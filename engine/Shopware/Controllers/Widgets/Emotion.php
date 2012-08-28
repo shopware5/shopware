@@ -251,10 +251,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->from('Shopware\Models\Article\Article', 'article')
             ->join('article.details', 'details')
             ->where('details.number = ?1')
-            ->setParameter(1, $number);
+            ->setParameter(1, $number)
+            ->setFirstResult(0)
+            ->setMaxResults(1);
 
-        $articleId = $builder->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId['id']);
+        $articleId = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $article = array();
+        if (!empty($articleId['id'])) {
+            $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId['id']);
+        }
         return $article;
     }
 
