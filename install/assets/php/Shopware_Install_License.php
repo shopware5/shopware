@@ -195,7 +195,7 @@ class Shopware_Install_License {
                 $sql = "DELETE FROM s_core_subscribes WHERE pluginID = $alreadyExists";
                 $this->getDatabase()->query($sql);
             }
-            //die("A");
+
             $sql = "
             INSERT INTO s_core_plugins (namespace,name,label,source,active,added,installation_date,update_date,refresh_date,author,copyright,version,capability_update,capability_install,capability_enable)
             VALUES (?,?,?,?,?,now(),now(),now(),now(),?,?,?,?,?,?)
@@ -220,6 +220,16 @@ class Shopware_Install_License {
             if (empty($pluginId)){
                 throw new Exception("SwagLicense could not be installed in database");
             }
+
+            $sql = "
+                INSERT IGNORE INTO `s_core_config_forms` (`id`, `parent_id`, `name`, `label`, `description`, `position`, `scope`, `plugin_id`) VALUES
+                (NULL, 92, 'license', 'Lizenz-Manager', NULL, 0, 0, ?);
+            ";
+            $prepareStatement = $this->getDatabase()->prepare($sql);
+            $prepareStatement->execute(array(
+                $pluginId
+            ));
+
         } catch(PDOException $e){
             $this->setError($e->getMessage());
             return false;
