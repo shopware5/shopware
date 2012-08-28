@@ -38,8 +38,9 @@
  * $list = new Shopware_Components_Check_System();
  * $data = $list->toArray();
  * </code>
-*/
-class Shopware_Install_License {
+ */
+class Shopware_Install_License
+{
     protected $pluginInstallationQueries = '
 
     ';
@@ -47,54 +48,56 @@ class Shopware_Install_License {
     protected $apiGateway = 'http://store.shopware.de/downloads/check_license';
 
     /**
-    *
-    * @var PDO
-    */
+     *
+     * @var PDO
+     */
     protected $database;
 
     protected $error;
 
-    public function evaluateLicense($licenseKey,$host,$edition){
-        if (!function_exists("curl_init")){
+    public function evaluateLicense($licenseKey, $host, $edition)
+    {
+        if (!function_exists("curl_init")) {
             $this->setError("Curl library not found");
             return false;
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->getApiGateway());
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array( 'license' => $licenseKey, 'host' => $host, 'product' => $edition));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array('license' => $licenseKey, 'host' => $host, 'product' => $edition));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response);
 
-        if ($response->success != true){
-            if ($response->error == "INVALID"){
+        if ($response->success != true) {
+            if ($response->error == "INVALID") {
                 $this->setError("License key seems to be incorrect");
-            }elseif($response->error == "PRODUCT"){
+            } elseif ($response->error == "PRODUCT") {
                 $this->setError("License key is formally correct but does not match to the selected shopware edition");
-            }elseif($response->error=="HOST"){
-                $this->setError("License key is not valid for domain ".$host);
-            }else {
+            } elseif ($response->error == "HOST") {
+                $this->setError("License key is not valid for domain " . $host);
+            } else {
                 $this->setError("License key seems to be incorrect");
             }
             return false;
         }
         // Insert license in database
-        $label = $response->info->label;        // Shopware Enterprise Cluster
-        $module = $response->info->module;      // SwagCommercial
-        $product = $response->info->product;    // EC
-        $host = $response->info->host;          // sth.test.shopware.in
-        $type = $response->info->type;          // 1
-        $license = $response->info->license;    // ... License-Key...
+        $label = $response->info->label; // Shopware Enterprise Cluster
+        $module = $response->info->module; // SwagCommercial
+        $product = $response->info->product; // EC
+        $host = $response->info->host; // sth.test.shopware.in
+        $type = $response->info->type; // 1
+        $license = $response->info->license; // ... License-Key...
         $this->installLicensePlugin();
-        $this->insertLicenseInDatabase($label,$module,$product,$host,$type,$license);
+        $this->insertLicenseInDatabase($label, $module, $product, $host, $type, $license);
 
         $this->downloadLicensePlugin();
         return true;
     }
 
-    public function insertLicenseInDatabase($label,$module,$product,$host,$type,$license){
+    public function insertLicenseInDatabase($label, $module, $product, $host, $type, $license)
+    {
         try {
             // Delete previous inserted licenses
             $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
@@ -107,27 +110,29 @@ class Shopware_Install_License {
             ";
             $prepareStatement = $this->getDatabase()->prepare($sql);
             $prepareStatement->execute(array(
-                $module,$host,$label,$license
+                $module, $host, $label, $license
             ));
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
         }
 
         return true;
     }
-    public function downloadLicensePlugin(){
+
+    public function downloadLicensePlugin()
+    {
         $name = 'plugin' . md5($this->getPluginDownloadPath()) . '.zip';
         $message = '';
-        $tmp = dirname(__FILE__)."/../../../" . 'files/downloads/';
-        $targetDir = dirname(dirname(dirname(dirname(__FILE__))))."/engine/Shopware/Plugins/Community/";
+        $tmp = dirname(__FILE__) . "/../../../" . 'files/downloads/';
+        $targetDir = dirname(dirname(dirname(dirname(__FILE__)))) . "/engine/Shopware/Plugins/Community/";
 
-        if (!file_exists($targetDir) || !is_writable($targetDir)){
+        if (!file_exists($targetDir) || !is_writable($targetDir)) {
             $this->setError("Directory $targetDir does not exists or is not writable");
             return false;
         }
 
-        if (!file_exists($tmp) || !is_writable($tmp)){
+        if (!file_exists($tmp) || !is_writable($tmp)) {
             $this->setError("Directory $tmp does not exists or is not writable");
             return false;
         }
@@ -137,46 +142,47 @@ class Shopware_Install_License {
             $ch = curl_init($this->pluginDownloadPath);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FAILONERROR, true);
-            curl_setopt($ch, CURLOPT_BINARYTRANSFER,true);
+            curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
             $data = curl_exec($ch);
-            if (empty($data)){
-                throw Exception("Curl error: ".curl_errno($ch)."\n".curl_error($ch));
+            if (empty($data)) {
+                throw Exception("Curl error: " . curl_errno($ch) . "\n" . curl_error($ch));
             }
-            file_put_contents($tmp.$name,$data);
+            file_put_contents($tmp . $name, $data);
             curl_close($ch);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->setError($e->getMessage());
             return false;
         }
 
         try {
-          if(!class_exists("ZipArchive")){
-              throw new Exception("Can not found ZipArchive extension");
-          }
-          $zip = new ZipArchive();
-          if (!$zip){
-              throw new Exception("Can not create ZipArchive object");
-          }
-          $zip->open($tmp.$name);
-          $zip->extractTo($targetDir);
-          $zip->close();
-        } catch(Exception $e){
+            if (!class_exists("ZipArchive")) {
+                throw new Exception("Can not found ZipArchive extension");
+            }
+            $zip = new ZipArchive();
+            if (!$zip) {
+                throw new Exception("Can not create ZipArchive object");
+            }
+            $zip->open($tmp . $name);
+            $zip->extractTo($targetDir);
+            $zip->close();
+        } catch (Exception $e) {
             $this->setError($e->getMessage());
             return false;
         }
 
-        if (!file_exists($targetDir."Core/SwagLicense/Bootstrap.php")){
+        if (!file_exists($targetDir . "Core/SwagLicense/Bootstrap.php")) {
             $this->setError("SwagLicense was not extracted correctly. Please install the plugin manually through shopware plugin-manager after installation.");
             return false;
         }
         // Delete file
 
-        @unlink($tmp.$name);
+        @unlink($tmp . $name);
 
         return true;
     }
 
-    public function installLicensePlugin(){
+    public function installLicensePlugin()
+    {
         // Insert plugin into s_core_plugins
         // Check if inserted before
         // INSERT INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
@@ -188,7 +194,7 @@ class Shopware_Install_License {
             ";
             $alreadyExists = $this->getDatabase()->query($sql)->fetchColumn();
 
-            if (!empty($alreadyExists)){
+            if (!empty($alreadyExists)) {
                 $sql = "DELETE FROM s_core_plugins WHERE id = $alreadyExists";
                 $this->getDatabase()->query($sql);
 
@@ -201,23 +207,23 @@ class Shopware_Install_License {
             VALUES (?,?,?,?,?,now(),now(),now(),now(),?,?,?,?,?,?)
             ";
             $array = array(
-              'Core', //Namespace,
-              'SwagLicense', // name
-              'Lizenz-Manager', // label
-              'Community', // source
-              1, // active
-              'shopware AG', // author,
-              'Copyright © 2012, shopware AG', //copyright
-              '1.0.2', // version
-              1, // capability_update
-              1, // capability_install
-              1 // capability_enable
+                'Core', //Namespace,
+                'SwagLicense', // name
+                'Lizenz-Manager', // label
+                'Community', // source
+                1, // active
+                'shopware AG', // author,
+                'Copyright © 2012, shopware AG', //copyright
+                '1.0.2', // version
+                1, // capability_update
+                1, // capability_install
+                1 // capability_enable
             );
             $prepareStatement = $this->getDatabase()->prepare($sql);
             $prepareStatement->execute($array);
             $pluginId = $this->getDatabase()->lastInsertId();
 
-            if (empty($pluginId)){
+            if (empty($pluginId)) {
                 throw new Exception("SwagLicense could not be installed in database");
             }
 
@@ -230,10 +236,10 @@ class Shopware_Install_License {
                 $pluginId
             ));
 
-        } catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $this->setError($e->getMessage());
             return false;
         }
@@ -241,27 +247,28 @@ class Shopware_Install_License {
         // Create events
         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_License',
-            'onInitResourceLicense',$pluginId
+            'onInitResourceLicense', $pluginId
         );
         $this->subscribeEvent(
             'Enlight_Controller_Action_PostDispatch_Backend_Index',
-            'onPostDispatchBackendIndex',$pluginId
+            'onPostDispatchBackendIndex', $pluginId
         );
         $this->subscribeEvent(
             'Enlight_Controller_Front_DispatchLoopStartup',
-            'onDispatchLoopStartup',$pluginId
+            'onDispatchLoopStartup', $pluginId
         );
         $this->subscribeEvent(
             'Enlight_Controller_Action_PostDispatch_Backend_Config',
-            'onPostDispatchBackendConfig',$pluginId
+            'onPostDispatchBackendConfig', $pluginId
         );
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_License',
-            'onGetControllerPathBackend',$pluginId
+            'onGetControllerPathBackend', $pluginId
         );
     }
 
-    protected function subscribeEvent($event,$listener,$pluginId){
+    protected function subscribeEvent($event, $listener, $pluginId)
+    {
         // Insert events in s_core_subscribes
         try {
             $sql = "
@@ -269,15 +276,14 @@ class Shopware_Install_License {
             VALUES (?,?,?)
             ";
             $prepareStatement = $this->getDatabase()->prepare($sql);
-            $array = array($event,$listener,$pluginId);
+            $array = array($event, $listener, $pluginId);
             $prepareStatement->execute($array);
-        }catch (PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
         }
         return true;
     }
-
 
 
     public function setApiGateway($apiGateway)
@@ -328,11 +334,11 @@ class Shopware_Install_License {
 
     public function setError($error)
     {
-       $this->error = $error;
+        $this->error = $error;
     }
 
     public function getError()
     {
-       return $this->error;
+        return $this->error;
     }
 }
