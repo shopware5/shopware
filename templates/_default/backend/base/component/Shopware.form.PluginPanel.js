@@ -260,8 +260,8 @@ Ext.define('Shopware.form.PluginPanel',
                 items: tabs,
                 plain: true
             });
-        } else {
-            if(tabs[0].title != "undefined") {
+        } else if(tabs.length == 1) {
+            if(tabs[0].title) {
                 delete tabs[0].title;
             }
             items.push({
