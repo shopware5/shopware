@@ -105,9 +105,9 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     protected function getFilename($name)
     {
         $suffix = $this->_nameSuffix !== null ? $this->_nameSuffix : '.' . $this->_configType;
-        foreach($this->_configDir as $dir) {
+        foreach ($this->_configDir as $dir) {
             $result = $dir . $this->_namePrefix . $name . $suffix;
-            if(file_exists($result)) {
+            if (file_exists($result)) {
                 return $result;
             }
         }
@@ -138,14 +138,13 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
             if (file_exists($filename)) {
                 $reader = 'Zend_Config_' . ucfirst($this->_configType);
                 $base = new $reader($filename, null, array(
-                    'skipExtends' => true,
-                    'allowModifications' => true)
+                        'skipExtends' => true,
+                        'allowModifications' => true)
                 );
             } else {
                 $base = new Enlight_Config(array(), true);
             }
-        }
-        catch (Zend_Exception $e) {
+        } catch (Zend_Exception $e) {
             throw new Enlight_Config_Exception($e->getMessage(), $e->getCode(), $e);
         }
         return $base;
@@ -163,7 +162,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         $name = $this->getFilename($config->getName());
         if (file_exists($name)) {
             $reader = 'Zend_Config_' . ucfirst($this->_configType);
-            while(true) {
+            while (true) {
                 try {
                     /** @var $reader Zend_Config_Ini */
                     $reader = new $reader($name, $section, array(
@@ -171,9 +170,9 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
                     );
                     $config->setData($reader->toArray());
                     break;
-                // Section is defect
-                } catch(Exception $e) {
-                    if(!empty($section) && is_array($section)) {
+                    // Section is defect
+                } catch (Exception $e) {
+                    if (!empty($section) && is_array($section)) {
                         // Try next section
                         array_shift($section);
                     } else {
@@ -200,25 +199,25 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         $section = $config->getSection();
         $filename = $this->getFilename($config->getName());
 
-        if(!$config->isDirty()) {
+        if (!$config->isDirty()) {
             return $this;
         }
 
         if (!empty($section)) {
             $base = $this->readBase($filename);
-            if(is_array($section)) {
-                foreach(array_reverse($section) as $sectionName) {
-                    if(!isset($base->$sectionName)) {
+            if (is_array($section)) {
+                foreach (array_reverse($section) as $sectionName) {
+                    if (!isset($base->$sectionName)) {
                         $base->$sectionName = array();
                     }
                 }
                 $sectionName = $extendingSection = array_shift($section);
-                foreach($section as $extendedSection) {
+                foreach ($section as $extendedSection) {
                     $base->setExtend($extendingSection, $extendedSection);
                     $extendingSection = $extendedSection;
                 }
             } else {
-                $sectionName = (string) $section;
+                $sectionName = (string)$section;
             }
             $base->$sectionName = $config;
         } else {
@@ -226,22 +225,26 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         }
 
         $dir = dirname($filename);
-        if(!file_exists($dir)) {
+        if (!file_exists($dir) || !is_writeable($dir)) {
             $old = umask(0);
             mkdir($dir, 0777, true);
+            chmod($dir, 0777);
             umask($old);
+        }
+
+        if (!is_writeable($dir)) {
+            return $this;
         }
 
         try {
             $writer = 'Zend_Config_Writer_' . ucfirst($this->_configType);
             /** @var $writer Zend_Config_Writer */
             $writer = new $writer(array(
-                'config' => $base,
-                'filename' => $filename)
+                    'config' => $base,
+                    'filename' => $filename)
             );
             $writer->write();
-        }
-        catch (Zend_Exception $e) {
+        } catch (Zend_Exception $e) {
             throw new Enlight_Config_Exception($e->getMessage(), $e->getCode(), $e);
         }
         return $this;
