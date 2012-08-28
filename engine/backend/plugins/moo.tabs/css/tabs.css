@@ -1,0 +1,57 @@
+/*------------------------------------------------------------------------------
+|
+|                           net4visions.com source code
+|
+|-------------------------------------------------------------------------------
+|
+| file:             _common.css - tab panes
+| category:         stylesheet
+|
+| last modified:    04/30/2006
+|
+| description:
+| this css file handles the layout of the tab panes (common styles)
+|
+------------------------------------------------------------------------------*/
+
+/* TOP TABS - DEFAULT */
+/* tabGroupContainer */
+
+/* tabs */
+div.tabContainer ul {	
+	float: left;
+	width: 100%;		
+}
+div.tabContainer ul, div.tabContainer li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+div.tabContainer li {
+	float: left;	
+	margin-right: 3px;
+	margin-left: 0px;
+	padding: 0 0 0 10px;
+	line-height: 35px;		
+	cursor: pointer;	
+}
+
+div.tabContainer li.disabled {
+	filter: alpha(opacity=50);	
+	opacity: 0.5;	
+	cursor: default;
+}
+div.tabContainer li span {
+	float: left;
+	display: block;	
+	padding: 4px 10px 0 0;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 31px;
+}
+
+
+
+
+
+

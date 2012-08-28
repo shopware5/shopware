@@ -1,0 +1,1 @@
+All files in this folder are deprecated and will be removed in final version of shopware 4

@@ -1,0 +1,286 @@
+<?php
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Config
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     Heiner Lohaus
+ * @author     $Author$
+ */
+
+/**
+ * Shopware Config Model
+ *
+ * todo@all: Documentation
+ */
+class Shopware_Components_Config implements ArrayAccess
+{
+    /**
+     * @var Shopware\Models\Shop\Shop
+     */
+    protected $_shop;
+
+    /**
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+
+    /**
+     * @var bool|int
+     */
+    protected $_cacheTime = false;
+
+    /**
+     * @var bool|int
+     */
+    protected $_cacheTags = array('Shopware_Config');
+
+    /**
+     * @var array
+     */
+    protected $_data;
+
+    /**
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    protected $_db;
+
+    /**
+     * Constructor method
+     *
+     * @param array $config
+     */
+    public function __construct($config)
+    {
+        if(isset($config['cache'])
+            && $config['cache'] instanceof Zend_Cache_Core) {
+            $this->_cache = $config['cache'];
+        }
+        if(isset($config['db'])
+            && $config['db'] instanceof Zend_Db_Adapter_Abstract) {
+            $this->_db = $config['db'];
+        }
+        if (isset($config['shop'])) {
+            $this->setShop($config['shop']);
+        } else {
+            $this->load();
+        }
+    }
+
+    /**
+     * @param Shopware\Models\Shop\Shop $shop
+     * @return \Shopware_Components_Config
+     */
+    public function setShop($shop)
+    {
+        $this->_shop = $shop;
+        $this->load();
+        $this->offsetSet('host', $shop->getHost());
+        $this->offsetSet('basePath', $shop->getHost() . $shop->getBasePath());
+        if($shop->getTitle() !== null) {
+            $this->offsetSet('shopName', $shop->getTitle());
+        }
+        return $this;
+    }
+
+    /**
+     * Load data from cache or database
+     */
+    protected function load()
+    {
+        if ($this->_cache !== null) {
+            $cacheId = 'Shopware_Config';
+            if ($this->_shop !== null) {
+                $cacheId .= '_' . $this->_shop->getId();
+            }
+            if (($this->_data = $this->_cache->load($cacheId)) === false) {
+                $this->_data = $this->readData();
+                $this->_cache->save(
+                    $this->_data,
+                    $cacheId,
+                    $this->_cacheTags,
+                    $this->_cacheTime
+                );
+            }
+        } else {
+            $this->_data = $this->readData();
+        }
+    }
+
+    /**
+     * Read data with translations from database
+     *
+     * @return array
+     */
+    protected function readData()
+    {
+        $sql = "
+            SELECT
+              LOWER(REPLACE(e.name, '_', '')) as name,
+              IFNULL(IFNULL(v2.value, v1.value), e.value) as value
+            FROM s_core_config_elements e
+            LEFT JOIN s_core_config_values v1
+            ON v1.element_id = e.id
+            AND v1.shop_id = ?
+            LEFT JOIN s_core_config_values v2
+            ON v2.element_id = e.id
+            AND v2.shop_id = ?
+        ";
+        $data = $this->_db->fetchPairs($sql, array(
+            1, //Shop parent id
+            isset($this->_shop) ? $this->_shop->getId() : null
+        ));
+
+        $result = array();
+        foreach ($data as $key => $value) {
+            $result[$key] = unserialize($value);
+        }
+
+        $result['version'] = Shopware::VERSION;
+        $result['revision'] = Shopware::REVISION;
+        $result['versiontext'] = Shopware::VERSION_TEXT;
+
+        return $result;
+    }
+
+    /**
+     * Format name method
+     *
+     * @param string $name
+     * @return string
+     */
+    public function formatName($name)
+    {
+        if (strpos($name, 's') === 0 && preg_match('#^s[A-Z]#', $name)) {
+            $name = substr($name, 1);
+        }
+        return str_replace('_', '', strtolower($name));
+    }
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return null
+     */
+    public function get($name, $default = null)
+    {
+        $value = $this->offsetGet($name);
+        return $value !== null ? $value : $default;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function offsetGet($name)
+    {
+        if (!isset($this->_data[$name])) {
+            $baseName = $this->formatName($name);
+            if (!isset($this->_data[$baseName])) {
+                $this->_data[$baseName] = null;
+            }
+            $this->_data[$name] =& $this->_data[$baseName];
+        }
+        return $this->_data[$name];
+    }
+
+    /**
+     * @param $name
+     */
+    public function offsetUnset($name)
+    {
+        $this->_data[$name] = null;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function offsetExists($name)
+    {
+        if (!isset($this->_data[$name])) {
+            $baseName = $this->formatName($name);
+            return isset($this->_data[$baseName]) && $this->_data[$baseName] !== null;
+        }
+        return true;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return array
+     */
+    public function offsetSet($name, $value)
+    {
+        $baseName = $this->formatName($name);
+        return $this->_data[$baseName] = $value;
+    }
+
+    /**
+     * Magic getter
+     *
+     * @param   string $name
+     * @return  bool
+     */
+    public function __isset($name)
+    {
+        return $this->offsetExists($name);
+    }
+
+    /**
+     * Magic getter
+     *
+     * @param   string $name
+     * @return  mixed
+     */
+    public function __get($name)
+    {
+        return $this->offsetGet($name);
+    }
+
+    /**
+     * Magic setter
+     *
+     * @param   string $name
+     * @param   mixed $value
+     * @return  array
+     */
+    public function __set($name, $value)
+    {
+        return $this->offsetSet($name, $value);
+    }
+
+    /**
+     * Magic caller method
+     *
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($name, $args = null)
+    {
+        return $this->get($name);
+    }
+}

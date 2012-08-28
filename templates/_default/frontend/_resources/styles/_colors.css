@@ -1,0 +1,366 @@
+/**
+	Shopware 3.5 Template Colors
+	http://shopware.de
+	
+	@package		default
+	@subpackage		css
+	@category		design
+	@version		v1 
+	@author			stp/Shopware AG <info@shopware.ag>
+	@copyright		Copyright (c) 2010 Shopware AG (http://www.shopware.de)
+	
+	This stylesheets contains all color hexcodes which are used in
+	the default template.
+	
+	MAIN COLORS
+	
+	Borders: 		#c7c7c7
+	Backgrounds:	#f5f5f5
+	Highlights: 	#dd4800
+	Primary text:	#333333
+	Secondary text:	#777777
+	Separators:		#cccccc
+*/
+
+/*
+ * Background colors
+ *
+ * Used colors:
+ * - #f5f5f5
+ * - #ffffff
+ * - #dd4800
+ * - #c7c7c7
+ * - #f3f3f3
+ * - #e04900
+ * - #e6efc2
+ * - #fbe3e4
+ * - #efe9e2
+ -----------------------------------------------*/
+ 
+/* #f5f5f5 */
+html,
+body,
+#shopnavi .ajax_basket_result,
+#detail #detailinfo #comments form,
+div#notes .table_head,
+div.table_head.grid_20,
+div.table_foot.grid_20,
+div.table_head.grid_16,
+div.table_foot.grid_16,
+div.table_head.grid_7,
+div.table_foot.grid_7,
+div.table_head.grid_8,
+div.table_foot.grid_8,
+div.table_head.grid_13,
+div.table_foot .box,
+.basket .agb,
+#content #left select,
+#recalcShipping .comment,
+.account #userinformations,
+.account #selected_payment,
+.account .newsletter,
+.account .billing,
+.account .shipping,
+#right .adminbox,
+.account .password,
+.addresses .select_billing,
+.addresses .select_shipping,
+.addresses, .password form div,
+.tickeranswer,
+form.comments,
+.compare_desc div,
+.tellafriend fieldset,
+ul#categories_s ul a, ul#categories_s ul a.active,
+ul#categories_s ul ul a.active {
+	background-color: #f5f5f5;
+}
+
+/* #ffffff */
+.container_20,
+#mainNavigation ul li.dropactive:hover a,
+#shopnavi .ajax_basket_result .inner_cart div,
+#content #left ul li.active,
+#content #left ul li.active li,
+div.supplier_filter ul li,
+div.supplier_filter, div#hersteller_filter span,
+div.supplier, div.blogFilter, div.blogInteract,
+div.supplier ul li.image,
+.bundle_box .box_bundleArticleNames,
+.ui-tabs .ui-tabs-nav li.ui-state-active,
+#detail #detailinfo .similar .artbox .artbox_thumb,
+div.table_foot.grid_8,
+div.table_foot.grid_20,
+div.table_foot.grid_7,
+div.table_foot.grid_16,
+.register div h2.heading,
+div.ajax_add_article .article_box,
+div.ajax_add_article .bottom,
+#right .adminbox,
+#right .adminbox h3,
+.addresses, .addresses h2,
+.ticketdetail_txtbox,
+li.searchresult_supplier a.resultlink,
+#content div#left div.searchbox ul,
+#center.supportrequest h2,
+.tellafriend h2,
+ul#categories_s ul ul ul a.active,
+.liveshopping_detail .time_bars .time_processbar_container div,
+.liveshopping_container .time_bars .time_processbar_container div,
+.liveshopping_container .time_bars .instock_processbar_container div,
+.liveshopping_detail .instock_processbar_container div,
+#detail .liveshopping_detail .middle .bar_time div {
+	background-color: #ffffff;
+}
+
+/* #c7c7c7 */
+#shopnavi .ajax_basket_result .inner_cart,
+.addresses .change a,
+.contact .form .grid_9 .change a,
+.addresses .select_billing .change input,
+.contact .form .change_password {
+	background-color: #c7c7c7;
+}
+
+/* #f3f3f3 */
+#topbar,
+.register .personal_settings,
+.register .shipping_address,
+.register .payment_method,
+.register .company_informations,
+.register .alternative_shipping {
+	background-color: #f3f3f3;
+}
+
+/* #e04900 */
+#mainNavigation {
+	background-color: #E04900;
+}
+
+/* #e6efc2 */
+#shopnavi .ajax_basket_result .inner_cart div.premium {
+	background-color: #e6efc2;
+}
+
+/* #fbe3e4 */
+#shopnavi .ajax_basket_result .inner_cart div.bundle,
+div.table_row.bundle_row, div.table_row.bundle {
+	background-color: #fbe3e4;
+}
+
+/*
+ * Border colors
+ *
+ * Used colors:
+ * - #dd4800
+ * - #c7c7c7
+ * - #dfdfdf
+ * - #333333
+ * - #ffffff
+ * - #efe9e2
+ * - #e3e3e3
+ * - #cccccc
+ * - #e7e7e7
+ * - #e6e6e6
+ * - #555555
+ * - #999999
+ * - #dbdbdb
+ * - #FBC2C4
+ * - #696969
+ * - #dadada
+ * - #efebe2
+ -----------------------------------------------*/
+ 
+/* #c7c7c7 */
+.container_20,
+hr.smallline,
+#content .headingbox,
+#content .headingbox_nobg,
+#content .headingbox_dark,
+#topbar,
+#shopnavi .ajax_basket_result,
+#shopnavi .ajax_basket_result .inner_cart,
+#content #left ul#servicenav,
+div.supplier_filter,
+div.supplier_filter p,
+div.supplier_filter ul li,
+div.supplier, div.blogFilter,
+div.blogInteract,
+div.supplier ul li,
+div.blogFilter ul li,
+div.blogInteract ul li,
+.listing_actions,
+.listing_actions a.perpage,
+.listing_actions.bottom a.perpage,
+.listing_actions.bottom a.navi,
+.listing_actions a.navi,
+.listing_actions div.more,
+.artbox,
+.listing_actions .offers,
+#listing-1col .artbox.last,
+#detail .border,
+.box_bundleset,
+#detail #detailinfo #comments form,
+.ui-tabs .ui-tabs-nav li,
+#detail #detailinfo .inner_tabs,
+div.table_head.grid_20,
+div.table_foot.grid_20,
+div.table_head.grid_16,
+div.table_foot.grid_16,
+div.table_head.grid_7,
+div.table_foot.grid_7,
+div.table_head.grid_8,
+div.table_foot.grid_8,
+div.table_head.grid_13,
+div.table_row.grid_20,
+div.table_row.grid_16,
+div.table_row.grid_7,
+div.table_row.grid_8,
+div.table_row.grid_13,
+div.table_foot .box,
+div.table_premium,
+.table_premium.grid_16,
+#content #left.basket,
+.info div,
+.info div .heading,
+#login div h2,
+#content .inner .check_order,
+div#right.register h2,
+div#right.register ul,
+#login .inner_container,
+.register .personal_settings,
+.register .shipping_address,
+.register .payment_method,
+.register .company_informations,
+.register .alternative_shipping,
+.basket .agb,
+div.step_box ul li.active,
+.basket .more_info,
+.account #userinformations,
+.account #selected_payment,
+.account .newsletter,
+.account .billing,
+.account .shipping,
+#right .adminbox,
+.account .password,
+.addresses .select_billing,
+.addresses .select_shipping,
+.addresses,
+.password form div,
+#content div.inner .change_shipping div.alternative_shipping,
+#content div.inner .change_billing .shipping_address,
+#content .orders .orderoverview_active .lastrow,
+#ticket h2,
+.ticketdetail_lbl,
+.tickeranswer h2,
+.tickeranswer,
+.ticketdetail_txtbox,
+#listing-blog .blogbox,
+#content .blogbox,
+.contentdetail, .newsletter_entry,
+.newsletter_detail,
+.blogbox .tags a,
+.blogbox a.more_info,
+.content_listing a.more_info,
+div#commentcontainer ul,
+form.comments,
+.viewlast,
+div#searchresults,
+li.searchresult ul li,
+.fuzzy div.result_box,
+.fuzzy .category_filter h3,
+#content #left .filter_search h3.heading,
+.fuzzy .category_filter .categories,
+#content #left .filter_search .searchbox,
+.finished h3, .finished p.bold,
+#compareContainerResults li,
+#compareHighlight,
+.container_20 .grid_3.compare_desc,
+.content_listing, #tagcloud,
+.topseller,
+#center.supportrequest,
+.tellafriend h2,
+.tellafriend fieldset {
+	border-color: #c7c7c7;
+}
+
+#mainNavigation ul li.dropactive:hover a,
+#compareHighlight.active {
+	border-bottom-color: #c7c7c7;
+}
+
+/* #dfdfdf */
+tfoot,
+div.supplier ul li,
+div#hersteller_filter ul li,
+#addwithnumber,
+.ticketoverview,
+.ticketoverview .header, .ticketoverview .header div.grid_3,
+.ticketoverview .content {
+	border-color: #dfdfdf;
+}
+
+/* #333333 */
+tfoot .last,
+#compare_bigbox,
+#compareHighlight.active,
+#compareContainerResults,
+#mainNavigation ul li.dropactive:hover a {
+	border-color: #333;
+}
+
+/* #fff */
+div#breadcrumb,
+#content #left ul li,
+#compareHighlight,
+ul#categories_s li,
+ul#categories_s ul {
+	border-color: #fff;
+}
+
+/* #efe9e2 */
+#content #left ul li.active {
+	border-color: #efe9e2;
+}
+
+#content #left ul li.active.sub a.active {
+	border-bottom-color: #efe9e2;
+}
+
+/* #e3e3e3 */
+#content #right div.heading,
+.artbox .actions a, #related .listing .artbox .actions a,
+.thumb_box a,
+div#commentcontainer .comment_outer,
+.viewlast .heading,
+.fuzzy .category_filter .border {
+	border-color: #e3e3e3;
+}
+
+#content #left ul#servicenav li.heading,
+#detail #detailinfo .similar {
+	border-left-color: #e3e3e3;
+}
+
+#content #left ul#servicenav li.heading,
+.artbox,
+.fuzzy div.result_box,
+.topseller h3 {
+	border-bottom-color: #e3e3e3;
+}
+
+/* #cccccc */
+div.supplier_filter, div#hersteller_filter span,
+.liveshopping_detail .time_bars .time_processbar_container,
+.liveshopping_container .time_bars .time_processbar_container,
+.liveshopping_container .time_bars .instock_processbar_container,
+.liveshopping_detail .time_bars .instock_processbar_container {
+	border-color: #ccc;
+}
+
+/* #e7e7e7 */
+.teaser,
+.teaser_small,
+.viewlast .article_image,
+.blogentry .post_metadata span {
+	border-color: #e7e7e7;
+}

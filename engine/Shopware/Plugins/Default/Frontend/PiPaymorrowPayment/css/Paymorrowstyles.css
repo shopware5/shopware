@@ -1,0 +1,151 @@
+.payment_logo_PaymorrowInvoice {
+}
+
+.Paymorrow_birthday_div {
+    width: 500px;
+}
+
+#Paymorrow_invoicebirth {
+    margin-left: 0px;
+    float: right;
+    width: 350px;
+}
+
+#Paymorrow_birthday_label {
+    width: 155px;
+    font-weight: bold;
+}
+
+#Paymorrow_birthday_label_rate {
+    width: 155px;
+    font-weight: bold;
+}
+
+.piPaymorrowBankTable {
+    margin-top: 8px;
+    line-height: 7px;
+    padding: 0px 5px;
+    font-size: 9px;
+}
+
+.piPaymorrowSmallerFont {
+    font-size: 9px;
+}
+
+.piPaymorrowSmallFont {
+    font-size: 10px;
+}
+
+.piPaymorrowBankTableTd {
+    padding: 2px 5px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.piPaymorrowBankTableMail {
+    border-bottom: 1px solid #cccccc;
+}
+
+.pi_Paymorrow_loading {
+    background-image: url("../img/ajax-loader.gif");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #fff;
+    width: 210px;
+    height: 70px;
+}
+
+#Paymorrow_width_checkout {
+    width: 548px;
+    float: right;
+    margin-right: 25px;
+}
+
+#Paymorrow_width_register {
+    width: 540px;
+    float: right;
+    margin-right: 25px;
+}
+
+.Paymorrow_marginleft {
+    margin-left: 28px;
+}
+
+input.pi_Paymorrow_phone {
+    padding: 5px;
+    width: 174px;
+}
+
+#Paymorrow_phone_label {
+    width: 155px;
+    font-weight: bold;
+}
+
+#Paymorrow_phone_label_rate {
+    width: 155px;
+    font-weight: bold;
+}
+
+.pi_Paymorrow_savebutton {
+    margin-left: 275px;
+}
+
+.Paymorrow_agb_label {
+    margin-left: 25px;
+}
+
+label.Paymorrow_agb_acceptlabel {
+    width: 90%;
+    margin-left: 5px;
+    height: 80px;
+    line-height: 14px;
+}
+
+#pi_Paymorrow_shopname {
+    color: red;
+}
+
+#pi_Paymorrow_paymentWarning {
+    margin: 0 0 20px 40px;
+    width: 690px;
+    background: none repeat scroll 0 0 #FBE3E4;
+    border: #FBC2C4 2px solid;
+    color: #8A1F11;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+#pi_Paymorrow_paymentWarning_register {
+    margin: 0 0 20px 40px;
+    width: 640px;
+    background: none repeat scroll 0 0 #FBE3E4;
+    border: #FBC2C4 2px solid;
+    color: #8A1F11;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+#pi_Paymorrow_paymentWarning_account {
+    margin: 0 0 20px 0px;
+    width: 690px;
+    background: none repeat scroll 0 0 #FBE3E4;
+    border: #FBC2C4 2px solid;
+    color: #8A1F11;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+.Paymorrow_order_img {
+
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.orange {
+    color: orange;
+}	

@@ -1,0 +1,7 @@
+{
+    "name": "Emotion Orange",
+    "author": "shopware AG",
+    "license": "AGPL",
+    "esi": true,
+    "emotion": true
+}

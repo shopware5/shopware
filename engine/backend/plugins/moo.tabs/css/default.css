@@ -1,0 +1,50 @@
+/*------------------------------------------------------------------------------
+|
+|                           net4visions.com source code
+|
+|-------------------------------------------------------------------------------
+|
+| file:             _tStyle.css - tab panes
+| category:         stylesheet
+|
+| last modified:    05/02/2006
+|
+| description:
+| this css file handles the layout of the tab panes (default theme)
+|
+------------------------------------------------------------------------------*/
+
+/* TOP TABS - DEFAULT */
+/* tabs */
+
+
+div.tabContainer.default li {	
+	background: url("../img/tab_bg.gif") no-repeat left top;	
+}
+div.tabContainer.default li.current {
+	background: url("../img/tab_sel_bg.gif") no-repeat left top;	
+}
+div.tabContainer.default li span {	
+	background: url("../img/tab_end.gif") no-repeat right top;	
+}
+div.tabContainer.default li.current span {
+	background: url("../img/tab_sel_end.gif") no-repeat right top;
+}
+/* BOTTOM TABS */
+/* tabs */
+.bottom div.tabContainer.default ul {		
+	background: url("../img/bottom_tabs_bg.gif");	
+}
+.bottom div.tabContainer.default li {	
+	background: url("../img/bottom_tab_bg.gif") no-repeat left bottom;		
+}
+.bottom div.tabContainer.default li.current {
+	background: url("../img/bottom_tab_sel_bg.gif") no-repeat left bottom;	
+}
+.bottom div.tabContainer.default li span {	
+	background: url("../img/bottom_tab_end.gif") no-repeat right bottom;	
+}
+.bottom div.tabContainer.default li.current span {
+	background: url("../img/bottom_tab_sel_end.gif") no-repeat right bottom;	
+}
+/*----------------------------------------------------------------------------*/

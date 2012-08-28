@@ -1,0 +1,304 @@
+<?php
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Snippet
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     $Author$
+ * @author     Benjamin Cremer
+ */
+
+namespace   Shopware\Models\Snippet;
+use         Shopware\Components\Model\ModelEntity,
+            Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * Shopware snippet model represents a single snippet
+ *
+ * Indices:
+ * <code>
+ *   - PRIMARY KEY (`id`)
+ *   - UNIQUE KEY `namespace` (`namespace`,`shopID`,`name`,`localeID`)
+ * </code>
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="s_core_snippets")
+ * @ORM\HasLifecycleCallbacks
+ */
+class Snippet extends ModelEntity
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string $namespace
+     *
+     * @ORM\Column(name="namespace", type="string", length=255, nullable=false)
+     */
+    private $namespace;
+
+    /**
+     * @var integer $shopid
+     *
+     * @ORM\Column(name="shopID", type="integer", nullable=false)
+     */
+    private $shopId;
+
+    /**
+     * @var integer $localeid
+     *
+     * @ORM\Column(name="localeID", type="integer", nullable=false)
+     */
+    private $localeId;
+
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string $value
+     *
+     * @ORM\Column(name="value", type="text", nullable=false)
+     */
+    private $value;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
+    private $updated;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set namespace
+     *
+     * @param string $namespace
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+        return $this;
+    }
+
+    /**
+     * Get namespace
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * Set shopId
+     *
+     * @param integer $shopid
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setShopId($shopid)
+    {
+        $this->shopId = $shopid;
+        return $this;
+    }
+
+    /**
+     * Get shopId
+     *
+     * @return integer
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * Set localeId
+     *
+     * @param integer $localeid
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setLocaleId($localeid)
+    {
+        $this->localeId = $localeid;
+        return $this;
+    }
+
+    /**
+     * Get localeId
+     *
+     * @return integer
+     */
+    public function getLocaleId()
+    {
+        return $this->localeId;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setCreated($created = 'now')
+    {
+        if (!$created instanceof \DateTime) {
+            $this->created = new \DateTime($created);
+        } else {
+            $this->created = $created;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return \Shopware\Models\Snippet\Snippet
+     */
+    public function setUpdated($updated = 'now')
+    {
+        if (!$updated instanceof \DateTime) {
+            $this->updated = new \DateTime($updated);
+        } else {
+            $this->updated = $updated;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Sets created on pre persist
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime('now');
+        $this->updated = new \DateTime('now');
+    }
+
+    /**
+     * Sets update on pre update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime('now');
+    }
+}
