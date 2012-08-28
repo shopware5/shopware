@@ -257,7 +257,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         /** @var $repository \Shopware\Models\Partner\Repository */
         $repository = Shopware()->Models()->Partner();
         $dataQuery = $repository->getCustomerForMappingQuery($mapCustomerAccountValue);
-        $customerData = $dataQuery->getOneOrNullResult();
+        $customerData = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $userId = $customerData["id"];
         unset($customerData["id"]);
         if(!empty($customerData)){

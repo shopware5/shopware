@@ -233,7 +233,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
-        $blogArticleData = $blogArticleQuery->getOneOrNullResult();
+        $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         //load the right template
         if (!empty($blogArticleData['template'])) {

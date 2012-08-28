@@ -79,7 +79,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id);
 
         /* @var $form Form */
-        $form = $query->getOneOrNullResult();
+        $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
             throw new Enlight_Exception("Could not construct form class");
