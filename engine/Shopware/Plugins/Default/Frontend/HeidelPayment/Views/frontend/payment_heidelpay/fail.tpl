@@ -2,7 +2,7 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
-	{$sBreadcrumb[] = ['name'=>"{s name='PaymentProcess'}{/s}"]}
+	{$sBreadcrumb[] = ['name'=>"{s name='PaymentProcess' namespace='frontend/payment_heidelpay/fail'}{/s}"]}
 {/block}
 
 {block name='frontend_index_header' append}

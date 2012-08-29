@@ -18,8 +18,7 @@ name="frontend_index_header_javascript" append}
 <div id="payment" class="grid_20"
 	style="margin: 10px 0 10px 20px; width: 959px;">
 
-<h2 class="headingbox_dark largesize">{se name="PaymentHeader"}Bitte
-führen Sie nun die Zahlung durch:{/se}</h2>
+<h2 class="headingbox_dark largesize">{se name="PaymentHeader"}Bitte schliessen Sie nun die Zahlung ab:{/se}</h2>
 <center><iframe id="payment_frame" width="500px" frameborder="0"
 	border="0" src="{$PaymentUrl}" style="width: 450px; border: 0px solid #000;"></iframe></center>
 <div id="payment_loader" class="ajaxSlider"

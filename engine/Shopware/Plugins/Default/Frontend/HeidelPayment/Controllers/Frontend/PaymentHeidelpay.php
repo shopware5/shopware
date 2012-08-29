@@ -10,6 +10,26 @@
  */
 class Shopware_Controllers_Frontend_PaymentHeidelpay extends Shopware_Controllers_Frontend_Payment
 {
+	 var $reqFields = array(
+    'IDENTIFICATION_UNIQUEID',
+    'IDENTIFICATION_SHORTID',
+    'IDENTIFICATION_TRANSACTIONID',
+    'IDENTIFICATION_REFERENCEID',
+    'PROCESSING_RESULT',
+    'PROCESSING_RETURN_CODE',
+    'PROCESSING_CODE',
+    'TRANSACTION_SOURCE',
+    'TRANSACTION_CHANNEL',
+    'TRANSACTION_RESPONSE',
+    'TRANSACTION_MODE',
+    'CRITERION_RESPONSE_URL',
+  	);
+	
+	
+	var $dbtable = '';
+	var $curl_response   = '';
+  	var $error      = '';
+    var $httpstatus = '';
   /**
    * Index action method
    */
@@ -706,29 +726,293 @@ class Shopware_Controllers_Frontend_PaymentHeidelpay extends Shopware_Controller
     }
     //check if the cleared parameter is passed, if this is the case resolve the id with the status model .
     if (isset($params['cleared'])) {
-      $newData['paymentStatus'] = Shopware()
-        ->Models()
+      //$orderModel->getInternalComment();
+      /*
+			$newData['paymentStatus'] = Shopware()
+				->Models()
         ->getRepository('\Shopware\Models\Order\Status')
-        ->find($params['cleared']);
+        ->findOneBy(array('id' => $params['cleared']));
+       */
+      $sql = 'UPDATE `s_order` SET `cleared` = ? WHERE `transactionID` = ?';
+      Shopware()->Db()->query($sql,array((int)$params['cleared'], $transactionID));
     }
-    if (isset($params['status'])) {
-      $newData['orderStatus'] = Shopware()
-        ->Models()
-        ->getRepository('\Shopware\Models\Order\Status')
-        ->find($params['status']);
+    /*
+		if (isset($params['status'])) {
+			$newData['orderStatus'] = Shopware()
+				->Models()
+				->getRepository('\Shopware\Models\Order\Status')
+				->find($params['status']);
     }
-    if (isset($params['dispatch'])) {
-      $newData['dispatch'] = Shopware()
-        ->Models()
-        ->getRepository('\Shopware\Models\Dispatch\Dispatch')
-        ->find($params['dispatch']);
+		if (isset($params['dispatch'])) {
+			$newData['dispatch'] = Shopware()
+				->Models()
+				->getRepository('\Shopware\Models\Dispatch\Dispatch')
+				->find($params['dispatch']);
     }
-    // populate Model with data
-    $orderModel->fromArray($newData);
-    Shopware()->Models()->persist($orderModel);
-    // save to database
-    Shopware()->Models()->flush();
-  }
-  /*}}}*/
+    */
 
+		// populate Model with data
+		$orderModel->fromArray($newData);
+		Shopware()->Models()->persist($orderModel);
+		// save to database
+		Shopware()->Models()->flush();
+		}
+	/*}}}*/
+	
+	public function rawnotifyAction(){
+		
+		ini_set('session.use_cookies', 0); // Session Cookie unterbinden
+		ob_start();
+		
+		$PaymentIP = explode(',', $this->Config()->HEIDELPAY_NOTIFY_IP);
+		if (!in_array($_SERVER['REMOTE_ADDR'], $PaymentIP)) {
+			 Shopware()->Plugins()->Frontend()->HeidelPayment()->Logging(
+        "Notify call from an unauthorized ip-address".
+        " IP: " . $_SERVER['REMOTE_ADDR'] .
+        " allowed are : " . $this->Config()->HEIDELPAY_NOTIFY_IP
+        , "ERROR" );
+        $this->View()->MES = 'FAIL';
+		exit();	
+			
+		}
+		
+		$HTTP_RAW_POST_DATA = $this->Request()->getRawBody();
+
+		if (empty($HTTP_RAW_POST_DATA)) {
+			$HTTP_RAW_POST_DATA = '';
+			exit();
+		};
+		$mail = '<pre>RAW:'.print_r($HTTP_RAW_POST_DATA, 1).'</pre>';
+		$xml = simplexml_load_string($HTTP_RAW_POST_DATA); // Raw Daten in XML Object laden
+		$mail.= '<pre>XML:'.print_r($xml, 1).'</pre>';
+		$postData = $this->getPostFromXML($xml); // XML in Post Array konvertieren
+		$mail.= '<pre>Data:'.print_r($postData, 1).'</pre>';
+		#echo '<pre>'.print_r($postData, 1).'</pre>';
+		
+		$table = $this->Config()->HEIDELPAY_SECURITY_SENDER;
+		$res = Shopware()->Plugins()->Frontend()->HeidelPayment()->checkTable($table);
+		if ($res) $this->setActiveTable($table); // Aktuelle Tabelle wï¿½hlen
+		#var_dump($res);
+		if (!$res){
+			Shopware()->Plugins()->Frontend()->HeidelPayment()->createSenderTable($table);
+			$this->setActiveTable($table); // Aktuelle Tabelle wählen
+		}
+		// Falls RefId nicht gefuellt aber AccountRegistration gesetzt, dann ueübernehmen
+		if (empty($postData['IDENTIFICATION_REFERENCEID']) && !empty($postData['CRITERION_ACCOUNT_REGISTRATION'])){
+			$postData['IDENTIFICATION_REFERENCEID'] = $postData['CRITERION_ACCOUNT_REGISTRATION'];
+		}
+		$lastId = $this->saveReq($postData, $HTTP_RAW_POST_DATA); // Request speichern
+		if (!$lastId){
+			// Buchung bereits gefunden
+
+			header('HTTP/1.1 200 Not Found');
+			exit();
+		}
+		$this->saveSERIAL($lastId, $postData); // Postdaten speichern
+		
+		$url = $postData['CRITERION_RESPONSE_URL'];
+		if ($postData['PROCESSING_STATUS'] == 'WAITING') $url = 'NORESP'; // Wenn 3D Secure Waiting, dann keine Response an Shop.
+		if ($url != 'NORESP' && !empty($url)){
+			$res = $this->doNotify($url, $postData); // Post Response an Shop schicken
+
+			if ($this->httpstatus != '200'){
+
+				if ($postData['CRITERION_RESPONSE_PER_MAIL']){
+					 //@mail($postData['CRITERION_RESPONSE_PER_MAIL'], 'RESPONSE PER MAIL', print_r($postData,1));
+					header('HTTP/1.1 200 OK'); // Hier wird es eh keinen Erfolg mehr geben
+					exit();
+				} else {
+					header('HTTP/1.1 403 Forbidden');
+					exit();
+				}
+			}
+			$this->saveRes2Req($postData['IDENTIFICATION_UNIQUEID'], $res); // Response speichern
+			
+			// 3D Secure
+			if ($postData['PROCESSING_STATUS_CODE'] == '80' 
+				&& $postData['PROCESSING_RETURN_CODE'] == '000.200.000' 
+					&& $postData['PROCESSING_REASON_CODE'] == '00'){
+				// Nix tun
+				$mail.= 'Noch keine Aktion, da 3D Secure WAITING...'."\n";
+			} 
+		}
+		
+		$mail.= '<pre>Res:'.print_r($res, 1).'</pre>';
+		
+		
+		
+		header('HTTP/1.1 200 OK');
+		$this->View()->MES = 'OK';
+		
+	}
+	
+	  private function getPostFromXML($xml)/*{{{*/
+  {
+    $tmp = array();
+    if (empty($xml)) return array();
+
+    foreach($xml AS $k => $v){
+      $attribs = $v->attributes();
+      #echo '<pre>'.print_r($attribs, 1).'</pre>';
+      foreach($attribs AS $ak => $av){
+        #echo $ak.' -> '.$av.'<br>';
+        $tmp[strtoupper($k).'_'.strtoupper($ak)] = (string)$av;
+      }
+      foreach($v AS $kk => $vv){
+        $attribs = $vv->attributes();
+        if (!empty($attribs)){
+          foreach($attribs AS $ak => $av){
+            #echo $ak.' -> '.$av.'<br>';
+            $tmp[strtoupper($kk).'_'.strtoupper($ak)] = (string)$av;
+          }
+        }# else {
+        foreach($vv AS $kkk => $vvv){
+          $attribs = $vvv->attributes();
+          if (!empty($attribs)){
+            foreach($attribs AS $ak => $av){
+              if ($kk == 'Analysis') continue;
+              #echo $ak.' -> '.$av.'<br>';
+              $tmp[strtoupper($kk).'_'.strtoupper($kkk).'_'.strtoupper($ak)] = (string)$av;
+            }
+          }# else {
+          if ($kk == 'Customer'){
+            foreach($vvv AS $kkkk => $vvvv){
+              #echo $ak.' -> '.$av.'<br>';
+              $tmp[strtoupper($kkk).'_'.strtoupper($kkkk)] = (string)$vvvv;
+            }
+          } else if ($kk == 'Payment'){
+            foreach($vvv AS $kkkk => $vvvv){
+              #echo $ak.' -> '.$av.'<br>';
+              $tmp[strtoupper($kkk).'_'.strtoupper($kkkk)] = (string)$vvvv;
+            }
+          } else if ($kk == 'Analysis'){
+            $attribs = $vvv->attributes();
+            if (!empty($attribs)){
+              #echo (string)$attribs->name;
+              #echo (string)$vvv;
+              $tmp[strtoupper($kkk).'_'.strtoupper((string)$attribs->name)] = (string)$vvv;
+            }
+            foreach($vvv AS $kkkk => $vvvv){
+              #echo $kkkk.' -> '.$vvvv.'<br>';
+              #$tmp[strtoupper($kkkk).'_'.strtoupper((string)$attribs->name)] = (string)$vvvv;
+            }
+          } else {
+            if ($kkk == 'Expiry') continue;
+            $tmp[strtoupper($kk).'_'.strtoupper($kkk)] = (string)$vvv;
+            #echo $kkk.' -> '.$vvv.'<br>';
+          }
+          #}
+        }
+        #}
+      }
+    }
+    return $tmp;
+  }/*}}}*/
+  
+  
+    private function saveReq($data, $xml)/*{{{*/
+  {
+    // Double Check
+    if (!empty($data['IDENTIFICATION_UNIQUEID'])){
+      $sql = 'SELECT `id` FROM `'.$this->dbtable.'` 
+              WHERE `IDENTIFICATION_UNIQUEID`= "'.addslashes($data['IDENTIFICATION_UNIQUEID']).'" ';
+      $row = Shopware()->Db()->fetchAll($sql);
+      if ($row[0]['id'] > 0) return $row[0]['id'];
+    }
+    $sql = 'INSERT INTO `'.$this->dbtable.'` SET ';
+    foreach($this->reqFields AS $key){
+      $sql.= '`'.$key.'` = "'.addslashes($data[$key]).'", ';
+    }
+    $tmp = explode('.', $data['PROCESSING_CODE']);
+    $sql.= '`meth` = "'.addslashes($tmp[0]).'", '; 
+    $sql.= '`typ` = "'.addslashes($tmp[1]).'", '; 
+    #$sql.= '`XML` = "'.addslashes($xml).'", '; // Raw Post Data
+    $sql.= '`created` = NOW() ';
+    #echo $sql;
+    $res = Shopware()->Db()->query($sql);
+    $lastID = Shopware()->Db()->lastInsertId();
+    // Im Fall von CP die PA Zeile als gecaptured markieren
+    if (!empty($data['IDENTIFICATION_REFERENCEID']) && $tmp[1] == 'CP'){
+      $sql = 'UPDATE `'.$this->dbtable.'` 
+              SET `CAPTURED` = 1 
+              WHERE `IDENTIFICATION_UNIQUEID` = "'.addslashes($data['IDENTIFICATION_REFERENCEID']).'"';
+      Shopware()->Db()->query($sql);
+    }
+    return $lastID;
+  }/*}}}*/
+  
+    private function saveSERIAL($id, $data)/*{{{*/
+  {
+  	foreach ($data AS $key => $value) {
+  		$data[$key] = utf8_decode($value);
+  	}
+    $serial = serialize($data);
+    $sql = 'UPDATE `'.$this->dbtable.'` 
+            SET `SERIAL` = "'.addslashes($serial).'" 
+            WHERE `id` = '.(int)$id;
+    return Shopware()->Db()->query($sql);
+  }/*}}}*/
+  
+    private function doNotify($url, $data, $xml = NULL)/*{{{*/
+  {
+    $strPOST = '';
+    foreach($data AS $k => $v) {
+      $strPOST.= $k.'='.$v.'&';
+    }
+    if (!empty($xml)) $strPOST = 'load='.urlencode($xml);
+
+    #echo '<pre>'.print_r($strPOST, 1).'</pre>';
+
+    if (function_exists('curl_init')) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_HEADER, 0);
+      curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $strPOST);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
+      #curl_setopt($ch, CURLOPT_FOLLLOW_LOCATION,1);
+      curl_setopt($ch, CURLOPT_USERAGENT, "php ctpepost");
+
+      $this->curl_response     = curl_exec($ch);
+      $this->error        = curl_error($ch);
+      $this->httpstatus   = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+
+      #echo '<pre>'.print_r($this->curl_response, 1).'</pre>';
+      #echo '<pre>'.print_r($this->error, 1).'</pre>';
+      #echo '<pre>'.print_r($this->httpstatus, 1).'</pre>';
+
+      curl_close($ch);
+
+      $res = $this->curl_response;
+      if (!$this->curl_response && $this->error){
+        $msg = urlencode('Curl Fehler...');
+        $res = 'status=FAIL&msg='.$this->error;
+      }
+
+    } else {
+      $msg = urlencode('Curl Fehler..');
+      $res = 'status=FAIL&msg='.$msg;
+    }
+
+    return $res;
+  }/*}}}*/
+  
+  private  function saveRes2Req($uniqueId, $response)/*{{{*/
+  {
+    $sql = 'UPDATE `'.$this->dbtable.'` SET ';
+    $sql.= '`RESPONSE` = "'.addslashes($response).'" ';
+    $sql.= 'WHERE `IDENTIFICATION_UNIQUEID` = "'.addslashes($uniqueId).'" ';
+    return Shopware()->Db()->query($sql);
+  }/*}}}*/
+  public function setActiveTable($table)/*{{{*/
+	  {
+	  $this->dbtable = $table;
+	  return $table;
+	  }/*}}}*/ 
+	
 }
