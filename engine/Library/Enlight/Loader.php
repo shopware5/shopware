@@ -104,6 +104,7 @@ class Enlight_Loader
         if (!is_string($class)) {
             throw new Enlight_Exception('Class name must be a string');
         }
+        $class = ltrim($class, self::DEFAULT_SEPARATOR);
         if (!$this->isLoaded($class)) {
             if ($path !== null) {
                 $this->loadFile($path);
@@ -414,7 +415,7 @@ class Enlight_Loader
     public function saveClassBootstrap($file)
     {
         if(file_exists($file)) {
-            return;
+            return true;
         }
         $fp = fopen($file, 'w+');
         if(!$file || !flock($fp, LOCK_EX)) {
