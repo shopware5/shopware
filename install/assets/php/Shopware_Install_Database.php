@@ -93,13 +93,24 @@ class Shopware_Install_Database
         }
 
         try {
-            $sql = "SHOW VARIABLES LIKE 'have_innodb';";
-            $result = $this->database->query($sql)->fetchColumn(1);
-            if($result != 'YES') {
-                $this->setError("Database-Error!: The support of the InnoDB storage engine is missing.<br/>");
+            $sql = "SELECT VERSION()";
+            $result = $this->database->query($sql)->fetchColumn(0);
+            if(version_compare($result, '4.1.0', '<')) {
+                $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 4 requires at least MySQL 4.1.0.<br/>");
                 return false;
             }
         } catch(PDOException $e) { }
+
+        try {
+            $sql = "SHOW VARIABLES LIKE 'have_innodb';";
+            $result = $this->database->query($sql)->fetchColumn(1);
+            if($result != 'YES') {
+                $this->setError("Database-Error!: The InnoDB storage engine is disabeld. Please enable for Shopware 4.<br/>");
+                return false;
+            }
+        } catch(PDOException $e) { }
+
+        // 5.1.0
 
         return true;
     }
