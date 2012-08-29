@@ -32,19 +32,18 @@
 error_reporting(E_ALL);
 ini_set("display_errors",1);
 define("installer",true);
-//$directory_not_empty = FALSE;
-//$files = scandir(dirname(dirname(__FILE__))."/cache/templates");
-//if ((count($files) > 2) )
-//{
-//	$directory_not_empty = true;
-//}
-//
-//if ($directory_not_empty == true){
-//header('Content-type: text/html; charset=utf-8', true, 503);
-//echo "<h4>Der Installer wurde bereits ausgeführt</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!";
-//echo "<h4>The installation process has already been finished.</h4> <br/> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!";
-//exit;
-//}
+$directory_not_empty = FALSE;
+$files = scandir(dirname(dirname(__FILE__)) . "/cache/templates");
+if ((count($files) > 2)) {
+    $directory_not_empty = true;
+}
+
+if ($directory_not_empty == true) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
+    echo "<h4>Der Installer wurde bereits ausgeführt</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!";
+    echo "<h4>The installation process has already been finished.</h4> <br/> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!";
+    exit;
+}
 // Check the minimum required php version
 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);

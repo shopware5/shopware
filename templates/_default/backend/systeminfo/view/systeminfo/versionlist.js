@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Versionlist', {
             },{
                 header: '{s name=version_grid/column/version}Version{/s}',
                 dataIndex: 'version',
+                align: 'right',
                 flex: 1
             }
         ];

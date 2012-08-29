@@ -112,10 +112,12 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
             },{
                 header: '{s name=config_grid/column/required}Required{/s}',
                 dataIndex: 'required',
+                align: 'right',
                 flex: 1
             },{
                 header: '{s name=config_grid/column/version}Version{/s}',
                 dataIndex: 'version',
+                align: 'right',
                 flex: 1,
                 renderer: me.renderVersion
             },{

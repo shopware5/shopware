@@ -2,7 +2,7 @@
 <shopware>
 <requirements>
 	<requirement>
-	 	<name>php</name><group>core</group><required>5.3</required>
+	 	<name>php</name><group>core</group><required>5.3.2</required>
 	</requirement>
 	<requirement>
 	 	<name>Zend Optimizer</name><group>core</group><required>3.3.0</required>
@@ -67,17 +67,6 @@
 	<requirement>
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
-<!--
-	<requirement>
-	 	<name>session.gc_probability</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>session.gc_divisor</name><group>config</group><required>10</required>
-	</requirement>
-	<requirement>
-	 	<name>session.use_trans_sid</name><group>config</group><required>0</required>
-	</requirement>
--->
 	<requirement>
 	 	<name>memory_limit</name><group>config</group><required>128M</required>
 	</requirement>
