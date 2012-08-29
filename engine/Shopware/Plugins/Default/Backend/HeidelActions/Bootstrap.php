@@ -45,18 +45,19 @@ class Shopware_Plugins_Backend_HeidelActions_Bootstrap extends Shopware_Componen
 			throw new Enlight_Exception("Dieses Plugin benoetigt das Plugin HeidelPayment<br />This plugin requires the plugin payment");
 	}
 		
-		if (ini_get('always_populate_raw_post_data') == 0) {
-			throw new Enlight_Exception('
-			DE:<br />
-			Dieses Plugin benoetig die PHP Einstellung "alwasy_populate_raw_post_data". Bitte setzen Sie diese auf "On". Sollten
-			Sie weitere Informationen benoetigen, schreiben Sie bitte eine E-Mail an technik@heidelpay.de .
-			<br/>
-			<br/>
-			EN:<br/>
-			This Plugin needs the php setting "always_populate_raw_post_data". Please switch it to "On".
-			If you need more information please send an email to technik@heidelpay.de.'
-			);
-                };
+  if (ini_get('always_populate_raw_post_data') == 0) {
+    $this->Logging("Unable to install plugin due to missing always_populate_raw_post_data.","ERROR");
+    throw new Enlight_Exception('
+      DE:<br />
+      Dieses Plugin benoetig die PHP Einstellung "alwasy_populate_raw_post_data". Bitte setzen Sie diese auf "On". Sollten
+      Sie weitere Informationen benoetigen, schreiben Sie bitte eine E-Mail an technik@heidelpay.de .
+      <br/>
+      <br/>
+      EN:<br/>
+      This Plugin needs the php setting "always_populate_raw_post_data". Please switch it to "On".
+      If you need more information please send an email to technik@heidelpay.de.'
+    );
+  };
 
 		$this->createEvents();
 
@@ -405,7 +406,7 @@ class Shopware_Plugins_Backend_HeidelActions_Bootstrap extends Shopware_Componen
 	 * posible log levels are:  DEBUG , INFO , WARN , ERROR
 	 */
 	public function Logging($message, $level = "ERROR" ) {
-		$path = "logs/heidelpay.log";
+		$path = "files/log/heidelpay.log";
 		$dir  = dirname($path);
 		if (!file_exists($dir)) {
 			mkdir($dir);

@@ -65,16 +65,17 @@ class heidelpay
   function heidelpay()/*{{{*/
   {
 
-    $configFilepath = '../../../../../Configs/Custom.php';
+    $configFilepath = dirname(__FILE__).'/../../../../../../../config.php';
     $config =  include $configFilepath;
     if (!is_array($config)) {
-                        print 'Invalid configuration file provided; PHP file does not return array value';
+      print 'Invalid configuration file provided; PHP file does not return array value';
+      exit();
     };
-	$this->dbhost = $config['db']['host'];
-	$this->dbuser = $config['db']['username'];
-	$this->dbpass = $config['db']['password'];
-	$this->dbname = $config['db']['dbname'];
 
+    $this->dbhost = $config['db']['host'];
+    $this->dbuser = $config['db']['username'];
+    $this->dbpass = $config['db']['password'];
+    $this->dbname = $config['db']['dbname'];
 
     if ($this->db = mysql_connect($this->dbhost, $this->dbuser, $this->dbpass)){
       mysql_select_db($this->dbname, $this->db);
@@ -82,26 +83,27 @@ class heidelpay
       $this->error = 'MySQL Connection failed.';
     } 
 
-	// load protokoll for shopware config (sUSESSL)
+    // load protokoll for shopware config (sUSESSL)
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') {
-        $this->protokoll = "https://" ;
+      $this->protokoll = "https://" ;
     } else {
-        $this->protokoll = "http://" ;
+      $this->protokoll = "http://" ;
     }
-      $serverHost = $_SERVER['HTTP_HOST'];
+    $serverHost = $_SERVER['HTTP_HOST'];
 
-        // Get default shop 
-        $sql = 'SELECT base_path FROM `s_core_shops`WHERE `default` = 1 LIMIT 1';
-        $this->sql[__FUNCTION__][] = $sql;
-        $res = mysql_query($sql, $this->db);
-        $exists = mysql_num_rows($res)>0;
-        if (!$exists) {
-            print 'No Settings Config found for sBASEPATH';
-            exit();
-        }
-	$row = mysql_fetch_assoc($res);
-	$this->baseURL = $this->protokoll.$serverHost.$row['base_path'];
-      
+    // Get default shop 
+    $sql = 'SELECT base_path FROM `s_core_shops`WHERE `default` = 1 LIMIT 1';
+    $this->sql[__FUNCTION__][] = $sql;
+    $res = mysql_query($sql, $this->db);
+
+    $exists = mysql_num_rows($res)>0;
+    if (!$exists) {
+      print 'No Settings Config found for sBASEPATH';
+      exit();
+    }
+    $row = mysql_fetch_assoc($res);
+    $this->baseURL = $this->protokoll.$serverHost.$row['base_path'];
+
   }/*}}}*/
 
   function saveReq($data, $xml)/*{{{*/

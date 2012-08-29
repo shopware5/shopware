@@ -29,8 +29,20 @@ class Shopware_Controllers_Backend_HeidelBooking extends Enlight_Controller_Acti
     } else {
       $protokoll = "http://";
     };
+
+    // Get default shop 
+    $sql = 'SELECT base_path FROM `s_core_shops`WHERE `default` = 1 LIMIT 1';
+    $res = current(Shopware()->Db()->fetchAll($sql));
+    $exists = count($res)>0;
+    if (!$exists) {
+      print 'No Settings Config found for sBASEPATH';
+      exit();
+    }
+    $serverHost = $this->Request()->getHttpHost();
+    $baseURL = $protokoll.$serverHost.$res['base_path'];
+
     //$this->payproxyURL = $protokoll . $this->Request()->getHttpHost() ."/engine/Shopware/Plugins/Default/Backend/HeidelActions/payproxy/" ;
-    $this->payproxyURL = $protokoll . $this->Request()->getHttpHost() ."/backend/HeidelBooking/executeSubScript/file/" ; 
+    $this->payproxyURL = $baseURL."/backend/HeidelBooking/executeSubScript/file/" ; 
     
     if ($this->Request()->getParam('cid') != $this->FrontendConfig()->HEIDELPAY_CC_CHANNEL){
       define('TRANSACTION_CHANNEL', $this->Request()->getParam('cid'));
