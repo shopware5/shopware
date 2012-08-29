@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             hideHeaders: false,
             buttons:[ 'add','remove' ],
             selectedItems: me.record.getArticles(),
-            fromFieldDockedItems: [ me.getFromToolbar() ],
+            fromFieldDockedItems: [ me.getFromToolbar(), me.getFromPagingToolbar() ],
             toFieldDockedItems: [ me.getToToolbar() ],
             buttonsText: {
                 add: "{s name=tabs/article_mapping/button_add}Add{/s}",
@@ -115,6 +115,16 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             }
         });
         return [me.ddSelector];
+    },
+
+    getFromPagingToolbar: function() {
+        var me = this;
+        return {
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: me.articleStore,
+            dock: 'bottom'
+        };
     },
 
     /**
