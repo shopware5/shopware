@@ -142,16 +142,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             me.fireEvent('articleNameSelect', me.rowEditor, value, record)
         });
 
-        // Hide search fields
-        me.articleNameSearch.on('blur', function() {
-            me.articleNumberSearch.getDropDownMenu().hide();
-            me.articleNameSearch.getDropDownMenu().hide();
-        }, me);
-        me.articleNumberSearch.on('blur', function() {
-            me.articleNumberSearch.getDropDownMenu().hide();
-            me.articleNameSearch.getDropDownMenu().hide();
-        }, me);
-
         me.on('canceledit', function() {
             me.articleNumberSearch.getDropDownMenu().hide();
             me.articleNameSearch.getDropDownMenu().hide();

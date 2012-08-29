@@ -369,7 +369,8 @@ Ext.define('Shopware.form.field.ArticleSearch',
             hideTrigger: true,
             listeners: {
                 scope: me,
-                keyup: me.onSearchKeyUp
+                keyup: me.onSearchKeyUp,
+                blur: me.onSearchBlur
             }
         });
         return input;
@@ -384,7 +385,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
             if (me.dropDownMenu) {
                 me.dropDownMenu.hide();
             }
-        }, 100);
+        }, 1000);
     },
 
     /**
