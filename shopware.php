@@ -43,10 +43,7 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
 }
 
 // Check the database config
-if (file_exists('config.php')
-  && !($config = include 'config.php')
-  || empty($config['db']['dbname'])
-  || $config['db']['name'] == '%db.database') {
+if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.database%') !== false) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Fehler</h2>';

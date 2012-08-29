@@ -4,7 +4,7 @@
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
-    $customConfig = $this->loadConfig($this->DocPath() . '/config.php');
+    $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
 } elseif (file_exists(__DIR__ . '/Custom.php')) {
     $customConfig = $this->loadConfig(__DIR__ . '/Custom.php');
 }  else {
@@ -24,7 +24,10 @@ $customConfig = array_merge(array(
     'httpCache' => array(),
     'session' => array(),
     'phpSettings' => array(),
-    'cache' => array(),
+    'cache' => array(
+        'backendOptions' => array(),
+        'frontendOptions' => array()
+    ),
     'hook' => array(),
     'model' => array(),
     'custom' => array(),
@@ -89,21 +92,21 @@ return array_merge($customConfig, array(
         'date.timezone' => 'Europe/Berlin',
         'zend.ze1_compatibility_mode' => 0
     ), $customConfig['phpSettings']),
-    'cache' => array_merge(array(
+    'cache' => array(
         'frontendOptions' => array(
             'automatic_serialization' => true,
             'automatic_cleaning_factor' => 0,
             'lifetime' => 3600
         ),
-        'backend' => 'File',
-        'backendOptions' => array(
+        'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
+        'backendOptions' => array_merge(array(
             'hashed_directory_umask' => 0771,
             'cache_file_umask' => 0644,
             'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
             'cache_dir' => $this->DocPath('cache_database'),
             'file_name_prefix' => 'shopware'
-        ),
-    ), $customConfig['cache']),
+        ), $customConfig['cache']['backendOptions']),
+    ),
     'hook' => array_merge(array(
         'proxyDir' => $this->AppPath('Proxies'),
         'proxyNamespace' => $this->App() . '_Proxies'

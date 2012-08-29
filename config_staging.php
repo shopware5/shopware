@@ -1,23 +1,24 @@
 <?php
-
-if (file_exists($this->DocPath()."/config.php")){
-    $defaultConfig = include($this->DocPath()."/config.php");
-}else {
+if (file_exists($this->DocPath() . 'config.php')) {
+    $defaultConfig = include $this->DocPath() . 'config.php';
+} else {
     $defaultConfig = array();
 }
 
 $stagingConfig = array(
-    'db' => array_merge($defaultConfig["db"],array(
-        'dbname' => $defaultConfig["custom"]["staging_database"]
+    'db' => array_merge($defaultConfig['db'], array(
+        'dbname' => $defaultConfig['custom']['staging_database']
     )),
-    'custom' => array_merge($defaultConfig["custom"],array(
+    'custom' => array_merge($defaultConfig['custom'], array(
         'is_staging' => true,
     )),
     'cache' => array(
-        'backendOptions' => array("cache_dir"=>$this->DocPath('staging_cache_database'))
+        'backendOptions' => array(
+            'cache_dir' => $this->DocPath('staging_cache_database')
+        )
     ),
     'httpCache' => array(
-        'cache_dir' =>  $this->DocPath('staging_cache_templates_html')
+        'cache_dir' => $this->DocPath('staging_cache_templates_html')
     ),
     'template' => array(
         'cacheDir' => $this->DocPath('staging_cache_templates_cache'),
