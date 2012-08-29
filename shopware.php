@@ -31,29 +31,32 @@
  */
 
 // Check the minimum required php version
-if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+if (version_compare(PHP_VERSION, '5.3.2', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3.2';
 
     echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
     return;
 }
 
-if (file_exists(dirname(__FILE__)."/config.php")){
-    if (strpos(file_get_contents(dirname(__FILE__)."/config.php"),"%db.database%")!==false){
-        header('Content-type: text/html; charset=utf-8', true, 503);
+// Check the database config
+if (file_exists('config.php')
+  && !($config = include 'config.php')
+  || empty($config['db']['dbname'])
+  || $config['db']['name'] == '%db.database') {
+    header('Content-type: text/html; charset=utf-8', true, 503);
 
-        echo '<h2>Fehler</h2>';
-        echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den Installer unter /install/ aus!';
+    echo '<h2>Fehler</h2>';
+    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den Installer unter /install/ aus!';
 
-        echo '<h2>Error</h2>';
-        echo 'Shopware 4 must be configured first. Please run the installer under /install/!';
-        return;
-    }
+    echo '<h2>Error</h2>';
+    echo 'Shopware 4 must be configured first. Please run the installer under /install/!';
+    return;
 }
+
 set_include_path(
     '.' . PATH_SEPARATOR .
     dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
@@ -64,9 +67,9 @@ set_include_path(
 include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
 
-$environment = getenv("ENV");
+$environment = getenv('ENV');
 if (empty($environment)){
-    $environment = "production";
+    $environment = 'production';
 }
 
 $s = new Shopware($environment);

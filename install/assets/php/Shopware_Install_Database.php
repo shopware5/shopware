@@ -43,8 +43,19 @@ require_once(dirname(__FILE__)."/Shopware_Components_Dump.php");
 
 class Shopware_Install_Database
 {
+    /**
+     * @var PDO
+     */
     protected $database;
+
+    /**
+     * @var array
+     */
     protected $database_parameters = array();
+
+    /**
+     * @var string
+     */
     protected $configFile;
 
     public function __construct(array $databaseParameters){
@@ -64,12 +75,13 @@ class Shopware_Install_Database
 
     protected $error;
 
-    public function setDatabase(){
+    public function setDatabase()
+    {
         $host = $this->database_parameters["host"];
         $port = $this->database_parameters["port"];
         $database = $this->database_parameters["database"];
         $user = $this->database_parameters["user"];
-        $password = $this->database_parameters["password"];
+        $password = trim($this->database_parameters["password"]);
 
         try {
             $this->database = new PDO("mysql:host=$host;port=$port;dbname=$database", $user, $password);
@@ -79,6 +91,16 @@ class Shopware_Install_Database
             $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
             return false;
         }
+
+        try {
+            $sql = "SHOW VARIABLES LIKE 'have_innodb';";
+            $result = $this->database->query($sql)->fetchColumn(1);
+            if($result != 'YES') {
+                $this->setError("Database-Error!: The support of the InnoDB storage engine is missing.<br/>");
+                return false;
+            }
+        } catch(PDOException $e) { }
+
         return true;
     }
 

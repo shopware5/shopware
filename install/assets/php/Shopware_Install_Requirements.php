@@ -45,25 +45,19 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
 
     protected $fatalError;
 
-    protected $permissionsList = array(
-        'cache/database',
-        'cache/templates',
-        'media',
-        ''
-    );
-
     /**
      * Checks all requirements
      */
     protected function checkAll()
     {
         foreach ($this->list as $requirement) {
-            $requirement->version = $this->check($requirement->name);
+            $version = $this->check($requirement->name);
             $requirement->result = $this->compare(
-                $requirement->name,
-                $requirement->version,
-                $requirement->required
+                (string) $requirement->name,
+                $version,
+                (string)$requirement->required
             );
+            $requirement->version = $version;
         }
     }
 
@@ -75,10 +69,9 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function getList()
     {
-        if($this->list === null) {
-
-            $xml_object = simplexml_load_file(dirname(__FILE__).'/System.xml');
-            if(is_object($xml_object->requirements)==true){
+        if ($this->list === null) {
+            $xml_object = simplexml_load_file(dirname(__FILE__) . '/System.xml');
+            if (is_object($xml_object->requirements) == true) {
                 $this->list = $xml_object->requirement;
             }
             $this->checkAll();
@@ -94,22 +87,21 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     protected function check($name)
     {
-        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
-        if(method_exists($this, $m)) {
+        $m = 'check' . str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
         } elseif (function_exists($name)) {
             return true;
-        } elseif(($value = ini_get($name))!==null) {
-            if(strtolower($value)=='off' || $value==0) {
+        } elseif (($value = ini_get($name)) !== null) {
+            if (strtolower($value) == 'off' || $value == 0) {
                 return false;
-            } elseif (strtolower($value)=='on' || $value==1) {
+            } elseif (strtolower($value) == 'on' || $value == 1) {
                 return true;
             } else {
                 return $value;
             }
-            return (!empty($value)&&strtolower($value)!='off');
         } else {
             return null;
         }
@@ -125,17 +117,17 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     protected function compare($name, $version, $required)
     {
-        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
-        if(method_exists($this, $m)) {
+        $m = 'compare' . str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        if (method_exists($this, $m)) {
             return $this->$m($version, $required);
-        } elseif(preg_match('#^[0-9]+[A-Z]$#', $required)) {
-            return $this->decodePhpSize($required)<=$this->decodePhpSize($version);
-        } elseif(preg_match('#^[0-9]+ [A-Z]+$#i', $required)) {
-            return $this->decodeSize($required)<=$this->decodeSize($version);
-        } elseif(preg_match('#^[0-9][0-9\.]+$#', $required)) {
+        } elseif (preg_match('#^[0-9]+[A-Z]$#', $required)) {
+            return $this->decodePhpSize($required) <= $this->decodePhpSize($version);
+        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $required)) {
+            return $this->decodeSize($required) <= $this->decodeSize($version);
+        } elseif (preg_match('#^[0-9][0-9\.]+$#', $required)) {
             return version_compare($required, $version, '<=');
         } else {
-            return $required==$version;
+            return $required == $version;
         }
     }
 
@@ -156,14 +148,14 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function checkIonCubeLoader()
     {
-        if(!extension_loaded('ionCube Loader')) {
+        if (!extension_loaded('ionCube Loader')) {
             return false;
         }
         ob_start();
         phpinfo(1);
         $s = ob_get_contents();
         ob_end_clean();
-        if(preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/',$s,$match)) {
+        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/', $s, $match)) {
             return $match[1];
         }
         return false;
@@ -176,7 +168,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function checkPhp()
     {
-        if(strpos(phpversion(), '-')) {
+        if (strpos(phpversion(), '-')) {
             return substr(phpversion(), 0, strpos(phpversion(), '-'));
         } else {
             return phpversion();
@@ -193,7 +185,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         if (function_exists('curl_version')) {
             $curl = curl_version();
             return $curl['version'];
-        } elseif(function_exists('curl_init')) {
+        } elseif (function_exists('curl_init')) {
             return true;
         } else {
             return false;
@@ -207,7 +199,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function checkLibXml()
     {
-        if(defined('LIBXML_DOTTED_VERSION')) {
+        if (defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
         } else {
             return false;
@@ -223,9 +215,9 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
-            if(preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
-                if(substr_count($match[0],'.')==1) {
-                    $match[0] .='.0';
+            if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
+                if (substr_count($match[0], '.') == 1) {
+                    $match[0] .= '.0';
                 }
                 return $match[0];
             }
@@ -244,7 +236,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
-            return !empty($gd['JPEG Support'])||!empty($gd['JPG Support']);
+            return !empty($gd['JPEG Support']) || !empty($gd['JPG Support']);
         } else {
             return false;
         }
@@ -273,7 +265,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function checkSessionSavePath()
     {
         if (function_exists('session_save_path')) {
-            return (bool) session_save_path();
+            return (bool)session_save_path();
         } elseif (ini_get('session.save_path')) {
             return true;
         } else {
@@ -288,14 +280,15 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function checkMagicQuotes()
     {
-        if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             return true;
-        } elseif(function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
+        } elseif (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
             return true;
         } else {
             return false;
         }
     }
+
     /**
      * Checks the disk free space
      *
@@ -303,7 +296,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function checkDiskFreeSpace()
     {
-        if(function_exists('disk_free_space')) {
+        if (function_exists('disk_free_space')) {
             return $this->encodeSize(disk_free_space(dirname(__FILE__)));
         } else {
             return false;
@@ -318,8 +311,8 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function checkIncludePath()
     {
         if (function_exists('set_include_path')) {
-            $old = set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__).DIRECTORY_SEPARATOR);
-            return $old && get_include_path()!=$old;
+            $old = set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR);
+            return $old && get_include_path() != $old;
         } else {
             return false;
         }
@@ -334,7 +327,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public function compareMaxExecutionTime($version, $required)
     {
-        if(!$version) {
+        if (!$version) {
             return true;
         }
         return version_compare($required, $version, '<=');
@@ -346,12 +339,12 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      * @param string $val
      * @return float
      */
-    public static function decodePhpSize ($val)
+    public static function decodePhpSize($val)
     {
         $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
-        $val = (float) $val;
-        switch($last) {
+        $last = strtolower($val[strlen($val) - 1]);
+        $val = (float)$val;
+        switch ($last) {
             case 'g':
                 $val *= 1024;
             case 'm':
@@ -368,12 +361,12 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      * @param string $val
      * @return float
      */
-    public static function decodeSize ($val)
+    public static function decodeSize($val)
     {
         $val = trim($val);
-        list($val, $last) = explode(' ',$val);
-        $val = (float) $val;
-        switch(strtoupper($last)) {
+        list($val, $last) = explode(' ', $val);
+        $val = (float)$val;
+        switch (strtoupper($last)) {
             case 'TB':
                 $val *= 1024;
             case 'GB':
@@ -383,7 +376,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
             case 'KB':
                 $val *= 1024;
             case 'B':
-                $val = (float) $val;
+                $val = (float)$val;
         }
         return $val;
     }
@@ -396,9 +389,9 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
      */
     public static function encodeSize($bytes)
     {
-        $types = array( 'B', 'KB', 'MB', 'GB', 'TB' );
-        for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
-        return( round( $bytes, 2 ) . ' ' . $types[$i] );
+        $types = array('B', 'KB', 'MB', 'GB', 'TB');
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
+        return (round($bytes, 2) . ' ' . $types[$i]);
     }
 
     /**
@@ -412,22 +405,18 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         foreach ($this->getList() as $requirement) {
             $listResult = array();
 
-            $listResult["name"] = (string)$requirement->name;
-            $listResult["isHardlyRequired"] = $requirement->weakRequired ? false : true;
-            $listResult["hasNotice"] = (string)$requirement->hasNotice;
-            $listResult["required"] = (string)$requirement->required;
-            $listResult["version"] = (string)$requirement->version;
-            $listResult["result"] = (string)$requirement->result;
-            if (empty($listResult["result"]) && $listResult["isHardlyRequired"] == true){
+            $listResult['name'] = (string)$requirement->name;
+            $listResult['isHardlyRequired'] = $requirement->weakRequired ? false : true;
+            $listResult['hasNotice'] = (string)$requirement->hasNotice;
+            $listResult['required'] = (string)$requirement->required;
+            $listResult['version'] = (string)$requirement->version;
+            $listResult['result'] = (string)$requirement->result;
+            if (empty($listResult['result']) && $listResult['isHardlyRequired'] == true) {
                 $this->setFatalError(true);
             }
             $list[] = $listResult;
         }
         return $list;
-    }
-
-    public function permissionsToArray(){
-
     }
 
     /**
