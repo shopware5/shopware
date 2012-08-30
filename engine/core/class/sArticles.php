@@ -914,7 +914,7 @@ class sArticles
 				IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
 				attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
 				attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-				cd.discount,
+				-- cd.discount,
 				IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
 				(a.configurator_set_id IS NOT NULL) as sConfigurator,
 				IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
