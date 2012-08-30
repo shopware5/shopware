@@ -826,7 +826,6 @@ class sArticles
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
-            IFNULL(p.price, p2.price) as org,
                 (
                     SELECT IFNULL(p.price, p2.price) as min_price
                     FROM s_articles_details d
@@ -845,7 +844,7 @@ class sArticles
 
                     ORDER BY min_price
                     LIMIT 1
-                ) * 100 / (100 + IFNULL(cd.discount, 0))
+                ) * 100 / (100 - IFNULL(cd.discount, 0))
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
@@ -915,7 +914,7 @@ class sArticles
 				IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
 				attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
 				attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-				-- cd.discount,
+				cd.discount,
 				IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
 				(a.configurator_set_id IS NOT NULL) as sConfigurator,
 				IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
@@ -1083,6 +1082,8 @@ class sArticles
         $articles = $this->sGetTranslations($articles, "article");
 
         foreach ($articles as $articleKey => $articleValue) {
+            var_dump($articleValue['price']);
+            var_dump($articleValue['price']);
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
 
             $articles[$articleKey]["sVariantArticle"] = false;
@@ -1773,25 +1774,25 @@ class sArticles
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
-				((
-					SELECT IFNULL(p.price,p2.price) as min_price
-					FROM s_articles_details d
+                (
+                    SELECT IFNULL(p.price, p2.price) as min_price
+                    FROM s_articles_details d
 
-					LEFT JOIN s_articles_prices p
-					ON p.articleDetailsID=d.id
-					AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
-					AND p.to='beliebig'
+                    LEFT JOIN s_articles_prices p
+                    ON p.articleDetailsID=d.id
+                    AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
+                    AND p.to='beliebig'
 
-					LEFT JOIN s_articles_prices p2
-					ON p2.articledetailsID=d.id
-					AND p2.pricegroup='EK'
-					AND p2.to='beliebig'
+                    LEFT JOIN s_articles_prices p2
+                    ON p2.articledetailsID=d.id
+                    AND p2.pricegroup='EK'
+                    AND p2.to='beliebig'
 
-					WHERE d.articleID=a.id
+                    WHERE d.articleID=a.id
 
-					ORDER BY min_price
-					LIMIT 1
-				) * 100/100-IFNULL(cd.discount,0))
+                    ORDER BY min_price
+                    LIMIT 1
+                ) * 100 / (100 - IFNULL(cd.discount, 0))
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
@@ -1804,7 +1805,9 @@ class sArticles
 				AND cd.discountstart=(
 					SELECT MAX(discountstart)
 					FROM s_core_pricegroups_discounts
-					WHERE groupID=a.pricegroupID AND cd.customergroupID=cg.id)
+					WHERE groupID=a.pricegroupID
+					AND customergroupID=cg.id
+                )
 			";
         } else {
             $select_price = '0';
