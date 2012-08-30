@@ -3,15 +3,15 @@
         {foreach $Data.entries as $entry}
             <div class="blog-entry" style="width:{"100" / $Data.entries|count}%">
             	<div class="blog-entry-inner{if $entry@last} last{/if}">
-	                <div class="blog_img">
-		                <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">
-			                {if $entry.media.thumbnails.3}
-				                 <img src="{$entry.media.thumbnails.3}" />
-				            {else}
-				            	{se name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/se}
-				            {/if}
-		                </a>
-	                </div>
+                    <div class="blog_img">
+                       {if $entry.media.thumbnails.3}
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({$entry.media.thumbnails.3}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
+                        {else}
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">
+                                {se name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/se}
+                            </a>
+                        {/if}
+                    </div>
 	                
 	                <h2>
 	                	<a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">{$entry.title|truncate:40}</a>
