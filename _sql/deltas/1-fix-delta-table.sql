@@ -1,0 +1,8 @@
+-- //
+
+TRUNCATE `changelog`;
+
+-- //@UNDO
+
+-- //
+
