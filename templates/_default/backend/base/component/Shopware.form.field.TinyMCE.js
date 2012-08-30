@@ -330,8 +330,9 @@ Ext.define('Shopware.form.field.TinyMCE',
         // (e.g. in order to click the save button in the ExtJS window).
         // This solution still as some drawbacks as it image-resize-actions won't trigger a undo-step usually.
         me.tinymce.onInit.add(function(ed, evt) {
-            var dom = ed.dom;
-            var doc = ed.getDoc();
+            var dom = ed.dom,
+                doc = ed.getDoc();
+
             tinymce.dom.Event.add(doc, 'blur', function(e) {
                 me.setRawValue(me.tinymce.getContent());
             });
@@ -342,7 +343,6 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Fire the "afterrendereditor" event
         me.fireEvent('afterrendereditor', me, me.tinymce, input.id, me.config.editor);
-
     },
 
     /**

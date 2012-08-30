@@ -2,7 +2,10 @@ tinyMCEPopup.requireLangPack();
 tinyMCEPopup.onInit.add(onLoadInit);
 
 function saveContent() {
+    var ed = tinyMCE.activeEditor,
+        undoManager = ed.undoManager;
 	tinyMCEPopup.editor.setContent(document.getElementById('htmlSource').value, {source_view : true});
+    undoManager.add();
 	tinyMCEPopup.close();
 }
 
