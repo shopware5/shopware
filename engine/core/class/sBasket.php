@@ -291,18 +291,14 @@ class sBasket
 	 * Add premium products to cart
 	 * @access public
      * @deprecated
-	 * @return void
+	 * @return bool|int
 	 */
 	public function sInsertPremium()
 	{
 		static $last_premium;
 
 		$sBasketAmount = $this->sGetAmount();
-		if(empty($sBasketAmount["totalAmount"]))
-		$sBasketAmount = 0;
-		else
-		$sBasketAmount = $sBasketAmount["totalAmount"];
-
+		$sBasketAmount = empty($sBasketAmount["totalAmount"]) ? 0 :$sBasketAmount["totalAmount"];
 
 
 		if(empty($this->sSYSTEM->_GET["sAddPremium"]))
@@ -328,11 +324,14 @@ class sBasket
 			";
 
             $deletePremium = Shopware()->Db()->fetchCol($sql, array($sBasketAmount, $this->sSYSTEM->sSESSION_ID));
-			if(empty($deletePremium))
-			return true;
 
-            $sql= "DELETE FROM s_order_basket WHERE id IN (?)";
-            Shopware()->Db()->query($sql, array($deletePremium));
+			if(empty($deletePremium)) {
+                return true;
+            }
+
+            $deletePremium = Shopware()->Db()->quote($deletePremium);
+            $sql= "DELETE FROM s_order_basket WHERE id IN ($deletePremium)";
+            Shopware()->Db()->query($sql);
 			return true;
 		}
 
