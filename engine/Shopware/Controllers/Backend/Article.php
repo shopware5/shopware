@@ -1092,7 +1092,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'data' => $data
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -1170,7 +1170,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'data' => $data
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -1235,7 +1235,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'data' => $data
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -1265,7 +1265,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'success' => true
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -1291,7 +1291,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'success' => true
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -2512,7 +2512,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'success' => true
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -2552,7 +2552,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'success' => true
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'error' => $e->getMessage()
@@ -2612,7 +2612,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'success' => true
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -2843,7 +2843,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->View()->assign(array(
                 'success' => true
             ));
-        } catch (\Doctrine\ORM\ORMException $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'error' => $e->getMessage()
@@ -2886,7 +2886,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $articleDetail = $esd->getArticleDetail();
             $articleDetail->setInStock($freeSerialsCount);
             Shopware()->Models()->flush();
-        } catch (\Doctrine\ORM\ORMException $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'error' => $e->getMessage()
