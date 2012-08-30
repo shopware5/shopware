@@ -201,20 +201,17 @@ div.supplier ul li.image {background-color: #fff;}
 
 #detail .article_back a,
 #detail .article_next a {
-    width: auto;
-    height: auto;
-    position: absolute;
+    position: static;
     display: block;
-    width: 16px; height: 16px;
-    top: 50%; left: auto;
-    margin-top: -8px;
     text-indent: -999em;
     padding: 0;
+    width: 19px;
+    height: 111px;
 }
-#detail .article_back a { background: url("../images/icons/ico_listing-prev.png") no-repeat }
-#detail .article_back:hover a { background: url("../images/icons/ico_listing-prev-active.png") no-repeat }
-#detail .article_next a { background: url("../images/icons/ico_listing-next.png") no-repeat }
-#detail .article_next:hover a { background: url("../images/icons/ico_listing-next-active.png") no-repeat }
+#detail .article_back a { background: url("../images/icons/ico_listing-prev.png") no-repeat center center }
+#detail .article_back:hover a { background: url("../images/icons/ico_listing-prev-active.png") no-repeat center center }
+#detail .article_next a { background: url("../images/icons/ico_listing-next.png") no-repeat center center }
+#detail .article_next:hover a { background: url("../images/icons/ico_listing-next-active.png") no-repeat center center }
 
 #detail h1 {color:#333;}
 #detail .border {border-color: #dfdfdf;}
