@@ -1478,7 +1478,6 @@ div#searchresults ul.searchresult li.active a h3 {color: #e1540f;}
 
 div#searchresults li.searchresult {background: #fff;overflow: hidden;padding: 0;}
 div#searchresults li.searchresult .searchthumb {width: 96px;background: transparent;float: left;height: 57px;text-align: center; margin: 10px 0;}
-div#searchresults li.searchresult .searchthumb img{height: 57px;}
 div#searchresults li.searchresult .searchinner {float: left;height: 57px; width: 364px;padding: 10px 5px;}
 div#searchresults li.searchresult .searchinner a h3 {color: #000;}
 div#searchresults a.resultall {margin: 0 14px; width: 490px;}
@@ -1914,8 +1913,8 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 
 /* COL 2 */
 .emotion-col3 .col2 .artbox .inner .artbox_thumb {height: 298px; width: 285px;}
-.emotion-col3 .col2 .artbox .inner .title {position: absolute; top: 40px; left: 320px; width: 215px;}
-.emotion-col3 .col2 .artbox .inner .desc {position: absolute; top: 75px; left: 320px; width: 215px;}
+.emotion-col3 .col2 .artbox .inner .title {position: absolute; top: 40px; left: 320px; width: 175px;}
+.emotion-col3 .col2 .artbox .inner .desc {position: absolute; top: 75px; left: 320px; width: 175px;}
 .emotion-col3 .col2 .artbox .article_price_unit_pseudo,
 .emotion-col3 .col2 .artbox .article_price_unit,
 .emotion-col3 .col2 .artbox p.price, 
