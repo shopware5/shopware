@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     initComponent: function() {
         var me = this;
 
-        if(!Ext.isIE && !Ext.ieVersion >= 9) {
+        if(Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
             // Create the headline
             me.headline = Ext.create('Ext.container.Container', {
                 html: '<h1>{s name=title/login}Login Shopware 4 Backend{/s}</h1>'
