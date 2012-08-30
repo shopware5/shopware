@@ -75,7 +75,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
-        if ($request->getModuleName() == 'backend') {
+        if ($request->getModuleName() == 'backend' || $request->getModuleName() == 'api') {
             return;
         }
 
@@ -123,6 +123,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                 }
             }
         }
+
         unset($process);
         $request->setParams($userParams);
     }
