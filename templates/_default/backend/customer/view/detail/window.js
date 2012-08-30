@@ -127,7 +127,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * @param model
      */
     setStores: function(stores) {
-        var me = this;
+        var me = this, billing = null, shipping = null, state, countryStore;
+
 
         me.baseFieldSet.customerGroupCombo.bindStore(stores.getCustomerGroupStore);
         me.baseFieldSet.shopStoreCombo.bindStore(stores.getShopStore);
@@ -140,6 +141,60 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.orderGrid.paymentStore = stores.getPaymentStore;
         me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
         me.detailForm.loadRecord(me.record);
+
+
+        if (me.record instanceof Ext.data.Model &&
+            me.record.getBilling() instanceof Ext.data.Store &&
+            me.record.getBilling().first() instanceof Ext.data.Model) {
+
+            billing = me.record.getBilling().first();
+
+            if(billing.get('countryId')) {
+                
+                me.billingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = billing.get('countryId');
+                me.billingFieldSet.countryStateCombo.getStore().load({
+                    callback: function() {
+                        if(billing.get('stateId')) {
+                            me.billingFieldSet.countryStateCombo.setValue(billing.get('stateId'));
+                        }
+                        else {
+                            me.billingFieldSet.countryStateCombo.setValue(null);
+                            billing.set('stateId',null);
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            me.billingFieldSet.countryStateCombo.setValue(null);
+        }
+
+        if (me.record instanceof Ext.data.Model &&
+                me.record.getShipping() instanceof Ext.data.Store &&
+                me.record.getShipping().first() instanceof Ext.data.Model) {
+
+            shipping = me.record.getShipping().first();
+
+            if(shipping.get('countryId')) {
+                me.shippingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = shipping.get('countryId');
+                me.shippingFieldSet.countryStateCombo.getStore().load({
+                    callback: function() {
+                        me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
+                        if(shipping.get('stateId')) {
+                            me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
+                        }
+                        else {
+                            me.shippingFieldSet.countryStateCombo.setValue(null);
+                            shipping.set('stateId',null);
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            me.shippingFieldSet.countryStateCombo.setValue(null);
+        }
+
 
         if (!me.record.get('id') ) {
             me.detailForm.getForm().clearInvalid();

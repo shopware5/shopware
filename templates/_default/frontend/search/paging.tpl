@@ -7,7 +7,7 @@
 {/block}
 {* Listing paging *}
 {block name='frontend_listing_actions_paging'}
-{if $sPages.pages|@count != 1}
+{if $sPages.pages|@count != 0}
 	<div class="bottom">
 		<div class="paging">
 			<label>{s name='ListingPaging'}{/s}</label>

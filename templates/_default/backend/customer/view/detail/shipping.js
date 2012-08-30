@@ -268,6 +268,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             editable:false,
             name:'shipping[countryId]',
             fieldLabel:me.snippets.country,
+            forceSelection: true,
             valueField:'id',
             anchor:'100%',
             labelWidth:150,
@@ -275,9 +276,26 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             displayField:'name',
             listeners: {
                 change: function(field, newValue, oldValue) {
-                    me.fireEvent('countryChanged', field, newValue);
+                    me.fireEvent('countryChanged', field, newValue, me.countryStateCombo);
                 }
             }
+        });
+
+        me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
+            name:'shipping[stateId]',
+            action: 'shippingStateId',
+            forceSelection: true,
+            fieldLabel:me.snippets.state,
+            store: Ext.create('Shopware.store.CountryState'),
+            valueField: 'id',
+            displayField: 'name',
+            editable: false,
+            hidden: true,
+            triggerAction:'all',
+            queryMode: 'local',
+            anchor:'100%',
+            labelWidth:150,
+            minWidth:250
         });
 
         return [{
@@ -312,17 +330,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             fieldLabel:me.snippets.city
         },
             me.countryCombo,
+            me.countryStateCombo,
         {
-            xtype: 'combobox',
-            name:'shipping[stateId]',
-            id: 'stateShipping',
-            store: Ext.create('Shopware.store.CountryState'),
-            fieldLabel:me.snippets.state,
-            valueField: 'id',
-            displayField: 'name',
-            editable: false,
-            hidden: true
-        }, {
             name:'shipping[company]',
             fieldLabel:me.snippets.company
         }, {

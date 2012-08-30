@@ -222,6 +222,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             valueField:'id',
             queryMode: 'local',
             displayField:'name',
+            forceSelection: true,
             anchor:'100%',
             labelWidth:150,
             minWidth:250,
@@ -229,10 +230,28 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             allowBlank:false,
             listeners: {
                 change: function(field, newValue, oldValue) {
-                    me.fireEvent('countryChanged', field, newValue);
+                    me.fireEvent('countryChanged', field, newValue, me.countryStateCombo);
                 }
             }
         });
+
+        me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
+            name:'billing[stateId]',
+            action: 'billingStateId',
+            fieldLabel:me.snippets.state,
+            store: Ext.create('Shopware.store.CountryState'),
+            valueField: 'id',
+            displayField: 'name',
+            forceSelection: true,
+            editable: false,
+            hidden: true,
+            triggerAction:'all',
+            queryMode: 'local',
+            anchor:'100%',
+            labelWidth:150,
+            minWidth:250
+        });
+
 
         return [{
             xtype:'combobox',
@@ -278,17 +297,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             allowBlank:false
         },
             me.countryCombo,
+            me.countryStateCombo,
         {
-            xtype: 'combobox',
-            name:'billing[stateId]',
-            id: 'stateBilling',
-            fieldLabel:me.snippets.state,
-            store: Ext.create('Shopware.store.CountryState'),
-            valueField: 'id',
-            displayField: 'name',
-            editable: false,
-            hidden: true
-        }, {
             //define birthday date field with a defined format
             xtype:'datefield',
             name:'billing[birthday]',

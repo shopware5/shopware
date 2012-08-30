@@ -85,9 +85,9 @@ class Billing extends ModelEntity
     /**
      * Contains the id of the state. Used for billing - state association.
      * @var integer $stateId
-     * @ORM\Column(name="stateID", type="integer", nullable=false)
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    protected $stateId = 0;
+    protected $stateId = null;
 
     /**
      * Contains the name of the billing address company

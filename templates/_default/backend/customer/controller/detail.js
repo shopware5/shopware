@@ -123,52 +123,35 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param field
      * @param newValue
      */
-    onCountryChanged: function(field, newValue) {
+    onCountryChanged: function(countryCombo, newValue, countryStateCombo) {
         var me = this,
-            store, combo, oldState, record;
+            store, combo, oldState;
 
-        // Get the related state-combo to set
-        if(field.name == "billing[countryId]"){
-            combo = Ext.getCmp('stateBilling');
-        }else if(field.name == "shipping[countryId]"){
-            combo = Ext.getCmp('stateShipping');
-        }else{
+        oldState = countryStateCombo.getValue();
+        store = countryStateCombo.store;
+        if (newValue === null) {
+            countryStateCombo.setValue(null);
+            countryStateCombo.hide();
             return;
         }
-
-        oldState = combo.getValue();
-        store = combo.store;
-
-        // Load the state-store and enable/disable it depending on the number of results
-        store.each(function(record){
-            store.remove(record);
-        });
         store.getProxy().extraParams = {
             countryId: newValue
         };
         store.load({
             callback: function() {
+                var record = store.getById(oldState);
 
-                if(store.count() == 0){
-                    combo.required = false;
-                    combo.hide();
-                    combo.setValue(0);
-                }else{
-                    combo.show();
-                    combo.required = true;
-
-                    record = store.getById(oldState);
-
-                    if(record instanceof Ext.data.Model){
-                       combo.setValue(record.get('id'));
-                    }else{
-                       combo.setValue(store.getAt(0));
-                    }
+                if (record === null) {
+                    record = store.first();
                 }
+                if (record instanceof Ext.data.Model) {
+                    countryStateCombo.setValue(record.get('id'));
+                } else {
+                    countryStateCombo.setValue(null);
+                }
+                countryStateCombo.show();
             }
         });
-
-
     },
 
     /**
