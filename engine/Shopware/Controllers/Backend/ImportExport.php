@@ -2221,8 +2221,23 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'md5_password'   => 'rawPassword',
             'phone'          => 'billing_phone',
             'fax'            => 'billing_fax',
-            'customernumber' => 'billing_number'
+            'customernumber' => 'billing_number',
+
+            'billing_text1'  => 'billing_attr_text1',
+            'billing_text2'  => 'billing_attr_text2',
+            'billing_text3'  => 'billing_attr_text3',
+            'billing_text4'  => 'billing_attr_text4',
+            'billing_text5'  => 'billing_attr_text5',
+            'billing_text6'  => 'billing_attr_text6',
+
+            'shipping_text1'  => 'shipping_attr_text1',
+            'shipping_text2'  => 'shipping_attr_text2',
+            'shipping_text3'  => 'shipping_attr_text3',
+            'shipping_text4'  => 'shipping_attr_text4',
+            'shipping_text5'  => 'shipping_attr_text5',
+            'shipping_text6'  => 'shipping_attr_text6',
         );
+
         $customerData = $this->mapFields($customerData, $customerMapping) + $customerData;
 
         $attribute = $this->prefixToArray($customerData, 'attr_');
