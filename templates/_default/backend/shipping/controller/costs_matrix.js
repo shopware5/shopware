@@ -216,12 +216,12 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                 if (response !== 'yes') {
                     return false;
                 }
-                var costsMatrixModel = me.getModel('Costsmatrix').create();
-                costsMatrixModel.set(record.data);
                 // Row has been created, but not yet saved, so we just remove it
                 if(record.phantom) {
-                    store.load();
+                    record.store.remove(record);
                 } else {
+                    var costsMatrixModel = me.getModel('Costsmatrix').create();
+                    costsMatrixModel.set(record.data);
                     costsMatrixModel.destroy({
                         success : function () {
                             store.load();

@@ -181,11 +181,11 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 items: [{
                     iconCls : 'sprite-minus-circle-frame',
                     action  : 'deleteCostsMatrixEntry',
-                    cls     : 'dispatchDelete',
+                    //cls     : 'dispatchDelete',
                     tooltip : '{s name=grid_delete_tooltip}Delete these shipping costs.{/s}',
                     renderer: me.onActionRender,
                     getClass: function(value, metadata, record) {
-                        if (record.get('to') != '')  {
+                        if (record.data.to > 0)  {
                             return 'x-hidden';
                         }
                     }
