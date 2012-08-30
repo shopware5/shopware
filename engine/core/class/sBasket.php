@@ -1861,4 +1861,25 @@ class sBasket
 
 		return $insertId;
 	}
+
+    /**
+     * Refresh basket after login / currency change
+     * @deprecated
+     */
+    public function sRefreshBasket()
+    {
+        $session = Shopware()->Session();
+        $admin = Shopware()->Modules()->Admin();
+
+        // Update basket data
+        $admin->sGetUserData();
+        $this->sGetBasket();
+        $admin->sGetShippingcosts();
+
+        // Update basket data in session
+        $session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
+        $session->sBasketQuantity = $this->sCountBasket();
+        $amount = $this->sGetAmount();
+        $session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+    }
 }

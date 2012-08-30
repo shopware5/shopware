@@ -84,6 +84,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function postDispatch()
     {
+        $this->session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
         $this->session->sBasketQuantity = $this->basket->sCountBasket();
         $amount = $this->basket->sGetAmount();
         $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);

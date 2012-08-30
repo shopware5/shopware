@@ -299,6 +299,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $session->$cookieKey = $cookieValue;
         }
 
+        // Refresh basket on currency change
+        if(isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency) {
+            Shopware()->Modules()->Basket()->sRefreshBasket();
+        }
+
         // Upgrade template
         if(isset($session->template) && !empty($session->Admin)) {
             $repository = 'Shopware\Models\Shop\Template';

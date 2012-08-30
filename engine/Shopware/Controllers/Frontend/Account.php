@@ -790,17 +790,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     protected function refreshBasket()
     {
-        $basket = Shopware()->Modules()->Basket();
-        $session = Shopware()->Session();
-
-        // Update basket data
-        $this->admin->sGetUserData();
-        $basket->sGetBasket();
-        $this->admin->sGetShippingcosts();
-
-        // Update basket data in session
-        $session->sBasketQuantity = $basket->sCountBasket();
-        $amount = $basket->sGetAmount();
-        $session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+        Shopware()->Modules()->Basket()->sRefreshBasket();
     }
 }
