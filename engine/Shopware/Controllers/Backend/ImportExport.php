@@ -1497,6 +1497,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $category['id']     = $category['categoryID'];
             $category['parent'] = $categoryRepository->find($category['parentID']);
             $models[] = $this->saveCategory($category, $categoryRepository, $metaData);
+            Shopware()->Models()->flush();
         }
 
         try {
