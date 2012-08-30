@@ -448,42 +448,50 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function saveDetail()
     {
-        $params = $this->Request()->getParams();
-        $categoryId = $params['id'];
-        if (empty($categoryId)) {
-            $categoryModel = new \Shopware\Models\Category\Category();
-        } else {
-            $categoryModel = $this->getRepository()->find($categoryId);
-            $categoryModel->getArticles()->clear();
+        try {
+            $params = $this->Request()->getParams();
+            $categoryId = $params['id'];
+            if (empty($categoryId)) {
+                $categoryModel = new \Shopware\Models\Category\Category();
+            } else {
+                $categoryModel = $this->getRepository()->find($categoryId);
+                $categoryModel->getArticles()->clear();
+                Shopware()->Models()->flush();
+            }
+
+            $this->prepareArticleAssociatedData($params, $categoryModel);
+            $params = $this->prepareAttributeAssociatedData($params);
+            $params = $this->prepareCustomerGroupsAssociatedData($params);
+            $params = $this->prepareMediaAssociatedData($params);
+            unset($params["articles"]);
+            unset($params["emotion"]);
+            unset($params["imagePath"]);
+
+            $categoryModel->fromArray($params);
+
+            $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
+            $parent = $this->getRepository()->find($params['parentId']);
+            $categoryModel->setParent($parent);
+
+            Shopware()->Models()->persist($categoryModel);
             Shopware()->Models()->flush();
+
+            $params['id'] = $categoryModel->getId();
+
+            $query = $this->getRepository()->getDetailQuery($params['id']);
+            $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $data["imagePath"] = $data["media"]["path"];
+
+            $this->View()->assign(array(
+                'success' => true, 'data' => $data, 'total' => count($data)
+            ));
         }
-
-        $this->prepareArticleAssociatedData($params, $categoryModel);
-        $params = $this->prepareAttributeAssociatedData($params);
-        $params = $this->prepareCustomerGroupsAssociatedData($params);
-        $params = $this->prepareMediaAssociatedData($params);
-        unset($params["articles"]);
-        unset($params["emotion"]);
-        unset($params["imagePath"]);
-
-        $categoryModel->fromArray($params);
-
-        $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
-        $parent = $this->getRepository()->find($params['parentId']);
-        $categoryModel->setParent($parent);
-
-        Shopware()->Models()->persist($categoryModel);
-        Shopware()->Models()->flush();
-
-        $params['id'] = $categoryModel->getId();
-
-        $query = $this->getRepository()->getDetailQuery($params['id']);
-        $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $data["imagePath"] = $data["media"]["path"];
-
-        $this->View()->assign(array(
-            'success' => true, 'data' => $data, 'total' => count($data)
-        ));
+        catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+        }
     }
 
     /**
@@ -491,21 +499,29 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function deleteAction()
     {
-        if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
-            return;
+        try {
+            if (!($id = $this->Request()->getParam('id'))) {
+                $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
+                return;
+            }
+
+            $result = Shopware()->Models()->getRepository('\Shopware\Models\Category\Category')->find($id);
+            if (!$result) {
+                $this->View()->assign(array('success' => false, 'message' => 'Category not found'));
+                return;
+            }
+
+            Shopware()->Models()->remove($result);
+            Shopware()->Models()->flush();
+
+            $this->View()->assign(array('success' => true));
         }
-
-        $result = Shopware()->Models()->getRepository('\Shopware\Models\Category\Category')->find($id);
-        if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Category not found'));
-            return;
+        catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
         }
-
-        Shopware()->Models()->remove($result);
-        Shopware()->Models()->flush();
-
-        $this->View()->assign(array('success' => true));
     }
 
 
