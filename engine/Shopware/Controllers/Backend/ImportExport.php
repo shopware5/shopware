@@ -1496,6 +1496,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $category = (array) $category;
             $models[] = $this->saveCategory($category, $categoryRepository, $metaData);
             Shopware()->Models()->flush();
+            Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->recover();
         }
 
         try {
@@ -2017,6 +2018,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (empty($articleData['ordernumber']) && empty($articleData['articleID']) && empty($articleData['articledetailsID'])) {
             return false;
         }
+
+        $articleData = $this->toUtf8($articleData);
 
         $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
