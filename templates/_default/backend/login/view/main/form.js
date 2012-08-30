@@ -57,58 +57,70 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     initComponent: function() {
         var me = this;
 
-        // Create the headline
-        me.headline = Ext.create('Ext.container.Container', {
-            html: '<h1>{s name=title/login}Login Shopware 4 Backend{/s}</h1>'
-        });
+        if(!Ext.isIE && !Ext.ieVersion >= 9) {
+            // Create the headline
+            me.headline = Ext.create('Ext.container.Container', {
+                html: '<h1>{s name=title/login}Login Shopware 4 Backend{/s}</h1>'
+            });
 
-        // Username field
-        me.userName = Ext.create('Ext.form.field.Text', {
-            name: 'username',
-            allowBlank: true,
-            fieldLabel: '{s name=field/username}Username{/s}'
-        });
+            // Username field
+            me.userName = Ext.create('Ext.form.field.Text', {
+                name: 'username',
+                allowBlank: true,
+                fieldLabel: '{s name=field/username}Username{/s}'
+            });
 
-        // Passwort field
-        me.password = Ext.create('Ext.form.field.Text', {
-            inputType: 'password',
-            name: 'password',
-            allowBlank: true,
-            fieldLabel: '{s name=field/password}Password{/s}'
-        });
+            // Passwort field
+            me.password = Ext.create('Ext.form.field.Text', {
+                inputType: 'password',
+                name: 'password',
+                allowBlank: true,
+                fieldLabel: '{s name=field/password}Password{/s}'
+            });
 
-        // Language switcher
-        me.language = Ext.create('Ext.form.field.ComboBox', {
-            type: 'remote',
-            name: 'locale',
-            store: me.localeStore,
-            queryMode: 'local',
-            emptyText: '{s name=field/locale/empty_text}Select other language...{/s}',
-            fieldLabel: '{s name=field/locale}Language{/s}',
-            displayField: 'name',
-            valueField: 'id',
-            cls: Ext.baseCSSPrefix + 'form-combo'
-        });
+            // Language switcher
+            me.language = Ext.create('Ext.form.field.ComboBox', {
+                type: 'remote',
+                name: 'locale',
+                store: me.localeStore,
+                queryMode: 'local',
+                emptyText: '{s name=field/locale/empty_text}Select other language...{/s}',
+                fieldLabel: '{s name=field/locale}Language{/s}',
+                displayField: 'name',
+                valueField: 'id',
+                cls: Ext.baseCSSPrefix + 'form-combo'
+            });
 
-        me.items = [ me.headline, me.userName, me.password, me.language ];
+            me.items = [ me.headline, me.userName, me.password, me.language ];
 
-        //set the focus on the first textbox
-        me.userName.focus(false, 125);
+            //set the focus on the first textbox
+            me.userName.focus(false, 125);
 
-        me.dockedItems = [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            ui: 'shopware-ui',
-            cls: 'shopware-toolbar',
-            style: 'background: transparent;box-shadow: none',
-            items: ['->',{
-                xtype: 'button',
-                cls: 'primary',
-                text: '{s name=button/login}Login{/s}',
-                action: 'login',
-                margin: '0 48 0 0'
-            }]
-        }];
+            me.dockedItems = [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                ui: 'shopware-ui',
+                cls: 'shopware-toolbar',
+                style: 'background: transparent;box-shadow: none',
+                items: ['->',{
+                    xtype: 'button',
+                    cls: 'primary',
+                    text: '{s name=button/login}Login{/s}',
+                    action: 'login',
+                    margin: '0 48 0 0'
+                }]
+            }];
+        } else {
+            me.headline = Ext.create('Ext.container.Container', {
+                html: '<h1>{s name=title/login}Login Shopware 4 Backend{/s}</h1>'
+            });
+
+            me.items = [me.headline, {
+                xtype: 'box',
+                cls: Ext.baseCSSPrefix + 'ie-notice',
+                html: me.getIEWarning()
+            }];
+        }
 
         me.callParent(arguments);
 
@@ -122,6 +134,21 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
             });
             me.add(me.chromeHint);
         }
+    },
+
+    getIEWarning: function() {
+        return new Ext.Template(
+            '<div class="inner">',
+                '<h2 class="teaser">{s name=content/ie/teaser}{/s}</h2>',
+                '<p>{s name=content/ie/text}{/s}</p>',
+                '<ul class="browsers">',
+                    '<li class="chrome"><a href="{s name=content/ie/link/chrome}http://www.google.com/chrome{/s}" target="_blank"></a></li>',
+                    '<li class="firefox"><a href="{s name=content/ie/link/firefox}http://www.mozilla.org/de/firefox/new/{/s}" target="_blank"></a></li>',
+                    '<li class="safari"><a href="{s name=content/ie/link/safari}http://www.apple.com/safari/{/s}" target="_blank"></a></li>',
+                    '<li class="ie"><a href="{s name=content/ie/link/ie}http://windows.microsoft.com/de-DE/internet-explorer/downloads/ie{/s}" target="_blank"></a></li>',
+                '</ul>',
+            '</div>'
+        )
     },
 
     getInfoTemplate: function() {

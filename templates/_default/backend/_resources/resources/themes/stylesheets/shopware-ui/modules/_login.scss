@@ -161,4 +161,34 @@
         }
     }
 
+    // IE Notice
+    .#{$prefix}ie-notice {
+        text-shadow: 1px 1px 0 #fff;
+        color: lighten($font-color, 10%);
+        font-size: 12px;
+        line-height: 18px;
+
+        .teaser { margin: 0 0 12px }
+
+        .browsers {
+            height: 32px;
+            margin: 12px auto 0;
+
+            li { float: left; width: 72px; height: 32px; display: block; margin: 0 10px }
+            a { display: block; width: 72px; height: 32px; }
+            .chrome {
+                background: theme-image($theme, '32-chrome.png') no-repeat top center;
+            }
+            .firefox {
+                background: theme-image($theme, '32-firefox.png') no-repeat top center;
+            }
+            .safari {
+                background: theme-image($theme, '32-safari.png') no-repeat top center;
+            }
+            .ie {
+                background: theme-image($theme, '32-ie.png') no-repeat top center;
+            }
+        }
+    }
+
 }
