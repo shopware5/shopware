@@ -14,7 +14,7 @@
             'rotate': {if $Data.banner_slider_rotation}true{else}false{/if},
             'layout': 'horizontal',
             'showNumbers': {if $Data.banner_slider_numbers}true{else}false{/if},
-            'navigation': true,
+            'navigation': {if $Data.banner_slider_arrows}true{else}false{/if},
             'showArrows': {if $Data.banner_slider_arrows}true{else}false{/if},
             'scrollWidth': ~~(1 * '{$sElementWidth}'),
             'scrollHeight': ~~(1 * '{$sElementHeight}')
