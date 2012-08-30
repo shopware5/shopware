@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to get access to the entity manager.
      * @return Shopware\Components\Model\ModelManager
      */
-    private function getManager() {
+    protected function getManager() {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -140,7 +140,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @return Shopware\Models\Article\Repository
      */
-    private function getRepository()
+    protected function getRepository()
     {
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
@@ -152,7 +152,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the customerGroup repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getCustomerGroupRepository() {
+    protected function getCustomerGroupRepository() {
     	if ($this->customerGroupRepository === null) {
     		$this->customerGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
     	}
@@ -163,7 +163,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the articleDetail repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getArticleDetailRepository() {
+    protected function getArticleDetailRepository() {
     	if ($this->articleDetailRepository === null) {
     		$this->articleDetailRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
     	}
@@ -175,7 +175,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @return Shopware\Models\Article\Repository
      */
-    private function getCustomerRepository()
+    protected function getCustomerRepository()
     {
         if ($this->customerRepository === null) {
             $this->customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to get access on the shop repository.
      * @return null|Shopware\Models\Shop\Repository
      */
-    private function getShopRepository() {
+    protected function getShopRepository() {
         if ($this->shopRepository === null) {
             $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         }
@@ -199,7 +199,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to get access on the category repository.
      * @return null|Shopware\Models\Category\Repository
      */
-    private function getCategoryRepository() {
+    protected function getCategoryRepository() {
         if ($this->categoryRepository === null) {
             $this->categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         }
@@ -210,7 +210,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the configuratorPriceSurcharge repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getConfiguratorPriceSurchargeRepository() {
+    protected function getConfiguratorPriceSurchargeRepository() {
     	if ($this->configuratorPriceSurchargeRepository === null) {
     		$this->configuratorPriceSurchargeRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\PriceSurcharge');
     	}
@@ -221,7 +221,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the ConfiguratorDependency repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getConfiguratorDependencyRepository() {
+    protected function getConfiguratorDependencyRepository() {
     	if ($this->configuratorDependencyRepository === null) {
     		$this->configuratorDependencyRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Dependency');
     	}
@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the configuratorGroup repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getConfiguratorGroupRepository() {
+    protected function getConfiguratorGroupRepository() {
     	if ($this->configuratorGroupRepository === null) {
     		$this->configuratorGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group');
     	}
@@ -242,7 +242,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the configuratorOption repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getConfiguratorOptionRepository() {
+    protected function getConfiguratorOptionRepository() {
     	if ($this->configuratorOptionRepository === null) {
     		$this->configuratorOptionRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Option');
     	}
@@ -253,7 +253,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Helper function to get access to the configuratorSet repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getConfiguratorSetRepository() {
+    protected function getConfiguratorSetRepository() {
     	if ($this->configuratorSetRepository === null) {
     		$this->configuratorSetRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Set');
     	}
@@ -402,7 +402,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $mapping
      * @return array
      */
-    private function getVariantsForMapping($articleId, $mainDetail, $mapping)
+    protected function getVariantsForMapping($articleId, $mainDetail, $mapping)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('details'))
@@ -433,7 +433,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $mapping
      * @return array
      */
-    private function getMappingData($mainDetail, $mapping)
+    protected function getMappingData($mainDetail, $mapping)
     {
         $mainData = array();
         if ($mapping['settings']) {
@@ -567,7 +567,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function which duplicates the article data of the s_articles.
      * @param $articleId
      */
-    private function duplicateArticleData($articleId)
+    protected function duplicateArticleData($articleId)
     {
         $sql= "INSERT INTO s_articles
                SELECT NULL,
@@ -582,7 +582,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleCategories($articleId, $newArticleId)
+    protected function duplicateArticleCategories($articleId, $newArticleId)
     {
         $sql= "INSERT INTO s_articles_categories
                SELECT NULL, ?, categoryID
@@ -598,7 +598,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleCustomerGroups($articleId, $newArticleId)
+    protected function duplicateArticleCustomerGroups($articleId, $newArticleId)
     {
         $sql= "INSERT INTO s_articles_avoid_customergroups
                SELECT ?, customergroupID
@@ -614,7 +614,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleRelated($articleId, $newArticleId)
+    protected function duplicateArticleRelated($articleId, $newArticleId)
     {
         $sql= "INSERT INTO s_articles_relationships
                SELECT NULL, ?, relatedarticle
@@ -630,7 +630,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleSimilar($articleId, $newArticleId)
+    protected function duplicateArticleSimilar($articleId, $newArticleId)
     {
         $sql= "INSERT INTO s_articles_similar
                SELECT NULL, ?, relatedarticle
@@ -646,7 +646,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleLinks($articleId, $newArticleId)
+    protected function duplicateArticleLinks($articleId, $newArticleId)
     {
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
 
@@ -674,7 +674,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleDownloads($articleId, $newArticleId)
+    protected function duplicateArticleDownloads($articleId, $newArticleId)
     {
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
 
@@ -702,7 +702,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleImages($articleId, $newArticleId)
+    protected function duplicateArticleImages($articleId, $newArticleId)
     {
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
 
@@ -758,7 +758,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleProperties($articleId, $newArticleId)
+    protected function duplicateArticleProperties($articleId, $newArticleId)
     {
         $sql= "INSERT INTO s_filter_articles
                SELECT ?, valueID
@@ -774,7 +774,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @param $newArticleId
      */
-    private function duplicateArticleDetails($articleId, $newArticleId, $mailDetailId = null)
+    protected function duplicateArticleDetails($articleId, $newArticleId, $mailDetailId = null)
     {
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -841,7 +841,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @return null|string
      */
-    private function duplicateArticleConfigurator($articleId)
+    protected function duplicateArticleConfigurator($articleId)
     {
         $unique = uniqid();
 
@@ -921,7 +921,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to remove all article variants.
      * @param $articleId
      */
-    private function removeAllConfiguratorVariants($articleId) {
+    protected function removeAllConfiguratorVariants($articleId) {
         $builder = Shopware()->Models()->createQueryBuilder();
         $details = $builder->select(array('details', 'configuratorOptions'))
                 ->from('Shopware\Models\Article\Detail', 'details')
@@ -1036,7 +1036,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $imageData
      * @param $parent \Shopware\Models\Article\Image
      */
-    private function createImagesForOptions($options, $imageData, $parent)
+    protected function createImagesForOptions($options, $imageData, $parent)
     {
         $articleId = $parent->getArticle()->getId();
         $imageData['path'] = null;
@@ -1057,7 +1057,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Restores the old main detail of the passed article id.
      */
-    private function restoreOldMainDetail($articleId) {
+    protected function restoreOldMainDetail($articleId) {
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         $mainDetail = $article->getDetails()->first();
 
@@ -1105,7 +1105,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $detail \Shopware\Models\Article\Detail
      * @return \Shopware\Models\Article\Detail
      */
-    private function saveDetail($data, $detail)
+    protected function saveDetail($data, $detail)
     {
         $article = $detail->getArticle();
         $data['prices'] = $this->preparePricesAssociatedData($data['prices'], $article, $article->getTax());
@@ -1305,8 +1305,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return mixed
      */
-    private function saveArticle($data, $article) {
+    protected function saveArticle($data, $article) {
         try {
+
+            throw new Exception('catch me');
+
             $data = $this->prepareAssociatedData($data, $article);
             $article->fromArray($data);
 
@@ -1322,7 +1325,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'data' => $savedArticle
             ));
         }
-        catch (\Doctrine\ORM\ORMException $e) {
+        catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -1385,7 +1388,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Selects the dynamic attribute fields
      * @return array
      */
-    private function getAttributeFields()
+    protected function getAttributeFields()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         return $builder->select(array('elements'))
@@ -1399,7 +1402,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $id
      * @return array
      */
-    private function getArticle($id)
+    protected function getArticle($id)
     {
         $data = $this->getRepository()->getArticleQuery($id)->getArrayResult();
 
@@ -1510,7 +1513,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $tax
      * @return array
      */
-    private function formatPricesFromNetToGross($prices, $tax)
+    protected function formatPricesFromNetToGross($prices, $tax)
     {
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
@@ -1530,7 +1533,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $tax
      * @return array
      */
-    private function getPrices($id, $tax)
+    protected function getPrices($id, $tax)
     {
         $prices = $this->getRepository()
                        ->getPricesQuery($id)
@@ -1618,7 +1621,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $limit
      * @return array
      */
-    private function prepareGeneratorData($groups, $offset, $limit)
+    protected function prepareGeneratorData($groups, $offset, $limit)
     {
 
         //we have to iterate all passed groups to check the activated options.
@@ -1789,7 +1792,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return array|bool
      */
-    private function prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article) {
+    protected function prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article) {
         $name = '';
         $optionsModels= array();
         $tax = $article->getTax();
@@ -1864,7 +1867,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $variantData;
     }
 
-    private function getDependencyByOptionId($optionId, $dependencies) {
+    protected function getDependencyByOptionId($optionId, $dependencies) {
         $returnValue = array();
         foreach($dependencies as $dependency) {
             if ($dependency['parentId'] == $optionId) {
@@ -1875,7 +1878,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $returnValue;
     }
 
-    private function getSurchargeByOptionId($optionId, $priceSurcharges) {
+    protected function getSurchargeByOptionId($optionId, $priceSurcharges) {
         $returnValue = array();
         foreach($priceSurcharges as $priceSurcharge) {
             if ($priceSurcharge['parentId'] == $optionId) {
@@ -1893,7 +1896,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article
      * @return mixed
      */
-    private function getDetailDataForVariantGeneration($article) {
+    protected function getDetailDataForVariantGeneration($article) {
         $builder = Shopware()->Models()->createQueryBuilder();
         $detailData = $builder->select(array('detail', 'prices', 'attribute', 'customerGroup'))
                               ->from('Shopware\Models\Article\Detail', 'detail')
@@ -1925,7 +1928,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return array
      */
-    private function prepareAssociatedData($data, $article)
+    protected function prepareAssociatedData($data, $article)
     {
         //format the posted extJs article data
         $data = $this->prepareArticleAssociatedData($data);
@@ -1974,7 +1977,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return mixed
      */
-    private function prepareAvoidCustomerGroups($data) {
+    protected function prepareAvoidCustomerGroups($data) {
         if (!empty($data['customerGroups'])) {
             $customerGroups = array();
             foreach($data['customerGroups'] as $customerGroup) {
@@ -1997,7 +2000,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function preparePropertyValuesData($data) {
+    protected function preparePropertyValuesData($data) {
         $values = $data['propertyValues'];
         $models = array();
         foreach($values as $valueData) {
@@ -2040,7 +2043,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return array
      */
-    private function prepareConfiguratorAssociatedData($data, $article)
+    protected function prepareConfiguratorAssociatedData($data, $article)
     {
         if (!empty($data['configuratorSetId'])) {
             $data['configuratorSet'] = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Set', $data['configuratorSetId']);
@@ -2075,7 +2078,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareArticleAssociatedData($data)
+    protected function prepareArticleAssociatedData($data)
     {
         //check if a tax id is passed and load the tax model or set the tax parameter to null.
         if (!empty($data['taxId'])) {
@@ -2120,7 +2123,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareMainDetailAssociatedData($data)
+    protected function prepareMainDetailAssociatedData($data)
     {
         $data['mainDetail'] = $data['mainDetail'][0];
         $data['mainDetail']['active'] = $data['active'];
@@ -2138,7 +2141,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareCategoryAssociatedData($data)
+    protected function prepareCategoryAssociatedData($data)
     {
         $categories = array();
         foreach($data['categories'] as $categoryData) {
@@ -2157,7 +2160,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return array
      */
-    private function prepareRelatedAssociatedData($data, $article)
+    protected function prepareRelatedAssociatedData($data, $article)
     {
         $related = array();
         foreach($data['related'] as $relatedData) {
@@ -2185,7 +2188,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return array
      */
-    private function prepareSimilarAssociatedData($data, $article)
+    protected function prepareSimilarAssociatedData($data, $article)
     {
         $similar = array();
         foreach($data['similar'] as $similarData) {
@@ -2211,7 +2214,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareImageAssociatedData($data)
+    protected function prepareImageAssociatedData($data)
     {
         $position = 1;
         foreach($data['images'] as &$imageData) {
@@ -2241,7 +2244,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article
      * @return array
      */
-    private function prepareAttributeAssociatedData($data, $article)
+    protected function prepareAttributeAssociatedData($data, $article)
     {
         $data['attribute'][0]['article'] = $article;
         $data['mainDetail']['attribute'] = $data['attribute'][0];
@@ -2255,7 +2258,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article \Shopware\Models\Article\Article
      * @return mixed
      */
-    private function prepareMainPricesAssociatedData($data, $article)
+    protected function prepareMainPricesAssociatedData($data, $article)
     {
         $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainPrices'], $article, $data['tax']);
         return $data;
@@ -2267,7 +2270,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $tax \Shopware\Models\Tax\Tax
      * @return array
      */
-    private function preparePricesAssociatedData($prices, $article, $tax)
+    protected function preparePricesAssociatedData($prices, $article, $tax)
     {
         foreach($prices as &$priceData) {
             //load the customer group of the price definition
@@ -2305,7 +2308,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareLinkAssociatedData($data)
+    protected function prepareLinkAssociatedData($data)
     {
         foreach($data['links'] as &$linkData) {
             $linkData['attribute'] = $linkData['attribute'][0];
@@ -2318,7 +2321,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function prepareDownloadAssociatedData($data)
+    protected function prepareDownloadAssociatedData($data)
     {
         foreach($data['downloads'] as &$downloadData) {
             $downloadData['attribute'] = $downloadData['attribute'][0];
@@ -2330,7 +2333,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Returns a list of all article detail templates as array.
      * @return array
      */
-    private function getTemplates()
+    protected function getTemplates()
     {
         $config = Shopware()->Config()->detailTemplates;
         $data = array();
@@ -2345,7 +2348,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function which returns default data for a new article.
      * @return array
      */
-    private function getNewArticleData()
+    protected function getNewArticleData()
     {
         $sql= "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
         $number = Shopware()->Db()->fetchOne($sql);
@@ -2396,7 +2399,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to remove all article prices quickly.
      * @param $articleId
      */
-    private function removePrices($articleId)
+    protected function removePrices($articleId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
@@ -2410,7 +2413,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to remove the article attributes quickly.
      * @param $articleId
      */
-    private function removeAttributes($articleId)
+    protected function removeAttributes($articleId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
@@ -2424,7 +2427,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Internal helper function to remove the detail esd configuration quickly.
      * @param $articleId
      */
-    private function removeArticleEsd($articleId)
+    protected function removeArticleEsd($articleId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
@@ -2437,7 +2440,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * @param $article \Shopware\Models\Article\Article
      */
-    private function removeArticleDetails($article)
+    protected function removeArticleDetails($article)
     {
         $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
@@ -2628,7 +2631,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @internal param $data
      * @internal param $mainDetail
      */
-    private function increaseAutoNumber($autoNumber, $number)
+    protected function increaseAutoNumber($autoNumber, $number)
     {
         if (strlen($number) > 2) {
             $number = substr($number, strlen(Shopware()->Config()->backendAutoOrderNumberPrefix));
@@ -3194,7 +3197,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $counter
      * @return string
      */
-    private function interpretNumberSyntax($article, $detail, $commands, $counter)
+    protected function interpretNumberSyntax($article, $detail, $commands, $counter)
     {
         $name = array();
         foreach($commands as $command) {
@@ -3227,7 +3230,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $commands
      * @return string
      */
-    private function recursiveInterpreter($cursor, $index, $commands)
+    protected function recursiveInterpreter($cursor, $index, $commands)
     {
         if (!is_object($cursor)) {
             return '';
@@ -3266,7 +3269,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $syntax
      * @return array
      */
-    private function prepareNumberSyntax($syntax)
+    protected function prepareNumberSyntax($syntax)
     {
         preg_match_all('#\{(.*?)\}#msi', $syntax, $result);
         $syntax = $result[1];
@@ -3285,7 +3288,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function which helps the get the cursor object for the passed syntax command.
      */
-    private function getCommandMapping($syntax)
+    protected function getCommandMapping($syntax)
     {
         //we have to explode the current command to resolve the multiple properties.
         $paths = explode('.', $syntax);
@@ -3413,7 +3416,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $violations \Symfony\Component\Validator\ConstraintViolationList
      * @return string
      */
-    private function getViolationFields($violations)
+    protected function getViolationFields($violations)
     {
         $fields = array();
         /**@var $violation Symfony\Component\Validator\ConstraintViolation*/
