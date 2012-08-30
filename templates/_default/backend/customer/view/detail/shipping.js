@@ -339,37 +339,37 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
     createShippingFormRight:function () {
         var me = this;
         return [{
-            name:'shippingAttributes[text1]',
+            name:'shippingAttribute[text1]',
             fieldLabel:me.snippets.text1.label,
             supportText: me.snippets.text1.support,
             helpTitle: me.snippets.text1.helpTitle,
             helpText: me.snippets.text1.helpText
         }, {
-            name:'shippingAttributes[text2]',
+            name:'shippingAttribute[text2]',
             fieldLabel:me.snippets.text2.label,
             supportText: me.snippets.text2.support,
             helpTitle: me.snippets.text2.helpTitle,
             helpText: me.snippets.text2.helpText
         }, {
-            name:'shippingAttributes[text3]',
+            name:'shippingAttribute[text3]',
             fieldLabel:me.snippets.text3.label,
             supportText: me.snippets.text3.support,
             helpTitle: me.snippets.text3.helpTitle,
             helpText: me.snippets.text3.helpText
         }, {
-            name:'shippingAttributes[text4]',
+            name:'shippingAttribute[text4]',
             fieldLabel:me.snippets.text4.label,
             supportText: me.snippets.text4.support,
             helpTitle: me.snippets.text4.helpTitle,
             helpText: me.snippets.text4.helpText
         }, {
-            name:'shippingAttributes[text5]',
+            name:'shippingAttribute[text5]',
             fieldLabel:me.snippets.text5.label,
             supportText: me.snippets.text5.support,
             helpTitle: me.snippets.text5.helpTitle,
             helpText: me.snippets.text5.helpText
         }, {
-            name:'shippingAttributes[text6]',
+            name:'shippingAttribute[text6]',
             fieldLabel:me.snippets.text6.label,
             supportText: me.snippets.text6.support,
             helpTitle: me.snippets.text6.helpTitle,

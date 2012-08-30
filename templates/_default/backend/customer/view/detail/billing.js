@@ -329,37 +329,37 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             name:'billing[fax]',
             fieldLabel:me.snippets.fax
         }, {
-            name:'billingAttributes[text1]',
+            name:'billingAttribute[text1]',
             fieldLabel:me.snippets.text1.label,
             supportText: me.snippets.text1.support,
             helpTitle: me.snippets.text1.helpTitle,
             helpText: me.snippets.text1.helpText
         }, {
-            name:'billingAttributes[text2]',
+            name:'billingAttribute[text2]',
             fieldLabel:me.snippets.text2.label,
             supportText: me.snippets.text2.support,
             helpTitle: me.snippets.text2.helpTitle,
             helpText: me.snippets.text2.helpText
         }, {
-            name:'billingAttributes[text3]',
+            name:'billingAttribute[text3]',
             fieldLabel:me.snippets.text3.label,
             supportText: me.snippets.text3.support,
             helpTitle: me.snippets.text3.helpTitle,
             helpText: me.snippets.text3.helpText
         }, {
-            name:'billingAttributes[text4]',
+            name:'billingAttribute[text4]',
             fieldLabel:me.snippets.text4.label,
             supportText: me.snippets.text4.support,
             helpTitle: me.snippets.text4.helpTitle,
             helpText: me.snippets.text4.helpText
         }, {
-            name:'billingAttributes[text5]',
+            name:'billingAttribute[text5]',
             fieldLabel:me.snippets.text5.label,
             supportText: me.snippets.text5.support,
             helpTitle: me.snippets.text5.helpTitle,
             helpText: me.snippets.text5.helpText
         }, {
-            name:'billingAttributes[text6]',
+            name:'billingAttribute[text6]',
             fieldLabel:me.snippets.text6.label,
             supportText: me.snippets.text6.support,
             helpTitle: me.snippets.text6.helpTitle,
