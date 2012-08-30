@@ -1,6 +1,6 @@
 -- //
 
-INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
+INSERT IGNORE INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
 (-12, 'Hersteller', NULL, 12);
 
 -- //@UNDO
