@@ -14,10 +14,12 @@
     <file><name>engine/Shopware/Proxies/</name></file>
     <file><name>engine/Shopware/Models/Attribute/</name></file>
     <file><name>media/archive/</name></file>
+    <file><name>media/image/</name></file>
     <file><name>media/image/thumbnail/</name></file>
     <file><name>media/music/</name></file>
     <file><name>media/pdf/</name></file>
     <file><name>media/unknown/</name></file>
     <file><name>media/video/</name></file>
+    <file><name>media/temp/</name></file>
 </files>
 </shopware>
