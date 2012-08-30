@@ -19,14 +19,14 @@
 {if $shop && $languages|count > 1}
 <div class="topbar_lang">
     {if $shop && $languages|count > 1}
-        <div class="flag {$shop->getLocale()->toString()}">{$shop->getTitle()|default:$shop->getName()}</div>
+        <div class="flag {$shop->getLocale()->toString()}">{$shop->getName()}</div>
     {/if}
     {if $languages|count > 1}
         <form method="post" action="">
             <select name="__shop" class="lang_select auto_submit">
                 {foreach from=$languages item=language}
                     <option value="{$language->getId()}" {if $language->getId() === $shop->getId()}selected="selected"{/if}>
-                        {$language->getTitle()|default:$language->getName()}
+                        {$language->getName()}
                     </option>
                 {/foreach}
             </select>
