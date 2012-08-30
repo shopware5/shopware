@@ -2216,10 +2216,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     public function prepareCustomerData($customerData)
     {
         $customerMapping = array(
-            'customergroup' => 'groupKey',
-            'md5_password'  => 'rawPassword',
-            'phone'         => 'billing_phone',
-            'fax'           => 'billing_fax',
+            'customergroup'  => 'groupKey',
+            'md5_password'   => 'rawPassword',
+            'phone'          => 'billing_phone',
+            'fax'            => 'billing_fax',
+            'customernumber' => 'billing_number'
         );
         $customerData = $this->mapFields($customerData, $customerMapping) + $customerData;
 
