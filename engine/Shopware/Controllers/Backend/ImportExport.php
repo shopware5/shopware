@@ -2216,6 +2216,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $customerMapping = array(
             'customergroup' => 'groupKey',
             'md5_password'  => 'rawPassword',
+            'phone'         => 'billing_phone',
+            'fax'           => 'billing_fax',
         );
         $customerData = $this->mapFields($customerData, $customerMapping) + $customerData;
 
@@ -2232,7 +2234,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'firstname' => 'firstName',
                 'lastname'  => 'lastName',
             );
-            $customerData['billing'] = $this->mapFields($customerData['billing'], $billingMapping);
+            $customerData['billing'] = $this->mapFields($customerData['billing'], $billingMapping) + $customerData['billing'];
 
             $billingAttribute = $this->prefixToArray($customerData['billing'], 'attr_');
 
@@ -2249,7 +2251,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'firstname' => 'firstName',
                 'lastname'  => 'lastName',
             );
-            $customerData['shipping'] = $this->mapFields($customerData['shipping'], $shippingMapping);
+            $customerData['shipping'] = $this->mapFields($customerData['shipping'], $shippingMapping) + $customerData['shipping'];
 
             $shippingAttribute = $this->prefixToArray($customerData['shipping'], 'attr_');
 
