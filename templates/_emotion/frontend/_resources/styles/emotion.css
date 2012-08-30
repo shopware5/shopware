@@ -182,6 +182,37 @@ div.supplier ul li.image {background-color: #fff;}
 
 /*	ARTICLE DETAILS
 	------------------------ */
+#detail { position: relative }
+#detail .article_back,
+#detail .article_next {
+    float: none;
+    width: 19px;
+    height: 111px;
+    position: absolute;
+    background: url("../images/bt_forward_back.jpg") no-repeat;
+    top: 160px;
+    z-index: 10;
+}
+#detail .article_back { left: 0 }
+#detail .article_next { right: 0; background-position: -20px 0 }
+
+#detail .article_back a,
+#detail .article_next a {
+    width: auto;
+    height: auto;
+    position: absolute;
+    display: block;
+    width: 16px; height: 16px;
+    top: 50%; left: auto;
+    margin-top: -8px;
+    text-indent: -999em;
+    padding: 0;
+}
+#detail .article_back a { background: url("../images/icons/ico_listing-prev.png") no-repeat }
+#detail .article_back:hover a { background: url("../images/icons/ico_listing-prev-active.png") no-repeat }
+#detail .article_next a { background: url("../images/icons/ico_listing-next.png") no-repeat }
+#detail .article_next:hover a { background: url("../images/icons/ico_listing-next-active.png") no-repeat }
+
 #detail h1 {color:#333;}
 #detail .border {border-color: #dfdfdf;}
 #detail, #detail a, #content #detail .article_details strong.supplier {color:#999 !important;}
