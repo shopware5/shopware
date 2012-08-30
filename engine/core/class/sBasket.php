@@ -293,64 +293,56 @@ class sBasket
      * @deprecated
 	 * @return bool|int
 	 */
-	public function sInsertPremium()
-	{
-		static $last_premium;
+    public function sInsertPremium()
+    {
+        static $last_premium;
 
-		$sBasketAmount = $this->sGetAmount();
-		$sBasketAmount = empty($sBasketAmount["totalAmount"]) ? 0 :$sBasketAmount["totalAmount"];
+        $sBasketAmount = $this->sGetAmount();
+        $sBasketAmount = empty($sBasketAmount["totalAmount"]) ? 0 :$sBasketAmount["totalAmount"];
+        $sBasketAmount = (float)$sBasketAmount;
 
-
-		if(empty($this->sSYSTEM->_GET["sAddPremium"]))
-		{
-			$sql = "
+        if(empty($this->sSYSTEM->_GET["sAddPremium"]))
+        {
+            $sql = "
                 SELECT b.id
                 FROM s_order_basket b
 
-                LEFT JOIN s_articles_details details
-                    ON details.ordernumber = b.ordernumber
-
-                INNER JOIN s_articles_details mainDetails
-                    ON details.articleId = mainDetails.articleId
-                    AND mainDetails.kind =1
-
                 LEFT JOIN s_addon_premiums p
-                    ON p.startprice <= ?
-                    AND p.ordernumber = mainDetails.ordernumber
+                ON p.id=b.articleID
+                AND p.startprice <= ?
 
                 WHERE b.modus =1
                 AND p.id IS NULL
-                AND b.sessionID =  ?
+                AND b.sessionID = ?
 			";
 
             $deletePremium = Shopware()->Db()->fetchCol($sql, array($sBasketAmount, $this->sSYSTEM->sSESSION_ID));
-
-			if(empty($deletePremium)) {
+            if(empty($deletePremium)) {
                 return true;
             }
 
             $deletePremium = Shopware()->Db()->quote($deletePremium);
             $sql= "DELETE FROM s_order_basket WHERE id IN ($deletePremium)";
             Shopware()->Db()->query($sql);
-			return true;
-		}
+            return true;
+        }
 
-		if(empty($this->sSYSTEM->_GET["sAddPremium"]))
-		return false;
+        if (empty($this->sSYSTEM->_GET["sAddPremium"]))
+            return false;
 
-		if(isset($last_premium)&&$last_premium==$this->sSYSTEM->_GET["sAddPremium"])
-		return false;
+        if (isset($last_premium) && $last_premium == $this->sSYSTEM->_GET["sAddPremium"])
+            return false;
 
-		$last_premium = $this->sSYSTEM->_GET["sAddPremium"];
+        $last_premium = $this->sSYSTEM->_GET["sAddPremium"];
 
-		$this->sSYSTEM->sDB_CONNECTION->Execute("
+        $this->sSYSTEM->sDB_CONNECTION->Execute("
 			DELETE FROM s_order_basket WHERE sessionID='".$this->sSYSTEM->sSESSION_ID."' AND modus=1
 		");
 
-		$ordernumber = $this->sSYSTEM->sDB_CONNECTION->qstr($this->sSYSTEM->_GET["sAddPremium"]);
+        $ordernumber = $this->sSYSTEM->sDB_CONNECTION->qstr($this->sSYSTEM->_GET["sAddPremium"]);
 
-		$sql = "
-			SELECT d.ordernumber, a.id as articleID, a.name, d.additionaltext, p.ordernumber_export, a.configurator_set_id
+        $sql = "
+			SELECT p.id, d.ordernumber, a.id as articleID, a.name, d.additionaltext, p.ordernumber_export, a.configurator_set_id
 			FROM
 				s_addon_premiums p,
 				s_articles_details d,
@@ -363,10 +355,10 @@ class sBasket
 			AND d.articleID=a.id
 		";
 
-
-		$premium = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
-		if(empty($premium))
-		return false;
+        $premium = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        if(empty($premium)) {
+            return false;
+        }
 
         $premium = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslation($premium,$premium["articleID"],"article",$this->sSYSTEM->sLanguage);
         if (!empty($premium['configurator_set_id'])) {
@@ -379,25 +371,24 @@ class sBasket
             INSERT INTO s_order_basket (
                 sessionID, articlename, articleID, ordernumber, quantity, price, netprice,tax_rate, datum, modus, currencyFactor
             ) VALUES (
-                  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                  ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?
             )
         ";
 
         $data = array(
             $this->sSYSTEM->sSESSION_ID,
             trim($premium["name"] . " " . $premium["additionaltext"]),
-            $premium["articleID"],
+            $premium['id'],
             $number,
             1,
             0,
             0,
             0,
-            'NOW()',
             1,
             $this->sSYSTEM->sCurrency["factor"]
         );
         return Shopware()->Db()->query($sql, $data);
-	}
+    }
 
 	/**
 	 * Get count of different positions from current cart
