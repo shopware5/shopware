@@ -1307,9 +1307,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function saveArticle($data, $article) {
         try {
-
-            throw new Exception('catch me');
-
             $data = $this->prepareAssociatedData($data, $article);
             $article->fromArray($data);
 
