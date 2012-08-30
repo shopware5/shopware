@@ -72,7 +72,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
         $this->inquiryId = $config->inquiryId;
 
         $event = new Enlight_Event_EventHandler(
-            'Enlight_Controller_Front_SendResponse',
+            'Enlight_Controller_Front_DispatchLoopShutdown',
             array($this, 'onAfterSendResponse')
         );
         Shopware()->Events()->registerListener($event);
