@@ -94,6 +94,6 @@
 {* Footer *}
 {block name="frontend_index_footer"}
     {if $sLastArticlesShow}
-        {action module=widgets controller=index action=lastArticles}
+        {action module=widgets controller=lastArticles}
     {/if}
 {/block}

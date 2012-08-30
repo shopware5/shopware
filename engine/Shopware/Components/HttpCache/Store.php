@@ -54,7 +54,9 @@ class Store extends BaseStore
             return $this->keyCache[$request];
         }
         $uri = $request->getUri();
-        $cookieName = 'controller-options-' . $request->getPathInfo();
+        $cookieName = 'controller-options-'
+                    . $request->getBaseUrl()
+                    . $request->getPathInfo();
         if ($request->cookies->has($cookieName)) {
             $uri .= '&' . $request->cookies->get($cookieName);
         }

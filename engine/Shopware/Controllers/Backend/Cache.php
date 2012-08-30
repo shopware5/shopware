@@ -297,7 +297,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         foreach ($files as $file) {
             unlink($file);
         }
-        Shopware()->Models()->regenerateProxies();
+        //Shopware()->Models()->regenerateProxies();
     }
 
     /**
@@ -330,14 +330,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     public function getConfigCacheInfo()
     {
         $cache_config = Shopware()->getOption('cache');
-
         if ($cache_config['backend'] == 'apc' && extension_loaded('apc')) {
             $apcInfo = apc_cache_info('user');
-
             $info['files'] = $apcInfo['num_entries'];
-            ;
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
-
         } else {
             if (!empty($cache_config['backendOptions']['cache_dir'])) {
                 $dir = $cache_config['backendOptions']['cache_dir'];

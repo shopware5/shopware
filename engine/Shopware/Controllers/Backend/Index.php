@@ -60,6 +60,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         // Redirect broken backend urls to frontend
         if(!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth'))) {
             $uri = $this->Request()->getRequestUri();
+            $uri = str_replace('shopware.php/', '', $uri);
             $uri = str_replace('/backend/', '/', $uri);
             $this->Response()->setRedirect($uri, 301);
             return;
@@ -119,17 +120,14 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $controller = Zend_Json::encode($controller);
         $this->View()->assign('controller', $controller, true);
 
-        $this->View()->assign('product', "", true);
-        if (is_object("Shopware_Components_License")){
-            if (method_exists(Shopware()->License(),"getLicenseInfo")){
-                $l = Shopware()->License();
-                $m = 'SwagCommercial';
-                $o = $l->getLicenseInfo($m);
-                $r = isset($o['product']) ? $o['product'] : null;
-                $this->View()->assign('product', $r, true);
-            }
+        $this->View()->assign('product', '', true);
+        if(Shopware()->Bootstrap()->issetResource('License')) {
+            $l = Shopware()->License();
+            $m = 'SwagCommercial';
+            $o = $l->getLicenseInfo($m);
+            $r = isset($o['product']) ? $o['product'] : null;
+            $this->View()->assign('product', $r, true);
         }
-
 	}
 
     /**

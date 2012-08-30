@@ -79,10 +79,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $form->setElement('textarea', 'noCacheControllers', array(
             'label' => 'NoCache-Controller / Tags',
             'value' =>
-                "frontend/checkout checkout\n" .
-                "frontend/note checkout\n" .
-                "frontend/detail detail\n" .
-                "frontend/compare compare\n"
+                "frontend/listing price\n" .
+                "frontend/index price\n" .
+                "frontend/detail price\n" .
+                "widgets/lastArticles detail\n" .
+                "widgets/checkout checkout\n" .
+                "widgets/compare compare\n" .
+                "widgets/emotion price\n"
         ));
         $form->setElement('boolean', 'proxyBan', array(
             'label' => 'Proxy-BAN aktivieren',
@@ -116,7 +119,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function getVersion()
     {
-        return '1.0.2';
+        return '1.0.3';
     }
 
     /**
@@ -241,7 +244,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $this->initConfig();
 
-        if ($request->getModuleName() == 'backend') {
+        if ($request->getModuleName() != 'frontend' && $request->getModuleName() != 'widgets') {
             return;
         }
         if (!Shopware()->Shop()->get('esi')) {
@@ -267,8 +270,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $options = $this->controllerOptions[$controllerName];
             $query = $this->request->getQuery();
             $result = array_intersect_key($query, $options);
+            $cookie = 'controller-options-'
+                . $this->request->getBaseUrl()
+                . $this->request->getPathInfo();
             if(count($result) > 0) {
-                $cookie = 'controller-options-' . $this->request->getPathInfo();
                 $options = $this->request->getCookie($cookie);
                 if($options !== null) {
                     parse_str($options, $options);
@@ -287,7 +292,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 $location = $this->action->Front()->Router()->assemble($location);
                 $this->action->redirect($location);
             } else {
-                $cookie = 'controller-options-' . $this->request->getPathInfo();
                 $options = $this->request->getCookie($cookie);
                 if($options !== null) {
                     parse_str($options, $options);
