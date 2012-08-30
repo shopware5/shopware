@@ -395,6 +395,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $moveItemId = $params['id'];
         if (!empty($moveItemId)) {
             try {
+                throw new Exception('catch me ');
+
                 $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
                 $parentNodeModel = $this->getRepository()->find($params['parentId']);
 
@@ -432,7 +434,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 $this->View()->assign(
                     array(
                         'success' => false,
-                        'message' => 'The following error occurred' . $e->getMessage()
+                        'message' => $e->getMessage()
                     )
                 );
             }
@@ -449,6 +451,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function saveDetail()
     {
         try {
+            throw new Exception('catch me');
+
             $params = $this->Request()->getParams();
             $categoryId = $params['id'];
             if (empty($categoryId)) {
@@ -500,6 +504,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function deleteAction()
     {
         try {
+            throw new Exception('catch me ');
+
             if (!($id = $this->Request()->getParam('id'))) {
                 $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
                 return;

@@ -132,17 +132,32 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             tree        = me.getCategoryTree(),
             selection   = tree.getSelectionModel( ).getSelection(),
             store = me.subApplication.getStore('Tree');
+
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteCategoryHeadline,
-            Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text'), selection[0].get('articleCount') ), 
+            Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text'), selection[0].get('articleCount') ),
             function (response) {
                 if (response !== 'yes') {
                     return false;
                 }
-                selection[0].destroy();
-                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
-                store.load();
-                me.disableForm();
+                selection[0].destroy({
+                    callback: function(self, operation) {
+                        var rawData = operation.records[0].proxy.reader.rawData
+
+                        if (operation.wasSuccessul()) {
+                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                            store.load();
+                            me.disableForm();
+                        } else {
+                            if (rawData.message) {
+                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure + '<br>' + rawData.message, me.snippets.growlMessage);
+                            } else {
+                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure, me.snippets.growlMessage);
+                            }
+                        }
+                    }
+                });
+
             });
     },
 
@@ -270,13 +285,26 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @return void
      */
     onCategoryMove : function(node, oldParent, newParent) {
+        var me = this;
+
         node.data.position = node.data.index + 1;
         if (newParent.data.id !== 'root') {
             node.data.parentId = newParent.data.id;
         } else {
             node.data.parentId = 0;
         }
-        node.save();
+        node.save({
+            callback:function (self, operation) {
+                if (!operation.success) {
+                    var rawData = self.proxy.reader.rawData;
+                    if (rawData.message) {
+                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure + '<br>' +  rawData.message, me.snippets.growlMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure, me.snippets.growlMessage);
+                    }
+                }
+            }
+        });
     },
 
     /**
@@ -375,7 +403,12 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     treeStore.load({ node: parentNode });
                 } else {
-                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    var rawData = self.proxy.reader.rawData;
+                    if (rawData.message) {
+                        Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    }
                 }
             }
         });

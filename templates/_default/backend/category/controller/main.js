@@ -135,7 +135,12 @@ Ext.define('Shopware.apps.Category.controller.Main', {
                         Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                         me.subApplication.treeStore.load({ node: parentNode });
                     } else {
-                        Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                        var rawData = self.proxy.reader.rawData;
+                        if (rawData.message) {
+                            Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                        }
                     }
                 }
             });
