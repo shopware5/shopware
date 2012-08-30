@@ -2216,6 +2216,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     public function prepareCustomerData($customerData)
     {
         $customerMapping = array(
+            'subshopID'      => 'shopId',
             'customergroup'  => 'groupKey',
             'md5_password'   => 'rawPassword',
             'phone'          => 'billing_phone',
