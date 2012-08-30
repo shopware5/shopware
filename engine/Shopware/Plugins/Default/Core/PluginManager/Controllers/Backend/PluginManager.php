@@ -450,10 +450,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         foreach($plugins as &$plugin) {
             $fullPath = Shopware()->AppPath('Plugins_' . $plugin['source'] . '_' . $plugin['namespace']);
+            $pluginPath = str_replace(Shopware()->OldPath(), '', $fullPath);
             $fullPath = $fullPath . $plugin['name'] . DIRECTORY_SEPARATOR . 'plugin.png';
+            $pluginPath = $pluginPath . $plugin['name'] . DIRECTORY_SEPARATOR . 'plugin.png';
 
             if (file_exists($fullPath)) {
-                $plugin['icon'] = substr($fullPath, strpos($fullPath, $this->Request()->getBasePath()));
+                $plugin['icon'] = $this->Request()->getBasePath() . DIRECTORY_SEPARATOR . ltrim($pluginPath, DIRECTORY_SEPARATOR);
             } else {
                 $plugin['icon'] = null;
             }
