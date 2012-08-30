@@ -393,7 +393,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
             url:'{url controller="PluginManager" action="refreshPluginList"}',
             method: 'POST',
             callback: function(request, opts, operation) {
-                me.installLicensePlugin(record, detail);
+                if (record !== null) {
+                    me.installLicensePlugin(record, detail);
+                }
             }
         });
     },

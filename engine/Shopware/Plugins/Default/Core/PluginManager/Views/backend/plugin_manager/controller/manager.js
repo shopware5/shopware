@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 			title: '{s name=manager/title}Plugin manager{/s}',
 			successful_delete: '{s name=manager/successful_delete}Plugin have been deleted successfully{/s}',
 			failed_delete: '{s name=manager/failed_delete}Plugin could not be deleted{/s}',
+            deleteMessage: '{s name=manager/delete_message}Are you sure you want to delete the selected plugin?{/s}',
 			failed_edit: '{s name=manager/failed_edit}Plugin details could not be loaded from [0]{/s}',
 			successful_install: '{s name=manager/successful_install}Plugin [0] have been installed successfully{/s}',
 			failed_install: '{s name=manager/failed_install}Plugin [0] could not be installed{/s}',
@@ -130,22 +131,26 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
     },
 
     onDeletePlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
-        var me = this;
+        var me = this, confirmMessage;
 
         if (record && record.get('id')) {
-            record.destroy({
-                callback: function(record, operation) {
-                   if (operation.wasSuccessful()) {
-                       Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.successful_delete);
-                       me.getPluginGrid().getStore().load();
-                   } else {
-                       var message = '';
-                       var rawData = operation.records[0].getProxy().reader.rawData;
-                       if (rawData.message) {
-                           message = '<br>' + rawData.message;
-                       }
-                       Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_delete + message);
-                   }
+            Ext.MessageBox.confirm(me.snippets.manager.title, me.snippets.manager.deleteMessage, function(btn) {
+                if(btn == 'yes') {
+                    record.destroy({
+                        callback: function(record, operation) {
+                           if (operation.wasSuccessful()) {
+                               Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.successful_delete);
+                               me.getPluginGrid().getStore().load();
+                           } else {
+                               var message = '';
+                               var rawData = operation.records[0].getProxy().reader.rawData;
+                               if (rawData.message) {
+                                   message = '<br>' + rawData.message;
+                               }
+                               Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_delete + message);
+                           }
+                        }
+                    });
                 }
             });
         }
@@ -501,6 +506,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             success: function(form, action) {
                 Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.successful_upload);
                 win.close();
+                var accountCtl = me.subApplication.getController('Account');
+                accountCtl.refreshPluginList(null);
+                me.getPluginGrid().getStore().load();
             },
             failure: function(form, action) {
                 var response = Ext.decode(action.response.responseText);
