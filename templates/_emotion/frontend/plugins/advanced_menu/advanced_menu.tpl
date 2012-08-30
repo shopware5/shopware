@@ -12,6 +12,11 @@
 {/function}
 
 <div id="mainNavigation">
+    <li class="{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
+        <a href="{url controller='index'}" title="{s name='IndexLinkHome'}{/s}" class="first{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
+            {se name='IndexLinkHome'}Home{/se}
+        </a>
+    </li>
 	<ul>
 	    {foreach from=$sAdvancedMenu item=sCategory}
             {if !$sCategory.hidetop}
