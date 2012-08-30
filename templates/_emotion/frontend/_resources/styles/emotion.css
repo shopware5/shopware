@@ -183,6 +183,9 @@ div.supplier ul li.image {background-color: #fff;}
 /*	ARTICLE DETAILS
 	------------------------ */
 #detail { position: relative }
+#detail .right {
+
+}
 #detail .article_back,
 #detail .article_next {
     float: none;
@@ -1659,7 +1662,7 @@ div#searchresults a.resultall {margin: 0 14px; width: 490px;}
 #buybox #detailCartButton .space {display: none;}
 
 div#article_details div.article_details_bottom {margin: 25px 0 0;}
-#detailbox h1, .article_details_price {margin-bottom: 25px;}
+#detailbox h1, .article_details_price {margin-bottom: 25px; width: 550px;}
 #detailbox h1 {line-height: 26px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;}
 .article_details_price {font-size: 21px;}
 
