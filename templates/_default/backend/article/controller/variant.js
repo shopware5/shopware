@@ -1040,7 +1040,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
            groupListing = me.getConfiguratorGroupListing(),
            optionListing = me.getConfiguratorOptionListing();
 
-        if ( !(record instanceof Ext.data.Model) ) {
+        if (!(record instanceof Ext.data.Model)) {
             return;
         }
         var name = record.get('name');
@@ -1062,7 +1062,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                         });
                         optionListing.reconfigure(store);
                         optionListing.setDisabled(true);
-                        groupListing.reconfigure(groupListing.getStore());
                     },
                     failure:function (record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
