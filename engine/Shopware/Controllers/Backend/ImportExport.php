@@ -1494,8 +1494,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $total++;
 
             $category = (array) $category;
-            $category['id']     = $category['categoryID'];
-            $category['parent'] = $categoryRepository->find($category['parentID']);
             $models[] = $this->saveCategory($category, $categoryRepository, $metaData);
             Shopware()->Models()->flush();
         }
@@ -1534,6 +1532,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function saveCategory($category, \Shopware\Models\Category\Repository $categoryRepository, $metaData)
     {
+        $category = $this->toUtf8($category);
+
         $updateData = array();
 
         $mapping = array();
@@ -1541,20 +1541,32 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $mapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
         }
 
-        $updateData = $this->mapFields($category, $mapping);
-        $updateData['parent'] = $updateData['parentId'];
+        $mapping = $mapping + array(
+            'categoryID' => 'id',
+            'ac_attr1'   => 'attribute_attribute1',
+            'ac_attr2'   => 'attribute_attribute2',
+            'ac_attr3'   => 'attribute_attribute3',
+            'ac_attr4'   => 'attribute_attribute4',
+            'ac_attr5'   => 'attribute_attribute5',
+            'ac_attr6'   => 'attribute_attribute6',
+        );
 
-        $attribute = $this->prefixToArray($category, 'attribute_');
+        $updateData = $this->mapFields($category, $mapping);
+
+        $updateData['id']     = $category['categoryID'];
+        $updateData['parent'] = $categoryRepository->find($category['parentID']);
+
+        $attribute = $this->prefixToArray($updateData, 'attribute_');
         if (!empty($attribute)) {
             $updateData['attribute'] = $attribute;
         }
 
         /** @var $categoryModel \Shopware\Models\Category\Category */
-        $categoryModel = $categoryRepository->find($category['id']);
+        $categoryModel = $categoryRepository->find($category['categoryID']);
 
         if (!$categoryModel) {
             $categoryModel = new \Shopware\Models\Category\Category();
-            $categoryModel->setPrimaryIdentifier($category['id']);
+            $categoryModel->setPrimaryIdentifier($category['categoryID']);
             Shopware()->Models()->persist($categoryModel);
         }
 
@@ -2168,6 +2180,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     protected function saveCustomer($customerData)
     {
+        $customerData = $this->toUtf8($customerData);
+
         /** @var \Shopware\Models\Customer\Repository $customerRepository */
         $customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
 
@@ -2703,6 +2717,25 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         throw new \InvalidArgumentException(
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
         );
+    }
+
+    /**
+     * @param arry $input
+     * @return array
+     */
+    protected function toUtf8(array $input)
+    {
+        // detect whether the input is UTF-8 or ISO-8859-1
+        array_walk_recursive($input, function (&$value) {
+            // $isUtf8 = mb_detect_encoding($value, 'UTF-8', true) !== false);
+            $isUtf8 = (utf8_encode(utf8_decode($value)) == $value);
+            if (!$isUtf8) {
+                $value = utf8_encode($value);
+            }
+            return $value;
+        });
+
+        return $input;
     }
 
     /**

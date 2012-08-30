@@ -207,6 +207,9 @@ class Customer extends Resource
 
     private function prepareCustomerData($params, $customer = null)
     {
+        if ($customer === null && !isset($params['active'])) {
+            $params['active'] = true;
+        }
 
         if (isset($params['email']) && !$this->isEmailUnique($params['email'], $customer)) {
             throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
