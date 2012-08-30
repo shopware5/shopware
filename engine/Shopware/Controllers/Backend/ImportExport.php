@@ -1945,6 +1945,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             try {
                 $counter++;
                 $result = $this->saveArticle($articleData, $articleResource, $articleRepostiory, $articleDetailRepostiory, $articleMapping, $articleDetailMapping);
+                Shopware()->Models()->flush();
                 if ($result) {
                     $articleIds[] = $result->getId();
                     if (($counter % 5) == 0) {
