@@ -26,13 +26,6 @@
 {* Sidebar right *}
 {block name='frontend_index_content_right'}{/block}
 
-{* Top seller slider *}
-{block name='frontend_home_index_blog' prepend}
-    {if !$hasEmotion}
-        {action module=widgets controller=listing action=top_seller perPage=6}
-    {/if}
-{/block}
-
 {* Category text *}
 {block name='frontend_home_index_text'}
     {if !$hasEmotion}

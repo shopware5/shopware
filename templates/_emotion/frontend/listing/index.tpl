@@ -10,13 +10,6 @@
 {/if}
 {/block}
 
-{* Topseller slider *}
-{block name="frontend_listing_index_listing" prepend}
-    {if !$hasEmotion && !$sSupplierInfo}
-        {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
-    {/if}
-{/block}
-
 {block name="frontend_listing_index_listing" append}
 {if $sCategoryContent.parent != 1 && $hasEmotion && !$sSupplierInfo}
     <div class="emotion-link">
@@ -26,6 +19,13 @@
     </div>
     <div class="space">&nbsp;</div>
 {/if}
+{/block}
+
+{* Topseller slider *}
+{block name="frontend_listing_index_banner" append}
+    {if !$hasEmotion && !$sSupplierInfo}
+        {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
+    {/if}
 {/block}
 
 {* Trusted shops logo *}
