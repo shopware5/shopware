@@ -64,7 +64,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         ));
         $form->setElement('number', 'thumb', array(
             'label' => 'Vorschaubild-Größe',
-            'value' => 0,
+            'value' => 2,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('number', 'time', array(
