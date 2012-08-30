@@ -212,8 +212,8 @@
 	            vertical-align: middle;
 	            text-align: center;
 	            img {
-                    height: 70px;
-                    width: 70px;
+                    max-height: 70px;
+                    max-width: 70px;
                 }
 	        }
 	    }
@@ -289,8 +289,8 @@
 	            vertical-align: middle;
 	            text-align: center;
                 img {
-                    height: 153px;
-                    width: 153px;
+                    max-height: 153px;
+                    max-width: 152px;
                 }
 	        }
 	    }
