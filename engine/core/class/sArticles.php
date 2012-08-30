@@ -844,7 +844,7 @@ class sArticles
 
                     ORDER BY min_price
                     LIMIT 1
-                ) * 100 / (100 - IFNULL(cd.discount, 0))
+                ) * ((100 - IFNULL(cd.discount, 0)) / 100)
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
@@ -1082,8 +1082,6 @@ class sArticles
         $articles = $this->sGetTranslations($articles, "article");
 
         foreach ($articles as $articleKey => $articleValue) {
-            var_dump($articleValue['price']);
-            var_dump($articleValue['price']);
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
 
             $articles[$articleKey]["sVariantArticle"] = false;
@@ -1792,7 +1790,7 @@ class sArticles
 
                     ORDER BY min_price
                     LIMIT 1
-                ) * 100 / (100 - IFNULL(cd.discount, 0))
+                ) * ((100 - IFNULL(cd.discount, 0)) / 100)
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
