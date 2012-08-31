@@ -30,20 +30,18 @@
  * @author     $Author$
  */
 error_reporting(E_ALL);
-ini_set("display_errors",1);
-define("installer",true);
-$directory_not_empty = FALSE;
-$files = scandir(dirname(dirname(__FILE__)) . "/cache/templates");
-if ((count($files) > 2)) {
-    $directory_not_empty = true;
-}
+ini_set("display_errors", 1);
+define("installer", true);
+define('SW_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
-if ($directory_not_empty == true) {
+$directory_not_empty = file_exists(SW_PATH . 'cache/templates/compile/');
+if ($directory_not_empty) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo "<h4>Der Installer wurde bereits ausgeführt</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!";
     echo "<h4>The installation process has already been finished.</h4> <br/> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!";
     exit;
 }
+
 // Check the minimum required php version
 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
@@ -63,9 +61,6 @@ require 'assets/php/Shopware_Install_Requirements_Path.php';
 require 'assets/php/Shopware_Install_Database.php';
 require 'assets/php/Shopware_Install_License.php';
 require 'assets/php/Shopware_Install_Configuration.php';
-
-
-
 
 /**
  * Load language file
@@ -89,8 +84,8 @@ $language = require(dirname(__FILE__)."/assets/lang/$selectedLanguage.php");
 $app = new Slim();
 
 // Assign components
-$app->config('install.requirements',new Shopware_Install_Requirements());
-$app->config('install.requirementsPath',new Shopware_Install_Requirements_Path());
+$app->config('install.requirements', new Shopware_Install_Requirements());
+$app->config('install.requirementsPath', new Shopware_Install_Requirements_Path());
 $app->config('install.language',$selectedLanguage);
 
 
@@ -120,14 +115,12 @@ $app->config('install.configuration',$configObj);
 // Set global variables
 $app->view()->setData("selectedLanguage",$selectedLanguage);
 $app->view()->setData("language",$language);
-$app->view()->setData("baseURL",str_replace("index.php","",$_SERVER["PHP_SELF"]));
+$app->view()->setData("baseURL", str_replace('index.php', '', $_SERVER["PHP_SELF"]));
 $app->view()->setData("app",$app);
 $app->view()->setData("error",false);
-$app->view()->setData("parameters",$_SESSION["parameters"]);
+$app->view()->setData("parameters", $_SESSION["parameters"]);
 $basepath = $configObj->getShopDomain();
 $app->view()->setData("basepath","http://".$basepath["domain"].$basepath["basepath"]);
-
-
 
 // Step 1: Select language
 $app->map('/', function () {
