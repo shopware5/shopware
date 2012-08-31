@@ -257,7 +257,7 @@ class Media extends ModelEntity
      */
     public function setName($name)
     {
-        $this->name = $this->formatName($name);
+        $this->name = $this->removeSpecialCharacters($name);
         return $this;
     }
 
@@ -523,7 +523,7 @@ class Media extends ModelEntity
 
             //to remove the old thumbnails, use the old name.
             $name = (isset($changeSet['name'])) ? $changeSet['name'][0] : $this->name;
-            $name = $this->formatName($name);
+            $name = $this->removeSpecialCharacters($name);
             $name = $name . '.' . $this->extension;
 
             //to remove the old album thumbnails, use the old album
@@ -706,32 +706,11 @@ class Media extends ModelEntity
     public function getFileName()
     {
         if ($this->name !== '') {
-            return $this->formatName($this->name) . '.' . $this->extension;
+            return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
         } else {
             // do whatever you want to generate a unique name
             return uniqid() . '.' . $this->extension();
         }
-    }
-
-    /**
-     * Helper function to format the file name.
-     * @param $name
-     * @return mixed
-     */
-    private function formatName($name)
-    {
-        $formatName = $name;
-        $specialSigns = array(';', ':', '/', '*', '+', ',', '.', '!', '"', '§', '$', '%', '&', '/', '(', ')', '=', '?', '´', '`', 'ß', '²', '³', '{', '[', ']', '}', '\\', '~', '#', '|', '<', '>', '^', '°');
-        $formatName = str_replace($specialSigns, '', $formatName);
-        $formatName = str_replace(' ', '-', $formatName);
-        $formatName = str_replace('ö', 'oe', $formatName);
-        $formatName = str_replace('ä', 'ae', $formatName);
-        $formatName = str_replace('ü', 'ue', $formatName);
-
-        if (strlen($formatName) === 0) {
-            $formatName = uniqid();
-        }
-        return $formatName;
     }
 
     /****************************************************************
@@ -1017,9 +996,6 @@ class Media extends ModelEntity
             $name      = $this->file->getBasename();
         }
 
-        //Replace special characters
-        $name = str_replace(' ', '-', $name);
-
         //set the file type using the type mapping
         if (array_key_exists(strtolower($extension), $this->typeMapping)) {
             $this->type = $this->typeMapping[strtolower($extension)];
@@ -1029,14 +1005,23 @@ class Media extends ModelEntity
 
         // The filesize in bytes.
         $this->fileSize  = $this->file->getSize();
-        $this->name      = $name;
+        $this->name      = $this->removeSpecialCharacters($name);
         $this->extension = $extension;
-
         $this->path = str_replace(Shopware()->OldPath(), '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {
             $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
         }
+    }
+
+    private function removeSpecialCharacters($name)
+    {
+        $name = iconv('utf-8', 'ascii//translit', $name);
+        $name = strtolower($name);
+        $name = preg_replace('#[^a-z0-9\-_]#', '-', $name);
+        $name = preg_replace('#-{2,}#', '-', $name);
+        $name = trim($name, '-');
+        return mb_substr($name, 0, 180);
     }
 
     public function getDefaultThumbnails()
