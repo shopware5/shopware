@@ -235,11 +235,14 @@ Ext.define('Shopware.apps.Config.controller.Main', {
                     });
                 Shopware.Notification.createGrowlMessage(title, message, win.title);
             },
-            failure:function (records, operation) {
+            failure:function (batch) {
                 var template = new Ext.Template('{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
+                if(batch.proxy.reader.rawData.message) {
+                    message += '<br />' + batch.proxy.reader.rawData.message;
+                }
                 Shopware.Notification.createGrowlMessage(title, message, win.title);
             }
         });

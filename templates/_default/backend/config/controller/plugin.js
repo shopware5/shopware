@@ -147,9 +147,12 @@ Ext.define('Shopware.apps.Config.controller.Plugin', {
                     message = new Ext.Template(message).applyTemplate(plugin.data);
                     Shopware.Notification.createGrowlMessage(title, message, win.title);
                 },
-                failure: function (operation) {
+                failure: function (batch) {
                     message = '{s name=action_failed}The action could not be executed.{/s}';
                     message = new Ext.Template(message).applyTemplate(plugin.data);
+                    if(batch.proxy.reader.rawData.message) {
+                        message += '<br />' + batch.proxy.reader.rawData.message;
+                    }
                     Shopware.Notification.createGrowlMessage(title, message, win.title);
                 }
             });

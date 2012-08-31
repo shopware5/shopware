@@ -376,8 +376,11 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                 me.createGrowlMessage(record, title, message);
                 store.load();
             },
-            failure:function (records, operation) {
+            failure:function (batch) {
                 message = me.messages.saveEntryError;
+                if(batch.proxy.reader.rawData.message) {
+                    message += '<br />' + batch.proxy.reader.rawData.message;
+                }
                 me.createGrowlMessage(record, title, message);
                 store.load();
             }
@@ -429,8 +432,11 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                     message = me.messages.deleteEntrySuccess;
                     me.createGrowlMessage(record, title, message);
                 },
-                failure: function (operation) {
+                failure: function (batch) {
                     message = me.messages.deleteEntryError;
+                    if(batch.proxy.reader.rawData.message) {
+                        message += '<br />' + batch.proxy.reader.rawData.message;
+                    }
                     me.createGrowlMessage(record, title, message);
                 }
             });

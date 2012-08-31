@@ -109,19 +109,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 ->setParameter('id', $node);
         }
 
-        try {
-            $data = $builder->getQuery()->getArrayResult();
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data,
-                'total' => count($data)
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-        }
+        $data = $builder->getQuery()->getArrayResult();
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data,
+            'total' => count($data)
+        ));
     }
 
     /**
@@ -149,28 +142,21 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $builder->addOrderBy((array)$this->Request()->getParam('sort', array()))
             ->addFilter((array)$this->Request()->getParam('filter', array()));
 
-        try {
-            $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-            foreach($data['elements'] as $elementsKey => $values) {
-                foreach($values['translations'] as $translationsKey => $array) {
-                    if($array['label'] !== null) {
-                        $data['elements'][$elementsKey]['label'] = $array['label'];
-                    }
+        foreach($data['elements'] as $elementsKey => $values) {
+            foreach($values['translations'] as $translationsKey => $array) {
+                if($array['label'] !== null) {
+                    $data['elements'][$elementsKey]['label'] = $array['label'];
                 }
             }
-            
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data,
-                'total' => count($data)
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
         }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data,
+            'total' => count($data)
+        ));
     }
 
     /**
@@ -588,23 +574,15 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
-        try {
+        $model->fromArray($data);
 
-            $model->fromArray($data);
+        $manager->persist($model);
+        $manager->flush();
 
-            $manager->persist($model);
-            $manager->flush();
-
-            if ($name === 'shop') {
-                $this->fixTranslationTable();
-            }
-            $this->View()->assign(array('success' => true));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        if ($name === 'shop') {
+            $this->fixTranslationTable();
         }
+        $this->View()->assign(array('success' => true));
     }
 
     /**
