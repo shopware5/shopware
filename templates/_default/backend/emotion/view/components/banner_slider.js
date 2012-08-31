@@ -163,8 +163,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
             flex: 1,
             editor: {
                 xtype: 'textfield',
-                allowBlank: true,
-                vtype: 'url'
+                allowBlank: true
             }
         }, {
             xtype: 'actioncolumn',

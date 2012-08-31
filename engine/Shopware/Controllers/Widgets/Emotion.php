@@ -265,6 +265,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
+
+        if(!empty($data['link'])) {
+            preg_match('/^(http|https):\/\//', $data['link'], $matches);
+
+            if(empty($matches)) {
+                $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
+            }
+        }
+
         $mappings = $data['bannerMapping'];
         if (!empty($mappings)) {
             foreach ($mappings as $key => $mapping) {
@@ -326,6 +335,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getBannerSlider($data, $category, $element)
     {
         $data["values"] = $data["banner_slider"];
+
+        foreach($data["values"] as &$value) {
+            if(!empty($value['link'])) {
+                preg_match('/^(http|https):\/\//', $value['link'], $matches);
+
+                if(empty($matches)) {
+                    $value['link'] = $this->Request()->getBaseUrl() . $value['link'];
+                }
+            }
+        }
 
         return $data;
     }
