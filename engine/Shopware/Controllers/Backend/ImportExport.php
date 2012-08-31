@@ -1837,10 +1837,21 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         /** @var \Shopware\Models\Article\Repository $articleDetailRepostiory */
         $articleDetailRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
 
+        $articleMetaData       = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
+        $articleDetailMetaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
+
+        $articleMapping = array();
+        foreach ($articleMetaData->fieldMappings as $fieldMapping) {
+            $articleMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
+        }
+
+        $articleDetailMapping = array();
+        foreach ($articleDetailMetaData->fieldMappings as $fieldMapping) {
+            $articleDetailMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
+        }
+
         $counter = 0;
         $results = $this->prepareImportXmlData($results['article']);
-
-        Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
 
         foreach ($results as $article) {
             if (empty($article['id']) && empty($article['ordernumber'])) {
@@ -1867,44 +1878,53 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
+                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
+                $detailData = $this->mapFields($article, $articleDetailMapping);
+
+                $updateData['mainDetail'] = $detailData;
+
                 if (isset($article['similar'])) {
-                    $article['similar'] = $this->prepareImportXmlData($article['related']['similar']);
+                    $updateData['similar'] = $this->prepareImportXmlData($article['related']['similar']);
                 }
 
                 if (isset($article['related'])) {
-                    $article['related'] = $this->prepareImportXmlData($article['related']['related']);
+                    $updateData['related'] = $this->prepareImportXmlData($article['related']['related']);
                 }
 
                 if (isset($article['categories'])) {
-                    $article['categories'] = $this->prepareImportXmlData($article['categories']['category']);
+                    $updateData['categories'] = $this->prepareImportXmlData($article['categories']['category']);
                 }
 
                 if (isset($article['variants'])) {
-                    $article['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
+                    $updateData['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
                     foreach ($article['variants'] as $key => $variant) {
                         if (isset($variant['prices'])) {
-                            $article['variants'][$key]['prices'] = $this->prepareImportXmlData($variant['prices']['price']);
+                            $updateData['variants'][$key]['prices'] = $this->prepareImportXmlData($variant['prices']['price']);
                         }
                     }
                 }
 
-                if (isset($article['mainDetail']['prices'])) {
-                    $article['mainDetail']['prices'] = $this->prepareImportXmlData($article['mainDetail']['prices']['price']);
+                if (isset($article['prices'])) {
+                    $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['mainDetail']['prices']['price']);
                 }
+
+                if (isset($article['mainDetail']['prices'])) {
+                    $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['mainDetail']['prices']['price']);
+                }
+
+                unset($article['images']);
+                unset($article['variants']);
 
                 $article = $this->array_filter_recursive($article);
 
                 if ($articleModel) {
-                    $result = $articleResource->update($articleModel->getId(), $article);
+                    $result = $articleResource->update($articleModel->getId(), $updateData);
                 } else {
-                    $result = $articleResource->create($article);
+                    $result = $articleResource->create($updateData);
                 }
 
                 if ($result) {
                     $articleIds[] = $result->getId();
-                    if (($counter % 5) == 0) {
-                        Shopware()->Models()->clear();
-                    }
                 }
             } catch (\Exception $e) {
                 if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
@@ -1925,7 +1945,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         if (!empty($errors)) {
-            Shopware()->Models()->getConnection()->rollback();
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
@@ -1933,8 +1952,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             ));
             return;
         }
-
-        Shopware()->Models()->getConnection()->commit();
 
         echo json_encode(array(
         'success' => true,
