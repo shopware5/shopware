@@ -1834,21 +1834,37 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         /** @var \Shopware\Components\Api\Resource\Article $articleResource */
         $articleResource = \Shopware\Components\Api\Manager::getResource('article');
 
+        /** @var \Shopware\Models\Article\Repository $articleDetailRepostiory */
+        $articleDetailRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+
         $counter = 0;
         $results = $this->prepareImportXmlData($results['article']);
 
         Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
 
         foreach ($results as $article) {
-            if (empty($article['id'])) {
+            if (empty($article['id']) && empty($article['ordernumber'])) {
                 continue;
             }
 
             try {
                 $counter++;
-                $articleModel = $articleRepostiory->find($article['id']);
-                if (!$articleModel) {
-                    continue;
+
+                if (isset($article['ordernumber'])) {
+                    /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+                    $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $article['ordernumber']));
+                    if ($articleDetailModel) {
+                        /** @var \Shopware\Models\Article\Article $articleModel */
+                        $articleModel = $articleDetailModel->getArticle();
+                        if (!$articleModel) {
+                            continue;
+                        }
+                    }
+                } elseif (isset($article['id'])) {
+                    $articleModel = $articleRepostiory->find($article['id']);
+                    if (!$articleModel) {
+                        continue;
+                    }
                 }
 
                 if (isset($article['similar'])) {
@@ -1877,7 +1893,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $article = $this->array_filter_recursive($article);
-                $result  = $articleResource->update($articleModel->getId(), $article);
+
+                if ($articleModel) {
+                    $result = $articleResource->update($articleModel->getId(), $article);
+                } else {
+                    $result = $articleResource->create($article);
+                }
+
                 if ($result) {
                     $articleIds[] = $result->getId();
                     if (($counter % 5) == 0) {
