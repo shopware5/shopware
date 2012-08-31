@@ -3426,6 +3426,17 @@ and (orientation : portrait) {
 	#footer .footer_menu a { font-size: 14px }
 }
 
+/** iPHONE MEDIA QUERY */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    body #wrapper, #header, .shopware_footer, body #footer_wrapper { width: 1020px }
+    /** Service menu */
+	.my_options a, .my_options span.service { font-size: 14px }
+	.my_options .service.active { display: block }
+	.my_options .service ul { left: -108px; }
+}
+
 
 /*	FANCY SELECT
 	-------------------------------------------- */
