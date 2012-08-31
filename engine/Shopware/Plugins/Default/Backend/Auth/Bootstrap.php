@@ -386,7 +386,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $options = $this->Application()->getOption('backendSession', array());
 
         if (!isset($options['cookie_path']) && $this->request !== null) {
-            $options['cookie_path'] = rtrim($this->request->getBasePath(), '/') . '/backend/';
+            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';
         }
         if (empty($options['gc_maxlifetime'])) {
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
