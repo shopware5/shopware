@@ -3,7 +3,7 @@
 /** Installer locale - de_DE */
 return array(
     "start_install" => "Installation starten",
-    "system_requirements" => "Systemvorrausetzungen",
+    "system_requirements" => "Systemvoraussetzungen",
     "configure_db" => "Datenbank konfigurieren",
     "licence" => "Lizenz",
     "configuration" => "Konfiguration",
