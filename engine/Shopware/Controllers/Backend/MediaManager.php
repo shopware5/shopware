@@ -554,6 +554,17 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
         }
 
+        if ($parentId !== null && empty($params['id'])) {
+            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder->select(array('settings'))
+                    ->from('Shopware\Models\Media\Settings', 'settings')
+                    ->where('settings.albumId = :albumId')
+                    ->setParameter('albumId', $parentId);
+
+            $settingData = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $settings->fromArray($settingData);
+        }
+
         //try save
         try {
             Shopware()->Models()->persist($album);
