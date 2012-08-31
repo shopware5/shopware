@@ -31,6 +31,15 @@
  */
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
+
+if (version_compare(PHP_VERSION, '5.3.13', '=')) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
+    echo '<h2>Fehler</h2>';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', diese Version ist mit Shopware 4 nicht kompatibel. Aktualisieren Sie auf PHP 5.3.14 oder höher!';
+    echo '<h2>Error</h2>';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.14';
+    return;
+}
 define("installer", true);
 define('SW_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
@@ -51,6 +60,8 @@ if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3';
     return;
 }
+
+
 session_start();
 if (!isset($_SESSION["parameters"])){
     $_SESSION["parameters"] = array();
