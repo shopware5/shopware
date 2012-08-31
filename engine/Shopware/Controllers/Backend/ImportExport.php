@@ -1905,7 +1905,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 if (isset($article['prices'])) {
-                    $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['mainDetail']['prices']['price']);
+                    $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['prices']['price']);
                 }
 
                 if (isset($article['mainDetail']['prices'])) {
@@ -1914,8 +1914,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 unset($article['images']);
                 unset($article['variants']);
-
-                $article = $this->array_filter_recursive($article);
 
                 if ($articleModel) {
                     $result = $articleResource->update($articleModel->getId(), $updateData);
