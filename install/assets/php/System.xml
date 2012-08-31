@@ -41,6 +41,9 @@
 	<requirement>
 	 	<name>mbstring</name><group>extension</group><required>1</required>
 	</requirement>
+    <requirement>
+        <name>iconv</name><group>extension</group><required>1</required>
+    </requirement>
 	<requirement>
 	 	<name>json</name><group>extension</group><required>1</required>
 	</requirement>

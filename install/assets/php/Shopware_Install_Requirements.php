@@ -51,9 +51,10 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     protected function checkAll()
     {
         foreach ($this->list as $requirement) {
-            $version = $this->check($requirement->name);
+            $name = (string)$requirement->name;
+            $version = $this->check($name);
             $requirement->result = $this->compare(
-                (string) $requirement->name,
+                $name,
                 $version,
                 (string)$requirement->required
             );
@@ -92,6 +93,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
+            //return phpversion($name) ? phpversion($name) : true;
         } elseif (function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
