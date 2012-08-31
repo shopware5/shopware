@@ -602,11 +602,11 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
         $entityManager = Shopware\Components\Model\ModelManager::create($conn, $config, $eventManager);
 
-        if (!is_readable(rtrim($config->getProxyDir(), '/') . '/__CG__ShopwareModelsShopShop.php')) {
-            $metadata     = $entityManager->getMetadataFactory()->getAllMetadata();
-            $proxyFactory = $entityManager->getProxyFactory();
-            $proxyFactory->generateProxyClasses($metadata);
-        }
+        //if (!is_readable(rtrim($config->getProxyDir(), '/') . '/__CG__ShopwareModelsShopShop.php')) {
+        //    $metadata     = $entityManager->getMetadataFactory()->getAllMetadata();
+        //    $proxyFactory = $entityManager->getProxyFactory();
+        //    $proxyFactory->generateProxyClasses($metadata);
+        //}
 
         return $entityManager;
     }

@@ -86,12 +86,15 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
             },
             'cache-form': {
                 actioncomplete: function(form, action) {
-                    Shopware.Notification.createGrowlMessage(
-                        me.infoTitle,
-                        me.infoMessageSuccess,
-						me.infoTitle
-                    );
-                    me.getStore('main.Info').load();
+                    me.getStore('main.Info').load({
+                        callback: function(records, operation) {
+                            Shopware.Notification.createGrowlMessage(
+                                me.infoTitle,
+                                me.infoMessageSuccess,
+                                me.infoTitle
+                            );
+                        }
+                    });
                 }
             }
         });
