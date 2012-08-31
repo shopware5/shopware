@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      */
     onCountryChanged: function(countryCombo, newValue, countryStateCombo) {
         var me = this,
-            store, combo, oldState;
+            store, oldState;
 
         oldState = countryStateCombo.getValue();
         store = countryStateCombo.store;
@@ -141,9 +141,12 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             callback: function() {
                 var record = store.getById(oldState);
 
-                if (record === null) {
-                    record = store.first();
+                if (store.getCount() === 0) {
+                    countryStateCombo.setValue(null);
+                    countryStateCombo.hide();
+                    return true;
                 }
+
                 if (record instanceof Ext.data.Model) {
                     countryStateCombo.setValue(record.get('id'));
                 } else {
@@ -343,13 +346,21 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      */
     onCreateCustomer:function () {
         var me = this,
-            detailStore = me.subApplication.getStore('Detail'),
             record = me.getModel('Customer').create({ active: true });
 
-        detailStore.getProxy().extraParams = {
-            customerID: ''
-        };
-        me.getView('detail.Window').create({ record: record }).show();
+        var detailWindow = me.subApplication.getView('detail.Window').create().show();
+        detailWindow.setLoading(true);
+
+        var store = Ext.create('Shopware.apps.Customer.store.Batch');
+        store.load({
+            callback:function (records) {
+                var storeData = records[0];
+                detailWindow.record = record;
+                detailWindow.createTabPanel();
+                detailWindow.setLoading(false);
+                detailWindow.setStores(storeData);
+            }
+        });
     },
 
     /**
