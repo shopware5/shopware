@@ -7,7 +7,7 @@
         <p>
         <strong>{se name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/se}:</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
         {if $sArticle.referenceunit}
-            ({$sArticle.referenceunit} {$sArticle.sUnit.unit} / {$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s})
+            ({$sArticle.referenceunit} {$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sArticle.sUnit.unit})
         {/if}
         </p>
     </div>
