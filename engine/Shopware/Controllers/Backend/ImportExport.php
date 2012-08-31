@@ -502,6 +502,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 '' as attributevalues,
 
                 {$selectAttributes},
+                configurator_set_id as configuratorsetID,
                 acs.type as configuratortype,
             	IF(acs.id,1,NULL) as configurator
             	{$selectStatements}
@@ -525,7 +526,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             LEFT JOIN s_articles_esd e
             ON e.articledetailsID=d.id
 
-            LEFT JOIN s_article_configurator_sets acs ON a.configurator_set_id = acs.id
+            LEFT JOIN s_article_configurator_sets acs
+            ON a.configurator_set_id = acs.id
 
             {$joinStatements}
 
@@ -547,9 +549,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $first   = true;
             $keys    = array();
             while ($row = $stmt->fetch()) {
-                if ($exportArticleTranslations) {
-                    $row = $this->prepareArticleRow($row, $languages, $translationFields);
-                }
+                $row = $this->prepareArticleRow($row, $languages, $translationFields);
 
                 if ($first) {
                     $first = false;
@@ -577,9 +577,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $first = true;
             echo $excel->getHeader();
             while ($row = $stmt->fetch()) {
-                if ($exportArticleTranslations) {
-                    $row = $this->prepareArticleRow($row, $languages, $translationFields);
-                }
+                $row = $this->prepareArticleRow($row, $languages, $translationFields);
 
                 if ($first) {
                     $first = false;
@@ -602,6 +600,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function prepareArticleRow($row, $languages, $translationFields)
     {
+        if (empty($row['configuratorsetID'])) {
+            $row['mainnumber'] = '';
+            $row['additionaltext'] = '';
+        }
+
         if (!empty($languages)) {
             foreach ($languages as $language) {
                 if (!empty($row['article_translation_' . $language])) {
@@ -1958,12 +1961,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             try {
                 $counter++;
                 $result = $this->saveArticle($articleData, $articleResource, $articleRepostiory, $articleDetailRepostiory, $articleMapping, $articleDetailMapping);
-                Shopware()->Models()->flush();
                 if ($result) {
                     $articleIds[] = $result->getId();
-                    if (($counter % 5) == 0) {
-                        Shopware()->Models()->clear();
-                    }
+                }
+
+                if (($counter % 5) == 0) {
+                    Shopware()->Models()->clear();
                 }
             } catch (\Exception $e) {
                 if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
@@ -1980,7 +1983,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $errormessage = $e->getMessage();
                 }
 
-                $errors[] = "Error in line {$counter}: $errormessage";
+                $errors[] = "Error in line {$counter}: $errormessage\n";
             }
         }
 
@@ -2015,8 +2018,17 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         $importImages = false;
 
-        if (empty($articleData['ordernumber']) && empty($articleData['articleID']) && empty($articleData['articledetailsID'])) {
+        if (empty($articleData['ordernumber'])) {
             return false;
+        }
+        unset($articleData['articleID'], $articleData['articledetailsID']);
+
+        if (isset($articleData['configurator']) && !empty($articleData['configurator'])) {
+            return;
+        }
+
+        if (isset($articleData['mainnumber']) && !empty($articleData['mainnumber'])) {
+            return;
         }
 
         $articleData = $this->toUtf8($articleData);
@@ -2058,42 +2070,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
         }
 
-        if (!empty($articleData['ordernumber'])) {
-            unset($articleData['articleID'], $articleData['articledetailsID']);
-        }
-
         $attribute = $this->prefixToArray($articleData, 'attr_');
         if (!empty($attribute)) {
             $detailData['attribute'] = $attribute;
         }
 
-        if (!empty($articleData['articledetailsID'])) {
-            /** @var \Shopware\Models\Article\Detail $articleDetailModel */
-            $articleDetailModel = $articleDetailRepostiory->find($articleData['articledetailsID']);
-            if (!$articleDetailModel) {
-                return;
-            }
-
+        /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+        $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['ordernumber']));
+        if ($articleDetailModel) {
             /** @var \Shopware\Models\Article\Article $articleModel */
             $articleModel = $articleDetailModel->getArticle();
-
-        } elseif (!empty($articleData['ordernumber'])) {
-            /** @var \Shopware\Models\Article\Detail $articleDetailModel */
-            $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['ordernumber']));
-            if ($articleDetailModel) {
-
-                /** @var \Shopware\Models\Article\Article $articleModel */
-                $articleModel = $articleDetailModel->getArticle();
-            }
-
-        } elseif (!empty($articleData['articleID'])) {
-            /** @var \Shopware\Models\Article\Article $articleModel */
-            $articleModel = $articleRepostiory->find($articleData['articleID']);
             if (!$articleModel) {
-                return;
+                return false;
             }
-
-            $articleDetailModel = $articleModel->getMainDetail();
         }
 
         if ($articleModel) {
@@ -2101,7 +2090,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $updateData['mainDetail'] = $detailData;
             } elseif ($articleDetailModel->getKind() == 2) {
                 $detailData['id'] = $articleDetailModel->getId();
-
                 $updateData = array();
                 $updateData['variants'][] = $detailData;
             }
@@ -2134,10 +2122,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $result = $this->saveCustomer($customerData);
                 if ($result) {
                     $customerIds[] = $result->getId();
-                } else {
                 }
-
-
             } catch (\Exception $e) {
                 if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
                     $messages = array();
