@@ -105,7 +105,7 @@ class Shopware_Install_Database
             $sql = "SHOW VARIABLES LIKE 'have_innodb';";
             $result = $this->database->query($sql)->fetchColumn(1);
             if($result != 'YES') {
-                $this->setError("Database-Error!: The InnoDB storage engine is disabeld. Please enable it for Shopware 4.<br/>");
+                $this->setError("Database-Error!: MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
             }
         } catch(PDOException $e) { }
