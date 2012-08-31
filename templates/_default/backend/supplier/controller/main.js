@@ -185,6 +185,10 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
                 sm.deselect(element);
                 saveSelection = sm.getSelection();
                 allowDelete = false;
+                Ext.MessageBox.alert(
+                    me.messages.deleteDialogTitle,
+                    me.messages.deleteDialogForbidden
+                );
                 return false;
             }
         });
