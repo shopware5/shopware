@@ -116,7 +116,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagedestroy($im);
         $i = ob_get_contents();
 
-        $this->Response()->setHeader('Content-Type', 'image/jpeg');
+        $this->Response()->setHeader('Content-Type', 'image/jpeg', true);
         $this->Response()->setHeader('Content-Length', strlen($i));
 
         echo $i;
