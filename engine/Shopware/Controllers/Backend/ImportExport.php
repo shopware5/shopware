@@ -1477,35 +1477,40 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         if ($extension === 'csv') {
             $results = new Shopware_Components_CsvIterator($filePath, ';');
-            $headers = $results->getHeader();
         }
 
         /** @var \Shopware\Models\Category\Repository $categoryRepository  */
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $metaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Category\Category');
-
-        // $originalIdGenerator = $metaData->idGenerator;
         $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
 
-        $counter = 0;
-        $total = 0;
+        $counter     = 0;
+        $total       = 0;
+        $categoryIds = array();
 
-        $models = array();
+        $categoryRepository->recover();
+        Shopware()->Models()->clear();
 
-        foreach ($results as $category) {
-            $counter++;
-            $total++;
-
-            $category = (array) $category;
-            $models[] = $this->saveCategory($category, $categoryRepository, $metaData);
-            Shopware()->Models()->flush();
-            Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->recover();
-        }
-
+        Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
         try {
-            Shopware()->Models()->flush();
-            Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->recover();
+            foreach ($results as $category) {
+                $total++;
+                $category = (array) $category;
+
+                $categoryModel = $this->saveCategory($category, $categoryRepository, $metaData);
+                Shopware()->Models()->flush();
+                Shopware()->Models()->clear();
+                if ($categoryModel) {
+                    $counter++;
+                    $categoryIds[] = $categoryModel->getId();
+                }
+            }
+
+            Shopware()->Models()->getConnection()->commit();
+            $categoryRepository->recover();
+            Shopware()->Models()->clear();
         } catch (\Exception $e) {
+            Shopware()->Models()->getConnection()->rollback();
             echo json_encode(array(
                 'success' => false,
                 'message' => sprintf("Error: %s", $e->getMessage())
@@ -1513,16 +1518,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             return;
         }
 
-        $categoryIds = array();
-
-        /** @var $categoryModel \Shopware\Models\Category\Category */
-        foreach ($models as $categoryModel) {
-            $categoryIds[] = $categoryModel->getId();
-        }
-
         echo json_encode(array(
             'success' => true,
-            'message' => sprintf("Successfully updated %s of %s categories", $total, $counter)
+            'message' => sprintf("Successfully imported %s of %s categories", $counter, $total)
         ));
 
         return;
@@ -1536,9 +1534,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function saveCategory($category, \Shopware\Models\Category\Repository $categoryRepository, $metaData)
     {
-        $category = $this->toUtf8($category);
+        $parent = $categoryRepository->find($category['parentID']);
+        if (!$parent) {
+            throw new \Exception(sprintf('Could not update/insert category with id %s, could not find parentId %s', $category['categoryID'], $category['parentID']));
+        }
 
-        $updateData = array();
+        $category = $this->toUtf8($category);
 
         $mapping = array();
         foreach ($metaData->fieldMappings as $fieldMapping) {
@@ -1556,9 +1557,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         );
 
         $updateData = $this->mapFields($category, $mapping);
-
-        $updateData['id']     = $category['categoryID'];
-        $updateData['parent'] = $categoryRepository->find($category['parentID']);
+        $updateData['parent'] = $parent;
 
         $attribute = $this->prefixToArray($updateData, 'attribute_');
         if (!empty($attribute)) {
@@ -1567,7 +1566,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         /** @var $categoryModel \Shopware\Models\Category\Category */
         $categoryModel = $categoryRepository->find($category['categoryID']);
-
         if (!$categoryModel) {
             $categoryModel = new \Shopware\Models\Category\Category();
             $categoryModel->setPrimaryIdentifier($category['categoryID']);
