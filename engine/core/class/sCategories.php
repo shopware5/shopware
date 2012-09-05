@@ -145,7 +145,7 @@ class sCategories
      * @param $parentId
      * @return array|null
      */
-    public function sGetCategoryByArticleId($articleId, $parentId)
+    public function sGetCategoryByArticleId($articleId, $parentId = null)
     {
         if($parentId === null) {
             $parentId = $this->baseId;
