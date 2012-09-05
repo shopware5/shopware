@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             $uri = $this->Request()->getRequestUri();
             $uri = str_replace('shopware.php/', '', $uri);
             $uri = str_replace('/backend/', '/', $uri);
-            $this->Response()->setRedirect($uri, 301);
+            $this->redirect($uri, array('code' => 301));
             return;
         }
         if($this->Request()->getParam('no-cache') === null) {
@@ -78,7 +78,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         //}
 
         if(strpos($this->Request()->getPathInfo(), '/backend/') !== 0) {
-            $this->Response()->setRedirect('backend/', 301);
+            $this->redirect('backend/', array('code' => 301));
         }
     }
 
