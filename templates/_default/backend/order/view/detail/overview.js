@@ -712,6 +712,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             },
             {
                 xtype: 'numberfield',
+                decimalPrecision: 2,
+                submitLocaleSeparator: false,
                 name: 'invoiceShipping',
                 fieldLabel: Ext.String.format(me.snippets.edit.shippingCost, me.record.get('currency'))
             },
