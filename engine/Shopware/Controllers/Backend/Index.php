@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             $menu = Shopware()->Models()->getRepository(
                 'Shopware\Models\Menu\Menu'
             );
-            $menuItems = $menu->findBy(array('parentId' => null), 'position');
+            $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
             $this->View()->menu = $menuItems;
         }
     }
