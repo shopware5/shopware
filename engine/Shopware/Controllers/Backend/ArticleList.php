@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 		}
 
 		$categoryId   = $this->Request()->getParam('categoryId');
-		$filterParams = $this->Request()->getParam('filter');
+		$filterParams = $this->Request()->getParam('filter', array());
         $filterBy     = $this->Request()->getParam('filterBy');
 		$showVariants = (bool) $this->Request()->getParam('showVariants', false);
         $order        = $this->Request()->getParam('sort', null);
@@ -244,7 +244,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $limit        = $this->Request()->getParam('limit', 20);
 
 		$filters = array();
-		foreach ($filterParams as $singleFilter) {
+        foreach ($filterParams as $singleFilter) {
 			$filters[$singleFilter['property']] = $singleFilter['value'];
 		}
 
