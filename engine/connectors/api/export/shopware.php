@@ -1,7 +1,6 @@
 <?php
 /**
- * Shopware API Export-Funktionen
- *
+ * Deprecated Shopware API Export-Funktionen
  * <code>
  * <?php
  * require_once 'api.php';
@@ -18,6 +17,7 @@
  * @package     Shopware 3.5.0
  * @subpackage  API-Export
  * @version		1.0.0
+ * @deprecated
  */
 class sShopwareExport
 {
@@ -37,7 +37,11 @@ class sShopwareExport
 	function sFullArticles ()
 	{
 		$articles = $this->sArticles();
-		
+
+        if(count($articles) === 0) {
+            return false;
+        }
+
 		$articledetailIDs = array_keys($articles);
 		$articleIDs = array();
 		foreach ($articles as $article) {
@@ -92,19 +96,19 @@ class sShopwareExport
 				a.shippingtime,
 				IF(a.datum='0000-00-00','',a.datum) as added,
 				IF(a.changetime='0000-00-00 00:00:00','',a.changetime) as `changed`,
-				IF(a.releasedate='0000-00-00','',a.releasedate) as releasedate,
-				a.shippingfree,
+				IF(d.releasedate='0000-00-00','',d.releasedate) as releasedate,
+				d.shippingfree,
 				a.notification,
 				a.topseller,
 				a.keywords,
-				a.minpurchase,
-				a.purchasesteps,
-				a.maxpurchase,
+				d.minpurchase,
+				d.purchasesteps,
+				d.maxpurchase,
 				a.mode,
-				a.purchaseunit,
-				a.referenceunit,
-				a.packunit,
-				a.unitID,
+				d.purchaseunit,
+				d.referenceunit,
+				d.packunit,
+				d.unitID,
 				a.pricegroupID,
 				a.pricegroupActive,
 				a.laststock,
@@ -116,36 +120,48 @@ class sShopwareExport
 				d.kind,
 				d.instock,
 				d.stockmin,
-				IF(file IS NULL,0,1) as esd,
-				d.weight,
+				IF(e.file IS NULL,0,1) as esd,
+                d.weight,
+                d.width,
+                d.height,
+                d.length,
 				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10, 
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
 				s.name as supplier,
 				u.unit,
 				t.tax,
 				a.filtergroupID as attributegroupID,
-				IF(g.groupID,1,0) as configurator
+                acs.type as configuratortype,
+            	IF(acs.id,1,NULL) as configurator
 				
 			FROM s_articles a
+
 			INNER JOIN s_articles_details d
 			ON d.articleID = a.id
+
 			LEFT JOIN s_articles_details d2
 			ON d2.articleID = a.id
 			AND d2.kind=1
 			AND d.kind=2
+
 			INNER JOIN s_articles_attributes at
 			ON at.articledetailsID = d.id
+
 			LEFT JOIN `s_core_units` as u
-			ON a.unitID = u.id
+			ON d.unitID = u.id
+
 			LEFT JOIN s_core_tax as t
 			ON a.taxID = t.id
+
 			LEFT JOIN s_articles_supplier as s
 			ON a.supplierID = s.id
+
 			LEFT JOIN s_articles_esd e
 			ON e.articledetailsID=d.id
-			LEFT JOIN s_articles_groups g
-			ON g.groupID=1
-			AND g.articleID=a.id
+
+            LEFT JOIN s_article_configurator_sets acs
+            ON a.configurator_set_id = acs.id
+
 			WHERE
 			a.mode = 0
 			ORDER BY a.id, d.kind
@@ -191,32 +207,45 @@ class sShopwareExport
 		{
 			$article_details['articleIDs'] = array_map("intval",$article_details['articleIDs']);
 			$article_details['where'] = "(`articleID`=".implode(" OR `articleID`=",$article_details['articleIDs']).")";
+            // as we need to join over s_article_details in SW4 in order to get the ordernumber,
+            // we also need to prevent 'articleID' from being ambiguous
+            $article_details['where_reference'] = "(`ref`.`articleID`=".implode(" OR `ref`.`articleID`=",$article_details['articleIDs']).")";
 		}
 		if(empty($article_details['where']))
-			return false;		
-		$sql = "SELECT `description`, `filename` as name, `size`, `articleID` FROM `s_articles_downloads` WHERE {$article_details['where']}";
+			return false;
+        // Downloads
+		$sql = "SELECT `description`, `filename` as link, `size`, `articleID` FROM `s_articles_downloads` WHERE {$article_details['where']}";
 		if(($result = $this->sDB->Execute($sql))===false)
     		return false;
         while ($row = $result->FetchRow()) {
         	$id = $row["articleID"]; unset($row["articleID"]);
-        	$row["link"] = "http://".$this->sSystem->sCONFIG['sBASEPATH'].$this->sSystem->sCONFIG['sARTICLEFILES']."/".$row["name"];
+        	$row["name"] =  basename($row["link"]);
 			$rows[$id]["downloads"][] = $row;
-        } 
+        }
+        // Informations (links)
 		$sql = "SELECT `description` ,`link` ,`target`, `articleID` FROM `s_articles_information` WHERE {$article_details['where']}";
 		if(($result = $this->sDB->Execute($sql))===false)
     		return false;
         while ($row = $result->FetchRow()) {
         	$id = $row["articleID"]; unset($row["articleID"]);
 			$rows[$id]["information"][] = $row;
-        } 
-		$sql = "SELECT `relatedarticle`, `articleID` FROM `s_articles_relationships` WHERE {$article_details['where']}";
+        }
+        // Related articles
+		$sql = "SELECT `ad`.`ordernumber` as relatedarticle, `ref`.`articleID`
+				FROM `s_articles_relationships` ref
+				LEFT JOIN s_articles_details ad ON ad.articleID=ref.relatedarticle
+				WHERE {$article_details['where_reference']}";
 		if(($result = $this->sDB->Execute($sql))===false)
     		return false;
         while ($row = $result->FetchRow()) {
 			$rows[$row["articleID"]]["relationships"][] = $row["relatedarticle"];
 			$rows[$row["articleID"]]["crossellings"][] = $row["relatedarticle"];
         }
-		$sql = "SELECT `relatedarticle`, `articleID`  FROM `s_articles_similar` WHERE {$article_details['where']}";
+        // Similar articles
+		$sql = "SELECT `ad`.`ordernumber` as relatedarticle, `ref`.`articleID`
+		FROM `s_articles_similar` ref
+		LEFT JOIN s_articles_details ad ON ad.articleID=ref.relatedarticle
+		WHERE {$article_details['where_reference']}";
 		if(($result = $this->sDB->Execute($sql))===false)
     		return false;
         while ($row = $result->FetchRow()) {
@@ -309,10 +338,10 @@ class sShopwareExport
 				$articleID = (int) $articleID;
 			$article_images['where'] = "`articleID` IN (".implode(",",$article_images['articleIDs']).")";
 		}
+        //need to join over s_media to get the path
 		$sql = "
-			SELECT
-				*
-			FROM `s_articles_img`
+            SELECT ai.*, m.path FROM `s_articles_img` ai
+            JOIN s_media m ON m.id = ai.media_id
 			WHERE {$article_images['where']}
 			ORDER BY articleID, main, position, id
 		";
@@ -322,7 +351,7 @@ class sShopwareExport
     	$rows = array();
         while ($row = $result->FetchRow()) {
         	if(empty($row["extension"])) $row["extension"] = 'jpg';
-        	$row["link"] = "http://".$this->sSystem->sCONFIG['sBASEPATH'].$this->sSystem->sCONFIG['sARTICLEIMAGES']."/".$row["img"].".".$row["extension"];
+        	$row["link"] = "http://".Shopware()->Config()->Basepath."/".$row["path"];
 			$rows[$row["articleID"]][] = $row;
         }
 		return $rows;
@@ -349,7 +378,8 @@ class sShopwareExport
 			$article_categories['articleIDs'] = array_map("intval",$article_categories['articleIDs']);
 			$article_categories['where'] = "(`articleID`=".implode(" OR `articleID`=",$article_categories['articleIDs']).")";
 		}
-		$sql = "SELECT DISTINCT `articleID`, `categoryID` FROM `s_articles_categories` WHERE {$article_categories['where']} AND categoryID = categoryparentID";
+		$sql = "SELECT DISTINCT `articleID`, `categoryID` FROM `s_articles_categories` WHERE {$article_categories['where']}";
+
 		if(!$result = $this->sDB->Execute($sql))
     		return false;
         while ($row = $result->FetchRow()) {
@@ -391,7 +421,7 @@ class sShopwareExport
 	function sSuppliers ()
 	{
 		$sql = "
-			SELECT id, id as supplierID, name, img, link, CONCAT('http://{$this->sSystem->sCONFIG['sBASEPATH']}{$this->sSystem->sCONFIG['sSUPPLIERIMAGES']}/',img) as `img_link`
+			SELECT id, id as supplierID, name, img, link, CONCAT('http://".Shopware()->Config()->Basepath."/',img) as `img_link`
 			FROM `s_articles_supplier`";
 		return $this->sDB->GetAssoc($sql);
 	}
@@ -461,17 +491,10 @@ class sShopwareExport
 				`status` = {$order['status']} $upset
 			WHERE {$order['where']} AND status!=-1
 		";
+
 		if($this->sDB->Execute($sql)===false)
 			return false;
 		return true;
-	}
-	
-	/**
-	 * Noch nicht implementiert
-	 * @access public
-	 */
-	function sCloseOrder ()
-	{
 	}
 	
 	/**
@@ -499,14 +522,7 @@ class sShopwareExport
 		{
 			$sql_where = 'WHERE '.$order['where'];
 		}
-		if (!empty($this->sSystem->sCONFIG['sPREMIUMSHIPPIUNG']))
-		{
-			$dispatch_table = 's_premium_dispatch';
-		}
-		else
-		{
-			$dispatch_table = 's_premium_dispatch';
-		}
+
 		$sql = "
 			SELECT
 				`o`.`id`,
@@ -555,7 +571,7 @@ class sShopwareExport
 			ON	(`o`.`cleared` = `c`.`id`)
 			LEFT JOIN `s_core_paymentmeans` as `p`
 			ON	(`o`.`paymentID` = `p`.`id`)
-			LEFT JOIN `$dispatch_table` as `d`
+			LEFT JOIN `s_premium_dispatch` as `d`
 			ON	(`o`.`dispatchID` = `d`.`id`)
 			LEFT JOIN `s_core_currencies` as `cu`
 			ON	(`o`.`currency` = `cu`.`currency`)
@@ -591,6 +607,7 @@ class sShopwareExport
 		{
 			return false;
 		}
+
 		$sql = "
 			SELECT 
 				`d`.`id` as `orderdetailsID`,
@@ -610,6 +627,7 @@ class sShopwareExport
 				`d`.`esdarticle`,
 				`d`.`taxID`,
 				`t`.`tax`,
+				`d`.`tax_rate`,
 				`d`.`esdarticle` as `esd`
 			FROM
 				`s_order_details` as `d`
@@ -621,7 +639,7 @@ class sShopwareExport
 				({$order['where']})
 			ORDER BY `orderdetailsID` ASC
 		"; // Fix #5830 backported from github
-		
+
 		$rows = $this->sDB->GetAll($sql);
 		if(empty($rows)||!is_array($rows))
 			return false;
@@ -673,6 +691,7 @@ class sShopwareExport
 				`b`.`fax` AS `fax`, 
 				`b`.`fax` AS `billing_fax`, 
 				`b`.`countryID` AS `billing_countryID`, 
+                `b`.`stateID` AS `billing_stateID`,
 				`bc`.`countryname` AS `billing_country`,
 				`bc`.`countryiso` AS `billing_countryiso`,
 				`bca`.`name` AS `billing_countryarea`,
@@ -694,6 +713,7 @@ class sShopwareExport
 				`s`.`streetnumber` AS `shipping_streetnumber`,
 				`s`.`zipcode` AS `shipping_zipcode`,
 				`s`.`city` AS `shipping_city`,
+                `s`.`stateID` AS `shipping_stateID`,
 				`s`.`countryID` AS `shipping_countryID`,
 				`sc`.`countryname` AS `shipping_country`,
 				`sc`.`countryiso` AS `shipping_countryiso`,
@@ -882,7 +902,8 @@ class sShopwareExport
 			WHERE `mode`=0
 		";
 		$ret["customer_groups"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
-		
+
+        // Did not add the new field `description` here, in order not to brake the id=>name scheme
 		$sql = "SELECT `id`, `name` FROM `s_articles_supplier`";
   		$ret["manufacturers"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
 
@@ -929,6 +950,7 @@ class sShopwareExport
 		} else {
 			$where = "";		
 		}
+
 		$sql = "
 				SELECT
 					`u`.`id`,
@@ -947,6 +969,7 @@ class sShopwareExport
 					`b`.`fax` AS `billing_fax`, 
 					`b`.`countryID` AS `billing_countryID`, 
 					`b`.`ustid`,
+					`b`.`stateID` AS `billing_stateID`,
 					`ba`.`text1` AS `billing_text1`,
 					`ba`.`text2` AS `billing_text2`,
 					`ba`.`text3` AS `billing_text3`,
@@ -963,6 +986,7 @@ class sShopwareExport
 					`s`.`zipcode` AS `shipping_zipcode`,
 					`s`.`city` AS `shipping_city`,
 					`s`.`countryID` AS `shipping_countryID`,
+					`s`.`stateID` AS `shipping_stateID`,
 					`sa`.`text1` AS `shipping_text1`,
 					`sa`.`text2` AS `shipping_text2`,
 					`sa`.`text3` AS `shipping_text3`,
@@ -986,7 +1010,7 @@ class sShopwareExport
 				FROM 
 					`s_user` as `u`
 				LEFT JOIN `s_user_billingaddress` as `b` ON (`b`.`userID`=`u`.`id`) 
-				LEFT JOIN `s_user_shippingaddress` as `s` ON (`s`.`userID`=`u`.`id`) 
+				LEFT JOIN `s_user_shippingaddress` as `s` ON (`s`.`userID`=`u`.`id`)
 				LEFT JOIN s_core_countries bc ON bc.id = b.countryID
 				LEFT JOIN s_core_countries sc ON sc.id = s.countryID
                 LEFT JOIN s_core_countries_areas bca
