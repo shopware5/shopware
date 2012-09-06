@@ -155,8 +155,6 @@ class Field extends ModelEntity
     private $position;
 
     /**
-     * Currently not implmented.
-     *
      * @var string $ticketTask
      *
      * @ORM\Column(name="ticket_task", type="string", length=200, nullable=false)
@@ -421,5 +419,26 @@ class Field extends ModelEntity
     public function onPrePersist()
     {
         $this->added = new \DateTime('now');
+    }
+
+    /**
+     * Set TicketTask
+     *
+     * @param string $ticketTask
+     * @return \Shopware\Models\Form\Field
+     */
+    public function setTicketTask($ticketTask)
+    {
+        $this->ticketTask = $ticketTask;
+        return $this;
+    }
+
+    /**
+     * Get Ticket Task
+     * @return string
+     */
+    public function getTicketTask()
+    {
+        return $this->ticketTask;
     }
 }
