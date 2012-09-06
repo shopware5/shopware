@@ -363,7 +363,7 @@ class Article extends Resource
 
             $variant->fromArray($variantData);
 
-            if (isset($variantData['configuratorOptions'])) {
+            if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
                 $configuratorSet = $article->getConfiguratorSet();
 
                 if (!$configuratorSet && !isset($data['configuratorSet'])) {

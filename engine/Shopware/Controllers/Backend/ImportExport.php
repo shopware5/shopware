@@ -2238,7 +2238,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $isOldVariant = false;
-        if (!empty($articleData['additionaltext']) && empty($articleData['mainnumber'])) {
+        if (!empty($articleData['additionaltext']) && empty($articleData['mainnumber']) && empty($articleData['configuratorsetID'])) {
             $isOldVariant = true;
             $groupName = $articleData['ordernumber'] . '-Group';
 
@@ -2255,7 +2255,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'group'  => $groupName,
                 'option' => $articleData['additionaltext']
             ));
-        } elseif (!empty($articleData['mainnumber']) && empty($articleData['configurator'])) {
+        } elseif (!empty($articleData['mainnumber']) && empty($articleData['configurator']) && empty($articleData['configuratorsetID'])) {
             $isOldVariant = true;
             $groupName = $articleData['mainnumber'] . '-Group';
             $configuratorOptions = array(array(
