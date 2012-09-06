@@ -59,8 +59,8 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
      */
     protected $headers = array(
         'Content-Type' => null,
-        'Cache-Control' => 'public, max-age=2592000, s-maxage=0',
-        'Pragma' => 'public',
+        'Cache-Control' => 'private, proxy-revalidate, max-age=2592000, s-maxage=0',
+        'Pragma' => 'private',
         'Expires' => null,
         'Last-Modified' => null
     );
