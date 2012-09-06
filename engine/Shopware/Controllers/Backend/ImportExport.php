@@ -590,32 +590,44 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     INNER JOIN s_articles_details rad ON ra.main_detail_id = rad.id
                     WHERE sa.articleID=a.id
                 ) as crosselling,
+
                 (SELECT GROUP_CONCAT(categoryID SEPARATOR '|') FROM s_articles_categories WHERE articleID=a.id) as categories,
+
                 '' as categorypaths,
+
                 (
                     SELECT GROUP_CONCAT(CONCAT('{$imagePath}',img,'.',extension) ORDER BY `main`,  `position`  SEPARATOR '|')
                     FROM `s_articles_img`
                     WHERE articleID=a.id
                 ) as images,
+
+                a.filtergroupID as filterGroupId,
+
                 (
                     SELECT GROUP_CONCAT(id SEPARATOR '|' ) FROM s_filter_articles fa
                     LEFT JOIN s_filter_values fv ON fa.valueId = fv.id
                     WHERE fa.articleId = a.id
                 ) as propertyValues,
 
-                a.filtergroupID as filterGroupId,
-
-                {$selectAttributes},
                 configurator_set_id as configuratorsetID,
                 acs.type as configuratortype,
-                IF(acs.id,1,NULL) as configurator
+                (
+                    SELECT GROUP_CONCAT(CONCAT_WS(':', cg.name, co.name) SEPARATOR '|') FROM s_articles_details ad
+                    INNER JOIN s_article_configurator_option_relations cor ON cor.article_id = ad.id
+                    INNER JOIN s_article_configurator_options co ON cor.option_id = co.id
+                    INNER JOIN s_article_configurator_groups cg ON co.group_id = cg.id
+                    WHERE ad.id = d.id
+                    GROUP BY ad.id
+                ) as configuratorOptions,
+
+                {$selectAttributes}
                 {$selectStatements}
 
             FROM s_articles a
 
             {$variantsSql}
 
-            INNER JOIN s_articles_attributes at
+            LEFT JOIN s_articles_attributes at
             ON at.articledetailsID=d.id
 
             LEFT JOIN `s_core_units` as u

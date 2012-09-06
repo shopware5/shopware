@@ -359,7 +359,7 @@ class Article extends Resource
 
             $variantData = $this->prepareVariantAssociatedData($variantData);
             $variantData = $this->prepareVariantPricesAssociatedData($data, $variantData, $article, $variant);
-            $variantData = $this->prepareVariantAttributeAssociatedData($variantData, $article);
+            $variantData = $this->prepareVariantAttributeAssociatedData($variantData, $article, $variant);
 
             $variant->fromArray($variantData);
 
@@ -1064,11 +1064,16 @@ class Article extends Resource
     /**
      * @param array $variantData
      * @param \Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Article\Detail $variant
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareVariantAttributeAssociatedData($variantData, ArticleModel $article)
+    protected function prepareVariantAttributeAssociatedData($variantData, ArticleModel $article, \Shopware\Models\Article\Detail $variant)
     {
+        if (!$variant->getAttribute()) {
+            $variantData['attribute']['article'] = $article;
+        }
+
         if (!isset($variantData['attribute'])) {
             return $variantData;
         }
