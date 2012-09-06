@@ -165,4 +165,19 @@ class Value extends ModelEntity
         return $this->position;
     }
 
+    /**
+     * @param string $option
+     */
+    public function setOption($option)
+    {
+        $this->option = $option;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOption()
+    {
+        return $this->option;
+    }
 }
