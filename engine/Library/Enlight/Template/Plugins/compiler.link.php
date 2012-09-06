@@ -104,7 +104,7 @@ class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
             // try to find the file on the filesystem
             foreach ($template->smarty->getTemplateDir() as $dir) {
                 if (file_exists($dir . $file)) {
-                    $file = realpath($dir . $file);
+                    $file = realpath($dir) . DS . str_replace('/', DS, $file);
                     break;
                 }
                 if($useIncludePath) {

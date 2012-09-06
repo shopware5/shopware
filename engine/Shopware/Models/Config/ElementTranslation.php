@@ -85,7 +85,7 @@ class ElementTranslation extends ModelEntity
      *
      * @var \Shopware\Models\Shop\Locale $locale
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale", inversedBy="configTranslation")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
     protected $locale;

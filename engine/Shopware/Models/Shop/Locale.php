@@ -75,22 +75,6 @@ class Locale extends ModelEntity
     private $territory;
 
     /**
-     * INVERSE SIDE
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="locale")
-     * @var ArrayCollection
-     */
-    protected $configTranslation;
-
-    /**
-     * INVERSE SIDE
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="locale")
-     * @var ArrayCollection
-     */
-    protected $configFormTranslation;
-
-    /**
      * Get id
      *
      * @return integer
@@ -172,37 +156,5 @@ class Locale extends ModelEntity
     public function toString()
     {
         return $this->getLocale();
-    }
-
-    /**
-     * @return \Shopware\Models\Config\ElementTranslation
-     */
-    public function getConfigTranslation()
-    {
-        return $this->configTranslation;
-    }
-
-    /**
-     * @param \Shopware\Models\Config\ElementTranslation $configTranslation
-     */
-    public function setConfigTranslation($configTranslation)
-    {
-        $this->configTranslation = $configTranslation;
-    }
-
-    /**
-     * @return \Shopware\Models\Config\FormTranslation
-     */
-    public function getConfigFormTranslation()
-    {
-        return $this->configFormTranslation;
-    }
-
-    /**
-     * @param \Shopware\Models\Config\FormTranslation $configFormTranslation
-     */
-    public function setConfigFormTranslation($configFormTranslation)
-    {
-        $this->configFormTranslation = $configFormTranslation;
     }
 }

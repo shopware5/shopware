@@ -81,14 +81,14 @@ class FormTranslation extends ModelEntity
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Config\Form", inversedBy="translations")
      * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
-    protected  $form;
+    protected $form;
 
     /**
      * OWNING SIDE
      *
      * @var \Shopware\Models\Shop\Locale $locale
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale", inversedBy="configFormTranslation")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
     protected $locale;
