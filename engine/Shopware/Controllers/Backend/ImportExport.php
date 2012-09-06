@@ -35,25 +35,118 @@
  */
 class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
 {
-	protected function initAcl()
-	{
-		$this->addAclPermission('exportCustomers', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportArticles', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportInStock', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportNotInStock', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportPrices', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportNewsletter', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportCategories', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportArticleImages', 'export', 'Insufficient Permissions');
-		$this->addAclPermission('exportOrders', 'export', 'Insufficient Permissions');
+    /**
+     * Inits ACL-Permissions
+     */
+    protected function initAcl()
+    {
+        $this->addAclPermission('exportCustomers', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportArticles', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportInStock', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportNotInStock', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportPrices', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportNewsletter', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportCategories', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportArticleImages', 'export', 'Insufficient Permissions');
+        $this->addAclPermission('exportOrders', 'export', 'Insufficient Permissions');
 
-		$this->addAclPermission('import', 'import', 'Insufficient Permissions');
-	}
+        $this->addAclPermission('import', 'import', 'Insufficient Permissions');
+    }
+
+    /**
+     * Entity Manager
+     * @var \Shopware\Components\Model\ModelManager
+     */
+    protected $manager = null;
+
+    /**
+     * Repository for the article model.
+     * @var \Shopware\Models\Article\Repository
+     */
+    protected $articleRepository = null;
+
+    /**
+     * Repository for the articleDetail model.
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $articleDetailRepository = null;
+
+    /**
+     * Repository for the category model
+     * @var \Shopware\Models\Category\Repository
+     */
+    protected $categoryRepository = null;
+
+    /**
+     * Repository for the customer model
+     * @var \Shopware\Models\Customer\Repository
+     */
+    protected $customerRepository = null;
 
     /**
      * @var string path to termporary uploaded file for import
      */
     protected $uploadedFilePath;
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     * @return \Shopware\Components\Model\ModelManager
+     */
+    protected function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+        return $this->manager;
+    }
+
+    /**
+     * Helper function to get access to the article repository.
+     * @return Shopware\Models\Article\Repository
+     */
+    protected function getArticleRepository()
+    {
+        if ($this->articleRepository === null) {
+            $this->articleRepository = $this->getManager()->getRepository('Shopware\Models\Article\Article');
+        }
+        return $this->articleRepository;
+    }
+
+    /**
+     * Helper function to get access to the articleDetail repository.
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    protected function getArticleDetailRepository()
+    {
+        if ($this->articleDetailRepository === null) {
+            $this->articleDetailRepository = $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+        }
+        return $this->articleDetailRepository;
+    }
+
+    /**
+     * Helper function to get access to the category repository.
+     * @return \Shopware\Models\Category\Repository
+     */
+    public function getCategoryRepository()
+    {
+        if ($this->categoryRepository === null) {
+            $this->categoryRepository = $this->getManager()->getRepository('Shopware\Models\Category\Category');
+        }
+        return $this->categoryRepository;
+    }
+
+    /**
+     * Helper function to get access to the customer repository.
+     * @return Shopware\Models\Article\Repository
+     */
+    protected function getCustomerRepository()
+    {
+        if ($this->customerRepository === null) {
+            $this->customerRepository = $this->getManager()->getRepository('Shopware\Models\Customer\Customer');
+        }
+        return $this->customerRepository;
+    }
 
     /**
      * Exports list of customers as CSV
@@ -62,7 +155,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $metaDataFactory = Shopware()->Models()->getMetadataFactory();
+        $metaDataFactory = $this->getManager()->getMetadataFactory();
         $billingAttributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\CustomerBilling')->getFieldNames();
         $billingAttributeFields = array_flip($billingAttributeFields);
         unset($billingAttributeFields['id']);
@@ -144,7 +237,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         ));
         $select = array_merge($select, $selectCustomerAttributes);
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->getManager()->createQueryBuilder();
         $builder->select($select)
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
@@ -220,17 +313,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $offset = 0;
         }
 
-        /** @var \Shopware\Models\Article\Repository $articleRepostiory */
-        $articleRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-
-        $builder = $articleRepostiory->createQueryBuilder('article');
+        $builder = $this->getArticleRepository()->createQueryBuilder('article');
 
         $builder->select(array(
                     'article',
                     'mainDetail',
                     'mainDetailAttribute',
                     'mainDetailPrices',
-
                     'PARTIAL categories.{id}',
                     'PARTIAL similar.{id}',
                     'PARTIAL accessories.{id}',
@@ -281,11 +370,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $article['variants'] = $this->prepareXmlArray($article['details'], 'variant');
             unset($article['details']);
 
-            $article['categories'] = $this->prepareXmlArray($article['categories'], 'category');
-            $article['related']    = $this->prepareXmlArray($article['related'], 'related');
-            $article['similar']    = $this->prepareXmlArray($article['similar'], 'similar');
+            $article['categories']     = $this->prepareXmlArray($article['categories'], 'category');
+            $article['related']        = $this->prepareXmlArray($article['related'], 'related');
+            $article['similar']        = $this->prepareXmlArray($article['similar'], 'similar');
+            $article['propertyValues'] = $this->prepareXmlArray($article['propertyValues'], 'propertyValue');
 
-            $article['mainDetail']['prices'] = $this->prepareXmlArray($article['mainDetail']['prices'], 'pricee');
+            $article['mainDetail']['prices'] = $this->prepareXmlArray($article['mainDetail']['prices'], 'price');
 
         }
 
@@ -326,7 +416,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $offset = 0;
         }
 
-        $metaDataFactory = Shopware()->Models()->getMetadataFactory();
+        $metaDataFactory = $this->getManager()->getMetadataFactory();
         $attributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\Article')->getFieldNames();
         $attributeFields = array_flip($attributeFields);
         unset($attributeFields['id']);
@@ -343,13 +433,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $joinStatements = '';
         $selectStatements = array();
 
-        if ($exportArticleTranslations)
-        {
+        if ($exportArticleTranslations) {
             $sql = '
                 SELECT DISTINCT isocode
                 FROM s_core_multilanguage
                 WHERE skipbackend=0
-	        ';
+            ';
 
             $languages = Shopware()->Db()->fetchCol($sql);
 
@@ -439,7 +528,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             ";
         }
 
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
 
         $imagePath = 'http://'. $shop->getHost() . $shop->getBasePath()  . '/media/image/';
@@ -489,23 +578,38 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 d.length,
                 d.ean,
                 u.unit,
-                (SELECT GROUP_CONCAT(relatedarticle SEPARATOR '|') FROM s_articles_similar WHERE articleID=a.id) as similar,
-                (SELECT GROUP_CONCAT(relatedarticle SEPARATOR '|') FROM s_articles_relationships WHERE articleID=a.id) as crosselling,
-            	(SELECT GROUP_CONCAT(categoryID SEPARATOR '|') FROM s_articles_categories WHERE articleID=a.id) as categories,
+                (
+                    SELECT GROUP_CONCAT(rad.ordernumber SEPARATOR '|') FROM s_articles_similar sa
+                    INNER JOIN s_articles ra ON ra.id = sa.relatedarticle
+                    INNER JOIN s_articles_details rad ON ra.main_detail_id = rad.id
+                    WHERE sa.articleID=a.id
+                ) as similar,
+                (
+                    SELECT GROUP_CONCAT(rad.ordernumber SEPARATOR '|') FROM s_articles_relationships sa
+                    INNER JOIN s_articles ra ON ra.id = sa.relatedarticle
+                    INNER JOIN s_articles_details rad ON ra.main_detail_id = rad.id
+                    WHERE sa.articleID=a.id
+                ) as crosselling,
+                (SELECT GROUP_CONCAT(categoryID SEPARATOR '|') FROM s_articles_categories WHERE articleID=a.id) as categories,
+                '' as categorypaths,
                 (
                     SELECT GROUP_CONCAT(CONCAT('{$imagePath}',img,'.',extension) ORDER BY `main`,  `position`  SEPARATOR '|')
                     FROM `s_articles_img`
                     WHERE articleID=a.id
                 ) as images,
+                (
+                    SELECT GROUP_CONCAT(id SEPARATOR '|' ) FROM s_filter_articles fa
+                    LEFT JOIN s_filter_values fv ON fa.valueId = fv.id
+                    WHERE fa.articleId = a.id
+                ) as propertyValues,
 
-                a.filtergroupID as attributegroupID,
-                '' as attributevalues,
+                a.filtergroupID as filterGroupId,
 
                 {$selectAttributes},
                 configurator_set_id as configuratorsetID,
                 acs.type as configuratortype,
-            	IF(acs.id,1,NULL) as configurator
-            	{$selectStatements}
+                IF(acs.id,1,NULL) as configurator
+                {$selectStatements}
 
             FROM s_articles a
 
@@ -605,6 +709,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $row['additionaltext'] = '';
         }
 
+        if (!empty($row['categories'])) {
+            $categorypaths = array();
+            $categories = explode('|', $row['categories']);
+            foreach ($categories as $category) {
+                $categorypath = $this->getCategoryPath($category);
+
+                if (!empty($categorypath)) {
+                    $categorypaths[] = $categorypath;
+                }
+            }
+            $row['categorypaths'] = implode("\r\n",$categorypaths);
+        }
+
         if (!empty($languages)) {
             foreach ($languages as $language) {
                 if (!empty($row['article_translation_' . $language])) {
@@ -617,7 +734,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 if (!empty($objectdata)) {
                     foreach ($objectdata as $key=>$value) {
-                        if(isset($translationFields[$key])) {
+                        if (isset($translationFields[$key])) {
                             $row[$translationFields[$key] . '_' . $language] = $value;
                         }
                     }
@@ -632,7 +749,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         return $row;
     }
-
 
     /**
      * Exports Article-InStock as CSV
@@ -914,7 +1030,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
 
         $path = 'http://'. $shop->getHost() . $shop->getBasePath()  . '/media/image/';
@@ -955,7 +1071,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $rules = explode(',', $image['rules']);
 
             $out = array();
-            foreach($rules as $rule) {
+            foreach ($rules as $rule) {
                 $split = explode('|', $rule);
                 $ruleId   = $split[0];
                 $optionId = $split[1];
@@ -992,7 +1108,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $format = strtolower($this->Request()->getParam('format', 'csv'));
 
         /** @var \Shopware\Models\Order\Repository $repository  */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        $repository = $this->getManager()->getRepository('Shopware\Models\Order\Order');
+
+        /** @var \Shopware\Components\Model\ModelRepository $currencyRepostiroy  */
+        $currencyRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Currency');
+
         $builder = $repository->createQueryBuilder('orders');
 
         $orderState = $this->Request()->getParam('orderstate');
@@ -1075,15 +1195,18 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'paymentStatus.description as cleared_description',
                 'orderStatus.description as status_description',
 
-
                 'payment.description as payment_description',
                 'dispatch.description as dispatch_description',
+
+                // dummy for currency_description
+                'orders.id as currency_description',
 
                 'orders.referer as referer',
                 'orders.clearedDate as cleareddate',
                 'orders.trackingCode as trackingcode',
                 'orders.languageIso as language',
                 'orders.currency as currency',
+                'orders.currencyFactor as currencyFactor',
 
                 // dummy for count positions
                 'orders.id as count_positions',
@@ -1132,6 +1255,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 'billing.vatId as ustid',
                 'billing.phone as phone',
+                'billing.fax as fax',
                 'customer.email as email',
                 'customer.groupKey as customergroup',
                 'customer.newsletter as newsletter',
@@ -1200,6 +1324,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $item['count_positions'] = 0;
                 }
 
+                $currencyModel = $currencyRepository->findOneBy(array('currency' => $item['currency']));
+                if ($currencyModel) {
+                    $item['currency_description'] = $currencyModel->getName();
+                } else {
+                    $item['currency_description'] = '';
+                }
+
                 // Format tax
                 $item['tax'] = (float) $item['tax'];
             }
@@ -1212,7 +1343,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             if ($format === 'excel') {
                 $this->Response()->setHeader('Content-Type', 'application/vnd.ms-excel;charset=UTF-8');
-                $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.categories.'.date("Y.m.d").'.xls"');
+                $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.orders.'.date("Y.m.d").'.xls"');
                 $this->Response()->setHeader('Content-Transfer-Encoding', 'binary');
 
                 $excel = new Shopware_Components_Convert_Excel();
@@ -1383,8 +1514,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $total = 0;
         $errors = array();
 
-        /** @var \Shopware\Models\Article\Repository $articleDetailRepostiory */
-        $articleDetailRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $articleDetailRepostiory = $this->getArticleDetailRepository();
 
         foreach ($results as $imageData) {
             if (empty($imageData['ordernumber']) || empty($imageData['image'])) {
@@ -1414,7 +1544,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $media = new \Shopware\Models\Media\Media();
             $media->setAlbumId(-1);
-            $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', -1));
+            $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
 
             $media->setFile($file);
             $media->setDescription('');
@@ -1422,10 +1552,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $media->setUserId(0);
 
             try { //persist the model into the model manager
-                Shopware()->Models()->persist($media);
-                Shopware()->Models()->flush();
-            }
-            catch (\Doctrine\ORM\ORMException $e) {
+                $this->getManager()->persist($media);
+                $this->getManager()->flush();
+            } catch (\Doctrine\ORM\ORMException $e) {
                 $errors[] = "Could not move image";
                 continue;
             }
@@ -1441,8 +1570,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $image->setExtension($media->getExtension());
             $image->setMedia($media);
 
-            Shopware()->Models()->persist($image);
-            Shopware()->Models()->flush($image);
+            $this->getManager()->persist($image);
+            $this->getManager()->flush($image);
 
             $total++;
         }
@@ -1480,8 +1609,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         /** @var \Shopware\Models\Category\Repository $categoryRepository  */
-        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-        $metaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Category\Category');
+        $categoryRepository = $this->getManager()->getRepository('Shopware\Models\Category\Category');
+        $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Category\Category');
         $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
 
         $counter     = 0;
@@ -1489,28 +1618,32 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $categoryIds = array();
 
         $categoryRepository->recover();
-        Shopware()->Models()->clear();
+        $this->getManager()->clear();
 
-        Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
+        $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
         try {
             foreach ($results as $category) {
                 $total++;
                 $category = (array) $category;
 
+                if (empty($category['parentID']) || empty($category['categoryID']) || empty($category['description'])) {
+                    continue;
+                }
+
                 $categoryModel = $this->saveCategory($category, $categoryRepository, $metaData);
-                Shopware()->Models()->flush();
-                Shopware()->Models()->clear();
+                $this->getManager()->flush();
+                $this->getManager()->clear();
                 if ($categoryModel) {
                     $counter++;
                     $categoryIds[] = $categoryModel->getId();
                 }
             }
 
-            Shopware()->Models()->getConnection()->commit();
+            $this->getManager()->getConnection()->commit();
             $categoryRepository->recover();
-            Shopware()->Models()->clear();
+            $this->getManager()->clear();
         } catch (\Exception $e) {
-            Shopware()->Models()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollback();
             echo json_encode(array(
                 'success' => false,
                 'message' => sprintf("Error: %s", $e->getMessage())
@@ -1569,7 +1702,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (!$categoryModel) {
             $categoryModel = new \Shopware\Models\Category\Category();
             $categoryModel->setPrimaryIdentifier($category['categoryID']);
-            Shopware()->Models()->persist($categoryModel);
+            $this->getManager()->persist($categoryModel);
         }
 
         $categoryModel->fromArray($updateData);
@@ -1582,8 +1715,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function importNewsletter($filePath)
     {
-        $newsletterRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Address');
-        $newsletterGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Group');
+        $newsletterRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Address');
+        $newsletterGroupRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Group');
 
         $results = new Shopware_Components_CsvIterator($filePath, ';');
 
@@ -1616,8 +1749,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if ($group) {
                     $recipient->setGroup($group);
                 }
-                Shopware()->Models()->persist($recipient);
-                Shopware()->Models()->flush();
+                $this->getManager()->persist($recipient);
+                $this->getManager()->flush();
 
                 $insertCount++;
             }
@@ -1826,17 +1959,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $results  = $xml->articles;
         $results  = $this->simplexml2array($results);
 
-        /** @var \Shopware\Models\Article\Repository $articleRepostiory */
-        $articleRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+        $articleRepostiory       = $this->getArticleRepository();
+        $articleDetailRepostiory = $this->getArticleDetailRepository();
 
         /** @var \Shopware\Components\Api\Resource\Article $articleResource */
         $articleResource = \Shopware\Components\Api\Manager::getResource('article');
 
-        /** @var \Shopware\Models\Article\Repository $articleDetailRepostiory */
-        $articleDetailRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-
-        $articleMetaData       = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
-        $articleDetailMetaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
+        $articleMetaData       = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
+        $articleDetailMetaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
 
         $articleMapping = array();
         foreach ($articleMetaData->fieldMappings as $fieldMapping) {
@@ -1944,7 +2074,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
-                'message' => sprintf("Errors: $message"),
+                'message' => $message,
             ));
             return;
         }
@@ -1970,15 +2100,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         /** @var \Shopware\Components\Api\Resource\Article $articleResource */
         $articleResource = \Shopware\Components\Api\Manager::getResource('article');
 
-        /** @var \Shopware\Models\Article\Repository $articleRepostiory */
-        $articleRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-
-        /** @var \Shopware\Models\Article\Repository $articleDetailRepostiory */
-        $articleDetailRepostiory = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-
-        $articleMetaData       = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
-        $articleDetailMetaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
-
+        $articleMetaData       = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
+        $articleDetailMetaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
 
         $articleMapping = array();
         foreach ($articleMetaData->fieldMappings as $fieldMapping) {
@@ -1990,49 +2113,83 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $articleDetailMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
         }
 
-        Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
+        $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
 
-        foreach ($results as $articleData) {
-            try {
+        $postInsertData = array();
+
+        try {
+            foreach ($results as $articleData) {
                 $counter++;
-                $result = $this->saveArticle($articleData, $articleResource, $articleRepostiory, $articleDetailRepostiory, $articleMapping, $articleDetailMapping);
+                $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
                 if ($result) {
                     $articleIds[] = $result->getId();
-                }
 
-                if (($counter % 5) == 0) {
-                    Shopware()->Models()->clear();
-                }
-            } catch (\Exception $e) {
-                if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
-                    $messages = array();
-                    /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
-                    foreach ($e->getViolations() as $violation) {
-                        $messages[] = sprintf(
-                            '%s: %s', $violation->getPropertyPath(), $violation->getMessage()
-                        );
+                    $updateData = array();
+
+                    if (!empty($articleData['similar'])) {
+                        $similars = explode('|', $articleData['similar']);
+                        foreach ($similars as $similarId) {
+                            if (is_numeric($similarId)) {
+                                $updateData['similar'][] = array('id' => $similarId);
+                            } else {
+                                $updateData['similar'][] = array('number' => $similarId);
+                            }
+                        }
                     }
 
-                    $errormessage = implode("\n", $messages);
-                } else {
-                    $errormessage = $e->getMessage();
+                    if (!empty($articleData['crosselling'])) {
+                        $crossSellings = explode('|', $articleData['crosselling']);
+                        foreach ($crossSellings as $crosssellingId) {
+                            if (is_numeric($crosssellingId)) {
+                                $updateData['related'][] = array('id' => $crosssellingId);
+                            } else {
+                                $updateData['related'][] = array('number' => $crosssellingId);
+                            }
+                        }
+                    }
+
+                    if (!empty($updateData)) {
+                        $updateData['id'] = $result->getId();
+                        $postInsertData[] = $updateData;
+                    }
                 }
 
-                $errors[] = "Error in line {$counter}: $errormessage\n";
+                $this->getManager()->flush();
+                $this->getManager()->clear();
             }
-        }
 
-        if (!empty($errors)) {
-            Shopware()->Models()->getConnection()->rollback();
+            foreach ($postInsertData as $updateData) {
+                $result = $articleResource->update($updateData['id'], $updateData);
+            }
+
+
+            $this->getManager()->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getManager()->getConnection()->rollback();
+
+            if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
+                $messages = array();
+                /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
+                foreach ($e->getViolations() as $violation) {
+                    $messages[] = sprintf(
+                        '%s: %s', $violation->getPropertyPath(), $violation->getMessage()
+                    );
+                }
+
+                $errormessage = implode("\n", $messages);
+            } else {
+                $errormessage = $e->getMessage();
+            }
+
+            $errors[] = "Error in line {$counter}: $errormessage\n";
+
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
-                'message' => sprintf("Errors: $message"),
+                'message' => $message,
             ));
             return;
         }
-
-        Shopware()->Models()->getConnection()->commit();
 
         echo json_encode(array(
              'success' => true,
@@ -2043,38 +2200,90 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     /**
      * @param array $articleData
      * @param $articleResource
-     * @param $articleRepostiory
-     * @param $articleDetailRepostiory
      * @param array $articleMapping
      * @param array $articleDetailMapping
      * @return \Shopware\Models\Article\Article
      */
-    protected function saveArticle($articleData, $articleResource, $articleRepostiory, $articleDetailRepostiory, $articleMapping, $articleDetailMapping)
+    protected function saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping)
     {
         $importImages = false;
+
+        $articleData = $this->toUtf8($articleData);
+
+        $articleRepostiory       = $this->getArticleRepository();
+        $articleDetailRepostiory = $this->getArticleDetailRepository();
 
         if (empty($articleData['ordernumber'])) {
             return false;
         }
+
         unset($articleData['articleID'], $articleData['articledetailsID']);
 
-        if (isset($articleData['configurator']) && !empty($articleData['configurator'])) {
-            return;
+        $isOldConfigurator = false;
+        if (isset($articleData['configurator']) && !empty($articleData['configurator']) && empty($articleData['configuratorsetID'])) {
+            $isOldConfigurator = true;
+            $configurator = $this->prepareLegacyConfiguratorImport($articleData['configurator']);
         }
 
-        if (isset($articleData['mainnumber']) && !empty($articleData['mainnumber'])) {
-            return;
+        $isOldVariant = false;
+        if (!empty($articleData['additionaltext']) && empty($articleData['mainnumber'])) {
+            $isOldVariant = true;
+            $groupName = $articleData['ordernumber'] . '-Group';
+
+            $configuratorSet = array(
+                'groups' => array(array(
+                    'name'    => $groupName,
+                    'options' => array(
+                        array('name' => $articleData['additionaltext'])
+                    ))
+                )
+            );
+
+            $configuratorOptions = array(array(
+                'group'  => $groupName,
+                'option' => $articleData['additionaltext']
+            ));
+        } elseif (!empty($articleData['mainnumber']) && empty($articleData['configurator'])) {
+            $isOldVariant = true;
+            $groupName = $articleData['mainnumber'] . '-Group';
+            $configuratorOptions = array(array(
+                'group'  => $groupName,
+                'option' => $articleData['additionaltext']
+            ));
         }
 
-        $articleData = $this->toUtf8($articleData);
+        // unset legacy attributes
+        unset($articleData['attributegroupID']);
+        unset($articleData['attributevalues']);
 
         $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
+
+        if (!empty($articleData['categorypaths'])) {
+            $categoryIds = $this->createCategoriesByCategoryPaths($articleData['categorypaths']);
+
+            unset($articleData['categories']);
+            unset($articleData['categorypaths']);
+            foreach ($categoryIds as $categoryId) {
+                $updateData['categories'][] = array('id' => $categoryId);
+            }
+        }
+
+        if (isset($articleData['tax']) && empty($articleData['tax'])) {
+            $updateData['tax'] = 19;
+        }
 
         if (!empty($articleData['price'])) {
             $detailData['prices'] = array(array(
                 'price' => $articleData['price'],
             ));
+        }
+
+        if (!empty($articleData['propertyValues'])) {
+            $propertyValues = explode('|', $articleData['propertyValues']);
+            foreach ($propertyValues as $propertyValue) {
+                $updateData['propertyValues'][] = array('id' => $propertyValue);
+            }
         }
 
         if ($importImages && !empty($articleData['images'])) {
@@ -2091,23 +2300,87 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
         }
 
-        if (!empty($articleData['similar'])) {
-            $similars = explode('|', $articleData['similar']);
-            foreach ($similars as $similarId) {
-                $updateData['similar'][] = array('id' => $similarId);
-            }
-        }
-
-        if (!empty($articleData['crosselling'])) {
-            $crossSellings = explode('|', $articleData['crosselling']);
-            foreach ($crossSellings as $crosssellingId) {
-                $updateData['related'][] = array('id' => $crosssellingId);
-            }
-        }
+        // unset similar and crosselling, will be inserted post insert
+        unset($articleData['similar']);
+        unset($articleData['crosselling']);
 
         $attribute = $this->prefixToArray($articleData, 'attr_');
         if (!empty($attribute)) {
             $detailData['attribute'] = $attribute;
+        }
+
+        if ($isOldVariant) {
+            if (isset($configuratorSet)) {
+                /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+                $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['ordernumber']));
+                if ($articleDetailModel) {
+                    /** @var \Shopware\Models\Article\Article $articleModel */
+                    $articleModel = $articleDetailModel->getArticle();
+                    if (!$articleModel) {
+                        throw new \Exception('Article not Found');
+                    }
+                }
+
+                $updateData['configuratorSet'] = $configuratorSet;
+                $updateData['variants'][0] = $detailData;
+                $updateData['variants'][0]['configuratorOptions'] = $configuratorOptions;
+                $updateData['variants'][0]['standard'] = true;
+                $updateData['mainDetail'] = $detailData;
+                $updateData['mainDetail']['number'] .= '_main';
+
+                if ($articleModel) {
+                    throw new \Exception(sprintf('Legacy variant article with ordernumber %s can only be imported once.', $articleData['ordernumber']));
+                } else {
+                    $result = $articleResource->create($updateData);
+                }
+            } else {
+                /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+                $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['mainnumber']));
+                if ($articleDetailModel) {
+                    /** @var \Shopware\Models\Article\Article $articleModel */
+                    $articleModel = $articleDetailModel->getArticle();
+                    if (!$articleModel) {
+                        throw new \Exception('Article not Found');
+                    }
+                }
+
+                $updateData = array();
+                $detailData['configuratorOptions'] = $configuratorOptions;
+                $updateData['variants'][] = $detailData;
+
+                if ($articleModel) {
+                    $result = $articleResource->update($articleModel->getId(), $updateData);
+                } else {
+                    throw new \Exception('Parent variant not found');
+                }
+            }
+
+            return $result;
+        }
+
+
+        if ($isOldConfigurator) {
+            /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+            $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['ordernumber']));
+            if ($articleDetailModel) {
+                /** @var \Shopware\Models\Article\Article $articleModel */
+                $articleModel = $articleDetailModel->getArticle();
+                if (!$articleModel) {
+                    throw new \Exception('Article not Found');
+                }
+            }
+
+            $updateData['configuratorSet'] = $configurator['configuratorSet'];
+            $updateData['variants'] = $configurator['variants'];
+            $updateData['mainDetail'] = $detailData;
+
+            if ($articleModel) {
+                throw new \Exception(sprintf('Legacy configurator article with ordernumber %s can only be imported once.', $articleData['ordernumber']));
+            } else {
+                $result = $articleResource->create($updateData);
+            }
+
+            return $result;
         }
 
         /** @var \Shopware\Models\Article\Detail $articleDetailModel */
@@ -2116,7 +2389,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             /** @var \Shopware\Models\Article\Article $articleModel */
             $articleModel = $articleDetailModel->getArticle();
             if (!$articleModel) {
-                return false;
+                throw new \Exception('Article not Found');
             }
         }
 
@@ -2128,6 +2401,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $updateData = array();
                 $updateData['variants'][] = $detailData;
             }
+
             $result = $articleResource->update($articleModel->getId(), $updateData);
         } else {
             $updateData['mainDetail'] = $detailData;
@@ -2135,6 +2409,89 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         return $result;
+    }
+
+    /**
+     * Transforms legacy configurator data
+     *
+     * @param $configuratorData
+     * @return array
+     */
+    protected function prepareLegacyConfiguratorImport($configuratorData)
+    {
+        $variants = array();
+        $values   = explode("\n", $configuratorData);
+        foreach ($values as $value) {
+            $value = explode('|', trim($value));
+            if (count($value) < 4) {
+                continue;
+            }
+
+            $value[1] = explode(',', $value[1]);
+            $value[3] = trim($value[3], ', ');
+            $variant  = array(
+                'additionalText' => $value[3],
+                'number'         => $value[0],
+                'inStock'        => $value[1][0]
+            );
+            $value[3] = explode(',', $value[3]);
+
+            if (isset($value[1][1])) {
+                $variant['active'] = $value[1][1];
+            }
+
+            if (isset($value[1][2])) {
+                $variant['standard'] = $value[1][2];
+            }
+
+            $variant['configuratorOptions'] = array();
+
+            for ($i = 0, $c = count($value[3]); $i < $c; $i++) {
+                $value[3][$i] = explode(':', $value[3][$i]);
+
+                $variant['configuratorOptions'][] = array(
+                    'group'  => trim($value[3][$i][0]),
+                    'option' => trim($value[3][$i][1])
+                );
+            }
+
+            $variant['prices'] = array(array(
+                'price' => $value[2],
+            ));
+
+            $variants[] = $variant;
+        }
+
+        $groups = array();
+        foreach ($variants as $variant) {
+            foreach ($variant['configuratorOptions'] as $configuratorOption) {
+                if (!isset($groups[$configuratorOption['group']])) {
+                    $groups[$configuratorOption['group']] = array();
+                }
+
+                if (!in_array($configuratorOption['option'], $groups[$configuratorOption['group']])) {
+                    $groups[$configuratorOption['group']][] = $configuratorOption['option'];
+                }
+            }
+        }
+
+        $configuratorGroups = array();
+        foreach ($groups as $groupName => $options) {
+            $configuratorGroup = array();
+            $configuratorGroup['name'] = $groupName;
+            $configuratorGroup['options'] = array();
+            foreach ($options as $option) {
+                $configuratorGroup['options'][] = array(
+                    'name' => $option
+                );
+            }
+            $configuratorGroups[] = $configuratorGroup;
+        }
+
+        $configurator['variants'] = $variants;
+        $configurator['configuratorSet'] = array('groups' => $configuratorGroups);
+
+        return $configurator;
     }
 
     /**
@@ -2149,7 +2506,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $errors = array();
         $counter = 0;
 
-        Shopware()->Models()->getConnection()->beginTransaction(); // suspend auto-commit
+        $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
 
         foreach ($results as $customerData) {
             try {
@@ -2180,7 +2537,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         if (!empty($errors)) {
-            Shopware()->Models()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollback();
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
@@ -2188,7 +2545,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             ));
             return;
         } else {
-            Shopware()->Models()->getConnection()->commit();
+            $this->getManager()->getConnection()->commit();
         }
 
         echo json_encode(array(
@@ -2205,8 +2562,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         $customerData = $this->toUtf8($customerData);
 
-        /** @var \Shopware\Models\Customer\Repository $customerRepository */
-        $customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+        $customerRepository = $this->getCustomerRepository();
 
         /** @var \Shopware\Components\Api\Resource\Customer $customerResource */
         $customerResource = \Shopware\Components\Api\Manager::getResource('customer');
@@ -2354,29 +2710,29 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $sql = "
-			SELECT
-			    c.id as categoryID,
-			    c.parent as parentID,
-			    c.description,
-			    c.position,
-			    c.metakeywords,
-			    c.metadescription,
-			    c.cmsheadline,
-			    c.cmstext,
-			    c.template,
-			    c.active,
-			    c.blog,
-			    c.showfiltergroups,
-			    c.external,
-			    c.hidefilter
+            SELECT
+                c.id as categoryID,
+                c.parent as parentID,
+                c.description,
+                c.position,
+                c.metakeywords,
+                c.metadescription,
+                c.cmsheadline,
+                c.cmstext,
+                c.template,
+                c.active,
+                c.blog,
+                c.showfiltergroups,
+                c.external,
+                c.hidefilter
                 $attributesSelect
-			FROM s_categories c
-			LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
-			WHERE c.id != 1
-			ORDER BY c.left, c.position
+            FROM s_categories c
+            LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
+            WHERE c.id != 1
+            ORDER BY c.left, c.position
 
-			 LIMIT {$offset},{$limit}
-		";
+             LIMIT {$offset},{$limit}
+        ";
 
         $stmt = Shopware()->Db()->query($sql);
         $result = $stmt->fetchAll();
@@ -2391,7 +2747,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     protected function updateOrderStatus($orderIds, $statusId)
     {
-        $status = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(array(
+        $status = $this->getManager()->getRepository('Shopware\Models\Order\Status')->findOneBy(array(
             'id'    => $statusId,
             'group' => 'state'
         ));
@@ -2400,7 +2756,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             throw new Exception(sprintf("OrderStatus by id %s not found", $statusId));
         }
 
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')
+        $builder = $this->getManager()->getRepository('Shopware\Models\Order\Order')
                 ->createQueryBuilder('orders')
                 ->update();
 
@@ -2414,10 +2770,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $builder->getQuery()->execute();
     }
 
-
     /**
+     * @param int $articleId
+     * @param array $imageIds
+     * @return bool
      */
-    function deleteOtherArticleImages ($articleId, $imageIds = null)
+    public function deleteOtherArticleImages($articleId, $imageIds = null)
     {
         if (empty($articleId)) {
             return false;
@@ -2430,7 +2788,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $result = $this->sDB->Execute($sql);
-        if($result === false) {
+        if ($result === false) {
             return false;
         }
 
@@ -2450,7 +2808,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 LEFT JOIN s_articles a
                     ON  a.id = ac.articleID
                 WHERE c.id IS NULL OR a.id IS NULL
-		    ";
+            ";
         Shopware()->Db()->exec($sql);
 
         $sql = "
@@ -2555,8 +2913,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         echo $excel->getFooter();
     }
 
-
-
     /**
      * @param array $input
      * @param string $prefix
@@ -2613,7 +2969,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         return floatval(str_replace(",", ".", $value));
     }
 
-
     /**
      * @param $input
      * @param string $keyname
@@ -2651,7 +3006,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         if (get_class($xml) == 'SimpleXMLElement') {
             $attributes = $xml->attributes();
-            foreach($attributes as $k=>$v) {
+            foreach ($attributes as $k=>$v) {
                 if ($v) $a[$k] = (string) $v;
             }
             $x = $xml;
@@ -2659,7 +3014,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
         if (is_array($xml)) {
             if (count($xml) == 0) return (string) $x; // for CDATA
-            foreach($xml as $key=>$value) {
+            foreach ($xml as $key=>$value) {
                 $r[$key] = $this->simplexml2array($value);
             }
             if (isset($a)) $r['@attributes'] = $a;    // Attributes
@@ -2669,18 +3024,70 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param array $input
+     * Returns the category path for the given category id
+     *
+     * @param int $id
+     * @return string
+     */
+    public function getCategoryPath($id)
+    {
+        $repository = $this->getManager()->getRepository('Shopware\Models\Category\Category');
+
+        $path = $repository->getPathById($id, 'name');
+        unset($path[0]);
+        $path = implode($path, '|');
+
+        return $path;
+    }
+
+    /**
+     * @param string $categorypaths
      * @return array
      */
-    public function array_filter_recursive($input)
+    public function createCategoriesByCategoryPaths($categorypaths)
     {
-        foreach ($input as &$value) {
-            if (is_array($value)) {
-                $value = $this->array_filter_recursive($value);
+        $categoryIds = array();
+        $categorypaths = explode("\n", $categorypaths);
+
+        foreach ($categorypaths as $categorypath) {
+            $categorypath = trim($categorypath);
+            if (empty($categorypath)) {
+                continue;
             }
+
+            $categories = explode('|', $categorypath);
+            $categoryId = 1;
+            foreach ($categories as $categoryName) {
+                $categoryName = trim($categoryName);
+                if (empty($categoryName)) {
+                    break;
+                }
+
+                $categoryModel = $this->getCategoryRepository()->findOneBy(array('name' => $categoryName, 'parentId' => $categoryId));
+                if (!$categoryModel) {
+                    $parent = $this->getCategoryRepository()->find($categoryId);
+                    if (!$parent) {
+                        throw new \Exception(sprintf('Could not find %s '));
+                    }
+                    $categoryModel = new \Shopware\Models\Category\Category();
+                    $categoryModel->setParent($parent);
+                    $categoryModel->setName($categoryName);
+                    $this->getManager()->persist($categoryModel);
+                    $this->getManager()->flush();
+                    $this->getManager()->clear();
+                }
+
+                $categoryId = $categoryModel->getId();
+            }
+
+            if (empty($categoryId)) {
+                continue;
+            }
+
+            $categoryIds[] = $categoryId;
         }
 
-        return array_filter($input);
+        return $categoryIds;
     }
 
     /**
@@ -2702,7 +3109,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not exist.", $destPath)
             );
-        } else if (!is_writable($destPath)) {
+        } elseif (!is_writable($destPath)) {
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not have write permissions.", $destPath)
             );
@@ -2743,7 +3150,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param arry $input
+     * @param array $input
      * @return array
      */
     protected function toUtf8(array $input)
