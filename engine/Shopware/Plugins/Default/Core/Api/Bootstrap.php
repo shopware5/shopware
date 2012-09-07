@@ -56,6 +56,25 @@ class Shopware_Plugins_Core_Api_Bootstrap extends Shopware_Components_Plugin_Boo
 
 		return $api;
 	}
+
+    public function getVersion() {
+        return '1.0.0';
+    }
+
+    public function getLabel() {
+        return 'API';
+    }
+
+    public function getInfo() {
+        return array(
+            'version' => $this->getVersion(),
+            'label' => $this->getLabel(),
+            'name' => $this->getLabel(),
+            'description' => 'The old Shopware Import/Export API'
+        );
+    }
+
+
 }
 
 class sAPI
@@ -100,11 +119,11 @@ class sAPI
 	var $sCONFIG;
 
 	function Import(){
-		return $this->import->shopware;
+		return $this->import;
 	}
 
 	function Export(){
-		return $this->export->shopware;
+		return $this->export;
 	}
 	/**
 	  * L�dt externe Daten und speichert diese in einem File-Cache
@@ -121,13 +140,13 @@ class sAPI
 			case "http":
 			case "file":
 				$hash = "";
-				$dir = $this->sPath."/engine/connectors/api/tmp";
+				$dir = Shopware()->DocPath('media_' . 'temp');
 				while (empty($hash)) {
 					$hash = md5(uniqid(rand(), true));
-					if(file_exists("$dir/$hash.tmp"))
+					if(file_exists("$dir/$hash.api_tmp"))
 						$hash = "";
 				}
-				if (!$put_handle = fopen("$dir/$hash.tmp", "w+")) {
+				if (!$put_handle = fopen("$dir/$hash.api_tmp", "w+")) {
 					return false;
 				}
 				if (!$get_handle = fopen($url, "r")) {
@@ -139,22 +158,23 @@ class sAPI
 				fclose($get_handle);
 				fclose($put_handle);
 				$this->sFiles[] = $hash;
-				return "$dir/$hash.tmp";
+				return "$dir/$hash.api_tmp";
 			default:
 				break;
 		}
 	}
+
 	/**
 	  * Garbage-Collector
-	  * Nach dem Beenden der API werden tempor�re Dateien gel�scht
+	  * Delete temp files on exit
 	  * @access public
 	  */
 	function __destruct  ()
 	{
 		if(!empty($this->sFiles))
 		foreach ($this->sFiles as $hash) {
-			if(file_exists($this->sPath."/engine/connectors/api/tmp/$hash.tmp"))
-				@unlink($this->sPath."/engine/connectors/api/tmp/$hash.tmp");
+			if(file_exists(Shopware()->DocPath('media_' . 'temp')."/$hash.api_tmp"))
+				@unlink(Shopware()->DocPath('media_' . 'temp')."$hash.api_tmp");
 		}
 
 	}
@@ -208,9 +228,9 @@ class sAPI
 	 * <code>
 	 * <?php
 	 *	$api = new sAPI();
-	 *	$export =& $api->export->shopware;	// L�dt Klasse /api/export/shopware.php
-	 *	$xml =& $api->convert->xml;			// L�dt Klasse /api/convert/xml.php
-	 *  $mapping =& $api->convert->mapping;	// L�dt Klasse /api/convert/mapping.php
+	 *	$export =& $api->export->shopware;	// Lädt Klasse /api/export/shopware.php
+	 *	$xml =& $api->convert->xml;			// Lädt Klasse /api/convert/xml.php
+	 *  $mapping =& $api->convert->mapping;	// Lädt Klasse /api/convert/mapping.php
 	 *	$xml->sSettings['encoding'] = "ISO-8859-1";
 	 * ?>
 	 * </code>
@@ -242,8 +262,10 @@ class sAPI
 		}
 		return $this->sResource[$res];
     }
+
 }
 
+// Still needed for compability reasons
 class sClassHandler
 {
 	private $sAPI = null;
@@ -255,13 +277,18 @@ class sClassHandler
 		$this->sType = $sType;
 		$this->sAPI = $sAPI;
 	}
+
+
 	function __get  ($class)
 	{
 		if(!isset($this->sClass[$class]))
 		{
-			if(!file_exists($this->sAPI->sPath."/engine/connectors/api/{$this->sType}/$class.php"))
+            // construct include file name
+			if(!file_exists(dirname(__FILE__)."/Components/{$this->sType}.php"))
 				return false;
-			include($this->sAPI->sPath."/engine/connectors/api/{$this->sType}/$class.php");
+			include(dirname(__FILE__)."/Components/{$this->sType}.php");
+
+            // construct class name
 			$name = "s".ucfirst($class).ucfirst($this->sType);
 			if(class_exists($name))
 				$this->sClass[$class] = new $name;
@@ -269,6 +296,7 @@ class sClassHandler
 				$this->sClass[$class] = new $class;
 			else
 				return false;
+
 			$this->sClass[$class]->sSystem =& $this->sAPI->sSystem;
 			$this->sClass[$class]->sDB =& $this->sAPI->sDB;
 			$this->sClass[$class]->sPath =& $this->sAPI->sPath;
