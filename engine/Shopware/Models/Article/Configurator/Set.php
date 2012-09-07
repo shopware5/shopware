@@ -187,6 +187,16 @@ class Set extends ModelEntity
     }
 
     /**
+     * @param \Shopware\Models\Article\Configurator\Group $group
+     * @return \Shopware\Models\Article\Configurator\Set
+     */
+    public function addGroup($group)
+    {
+        $this->groups->add($group);
+        return $this;
+    }
+
+    /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getArticles()
@@ -233,6 +243,16 @@ class Set extends ModelEntity
     public function setOptions($options)
     {
         $this->setOneToMany($options, '\Shopware\Models\Article\Configurator\Option', 'options');
+        return $this;
+    }
+
+    /**
+     * @param \Shopware\Models\Article\Configurator\Option $option
+     * @return \Shopware\Models\Article\Configurator\Set
+     */
+    public function addOption($option)
+    {
+        $this->options->add($option);
         return $this;
     }
 

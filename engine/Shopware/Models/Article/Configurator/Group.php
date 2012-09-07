@@ -177,4 +177,15 @@ class Group extends ModelEntity
     {
         $this->options = $options;
     }
+
+    /**
+     * @param \Shopware\Models\Article\Configurator\Option
+     * @return \Shopware\Models\Article\Configurator\Group
+     */
+    public function addOption($option)
+    {
+        $this->options->add($option);
+        return $this;
+    }
+
 }
