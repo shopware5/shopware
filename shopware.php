@@ -64,7 +64,7 @@ set_include_path(
 include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
 
-$environment = getenv('ENV');
+$environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
 if (empty($environment)){
     $environment = 'production';
 }
