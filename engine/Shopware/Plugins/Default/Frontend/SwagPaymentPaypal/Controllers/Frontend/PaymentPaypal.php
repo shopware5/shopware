@@ -377,10 +377,10 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         $data['billing']['street'] = $street[0];
         $data['billing']['streetnumber'] = implode(' ', array_slice($street, 1));
         if(strlen($data['billing']['streetnumber']) > 4) {
-            $data['shipping']['street'] .= ' ' . $data['shipping']['streetnumber'];
+            $data['billing']['street'] .= ' ' . $data['billing']['streetnumber'];
         }
-        if(empty($data['shipping']['streetnumber'])) {
-            $data['shipping']['streetnumber'] = ' ';
+        if(empty($data['billing']['streetnumber'])) {
+            $data['billing']['streetnumber'] = ' ';
         }
         $data['billing']['zipcode'] = $details['SHIPTOZIP'];
         $data['billing']['city'] = $details['SHIPTOCITY'];
@@ -460,6 +460,9 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
             $params['AMT'] = $basket['AmountNumeric'];
         }
         $params['AMT'] = number_format($params['AMT'], 2, '.', '');
+        $params["SHIPPINGAMT"] = number_format($params['SHIPPINGAMT'], 2, '.', '');
+        $params["ITEMAMT"] = number_format($params['AMT'] - $params["SHIPPINGAMT"], 2, '.', '');
+        $params["TAXAMT"] = number_format(0, 2, '.', '');
 
         $config = $this->Plugin()->Config();
         if($config->get('paypalTransferCart')) {
@@ -469,19 +472,19 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 } else {
                     $amount = str_replace(',', '.', $item['amount']);
                 }
-                if(empty($amount) || empty($user['additional']['charge_vat'])) {
-                    $tax = 0;
-                } elseif(!empty($item['tax'])) {
-                    $tax = str_replace(',', '.', $item['tax']);
-                } else {
-                    $tax = $amount - str_replace(',', '.', $item['amountnet']);
-                }
+//                if(empty($amount) || empty($user['additional']['charge_vat'])) {
+//                    $tax = 0;
+//                } elseif(!empty($item['tax'])) {
+//                    $tax = str_replace(',', '.', $item['tax']);
+//                } else {
+//                    $tax = $amount - str_replace(',', '.', $item['amountnet']);
+//                }
                 $article = array(
                     'L_NUMBER' . $key   => $item['ordernumber'],
                     'L_NAME' . $key     => $item['articlename'],
                     'L_AMT' . $key      => number_format($amount / $item['quantity'], 2, '.', ''),
                     'L_QTY' . $key      => $item['quantity'],
-                    //'L_TAXAMT' . $key   => $tax
+//                    'L_TAXAMT' . $key   => $tax
                 );
 //            if($item['modus'] == 4) {
 //                $article['type'] = 'handling';
