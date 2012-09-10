@@ -110,7 +110,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if ($element["name"] == "inquiry" && !empty($this->Request()->sInquiry)) {
                     switch ($this->Request()->sInquiry) {
                         case "basket":
-                            $text = Shopware()->System()->sCONFIG["sSnippets"]["sINQUIRYTEXTBASKET"];
+                            $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
                             $getBasket = Shopware()->Modules()->Basket()->sGetBasket();
                             //$text = ''; Fix 100363 / 5416 Thanks to H. Ronecker
                             foreach($getBasket["content"] as $basketRow) {
@@ -120,6 +120,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             }
                             if (!empty($text)) {
                                 $this->_elements[$id]["value"] = $text;
+                                $element["value"] = $text;
                             }
                             break;
                         case "detail":
