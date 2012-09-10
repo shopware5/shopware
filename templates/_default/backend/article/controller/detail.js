@@ -891,8 +891,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         }
         //check if the user want to edit the price field.
         if ( event.field === "price" ) {
-            if (previousPrice && ~~(previousPrice.get('price') * 1) > 0) {
-                maxValue =  ~~(previousPrice.get('price') * 1) - 0.01;
+            if (previousPrice && previousPrice.get('price') > 0) {
+                maxValue = previousPrice.get('price') - 0.01;
             }
             editor.setMaxValue(maxValue);
         }

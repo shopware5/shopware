@@ -253,6 +253,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 dataIndex: 'price',
                 editor: {
                     xtype: 'numberfield',
+                    decimalPrecision: 2,
                     minValue: 0
                 }
             }, {
@@ -262,6 +263,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 editor: {
                     xtype: 'numberfield',
                     minValue: 0,
+                    decimalPrecision: 2,
                     maxValue: 100
                 },
                 renderer: function(v) {
@@ -276,6 +278,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 dataIndex: 'pseudoPrice',
                 editor: {
                     xtype: 'numberfield',
+                    decimalPrecision: 2,
                     minValue: 0
                 }
             }, {
@@ -284,6 +287,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 dataIndex: 'basePrice',
                 editor: {
                     xtype: 'numberfield',
+                    decimalPrecision: 2,
                     minValue: 0
                 }
             }, {
