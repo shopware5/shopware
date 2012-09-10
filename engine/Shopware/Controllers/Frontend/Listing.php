@@ -84,6 +84,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             }
         }
 
+        $showListing = true;
         $hasEmotion = false;
         if (!$this->Request()->getQuery('sSupplier')
             && !$this->Request()->getQuery('sPage')
@@ -93,19 +94,22 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         ) {
             if(Shopware()->Shop()->getTemplate()->getVersion() == 1) {
                 $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
-            } else {
-                // Check if is a emotion grid is active for this category
-                $hasEmotion = Shopware()->Db()->fetchOne("
-                    SELECT ec.id, ec.emotion_id FROM s_emotion_categories ec
-                    LEFT JOIN s_emotion e ON (e.id = ec.emotion_id)
-                    WHERE ec.category_id = ?
-                    AND (e.valid_to >= NOW() OR e.valid_to IS NULL)
-                ", array($categoryId));
             }
+            // Check if is a emotion grid is active for this category
+            $emotion = Shopware()->Db()->fetchRow("
+                SELECT e.id, e.show_listing
+                FROM s_emotion_categories ec, s_emotion e
+                WHERE ec.category_id = ?
+                AND e.id = ec.emotion_id
+                AND (e.valid_to >= NOW() OR e.valid_to IS NULL)
+            ", array($categoryId));
+            $hasEmotion = !empty($emotion['id']);
+            $showListing = !empty($emotion['show_listing']);
         }
 
+        $this->View()->showListing = $showListing;
         $this->View()->hasEmotion = $hasEmotion;
-        if (!empty($hasEmotion)) {
+        if (!$showListing) {
             return;
         } elseif (!empty($offers)) {
             $this->View()->sOffers = $offers;

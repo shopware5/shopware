@@ -5,7 +5,7 @@
             	<div class="blog-entry-inner{if $entry@last} last{/if}">
                     <div class="blog_img">
                        {if $entry.media.thumbnails.3}
-                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({$entry.media.thumbnails.3}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({link file=$entry.media.thumbnails.3}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
                         {else}
                             <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">
                                 {se name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/se}

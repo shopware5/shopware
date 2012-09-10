@@ -222,7 +222,6 @@ class Emotion extends ModelEntity
      */
     private $modified;
 
-
     /**
      * Contains the assigned \Shopware\Models\Category\Category
      * which can be configured in the backend emotion module.
@@ -240,7 +239,6 @@ class Emotion extends ModelEntity
      * )
      */
     protected $categories;
-
 
     /**
      * OWNING SIDE
@@ -269,6 +267,12 @@ class Emotion extends ModelEntity
      * @var \Shopware\Models\Attribute\Emotion
      */
     protected $attribute;
+
+    /**
+     * @var boolean $isLandingPage
+     * @ORM\Column(name="show_listing", type="boolean", nullable=false)
+     */
+    protected $showListing;
 
     /**
      * Class constructor.
@@ -674,5 +678,21 @@ class Emotion extends ModelEntity
     public function getLandingPageBlock()
     {
         return $this->landingPageBlock;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getShowListing()
+    {
+        return $this->showListing;
+    }
+
+    /**
+     * @param boolean $showListing
+     */
+    public function setShowListing($showListing)
+    {
+        $this->showListing = $showListing;
     }
 }

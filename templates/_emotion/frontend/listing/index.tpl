@@ -11,7 +11,7 @@
 {/block}
 
 {block name="frontend_listing_index_listing" append}
-{if $sCategoryContent.parent != 1 && $hasEmotion && !$sSupplierInfo}
+{if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
     <div class="emotion-link">
         <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
             {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
@@ -43,21 +43,21 @@
 
 {* Hide listing if we're having a emotion here *}
 {block name="frontend_listing_list_inline"}
-    {if !$hasEmotion || $emotionListing}
+    {if $showListing}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Listing actions top *}
 {block name="frontend_listing_top_actions"}
-    {if !$hasEmotion}
+    {if $showListing}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Listing actions bottom *}
 {block name="frontend_listing_bottom_paging"}
-    {if !$hasEmotion}
+    {if $showListing}
         {$smarty.block.parent}
     {/if}
 {/block}

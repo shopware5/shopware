@@ -1,3 +1,6 @@
+{* Promotion *}
+{include file='frontend/listing/promotions.tpl' sTemplate=$sTemplate}
+
 {* Sorting and changing layout *}
 {block name="frontend_listing_top_actions"}
 {if !$sOffers}
@@ -26,9 +29,6 @@
 	<div class="space">&nbsp;</div>
 {/if}
 {/block}
-
-{* Promotion *}
-{include file='frontend/listing/promotions.tpl' sTemplate=$sTemplate}
 
 {* Hide actual listing if a promotion is active *}
 {if !$sOffers} 

@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: '{s name=settings/listing}Listing{/s}',
             boxLabel: '{s name=settings/listing_box_label}Listing will be visible under the emotion{/s}',
-            name: 'listing',
+            name: 'showListing',
             inputValue: true,
             uncheckedValue: false
         });

@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
 		//{block name="backend/emotion/model/emotion/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'active', type: 'boolean' },
-        { name: 'listing', type: 'boolean' },
+        { name: 'showListing', type: 'boolean' },
         { name: 'name', type: 'string' },
         { name: 'cols', type: 'int' },
         { name: 'rows', type: 'int' },
