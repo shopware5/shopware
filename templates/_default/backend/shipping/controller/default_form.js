@@ -131,6 +131,11 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
 					var records = answerConfig.getRecords(),
 						record = records[0],
 						rawData = record.getProxy().getReader().rawData;
+                    // Prevent cloned records from creating new records on each save-action
+                    if(record.get('clone')){
+                        record.set('id', rawData.data.id);
+                        record.set('clone', false);
+                    }
 					me.onCostsMatrixSave(button, rawData.data.id);
 				}
 				me.getStore('Dispatch').load();

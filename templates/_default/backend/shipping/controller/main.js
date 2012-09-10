@@ -352,7 +352,24 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
 
         record.data.clone = true;
 		costsmatrix.removeAll();
-        costsmatrix.add(emptyCostsMatrix);
+
+        // also clone the actual shipping costs SW-2263
+        costsmatrix.getProxy().extraParams = {
+            dispatchId : record.get('id')
+        };
+        costsmatrix.load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var newRecords  = new Array();
+                Ext.each(records, function(record) {
+                    var newRecord = record.copy();
+                    Ext.data.Model.id(newRecord);
+                    newRecords.push(newRecord);
+                });
+                costsmatrix.removeAll();
+                costsmatrix.add(newRecords);
+            }
+        });
 
         // save costsmatrix for further reference
         me.costsmatrix = costsmatrix;
