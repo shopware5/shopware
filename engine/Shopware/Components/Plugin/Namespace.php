@@ -332,9 +332,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             /** @var $em Shopware\Components\Model\ModelManager */
             $em = $this->Application()->Models();
 
-            $query = 'DELETE FROM Shopware\Models\Config\Form f WHERE f.pluginId = ?0';
-            $query = $em->createQuery($query);
-            $query->execute(array($id));
+            $form = $plugin->Form();
+            if($form->getId()) {
+                $em->remove($form);
+            } else {
+                $em->detach($form);
+            }
+            $em->flush();
 
             $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
             $query = $em->createQuery($query);
