@@ -217,9 +217,6 @@ class sRewriteTable
 
         $categories = array();
         foreach($result as $category){
-            if (isset($category['attribute'])) {
-                $category['category']['attribute'] = $category['attribute'];
-            }
             $categories[$category['category']['id']] = array_merge($category['category'], array(
                 'description' => $category['category']['name'],
                 'childrenCount' => $category['childrenCount'],
