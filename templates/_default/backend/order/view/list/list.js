@@ -440,6 +440,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         var me = this;
 
         var selModel = Ext.create('Ext.selection.CheckboxModel', {
+            checkOnly: true,
             listeners:{
                 // Unlocks the save button if the user has checked at least one checkbox
                 selectionchange:function (sm, selections) {
