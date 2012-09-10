@@ -217,11 +217,11 @@ class Repository extends TreeRepository
         $builder->from($this->getEntityName(), 'c')
             ->select(array(
                 'c as category',
-                'media',
+                'attribute',
                 '(c.right - c.left - 1) / 2 as childrenCount',
                 '(' . $articleSelect . ') as articleCount'
             ))
-            ->leftJoin('c.media', 'media')
+            ->leftJoin('c.attribute', 'attribute')
             ->where('c.active=1')
             ->addOrderBy('c.left')
             ->having('articleCount > 0 OR c.external IS NOT NULL');
@@ -276,6 +276,9 @@ class Repository extends TreeRepository
         $builder = $this->getActiveQueryBuilder($customerGroupId)
             ->andWhere('c.id = ?0')
             ->setParameter(0, $id);
+
+        $builder->leftJoin('c.media', 'media')
+            ->addSelect('media');
 
         return $builder->getQuery();
     }

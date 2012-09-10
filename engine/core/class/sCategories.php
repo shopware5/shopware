@@ -126,7 +126,10 @@ class sCategories
             ->getArrayResult();
         $resultCategories = array();
         foreach($categories as $category) {
-            $url = ($category['category']["blog"]) ? $this->blogBaseUrl : $this->baseUrl;
+            $url = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
+            if (isset($category['attribute'])) {
+                $category['category']['attribute'] = $category['attribute'];
+            }
             $resultCategories[$category['category']['id']] = array_merge($category['category'], array(
                 'description' => $category['category']['name'],
                 'childrenCount' => $category['childrenCount'],
@@ -209,6 +212,9 @@ class sCategories
 
         $categories = array();
         foreach($result as $category){
+            if (isset($category['attribute'])) {
+                $category['category']['attribute'] = $category['attribute'];
+            }
             $url = ($category['category']['blog']) ? $this->blogBaseUrl : $this->baseUrl;
             $categories[$category['category']['id']] = array_merge($category['category'], array(
                 'description' => $category['category']['name'],
@@ -255,8 +261,15 @@ class sCategories
             ->getArrayResult();
         $category = $category[0];
 
-        $detailUrl = ($category['category']['blog']) ? $this->blogBaseUrl . $category['category']['id'] : $this->baseUrl . $category['category']['id'];
+        $detailUrl = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
+        $detailUrl .= $category['category']['id'];
 
+        if (isset($category['attribute'])) {
+            $category['category']['attribute'] = $category['attribute'];
+        }
+        if (isset($category['media'])) {
+            $category['category']['media'] = $category['media'];
+        }
         $category = array_merge($category['category'], array(
             'description' => $category['category']['name'],
             'cmsheadline' => $category['category']['cmsHeadline'],
