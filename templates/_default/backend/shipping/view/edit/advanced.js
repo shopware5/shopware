@@ -76,6 +76,19 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
      */
     bodyPadding: 4,
 
+    /**
+     * Default formatting for the form panels.
+     * @object
+     */
+    formDefaults: {
+        labelStyle : 'font-weight: 700; text-align: left;',
+        labelWidth  : 120,
+        minWidth : 250,
+        xtype : 'container',
+        layout: 'hbox',
+        columnWidth : 0.4,
+        anchor : '100%'
+    },
 
     /**
      * Initialize the controller and defines the necessary default configuration
@@ -96,7 +109,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             columnWidth : 0.5,
             layout : 'anchor',
             items : me.getFormElementsLeft(),
-            defaults: me.getFormDefaults,
+            defaults: me.formDefaults,
             margin : '0 10 0 0'
         };
     },
@@ -108,7 +121,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             columnWidth: 0.5,
             layout: 'anchor',
             items : me.getFormElementsRight(),
-            defaults: me.getFormDefaults
+            defaults: me.formDefaults
         };
     },
 
@@ -388,24 +401,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             stacked: false,
             valueField: 'id',
             value : ids
-        };
-    },
-
-     /**
-     * Returns an object containing all default settings for every form element
-     * todo@stp please move this to CSS/SASS
-     * @return object
-     */
-    getFormDefaults : function()
-    {
-        return {
-            labelStyle : 'font-weight: 700; text-align: left;',
-            labelWidth  : 120,
-            minWidth : 250,
-            xtype : 'container',
-            layout: 'hbox',
-            columnWidth : 0.4,
-            anchor : '100%'
         };
     }
 });

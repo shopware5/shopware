@@ -120,7 +120,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
                 fieldLabel: '{s name=left_description}Description{/s}',
                 emptyText   : '{s name=left_empty_text_description}Description{/s}',
                 name: 'description',
-                id: 'description',
                 xtype:'textarea',
                 height: 50,
                 translatable: true // Indicates that this field is translatable
@@ -128,7 +127,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
             {
                 fieldLabel: '{s name=left_tracking_url}Tracking URL{/s}',
                 name: 'statusLink',
-                id: 'statusLink'
             },
             {
                 fieldLabel: '{s name=left_comment_tracking}Comment{/s}',

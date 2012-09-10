@@ -202,7 +202,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         });
 
         return Ext.create('Ext.form.Panel', {
-            id: 'shippingEditDefaultForm',
             bodyPadding: 8,
             region: 'center',
             /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
