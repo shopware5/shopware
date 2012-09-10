@@ -271,6 +271,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $mail->Body = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mail->Body);
         $mail->Body = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mail->Body);
+        $mail->Body = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mail->Body);
         $mail->Body = strip_tags($mail->Body);
 
         $mail->ClearAddresses();
