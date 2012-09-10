@@ -1,14 +1,13 @@
-{if $sEmotions.0}
+{if $sEmotions|@count > 0}
 
-    {* We've just only one emotion in a category at the same time *}
-    {$emotion = $sEmotions[0]}
+{foreach $sEmotions as $emotion}
 
     {* Calculate the cell width and get the cell height from the emotion settings *}
     {$cellWidth = $emotion.containerWidth / $emotion.cols}
     {$cellHeight = $emotion.cellHeight}
     {$finalRowHeight = 1}
 
-    <div class="emotion-listing emotion-col{$emotion.cols}" style="width:{$emotion.containerWidth}px">
+    <div class="emotion-listing emotion-col{$emotion.cols} emotion-{$emotion@index}" style="width:{$emotion.containerWidth}px">
         {if $emotion.elements.0}
             {foreach $emotion.elements as $element}
 
@@ -31,7 +30,6 @@
                     </div>
                 </div>
 
-
                 {* Get the last row to compute the final height of the emotion world *}
                 {if $finalEndRow < $element.endRow}
                     {$finalEndRow=$element.endRow}
@@ -39,16 +37,10 @@
             {/foreach}
         {/if}
         <script type="text/javascript">
-            var emotionHeight = '{$finalEndRow * $cellHeight}';
-            {literal}
-            (function($) {
-                $(document).ready(function() {
-                    if(typeof(emotionHeight) !== 'undefined' && emotionHeight && emotionHeight > 0) {
-                        $('.emotion-listing').css('height', emotionHeight);
-                    }
-                })
-            })(jQuery);
-            {/literal}
+            var emotionHeight{$emotion@index} = '{$finalEndRow * $cellHeight}';
+            jQuery('.emotion-{$emotion@index}').css('height', emotionHeight{$emotion@index});
         </script>
+        {$finalEndRow=1}
     </div>
+{/foreach}
 {/if}
