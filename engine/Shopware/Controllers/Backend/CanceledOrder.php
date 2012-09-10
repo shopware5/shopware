@@ -152,6 +152,14 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         );
 
+        $sql = "SELECT id
+            FROM s_order_basket
+            WHERE modus = 0
+            AND datum >= :startDate AND datum <= DATE_ADD(:endDate,INTERVAL 1 DAY)
+            GROUP BY sessionID";
+        $result = Shopware()->Db()->query($sql, $params);
+        $total = $result->rowCount();
+
         if(is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND lastviewport LIKE :filter';
@@ -159,8 +167,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $filter = '';
         }
 
-        // As prepared statements do not seem to work in conjunction with
-        // ORDER BY, this is used to prevent SQL injections
         if($sort !== null && isset($sort[0]['property'])) {
             if (isset($sort['0']['direction']) && $sort['0']['direction'] === 'DESC') {
                 $direction = 'DESC';
@@ -188,6 +194,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $sort = '';
         }
 
+
         $sql = "
             SELECT  lastviewport as name, COUNT(lastviewport) as number
             FROM
@@ -206,12 +213,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Insert the percentage into each field manually
         $sum = 0;
-        if($data !== null && isset($data[0]['number'])) {
-            foreach($data as $key => $value) {
-                $sum += $value['number'];
-            }
+        if($data !== null && isset($total)) {
             for($i=0;$i<count($data);$i++){
-                $data[$i]['percent'] = round($data[$i]['number'] / $sum * 100, 1);
+                $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
             }
         }
 
@@ -437,8 +441,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $filter = '';
         }
 
-        // As prepared statements do not seem to work in conjunction with
-        // ORDER BY, this is used to prevent SQL injections
         if($sort !== null && isset($sort[0]['property'])) {
             if (isset($sort['0']['direction']) && $sort['0']['direction'] === 'DESC') {
                 $direction = 'DESC';
@@ -510,8 +512,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $filter = '';
         }
 
-        // As prepared statements do not seem to work in conjunction with
-        // ORDER BY, this is used to prevent SQL injections
         if($sort !== null && isset($sort[1]['property'])) {
             if (isset($sort['1']['direction']) && $sort['1']['direction'] === 'DESC') {
                 $direction = 'DESC';
