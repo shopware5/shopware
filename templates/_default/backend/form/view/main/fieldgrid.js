@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
          tooltipDragDrop: '{s name=tooltip_dragdrop}You can move rows via Drag & Drop{/s}',
          hintDragDrop: '{s name=hint_dragdrop}You can move rows via Drag & Drop{/s}',
          saveBtnText: '{s name=rowedit_save}Save{/s}',
-         cancelBtnText: '{s name=rowedit_cancle}Cancle{/s}'
+         cancelBtnText: '{s name=rowedit_cancel}Cancel{/s}'
     },
 
     /**
@@ -96,7 +96,8 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     getRowEditingPlugin: function() {
         var me = this, rowEditingPlugin = Ext.create('Ext.grid.plugin.RowEditing', {
             saveBtnText : me.messages.saveBtnText,
-            cancelBtnText : me.messages.cancelBtnText
+            cancelBtnText : me.messages.cancelBtnText,
+            errorSummary: false
         });
 
         return rowEditingPlugin;
