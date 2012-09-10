@@ -72,29 +72,25 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sCategoryInfo' => $categoryContent
         ));
 
-        if(Shopware()->Shop()->getTemplate()->getVersion() == 2) {
-            /**@var $repository \Shopware\Models\Emotion\Repository*/
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-            $query = $repository->getCampaignByCategoryQuery($categoryId);
-            $campaignsResult = $query->getArrayResult();
-            $campaigns = array();
-            foreach ($campaignsResult as $campaign) {
-                $campaign['categoryId'] = $categoryId;
-                $campaigns[$campaign['landingPageBlock']][] = $campaign;
-            }
+        /**@var $repository \Shopware\Models\Emotion\Repository*/
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $query = $repository->getCampaignByCategoryQuery($categoryId);
+        $campaignsResult = $query->getArrayResult();
+        $campaigns = array();
+        foreach ($campaignsResult as $campaign) {
+            $campaign['categoryId'] = $categoryId;
+            $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
 
         $showListing = true;
         $hasEmotion = false;
+
         if (!$this->Request()->getQuery('sSupplier')
             && !$this->Request()->getQuery('sPage')
             && !$this->Request()->getQuery('sFilterProperties')
             && !$this->Request()->getParam('sRss')
             && !$this->Request()->getParam('sAtom')
         ) {
-            if(Shopware()->Shop()->getTemplate()->getVersion() == 1) {
-                $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
-            }
             // Check if is a emotion grid is active for this category
             $emotion = Shopware()->Db()->fetchRow("
                 SELECT e.id, e.show_listing
@@ -105,14 +101,20 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             ", array($categoryId));
             $hasEmotion = !empty($emotion['id']);
             $showListing = !$hasEmotion || !empty($emotion['show_listing']);
+
+            /**
+             * @deprecated
+             */
+            if(empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
+                $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
+                $this->View()->sOffers = $offers;
+                $showListing = false;
+            }
         }
 
         $this->View()->showListing = $showListing;
         $this->View()->hasEmotion = $hasEmotion;
         if (!$showListing) {
-            return;
-        } elseif (!empty($offers)) {
-            $this->View()->sOffers = $offers;
             return;
         }
 
