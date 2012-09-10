@@ -694,7 +694,7 @@ div.ajax_login_form .heading .modal_close,
 	font-weight: bold; 
 	cursor: pointer;
 	display: block;
-	z-index: 9999;
+	z-index: 10;
 }
 ul#servicenavi {
 	background: #fff;
