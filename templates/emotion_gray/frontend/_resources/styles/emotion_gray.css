@@ -67,11 +67,11 @@ a.link {color:#666}
 #mainNavigation {background-color: #7c7c7c;}
 #mainNavigation a {color:#fff;border-left-color: #7c7c7c;border-right-color:#8e8d8d;}
 #mainNavigation .dropactive:hover a {color: #7c7c7c;}
-#mainNavigation a.first {border-left-color: #32b2e7;}
+#mainNavigation a.first {border-left-color: #7c7c7c;}
 #mainNavigation a.active {color: #7c7c7c;}
 
 /* Drop down menu */
-#mainNavigation ul li.dropactive:hover a {background-image: none;background-color: #000;border-color: #000;border-bottom-color: #dfdfdf;color: #fff;}
+#mainNavigation ul li.dropactive:hover a {background-image: none;background-color: transparent;border-color: #000;border-bottom-color: #dfdfdf;color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover a {color: #fff;background-color: #333333;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li a {color: #7c7c7c; background-color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover a {color: #fff;background-color: #7c7c7c;}

@@ -71,7 +71,7 @@ a.link {color:#666}
 #mainNavigation a.active {color: #000000;}
 
 /* Drop down menu */
-#mainNavigation ul li.dropactive:hover a {background-image: none;background-color: #000;border-color: #000;border-bottom-color: #dfdfdf;color: #fff;}
+#mainNavigation ul li.dropactive:hover a {background-image: none;background-color: transparent;border-color: #000;border-bottom-color: #dfdfdf;color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover a {color: #fff;background-color: #333333;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li a {color: #000000; background-color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover a {color: #fff;background-color: #000000;}
