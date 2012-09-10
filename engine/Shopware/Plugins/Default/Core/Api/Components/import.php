@@ -72,386 +72,20 @@ class sShopwareImport
     }
 
     /**
-     * Helper function taken from the ImportExport Module to map fields
-     * @param array $input
-     * @param array $mapping
-     * @param array $whitelist
-     * @return array
+     * Create a configurator
+     * @param      $article
+     * @param null $article_configurator
      */
-    protected function mapFields($input, $mapping = array(), $whitelist = array())
-    {
-        $output = array();
-
-        $whitelist = $mapping + $whitelist;
-
-        foreach ($input as $key => $value) {
-            if (isset($mapping[$key])) {
-                $output[$mapping[$key]] = $value;
-            } elseif (in_array($key, $whitelist)) {
-                $output[$key] = $value;
-            } else {
-                // fields we don't know we don't want
-            }
-        }
-
-        return $output;
-    }
-
-
-    private function setOldVariant($articleModel, $data) {
-
-        $configuratorSetRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Set');
-        $configuratorGroupRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group');
-        $configuratorOptionRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Option');
-
-        /**
-         * Set up (name) Set
-         */
-        // Check if the article already has a configurator
-        if($articleModel->getConfiguratorSet() instanceof \Shopware\Models\Article\Configurator\Set) {
-            $configuratorSet = $articleModel->getConfiguratorSet();
-        // If no configurator is available, create one and dynamically name it
-        }else{
-
-            $configuratorSet = new \Shopware\Models\Article\Configurator\Set();
-
-            // Set configurator name by configurator option
-            if(isset($data['configuratorSet']['name'])) {
-                $name = $data['configuratorSet']['name'];
-                $configuratorModel = $configuratorSetRepository->findOneBy(array('name'=>$name));
-                if($configuratorModel !== null) {
-                    $configuratorSet = $configuratorModel;
-                }
-                $configuratorSet->setName($name);
-            // Set configurator name by ordernumber
-            }elseif($articleModel->getMainDetail() !== null) {
-                $number = $articleModel->getMainDetail()->getNumber();
-                $name = "Generated Set ".$number;
-                $configuratorModel = $configuratorSetRepository->findOneBy(array('name'=>$name));
-                if($configuratorModel !== null) {
-                    $configuratorSet = $configuratorModel;
-                }
-                $configuratorSet->setName($name);
-            // set configurator name by counting
-            }else{
-                $counter = 1;
-                $template = "Generated Set #";
-
-                $name = $template.$counter;
-                while($configuratorSetRepository->findOneBy(array('name'=>$name)) !== null) {
-                    $counter++;
-                    $name = $template.$counter;
-                }
-                $configuratorSet->setName($name);
-            }
-            // set type if field is available
-            if (isset($data['configuratorSet']['type'])) {
-                $configuratorSet->setType($data['configuratorSet']['type']);
-            }
-            // set public if field is available
-            if (isset($data['configuratorSet']['public'])) {
-                $configuratorSet->setPublic($data['configuratorSet']['public']);
-            }
-        }
-
-        /**
-         * Create a generic group for old 1-dim variants
-         */
-        $genericGroupName = "generatedOldVariant";
-        $groupModel = null;
-        $optionModel = null;
-        // Check if there is already such a group in the current set
-        $groupModel = $configuratorGroupRepository->findOneBy(array('name'=>$genericGroupName));
-        // If there is no such group, create one
-        if($groupModel === null) {
-            $groupModel = new \Shopware\Models\Article\Configurator\Group();
-            $groupModel->setName($genericGroupName);
-            $groupModel->setPosition(1);
-        }
-
-        //Check if there is already a option called $additionaltext, else create one
-        $optionModel = $configuratorOptionRepository->findOneBy(array('name'=>$data['additionaltext']));
-        // If there is no such option, create it
-        if($optionModel === null) {
-            $optionModel = new \Shopware\Models\Article\Configurator\Option();
-            $allOptions[] = $optionModel;
-            $optionModel->setName($data['additionaltext']);
-            $optionModel->setPosition(1);
-        }
-
-        $groupModel->addOption($optionModel);
-        $configuratorSet->addGroup($groupModel);
-        $configuratorSet->addOption($optionModel);
-
-        Shopware()->Models()->persist($groupModel);
-        Shopware()->Models()->persist($configuratorSet);
-
-        $optionModel->setGroup($groupModel);
-        Shopware()->Models()->persist($optionModel);
-
-        return $configuratorSet;
-
-    }
-
-    function sArticle($article, $config = array()) {
-        if(!isset($config['update'])){
-            $config['update'] = true;
-        }
-
-        if (empty($article['ordernumber'])&&empty($article['articledetailsID'])&&empty($article['articleID']))
-        {
-            $this->sAPI->sSetError("Ordernumber or articleID are required", 10200);
-            return false;
-        }
-
-        // Set up article mappings
-        $articleMetaData       = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Article');
-        $articleDetailMetaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Detail');
-        $articleAttributeMetaData = Shopware()->Models()->getMetadataFactory()->getMetadataFor('Shopware\Models\Attribute\Article');
-
-        $articleMapping = array();
-        foreach ($articleMetaData->fieldMappings as $fieldMapping) {
-            $articleMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
-        }
-
-        $articleDetailMapping = array();
-        foreach ($articleDetailMetaData->fieldMappings as $fieldMapping) {
-            $articleDetailMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
-        }
-
-        $articleAttributeMapping = array();
-        foreach ($articleAttributeMetaData->fieldMappings as $fieldMapping) {
-            $articleAttributeMapping[$fieldMapping['columnName']] = $fieldMapping['fieldName'];
-        }
-
-        // Check if this is a variant
-        if(!empty($article['mainnumber'])||!empty($article['mainID'])||!empty($article['maindetailsID'])) {
-            $variantMode = true;
-        }else{
-            $variantMode = false;
-        }
-
-        $variantIsMainDetail = false;
-
-        // Get repositories
-        $articleDetailRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Detail');
-        $taxRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tax\Tax');
-        $articleRepository = $this->getArticleRepository();
-        $supplierRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Supplier');
-
-        $articleModel = null;
-        $articleDetailModel = null;
-        $configuratorModel = null;
-
-        /**
-         * Get models depending on input data
-         */
-        if(!$variantMode) {
-            // Get article
-            if(!empty($article['articleID'])){
-                $articleModel = $articleRepository->findOne($article['articleID']);
-                if($articleModel === null) {
-                    echo "article not found";
-                    return false;
-                }else{
-                    $articleDetailModel = $articleModel->getMainDetail();
-                }
-            }
-
-            if(!empty($article['articledetailsID'])) {
-                $articleDetailModel = $articleDetailRepository->findOneBy(array('id' => $article['articledetailsID']));
-                if($articleDetailModel === null) {
-                    echo "article detail not found: {$article['articledetailsID']}";
-                    return false;
-                }
-                $articleModel = $articleDetailModel->getArticle();
-            }elseif(!empty($article['ordernumber'])) {
-                $articleDetailModel = $articleDetailRepository->findOneBy(array('number' => $article['ordernumber']));
-                if($articleDetailModel === null) {
-                    $articleDetailModel = new \Shopware\Models\Article\Detail();
-                }
-                $articleModel = $articleDetailModel->getArticle();
-            }
-
-            // If articleModel is not available, a new one needs to be created
-            if($articleModel === null) {
-                $articleModel = new \Shopware\Models\Article\Article();
-            // Taken from the previos sArticle method. Kept for compability reason
-            }elseif(empty($config['update'])){
-                $this->sAPI->sSetError("Update not allowed", 10202);
-             			return false;
-            }
-        }else{
-            // Get article
-            if(!empty($article['mainID'])){
-                $articleModel = $articleRepository->find($article['mainID']);
-                if($articleModel === null) {
-                    echo "article not found";
-                    return false;
-                }
-            }
-            
-            if(!empty($article['maindetailsID'])) {
-                $articleDetailModel = $articleDetailRepository->findOneBy(array('id' => $article['maindetailsID']));
-                if($articleDetailModel === null) {
-                    echo "article detail not found: {$article['maindetailsID']}";
-                    return false;
-                }
-                $articleModel = $articleDetailModel->getArticle();
-            }elseif(!empty($article['mainnumber'])) {
-                $articleDetailModel = $articleDetailRepository->findOneBy(array('number' => $article['mainnumber']));
-                if($articleDetailModel === null) {
-                    echo "article detail not found: {$article['mainnumber']}";
-
-                    return false;
-                }
-                $articleModel = $articleDetailModel->getArticle();
-            }
-
-            // If we got a detailModel from mainnumber or maindetailsID, remember the id of the main variant!
-            if($articleDetailModel !== null) {
-                $variantIsMainDetail = $articleDetailModel;
-            }elseif($articleModel->getMainDetail() !== null && $articleModel->getMainDetail()->getKind() === 2){
-                $variantIsMainDetail = $articleModel->getMainDetail();
-            }
-
-            // If configuratoOptions is set, the variant has a regular configurator which needs to be set
-            if(isset($article['configuratorOptions']) && is_array($article['configuratorOptions'])) {
-                // ...
-            // if not, this is a old, 1-dim variant
-            }else{
-                $configuratorModel = $this->setOldVariant($articleModel, $article);
-            }
-
-            // Set articleDetailModel to null
-            // Get the existing variant from ordernumber or create a new one
-            $articleDetailModel = null;
-            if(!empty($article['ordernumber'])) {
-                $articleDetailModel = $articleDetailRepository->findOneBy(array('number' => $article['ordernumber']));
-            }
-            if($articleDetailModel === null) {
-                $articleDetailModel = new \Shopware\Models\Article\Detail();
-            }
-        }
-
-        /**
-         * Setup tax and supplier
-         */
-        // Get Tax
-        $taxModel = null;
-        if (!empty($article['taxID'])) {
-            $taxModel = $taxRepository->find($article['taxID']);
-            if($taxModel === null) {
-                echo "tax id not found";
-                return false;
-            }
-        }elseif (isset($article['tax'])) {
-            $taxModel = $taxRepository->findBy(array('tax' => $article['tax']));
-            if($taxModel === null) {
-                echo "tax not found";
-                return false;
-            }
-        }
-
-		// Get Supplier
-		if (isset($article['supplierID'])) {
-			$article['supplierID'] = $this->sSupplier(array('supplierID'=>$article['supplierID']));
-            unset($article['supplier']);
-        }elseif (isset($article['supplier'])){
-			$article['supplierID'] = $this->sSupplier(array('supplier'=>$article['supplier']));
-            unset($article['supplier']);
-        }
-		if (empty($article['supplierID'])&&empty($article['articleID'])) // Hersteller wird ben�tigt
-		{
-			$this->sAPI->sSetError("Supplier is required", 10206);
-			return false;
-		}
-
-        // Get arrays with correct mappings
-        $articleData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
-        $detailData = $this->mapFields($article, $articleDetailMapping, array('impressions', 'sales'));
-        $attributeData = $this->mapFields($article, $articleAttributeMapping);
-
-        /**
-         * Prepare the models for persisting
-         */
-        if(!$variantMode) {
-            $articleModel->fromArray($articleData);
-            $articleDetailModel->fromArray($detailData);
-
-        }else{
-             // if the article has a detail model, set the old detail model to kind=3
-            $oldDetailModel = $articleModel->getMainDetail();
-            if($oldDetailModel !== null && $oldDetailModel->getKind() === 1 ) {
-                $oldDetailModel->setKind(3);
-                Shopware()->Models()->persist($oldDetailModel);
-            }
-
-            $articleDetailModel->fromArray($detailData);
-            $articleDetailModel->setKind(2);
-            $articleDetailModel->setArticle($articleModel);
-        }
-        // Set tax if given
-        if($taxModel !== null) {
-            $articleModel->setTax($taxModel);
-        }
-
-        // Set supplier if given
-        if(!empty($article['supplierID'])){
-            $articleModel->setSupplier($supplierRepository->find($article['supplierID']));
-            $articleDetailModel->setSupplierNumber($article['supplierID']);
-        }
-
-        // Set configurator
-        if($configuratorModel !== null) {
-            $articleModel->setConfiguratorSet($configuratorModel);
-        }
-
-        // Set mainDetailID
-        // If this is a normal article, set its detailModel to be the mainDetail
-        // if we have the id of the main variant, set this
-        if(!$variantMode || $variantIsMainDetail ) {
-            if($variantIsMainDetail === false) {
-                $articleModel->setMainDetail($articleDetailModel);
-            }else{
-//                $mainDetailModel = $articleDetailRepository->find($variantIsMainDetail);
-//                $articleModel->setMainDetail($mainDetailModel);
-                $articleModel->setMainDetail($variantIsMainDetail);
-            }
-            Shopware()->Models()->persist($articleModel);
-        }
-
-        Shopware()->Models()->persist($articleDetailModel);
-
-        // Setting attributes
-        $attributeModel = $articleDetailModel->getAttribute();
-        if($attributeModel === null) {
-            $attributeModel = new \Shopware\Models\Attribute\Article();
-        }
-        $attributeModel->fromArray($attributeData);
-        $attributeModel->setArticle($articleModel);
-        $attributeModel->setArticleDetail($articleDetailModel);
-
-        Shopware()->Models()->persist($attributeModel);
-        Shopware()->Models()->flush();
-
-        return array(
-            'articledetailsID' => $articleDetailModel->getId(),
-            'articleID' => $articleModel->getId(),
-            'articleattributesID' => $attributeModel->getId(),
-            'kind' => $articleDetailModel->getKind(),
-            'supplierID' => $articleModel->getSupplier()->getId(),
-            'tax' => $taxModel->getTax(),
-            'taxID' => $taxModel->getId()
-        );
-
-
+    function sArticleConfigurator($article, $article_configurator = null) {
+        echo "This method has been deprecated";
+        $this->sAPI->sSetError("This method has been deprecated", 10901);
+        return false;
     }
 
     /**
-     * @param Create a new style configurator the old way (sql)
+     * @param Create a new style configurator from a simple variant
      */
-    function sArticleConfigurator($article) {
+    function sArticleLegacyVariant($article) {
 
         if(empty($article['articleID']) || empty($article['maindetailsID'])) {
             $this->sAPI->sSetError("articleID and maindetailsID required", 10701);
@@ -468,9 +102,12 @@ class sShopwareImport
         }else{
             // create a new configurator form ordernumber
             $name = Shopware()->Db()->quote("Generated set ".$result['ordernumber']);
-            $this->sDB->Execute("INSERT INTO `s_article_configurator_sets` (name,public,type) VALUES({$name},0,0)");
-            $configuratorID = (int) $this->sDB->Insert_ID();
-
+            $sql = "SELECT id FROM `s_article_configurator_sets` WHERE name=$name";
+            $configuratorID = Shopware()->Db()->fetchOne($sql);
+            if($configuratorID === false) {
+                Shopware()->Db()->query("INSERT INTO `s_article_configurator_sets` (name,public,type) VALUES({$name},0,0)");
+                $configuratorID = (int) Shopware()->Db()->lastInsertId();
+            }
         }
 
         //create a generic group for the 1-dim-variants
@@ -498,15 +135,25 @@ class sShopwareImport
 
         // Set relations
         $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_group_relations` WHERE group_id={$groupID} AND set_id={$configuratorID}";
-        if(Shopware()->Db()->fetchOne($sql) === 0) {
+
+        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
             $sql = "INSERT INTO `s_article_configurator_set_group_relations` (set_id,group_id) VALUES({$configuratorID},{$groupID})";
             $this->sDB->Execute($sql);
         }
+
         $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_option_relations` WHERE option_id={$optionID} AND set_id={$configuratorID}";
-        if(Shopware()->Db()->fetchOne($sql) === 0) {
+        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
             $sql = "INSERT INTO `s_article_configurator_set_option_relations` (set_id,option_id) VALUES({$configuratorID},{$optionID})";
             $this->sDB->Execute($sql);
         }
+
+
+        $sql = "SELECT COUNT(*) FROM `s_article_configurator_option_relations` WHERE option_id={$optionID} AND article_id={$article['articledetailsID']}";
+        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
+            $sql = "INSERT INTO `s_article_configurator_option_relations` (article_id,option_id) VALUES({$article['articledetailsID']},{$optionID})";
+            $this->sDB->Execute($sql);
+        }
+
 
         return $configuratorID;
 
@@ -559,7 +206,7 @@ class sShopwareImport
 	 * @access public
 	 * @return array Alle offenen Bestellungen
 	 */
-	function sArticleOld ($article, $config = array())
+	function sArticle ($article, $config = array())
 	{
 		if(!isset($config['update']))
 			$config['update'] = true;
@@ -745,12 +392,6 @@ class sShopwareImport
 			}
 			$article['maindetailsID'] = $row['id'];
 			$article['articleID'] = $row['articleID'];
-
-            // setup variant
-            $configuratorSetId = $this->sArticleConfigurator($article);
-            if($configuratorSetId === false) {
-                return false;
-            }
 
 		}
 		// Wir �berpr�fen ob Artikel vorhanden ist, wenn ja holen wir die ArtikelDetailsID
@@ -1091,11 +732,21 @@ class sShopwareImport
 			$article['articleattributesID'] = $this->sDB->Insert_ID();
 		}
 
-        if($$configuratorSetId !== null) {
+        if(!empty($article['mainnumber'])||!empty($article['mainID'])||!empty($article['maindetailsID'])) {
+            // setup variant
+            $configuratorSetId = $this->sArticleLegacyVariant($article);
+            if($configuratorSetId === false) {
+                return false;
+            }
+        }
+
+        // Set configurator set id
+        if($configuratorSetId !== null && $configuratorSetId !== (int) $article['configurator_set_id']) {
             $sql = "UPDATE s_articles SET configurator_set_id={$configuratorSetId} WHERE id={$article['articleID']}";
             $this->sDB->Execute($sql);
-
         }
+
+
 
 		return array(
 			'articledetailsID' => $article['articledetailsID'],
