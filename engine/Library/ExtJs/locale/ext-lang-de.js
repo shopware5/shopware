@@ -294,8 +294,8 @@ Ext.onReady(function() {
 
     Ext.define("Ext.locale.de.grid.BooleanColumn", {
         override: "Ext.grid.BooleanColumn",
-        trueText: "wahr",
-        falseText: "falsch"
+        trueText: "aktiv",
+        falseText: "inaktiv"
     });
 
     Ext.define("Ext.locale.de.grid.NumberColumn", {
