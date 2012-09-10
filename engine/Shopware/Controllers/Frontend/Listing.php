@@ -104,7 +104,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 AND (e.valid_to >= NOW() OR e.valid_to IS NULL)
             ", array($categoryId));
             $hasEmotion = !empty($emotion['id']);
-            $showListing = !empty($emotion['show_listing']);
+            $showListing = !$hasEmotion || !empty($emotion['show_listing']);
         }
 
         $this->View()->showListing = $showListing;
