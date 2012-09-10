@@ -14,11 +14,13 @@
 		                        <img src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}" name="{$sSupplierInfo.name}" class="right" border="0" title="{$sSupplierInfo.name}" />
 		                    {/if}
 		                    {$sSupplierInfo.description}
+                            <div class="clear"></div>
 		                </div>
 		            {else}
 		                {if $sSupplierInfo.image}
 		                    <img src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}" name="{$sSupplierInfo.name}" class="right" border="0" title="{$sSupplierInfo.name}" />
 		                {/if}
+                        <div class="clear"></div>
 		            {/if}
 		        </div>
 			</div>
