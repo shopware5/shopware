@@ -56,10 +56,12 @@
 
                     {* Article comments - small overview *}
                     {block name="frontend_detail_comments_overview"}
-					<div class="detail_comments">
-						<span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
-						<span class="comment_numbers">(<a href="#write_comment" class="write_comment" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">{$sArticle.sVoteAverange.count}</a>)</span>
-					</div>
+                        {if !{config name=VoteDisable}}
+                            <div class="detail_comments">
+                                <span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
+                                <span class="comment_numbers">(<a href="#write_comment" class="write_comment" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">{$sArticle.sVoteAverange.count}</a>)</span>
+                            </div>
+                        {/if}
                     {/block}
 
 					{* Additional links *}
