@@ -43,7 +43,7 @@
 
 {* Hide listing if we're having a emotion here *}
 {block name="frontend_listing_list_inline"}
-    {if !$hasEmotion}
+    {if !$hasEmotion || $emotionListing}
         {$smarty.block.parent}
     {/if}
 {/block}

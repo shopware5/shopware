@@ -94,10 +94,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 change: function(field, value) {
                     if(value) {
                         me.categoryNameField.hide().setDisabled(true);
+                        me.listingCheckbox.hide();
                         me.landingPageFieldSet.show();
                     } else {
                         me.categoryNameField.show().setDisabled(false);
                         me.landingPageFieldSet.hide();
+                        me.listingCheckbox.show();
                     }
                 }
             }
@@ -131,14 +133,20 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             uncheckedValue:false
         });
 
+        me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: '{s name=settings/listing}Listing{/s}',
+            boxLabel: '{s name=settings/listing_box_label}Listing will be visible under the emotion{/s}',
+            name: 'listing',
+            inputValue: true,
+            uncheckedValue: false
+        });
+
         me.timingFieldSet =  me.createTimingFieldSet();
         me.landingPageFieldSet = me.createLandingpageFieldset();
         me.additionalFieldSet = me.createAdditionalSettingsFieldset();
 
-        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, me.activeComboBox, me.timingFieldSet, me.landingPageFieldSet, me.additionalFieldSet ];
+        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet, me.additionalFieldSet ];
         me.callParent(arguments);
-
-
 
         me.loadRecord(me.emotion);
     },
