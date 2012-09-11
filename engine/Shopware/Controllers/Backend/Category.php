@@ -389,7 +389,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $position = (int)$this->Request()->getParam('position');
 
         $item->setPosition($position);
-        //$item->setParent($parent);
 
         if($previousId !== null){
             /** @var $previous \Shopware\Models\Category\Category */
@@ -473,7 +472,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 return;
             }
 
- //           $this->getRepository()->removeFromTree($result);
+            $children = $this->getRepository()->children($result, false, 'left', 'DESC');
+            foreach($children as $node) {
+                Shopware()->Models()->remove($node);
+                Shopware()->Models()->flush();
+            }
             Shopware()->Models()->remove($result);
             Shopware()->Models()->flush();
 
@@ -508,46 +511,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $temporaryCategoryArray = array_splice($categoryChildArray, $movedChildKey, 1);
         array_splice($categoryChildArray, $newPosition, 0, $temporaryCategoryArray);
         return $categoryChildArray;
-    }
-
-    /**
-     * Sets the missing positions to the category
-     * The position is only set if the position structure isn't valid(unique)
-     *
-     * @param $parentNodeModel
-     * @param $force | if force is set to true the positions will be set anyway
-     * @return void
-     */
-    protected function recoverPosition($parentNodeModel, $force = false)
-    {
-        if (is_object($parentNodeModel)) {
-            $parentId = intval($parentNodeModel->getId());
-            if (!empty($parentId)) {
-                $sql = "SELECT COUNT(id) FROM s_categories WHERE parent = ? AND position = 0";
-                $positionZeroCount = Shopware()->Db()->fetchOne($sql, array($parentId));
-
-                if ($positionZeroCount > 1 || $force) {
-                    $childModels = $this->getRepository()->childrenQuery($parentNodeModel, true, "position");
-                    $categoryChildArray = $childModels->getArrayResult();
-                    if (!empty($categoryChildArray)) {
-                        //use batch size to improve the performance on a large amount of category items
-                        $batchSize = 100;
-                        $i = 0;
-                        foreach ($categoryChildArray as $key => $child) {
-                            $categoryModel = $this->getRepository()->find($child["id"]);
-                            $categoryModel->setPosition($key);
-                            if (($i % $batchSize) == 0) {
-                                Shopware()->Models()->flush();
-                                Shopware()->Models()->clear();
-                            }
-                            $i++;
-                        }
-                        Shopware()->Models()->flush();
-                        Shopware()->Models()->clear();
-                    }
-                }
-            }
-        }
     }
 
     /**

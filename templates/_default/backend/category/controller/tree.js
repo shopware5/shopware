@@ -141,6 +141,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text'), selection[0].get('articleCount') ),
             function (response) {
                 if (response !== 'yes') {
+                    mainWindow.setLoading(false);
                     return false;
                 }
                 selection[0].destroy({
