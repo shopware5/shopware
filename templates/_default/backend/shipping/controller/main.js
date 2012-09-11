@@ -110,12 +110,12 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             }
         });
 
-        me.customerGroupStore = Ext.create('Shopware.apps.Base.store.CustomerGroup').load();
+        me.customerGroupStore = me.getStore('Shopware.apps.Base.store.CustomerGroup').load();
 
         me.subApplication.paymentStore = me.subApplication.getStore('Payment');
         me.subApplication.countryStore = me.subApplication.getStore('Country');
 
-        me.shopStore = Ext.create('Shopware.apps.Base.store.Shop').load({
+        me.shopStore = me.getStore('Shopware.apps.Base.store.Shop').load({
             callback: function() {
                 me.mainWindow = me.getView('Main').create({
                     customerGroupStore: me.customerGroupStore,
@@ -126,6 +126,8 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 me.mainWindow.show();
             }
         });
+
+        me.callParent(arguments);
     },
 
     /**
@@ -254,31 +256,27 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
      * @return Shopware.apps.Shipping.view.edit.Panel
      */
     createEditForm : function(record, costsmatrix) {
-        var me = this,
-            dispatchStore = me.getStore('Dispatch'),
-			taxStore = me.subApplication.taxStore = me.getStore('Tax');
+        var me = this;
 
-        me.costsmatrix = costsmatrix;
+        // Using Ext.create() here to force new instances of Stores (sw-3780)
+        return  Ext.create('Shopware.apps.Shipping.view.edit.Panel', {
+            editRecord              : record,
+            // store for costs matrix tab
+            costMatrixStore         : costsmatrix,
+            // store for payments tab
+            availablePayments       : Ext.create('Shopware.apps.Shipping.store.Payment').load(),
+            // store for county tab
+            availableCountries      : Ext.create('Shopware.apps.Shipping.store.Country').load(),
+            // store for the category tree
+            availableCategoriesTree : Ext.create('Shopware.apps.Shipping.store.CategoryTree').load(),
+            // store for holidays
+            availableHolidays       : Ext.create('Shopware.apps.Shipping.store.Holiday').load(),
+            // current dispatch id
+            dispatchId              : record.get('id'),
+            // store for the dispatch
+            mainStore               : Ext.create('Shopware.apps.Shipping.store.Dispatch').load()
+        });
 
-         return  me.getView('edit.Panel').create({
-             editRecord              : record,
-             // store for costs matrix tab
-             costMatrixStore         : costsmatrix,
-             // store for payments tab
-             availablePayments       : me.subApplication.paymentStore,
-             // store for county tab
-             availableCountries      : me.subApplication.countryStore,
-             // store for the category tree
-             availableCategoriesTree : me.getStore('CategoryTree'),
-             // store for holidays
-             availableHolidays       : me.getStore('Holiday'),
-             // current dispatch id
-             dispatchId              : record.get('id'),
-             // store for the dispatch
-             mainStore               : dispatchStore,
-
-			 taxStore: taxStore
-        } );
     },
 
      /**
@@ -319,7 +317,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
     onEditShippingCosts : function (view, item, rowIndex) {
         var store       = view.getStore(),
             me          = this,
-            costsmatrix = this.getStore('Costsmatrix'),
+            costsmatrix = Ext.create('Shopware.apps.Shipping.store.Costsmatrix'),
             record      = store.load().getAt(rowIndex);
 
 		record.data.clone = false;
@@ -372,7 +370,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         });
 
         // save costsmatrix for further reference
-        me.costsmatrix = costsmatrix;
+//        me.costsmatrix = costsmatrix;
         // supply data to the main view
        me.createEditForm(record, costsmatrix).show();
     },

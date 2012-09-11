@@ -304,7 +304,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
             emptyText   : '{s name=right_choose}Choose...{/s}',
             value       : 0,
             fieldLabel  : '{s name=right_dispatch_type}Dispatch type{/s}',
-            id          : 'dispatch_type_field',
             valueField  : 'type',
             editable    : false,
             store       : new Ext.data.SimpleStore({

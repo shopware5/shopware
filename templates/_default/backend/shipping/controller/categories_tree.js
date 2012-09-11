@@ -60,6 +60,8 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
                 afterrender : me.onAfterRender
             }
         });
+
+        me.callParent(arguments);
         
     },
     /**

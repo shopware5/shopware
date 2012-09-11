@@ -91,6 +91,8 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                 }
             }
         });
+
+        me.callParent(arguments);
     },
     /**
      * Helper method which handles all clicks of the action column

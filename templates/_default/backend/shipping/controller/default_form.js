@@ -76,6 +76,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                 'click' : me.onDispatchSave
             }
         });
+
+        me.callParent(arguments);
     },
 
     /**

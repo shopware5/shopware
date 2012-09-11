@@ -196,8 +196,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
                 xtype: 'shipping-top-right-form',
                 dispatchCalculationData: me.dispatchCalculationData,
                 dispatchTypeData: me.dispatchTypeData,
-                dispatchSurchargeCalculationData: me.dispatchSurchargeCalculationData,
-				taxStore: me.taxStore
+                dispatchSurchargeCalculationData: me.dispatchSurchargeCalculationData
             }]
         });
 
