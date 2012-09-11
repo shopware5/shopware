@@ -33,24 +33,13 @@
  *
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Login.controller.Login', {
+Ext.define('Shopware.apps.Login.controller.Main', {
 
     /**
      * Extend from the standard ExtJS 4 controller
      * @string
      */
 	extend: 'Ext.app.Controller',
-
-    /**
-     * Define references for the different parts of our application. The
-     * references are parsed by ExtJS and Getter methods are automatically created.
-     *
-     * Example: { ref : 'grid', selector : 'grid' } transforms to this.getGrid();
-     *          { ref : 'addBtn', selector : 'button[action=add]' } transforms to this.getAddBtn()
-     *
-     * @array
-     */
-	refs: [ ],
 
 	/**
 	 * Creates the necessary event listener for this
@@ -104,20 +93,23 @@ Ext.define('Shopware.apps.Login.controller.Login', {
         if(!form.isValid() || !values.password.length || !values.username.length) {
             return false;
         }
-
         form.submit({
             url: '{url action=login}',
-            waitMsg:'Login...',
-            success: function(fp, o) {
-                if(!o.result.user) {
-                    Ext.Msg.alert('Login fehlgeschlagen', 'Ihr Login war nicht erfolgreich. Bitte &uuml;berpr&uuml;fen Sie Ihre Eingabe und probieren es erneut.');
-                }
-                else{
-                    window.location.href = window.location.href;
-                }
+            waitMsg: '{s name=wait/message}Login...{/s}',
+            success: function(form, action) {
+                window.location.href = window.location.href;
             },
-            failure: function() {
-                Ext.Msg.alert('Login fehlgeschlagen', 'Ihr Login war nicht erfolgreich. Bitte &uuml;berpr&uuml;fen Sie Ihre Eingabe und probieren es erneut.');
+            failure: function(form, action) {
+                var lockedUntil, message;
+                if(action.result.lockedUntil) {
+                    action.result.lockedUntil = new Date(action.result.lockedUntil);
+                    message = "{s name=failure/locked_message}Der Account ist bis zum [lockedUntil:date] um [lockedUntil:date('H:i:s')] Uhr gesperrt.{/s}";
+                    message = new Ext.Template(message);
+                    message = message.applyTemplate(action.result);
+                } else {
+                    message = '{s name=failure/input_message}Bitte überprüfen Sie Ihre Eingabe und probieren es erneut.{/s}';
+                }
+                Ext.Msg.alert('{s name=failure/title}Login fehlgeschlagen{/s}', '{s name=failure/message}Ihr Login war nicht erfolgreich. {/s}' + message);
                 return false;
             }
         });

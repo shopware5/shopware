@@ -50,14 +50,17 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $user = Shopware()->Auth()->login($username, $password);
+        /** @var $auth Shopware_Components_Auth */
+        $auth = Shopware()->Auth();
+        $result = $auth->login($username, $password);
+        $user = $auth->getIdentity();
         if(!empty($user->roleID)) {
             $user->role = Shopware()->Models()->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
         }
-        if(($locale = $this->Request()->get('locale')) !== null) {
+        if($user && ($locale = $this->Request()->get('locale')) !== null) {
             $user->locale = Shopware()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($locale);
@@ -68,17 +71,24 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
                 $user->localeID
             );
         }
-        if(!isset($user->locale)) {
+        if($user && !isset($user->locale)) {
             $user->locale = Shopware()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($this->getPlugin()->getDefaultLocale());
         }
 
+        $messages = $result->getMessages();
+        /** @var $lockedUntil Zend_Date */
+        if(isset($messages['lockedUntil'])) {
+            $lockedUntil = isset($messages['lockedUntil']) ? $messages['lockedUntil'] : null;
+            $lockedUntil = $lockedUntil->toString(Zend_Date::ISO_8601);
+        }
+
         $this->View()->assign(array(
-            'success' => !empty($user),
-            'user' => $user->username,
+            'success' => $result->isValid(),
+            'user' => $result->getIdentity(),
             'locale' => isset($user->locale) ? $user->locale->toString() : null,
-            'lockedUntil' => null
+            'lockedUntil' => isset($lockedUntil) ? $lockedUntil : null
         ));
     }
 

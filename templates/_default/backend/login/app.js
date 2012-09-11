@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Login', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Login' ],
+    controllers: [ 'Main' ],
 
     /**
      * Required stores for controller
@@ -96,11 +96,6 @@ Ext.define('Shopware.apps.Login', {
     targetName: 'Shopware.apps.Index',
 
     /**
-     * Target sub Application
-     */
-    target: { name: null, loadMask: false },
-
-    /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
      * The class sets a new event listener on the "destroy" event of
@@ -115,7 +110,7 @@ Ext.define('Shopware.apps.Login', {
      */
     launch: function() {
         var me = this,
-            mainController = me.getController('Login');
+            mainController = me.getController('Main');
 
         return mainController.mainWindow;
     }

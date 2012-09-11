@@ -79,24 +79,24 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      *
      * @param string $username
      * @param string $password
-     * @return bool
+     * @return Zend_Auth_Result
      */
     public function login($username, $password)
     {
+        $result = null;
         $adapters = $this->getAdapter();
         foreach ($adapters as $adapter) {
             $adapter->setIdentity($username);
             $adapter->setCredential($password);
 
-            $this->authenticate($adapter);
-            $user = $this->getIdentity();
-            if (!empty($user)) {
+            $result = $this->authenticate($adapter);
+            if ($result->isValid()) {
                 $this->setBaseAdapter($adapter);
-                return $user;
+                return $result;
             }
         }
         $this->setBaseAdapter(null);
-        return false;
+        return $result;
     }
 
     /**

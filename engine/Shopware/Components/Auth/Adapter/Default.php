@@ -114,32 +114,38 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     {
         $result = parent::authenticate();
 
-        // Get temporary set of user - data
-        $zendDbSelect = clone $this->_dbSelect;
-        $zendDbSelect->reset();
-        $zendDbSelect->from($this->_tableName);
-        $zendDbSelect->where('username = ?', $this->_identity);
-
-        $getUserData = $this->_zendDb->fetchRow($zendDbSelect->assemble());
+        $select = $this->_zendDb->select();
+        $select->from($this->_tableName);
+        $select->where($this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity);
+        $user = $this->_zendDb->fetchRow($select, array(), Zend_Db::FETCH_OBJ);
 
         if ($result->isValid()) {
             // Check if user role is active
-            $roleId = $getUserData["roleID"];
-            if ($this->_zendDb->fetchOne("SELECT enabled FROM s_core_auth_roles WHERE id = ?", array($roleId)) == false) {
-                return false;
+            $sql = 'SELECT enabled FROM s_core_auth_roles WHERE id = ?';
+            if ($this->_zendDb->fetchOne($sql, array($user->roleID)) == false) {
+                return new Zend_Auth_Result(
+                    Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
+                    $this->_identity, array()
+                );
             }
             $this->updateExpiry();
             $this->updateSessionId();
         } else {
-            $failedLogins = $getUserData["failedlogins"];
             // If more then 4 previous failed logins lock account for n * failedlogins seconds
-            if ($failedLogins >= 4) {
-                $datetime = new Zend_Date();
-                $datetime->addSecond($this->lockSeconds * $failedLogins);
-                $this->setLockedUntil($datetime);
+            if ($user->failedlogins >= 4) {
+                $lockedUntil = new Zend_Date();
+                $lockedUntil->addSecond($this->lockSeconds * $user->failedlogins);
+                $this->setLockedUntil($lockedUntil);
             }
             // Increase number of failed logins
-            $this->setFailedLogins($failedLogins + 1);
+            $this->setFailedLogins($user->failedlogins + 1);
+            if(isset($lockedUntil)) {
+                return new Zend_Auth_Result(
+                    -4,
+                    $this->_identity,
+                    array('lockedUntil' => $lockedUntil)
+                );
+            }
         }
         return $result;
     }
