@@ -145,7 +145,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $data = $dataQuery->getArrayResult();
 
             $summaryQuery = $repository->getStatisticListQuery($order,$offset,$limit,$partnerId, true,$fromDate,$toDate);
-            $summaryData = $summaryQuery->getSingleResult();
+            $summaryData = $summaryQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(
                 array(

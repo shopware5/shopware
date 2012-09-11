@@ -46,6 +46,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
+        if(empty($categoryId)) {
+            return $this->redirect(array('controller' => 'index'), array('code' => 301));
+        }
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
         if (!empty($categoryContent['external'])) {

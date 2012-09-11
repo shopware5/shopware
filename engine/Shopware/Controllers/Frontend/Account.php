@@ -255,7 +255,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->sPartnerOrders = $dataQuery->getArrayResult();
 
         $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, true, $fromDate, $toDate);
-        $this->View()->sTotalPartnerAmount = $dataQuery->getSingleResult();
+        $this->View()->sTotalPartnerAmount = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
 	/**

@@ -51,6 +51,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @array
      */
     refs: [
+        { ref: 'mainWindow', selector: 'category-main-window' },
         { ref: 'categoryTree', selector: 'category-category-tree' },
         { ref: 'deleteButton', selector: 'category-category-tree button[action=deleteCategory]' },
         { ref: 'saveCategoryButton', selector: 'button[action=saveDetail]' },
@@ -133,6 +134,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             selection   = tree.getSelectionModel( ).getSelection(),
             store = me.subApplication.getStore('Tree');
 
+        var mainWindow = me.getMainWindow();
+        mainWindow.setLoading(true);
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteCategoryHeadline,
             Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text'), selection[0].get('articleCount') ),
@@ -142,9 +145,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 }
                 selection[0].destroy({
                     callback: function(self, operation) {
+                        mainWindow.setLoading(false);
                         var rawData = operation.records[0].proxy.reader.rawData
-
-                        if (operation.wasSuccessul()) {
+                        if (operation.success) {
                             Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
                             store.load();
                             me.disableForm();
@@ -293,6 +296,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         } else {
             node.data.parentId = 0;
         }
+        var mainWindow = me.getMainWindow();
+        mainWindow.setLoading(true);
         node.save({
             callback:function (self, operation) {
                 if (!operation.success) {

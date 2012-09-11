@@ -230,7 +230,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->where('category.id = ?1')
             ->setParameter(1, $data["category_selection"]);
 
-        $categoryName = $builder->getQuery()->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $data["categoryName"] = $categoryName["name"];
 
