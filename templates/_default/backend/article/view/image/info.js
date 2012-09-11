@@ -81,6 +81,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         settings: '{s name=image/info/settings}Settings{/s}',
         treeTitle: '{s name=image/info/tree}Assignments{/s}',
         saveSettings: '{s name=image/info/save_settings}Save settings{/s}',
+        translateTitle: '{s name=image/info/translate_title}Translate title{/s}',
 
         attribute1: '{s name=image/info/attribute1}attribute1{/s}',
         attribute2: '{s name=image/info/attribute2}attribute2{/s}',
@@ -127,7 +128,24 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
     		 * @event
     		 * @param [Ext.data.Model] The media record
     		 */
-    		'download'
+    		'download',
+
+            /**
+             * Event will be fired when the user wants to translate the settings.
+             *
+             * @event
+             * @param [object] form - Ext.form.Panel - The settings Panel
+             * @param [object] record - Shopware.apps.Article.model.Media
+             */
+            'translateSettings',
+
+            /**
+             * Event will be fired when the user wants to save the image settings.
+             * @event
+             * @param [object] form - Ext.form.Panel - The settings Panel
+             * @param [object] record - Shopware.apps.Article.model.Media
+             */
+            'saveImageSettings'
     	);
     },
 
@@ -185,7 +203,8 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         me.titleField = Ext.create('Ext.form.field.Text', {
             name: 'description',
             anchor: '100%',
-            fieldLabel: me.snippets.imageTitle
+            fieldLabel: me.snippets.imageTitle,
+            translatable: true
         });
 
         me.attr1Field = Ext.create('Ext.form.field.Text', {
@@ -208,9 +227,18 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
 
         me.settingToolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
+            margin: '8 0 0',
             items: [
-                '->',
-                {
+                '->', {
+                    xtype: 'button',
+                    text: me.snippets.translateTitle,
+                    cls: 'small secondary',
+                    handler: function() {
+                        if (me.record) {
+                            me.fireEvent('translateSettings', me.settingsForm, me.record);
+                        }
+                    }
+                }, {
                     xtype: 'button',
                     text: me.snippets.saveSettings,
                     cls: 'small secondary',
@@ -236,6 +264,14 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             title: me.snippets.settings,
             flex: 1,
             layout: 'anchor',
+            plugins: [{
+                ptype: 'translation',
+                pluginId: 'translation',
+                translationType: 'article',
+                translationMerge: false,
+                translationKey: null,
+                translationName: 'attributes'
+            }],
             defaults: {
                 labelWidth: 90,
                 anchor: '100%'

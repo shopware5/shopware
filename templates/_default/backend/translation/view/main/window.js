@@ -99,6 +99,7 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
     createActionButtons: function() {
         return [{
             text: '{s name=button/cancel}Cancel{/s}',
+            cls: 'secondary',
             action: 'translation-main-window-save'
         }, {
             text: '{s name=button/save}Save translations{/s}',

@@ -105,7 +105,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             },
             'article-detail-window article-image-info': {
                 download: me.onDownload,
-                saveImageSettings: me.onSaveImageSettings
+                saveImageSettings: me.onSaveImageSettings,
+                translateSettings: me.onTranslateSettings
             },
             'article-detail-window article-image-upload mediaselectionfield': {
                 selectMedia: me.onMediaAdded
@@ -574,6 +575,24 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         mediaStore.remove(draggedRecord);
         mediaStore.insert(index, draggedRecord);
         return true;
+    },
+
+    /**
+     * Event listener method which will be fired when the user wants
+     * to translate the image title.
+     *
+     * @public
+     * @event translateSettings
+     * @param [Ext.form.Panel] form
+     * @param [Showpare.apps.Article.model.Media] record
+     * @return void
+     */
+    onTranslateSettings: function(form, record) {
+        var me = this,
+            plugin = form.getPlugin('translation');
+
+        form.getForm().loadRecord(record);
+        plugin.onOpenTranslationWindow();
     }
 
 });
