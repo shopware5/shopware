@@ -52,7 +52,8 @@ Ext.define('Shopware.apps.Category.model.Tree', {
         { name : 'id', type: 'integer', useNull:true },
         { name : 'parentId', type: 'integer' },
         { name : 'name', type: 'string' },
-        { name : 'position', type: 'integer', useNull:true, defaultValue: null}
+        { name : 'position', type: 'integer', useNull:true, defaultValue: null},
+        { name : 'previousId', type: 'integer', useNull:true, defaultValue: null}
     ],
     proxy : {
         type : 'ajax',

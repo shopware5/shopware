@@ -287,15 +287,13 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param [object] newParent - updated Ext.data.Model
      * @return void
      */
-    onCategoryMove : function(node, oldParent, newParent) {
+    onCategoryMove : function(node, oldParent, newParent, postion) {
         var me = this;
 
-        node.data.position = node.data.index + 1;
-        if (newParent.data.id !== 'root') {
-            node.data.parentId = newParent.data.id;
-        } else {
-            node.data.parentId = 0;
-        }
+        node.data.postion = postion;
+        node.data.parentId = !newParent.isRoot() ? newParent.data.id : null;
+        node.data.previousId = node.previousSibling ? node.previousSibling.data.id : null;
+
         var mainWindow = me.getMainWindow();
         mainWindow.setLoading(true);
         node.save({
@@ -308,6 +306,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                         Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure, me.snippets.growlMessage);
                     }
                 }
+                mainWindow.setLoading(false);
             }
         });
     },

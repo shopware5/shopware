@@ -161,11 +161,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
-//        $categoryModel = $this->getRepository()->find($node);
-//         set the position field to the category if it is not set
-//        $this->recoverPosition($categoryModel);
-
-
         $query = $this->getRepository()->getListQuery(
             $filter,
             $this->Request()->getParam('sort', array()),
@@ -385,52 +380,31 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function moveTreeItemAction()
     {
-        $params = $this->Request()->getParams();
-        $moveItemId = $params['id'];
-        if (!empty($moveItemId)) {
-            try {
-                $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
-                $parentNodeModel = $this->getRepository()->find($params['parentId']);
+        $repository = $this->getRepository();
+        $itemId = (int)$this->Request()->getParam('id');
+        /** @var $item \Shopware\Models\Category\Category */
+        $item = $this->getRepository()->find($itemId);
+        $parentId = (int)$this->Request()->getParam('parentId', 1);
+        $previousId = $this->Request()->getParam('previousId');
+        $position = (int)$this->Request()->getParam('position');
 
-                /** @var $movedModel \Shopware\Models\Category\Category */
-                $movedModel = $this->repository->find($moveItemId);
-                $movedModel->setParent($parentNodeModel);
-                Shopware()->Models()->flush();
+        $item->setPosition($position);
+        //$item->setParent($parent);
 
-                $newPosition = intval($params["position"]);
-                $childModels = $this->repository->childrenQuery($parentNodeModel, true, "position");
-
-                $categoryChildArray = $this->moveCategoryItem($moveItemId, $newPosition, $childModels->getArrayResult());
-
-                //use batch size to improve the performance on a large amount of category items
-                $batchSize = 100;
-                $i = 0;
-                foreach ($categoryChildArray as $key => $child) {
-                    $categoryModel = $this->getRepository()->find($child["id"]);
-                    $categoryModel->setPosition($key);
-                    if (($i % $batchSize) == 0) {
-                        Shopware()->Models()->flush();
-                        Shopware()->Models()->clear();
-                    }
-                    $i++;
-                }
-                Shopware()->Models()->flush();
-                Shopware()->Models()->clear();
-
-
-                // to set the category left and right value
-                $this->repository->reorder($parentNodeModel, "position");
-
-                $this->View()->assign(array('success' => true));
-            } catch (Exception $e) {
-                $this->View()->assign(
-                    array(
-                        'success' => false,
-                        'message' => $e->getMessage()
-                    )
-                );
-            }
+        if($previousId !== null){
+            /** @var $previous \Shopware\Models\Category\Category */
+            $previous = $this->getRepository()->find($previousId);
+            $repository->persistAsNextSiblingOf($item, $previous);
+        } else {
+            /** @var $parent \Shopware\Models\Category\Category */
+            $parent = $this->getRepository()->find($parentId);
+            $repository->persistAsFirstChildOf($item, $parent);
         }
+        Shopware()->Models()->flush();
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
