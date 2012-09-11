@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     editor.decimalPrecision = config.decimalPrecision;
                     var newValue  = Ext.util.Format.round(options.value + config.minChange, config.decimalPrecision);
                     editor.completeEdit();
-                    me.addCostsMatrixEntry(newValue);
+                    me.addCostsMatrixEntry(newValue, options.grid.store);
                     editor.startEditByPosition({
                         row: options.rowIdx + 1,
                         column: 1
@@ -242,11 +242,11 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * Method tho add a new row at the end of a grid
      *
      * @param [float] from
+     * @param Ext.data.Store store
      * @return void
      */
-    addCostsMatrixEntry : function(from) {
+    addCostsMatrixEntry : function(from, store) {
         var me = this,
-        store = me.getStore('Costsmatrix'),
         last = store.getCount(),
         lastEntry = store.getAt(last-1),
         from  = 1*from;
