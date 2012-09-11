@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         var me = this;
 
         // Using Ext.create() here to force new instances of Stores (sw-3780)
-        return  Ext.create('Shopware.apps.Shipping.view.edit.Panel', {
+        return  me.getView('Shopware.apps.Shipping.view.edit.Panel').create({
             editRecord              : record,
             // store for costs matrix tab
             costMatrixStore         : costsmatrix,
