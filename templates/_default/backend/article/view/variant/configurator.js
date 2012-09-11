@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             remove: '{s name=variant/configurator/group/remove_column}Delete group{/s}',
             edit: '{s name=variant/configurator/group/edit_column}Edit group{/s}',
             name: '{s name=variant/configurator/group/name_column}Group name{/s}',
+            description: '{s name=variant/configurator/group/description_column}Group description{/s}',
             active: '{s name=variant/configurator/group/active_column}Activated{/s}',
             options: {
                 header: '{s name=variant/configurator/group/options_column_header}Option count{/s}'
@@ -518,6 +519,17 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 name: 'name'
             }
         } , {
+            dataIndex: 'description',
+            flex: 2,
+            text: me.snippets.groups.description,
+            translationEditor: {
+                xtype: 'textarea',
+                allowBlank: false,
+                fieldLabel: me.snippets.groups.description,
+                name: 'description'
+            },
+            hidden: true
+        },{
             dataIndex: 'optionCount',
             flex: 1,
             text: me.snippets.groups.options.header,
