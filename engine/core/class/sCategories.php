@@ -143,16 +143,30 @@ class sCategories
     /**
      * @param $articleId
      * @param $parentId
-     * @return array|null
+     * @return int|null
      */
-    public function sGetCategoryByArticleId($articleId, $parentId = null)
+    public function sGetCategoryIdByArticleId($articleId, $parentId = null)
     {
         if($parentId === null) {
             $parentId = $this->baseId;
         }
-        $query = $this->repository->getActiveByArticleIdQuery($articleId, $parentId);
-        $result = $query->setMaxResults(1)->getArrayResult();
-        return isset($result[0]) ? $result[0] : null;
+        //$query = $this->repository->getActiveByArticleIdQuery($articleId, $parentId);
+        //$result = $query->setMaxResults(1)->getArrayResult();
+        //return isset($result[0]) ? $result[0] : null;
+        $sql = '
+            SELECT c2.id
+            FROM s_categories c, s_categories c2, s_articles_categories ac
+            WHERE c.id = ?
+            AND c2.left > c.left
+            AND c2.right < c.right
+            AND ac.articleID = ?
+            AND c2.id = ac.categoryID
+            AND c2.active = 1
+            ORDER BY ac.id
+        ';
+        return (int)Shopware()->Db()->fetchOne($sql, array(
+            $parentId, $articleId
+        ));
     }
 
     /**

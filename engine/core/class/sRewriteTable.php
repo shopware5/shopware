@@ -443,18 +443,21 @@ class sRewriteTable
 
     /**
      * @param   $articleId
-     * @param   null $categoryId
+     * @param   null $parentId
      * @return  null|string
      */
-    public function sCategoryPathByArticleId($articleId, $categoryId = null)
+    public function sCategoryPathByArticleId($articleId, $parentId = null)
     {
-        if (empty($categoryId)) {
-            $categoryId = $this->baseCategory->getId();
-        }
-        $category = $this->repository
-            ->getActiveByArticleIdQuery($articleId, $categoryId)
-            ->setMaxResults(1)
-            ->getOneOrNullResult();
-        return $category !== null ? $this->sCategoryPath($category) : null;
+        //if (empty($parentId)) {
+        //    $parentId = $this->baseCategory->getId();
+        //}
+        //$categoryId = $this->repository
+        //    ->getActiveByArticleIdQuery($articleId, $categoryId)
+        //    ->setMaxResults(1)
+        //    ->getOneOrNullResult();
+        $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
+            $articleId, $parentId
+        );
+        return $categoryId !== null ? $this->sCategoryPath($categoryId) : null;
     }
 }

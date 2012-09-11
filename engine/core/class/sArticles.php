@@ -2473,8 +2473,8 @@ class sArticles
             $sArticleID = intval($this->sSYSTEM->_GET['sArticle']);
             $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
             if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
-                $getArticle["category"] = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryByArticleId($sArticleID);
-                $this->sSYSTEM->_GET['sCategory'] = $sCategoryID = $getArticle["category"]["id"];
+                $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($sArticleID);
+                $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
             }
             if (!empty($sCategoryID)) {
                 $getArticle["categoryID"] = $sCategoryID;

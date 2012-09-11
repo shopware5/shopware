@@ -1403,9 +1403,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data = $this->getRepository()->getArticleQuery($id)->getArrayResult();
 
-        $sql= "SELECT categoryID FROM s_articles_categories WHERE articleID = ? ORDER BY id ASC";
-        $categorySort = Shopware()->Db()->fetchCol($sql, array($id));
-
         $data[0]['mainPrices'] = $this->getPrices($data[0]['mainDetail']['id'], $data[0]['tax']);
         $data[0]['attribute'] = $this->getRepository()->getAttributesQuery($data[0]['mainDetail']['id'])->getArrayResult();
 
@@ -1418,6 +1415,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         } else {
             $data[0]['configuratorSet'] = null;
         }
+
+        $sql= "SELECT categoryID FROM s_articles_categories WHERE articleID = ? ORDER BY id ASC";
+        $categorySort = Shopware()->Db()->fetchCol($sql, array($id));
 
         $categories = array();
         foreach($categorySort as $sort) {
@@ -3388,10 +3388,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-   		$shopId = (int) $this->Request()->getParam('shopId');
-   		$articleId = (int) $this->Request()->getParam('articleId');
+   		$shopId = (int)$this->Request()->getParam('shopId');
+   		$articleId = (int)$this->Request()->getParam('articleId');
 
-        $shopId = $this->Request()->getParam('shopId');
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);
         $shop->registerResources(Shopware()->Bootstrap());
