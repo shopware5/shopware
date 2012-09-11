@@ -91,10 +91,10 @@
 					{* Captcha *}
 					{block name='frontend_detail_comment_input_captcha'}
 					<div class="captcha">
-						<img src="{url controller='captcha' rand=$rand}" alt="" />
+						<img src="{url controller='captcha' rand=$rand forceSecure}" alt="Captcha" />
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
-							<input type="text" name="sCaptcha"  class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
+							<input type="text" name="sCaptcha"class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
 							<input type="hidden" name="sRand"  value="{$rand}" />
 							<div class="clear">&nbsp;</div>
 						</div>
