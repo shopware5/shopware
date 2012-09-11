@@ -102,7 +102,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Retrieve a list of listeners registered to a given event.
      *
      * @param   $event
-     * @return  array
+     * @return  Enlight_Event_Handler[]
      */
     public function getListeners($event)
     {
@@ -236,7 +236,9 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
         foreach ($this->getListeners($event) as $listener) {
-            $eventArgs->setReturn($listener->execute($eventArgs));
+            if (null !== ($return = $listener->execute($eventArgs))) {
+                $eventArgs->setReturn($return);
+            }
         }
         $eventArgs->setProcessed(true);
         return $eventArgs->getReturn();
