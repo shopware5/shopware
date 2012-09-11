@@ -641,7 +641,7 @@ class Media extends ModelEntity
         }
 
         //load the configured album thumbnail sizes
-        $sizes = $album->getSettings()->getThumbnailSize();
+        $sizes = $album->getSettings()->getThumbnailSize();       
 
         //iterate the sizes and create the thumbnails
         foreach ($sizes as $size) {
@@ -653,15 +653,21 @@ class Media extends ModelEntity
                 continue;
             }
 
+            // To avoid any confusing, we're mapping the index based to an association based array and remove the index based elements.
+            $data['width'] = $data[0];
+            $data['height'] = $data[1];
+            unset($data[0]);
+            unset($data[1]);
+
             //continue if configured size is not numeric
-            if (!is_numeric($data[0])) {
+            if (!is_numeric($data['width'])) {
                 continue;
             }
             //if no height configured, set 0
-            $data[1] = (isset($data[1])) ? $data[1] : 0;
+            $data['height'] = (isset($data['height'])) ? $data['height'] : 0;
 
             //create thumbnail with the configured size
-            $this->createThumbnail((int) $data[0], (int) $data[1]);
+            $this->createThumbnail((int) $data['width'], (int) $data['height']);
         }
     }
 
@@ -866,6 +872,8 @@ class Media extends ModelEntity
      */
     private function createThumbnail($width, $height)
     {
+
+
         $image = $this->createFileImage();
         $originalSize = getimagesize($this->path);
 
@@ -934,23 +942,27 @@ class Media extends ModelEntity
      */
     private function calculateThumbnailSize(array $originalSize, $width, $height)
     {
-        if ($height === 0 || empty($height)) {
-            $proportion = $originalSize[0] / $originalSize[1];
-            $newWidth = min($originalSize[0], $width);
-            $newHeight = round($newWidth / $proportion, 0);
+        // Source image size
+        $srcWidth = $originalSize[0];
+        $srcHeight = $originalSize[1];
+
+        // Calculate the scale factor
+        if($width === 0) {
+            $factor = $height / $srcHeight;
+        } else if($height === 0) {
+            $factor = $width / $srcWidth;
         } else {
-            //The proportion is calculated by Greater Value / Low value
-            $proportion = max($originalSize[0], $originalSize[1]) / min($originalSize[0], $originalSize[1]);
-            //if original width bigger than the original height, use the original width otherwise calculate the new width by the proportion
-            $newWidth = ($originalSize[0] > $originalSize[1]) ? $width : round($height / $proportion, 0);
-            //if original height bigger than the original width, use the original height otherwise calculate the new height by the proportion
-            $newHeight = ($originalSize[1] > $originalSize[0]) ? $height : round($width / $proportion, 0);
+            $factor = min($width / $srcWidth, $height / $srcHeight);
         }
 
+        // Get the destination size
+        $dstWidth = round($srcWidth * $factor);
+        $dstHeight = round($srcHeight * $factor);
+
         return array(
-            'width' => $newWidth,
-            'height' => $newHeight,
-            'proportion' => $proportion
+            'width' => $dstWidth,
+            'height' => $dstHeight,
+            'proportion' => $factor
         );
     }
 
