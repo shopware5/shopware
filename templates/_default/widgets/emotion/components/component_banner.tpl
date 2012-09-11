@@ -7,7 +7,7 @@
         <img src="{link file=$Data.file}" />
     {/if}
     {if $Data.bannerMapping}
-        <div class="banner-mapping">
+        <div class="banner-mapping" style="height: {$sElementHeight}px;width: {$sElementWidth}px">
         {foreach $Data.bannerMapping as $mapping}
                 <a href="{$mapping.link.linkDetails}" class="emotion-banner-mapping" style="width:{$mapping.width}px;height:{$mapping.height}px;left:{$mapping.x}px;top:{$mapping.y}px"></a>
         {/foreach}

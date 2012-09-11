@@ -2687,7 +2687,7 @@ div#notes .table_row .title {width: 450px;}
 	------------------------ */
 .emotion-element .banner-element .mapping {position: relative;}
 .emotion-element .banner-element .banner-mapping {position: absolute;top: 0; left: 0;}
-.emotion-element .banner-element .banner-mapping a {display: block;position: absolute;text-underline: none;}
+.emotion-element .banner-element .banner-mapping a {display: block;position: absolute;text-underline: none;z-index: 10; cursor: pointer }
 
 /** ERROR MESSAGES **/
 input.instyle_success[type="text"], input.instyle_success[type="password"],
