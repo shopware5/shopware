@@ -1649,6 +1649,22 @@ div#searchresults a.resultall {margin: 0 14px; width: 490px;}
 }
 /** BUYBOX **/
 #buybox #detailCartButton {border-top: 1px solid #f7d5c5;padding-top: 20px;}
+#buybox #detailCartButton .transparent {
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=50);
+
+    /* Netscape */
+    -moz-opacity: 0.5;
+
+    /* Safari 1.x */
+    -khtml-opacity: 0.5;
+
+    /* Good browsers */
+    opacity: 0.5;
+}
 
 /* BUYBOX SELECT */
 #buybox .config_select select,
