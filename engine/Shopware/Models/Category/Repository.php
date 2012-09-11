@@ -204,13 +204,14 @@ class Repository extends TreeRepository
     }
 
     /**
-     * Helper function to create the query builder for the "getActiveByParentIdQuery, getActiveChildrenByIdQuery, getActiveByIdQuery" functions.
+     * Helper function to create the query builder for the
+     * "getActiveByParentIdQuery, getActiveChildrenByIdQuery, getActiveByIdQuery" functions.
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param null $customerGroupId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getActiveQueryBuilder($customerGroupId = null)
+    protected function getActiveQueryBuilder($customerGroupId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $articleSelect = $this->getActiveArticleQueryBuilder()->getDQL();
@@ -311,6 +312,36 @@ class Repository extends TreeRepository
     }
 
     /**
+     * @param Category|int $category
+     * @return int
+     */
+    public  function getActiveArticleIdByCategoryId($category)
+    {
+        if (!is_object($category)) {
+            $category = $this->find($category);
+        }
+        if($category === null) {
+            return null;
+        }
+
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->from($this->getEntityName(), 'c');
+        $builder->select('MIN(a.id)')
+            ->join('c.articles', 'a', Expr\Join::WITH, 'a.active=1');
+
+        $builder->where('c.active=1');
+        $builder->andWhere('c.right <= :right AND c.left >= :left');
+        $builder->setParameters(array(
+            'right' => $category->getRight(),
+            'left' => $category->getLeft(),
+        ));
+
+        return $builder->getQuery()->getResult(
+            \Doctrine\ORM\Query::HYDRATE_SINGLE_SCALAR
+        );
+    }
+
+    /**
      * Returns the \Doctrine\ORM\Query to select all blog categories for example for the blog backend list
      *
      * @param $parentId
@@ -348,7 +379,8 @@ class Repository extends TreeRepository
 
 
     /**
-     * Returns the \Doctrine\ORM\Query to select all blog categories and parent categories with blog child elements for example for the blog backend tree
+     * Returns the \Doctrine\ORM\Query to select all blog categories and parent categories
+     * with blog child elements for example for the blog backend tree
      *
      * @param $filterBy
      * @return \Doctrine\ORM\Query

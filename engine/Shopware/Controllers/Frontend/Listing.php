@@ -50,16 +50,16 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
-//        } elseif (Shopware()->Config()->categoryDetailLink
-//          && !empty($categoryArticles['sArticles']) && count($categoryArticles['sArticles']) == 1) {
-//            $categoryArticle = reset($categoryArticles['sArticles']);
-//            $location = array(
-//                'sViewport' => 'detail',
-//                'sArticle' => $categoryArticle['articleID'],
-//                'title' => $categoryArticle['articleName']
-//            );
-        } elseif (!$categoryContent) {
+        } elseif (empty($categoryContent)) {
             $location = array('controller' => 'index');
+        } elseif (Shopware()->Config()->categoryDetailLink && $categoryContent['articleCount'] == 1) {
+            /**@var $repository \Shopware\Models\Category\Repository*/
+            $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+            $articleId = $repository->getActiveArticleIdByCategoryId($categoryContent['id']);
+            $location = array(
+                'sViewport' => 'detail',
+                'sArticle' => $articleId
+            );
         }
         if (isset($location)) {
             return $this->redirect($location, array('code' => 301));
