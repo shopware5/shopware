@@ -1,21 +1,44 @@
-Shopware Github Repository
+Shopware 4 Repository
 =============
 [Shopware AG](http://www.shopware.de)
 
 
+About shopware 4
+---
 
-We use this library on GitHub when rendering your README or any other
-rich text file.
+
+Shopware is a next generation open source ecommerce software made in germany.
+
+Based on newest technology like Symfony 2, Doctrine  2 and Zend-Framework it comes as a perfect platform for your ecommerce projects.
+
+Shopware 4 provides an event driven plugin-system, so you can add own modifications easily.
+
+Further you can hook into many existing objects and methods via an apo style syntax.
+
+## Screenshot (ExtJS based Backend) ##
+
+
+![](http://www.shopware.de/templates/0/de/media/img/default/store/sw4_backend_bg.jpg)
 
 
 
 How to report bugs / feature requests?
 ----------------------------
 
+You can either use the Github issue tracker or our jira based web-frontend to submit tickets.
+
+* [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
+
 
 
 How to contribute?
 -----------------
+
+Shopware is available under dual license (AGPL v3 and propratry license). If you want to contribute code (features or bugfixes) you have to create a pull request that considers a valid license information. You can either contribute your code under new bsd or MIT license.
+
+If you want to contribute to the backend part of shopware and you got in touch with extjs-based code this parts must be licensed under GPL V3, this is due to the license terms of sencha.
+
+If you are not sure, how to contribute code under right license and right way you can contact us under info@shopware.de. Further you can close a contribution aggreement with us to get more safety around your code submits.
 
 
 
