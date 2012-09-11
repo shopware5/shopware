@@ -108,7 +108,7 @@
 
 				{* Cart button *}
 				{block name='frontend_detail_buy_button'}
-					<input type="submit" id="basketButton" {if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected}class="transparent"{/if} title="{$sArticle.articleName} {s name="DetailBuyActionAdd"}{/s}" name="{s name="DetailBuyActionAdd"}{/s}" value="{s name="DetailBuyActionAdd"}{/s}" style="{$buy_box_display}" />
+					<input type="submit" id="basketButton"{if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected} class="transparent" disabled="disabled" {/if}title="{$sArticle.articleName} {s name="DetailBuyActionAdd"}{/s}" name="{s name="DetailBuyActionAdd"}{/s}" value="{s name="DetailBuyActionAdd"}{/s}" style="{$buy_box_display}" />
 				{/block}
 
 				<div class="space">&nbsp;</div>
