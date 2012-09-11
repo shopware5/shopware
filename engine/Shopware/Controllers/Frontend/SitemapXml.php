@@ -135,15 +135,16 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $sql = "
 			SELECT
 				a.id,
-				a.name,
 				DATE(a.changetime) as changed
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles as a
-			WHERE a.active=1
-			AND c.id=?
+			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
+			WHERE c.id=?
 	        AND c2.left >= c.left
 	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+	        AND c2.active = 1
+	        AND ac.articleID = a.id
+	        AND ac.categoryID = c2.id
+	        AND a.active=1
+	        GROUP BY a.id
 		";
         $result = Shopware()->Db()->query($sql, array($parentId));
         if (!$result->rowCount()) {
@@ -152,8 +153,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         while ($url = $result->fetch()) {
             $url['link'] = $this->Front()->Router()->assemble(array(
                 'sViewport' => 'detail',
-                'sArticle' => $url['id'],
-                'title' => $url['name']
+                'sArticle' => $url['id']
             ));
             $this->printArticleUrls($url);
         }
