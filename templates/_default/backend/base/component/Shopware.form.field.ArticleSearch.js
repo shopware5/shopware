@@ -200,6 +200,12 @@ Ext.define('Shopware.form.field.ArticleSearch',
     searchScope: ['articles','variants','configurator'],
 
     /**
+     * Form field configuration
+     * @object
+     */
+    formFieldConfig: {},
+
+    /**
      * Initializes the Live Article Search component
      *
      * @public
@@ -349,8 +355,9 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * @return [object] input -  created Ext.form.field.Trigger
      */
     createSearchField: function() {
-        var me = this,
-            input = Ext.create('Ext.form.field.Trigger', {
+        var me = this;
+
+        var fieldConfig = Ext.apply({
             componentLayout: 'textfield',
             triggerCls: 'reset',
             emptyText: '{s name=search_default_text}Search...{/s}',
@@ -372,7 +379,9 @@ Ext.define('Shopware.form.field.ArticleSearch',
                 keyup: me.onSearchKeyUp,
                 blur: me.onSearchBlur
             }
-        });
+        }, me.formFieldConfig);
+
+        var input = Ext.create('Ext.form.field.Trigger', fieldConfig);
         return input;
     },
 
