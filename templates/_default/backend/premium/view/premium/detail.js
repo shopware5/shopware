@@ -83,18 +83,17 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
             items:[
                 {
                     xtype:'articlesearch',
-					searchFieldName: 'orderNumber',
-					returnValue: 'number',
+                    searchFieldName: 'orderNumber',
+                    returnValue: 'number',
                     name:'orderNumber',
                     fieldLabel:'{s name=form_ordernumber}Order number{/s}',
                     supportText:'{s name=form_ordernumber/supporttext}The order number of the article that will be added as premium article.{/s}',
                     allowBlank:false,
-					required: true,
-                    width: '100%',
+                    required: true,
                     formFieldConfig: {
-                        width: (Ext.isIE ? 435 : '100%'),
                         labelStyle:'font-weight: 700; text-align: right;',
-                        labelWidth:130
+                        labelWidth:130,
+                        fieldStyle: 'width: 435px'
                     }
                 },
                 {
