@@ -19,11 +19,11 @@
 	{if $country.states}
 		<div class="basket_country country_states {if $country.id != $sCountry.id}hidden{/if}">
 			<p>
-				<label for="country_{$country.id}_states">{se name='RegisterBillingLabelState' force}Bundesstaat:{/se} </label>
+				<label for="country_{$country.id}_states">{se name='RegisterBillingLabelState'}{/se}</label>
 			</p>
 			
 			<select {if $country.id != $sCountry.id}disabled="disabled"{/if} name="sState" id="country_{$country.id}_states" class="auto_submit text">
-				<option value="" selected="selected">{s name='StateSelection' force}Bitte w&auml;hlen:{/s}</option>
+				<option value="" selected="selected">{s name='StateSelection'}{/s}</option>
 				{foreach from=$country.states item=state}
 					<option value="{$state.id}" {if $state.id eq $sState.id || $state.id eq $sState}selected="selected"{/if}>
 						{$state.name}
@@ -44,7 +44,7 @@
 		<label for="basket_payment_list">{se name="ShippingLabelPayment"}{/se}</label>
 	</p>
 	
-	<select id="basket_country_list" name="sPayment" class="auto_submit">
+	<select id="basket_payment_list" name="sPayment" class="auto_submit">
 		{foreach from=$sPayments item=payment}
 			<option value="{$payment.id}" {if $payment.id eq $sPayment.id}selected{/if}>
 				{$payment.description}
@@ -60,10 +60,10 @@
 	<p>
 		<label for="basket_dispatch_list">{se name="ShipppingLabelDispatch"}{/se}</label>
 	</p>	
-	<select id="basket_country_list" name="sDispatch" class="auto_submit">
+	<select id="basket_dispatch_list" name="sDispatch" class="auto_submit">
 	{if $sDispatches}
 		{foreach from=$sDispatches item=dispatch}
-			<option value="{$dispatch.id}" {if $dispatch.id eq $sDispatches.id}selected{/if}>
+			<option value="{$dispatch.id}" {if $dispatch.id eq $sDispatch.id}selected{/if}>
 				{$dispatch.name}
 			</option>
 		{/foreach}
