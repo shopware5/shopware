@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     field[action]();
                 });
                 Ext.each(requiredFields, function(field) {
-                    field['allowBlank'] = !!value;
+                    field.allowBlank = !value;
                 });
                 mainField.setValue(value ? null : 1);
                 if(!value) {
