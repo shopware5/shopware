@@ -146,9 +146,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             return;
         }
 
-        if (!Shopware()->Bootstrap()->issetResource('Db')
-            || !Shopware()->Bootstrap()->issetResource('Shop')
-        ) {
+        if (!Shopware()->Bootstrap()->issetResource('Shop')) {
             return;
         }
 
@@ -208,6 +206,10 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
         if (strpos($url, '/backend') === 0 || strpos($url, '/api') === 0) {
             return;
         }
+        if (!Shopware()->Bootstrap()->issetResource('Shop')) {
+            return;
+        }
+
         $shop = Shopware()->Shop();
         $sql = 'SELECT org_path, main FROM s_core_rewrite_urls WHERE path LIKE ? AND subshopID =?';
         $result = Shopware()->Db()->fetchRow($sql, array(
