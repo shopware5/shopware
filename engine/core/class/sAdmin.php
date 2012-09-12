@@ -110,119 +110,97 @@ class sAdmin
 	 */
 	public function sValidateVat()
 	{
-		if(empty($this->sSYSTEM->sCONFIG['sVATCHECKENDABLED']))
-		{
-			return array();
-		}
-		if(empty($this->sSYSTEM->_POST["ustid"])&&empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED']))
-		{
-			return array();
-		}
+        if (empty($this->sSYSTEM->sCONFIG['sVATCHECKENDABLED'])) {
+            return array();
+        }
+        if (empty($this->sSYSTEM->_POST["ustid"]) && empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED'])) {
+            return array();
+        }
 
-		$messages = array();
-		$ustid = preg_replace('#[^0-9A-Z\+\*\.]#','',strtoupper($this->sSYSTEM->_POST['ustid']));
-		$country = $this->sSYSTEM->sDB_CONNECTION->GetOne(
-			'SELECT countryiso FROM s_core_countries WHERE id=?',
-			array($this->sSYSTEM->_POST['country'])
-		);
-		if(empty($this->sSYSTEM->_POST["ustid"]))
-		{
-			$messages[] = $this->snippetObject->get('VatFailureEmpty','Please enter a vat id');
-		}
-		elseif(empty($ustid)||!preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustid, $vat))
-		{
-			$messages[] = $this->snippetObject->get('VatFailureInvalid','The vat id entered is invalid');
-		}
-		elseif(empty($country)||$country!=$vat[1])
-		{
-			$field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields','Company,City,Zip,Street,Country'));
-			$field_name = isset($field_names[4]) ? $field_names[4] : 'Land';
-			$messages[] = sprintf($this->snippetObject->get('VatFailureErrorField','The field %s does not match to the vat id entered'), $field_name);
-		}
-		elseif ($country=='DE')
-		{
+        $messages = array();
+        $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->sSYSTEM->_POST['ustid']));
+        $country = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+            'SELECT countryiso FROM s_core_countries WHERE id=?',
+            array($this->sSYSTEM->_POST['country'])
+        );
+        if (empty($this->sSYSTEM->_POST["ustid"])) {
+            $messages[] = $this->snippetObject->get('VatFailureEmpty', 'Please enter a vat id');
+        } elseif (empty($ustid) || !preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustid, $vat)) {
+            $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+        }
+        elseif (empty($country) || $country != $vat[1]) {
+            $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
+            $field_name = isset($field_names[4]) ? $field_names[4] : 'Land';
+            $messages[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $field_name);
+        }
+        elseif ($country == 'DE') {
 
-		}
-		elseif(!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER']))
-		{
-			$data = array(
-				'UstId_1' => $this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'],
-				'UstId_2' => $vat[1].$vat[2],
-				'Firmenname' => '',
-				'Ort' => '',
-				'PLZ' => '',
-				'Strasse' => '',
-				'Druck' => empty($this->sSYSTEM->sCONFIG['sVATCHECKCONFIRMATION']) ? 'nein' : 'ja'
-			);
+        }
+        elseif (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'])) {
+            $data = array(
+                'UstId_1' => $this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'],
+                'UstId_2' => $vat[1] . $vat[2],
+                'Firmenname' => '',
+                'Ort' => '',
+                'PLZ' => '',
+                'Strasse' => '',
+                'Druck' => empty($this->sSYSTEM->sCONFIG['sVATCHECKCONFIRMATION']) ? 'nein' : 'ja'
+            );
 
-			if(!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCED'])
-			  && strpos($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDCOUNTRIES'], $vat[1])!==false)
-			{
-				$data['Firmenname'] = $this->sSYSTEM->_POST['company'];
-				$data['Ort'] = $this->sSYSTEM->_POST['city'];
-				$data['PLZ'] = $this->sSYSTEM->_POST['zipcode'];
-				$data['Strasse'] = $this->sSYSTEM->_POST['street'].' '.$this->sSYSTEM->_POST['streetnumber'];
-			}
+            if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCED'])
+                && strpos($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDCOUNTRIES'], $vat[1]) !== false
+            ) {
+                $data['Firmenname'] = $this->sSYSTEM->_POST['company'];
+                $data['Ort'] = $this->sSYSTEM->_POST['city'];
+                $data['PLZ'] = $this->sSYSTEM->_POST['zipcode'];
+                $data['Strasse'] = $this->sSYSTEM->_POST['street'] . ' ' . $this->sSYSTEM->_POST['streetnumber'];
+            }
 
-			$request = 'http://evatr.bff-online.de/evatrRPC?';
-			$request .= http_build_query($data,'','&');
+            $request = 'http://evatr.bff-online.de/evatrRPC?';
+            $request .= http_build_query($data, '', '&');
 
-			$context = stream_context_create(array('http' => array(
-			    'method' => 'GET',
-			    'header' => 'Content-Type: text/html; charset=ISO-8859-1',
-			    'timeout' => 5,
-			    'user_agent'=> 'Shopware/'.$this->sSYSTEM->sCONFIG['sVERSION']
-			)));
-			$response = @file_get_contents($request, false, $context);
+            $context = stream_context_create(array('http' => array(
+                'method' => 'GET',
+                'header' => 'Content-Type: text/html; charset=utf-8',
+                'timeout' => 5,
+                'user_agent' => 'Shopware/' . $this->sSYSTEM->sCONFIG['sVERSION']
+            )));
+            $response = @file_get_contents($request, false, $context);
 
-			$reg = '#<param>\s*<value><array><data>\s*<value><string>([^<]*)</string></value>\s*<value><string>([^<]*)</string></value>\s*</data></array></value>\s*</param>#msi';
-			if(!empty($response)&&preg_match_all($reg,$response,$matches))
-			{
-				$response = array_combine($matches[1], $matches[2]);
-				$messages = $this->sCheckVatResponse($response);
-			}
-			elseif(empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE']))
-			{
-				$messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 10);
-			}
-		}
-		elseif(false&&class_exists('SoapClient'))
-		{
-			$url = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService.wsdl';
-			if(!file_get_contents($url))
-			{
-				$messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 11);
-			}
-			else
-			{
-				$client = new SoapClient($url, array('exceptions'=>0,'connection_timeout'=>5));
-				$response = $client->checkVat(array('countryCode'=>$vat[1], 'vatNumber'=>$vat[2]));
-			}
-			if(is_soap_fault($response))
-			{
-				$messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 12);
-				if(!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG']))
-				{
-					$messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
-				}
-			}
-			elseif(empty($response->valid))
-			{
-				$messages[] = $this->snippetObject->get('VatFailureInvalid','The vat id entered is invalid');
-			}
-		}
-		else
-		{
-			$messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 20);
-		}
-		if(!empty($messages)&&empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED']))
-		{
-			$messages[] = $this->snippetObject->get('VatFailureErrorInfo',''); // todo@all In the case vat is not required in registration, this info message should occur
-		}
-		$messages = Enlight()->Events()->filter('Shopware_Modules_Admin_CheckTaxID_MessagesFilter', $messages,
-		  array('subject'=>$this,"post"=>$this->sSYSTEM->_POST)
-		);
-		return $messages;
+            $reg = '#<param>\s*<value><array><data>\s*<value><string>([^<]*)</string></value>\s*<value><string>([^<]*)</string></value>\s*</data></array></value>\s*</param>#msi';
+            if (!empty($response) && preg_match_all($reg, $response, $matches)) {
+                $response = array_combine($matches[1], $matches[2]);
+                $messages = $this->sCheckVatResponse($response);
+            } elseif (empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE'])) {
+                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 10);
+            }
+        } elseif (false && class_exists('SoapClient')) {
+            $url = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService.wsdl';
+            if (!file_get_contents($url)) {
+                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 11);
+            } else {
+                $client = new SoapClient($url, array('exceptions' => 0, 'connection_timeout' => 5));
+                $response = $client->checkVat(array('countryCode' => $vat[1], 'vatNumber' => $vat[2]));
+            }
+            if (is_soap_fault($response)) {
+                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 12);
+                if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG'])) {
+                    $messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
+                }
+            } elseif (empty($response->valid)) {
+                $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+            }
+        }
+        else {
+            $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 20);
+        }
+        if (!empty($messages) && empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED'])) {
+            $messages[] = $this->snippetObject->get('VatFailureErrorInfo', ''); // todo@all In the case vat is not required in registration, this info message should occur
+        }
+        $messages = Enlight()->Events()->filter('Shopware_Modules_Admin_CheckTaxID_MessagesFilter', $messages,
+            array('subject' => $this, "post" => $this->sSYSTEM->_POST)
+        );
+        return $messages;
 	}
 
 	/**
@@ -232,18 +210,14 @@ class sAdmin
 	 */
 	public function sCheckVatResponse ($response)
 	{
-		if(!empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE']))
-		{
-			if(in_array($response['ErrorCode'], array(999, 200, 205, 218, 208, 217, 219)))
-			{
-				return array();
-			}
-		}
+        if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE'])) {
+            if (in_array($response['ErrorCode'], array(999, 205, 218, 208, 217, 219))) {
+                return array();
+            }
+        }
         // todo@all remove if no longer needed, else fix this unicode mess
-		if(!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG']))
-		{
-			switch ($response['ErrorCode'])
-			{
+        if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG'])) {
+            switch ($response['ErrorCode']) {
 				case 200: break;
 				case 201: $msg = 'Die eingegebene USt-IdNr. ist ungültig.'; break;
 				case 202: $msg = 'Die eingegebene USt-IdNr. ist ungültig. Sie ist nicht in der Unternehmerdatei des betreffenden EU-Mitgliedstaates registriert.'; break;
@@ -269,43 +243,42 @@ class sAdmin
 				case 205: $msg = 'Ihre Anfrage kann derzeit durch den angefragten EU-Mitgliedstaat oder aus anderen Gründen nicht beantwortet werden'; break;
 
 				default:  $msg = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 30); break;
-			}
-		}
-		else
-		{
-			switch ($response['ErrorCode'])
-			{
-				case 200: break;
-				case 201:
-				case 202:
-				case 204:
-				case 209:
-				case 210:
-				case 211:
-				case 212: $msg = $this->snippetObject->get('VatFailureInvalid','The vat id entered is invalid'); break;
-				case 203: $msg = sprintf($this->snippetObject->get('VatFailureDate','The vat id entered is invalid.Is valid from %s'), $response['Gueltig_ab']); break;
-				default:  $msg = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 31); break;
-			}
-		}
-		$result = array();
-		if(!empty($msg))
-		{
-			$result[] = $msg;
-		}
-		else
-		{
-			$fields = array('Erg_Name', 'Erg_Ort', 'Erg_PLZ', 'Erg_Str');
-			$field_names = explode(',',$this->snippetObject->get('VatFailureErrorFields','Company,City,Zip,Street,Country'));
-			foreach ($fields as $key=>$field)
-			{
-				if(isset($response[$field]) && strpos($this->sSYSTEM->sCONFIG['sVATCHECKVALIDRESPONSE'], $response[$field]) === false)
-				{
-					$name = isset($field_names[$key]) ? $field_names[$key] : $field;
-					$result[] = sprintf($this->snippetObject->get('VatFailureErrorField','The field %s does not match to the vat id entered'), $name);
-				}
-			}
-		}
-		return $result;
+            }
+        } else {
+            switch ($response['ErrorCode']) {
+                case 200:
+                    break;
+                case 201:
+                case 202:
+                case 204:
+                case 209:
+                case 210:
+                case 211:
+                case 212:
+                    $msg = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+                    break;
+                case 203:
+                    $msg = sprintf($this->snippetObject->get('VatFailureDate', 'The vat id entered is invalid.Is valid from %s'), $response['Gueltig_ab']);
+                    break;
+                default:
+                    $msg = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 31);
+                    break;
+            }
+        }
+        $result = array();
+        if (!empty($msg)) {
+            $result[] = $msg;
+        } else {
+            $fields = array('Erg_Name', 'Erg_Ort', 'Erg_PLZ', 'Erg_Str');
+            $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
+            foreach ($fields as $key => $field) {
+                if (isset($response[$field]) && strpos($this->sSYSTEM->sCONFIG['sVATCHECKVALIDRESPONSE'], $response[$field]) === false) {
+                    $name = isset($field_names[$key]) ? $field_names[$key] : $field;
+                    $result[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $name);
+                }
+            }
+        }
+        return $result;
 	}
 	 /**
 	 * Get data from a certain payment
