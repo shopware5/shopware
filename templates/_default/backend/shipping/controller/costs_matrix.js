@@ -211,7 +211,8 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
     onDeleteCostsMatrixEntry: function(rowIndex, record) {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
-        store = this.getStore('Costsmatrix');
+        store = record.store;
+
         Ext.MessageBox.confirm('{s name=delete_dialog_title}Delete selected Costs Entry?{/s}',
             '{s name=delete_dialog_body}Do you really want delete this entry?{/s}',
             function (response) {
