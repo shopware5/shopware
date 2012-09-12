@@ -514,7 +514,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
                 $prefix   = 's' . $counter;
                 $localeId = $locale['localeId'];
-                $shopId   = $locale['localeId'];
+                $shopId   = $locale['shopId'];
                 $alias    = $locale['locale'] . $locale['shopId'];
 
                 $stmt->joinLeft(
