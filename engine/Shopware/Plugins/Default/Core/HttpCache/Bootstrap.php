@@ -72,9 +72,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 "frontend/blog 14400\r\n" .
                 "widgets/index 3600\r\n" .
                 "widgets/checkout 3600\r\n" .
-                "widgets/compare 3600\r\n".
-                "widgets/emotion 14400\r\n".
-                "widgets/recommendation 14400\r\n"
+                "widgets/compare 3600\r\n" .
+                "widgets/emotion 14400\r\n" .
+                "widgets/recommendation 14400\r\n" .
+                "widgets/lastArticles 3600\n"
         ));
         $form->setElement('textarea', 'noCacheControllers', array(
             'label' => 'NoCache-Controller / Tags',
@@ -119,7 +120,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function getVersion()
     {
-        return '1.0.3';
+        return '1.0.4';
     }
 
     /**
