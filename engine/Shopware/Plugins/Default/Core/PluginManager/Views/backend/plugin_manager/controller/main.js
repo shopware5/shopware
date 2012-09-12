@@ -63,7 +63,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         /*{if {acl_is_allowed privilege=read}}*/
         me.subApplication.pluginStore = me.getStore('Plugin');
         me.subApplication.pluginStore.getProxy().extraParams.category = 'Community';
-        me.subApplication.pluginStore.load();
+        me.subApplication.pluginStore.load({
+            callback: function(records, operation, success) {
+                if(success) {
+                    return true;
+                }
+
+                var error = Ext.util.Format.stripTags(operation.error);
+                Ext.MessageBox.alert('Error-Report', error);
+            }
+        });
 
         /** {if $storeApiAvailable} */
         me.subApplication.communityStore = me.getStore('Community');
