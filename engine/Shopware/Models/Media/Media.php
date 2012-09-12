@@ -728,7 +728,7 @@ class Media extends ModelEntity
      * @return bool
      */
     private function uploadFile()
-    {
+        {
         //move the file to the upload directory
         if ($this->file !== null) {
             //file already exists?
@@ -738,6 +738,11 @@ class Media extends ModelEntity
                 // Path in setFileInfo is set, before the file gets a unique ID here
                 // Therefore the path is updated here SW-2889
                 $this->path = str_replace(Shopware()->OldPath(), '', $this->getUploadDir() . $this->getFileName());
+
+                /**
+                 * SW-3805 - Hotfix for windows path's
+                 */
+                $this->path = str_replace('\\', '/', $this->path);
             }
             try {
                 $this->file->move($this->getUploadDir(), $this->getFileName());
