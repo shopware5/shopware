@@ -667,7 +667,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      *
      * @event
      */
-    onRemoveSimilarArticle: function(record) {
+    onRemoveSimilarArticle: function(grid, record) {
         var me = this,
             store = grid.getStore();
 
@@ -711,7 +711,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      *
      * @event
      */
-    onRemoveAccessoryArticle: function(record) {
+    onRemoveAccessoryArticle: function(grid, record) {
         var me = this,
             store = grid.getStore();
 

@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Similar', {
                             iconCls: 'sprite-minus-circle-frame',
                             tooltip: me.snippets.delete,
                             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                                me.fireEvent(me.removeEvent, record);
+                                me.fireEvent(me.removeEvent, view, record);
                             }
                         }
                     ]
