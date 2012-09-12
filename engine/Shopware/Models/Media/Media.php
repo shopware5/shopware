@@ -728,7 +728,7 @@ class Media extends ModelEntity
      * @return bool
      */
     private function uploadFile()
-        {
+    {
         //move the file to the upload directory
         if ($this->file !== null) {
             //file already exists?
