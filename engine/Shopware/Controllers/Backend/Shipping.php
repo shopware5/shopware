@@ -435,15 +435,16 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         // clear costs
         $this->deleteCostsMatrix($dispatchId);
 
+        $data = array();
         foreach ($costsMatrix as $param) {
             $shippingCostModel = new \Shopware\Models\Dispatch\ShippingCost();
             $param['dispatch'] = $dispatch;
             // set data to model and overwrite the image field
             $shippingCostModel->fromArray($param);
-
+            
             try {
                 $manager->persist($shippingCostModel);
-                $data = $this->getManager()->toArray($shippingCostModel);
+                $data[] = $this->getManager()->toArray($shippingCostModel);
             } catch(Exception $e) {
                 $errorMsg = $e->getMessage();
                 $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));

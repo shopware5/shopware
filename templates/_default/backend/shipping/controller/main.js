@@ -126,7 +126,6 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 me.mainWindow.show();
             }
         });
-
         me.callParent(arguments);
     },
 
@@ -298,7 +297,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             case 'sprite-minus-circle-frame':
                 me.onDeleteSingleShipping(view, rowIndex);
             break;
-            case 'sprite-document-copy':
+            case 'sprite-blue-document-copy':
                 me.onCloneShippingCosts(view, item, rowIndex);
                 break;
             default:
@@ -355,6 +354,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         costsmatrix.getProxy().extraParams = {
             dispatchId : record.get('id')
         };
+
         costsmatrix.load({
             scope: me,
             callback: function(records, operation, success) {
@@ -362,7 +362,9 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 Ext.each(records, function(record) {
                     var newRecord = record.copy();
                     Ext.data.Model.id(newRecord);
+                    newRecord.setId(null);
                     newRecords.push(newRecord);
+
                 });
                 costsmatrix.removeAll();
                 costsmatrix.add(newRecords);

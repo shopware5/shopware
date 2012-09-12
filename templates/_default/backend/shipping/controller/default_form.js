@@ -281,20 +281,23 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
         costsMatrixStore.getProxy().extraParams = {
             dispatchId : dispatchId
         };
-
         // clean the whole grid - to avoid headaches during updates, we build everything from scratch
         costsMatrixStore.each(function(element) {
             // remove id -> force to create a new entry
             element.setId(null);
+            Ext.data.Model.id(element);
             element.set('dispatchId', dispatchId);
             // mark as new
             element.phantom = true;
         });
 
         // trash and refill the store.
-        costsMatrixStore.sync();
-        // reload the data
-        costsMatrixStore.load();
+        costsMatrixStore.sync({
+            callback: function() {
+                // Syncing is done, so reload the store
+                costsMatrixStore.load();
+            }
+        });
     }
 });
  /*{/block}*/

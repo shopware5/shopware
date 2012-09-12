@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                     /* {/if} */
                      /* {if {acl_is_allowed privilege=create}} */
                     {
-                        iconCls :'sprite-document-copy',
+                        iconCls :'sprite-blue-document-copy',
                         cls     :'cloneButton',
                         tooltip :'{s name=grid_clone_tooltip}Duplicate these shipping costs{/s}',
                         style   : 'width: 16px; height: 16px'
