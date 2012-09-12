@@ -169,6 +169,81 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             setValue: function(value) {
                 this.getSearchField().setValue(value);
             },
+
+            /**
+             * Event listener method which will be fired if
+             * the user types into the search field.
+             *
+             * Shows the trigger button and starts the search.
+             *
+             * @event keyup
+             * @param [object] el - Ext.form.field.Trigger which has fired the event
+             * @param [object] event - Ext.EventObject
+             * @return void
+             */
+            onSearchKeyUp: function(el, event) {
+                var me = this;
+
+                el.setHideTrigger(el.getValue().length === 0);
+                clearTimeout(me.searchTimeout);
+
+                var value = el.getValue();
+
+                // Check if we're dealing with a link
+                if(value.substr(0,1) === '/' || Ext.isArray(value.match(/(http|https|shopware\.php)/))) {
+                    me.fireEvent('valueselect', me, value, value, value);
+                    return;
+                }
+
+                // Check if we've a value and the user did press the ESC key
+                if(event.keyCode === Ext.EventObject.ESC || !el.value) {
+                    event.preventDefault();
+                    el.setValue('');
+                    me.dropDownStore.filters.clear();
+                    me.getDropDownMenu().hide();
+                    return false;
+                }
+
+                var dropdown = me.getDropDownMenu(),
+                    selModel = dropdown.getSelectionModel(),
+                    record = selModel.getLastSelected(),
+                    curIndex = me.dropDownStore.indexOf(record),
+                    lastIndex = me.dropDownStore.getCount() - 1;
+
+
+                // Keyboard up pressed
+                if(event.keyCode === Ext.EventObject.UP) {
+                    if(curIndex === undefined) {
+                        selModel.select(0);
+                    } else {
+                        selModel.select(curIndex === 0 ? lastIndex : (curIndex - 1));
+                    }
+                }
+
+                // Keyboard down pressed
+                else if(event.keyCode === Ext.EventObject.DOWN) {
+                    if(curIndex == undefined) {
+                        selModel.select(0);
+                    } else {
+                        selModel.select(curIndex === lastIndex ? 0 : (curIndex + 1));
+                    }
+                }
+
+                // Keyboard enter pressed
+                else if(event.keyCode === Ext.EventObject.ENTER) {
+                    event.preventDefault();
+                    record && me.onSelectArticle(null, record);
+                }
+
+                // No special key was pressed, start searching...
+                else {
+                    me.searchTimeout = setTimeout(function() {
+                        me.dropDownStore.filters.clear();
+                        me.dropDownStore.filter('free', '%' + el.value + '%');
+                    }, me.searchBuffer);
+                }
+            },
+
             listeners: {
                 scope: me,
                 valueselect: function(value, record) {

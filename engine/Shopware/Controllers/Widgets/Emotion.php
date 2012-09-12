@@ -265,11 +265,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
-
+        
         if(!empty($data['link'])) {
-            preg_match('/^(http|https):\/\//', $data['link'], $matches);
+            preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
-            if(empty($matches)) {
+            if(empty($matches) && substr($data['link'], 0, 1) === '/') {
                 $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
             }
         }
@@ -278,13 +278,25 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if (!empty($mappings)) {
             foreach ($mappings as $key => $mapping) {
                 $number = $mapping['link'];
-                if (!empty($number)) {
-                    $mapping['link'] = $this->articleByNumber($number);
+
+                if(!empty($number)) {
+                    preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $number, $matches);
+
+                    if(empty($matches)) {
+                        if(substr($number, 0, 1) === '/') {
+                            $mapping['link'] = $this->Request()->getBaseUrl() . $number;
+                        } else {
+                            $mapping['link'] = $this->articleByNumber($number);
+                            $mapping['link'] = $mapping['link']['linkDetails'];
+                        }
+                    }
                 }
+
                 $mappings[$key] = $mapping;
             }
         }
         $data['bannerMapping'] = $mappings;
+        
         return $data;
     }
 
