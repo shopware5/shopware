@@ -100,7 +100,6 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
                 if (empty($result['type'])) $result['type'] = 'article';
                 if (!empty($result['image'])) {
                     $result['image'] = $basePath
-                                     . Shopware()->Config()->sARTICLEIMAGES
                                      . '/media/image/thumbnail/' . $result['image']
                                      . '_57x57.'
                                      . $result['extension'];

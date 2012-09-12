@@ -110,13 +110,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     protected $configSearchResultsPerPage;
 
     /**
-     * Last time the search index was updated
-     * @var datetime
-     * @default YYYY-MM-DD H:I:S
-     */
-    protected $configSearchLastUpdate;
-
-    /**
      * Interval to update the search index
      * @var int
      * @default 86400
@@ -313,7 +306,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             "sFUZZYSEARCHPRICEFILTER" => 'configSearchPriceFilter',
             "sFUZZYSEARCHSELECTPERPAGE" => 'configSearchSelectPerPage',
             "sFUZZYSEARCHRESULTSPERPAGE" => 'configSearchResultsPerPage',
-            "sFUZZYSEARCHLASTUPDATE" => 'configSearchLastUpdate',
             "sCACHESEARCH" => 'configSearchCache',
             "sBADWORDS" => 'configSearchBadWords'
         );
@@ -367,17 +359,19 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function validateCache($configuration = array(), $force = false)
     {
-        $cacheExecutionInterval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int)$this->configSearchCache;
-        $cacheCurrentTimeStamp = $this->database->fetchOne('SELECT NOW()');
-        $cacheLastExecutionTimeStamp = $this->configSearchLastUpdate;
+        $interval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int)$this->configSearchCache;
+        $sql = '
+            SELECT NOW() as current, cf.value as last,
+            (SELECT 1 FROM s_search_index LIMIT 1) as not_force
+            FROM s_core_config_elements ce, s_core_config_values cf
+            WHERE ce.name = \'fuzzysearchlastupdate\'
+            AND cf.element_id = ce.id AND cf.shop_id = 1
+        ';
+        $result = $this->database->fetchRow($sql);
+        $last = !empty($result['last']) ? unserialize($result['last']) : null;
 
-        // If index database table is empty - force index rebuild
-        if ($this->database->fetchOne("SELECT keywordID FROM s_search_index")==false) {
-            $force = true;
-        }
-
-        if (empty($cacheExecutionInterval) || $force == true
-            || strtotime($cacheLastExecutionTimeStamp) < strtotime($cacheCurrentTimeStamp) - $cacheExecutionInterval
+        if (empty($last) || empty($result['not_force'])
+            || strtotime($last) < strtotime($result['current']) - $interval
         ) {
             @ini_set("memory_limit", "256M");
             @set_time_limit(0);
