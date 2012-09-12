@@ -156,11 +156,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
 		$this->View()->sCountry = $this->getSelectedCountry();
         $this->View()->sState = $this->getSelectedState();
-        $this->View()->sBasket = $this->getBasket();
+        $this->View()->sPayment = $this->getSelectedPayment();
+        $this->View()->sUserData["payment"] = $this->View()->sPayment;
 
 		$this->View()->sDispatch = $this->getSelectedDispatch();
 		$this->View()->sPayments = $this->getPayments();
 		$this->View()->sDispatches = $this->getDispatches();
+
+        $this->View()->sBasket = $this->getBasket();
 
 		$this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
 		$this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
@@ -178,8 +181,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$this->View()->sShowEsdNote = $this->getEsdNote();
 		$this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
 		$this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
-        $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sUserData['payment'] = $this->View()->sPayment;
+
 		$this->saveTemporaryOrder();
 		
 		if($this->getMinimumCharge()) {
