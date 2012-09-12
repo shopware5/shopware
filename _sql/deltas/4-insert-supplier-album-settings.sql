@@ -1,6 +1,6 @@
 -- //
 
-INSERT INTO  `s_media_album_settings` (
+INSERT IGNORE INTO  `s_media_album_settings` (
     `id` ,
     `albumID` ,
     `create_thumbnails` ,
