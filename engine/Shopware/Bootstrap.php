@@ -258,7 +258,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         } else {
             $transportName = $options['type'];
         }
-        unset($options['type']);
+        unset($options['type'], $options['charset']);
 
         if ($transportName=='Zend_Mail_Transport_Smtp') {
             $transport = Enlight_Class::Instance($transportName, array($options['host'], $options));
