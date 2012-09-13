@@ -99,6 +99,10 @@
     	}
     }
 }
+.#{$prefix}window + .#{$prefix}mask {
+    top: -40px !important;
+    height: 200% !important;
+}
 
 // Default shadow
 .#{$prefix}css-shadow {
