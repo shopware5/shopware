@@ -1734,8 +1734,8 @@ class sShopwareImport
             $media->setAlbumId($article_image["albumID"]);
             $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', $article_image["albumID"]));
         } else {
-            $media->setAlbumId(-10);
-            $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', -10));
+            $media->setAlbumId(-1);
+            $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', -1));
         }
 
         // Create new article image object and set values
@@ -1749,7 +1749,7 @@ class sShopwareImport
         $articleImage->setWidth($width);
         $articleImage->setHeight($height);
         $articleImage->setHeight($height);
-        $articleImage->setPath($media->getPath());
+        $articleImage->setPath($article_image['name']);
         $articleImage->setExtension($media->getExtension());
         $articleImage->setPosition($article_image['position']);
         $articleImage->setMain($article_image['main']);
