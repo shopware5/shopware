@@ -69,7 +69,6 @@ Ext.define('Shopware.apps.Article', {
         'detail.Window',
         'detail.Settings',
         'detail.Properties',
-        'detail.PropertyValue',
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
