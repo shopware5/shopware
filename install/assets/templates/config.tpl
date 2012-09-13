@@ -5,8 +5,6 @@ return array(
         'password' => '%db.password%',
         'dbname' => '%db.database%',
         'host' => '%db.host%',
-        'port' => '%db.port%',
-        'charset' => 'utf8'
-    ),
-    'mail' => array('type' => 'sendmail')
+        'port' => '%db.port%'
+    )
 );
