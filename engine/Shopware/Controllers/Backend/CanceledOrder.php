@@ -268,11 +268,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                 ->leftJoin('voucher.codes', 'voucherCodes')
                 ->where('voucher.modus = ?1')
+                ->andWhere('voucher.id = :voucherId')
                 ->andWhere('voucher.validTo >= CURRENT_TIMESTAMP() OR voucher.validTo is NULL')
-                //->andWhere('voucher.validFrom <= now() OR voucher.validFrom is NULL')
                 ->andWhere('voucherCodes.customerId is NULL')
                 ->andWhere('voucherCodes.cashed = 0')
                 ->setParameter(1, 1)
+                ->setParameter('voucherId', $voucherId)
                 ->setMaxResults(1);
         $query = $builder->getQuery();
         $total = Shopware()->Models()->getQueryCount($query);
