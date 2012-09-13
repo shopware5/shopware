@@ -1042,10 +1042,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
-
-        $path = 'http://'. $shop->getHost() . $shop->getBasePath()  . '/media/image/';
+        $path = $this->Request()->getScheme().'://'.$this->Request()->getHttpHost().$this->Request()->getBasePath().'/media/image/';
 
         $sqlDetail = "
             SELECT
@@ -1056,7 +1053,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 ai.position,
                 ai.width,
                 ai.height,
-                GROUP_CONCAT(CONCAT(im.id, '|', mr.option_id, '|' , co.name)) as rules
+                GROUP_CONCAT(CONCAT(im.id, '|', mr.option_id, '|' , co.name, '|', cg.name)) as relations
 
             FROM s_articles_img ai
             INNER JOIN s_articles a ON ai.articleId = a.id
@@ -1065,6 +1062,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             LEFT JOIN s_article_img_mappings im ON im.image_id = ai.id
             LEFT JOIN s_article_img_mapping_rules mr ON mr.mapping_id = im.id
             LEFT JOIN s_article_configurator_options co ON mr.option_id = co.id
+            LEFT JOIN s_article_configurator_groups cg ON co.group_id = cg.id
 
             WHERE ai.parent_id is NULL
             AND ai.article_detail_id IS NULL
@@ -1076,28 +1074,30 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $result = $stmt->fetchAll();
 
         foreach ($result as &$image) {
-            if (empty($image['rules'])) {
+            if (empty($image['relations'])) {
                 continue;
             }
 
-            $rules = explode(',', $image['rules']);
+            $relations = explode(',', $image['relations']);
 
             $out = array();
-            foreach ($rules as $rule) {
+            foreach ($relations as $rule) {
                 $split = explode('|', $rule);
                 $ruleId   = $split[0];
                 $optionId = $split[1];
                 $name     = $split[2];
+                $groupName     = $split[3];
 
-                $out[$ruleId][] = $name;
+                $out[$ruleId][] = "$groupName:$name";
             }
 
-            $rules = '';
+            $relations = '';
             foreach ($out as $group) {
-                $rules .= "(" . implode(',', $group) . ")";
+                $name = $group['name'];
+                $relations .= "&{" . implode(',', $group) . "}";
             }
 
-            $image['rules'] = $rules;
+            $image['relations'] = $relations;
         }
 
         $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
@@ -1548,10 +1548,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             try {
                 $path = $this->load($imageData['image']);
             } catch (\Exception $e) {
-                $errors[] = "Could load image";
+                $errors[] = "Could not load image {$imageData['image']}";
                 continue;
             }
-
+            
             $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
             $media = new \Shopware\Models\Media\Media();
@@ -3146,7 +3146,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 if (!$get_handle = fopen($url, "r")) {
-                    return false;
+                    throw new \Exception("Could not open $url for reading");
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
