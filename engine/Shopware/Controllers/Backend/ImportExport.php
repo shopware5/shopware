@@ -551,7 +551,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 d.stockmin,
                 a.description,
                 a.description_long,
-                a.shippingtime,
+                d.shippingtime,
                 IF(a.datum='0000-00-00','',a.datum) as added,
                 IF(a.changetime='0000-00-00 00:00:00','',a.changetime) as `changed`,
                 IF(d.releasedate='0000-00-00','',d.releasedate) as releasedate,
@@ -1530,7 +1530,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         foreach ($results as $imageData) {
             if (empty($imageData['ordernumber']) || empty($imageData['image'])) {
-                continue;
+                continue; 
             }
             $counter++;
 
@@ -2018,13 +2018,17 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
-                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
+                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup'));
                 $detailData = $this->mapFields($article, $articleDetailMapping);
 
                 $updateData['mainDetail'] = $detailData;
 
                 if (isset($article['similar'])) {
                     $updateData['similar'] = $this->prepareImportXmlData($article['related']['similar']);
+                }
+
+                if (isset($article['propertyValues'])) {
+                    $updateData['propertyValues'] = $this->prepareImportXmlData($article['propertyValues']['propertyValue']);
                 }
 
                 if (isset($article['related'])) {
@@ -2086,7 +2090,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
-                'message' => $message,
+                'message' => "Error: $message",
             ));
             return;
         }
@@ -2174,6 +2178,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $result = $articleResource->update($updateData['id'], $updateData);
             }
 
+            $this->insertPrices($results);
 
             $this->getManager()->getConnection()->commit();
         } catch (\Exception $e) {
@@ -2198,7 +2203,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
-                'message' => $message,
+                'message' => "Error: $message",
             ));
             return;
         }
@@ -2207,6 +2212,74 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
              'success' => true,
              'message' => sprintf("Successfully saved: %s", count($articleIds))
         ));
+    }
+
+    /**
+     * Helper function which creates customerGroup-prices if available
+     * @param $results CSV Iterator
+     */
+    protected function insertPrices($results) {
+        // create pricegroup array
+        $customerPriceGroups = array();
+        foreach($results as $articleData) {
+            foreach($articleData as $key => $value) {
+                if(strpos($key, 'price_') !== false) {
+                    $customerPriceGroups[str_replace('price_', '', $key)] = $value;
+                }
+            }
+        }
+
+        $sql = "SELECT `groupkey` as `key`, `id`, `groupkey`, `taxinput` FROM s_core_customergroups WHERE mode=0 ORDER BY id ASC";
+        $localCustomerGroups = Shopware()->Db()->fetchAssoc($sql);
+
+        // Iter all given articles
+        foreach($results as $articleData) {
+            // get articleId and detailId by ordernumber
+            $sql = '
+                SELECT ad.id, articleID, t.tax
+                FROM s_articles_details ad
+                JOIN s_articles a
+                ON a.id = ad.articleID
+                JOIN s_core_tax t
+                ON t.id = a.taxID
+                WHERE ordernumber LIKE ?
+            ';
+            $stmt = Shopware()->Db()->query($sql, $articleData['ordernumber']);
+            $result = $stmt->fetch();
+            $tax = $result['tax'];
+
+            // delete old and save new prices
+            foreach($customerPriceGroups as $customerGroup => $price) {
+                $price = floatval(str_replace(',' , '.', $price));
+
+                // if customer group is a preTax group (taxinput=true), recalculate the price
+                $isPreTax = $localCustomerGroups[$customerGroup]['taxinput'];
+                if($isPreTax) {
+                    $price = $price/(100+$tax)*100;
+                }
+
+                // Delete old pricegroups, if detailID and 'from' match
+                Shopware()->Db()->delete('s_articles_prices', array(
+                    'pricegroup = ?'                => $customerGroup,
+                    'articledetailsID = ?'          => $result['id'],
+                    'CAST(`from` AS UNSIGNED) >= ?' => 1
+                ));
+
+                Shopware()->Db()->insert('s_articles_prices', array(
+                    'articleID'        => $result['articleID'],
+                    'articledetailsID' => $result['id'],
+                    'pricegroup'       => $customerGroup,
+                    'from'             => 1,
+                    'to'               => 'beliebig',
+                    'price'            => $price,
+                    'pseudoprice'      => 0,
+                    'baseprice'        => 0,
+                    'percent'          => 0
+                ));
+            }
+
+        }
+
     }
 
     /**
