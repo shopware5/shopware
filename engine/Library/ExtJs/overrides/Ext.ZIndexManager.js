@@ -20,10 +20,11 @@ Ext.override(Ext.ZIndexManager, {
             viewport = Shopware.app.Application.viewport;
 
         if (maskTarget.dom === document.body) {
-            viewSize.height = Math.max(document.body.scrollHeight, Ext.dom.Element.getDocumentHeight());
+            viewSize.height = Math.max(document.body.scrollHeight, Ext.dom.Element.getDocumentHeight()) + 1000;
             viewSize.width = Math.max(document.body.scrollWidth, viewSize.width);
         }
-        if (!me.mask) {
+        if (!me.mask && !Shopware.app.Application.globalMask) {
+
             var body = Ext.getBody();
             if(viewport) {
                 body = viewport.getActiveDesktop().getEl();
@@ -34,7 +35,12 @@ Ext.override(Ext.ZIndexManager, {
             });
             me.mask.setVisibilityMode(Ext.Element.DISPLAY);
             me.mask.on('click', me._onMaskClick, me);
+            Shopware.app.Application.globalMask = me.mask;
         }
+
+        // Terminate the mask comp which will be displayed
+        me.mask = me.mask || Shopware.app.Application.globalMask;
+
         me.mask.maskTarget = maskTarget;
         maskTarget.addCls(Ext.baseCSSPrefix + 'body-masked');
         me.mask.setBox(viewSize);

@@ -248,8 +248,6 @@ Ext.define('Enlight.app.Window', {
 
         me.callParent(arguments);
         me.isWindowOnFront = true;
-
-
         me.center();
 	},
 
