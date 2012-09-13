@@ -394,6 +394,8 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         }
         if (!empty($details['BUSINESS'])) {
             $data['billing']['company'] = $details['BUSINESS'];
+        } else {
+            $data['billing']['company'] = '';
         }
 
         $data['shipping'] = $data['billing'];
