@@ -5,6 +5,6 @@ return array(
         'password' => '%db.password%',
         'dbname' => '%db.name%',
         'host' => '%db.host%',
-        'charset' => 'utf8'
+        'port' => '%db.port%'
     ),
 );
