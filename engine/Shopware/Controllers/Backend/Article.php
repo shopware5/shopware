@@ -408,7 +408,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder->select(array('details'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->where('details.id != ?1')
-                ->andWhere('details.kind != 3')
                 ->andWhere('details.articleId = ?2')
                 ->setParameter(1, $mainDetail->getId())
                 ->setParameter(2, $articleId);
@@ -904,7 +903,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 return;
             }
             $this->removeAllConfiguratorVariants($articleId);
-            $this->restoreOldMainDetail($articleId);
             $this->View()->assign(array(
                 'success' => true
             ));
@@ -931,6 +929,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->getQuery()
                 ->getArrayResult();
 
+        /**@var $article \Shopware\Models\Article\Article*/
+        $article = $this->getRepository()->find($articleId);
+        $mainDetailId = $article->getMainDetail()->getId();
+
         if (empty($details)) {
             return;
         }
@@ -938,6 +940,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $detailIds = array();
         foreach($details as $detail) {
             if (empty($detail['configuratorOptions'])) {
+                continue;
+            }
+            if($mainDetailId == $detail['id']) {
                 continue;
             }
             $detailIds[] = $detail['id'];
@@ -1053,22 +1058,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->flush();
     }
 
-
-    /**
-     * Restores the old main detail of the passed article id.
-     */
-    protected function restoreOldMainDetail($articleId) {
-        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-        $mainDetail = $article->getDetails()->first();
-
-        if ($mainDetail instanceof \Shopware\Models\Article\Detail) {
-            $article->setMainDetail($mainDetail);
-            Shopware()->Models()->persist($mainDetail);
-            Shopware()->Models()->persist($article);
-            Shopware()->Models()->flush();
-        }
-    }
-
     /**
      * Event listener function of the article backend module. Fired when the user
      * edit or create an article variant and clicks the save button which displayed on bottom of the article
@@ -1123,12 +1112,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->persist($detail);
         Shopware()->Models()->flush();
         if ($data['standard']) {
-            $mainDetail = $article->getMainDetail();
-            $mainDetail->setKind(2);
-            $article->setMainDetail($detail);
-            Shopware()->Models()->persist($mainDetail);
-            Shopware()->Models()->persist($article);
-            Shopware()->Models()->flush();
+              //todo@hl Fix standard detail change
+//            $mainDetail = $article->getMainDetail();
+//            $mainDetail->setKind(2);
+//            $article->setMainDetail($detail);
+//            Shopware()->Models()->persist($mainDetail);
+//            Shopware()->Models()->persist($article);
+//            Shopware()->Models()->flush();
         }
         return $detail;
     }
@@ -1811,15 +1801,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $groups = $this->Request()->getParam('groups');
             $offset = $this->Request()->getParam('offset', 0);
             $limit = $this->Request()->getParam('limit', 50);
-            $totalCount = $this->Request()->getParam('totalCount', null);
 
             if ($offset === 0) {
                 $this->removeAllConfiguratorVariants($articleId);
-                $this->restoreOldMainDetail($articleId);
             }
 
             /**@var $article \Shopware\Models\Article\Article*/
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
+            $article = $this->getRepository()->find($articleId);
 
             $detailData = $this->getDetailDataForVariantGeneration($article);
 
@@ -1837,7 +1825,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $variants = Shopware()->Db()->fetchAll($sql);
 
-            $counter= $offset + 1;
+            $counter = $offset;
             $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
 
             //iterate all selected variants to insert them into the database
@@ -1846,24 +1834,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 if ($variantData === false) {
                     continue;
                 }
-                $counter++;
                 //merge the data with the original main detail data
                 $data = array_merge($detailData, $variantData);
-                $detail = new \Shopware\Models\Article\Detail();
+                if(!$counter) {
+                    $detail = $article->getMainDetail();
+                } else {
+                    $detail = new \Shopware\Models\Article\Detail();
+                }
                 $detail->fromArray($data);
                 $detail->setArticle($article);
                 Shopware()->Models()->persist($detail);
-            }
-            Shopware()->Models()->flush();
-
-            if (($offset + $limit) >= $totalCount) {
-                $mainDetail = $article->getMainDetail();
-                $mainDetail->setActive(0);
-                $mainDetail->setKind(3);
-                $newMainDetail = $this->getRepository()->getFirstArticleDetailWithKindTwoQuery($articleId)->getResult();
-                $article->setMainDetail($newMainDetail[0]);
-                Shopware()->Models()->persist($mainDetail);
-                Shopware()->Models()->persist($article);
+                $counter++;
             }
             Shopware()->Models()->flush();
 
@@ -1941,11 +1922,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //create the new variant data
         $variantData = array(
             'additionalText' => implode(' / ', $name),
-            'kind' => 2,
             'active' => 1,
-            'number' => $detailData['number'] . '.' . $counter,
             'configuratorOptions' => $optionsModels
         );
+
+        if($counter) {
+            $variantData['kind'] = 2;
+            $variantData['number'] = $detailData['number'] . '.' . $counter;
+        }
 
         //we have to check the defined price surcharges for the article configurator set,
         //to add the defined surcharges to the variant prices with the corresponding configurator options
@@ -2073,8 +2057,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs article download data
         $data = $this->prepareDownloadAssociatedData($data);
 
-        //$data = $this->preparePropertyValuesData($data);
-
         return $data;
     }
 
@@ -2100,31 +2082,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return $data;
     }
-
-    /**
-     * Internal helper function which resolves the passed property value ids
-     * to \Shopware\Models\Property\Value Models.
-     * The property values are configured over the article backend module on the detail page.
-     * @param $data
-     * @return array
-     */
-    protected function preparePropertyValuesData($data) {
-        $values = $data['propertyValues'];
-        $models = array();
-        foreach($values as $valueData) {
-            if (empty($valueData['id'])) {
-                continue;
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Property\Value', $valueData['id']);
-            if (!$model instanceof \Shopware\Models\Property\Value) {
-                continue;
-            }
-            $models[] = $model;
-        }
-        $data['propertyValues'] = $models;
-        return $data;
-    }
-
 
     /**
      * Internal helper function to check if the article is configured as
@@ -2773,7 +2730,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->leftJoin('articleDetail.esd', 'esd')
                     ->leftJoin('articleDetail.article', 'article')
                     ->where('articleDetail.articleId = :articleId')
-                    ->andWhere('articleDetail.kind <> 3')
                     ->andWhere('esd.id IS NULL')
                     ->setParameter('articleId', $articleId);
 
@@ -3257,13 +3213,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                             ->getArticleWithVariantsAndOptionsQuery($articleId)
                             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-            $mainDetail = $this->getRepository()
-                               ->getArticleMainDetailFallbackQuery($articleId)
-                               ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-
-            if ($mainDetail) {
-                $article->setMainDetail($mainDetail);
-            }
             $abortId = $article->getMainDetail()->getId();
             $commands = $this->prepareNumberSyntax($syntax);
             $details = $article->getDetails();

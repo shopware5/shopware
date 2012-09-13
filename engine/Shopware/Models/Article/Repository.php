@@ -413,32 +413,6 @@ class Repository extends ModelRepository
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $articleId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getArticleMainDetailFallbackQuery($articleId) {
-    	$builder = $this->getArticleMainDetailFallbackQueryBuilder($articleId);
-    	return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getArticleMainDetailFallbackQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $articleId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getArticleMainDetailFallbackQueryBuilder($articleId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('detail'))
-                ->from('Shopware\Models\Article\Detail', 'detail')
-                ->where('detail.articleId = ?1')
-                ->andWhere('detail.kind = 3')
-                ->setParameter(1, $articleId);
-    	return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
      * @param $article Article
      * @param $customerGroupKey
      * @return \Doctrine\ORM\Query
@@ -759,7 +733,6 @@ class Repository extends ModelRepository
         $builder->select('details.id')
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->where('details.articleId = ?1')
-                ->andWhere('details.kind != 3')
                 ->setParameter(1, $articleId);
 
         if ($filter !== null) {
