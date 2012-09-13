@@ -63,9 +63,9 @@ class Relation extends ModelEntity
 
     /**
      * @ORM\Column(name="groupID", type="integer", nullable=true)
-     * @var int $groupid
+     * @var int $groupId
      */
-    private $groupid;
+    private $groupId;
 
     /**
      * The resource property is the owning side of the association between relation and option.

@@ -912,10 +912,8 @@ class Repository extends ModelRepository
     public function getPropertiesQueryBuilder()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        return $builder->select(array('properties', 'options', 'values'))
+        return $builder->select(array('properties'))
                        ->from('Shopware\Models\Property\Group', 'properties')
-                       ->leftJoin('properties.options', 'options')
-                       ->leftJoin('options.values', 'values')
                        ->orderBy('properties.name', 'ASC');
     }
 

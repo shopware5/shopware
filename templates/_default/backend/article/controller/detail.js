@@ -37,10 +37,18 @@
 Ext.define('Shopware.apps.Article.controller.Detail', {
 
     /**
-     * The parent class that this class extends.
+     * Extend from the standard ExtJS 4 controller
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Enlight.app.Controller',
+
+    /**
+     * Required stores for controller
+     * @array
+     */
+    stores: [
+        'Property', 'PropertyValue'
+    ],
 
     refs: [
         { ref: 'mainWindow', selector: 'article-detail-window' },
@@ -51,11 +59,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         { ref: 'variantTab', selector: 'article-detail-window panel[name=variant-tab]' },
         { ref: 'esdTab', selector: 'article-detail-window panel[name=esd-tab]' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
-        { ref: 'propertyComboBox', selector: 'article-detail-window combobox[name=filterGroupId]' },
         { ref: 'propertyGrid', selector: 'article-detail-window grid[name=property-grid]' },
         { ref: 'priceFieldSet', selector: 'article-detail-window article-prices-field-set' }
     ],
-
 
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
@@ -101,8 +107,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             'article-detail-window article-base-field-set checkbox[name=isConfigurator]': {
                 change: me.onEnableConfigurator
             },
-            'article-detail-window article-properties-field-set': {
-                propertySelected: me.onPropertySelected
+            'article-detail-window combo[name=filterGroupId]': {
+                select: me.onChangePropertyGroup
             },
             'article-detail-window article-properties-field-set grid': {
                 beforeedit: me.onBeforePropertyEdit
@@ -179,7 +185,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         //update the article record with the form data.
         form.getForm().updateRecord(article);
-        article = me.prepareArticleProperties(article);
         article = me.prepareAvoidCustomerGroups(article);
 
         if (!article.get('isConfigurator')) {
@@ -222,6 +227,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     mainWindow.supplierStore.filters.clear();
                     mainWindow.supplierStore.load();
                 }
+
+                me.prepareArticleProperties(record);
 
                 newArticle.getPrice().filter(lastFilter);
                 me.reconfigureAssociationComponents(newArticle);
@@ -293,36 +300,16 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     prepareArticleProperties: function(article) {
-        var me = this, propertyGrid = me.getPropertyGrid();
+        var me = this,
+            propertyStore = me.getStore('Property');
 
-        if (propertyGrid.getStore() && propertyGrid.getStore().getCount() > 0) {
-            //get selected item of the combo box.
-            var selected = me.getPropertyComboBox().lastSelection[0];
-
-            var gridStore = propertyGrid.getStore();
-
-            //create a new model to add only the selected items.
-            var newModel = Ext.create('Shopware.apps.Article.model.PropertyGroup', selected.data);
-
-            //create a new store for the options
-            var selectedValues = Ext.create('Ext.data.Store', {
-                model: 'Shopware.apps.Article.model.PropertyValue'
-            });
-
-            gridStore.each(function(option) {
-                var values = option.get('propertyValues');
-                var valueStore = option.getValues();
-                Ext.each(values, function(value) {
-                    if (value) {
-                        var valueModel = valueStore.getById(value);
-                        if (valueModel instanceof Ext.data.Model) {
-                            selectedValues.add(valueModel);
-                        }
-                    }
-                });
-            });
-            article.getPropertyValuesStore = selectedValues;
+        if(article.id) {
+            propertyStore.getProxy().extraParams.articleId = article.getId();
         }
+        propertyStore.each(function(property) {
+            property.setDirty();
+        });
+        propertyStore.sync();
         return article;
     },
 
@@ -351,6 +338,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         me.subApplication.article = article;
 
         mainWindow.detailForm.loadRecord(article);
+
+        me.loadPropertyStore(article);
 
         esdTab.setDisabled(article.get('id') === null);
         esdListing.esdStore.getProxy().extraParams.articleId = article.get('id');
@@ -393,6 +382,28 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         listingComponent.mediaStore = article.getMedia();
 
         mainWindow.detailForm.getForm().isValid();
+    },
+
+    loadPropertyStore: function(article) {
+        var me = this,
+            propertyStore = me.getStore('Property'),
+            valueStore = me.getStore('PropertyValue');
+
+        var filterGroupId = article.get('filterGroupId');
+        if(filterGroupId) {
+            propertyStore.getProxy().extraParams.propertyGroupId
+                = valueStore.getProxy().extraParams.propertyGroupId
+                = article.get('filterGroupId');
+            valueStore.load({
+                callback: function() {
+                    propertyStore.load({
+                        params: {
+                            articleId: article.getId()
+                        }
+                    });
+                }
+            });
+        }
     },
 
     /**
@@ -727,10 +738,21 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * @param [string] value
      * @param [Ext.grid.Panel] grid
      */
-    onPropertySelected: function(value, grid, store) {
-        if (value && grid && store) {
-            var propertyGroup = store.getById(value);
-            grid.reconfigure(propertyGroup.getOptions());
+    onChangePropertyGroup: function (combo, records) {
+        var me = this,
+            grid = me.getPropertyGrid(),
+            propertyStore = me.getStore('Property'),
+            valueStore = me.getStore('PropertyValue'),
+            propertyGroupId = records.length > 0 ? records[0].getId() : null;
+
+        if (propertyGroupId) {
+            propertyStore.getProxy().extraParams.propertyGroupId
+                = propertyGroupId;
+            propertyStore.load();
+
+            valueStore.getProxy().extraParams.propertyGroupId
+                = propertyGroupId;
+            valueStore.load();
             grid.show();
         } else {
             grid.hide();
@@ -742,19 +764,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * edit a cell.
      */
     onBeforePropertyEdit: function(editor, event) {
-        var me = this, option,
-            grid = me.getPropertyGrid();
-
-        if (event && event.column && event.column.field) {
-            option = grid.getStore().getAt(event.rowIdx);
-            if (option && option.getValues()) {
-                event.column.field.bindStore(option.getValues());
-            }
-        }
-        if (event.value === Ext.undefined) {
-//            event.column.field.removeValue(event.column.field.valueModels);
-//            event.column.field.removeValue(event.column.field.displayTplData[0]);
-        }
+        var me = this,
+            store = me.getStore('PropertyValue'),
+            optionId = event.record.getId();
+        store.clearFilter();
+        store.filter('optionId', optionId);
     },
 
     /**

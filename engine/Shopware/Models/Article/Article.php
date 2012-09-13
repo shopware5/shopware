@@ -379,7 +379,7 @@ class Article extends ModelEntity
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"all"})
      * @ORM\JoinTable(name="s_filter_articles",
      *      joinColumns={
      *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -406,7 +406,7 @@ class Article extends ModelEntity
     {
         $this->categories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
-        $this->properties = new ArrayCollection();
+        $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
         $this->similar = new ArrayCollection();
         $this->details = new ArrayCollection();

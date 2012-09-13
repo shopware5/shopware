@@ -1381,6 +1381,117 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ));
     }
 
+
+    /**
+     *
+     */
+    public function getPropertyListAction()
+    {
+        $articleId = $this->Request()->getParam('articleId');
+        $propertyGroupId =  $this->Request()->getParam('propertyGroupId');
+
+        $builder = Shopware()->Models()->createQueryBuilder()
+            ->from('Shopware\Models\Property\Option', 'po')
+            ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
+            ->setParameter('propertyGroupId', $propertyGroupId)
+            ->select(array( 'PARTIAL po.{id,name}' ));
+
+        $query = $builder->getQuery();
+        $options = array();
+        foreach($query->getArrayResult() as $option) {
+            $options[$option['id']] = $option;
+        }
+
+        $builder = Shopware()->Models()->createQueryBuilder()
+            ->from('Shopware\Models\Property\Value', 'pv')
+            ->join('pv.articles', 'pa', 'with', 'pa.id = :articleId')
+            ->setParameter('articleId', $articleId)
+            ->join('pv.option', 'po')
+            ->select(array('po.id as optionId', 'pv.id as value'));
+
+        $query = $builder->getQuery();
+        foreach($query->getArrayResult() as $value) {
+            if(!isset($options[$value['optionId']])) {
+                continue;
+            }
+            if(!isset($options[$value['optionId']]['name'])) {
+                $options[$value['optionId']]['value'] = array($value['value']);
+            } else {
+                $options[$value['optionId']]['value'][] = $value['value'];
+            }
+        }
+
+        $this->View()->assign(array(
+            'data' =>  array_values($options),
+            'total' =>  count($options),
+            'success' => true
+        ));
+    }
+
+    /**
+     * Returns the available property values
+     */
+    public function getPropertyValuesAction()
+    {
+        $propertyGroupId =  $this->Request()->getParam('propertyGroupId');
+
+        $builder = Shopware()->Models()->createQueryBuilder()
+            ->from('Shopware\Models\Property\Value', 'pv')
+            ->join('pv.option', 'po')
+            ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
+            ->setParameter('propertyGroupId', $propertyGroupId)
+            ->select(array( 'pv.id', 'pv.value', 'po.id as optionId' ));
+
+        $query = $builder->getQuery();
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(array(
+            'data' =>  $data,
+            'total' =>  count($data),
+            'success' => true
+        ));
+    }
+
+    public function setPropertyListAction()
+    {
+        $models = Shopware()->Models();
+        $articleId = $this->Request()->getParam('articleId');
+        /** @var $article Shopware\Models\Article\Article */
+        $article = $models->find('Shopware\Models\Article\Article', $articleId);
+        $properties = $this->Request()->getParam('properties', array());
+
+        $propertyValues = $article->getPropertyValues();
+        $propertyValues->clear();
+        $models->flush();
+
+        foreach($properties as $property) {
+            if(empty($property['value'])) {
+                continue;
+            }
+            /** @var $article Shopware\Models\Property\Option */
+            $option = $models->find('Shopware\Models\Property\Option', $property['id']);
+            foreach((array) $property['value'] as $value) {
+                if(is_int($value)) {
+                    $value = $models->find('Shopware\Models\Property\Value', $value);
+                } else {
+                    $value = new Shopware\Models\Property\Value(
+                        $option,
+                        $value
+                    );
+                    $models->persist($value);
+                }
+                if($value !== null) {
+                    $propertyValues->add($value);
+                }
+            }
+        }
+        $models->flush();
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
+    }
+
     /**
      * Selects the dynamic attribute fields
      * @return array
@@ -1962,7 +2073,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs article download data
         $data = $this->prepareDownloadAssociatedData($data);
 
-        $data = $this->preparePropertyValuesData($data);
+        //$data = $this->preparePropertyValuesData($data);
 
         return $data;
     }

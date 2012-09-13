@@ -71,16 +71,19 @@ class Option extends ModelEntity
     /**
      * ManyToMany to Group (Inverse Side)
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection $groups
-     *
+     * @var Group[]Doctrine\Common\Collections\ArrayCollection $groups
      * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\JoinTable(name="s_filter_relations",
+     *      joinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")}
+     *      )
      */
     private $groups;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $articles
      *
-     * @ORM\OneToMany(targetEntity="\Shopware\Models\Property\Relation", mappedBy="option")
+     * @ORM\OneToMany(targetEntity="Relation", mappedBy="option")
      */
     private $relations;
 

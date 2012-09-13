@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Article', {
         'detail.Window',
         'detail.Settings',
         'detail.Properties',
+        'detail.PropertyValue',
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
@@ -117,7 +118,9 @@ Ext.define('Shopware.apps.Article', {
         'Surcharge',
         'Dependency',
         'ConfiguratorSet',
-        'MediaMapping'
+        'MediaMapping',
+        'Property',
+        'PropertyValue'
     ],
 
     /**
@@ -159,7 +162,8 @@ Ext.define('Shopware.apps.Article', {
         'PriceSurcharge',
         'Field',
         'MediaMapping',
-        'MediaMappingRule'
+        'MediaMappingRule',
+        'Property'
     ],
 
     /**

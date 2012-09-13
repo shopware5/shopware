@@ -94,31 +94,14 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
 	 */
     initComponent:function () {
         var me = this;
-        me.registerEvents();
         me.title = me.snippets.title;
         me.items = me.createElements();
         me.callParent(arguments);
     },
 
     /**
-     * Registers additional component events.
-     */
-    registerEvents: function() {
-        this.addEvents(
-            /**
-             * Event will be fired when the user change the filter group in the property field set.
-             *
-             * @event
-             * @param [string] - The new value
-             * @param [Ext.grid.Panel] - The property grid
-             */
-            'propertySelected'
-        );
-    },
-
-    /**
      * Creates the elements for the properties field set.
-     * @return array
+     * @return Array
      */
     createElements: function () {
         var me = this;
@@ -138,13 +121,9 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             valueField: 'id',
             displayField: 'name',
             emptyText: me.snippets.empty,
-            fieldLabel: me.snippets.property,
-            listeners: {
-                change: function(field, newValue) {
-                    me.fireEvent('propertySelected', newValue, me.propertyGrid, me.propertyStore)
-                }
-            }
+            fieldLabel: me.snippets.property
         });
+
         return [ notice, me.propertyCombo, me.propertyGrid ];
     },
 
@@ -155,31 +134,12 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
     createPropertyGrid: function() {
         var me = this, store = null;
 
-        if (me.article && me.article.get('filterGroupId')) {
-            var property = me.propertyStore.getById(me.article.get('filterGroupId'));
-            if (property) {
-                store = property.getOptions();
-
-                var selected = me.article.getPropertyValues();
-                if (selected && selected.getCount() > 0) {
-                    selected.each(function(item) {
-                        var gridItem = store.getById(item.get('optionId'));
-                        var propertyValues = gridItem.get('propertyValues');
-                        if (!Ext.isArray(propertyValues)) {
-                            propertyValues = [];
-                        }
-                        propertyValues.push(item.get('id'));
-                        gridItem.set('propertyValues', propertyValues);
-                    });
-                }
-            }
-        }
+        me.valueStore = Ext.data.StoreManager.lookup('PropertyValue');
+        me.store = Ext.data.StoreManager.lookup('Property');
 
         return Ext.create('Ext.grid.Panel', {
-            hidden: (store === null),
-            store: store,
+            store: me.store,
             height: 155,
-            name: 'property-grid',
             cls: Ext.baseCSSPrefix + 'free-standing-grid ' + Ext.baseCSSPrefix + 'article-properties-grid',
             title: '{s name=detail/property/title}Properties{/s}',
             plugins: [{
@@ -192,28 +152,30 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
                 {
                     header: me.snippets.name,
                     dataIndex: 'name',
+                    editor: {
+                        xtype: 'textfield',
+                        readOnly: true
+                    },
                     width: 150
                 } , {
                     header: me.snippets.value,
-                    dataIndex: 'propertyValues',
+                    dataIndex: 'value',
                     flex: 1,
-                    editor: me.createCellEditor(),
-                    renderer: me.getValueRenderer
+                    renderer: me.getValueRenderer,
+                    editor: me.getValueEditor()
                 }
             ]
         });
     },
 
-    /**
-     * Creates the cell editor combo box for the value column
-     *
-     */
-    createCellEditor: function() {
+    getValueEditor: function() {
         var me = this;
-
         return Ext.create('Ext.ux.form.field.BoxSelect', {
+            store: me.valueStore,
             multiSelect: true,
-            forceSelection: true,
+            forceSelection: false,
+            createNewOnEnter: true,
+            createNewOnBlur: true,
             delimiter: ', ',
             typeAhead: true,
             displayField: 'value',
@@ -223,33 +185,26 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         });
     },
 
-    /**
-     * Renderer function of the value column. Converts the passed option value ids into the value names.
-     * @param values
-     * @param metadata
-     * @param record
-     * @param rowIndex
-     * @param colIndex
-     * @return array
-     */
     getValueRenderer: function(values, metadata, record, rowIndex, colIndex) {
         var me = this,
-            displayValues = [];
+            column = me.columns[colIndex],
+            result = [];
+        if(!column.editor && !column._editor) {
+            return value;
+        }
+        if(!column._editor) {
+            column._editor = column.editor;
+        }
 
-        if (!values) {
-            return values;
-        }
-        if (values.length > 0 && record) {
-            var valueStore = record.getValues();
-            Ext.each(values, function(valueId) {
-                var value = valueStore.getById(valueId);
-                if (value) {
-                    displayValues.push(value.get('value'));
-                }
-            });
-            return displayValues;
-        }
+        var editor = column._editor,
+            store = editor.store || me.valueStore;
+
+        Ext.each(values, function(value, key) {
+            var map = store.getById(value);
+            result[result.length] = map ? map.get(editor.displayField) : value;
+        });
+
+        return result.join(', ');
     }
-
 });
 //{/block}

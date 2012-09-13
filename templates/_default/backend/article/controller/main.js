@@ -213,6 +213,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     });
                     var tabPanel = me.mainWindow.createMainTabPanel();
                     me.mainWindow.insert(0, tabPanel);
+
+                    me.getController('Detail').loadPropertyStore(article);
+
                     me.mainWindow.changeTitle();
                     me.mainWindow.setLoading(false);
                 }

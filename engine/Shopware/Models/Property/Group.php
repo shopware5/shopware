@@ -96,9 +96,9 @@ class Group extends ModelEntity
     private $options;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $articles
+     * @var \Doctrine\Common\Collections\ArrayCollection $relations
      *
-     * @ORM\OneToMany(targetEntity="\Shopware\Models\Property\Relation", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="Relation", mappedBy="group")
      */
     private $relations;
 
