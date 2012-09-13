@@ -33,7 +33,6 @@
 	<div class="space border">&nbsp;</div>
 	<div class="space">&nbsp;</div>
 	<div class="thumb_box">
-        --------------> {$sArticle.image.res.description} <-----------
         {if $sArticle.image.src.4}
             <a href="{$sArticle.image.src.5}"
             title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}"
