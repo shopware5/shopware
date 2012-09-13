@@ -2686,8 +2686,21 @@ div#notes .table_row .title {width: 450px;}
 /* BANNER
 	------------------------ */
 .emotion-element .banner-element .mapping {position: relative;}
-.emotion-element .banner-element .banner-mapping {position: absolute;top: 0; left: 0;}
-.emotion-element .banner-element .banner-mapping a {display: block;position: absolute;text-underline: none;z-index: 10; cursor: pointer }
+.emotion-element .banner-element .mapping img { position: relative; z-index: 8 }
+.emotion-element .banner-element .banner-mapping {position: absolute;top: 0; left: 0;z-index: 9}
+.emotion-element .banner-element .banner-mapping a {
+    display: block;
+    position: absolute;
+    text-decoration: none;
+    z-index: 10;
+    cursor: pointer;
+    background: #000;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+}
 
 /** ERROR MESSAGES **/
 input.instyle_success[type="text"], input.instyle_success[type="password"],
