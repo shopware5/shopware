@@ -119,11 +119,11 @@ class sAPI
 	var $sCONFIG;
 
 	function Import(){
-		return $this->import;
+		return $this->import->shopware;
 	}
 
 	function Export(){
-		return $this->export;
+		return $this->export->shopware;
 	}
 	/**
 	  * L�dt externe Daten und speichert diese in einem File-Cache
