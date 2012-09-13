@@ -1239,11 +1239,11 @@ class sAdmin
 	 */
 	public function sGetCountryTranslation($country=""){
 		// Load Translation
-		$sql = "
-		SELECT objectdata FROM s_core_translations WHERE objecttype='config_countries' AND objectlanguage='".$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]."'";
+		$sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_countries' AND objectlanguage=?";
 
-		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql);
-
+        $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $param);
+        
 		if ($getTranslation["objectdata"]){
 			$object = unserialize($getTranslation["objectdata"]);
 		}
@@ -1270,9 +1270,9 @@ class sAdmin
 	public function sGetDispatchTranslation($dispatch=""){
 		// Load Translation
 		$sql = "
-		SELECT objectdata FROM s_core_translations WHERE objecttype='config_dispatch' AND objectlanguage='".$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]."'";
-
-		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql);
+		SELECT objectdata FROM s_core_translations WHERE objecttype='config_dispatch' AND objectlanguage=?";
+        $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
 
 		if ($getTranslation["objectdata"]){
 			$object = unserialize($getTranslation["objectdata"]);
@@ -1304,9 +1304,10 @@ class sAdmin
 
 		// Load Translation
 		$sql = "
-		SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage='".$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]."'";
+		SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage=?";
+        $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 
-		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql);
+		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
 
 		if (!empty($getTranslation["objectdata"])){
 			$object = unserialize($getTranslation["objectdata"]);
@@ -1341,11 +1342,12 @@ class sAdmin
             SELECT objectdata FROM s_core_translations
             WHERE objecttype = 'config_country_states'
             AND objectkey = 1
-            AND objectlanguage = '$language'
+            AND objectlanguage = ?
 		";
         $translation = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-            $cacheTime, $sql
+            $cacheTime, $sql, array($language)
         );
+
         if (!empty($translation)) {
             $translation = unserialize($translation);
         } else {
@@ -1356,10 +1358,10 @@ class sAdmin
                 SELECT objectdata FROM s_core_translations
                 WHERE objecttype = 'config_country_states'
                 AND objectkey = 1
-                AND objectlanguage = '$fallback'
+                AND objectlanguage = ?
             ";
             $translationFallback = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-                $cacheTime, $sql
+                $cacheTime, $sql, array($fallback)
             );
             if (!empty($translationFallback)) {
                 $translationFallback = unserialize($translationFallback);
@@ -1598,23 +1600,24 @@ class sAdmin
 			(userID,company,department, salutation,firstname,lastname,
 			street,streetnumber,zipcode,city, countryID,stateID)
 			VALUES
-			($userID,
-			'{$userObject["shipping"]["company"]}',
-			'{$userObject["shipping"]["department"]}',
-			'{$userObject["shipping"]["salutation"]}',
-			'{$userObject["shipping"]["firstname"]}',
-			'{$userObject["shipping"]["lastname"]}',
-			'{$userObject["shipping"]["street"]}',
-			'{$userObject["shipping"]["streetnumber"]}',
-			'{$userObject["shipping"]["zipcode"]}',
-			'{$userObject["shipping"]["city"]}',
-			'{$userObject["shipping"]["country"]}',
-			'{$userObject["shipping"]["stateID"]}'
-
-			)";
+			(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 			$sqlShipping = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShipping_FilterSql', $sqlShipping, array('subject'=>$this,'user'=>$userObject,'id'=>$userID));
+            $shippingParams = array(
+                $userID,
+                $userObject["shipping"]["company"],
+                $userObject["shipping"]["department"],
+                $userObject["shipping"]["salutation"],
+                $userObject["shipping"]["firstname"],
+                $userObject["shipping"]["lastname"],
+                $userObject["shipping"]["street"],
+                $userObject["shipping"]["streetnumber"],
+                $userObject["shipping"]["zipcode"],
+                $userObject["shipping"]["city"],
+                $userObject["shipping"]["country"],
+                $userObject["shipping"]["stateID"]
+            );
 			// Trying to insert
-			$saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlShipping);
+			$saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlShipping, $shippingParams);
 			Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterShipping_Return', array('subject'=>$this,'insertObject'=>$saveUserData));
 
             //new attribute table
@@ -1622,17 +1625,18 @@ class sAdmin
             $sqlAttributes = "INSERT INTO s_user_shippingaddress_attributes
      			(shippingID, text1, text2, text3, text4, text5, text6)
      			VALUES
-     			($shippingId,
-     			'{$userObject["shipping"]["text1"]}',
-     			'{$userObject["shipping"]["text2"]}',
-     			'{$userObject["shipping"]["text3"]}',
-     			'{$userObject["shipping"]["text4"]}',
-     			'{$userObject["shipping"]["text5"]}',
-     			'{$userObject["shipping"]["text6"]}'
-     			)";
-
+     			(?, ?, ?, ?, ?, ?, ?)";
             $sqlAttributes = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql', $sqlAttributes, array('subject'=>$this,'user'=>$userObject,'id'=>$userID));
-            $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttributes);
+            $attributeParams = array(
+                $shippingId,
+                $userObject["shipping"]["text1"],
+                $userObject["shipping"]["text2"],
+                $userObject["shipping"]["text3"],
+                $userObject["shipping"]["text4"],
+                $userObject["shipping"]["text5"],
+                $userObject["shipping"]["text6"]
+            );
+            $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttributes, $attributeParams);
             Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return', array('subject'=>$this,'insertObject'=>$saveAttributeData));
 
 			return $shippingId;
@@ -2081,8 +2085,8 @@ class sAdmin
 
 			if(empty($userData["billingaddress"]['customernumber']) && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS'])
 			{
-				$sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number`+1 WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`='{$this->sSYSTEM->_SESSION["sUserId"]}'";
-				$this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+				$sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number`+1 WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`=?";
+				$this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
 			}
 
 			// 2.) Advanced infos
@@ -2116,7 +2120,7 @@ class sAdmin
 				}
 
 			// 3.) Get shipping-adress
-			$shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user_shippingaddress WHERE userID=".$this->sSYSTEM->_SESSION["sUserId"]);
+			$shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user_shippingaddress WHERE userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
             $attributes = $this->getUserShippingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
@@ -2529,28 +2533,29 @@ class sAdmin
 
 			$value = explode("|",$value);
 			if (!empty($value[0]) && isset($value[1])){
-			$sql = "
-			SELECT s_articles_attributes.id
-			FROM s_order_basket, s_articles_attributes, s_articles_details
-			WHERE
-			s_order_basket.sessionID=?
-			AND s_order_basket.modus=0
-			AND (
-			s_order_basket.ordernumber = s_articles_details.ordernumber
-			OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
-			)
-			AND s_articles_details.id = s_articles_attributes.articledetailsID
-			AND s_articles_attributes.{$value[0]} = '{$value[1]}'
-			LIMIT 1
-			";
+                $number = (int) str_ireplace('attr', '', $value[0]);
 
-			$checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID));
-			if ($checkArticle){
-				return true;
-			}else {
-				return false;
-			}
+                $sql = "
+                SELECT s_articles_attributes.id
+                FROM s_order_basket, s_articles_attributes, s_articles_details
+                WHERE
+                s_order_basket.sessionID=?
+                AND s_order_basket.modus=0
+                AND (
+                s_order_basket.ordernumber = s_articles_details.ordernumber
+                OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
+                )
+                AND s_articles_details.id = s_articles_attributes.articledetailsID
+                AND s_articles_attributes.attr{$number} = ?
+                LIMIT 1
+                ";
 
+                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
+                if ($checkArticle){
+                    return true;
+                }else {
+                    return false;
+                }
 			}else {
 				return false;
 			}
@@ -2569,28 +2574,30 @@ class sAdmin
 
 			$value = explode("|",$value);
 			if (!empty($value[0]) && isset($value[1])){
-			$sql = "
-			SELECT s_articles_attributes.id
-			FROM s_order_basket, s_articles_attributes, s_articles_details
-			WHERE
-			s_order_basket.sessionID=?
-			AND s_order_basket.modus=0
-			AND (
-			s_order_basket.ordernumber = s_articles_details.ordernumber
-			OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
-			)
-			AND s_articles_details.id = s_articles_attributes.articledetailsID
-			AND s_articles_attributes.{$value[0]}!= '{$value[1]}'
-			LIMIT 1
-			";
-			$checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID));
+                $number = (int) str_ireplace('attr', '', $value[0]);
+
+                $sql = "
+                SELECT s_articles_attributes.id
+                FROM s_order_basket, s_articles_attributes, s_articles_details
+                WHERE
+                s_order_basket.sessionID=?
+                AND s_order_basket.modus=0
+                AND (
+                s_order_basket.ordernumber = s_articles_details.ordernumber
+                OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
+                )
+                AND s_articles_details.id = s_articles_attributes.articledetailsID
+                AND s_articles_attributes.attr{$number}!= ?
+                LIMIT 1
+                ";
+                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
 
 
-			if ($checkArticle){
-				return true;
-			}else {
-				return false;
-			}
+                if ($checkArticle){
+                    return true;
+                }else {
+                    return false;
+                }
 
 			}else {
 				return false;
@@ -2609,7 +2616,7 @@ class sAdmin
 	public function sRiskINKASSO ($user, $order, $value){
 		if ($this->sSYSTEM->_SESSION["sUserId"]){
 			$checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-			SELECT id FROM s_order WHERE cleared=16 AND userID=".$this->sSYSTEM->_SESSION["sUserId"]);
+			SELECT id FROM s_order WHERE cleared=16 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
 			if ($checkOrder["id"]){
 				return true;
 			}else {
@@ -2630,11 +2637,13 @@ class sAdmin
 	public function sRiskLASTORDERLESS ($user, $order, $value){
 		// A order from previous x days must exists
 		if ($this->sSYSTEM->_SESSION["sUserId"]){
+            $value = (int) $value;
 			$sql = "
-			SELECT id FROM s_order WHERE userID=".$this->sSYSTEM->_SESSION["sUserId"]."
+			SELECT id FROM s_order WHERE userID=?
 			AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1
 			";
-			$checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+			$checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
+
 			if (!$checkOrder["id"]){
 				return true;
 			}else {
@@ -2657,10 +2666,11 @@ class sAdmin
 			SELECT s_articles_categories.id as id
 			FROM s_order_basket, s_articles_categories
 			WHERE s_order_basket.articleID = s_articles_categories.articleID
-			AND s_articles_categories.categoryID = $value
-			AND s_order_basket.sessionID='{$this->sSYSTEM->sSESSION_ID}'
+			AND s_articles_categories.categoryID = ?
+			AND s_order_basket.sessionID=?
 			AND s_order_basket.modus=0
-		");
+		", array($value, $this->sSYSTEM->sSESSION_ID));
+
 		if (!empty($checkArticle))
 			return true;
 		else
@@ -2677,7 +2687,7 @@ class sAdmin
 	public function sRiskLASTORDERSLESS($user,$order,$value){
 		if ($this->sSYSTEM->_SESSION["sUserId"]){
 			$checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT id FROM s_order WHERE status != -1 AND status != 4 AND userID=".$this->sSYSTEM->_SESSION["sUserId"]);
+			SELECT id FROM s_order WHERE status != -1 AND status != 4 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
 			if (count($checkOrder)<=$value){
 				return true;
 			}

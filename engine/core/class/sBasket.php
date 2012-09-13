@@ -1814,27 +1814,29 @@ class sBasket
 					$sql = "
 						INSERT INTO s_order_basket (id,sessionID,userID,articlename,articleID,
 						ordernumber, shippingfree, quantity, price, netprice, datum, esdarticle, partnerID, config)
-						VALUES (
-						'',
-						'".$this->sSYSTEM->sSESSION_ID."',
-						'".$this->sSYSTEM->_SESSION['sUserId']."',
-						{$getArticle["articleName"]},
-						{$getArticle["articleID"]},
-						'{$getArticle["ordernumber"]}',
-						{$getArticle["shippingfree"]},
-						$quantity,
-						{$getPrice["price"]},
-						{$getPrice["netprice"]},
-						'$insertTime',
-						$sEsd,
-						'".$this->sSYSTEM->_SESSION["sPartner"]."',
-						".(empty($sUpPriceValues) ? "''" : $this->sSYSTEM->sDB_CONNECTION->qstr(serialize($sUpPriceValues)))."
-						)
+						VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
 					";
+
+                    $params = array(
+                        '',
+                        (string) $this->sSYSTEM->sSESSION_ID,
+                        (string) $this->sSYSTEM->_SESSION['sUserId'],
+                        $getArticle["articleName"],
+                        $getArticle["articleID"],
+                        (string) $getArticle["ordernumber"],
+                        $getArticle["shippingfree"],
+                        $quantity,
+                        $getPrice["price"],
+                        $getPrice["netprice"],
+                        (string) $insertTime,
+                        $sEsd,
+                        (string) $this->sSYSTEM->_SESSION["sPartner"],
+                        (empty($sUpPriceValues) ? "" : serialize($sUpPriceValues))
+                    );
 
 					$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_AddArticle_FilterSql',$sql, array('subject'=>$this,"article"=>$getArticle,"price"=>$getPrice,"esd"=>$sEsd,"quantity"=>$quantity,"partner"=>$this->sSYSTEM->_SESSION["sPartner"]));
 
-					$rs = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+					$rs = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $params);
 
 					if (!$rs){
 						$this->sSYSTEM->E_CORE_WARNING ("BASKET-INSERT #02","SQL-Error".$sql);
