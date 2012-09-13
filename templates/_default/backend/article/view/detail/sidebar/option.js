@@ -323,9 +323,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
                 me.categoryList
             ]
         });
-
     },
-
 
     /**
      * Creates the field set for the article image upload. To upload the article images, the container contains
@@ -333,12 +331,18 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
      * @return Ext.form.FieldSet
      */
     createImageContainer: function() {
-        var me = this;
+        var me = this, fieldset;
+        
+        fieldset = Ext.create('Ext.form.FieldSet', {
+            layout: 'anchor',
+            title: me.snippets.imageUpload
+        });
 
         me.uploadField  = Ext.create('Ext.form.field.File', {
             buttonOnly: false,
             labelWidth: 100,
             anchor: '100%',
+            name: 'fileId',
             margin: '0 0 15',
             buttonText : me.snippets.upload,
             listeners: {
@@ -355,18 +359,28 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
                 cls: 'small secondary'
             }
         });
-
-        me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', { height: 85, hideOnLegacy: true });
+        
+        if(Ext.isIE || Ext.isSafari) {
+	    	var form = Ext.create('Ext.form.Panel', {
+	    		unstyled: true,
+	    		border: 0,
+	    		bodyBorder: 0,
+	    		style: 'background: transparent',
+	    		bodyStyle: 'background: transparent',
+		    	url: '{url controller="mediaManager" action="upload"}?albumID=-1',
+		    	items: [ me.uploadField ]
+	    	});
+	    	me.uploadField = form;
+        }
+        
+	    fieldset.add(me.uploadField);
+        
+        var config = { dropZoneConfig: { height: 85, hideOnLegacy: true, showInput: false } };
+        me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', config);
         me.dropZone.mediaDropZone.height = 60;
-
-        return Ext.create('Ext.form.FieldSet', {
-            layout: 'anchor',
-            title: me.snippets.imageUpload,
-            items: [
-                me.uploadField,
-                me.dropZone
-            ]
-        });
+   
+        fieldset.add(me.dropZone);
+        return fieldset;
     }
 
 });

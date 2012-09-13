@@ -71,6 +71,12 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
     snippets: {
         dropZone: '{s name=image/upload/drop_zone}Upload images via drag&drop{/s}'
     },
+    
+    /**
+     * Configuration object for the drop zone which will be set during initializing
+     * @object
+     */
+    dropZoneConfig: {},
 
     /**
 	 * The initComponent template method is an important initialization step for a Component.
@@ -110,25 +116,21 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
      * @return Shopware.app.FileUpload
      */
     createMediaDropZone: function() {
-        var me = this;
-
-        return Ext.create('Shopware.app.FileUpload', {
-            requestURL: '{url controller="mediaManager" action="upload"}?albumID=-1',
+        var me = this,
+            defaultConfig = {
+	        requestURL: '{url controller="mediaManager" action="upload"}?albumID=-1',
             showInput: false,
             padding:0,
             checkSize: false,
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,
-            hideOnLegacy: me.hideOnLegacy,
             dropZoneText: me.snippets.dropZone,
             height: 100
-        });
+        };
+        
+        defaultConfig = Ext.apply(defaultConfig, me.dropZoneConfig);
+        return Ext.create('Shopware.app.FileUpload', defaultConfig);
     }
 });
 //{/block}
-
-
-
-
-

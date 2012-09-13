@@ -161,6 +161,8 @@ Ext.define('Ext.util.FileUpload', {
 	        iconCls: 'sprite-inbox-image'
         }
     },
+    
+    inputConfig: {},
 
     /**
      * Rendering template for the drop zone
@@ -503,7 +505,9 @@ Ext.define('Ext.util.FileUpload', {
     createFileInputField:function () {
         var me = this, file, el, ret;
 
-        file = Ext.create('Ext.form.field.File', Ext.apply(me.fileInputConfig, { name: me.fileField }));
+        var config = Ext.apply(me.inputConfig, me.fileInputConfig);
+        config.name = me.fileField;
+        file = me.inputFileCmp = Ext.create('Ext.form.field.File', config);
         ret = file;
 
         // Add "multiple" attribute to the file input field

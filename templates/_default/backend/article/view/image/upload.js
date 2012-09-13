@@ -148,6 +148,7 @@ Ext.define('Shopware.apps.Article.view.image.Upload', {
             labelWidth: 100,
             anchor: '100%',
             margin: '0 10 0 0',
+            name: 'fileId',
             buttonText : me.snippets.upload,
             listeners: {
                 scope: this,
@@ -163,6 +164,19 @@ Ext.define('Shopware.apps.Article.view.image.Upload', {
                 cls: 'small secondary'
             }
         });
+
+        if(Ext.isIE || Ext.isSafari) {
+            var form = Ext.create('Ext.form.Panel', {
+                unstyled: true,
+                border: 0,
+                bodyBorder: 0,
+                style: 'background: transparent',
+                bodyStyle: 'background: transparent',
+                url: '{url controller="mediaManager" action="upload"}?albumID=-1',
+                items: [ me.fileUploadField ]
+            });
+            me.fileUploadField  = form;
+        }
 
         // Media selection field
         me.mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
@@ -191,7 +205,7 @@ Ext.define('Shopware.apps.Article.view.image.Upload', {
 
     /**
      * Method to set the allowed file extension for the media manager
-     * @return array of strings
+     * @return Array of strings
      */
     getAllowedExtensions : function() {
         return [ 'gif', 'png', 'jpeg', 'jpg', 'swf' ]
@@ -214,8 +228,7 @@ Ext.define('Shopware.apps.Article.view.image.Upload', {
 
         return Ext.create('Shopware.apps.Article.view.image.DropZone', {
             anchor: '100%',
-            hideOnLegacy: true,
-            focusable: false
+            dropZoneConfig: { hideOnLegacy: true, focusable: false }
         });
     }
 

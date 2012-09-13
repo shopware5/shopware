@@ -45,6 +45,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @object
      */
     snippets: {
+    	upload: {
+	    	text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'	
+    	},
         success: {
             title: '{s name=media/success/title}Success{/s}',
             mapping: '{s name=media/success/mapping}The image mapping saved successfully{/s}',
@@ -431,8 +434,19 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param field
      */
     onSidebarMediaUpload: function(field) {
-        var dropZone = this.getSidebarMediaDropZone();
-        this.uploadMedia(field, dropZone);
+        var dropZone = this.getSidebarMediaDropZone(), me = this;
+        
+        if(Ext.isIE || Ext.isSafari) {
+        	var form = field.ownerCt;
+        	form.submit({
+        		success: function() {
+                    console.log(arguments);
+	        		Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
+        		}
+        	});
+        } else {
+            this.uploadMedia(field, dropZone);
+        }
     },
 
     /**
@@ -442,8 +456,19 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param [object]
      */
     onMediaUpload: function(field) {
-        var dropZone = this.getMediaDropZone();
-        this.uploadMedia(field, dropZone);
+        var dropZone = this.getMediaDropZone(), me = this;
+
+        if(Ext.isIE || Ext.isSafari) {
+            var form = field.ownerCt;
+            form.submit({
+                success: function() {
+                    console.log(arguments);
+                    Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
+                }
+            });
+        } else {
+            this.uploadMedia(field, dropZone);
+        }
     },
 
     /**
@@ -597,3 +622,4 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
 });
 //{/block}
+3
