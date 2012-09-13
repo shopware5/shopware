@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Navigation', {
                 { name: '{s name=navigation/all_extensions}All extensions{/s}', badge: 0, selected: false, requestParam: null },
                 { name: '{s name=navigation/community}Community extensions{/s}', badge: 0, selected: true, requestParam: 'Community' },
                 { name: '{s name=navigation/shopware}Shopware extensions{/s}', badge: 0, selected: false, requestParam: 'Default' },
-                { name: '{s name=navigation/local}Local extensions{/s}', badge: 0, selected: false, requestParam: 'Locale' }
+                { name: '{s name=navigation/local}Local extensions{/s}', badge: 0, selected: false, requestParam: 'Local' }
             ]
         });
 
