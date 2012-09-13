@@ -37,52 +37,63 @@
  */
 /* {block name=backend/category/view/main/window} */
 Ext.define('Shopware.apps.Category.view.main.Window', {
+
     /**
      * Parent Element Enlight.app.Window
      * @string
      */
     extend: 'Enlight.app.Window',
+
     /**
      * Title of this window
      * @string
      */
     title: '{s name=window/main_title}Categories{/s}',
+
     /**
      * XType for this component
+     * @string
      */
     alias: 'widget.category-main-window',
+
     /**
      * Enables  / Disables border
      * Default: false
      * @boolean
      */
     border: false,
+
     /**
      * Enabled / disables autoShow
      * Default: true
      * @boolean
      */
     autoShow: true,
+
     /**
      * Layout setting for this sub-application
      * Default: border
      * @string
      */
     layout: 'border',
+
     /**
      * Height setting for this window in pixel
      * Default: 600 px
      * @integer
      */
     height: 600,
+
     /**
      * Width setting for this window in pixel
      * Default: 925 px
      * @integer
      */
     width: 900,
+
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
+     * @boolean
      */
     stateful:true,
 
@@ -97,10 +108,16 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      */
     tabPanel : null,
 
+    /**
+     * Masks the viewport when the window is visible.
+     * @boolean
+     */
+    modal: true,
 
     /**
      * Initializes the component and builds up the main interface
      *
+     * @public
      * @return void
      */
     initComponent: function() {
@@ -131,6 +148,9 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * or to create a new customer.
      * Can contains additionally an second tab which displays the customer orders and a chart which
      * displays the orders grouped by the order year and month
+     *
+     * @public
+     * @return Array of components
      */
     getTabs:function () {
         var me = this;
@@ -159,7 +179,9 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
 
     /**
      * Build and returns the action toolbar in the footer of the form.
-     * @return Ext.toolbar.Toolbar
+     *
+     * @public
+     * @return Array of docked items
      */
     getDockedItems : function() {
         var me = this,
@@ -175,6 +197,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
             }
         });
         /* {/if} */
+
         return [{
             xtype:'toolbar',
             cls: 'shopware-toolbar',

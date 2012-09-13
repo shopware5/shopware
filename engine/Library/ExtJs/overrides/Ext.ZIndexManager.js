@@ -41,6 +41,8 @@ Ext.override(Ext.ZIndexManager, {
         // Terminate the mask comp which will be displayed
         me.mask = me.mask || Shopware.app.Application.globalMask;
 
+        console.log(comp);
+        me.mask.insertAfter(comp.el);
         me.mask.maskTarget = maskTarget;
         maskTarget.addCls(Ext.baseCSSPrefix + 'body-masked');
         me.mask.setBox(viewSize);
