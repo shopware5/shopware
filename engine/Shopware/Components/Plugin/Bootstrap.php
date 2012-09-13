@@ -211,13 +211,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public final function hasForm()
     {
-        if($this->form === null) {
+        if($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
             $this->form = $formRepository->findOneBy(array(
                 'name' => $this->getName()
             ));
         }
-        if($this->form === null) {
+        if($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
             $this->form = $formRepository->findOneBy(array(
                 'pluginId' => $this->getId()
