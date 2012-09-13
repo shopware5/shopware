@@ -1,7 +1,7 @@
 {
     "name": "Emotion Gray",
     "author": "shopware AG",
-    "license": "AGPL",
+    "license": "New BSD",
     "esi": true,
     "emotion": true
 }
