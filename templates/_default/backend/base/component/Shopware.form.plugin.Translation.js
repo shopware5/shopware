@@ -196,7 +196,10 @@ Ext.define('Shopware.form.plugin.Translation',
                     config.labelSeparator = '';
                 }
 
-                me.translatableFields.push(field);
+                // SW-3564 - Don't take disabled fields into account
+                if(!field.isDisabled()) {
+                    me.translatableFields.push(field);
+                }
 
                 // Inject the globe element into the component
                 if(field.getEl()) {

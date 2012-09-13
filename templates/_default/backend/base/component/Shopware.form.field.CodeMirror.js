@@ -287,6 +287,13 @@ Ext.define('Shopware.form.field.CodeMirror',
         if (this.editor && (typeof value !== "undefined")) {
             this.editor.setValue(value);
         }
+
+        // Refresh the codemirror field when a value was set
+        if(this.editor) {
+            this.editor.refresh();
+        }
+        this.config.value = value;
+
         return this.callParent(arguments);
     },
 

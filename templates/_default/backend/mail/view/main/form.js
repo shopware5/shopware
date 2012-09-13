@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
     newRecord: function(record) {
         var me   = this,
             form = me.getForm();
-        
+
         form.findField('name').validationRequestParam = 0;
 
     /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
@@ -110,16 +110,17 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         me.getComponent('tabpanel').setActiveTab(0);
 
         // update translation globes
-    /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
+        /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
         me.getPlugin('my-translation').onGetTranslatableFields();
-    /*{/if}*/
+        /*{/if}*/
+//        form.loadRecord(record);
 
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
         form.findField('name').setReadOnly(true);
         return;
         /*{/if}*/
 
-        if (record.get('type') !== 'userMail') {
+        if(record.get('type') !== 'userMail') {
             form.findField('name').setReadOnly(true);
         } else {
             form.findField('name').setReadOnly(false);
@@ -221,6 +222,16 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                 xtype: 'tabpanel',
                 itemId: 'tabpanel',
                 flex: 1,
+                listeners: {
+                    scope: me,
+                    // SW-3564 - Refresh codemirror fields on tab change
+                    tabchange: function(tabPanel, tab) {
+                        var editorField = tab.editorField;
+                        editorField.editor.refresh();
+
+                        me.getPlugin('my-translation').onGetTranslatableFields();
+                    }
+                },
                 items: [
                     {
                         xtype: 'mail-main-contentEditor',

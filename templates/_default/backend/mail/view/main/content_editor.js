@@ -95,27 +95,34 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
      */
     getItems: function() {
         var me = this;
-        me.htmlTextField= Ext.create('Shopware.form.field.CodeMirror', {
-            flex: 1,
-            xtype: 'codemirrorfield',
-            mode: 'smarty',
-            name: 'contentHtml',
-            translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
-            translatable: true // Indicates that this field is translatable
-        });
-        me.textfield = Ext.create('Shopware.form.field.CodeMirror', {
-            flex: 1,
-            xtype: 'codemirrorfield',
-            mode: 'smarty',
-            name: 'content',
-            translationLabel: '{s name=codemirror_translationLabel}Content{/s}',
-            translatable: true // Indicates that this field is translatable
-        });
-        me.textfield.name = 'content';
-        me.textfield.translationLabel = 'content';
 
+        me.editorField = null;
 
-        return [ (this.isHtml ? me.htmlTextField : me.textfield) ];
+        if(this.isHtml) {
+            me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
+                flex: 1,
+                xtype: 'codemirrorfield',
+                mode: 'smarty',
+                name: 'contentHtml',
+                translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
+                translatable: true // Indicates that this field is translatable
+            });
+        }else{
+            me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
+                flex: 1,
+                xtype: 'codemirrorfield',
+                mode: 'smarty',
+                name: 'content',
+                translationLabel: '{s name=codemirror_translationLabel}Content{/s}',
+                translatable: true // Indicates that this field is translatable
+            });
+            me.editorField.name = 'content';
+            me.editorField.translationLabel = 'content';
+        }
+
+        return me.editorField;
+
+//        return [ (this.isHtml ? me.htmlTextField : me.textfield) ];
     },
 
     /**

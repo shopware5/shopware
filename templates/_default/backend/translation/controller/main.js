@@ -137,6 +137,9 @@ Ext.define('Shopware.apps.Translation.controller.Main',
         me.registerTranslationSerivces();
 
         me.callParent(arguments);
+
+
+
     },
 
     /**
@@ -229,6 +232,14 @@ Ext.define('Shopware.apps.Translation.controller.Main',
 
                 response = Ext.JSON.decode(response.responseText);
                 pnl.getForm().loadRecord(response);
+
+                // SW-3564 - Force codemirror fields to refresh
+                var codeMirrorFields = pnl.query('codemirrorfield');
+                Ext.each(codeMirrorFields, function(field) {
+                    var editor = field.editor;
+                    editor.refresh();
+                });
+
                 pnl.setLoading(false);
             }
         });

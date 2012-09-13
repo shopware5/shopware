@@ -287,6 +287,8 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             scope: this,
             callback: function(records, operation, success) {
                 if (success) {
+                    me.getFormPanel().newRecord();
+
                     formPanel.loadRecord(records[0]);
 
                     // Reset the form so it does not seem dirty.
@@ -295,7 +297,8 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                     });
 
                     formPanel.getForm().reset();
-    
+
+
                     infoPanel.updateContext(records[0].get('contextPath'));
 
                     me.getPreviewBtn().setDisabled(false);
@@ -304,16 +307,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                 formPanel.setLoading(false);
 
                 var tabPanel = me.getTabPanel();
-                if(records[0].get('contentHtml') == '') {
-                    var htmlEditor = tabPanel.items.getAt(1);
-
-                    var editor = me.getContentEditor();
-                    editor.htmlTextField.setValue('');
-                    editor.htmlTextField.setRawValue('');
-                    editor.htmlTextField.editor.save();
-                    editor.htmlTextField.doComponentLayout();
-
-                }
             }
         });
     },
@@ -434,7 +427,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             record = Ext.create('Shopware.apps.Mail.model.Mail');
         }
 
-        var oldName = record.get('name')
+        var oldName = record.get('name');
 
         form.updateRecord(record);
 
