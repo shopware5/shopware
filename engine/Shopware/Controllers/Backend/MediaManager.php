@@ -705,11 +705,18 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
     {
+
+        /** @var $repository \Shopware\Models\Media\Repository */
+        $repository = Shopware()->Models()->Media();
+        $query = $repository->getAlbumMediaQuery($album->getId());
+        //returns the total count of the query
+        $totalResult = \DoctrineExtensions\Paginate\Paginate::count($query);
+
         $node = array(
             'id' => $album->getId(),
             'text' => $album->getName(),
             'position' => $album->getPosition(),
-            'mediaCount' => count($album->getMedia()),
+            'mediaCount' => $totalResult,
             'parentId' => $album->getParentId()
         );
 
