@@ -42,8 +42,8 @@ return array(
     'step4_header' => 'Datenbank importieren', // Database import
     'step4_skip_import' => 'Die Standard-Datenbank nicht importieren', // Skip database import
     'step4_skip_info' =>
-      'Achtung: Diese Option nur auswählen, wenn die Datenbank schon importiert ist oder falls Sie die Datenbank selber importieren möchten.<br/>' .
-      'Wenn Sie die Datenbank selber importieren möchten, führen Sie den Import bitte jetzt durch.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
+      'Achtung: Diese Option nur auswählen, wenn die Datenbank schon importiert worden ist oder Sie die Datenbank selbst importieren möchten.<br/>' .
+      'Wenn Sie die Datenbank selbst importieren möchten, führen Sie den Import bitte durch, bevor Sie fortfahren.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
     // Step 5
     'step5_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten', // Choose your license
     'step5_ce' => 'Shopware Communtity Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
