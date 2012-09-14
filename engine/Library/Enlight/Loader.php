@@ -217,7 +217,7 @@ class Enlight_Loader
      */
     public function getClassPath($class)
     {
-        if($this->classMap !== null && isset($this->classMap[$class])) {
+        if($this->classMap !== null && isset($this->classMap[$class]) && is_readable($this->classMap[$class])) {
             return $this->classMap[$class];
         }
         foreach ($this->namespaces as $namespace) {
