@@ -1404,6 +1404,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
         $type = strtolower(trim($this->Request()->getParam('type')));
+
         if (!$type) {
             echo json_encode(array(
                 'success' => false,
@@ -1528,7 +1529,36 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $articleDetailRepository = $this->getArticleDetailRepository();
 
+        $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
+        $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
+
         foreach ($results as $imageData) {
+            if(!empty($imageData['relations'])) {
+                $relations = array();
+                $results = explode("&", $imageData['relations']);
+                foreach($results as $result) {
+                    if($result !== "") {
+                        $result = preg_replace('/{|}/', '', $result);
+                        list($group, $option) = explode(":", $result);
+
+                        // Try to get given configurator group/option. Continue, if they don't exist
+                        $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
+                        if($cGroupModel === null) {
+                            continue;
+                        }
+                        $cOptionModel = $configuratorOptionRepository->findOneBy(
+                            array('name' => $option,
+                                 'groupId'=>$cGroupModel->getId()
+                            )
+                        );
+                        if($cOptionModel === null) {
+                            continue;
+                        }
+                        $relations[] = array("group" => $cGroupModel, "option" => $cOptionModel);
+                    }
+                }
+            }
+
             if (empty($imageData['ordernumber']) || empty($imageData['image'])) {
                 continue; 
             }
@@ -1581,9 +1611,27 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $image->setPath($media->getName());
             $image->setExtension($media->getExtension());
             $image->setMedia($media);
-
+            $image->setArticleDetail($articleDetailModel);
             $this->getManager()->persist($image);
             $this->getManager()->flush($image);
+
+            // Set mappings
+            if(!empty($relations)) {
+                foreach($relations as $relation){
+                    $optionModel = $relation['option'];
+                    Shopware()->Db()->insert('s_article_img_mappings', array(
+                        'image_id' => $image->getId()
+                    ));
+                    $mappingID = Shopware()->Db()->lastInsertId();
+                    Shopware()->Db()->insert('s_article_img_mapping_rules', array(
+                        'mapping_id' => $mappingID,
+                        'option_id' => $optionModel->getId()
+                    ));
+                }
+
+
+            }
+
 
             $total++;
         }
