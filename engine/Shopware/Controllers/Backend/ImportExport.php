@@ -1611,7 +1611,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $image->setPath($media->getName());
             $image->setExtension($media->getExtension());
             $image->setMedia($media);
-            $image->setArticleDetail($articleDetailModel);
             $image->setMain($imageData['main']);
             $this->getManager()->persist($image);
             $this->getManager()->flush($image);
