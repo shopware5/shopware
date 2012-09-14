@@ -40,8 +40,10 @@ return array(
     'step_3_loading' => 'Datenbank wird importiert...',
     // Step 4
     'step4_header' => 'Datenbank importieren', // Database import
-    'step4_skip_import' => 'Standard-Datenbank nicht importieren', // Skip database import
-    'step4_skip_info' => 'Standard-Datenbank nicht importieren', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
+    'step4_skip_import' => 'Die Standard-Datenbank nicht importieren', // Skip database import
+    'step4_skip_info' =>
+      'Achtung: Diese Option nur auswählen, wenn die Datenbank schon importiert ist oder falls Sie die Datenbank selber importieren möchten.<br/>' .
+      'Wenn Sie die Datenbank selber importieren möchten, führen Sie den Import bitte jetzt durch.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
     // Step 5
     'step5_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten', // Choose your license
     'step5_ce' => 'Shopware Communtity Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
@@ -71,8 +73,8 @@ return array(
     'step6_admin_password_repeat' => 'Admin Passwort Wdh.:', // Admin password repeat
     // Step 7
     'step7_title' => 'Basis-Einrichtung abgeschlossen', // Finished
-    'step7_info' => 'Die Installation wurde erfolreich abgeschlossen.<br /><br />Aus Sicherheitsgründen sollten Sie den Installer (/install) nun via FTP vom Server löschen.', // The installation was finished successful
-    'step7_frontend' => 'Zum Shop Frontend', // Open shop frontend
-    'step7_backend' => 'Zum Shop Backend (Administration)', // Open shop backend
+    'step7_info' => 'Die Installation wurde erfolgreich abgeschlossen.<br /><br />Aus Sicherheitsgründen sollten Sie den Installer (/install) nun via FTP vom Server löschen.', // The installation was finished successful
+    'step7_frontend' => 'Zum Shop-Frontend', // Open shop frontend
+    'step7_backend' => 'Zum Shop-Backend (Administration)', // Open shop backend
 
 );

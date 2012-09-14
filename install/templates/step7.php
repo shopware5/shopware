@@ -13,7 +13,4 @@ if (!defined("installer")){
         <a href="http://<?php echo $shop["domain"]."".$shop["basepath"] ?>" target="_blank"><?php echo $language["step7_frontend"];?></a><br /><br />
         <a href="http://<?php echo $shop["domain"]."".$shop["basepath"]."/backend" ?>" target="_blank"><?php echo $language["step7_backend"];?></a>
     </div>
-    <div class="actions clearfix">
-        <a href="<?php echo $app->urlFor('step6', array()); ?>" class="secondary"><?php echo $language["back"];?></a>
-    </div>
 </div>

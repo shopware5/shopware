@@ -406,14 +406,13 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         $list = array();
         foreach ($this->getList() as $requirement) {
             $listResult = array();
-
             $listResult['name'] = (string)$requirement->name;
-            $listResult['isHardlyRequired'] = $requirement->weakRequired ? false : true;
-            $listResult['hasNotice'] = (string)$requirement->hasNotice;
+            $listResult['notice'] = (string)$requirement->notice;
             $listResult['required'] = (string)$requirement->required;
             $listResult['version'] = (string)$requirement->version;
-            $listResult['result'] = (string)$requirement->result;
-            if (empty($listResult['result']) && $listResult['isHardlyRequired'] == true) {
+            $listResult['result'] = (bool)(string)$requirement->result;
+            $listResult['error'] = (bool)$requirement->error;
+            if(!$listResult['result'] && $listResult['error']) {
                 $this->setFatalError(true);
             }
             $list[] = $listResult;

@@ -27,11 +27,11 @@ if (!defined("installer")){
 
     <div class="meta">
         <p>
-            <strong>Shopware-Version:</strong> 4.0.1
+            <strong>Shopware-Version:</strong> 4.0.2
         </p>
 
         <p>
-            <strong>Installer-Version:</strong> 1.0.1
+            <strong>Installer-Version:</strong> 1.0.2
 
         </p>
     </div>

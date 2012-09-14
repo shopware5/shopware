@@ -4,9 +4,12 @@
 	 	<name>php</name><group>core</group><required>5.3.2</required>
 	</requirement>
 	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>4.0.0</required>
-        <hasNotice>The ioncube loader is only required, if you want to use commercial plugins within the shopware communtity version</hasNotice>
-	    <weakRequired>true</weakRequired>
+	 	<name>ionCube Loader</name><group>core</group><required>4.0.2</required>
+        <notice>The ionCube Loader is only required, if you want to use commercial plugins within the Shopware Community Edition.</notice>
+    </requirement>
+    <requirement>
+        <name>eAccelerator</name><group>extension</group><required>0</required>
+        <notice>Using the eAccelerator is not recommended. Please use instead the APC cache.</notice>
     </requirement>
 	<requirement>
 	 	<name>pdo</name><group>core</group><required>1</required>
@@ -15,7 +18,7 @@
 	 	<name>pdo_mysql</name><group>core</group><required>1</required>
 	</requirement>
 	<requirement>
-	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info><weakRequired>true</weakRequired>
+	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info><error>true</error>
 	</requirement>
 	<requirement>
 	 	<name>gd</name><group>extension</group><required>2.0.0</required>
@@ -66,13 +69,13 @@
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
-	 	<name>memory_limit</name><group>config</group><required>128M</required><weakRequired>true</weakRequired>
+	 	<name>memory_limit</name><group>config</group><required>128M</required><error>true</error>
 	</requirement>
 	<requirement>
 	 	<name>max_execution_time</name><group>config</group><required>30</required>
 	</requirement>
 	<requirement>
-	 	<name>upload_max_filesize</name><group>config</group><required>10M</required>
+	 	<name>upload_max_filesize</name><group>config</group><required>6M</required>
 	</requirement>
 	<requirement>
 	 	<name>post_max_size</name><group>config</group><required>8M</required>
@@ -85,9 +88,6 @@
 	</requirement>
 	<requirement>
 	 	<name>file_uploads</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>zend.ze1_compatibility_mode</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
 	 	<name>suhosin.session.cryptua</name><group>config</group><required>0</required>

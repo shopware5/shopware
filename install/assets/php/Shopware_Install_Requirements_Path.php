@@ -60,8 +60,6 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
 		foreach ($this->list->file as $requirement) {
 			$requirement->existsAndWriteable = $this->checkExits($requirement->name);
 		}
-
-
 	}
 
 	/**
