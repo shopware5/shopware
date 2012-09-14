@@ -1809,12 +1809,8 @@ class sBasket
 					}else {
 						$sEsd = "0";
 					}
-					// ----
-					$getArticle["articleName"] = $this->sSYSTEM->sDB_CONNECTION->qstr($getArticle["articleName"]);
 
 					$quantity = (int) $quantity;
-
-
 					$sql = "
 						INSERT INTO s_order_basket (id,sessionID,userID,articlename,articleID,
 						ordernumber, shippingfree, quantity, price, netprice, datum, esdarticle, partnerID, config)
