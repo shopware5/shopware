@@ -440,7 +440,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         	var form = field.ownerCt;
         	form.submit({
         		success: function() {
-                    console.log(arguments);
 	        		Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
         		}
         	});
