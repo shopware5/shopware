@@ -142,10 +142,11 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
                 }
             } else {
-                var oldNumber = e.record.get('number');
+                var oldNumber = e.record.get('number'),
+                    newNumber = e.record.get('details.number') || e.record.get('number');
 
                 // Map the ordernumber and save the model to the server side
-                e.record.set('number', e.record.get('details.number'));
+                e.record.set('number', newNumber);
                 e.record.save({
 
                     // Rollback changes if an error occurs
