@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * @object
      */
     snippets:{
+        regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}',
         columns:{
             number:'{s name=variant/list/column/number}Order number{/s}',
             stock:'{s name=variant/list/column/stock}Stock{/s}',
@@ -83,6 +84,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             remove:'{s name=variant/list/toolbar/button_delete}Delete all selected{/s}',
             search:'{s name=variant/list/toolbar/search_empty_text}Search...{/s}',
             data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
+            save:'{s name=variant/list/toolbar/save}Save changes{/s}',
             orderNumber: {
                 field: '{s name=variant/list/toolbar/order_field}Apply standard prices{/s}',
                 button: '{s name=variant/list/toolbar/order_button}Regenerate order numbers{/s}',
@@ -103,40 +105,64 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         me.columns = me.getColumns();
         me.toolbar = me.getToolbar();
         me.pagingbar = me.getPagingBar();
-        me.plugins = [ me.createRowEditor() ];
+        me.plugins = [ me.createCellEditor() ];
         me.dockedItems = [ me.toolbar, me.pagingbar ];
         me.callParent(arguments);
     },
 
     /**
-     * Creates the row editor the grid panel.
+     * Creates the cell editor the grid panel.
+     *
+     * @public
+     * @return [object] Ext.grid.plugin.CellEditing
      */
-    createRowEditor: function() {
+    createCellEditor: function() {
         var me = this;
 
-        me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
+        me.cellEditor = Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToMoveEditor: 1,
             autoCancel: true
         });
 
         //register listener on the edit event to save the record and convert the price value. Without
         //this listener the insert price "10,55" would be become "1055"
-        me.rowEditor.on('edit', function(editor, e) {
-            if (e.newValues.price) {
-                var newPrice = Ext.Number.toFixed(Ext.Number.from(e.newValues.price), 2);
-                var oldPrice = Ext.Number.toFixed(Ext.Number.from(e.originalValues.price), 2);
+        me.cellEditor.on('edit', function(editor, e) {
+            if (e.value && e.field === 'price') {
+                var newPrice = Ext.Number.from(e.value);
+                newPrice = Ext.Number.toFixed(newPrice, 2);
+
+                var oldPrice = Ext.Number.from(e.originalValue);
+                oldPrice = Ext.Number.toFixed(oldPrice, 2);
+
                 if (newPrice != oldPrice) {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
                 }
+            } else {
+                // Map the ordernumber and save the model to the server side
+                e.record.set('number', e.record.get('details.number'));
+                e.record.save();
             }
-
-            e.record.set('inStock', e.newValues.inStock);
-            e.record.set('active', e.newValues.active);
-            e.record.set('standard', e.newValues.standard);
-            me.fireEvent('saveVariant', e.record);
         });
 
-        return me.rowEditor;
+        /**
+         * Event listener which filters the html tags from the number value.
+         */
+        me.cellEditor.on('beforeedit', function(editor, e) {
+            if(e.field === 'details.number') {
+
+                // We need to defer the function call to make sure that the editor is rendered
+                // and the value is loaded.
+                Ext.defer(function() {
+
+                    editor.editors.each(function(ed) {
+                        ed.validationRequestParam = e.record.get('id');
+                        ed.setValue(e.record.get('number'));
+                    });
+                }, 50);
+            }
+        }, me);
+
+        return me.cellEditor;
     },
 
     /**
@@ -304,7 +330,11 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             dataIndex: 'details.number',
             sortable: true,
             flex:1,
-            renderer: me.numberColumnRenderer
+            align: 'left',
+            renderer: me.numberColumnRenderer,
+            editor: {
+                allowBlank: false
+            }
         });
         columns = columns.concat(me.createDynamicColumns());
         columns = columns.concat(standardColumns);
@@ -420,14 +450,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
     getGridSelModel:function () {
         var me = this;
 
-        return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
-                // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
-                    me.deleteButton.setDisabled(selections.length === 0);
-                }
-            }
-        });
+        return Ext.create('Ext.selection.CellModel');
     },
 
 
@@ -437,21 +460,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      */
     getToolbar:function () {
         var me = this;
-
-        //creates the delete button to remove all selected variants in one request.
-        me.deleteButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-minus-circle-frame',
-            text: me.snippets.toolbar.remove,
-            disabled: true,
-            action:'deleteVariant',
-            handler: function() {
-                var selectionModel = me.getSelectionModel(),
-                    records = selectionModel.getSelection();
-                if (records.length > 0) {
-                    me.fireEvent('deleteVariant', records);
-                }
-            }
-        });
 
         //creates the price button to apply the standard prices of the main article on all variants.
         me.applyDataButton = Ext.create('Ext.button.Button', {
@@ -501,10 +509,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
             items:[
-                me.deleteButton,
-                { xtype:'tbspacer', width: 6 },
-                { xtype: 'tbseparator' },
-                { xtype:'tbspacer', width: 6 },
                 me.applyDataButton,
                 { xtype:'tbspacer', width: 6 },
                 { xtype: 'tbseparator' },
