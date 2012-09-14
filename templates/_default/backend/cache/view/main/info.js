@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.cache-info',
 
-    title: '{s name=info/title}Cache information{/s}',
+    title: '{s name=info/title}Cache-Directory information{/s}',
 
     layout: 'fit',
     autoScroll: true,
@@ -62,6 +62,10 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
             header: '{s name=info/columns/backend}Backend{/s}',
             dataIndex: 'backend',
             flex: 3
+        }, {
+            header: '{s name=info/columns/directory}Directory{/s}',
+            dataIndex: 'dir',
+            flex: 5
         }, {
             header: '{s name=info/columns/files}Files{/s}',
             dataIndex: 'files',

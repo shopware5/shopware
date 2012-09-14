@@ -89,10 +89,10 @@ Ext.define('Shopware.apps.Cache.view.main.Form', {
         var me = this;
         return [{
             name: 'cache[config]',
-            boxLabel: '{s name=form/items/config}Configuration cache (settings, snippets, etc.){/s}'
+            boxLabel: '{s name=form/items/config}Templates, (settings, snippets, etc.){/s}'
         }, {
             name: 'cache[frontend]',
-            boxLabel: '{s name=form/items/frontend}Frontend / page cache{/s}'
+            boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}'
         }, {
             name: 'cache[backend]',
             boxLabel: '{s name=form/items/backend}Backend cache{/s}'
