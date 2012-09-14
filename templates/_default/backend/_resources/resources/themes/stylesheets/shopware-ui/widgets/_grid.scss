@@ -37,6 +37,11 @@
 	.#{$prefix}grid-row .#{$prefix}grid-cell {
 		border-color: #cdd6dc;
 		border-top: 1px solid transparent;
+        -webkit-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -moz-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -ms-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -o-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
 
 		// Basic cell content formatting
 		a {
@@ -92,14 +97,24 @@
             appearance: none;
 		}
 	}
-	
+
+    .#{$prefix}grid-cell-selected {
+        background: #009CFF !important;
+        color: #fff;
+    }
+
 	.#{$prefix}grid-row-over {
 		background: transparent;
 		
 		.#{$prefix}grid-cell {
 			background: transparent !important;
 		}
+        .#{$prefix}grid-cell-selected {
+            background: #009CFF !important;
+        }
 	}
+
+
 	
 	// Marked rows
 	.#{$prefix}grid-row-selected {
