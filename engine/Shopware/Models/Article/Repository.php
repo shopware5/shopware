@@ -438,16 +438,11 @@ class Repository extends ModelRepository
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
                 ->andWhere('details.kind = 1')
-                ->andWhere('details.active = 1')
                 ->andWhere('prices.customerGroupKey = :key')
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('key', $customerGroupKey)
                 ->setParameter(1, $article->getId());
-
-        if ($article->getLastStock()) {
-            $builder->andWhere('details.inStock > 0');
-        }
 
     	return $builder;
     }

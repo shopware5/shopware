@@ -80,26 +80,30 @@ class sBasket
 	 */
 	public function sCheckBasketQuantities(){
 
-		$sql = "SELECT
-			SUM(s_articles_details.instock - s_order_basket.quantity) AS diffStock, s_order_basket.ordernumber
-			FROM s_articles,s_articles_details,s_order_basket
-			WHERE 
-			s_articles.mode = 0 AND s_articles.active = 1 AND s_articles.laststock = 1 AND s_articles.id = s_articles_details.articleID
-			AND s_articles_details.ordernumber = s_order_basket.ordernumber AND s_order_basket.modus = 0 AND
-			s_order_basket.sessionID = ?
-			GROUP BY  s_order_basket.ordernumber
-			";
-
+		$sql = "
+            SELECT
+              (d.instock - b.quantity) as diffStock, b.ordernumber,
+              a.laststock, IF(a.active=1, d.active, 0) as active
+			FROM s_order_basket b
+			LEFT JOIN s_articles_details d
+			ON d.ordernumber = b.ordernumber
+			AND d.articleID = b.articleID
+			LEFT JOIN s_articles a
+			ON a.id = d.articleID
+			WHERE b.sessionID = ?
+			AND b.modus = 0
+			GROUP BY b.ordernumber
+        ";
 		$result = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql,array($this->sSYSTEM->sSESSION_ID));
 		$hideBasket = false;
 		foreach ($result as $article){
-			if ($article["diffStock"]<0){
+			if (empty($article['active'])
+              || (!empty($article['laststock']) && $article["diffStock"] < 0)){
 				$hideBasket = true;
 				$articles[$article["ordernumber"]]["OutOfStock"] = true;
-			}else {
+			} else {
 				$articles[$article["ordernumber"]]["OutOfStock"] = false;
 			}
-
 		}
 		return array("hideBasket"=>$hideBasket,"articles"=>$articles);
 	}

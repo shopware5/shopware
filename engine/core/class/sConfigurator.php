@@ -162,18 +162,12 @@ class sConfigurator
                     ->leftJoin('detail.prices', 'prices')
                     ->leftJoin('prices.customerGroup', 'customerGroup')
                     ->where('detail.articleId = ?1')
-                    ->andWhere('detail.active = 1')
                     ->andWhere('customerGroup.key = :customerGroup')
                     ->setParameter(1, $id)
                     ->setParameter('customerGroup', $customerGroupKey)
                     ->orderBy('detail.kind', 'ASC')
                     ->addOrderBy('customerGroup.id', 'ASC')
                     ->addOrderBy('prices.from', 'ASC');
-
-            if ($article->getLastStock()) {
-                $builder->andWhere('detail.inStock > 0');
-            }
-
 
             //now we iterate all selected groups with their options to filter the available variant
             foreach($selectedItems as $optionId) {
@@ -193,6 +187,9 @@ class sConfigurator
             //we can only set one variant as select, so we select the first one
             $detailData = $selected[0];
             if (!empty($detailData)) {
+                if ($article->getLastStock() && $detailData['inStock'] < 1) {
+                    $detailData['active'] = 0;
+                }
                 if (empty($detailData['prices'])) {
                     $detailData['prices'] = $this->getDefaultPrices($detailData['id']);
                 }
@@ -221,7 +218,11 @@ class sConfigurator
         }
 
         if (empty($selected)) {
-            $detail = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $detail = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey)
+                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            if ($article->getLastStock() && $detail['inStock'] < 1) {
+                $detail['active'] = 0;
+            }
             $preSelectedOptions = $detail['configuratorOptions'];
 
             foreach($sConfigurator as &$group) {
