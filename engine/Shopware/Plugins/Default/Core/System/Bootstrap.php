@@ -106,9 +106,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $config->defaultCustomerGroup = $system->sUSERGROUP;
         }
 
-        if (Shopware()->Bootstrap()->issetResource('Session')
-          && !empty(Shopware()->Session()->sUserGroup)) {
-            if (Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
+        if (Shopware()->Bootstrap()->issetResource('Session')) {
+            if (!empty(Shopware()->Session()->sUserGroup)
+              && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
                 $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
                 //$system->sUSERGROUPDATA = Shopware()->Session()->sUserGroupData;
                 $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
