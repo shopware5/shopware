@@ -94,6 +94,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         saved: {
             errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
             errorTitle: '{s name=article_saved/error_title}Error{/s}',
+            ordernumberNotMatch: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
         }
     },
 
@@ -145,20 +146,26 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 var oldNumber = e.record.get('number'),
                     newNumber = e.record.get('details.number') || e.record.get('number');
 
-                // Map the ordernumber and save the model to the server side
-                e.record.set('number', newNumber);
-                e.record.save({
+                if(!newNumber || !newNumber.match(/^[a-zA-Z0-9-_.]+$/)) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
+                    e.record.set('number', oldNumber);
+                    e.record.set('details.number', oldNumber);
+                } else {
+                     // Map the ordernumber and save the model to the server side
+                    e.record.set('number', newNumber);
+                    e.record.save({
 
-                    // Rollback changes if an error occurs
-                    failure: function(record) {
-                        var rawData = record.getProxy().getReader().rawData,
-                            message = rawData.message;
+                        // Rollback changes if an error occurs
+                        failure: function(record) {
+                            var rawData = record.getProxy().getReader().rawData,
+                                message = rawData.message;
 
-                        e.record.set('number', oldNumber);
-                        e.record.set('details.number', oldNumber);
-                        Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.errorMessage + message, me.snippets.growlMessage);
-                    }
-                });
+                            e.record.set('number', oldNumber);
+                            e.record.set('details.number', oldNumber);
+                            Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.errorMessage + message, me.snippets.growlMessage);
+                        }
+                    });
+                }
             }
         });
 
