@@ -49,12 +49,19 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     private $cache;
 
     /**
-     * @var \Zend_Cache_Core
+     * @var string
      */
     private $prefix;
 
-    public function __construct(\Zend_Cache_Core $cache, $prefix = 'Shopware_Models_')
+    /**
+     * @param \Zend_Cache_Core $cache
+     * @param string $prefix
+     */
+    public function __construct(\Zend_Cache_Core $cache, $prefix)
     {
+        if($prefix === null) {
+            $prefix = 'Shopware_Models_' . \Shopware::REVISION . '_';
+        }
         $this->prefix = $prefix;
         $this->cache = $cache;
     }

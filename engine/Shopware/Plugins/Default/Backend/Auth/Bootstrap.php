@@ -293,7 +293,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $bootstrap->getResource('Locale')->setLocale($locale->toString());
         $bootstrap->getResource('Snippets')->setLocale($locale);
         $template = $bootstrap->getResource('Template');
-        $template->setCompileId('backend_' . $locale->toString());
+        $baseHash = $this->request->getScheme() . '://'
+                  . $this->request->getHttpHost()
+                  . $this->request->getBaseUrl() . '?'
+                  . Shopware::REVISION;
+        $baseHash = substr(sha1($baseHash), 0 , 5);
+        $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
         if (isset($user->role)) {
             $template->setCacheId($user->role->getName());
         }
