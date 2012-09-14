@@ -1526,7 +1526,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $total = 0;
         $errors = array();
 
-        $articleDetailRepostiory = $this->getArticleDetailRepository();
+        $articleDetailRepository = $this->getArticleDetailRepository();
 
         foreach ($results as $imageData) {
             if (empty($imageData['ordernumber']) || empty($imageData['image'])) {
@@ -1535,7 +1535,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $counter++;
 
             /** @var \Shopware\Models\Article\Detail $articleDetailModel */
-            $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $imageData['ordernumber']));
+            $articleDetailModel = $articleDetailRepository->findOneBy(array('number' => $imageData['ordernumber']));
             if (!$articleDetailModel) {
                 continue;
             }
@@ -1589,8 +1589,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         if (!empty($errors)) {
+            $errors = $this->toUtf8($errors);
             $message = implode("<br>\n", $errors);
-                echo json_encode(array(
+            echo json_encode(array(
                 'success' => false,
                 'message' => sprintf("Errors: $message"),
             ));
@@ -1601,7 +1602,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'success' => true,
             'message' => sprintf("Successfully uploaded %s of %s Images", $total, $counter)
         ));
-
+        
         return;
     }
 
@@ -1641,7 +1642,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (empty($category['parentID']) || empty($category['categoryID']) || empty($category['description'])) {
                     continue;
                 }
-
+                
                 $categoryModel = $this->saveCategory($category, $categoryRepository, $metaData);
                 $this->getManager()->flush();
                 $this->getManager()->clear();
@@ -2136,6 +2137,21 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         try {
             foreach ($results as $articleData) {
                 $counter++;
+
+                // Prevent invalid records from being imported and throw a exception
+                if(empty($articleData['name'])) {
+                    throw new \Exception("Article name may not be empty");
+                    continue;
+                }
+                if(empty($articleData['ordernumber'])) {
+                    throw new \Exception("Article ordernumber may not be empty");
+                }
+                if(!empty($articleData['ordernumber'])) {
+                    if(preg_match('/[^a-zA-Z0-9-_.]/', $articleData['ordernumber']) !== 0) {
+                        throw new \Exception("Invalid ordernumber: {$articleData['ordernumber']}");
+                    }
+                }
+
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
                 if ($result) {
                     $articleIds[] = $result->getId();
@@ -2200,10 +2216,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $errors[] = "Error in line {$counter}: $errormessage\n";
 
+            $errors = $this->toUtf8($errors);
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,
-                'message' => "Error: $message",
+                'message' => "Error: ".$message,
             ));
             return;
         }
