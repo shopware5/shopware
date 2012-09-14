@@ -418,11 +418,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                     name: 'packUnit',
                     translatable: true,
                     fieldLabel: me.snippets.basePrice.packingUnit
-                } , {
-                    xtype: 'numberfield',
-                    name: 'minPurchase',
-                    fieldLabel: me.snippets.settings.minimumOrder
-                },
+                }
             ]
         });
     },
@@ -481,6 +477,10 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 xtype: 'numberfield',
                 name: 'stockMin',
                 fieldLabel: me.snippets.settings.minStock
+            }, {
+                xtype: 'numberfield',
+                name: 'minPurchase',
+                fieldLabel: me.snippets.settings.minimumOrder
             }, {
                 xtype: 'numberfield',
                 name: 'purchaseSteps',
