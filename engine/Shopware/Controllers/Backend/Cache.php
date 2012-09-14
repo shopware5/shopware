@@ -125,6 +125,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         //SW-2099 - Fix clean file cache
 
+        if ($cache['config'] == 'on') {
+            $this->clearCompilerCache();
+        }
         if ($cache['search'] == 'on') {
             $this->clearSearchCache();
         }
@@ -154,18 +157,13 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $cache = $this->Request()->getQuery('cache');
         switch ($cache) {
             case 'Template':
-                $this->clearBackendCache();
-                break;
             case 'Config':
+                $this->clearBackendCache();
                 $this->clearConfigCache();
                 break;
             case 'Frontend':
                 $this->clearFrontendCache();
                 $this->clearQueryCache();
-                break;
-            case 'Proxy':
-            case 'Proxies':
-                $this->clearProxyCache();
                 break;
             default:
                 break;
@@ -396,6 +394,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $info = array();
         $info['dir'] = str_replace(Shopware()->DocPath(), '', $dir);
+        $info['dir'] = str_replace(DIRECTORY_SEPARATOR, '/', $info['dir']);
+        $info['dir'] = rtrim($info['dir'], '/') . '/';
         if (!file_exists($dir) || !is_dir($dir)) {
             $info['message'] = 'Cache dir not exists';
             return $info;

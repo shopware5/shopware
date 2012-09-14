@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
          });
 
         me.callParent(arguments);
+        me.store.load();
     },
 
     /**

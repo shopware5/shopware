@@ -55,7 +55,7 @@ class Shopware extends Enlight_Application
     {
         Shopware($this);
 
-        $this->oldPath = dirname(dirname(dirname(__FILE__))) . $this->DS();
+        $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
 
         if ($options === null) {
             $options = $this->AppPath() . 'Configs/Default.php';

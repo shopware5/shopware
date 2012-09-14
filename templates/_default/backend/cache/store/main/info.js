@@ -31,8 +31,6 @@ Ext.define('Shopware.apps.Cache.store.main.Info', {
 
     fields: [ 'name', 'backend', 'dir', 'size', 'files', 'freeSpace' ],
 
-    autoLoad: true,
-
     proxy: {
         type: 'ajax',
         url: '{url action=getInfo}',
