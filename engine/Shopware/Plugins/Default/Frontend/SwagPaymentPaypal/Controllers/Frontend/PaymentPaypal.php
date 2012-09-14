@@ -335,7 +335,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         }
 
         $paymentStatus = $result['PAYMENTSTATUS'];
-        if($result['AMT'] != $this->getAmount()) {
+        if($this->getAmount() > (float)$result['AMT']) {
             $paymentStatus = 'AmountMissMatch'; //Überprüfung notwendig
         }
         $this->Plugin()->setPaymentStatus($result['TRANSACTIONID'], $paymentStatus);
@@ -397,6 +397,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         } else {
             $data['billing']['company'] = '';
         }
+        $data['billing']['department'] = '';
 
         $data['shipping'] = $data['billing'];
         $name = explode(' ', $details['SHIPTONAME']);
