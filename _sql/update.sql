@@ -106,7 +106,8 @@ CREATE TABLE IF NOT EXISTS `s_emotion_new` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 RENAME TABLE s_emotion TO s_emotion_backup;
-INSERT INTO s_emotion_new (SELECT * FROM s_emotion_backup);
+INSERT INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
+(SELECT * FROM s_emotion_backup);
 RENAME TABLE s_emotion_new TO s_emotion;
 DROP TABLE s_emotion_backup;
 

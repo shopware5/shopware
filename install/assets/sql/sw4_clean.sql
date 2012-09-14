@@ -8318,7 +8318,6 @@ ALTER TABLE `s_user_billingaddress_attributes`
 --
 ALTER TABLE `s_user_shippingaddress_attributes`
   ADD CONSTRAINT `s_user_shippingaddress_attributes_ibfk_1` FOREIGN KEY (`shippingID`) REFERENCES `s_user_shippingaddress` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
 -- Prepares
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -8427,7 +8426,8 @@ CREATE TABLE IF NOT EXISTS `s_emotion_new` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 RENAME TABLE s_emotion TO s_emotion_backup;
-INSERT INTO s_emotion_new (SELECT * FROM s_emotion_backup);
+INSERT INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
+(SELECT * FROM s_emotion_backup);
 RENAME TABLE s_emotion_new TO s_emotion;
 DROP TABLE s_emotion_backup;
 
