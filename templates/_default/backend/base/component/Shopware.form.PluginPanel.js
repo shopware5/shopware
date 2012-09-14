@@ -67,6 +67,8 @@ Ext.define('Shopware.form.PluginPanel',
      */
     injectActionButtons: false,
 
+    descriptionField: true,
+
     _descriptionAdded: false,
 
     /**
@@ -141,8 +143,9 @@ Ext.define('Shopware.form.PluginPanel',
         var me = this;
 
         // If the shop store isn't fully loaded yet, defer the "initForm"-call
-        if(me.shopStore.isLoading()) {
+        if(me.shopStore.isLoading() || !me.rendered) {
             Ext.defer(me.initForm, 100, me, [ form ]);
+            return false;
         }
 
         if(me.injectActionButtons) {
@@ -190,10 +193,10 @@ Ext.define('Shopware.form.PluginPanel',
             type, name, value,
             elementLabel = '',
             elementDescription = '', elementName,
-            items = [], fields = [],
+            items = [],
             tabs = [], options;
 
-        if(form.get('description')) {
+        if(form.get('description') && me.descriptionField) {
 
             if(!me._descriptionAdded) {
                 items.push({
@@ -209,7 +212,7 @@ Ext.define('Shopware.form.PluginPanel',
         }
 
         me.shopStore.each(function(shop) {
-            fields = [];
+            var fields = [];
             form.getElements().each(function(element) {
                 value = element.getValues().find('shopId', shop.getId());
                 value = element.getValues().getAt(value);
@@ -219,8 +222,7 @@ Ext.define('Shopware.form.PluginPanel',
                 name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
 
                 options = element.get('options');
-                options = Ext.isObject(options) ? options : {};
-                options = Ext.applyIf(options, options.attributes || {});
+                options = options || {};
                 delete options.attributes;
 
                 elementName = element.get('name');
@@ -236,7 +238,7 @@ Ext.define('Shopware.form.PluginPanel',
                     }
                 }
 
-                fields.push(Ext.applyIf({
+                fields.push(Ext.apply({
                     xtype: type,
                     name: name,
                     elementName: elementName,

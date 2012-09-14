@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Settings', {
         if(configForms.length) {
             configForms = configForms[0];
             formId = configForms.id;
-            me.form = Ext.create('Shopware.form.PluginPanel', { formId: formId });
+            me.form = Ext.create('Shopware.form.PluginPanel', { formId: formId, descriptionField: false });
             me.add(me.form);
             me.doComponentLayout();
         }
