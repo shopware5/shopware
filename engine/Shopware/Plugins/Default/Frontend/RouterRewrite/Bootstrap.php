@@ -127,8 +127,9 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
 
         $query = $request->getQuery();
         $location = $router->assemble($query);
+        $current =  $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri();
 
-        if (strpos($location, $request->getRequestUri()) === false) {
+        if ($location !== $current) {
             $response->setRedirect($location, 301);
         }
     }
