@@ -248,15 +248,23 @@ class sArticles
                     $articles[] = $data;
                 }
             }
-            foreach ($articles as $key => $article) {
-                // Building global property-list
-                if (!empty($article["sProperties"]))
-                    foreach ($article["sProperties"] as $property) {
-                        $properties[$property["id"]] = $property["name"];
-                        $articles[$key]["sPropertiesData"][$property["id"]] = $property["value"];
-                    }
-            }
 
+            foreach ($articles as $key => $article) {
+                $sql = "SELECT comparable FROM s_filter WHERE id = ?";
+                $comparable = Shopware()->Db()->fetchOne($sql, array($article["filtergroupID"]));
+                if (!empty($comparable)) {
+                    // Building global property-list
+                    if (!empty($article["sProperties"])) {
+                        foreach ($article["sProperties"] as $property) {
+                            $properties[$property["id"]] = $property["name"];
+                            $articles[$key]["sPropertiesData"][$property["id"]] = $property["value"];
+                        }
+                    }
+                }
+                else {
+                    unset($articles[$key]["sProperties"]);
+                }
+            }
 
             return array("articles" => $articles, "properties" => $properties);
         } else {
