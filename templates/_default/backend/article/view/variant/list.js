@@ -145,7 +145,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 var oldNumber = e.record.get('number');
 
                 // Map the ordernumber and save the model to the server side
-                console.dir(e.record.data);
                 e.record.set('number', e.record.get('details.number'));
                 e.record.save({
 
