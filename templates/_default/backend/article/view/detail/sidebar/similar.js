@@ -86,6 +86,8 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Similar', {
      */
     removeEvent: 'removeSimilarArticle',
 
+    listingName: 'similar-listing',
+
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -243,7 +245,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Similar', {
             title: me.snippets.gridTitle,
             cls: Ext.baseCSSPrefix + 'free-standing-grid',
             store: me.gridStore,
-            name: 'listing',
+            name: me.listingName,
             height: 150,
             maxHeight: 150,
             minHeight: 150,

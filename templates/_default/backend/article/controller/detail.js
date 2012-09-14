@@ -366,10 +366,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         mainWindow.down('article-sidebar article-sidebar-link grid[name=download-listing]').reconfigure(article.getDownload());
 
         //reconfigure the article accessory articles listing
-        mainWindow.down('article-sidebar article-sidebar-accessory grid[name=listing]').reconfigure(article.getAccessory());
+        mainWindow.down('article-sidebar article-sidebar-accessory grid[name=accessory-listing]').reconfigure(article.getAccessory());
 
         //reconfigure the article similar articles listing
-        mainWindow.down('article-sidebar article-sidebar-similar grid[name=listing]').reconfigure(article.getSimilar());
+        mainWindow.down('article-sidebar article-sidebar-similar grid[name=similar-listing]').reconfigure(article.getSimilar());
 
         //reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());

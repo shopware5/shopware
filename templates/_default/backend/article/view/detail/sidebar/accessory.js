@@ -90,6 +90,8 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Accessory', {
      */
     removeEvent: 'removeAccessoryArticle',
 
+    listingName: 'accessory-listing',
+
     /**
      * Registers additional component events.
      */
