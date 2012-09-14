@@ -47,6 +47,7 @@
                 <div class="supplier">
                     <a href="{$supplier.link}" title="{$supplier.name}" class="image-wrapper{if !$supplier.image} text{/if}">
                     {if $supplier.image}
+                            <span class="vertical-center"></span>
                             <img src="{$supplier.image}" alt="{$supplier.name}" />
                     {else}
                         {$supplier.name}

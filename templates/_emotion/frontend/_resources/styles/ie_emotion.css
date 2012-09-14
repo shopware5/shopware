@@ -25,3 +25,6 @@
 #compareHighlight, #compareHighlight.active {
 	left: 370px;
 }
+.slider-manufacturer .sliding_container .slide .inner-slide { height: 100% }
+.slider-manufacturer .sliding_container .supplier a { display: block }
+.slider-manufacturer .sliding_container .supplier span { display: inline-block }

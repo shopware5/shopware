@@ -3624,9 +3624,19 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 /*	MANUFACTURER EMOTION SLIDER
 	-------------------------------------------- */
 .slider-manufacturer .sliding_container .slide { float: left }
-.slider-manufacturer .sliding_container .inner-slide { margin: 0 30px; position: relative; }
-.slider-manufacturer .sliding_container .supplier { float: left; width: 165px; border: 0 none; margin: 26px 15px; text-align: center; }
+.slider-manufacturer .sliding_container .inner-slide { margin: 0 30px; position: relative; z-index: 1 }
+.slider-manufacturer .sliding_container .supplier { float: left; width: 165px; border: 0 none; margin: 26px 15px; text-align: center; height: 89px }
+
 .slider-manufacturer .sliding_container .supplier a {
+    display: table-cell;
+    vertical-align: middle;
+    height: 89px;
+    width: 200px;
+}
+.slider-manufacturer .sliding_container .supplier a * { vertical-align: middle }
+.slider-manufacturer .sliding_container .supplier a img { max-width: 204px; display: block; width: 100% \0/; margin: 0 auto;}
+
+/* .slider-manufacturer .sliding_container .supplier a {
     height: auto;
     cursor: pointer;
     display: block;
@@ -3637,8 +3647,10 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     max-width: 100%;
 
 }
-.slider-manufacturer .sliding_container .supplier a * { vertical-align: center }
+.slider-manufacturer .sliding_container .supplier a * { vertical-align: middle }
+.slider-manufacturer .sliding_container .supplier a .vertical-center {display: inline-block; height: 100%; width: 1px;  }
 .slider-manufacturer .sliding_container .supplier a img { max-width: 100%; display: block; width: 100% \0/; height: 85px; margin: 0 auto;}
+*/
 .slider-manufacturer .sliding_container .supplier .text {
     background: url(../../../../_default/frontend/_resources/images/backgrounds/bg_supplier_slider_text.png) repeat-x;
     display: block;
@@ -3655,45 +3667,55 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 /** INDEX - 3 COL LISTING **/
 /* COL 1 */
 .ctl_index .emotion-col3 .col1 .slider-manufacturer .sliding_container .supplier {width: 235px}
+.ctl_index .emotion-col3 .col1 .slider-manufacturer .sliding_container .supplier a img { max-width: 235px; }
 /* COL 2 */
-.ctl_index .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier {width: 170px;} 
+.ctl_index .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier {width: 170px;}
+.ctl_index .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier a img { max-width: 170px; }
 /* COL 3 */
-.ctl_index .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier {width: 198px;} 
+.ctl_index .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier {width: 198px;}
+.ctl_index .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier a img { max-width: 198px; }
 
 /** INDEX - 4 COL LISTING **/
 /* COL 1 */
 .ctl_index .emotion-col4 .col1 .slider-manufacturer .sliding_container .supplier {margin: 26px 8px;}
 /* COL 2 */
-.ctl_index .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier {width: 187px;} 
+.ctl_index .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier {width: 187px;}
+.ctl_index .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier a img { max-width: 187px; }
 /* COL 3 */
-.ctl_index .emotion-col4 .col3 .slider-manufacturer .sliding_container .supplier {width: 198px;} 
+.ctl_index .emotion-col4 .col3 .slider-manufacturer .sliding_container .supplier {width: 198px;}
+.ctl_index .emotion-col4 .col3 .slider-manufacturer .sliding_container .supplier a img { max-width: 198px; }
 /* COL 4 */
-.ctl_index .emotion-col4 .col4 .slider-manufacturer .sliding_container .supplier {width: 204px;} 
+.ctl_index .emotion-col4 .col4 .slider-manufacturer .sliding_container .supplier {width: 204px;}
+.ctl_index .emotion-col4 .col4 .slider-manufacturer .sliding_container .supplier a img { max-width: 204px; }
 
 /** LISTING - 3 COL LISTING **/
-.ctl_listing .emotion-col3 .slider-manufacturer .sliding_container .supplier a img {height: 69px;}
 .ctl_listing .emotion-col3 .slider-manufacturer .sliding_container .supplier {margin: 34px 15px}
 
 /* COL 1 */
 .ctl_listing .emotion-col3 .col1 .slider-manufacturer .sliding_container .supplier {width: 167px}
+.ctl_listing .emotion-col3 .col1 .slider-manufacturer .sliding_container .supplier a img { max-width: 167px; }
 /* COL 2 */
 .ctl_listing .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier {width: 126px; margin: 40px 15px;}
-.ctl_listing .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier a img {height: 57px;}
+.ctl_listing .emotion-col3 .col2 .slider-manufacturer .sliding_container .supplier a img {max-width: 126px}
 /* COL 3 */
-.ctl_listing .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier {width: 154px;} 
+.ctl_listing .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier {width: 154px;}
+.ctl_listing .emotion-col3 .col3 .slider-manufacturer .sliding_container .supplier a img { max-width: 154px; }
 
 /** LISTING - 4 COL LISTING **/
-.ctl_listing .emotion-col4 .slider-manufacturer .sliding_container .supplier a img {height: 69px;}
 .ctl_listing .emotion-col4 .slider-manufacturer .sliding_container .supplier {margin: 34px 15px}
 
 /* COL 1 */
 .ctl_listing .emotion-col4 .col1 .slider-manufacturer .sliding_container .supplier {margin: 34px 0; width: 131px;}
+.ctl_listing .emotion-col4 .col1 .slider-manufacturer .sliding_container .supplier a img { max-width: 131px }
 /* COL 2 */
-.ctl_listing .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier {width: 137px;} 
+.ctl_listing .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier {width: 137px;}
+.ctl_listing .emotion-col4 .col2 .slider-manufacturer .sliding_container .supplier a img { max-width: 137px }
 /* COL 3 */
 .ctl_listing .emotion-col4 .col3 .slider-manufacturer .sliding_container .supplier {width: 148px;}
+.ctl_listing .emotion-col4 .col3 .slider-manufacturer .sliding_container .supplier a img { max-width: 148px }
 /* COL 4 */
-.ctl_listing .emotion-col4 .col4 .slider-manufacturer .sliding_container .supplier {width: 154px;} 
+.ctl_listing .emotion-col4 .col4 .slider-manufacturer .sliding_container .supplier {width: 154px;}
+.ctl_listing .emotion-col4 .col1 .slider-manufacturer .sliding_container .supplier a img { max-width: 154px }
 
 
 /*	ARTICLE EMOTION SLIDER
