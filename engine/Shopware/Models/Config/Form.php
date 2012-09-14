@@ -59,7 +59,7 @@ class Form extends ModelEntity
 
     /**
      * @var Form
-     * @ORM\ManyToOne(targetEntity="Form", inversedBy="children", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Form", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
     private $parent;
@@ -117,11 +117,10 @@ class Form extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $translations;
-
 
     /**
      * Class constructor.

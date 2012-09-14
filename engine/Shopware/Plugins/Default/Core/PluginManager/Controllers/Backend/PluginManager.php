@@ -590,7 +590,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 } else {
                     $result = $namespace->uninstallPlugin($bootstrap);
                 }
-                Shopware()->Models()->regenerateProxies();
             }
 
             if(!isset($result) || !$plugin->getActive() !== empty($data['active'])) {

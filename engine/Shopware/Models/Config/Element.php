@@ -124,7 +124,7 @@ class Element extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $translations;
