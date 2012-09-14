@@ -309,7 +309,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Zend_Auth $auth
      */
-    protected function registerAclPlugin($auth)
+    public function registerAclPlugin($auth)
     {
         $bootstrap = $this->Application()->Bootstrap();
         if($this->acl === null) {
