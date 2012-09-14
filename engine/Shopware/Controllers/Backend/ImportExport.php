@@ -2201,6 +2201,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
+                if(!empty($articleData['configuratorOptions']) && !empty($articleData['configuratorsetID']) ) {
+                    $errors[] = "New style configurator articles cannot be imported, yet. Skipping {$articleData['ordernumber']}<br />\r\n";
+                    continue;
+                }
+
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
                 if ($result) {
                     $articleIds[] = $result->getId();
@@ -2265,6 +2270,16 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $errors[] = "Error in line {$counter}: $errormessage\n";
 
+            $errors = $this->toUtf8($errors);
+            $message = implode("<br>\n", $errors);
+            echo json_encode(array(
+                'success' => false,
+                'message' => "Error: ".$message,
+            ));
+            return;
+        }
+
+        if(!empty($errors)) {
             $errors = $this->toUtf8($errors);
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
