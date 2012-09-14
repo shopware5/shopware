@@ -37,6 +37,15 @@
 class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * Loads auth and script renderer resource
+     */
+    public function init()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        parent::init();
+    }
+
+    /**
      * Do authentication and return result in json-format
      * Check if account is blocked
      */

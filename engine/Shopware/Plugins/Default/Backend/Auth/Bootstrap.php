@@ -203,7 +203,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->aclResource = strtolower($this->request->getControllerName());
 
         if($this->request->getModuleName() != 'backend'
-          || in_array($this->aclResource, array('error', 'login'))) {
+          || in_array($this->aclResource, array('error'))) {
             return;
         }
 
