@@ -720,12 +720,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             'parentId' => $album->getParentId()
         );
 
-        /**@var $settings \Shopware\Models\Media\Settings*/
-        $settings = $album->getSettings();
-        if (isset($settings) && $settings !== null) {
-            $node["iconCls"] = $settings->getIcon();
-            $node["createThumbnails"] = $settings->getCreateThumbnails();
-            $thumbnails = $settings->getThumbnailSize();
+        //to get fresh album settings from new albums too
+        $settingsQuery = $repository->getAlbumWithSettingsQuery($album->getId());
+        $albumData = $settingsQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $settings = $albumData["settings"];
+
+        if (!empty($settings) && $settings !== null) {
+            $node["iconCls"] = $settings["icon"];
+            $node["createThumbnails"] = $settings["createThumbnails"];
+            $thumbnails = explode(";",$settings["thumbnailSize"]);
             $node["thumbnailSize"] = array();
             $count = count($thumbnails);
 
