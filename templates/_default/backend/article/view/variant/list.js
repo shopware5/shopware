@@ -90,6 +90,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 button: '{s name=variant/list/toolbar/order_button}Regenerate order numbers{/s}',
                 empty: '{s name=variant/list/toolbar/order_empty}mainDetail.number{/s}'
             }
+        },
+        saved: {
+            errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
+            errorTitle: '{s name=article_saved/error_title}Error{/s}',
         }
     },
 
@@ -138,9 +142,24 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
                 }
             } else {
+                var oldNumber = e.record.get('number');
+
                 // Map the ordernumber and save the model to the server side
                 e.record.set('number', e.record.get('details.number'));
-                e.record.save();
+                e.record.save({
+
+                    // Rollback changes if an error occurs
+                    failure: function(record) {
+                        var rawData = record.getProxy().getReader().rawData,
+                            message = rawData.message;
+
+                        if(e.field === 'details.number') {
+                            e.record.set('number', oldNumber);
+                            e.record.set('details.number', oldNumber);
+                        }
+                        Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.errorMessage + message, me.snippets.growlMessage);
+                    }
+                });
             }
         });
 
