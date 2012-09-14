@@ -279,7 +279,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
         // Payment settings
         $form->setElement('boolean', 'paypalPaymentActionPending', array(
             'label' => 'Zahlungen nur autorisieren (Auth-Capture)',
-            'value' => true,
+            'value' => false,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('boolean', 'paypalBillingAgreement', array(
