@@ -67,6 +67,8 @@ Ext.define('Shopware.form.PluginPanel',
      */
     injectActionButtons: false,
 
+    _descriptionAdded: false,
+
     /**
      * Initiliazes the component, loads the stores and creates the view.
      *
@@ -192,12 +194,18 @@ Ext.define('Shopware.form.PluginPanel',
             tabs = [], options;
 
         if(form.get('description')) {
-            items.push({
-                xtype: 'fieldset',
-                margin: 10,
-                title: '{s name=form/description_title}Description{/s}',
-                html: form.get('description')
-            });
+
+            if(!me._descriptionAdded) {
+                items.push({
+                    xtype: 'fieldset',
+                    margin: 10,
+                    title: '{s name=form/description_title}Description{/s}',
+                    html: form.get('description')
+                });
+
+                // Set private flag
+                me._descriptionAdded = true;
+            }
         }
 
         me.shopStore.each(function(shop) {
