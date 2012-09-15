@@ -1450,6 +1450,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $article = $models->find('Shopware\Models\Article\Article', $articleId);
         $properties = $this->Request()->getParam('properties', array());
 
+        if (empty($properties[0])){
+            $properties[0] = array(
+                "id" => $this->Request()->getParam('id'),
+                "name" => $this->Request()->getParam('name'),
+                "value" => $this->Request()->getParam('value'),
+
+            );
+        }
+
         $propertyValues = $article->getPropertyValues();
         $propertyValues->clear();
         $models->flush();
