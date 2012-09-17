@@ -1576,7 +1576,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $image = new \Shopware\Models\Article\Image();
 
             try {
-                $path = $this->load($imageData['image']);
+                $path = $this->load($imageData['image'], basename($imageData['image']));
             } catch (\Exception $e) {
                 $errors[] = "Could not load image {$imageData['image']}";
                 continue;
@@ -1628,8 +1628,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         'option_id' => $optionModel->getId()
                     ));
                 }
+            }
 
-
+            // Prevent multiple images from being a preview
+            if((int) $imageData['main'] === 1) {
+                Shopware()->Db()->update('s_articles_img',
+                    array(
+                        'main' => 2
+                    ),
+                    array(
+                        'articleID = ?' => $article->getId(),
+                        'id <> ?' => $image->getId()
+                    )
+                );
             }
 
 
@@ -3264,11 +3275,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
     /**
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
+     * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      * @return bool|string returns the absolute path of the downloaded file
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function load($url)
+    protected function load($url, $baseFilename=null)
     {
         $destPath = Shopware()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
@@ -3293,16 +3305,24 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             case "ftp":
             case "http":
             case "file":
-                $hash = "";
-                while (empty($hash)) {
-                    $hash = md5(uniqid(rand(), true));
-                    if (file_exists("$destPath/$hash")) {
-                        $hash = "";
+                $counter = 1;
+                if($baseFilename === null) {
+                    $filename = md5(uniqid(rand(), true));
+                }else{
+                    $filename = $baseFilename;
+                }
+
+                while (file_exists("$destPath/$filename")) {
+                    if($baseFilename) {
+                        $filename = "$counter-$baseFilename";
+                        $counter++;
+                    }else{
+                        $filename = md5(uniqid(rand(), true));
                     }
                 }
 
-                if (!$put_handle = fopen("$destPath/$hash", "w+")) {
-                    throw new \Exception("Could not open $destPath/$hash for writing");
+                if (!$put_handle = fopen("$destPath/$filename", "w+")) {
+                    throw new \Exception("Could not open $destPath/$filename for writing");
                 }
 
                 if (!$get_handle = fopen($url, "r")) {
@@ -3314,7 +3334,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 fclose($get_handle);
                 fclose($put_handle);
 
-                return "$destPath/$hash";
+                return "$destPath/$filename";
         }
         throw new \InvalidArgumentException(
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
