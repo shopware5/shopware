@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful:false,
 
     /**
      * The unique id for this object to use for state management purposes.

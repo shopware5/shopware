@@ -153,12 +153,15 @@ Ext.define('Enlight.app.Window', {
         if(!me.tools.maximize) {
             me.tools.maximize = me.header.tools.maximize;
         }
+
         if(!me.tools.minimize) {
-            me.tools.minimize = me.header.tools.minimize;
+            me.tools.minimize = me.header.tools.minimize.cloneConfig();
         }
+
         if(!me.tools.close) {
-            me.tools.close = me.header.tools.close;
+            me.tools.close = me.header.tools.close.cloneConfig();
         }
+
         if(!me.tools.restore) {
             me.tools.restore = me.header.tools.restore;
         }
@@ -415,7 +418,11 @@ Ext.define('Enlight.app.Window', {
                 me.restorePos = me.getPosition(true);
             }
             if (me.maximizable) {
+                if(!me.tools.maximize) {
+                    me.tools.maximize = me.header.tools.maximize.cloneConfig();
+                }
                 me.tools.maximize.hide();
+
                 me.tools.restore.show();
             }
             me.maximized = true;
