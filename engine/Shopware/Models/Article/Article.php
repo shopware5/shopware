@@ -379,7 +379,7 @@ class Article extends ModelEntity
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist", "update"})
      * @ORM\JoinTable(name="s_filter_articles",
      *      joinColumns={
      *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
