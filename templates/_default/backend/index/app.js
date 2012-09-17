@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Index', {
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers:[ 'Main', 'Widgets' ],
+    controllers:[ 'Main', 'Widgets', 'ErrorReporter' ],
 
     /**
      * Requires class for the module (subapplication)

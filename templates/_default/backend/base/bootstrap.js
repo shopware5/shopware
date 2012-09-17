@@ -22,6 +22,7 @@
  */
 
 {* Include overrides *}
+{include file='ExtJs/overrides/Ext.data.proxy.Server.js'}
 {include file='ExtJs/overrides/Ext.app.Application.js'}
 {include file='ExtJs/overrides/Ext.app.Controller.js'}
 {include file='ExtJs/overrides/Ext.Loader.js'}
