@@ -148,23 +148,6 @@ Ext.define('Enlight.app.Window', {
         }
 
         windowManager.bringToFront(me);
-
-        // If the tools are missing, add them here
-        if(!me.tools.maximize) {
-            me.tools.maximize = me.header.tools.maximize;
-        }
-
-        if(!me.tools.minimize) {
-            me.tools.minimize = me.header.tools.minimize.cloneConfig();
-        }
-
-        if(!me.tools.close) {
-            me.tools.close = me.header.tools.close.cloneConfig();
-        }
-
-        if(!me.tools.restore) {
-            me.tools.restore = me.header.tools.restore;
-        }
     },
 
     /**
@@ -423,6 +406,9 @@ Ext.define('Enlight.app.Window', {
                 }
                 me.tools.maximize.hide();
 
+                if(!me.tools.restore) {
+                    me.tools.restore = me.header.tools.restore.cloneConfig();
+                }
                 me.tools.restore.show();
             }
             me.maximized = true;

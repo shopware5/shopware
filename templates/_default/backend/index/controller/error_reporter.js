@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
      * Controls if errors are logged to the default window.console
      * @boolean
      */
-    displayErrors: false,
+    displayErrors: true,
 
     /**
      * Creates the necessary event listener for this
