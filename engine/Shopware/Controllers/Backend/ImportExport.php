@@ -2408,6 +2408,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $configurator = $this->prepareLegacyConfiguratorImport($articleData['configurator']);
         }
 
+        $articleData = $this->prepareTranslation($articleData);
+
         $isOldVariant = false;
         if (!empty($articleData['additionaltext']) && empty($articleData['mainnumber']) && empty($articleData['configuratorsetID'])) {
             $isOldVariant = true;
@@ -2439,7 +2441,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         unset($articleData['attributegroupID']);
         unset($articleData['attributevalues']);
 
-        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier'));
+        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
 
         if (!empty($articleData['categorypaths'])) {
@@ -2675,6 +2677,50 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $configurator['configuratorSet'] = array('groups' => $configuratorGroups);
 
         return $configurator;
+    }
+
+    /**
+     * Prepare an articles' translation. Needed to be called before the article mapping is done
+     * @param $data
+     * @return array
+     */
+    protected function prepareTranslation($data) {
+
+        $translationByLanguage = array();
+
+        $whitelist = array(
+            'name'              => 'name',
+            'additionaltext'    => 'additionaltext',
+            'description'       => 'description',
+            'description_long'  => 'descriptionLong',
+            'packUnit'          => 'packunit',
+            'keywords'          => 'keywords'
+        );
+
+
+        // first get a list of all available translation by language ID
+        foreach($data as $key => $value) {
+            foreach($whitelist as $translationKey => $translationMapping) {
+                if(strpos($key, $translationKey.'_') !== false) {
+                    $parts = explode('_', $key);
+                    $language = (int) array_pop($parts);
+                    if(!$language > 0) {
+                        continue;
+                    }
+
+                    if(!isset($translationByLanguage[$language])) {
+                        $translationByLanguage[$language] = array();
+                        $translationByLanguage[$language]['shopId'] = $language;
+                    }
+                    $translationByLanguage[$language][$translationMapping] = $value;
+                    unset($data[$key]);
+                }
+            }
+        }
+
+        $data['translations'] = $translationByLanguage;
+        return $data;
+
     }
 
     /**
