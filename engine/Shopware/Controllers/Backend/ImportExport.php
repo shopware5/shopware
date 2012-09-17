@@ -1797,6 +1797,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 continue;
             }
 
+            // Set newsletter recipient/group
+            $group = null;
             if ($newsletterData['group']) {
                 $group = $newsletterGroupRepository->findOneBy(array('name' => $newsletterData['group']));
             }
@@ -1805,10 +1807,15 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             if (!$existingRecipient) {
                 $recipient = new Shopware\Models\Newsletter\Address();
                 $recipient->setEmail($newsletterData['email']);
-                $recipient->setIsCustomer(false);
+
+                if($newsletterData['userID']) {
+                    $recipient->setIsCustomer(true);
+                }else{
+                    $recipient->setIsCustomer(false);
+                }
 
                 if ($group) {
-                    $recipient->setGroup($group);
+                    $recipient->setNewsletterGroup($group);
                 }
                 $this->getManager()->persist($recipient);
                 $this->getManager()->flush();

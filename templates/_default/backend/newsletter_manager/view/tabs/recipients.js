@@ -252,10 +252,12 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             return '';
         }
 
+        // Recipient is a customer
         if(customer !== null && customer.first() instanceof Ext.data.Model) {
             return "<strong>" + customer.first().get('groupKey') + '{s name=customerGroup} (Customer group){/s}</strong>' ;
         }
 
+        //  Non-Customer recipient
         group = me.newsletterGroupStore.findRecord('id', record.get('groupId'));
         if(group !== null) {
             return group.get('name');
@@ -264,6 +266,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         if(group !== null && group.first() instanceof Ext.data.Model) {
             return group.first().get('name');
 //            return group.first().get('id');
+        }
+
+        // If the customer wasn't found, print this in order to prevent confusion.
+        if(isCustomer && !customer) {
+            return 'Customer not found';
         }
 
         return 'Group not found';
