@@ -82,7 +82,10 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
      */
     public function doSearch($term)
     {
-        $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
+        $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
+        if (empty($adapter)){
+            $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
+        }
         $search = new Shopware_Components_Search($adapter);
         $searchResults = $search->search($term, $this->getConfig());
 

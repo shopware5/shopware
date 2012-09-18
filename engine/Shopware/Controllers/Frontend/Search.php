@@ -161,10 +161,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         // Check if search term met minimum length
         if (strlen($term) >= (int)$minLengthSearchTerm) {
-
-
             // Configure search adapter
-
             $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
             if (empty($adapter)){
                 $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
@@ -223,6 +220,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             $this->View()->sLinks = $links;
             $this->View()->sPages = $sPages;
             $this->View()->sPriceFilter = $search->getAdapter()->getPriceRanges();
+
+            Enlight()->Events()->notify('Shopware_Controllers_Frontend_Search_ModifySearchResult',array("subject" => $this,"search"=>$search));
 
             $this->View()->sCategoriesTree = $this->getCategoryTree(
                 $resultCurrentCategory, $config['restrictSearchResultsToCategory']
