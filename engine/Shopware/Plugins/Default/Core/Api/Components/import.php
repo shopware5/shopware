@@ -1368,8 +1368,29 @@ class sShopwareImport
             Shopware()->Models()->flush();
         }
 
-        return $model->getId();
+        // set category attributes
+        $upset = array();
+        for ($i=1;$i<=6;$i++) {
+            if(isset($category['ac_attr'.$i])) {
+                $upset['attribute'.$i] = (string)$category['ac_attr'.$i];
+            } elseif(isset($category['attr'][$i])) {
+                $upset['attribute'.$i] = (string)$category['attr'][$i];
+            }
+        }
+        if(!empty($upset)) {
+            $attributeID = Shopware()->Db()->fetchOne("SELECT id FROM s_categories_attributes WHERE categoryID=?", array($model->getId()));
+            if($attributeID === false) {
+                $upset['categoryID'] = $model->getId();
+                Shopware()->Db()->insert('s_categories_attributes', $upset);
+            }else{
+                Shopware()->Db()->update('s_categories_attributes',
+                    $upset,
+                    array('categoryID = ?' => $model->getId())
+                );
+            }
+        }
 
+        return $model->getId();
     }
 
 
