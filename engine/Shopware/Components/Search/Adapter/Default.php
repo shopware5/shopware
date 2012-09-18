@@ -961,6 +961,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Read all affected categories from result
         $this->getCountCategoryFilters($searchResultsFinal);
 
+        // Empty method to modifiy search results in own search adapters
+        $this->executeCustomFilters($searchResultsFinal);
+
         $this->getCountSupplierPriceFilters($searchResultsFinal);
 
         // Set count of results to result object
@@ -984,6 +987,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         }
 
         return $this->getResult();
+    }
+
+    /**
+     * Empty method that allows to integrate own filters into search adapter
+     * @param $searchResult
+     */
+    public function executeCustomFilters($searchResult){
+
     }
 
 
