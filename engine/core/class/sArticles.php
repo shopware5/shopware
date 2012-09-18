@@ -2314,11 +2314,6 @@ class sArticles
      */
     public function sGetArticleById($id = 0)
     {
-        if (!empty($id)) {
-            $this->sSYSTEM->_GET['sArticle'] = $id;
-        }
-
-        $this->sSYSTEM->_GET["sArticle"] = intval($this->sSYSTEM->_GET["sArticle"]);
 
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
@@ -2408,7 +2403,7 @@ class sArticles
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE a.id=" . $this->sSYSTEM->_GET['sArticle'] . "
+			WHERE a.id=" . $id . "
 			AND ag.articleID IS NULL
 
             $subShopLimitationCategoryClause
@@ -2418,14 +2413,14 @@ class sArticles
             $sql .= "AND a.active=1";
         }
 
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterSQL', $sql, array('subject' => $this, 'id' => $this->sSYSTEM->_GET['sArticle'], 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterSQL', $sql, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
 //        $this->sSYSTEM->_SESSION["sLastArticle"] = $this->sSYSTEM->_GET['sArticle']; // r302 save last visited article
 
-        $getArticle = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $this->sSYSTEM->_GET["sArticle"]);
+        $getArticle = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $id);
 
         // Translate main - data
-        $getArticle = $this->sGetTranslation($getArticle, $this->sSYSTEM->_GET['sArticle'], "article", $this->sSYSTEM->sLanguage);
+        $getArticle = $this->sGetTranslation($getArticle, $id, "article", $this->sSYSTEM->sLanguage);
 
         /*
           Calculating matching price SW 2.1
@@ -2437,7 +2432,7 @@ class sArticles
 
         // If the article could found
         if (count($getArticle) && $getArticle["articleID"]) {
-            $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterArticle', $getArticle, array('subject' => $this, 'id' => $this->sSYSTEM->_GET['sArticle'], 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+            $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterArticle', $getArticle, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
             // Grap related links
             $getRelatedLinks = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
@@ -2478,11 +2473,11 @@ class sArticles
             // If the user doesnï¿½t come from category-system, get related category
             // SHOPWARE 2.1 //
             // =================================================.
-            $sArticleID = intval($this->sSYSTEM->_GET['sArticle']);
+            $sArticleID = intval($id);
             $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
             if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
                 $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($sArticleID);
-                $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
+                //$this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
             }
             if (!empty($sCategoryID)) {
                 $getArticle["categoryID"] = $sCategoryID;
@@ -2521,11 +2516,11 @@ class sArticles
                 }
             } else {
 
-               if (!empty( $this->sSYSTEM->_GET["sCategory"] )){
+               if (!empty( $sCategoryID )){
                 $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
                 $sqlGetCategory = "
 					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories, s_articles, s_articles_details
-					WHERE s_articles_categories.categoryID=" . $this->sSYSTEM->_GET["sCategory"] . "
+					WHERE s_articles_categories.categoryID=" . $sCategoryID . "
 					AND s_articles.id=s_articles_categories.articleID AND s_articles.id=s_articles_details.articleID
 					AND s_articles_details.kind=1
 					AND s_articles.id!={$getArticle["articleID"]}
@@ -2755,7 +2750,7 @@ class sArticles
         // Deactivate bundle displaying
         $getArticle['crossbundlelook'] = false;
 
-        $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $this->sSYSTEM->_GET['sArticle'], 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+        $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
         return $getArticle;
     }
