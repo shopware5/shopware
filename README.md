@@ -58,12 +58,12 @@ If you are not sure, how to contribute code under right license and right way yo
 
 To start contributing, just fork the master tree and clone your fork to your local machine:
 
-		git clone https://github.com/[YOUR USERNAME]/shopware-4.git
+		git clone git@github.com:[YOUR USERNAME]/shopware-4.git
 		
 After having done this, configure the remotes:
 
 		cd shopware-4
-		git remote add upstream https://github.com/[YOUR USERNAME]/shopware-4.git
+		git remote add upstream git://github.com/ShopwareAG/shopware-4.git
 		git fetch upstream
 		
 Now you're ready to start hacking and contributing to Shopware. If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
