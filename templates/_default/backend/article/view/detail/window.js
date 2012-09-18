@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Define window width
      * @integer
      */
-    width:'90%',
+    width:'80%',
     /**
      * Define window height
      * @integer
