@@ -96,7 +96,7 @@ class Category extends ModelEntity
     /**
      * @var Shopware\Models\Category\Category
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Category\Category", inversedBy="attribute", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Category\Category", inversedBy="attribute")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
      * })
