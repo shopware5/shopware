@@ -2508,22 +2508,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
         foreach($details as $detail) {
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Image', 'image')
-                    ->where('image.articleDetailId = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+            $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
+            $query->execute();
 
             $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Detail', 'detail')
-                    ->where('detail.id = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+            $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
+            $query->execute();
         }
     }
 

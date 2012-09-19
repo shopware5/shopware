@@ -285,28 +285,20 @@ class Article extends Resource
      * Helper function to remove article details for a given article
      * @param $article \Shopware\Models\Article\Article
      */
-    private function removeArticleDetails($article)
+    protected function removeArticleDetails($article)
     {
         $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
         foreach($details as $detail) {
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Image', 'image')
-                    ->where('image.articleDetailId = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+            $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
+            $query->execute();
 
             $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Detail', 'detail')
-                    ->where('detail.id = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+            $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
+            $query->execute();
         }
     }
 

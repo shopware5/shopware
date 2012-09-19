@@ -1908,7 +1908,56 @@ class Repository extends ModelRepository
         return $builder;
     }
 
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove images associated
+     * with the given articleDetailId
+     * @param $detailId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveImageQuery($detailId) {
+    	$builder = $this->getRemoveImageQueryBuilder($detailId);
+    	return $builder->getQuery();
+    }
 
+    /**
+     * Helper function to create the query builder for the "getRemoveImageQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $detailId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveImageQueryBuilder($detailId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Article\Image', 'image')
+                ->where('image.articleDetailId = :id')
+                ->setParameter('id', $detailId);
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove a given article detail
+     * @param $detailId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveDetailQuery($detailId) {
+    	$builder = $this->getRemoveDetailQueryBuilder($detailId);
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveDetailQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $detailId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveDetailQueryBuilder($detailId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Article\Detail', 'detail')
+                ->where('detail.id = :id')
+                ->setParameter('id', $detailId);
+
+        return $builder;
+    }
 
 }
 
