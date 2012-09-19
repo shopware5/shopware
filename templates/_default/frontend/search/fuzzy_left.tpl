@@ -8,6 +8,12 @@
 	{* Filter by properties *}
 	{block name='frontend_search_filter_properties'}
 	<div class="searchbox">
+        <style>
+            #content #left .filter_search .searchbox li {
+               height:100%
+            }
+
+        </style>
 	 <h3>{se name='SearchLeftHeadlineFilter'}{/se}</h3>
 	    
 	    {if !$sRequests.sFilter.propertygroup}

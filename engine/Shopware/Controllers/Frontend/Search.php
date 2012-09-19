@@ -98,7 +98,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $config['filter']['supplier'] = $config['sFilter']['supplier'] = (int)$this->Request()->sFilter_supplier;
         $config['filter']['category'] = $config['sFilter']['category'] = (int)$this->Request()->sFilter_category;
         $config['filter']['price'] = $config['sFilter']['price'] = (int)$this->Request()->sFilter_price;
-        $config['filter']['propertyGroup'] = $config['sFilter']['propertyGroup'] = $this->Request()->sFilter_propertygroup;
+        $config['filter']['propertyGroup'] = $config['sFilter']['propertygroup'] = $this->Request()->sFilter_propertygroup;
 
         $config['sortSearchResultsBy'] = $config["sSort"] = (int)$this->Request()->sSort;
         $config['sortSearchResultsByDirection'] = (int)$this->Request()->sOrder;
@@ -221,7 +221,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             $this->View()->sPages = $sPages;
             $this->View()->sPriceFilter = $search->getAdapter()->getPriceRanges();
 
-            Enlight()->Events()->notify('Shopware_Controllers_Frontend_Search_ModifySearchResult',array("subject" => $this,"search"=>$search));
+            Enlight()->Events()->notify('Shopware_Controllers_Frontend_Search_ModifySearchResult',array("subject" => $this,"search"=>$search,"result"=>$searchResults));
 
             $this->View()->sCategoriesTree = $this->getCategoryTree(
                 $resultCurrentCategory, $config['restrictSearchResultsToCategory']
