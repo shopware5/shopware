@@ -474,8 +474,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $children = $this->getRepository()->children($result, false, 'left', 'DESC');
             foreach($children as $node) {
-                Shopware()->Models()->remove($node);
-                Shopware()->Models()->flush();
+                $this->getRepository()->removeFromTree($node);
             }
             Shopware()->Models()->remove($result);
             Shopware()->Models()->flush();

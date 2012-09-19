@@ -125,6 +125,21 @@ class TreeRepository extends BaseRepository
             return true;
         }
 
+        //reset the left and right values
+        $sql = "UPDATE `s_categories` SET `left` = '0', `right` = '0', `level` = '0'";
+        Shopware()->Db()->query($sql);
+
+        $sql = "UPDATE `s_categories` SET `left` = '1', `right` = '2' WHERE id = 1";
+        Shopware()->Db()->query($sql);
+
+        //delete broken categories
+        $sql = "DELETE c FROM `s_categories` c
+                LEFT JOIN `s_categories` c2
+                ON c.parent=c2.id
+                WHERE c2.id IS NULL AND c.id!=1";
+        Shopware()->Db()->query($sql);
+
+
         $categories = $this->getRootNodes();
         if(empty($categories)) {
             return false;

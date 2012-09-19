@@ -144,13 +144,18 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     mainWindow.setLoading(false);
                     return false;
                 }
-                selection[0].destroy({
+                var record = selection[0],
+                parentNode = record.parentNode;
+
+                record.removeAll();
+                record.childNodes = [];
+                record.destroy({
                     callback: function(self, operation) {
                         mainWindow.setLoading(false);
                         var rawData = operation.records[0].proxy.reader.rawData
                         if (operation.success) {
                             Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
-                            store.load();
+                            store.load({ node: parentNode });
                             me.disableForm();
                         } else {
                             if (rawData.message) {

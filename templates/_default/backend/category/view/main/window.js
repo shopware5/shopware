@@ -128,12 +128,14 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         me.tabPanel = Ext.create('Ext.tab.Panel', {
             region:'center',
             items:me.getTabs(),
+            split: true,
             dockedItems: me.getDockedItems()
         });
 
         me.items = [
             {
                 xtype:'category-category-tree',
+                split: true,
                 store:me.treeStore
             },
             me.tabPanel
