@@ -184,8 +184,8 @@ class Article extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
-        $this->getManager()->persist($article);
-        $this->flush();
+            $this->getManager()->persist($article);
+            $this->flush();
 
         if (!empty($translations)) {
             $this->writeTranslations($article->getId(), $translations);
@@ -450,18 +450,12 @@ class Article extends Resource
                 $newMain = $variant;
                 $newMain->setKind(1);
 
+                // todo@dn Check if has configurator - delete else
                 $oldMain = $data['mainDetail'];
-
-                if (empty($oldMain['additionalText'])) {
-                    $oldMain['kind']   = 3;
-                    $oldMain['active'] = false;
-                } else {
-                    $oldMain['kind']   = 2;
-                    $oldMain['active'] = false;
-                }
+                $oldMain['kind'] = 2;
 
                 $data['mainDetail'] = $newMain;
-                $variant = $oldMain;
+//                $variant = $oldMain;
             }
 
             $variants[] = $variant;

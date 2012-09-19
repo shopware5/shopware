@@ -2218,11 +2218,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
-                if(!empty($articleData['configuratorOptions']) && !empty($articleData['configuratorsetID']) ) {
-                    $errors[] = "New style configurator articles cannot be imported, yet. Skipping {$articleData['ordernumber']}<br />\r\n";
-                    continue;
-                }
-
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
                 if ($result) {
                     $articleIds[] = $result->getId();
@@ -2249,6 +2244,24 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                                 $updateData['related'][] = array('number' => $crosssellingId);
                             }
                         }
+                    }
+
+                    // During the import each article creates a set with it own configruatorOptions as Options
+                    // when persisting only these options will be set to be set-option relations
+                    // in order to fix this, we set all options active which can be assigned to a given article
+                    /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
+                    $configuratorSet = $result->getConfiguratorSet();
+                    if($configuratorSet !== null) {
+                        $articleRepository = $this->getArticleRepository();
+                        $ids = $articleRepository->getArticleConfiguratorSetOptionIds($result->getId());
+
+                        if(!empty($ids)) {
+                            $configuratorOptionRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Configurator\Option');
+                            $optionModels = $configuratorOptionRepository->findBy(array("id" => $ids));
+                            $configuratorSet->setOptions($optionModels);
+                        }
+
+
                     }
 
                     if (!empty($updateData)) {
@@ -2408,6 +2421,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $configurator = $this->prepareLegacyConfiguratorImport($articleData['configurator']);
         }
 
+        $isNewConfigurator = false;
+        if(isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
+            list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
+        }
+
+
         $articleData = $this->prepareTranslation($articleData);
 
         $isOldVariant = false;
@@ -2511,7 +2530,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $updateData['variants'][0]['configuratorOptions'] = $configuratorOptions;
                 $updateData['variants'][0]['standard'] = true;
                 $updateData['mainDetail'] = $detailData;
-                $updateData['mainDetail']['number'] .= '_main';
+//                $updateData['mainDetail']['number'] .= '_main';
 
                 if ($articleModel) {
                     throw new \Exception(sprintf('Legacy variant article with ordernumber %s can only be imported once.', $articleData['ordernumber']));
@@ -2543,7 +2562,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             return $result;
         }
 
-
+        // For old 3.x configurators
         if ($isOldConfigurator) {
             /** @var \Shopware\Models\Article\Detail $articleDetailModel */
             $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['ordernumber']));
@@ -2564,6 +2583,38 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             } else {
                 $result = $articleResource->create($updateData);
             }
+
+            return $result;
+        }
+
+        // For configurators as used in SW 4
+        if($isNewConfigurator) {
+            /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+            $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['mainnumber']));
+            if ($articleDetailModel) {
+                /** @var \Shopware\Models\Article\Article $articleModel */
+                $articleModel = $articleDetailModel->getArticle();
+                if (!$articleModel) {
+                    throw new \Exception('Article not Found');
+                }
+            }
+
+            // update?
+            if(isset($articleModel) && $articleModel !== null) {
+                $updateData = array();
+                $detailData['configuratorOptions'] = $configuratorOptions;
+                $updateData['variants'][] = $detailData;
+
+                $result = $articleResource->update($articleModel->getId(), $updateData);
+            }else{
+                $updateData['configuratorSet'] = $configuratorSet;
+                $updateData['variants'][0] = $detailData;
+                $updateData['variants'][0]['configuratorOptions'] = $configuratorOptions;
+                $updateData['variants'][0]['standard'] = true;
+                $updateData['mainDetail'] = $detailData;
+                $result = $articleResource->create($updateData);
+            }
+
 
             return $result;
         }
@@ -2594,6 +2645,37 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         return $result;
+    }
+
+    /**
+     * Takes a new style configurator and converts it into a proper array
+     * @param $configuratorData
+     * @return array
+     */
+    protected  function prepareNewConfiguratorImport($configuratorData) {
+        $configuratorGroups = array();
+        $configuratorOptions = array();
+
+        // split string into parts and recieve group and options this way
+        $pairs = explode("|", $configuratorData);
+        foreach($pairs as $pair) {
+            list($group, $option) = explode(":", $pair);
+
+            $currentGroup = array("name" => $group, "options" => array(array("name" => $option)));
+            $configuratorGroups[] = $currentGroup;
+
+            $configuratorOptions[]= array("option" => $option, "group" => $group);
+
+        }
+
+        return array(
+            array('groups' => $configuratorGroups),      // ConfiguratorSet
+            $configuratorOptions                         // ConfiguratorOptions
+        );
+
+
+
+
     }
 
     /**

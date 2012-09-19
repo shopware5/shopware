@@ -601,7 +601,7 @@ class Repository extends ModelRepository
      * @param $articleId
      * @return array
      */
-    private function getArticleConfiguratorSetOptionIds($articleId)
+    public function getArticleConfiguratorSetOptionIds($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $ids = $builder->select('DISTINCT options.id')
