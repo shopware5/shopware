@@ -3786,3 +3786,5 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     text-decoration: none;
     color: #E1540F;
 }
+#content #left .filter_search .searchbox li { display: block; height: auto }
+#content #left .filter_search .searchbox li.head { height: auto; border-top: 1px solid #DFDFDF }
