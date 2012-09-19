@@ -315,8 +315,16 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             case 'searchTable':
                 $select = Shopware()->Db()->select();
                 $select->from(array('t' => $table), array(
-                    'id', 'name' => 'table'
+                    '*', 'name' => 'table'
                 ));
+                if(isset($search)) {
+                    $select->where(
+                        't.table LIKE :search'
+                    );
+                    $select->bind(array(
+                        'search' => $search
+                    ));
+                }
                 $data = Shopware()->Db()->fetchAll($select);
                 break;
             case 'searchField':
@@ -606,6 +614,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         switch ($name) {
+            case 'searchTable':
+                $data['table'] = $data['name'];
+                unset($data['name']);
+                break;
             case 'searchField':
                 $data['tableID'] = isset($data['tableId']) ? $data['tableId'] : null;
                 unset($data['table'], $data['tableID']);
