@@ -22,10 +22,14 @@
 				var win, de = DOM.doc.documentElement;
 
 				if (ed.getParam('fullscreen_is_enabled')) {
-					if (ed.getParam('fullscreen_new_window'))
+					if (ed.getParam('fullscreen_new_window')) {
 						closeFullscreen(); // Call to close in new window
-					else {
+                    } else {
 						DOM.win.setTimeout(function() {
+                            var activeEd = tinyMCE.activeEditor,
+                                undoManager = activeEd.undoManager;
+                            undoManager.add();
+
 							tinymce.dom.Event.remove(DOM.win, 'resize', t.resizeFunc);
 							tinyMCE.get(ed.getParam('fullscreen_editor_id')).setContent(ed.getContent());
 							tinyMCE.remove(ed);
@@ -34,6 +38,7 @@
 							DOM.setStyle(DOM.doc.body, 'overflow', ed.getParam('fullscreen_overflow'));
 							DOM.win.scrollTo(ed.getParam('fullscreen_scrollx'), ed.getParam('fullscreen_scrolly'));
 							tinyMCE.settings = tinyMCE.oldSettings; // Restore old settings
+
 						}, 10);
 					}
 
