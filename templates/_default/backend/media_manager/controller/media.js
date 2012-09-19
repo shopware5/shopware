@@ -264,17 +264,18 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             treeStore = tree.getStore(),
             rootNode = tree.getRootNode();
 
-        Ext.each(selected, function(record) {
-            record.destroy();
-        });
-
-        store.load({
-            callback: function() {
-                rootNode.removeAll(false);
-                treeStore.load();
+        store.remove(selected);
+        store.getProxy().batchActions = false;
+        store.sync({
+            callback : function() {
+                store.load({
+                    callback: function() {
+                        rootNode.removeAll(false);
+                        treeStore.load();
+                    }
+                });
             }
         });
-
     },
 
     /**
