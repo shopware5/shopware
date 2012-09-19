@@ -2312,9 +2312,15 @@ class sArticles
      * @access public
      * @return array
      */
-    public function sGetArticleById($id = 0)
+    public function sGetArticleById($id = 0, $sCategoryID = NULL)
     {
 
+        if(empty($sCategoryID)) {
+            $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
+        }
+        if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
+            $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($sArticleID);
+        }
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
             $subShopLimitationFrom = "s_categories c, s_categories c2, s_articles_categories ac,";
@@ -2474,11 +2480,6 @@ class sArticles
             // SHOPWARE 2.1 //
             // =================================================.
             $sArticleID = intval($id);
-            $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
-            if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
-                $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($sArticleID);
-                //$this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
-            }
             if (!empty($sCategoryID)) {
                 $getArticle["categoryID"] = $sCategoryID;
             }
