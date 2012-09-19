@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         me.control({
             'config-base-form': {
                 edit: function(panel, record) {
-                    me.doEditEntry(record);
+                    me.doEditEntry(panel, record);
                 },
                 delete: function(panel, record) {
                     me.doDeleteEntry(record);
@@ -156,12 +156,13 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             },
             'config-base-table button': {
                 click: function(button) {
+                    var baseForm = button.up('config-base-form');
                     switch (button.action) {
                         case 'add':
-                            me.onAddEntry();
+                            me.onAddEntry(baseForm);
                             break;
                         case 'delete':
-                            me.onDeleteEntry();
+                            me.onDeleteEntry(baseForm);
                             break;
                         case 'edit':
                             break;
@@ -172,11 +173,15 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                 change: me.onSelectCustomerGroupOnTax
             },
             'config-base-detail button[action=save]': {
-                click: me.onSaveEntry
+                click: function(button, event) {
+                    var baseForm = button.up('config-base-form');
+                    me.onSaveEntry(baseForm);
+                }
             },
             'config-base-detail button[action=reset]': {
                 click: function(button, event) {
-                    me.doEditEntry();
+                    var baseForm = button.up('config-base-form');
+                    me.doEditEntry(baseForm);
                 }
             },
             'config-base-table textfield[name=searchfield]': {
@@ -198,13 +203,12 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             'config-base-table': {
                 selectionchange: function(table, records) {
                     var me = this,
-                        deleteButton = me.getDeleteButton(),
-                        formPanel = me.getDetail(),
+                        baseForm = table.view.up('config-base-form'),
+                        deleteButton = baseForm.getDeleteButton(),
                         record = records.length ? records[0] : null,
-                        action;
-
+                        formPanel = baseForm.getDetail(), action;
                     if(record) {
-                        me.doEditEntry(record);
+                        me.doEditEntry(baseForm, record);
                         if(deleteButton) {
                             action = record.get('deletable') !== false;
                             action = action ? 'enable' : 'disable';
@@ -270,30 +274,43 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         me.map = new Ext.util.KeyMap(me.getWindow().getEl(), [{
             key: "s",
             ctrl: true,
-            handler: me.onSaveEntry,
+            handler: me.onKeyHandler,
             scope: me,
             defaultEventAction: 'preventDefault'
         }, {
             key: Ext.EventObject.INSERT,
             alt: true,
-            handler: me.onAddEntry,
+            handler: me.onKeyHandler,
             scope: me
         }, {
             key: Ext.EventObject.DELETE,
             alt: true,
-            handler: me.onDeleteEntry,
+            handler: me.onKeyHandler,
             scope: me
         }]);
     },
 
-    onAddEntry: function() {
-        var me = this,
-            formPanel = me.getDetail();
-        if(!formPanel) {
-            return;
+    onKeyHandler: function(key, event) {
+        var me = this, baseForm = me.getDetail();
+        switch(key) {
+            case 83:
+                me.onSaveEntry(baseForm);
+                break;
+            case Ext.EventObject.INSERT:
+                me.onAddEntry(baseForm);
+                break;
+            case Ext.EventObject.DELETE:
+                me.onDeleteEntry(baseForm);
+                break;
         }
+    },
+
+    onAddEntry: function(baseForm) {
+        var me = this,
+            formPanel = baseForm.getDetail();
+
         var basicForm = formPanel.getForm(),
-            table = me.getTable(),
+            table = baseForm.getTable(),
             store = table.getStore(),
             formStore = store,
             fields, record;
@@ -305,7 +322,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 
         // Create a new model and assign it to the form
         record = formStore.createModel({ });
-        me.loadEditEntry(record);
+        me.loadEditEntry(baseForm, record);
 
         // Focus an first field
         fields = basicForm.getFields();
@@ -314,23 +331,19 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         }
     },
 
-
     onSelectCustomerGroupOnTax: function(field, newValue, oldValue) {
         var me = this,
         addButton = me.getTaxRuleAddButton();
         addButton.setDisabled(!newValue);
     },
     
-    onSaveEntry: function() {
+    onSaveEntry: function(baseForm) {
         var me = this,
-            formPanel = me.getDetail();
-        if(!formPanel) {
-            return;
-        }
+            formPanel = baseForm.getDetail();
 
         var basicForm = formPanel.getForm(),
             record = formPanel.getRecord(),
-            table = me.getTable(),
+            table = baseForm.getTable(),
             store = table.getStore(),
             formStore = store;
 
@@ -353,7 +366,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         //todo@hl
 		var values = formPanel.getValues();
 		if(values['elements']){
-			var elementFieldSet = me.getDetail().down('fieldset[name=elementFieldSet]'),
+			var elementFieldSet = formPanel.down('fieldset[name=elementFieldSet]'),
 				elementComboBox = elementFieldSet.down('combo'),
 				elementStore = elementComboBox.getStore(),
 				activeRecord = elementStore.getById(values['elements']),
@@ -398,12 +411,9 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         Shopware.Notification.createGrowlMessage(title, message, win.title);
     },
 
-    onDeleteEntry: function() {
+    onDeleteEntry: function(baseForm) {
         var me = this,
-            table = me.getTable();
-        if(!table) {
-            return;
-        }
+            table = baseForm.getTable();
         var selectionModel = table.getSelectionModel(),
             record = selectionModel.getLastSelected();
         if(!record) {
@@ -443,9 +453,9 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         });
     },
 
-    doEditEntry: function(record) {
+    doEditEntry: function(baseForm, record) {
         var me = this,
-            formPanel = me.getDetail(),
+            formPanel = baseForm.getDetail(),
             formStore;
         if(!formPanel) {
             return;
@@ -463,17 +473,17 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                     if (operation.success !== true || !records.length) {
                         return;
                     }
-                    me.loadEditEntry(records[0]);
+                    me.loadEditEntry(baseForm, records[0]);
                 }
             });
         } else {
-            me.loadEditEntry(record);
+            me.loadEditEntry(baseForm, record);
         }
     },
 
-    loadEditEntry: function(record) {
+    loadEditEntry: function(baseForm, record) {
         var me = this,
-            formPanel = me.getDetail(),
+            formPanel = baseForm.getDetail(),
             basicForm = formPanel.getForm();
 
         if(!record) {
@@ -487,8 +497,8 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             record.associations.each(function(association) {
                 var store = record[association.name](),
                     associationKey = association.associationKey,
-                    grid = me.getDetail().down('grid[name=' + associationKey + ']'),
-                    combo = me.getDetail().down('combo[name=' + associationKey + ']'),
+                    grid = formPanel.down('grid[name=' + associationKey + ']'),
+                    combo = formPanel.down('combo[name=' + associationKey + ']'),
                     filter;
 
                 //Bind the association store to the combobox

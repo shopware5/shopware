@@ -52,6 +52,18 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
         me.callParent(arguments);
     },
 
+    getDetail: function() {
+        return this.down('config-base-detail');
+    },
+
+    getTable: function() {
+        return this.down('config-base-table');
+    },
+
+    getDeleteButton: function() {
+        return this.down('config-base-table button[action=delete]');
+    },
+
     getItems: function() {
 		return [];
     },
