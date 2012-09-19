@@ -855,8 +855,18 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     },
 
     openProgressWindow: function(article) {
-        var me = this, totalCount = 1, count,
-                configurator = me.getConfigurator();
+        var me = this, totalCount = 1, count, groupsChanged = false,
+            configurator = me.getConfigurator();
+
+        var oldGroups = Ext.create('Ext.data.Store', {
+            model:'Shopware.apps.Article.model.ConfiguratorGroup'
+        });
+
+        if (article.getConfiguratorSet() instanceof Ext.data.Store &&
+            article.getConfiguratorSet().first() instanceof Ext.data.Model) {
+
+            oldGroups = article.getConfiguratorSet().first().getConfiguratorGroups();
+        }
 
         //first we create a new store for the activated groups
         var activeGroups = Ext.create('Ext.data.Store', {
@@ -872,6 +882,11 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         configurator.configuratorGroupStore.each(function (group) {
             if ( group.get('active') ) {
                 activeGroups.add(group);
+
+                if (!(oldGroups.getById(group.get('id')))) {
+                    groupsChanged = true;
+                }
+
                 count = 0;
                 group.getConfiguratorOptions().each(function (option) {
                     if ( option.get('active') ) {
@@ -884,6 +899,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             }
         });
 
+        if (oldGroups.getCount() !== activeGroups.getCount()) {
+            groupsChanged = true;
+        }
+
         //at least we set the active groups in the model association store and save the model.
         model.getConfiguratorGroups();
         model.set('totalCount', totalCount);
@@ -891,7 +910,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         var progress = me.getView('variant.Progress').create({
             configurator: model,
-            article: article
+            article: article,
+            groupsChanged: groupsChanged
         }).show();
     },
 

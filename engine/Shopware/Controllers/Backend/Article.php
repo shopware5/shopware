@@ -26,7 +26,7 @@
  * @subpackage Article
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
- * @author     Heiner Lohaus
+ * @author     Oliver Denter
  * @author     $Author$
  */
 
@@ -1735,6 +1735,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $activeGroups = array();
         //we need a second array with all group ids to iterate them easily in the sql generation
         $originals = array();
+        $allOptions = array();
         foreach($groups as $group) {
             if (!$group['active']) {
                 continue;
@@ -1744,6 +1745,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             foreach($group['options'] as $option) {
                 if ($option['active']) {
                     $options[] = $option['id'];
+                    $allOptions[$option['id']] = $option['id'];
                 }
             }
 
@@ -1794,7 +1796,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return array(
             'sql' => $sql,
-            'originals' => $originals
+            'originals' => $originals,
+            'allOptions' => $allOptions
         );
     }
 
@@ -1811,12 +1814,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $offset = $this->Request()->getParam('offset', 0);
             $limit = $this->Request()->getParam('limit', 50);
 
-            if ($offset === 0) {
-                $this->removeAllConfiguratorVariants($articleId);
-            }
+            //the merge type defines if all variants has to been regenerated or if only new variants will be added.
+            //1 => Regenerate all variants
+            //2 => Merge variants
+            $mergeType = $this->Request()->getParam('mergeType', 1);
 
             /**@var $article \Shopware\Models\Article\Article*/
             $article = $this->getRepository()->find($articleId);
+
+            $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
+            if ($offset === 0 && $mergeType === 1) {
+                $this->removeAllConfiguratorVariants($articleId);
+            } else if ($offset === 0 && $mergeType === 2) {
+                $this->deleteVariantsForAllDeactivatedOptions($article, $generatorData['allOptions']);
+            }
 
             $detailData = $this->getDetailDataForVariantGeneration($article);
 
@@ -1825,21 +1836,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
             $priceSurcharges = $this->getRepository()->getConfiguratorPriceSurchargesQuery($configuratorSet->getId())->getArrayResult();
 
-            $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
             if (empty($generatorData)) {
                 return;
             }
+
             $sql = $generatorData['sql'];
             $originals = $generatorData['originals'];
-
             $variants = Shopware()->Db()->fetchAll($sql);
 
-            $counter = $offset;
+            if ($mergeType === 1) {
+                $counter = $offset;
+            } else {
+                $sql= "SELECT COUNT(id) FROM s_articles_details WHERE articleID = ?";
+                $counter = Shopware()->Db()->fetchOne($sql, array($articleId));
+            }
             $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
 
             //iterate all selected variants to insert them into the database
             foreach($variants as $variant) {
-                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article);
+                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType);
                 if ($variantData === false) {
                     continue;
                 }
@@ -1872,6 +1887,35 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Internal helper function to remove all article variants for the deselected options.
+     * @param \Shopware\Models\Article\Article $article
+     * @param array $selectedOptions
+     *
+     */
+    protected  function deleteVariantsForAllDeactivatedOptions($article, $selectedOptions)
+    {
+        $configuratorSet = $article->getConfiguratorSet();
+        $oldOptions = $configuratorSet->getOptions();
+
+        /**@var $oldOption \Shopware\Models\Article\Configurator\Option*/
+        foreach($oldOptions as $oldOption) {
+            if (!array_key_exists($oldOption->getId(), $selectedOptions)) {
+                $details = $this->getRepository()
+                                ->getArticleDetailByConfiguratorOptionIdQuery($article->getId(), $oldOption->getId())
+                                ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
+                                ->getResult();
+
+                foreach($details as $detail) {
+                    Shopware()->Models()->remove($detail);
+                }
+
+                Shopware()->Models()->flush();
+            }
+        }
+    }
+
+
+    /**
      * Helper function to prepare the variant data for a new article detail.
      * Iterates all passed price surcharges and dependencies to check if the current variant
      * has configurator options which defined in the dependencies or in the price surcharges.
@@ -1888,9 +1932,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $allOptions
      * @param $originals
      * @param $article \Shopware\Models\Article\Article
+     * @param $mergeType
+     *
      * @return array|bool
      */
-    protected function prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article) {
+    protected function prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType) {
         $name = '';
         $optionsModels= array();
         $tax = $article->getTax();
@@ -1922,6 +1968,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (in_array($dependency['parentId'], $optionIds) && in_array($dependency['childId'], $optionIds)) {
                 $abortVariant = true;
             }
+        }
+
+        //if the user selects the "merge variants" generation type, we have to check if the current variant already exist.
+        if ($mergeType === 2 && $abortVariant === false) {
+            $query = $this->getRepository()->getDetailsForOptionIdsQuery($article->getId(), $optionsModels);
+            $exist = $query->getArrayResult();
+            $abortVariant = !empty($exist);
         }
 
         if ($abortVariant) {

@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Configurator', {
      */
     fields: [
 		//{block name="backend/article/model/configurator/fields"}{/block}
-		'articleId', 'setId', 'offset', 'limit', 'totalCount'
+		'articleId', 'setId', 'offset', 'limit', 'totalCount', 'mergeType'
     ],
 
     associations: [

@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      * Define window height
      * @integer
      */
-    height:230,
+    height:255,
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
@@ -129,6 +129,11 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         process: '{s name=progress/message}[0] of [1] variants created...{/s}',
         errorMessage: '{s name=progress/error_message}An error has occurred while generate the article variants:{/s}',
         errorTitle: '{s name=progress/error_title}Error{/s}',
+        generationType: '{s name=progress/generate_type}Merging{/s}',
+        types: {
+            overrideType: '{s name=progress/override_type}Override{/s}',
+            mergeType: '{s name=progress/merge_type}Merge{/s}'
+        },
         notice: '{s name=progress/notice}The current selection of groups and options will create [0] possible variants. <br><br>This process will take about [1] minutes depending on your system resources. <br>Do you want to continue?{/s}'
     },
 
@@ -148,15 +153,17 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         me.items = me.createItems();
         me.title = me.snippets.title;
         me.callParent(arguments);
-        //me.progressBar.updateProgress(0, Ext.String.format(me.snippets.process, 0, me.configurator.get('totalCount')), true);
     },
 
     /**
      * Creates the items for the progress window.
      */
     createItems: function() {
-        var me = this;
+        var me = this, defaultValue = 2;
 
+        if (me.groupsChanged) {
+            defaultValue = 1;
+        }
         if (!Ext.isNumeric(me.batchSize)) {
             me.batchSize = 50;
         }
@@ -166,6 +173,27 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
             anchor: '100%',
             margin: '10 0',
             style: 'text-align: center;'
+        });
+
+        me.typeComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'type',
+            queryMode: 'local',
+            margin: '0 0 10',
+            anchor: '100%',
+            valueField: 'id',
+            labelWidth: 120,
+            editable: false,
+            disabled: me.groupsChanged,
+            fieldLabel: me.snippets.generationType,
+            displayField: 'name',
+            value: defaultValue,
+            store: new Ext.data.SimpleStore({
+                fields:['id', 'name'],
+                data: [
+                    [1, me.snippets.types.overrideType],
+                    [2, me.snippets.types.mergeType]
+                ]
+            })
         });
 
         me.cancelButton = Ext.create('Ext.button.Button', {
@@ -208,7 +236,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
             anchor: '100%'
         });
 
-        return [ notice, me.progressField, me.cancelButton, me.startButton ];
+        return [ me.typeComboBox, notice, me.progressField, me.cancelButton, me.startButton ];
     },
 
     /**
@@ -226,6 +254,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
 
         model.set('offset', offset);
         model.set('limit', limit);
+        model.set('mergeType', me.typeComboBox.getValue());
         model.setDirty();
         model.save({
             success: function(record, operation) {
