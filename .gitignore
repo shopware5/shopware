@@ -1,0 +1,4 @@
+config.php
+cache/database/*
+cache/templates/*
+engine/Shopware/Proxies/*
