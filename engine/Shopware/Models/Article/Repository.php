@@ -1831,6 +1831,85 @@ class Repository extends ModelRepository
     }
 
 
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete prices associated
+     * with the given article
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemovePricesQuery($articleId) {
+        $builder = $this->getRemovePricesQueryBuilder($articleId);
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemovePricesQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemovePricesQueryBuilder($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Article\Price', 'prices')
+                ->where('prices.articleId = :id')
+                ->setParameter('id',$articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete attributes
+     * associated with the given articleId
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveAttributesQuery($articleId) {
+    	$builder = $this->getRemoveAttributesQueryBuilder($articleId);
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveAttributesQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveAttributesQueryBuilder($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
+                ->where('attribute.articleId = :id')
+                ->setParameter('id',$articleId);
+
+    	return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete esd articles
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveESDQuery($articleId) {
+        $builder = $this->getRemoveESDQueryBuilder($articleId);
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveESDQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveESDQueryBuilder($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Article\Esd', 'esd')
+                ->where('esd.articleId = :id')
+                ->setParameter('id',$articleId);
+
+        return $builder;
+    }
+
+
+
 }
 
 

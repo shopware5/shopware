@@ -265,10 +265,49 @@ class Article extends Resource
             throw new ApiException\NotFoundException("Article by id $id not found");
         }
 
+        // Delete associated data
+        $query = $this->getRepository()->getRemovePricesQuery($article->getId());
+        $query->execute();
+        $query = $this->getRepository()->getRemoveAttributesQuery($article->getId());
+        $query->execute();
+        $query = $this->getRepository()->getRemoveESDQuery($article->getId());
+        $query->execute();
+        $this->removeArticleDetails($article);
+
+
         $this->getManager()->remove($article);
         $this->flush();
 
         return $article;
+    }
+
+    /**
+     * Helper function to remove article details for a given article
+     * @param $article \Shopware\Models\Article\Article
+     */
+    private function removeArticleDetails($article)
+    {
+        $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
+        $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
+
+        foreach($details as $detail) {
+            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder->delete('Shopware\Models\Article\Image', 'image')
+                    ->where('image.articleDetailId = :id')
+                    ->setParameter('id', $detail['id'])
+                    ->getQuery()
+                    ->execute();
+
+            $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
+            Shopware()->Db()->query($sql, array($detail['id']));
+
+            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder->delete('Shopware\Models\Article\Detail', 'detail')
+                    ->where('detail.id = :id')
+                    ->setParameter('id', $detail['id'])
+                    ->getQuery()
+                    ->execute();
+        }
     }
 
     /**
@@ -910,7 +949,7 @@ class Article extends Resource
                 throw new ApiException\CustomValidationException(sprintf("Property Value by id %s not found", $valueData['id']));
             }
             $models[] = $model;
-        }
+            }
 
         $data['propertyValues'] = $models;
         return $data;
@@ -1094,7 +1133,7 @@ class Article extends Resource
             'description',
             'descriptionLong',
             'keywords',
-            'packUnit',
+            'packUnit'
         );
 
         $translationWriter = new \Shopware_Components_Translation();

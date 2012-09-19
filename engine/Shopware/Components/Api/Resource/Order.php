@@ -55,8 +55,8 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $builder = $this->getRepository()->getOrdersQueryBuilder($id);
-
+        $filters = array(array('property' => 'orders.id','expression' => '=','value' => $id));
+        $builder = $this->getRepository()->getOrdersQueryBuilder($filters);
         /** @var $order \Shopware\Models\Order\Order */
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 

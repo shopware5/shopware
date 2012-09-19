@@ -2475,12 +2475,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function removePrices($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Article\Price', 'prices')
-                ->where('prices.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+        $query = $this->getRepository()->getRemovePricesQuery($articleId);
+        $query->execute();
     }
 
     /**
@@ -2489,12 +2485,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function removeAttributes($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
-                ->where('attribute.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+        $query = $this->getRepository()->getRemoveAttributesQuery($articleId);
+        $query->execute();
     }
 
     /**
@@ -2503,12 +2495,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function removeArticleEsd($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Article\Esd', 'esd')
-                ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+        $query = $this->getRepository()->getRemoveESDQuery($articleId);
+        $query->execute();
     }
 
     /**
