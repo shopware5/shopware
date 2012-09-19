@@ -49,6 +49,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     public function postDispatch()
     {
         $data = $this->View()->getAssign();
+        $pretty = $this->Request()->getParam('pretty', false);
 
         array_walk_recursive($data, function (&$value) {
             // Convert DateTime instances to ISO-8601 Strings
@@ -58,6 +59,9 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         });
 
         $data = Zend_Json::encode($data);
+        if($pretty) {
+            $data = Zend_Json::prettyPrint($data);
+        }
 
         $this->response()->setHeader('Content-type', 'application/json', true);
         $this->response()->setBody($data);
