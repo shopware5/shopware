@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
 
         me.store = me.supplierStore;
         me.store.load();
-        me.selModel = me.getSelectionModel();
+        me.selModel = me.getSelModel();
 
         // Define the columns and renders
         me.columns = me.getGridColumns();
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return Ext.selection.CheckboxModel
      */
-    getSelectionModel : function()
+    getSelModel : function()
     {
         return Ext.create('Ext.selection.CheckboxModel');
     },

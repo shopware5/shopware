@@ -80,8 +80,6 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
 		growlMessage: '{s name=window_title}{/s}'
     },
 
-    currentSelected : null,
-
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
@@ -164,6 +162,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
          */
         me.mainWindow.show();
     },
+
     /**
      * Toggles the delete button in the toolbar
      *
@@ -171,45 +170,39 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
      * @param selection array of Ext.data.Model
      * @return void
      */
-    onSelectionChange: function(sm, selection)
-    {
+    onSelectionChange: function(sm, selection) {
         var me = this,
             deleteButton = me.mainWindow.down('button[action=deleteSupplier]'),
-            saveSelection = selection,
             allowDelete = true;
+
+        // hide detail panel if there are more than one item selected
+        if (selection.length > 1 ) {
+            me.getDetailView().collapse(false);
+        }
 
         // check for assigned articles
         Ext.each(selection, function(element) {
-            if(element.get('articleCounter') !== 0) {
+            if (element.get('articleCounter') !== 0) {
                 // remove supplier from selection if there are still articles assigned to it
                 sm.deselect(element);
-                saveSelection = sm.getSelection();
-                allowDelete = false;
-                Ext.MessageBox.alert(
-                    me.messages.deleteDialogTitle,
-                    me.messages.deleteDialogForbidden
-                );
-                return false;
             }
         });
+
+        selection = sm.getSelection();
 
         /*{if !{acl_is_allowed privilege=delete}}*/
         allowDelete = false;
         /* {/if} */
 
         // show details and enable delete button
-        if(selection.length > 0 ) {
+        if (selection.length > 0 ) {
             if(allowDelete) {
                 deleteButton.setDisabled(false);
             }
         } else {
             deleteButton.setDisabled(true);
         }
-        // hide detail panel if there are more than one item selected
-        if(selection.length > 1 ) {
-            me.getDetailView().collapse(false);
-        }
-        me.currentSelected = saveSelection;
+
     },
 
     /**
@@ -455,7 +448,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
             grid = me.getGrid(),
-            selection = me.currentSelected,
+            selection = grid.getSelectionModel().getSelection(),
             store = grid.getStore(),
             noOfElements = selection.length,
             listOfSupplierNames = "";
