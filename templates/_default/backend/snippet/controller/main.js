@@ -475,7 +475,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         //scroll the store to first page
         store.currentPage = 1;
 
-        if ( searchString.length === 0 ) {
+        if (searchString.length === 0 ) {
             store.filters.removeAtKey('searchFilter');
         } else {
             store.filters.add('searchFilter', new Ext.util.Filter({
@@ -554,7 +554,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
     onEdit: function(editor, event) {
         var me     = this,
             record = event.record,
-            view   = editor.grid.getView();
+            view   = editor.grid;
 
         if (!record.dirty) {
             return;

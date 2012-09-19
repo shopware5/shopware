@@ -72,13 +72,13 @@ Ext.define('Shopware.apps.Snippet', {
      * Required stores
      * @array
      */
-    stores: [ 'NSpace', 'Snippet' ],
+    stores: [ 'NSpace', 'Snippet', 'Shoplocale' ],
 
     /**
      * Required models
      * @array
      */
-    models: [ 'NSpace',  'Snippet' ],
+    models: [ 'NSpace',  'Snippet', 'Shoplocale' ],
 
     /**
      * Required views
