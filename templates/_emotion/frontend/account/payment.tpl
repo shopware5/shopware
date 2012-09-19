@@ -1,7 +1,7 @@
 {extends file='parent:frontend/account/payment.tpl'}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' append}
+{block name='frontend_index_start'}
 	{$sBreadcrumb[] = ['name'=>"{s name='ChangePaymentTitle'}{/s}", 'link'=>{url}]}
 	{$sActiveAction = 'payment'}
 {/block}

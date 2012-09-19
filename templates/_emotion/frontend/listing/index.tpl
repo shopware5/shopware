@@ -10,19 +10,23 @@
 {/if}
 {/block}
 
-{block name="frontend_listing_index_listing" append}
-{if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
-    <div class="emotion-link">
-        <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
-            {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
-        </a>
-    </div>
-    <div class="space">&nbsp;</div>
-{/if}
+{block name="frontend_listing_index_listing"}
+    {include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
+    {if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
+        <div class="emotion-link">
+            <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
+                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
+            </a>
+        </div>
+        <div class="space">&nbsp;</div>
+    {/if}
 {/block}
 
 {* Topseller slider *}
-{block name="frontend_listing_index_banner" append}
+{block name="frontend_listing_index_banner"}
+    {if !$sLiveShopping}
+        {include file='frontend/listing/banner.tpl' sLiveShopping=$sLiveShopping}
+    {/if}
     {if !$hasEmotion && !$sSupplierInfo}
         {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
     {/if}

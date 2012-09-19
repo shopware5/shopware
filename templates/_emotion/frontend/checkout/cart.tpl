@@ -1,9 +1,8 @@
 {extends file='parent:frontend/checkout/cart.tpl'}
 
-{block name='frontend_index_content_left'}
-{/block}
+{block name='frontend_index_content_left'}{/block}
 
-{block name='frontend_checkout_cart_premiums' prepend}
+{block name='frontend_checkout_cart_premiums'}
 	<div class="table_row noborder">
 		{include file='frontend/checkout/cart_footer_left.tpl'}
 	</div>	
@@ -17,6 +16,8 @@
 		{/if}
 	{/if}
 	</div>
+
+    {include file='frontend/checkout/premiums.tpl'}
 {/block} 
 
 

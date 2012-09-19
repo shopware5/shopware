@@ -18,5 +18,3 @@
 	</li>
 {/if}
 {/block}
-
-{block name="frontend_detail_tabs_related" append}{/block}

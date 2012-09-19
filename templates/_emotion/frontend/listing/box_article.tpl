@@ -53,7 +53,22 @@
 </p>
 {/block}
 
-{block name='frontend_listing_box_article_actions' append}
+{block name='frontend_listing_box_article_actions'}
+    <div class="actions">
+
+        {block name='frontend_listing_box_article_actions_buy_now'}
+        {* Buy now button *}
+        {if !$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
+            <a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}" title="{s name='ListingBoxLinkBuy'}{/s}" class="buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
+        {/if}
+        {/block}
+
+        {block name='frontend_listing_box_article_actions_inline'}
+            {* More informations button *}
+            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="more">{s name='ListingBoxLinkDetails'}{/s}</a>
+        {/block}
+    </div>
+
 	{if $sArticle.pseudoprice}
 		<div class="pseudo_percent">%</div>
 	{/if}
