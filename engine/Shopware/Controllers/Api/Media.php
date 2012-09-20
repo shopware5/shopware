@@ -32,7 +32,7 @@
 class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Category
+     * @var Shopware\Components\Api\Resource\Media
      */
     protected $resource = null;
 
@@ -44,7 +44,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     /**
      * Get list of media
      *
-     * GET /api/categories/
+     * GET /api/media/
      */
     public function indexAction()
     {
@@ -60,32 +60,32 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Get one category
+     * Get one media
      *
-     * GET /api/articles/{id}
+     * GET /api/media/{id}
      */
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
 
-        $category = $this->resource->getOne($id);
+        $media = $this->resource->getOne($id);
 
-        $this->View()->assign('data', $category);
+        $this->View()->assign('data', $media);
         $this->View()->assign('success', true);
     }
 
     /**
-     * Create new category
+     * Create new media
      *
-     * POST /api/category
+     * POST /api/media
      */
     public function postAction()
     {
-        $category = $this->resource->create($this->Request()->getPost());
+        $media = $this->resource->create($this->Request()->getPost());
 
-        $location = $this->apiBaseUrl . 'categories/' . $category->getId();
+        $location = $this->apiBaseUrl . 'media/' . $media->getId();
         $data = array(
-            'id'       => $category->getId(),
+            'id'       => $media->getId(),
             'location' => $location
         );
 
@@ -94,20 +94,20 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Update category
+     * Update media
      *
-     * PUT /api/categories/{id}
+     * PUT /api/media/{id}
      */
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
 
-        $category = $this->resource->update($id, $params);
+        $media = $this->resource->update($id, $params);
 
-        $location = $this->apiBaseUrl . 'categories/' . $category->getId();
+        $location = $this->apiBaseUrl . 'categories/' . $media->getId();
         $data = array(
-            'id'       => $category->getId(),
+            'id'       => $media->getId(),
             'location' => $location
         );
 
@@ -116,9 +116,9 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Delete article
+     * Delete media
      *
-     * DELETE /api/articles/{id}
+     * DELETE /api/media/{id}
      */
     public function deleteAction()
     {

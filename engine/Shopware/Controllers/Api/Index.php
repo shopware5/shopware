@@ -38,7 +38,7 @@ class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
 {
     public function invalidAction()
     {
-        $this->View()->assign(array('success' => false, 'message' => 'Invalid method'));
+        $this->View()->assign(array('success' => false, 'message' => 'Invalid method or invalid json string.'));
     }
 
     public function noAuthAction()

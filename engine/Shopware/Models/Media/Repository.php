@@ -41,6 +41,43 @@ class Repository extends ModelRepository
 {
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
+     * @param $filter
+     * @param $orderBy
+     * @param $offset
+     * @param $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getMediaListQuery($filter = null, $orderBy = null, $limit= null, $offset = null) {
+    	$builder = $this->getMediaListQueryBuilder($filter, $orderBy);
+        if ($limit !== null && $offset !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getMediaListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @param $orderBy
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getMediaListQueryBuilder($filter, $orderBy) {
+    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select('media')
+                ->from('Shopware\Models\Media\Media', 'media');
+        if($filter) {
+            $builder->addFilter($filter);
+        }
+        if($orderBy) {
+            $builder->addOrderBy($orderBy);
+        }
+    	return $builder;
+    }
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the media of the passed album id.
      * Used for the backend media manager listing of the media.
      *
