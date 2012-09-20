@@ -1604,6 +1604,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
 
             $media->setFile($file);
+            $media->setName(pathinfo($imageData['image'],  PATHINFO_FILENAME));
             $media->setDescription('');
             $media->setCreated(new \DateTime());
             $media->setUserId(0);
