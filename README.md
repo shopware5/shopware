@@ -75,7 +75,7 @@ Now you're ready to start hacking and contributing to Shopware. If you're done h
 
 **Please keep in mind that all verified and merged pull requests are released with the next minor version of Shopware.**
 
-For example if you're contributing to Shopware 4.0.2 your changes will be available in Shopware 4.0.3. We'll merge all changes from our contributors to the `master` branch before we release the next minor version, testing it through our quality assurance and pushing it out to the masses after all tests went well.
+For example if you're contributing to Shopware 4.0.3 your changes will be available in Shopware 4.0.4. We'll merge all changes from our contributors to the `master` branch before we release the next minor version, testing it through our quality assurance and pushing it out to the masses after all tests went well.
 
 ### How to report bugs / feature requests?
 
