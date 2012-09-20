@@ -86,7 +86,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $i = 0;
         foreach ($filter as $exprKey => $where) {
-            if ($where instanceof Expr) {
+            if (is_object($where)) {
                 $this->andWhere($where);
                 continue;
             }
