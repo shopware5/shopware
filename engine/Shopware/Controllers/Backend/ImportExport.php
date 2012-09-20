@@ -1708,8 +1708,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $categoryRepository->recover();
         $this->getManager()->clear();
 
-        throw new \Exception(sprintf('Could not update/insert category with id %s, could not find parentId %s', 1,2));
-
         $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
         try {
             foreach ($results as $category) {
