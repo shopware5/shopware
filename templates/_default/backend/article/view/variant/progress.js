@@ -247,7 +247,6 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      * @param offset
      * @param limit
      * @param article
-     * @param progress
      */
     startVariantGenerator: function(model, offset, limit, article) {
         var me = this;

@@ -377,7 +377,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         //reconfigure the image listing
         var imageListing = mainWindow.down('article-image-list dataview[name=image-listing]');
         var listingComponent = mainWindow.down('article-image-list');
-        var listingComp =
         imageListing.bindStore(article.getMedia());
         listingComponent.mediaStore = article.getMedia();
 

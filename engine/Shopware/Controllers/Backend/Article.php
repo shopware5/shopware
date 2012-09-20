@@ -1117,13 +1117,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->persist($detail);
         Shopware()->Models()->flush();
         if ($data['standard']) {
-              //todo@hl Fix standard detail change
-//            $mainDetail = $article->getMainDetail();
-//            $mainDetail->setKind(2);
-//            $article->setMainDetail($detail);
-//            Shopware()->Models()->persist($mainDetail);
-//            Shopware()->Models()->persist($article);
-//            Shopware()->Models()->flush();
+            $mainDetail = $article->getMainDetail();
+            $mainDetail->setKind(2);
+            $article->setMainDetail($detail);
+            Shopware()->Models()->persist($mainDetail);
+            Shopware()->Models()->persist($article);
+            Shopware()->Models()->flush();
         }
         return $detail;
     }
@@ -1828,16 +1827,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $article = $this->getRepository()->find($articleId);
 
             $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
+
+            $detailData = $this->getDetailDataForVariantGeneration($article);
+
             if ($offset === 0 && $mergeType === 1) {
                 $this->removeAllConfiguratorVariants($articleId);
             } else if ($offset === 0 && $mergeType === 2) {
                 $this->deleteVariantsForAllDeactivatedOptions($article, $generatorData['allOptions']);
             }
 
-            $detailData = $this->getDetailDataForVariantGeneration($article);
-
             $configuratorSet = $article->getConfiguratorSet();
-
             $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
             $priceSurcharges = $this->getRepository()->getConfiguratorPriceSurchargesQuery($configuratorSet->getId())->getArrayResult();
 
@@ -1854,9 +1853,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             } else {
                 $sql= "SELECT COUNT(id) FROM s_articles_details WHERE articleID = ?";
                 $counter = Shopware()->Db()->fetchOne($sql, array($articleId));
+                $counter++;
             }
             $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
-
             //iterate all selected variants to insert them into the database
             foreach($variants as $variant) {
                 $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType);
@@ -1875,6 +1874,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 Shopware()->Models()->persist($detail);
                 $counter++;
             }
+
+            $tmp = $this->getArticle($articleId);
+            if (empty($tmp[0]['mainDetail'])) {
+                $newMainDetail = $this->getArticleDetailRepository()->findOneBy(array('articleId' => $articleId));
+                $article->setMainDetail($newMainDetail);
+                if ($newMainDetail->getAttribute()) {
+                    $article->setAttribute($newMainDetail->getAttribute());
+                } else {
+                    $article->setAttribute(null);
+                }
+            }
+
             Shopware()->Models()->flush();
 
             $article = $this->getArticle($articleId);
@@ -1885,7 +1896,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => true,
+                'success' => false,
                 'message' => $e->getMessage()
             ));
         }
@@ -1910,6 +1921,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                                 ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
                                 ->getResult();
 
+                /**@var $detail \Shopware\Models\Article\Detail*/
                 foreach($details as $detail) {
                     Shopware()->Models()->remove($detail);
                 }
@@ -2076,7 +2088,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $detailData['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $detailData['unitId']);
         }
 
-        $detailData['attribute']['article'] = $article;
+        if (!empty($detailData['attribute'])) {
+            $detailData['attribute']['article'] = $article;
+        }
         return $detailData;
     }
 

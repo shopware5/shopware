@@ -206,6 +206,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         this.saveVariant(record,null);
         this.getVariantListing().getSelectionModel().deselectAll();
         this.getVariantListing().getStore().load();
+        if (record.get('standard') || record.get('kind') === 1) {
+            this.subApplication.getController('Detail').reloadArticle(record.get('articleId'));
+        }
     },
 
     /**
