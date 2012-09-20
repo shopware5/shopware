@@ -1404,120 +1404,131 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function importAction()
     {
-        @set_time_limit(0);
-        $this->Front()->Plugins()->Json()->setRenderer(false);
+        try {
+            @set_time_limit(0);
+            $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $type = strtolower(trim($this->Request()->getParam('type')));
+            $type = strtolower(trim($this->Request()->getParam('type')));
 
-        if (!$type) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => "No Importtype given",
-            ));
-            return;
-        }
-
-        if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => "Could not upload file",
-            ));
-            return;
-        }
-
-        $fileName  = basename($_FILES['file']['name']);
-        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-        if (!in_array($extension, array('csv', 'xml'))) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Unknown Extension',
-            ));
-            return;
-        }
-
-        $destPath = Shopware()->DocPath('media_' . 'temp');
-        if (!is_dir($destPath)) {
-            // Try to create directory with write permissions
-            mkdir($destPath, 0777, true);
-        }
-
-        $destPath = realpath($destPath);
-        if (!file_exists($destPath)) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => sprintf("Destination directory '%s' does not exist.", $destPath),
-            ));
-            return;
-        }
-
-        if (!is_writable($destPath)) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => sprintf("Destination directory '%s' does not have write permissions.", $destPath)
-            ));
-            return;
-        }
-
-        $filePath = tempnam($destPath, 'import_');
-
-        if (false === move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => sprintf("Could not move %s to %s.", $_FILES['file']['tmp_name'], $filePath)
-            ));
-            return;
-        }
-        $this->uploadedFilePath = $filePath;
-        chmod($filePath, 0644);
-
-        if ($type === 'instock') {
-            $this->importInStock($filePath);
-            return;
-        }
-
-        if ($type === 'customers') {
-            $this->importCustomers($filePath);
-            return;
-        }
-
-        if ($type === 'prices') {
-            $this->importPrices($filePath);
-            return;
-        }
-
-        if ($type === 'categories') {
-            $this->importCategories($filePath, $extension);
-            return;
-        }
-
-        if ($type === 'images') {
-            $this->importImages($filePath);
-            return;
-        }
-
-        if ($type === 'newsletter') {
-            $this->importNewsletter($filePath);
-            return;
-        }
-
-        if ($type === 'articles') {
-            if ($extension === 'csv') {
-                $this->importArticlesCsv($filePath);
+            if (!$type) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => "No Importtype given",
+                ));
                 return;
             }
 
-            if ($extension === 'xml') {
-                $this->importArticlesXml($filePath);
+            if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => "Could not upload file",
+                ));
                 return;
             }
-        }
 
-        echo json_encode(array(
-            'success' => false,
-            'message' => sprintf("Could not handle upload of type: %s.", $type)
-        ));
-        return;
+            $fileName  = basename($_FILES['file']['name']);
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+            if (!in_array($extension, array('csv', 'xml'))) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Unknown Extension',
+                ));
+                return;
+            }
+
+            $destPath = Shopware()->DocPath('media_' . 'temp');
+            if (!is_dir($destPath)) {
+                // Try to create directory with write permissions
+                mkdir($destPath, 0777, true);
+            }
+
+            $destPath = realpath($destPath);
+            if (!file_exists($destPath)) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => sprintf("Destination directory '%s' does not exist.", $destPath),
+                ));
+                return;
+            }
+
+            if (!is_writable($destPath)) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => sprintf("Destination directory '%s' does not have write permissions.", $destPath)
+                ));
+                return;
+            }
+
+            $filePath = tempnam($destPath, 'import_');
+
+            if (false === move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => sprintf("Could not move %s to %s.", $_FILES['file']['tmp_name'], $filePath)
+                ));
+                return;
+            }
+            $this->uploadedFilePath = $filePath;
+            chmod($filePath, 0644);
+
+            if ($type === 'instock') {
+                $this->importInStock($filePath);
+                return;
+            }
+
+            if ($type === 'customers') {
+                $this->importCustomers($filePath);
+                return;
+            }
+
+            if ($type === 'prices') {
+                $this->importPrices($filePath);
+                return;
+            }
+
+            if ($type === 'categories') {
+                $this->importCategories($filePath, $extension);
+                return;
+            }
+
+            if ($type === 'images') {
+                $this->importImages($filePath);
+                return;
+            }
+
+            if ($type === 'newsletter') {
+                $this->importNewsletter($filePath);
+                return;
+            }
+
+            if ($type === 'articles') {
+                if ($extension === 'csv') {
+                    $this->importArticlesCsv($filePath);
+                    return;
+                }
+
+                if ($extension === 'xml') {
+                    $this->importArticlesXml($filePath);
+                    return;
+                }
+            }
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => sprintf("Could not handle upload of type: %s.", $type)
+            ));
+            return;
+        }catch(\Exception $e){
+            // At this point any Exception would result in the import/export frontend "loading forever"
+            // Append stack trace in order to be able to debug
+            $message = $e->getMessage()."<br />\r\nStack Trace:".$e->getTraceAsString();
+            echo json_encode(array(
+                'success' => false,
+                'message' => $message
+            ));
+            return;
+        }
     }
 
     /**
@@ -1695,6 +1706,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $categoryRepository->recover();
         $this->getManager()->clear();
+
+        throw new \Exception(sprintf('Could not update/insert category with id %s, could not find parentId %s', 1,2));
 
         $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
         try {
