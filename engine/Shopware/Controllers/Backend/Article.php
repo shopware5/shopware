@@ -513,14 +513,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
              * @var $article Shopware\Models\Article\Article
              */
             $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-            if($article->getConfiguratorSet() !== null){
+            if ($article->getConfiguratorSet() !== null) {
                 $isConfigurator = true;
-                $mailDetailId = $article->getMainDetail()->getId();
-            }else{
+                $mailDetailId   = $article->getMainDetail()->getId();
+            } else {
                 $isConfigurator = false;
-                $mailDetailId = null;
+                $mailDetailId   = null;
             }
-
 
             $this->duplicateArticleData($articleId);
             $newArticleId = Shopware()->Db()->lastInsertId('s_articles');
@@ -784,7 +783,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->leftJoin('details.images', 'images')
                 ->where('details.articleId = ?1');
 
-        if($mailDetailId !== null){
+        if ($mailDetailId !== null){
             $builder->andWhere('details.id = ?2');
             $details = $builder->setParameter(1, $articleId)
                                ->setParameter(2, $mailDetailId)
@@ -796,9 +795,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                                ->getArrayResult();
         }
 
+        $newArticleData = $this->getNewArticleData();
+        $number = $newArticleData['number'];
+
         foreach ($details as $data) {
             $prices = array();
-            $data['number'] = $data['number'] . uniqid();
+            $data['number'] = $number;
             $detail = new \Shopware\Models\Article\Detail();
 
             foreach($data['prices'] as $priceData) {
@@ -834,6 +836,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($detail);
         }
         Shopware()->Models()->flush();
+
+        $this->increaseAutoNumber($newArticleData['autoNumber'], $number);
+
     }
 
     /**
@@ -2464,7 +2469,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $config = Shopware()->Config()->detailTemplates;
         $data = array();
-        foreach(explode(';', $config) as $path) {
+        foreach (explode(';', $config) as $path) {
             list($id, $name) = explode(':', $path);
             $data[] = array('id' => $id, 'name' => $name);
         }
@@ -2477,12 +2482,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function getNewArticleData()
     {
-        $sql= "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
+        $prefix = Shopware()->Config()->backendAutoOrderNumberPrefix;
+
+        $sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
         $number = Shopware()->Db()->fetchOne($sql);
-        $number++;
+
+        do {
+            $number++;
+
+            $sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
+            $hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
+        } while ($hit);
 
         return array(
-            'number' => Shopware()->Config()->backendAutoOrderNumberPrefix . $number,
+            'number'     => $prefix . $number,
             'autoNumber' => $number
         );
     }
