@@ -14,7 +14,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 
 	var $version	= 	"12.08" ;
 	var $modulType  = 	"Standard" ;
-	
+
 
 
 	public function getInfo() {
@@ -24,8 +24,8 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 			'autor' => 'Heidelberger Payment GmbH',
 			'label' => "Heidelpay Payment ".$this->modulType ,
 			'source' => "Default",
-			'description' => '<p><img src="data:image/png;base64,' . $img . '" /></p> <p style="font-size:12px; font-weight: bold;">Heidelberger Payment GmbH - Ihr Full Service Payment Provider - alles aus einer Hand <p></p> <p style="font-size:12px">Die Heidelberger Payment GmbH kurz: heidelpay bietet als einziger BaFin-zertifizierter Payment Service Provider alles was zum Online-Payment geh&ouml;rt.<br><br><a href="http://testshops.heidelpay.de/contactform/?campaign=shopware4.0&shop=shopware4.0" target="_blank" style="font-size: 12px; color: #000;  font-weight: bold;">&gt;&gt;&gt; Informationen anfordern &lt;&lt;&lt;</a><br/><p><br /> <p style="font-size:12px">Das Leistungsspektrum des PCI DSS zertifizierten Unternehmens reicht von weltweiten e-Payment L&ouml;sungen, inklusive eines vollst&auml;ndigen Debitorenmanagement-, Risk- und Fraud- Systems bis hin zu einem breiten Angebot alternativer Bezahlverfahren - schnell, sicher, einfach und umfassend - alles aus einer Hand.</p><br/> <a href="http://www.heidelpay.de" style="font-size: 12px; color: #000;  font-weight: bold;">www.heidelpay.de</a><br/> <br/> <p style="font-size: 12px; color: #f00";  font-weight: bold;">Hinweis:</p><p style="font-size:12px">Um unser "Heidelpay Actions Standard" Plug-in nutzen zu k&ouml;nnen, beantragen Sie bitte die Aufschaltung von push Benachrichtigungen bei unserem Technischen Support. Wenden Sie sich hierf&uuml;r bitte per email an technik@heidelpay.de oder Telefon +49 (0) 6221 65170-10 an uns. Bitte notieren Sie sich Sie sich vorher die URL ihres e-Shops plus dem Webpfad zur Heidelpay Action und teilen Sie uns diese dann mit, als Beispiel<br/><br/> <b>https://www.meinshop.de/payment_heidelpay/rawnotify</b></p>',
-			'license' => 'commercial',
+            'description' => '<p><img src="data:image/png;base64,' . $img . '" /></p> <p style="font-size:12px; font-weight: bold;">Heidelberger Payment GmbH - Ihr Full Service Payment Provider - alles aus einer Hand <p></p> <p style="font-size:12px">Die Heidelberger Payment GmbH kurz: heidelpay bietet als BaFin-zertifizierter Payment Service Provider alles was zum Online-Payment geh&ouml;rt.<br><br><a href="http://testshops.heidelpay.de/contactform/?campaign=shopware4.0&shop=shopware4.0" target="_blank" style="font-size: 12px; color: #000;  font-weight: bold;">&gt;&gt;&gt; Informationen anfordern &lt;&lt;&lt;</a><br/><p><br /> <p style="font-size:12px">Das Leistungsspektrum des PCI DSS zertifizierten Unternehmens reicht von weltweiten e-Payment L&ouml;sungen, inklusive eines vollst&auml;ndigen Debitorenmanagement-, Risk- und Fraud- Systems bis hin zu einem breiten Angebot alternativer Bezahlverfahren - schnell, sicher, einfach und umfassend - alles aus einer Hand.</p><br/> <a href="http://www.heidelpay.de" style="font-size: 12px; color: #000;  font-weight: bold;">www.heidelpay.de</a><br/> <br/> <p style="font-size: 12px; color: #f00";  font-weight: bold;">Hinweis:</p><p style="font-size:12px">Um unser "Heidelpay Actions Standard" Plug-in nutzen zu k&ouml;nnen, beantragen Sie bitte die Aufschaltung von push Benachrichtigungen bei unserem Technischen Support. Wenden Sie sich hierf&uuml;r bitte per email an technik@heidelpay.de oder Telefon +49 (0) 6221 65170-10 an uns. Bitte notieren Sie sich Sie sich vorher die URL ihres e-Shops plus dem Webpfad zur Heidelpay Action und teilen Sie uns diese dann mit, als Beispiel<br/><br/> <b>https://www.meinshop.de/payment_heidelpay/rawnotify</b></p>',
+            'license' => 'commercial',
     		'copyright' => 'Copyright © 2012, Heidelberger Payment GmbH',
 			'support' => 'technik@heidelpay.de',
 			'link' => 'http://www.heidelpay.de/'
@@ -49,7 +49,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 			$this->uninstall();
 			throw new Enlight_Exception("This plugin requires the plugin payment");
 		}
-		
+
 		if (ini_get('always_populate_raw_post_data') == 0) {
       $this->Logging("Unable to install plugin due to missing always_populate_raw_post_data.","ERROR");
 			throw new Enlight_Exception('
@@ -93,7 +93,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 	protected function createPayments()
 	{
 		$inst = $this->paymentMethod();
-		
+
 		foreach ($inst as $key => $val ) {
 			//$getOldPayments = Shopware()->Payments()->fetchAll(array('name'=>"heidelpay_".$val['name'],));
 			$getOldPayments = Shopware()->Payments()->fetchRow(array('name=?'=>"heidelpay_".$val['name']));
@@ -319,11 +319,11 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		/*
 		 * Send error mail if mail addresse set
 		 */
-		if (!empty($this->Config()->HEIDELPAY_ERRORMAIL)) { 
+		if (!empty($this->Config()->HEIDELPAY_ERRORMAIL)) {
 		 if ( $level == "ERROR") mail($this->Config()->HEIDELPAY_ERRORMAIL , 'Shopware Heidelpay Plugin error',  self::$_moduleDesc." (".$level.") : ".$message );
 		}
-		 
-		 
+
+
 	}	/*}*/
 
 	public function paymentMethod()
@@ -380,7 +380,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 
 
 		foreach ($snippets as $key => $value) {
-				
+
 			if (!empty($value[0])) {
 				$sql = " SELECT id FROM s_core_snippets WHERE  namespace = \"".$value[0]."\" AND shopID = 1 AND localeID = ".$value[1]." AND name = \"".$value[2]."\"" ;
 				$data = Shopware()->Db()->fetchAll($sql);
@@ -388,21 +388,21 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 				if ($data[0][id] > 0)
 				{
 					$sql = "UPDATE s_core_snippets SET namespace	= \"".$value[0]."\",
-													shopID 		= 	1, 
-													localeID 	= 	".$value[1].", 
-													name 		= 	\"".$value[2]."\", 
-													value 		= \"".$value[3]."\" 
+													shopID 		= 	1,
+													localeID 	= 	".$value[1].",
+													name 		= 	\"".$value[2]."\",
+													value 		= \"".$value[3]."\"
 				WHERE id=".$data[0]['id']." ";
-					
+
 				} else {
 					$sql = "INSERT s_core_snippets SET namespace	= \"".$value[0]."\",
-													shopID 		= 	1, 
-													localeID 	= 	".$value[1].", 
-													name 		= 	\"".$value[2]."\", 
-													value 		= \"".$value[3]."\" 
+													shopID 		= 	1,
+													localeID 	= 	".$value[1].",
+													name 		= 	\"".$value[2]."\",
+													value 		= \"".$value[3]."\"
 				";
 				}
-			
+
 				Shopware()->Db()->query($sql);
 			}
 		}
@@ -428,16 +428,16 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 
 		$snippets[] 	= array('frontend/payment_heidelpay/fail','1','basket','Zur&uuml;ck zum Warenkorb');
 		$snippets[] 	= array('frontend/payment_heidelpay/fail','2','basket','back to basket');
-		
+
     $snippets[] 	= array('frontend/payment_heidelpay/prepayment','1','PaymentProcess','Bezahlvorgang');
     $snippets[] 	= array('frontend/payment_heidelpay/prepayment','2','PaymentProcess','Payment process');
-		
+
     $snippets[] 	= array('frontend/payment_heidelpay/error','1','basket','Zur&uuml;ck zum Warenkorb');
     $snippets[] 	= array('frontend/payment_heidelpay/error','2','basket','back to basket');
 
 		$snippets[] 	= array('frontend/payment_heidelpay/fail','1','PaymentFailed','Ihr Bezahlvorgang konnte aus folgenden Grund nicht bearbeitet werden:');
 		$snippets[] 	= array('frontend/payment_heidelpay/fail','2','PaymentFailed','Your payment process could not be finished, because of the following reason:');
-				
+
     $snippets[] 	= array('frontend/payment_heidelpay/cancel','1','PaymentProcess','Bezahlvorgang');
     $snippets[] 	= array('frontend/payment_heidelpay/cancel','2','PaymentProcess','Payment process');
 
@@ -446,13 +446,13 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 
 		$snippets[] 	= array('frontend/payment_heidelpay/cancel','1','basket','Zur&uuml;ck zum Warenkorb');
 		$snippets[] 	= array('frontend/payment_heidelpay/cancel','2','basket','back to basket');
-		
+
     $snippets[] 	= array('frontend/payment_heidelpay/error','1','PaymentProcess','Bezahlvorgang');
     $snippets[] 	= array('frontend/payment_heidelpay/error','2','PaymentProcess','Payment process');
 
 		$snippets[] 	= array('frontend/payment_heidelpay/error','1','PaymentError','Es ist ein Fehler bei Ihrem Bezahlvorgang aufgetreten. Bitte wenden Sie sich an den Shopbetreiber.');
 		$snippets[] 	= array('frontend/payment_heidelpay/error','2','PaymentError','An error occurred during your payment process. Please contact the shop owner.');
-		
+
     $snippets[] 	= array('frontend/payment_heidelpay/success','1','PaymentSuccess','Ihr Bezahlvorgang war erfolgreich!');
     $snippets[] 	= array('frontend/payment_heidelpay/success','2','PaymentSuccess','Your transaction was successfull!');
 
@@ -491,8 +491,8 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
     #echo $sql;
     $exists = Shopware()->Db()->fetchAll($sql);
     return $exists;
-  }/*}}}*/ 
-  
+  }/*}}}*/
+
    public  function createSenderTable($table)/*{{{*/
   {
     $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'` (
@@ -525,6 +525,6 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
       KEY `IDENTIFICATION_REFERENCEID` (`IDENTIFICATION_REFERENCEID`)
     ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;';
     return Shopware()->Db()->query($sql);
-  }/*}}}*/ 
+  }/*}}}*/
 
 }
