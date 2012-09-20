@@ -39,6 +39,49 @@ class Repository extends ModelRepository
 {
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
+     * @param $filter
+     * @param $order
+     * @param $limit
+     * @param $offset
+     * @return \Doctrine\ORM\Query
+     */
+    public function getPropertyRelationQuery($filter = null, $order = null, $limit = null, $offset = null) {
+    	$builder = $this->getPropertyRelationQueryBuilder($filter, $order);
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                   ->setMaxResults($limit);
+        }
+    	return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getPropertyRelationQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @param $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getPropertyRelationQueryBuilder($filter, $order) {
+    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+            'relations'
+        ));
+        $builder->from('Shopware\Models\Property\Relation', 'relations')
+            ->leftJoin('relations.option', 'options')
+            ->leftJoin('relations.group', 'groups');
+
+        if($filter !== null) {
+            $builder->addFilter($filter);
+        }
+        if($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+    	return $builder;
+    }
+
+    /**
      * Receives all known property groups
      *
      * @param null $filter
