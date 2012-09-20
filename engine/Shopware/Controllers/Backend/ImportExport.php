@@ -1818,6 +1818,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $emailValidator = new Zend_Validate_EmailAddress();
 
         foreach ($results as $newsletterData) {
+            $updated = false;
+
             if (empty($newsletterData['email'])) {
                 continue;
             }
@@ -1831,7 +1833,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             if ($newsletterData['group']) {
                 $group = $newsletterGroupRepository->findOneBy(array('name' => $newsletterData['group']));
             }
+            if(!$group && $newsletterData['group']) {
+                $group = new \Shopware\Models\Newsletter\Group();
+                $group->setName($newsletterData['group']);
+                $this->getManager()->persist($group);
+            }
 
+            /** @var \Shopware\Models\Newsletter\Address $existingRecipient  */
             $existingRecipient = $newsletterRepository->findOneBy(array('email' => $newsletterData['email']));
             if (!$existingRecipient) {
                 $recipient = new Shopware\Models\Newsletter\Address();
@@ -1850,10 +1858,23 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $this->getManager()->flush();
 
                 $insertCount++;
+            }else{
+                $updated = true;
+                if($newsletterData['userID']) {
+                    $existingRecipient->setIsCustomer(true);
+                }else{
+                    $existingRecipient->setIsCustomer(false);
+                }
+
+                if ($group) {
+                    $existingRecipient->setNewsletterGroup($group);
+                }
+                $this->getManager()->persist($existingRecipient);
+                $this->getManager()->flush();
             }
 
             if ($group && !empty($newsletterData['firstname'])) {
-                $sql = "INSERT INTO s_campaigns_maildata (groupId, email, firstname, lastname) VALUES (?, ?, ?, ?)
+                $sql = "INSERT INTO s_campaigns_maildata (groupID, email, firstname, lastname) VALUES (?, ?, ?, ?)
                       ON DUPLICATE KEY UPDATE groupId = ?, email = ?, firstname = ?, lastname = ?";
 
                 $values = array(
@@ -1866,9 +1887,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 Shopware()->Db()->query($sql, array_merge(array_values($values), array_values($values)));
 
                 if ($existingRecipient) {
-                    $updateCount++;
+                    $updated = true;
                 }
             }
+
+            if($updated) {
+                $updateCount++;
+            }
+
         }
 
         if (!empty($errors)) {
