@@ -501,6 +501,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @deprecated Use the event subscriber (Event: class::method::type)
      * @param   $class
+     * @deprecated
      * @param   $method
      * @param   $listener
      * @param   null $type
@@ -519,7 +520,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Subscribe hook method
      *
-     * @deprecated Use the event subscriber
      * @param Enlight_Hook_HookHandler $handler
      * @return Shopware_Components_Plugin_Bootstrap
      */
