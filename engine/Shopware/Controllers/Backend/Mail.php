@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         );
 
         $systemNodes = array(
-            'name' => $snippet->get('mails_system', 'Sytem eMails'),
+            'name' => $snippet->get('mails_system', 'System eMails'),
             'leaf' => false,
             'data' => array()
         );
