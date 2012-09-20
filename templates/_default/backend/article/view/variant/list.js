@@ -142,6 +142,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 if (newPrice != oldPrice) {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
                 }
+
             } else {
                 var oldNumber = e.record.get('number'),
                     newNumber = e.record.get('details.number') || e.record.get('number');
@@ -153,18 +154,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 } else {
                      // Map the ordernumber and save the model to the server side
                     e.record.set('number', newNumber);
-                    e.record.save({
-
-                        // Rollback changes if an error occurs
-                        failure: function(record) {
-                            var rawData = record.getProxy().getReader().rawData,
-                                message = rawData.message;
-
-                            e.record.set('number', oldNumber);
-                            e.record.set('details.number', oldNumber);
-                            Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.errorMessage + message, me.snippets.growlMessage);
-                        }
-                    });
+                    me.fireEvent('saveVariant', e.record);
                 }
             }
         });
