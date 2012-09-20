@@ -27,14 +27,19 @@ class Shopware_Components_DbDiff_Mysql
         return array_unique(array_merge($sourceTables, $targetTables));
     }
 
-    public function getTableUpdate($table)
+    public function getTableUpdate($table, $options = array())
     {
         $diff = '';
+        $backupTable = isset($options['backupTable']) ? $options['backupTable'] : 'backup_' . $table;
         $sourceFields = $this->getTableFields($this->source, $table);
         $targetFields = $this->getTableFields($this->target, $table);
 
         if(empty($sourceFields)) {
-            $diff .= "DROP TABLE IF EXISTS `$table`;\n";
+            if(empty($options['backup'])) {
+                $diff .= "DROP TABLE IF EXISTS `$table`;\n";
+            } else {
+                $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
+            }
         } elseif(empty($targetFields)) {
             $diff .= $this->getTable($this->source, $table, array('ifNotExists' => true));
             $diff .= $this->getTableData($this->source, $table);
@@ -49,28 +54,52 @@ class Shopware_Components_DbDiff_Mysql
                 }
             }
             if($new) {
+                if(isset($options['mapping'])) {
+                    foreach($options['mapping'] as $source => $target) {
+                        if(isset($targetFields[$source])) {
+                            $targetFields[$target] = $targetFields[$source];
+                        }
+                    }
+                }
                 $intersectFields = array_keys(array_intersect_key($sourceFields, $targetFields));
                 $intersectFields = '`' . implode('`, `', $intersectFields) . '`';
+                $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
+                $diff .= $this->getTable($this->source, $table);
 
-                $tableNew = $table . '_new';
-                $diff .= $this->getTable($this->source, $table, array(
-                    'ifNotExists' => true,
-                    'newTable' => $tableNew
-                ));
-                $diff .= "INSERT IGNORE INTO `$tableNew` ($intersectFields)\n";
-                $diff .= "SELECT $intersectFields FROM `$table`;\n";
-                $diff .= "DROP TABLE `$table`;\n";
-                $diff .= "RENAME TABLE `$tableNew` TO `$table`;\n";
+                // Set real table status hack
+                //$newStatus = $this->getTableStatus($this->source, $table, false);
+                //$newStatus = str_replace(' DEFAULT CHARSET=', ', CONVERT TO CHARACTER SET ', $newStatus);
+                //$newStatus = str_replace(' COLLATE=', ', COLLATE ', $newStatus);
+                //$diff .= "ALTER TABLE `$table` $newStatus;\n";
+
+                $tableData = null;
+                if(!empty($options['backup'])) {
+                    $tableData = $this->getTableData($this->source, $table);
+                }
+                if($tableData === null) {
+                    $tableData = "INSERT IGNORE INTO `$table` ($intersectFields)\n";
+                    if(isset($options['mapping'])) {
+                        foreach($options['mapping'] as $source => $target) {
+                            $intersectFields = str_replace("`$target`", "`$source`", $intersectFields);
+                        }
+                    }
+                    $tableData .= "SELECT $intersectFields FROM `$backupTable`;\n";
+                }
+                $diff .= $tableData;
+
+                if(empty($options['backup'])) {
+                    $diff .= "DROP TABLE `$backupTable`;\n";
+                }
             } else {
                 $sourceStatus = $this->getTableStatus($this->source, $table, false);
                 $targetStatus = $this->getTableStatus($this->target, $table, false);
                 if($sourceStatus != $targetStatus) {
                     $newStatus = str_replace(' DEFAULT CHARSET=', ', CONVERT TO CHARACTER SET ', $sourceStatus);
+                    $newStatus = str_replace(' COLLATE=', ', COLLATE ', $newStatus);
                     $diff .= "ALTER TABLE `$table` $newStatus;\n";
                 }
             }
         }
-
         $diff .= "\n";
         return $diff;
     }
@@ -130,9 +159,26 @@ class Shopware_Components_DbDiff_Mysql
 
     protected function getTable(PDO $db, $table, $options = array())
     {
+        $sql = "SHOW CREATE TABLE `$table`";
+        $result = $db->query($sql);
+        $return = $result->fetchColumn(1);
+        if($return === false) {
+            return null;
+        }
+        if(!empty($options['newTable'])) {
+            $return = str_replace("CREATE TABLE `$table`", "CREATE TABLE `{$options['newTable']}`", $return);
+        }
+        if(!empty($options['ifNotExists'])) {
+            $return = str_replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS", $return);
+        }
+        // Fix wrong column charset
+        $return = str_replace('CHARSET=utf8 ', '', $return);
+        $return .= ";\n";
+        return $return;
+
         $lines = array();
         foreach ($this->getTableFields($db, $table) as $name => $field) {
-            $lines[] = "$name` $field";
+            $lines[] = "`$name` $field";
         }
         foreach ($this->getTableKeys($db, $table) as $key) {
             $lines[] = $key;
@@ -222,7 +268,7 @@ class Shopware_Components_DbDiff_Mysql
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $line = "{$row['Type']}";
             if (!empty($row['Collation']) && $row['Collation'] != $tableCollation) {
-                $line .= ' COLLATE=' . $row['Collation'];
+                $line .= ' COLLATE ' . $row['Collation'];
             }
             if ($row['Null'] != 'YES') {
                 $line .= ' NOT NULL';
