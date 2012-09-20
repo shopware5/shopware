@@ -953,6 +953,7 @@ class Article extends Resource
                         if(!$option) {
                             throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
                         }
+                        $propertyGroup->addOption($option);
                     // get/create option depending on associated filtergroups
                     }elseif($valueData['option']['name']) {
                         // if a name is passed and there is a matching option/group relation, get this option
@@ -970,10 +971,12 @@ class Article extends Resource
                         }else{
                             $option = $relation->getOption();
                         }
-                        $option->fromArray($valueData['option']);
-                        if($option->isFilterable() === null) {
-                            $option->setFilterable(false);
-                        }
+                    }else{
+                        throw new ApiException\CustomValidationException("A property option need to be given for earch property value");
+                    }
+                    $option->fromArray($valueData['option']);
+                    if($option->isFilterable() === null) {
+                        $option->setFilterable(false);
                     }
                 }
                 // create the value
