@@ -14,7 +14,7 @@ class Shopware_Install extends Slim
             "mysql:host={$config['host']};port={$config['port']};dbname=shopware_356",
             $config['username'], $config['password']
         );
-        $db->exec("SET NAMES 'utf8';");
+        $db->exec("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'; SET FOREIGN_KEY_CHECKS = 0;");
         return $db;
     }
 
@@ -27,7 +27,7 @@ class Shopware_Install extends Slim
             "mysql:host={$config['host']};port={$config['port']};dbname=shopware_clean",
             $config['username'], $config['password']
         );
-        $db->exec("SET NAMES 'utf8';");
+        $db->exec("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'; SET FOREIGN_KEY_CHECKS = 0;");
         return $db;
     }
 
@@ -36,6 +36,7 @@ class Shopware_Install extends Slim
         parent::__construct($userSettings);
         $this->add(new Slim_Middleware_SessionCookie());
 
+        $this->contentType('Content-type: text/html; charset=utf-8');
 
         $this->config('db', $this->initDb());
         $this->config('source', $this->initSource());
@@ -63,28 +64,19 @@ class Shopware_Install extends Slim
         })->via('GET', 'POST')->name('system');
 
         $this->get('/update', function () use ($app) {
-            echo "SET NAMES 'utf8';\n";
-            echo "SET FOREIGN_KEY_CHECKS = 0;\n";
-            echo "ALTER DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;\n\n";
-            $export = new Shopware_Components_DbDiff_Mysql(
-                $this->config('source'),
-                $this->config('db')
-            );
-            $tables = $export->listTables();
-            foreach($tables as $table) {
-                echo $export->getTableUpdate($table);
-            }
+            $app->render('update.php', array(
+                'app' => $app
+            ));
         })->via('GET', 'POST')->name('backup');
 
         $this->get('/backup', function () use ($app) {
             $skipTables = array(
-                's_articles_translations',
+                //'s_articles_translations',
                 's_search_index',
                 's_search_keywords',
                 's_core_log',
                 's_core_sessions'
             );
-
             echo "SET NAMES 'utf8';\n";
             echo "SET FOREIGN_KEY_CHECKS = 0;\n\n";
             $export = new Shopware_Components_DbExport_Mysql(
