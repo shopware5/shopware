@@ -206,7 +206,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'billing.phone',
             'billing.fax',
             'billing.countryId as billing_countryID',
-            'billing.vatId as ustid',
+            'billing.stateId as billing_stateID',
+            'billing.vatId as ustid'
         );
 
         $select = array_merge($select, $selectBillingAttributes);
@@ -221,6 +222,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'shipping.zipCode as shipping_zipcode',
             'shipping.city as shipping_city',
             'shipping.countryId as shipping_countryID',
+            'shipping.stateId as shipping_stateID'
         ));
 
         $select = array_merge($select, $selectShippingAttributes);
@@ -2929,6 +2931,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'phone'          => 'billing_phone',
             'fax'            => 'billing_fax',
             'customernumber' => 'billing_number',
+
+            'ustid'          => 'billing_vatId',
 
             'billing_text1'  => 'billing_attr_text1',
             'billing_text2'  => 'billing_attr_text2',
