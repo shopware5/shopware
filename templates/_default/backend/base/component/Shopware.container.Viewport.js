@@ -770,13 +770,16 @@ Ext.define('Shopware.container.Viewport',
                             delegate: '#' + id
                         }
                     });
+
+
                 container.getEl().on({
                     'dblclick': function() {
+
                         Shopware.app.Application.addSubApplication({
                             name: 'Shopware.apps.Article',
                             action: 'detail',
                             params: {
-                                articleId: data.record.id
+                                articleId: ~~(1 * data.record.articleId)
                             }
                         });
                     },
