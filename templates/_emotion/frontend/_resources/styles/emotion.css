@@ -3751,6 +3751,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 .fuzzy_result_box {
     width: 798px;
     float: left;
+    height:200px;
     margin: 0 10px 10px;
 }
 .fuzzy_result_box .inner_box {
