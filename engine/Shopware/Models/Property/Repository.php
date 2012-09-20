@@ -37,6 +37,58 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
+
+    /**
+     * Receives all known property groups
+     *
+     * @param null $filter
+     * @param null $order
+     * @param null $limit
+     * @param null $offset
+     * @return \Doctrine\ORM\Query
+     */
+    public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
+    {
+        // get the query and prepare the limit statement
+        $builder = $this->getListGroupsQueryBuilder($filter, $order);
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                   ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getListGroupsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param null $filter
+     * @param null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getListGroupsQueryBuilder($filter = null, $order = null) {
+
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+            'groups',
+            'options',
+            'attributes'
+        ));
+        $builder->from('Shopware\Models\Property\Group', 'groups')
+            ->leftJoin('groups.options', 'options')
+            ->leftJoin('groups.attribute', 'attributes');
+
+        if($filter !== null) {
+            $builder->addFilter($filter);
+        }
+        if($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+        return $builder;
+
+    }
+
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property groups
      * with their options and attributes.
