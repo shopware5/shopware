@@ -816,6 +816,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             AND p.`from`=1
             AND p.pricegroup='EK'
 
+            WHERE d.instock > 0
+
             ORDER BY a.id, d.kind, ordernumber
 
             LIMIT {$offset},{$limit}
