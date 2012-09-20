@@ -915,6 +915,11 @@ class Article extends Resource
             return $data;
         }
 
+        $propertyRepository = $this->getManager()->getRepository('Shopware\Models\Property\Group');
+
+        /**
+         *  Get group - this is required.
+         */
         if (isset($data['propertyGroup'])) {
             $propertyGroup = $data['propertyGroup'];
         } else {
@@ -922,19 +927,72 @@ class Article extends Resource
         }
 
         if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
-            throw new ApiException\CustomValidationException(sprintf("There is no filterGroup specified"));
+            throw new ApiException\CustomValidationException(sprintf("There is no propertyGroup specified"));
         }
 
         $models = array();
         foreach ($data['propertyValues'] as $valueData) {
-            if (empty($valueData['id'])) {
-                continue;
+            $value = null;
+            /** @var \Shopware\Models\Property\Option $option  */
+            $option = null;
+
+            // Get value by id
+            if(isset($valueData['id'])) {
+                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->find($valueData['id']);
+                if(!$value) {
+                    throw new ApiException\CustomValidationException(sprintf("Property value by id %s not found", $valueData['id']));
+                }
             }
-            $model = $this->getManager()->find('Shopware\Models\Property\Value', $valueData['id']);
-            if (!$model instanceof \Shopware\Models\Property\Value) {
-                throw new ApiException\CustomValidationException(sprintf("Property Value by id %s not found", $valueData['id']));
+            // Get / create value by name
+            elseif(isset($valueData['value'])) {
+                //get option
+                if(isset($valueData['option'])) {
+                    // get option by id
+                    if($valueData['option']['id']) {
+                        $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['option']['id']);
+                        if(!$option) {
+                            throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
+                        }
+                    // get/create option depending on associated filtergroups
+                    }elseif($valueData['option']['name']) {
+                        // if a name is passed and there is a matching option/group relation, get this option
+                        // if only a name is passed, create a new option
+                        $filters = array(
+                            array('property' => "options.name",'expression' => '=','value' => $valueData['option']['name']),
+                            array('property' => "groups.name",'expression' => '=','value' => $propertyGroup->getName()),
+                        );
+                        $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
+                        /** @var \Shopware\Models\Property\Relation $relation  */
+                        $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
+                        if(!$relation) {
+                            $option = new \Shopware\Models\Property\Option();
+                            $propertyGroup->addOption($option);
+                        }else{
+                            $option = $relation->getOption();
+                        }
+                        $option->fromArray($valueData['option']);
+                        if($option->isFilterable() === null) {
+                            $option->setFilterable(false);
+                        }
+                    }
+                }
+                // create the value
+                // If there is a filter value with matching name and option, load this value, else create a new one
+                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
+                    'value' => $valueData['value'],
+                    'optionId' => $option->getId()
+                ));
+                if(!$value) {
+                    $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
+                }
+                if(isset($valueData['position'])) {
+                    $value->setPosition($valueData['position']);
+                }
+            }else{
+                throw new ApiException\CustomValidationException("Name or id for property value required");
             }
-            $models[] = $model;
+
+            $models[] = $value;
             }
 
         $data['propertyValues'] = $models;
