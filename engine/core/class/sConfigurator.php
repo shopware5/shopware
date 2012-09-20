@@ -318,12 +318,14 @@ class sConfigurator
             $articleData["sUnit"] = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($selected["unitID"]);
         }
 
-        $articleData['pricegroup'] = $selectedPrice['customerGroupKey'];
-        $articleData["pricenumeric"] =$selectedPrice['pricenumeric'];
-        $articleData["price"] = $selectedPrice['price'];
-        $articleData["ordernumber"] = $selected["ordernumber"];
-        $articleData["instock"] = $selected["instock"];
-        $articleData["active"] = $selected["active"];
+        $articleData['pricegroup']   = $selectedPrice['customerGroupKey'];
+        $articleData["pricenumeric"] = $selectedPrice['pricenumeric'];
+        $articleData["price"]        = $selectedPrice['price'];
+        $articleData["pseudoprice"]  = $selectedPrice['pseudoPrice'];
+
+        $articleData["ordernumber"]  = $selected["ordernumber"];
+        $articleData["instock"]      = $selected["instock"];
+        $articleData["active"]       = $selected["active"];
         $articleData["suppliernumber"] = empty($selected['suppliernumber']) ? $articleData['suppliernumber'] : $selected['suppliernumber'];
         $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
         $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
