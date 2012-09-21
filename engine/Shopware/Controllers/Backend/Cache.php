@@ -290,6 +290,12 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected function clearProxyCache()
     {
+        $queryCache     = Shopware()->Models()->getConfiguration()->getQueryCacheImpl();
+        $metaDataCache  = Shopware()->Models()->getConfiguration()->getMetadataCacheImpl();
+
+        $queryCache->deleteAll();
+        $metaDataCache->deleteAll();
+
         $dir = Shopware()->AppPath('Proxies');
         $files = glob($dir . '*.php');
         foreach ($files as $file) {
