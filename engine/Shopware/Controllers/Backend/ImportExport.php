@@ -229,6 +229,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $select = array_merge($select, array(
             'customer.paymentId as paymentID',
             'customer.newsletter ',
+            'customer.accountmode ',
             'customer.affiliate ',
             'customer.groupKey as customergroup',
             'customer.languageIso as language',
@@ -2920,18 +2921,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         /** @var \Shopware\Components\Api\Resource\Customer $customerResource */
         $customerResource = \Shopware\Components\Api\Manager::getResource('customer');
 
-        if (empty($customerData['userID']) && empty($customerData['email'])) {
+        if (empty($customerData['email'])) {
             return false;
         }
 
-        if (!empty($customerData['userID'])) {
-            /** \Shopware\Models\Customer\Customer $customerModel */
-            $customerModel = $customerRepository->find($customerData['userID']);
-            if (!$customerModel) {
-                return false;
-            }
-        } elseif (!empty($customerData['email']) && !empty($customerData['subshopID'])) {
-            /** \Shopware\Models\Customer\Customer $customerModel */
+
+        // userId and custumernumber will be ignored as there is not distinction between accountmode 0 and 1 in
+        // old export files
+        if (!empty($customerData['email']) && !empty($customerData['subshopID'])) {            /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email'], 'shopId' => $customerData['subshopID']));
 
         } elseif (!empty($customerData['email'])) {
@@ -2968,6 +2965,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'phone'          => 'billing_phone',
             'fax'            => 'billing_fax',
             'customernumber' => 'billing_number',
+            'accountmode'    => 'accountMode',
 
             'ustid'          => 'billing_vatId',
 
@@ -3084,7 +3082,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             FROM s_categories c
             LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
             WHERE c.id != 1
-            ORDER BY c.left, c.position
+            ORDER BY c.parent ASC, c.level ASC, c.position ASC
 
              LIMIT {$offset},{$limit}
         ";
