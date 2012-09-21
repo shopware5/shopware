@@ -57,9 +57,10 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return \Doctrine\Common\Cache\Cache
+     * @param $cacheResource
+     * @return \Doctrine\Common\Cache\CacheProvider
      */
-    public function getCache()
+    public function getCache($cacheResource)
     {
         if ($this->cache === null) {
             if (extension_loaded('apc')) {
@@ -67,7 +68,7 @@ class Configuration extends BaseConfiguration
             } else if (extension_loaded('xcache')) {
                 $cache = new \Doctrine\Common\Cache\XcacheCache();
             } else {
-                $cache = new \Doctrine\Common\Cache\ArrayCache();
+                $cache = new \Shopware\Components\Model\Cache($cacheResource);
             }
 
             $cache->setNamespace("dc2_" . md5($this->getProxyDir()) . "_"); // to avoid collisions
@@ -130,7 +131,7 @@ class Configuration extends BaseConfiguration
      */
     public function setCacheResource($cacheResource)
     {
-        $cache = $this->getCache();
+        $cache = $this->getCache($cacheResource);
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
