@@ -33,10 +33,80 @@
 namespace Shopware\Components\Model;
 use \Doctrine\ORM\Configuration as BaseConfiguration;
 
+/**
+ *
+ */
 class Configuration extends BaseConfiguration
 {
+    /**
+     * @var
+     */
     protected $attributeDir;
 
+    /**
+     * @var \Doctrine\Common\Cache\Cache
+     */
+    protected $cache;
+
+    /**
+     * @param \Doctrine\Common\Cache\Cache $cache
+     */
+    public function setCache(\Doctrine\Common\Cache\Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * @return \Doctrine\Common\Cache\Cache
+     */
+    public function getCache()
+    {
+        if ($this->cache === null) {
+            if (extension_loaded('apc')) {
+                $cache = new \Doctrine\Common\Cache\ApcCache;
+            } else if (extension_loaded('xcache')) {
+                $cache = new \Doctrine\Common\Cache\XcacheCache;
+            } else if (extension_loaded('memcache')) {
+                $memcache = new \Memcache();
+                $memcache->connect('127.0.0.1');
+                if ($memcache->connect('127.0.0.1') !== false) {
+                    $cache = new \Doctrine\Common\Cache\MemcacheCache();
+                    $cache->setMemcache($memcache);
+                } else {
+                    $cache = new ArrayCache;
+                }
+            } else {
+                $cache = new ArrayCache;
+            }
+
+            $cache->setNamespace("dc2_" . md5($this->getProxyDir()) . "_"); // to avoid collisions
+
+            $this->cache = $cache;
+        }
+
+        return $this->cache;
+    }
+
+
+    /**
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->_attributes = $attributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->_attributes;
+    }
+
+    /**
+     * @param $options
+     */
     public function __construct($options)
     {
         // Specifies the FQCN of a subclass of the EntityRepository.
@@ -64,35 +134,45 @@ class Configuration extends BaseConfiguration
         $this->addCustomStringFunction('IFNULL', 'DoctrineExtensions\Query\Mysql\IfNull');
     }
 
+    /**
+     * @param $cacheResource
+     */
     public function setCacheResource($cacheResource)
     {
-        // Check if native Doctrine ApcCache may be used
-        if ($cacheResource->getBackend() instanceof Zend_Cache_Backend_Apc) {
-            $cache = new \Doctrine\Common\Cache\ApcCache();
-        } else {
-            $cache = new \Shopware\Components\Model\Cache($cacheResource);
-        }
+        $cache = $this->getCache();
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
     }
 
+    /**
+     * @param null $hookManager
+     */
     public function setHookManager($hookManager = null)
     {
         $this->_attributes['hookManager'] = $hookManager;
     }
 
+    /**
+     * @return null
+     */
     public function getHookManager()
     {
         return isset($this->_attributes['hookManager']) ?
             $this->_attributes['hookManager'] : null;
     }
 
+    /**
+     * @param $attributeDir
+     */
     public function setAttributeDir($attributeDir)
     {
         $this->attributeDir = $attributeDir;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAttributeDir()
     {
         return $this->attributeDir;
