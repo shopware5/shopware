@@ -66,6 +66,8 @@ class Article extends Resource
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array(
             'article',
+            'configuratorSet',
+            'configuratorSetGroups',
             'mainDetail',
             'PARTIAL categories.{id, name}',
             'PARTIAL similar.{id, name}',
@@ -80,8 +82,11 @@ class Article extends Resource
             'mainDetailAttribute',
             'propertyGroup',
             'details',
+            'configuratorOptions',
         ))
         ->from('Shopware\Models\Article\Article', 'article')
+        ->leftJoin('article.configuratorSet', 'configuratorSet')
+        ->leftJoin('configuratorSet.groups', 'configuratorSetGroups')
         ->leftJoin('article.mainDetail', 'mainDetail')
         ->leftJoin('article.tax', 'tax')
         ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
@@ -96,6 +101,7 @@ class Article extends Resource
         ->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
         ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
         ->leftJoin('article.propertyGroup', 'propertyGroup')
+        ->leftJoin('details.configuratorOptions', 'configuratorOptions')
         ->where('article.id = ?1')
         ->andWhere('images.parentId IS NULL')
         ->setParameter(1, $id);
