@@ -121,8 +121,10 @@ class Customer extends Resource
     {
         $this->checkPrivilege('create');
 
-        if (isset($params['email']) && !$this->isEmailUnique($params['email'], null, $params['shopId'])) {
-            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+        if(isset($params['accountmode']) && $params['accountmode'] == 0) {
+            if (isset($params['email']) && !$this->isEmailUnique($params['email'], null, $params['shopId'])) {
+                throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+            }
         }
 
         $params = $this->prepareCustomerData($params);
@@ -168,6 +170,10 @@ class Customer extends Resource
         $params = $this->prepareCustomerData($params, $customer);
         $customer->fromArray($params);
 
+        if (!$this->isEmailUnique($customer->getEmail(), $customer)) {
+            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+        }
+
         $violations = $this->getManager()->validate($customer);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
@@ -211,8 +217,9 @@ class Customer extends Resource
             $params['active'] = true;
         }
 
-        if (isset($params['email']) && !$this->isEmailUnique($params['email'], $customer)) {
-            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+        // if accountmode is not set, set it to be a full user account
+        if(!isset($params['accountMode']) || empty($params['accountMode'])){
+            $params['accountMode'] = 0;
         }
 
         if (!empty($params['groupKey'])) {
@@ -246,22 +253,29 @@ class Customer extends Resource
 
     /**
      * @param $mail
-     * @param null|int $cutomerId
+     * @param null|\Shopware\Models\Customer\Customer $customer
      * @param null|int $shopId
      * @return bool
      */
     public function isEmailUnique($mail, $customer = null, $shopId = null)
     {
-        $cutomerId = null;
+
+        $customerId = null;
         if ($customer) {
-            $cutomerId = $customer->getId();
+            $customerId = $customer->getId();
 
             if ($customer->getShop()) {
                 $shopId = $customer->getShop()->getId();
             }
+             error_log($customer->getAccountMode());
+            // If accountmode is 1 (no real user account), email is allowed to be non-unique
+            if($customer->getAccountMode() == 1) {
+                return true;
+            }
+
         }
 
-        $query = $this->getRepository()->getValidateEmailQuery($mail, $cutomerId, $shopId);
+        $query = $this->getRepository()->getValidateEmailQuery($mail, $customerId, $shopId);
 
         $customer = $query->getArrayResult();
 
