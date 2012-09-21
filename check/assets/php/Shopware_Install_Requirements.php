@@ -51,9 +51,10 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     protected function checkAll()
     {
         foreach ($this->list as $requirement) {
-            $version = $this->check($requirement->name);
+            $name = (string)$requirement->name;
+            $version = $this->check($name);
             $requirement->result = $this->compare(
-                (string) $requirement->name,
+                $name,
                 $version,
                 (string)$requirement->required
             );
@@ -92,6 +93,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
+            //return phpversion($name) ? phpversion($name) : true;
         } elseif (function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
@@ -404,14 +406,13 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         $list = array();
         foreach ($this->getList() as $requirement) {
             $listResult = array();
-
             $listResult['name'] = (string)$requirement->name;
-            $listResult['isHardlyRequired'] = $requirement->weakRequired ? false : true;
-            $listResult['hasNotice'] = (string)$requirement->hasNotice;
+            $listResult['notice'] = (string)$requirement->notice;
             $listResult['required'] = (string)$requirement->required;
             $listResult['version'] = (string)$requirement->version;
-            $listResult['result'] = (string)$requirement->result;
-            if (empty($listResult['result']) && $listResult['isHardlyRequired'] == true) {
+            $listResult['result'] = (bool)(string)$requirement->result;
+            $listResult['error'] = (bool)$requirement->error;
+            if(!$listResult['result'] && $listResult['error']) {
                 $this->setFatalError(true);
             }
             $list[] = $listResult;
