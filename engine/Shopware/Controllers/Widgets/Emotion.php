@@ -59,16 +59,19 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $category = (int)$this->Request()->getParam("category");
         $start = (int)$this->Request()->getParam("start");
         $limit = (int)$this->Request()->getParam("limit");
+
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
 
-        $max = $this->Request()->getParam("max") * $limit;
+        $max = $this->Request()->getParam("max");
+        $maxPages = round($max / $limit);
 
         $values = $this->getProductTopSeller($category, $start, $limit);
+
         $this->View()->assign('articles', $values["values"]);
-        $this->View()->assign('pages', $values["pages"] > $max ? $max : $values["pages"]);
+        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
         $this->View()->assign('sElementWidth', $elementWidth);
         $this->View()->assign('sElementHeight', $elementHeight);
@@ -85,11 +88,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $limit = (int)$this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-        $max = $this->Request()->getParam("max") * $limit;
+
+        $max = $this->Request()->getParam("max");
+        $maxPages = round($max / $limit);
 
         $values = $this->getProductNewcomer($category, $start, $limit);
+
         $this->View()->assign('articles', $values["values"]);
-        $this->View()->assign('pages', $values["pages"] > $max ? $max : $values["pages"]);
+        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
         $this->View()->assign('sElementWidth', $elementWidth);
         $this->View()->assign('sElementHeight', $elementHeight);
@@ -265,7 +271,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
-        
+
         if(!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -296,7 +302,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
         $data['bannerMapping'] = $mappings;
-        
+
         return $data;
     }
 
@@ -363,6 +369,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getArticleSlider($data, $category, $element)
     {
+        if (!isset($data["article_slider_select"])) {
+            $data["article_slider_select"] = "horizontal";
+        }
+
         // Determinate how many products showing on initial request
         if ($data["article_slider_select"] == "horizontal") {
             $perPage = $element['endCol'] - $element['startCol'] + 1;
@@ -372,7 +382,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $values = array();
 
-        $max = $data["article_slider_max_number"] * $perPage;
+        $max = $data["article_slider_max_number"];
+        $maxPages = round($max / $perPage);
 
         switch ($data["article_slider_type"]) {
             case "selected_article":
@@ -384,14 +395,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             case "topseller":
                 $temp = $this->getProductTopSeller($category, 0, $perPage);
                 $values = $temp["values"];
-                $data["pages"] = $temp["pages"] > $max ? $max : $temp["pages"];
+                $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
+
                 $query = array('controller' => 'emotion', 'module' => 'widgets', 'action' => 'emotionTopSeller');
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
             case "newcomer":
                 $temp = $this->getProductNewcomer($category, 0, $perPage);
                 $values = $temp["values"];
-                $data["pages"] = $temp["pages"] > $max ? $max : $temp["pages"];
+                $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
+
                 $query = array('controller' => 'emotion', 'module' => 'widgets', 'action' => 'emotionNewcomer');
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
@@ -416,9 +429,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             AND c2.right <= c.right
             AND ac.articleID=a.id
             AND ac.categoryID=c2.id
-            ORDER BY a.datum DESC LIMIT $perPage
+            ORDER BY a.datum DESC
+            LIMIT {$perPage}
         ";
+
         $articles = Shopware()->Db()->fetchAll($sql, array($category));
+
         $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
         $pages = round($count / $limit);
 
@@ -427,6 +443,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $articleId = $article["id"];
             $values[] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
         }
+
         return array("values" => $values, "pages" => $pages);
 
         /**
@@ -449,7 +466,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductTopSeller($category, $offset = 0, $limit)
     {
-
         /**
          *
          *  [data] => Array
@@ -493,7 +509,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         GROUP BY a.id
         ORDER BY quantity DESC, topseller DESC
-        LIMIT $perPage
+        LIMIT {$perPage}
         ";
 
         $articles = Shopware()->Db()->fetchAll($sql, array($category));
@@ -506,6 +522,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $articleId = $article["articleID"];
             $values[] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
         }
+
         return array("values" => $values, "pages" => $pages);
     }
 }
