@@ -63,11 +63,11 @@ class Configuration extends BaseConfiguration
     {
         if ($this->cache === null) {
             if (extension_loaded('apc')) {
-                $cache = new \Doctrine\Common\Cache\ApcCache;
+                $cache = new \Doctrine\Common\Cache\ApcCache();
             } else if (extension_loaded('xcache')) {
-                $cache = new \Doctrine\Common\Cache\XcacheCache;
+                $cache = new \Doctrine\Common\Cache\XcacheCache();
             } else {
-                $cache = new ArrayCache;
+                $cache = new \Doctrine\Common\Cache\ArrayCache();
             }
 
             $cache->setNamespace("dc2_" . md5($this->getProxyDir()) . "_"); // to avoid collisions
