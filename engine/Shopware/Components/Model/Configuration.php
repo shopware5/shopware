@@ -66,15 +66,6 @@ class Configuration extends BaseConfiguration
                 $cache = new \Doctrine\Common\Cache\ApcCache;
             } else if (extension_loaded('xcache')) {
                 $cache = new \Doctrine\Common\Cache\XcacheCache;
-            } else if (extension_loaded('memcache')) {
-                $memcache = new \Memcache();
-                $memcache->connect('127.0.0.1');
-                if ($memcache->connect('127.0.0.1') !== false) {
-                    $cache = new \Doctrine\Common\Cache\MemcacheCache();
-                    $cache->setMemcache($memcache);
-                } else {
-                    $cache = new ArrayCache;
-                }
             } else {
                 $cache = new ArrayCache;
             }
