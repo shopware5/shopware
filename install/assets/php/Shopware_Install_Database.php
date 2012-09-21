@@ -136,31 +136,41 @@ class Shopware_Install_Database
     }
 
     public function writeConfig(){
-
-        if (!file_exists(dirname(__FILE__)."/../templates/config.tpl")){
-            $this->setError("File templates/config.tpl not found ");
-            return false;
-        }
         $databaseConfigFile = $this->configFile;
 
         if (!file_exists($databaseConfigFile) || !is_writable($databaseConfigFile)){
             $this->setError("Shopware config file $databaseConfigFile not found or not writeable");
             return false;
         }
-        $template = file_get_contents(dirname(__FILE__)."/../templates/config.tpl");
+
+        $config = array(
+            'db' => array()
+        );
+
+        $mapping = array(
+            'user'     => 'username',
+            'database' => 'dbname',
+            'socket'   => 'unix_socket',
+        );
 
         foreach ($this->database_parameters as $key => $parameter){
             if ($key == "port" && empty($parameter)) continue;
+            if ($key == "socket" && empty($parameter)) continue;
 
-            $template = str_replace("%db.$key%",$parameter,$template);
+            if (isset($mapping[$key])) {
+                $key = $mapping[$key];
+            }
+
+            $config['db'][$key] = $parameter;
         }
 
         try {
-            if (!file_put_contents($databaseConfigFile,$template)){
+            $template = '<?php return ' . var_export($config, true) . ';';
+            if (!file_put_contents($databaseConfigFile, $template)){
                 $this->setError("Could not write config");
                 return false;
             }
-        }catch (Exception $e){
+        } catch (Exception $e){
             $this->setError($e->getMessage());
             return false;
         }
