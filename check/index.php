@@ -121,7 +121,6 @@ $app->view()->setData("basepath","http://".$basepath["domain"].$basepath["basepa
 // Step 1: Select language
 $app->map('/', function () {
     $app = Slim::getInstance();
-    $app = Slim::getInstance();
     // Check system requirements
     $shopwareSystemCheck = $app->config('install.requirements');
     $systemCheckResults = $shopwareSystemCheck->toArray();
