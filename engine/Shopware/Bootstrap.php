@@ -148,6 +148,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         $config = Shopware()->getOption('db');
 
+        if (isset($config['unix_socket']) && empty($config['unix_socket'])) {
+            unset($config['unix_socket']);
+        }
+
         $db = Enlight_Components_Db::factory(
             isset($config['adapter']) ? $config['adapter'] : 'PDO_MYSQL',
             $config

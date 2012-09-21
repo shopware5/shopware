@@ -33,6 +33,7 @@ return array(
     'step3_header' => 'Datenbank konfigurieren', // Database
     'step3_field_host' => 'Datenbank Server:', // Database host:
     'step3_field_port' => 'Datenbank Port:', // Database port:
+    'step3_field_socket' => 'Datenbank Socket:', // Database port:
     'step3_field_user' => 'Datenbank Benutzer:', // Database user
     'step3_field_password' => 'Datenbank Passwort:', // Database password
     'step3_field_database' => 'Datenbank Name:', // Database
