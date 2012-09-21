@@ -10,11 +10,13 @@ $backupTables = array(
     's_order_details',
     's_order_billingaddress',
     's_order_shippingaddress',
+    's_order_basket',
     's_core_plugins',
     's_core_subscribes',
     's_core_menu',
     's_core_countries',
-    's_core_snippets'
+    's_core_snippets',
+    's_filter_values'
 );
 $mapping = array(
     's_addon_premiums' => array(
@@ -33,6 +35,7 @@ $mapping = array(
         'multilanguage' => 'translatable'
     )
 );
+$app->contentType('Content-type: text/plain; charset=utf-8');
 echo "SET NAMES 'utf8' COLLATE 'utf8_unicode_ci';\n";
 echo "SET FOREIGN_KEY_CHECKS = 0;\n";
 echo "ALTER DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;\n\n";
