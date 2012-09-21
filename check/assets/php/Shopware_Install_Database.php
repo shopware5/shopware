@@ -75,14 +75,30 @@ class Shopware_Install_Database
 
     public function setDatabase()
     {
-        $host = $this->database_parameters["host"];
-        $port = $this->database_parameters["port"];
+        $host     = $this->database_parameters["host"];
         $database = $this->database_parameters["database"];
-        $user = $this->database_parameters["user"];
+        $user     = $this->database_parameters["user"];
         $password = trim($this->database_parameters["password"]);
+        $port     = trim($this->database_parameters["port"]);
+        $socket   = trim($this->database_parameters["socket"]);
+
+        $connectionSettings = array(
+            "host=$host",
+            "dbname=$database",
+        );
+
+        if (!empty($socket)) {
+            $connectionSettings[] = "unix_socket=$socket";
+        }
+
+        if (!empty($port)) {
+            $connectionSettings[] = "port=$port";
+        }
+
+        $connectionString = implode(';', $connectionSettings);
 
         try {
-            $this->database = new PDO("mysql:host=$host;port=$port;dbname=$database", $user, $password);
+            $this->database = new PDO("mysql:$connectionString", $user, $password);
             $this->database->exec("SET CHARACTER SET utf8");
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
