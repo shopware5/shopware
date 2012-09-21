@@ -442,9 +442,9 @@ class Article extends Resource
                 $variant->setConfiguratorOptions($assignedOptions);
             }
 
-            if (count($variant->getConfiguratorOptions()) === 0) {
-                throw new \Exception('No Configurator Options assigned');
-            }
+//            if (count($variant->getConfiguratorOptions()) === 0) {
+//                throw new \Exception('No Configurator Options assigned');
+//            }
 
             if ($variantData['isMain'] || $variantData['standard']) {
                 $newMain = $variant;

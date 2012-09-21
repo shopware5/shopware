@@ -226,6 +226,9 @@ class Media extends Resource
                 $path = $params['file'];
             }
             $params['file'] = new \Symfony\Component\HttpFoundation\File\File($path);
+            if(!isset($params['name'])) {
+                $params['name'] = pathinfo($path,  PATHINFO_FILENAME);
+            }
         }
 
 

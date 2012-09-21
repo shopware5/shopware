@@ -2644,10 +2644,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             // update?
             if(isset($articleModel) && $articleModel !== null) {
-                $updateData = array();
+                $updateData = array('variants'=>array());
                 $detailData['configuratorOptions'] = $configuratorOptions;
                 $updateData['variants'][] = $detailData;
-
                 $result = $articleResource->update($articleModel->getId(), $updateData);
             }else{
                 $updateData['configuratorSet'] = $configuratorSet;
@@ -2931,7 +2930,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             if (!$customerModel) {
                 return false;
             }
-        } elseif (!empty($customerData['email']) && empty($customerData['subshopID'])) {
+        } elseif (!empty($customerData['email']) && !empty($customerData['subshopID'])) {
             /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email'], 'shopId' => $customerData['subshopID']));
 
