@@ -5,6 +5,7 @@ return array(
         'password' => '%db.password%',
         'dbname' => '%db.database%',
         'host' => '%db.host%',
-        'port' => '%db.port%'
+        'port' => '%db.port%',
+        'unix_socket' => '%db.socket%'
     )
 );
