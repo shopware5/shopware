@@ -90,11 +90,12 @@ foreach ($params as $key => $value){
 
 // Initiate database object
 $databaseParameters = array(
-    "user" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_user"] : "",
+    "user"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_user"] : "",
     "password" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_password"] : "",
-    "host" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_host"] : "",
-    "port" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_port"] : "",
+    "host"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_host"] : "",
+    "port"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_port"] : "",
     "database" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_schema"] : "",
+    "socket"   => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_socket"] : "",
 );
 $app->config("install.database.parameters",$databaseParameters);
 $app->config('install.database',new Shopware_Install_Database($databaseParameters));

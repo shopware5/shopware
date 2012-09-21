@@ -33,6 +33,7 @@ return array(
     'step3_header' => 'Check database', // Database
     'step3_field_host' => 'Database host:', // Database host:
     'step3_field_port' => 'Database port:', // Database port:
+    'step3_field_socket' => 'Database socket:', // Database socket:
     'step3_field_user' => 'Database user:', // Database user
     'step3_field_password' => 'Database password:', // Database password
     'step3_field_database' => 'Database name:', // Database
