@@ -85,7 +85,7 @@ if (!defined("installer")){
             if ($systemCheckResult["result"] == true){
                 $class = "success";
             }else {
-                if ($systemCheckResult["isHardlyRequired"] == true){
+                if ($systemCheckResult["error"] == true){
                     $class = "error";
                 }else {
                     $class = "warning";
@@ -99,11 +99,11 @@ if (!defined("installer")){
                 <td><?php echo $systemCheckResult["result"] == true ? '<i class="icon-ok-sign"></i>' : '<i class="icon-minus-sign"></i>' ?></td>
             </tr>
             <?php
-             if($systemCheckResult["hasNotice"]){
+             if($systemCheckResult["notice"]){
             ?>
            <tr class="notice-text">
                <td colspan="4">
-                    <p><i class="icon-info-sign"></i> <?php echo $systemCheckResult["hasNotice"] ?></p>
+                    <p><i class="icon-info-sign"></i> <?php echo $systemCheckResult["notice"] ?></p>
                </td>
            </tr>
              <?php
