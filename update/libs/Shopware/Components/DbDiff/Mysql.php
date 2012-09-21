@@ -31,6 +31,7 @@ class Shopware_Components_DbDiff_Mysql
     {
         $diff = '';
         $backupTable = isset($options['backupTable']) ? $options['backupTable'] : 'backup_' . $table;
+        $newTable = isset($options['newTable']) ? $options['newTable'] : 'new_' . $table;
         $sourceFields = $this->getTableFields($this->source, $table);
         $targetFields = $this->getTableFields($this->target, $table);
 
@@ -63,33 +64,33 @@ class Shopware_Components_DbDiff_Mysql
                 }
                 $intersectFields = array_keys(array_intersect_key($sourceFields, $targetFields));
                 $intersectFields = '`' . implode('`, `', $intersectFields) . '`';
-                $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
-                $diff .= $this->getTable($this->source, $table);
 
-                // Set real table status hack
-                //$newStatus = $this->getTableStatus($this->source, $table, false);
-                //$newStatus = str_replace(' DEFAULT CHARSET=', ', CONVERT TO CHARACTER SET ', $newStatus);
-                //$newStatus = str_replace(' COLLATE=', ', COLLATE ', $newStatus);
-                //$diff .= "ALTER TABLE `$table` $newStatus;\n";
-
+                $diff .= $this->getTable($this->source, $table, array(
+                    'newTable' => $newTable,
+                    'ifNotExists' => true
+                ));
                 $tableData = null;
                 if(!empty($options['backup'])) {
-                    $tableData = $this->getTableData($this->source, $table);
+                    $tableData = $this->getTableData($this->source, $table, array(
+                        'newTable' => $newTable
+                    ));
                 }
                 if($tableData === null) {
-                    $tableData = "INSERT IGNORE INTO `$table` ($intersectFields)\n";
+                    $tableData = "INSERT IGNORE INTO `$newTable` ($intersectFields)\n";
                     if(isset($options['mapping'])) {
                         foreach($options['mapping'] as $source => $target) {
                             $intersectFields = str_replace("`$target`", "`$source`", $intersectFields);
                         }
                     }
-                    $tableData .= "SELECT $intersectFields FROM `$backupTable`;\n";
+                    $tableData .= "SELECT $intersectFields FROM `$table`;\n";
                 }
                 $diff .= $tableData;
-
                 if(empty($options['backup'])) {
-                    $diff .= "DROP TABLE `$backupTable`;\n";
+                    $diff .= "DROP TABLE IF EXISTS `$table`;\n";
+                } else {
+                    $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
                 }
+                $diff .= "RENAME TABLE `$newTable` TO `$table`;\n";
             } else {
                 $sourceStatus = $this->getTableStatus($this->source, $table, false);
                 $targetStatus = $this->getTableStatus($this->target, $table, false);
@@ -169,7 +170,7 @@ class Shopware_Components_DbDiff_Mysql
             $return = str_replace("CREATE TABLE `$table`", "CREATE TABLE `{$options['newTable']}`", $return);
         }
         if(!empty($options['ifNotExists'])) {
-            $return = str_replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS", $return);
+            $return = str_replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS ", $return);
         }
         // Fix wrong column charset
         $return = str_replace('CHARSET=utf8 ', '', $return);
@@ -205,8 +206,9 @@ class Shopware_Components_DbDiff_Mysql
         return $status['Collation'];
     }
 
-    public function getTableData(PDO $db, $table)
+    public function getTableData(PDO $db, $table, $options = array())
     {
+        $newTable = isset($options['newTable']) ? $options['newTable'] : $table;
         $sql = "SELECT * FROM `{$table}`";
         $result = $db->query($sql);
         if (!$result->rowCount()) {
@@ -227,7 +229,7 @@ class Shopware_Components_DbDiff_Mysql
         $rows = implode("),\n(", $rows);
 
         $fields = '`' . implode('`, `', $fields) . '`';
-        $return = "INSERT INTO `$table` ($fields) VALUES\n($rows);\n";
+        $return = "INSERT IGNORE INTO `$newTable` ($fields) VALUES\n($rows);\n";
 
         return $return;
     }
