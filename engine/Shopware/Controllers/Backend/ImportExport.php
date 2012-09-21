@@ -2250,7 +2250,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 // Prevent invalid records from being imported and throw a exception
                 if(empty($articleData['name'])) {
                     throw new \Exception("Article name may not be empty");
-                    continue;
                 }
                 if(empty($articleData['ordernumber'])) {
                     throw new \Exception("Article ordernumber may not be empty");
@@ -2262,6 +2261,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
+                if(!$result instanceof \Shopware\Models\Article\Article) {
+                    $errors[] = $result;
+                    continue;
+                }
                 if ($result) {
                     $articleIds[] = $result->getId();
 
@@ -2466,6 +2469,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $isNewConfigurator = false;
         if(isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
+            if(!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
+                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped",$articleData['ordernumber'] );
+            }
             list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
             $isNewConfigurator = true;
         }
