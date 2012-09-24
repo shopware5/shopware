@@ -283,10 +283,15 @@ class sClassHandler
 	{
 		if(!isset($this->sClass[$class]))
 		{
+            if($this->sType === "convert") {
+                $filename = $class;
+            }else{
+                $filename = $this->sType;
+            }
             // construct include file name
-			if(!file_exists(dirname(__FILE__)."/Components/{$this->sType}.php"))
+			if(!file_exists(dirname(__FILE__)."/Components/{$filename}.php"))
 				return false;
-			include(dirname(__FILE__)."/Components/{$this->sType}.php");
+			include(dirname(__FILE__)."/Components/{$filename}.php");
 
             // construct class name
 			$name = "s".ucfirst($class).ucfirst($this->sType);
