@@ -532,14 +532,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
        /** @var $config \Doctrine\ORM\Configuration */
         $config = $this->getResource('ModelConfig');
 
-        $cacheResource = $this->getResource('Cache');
-
-        // Check if native Doctrine ApcCache may be used
-        if ($cacheResource->getBackend() instanceof Zend_Cache_Backend_Apc) {
-            $cache = new Doctrine\Common\Cache\ApcCache();
-        } else {
-            $cache = new Shopware\Components\Model\Cache($cacheResource);
-        }
+        $cache = $config->getMetadataCacheImpl();
 
         // register standard doctrine annotations
         Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
