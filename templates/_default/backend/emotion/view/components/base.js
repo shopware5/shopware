@@ -234,6 +234,13 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         return this.settings;
     },
 
+    /**
+     * Updates the displayed size of the element
+     * in the frontend.
+     *
+     * @public
+     * @return void
+     */
     onUpdateSizeDisplay: function() {
         var me = this,
             cols = ~~(1 * me.colComboBox.getValue()),
@@ -242,10 +249,12 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             rowHeight = grid.cellHeight,
             colWidth = grid.containerWidth / grid.cols,
             field = me.displayField,
-            width = (cols * colWidth) + '',
-            height = rows * rowHeight;
+            offset = 10,
+            width = (cols * colWidth) - offset + '',
+            height = (rows * rowHeight) - offset + '';
 
         width = width.replace('.', ',');
+        height = height.replace('.', ',');
         width += 'px';
         height += 'px';
         field.setValue(width + ' x '  + height);
