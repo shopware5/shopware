@@ -136,7 +136,7 @@ class TreeRepository extends BaseRepository
         Shopware()->Db()->query($sql);
 
         //delete broken categories
-//        do {
+        do {
             $sql = "
                 DELETE c FROM `s_categories` c
                 LEFT JOIN `s_categories` c2
@@ -144,7 +144,7 @@ class TreeRepository extends BaseRepository
                 WHERE c2.id IS NULL AND c.id!=1
             ";
             $result = Shopware()->Db()->query($sql);
-//        } while($result->rowCount() > 0);
+        } while($result->rowCount() > 0);
 
         $categories = $this->getRootNodes();
         if(empty($categories)) {
