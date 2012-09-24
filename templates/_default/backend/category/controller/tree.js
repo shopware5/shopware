@@ -228,15 +228,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // load record into forms
                 settingForm.loadRecord(me.detailRecord);
 
-                var disableTab = !record.data.leaf;
-
-                var articleStore = me.subApplication.articleStore;
-                if(disableTab) {
-                    articleStore = Ext.create('Ext.data.Store', { fields: [ 'id' ], data: [] });
-                }
 
                 selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
-                    articleStore: articleStore,
+                    articleStore: me.subApplication.articleStore,
                     record: me.detailRecord
                 });
 
@@ -246,17 +240,10 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 });
 
 
-
-
-
+                var disableTab = !record.data.leaf;
                 me.updateTab(articleMappingContainer, selectorView, disableTab);
                 me.updateTab(categoryRestrictionContainer, restrictionView, me.detailRecord.get('parentId') == 0);
-
-                if(!disableTab) {
-                    me.getArticleMappingForm().ddSelector.toField.reconfigure(articleStore);
-                }
-
-
+                me.getArticleMappingForm().ddSelector.toField.reconfigure(me.detailRecord.getArticles());
                 /*{if {acl_is_allowed privilege=update}}*/
                 // enable save button
                 saveButton.enable();
