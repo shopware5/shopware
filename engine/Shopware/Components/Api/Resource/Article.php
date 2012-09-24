@@ -626,7 +626,7 @@ class Article extends Resource
             if (empty($data['filterGroupId'])) {
                 $data['propertyGroup'] = null;
             } else {
-                $data['propertyGroup'] = $this->getManager()->find('Shopware\Models\Property\Group', $data['filterGroupId']);
+                $data['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
                 if (empty($data['propertyGroup'])) {
                     throw new ApiException\CustomValidationException(sprintf("PropertyGroup by id %s not found", $data['filterGroupId']));
                 }
@@ -1113,9 +1113,10 @@ class Article extends Resource
                 try {
                     //persist the model into the model manager
                     $this->getManager()->persist($media);
+                    $this->getManager()->persist($image);
                     $this->getManager()->flush();
                 } catch (\Doctrine\ORM\ORMException $e) {
-                    throw new ApiException\CustomValidationException(sprintf("Some error occured while loading your image"));
+                    throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
                 }
 
                 $image->setMain(2);
