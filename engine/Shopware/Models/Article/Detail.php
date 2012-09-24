@@ -26,7 +26,7 @@
  * @subpackage Article
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
- * @author     Heiner Lohaus
+ * @author     Oliver Denter
  * @author     $Author$
 */
 
