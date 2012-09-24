@@ -8,7 +8,7 @@
    </div>
 <?php } ?>
 
-    <form action="<?php echo $app->urlFor('system', array()); ?>" method="post">
+    <form action="<?php echo $app->urlFor('update', array()); ?>" method="post">
 
         <div class="page-header">
                 <h2><?php echo $translation["system_requirements_header"];?></h2>
@@ -58,7 +58,7 @@
         	</tbody>
         </table>
         <div class="actions clearfix">
-            <a href="<?php echo $app->urlFor('index', array()); ?>" class="secondary"><?php echo $translation["back"];?></a>
+            <a href="<?php echo $app->urlFor('update', array()); ?>" class="secondary"><?php echo $translation["back"];?></a>
             <input type="submit" class="right primary" value="<?php echo $translation["forward"];?>"" />
         </div>
     </form>

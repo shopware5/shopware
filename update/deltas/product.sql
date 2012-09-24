@@ -39,6 +39,3 @@ UPDATE s_articles_details SET stockmin = NULL WHERE stockmin = 0;
 
 DELETE FROM `s_core_engine_elements`
 WHERE `databasefield` NOT LIKE 'attr%';
-
-UPDATE s_articles_supplier SET img = CONCAT('images/supplier/', img)
-WHERE img NOT LIKE '%/%' AND img != '';

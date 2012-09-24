@@ -11,7 +11,7 @@ class Shopware_Install extends Slim
         $config = isset($config['db']) ? $config['db'] : array();
         $config = array_merge(array('host' => '', 'port' => '', 'password' => ''), $config);
         $db = new PDO(
-            "mysql:host={$config['host']};port={$config['port']};dbname=shopware_356",
+            "mysql:host={$config['host']};port={$config['port']};dbname=shopware_demo",
             $config['username'], $config['password']
         );
         $db->exec("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'; SET FOREIGN_KEY_CHECKS = 0;");
@@ -67,7 +67,7 @@ class Shopware_Install extends Slim
             $app->render('update.php', array(
                 'app' => $app
             ));
-        })->via('GET', 'POST')->name('backup');
+        })->via('GET', 'POST')->name('update');
 
         $this->get('/backup', function () use ($app) {
             $skipTables = array(

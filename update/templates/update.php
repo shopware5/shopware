@@ -1,4 +1,18 @@
 <?php
+$skipTables = array(
+    's_articles_bundles',
+    's_articles_bundles_articles',
+    's_articles_bundles_prices',
+    's_articles_bundles_stint',
+    's_core_plugins_b2b_cgsettings',
+    's_core_plugins_b2b_private',
+    's_core_plugins_b2b_tpl_config',
+    's_core_plugins_b2b_tpl_variables',
+    's_articles_live',
+    's_articles_live_prices',
+    's_articles_live_shoprelations',
+    's_articles_live_stint',
+);
 $backupTables = array(
     's_core_config',
     's_articles',
@@ -16,7 +30,12 @@ $backupTables = array(
     's_core_menu',
     's_core_countries',
     's_core_snippets',
-    's_filter_values'
+    's_filter_values',
+    's_articles_groups',
+    's_articles_groups_option',
+    's_articles_groups_prices',
+    's_articles_groups_settings',
+    's_articles_groups_value'
 );
 $mapping = array(
     's_addon_premiums' => array(
@@ -36,6 +55,7 @@ $mapping = array(
     )
 );
 $app->contentType('Content-type: text/plain; charset=utf-8');
+echo "\xEF\xBB\xBF";
 echo "SET NAMES 'utf8' COLLATE 'utf8_unicode_ci';\n";
 echo "SET FOREIGN_KEY_CHECKS = 0;\n";
 echo "ALTER DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;\n\n";
