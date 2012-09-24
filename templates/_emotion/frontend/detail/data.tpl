@@ -2,38 +2,38 @@
 
 	{* Caching instock status *}
 	{if !$sView}
-		<input id='instock_{$sArticle.ordernumber}'type='hidden' value='{$sArticle.instock}' /> 
+		<input id='instock_{$sArticle.ordernumber}'type='hidden' value='{$sArticle.instock}' />
 	{/if}
 
 	{if $sArticle.sBlockPrices && (!$sArticle.sConfigurator || $sArticle.pricegroupActive) && $sArticle.sConfiguratorSettings.type!=2}
-		{foreach from=$sArticle.sBlockPrices item=row key=key} 
-			{if $row.from=="1"} 
-				<input id='price_{$sArticle.ordernumber}'type='hidden' value='{$row.price|replace:",":"."}' /> 
-			{/if} 
-		{/foreach} 
+		{foreach from=$sArticle.sBlockPrices item=row key=key}
+			{if $row.from=="1"}
+				<input id='price_{$sArticle.ordernumber}'type='hidden' value='{$row.price|replace:",":"."}' />
+			{/if}
+		{/foreach}
 	{else}
 		{if !$sView}
 			<input id='price_{$sArticle.ordernumber}' type='hidden' value='{$sArticle.price|replace:".":""|replace:",":"."}' />
 		{/if}
-	{/if} 
-	
+	{/if}
+
 	{* Order number *}
-	{if $sArticle.ordernumber} 
+	{if $sArticle.ordernumber}
 		{block name='frontend_detail_data_ordernumber'}
 			<p>{se name="DetailDataId"}{/se} {$sArticle.ordernumber}</p>
 		{/block}
 	{/if}
-	
+
 	{* Attributes fields *}
 	{block name='frontend_detail_data_attributes'}
-		{if $sArticle.attr1} 
+		{if $sArticle.attr1}
 			<p>{$sArticle.attr1}</p>
 		{/if}
-		{if $sArticle.attr2} 
+		{if $sArticle.attr2}
 			<p>{$sArticle.attr2}</p>
 		{/if}
 	{/block}
-		   
+
 	{block name="frontend_detail_data_delivery"}
 		{* Delivery informations *}
 		{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
@@ -42,7 +42,9 @@
 	{if !$sArticle.liveshoppingData.valid_to_ts}
 		{* Graduated prices *}
         {if $sArticle.sBlockPrices && ($sArticle.sConfiguratorSettings.type!=2 || $sArticle.pricegroupActive) && !$sArticle.liveshoppingData.valid_to_ts}
+
             {include file="frontend/detail/block_price.tpl" sArticle=$sArticle}
+
 
             {* Article price *}
             {block name='frontend_detail_data_price_info'}
@@ -50,6 +52,27 @@
                     {s namespace="frontend/detail/data" name="DetailDataPriceInfo"}{/s}
                 </p>
             {/block}
+
+            {if $sArticle.purchaseunit}
+            {* Article price *}
+                {block name='frontend_detail_data_price'}
+                <div class='article_details_price_unit'>
+                            <span>
+                                <strong>{se name="DetailDataInfoContent"}{/se}</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
+                                {if $sArticle.purchaseunit != $sArticle.referenceunit}
+                                    <span class="smallsize">
+                                        {if $sArticle.referenceunit}
+                                            ({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sArticle.referenceunit} {$sArticle.sUnit.description})
+                                        {/if}
+                                    </span>
+                                {/if}
+
+                            </span>
+                </div>
+                {/block}
+            {/if}
+
+
 		{else}
             {if $sArticle.sConfiguratorSettings.type!=2}
                 {* Pseudo price *}
@@ -112,9 +135,9 @@
                     {/block}
                 </div>
             {/if}
-		{/if}	
+		{/if}
 	{/if}
-	 
+
 	{block name="frontend_detail_data_liveshopping"}
 		{* Liveshopping *}
 		{if $sArticle.liveshoppingData.valid_to_ts}
