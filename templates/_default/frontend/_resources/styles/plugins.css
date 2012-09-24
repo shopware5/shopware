@@ -658,6 +658,50 @@ a.searchthumb {
 #topbar .de_DE {background-position: 0 0;}
 #topbar .en_GB {background-position: 0 -11px;}
 
+/** Styling the result box for the fuzzy search */
+.fuzzy_result_box {
+    width: 627px;
+    float: left;
+    margin: 0 10px 10px;
+}
+.fuzzy_result_box .inner_box {
+    border: 1px solid #c7c7c7;
+    border-top: 0 none;
+    padding: 15px 25px;
+    background: url(../images/backgrounds/bg_breadcrumb.png) left top repeat-x;
+}
+.fuzzy_result_box .headingbox {
+    background: #fff !important;
+}
+.fuzzy_result_box .inner_box ul {
+    width: 47%;
+    display: block;
+    float: left;
+    margin: 0 0 0 1%;
+    height: 75px;
+    overflow-y: scroll;
+}
+.fuzzy_result_box .inner_box ul.first {
+    border-right: 1px solid #DFDFDF;
+    margin: 0 1% 0 0;
+}
+.fuzzy_result_box .inner_box li {
+    background: url(../images/icons/ico_search_inactive.png) no-repeat;
+    height: 13px;
+    line-height: 13px;
+    padding: 0 0 0 21px;
+    margin: 0 0 10px 0;
+}
+.fuzzy_result_box .inner_box li:hover {
+    background: url(../images/icons/ico_search_active.png) no-repeat 0 0;
+}
+.fuzzy_result_box .inner_box a:hover {
+    text-decoration: none;
+    color: #E1540F;
+}
+#content #left .filter_search .searchbox li { display: block; height: auto }
+#content #left .filter_search .searchbox li.head { height: auto; border-top: 1px solid #DFDFDF }
+
 /*	IPAD RELATED STYLES
 	------------------------ */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
