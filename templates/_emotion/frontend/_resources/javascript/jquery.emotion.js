@@ -212,6 +212,9 @@
 	$.fn.fancySelect =  function() {
 		
 		function createTemplate(width, text) {
+            if(width < 50) {
+                width = 50;
+            }
 			var outer = $('<div>', { 'class': 'outer-select' }).css('width', width),
 				inner = $('<div>', { 'class': 'inner-select' }).appendTo(outer),
 				text = $('<span>', { 'class': 'select-text', 'html': text }).appendTo(inner);
