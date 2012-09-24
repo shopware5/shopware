@@ -176,14 +176,10 @@ class Translation extends Resource
 
         $params = $this->prepareTranslationData($params, $translation);
 
-        Shopware()->Db()->update("s_core_translations", array(
-            'objectlanguage' => $params['objectlanguage'],
-            'objectdata' =>  $params['objectata'],
-            'objectkey' => $params['objectkey'],
-            'objecttype' => $params['objecttype']
-        ), array(
-            'id' => $translation['id']
-        ));
+        $this->delete($id);
+
+        $translationWriter = $this->getTranslationComponent();
+        $translationWriter->write($params['objectlanguage'], $params['objecttype'], $params['objectkey'], $params['objectdata']);
 
         $sql  = '
             SELECT `id`
@@ -198,7 +194,7 @@ class Translation extends Resource
             $params['objectlanguage']
         ));
 
-        if($id) {c
+        if($id) {
             $translation = $this->getOne($id);
         }else{
             throw new \Exception("Translation wasn't inserted properly");
