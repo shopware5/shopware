@@ -627,6 +627,7 @@ class Article extends Resource
                 $data['propertyGroup'] = null;
             } else {
                 $data['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
+
                 if (empty($data['propertyGroup'])) {
                     throw new ApiException\CustomValidationException(sprintf("PropertyGroup by id %s not found", $data['filterGroupId']));
                 }
@@ -1000,7 +1001,7 @@ class Article extends Resource
             }else{
                 throw new ApiException\CustomValidationException("Name or id for property value required");
             }
-
+            Shopware()->Models()->persist($value);
             $models[] = $value;
             }
 
@@ -1097,7 +1098,8 @@ class Article extends Resource
             }
 
             if (isset($imageData['link'])) {
-                $path = $this->load($imageData['link']);
+                $name = pathinfo($imageData['link'],  PATHINFO_FILENAME);
+                $path = $this->load($imageData['link'], $name);
 
                 $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
@@ -1106,6 +1108,7 @@ class Article extends Resource
                 $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
 
                 $media->setFile($file);
+                $media->setName($name);
                 $media->setDescription('');
                 $media->setCreated(new \DateTime());
                 $media->setUserId(0);
@@ -1204,11 +1207,12 @@ class Article extends Resource
 
     /**
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
+     * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      * @return bool|string returns the absolute path of the downloaded file
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function load($url)
+    protected function load($url, $baseFilename=null)
     {
         $destPath = Shopware()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
@@ -1221,7 +1225,7 @@ class Article extends Resource
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not exist.", $destPath)
             );
-        } else if (!is_writable($destPath)) {
+        } elseif (!is_writable($destPath)) {
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not have write permissions.", $destPath)
             );
@@ -1233,20 +1237,28 @@ class Article extends Resource
             case "ftp":
             case "http":
             case "file":
-                $hash = "";
-                while (empty($hash)) {
-                    $hash = md5(uniqid(rand(), true));
-                    if (file_exists("$destPath/$hash")) {
-                        $hash = "";
+                $counter = 1;
+                if($baseFilename === null) {
+                    $filename = md5(uniqid(rand(), true));
+                }else{
+                    $filename = $baseFilename;
+                }
+
+                while (file_exists("$destPath/$filename")) {
+                    if($baseFilename) {
+                        $filename = "$counter-$baseFilename";
+                        $counter++;
+                    }else{
+                        $filename = md5(uniqid(rand(), true));
                     }
                 }
 
-                if (!$put_handle = fopen("$destPath/$hash", "w+")) {
-                    throw new \Exception("Could not open $destPath/$hash for writing");
+                if (!$put_handle = fopen("$destPath/$filename", "w+")) {
+                    throw new \Exception("Could not open $destPath/$filename for writing");
                 }
 
                 if (!$get_handle = fopen($url, "r")) {
-                    return false;
+                    throw new \Exception("Could not open $url for reading");
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
@@ -1254,7 +1266,7 @@ class Article extends Resource
                 fclose($get_handle);
                 fclose($put_handle);
 
-                return "$destPath/$hash";
+                return "$destPath/$filename";
         }
         throw new \InvalidArgumentException(
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
