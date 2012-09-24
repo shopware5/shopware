@@ -1243,7 +1243,7 @@ class sAdmin
 
         $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 		$getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $param);
-        
+
 		if ($getTranslation["objectdata"]){
 			$object = unserialize($getTranslation["objectdata"]);
 		}
@@ -2103,7 +2103,7 @@ class sAdmin
 
 
 				$userData["additional"]["country"] = $this->sGetCountryTranslation($userData["additional"]["country"]);
-            
+
                 $additional = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user WHERE id=?",array($this->sSYSTEM->_SESSION["sUserId"]));
                 $attributes = $this->getUserAttributes($this->sSYSTEM->_SESSION["sUserId"]);
                 $userData["additional"]["user"] = array_merge($attributes, $additional);
@@ -2292,7 +2292,7 @@ class sAdmin
 	 * @access public
 	 * @return boolean
 	 */
-	public function sManageRisks($paymentID,$basket,$user){
+	public function sManageRisks($paymentID,$basket,$user) {
 		// Get all assigned rules
 		$queryRules = $this->sSYSTEM->sDB_CONNECTION->GetAll("
 		SELECT rule1, value1, rule2, value2
@@ -2308,7 +2308,7 @@ class sAdmin
 		// Get Basket
 
 
-		foreach ($queryRules as $rule){
+		foreach ($queryRules as $rule) {
 			if ($rule["rule1"] && !$rule["rule2"]){
 				$rule["rule1"] = "sRisk".$rule["rule1"];
 				if ($rule["rule2"]) $rule["rule2"] = "sRisk".$rule["rule2"];
@@ -2722,11 +2722,11 @@ class sAdmin
 	 * @return bool
 	 */
 	public function sRiskDIFFER ($user, $order, $value){
-			//echo "test";
-        
-		if (strtolower($user["shippingaddress"]["street"].$user["shippingaddress"]["streetnumber"]) != strtolower($user["billingaddress"]["street"].$user["billingaddress"]["streetnumber"])){
-			return true;
-		}else {
+		if (strtolower(trim($user["shippingaddress"]["street"]).trim($user["shippingaddress"]["streetnumber"])) != strtolower(trim($user["billingaddress"]["street"]).trim($user["billingaddress"]["streetnumber"]))) {
+            return true;
+        } elseif (trim($user["shippingaddress"]["zipcode"]) != trim($user["billingaddress"]["zipcode"])) {
+            return true;
+        } else {
 			return false;
 		}
 	}
