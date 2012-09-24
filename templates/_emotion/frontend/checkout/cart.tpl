@@ -2,25 +2,6 @@
 
 {block name='frontend_index_content_left'}{/block}
 
-{block name='frontend_checkout_cart_premiums'}
-	<div class="table_row noborder">
-		{include file='frontend/checkout/cart_footer_left.tpl'}
-	</div>	
-	
-	{* The tag is still open due to a template issue in the frontend/checkout/shipping_costs which has a unclosed div-tag *}
-	<div class="table_row non">
-	<div class="table_row shipping">
-	{if $sBasket.content && !$sUserLoggedIn}
-		{if !$sUserData.additional.user.id}
-			{include file="frontend/checkout/shipping_costs.tpl"}
-		{/if}
-	{/if}
-	</div>
-
-    {include file='frontend/checkout/premiums.tpl'}
-{/block} 
-
-
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="grid_16 last" id="basket">
@@ -69,7 +50,21 @@
 			{/foreach}
 			
 			{* Premium articles *}
-			{block name='frontend_checkout_cart_premiums'}{/block}
+			{block name='frontend_checkout_cart_premiums'}
+                <div class="table_row noborder">
+                    {include file='frontend/checkout/cart_footer_left.tpl'}
+                </div>
+
+                {* The tag is still open due to a template issue in the frontend/checkout/shipping_costs which has a unclosed div-tag *}
+                <div class="table_row non">
+                	<div class="table_row shipping">
+                	{if $sBasket.content && !$sUserLoggedIn}
+                		{if !$sUserData.additional.user.id}
+                			{include file="frontend/checkout/shipping_costs.tpl"}
+                		{/if}
+                	{/if}
+                </div>
+			{/block}
 			
 			{* Table foot *}
 			{block name='frontend_checkout_cart_cart_footer'}
