@@ -229,7 +229,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $select = array_merge($select, array(
             'customer.paymentId as paymentID',
             'customer.newsletter ',
-            'customer.accountmode ',
+            'customer.accountMode as accountmode',
             'customer.affiliate ',
             'customer.groupKey as customergroup',
             'customer.languageIso as language',
@@ -251,7 +251,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 ->leftJoin('customer.attribute', 'attribute')
                 ->groupBy('customer.id');
 
-        $builder->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $x = $builder->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($builder->getQuery());
 
         $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
@@ -261,6 +261,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $convert = new Shopware_Components_Convert_Csv();
         $first   = true;
         $keys    = array();
+        
         foreach ($paginator as $row) {
             if ($first) {
                 $first = false;
