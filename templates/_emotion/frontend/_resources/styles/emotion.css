@@ -1141,7 +1141,7 @@ div.listing {width: 808px;}
 }
 #listing .artbox {width: 190px;}
 #listing .artbox .inner {width: 160px;}
-#listing .artbox p.desc {margin: 0 0 10px;}
+#listing .artbox p.desc {margin: 0 0 10px; word-wrap: break-word; }
 
 #listing-1col {margin-bottom: 10px;}
 #listing-1col .artbox {width: 796px;}
