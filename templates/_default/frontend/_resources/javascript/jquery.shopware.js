@@ -1169,7 +1169,7 @@ jQuery(document).ready(function ($) {
             }
 
             // Create slider navigation
-            if (config.navigation === true) {
+            if (config.showNumbers === true) {
                 var timeout = window.setTimeout(function() {
                     $.ajaxSlider.sliderNavigation(config);
 
@@ -1378,6 +1378,7 @@ jQuery(document).ready(function ($) {
             if(!config.showNumbers) {
                 return false;
             }
+            console.log('yes');
 
             // Create an navigation controller and append it
             // to our main container
