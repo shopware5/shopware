@@ -125,6 +125,9 @@ class TreeRepository extends BaseRepository
             return true;
         }
 
+        //set the time limit to 6 minutes to have enough time to repair huge category trees
+        set_time_limit(360);
+
         //reset the left and right values
         $sql = "UPDATE `s_categories` SET `left` = '0', `right` = '0', `level` = '0'";
         Shopware()->Db()->query($sql);
@@ -133,12 +136,15 @@ class TreeRepository extends BaseRepository
         Shopware()->Db()->query($sql);
 
         //delete broken categories
-        $sql = "DELETE c FROM `s_categories` c
+        do {
+            $sql = "
+                DELETE c FROM `s_categories` c
                 LEFT JOIN `s_categories` c2
                 ON c.parent=c2.id
-                WHERE c2.id IS NULL AND c.id!=1";
-        Shopware()->Db()->query($sql);
-
+                WHERE c2.id IS NULL AND c.id!=1
+            ";
+            $result = Shopware()->Db()->query($sql);
+        } while($result->rowCount() > 0);
 
         $categories = $this->getRootNodes();
         if(empty($categories)) {
