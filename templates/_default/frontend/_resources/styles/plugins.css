@@ -678,7 +678,7 @@ a.searchthumb {
     display: block;
     float: left;
     margin: 0 0 0 1%;
-    height: 75px;
+    height: 70px;
     overflow-y: scroll;
 }
 .fuzzy_result_box .inner_box ul.first {
