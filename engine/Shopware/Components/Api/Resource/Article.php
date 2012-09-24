@@ -190,8 +190,8 @@ class Article extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
-            $this->getManager()->persist($article);
-            $this->flush();
+        $this->getManager()->persist($article);
+        $this->flush();
 
         if (!empty($translations)) {
             $this->writeTranslations($article->getId(), $translations);
@@ -949,9 +949,8 @@ class Article extends Resource
                 if(!$value) {
                     throw new ApiException\CustomValidationException(sprintf("Property value by id %s not found", $valueData['id']));
                 }
-            }
             // Get / create value by name
-            elseif(isset($valueData['value'])) {
+            }elseif(isset($valueData['value'])) {
                 //get option
                 if(isset($valueData['option'])) {
                     // get option by id
@@ -979,7 +978,7 @@ class Article extends Resource
                             $option = $relation->getOption();
                         }
                     }else{
-                        throw new ApiException\CustomValidationException("A property option need to be given for earch property value");
+                        throw new ApiException\CustomValidationException("A property option need to be given for each property value");
                     }
                     $option->fromArray($valueData['option']);
                     if($option->isFilterable() === null) {
@@ -998,10 +997,10 @@ class Article extends Resource
                 if(isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
                 }
+                Shopware()->Models()->persist($value);
             }else{
                 throw new ApiException\CustomValidationException("Name or id for property value required");
             }
-            Shopware()->Models()->persist($value);
             $models[] = $value;
             }
 
