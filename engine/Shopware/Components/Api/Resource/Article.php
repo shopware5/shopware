@@ -954,14 +954,14 @@ class Article extends Resource
                 //get option
                 if(isset($valueData['option'])) {
                     // get option by id
-                    if($valueData['option']['id']) {
+                    if(isset($valueData['option']['id'])) {
                         $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['option']['id']);
                         if(!$option) {
                             throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
                         }
                         $propertyGroup->addOption($option);
                     // get/create option depending on associated filtergroups
-                    }elseif($valueData['option']['name']) {
+                    }elseif(isset($valueData['option']['name'])) {
                         // if a name is passed and there is a matching option/group relation, get this option
                         // if only a name is passed, create a new option
                         $filters = array(
@@ -984,6 +984,8 @@ class Article extends Resource
                     if($option->isFilterable() === null) {
                         $option->setFilterable(false);
                     }
+                }else{
+                    throw new ApiException\CustomValidationException("A property option need to be given for each property value");
                 }
                 // create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
