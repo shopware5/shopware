@@ -662,7 +662,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     {
         $sql = '
         SELECT
-            COUNT(*) as count, MAX(' . $sqlRelevanceField . ') as max_relevance
+            COUNT(DISTINCT a.id) as count, MAX(' . $sqlRelevanceField . ') as max_relevance
 
         ' . $sqlFromStatement . '
 
@@ -733,7 +733,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Strip out search results that does not have much relevance
         if (!empty($this->configSearchMinDistanceOnTop)) {
             $minimumRelevance = $max_relevance / 100 * $this->configSearchMinDistanceOnTop;
-            if (!empty($sqlRelevanceField))
+            if (!empty($minimumRelevance))
                 $sqlWhere .= ' AND relevance>=' . (int)$minimumRelevance;
         }
 
@@ -952,6 +952,17 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             $sqlWhere,
             $sqlHaving
         );
+
+        if(empty($this->requestSuggestSearch)) {
+            $sql = '
+              INSERT INTO s_statistics_search (datum, searchterm, results)
+                VALUES (NOW(), ?, ?)
+            ';
+            Shopware()->Db()->query($sql, array(
+                $term,
+                empty($searchResultsFinal) ? 0 : count($searchResultsFinal)
+            ));
+        }
 
         // If no results return false
         if (empty($searchResultsFinal)) {

@@ -187,9 +187,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $resultCurrentCategory = $searchResults->getCurrentCategoryFilter();
             }
 
-            // Update search statistics
-            $this->updateSearchStatistics($term, $resultCount);
-
             // Generate page array
             $sPages = $this->generatePagesResultArray($resultCount, $config['resultsPerPage'], $config["currentPage"]);
 
@@ -258,24 +255,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             }
         }
         return $sPages;
-    }
-
-    /**
-     * Update shopware search statistics
-     * @param string $term
-     * @param int $count
-     * @return void
-     */
-    protected function updateSearchStatistics($term, $count)
-    {
-        $sql = '
-        INSERT INTO s_statistics_search (datum, searchterm, results)
-            VALUES (NOW(), ?, ?)
-        ';
-        Shopware()->Db()->query($sql, array(
-            $term,
-            empty($count) ? 0 : $count
-        ));
     }
 
     /**
