@@ -726,6 +726,7 @@ jQuery(document).ready(function ($) {
             'maxPages': 0,
             'extraParams': {},
             'swipeRunning': false,
+            'showArrows': false,
 
             // Private
             '_this': null,
@@ -806,6 +807,11 @@ jQuery(document).ready(function ($) {
                 'title': 'Slide right',
                 'href': '#slideRight'
             }).appendTo(config._container).hide();
+
+            if(!config.showArrows) {
+                config._leftArrow.hide();
+                config._rightArrow.hide();
+            }
 
 
             $.ajaxSlider.debugMode('Select mode', config);
@@ -977,6 +983,11 @@ jQuery(document).ready(function ($) {
                             return;
                         }
 
+                        if(!config.showArrows) {
+                            config._leftArrow.hide();
+                            config._rightArrow.hide();
+                        }
+
                         // horizontal slider
                         if (config.layout === 'horizontal') {
                             var height;
@@ -1053,8 +1064,12 @@ jQuery(document).ready(function ($) {
                 config._leftArrow.bind('click', function (event) {
                     event.preventDefault();
                     $.ajaxSlider.getPage(config._activeSlide - 1, config);
-
                 });
+
+                if(!config.showArrows) {
+                    config._leftArrow.hide();
+                    config._rightArrow.hide();
+                }
 
 
             } else {
@@ -1199,6 +1214,11 @@ jQuery(document).ready(function ($) {
                         config._rightArrow.show();
                     }
 
+                    if(!config.showArrows) {
+                        config._leftArrow.hide();
+                        config._rightArrow.hide();
+                    }
+
                     // Right arrow
                     config._rightArrow.bind('click', function (event) {
                         $.ajaxSlider.rightArrow(event, config);
@@ -1280,6 +1300,11 @@ jQuery(document).ready(function ($) {
                     config._rightArrow.show();
                 }
 
+                if(!config.showArrows) {
+                    config._leftArrow.hide();
+                    config._rightArrow.hide();
+                }
+
                 // Right arrow
                 config._rightArrow.bind('click', function (event) {
                     $.ajaxSlider.rightArrow(event, config);
@@ -1349,6 +1374,10 @@ jQuery(document).ready(function ($) {
          * @param:  (obj) config - the plugin config
          */
         sliderNavigation: function (config) {
+
+            if(!config.showNumbers) {
+                return false;
+            }
 
             // Create an navigation controller and append it
             // to our main container
@@ -1436,7 +1465,7 @@ jQuery(document).ready(function ($) {
             }
 
             // Set navigation point to active
-            if (config.navigation === true) {
+            if (config.navigation === true && config.showNumbers) {
 
                 // Set this navigation point as active
                 config._activeNavigation.removeClass('active');
@@ -1455,6 +1484,11 @@ jQuery(document).ready(function ($) {
             } else {
                 config._leftArrow.show();
                 config._rightArrow.show();
+            }
+
+            if(!config.showArrows) {
+                config._leftArrow.hide();
+                config._rightArrow.hide();
             }
 
             config._leftArrow.bind('click', function (event) {
@@ -1483,6 +1517,11 @@ jQuery(document).ready(function ($) {
             } else {
                 config._leftArrow.show();
                 config._rightArrow.show();
+            }
+
+            if(!config.showArrows) {
+                config._leftArrow.hide();
+                config._rightArrow.hide();
             }
 
             config._leftArrow.bind('click', function (event) {
