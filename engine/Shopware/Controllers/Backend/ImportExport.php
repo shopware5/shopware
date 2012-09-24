@@ -1730,7 +1730,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             $this->getManager()->getConnection()->commit();
-//            $categoryRepository->recover();
             $this->getManager()->clear();
         } catch (\Exception $e) {
             $this->getManager()->getConnection()->rollback();
@@ -2601,7 +2600,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         throw new \Exception('Article not Found');
                     }
                 }
-
                 $updateData = array();
                 $detailData['configuratorOptions'] = $configuratorOptions;
                 $updateData['variants'][] = $detailData;
@@ -3446,7 +3444,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     continue;
                 }
 
-                $categoryIds[] = $categoryId;
+                if(!in_array($categoryId, $categoryIds)) {
+                    $categoryIds[] = $categoryId;
+                }
 
             }
         }
