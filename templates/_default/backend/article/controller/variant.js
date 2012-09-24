@@ -203,12 +203,19 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     },
 
     onSaveVariantInline: function(record) {
-        this.saveVariant(record,null);
-        this.getVariantListing().getSelectionModel().deselectAll();
-        this.getVariantListing().getStore().load();
-        if (record.get('standard') || record.get('kind') === 1) {
-            this.subApplication.getController('Detail').reloadArticle(record.get('articleId'));
-        }
+        var me = this;
+
+        me.saveVariant(record,null, {
+            callback: function() {
+                me.getVariantListing().getSelectionModel().deselectAll();
+
+                me.getVariantListing().getStore().load();
+
+                if (record.get('standard') || record.get('kind') == 1) {
+                    me.subApplication.getController('Detail').reloadArticle(record.get('articleId'));
+                }
+            }
+        });
     },
 
     /**
@@ -1295,7 +1302,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         }
     },
 
-    saveVariant: function(variant, win) {
+    saveVariant: function(variant, win, options) {
         var me = this;
 
         if (!variant) {
@@ -1311,6 +1318,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 Shopware.Notification.createGrowlMessage(me.snippets.success.title, message, me.snippets.growlMessage);
                 if (win) {
                     win.destroy();
+                }
+                if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
+                    options.callback(record);
                 }
             },
             failure: function(record, operation) {
