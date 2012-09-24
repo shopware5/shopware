@@ -220,7 +220,7 @@
         .#{$prefix}article-image-info .article-thumb-wrap .inner-thumb,
         .#{$prefix}article-image-info .article-thumb-wrap .inner-thumb img {
             max-width: 100% !important;
-            height: 100% !important;
+            max-height: 100% !important;
             display: block !important;
         }
         .#{$prefix}article-image-info .article-thumb-wrap .inner-thumb img {
