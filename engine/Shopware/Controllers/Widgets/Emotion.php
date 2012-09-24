@@ -447,7 +447,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $values = array();
         foreach ($articles as &$article) {
             $articleId = $article["id"];
-            $values[] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
+
+            $value = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);;
+            if (!$value) {
+                continue;
+            }
+
+            $values[] = $value;
         }
 
         return array("values" => $values, "pages" => $pages);
@@ -526,7 +532,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $values = array();
         foreach ($articles as &$article) {
             $articleId = $article["articleID"];
-            $values[] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
+
+            $value = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
+            if (!$value) {
+                continue;
+            }
+            $values[] = $value;
         }
 
         return array("values" => $values, "pages" => $pages);
