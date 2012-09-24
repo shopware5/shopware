@@ -1707,7 +1707,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $total       = 0;
         $categoryIds = array();
 
-        $categoryRepository->recover();
         $this->getManager()->clear();
 
         $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
@@ -1720,6 +1719,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     continue;
                 }
 
+                error_log("saving $counter");
                 $categoryModel = $this->saveCategory($category, $categoryRepository, $metaData);
                 $this->getManager()->flush();
                 $this->getManager()->clear();
@@ -1740,8 +1740,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             ));
             return;
         }
-
-        $categoryRepository->recover();
 
         echo json_encode(array(
             'success' => true,
