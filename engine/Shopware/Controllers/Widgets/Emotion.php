@@ -63,12 +63,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
+        $pages = $this->Request()->getParam("pages");
+        $offset = $limit * $pages - $limit;
+
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
 
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
 
-        $values = $this->getProductTopSeller($category, $start, $limit);
+        $values = $this->getProductTopSeller($category, $offset, $limit);
 
         $this->View()->assign('articles', $values["values"]);
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
@@ -89,10 +92,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
+        $pages = $this->Request()->getParam("pages");
+        $offset = $limit * $pages - $limit;
+
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
 
-        $values = $this->getProductNewcomer($category, $start, $limit);
+        $values = $this->getProductNewcomer($category, $offset, $limit);
 
         $this->View()->assign('articles', $values["values"]);
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
