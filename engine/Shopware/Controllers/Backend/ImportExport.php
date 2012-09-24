@@ -1719,7 +1719,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (empty($category['parentID']) || empty($category['categoryID']) || empty($category['description'])) {
                     continue;
                 }
-                
+
                 $categoryModel = $this->saveCategory($category, $categoryRepository, $metaData);
                 $this->getManager()->flush();
                 $this->getManager()->clear();
@@ -1730,16 +1730,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             $this->getManager()->getConnection()->commit();
-            $categoryRepository->recover();
+//            $categoryRepository->recover();
             $this->getManager()->clear();
         } catch (\Exception $e) {
             $this->getManager()->getConnection()->rollback();
+            $this->getManager()->close();
             echo json_encode(array(
                 'success' => false,
                 'message' => sprintf("Error: %s", $e->getMessage())
             ));
             return;
         }
+
+        $categoryRepository->recover();
 
         echo json_encode(array(
             'success' => true,
