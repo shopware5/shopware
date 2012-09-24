@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
 
         me.editorField = null;
 
-        if(this.isHtml) {
+        if (this.isHtml) {
             me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
                 flex: 1,
                 xtype: 'codemirrorfield',
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
                 translatable: true // Indicates that this field is translatable
             });
-        }else{
+        } else {
             me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
                 flex: 1,
                 xtype: 'codemirrorfield',
@@ -121,8 +121,6 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
         }
 
         return me.editorField;
-
-//        return [ (this.isHtml ? me.htmlTextField : me.textfield) ];
     },
 
     /**
@@ -144,7 +142,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                     disabled: !me.isHtml,
                     listeners: {
                         click: function() {
-                            me.fireEvent('showPreview', me.textfield.getValue(), me.isHtml);
+                            me.fireEvent('showPreview', me.editorField.getValue(), me.isHtml);
                         }
                     }
                 },
@@ -158,7 +156,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                     disabled: !me.isHtml,
                     listeners: {
                         click: function() {
-                            me.fireEvent('sendTestMail', me.textfield.getValue(), me.isHtml);
+                            me.fireEvent('sendTestMail', me.editorField.getValue(), me.isHtml);
                         }
                     }
                 }

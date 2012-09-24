@@ -227,7 +227,9 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                     // SW-3564 - Refresh codemirror fields on tab change
                     tabchange: function(tabPanel, tab) {
                         var editorField = tab.editorField;
-                        editorField.editor.refresh();
+                        if (editorField) {
+                            editorField.editor.refresh();
+                        }
 
                         me.getPlugin('my-translation').onGetTranslatableFields();
                     }
