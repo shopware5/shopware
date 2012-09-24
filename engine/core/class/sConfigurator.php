@@ -258,7 +258,10 @@ class sConfigurator
 
             if (count($selected['price']) > 1) {
                 $articleData['sBlockPrices'] = $selected['price'];
+            } else {
+                $articleData['sBlockPrices'] = array();
             }
+
             $articleData = $this->mergeSelectedAndArticleData($articleData, $selected, $selectedPrice);
             $articleData["sConfiguratorSelection"] = $selected;
         }
