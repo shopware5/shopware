@@ -3438,13 +3438,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $categoryId = $categoryModel->getId();
-            }
 
-            if (empty($categoryId)) {
-                continue;
-            }
+                if (empty($categoryId)) {
+                    continue;
+                }
 
-            $categoryIds[] = $categoryId;
+                $categoryIds[] = $categoryId;
+
+            }
         }
 
         return $categoryIds;
