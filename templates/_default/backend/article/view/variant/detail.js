@@ -407,8 +407,10 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                     displayField: 'name',
                     valueField: 'id'
                 }, {
+                    xtype: 'numberfield',
                     name: 'purchaseUnit',
                     submitLocaleSeparator: false,
+                    decimalPrecision: 4,
                     fieldLabel: me.snippets.basePrice.content
                 }, {
                     name: 'referenceUnit',
