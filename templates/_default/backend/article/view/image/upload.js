@@ -184,6 +184,10 @@ Ext.define('Shopware.apps.Article.view.image.Upload', {
             name: 'media-manager-selection',
             multiSelect: true,
             anchor: '100%',
+            buttonText: me.snippets.mediaSelection,
+            buttonConfig : {
+                width:150
+            },
             albumId: -1,
             allowBlank: false,
             validTypes: me.getAllowedExtensions(),
