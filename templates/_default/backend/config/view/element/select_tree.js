@@ -80,5 +80,5 @@ Ext.define('Shopware.apps.Config.view.element.SelectTree', {
         if(hasPicker) {
             me.store.load();
         }
-    }SW-3896
+    }
 });
