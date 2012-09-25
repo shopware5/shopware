@@ -23,12 +23,20 @@
 			{se name="OrderItemInfoNotProcessed"}{/se}
 		{elseif $offerPosition.status==1}
 			{se name="OrderItemInfoInProgress"}{/se}
-		{elseif $offerPosition.status==2}
+        {elseif $offerPosition.status==2}
+                {se name="OrderItemInfoCompleted"}{/se}
+        {elseif $offerPosition.status==3}
+                {se name="OrderItemInfoPartiallyCompleted"}{/se}
+        {elseif $offerPosition.status==4}
+                {se name="OrderItemInfoCanceled"}{/se}
+        {elseif $offerPosition.status==5}
+                {se name="OrderItemInfoReadyForShipping"}{/se}
+		{elseif $offerPosition.status==6}
 			{se name="OrderItemInfoShipped"}{/se}
-		{elseif $offerPosition.status==3}
+		{elseif $offerPosition.status==7}
 			{se name="OrderItemInfoPartiallyShipped"}{/se}
-		{elseif $offerPosition.status==4}
-			{se name="OrderItemInfoCanceled"}{/se}
+        {elseif $offerPosition.status==8}
+            {se name="OrderItemInfoClarificationNeeded"}{/se}
 		{/if}
 	</div>
 	
