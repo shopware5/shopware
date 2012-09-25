@@ -99,6 +99,10 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             form.getElements().each(function(element) {
                 value = element.getValues().find('shopId', shop.getId());
                 value = element.getValues().getAt(value);
+                if(!value && shop.getId() != 1) {
+                    value = element.getValues().find('shopId', 1);
+                    value = element.getValues().getAt(value);
+                }
 
                 type = element.get('type').toLowerCase();
                 type = 'config-element-' + type;
