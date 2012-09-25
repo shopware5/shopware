@@ -1378,7 +1378,6 @@ jQuery(document).ready(function ($) {
             if(!config.showNumbers) {
                 return false;
             }
-            console.log('yes');
 
             // Create an navigation controller and append it
             // to our main container
@@ -1466,8 +1465,7 @@ jQuery(document).ready(function ($) {
             }
 
             // Set navigation point to active
-            if (config.navigation === true && config.showNumbers) {
-
+            if (config.navigation || config.showNumbers) {
                 // Set this navigation point as active
                 config._activeNavigation.removeClass('active');
                 config._activeNavigation = config._this.find('#slideNavigation' + (slideNumber + 1)).addClass('active');
