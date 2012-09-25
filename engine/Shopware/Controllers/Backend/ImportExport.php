@@ -3088,7 +3088,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             FROM s_categories c
             LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
             WHERE c.id != 1
-            ORDER BY c.level, c.position
+            ORDER BY c.left
 
              LIMIT {$offset},{$limit}
         ";
