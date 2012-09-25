@@ -40,13 +40,18 @@ Ext.define('Shopware.apps.Config.model.form.PageGroup', {
         { name: 'name', type: 'string' },
         { name: 'key', type: 'string' },
         { name: 'mappingId', type: 'int', convert: function(v, record) {
-            if(v === null) {
+            if (v === null) {
                 return null;
             }
 
-            if(record.raw && record.raw.mapping && record.raw.mapping.id) {
+            if (Ext.typeOf(v) === 'number') {
+                return v;
+            }
+
+            if (record.raw && record.raw.mapping && record.raw.mapping.id) {
                 return record.raw.mapping.id;
             }
+
             return v;
         }, useNull: true },
         { name: 'mapping', type: 'string', convert: function(v, record) {
