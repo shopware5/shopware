@@ -2822,20 +2822,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $whitelist = array(
             'name'              => 'name',
             'additionaltext'    => 'additionaltext',
-            'description'       => 'description',
             'description_long'  => 'descriptionLong',
+            'description'       => 'description',
             'packUnit'          => 'packunit',
             'keywords'          => 'keywords'
         );
-
 
         // first get a list of all available translation by language ID
         foreach($data as $key => $value) {
             foreach($whitelist as $translationKey => $translationMapping) {
                 if(strpos($key, $translationKey.'_') !== false) {
                     $parts = explode('_', $key);
-                    $language = (int) array_pop($parts);
-                    if(!$language > 0) {
+                    $language = array_pop($parts);
+                    if(!is_numeric($language)) {
                         continue;
                     }
 
@@ -2844,7 +2843,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         $translationByLanguage[$language]['shopId'] = $language;
                     }
                     $translationByLanguage[$language][$translationMapping] = $value;
+
+                    // remove translation and whitelist entry in order not to double-set translations
                     unset($data[$key]);
+                    unset($whitelist[$translationKey]);
                 }
             }
         }
