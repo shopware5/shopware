@@ -61,14 +61,15 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     public function getLocalesAction()
     {
+        // Get locales from s_core_shops. Join over snippets in order to get default snippets referring onto main-shop
+        // as well as snippets which have no own shop
         $locales = Shopware()->Db()->fetchAll("
-            SELECT DISTINCT s.shopID as shopId, l.id as localeId, CONCAT(IF(o.id=1, 'Default', o.name), ' / ', l.locale) as displayName
-            FROM s_core_snippets s, s_core_locales l, s_core_multilanguage o
-            WHERE l.id = s.localeID
-            AND o.id = s.shopID
-            ORDER BY o.id
+            SELECT DISTINCT s.id as shopId, IFNULL(sn.localeID, s.locale_id) as localeId, CONCAT(IF(s.id=1, 'Default', s.name), ' / ', IFNULL(l.locale, l2.locale)) as displayName FROM s_core_shops s
+            LEFT JOIN s_core_snippets sn ON s.id = sn.shopID
+            LEFT JOIN s_core_locales l ON sn.localeID=l.id
+            LEFT JOIN s_core_locales l2 ON s.locale_id=l2.id
+            ORDER BY s.id, localeId
         ");
-
 
         $this->View()->assign(array(
             'success' => true,
