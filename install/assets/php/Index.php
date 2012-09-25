@@ -3,10 +3,6 @@ if (!defined("installer")){
     exit;
 }
 
-session_start();
-if (!isset($_SESSION["parameters"])){
-    $_SESSION["parameters"] = array();
-}
 require 'Slim/Slim.php';
 require 'assets/php/Shopware_Install_Requirements.php';
 require 'assets/php/Shopware_Install_Requirements_Path.php';
@@ -14,26 +10,36 @@ require 'assets/php/Shopware_Install_Database.php';
 require 'assets/php/Shopware_Install_License.php';
 require 'assets/php/Shopware_Install_Configuration.php';
 
+// Initiate slim
+$app = new Slim();
+
+$app->add(new Slim_Middleware_SessionCookie());
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (!isset($_SESSION["parameters"])){
+    $_SESSION["parameters"] = array();
+}
+
 /**
  * Load language file
  */
 $allowedLanguages = array("de", "en");
 $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-$selectedLanguage =  substr($selectedLanguage[0],0,2);
-if (empty($selectedLanguage) || !in_array($selectedLanguage,$allowedLanguages)) $selectedLanguage = "de";
-if (isset($_POST["language"]) && in_array($_POST["language"],$allowedLanguages)){
+$selectedLanguage = substr($selectedLanguage[0], 0, 2);
+if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
+    $selectedLanguage = "de";
+}
+if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)) {
     $selectedLanguage = $_POST["language"];
     $_SESSION["language"] = $selectedLanguage;
-}
-elseif (isset($_SESSION["language"]) && in_array($_SESSION["language"],$allowedLanguages)){
+} elseif (isset($_SESSION["language"]) && in_array($_SESSION["language"], $allowedLanguages)) {
     $selectedLanguage = $_SESSION["language"];
-}else {
+} else {
     $_SESSION["language"] = $selectedLanguage;
 }
 $language = require("assets/lang/$selectedLanguage.php");
-
-// Initiate slim
-$app = new Slim();
 
 // Assign components
 $app->config('install.requirements', new Shopware_Install_Requirements());

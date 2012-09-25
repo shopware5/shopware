@@ -178,6 +178,16 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     }
 
     /**
+     * Checks the php version
+     *
+     * @return bool
+     */
+    public function checkModRewrite()
+    {
+        return isset($_SERVER['MOD_REWRITE']);
+    }
+
+    /**
      * Checks the curl version
      *
      * @return bool|string
@@ -308,7 +318,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     /**
      * Checks the include path config
      *
-     * @return unknown
+     * @return bool
      */
     public function checkIncludePath()
     {
