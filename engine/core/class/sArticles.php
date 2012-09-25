@@ -1128,12 +1128,12 @@ class sArticles
             }
 
             // Price-Handling
-            $articles[$articleKey]["price"] = $this->sCalculatingPrice($articles[$articleKey]["price"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"]);
+            $articles[$articleKey]["price"] = $this->sCalculatingPrice($articles[$articleKey]["price"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
             $articles[$articleKey]["priceNumeric"] = floatval(str_replace(",", ".", $articles[$articleKey]["price"]));
             $articles[$articleKey]["pseudoprice"] = (float)$articles[$articleKey]["pseudoprice"];
 
             if (!empty($articles[$articleKey]["pseudoprice"])) {
-                $articles[$articleKey]["pseudoprice"] = $this->sCalculatingPrice($articles[$articleKey]["pseudoprice"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"]);
+                $articles[$articleKey]["pseudoprice"] = $this->sCalculatingPrice($articles[$articleKey]["pseudoprice"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
                 $discPseudo = str_replace(",", ".", $articles[$articleKey]["pseudoprice"]);
                 $discPrice = str_replace(",", ".", $articles[$articleKey]["price"]);
                 $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
@@ -1498,7 +1498,7 @@ class sArticles
      * @access public
      * @return double $price formated price
      */
-    public function sCalculatingPrice($price, $tax, $taxId = 0)
+    public function sCalculatingPrice($price, $tax, $taxId = 0, $article = array())
     {
         if (empty($taxId)){
             throw new Enlight_Exception("Empty taxID in sCalculatingPrice");
@@ -1589,7 +1589,7 @@ class sArticles
      * @access public
      * @return double $price  price unformated
      */
-    public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false)
+    public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = array())
     {
         if (empty($taxId)){
             throw new Enlight_Exception ("Empty tax id in sCalculatingPriceNum");
@@ -2154,11 +2154,11 @@ class sArticles
                     $getBlockPricings[$i]["to"] = $percent["to"];
                     if ($i == 0 && $ignore) {
 
-                        $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100)), $articleData["tax"], $articleData["taxID"]);
+                        $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100)), $articleData["tax"], $articleData["taxID"], $articleData);
                         $divPercent = $percent["percent"];
                     } else {
                         if ($ignore) $percent["percent"] -= $divPercent;
-                        $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100 - $percent["percent"])), $articleData["tax"], $articleData["taxID"]);
+                        $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100 - $percent["percent"])), $articleData["tax"], $articleData["taxID"], $articleData);
                     }
                     $i++;
 
@@ -2584,8 +2584,8 @@ class sArticles
                     foreach ($getBlockPricings as $blockPriceKey => $blockPriceValue) {
                         $getBlockPricings[$blockPriceKey]["from"] = $blockPriceValue["valFrom"];
                         $getBlockPricings[$blockPriceKey]["to"] = $blockPriceValue["valTo"];
-                        $getBlockPricings[$blockPriceKey]["price"] = $this->sCalculatingPrice($blockPriceValue["price"], $getArticle["tax"], $getArticle["taxID"]);
-                        $getBlockPricings[$blockPriceKey]["pseudoprice"] = $this->sCalculatingPrice($blockPriceValue["pseudoprice"], $getArticle["tax"], $getArticle["taxID"]);
+                        $getBlockPricings[$blockPriceKey]["price"] = $this->sCalculatingPrice($blockPriceValue["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
+                        $getBlockPricings[$blockPriceKey]["pseudoprice"] = $this->sCalculatingPrice($blockPriceValue["pseudoprice"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
 
                     }
                     $getArticle["sBlockPrices"] = $getBlockPricings;
@@ -2622,7 +2622,7 @@ class sArticles
                     $tax = $getArticle["tax"];
                 }
 
-                $basePrice = $this->sCalculatingPriceNum($price, $tax, false,false,$getArticle["taxID"],false);
+                $basePrice = $this->sCalculatingPriceNum($price, $tax, false,false,$getArticle["taxID"],false, $getArticle);
 
                 $basePrice = $basePrice / $getArticle["purchaseunit"] * $getArticle["referenceunit"];
                 $basePrice = $this->sFormatPrice($basePrice);
@@ -2640,7 +2640,7 @@ class sArticles
             // Get cheapest price
             $getArticle["priceStartingFrom"] = $this->sGetCheapestPrice($getArticle["articleID"], $getArticle["pricegroup"], $getArticle["pricegroupID"], $getArticle["pricegroupActive"]);
 
-            if ($getArticle["price"]) $getArticle["price"] = $this->sCalculatingPrice($getArticle["price"], $getArticle["tax"], $getArticle["taxID"]);
+            if ($getArticle["price"]) $getArticle["price"] = $this->sCalculatingPrice($getArticle["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
 
             // Load article-configurations
             $getArticle = $this->sGetArticleConfig($getArticle["articleID"], $getArticle);
@@ -2656,7 +2656,7 @@ class sArticles
             // Reformat prices
             // =================================================.
             if ($getArticle["pseudoprice"]) {
-                $getArticle["pseudoprice"] = $this->sCalculatingPrice(str_replace(",", ".", $getArticle["pseudoprice"]), $getArticle["tax"], $getArticle["taxID"]);
+                $getArticle["pseudoprice"] = $this->sCalculatingPrice(str_replace(",", ".", $getArticle["pseudoprice"]), $getArticle["tax"], $getArticle["taxID"], $getArticle);
 
                 $discPseudo = str_replace(",", ".", $getArticle["pseudoprice"]);
                 $discPrice = str_replace(",", ".", $getArticle["price"]);
@@ -2665,7 +2665,7 @@ class sArticles
                     $getArticle["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
                 }
             }
-            if ($getArticle["priceStartingFrom"]) $getArticle["priceStartingFrom"] = $this->sCalculatingPrice($getArticle["priceStartingFrom"], $getArticle["tax"], $getArticle["taxID"]);
+            if ($getArticle["priceStartingFrom"]) $getArticle["priceStartingFrom"] = $this->sCalculatingPrice($getArticle["priceStartingFrom"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
 
             // Update article impressions
             // =================================================.
@@ -2901,10 +2901,10 @@ class sArticles
 
 
         // Formating prices
-        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"]);
+        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
 
         if ($getPromotionResult["purchaseunit"] > 0 && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false);
+            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false, $getPromotionResult);
             $basePrice = $basePrice / $getPromotionResult["purchaseunit"] * $getPromotionResult["referenceunit"];
             $basePrice = $this->sFormatPrice($basePrice);
             $getPromotionResult["referenceprice"] = $basePrice;
@@ -2915,7 +2915,7 @@ class sArticles
         }
 
         if ($getPromotionResult["pseudoprice"]) {
-            $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"]);
+            $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
             $discPseudo = str_replace(",", ".", $getPromotionResult["pseudoprice"]);
             $discPrice = str_replace(",", ".", $getPromotionResult["price"]);
             $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
@@ -3205,17 +3205,17 @@ class sArticles
             $getPromotionResult["price"] = $getPromotionResult["priceStartingFrom"];
             if ($cheapestPrice[1] <= 1) {
                 $getPromotionResult["priceStartingFrom"] = $this->sCalculatingPrice(
-                    $getPromotionResult["priceStartingFrom"], $getPromotionResult["tax"], $getPromotionResult["taxID"]
+                    $getPromotionResult["priceStartingFrom"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult
                 );
             } else {
                 unset($getPromotionResult["priceStartingFrom"]);
             }
         }
         // Formating prices
-        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"]);
+        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"],$getPromotionResult);
 
         if ($getPromotionResult["purchaseunit"] > 0 && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false);
+            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false, $getPromotionResult);
             $basePrice = $basePrice / $getPromotionResult["purchaseunit"] * $getPromotionResult["referenceunit"];
             $basePrice = $this->sFormatPrice($basePrice);
             $getPromotionResult["referenceprice"] = $basePrice;
@@ -3225,7 +3225,7 @@ class sArticles
             $getPromotionResult["sUnit"] = $this->sGetUnit($getPromotionResult["unitID"]);
         }
         if ($getPromotionResult["pseudoprice"]) {
-            $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"]);
+            $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
             $discPseudo = str_replace(",", ".", $getPromotionResult["pseudoprice"]);
             $discPrice = str_replace(",", ".", $getPromotionResult["price"]);
             $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
@@ -3368,7 +3368,7 @@ class sArticles
      * @param $articleAlbum
      * @return array
      */
-    private function getArticleCover($articleId, $orderNumber, $articleAlbum)
+    public function getArticleCover($articleId, $orderNumber, $articleAlbum)
     {
         if (!empty($orderNumber)) {
             //check for specify variant images. For example:
