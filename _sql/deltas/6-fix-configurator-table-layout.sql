@@ -1,7 +1,17 @@
 -- //
 
-ALTER TABLE `s_article_configurator_options` DROP INDEX `group_id`,
-ADD UNIQUE (`group_id`, `name`);
+CREATE TABLE IF NOT EXISTS `new_s_article_configurator_options` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) unsigned DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id` (`group_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_article_configurator_options` (`id`, `group_id`, `name`, `position`)
+SELECT `id`, `group_id`, `name`, `position` FROM `s_article_configurator_options`;
+DROP TABLE IF EXISTS `s_article_configurator_options`;
+RENAME TABLE `new_s_article_configurator_options` TO `s_article_configurator_options`;
 
 ALTER TABLE `s_article_configurator_sets` DROP INDEX `name`,
 ADD UNIQUE `name` ( `name` );
