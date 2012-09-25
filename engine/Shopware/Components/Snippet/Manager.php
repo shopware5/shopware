@@ -177,9 +177,11 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $shop = $this->shop;
         $locale = $this->locale;
         $main = $shop->getMain();
-        $main = $main !== null && $main->getId() !== 1 ? $main : null;
+        if($main->getId() === 1 && $main->getLocale()->getId() === 1) {
+            $main = null;
+        }
 
-        if($main !== null) {
+        if($main !== null && $main->getId() !== 1) {
             $extends[] = array(
                 $main->getId(),
                 $locale->getId()
@@ -201,6 +203,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                 1, 1,
             );
         }
+
         $this->extends = $extends;
     }
 
