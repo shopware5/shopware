@@ -135,6 +135,16 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         me.on('canceledit', function(editor, e) {
             me.fireEvent('editingCanceled', editor, e)
         });
+        me.on('validateedit', function(editor, event) {
+            var newGroupId = event.newValues['address.groupId'],
+            newMail = event.newValues['address.email'];
+            if(newMail == "" || newGroupId == null) {
+                event.cancel = true;
+                return false;
+            }
+            event.cancel = false;
+            return true;
+        });
 
         me.callParent(arguments);
     },
@@ -162,7 +172,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
      * Data indices where chosen in order to match the database scheme for sorting in the PHP backend.
      * Therefore each Column requieres its own renderer in order to display the correct value.
      *
-     * @return [array] grid columns
+     * @return Array grid columns
      */
     getColumns: function() {
         var me = this;
@@ -178,7 +188,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 editor: {
                     xtype: 'textfield',
                     vtype: 'email',
-                    allowBlank: false,
+                    allowBlank: true,
                     editable: true
                 }
             },
@@ -190,7 +200,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 editor: {
                     xtype: 'combobox',
                     queryMode: 'local',
-                    allowBlank: false,
+                    allowBlank: true,
                     valueField: 'id',
                     displayField: 'name',
                     store : me.newsletterGroupStore,
