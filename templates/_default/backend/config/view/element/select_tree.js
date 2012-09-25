@@ -74,11 +74,11 @@ Ext.define('Shopware.apps.Config.view.element.SelectTree', {
      *
      * @param store
      */
-    onStoreHasLoaded: function(store) {
-        var me = this;
+    expand: function() {
+        var me = this, hasPicker = !!me.picker;
         me.callParent(arguments);
-        if(store.filters && store.filters.getCount()) {
-            store.load();
+        if(hasPicker) {
+            me.store.load();
         }
-    }
+    }SW-3896
 });
