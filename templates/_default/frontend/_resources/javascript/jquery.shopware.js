@@ -720,7 +720,7 @@ jQuery(document).ready(function ($) {
             'rotateSpeed': 5000,
             'navigation': true,
             'navigationClass': 'slide_navigation',
-            'showNumbers': true,
+            'showNumbers': false,
             'numberText': 'Seite %0 von %1',
             'debug': false,
             'maxPages': 0,
