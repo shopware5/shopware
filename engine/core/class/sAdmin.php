@@ -1258,6 +1258,10 @@ class sAdmin
 			$country["notice"] = $object[$country["id"]]["notice"];
 		}
 
+        if ($object[$country["id"]]["active"]){
+			$country["active"] = $object[$country["id"]]["active"];
+		}
+
 		return $country;
 	}
 
@@ -1380,15 +1384,20 @@ class sAdmin
 	{
 		$getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],"SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC");
 
-
 		$object = $this->sGetCountryTranslation();
         $stateTranslation = $this->sGetCountryStateTranslation();
 
+
 		foreach ($getCountries as $key => $v)
 		{
+
 			if (isset($object[$v["id"]]["active"])){
-				$v["active"] = $object[$v["id"]]["active"];
+                if (!$object[$v["id"]]["active"]) {
+                    unset($getCountries[$key]);
+                    continue;
+                }
 			}
+
 
             $getCountries[$key]["states"] = array();
             if (!empty($v["display_state_in_registration"])){
