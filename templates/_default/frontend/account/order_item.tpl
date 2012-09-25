@@ -32,9 +32,9 @@
         {elseif $offerPosition.status==5}
                 {se name="OrderItemInfoReadyForShipping"}{/se}
 		{elseif $offerPosition.status==6}
-			{se name="OrderItemInfoShipped"}{/se}
+            {se name="OrderItemInfoPartiallyShipped"}{/se}
 		{elseif $offerPosition.status==7}
-			{se name="OrderItemInfoPartiallyShipped"}{/se}
+            {se name="OrderItemInfoShipped"}{/se}
         {elseif $offerPosition.status==8}
             {se name="OrderItemInfoClarificationNeeded"}{/se}
 		{/if}
