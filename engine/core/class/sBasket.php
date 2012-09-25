@@ -1515,7 +1515,7 @@ class sBasket
         /*
         Recalculate Price if purchaseunit is set
         */
-        $brutto = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($netprice,$queryNewPrice["tax"],false,false,$queryNewPrice["taxID"],false);
+        $brutto = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($netprice,$queryNewPrice["tax"],false,false,$queryNewPrice["taxID"],false, $queryNewPrice);
 
         // Check if tax-free
         if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
@@ -1783,12 +1783,12 @@ class sBasket
                     // If configuration article
                     if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
                         // If netto set both values to net-price
-                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($getPrice["price"],$getPrice["tax"],false,false,$getArticle["taxID"],false);
+                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($getPrice["price"],$getPrice["tax"],false,false,$getArticle["taxID"],false,$getArticle);
                         $getPrice["netprice"] = $getPrice["price"];
                     }else {
                         // If brutto, save net
                         $getPrice["netprice"] = $getPrice["price"];
-                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($getPrice["price"],$getPrice["tax"],false,false,$getArticle["taxID"],false);
+                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($getPrice["price"],$getPrice["tax"],false,false,$getArticle["taxID"],false, $getArticle);
                     }
 					// For variants, extend the article-name
 					if ($getArticle["additionaltext"]){

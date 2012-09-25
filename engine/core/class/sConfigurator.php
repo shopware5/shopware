@@ -581,7 +581,7 @@ class sConfigurator
      * @param $fallback
      * @return mixed
      */
-    private function getOptionTranslation($optionId, $fallback)
+    public function getOptionTranslation($optionId, $fallback)
     {
         $sql= "SELECT objectdata
                FROM s_core_translations
@@ -597,7 +597,7 @@ class sConfigurator
         }
     }
 
-    private function getGroupTranslation($groupId, $fallback)
+    public function getGroupTranslation($groupId, $fallback)
     {
         $sql= "SELECT objectdata
                FROM s_core_translations

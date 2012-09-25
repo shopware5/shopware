@@ -487,4 +487,20 @@ class Basket extends ModelEntity
     {
         $this->netPrice = $netPrice;
     }
+
+    /**
+     * @return string
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
+
+    /**
+     * @param string $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
+    }
 }

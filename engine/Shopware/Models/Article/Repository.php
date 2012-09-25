@@ -121,7 +121,15 @@ class Repository extends ModelRepository
         foreach($options as $key => $option) {
             $alias = 'o' . $key;
             $builder->innerJoin('details.configuratorOptions', $alias, \Doctrine\ORM\Query\Expr\Join::WITH, $alias . '.id = :' . $alias);
-            $builder->setParameter($alias, $option->getId());
+
+            //in some cases the options parameter can contains an array of option models, an two dimensional array with option data, or an one dimensional array with ids.
+            if ($option instanceof \Shopware\Models\Article\Configurator\Option) {
+                $builder->setParameter($alias, $option->getId());
+            } else if (is_array($option) && !empty($option['id'])) {
+                $builder->setParameter($alias, $option['id']);
+            } else {
+                $builder->setParameter($alias, $option);
+            }
         }
 
     	return $builder;
