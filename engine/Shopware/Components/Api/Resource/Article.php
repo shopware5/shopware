@@ -141,7 +141,8 @@ class Article extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('article');
+        $builder = $this->getRepository()->createQueryBuilder('article')
+            ->leftJoin('article.mainDetail', 'mainDetail');
 
         $builder->addFilter($criteria)
                 ->addOrderBy($orderBy)
