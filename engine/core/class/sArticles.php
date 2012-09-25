@@ -2617,12 +2617,14 @@ class sArticles
                 if (!empty($getArticle["sBlockPrices"][0])) {
                     $price = str_replace(",", ".", $getArticle["sBlockPrices"][0]["price"]);
                     $tax = 0;
+
+                    $basePrice = $this->sCalculatingPriceNum($price, $tax, false,true,$getArticle["taxID"],false, $getArticle);
                 } else {
                     $price = $getArticle["price"];
                     $tax = $getArticle["tax"];
-                }
 
-                $basePrice = $this->sCalculatingPriceNum($price, $tax, false,false,$getArticle["taxID"],false, $getArticle);
+                    $basePrice = $this->sCalculatingPriceNum($price, $tax, false,false,$getArticle["taxID"],false, $getArticle);
+                }
 
                 $basePrice = $basePrice / $getArticle["purchaseunit"] * $getArticle["referenceunit"];
                 $basePrice = $this->sFormatPrice($basePrice);
