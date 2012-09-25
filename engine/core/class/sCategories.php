@@ -261,12 +261,13 @@ class sCategories
      */
     public function sGetCategoryContent($id)
     {
-        if($id === null) {
+        if ($id === null) {
             $id = $this->baseId;
         }
         $category = $this->repository
             ->getActiveByIdQuery($id, $this->customerGroupId)
             ->getArrayResult();
+
         $category = $category[0];
 
         $detailUrl = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
@@ -286,10 +287,15 @@ class sCategories
             'atomFeed' => $detailUrl . '&sAtom=1',
         ));
 
-        if(empty($category['template'])){
+        if (empty($category['template'])) {
+            $category['template'] = Shopware()->Config()->get('categoryDefaultTpl');
+        }
+
+        if (empty($category['template'])) {
             $category['template'] = 'article_listing_3col.tpl';
         }
-        if(preg_match('#article_listing_([1-4]col).tpl#', $category['template'], $match))  {
+
+        if (preg_match('#article_listing_([1-4]col).tpl#', $category['template'], $match)) {
             $category['layout'] = $match[1];
         }
 
