@@ -130,7 +130,7 @@ class Shopware_Components_Translation
             }
         }
         foreach($tmp as $tmpKey => $value) {
-            if(empty($value)) {
+            if (strlen(trim($value)) == 0) {
                 unset($tmp[$tmpKey]);
             }
         }

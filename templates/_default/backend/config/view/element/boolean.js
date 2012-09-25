@@ -30,8 +30,8 @@ Ext.define('Shopware.apps.Config.view.element.Boolean', {
         'widget.config-element-boolean',
         'widget.config-element-checkbox'
     ],
-    inputValue: true,
-    uncheckedValue:false,
+    inputValue: 1,
+    uncheckedValue: 0,
 
     initComponent: function () {
         var me = this;
