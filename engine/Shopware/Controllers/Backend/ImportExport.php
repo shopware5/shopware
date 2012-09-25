@@ -1798,14 +1798,18 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $categoryModel->fromArray($updateData);
 
+        // find a neighbour with less/equal position value
         if($categoryModel->getPosition() > 0) {
             $sql = "SELECT id FROM s_categories c WHERE parent=? AND `position` <=? ORDER BY `position` DESC LIMIT 1";
-            $previousId = Shopware()->Db()->fetchOne($sql, array($parent->getId(), $categoryModel->getPosition()));
+            $previousId = (int) Shopware()->Db()->fetchOne($sql, array($parent->getId(), $categoryModel->getPosition()));
         }
-        if(empty($previousId)){
+
+        // Use special persister in order to force position to be stored
+        if(!empty($previousId)){
             /** @var $previous \Shopware\Models\Category\Category */
             $previous = $categoryRepository->find($previousId);
             $categoryRepository->persistAsNextSiblingOf($categoryModel, $previous);
+        // Else set current model as first child of its parent
         } else {
             /** @var $parent \Shopware\Models\Category\Category */
             $categoryRepository->persistAsFirstChildOf($categoryModel, $parent);
