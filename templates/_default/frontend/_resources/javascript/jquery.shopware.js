@@ -726,7 +726,7 @@ jQuery(document).ready(function ($) {
             'maxPages': 0,
             'extraParams': {},
             'swipeRunning': false,
-            'showArrows': false,
+            'showArrows': true,
 
             // Private
             '_this': null,
@@ -3379,6 +3379,7 @@ jQuery.fn.liveSearch = function (conf) {
             'navigation': false,
             'scrollSpeed': 800,
             'rotate': false,
+            'showArrows': true,
             'width': 630,
             'height': 210,
             'scrollWidth': 578,
