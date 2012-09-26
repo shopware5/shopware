@@ -1415,7 +1415,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             if (!$type) {
                 echo json_encode(array(
                     'success' => false,
-                    'message' => "No Importtype given",
+                    'message' => "No Importtype given. This might result from 'post_max_size' not being big enough in your php.ini.",
                 ));
                 return;
             }
