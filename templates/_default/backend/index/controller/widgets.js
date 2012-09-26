@@ -153,10 +153,18 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                         var name = item.get('name');
                         me.terminateStore(name);
                     });
+                    me.loadNeccessaryStores();
                 } else {
                     me.allStoresLoaded();
                 }
             }
+        });
+    },
+
+    loadNeccessaryStores: function() {
+        var me = this;
+        Ext.each(me.necessaryStores, function(item) {
+            item.store.load();
         });
     },
 
@@ -173,19 +181,23 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
         switch(name) {
             case 'swag-sales-widget':
-                store = me.getStore('Turnover').load({ scope: me, callback: me.storeLoaded });
+                store = me.getStore('Turnover');
+                store.on('load', me.storeLoaded, me, { single: true });
                 me.necessaryStores.push({ name: 'turnoverStore', store: store });
                 break;
             case 'swag-visitors-customers-widget':
-                store = me.getStore('Visitors').load({ scope: me, callback: me.storeLoaded });
+                store = me.getStore('Visitors');
+                store.on('load', me.storeLoaded, me, { single: true });
                 me.necessaryStores.push({ name: 'visitorsStore', store: store });
                 break;
             case 'swag-last-orders-widget':
-                store = me.getStore('Orders').load({ scope: me, callback: me.storeLoaded });
+                store = me.getStore('Orders');
+                store.on('load', me.storeLoaded, me, { single: true });
                 me.necessaryStores.push({ name: 'ordersStore', store: store });
                 break;
             case 'swag-merchant-widget':
-                store = me.getStore('Merchant').load({ scope: me, callback: me.storeLoaded });
+                store = me.getStore('Merchant');
+                store.on('load', me.storeLoaded, me, { single: true });
                 me.necessaryStores.push({ name: 'merchantStore', store: store });
                 break;
             case 'swag-notice-widget':
