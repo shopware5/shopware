@@ -9,7 +9,7 @@
     </requirement>
     <requirement>
         <name>eAccelerator</name><group>core</group><required>0</required>
-        <notice>Using the eAccelerator is not recommended. Please use instead the APC cache.</notice>
+        <notice>Using the eAccelerator is not recommended. Please use the APC cache instead.</notice>
     </requirement>
     <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>

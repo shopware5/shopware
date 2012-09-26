@@ -161,9 +161,8 @@ class Shopware_Install_Database
                 $key = $mapping[$key];
             }
 
-            $config['db'][$key] = $parameter;
+            $config['db'][$key] = trim($parameter);
         }
-
         try {
             $template = '<?php return ' . var_export($config, true) . ';';
             if (!file_put_contents($databaseConfigFile, $template)){
