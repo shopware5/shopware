@@ -149,7 +149,7 @@ class Shopware_Install_Configuration
         empty($params["c_config_admin_language"]) ||
         empty($params["c_config_admin_password"]) ||
         empty($params["c_config_admin_password2"]) ||
-        $params["c_config_admin_password"] != $params["c_config_admin_password"]
+        $params["c_config_admin_password"] != $params["c_config_admin_password2"]
         ){
             $this->setError("Please fill in all required fields. (admin user)");
             return false;
