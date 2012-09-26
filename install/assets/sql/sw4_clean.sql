@@ -8624,3 +8624,6 @@ INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALU
 INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
 INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
 INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
+
+-- 10-remove-old-static-link-in-clean-install
+DELETE FROM `s_cms_static` WHERE `link` LIKE '%sViewport=content%';
