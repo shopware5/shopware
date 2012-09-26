@@ -2318,9 +2318,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
                     $configuratorSet = $result->getConfiguratorSet();
                     if($configuratorSet !== null) {
+                        $configuratorSet->getOptions()->clear();
                         $articleRepository = $this->getArticleRepository();
                         $ids = $articleRepository->getArticleConfiguratorSetOptionIds($result->getId());
-
                         if(!empty($ids)) {
                             $configuratorOptionRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Configurator\Option');
                             $optionModels = $configuratorOptionRepository->findBy(array("id" => $ids));
