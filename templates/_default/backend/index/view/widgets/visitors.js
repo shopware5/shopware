@@ -114,9 +114,19 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
     refreshView: function() {
         var me = this;
         me.gridPanel.setLoading(true);
+
+        if(!me.visitorsStore) {
+            return false;
+        }
+
         me.visitorsStore.load({
             callback: function() {
                 var stores = me.visitorsStore.first();
+
+                if(!stores || !stores.getCustomersStore || !stores.getVisitorsStore)  {
+                    return false;
+                }
+
                 me.gridPanel.reconfigure(stores.getCustomersStore);
                 me.chart.bindStore(stores.getVisitorsStore);
                 me.dataView.update([{

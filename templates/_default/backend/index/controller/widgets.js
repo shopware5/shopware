@@ -75,6 +75,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     loadedStores: 0,
 
     /**
+     * Indicates that all stores are loaded.
+     * @boolean
+     */
+    fullyLoaded: false,
+
+    /**
      * Snippets for the widget controller.
      * @object
      */
@@ -221,13 +227,16 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             subApplication: me.subApplication
         };
 
-        Ext.each(me.necessaryStores, function(store) {
-            config[store.name] = store.store;
-        });
-        me.widgetHolder = me.getView('widgets.Desktop').create(config);
-        me.isViewportRendered = true;
+        if(!me.fullyLoaded) {
+            Ext.each(me.necessaryStores, function(store) {
+                config[store.name] = store.store;
+            });
+            me.widgetHolder = me.getView('widgets.Desktop').create(config);
+            me.isViewportRendered = true;
 
-        desktop.add(me.widgetHolder);
+            desktop.add(me.widgetHolder);
+            me.fullyLoaded = true;
+        }
     },
 
     /**
@@ -292,8 +301,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 column: column,
                 position: row,
                 id: interalId
-            },
-            success: function(response) {
             }
         });
     },
