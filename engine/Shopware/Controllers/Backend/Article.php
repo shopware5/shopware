@@ -554,11 +554,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ));
         }
         catch (Exception $e) {
-            echo "<pre>";
-            print_r($e);
-            echo "</pre>";
-            exit();
-
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
