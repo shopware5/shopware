@@ -2530,7 +2530,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         unset($articleData['attributegroupID']);
         unset($articleData['attributevalues']);
 
-        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations'));
+        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'baseprice', 'pseudoprice'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
 
         if (!empty($articleData['categorypaths'])) {
@@ -2547,11 +2547,21 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $updateData['tax'] = 19;
         }
 
-        if (!empty($articleData['price'])) {
-            $detailData['prices'] = array(array(
-                'price' => $articleData['price'],
-            ));
+        $prices = array(
+            'price' => 'price',
+            'baseprice' => 'basePrice',
+            'pseudoprice' => 'pseudoPrice'
+        );
+        $detailData['prices'] = array();
+        foreach($prices as $priceKey => $mappedName) {
+            if(!empty($articleData[$priceKey])) {
+                $detailData['prices'][0][$mappedName] = $articleData[$priceKey];
+            }
         }
+        if(empty($detailData['prices'])) {
+            unset($detailData['prices']);
+        }
+
 
         if (!empty($articleData['propertyValues'])) {
             $propertyValues = explode('|', $articleData['propertyValues']);
