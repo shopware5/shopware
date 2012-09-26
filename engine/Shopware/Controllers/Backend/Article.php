@@ -1805,6 +1805,26 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         );
     }
 
+    private function setDetailDataReferences($detailData, $article) {
+        foreach($detailData['prices'] as &$price) {
+            $price['article'] = $article;
+            unset($price['id']);
+            $price['customerGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\Group', $price['customerGroup']['id']);
+        }
+        if ($detailData['unitId']) {
+            $detailData['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $detailData['unitId']);
+        }
+
+        if (!empty($detailData['attribute'])) {
+            unset($detailData['attribute']['id']);
+            unset($detailData['attribute']['articleId']);
+            unset($detailData['attribute']['articleDetailId']);
+            unset($detailData['attribute']['articleDetail']);
+            $detailData['attribute']['article'] = $article;
+        }
+        return $detailData;
+    }
+
     /**
      * Called when the user clicks the "generateVariants" button in the article backend module.
      * The function expects that an article id passed and an array with active groups passed.
@@ -1830,11 +1850,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $detailData = $this->getDetailDataForVariantGeneration($article);
 
-            if ($offset === 0 && $mergeType === 1) {
+            if ($offset === 0 && $mergeType == 1) {
                 $this->removeAllConfiguratorVariants($articleId);
-            } else if ($offset === 0 && $mergeType === 2) {
+            } else if ($offset === 0 && $mergeType == 2) {
                 $this->deleteVariantsForAllDeactivatedOptions($article, $generatorData['allOptions']);
             }
+
+            Shopware()->Models()->clear();
+            $article = $this->getRepository()->find($articleId);
+            $detailData = $this->setDetailDataReferences($detailData, $article);
 
             $configuratorSet = $article->getConfiguratorSet();
             $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
@@ -1848,42 +1872,41 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $originals = $generatorData['originals'];
             $variants = Shopware()->Db()->fetchAll($sql);
 
+            $counter = 1;
             if ($mergeType === 1) {
                 $counter = $offset;
-            } else {
-                $sql= "SELECT COUNT(id) FROM s_articles_details WHERE articleID = ?";
-                $counter = Shopware()->Db()->fetchOne($sql, array($articleId));
-                $counter++;
             }
             $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
+
             //iterate all selected variants to insert them into the database
             foreach($variants as $variant) {
                 $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType);
                 if ($variantData === false) {
                     continue;
                 }
+
                 //merge the data with the original main detail data
                 $data = array_merge($detailData, $variantData);
-                if(!$counter) {
+
+                //use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
+                if ($offset === 0 && $mergeType === 1) {
                     $detail = $article->getMainDetail();
                 } else {
                     $detail = new \Shopware\Models\Article\Detail();
+                    Shopware()->Models()->persist($detail);
                 }
+
                 $detail->fromArray($data);
                 $detail->setArticle($article);
-                Shopware()->Models()->persist($detail);
-                $counter++;
+                $offset++;
             }
 
-            $tmp = $this->getArticle($articleId);
-            if (empty($tmp[0]['mainDetail'])) {
+            Shopware()->Models()->flush();
+
+            //check if the main detail variant was deleted
+            if ($article->getMainDetail() === null) {
                 $newMainDetail = $this->getArticleDetailRepository()->findOneBy(array('articleId' => $articleId));
                 $article->setMainDetail($newMainDetail);
-                if ($newMainDetail->getAttribute()) {
-                    $article->setAttribute($newMainDetail->getAttribute());
-                } else {
-                    $article->setAttribute(null);
-                }
             }
 
             Shopware()->Models()->flush();
@@ -1902,6 +1925,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
+
     /**
      * Internal helper function to remove all article variants for the deselected options.
      * @param \Shopware\Models\Article\Article $article
@@ -1912,7 +1936,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $configuratorSet = $article->getConfiguratorSet();
         $oldOptions = $configuratorSet->getOptions();
-
+        $ids = array();
         /**@var $oldOption \Shopware\Models\Article\Configurator\Option*/
         foreach($oldOptions as $oldOption) {
             if (!array_key_exists($oldOption->getId(), $selectedOptions)) {
@@ -1921,14 +1945,29 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                                 ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
                                 ->getResult();
 
-                /**@var $detail \Shopware\Models\Article\Detail*/
-                foreach($details as $detail) {
-                    Shopware()->Models()->remove($detail);
+                if (!empty($details)) {
+                    /**@var $detail \Shopware\Models\Article\Detail*/
+                    foreach($details as $detail) {
+                        if ($detail->getKind() === 1) {
+                            $article->setMainDetail(null);
+                        }
+                        $ids[] = $detail->getId();
+                        Shopware()->Models()->remove($detail);
+                    }
+                    Shopware()->Models()->flush();
                 }
-
-                Shopware()->Models()->flush();
             }
         }
+
+        if (!empty($ids)) {
+            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
+                    ->where('attribute.articleDetailId IN (:articleDetailIds)')
+                    ->setParameters(array('articleDetailIds' => $ids))
+                    ->getQuery()
+                    ->execute();
+        }
+
     }
 
 
@@ -1953,7 +1992,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @return array|bool
      */
-    protected function prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType) {
+    protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType) {
         $name = '';
         $optionsModels= array();
         $tax = $article->getTax();
@@ -2005,9 +2044,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             'configuratorOptions' => $optionsModels
         );
 
-        if($counter) {
-            $variantData['kind'] = 2;
-            $variantData['number'] = $detailData['number'] . '.' . $counter;
+
+        if ($mergeType == 1 && $counter == 0) {
+            $variantData['number'] = $detailData['number'];
+            $counter++;
+        } else {
+            do {
+                $variantData['kind'] = 2;
+                $variantData['number'] = $detailData['number'] . '.' . $counter;
+                $counter++;
+            } while($this->orderNumberExist($variantData['number']));
         }
 
         //we have to check the defined price surcharges for the article configurator set,
@@ -2036,6 +2082,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $variantData;
+    }
+
+    private function orderNumberExist($number)
+    {
+        $detail = $this->getArticleDetailRepository()->findOneBy(array(
+            'number' => $number
+        ));
+
+        return !empty($detail);
     }
 
     protected function getDependencyByOptionId($optionId, $dependencies) {
@@ -2079,18 +2134,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                               ->getQuery()
                               ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach($detailData['prices'] as &$price) {
-            $price['article'] = $article;
-            unset($price['id']);
-            $price['customerGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\Group', $price['customerGroup']['id']);
-        }
-        if ($detailData['unitId']) {
-            $detailData['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $detailData['unitId']);
-        }
-
-        if (!empty($detailData['attribute'])) {
-            $detailData['attribute']['article'] = $article;
-        }
         return $detailData;
     }
 
