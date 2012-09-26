@@ -13,7 +13,7 @@ require 'assets/php/Shopware_Install_Configuration.php';
 // Initiate slim
 $app = new Slim();
 
-$app->add(new Slim_Middleware_SessionCookie());
+//$app->add(new Slim_Middleware_SessionCookie());
 
 if (!isset($_SESSION)) {
     session_start();
