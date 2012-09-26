@@ -218,3 +218,94 @@ DELETE FROM `s_core_menu` WHERE `name` = 'Proxy/Model-Cache';
 DELETE FROM `s_core_menu` WHERE `name` = 'Konfiguration';
 UPDATE `s_core_menu` SET `name` = 'Konfiguration + Template', `action` = 'Config', `shortcut` = 'STRG + ALT + X'  WHERE `name` = 'Textbausteine + Template';
 UPDATE `s_core_menu` SET `action` = 'Frontend', `shortcut` = 'STRG + ALT + F' WHERE `name` = 'Artikel + Kategorien';
+
+-- 1-fix-some-table-layouts.sql
+DROP TABLE IF EXISTS `s_core_plugin_configs`, `s_core_plugin_elements`, `s_core_engine_queries`, `s_core_licences`, `s_plugin_benchmark_log`;
+ALTER TABLE `s_filter_articles` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE `s_order_history` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE `s_plugin_widgets_notes` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+-- 2-fix-broken-unicode-strings.sql
+UPDATE `s_core_config_elements` SET `value` = 's:375:"ab,die,der,und,in,zu,den,das,nicht,von,sie,ist,des,sich,mit,dem,dass,er,es,ein,ich,auf,so,eine,auch,als,an,nach,wie,im,für,einen,um,werden,mehr,zum,aus,ihrem,style,oder,neue,spieler,können,wird,sind,ihre,einem,of,du,sind,einer,über,alle,neuen,bei,durch,kann,hat,nur,noch,zur,gegen,bis,aber,haben,vor,seine,ihren,jetzt,ihr,dir,etc,bzw,nach,deine,the,warum,machen,0,sowie,am";' WHERE `name` LIKE 'badwords';
+
+-- 3-increase-mail-context-size.sql
+ALTER TABLE `s_core_config_mails` CHANGE `context` `context` LONGTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+
+-- 4-add-index-to-search-statistics.sql
+DROP TABLE IF EXISTS s_statistics_search_backup;
+CREATE TABLE IF NOT EXISTS `s_statistics_search_new` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datum` datetime NOT NULL,
+  `searchterm` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `results` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `searchterm` (`searchterm`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+RENAME TABLE s_statistics_search TO s_statistics_search_backup;
+INSERT INTO s_statistics_search_new
+(SELECT * FROM s_statistics_search_backup);
+RENAME TABLE s_statistics_search_new TO s_statistics_search;
+DROP TABLE s_statistics_search_backup;
+
+-- 5-update-plugin-description.sql
+UPDATE `s_core_plugins` set description = REPLACE(description, 'als einziger BaFin-zertifizierter', 'als BaFin-zertifizierter') WHERE name LIKE "HeidelPayment" OR name LIKE "HeidelActions";
+
+-- 6-fix-configurator-table-layout.sql
+CREATE TABLE IF NOT EXISTS `new_s_article_configurator_options` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) unsigned DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id` (`group_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_article_configurator_options` (`id`, `group_id`, `name`, `position`)
+SELECT `id`, `group_id`, `name`, `position` FROM `s_article_configurator_options`;
+DROP TABLE IF EXISTS `s_article_configurator_options`;
+RENAME TABLE `new_s_article_configurator_options` TO `s_article_configurator_options`;
+
+ALTER TABLE `s_article_configurator_sets` DROP INDEX `name`,
+ADD UNIQUE `name` ( `name` );
+
+CREATE TABLE IF NOT EXISTS `new_s_article_configurator_set_group_relations` (
+  `set_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `group_id` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`set_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_article_configurator_set_group_relations` (`set_id`, `group_id`)
+SELECT `set_id`, `group_id` FROM `s_article_configurator_set_group_relations`;
+DROP TABLE IF EXISTS `s_article_configurator_set_group_relations`;
+RENAME TABLE `new_s_article_configurator_set_group_relations` TO `s_article_configurator_set_group_relations`;
+
+CREATE TABLE IF NOT EXISTS `new_s_article_configurator_set_option_relations` (
+  `set_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `option_id` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`set_id`,`option_id`)
+) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_article_configurator_set_option_relations` (`set_id`, `option_id`)
+SELECT `set_id`, `option_id` FROM `s_article_configurator_set_option_relations`;
+DROP TABLE IF EXISTS `s_article_configurator_set_option_relations`;
+RENAME TABLE `new_s_article_configurator_set_option_relations` TO `s_article_configurator_set_option_relations`;
+
+-- 7-remove-unused-config-elements.sql
+DELETE FROM `s_core_config_elements`
+WHERE `name` IN ('revision', 'version');
+
+UPDATE `s_core_config_elements` SET value = 'i:8;', `type` = 'number' WHERE name = 'chartrange';
+UPDATE `s_core_config_elements` SET value = 's:8:"51,51,51";' WHERE name = 'captchaColor';
+UPDATE `s_core_config_elements` SET value = 's:15:"Shopware 4 Demo";' WHERE name = 'shopName';
+DELETE FROM `s_core_config_values` WHERE id < 56;
+
+-- 8-change-decimal-precision-of-purchaseunit.sql
+ALTER TABLE `s_articles_details` CHANGE `purchaseunit` `purchaseunit` DECIMAL( 11, 4 ) UNSIGNED NULL DEFAULT NULL;
+
+-- 9-add-snippets-for-frontend-order-item.sql
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoCompleted', 'Komplett abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoPartiallyCompleted', 'Teilweise abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoClarificationNeeded', 'Klärung notwendig');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoReadyForShipping', 'Zur Lieferung bereit');
+
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoCompleted', 'Completed');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
+INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
