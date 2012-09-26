@@ -80,7 +80,6 @@ UPDATE `s_core_config_elements` SET `value` = 's:2773:"antibot;appie;architext;b
 
 -- 11-add-show-listing-option.sql
 DROP TABLE IF EXISTS s_emotion_backup;
-
 CREATE TABLE IF NOT EXISTS `s_emotion_new` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `active` int(1) NOT NULL,
@@ -104,13 +103,11 @@ CREATE TABLE IF NOT EXISTS `s_emotion_new` (
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
-
 RENAME TABLE s_emotion TO s_emotion_backup;
-INSERT INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
-(SELECT * FROM s_emotion_backup);
+INSERT IGNORE INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
+SELECT `id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified` FROM s_emotion_backup;
 RENAME TABLE s_emotion_new TO s_emotion;
 DROP TABLE s_emotion_backup;
-
 
 -- 12-fix-vat-service-label.sql
 UPDATE `s_core_config_elements`
@@ -263,9 +260,6 @@ INSERT IGNORE INTO `new_s_article_configurator_options` (`id`, `group_id`, `name
 SELECT `id`, `group_id`, `name`, `position` FROM `s_article_configurator_options`;
 DROP TABLE IF EXISTS `s_article_configurator_options`;
 RENAME TABLE `new_s_article_configurator_options` TO `s_article_configurator_options`;
-
-ALTER TABLE `s_article_configurator_sets` DROP INDEX `name`,
-ADD UNIQUE `name` ( `name` );
 
 CREATE TABLE IF NOT EXISTS `new_s_article_configurator_set_group_relations` (
   `set_id` int(11) unsigned NOT NULL DEFAULT '0',

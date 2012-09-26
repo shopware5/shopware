@@ -13,9 +13,6 @@ SELECT `id`, `group_id`, `name`, `position` FROM `s_article_configurator_options
 DROP TABLE IF EXISTS `s_article_configurator_options`;
 RENAME TABLE `new_s_article_configurator_options` TO `s_article_configurator_options`;
 
-ALTER TABLE `s_article_configurator_sets` DROP INDEX `name`,
-ADD UNIQUE `name` ( `name` );
-
 CREATE TABLE IF NOT EXISTS `new_s_article_configurator_set_group_relations` (
   `set_id` int(11) unsigned NOT NULL DEFAULT '0',
   `group_id` int(11) unsigned NOT NULL DEFAULT '0',
