@@ -294,12 +294,12 @@ DELETE FROM `s_core_config_values` WHERE id < 56;
 ALTER TABLE `s_articles_details` CHANGE `purchaseunit` `purchaseunit` DECIMAL( 11, 4 ) UNSIGNED NULL DEFAULT NULL;
 
 -- 9-add-snippets-for-frontend-order-item.sql
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoCompleted', 'Komplett abgeschlossen');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoPartiallyCompleted', 'Teilweise abgeschlossen');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoClarificationNeeded', 'Klärung notwendig');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoReadyForShipping', 'Zur Lieferung bereit');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoCompleted', 'Komplett abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoPartiallyCompleted', 'Teilweise abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoClarificationNeeded', 'Klärung notwendig');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoReadyForShipping', 'Zur Lieferung bereit');
 
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoCompleted', 'Completed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoCompleted', 'Completed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
