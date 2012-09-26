@@ -554,6 +554,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ));
         }
         catch (Exception $e) {
+            echo "<pre>";
+            print_r($e);
+            echo "</pre>";
+            exit();
+
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
@@ -866,14 +871,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $newSetId = Shopware()->Db()->lastInsertId('s_article_configurator_sets');
 
         $sql= "INSERT INTO s_article_configurator_set_group_relations
-                SELECT NULL, ?, group_id
+                SELECT ?, group_id
                 FROM s_article_configurator_set_group_relations as source
                 WHERE source.set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
 
         $sql= "INSERT INTO s_article_configurator_set_option_relations
-                SELECT NULL, ?, option_id
+                SELECT ?, option_id
                 FROM s_article_configurator_set_option_relations as source
                 WHERE source.set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
