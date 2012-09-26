@@ -439,9 +439,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         if ($exportArticleTranslations) {
             $sql = '
-                SELECT DISTINCT isocode
-                FROM s_core_multilanguage
-                WHERE skipbackend=0
+                 SELECT id
+                FROM s_core_shops
+                WHERE `default`=0
             ';
 
             $languages = Shopware()->Db()->fetchCol($sql);
@@ -656,7 +656,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             LIMIT {$offset},{$limit}
         ";
-
+        
         $stmt = Shopware()->Db()->query($sql);
 
         if ($format === 'csv') {
