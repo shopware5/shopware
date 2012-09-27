@@ -342,7 +342,9 @@ class Mail extends ModelEntity
      */
     public function isHtml()
     {
-        return (boolean) $this->getTranslated('contentHtml');
+        // Checking for contentHtml will result in HTML mails being sent, even if isHTML is false.
+        // So just return isHtml here again.
+        return $this->isHtml;
     }
 
     /**
