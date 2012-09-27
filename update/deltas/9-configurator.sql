@@ -7,7 +7,7 @@ AND v.standard = 1;
 
 INSERT IGNORE INTO `s_articles_details` (`articleID`, `ordernumber`, `kind`, `active`, `instock`)
 SELECT `articleID`, `ordernumber`, IF(`standard` = 1, 1, 2) as `kind`, `active`, `instock`
-FROM `backup_s_articles_groups_value;
+FROM backup_s_articles_groups_value;
 
 INSERT IGNORE INTO `s_article_configurator_sets` (`name`, `public`, `type`)
 SELECT CONCAT('Set-', d.ordernumber) as name, 0 as public, IFNULL(s.type, 1) as type

@@ -31,7 +31,7 @@ SELECT
   'IMAGE' as `type`, SUBSTRING_INDEX(filename, '.', -1) as `extension`,
   size as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_articles_downloads
-WHERE filename LIKE 'media/image/%');
+WHERE filename LIKE 'media/image/%';
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
@@ -40,7 +40,7 @@ SELECT
   'UNKNOWN' as `type`, SUBSTRING_INDEX(filename, '.', -1) as `extension`,
   size as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_articles_downloads
-WHERE filename LIKE 'media/unknown/%');
+WHERE filename LIKE 'media/unknown/%';
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT

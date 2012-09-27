@@ -33,6 +33,7 @@ SELECT id,
 FROM `backup_s_order_basket`;
 
 INSERT INTO s_order_billingaddress_attributes (billingID, text1, text2, text3, text4, text5, text6)
+SELECT id,
   IF(text1='', NULL, text1),
   IF(text2='', NULL, text2),
   IF(text3='', NULL, text3),
@@ -42,6 +43,7 @@ INSERT INTO s_order_billingaddress_attributes (billingID, text1, text2, text3, t
 FROM `backup_s_order_billingaddress`;
 
 INSERT INTO s_order_shippingaddress_attributes (shippingID, text1, text2, text3, text4, text5, text6)
+SELECT id,
   IF(text1='', NULL, text1),
   IF(text2='', NULL, text2),
   IF(text3='', NULL, text3),

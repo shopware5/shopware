@@ -1,5 +1,5 @@
 <?php
-class	Shopware_Components_Db_Import_Sql extends Shopware_Components_Db_Import_Abstract
+class Shopware_Components_DbImport_Sql extends Shopware_Components_DbImport_Abstract
 {
 	protected $length = 65535;
 		

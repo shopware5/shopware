@@ -5,10 +5,13 @@ AND d.kind = 1;
 
 INSERT IGNORE INTO `s_article_configurator_sets` (`name`, `public`, `type`)
 SELECT CONCAT('Set-', d.ordernumber) as name, 0 as public, 0 as type
-FROM s_articles_details d, s_articles_details v
+FROM s_articles_details v, s_articles_details d
+LEFT JOIN s_article_configurator_sets s
+ON s.name = CONCAT('Set-', d.ordernumber)
 WHERE d.kind = 1
 AND v.articleID = d.articleID
 AND v.kind = 2
+AND s.id IS NULL
 GROUP BY d.id;
 
 UPDATE s_articles a, s_articles_details d, s_article_configurator_sets s

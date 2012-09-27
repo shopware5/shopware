@@ -44,8 +44,8 @@ UPDATE s_core_multilanguage m
 SET m.isocode=m.id;
 
 UPDATE `s_core_shops` SET `default` = IF(`id`=1, 1, 0);
-SET @value = (SELECT `value` FROM `s_core_config` WHERE `name` LIKE 'sHOST');
+SET @value = (SELECT `value` FROM `backup_s_core_config` WHERE `name` LIKE 'sHOST');
 UPDATE `s_core_shops` SET `host` = TRIM(@value) WHERE `default`=1;
-SET @value = (SELECT REPLACE(`value`, @value, '') FROM `s_core_config` WHERE `name` LIKE 'sBASEPATH');
+SET @value = (SELECT REPLACE(`value`, @value, '') FROM `backup_s_core_config` WHERE `name` LIKE 'sBASEPATH');
 UPDATE `s_core_shops` SET `base_path` = TRIM(@value) WHERE `base_path` IS NULL AND `main_id` IS NULL;
 UPDATE `s_core_shops` SET `base_path` = NULL WHERE `base_path` = '';

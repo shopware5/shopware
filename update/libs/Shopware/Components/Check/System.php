@@ -11,26 +11,25 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public function getList()
     {
         if ($this->list === null) {
-            $xml_object = simplexml_load_file(dirname(__FILE__) . '/System.xml');
-            if (is_object($xml_object->requirement)) {
-                $this->list = array();
-                foreach ($xml_object->requirement as $requirement) {
-                    $name = (string)$requirement->name;
-                    $version = $this->check($name);
-                    $this->list[] = new ArrayObject(array(
-                        'name' => $name,
-                        'version' => $version,
-                        'required' => (string)$requirement->required,
-                        'group' => (string)$requirement->group,
-                        'notice' => (string)$requirement->notice,
-                        'error' => false,
-                        'result' => $this->compare(
-                            $name,
-                            $version,
-                            (string)$requirement->required
-                        ),
-                    ), ArrayObject::ARRAY_AS_PROPS);
-                }
+            $list = simplexml_load_file(dirname(__FILE__) . '/System.xml');
+            $this->list = array();
+            if(!empty($list->requirement))
+            foreach ($list->requirement as $requirement) {
+                $name = (string)$requirement->name;
+                $version = $this->check($name);
+                $this->list[] = new ArrayObject(array(
+                    'name' => $name,
+                    'version' => $version,
+                    'required' => (string)$requirement->required,
+                    'group' => (string)$requirement->group,
+                    'notice' => (string)$requirement->notice,
+                    'error' => false,
+                    'result' => $this->compare(
+                        $name,
+                        $version,
+                        (string)$requirement->required
+                    ),
+                ), ArrayObject::ARRAY_AS_PROPS);
             }
         }
         return $this->list;
