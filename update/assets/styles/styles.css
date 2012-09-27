@@ -211,6 +211,7 @@ header ul.navi-tabs li.disabled {
 }
 .actions .right {
     float: right;
+    margin-right: 5px;
 }
 table.table .success, table.table .success *:not(i) { background: #DFF0D8 !important; color: #468847; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
 table.table .error, table.table .error *:not(i) { background: #F2DEDE !important; color: #B94A48; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);}
@@ -289,4 +290,17 @@ input.inline-success:focus {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #7ABA7B;
 
     border-color: #356635;
+}
+.page-header {
+    position: relative;
+}
+.page-header i {
+    left: 0;
+    position: absolute;
+    top: 10px;
+}
+.page-header h2 {
+    -moz-user-select: none;
+    padding-left: 20px;
+    cursor:pointer;
 }

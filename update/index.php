@@ -37,22 +37,22 @@ set_include_path(
 );
 
 // Check active shopware 4 installation
-if (file_exists('cache/templates/compile/')) {
-    header('Content-type: text/html; charset=utf-8', true, 503);
-    echo "<h4>Der Installer wurde bereits ausgeführt</h4>";
-    echo "<p>Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!</p>";
-    echo "<h4>The installation process has already been finished.</h4>";
-    echo "<p> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!</p>";
-    exit;
-}
+//if (file_exists('../cache/templates/compile/')) {
+//    header('Content-type: text/html; charset=utf-8', true, 503);
+//    echo "<h4>Der Installer wurde bereits ausgeführt</h4>";
+//    echo "<p>Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!</p>";
+//    echo "<h4>The installation process has already been finished.</h4>";
+//    echo "<p> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!</p>";
+//    exit;
+//}
 
 // Check the minimum required php version
 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3.2';
     echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
     return;
 }
 

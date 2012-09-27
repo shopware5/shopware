@@ -81,7 +81,13 @@
 
     });
 
+    $.removeLoading = function() {
+        $('.loading-mask').remove();
+        $('.overlay').remove();
+    };
+
     $.loading = function(text) {
+        $.removeLoading();
         var loadingDiv = $('<div>', {
             'class': 'loading-mask',
             'html': text
@@ -112,7 +118,7 @@
         loadingDiv.animate({
             opacity: 1
         }, 350);
-    }
+    };
 
     $.checkForm = function(form) {
         var inputs = form.find('input'),
@@ -148,5 +154,5 @@
         });
 
         return success;
-    }
+    };
 })(jQuery);

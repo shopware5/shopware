@@ -1,4 +1,4 @@
-INSERT INTO s_core_snippets
+REPLACE INTO s_core_snippets
 SELECT s.*
 FROM backup_s_core_snippets s
 LEFT JOIN backup_s_core_snippets o
@@ -12,5 +12,4 @@ OR s.namespace LIKE 'newsletter/%')
 AND s.updated > '2011-05-25 00:00:00'
 AND s.value != ''
 AND (o.value IS NULL OR s.id = o.id OR s.value != o.value)
-AND s.value NOT LIKE '%$this->%'
-ON DUPLICATE KEY value=VALUES(value), updated=VALUES(updated);
+AND s.value NOT LIKE '%$this->%';
