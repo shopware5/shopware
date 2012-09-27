@@ -558,7 +558,9 @@ class Article extends Resource
             $allGroups[] = $group;
         }
 
+//        $configuratorSet->getOptions()->clear();
         $configuratorSet->setOptions($allOptions);
+//        $configuratorSet->getGroups()->clear();
         $configuratorSet->setGroups($allGroups);
 
         $data['configuratorSet'] = $configuratorSet;
@@ -960,7 +962,16 @@ class Article extends Resource
                         if(!$option) {
                             throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
                         }
-                        $propertyGroup->addOption($option);
+                        $filters = array(
+                            array('property' => "options.id",'expression' => '=','value' => $option->getId()),
+                            array('property' => "groups.id",'expression' => '=','value' => $propertyGroup->getId()),
+                        );
+                        $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
+                        /** @var \Shopware\Models\Property\Relation $relation  */
+                        $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
+                        if(!$relation) {
+                            $propertyGroup->addOption($option);
+                        }
                     // get/create option depending on associated filtergroups
                     }elseif(isset($valueData['option']['name'])) {
                         // if a name is passed and there is a matching option/group relation, get this option
