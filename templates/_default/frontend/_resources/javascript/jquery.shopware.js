@@ -177,11 +177,14 @@ jQuery(document).ready(function ($) {
 
         var value = $this.prev('input').val();
 
-        if (value.length) {
+        if (value && value.length) {
             $('div#DIV' + value).fadeIn('fast');
             lasthover = $('div#DIV' + value);
         }
     }, function () {
+        if(!lasthover) {
+            return false;
+        }
         lasthover.fadeOut('fast');
         lasthover = '';
     });
