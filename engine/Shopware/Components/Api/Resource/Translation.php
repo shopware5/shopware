@@ -237,7 +237,7 @@ class Translation extends Resource
         foreach($requiredParams as $param){
             if(!$translation) {
                 if(!isset($params[$param]) || empty($params[$param])) {
-                    throw new ApiException\ParameterMissingException();
+                    throw new ApiException\ParameterMissingException($param);
                 }
             }else{
                 if(isset($params[$param]) && empty($params[$param])) {

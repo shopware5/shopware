@@ -37,4 +37,33 @@ namespace Shopware\Components\Api\Exception;
  */
 class ParameterMissingException extends \Enlight_Exception
 {
+    /**
+     * @var null|string
+     */
+    protected $missingParam = null;
+
+    /**
+     * @param string|null $param
+     */
+    public function __construct($param = "") {
+        $this->setMissingParam($param);
+    }
+
+    /**
+     * @param string|null $param
+     */
+    public function setMissingParam($param)
+    {
+        $this->missingParam = $param;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMissingParam()
+    {
+        return $this->missingParam;
+    }
+
+
 }
