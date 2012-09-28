@@ -8,10 +8,24 @@ class Shopware_Install extends Slim
     {
         $config = include 'config.php';
         $config = isset($config['db']) ? $config['db'] : array();
-        $config = array_merge(array('host' => '', 'port' => '', 'password' => ''), $config);
+        $dsn = array();
+        if(isset($config['host'])) {
+            $dsn[] = 'host=' . $config['host'];
+        }
+        if(isset($config['port'])) {
+            $dsn[] = 'port=' . $config['port'];
+        }
+        if(isset($config['unix_socket'])) {
+            $dsn[] = 'unix_socket=' . $config['unix_socket'];
+        }
+        if(isset($config['dbname'])) {
+            $dsn[] = 'dbname=' . $config['dbname'];
+        }
+        $dsn = 'mysql:' . implode(';', $dsn);
         $db = new PDO(
-            "mysql:host={$config['host']};port={$config['port']};dbname=shopware_demo",
-            $config['username'], $config['password']
+            $dsn,
+            isset($config['username']) ? $config['username'] : null,
+            isset($config['password']) ? $config['password'] : null
         );
         $db->exec("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'; SET FOREIGN_KEY_CHECKS = 0;");
         return $db;
@@ -30,6 +44,20 @@ class Shopware_Install extends Slim
         return $db;
     }
 
+    public function initCurrentVersion()
+    {
+        $db = $this->config('db');
+        $sql = "SELECT value FROM s_core_config WHERE name = 'sVERSION'";
+        $query = $db->query($sql);
+        $version = $query ? $query->fetchColumn(0) : '4.0.3';
+        return $version;
+    }
+
+    public function initTranslation()
+    {
+        return include 'assets/translation/' . $this->config('language') .'.php';
+    }
+
     public function __construct($userSettings = array())
     {
         parent::__construct($userSettings);
@@ -39,12 +67,14 @@ class Shopware_Install extends Slim
         $this->contentType('Content-type: text/html; charset=utf-8');
 
         $this->config('db', $this->initDb());
-        $this->config('source', $this->initSource());
+        $this->config('currentVersion', $this->initCurrentVersion());
+        $this->config('updateVersion', self::UPDATE_VERSION);
+        $this->config('language', 'de');
 
         $this->view()->appendData(array(
             'app' => $this,
-            'translation' => include 'assets/translation/de.php',
-            'language' => 'de'
+            'translation' => $this->initTranslation(),
+            'language' => $this->config('language')
         ));
 
         $app = $this;
@@ -63,14 +93,8 @@ class Shopware_Install extends Slim
             ));
         })->via('GET', 'POST')->name('system');
 
-        $this->get('/update', function () use ($app) {
-            $app->render('update.php', array(
-                'app' => $app
-            ));
-        })->via('GET', 'POST')->name('update');
-
-        $this->get('/database', function () use ($app) {
-            $app->render('database.php', array(
+        $this->get('/main', function () use ($app) {
+            $app->render('main.php', array(
                 'action' => 'database',
                 'app' => $app,
                 'error' => false
@@ -83,11 +107,29 @@ class Shopware_Install extends Slim
         $this->get('/updateDatabase', array($this, 'updateDatabaseAction'))
             ->via('GET', 'POST')->name('updateDatabase');
 
-        //Shopware_Components_DbExport_Mysql
+        $this->get('/restoreDatabase', array($this, 'restoreDatabaseAction'))
+            ->via('GET', 'POST')->name('restoreDatabase');
+
+        $this->get('/downloadDatabase', array($this, 'downloadDatabaseAction'))
+            ->via('GET', 'POST')->name('downloadDatabase');
+
+        $this->get('/diffDatabase', array($this, 'diffDatabaseAction'))
+            ->via('GET', 'POST')->name('diffDatabase');
+
+        $this->get('/updateMedia', array($this, 'updateMediaAction'))
+            ->via('GET', 'POST')->name('updateImage');
+
+        $this->get('/finish', function () use ($app) {
+            $app->render('finish.php', array(
+                'action' => 'finish',
+                'app' => $app
+            ));
+        })->via('GET', 'POST')->name('finish');
     }
 
-    public function createUpdateAction()
+    public function diffDatabaseAction()
     {
+        $source = $this->initSource();
         $skipTables = array(
             's_articles_bundles',
             's_articles_bundles_articles',
@@ -101,6 +143,11 @@ class Shopware_Install extends Slim
             's_articles_live_prices',
             's_articles_live_shoprelations',
             's_articles_live_stint',
+            's_ticket_support_history',
+            's_ticket_support_status',
+            's_ticket_support_types',
+            's_plugin_coupons',
+            's_plugin_coupons_codes'
         );
         $backupTables = array(
             's_core_config',
@@ -110,6 +157,7 @@ class Shopware_Install extends Slim
             's_core_plugin_elements',
             's_user_billingaddress',
             's_user_shippingaddress',
+            's_core_multilanguage',
             's_order',
             's_order_details',
             's_order_billingaddress',
@@ -146,11 +194,9 @@ class Shopware_Install extends Slim
         );
         $this->contentType('Content-type: text/plain; charset=utf-8');
         echo "\xEF\xBB\xBF";
-        echo "SET NAMES 'utf8' COLLATE 'utf8_unicode_ci';\n";
-        echo "SET FOREIGN_KEY_CHECKS = 0;\n";
         echo "ALTER DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;\n\n";
         $export = new Shopware_Components_DbDiff_Mysql(
-            $this->config('source'),
+            $source,
             $this->config('db')
         );
         $tables = $export->listTables();
@@ -169,11 +215,13 @@ class Shopware_Install extends Slim
     {
         if(!is_writable('backup/')) {
             echo json_encode(array(
-                'message' => 'Backup dir "update/backup" is not writable!',
+                'message' => 'Das Backup-Verzeichnis "update/backup" beschreibbar!',
                 'success' => false,
             ));
             return;
         }
+
+        set_time_limit(0);
         $skipTables = array(
             's_search_index',
             's_search_keywords',
@@ -181,7 +229,7 @@ class Shopware_Install extends Slim
             's_core_sessions'
         );
         if(($file = $this->request()->post('file')) === null) {
-            $file = 'backup/database_' . date('Y-m-d_H-i-s') . '.php';
+            $file = 'backup/database.php';
         }
         $export = new Shopware_Components_DbExport_Mysql(
             $this->config('db')
@@ -210,24 +258,37 @@ class Shopware_Install extends Slim
         }
 
         echo json_encode(array(
-            'message' => 'test',
-            'success' => false,
+            'message' => 'Datenbank-Backup wurde erfolgreich durchgeführt.',
+            'success' => true,
             'file' => $file
         ));
     }
 
     public function updateDatabaseAction()
     {
+        set_time_limit(0);
         /** @var $db PDO */
         $db = $this->config('db');
-        $deltas = glob('deltas/*-*.sql');
-        natsort($deltas);
+        $version = $this->config('currentVersion');
+        if(!file_exists("deltas/$version.sql")) {
+            echo json_encode(array(
+                'message' => "Das Datenbank-Update unterstützt die Shopware-Version $version nicht.",
+                'success' => true
+            ));
+            return;
+        }
+        $deltas = glob('deltas/*-*.sql'); natsort($deltas);
+        array_unshift($deltas, "deltas/$version.sql");
         foreach($deltas as $delta) {
             $import = new Shopware_Components_DbImport_Sql($delta);
-            foreach($import as $key => $query) {
-                if($db->exec($query) === false) {
+            foreach($import as $query) {
+                if(!empty($query) && $db->exec($query) === false) {
+                    $errorInfo = $db->errorInfo();
+                    $msg = 'Das Datenbank-Update konnte nicht abgeschlossen werden. <br>' .
+                           'Ein Fehler beim Import der Datei " ' . $delta . '" ist aufgetretten. <br>' .
+                           '['. $errorInfo[0] . '] ' . $errorInfo[2];
                     echo json_encode(array(
-                        'message' => 'Query [' . $key . '] in delta "' . $delta. '" could not be executed successfully.',
+                        'message' => $msg,
                         'query' => $query,
                         'success' => false
                     ));
@@ -236,6 +297,117 @@ class Shopware_Install extends Slim
             }
         }
         echo json_encode(array(
+            'message' => 'Das Datenbank-Update wurde erfolgreich durchgeführt.',
+            'success' => true
+        ));
+    }
+
+    public function restoreDatabaseAction()
+    {
+        set_time_limit(0);
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $backup = 'backup/database.php';
+        $import = new Shopware_Components_DbImport_Sql($backup);
+        foreach($import as $query) {
+            if($db->exec($query) === false) {
+                $errorInfo = $db->errorInfo();
+                $msg = 'Die Datenbank-Wiederherstellung konnte nicht abgeschlossen werden. <br>' .
+                       'Ein Fehler beim Import des Backups ist aufgetretten. <br>' .
+                       '['. $errorInfo[0] . '] ' . $errorInfo[2];
+                echo json_encode(array(
+                    'message' => $msg,
+                    'query' => $query,
+                    'success' => false
+                ));
+                return;
+            }
+        }
+        echo json_encode(array(
+            'message' => 'Datenbank wurde erfolgreich wiederhergestellt.',
+            'success' => true
+        ));
+    }
+
+    public function downloadDatabaseAction()
+    {
+        $backup = 'backup/database.php';
+        $fp = fopen($backup, 'r');
+        $size = filesize($backup) - strlen(fgets($fp));
+        $file = basename($backup, '.php') . '.sql';
+        $this->response()->header('Content-Type', 'application/force-download');
+        $this->response()->header('Content-Disposition', 'attachment; filename="' . $file . '";');
+        $this->response()->header('Content-Length', $size);
+        echo stream_get_contents($fp);
+    }
+
+    public function updateMediaAction()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $dirs = array(
+            -1 => array('images/articles/', 'media/image/'),
+            -2 => array('images/banner/', 'media/banner/'),
+            -10 => array('files/downloads/', 'media/unknown/'),
+            -12 => array('images/supplier/', 'media/image/'),
+        );
+        $baseDir = realpath('../') . DIRECTORY_SEPARATOR;
+
+        $testDirs = array();
+        foreach($dirs as $dir) {
+            if(file_exists($baseDir. $dir[0]) && !is_writable($baseDir. $dir[0])) {
+                $testDirs[] = $dir[0];
+            }
+            if(!file_exists($baseDir . $dir[1]) || !is_writable($baseDir. $dir[1])) {
+                $testDirs[] = $dir[1];
+            }
+        }
+        if(!empty($testDirs)) {
+            $msg = 'Bilder konnten nicht übernommen werden.<br>' .
+                   'Folgende Verzeichnisse sind nicht beschreibar:<br><br>';
+            $msg .= implode('<br>', $testDirs);
+            echo json_encode(array(
+                'message' => $msg,
+                'success' => false
+            ));
+            return;
+        }
+
+        foreach($dirs as $albumId => $dir) {
+            $sql = '
+                SELECT `thumbnail_size`
+                FROM `s_media_album_settings`
+                WHERE `albumID` = :albumId
+                AND `create_thumbnails` =1
+            ';
+            $query = $db->prepare($sql);
+            $query->execute(array(':albumId' => $albumId));
+            $thumbs = $query->fetchColumn(0);
+            if($thumbs !== false) {
+                $thumbs = explode(';', $thumbs);
+            }
+            if(!file_exists($baseDir . $dir[0])) {
+                continue;
+            }
+            $iterator = new DirectoryIterator($baseDir . $dir[0]);
+            foreach ($iterator as $file) {
+                if($file->isDot()) {
+                    continue;
+                }
+                $name = (string)$file;
+                $newName = $name;
+                if(preg_match('#(.+_)([0-9])+(.[a-z]+)$#', $newName, $match)) {
+                    if(!isset($thumbs[$match[2]])) {
+                        continue;
+                    }
+                    $newName = 'thumbnail/' . $match[1] . $thumbs[$match[2]] . $match[3];
+                }
+                rename($baseDir . $dir[0] . $name, $baseDir . $dir[1] . $newName);
+            }
+            @rmdir($baseDir . $dir[0]);
+        }
+        echo json_encode(array(
+            'message' => 'Artikel-Bilder wurder erfolgreich übernommen.',
             'success' => true
         ));
     }
@@ -245,7 +417,9 @@ class Shopware_Install extends Slim
         if (strpos($class, 'Shopware') !== 0) {
             return;
         }
-        $file = dirname(__FILE__) . '/' . str_replace('_', DIRECTORY_SEPARATOR, substr($class, 9)) . '.php';
+        $file = dirname(__FILE__) . '/' .
+                str_replace('_', DIRECTORY_SEPARATOR, substr($class, 9)) .
+                '.php';
         if (file_exists($file)) {
             require $file;
         }

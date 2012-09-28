@@ -9,7 +9,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <title>Shopware 4 - Update</title>
+    <title>Shopware 4 - Updater</title>
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="assets/styles/bootstrap.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="assets/styles/styles.css" media="all"/>
@@ -20,7 +20,7 @@
 <body>
 
 <div class="info">
-    <img src="assets/images/logo_installer.png" alt="Shopware Installer" class="logo"/>
+    <img src="assets/images/logo_installer.png" alt="Shopware Updater" class="logo"/>
 
     <div class="meta">
         <p>
@@ -35,16 +35,22 @@
     <header>
         <ul class="navi-tabs clearfix">
             <li class="<?php if ($action == "index") echo "active"; else { echo "disabled"; }; ?>">
-              <a href="<?php echo $app->urlFor('index', array()); ?>"><?php echo $translation["start_install"];?></a>
+              <a href="<?php echo $app->urlFor('index', array()); ?>">Start / Sprachauswahl</a>
             </li>
             <li class="<?php if ($action == "system") echo "active"; else { echo "disabled";}; ?>">
-              <a href="<?php echo $app->urlFor('system', array()); ?>"><?php echo $translation["system_requirements"];?></a>
+              <a href="<?php echo $app->urlFor('system', array()); ?>">Systemvoraussetzungen</a>
             </li>
-            <li class="<?php if ($action == "system") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('system', array()); ?>">Überprüfung der Kompatibilität</a>
+            <li class="<?php if ($action == "compatibility") echo "active"; else { echo "disabled";}; ?>">
+                <a href="<?php echo $app->urlFor('index', array()); ?>">Kompatibilität</a>
             </li>
             <li class="<?php if ($action == "database") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('database', array()); ?>">Durchführen des Updates</a>
+                <a href="<?php echo $app->urlFor('database'); ?>">Update durchführen</a>
+            </li>
+            <li class="<?php if ($action == "custom") echo "active"; else { echo "disabled";}; ?>">
+                <a href="<?php echo $app->urlFor('index'); ?>">Anpassungen / Module</a>
+            </li>
+            <li class="<?php if ($action == "finish") echo "active"; else { echo "disabled";}; ?>">
+                <a href="">Abschluss</a>
             </li>
          </ul>
     </header>
