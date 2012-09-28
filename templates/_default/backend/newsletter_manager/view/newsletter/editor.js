@@ -34,7 +34,7 @@
  * Shopware UI - Editor
  * View for the editor which allows the user to create new newsletters
  */
-//{block name="backend/newsletter_manager/view/newsletter/Editor"}
+//{block name="backend/newsletter_manager/view/newsletter/editor"}
 Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-editor',

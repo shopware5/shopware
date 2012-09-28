@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
      * Data indices where chosen in order to match the database scheme for sorting in the PHP backend.
      * Therefore each Column requieres its own renderer in order to display the correct value.
      *
-     * @return [array] grid columns
+     * @return Array grid columns
      */
     getColumns: function() {
         var me = this;
@@ -307,7 +307,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
     /**
      * Creates pagingbar
      *
-     * @return Ext.toolbar.Paging
+     * @return Array
      */
     getPagingbar: function() {
         var me = this;
