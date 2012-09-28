@@ -39,13 +39,14 @@ class Shopware_Components_DbDiff_Mysql
             if(empty($options['backup'])) {
                 $diff .= "DROP TABLE IF EXISTS `$table`;\n";
             } else {
+                $diff .= "DROP TABLE IF EXISTS `$backupTable`;\n";
                 $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
             }
         } elseif(empty($targetFields)) {
             $diff .= $this->getTable($this->source, $table, array('ifNotExists' => true));
             $diff .= $this->getTableData($this->source, $table);
         } else {
-            $new = count($sourceFields) != count($targetFields);
+            $new = !empty($options['backup']) || count($sourceFields) != count($targetFields);
             if(!$new) {
                 foreach($sourceFields as $sourceField => $sourceFieldData) {
                     if(!isset($targetFields[$sourceField])
@@ -88,6 +89,7 @@ class Shopware_Components_DbDiff_Mysql
                 if(empty($options['backup'])) {
                     $diff .= "DROP TABLE IF EXISTS `$table`;\n";
                 } else {
+                    $diff .= "DROP TABLE IF EXISTS `$backupTable`;\n";
                     $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
                 }
                 $diff .= "RENAME TABLE `$newTable` TO `$table`;\n";
@@ -116,7 +118,7 @@ class Shopware_Components_DbDiff_Mysql
         } elseif(empty($targetFields)) {
             $diff .= $this->getTable(
                 $this->source, $table,
-                array('withAutoIncrement' => false)
+                array('autoIncrement' => false)
             );
         } else {
             $sourceKeys = $this->getTableKeys($this->source, $table);
@@ -158,7 +160,7 @@ class Shopware_Components_DbDiff_Mysql
         return $diff;
     }
 
-    protected function getTable(PDO $db, $table, $options = array())
+    public static function getTable(PDO $db, $table, $options = array())
     {
         $sql = "SHOW CREATE TABLE `$table`";
         $result = $db->query($sql);
@@ -172,29 +174,19 @@ class Shopware_Components_DbDiff_Mysql
         if(!empty($options['ifNotExists'])) {
             $return = str_replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS ", $return);
         }
-        // Fix wrong column charset
-        $return = str_replace('CHARSET=utf8 ', '', $return);
+        if(isset($options['autoIncrement'])) {
+            $replace = $options['autoIncrement'] === false ? '' : ' AUTO_INCREMENT=' . (int)$options['autoIncrement'];
+            $return = preg_replace("# AUTO_INCREMENT=[0-9]+#", $replace, $return);
+        }
+        if(!empty($options['dropIfExists'])) {
+            $newTable = isset($options['newTable']) ? $options['newTable'] : $table;
+            $return = "DROP TABLE IF EXISTS `$newTable`;\n" . $return;
+        }
         $return .= ";\n";
-        return $return;
-
-        $lines = array();
-        foreach ($this->getTableFields($db, $table) as $name => $field) {
-            $lines[] = "`$name` $field";
-        }
-        foreach ($this->getTableKeys($db, $table) as $key) {
-            $lines[] = $key;
-        }
-
-        $return = "CREATE TABLE ";
-        $return .= !empty($options['ifNotExists']) ? "IF NOT EXISTS " : "";
-        $return .= "`" . (!empty($options['newTable']) ? $options['newTable'] : $table) . "` (\n";
-        $return .= "  " . implode(",\n  ", $lines) . "\n";
-        $return .= ') ' . $this->getTableStatus($db, $table, !empty($options['withAutoIncrement'])) . ";\n";
-
         return $return;
     }
 
-    protected function getTableCollation(PDO $db, $table)
+    public static function getTableCollation(PDO $db, $table)
     {
         $sql = 'SHOW TABLE STATUS WHERE Name=?';
         $query = $db->prepare($sql);
@@ -206,10 +198,15 @@ class Shopware_Components_DbDiff_Mysql
         return $status['Collation'];
     }
 
-    public function getTableData(PDO $db, $table, $options = array())
+    public static function getTableData(PDO $db, $table, $options = array())
     {
         $newTable = isset($options['newTable']) ? $options['newTable'] : $table;
         $sql = "SELECT * FROM `{$table}`";
+        if(isset($options['limit'])) {
+            $limit = (int)$options['limit'];
+            $offset = isset($options['offset']) ? (int)$options['offset'] : 0;
+            $sql .= " LIMIT $limit OFFSET $offset";
+        }
         $result = $db->query($sql);
         if (!$result->rowCount()) {
             return null;
@@ -234,7 +231,7 @@ class Shopware_Components_DbDiff_Mysql
         return $return;
     }
 
-    protected function getTableStatus(PDO $db, $table, $withAutoIncrement = true)
+    public static function getTableStatus(PDO $db, $table, $withAutoIncrement = true)
     {
         $sql = 'SHOW TABLE STATUS WHERE Name=?';
         $query = $db->prepare($sql);
@@ -258,14 +255,14 @@ class Shopware_Components_DbDiff_Mysql
         return $line;
     }
 
-    protected function getTableFields(PDO $db, $table)
+    public static function getTableFields(PDO $db, $table)
     {
         $sql = "SHOW FULL COLUMNS FROM `$table`";
         $result = $db->query($sql);
         if($result == false) {
             return array();
         }
-        $tableCollation = $this->getTableCollation($db, $table);
+        $tableCollation = self::getTableCollation($db, $table);
         $fields = array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $line = "{$row['Type']}";
@@ -290,7 +287,7 @@ class Shopware_Components_DbDiff_Mysql
         return $fields;
     }
 
-    protected function getTableKeys(PDO $db, $table)
+    public static function getTableKeys(PDO $db, $table)
     {
         $keys = array();
         $keyTypes = array();

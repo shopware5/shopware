@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `new_s_addon_premiums` (
   `ordernumber_export` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subshopID` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_addon_premiums` (`id`, `startprice`, `ordernumber`, `ordernumber_export`, `subshopID`)
 SELECT `id`, `startprice`, `ordernumber`, `articleID`, `subshopID` FROM `s_addon_premiums`;
 DROP TABLE IF EXISTS `s_addon_premiums`;
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_dependencies` (
   `child_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `configurator_set_id` (`configurator_set_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_groups` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_groups` (
   `description` text COLLATE utf8_unicode_ci,
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_option_relations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_option_relations` (
   `option_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_id` (`article_id`,`option_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_options` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_options` (
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `group_id` (`group_id`,`name`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_price_surcharges` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -57,19 +57,19 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_price_surcharges` (
   `surcharge` decimal(10,3) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `configurator_set_id` (`configurator_set_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_set_group_relations` (
   `set_id` int(11) unsigned NOT NULL DEFAULT '0',
   `group_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`set_id`,`group_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_set_option_relations` (
   `set_id` int(11) unsigned NOT NULL DEFAULT '0',
   `option_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`set_id`,`option_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_sets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -78,21 +78,21 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_sets` (
   `type` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_img_mapping_rules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mapping_id` int(11) NOT NULL,
   `option_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_article_img_mappings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `image_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `image_id` (`image_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -128,9 +128,10 @@ CREATE TABLE IF NOT EXISTS `new_s_articles` (
   KEY `shippingtime` (`shippingtime`),
   KEY `changetime` (`changetime`),
   KEY `configurator_set_id` (`configurator_set_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles` (`id`, `supplierID`, `name`, `description`, `description_long`, `shippingtime`, `datum`, `active`, `taxID`, `pseudosales`, `topseller`, `keywords`, `changetime`, `pricegroupID`, `pricegroupActive`, `filtergroupID`, `laststock`, `crossbundlelook`, `notification`, `template`, `mode`)
 SELECT `id`, `supplierID`, `name`, `description`, `description_long`, `shippingtime`, `datum`, `active`, `taxID`, `pseudosales`, `topseller`, `keywords`, `changetime`, `pricegroupID`, `pricegroupActive`, `filtergroupID`, `laststock`, `crossbundlelook`, `notification`, `template`, `mode` FROM `s_articles`;
+DROP TABLE IF EXISTS `backup_s_articles`;
 RENAME TABLE `s_articles` TO `backup_s_articles`;
 RENAME TABLE `new_s_articles` TO `s_articles`;
 
@@ -163,13 +164,21 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_attributes` (
   KEY `articleID` (`articleID`),
   CONSTRAINT `s_articles_attributes_ibfk_1` FOREIGN KEY (`articleID`) REFERENCES `s_articles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `s_articles_attributes_ibfk_2` FOREIGN KEY (`articledetailsID`) REFERENCES `s_articles_details` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_attributes` (`id`, `articleID`, `articledetailsID`, `attr1`, `attr2`, `attr3`, `attr4`, `attr5`, `attr6`, `attr7`, `attr8`, `attr9`, `attr10`, `attr11`, `attr12`, `attr13`, `attr14`, `attr15`, `attr16`, `attr17`, `attr18`, `attr19`, `attr20`)
 SELECT `id`, `articleID`, `articledetailsID`, `attr1`, `attr2`, `attr3`, `attr4`, `attr5`, `attr6`, `attr7`, `attr8`, `attr9`, `attr10`, `attr11`, `attr12`, `attr13`, `attr14`, `attr15`, `attr16`, `attr17`, `attr18`, `attr19`, `attr20` FROM `s_articles_attributes`;
 DROP TABLE IF EXISTS `s_articles_attributes`;
 RENAME TABLE `new_s_articles_attributes` TO `s_articles_attributes`;
 
-ALTER TABLE `s_articles_avoid_customergroups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_avoid_customergroups` (
+  `articleID` int(11) NOT NULL,
+  `customergroupID` int(11) NOT NULL,
+  UNIQUE KEY `articleID` (`articleID`,`customergroupID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_avoid_customergroups` (`articleID`, `customergroupID`)
+SELECT `articleID`, `customergroupID` FROM `s_articles_avoid_customergroups`;
+DROP TABLE IF EXISTS `s_articles_avoid_customergroups`;
+RENAME TABLE `new_s_articles_avoid_customergroups` TO `s_articles_avoid_customergroups`;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles_categories` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -179,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_categories` (
   UNIQUE KEY `articleID` (`articleID`,`categoryID`),
   KEY `categoryID` (`categoryID`),
   KEY `articleID_2` (`articleID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_categories` (`id`, `articleID`, `categoryID`)
 SELECT `id`, `articleID`, `categoryID` FROM `s_articles_categories`;
 DROP TABLE IF EXISTS `s_articles_categories`;
@@ -217,13 +226,25 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_details` (
   UNIQUE KEY `ordernumber` (`ordernumber`),
   KEY `articleID` (`articleID`),
   KEY `releasedate` (`releasedate`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_details` (`id`, `articleID`, `ordernumber`, `suppliernumber`, `kind`, `additionaltext`, `impressions`, `sales`, `active`, `instock`, `stockmin`, `weight`, `position`)
 SELECT `id`, `articleID`, `ordernumber`, `suppliernumber`, `kind`, `additionaltext`, `impressions`, `sales`, `active`, `instock`, `stockmin`, `weight`, `position` FROM `s_articles_details`;
 DROP TABLE IF EXISTS `s_articles_details`;
 RENAME TABLE `new_s_articles_details` TO `s_articles_details`;
 
-ALTER TABLE `s_articles_downloads` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_downloads` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) unsigned NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `size` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `articleID` (`articleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_downloads` (`id`, `articleID`, `description`, `filename`, `size`)
+SELECT `id`, `articleID`, `description`, `filename`, `size` FROM `s_articles_downloads`;
+DROP TABLE IF EXISTS `s_articles_downloads`;
+RENAME TABLE `new_s_articles_downloads` TO `s_articles_downloads`;
 
 CREATE TABLE IF NOT EXISTS `s_articles_downloads_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -231,9 +252,25 @@ CREATE TABLE IF NOT EXISTS `s_articles_downloads_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `downloadID` (`downloadID`),
   CONSTRAINT `s_articles_downloads_attributes_ibfk_1` FOREIGN KEY (`downloadID`) REFERENCES `s_articles_downloads` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_articles_esd` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_esd` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  `articledetailsID` int(11) NOT NULL DEFAULT '0',
+  `file` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `serials` int(1) NOT NULL DEFAULT '0',
+  `notification` int(1) NOT NULL DEFAULT '0',
+  `maxdownloads` int(11) NOT NULL DEFAULT '0',
+  `datum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `articleID` (`articleID`),
+  KEY `articledetailsID` (`articledetailsID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_esd` (`id`, `articleID`, `articledetailsID`, `file`, `serials`, `notification`, `maxdownloads`, `datum`)
+SELECT `id`, `articleID`, `articledetailsID`, `file`, `serials`, `notification`, `maxdownloads`, `datum` FROM `s_articles_esd`;
+DROP TABLE IF EXISTS `s_articles_esd`;
+RENAME TABLE `new_s_articles_esd` TO `s_articles_esd`;
 
 CREATE TABLE IF NOT EXISTS `s_articles_esd_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -241,9 +278,19 @@ CREATE TABLE IF NOT EXISTS `s_articles_esd_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `esdID` (`esdID`),
   CONSTRAINT `s_articles_esd_attributes_ibfk_1` FOREIGN KEY (`esdID`) REFERENCES `s_articles_esd` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_articles_esd_serials` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_esd_serials` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `serialnumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `esdID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `esdID` (`esdID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_esd_serials` (`id`, `serialnumber`, `esdID`)
+SELECT `id`, `serialnumber`, `esdID` FROM `s_articles_esd_serials`;
+DROP TABLE IF EXISTS `s_articles_esd_serials`;
+RENAME TABLE `new_s_articles_esd_serials` TO `s_articles_esd_serials`;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -264,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_img` (
   KEY `article_detail_id` (`article_detail_id`),
   KEY `parent_id` (`parent_id`),
   KEY `media_id` (`media_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_img` (`id`, `articleID`, `img`, `main`, `description`, `position`, `width`, `height`, `relations`, `extension`)
 SELECT `id`, `articleID`, `img`, `main`, `description`, `position`, `width`, `height`, `relations`, `extension` FROM `s_articles_img`;
 DROP TABLE IF EXISTS `s_articles_img`;
@@ -279,9 +326,21 @@ CREATE TABLE IF NOT EXISTS `s_articles_img_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `imageID` (`imageID`),
   CONSTRAINT `s_articles_img_attributes_ibfk_1` FOREIGN KEY (`imageID`) REFERENCES `s_articles_img` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_articles_information` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_information` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `target` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `hauptid` (`articleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_information` (`id`, `articleID`, `description`, `link`, `target`)
+SELECT `id`, `articleID`, `description`, `link`, `target` FROM `s_articles_information`;
+DROP TABLE IF EXISTS `s_articles_information`;
+RENAME TABLE `new_s_articles_information` TO `s_articles_information`;
 
 CREATE TABLE IF NOT EXISTS `s_articles_information_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -289,9 +348,22 @@ CREATE TABLE IF NOT EXISTS `s_articles_information_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `informationID` (`informationID`),
   CONSTRAINT `s_articles_information_attributes_ibfk_1` FOREIGN KEY (`informationID`) REFERENCES `s_articles_information` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_articles_notification` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_notification` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ordernumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date` datetime NOT NULL,
+  `mail` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `send` int(1) unsigned NOT NULL,
+  `language` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `shopLink` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`)
+SELECT `id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink` FROM `s_articles_notification`;
+DROP TABLE IF EXISTS `s_articles_notification`;
+RENAME TABLE `new_s_articles_notification` TO `s_articles_notification`;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles_prices` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -309,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_prices` (
   KEY `articledetailsID` (`articledetailsID`),
   KEY `pricegroup_2` (`pricegroup`,`from`,`articledetailsID`),
   KEY `pricegroup` (`pricegroup`,`to`,`articledetailsID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_prices` (`id`, `pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`)
 SELECT `id`, `pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent` FROM `s_articles_prices`;
 DROP TABLE IF EXISTS `s_articles_prices`;
@@ -321,11 +393,31 @@ CREATE TABLE IF NOT EXISTS `s_articles_prices_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `priceID` (`priceID`),
   CONSTRAINT `s_articles_prices_attributes_ibfk_1` FOREIGN KEY (`priceID`) REFERENCES `s_articles_prices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_articles_relationships` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_relationships` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(30) NOT NULL,
+  `relatedarticle` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `articleID` (`articleID`,`relatedarticle`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_relationships` (`id`, `articleID`, `relatedarticle`)
+SELECT `id`, `articleID`, `relatedarticle` FROM `s_articles_relationships`;
+DROP TABLE IF EXISTS `s_articles_relationships`;
+RENAME TABLE `new_s_articles_relationships` TO `s_articles_relationships`;
 
-ALTER TABLE `s_articles_similar` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_articles_similar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(30) NOT NULL,
+  `relatedarticle` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `articleID` (`articleID`,`relatedarticle`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_articles_similar` (`id`, `articleID`, `relatedarticle`)
+SELECT `id`, `articleID`, `relatedarticle` FROM `s_articles_similar`;
+DROP TABLE IF EXISTS `s_articles_similar`;
+RENAME TABLE `new_s_articles_similar` TO `s_articles_similar`;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles_supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -334,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_supplier` (
   `link` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_supplier` (`id`, `name`, `img`, `link`)
 SELECT `id`, `name`, `img`, `link` FROM `s_articles_supplier`;
 DROP TABLE IF EXISTS `s_articles_supplier`;
@@ -346,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_supplier_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `supplierID` (`supplierID`),
   CONSTRAINT `s_articles_supplier_attributes_ibfk_1` FOREIGN KEY (`supplierID`) REFERENCES `s_articles_supplier` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_articles_translations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -364,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_translations` (
   `attr5` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `articleID` (`articleID`,`languageID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13928 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13928 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_translations` (`id`, `articleID`, `languageID`, `name`, `keywords`, `description`, `description_long`, `description_clear`, `attr1`, `attr2`, `attr3`, `attr4`, `attr5`)
 SELECT `id`, `articleID`, `languageID`, `name`, `keywords`, `description`, `description_long`, `description_clear`, `attr1`, `attr2`, `attr3`, `attr4`, `attr5` FROM `s_articles_translations`;
 DROP TABLE IF EXISTS `s_articles_translations`;
@@ -384,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `new_s_articles_vote` (
   `answer_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `articleID` (`articleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_articles_vote` (`id`, `articleID`, `name`, `headline`, `comment`, `points`, `datum`, `active`, `email`)
 SELECT `id`, `articleID`, `name`, `headline`, `comment`, `points`, `datum`, `active`, `email` FROM `s_articles_vote`;
 DROP TABLE IF EXISTS `s_articles_vote`;
@@ -400,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `new_s_billing_template` (
   `position` int(11) NOT NULL,
   `show` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_billing_template` (`ID`, `name`, `value`, `typ`, `group`, `desc`, `position`, `show`)
 SELECT `ID`, `name`, `value`, `typ`, `group`, `desc`, `position`, `show` FROM `s_billing_template`;
 DROP TABLE IF EXISTS `s_billing_template`;
@@ -420,7 +512,7 @@ CREATE TABLE IF NOT EXISTS `s_blog` (
   `meta_keywords` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `meta_description` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_blog_assigned_articles` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -428,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `s_blog_assigned_articles` (
   `article_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `blog_id` (`blog_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_blog_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -440,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `s_blog_attributes` (
   `attribute5` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `attribute6` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_blog_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -453,7 +545,7 @@ CREATE TABLE IF NOT EXISTS `s_blog_comments` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `points` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_blog_media` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -462,7 +554,7 @@ CREATE TABLE IF NOT EXISTS `s_blog_media` (
   `preview` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `blogID` (`blog_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_blog_tags` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -470,11 +562,35 @@ CREATE TABLE IF NOT EXISTS `s_blog_tags` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `blogID` (`blog_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_campaigns_articles` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL DEFAULT '0',
+  `articleordernumber` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_articles` (`id`, `parentID`, `articleordernumber`, `name`, `type`, `position`)
+SELECT `id`, `parentID`, `articleordernumber`, `name`, `type`, `position` FROM `s_campaigns_articles`;
+DROP TABLE IF EXISTS `s_campaigns_articles`;
+RENAME TABLE `new_s_campaigns_articles` TO `s_campaigns_articles`;
 
-ALTER TABLE `s_campaigns_banner` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_banner` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `linkTarget` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_banner` (`id`, `parentID`, `image`, `link`, `linkTarget`, `description`)
+SELECT `id`, `parentID`, `image`, `link`, `linkTarget`, `description` FROM `s_campaigns_banner`;
+DROP TABLE IF EXISTS `s_campaigns_banner`;
+RENAME TABLE `new_s_campaigns_banner` TO `s_campaigns_banner`;
 
 CREATE TABLE IF NOT EXISTS `new_s_campaigns_containers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -484,13 +600,21 @@ CREATE TABLE IF NOT EXISTS `new_s_campaigns_containers` (
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `position` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_campaigns_containers` (`id`, `promotionID`, `value`, `type`, `description`, `position`)
 SELECT `id`, `promotionID`, `value`, `type`, `description`, `position` FROM `s_campaigns_containers`;
 DROP TABLE IF EXISTS `s_campaigns_containers`;
 RENAME TABLE `new_s_campaigns_containers` TO `s_campaigns_containers`;
 
-ALTER TABLE `s_campaigns_groups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_groups` (`id`, `name`)
+SELECT `id`, `name` FROM `s_campaigns_groups`;
+DROP TABLE IF EXISTS `s_campaigns_groups`;
+RENAME TABLE `new_s_campaigns_groups` TO `s_campaigns_groups`;
 
 CREATE TABLE IF NOT EXISTS `new_s_campaigns_html` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -501,19 +625,78 @@ CREATE TABLE IF NOT EXISTS `new_s_campaigns_html` (
   `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `alignment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_campaigns_html` (`id`, `parentID`, `headline`, `html`, `image`, `link`, `alignment`)
 SELECT `id`, `parentID`, `headline`, `html`, `image`, `link`, `alignment` FROM `s_campaigns_html`;
 DROP TABLE IF EXISTS `s_campaigns_html`;
 RENAME TABLE `new_s_campaigns_html` TO `s_campaigns_html`;
 
-ALTER TABLE `s_campaigns_links` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL DEFAULT '0',
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_links` (`id`, `parentID`, `description`, `link`, `target`, `position`)
+SELECT `id`, `parentID`, `description`, `link`, `target`, `position` FROM `s_campaigns_links`;
+DROP TABLE IF EXISTS `s_campaigns_links`;
+RENAME TABLE `new_s_campaigns_links` TO `s_campaigns_links`;
 
-ALTER TABLE `s_campaigns_logs` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `mailingID` int(11) NOT NULL DEFAULT '0',
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_logs` (`id`, `datum`, `mailingID`, `email`, `articleID`)
+SELECT `id`, `datum`, `mailingID`, `email`, `articleID` FROM `s_campaigns_logs`;
+DROP TABLE IF EXISTS `s_campaigns_logs`;
+RENAME TABLE `new_s_campaigns_logs` TO `s_campaigns_logs`;
 
-ALTER TABLE `s_campaigns_mailaddresses` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_mailaddresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer` int(1) NOT NULL,
+  `groupID` int(11) NOT NULL,
+  `email` varchar(90) COLLATE utf8_unicode_ci NOT NULL,
+  `lastmailing` int(11) NOT NULL,
+  `lastread` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `groupID` (`groupID`),
+  KEY `email` (`email`),
+  KEY `lastmailing` (`lastmailing`),
+  KEY `lastread` (`lastread`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_mailaddresses` (`id`, `customer`, `groupID`, `email`, `lastmailing`, `lastread`)
+SELECT `id`, `customer`, `groupID`, `email`, `lastmailing`, `lastread` FROM `s_campaigns_mailaddresses`;
+DROP TABLE IF EXISTS `s_campaigns_mailaddresses`;
+RENAME TABLE `new_s_campaigns_mailaddresses` TO `s_campaigns_mailaddresses`;
 
-ALTER TABLE `s_campaigns_maildata` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_maildata` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `groupID` int(11) unsigned NOT NULL,
+  `salutation` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `firstname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lastname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `street` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `streetnumber` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `added` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`,`groupID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_maildata` (`id`, `email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`, `deleted`)
+SELECT `id`, `email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`, `deleted` FROM `s_campaigns_maildata`;
+DROP TABLE IF EXISTS `s_campaigns_maildata`;
+RENAME TABLE `new_s_campaigns_maildata` TO `s_campaigns_maildata`;
 
 CREATE TABLE IF NOT EXISTS `new_s_campaigns_mailings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -533,17 +716,45 @@ CREATE TABLE IF NOT EXISTS `new_s_campaigns_mailings` (
   `customergroup` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `publish` int(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_campaigns_mailings` (`id`, `datum`, `groups`, `subject`, `sendermail`, `sendername`, `plaintext`, `templateID`, `languageID`, `status`, `locked`, `recipients`, `read`, `clicked`, `customergroup`, `publish`)
 SELECT `id`, `datum`, `groups`, `subject`, `sendermail`, `sendername`, `plaintext`, `templateID`, `languageID`, `status`, `locked`, `recipients`, `read`, `clicked`, `customergroup`, `publish` FROM `s_campaigns_mailings`;
 DROP TABLE IF EXISTS `s_campaigns_mailings`;
 RENAME TABLE `new_s_campaigns_mailings` TO `s_campaigns_mailings`;
 
-ALTER TABLE `s_campaigns_positions` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_positions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `promotionID` int(11) NOT NULL DEFAULT '0',
+  `containerID` int(11) NOT NULL DEFAULT '0',
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_positions` (`id`, `promotionID`, `containerID`, `position`)
+SELECT `id`, `promotionID`, `containerID`, `position` FROM `s_campaigns_positions`;
+DROP TABLE IF EXISTS `s_campaigns_positions`;
+RENAME TABLE `new_s_campaigns_positions` TO `s_campaigns_positions`;
 
-ALTER TABLE `s_campaigns_sender` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_sender` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_sender` (`id`, `email`, `name`)
+SELECT `id`, `email`, `name` FROM `s_campaigns_sender`;
+DROP TABLE IF EXISTS `s_campaigns_sender`;
+RENAME TABLE `new_s_campaigns_sender` TO `s_campaigns_sender`;
 
-ALTER TABLE `s_campaigns_templates` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_campaigns_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_campaigns_templates` (`id`, `path`, `description`)
+SELECT `id`, `path`, `description` FROM `s_campaigns_templates`;
+DROP TABLE IF EXISTS `s_campaigns_templates`;
+RENAME TABLE `new_s_campaigns_templates` TO `s_campaigns_templates`;
 
 CREATE TABLE IF NOT EXISTS `new_s_categories` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -574,9 +785,12 @@ CREATE TABLE IF NOT EXISTS `new_s_categories` (
   KEY `position` (`position`),
   KEY `left` (`left`,`right`),
   KEY `level` (`level`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT COLLATE=utf8_unicode_ci;
-INSERT IGNORE INTO `new_s_categories` (`id`, `parent`, `description`, `position`, `metakeywords`, `metadescription`, `cmsheadline`, `cmstext`, `template`, `noviewselect`, `active`, `blog`, `showfiltergroups`, `external`, `hidefilter`, `hidetop`)
-SELECT `id`, `parent`, `description`, `position`, `metakeywords`, `metadescription`, `cmsheadline`, `cmstext`, `template`, `noviewselect`, `active`, `blog`, `showfiltergroups`, `external`, `hidefilter`, `hidetop` FROM `s_categories`;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_categories` (`id`, `parent`, `description`, `position`, `left`, `right`, `level`, `added`, `changed`, `metakeywords`, `metadescription`, `cmsheadline`, `cmstext`, `template`, `noviewselect`, `active`, `blog`, `showfiltergroups`, `external`, `hidefilter`, `hidetop`, `mediaID`) VALUES
+('1', NULL, 'Root', '0', '1', '6', '0', '2012-08-27 22:28:52', '2012-08-27 22:28:52', NULL, NULL, NULL, NULL, NULL, NULL, '1', '0', '0', NULL, '0', '0', '0'),
+('3', '1', 'Deutsch', '0', '2', '3', '1', '2012-08-27 22:28:52', '2012-08-27 22:28:52', NULL, '', '', '', NULL, '0', '1', '0', '0', '', '0', '0', NULL),
+('4', '1', 'Englisch', '1', '4', '5', '1', '2012-08-27 22:28:52', '2012-08-27 22:28:52', NULL, '', '', '', NULL, '0', '1', '0', '0', '', '0', '0', NULL);
+DROP TABLE IF EXISTS `backup_s_categories`;
 RENAME TABLE `s_categories` TO `backup_s_categories`;
 RENAME TABLE `new_s_categories` TO `s_categories`;
 
@@ -592,9 +806,17 @@ CREATE TABLE IF NOT EXISTS `s_categories_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `categoryID` (`categoryID`),
   CONSTRAINT `s_categories_attributes_ibfk_1` FOREIGN KEY (`categoryID`) REFERENCES `s_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_categories_avoid_customergroups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_categories_avoid_customergroups` (
+  `categoryID` int(11) NOT NULL,
+  `customergroupID` int(11) NOT NULL,
+  UNIQUE KEY `articleID` (`categoryID`,`customergroupID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_categories_avoid_customergroups` (`categoryID`, `customergroupID`)
+SELECT `categoryID`, `customergroupID` FROM `s_categories_avoid_customergroups`;
+DROP TABLE IF EXISTS `s_categories_avoid_customergroups`;
+RENAME TABLE `new_s_categories_avoid_customergroups` TO `s_categories_avoid_customergroups`;
 
 CREATE TABLE IF NOT EXISTS `new_s_cms_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -606,13 +828,22 @@ CREATE TABLE IF NOT EXISTS `new_s_cms_content` (
   `attachment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_cms_content` (`id`, `groupID`, `description`, `text`, `img`, `link`, `attachment`, `datum`)
 SELECT `id`, `groupID`, `description`, `text`, `img`, `link`, `attachment`, `datum` FROM `s_cms_content`;
 DROP TABLE IF EXISTS `s_cms_content`;
 RENAME TABLE `new_s_cms_content` TO `s_cms_content`;
 
-ALTER TABLE `s_cms_groups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_cms_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `position` int(11) NOT NULL DEFAULT '0',
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_cms_groups` (`id`, `position`, `description`)
+SELECT `id`, `position`, `description` FROM `s_cms_groups`;
+DROP TABLE IF EXISTS `s_cms_groups`;
+RENAME TABLE `new_s_cms_groups` TO `s_cms_groups`;
 
 CREATE TABLE IF NOT EXISTS `new_s_cms_static` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -633,7 +864,7 @@ CREATE TABLE IF NOT EXISTS `new_s_cms_static` (
   `meta_keywords` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `meta_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_cms_static` (`id`, `tpl1variable`, `tpl1path`, `tpl2variable`, `tpl2path`, `tpl3variable`, `tpl3path`, `description`, `html`, `grouping`, `position`, `link`, `target`)
 SELECT `id`, `tpl1variable`, `tpl1path`, `tpl2variable`, `tpl2path`, `tpl3variable`, `tpl3path`, `description`, `html`, `grouping`, `position`, `link`, `target` FROM `s_cms_static`;
 DROP TABLE IF EXISTS `s_cms_static`;
@@ -645,7 +876,7 @@ CREATE TABLE IF NOT EXISTS `s_cms_static_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cmsStaticID` (`cmsStaticID`),
   CONSTRAINT `s_cms_static_attributes_ibfk_1` FOREIGN KEY (`cmsStaticID`) REFERENCES `s_cms_static` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_cms_static_groups` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -655,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `s_cms_static_groups` (
   `mapping_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `mapping_id` (`mapping_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_cms_static_groups` (`id`, `name`, `key`, `active`, `mapping_id`) VALUES
 ('1', 'Links', 'gLeft', '1', NULL),
 ('2', 'Unten (Spalte 1)', 'gBottom', '1', NULL),
@@ -676,7 +907,7 @@ CREATE TABLE IF NOT EXISTS `new_s_cms_support` (
   `ticket_typeID` int(10) NOT NULL,
   `isocode` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_cms_support` (`id`, `name`, `text`, `email`, `email_template`, `email_subject`, `text2`, `ticket_typeID`, `isocode`)
 SELECT `id`, `name`, `text`, `email`, `email_template`, `email_subject`, `text2`, `ticket_typeID`, `isocode` FROM `s_cms_support`;
 DROP TABLE IF EXISTS `s_cms_support`;
@@ -688,7 +919,7 @@ CREATE TABLE IF NOT EXISTS `s_cms_support_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cmsSupportID` (`cmsSupportID`),
   CONSTRAINT `s_cms_support_attributes_ibfk_1` FOREIGN KEY (`cmsSupportID`) REFERENCES `s_cms_support` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_cms_support_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -706,7 +937,7 @@ CREATE TABLE IF NOT EXISTS `new_s_cms_support_fields` (
   `ticket_task` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`supportID`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_cms_support_fields` (`id`, `error_msg`, `name`, `note`, `typ`, `required`, `supportID`, `label`, `class`, `value`, `added`, `position`, `ticket_task`)
 SELECT `id`, `error_msg`, `name`, `note`, `typ`, `required`, `supportID`, `label`, `class`, `value`, `added`, `position`, `ticket_task` FROM `s_cms_support_fields`;
 DROP TABLE IF EXISTS `s_cms_support_fields`;
@@ -718,7 +949,7 @@ CREATE TABLE IF NOT EXISTS `s_core_acl_privileges` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resourceID` (`resourceID`)
-) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_acl_privileges` (`id`, `resourceID`, `name`) VALUES
 ('1', '1', 'create'),
 ('2', '1', 'read'),
@@ -854,7 +1085,7 @@ CREATE TABLE IF NOT EXISTS `s_core_acl_resources` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pluginID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_acl_resources` (`id`, `name`, `pluginID`) VALUES
 ('1', 'debug_test', NULL),
 ('2', 'banner', NULL),
@@ -900,7 +1131,7 @@ CREATE TABLE IF NOT EXISTS `s_core_acl_roles` (
   UNIQUE KEY `roleID` (`roleID`,`resourceID`,`privilegeID`),
   KEY `resourceID` (`resourceID`),
   KEY `privilegeID` (`privilegeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_acl_roles` (`id`, `roleID`, `resourceID`, `privilegeID`) VALUES
 ('1', '1', NULL, NULL);
 
@@ -922,7 +1153,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_auth` (
   `lockeduntil` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_auth` (`id`, `username`, `password`, `sessionID`, `lastlogin`, `name`, `email`, `active`, `admin`, `salted`, `failedlogins`, `lockeduntil`)
 SELECT `id`, `username`, `password`, `sessionID`, `lastlogin`, `name`, `email`, `active`, `admin`, `salted`, `failedlogins`, `lockeduntil` FROM `s_core_auth`;
 DROP TABLE IF EXISTS `s_core_auth`;
@@ -934,7 +1165,7 @@ CREATE TABLE IF NOT EXISTS `s_core_auth_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `authID` (`authID`),
   CONSTRAINT `s_core_auth_attributes_ibfk_1` FOREIGN KEY (`authID`) REFERENCES `s_core_auth` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_auth_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -946,7 +1177,7 @@ CREATE TABLE IF NOT EXISTS `s_core_auth_roles` (
   `admin` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_auth_roles` (`id`, `parentID`, `name`, `description`, `source`, `enabled`, `admin`) VALUES
 ('1', NULL, 'local_admins', 'Default group that gains access to all shop functions', 'build-in', '1', '1');
 
@@ -958,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_element_translations` (
   `description` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `element_id` (`element_id`,`locale_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_config_element_translations` (`id`, `element_id`, `locale_id`, `label`, `description`) VALUES
 ('1', '225', '2', 'Controller selection', NULL),
 ('2', '276', '2', 'Controller selection', NULL),
@@ -1175,7 +1406,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_elements` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `form_id_2` (`form_id`,`name`),
   KEY `form_id` (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=900 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=900 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
 ('186', '86', 'vouchertax', 's:2:\"19\";', 'MwSt. Gutscheine', NULL, 'text', '0', '0', '0', NULL, NULL, NULL),
 ('188', '86', 'discounttax', 's:2:\"19\";', 'MwSt. Rabatte', NULL, 'text', '0', '0', '0', NULL, NULL, NULL),
@@ -1385,7 +1616,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_form_translations` (
   `label` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_config_form_translations` (`id`, `form_id`, `locale_id`, `label`, `description`) VALUES
 ('1', '77', '2', 'Shop settings', NULL),
 ('2', '78', '2', 'System', NULL),
@@ -1458,7 +1689,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_forms` (
   UNIQUE KEY `name` (`name`),
   KEY `plugin_id` (`plugin_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_config_forms` (`id`, `parent_id`, `name`, `label`, `description`, `position`, `scope`, `plugin_id`) VALUES
 ('77', NULL, 'Base', 'Shopeinstellungen', NULL, '0', '0', NULL),
 ('78', NULL, 'Core', 'System', NULL, '10', '0', NULL),
@@ -1535,7 +1766,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_config_mails` (
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `stateId` (`stateId`),
   CONSTRAINT `s_core_config_mails_ibfk_1` FOREIGN KEY (`stateId`) REFERENCES `s_core_states` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_config_mails` (`id`, `name`, `frommail`, `fromname`, `subject`, `content`, `contentHTML`, `ishtml`, `attachment`)
 SELECT `id`, `name`, `frommail`, `fromname`, `subject`, `content`, `contentHTML`, `ishtml`, `attachment` FROM `s_core_config_mails`;
 DROP TABLE IF EXISTS `s_core_config_mails`;
@@ -1558,7 +1789,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_mails_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `mailID` (`mailID`),
   CONSTRAINT `s_core_config_mails_attributes_ibfk_1` FOREIGN KEY (`mailID`) REFERENCES `s_core_config_mails` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_config_values` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -1568,7 +1799,7 @@ CREATE TABLE IF NOT EXISTS `s_core_config_values` (
   PRIMARY KEY (`id`),
   KEY `shop_id` (`shop_id`),
   KEY `element_id` (`element_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1588,7 +1819,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_countries` (
   `force_state_in_registration` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `areaID` (`areaID`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `countryen`, `position`, `notice`, `shippingfree`, `taxfree`, `taxfree_ustid`, `taxfree_ustid_checked`, `active`, `iso3`, `display_state_in_registration`, `force_state_in_registration`) VALUES
 ('2', 'Deutschland', 'DE', '1', 'GERMANY', '1', '', '0', '0', '0', '0', '1', 'DEU', '0', '0'),
 ('3', 'Arabische Emirate', 'AE', '2', 'ARAB EMIRATES', '10', '', '0', '0', '0', '0', '0', 'ARE', '0', '0'),
@@ -1623,6 +1854,7 @@ INSERT IGNORE INTO `new_s_core_countries` (`id`, `countryname`, `countryiso`, `a
 ('35', 'Rum&auml;nien', 'RO', '3', 'ROMANIA', '10', '', '0', '0', '0', '0', '0', 'ROU', '0', '0'),
 ('36', 'Brasilien', 'BR', '2', 'BRAZIL', '10', '', '0', '0', '0', '0', '0', 'BRA', '0', '0'),
 ('37', 'Israel', 'IL', '2', 'ISRAEL', '10', '', '0', '0', '0', '0', '0', 'ISR', '0', '0');
+DROP TABLE IF EXISTS `backup_s_core_countries`;
 RENAME TABLE `s_core_countries` TO `backup_s_core_countries`;
 RENAME TABLE `new_s_core_countries` TO `s_core_countries`;
 
@@ -1632,7 +1864,7 @@ CREATE TABLE IF NOT EXISTS `s_core_countries_areas` (
   `active` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_countries_areas` (`id`, `name`, `active`) VALUES
 ('1', 'deutschland', '1'),
 ('2', 'welt', '1'),
@@ -1644,7 +1876,7 @@ CREATE TABLE IF NOT EXISTS `s_core_countries_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `countryID` (`countryID`),
   CONSTRAINT `s_core_countries_attributes_ibfk_1` FOREIGN KEY (`countryID`) REFERENCES `s_core_countries` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_countries_states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1655,7 +1887,7 @@ CREATE TABLE IF NOT EXISTS `s_core_countries_states` (
   `active` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `countryID` (`countryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_countries_states` (`id`, `countryID`, `name`, `shortcode`, `position`, `active`) VALUES
 ('2', '2', 'Niedersachsen', 'NI', '0', '1'),
 ('3', '2', 'Nordrhein-Westfalen', 'NW', '0', '1'),
@@ -1730,10 +1962,41 @@ CREATE TABLE IF NOT EXISTS `s_core_countries_states_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `stateID` (`stateID`),
   CONSTRAINT `s_core_countries_states_attributes_ibfk_1` FOREIGN KEY (`stateID`) REFERENCES `s_core_countries_states` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_core_currencies` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
-ALTER TABLE `s_core_customergroups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_currencies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `standard` int(1) NOT NULL,
+  `factor` double NOT NULL,
+  `templatechar` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `symbol_position` int(11) unsigned NOT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_currencies` (`id`, `currency`, `name`, `standard`, `factor`, `templatechar`, `symbol_position`, `position`)
+SELECT `id`, `currency`, `name`, `standard`, `factor`, `templatechar`, `symbol_position`, `position` FROM `s_core_currencies`;
+DROP TABLE IF EXISTS `s_core_currencies`;
+RENAME TABLE `new_s_core_currencies` TO `s_core_currencies`;
+
+CREATE TABLE IF NOT EXISTS `new_s_core_customergroups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupkey` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `tax` int(1) NOT NULL DEFAULT '0',
+  `taxinput` int(1) NOT NULL,
+  `mode` int(11) NOT NULL,
+  `discount` double NOT NULL,
+  `minimumorder` double NOT NULL,
+  `minimumordersurcharge` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `groupkey` (`groupkey`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_customergroups` (`id`, `groupkey`, `description`, `tax`, `taxinput`, `mode`, `discount`, `minimumorder`, `minimumordersurcharge`)
+SELECT `id`, `groupkey`, `description`, `tax`, `taxinput`, `mode`, `discount`, `minimumorder`, `minimumordersurcharge` FROM `s_core_customergroups`;
+DROP TABLE IF EXISTS `s_core_customergroups`;
+RENAME TABLE `new_s_core_customergroups` TO `s_core_customergroups`;
 
 CREATE TABLE IF NOT EXISTS `s_core_customergroups_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1741,10 +2004,32 @@ CREATE TABLE IF NOT EXISTS `s_core_customergroups_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `customerGroupID` (`customerGroupID`),
   CONSTRAINT `s_core_customergroups_attributes_ibfk_1` FOREIGN KEY (`customerGroupID`) REFERENCES `s_core_customergroups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_core_customergroups_discounts` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
-ALTER TABLE `s_core_customerpricegroups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_customergroups_discounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupID` int(11) NOT NULL,
+  `basketdiscount` double NOT NULL,
+  `basketdiscountstart` double NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groupID` (`groupID`,`basketdiscountstart`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_customergroups_discounts` (`id`, `groupID`, `basketdiscount`, `basketdiscountstart`)
+SELECT `id`, `groupID`, `basketdiscount`, `basketdiscountstart` FROM `s_core_customergroups_discounts`;
+DROP TABLE IF EXISTS `s_core_customergroups_discounts`;
+RENAME TABLE `new_s_core_customergroups_discounts` TO `s_core_customergroups_discounts`;
+
+CREATE TABLE IF NOT EXISTS `new_s_core_customerpricegroups` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `netto` int(1) unsigned NOT NULL,
+  `active` int(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_customerpricegroups` (`id`, `name`, `netto`, `active`)
+SELECT `id`, `name`, `netto`, `active` FROM `s_core_customerpricegroups`;
+DROP TABLE IF EXISTS `s_core_customerpricegroups`;
+RENAME TABLE `new_s_core_customerpricegroups` TO `s_core_customerpricegroups`;
 
 CREATE TABLE IF NOT EXISTS `s_core_detail_states` (
   `id` int(11) NOT NULL,
@@ -1752,16 +2037,42 @@ CREATE TABLE IF NOT EXISTS `s_core_detail_states` (
   `position` int(11) NOT NULL,
   `mail` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_detail_states` (`id`, `description`, `position`, `mail`) VALUES
 ('0', 'Offen', '1', '0'),
 ('1', 'In Bearbeitung', '2', '0'),
 ('2', 'Storniert', '3', '0'),
 ('3', 'Abgeschlossen', '4', '0');
 
-ALTER TABLE `s_core_documents` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `numbers` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `left` int(11) NOT NULL,
+  `right` int(11) NOT NULL,
+  `top` int(11) NOT NULL,
+  `bottom` int(11) NOT NULL,
+  `pagebreak` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_documents` (`id`, `name`, `template`, `numbers`, `left`, `right`, `top`, `bottom`, `pagebreak`)
+SELECT `id`, `name`, `template`, `numbers`, `left`, `right`, `top`, `bottom`, `pagebreak` FROM `s_core_documents`;
+DROP TABLE IF EXISTS `s_core_documents`;
+RENAME TABLE `new_s_core_documents` TO `s_core_documents`;
 
-ALTER TABLE `s_core_documents_box` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_documents_box` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `documentID` int(11) NOT NULL,
+  `name` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `style` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`)
+SELECT `id`, `documentID`, `name`, `style`, `value` FROM `s_core_documents_box`;
+DROP TABLE IF EXISTS `s_core_documents_box`;
+RENAME TABLE `new_s_core_documents_box` TO `s_core_documents_box`;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_engine_elements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1780,7 +2091,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_engine_elements` (
   `translatable` int(1) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `databasefield` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_engine_elements` (`id`, `domname`, `default`, `label`, `required`, `position`, `name`, `layout`, `variantable`, `help`, `translatable`)
 SELECT `id`, `domname`, `domvalue`, `domdescription`, `required`, `position`, `databasefield`, `domclass`, `availablebyvariants`, `help`, `multilanguage` FROM `s_core_engine_elements`;
 DROP TABLE IF EXISTS `s_core_engine_elements`;
@@ -1794,13 +2105,26 @@ CREATE TABLE IF NOT EXISTS `new_s_core_engine_groups` (
   `variantable` int(1) unsigned NOT NULL DEFAULT '0',
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_engine_groups` (`id`, `position`)
 SELECT `id`, `position` FROM `s_core_engine_groups`;
 DROP TABLE IF EXISTS `s_core_engine_groups`;
 RENAME TABLE `new_s_core_engine_groups` TO `s_core_engine_groups`;
 
-ALTER TABLE `s_core_factory` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_factory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `basename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `basefile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `inheritname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `inheritfile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `basename` (`basename`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_factory` (`id`, `description`, `basename`, `basefile`, `inheritname`, `inheritfile`)
+SELECT `id`, `description`, `basename`, `basefile`, `inheritname`, `inheritfile` FROM `s_core_factory`;
+DROP TABLE IF EXISTS `s_core_factory`;
+RENAME TABLE `new_s_core_factory` TO `s_core_factory`;
 
 CREATE TABLE IF NOT EXISTS `s_core_licenses` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -1818,9 +2142,20 @@ CREATE TABLE IF NOT EXISTS `s_core_licenses` (
   `active` int(1) NOT NULL,
   `plugin_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_core_locales` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_locales` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `locale` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `language` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `territory` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `locale` (`locale`)
+) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_locales` (`id`, `locale`, `language`, `territory`)
+SELECT `id`, `locale`, `language`, `territory` FROM `s_core_locales`;
+DROP TABLE IF EXISTS `s_core_locales`;
+RENAME TABLE `new_s_core_locales` TO `s_core_locales`;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1833,7 +2168,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_log` (
   `user_agent` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value4` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_log` (`id`, `type`, `key`, `text`, `date`, `value4`)
 SELECT `id`, `type`, `key`, `text`, `datum`, `value4` FROM `s_core_log`;
 DROP TABLE IF EXISTS `s_core_log`;
@@ -1856,7 +2191,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_menu` (
   `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`parent`)
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_menu` (`id`, `parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`) VALUES
 ('1', NULL, '', 'Artikel', NULL, NULL, 'ico package_green', '0', '1', NULL, NULL, 'Article', NULL, NULL),
 ('2', '1', '', 'Anlegen', '', NULL, 'sprite-inbox--plus', '-3', '1', NULL, NULL, 'Article', 'STRG + ALT + N', 'Detail'),
@@ -1910,6 +2245,7 @@ INSERT IGNORE INTO `new_s_core_menu` (`id`, `parent`, `hyperlink`, `name`, `oncl
 ('114', '40', '', 'Hilfe', NULL, NULL, 'sprite-lifebuoy', '0', '1', NULL, NULL, 'HelpMenu', NULL, NULL),
 ('115', '40', '', 'Feedback senden', NULL, NULL, 'sprite-briefcase--arrow', '0', '1', NULL, NULL, 'BetaFeedback', NULL, 'Index'),
 ('116', '23', '', 'Plugin Manager', NULL, NULL, 'sprite-application-block', '0', '1', '46', '36', 'PluginManager', NULL, 'Index');
+DROP TABLE IF EXISTS `backup_s_core_menu`;
 RENAME TABLE `s_core_menu` TO `backup_s_core_menu`;
 RENAME TABLE `new_s_core_menu` TO `s_core_menu`;
 
@@ -1936,10 +2272,11 @@ CREATE TABLE IF NOT EXISTS `new_s_core_multilanguage` (
   `fallback` int(11) unsigned DEFAULT NULL,
   `navigation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
-INSERT IGNORE INTO `new_s_core_multilanguage` (`id`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `fallback`, `navigation`)
-SELECT `id`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `fallback`, `navigation` FROM `s_core_multilanguage`;
-DROP TABLE IF EXISTS `s_core_multilanguage`;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_multilanguage` (`id`, `mainID`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `scoped_registration`, `fallback`, `navigation`) VALUES
+('1', NULL, '1', '1', '3', '', 'de.png', '1', 'Deutsch', 'EK', 'orange', 'orange', '0', '', '1', '1', '1|2', '1|6', NULL, '0', '');
+DROP TABLE IF EXISTS `backup_s_core_multilanguage`;
+RENAME TABLE `s_core_multilanguage` TO `backup_s_core_multilanguage`;
 RENAME TABLE `new_s_core_multilanguage` TO `s_core_multilanguage`;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_optin` (
@@ -1950,7 +2287,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_optin` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `hash` (`hash`),
   KEY `datum` (`datum`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_optin` (`id`, `datum`, `hash`, `data`)
 SELECT `id`, `datum`, `hash`, `data` FROM `s_core_optin`;
 DROP TABLE IF EXISTS `s_core_optin`;
@@ -1978,7 +2315,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_paymentmeans` (
   `source` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_paymentmeans` (`id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`)
 SELECT `id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID` FROM `s_core_paymentmeans`;
 DROP TABLE IF EXISTS `s_core_paymentmeans`;
@@ -1990,11 +2327,27 @@ CREATE TABLE IF NOT EXISTS `s_core_paymentmeans_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `paymentmeanID` (`paymentmeanID`),
   CONSTRAINT `s_core_paymentmeans_attributes_ibfk_1` FOREIGN KEY (`paymentmeanID`) REFERENCES `s_core_paymentmeans` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_core_paymentmeans_countries` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_paymentmeans_countries` (
+  `paymentID` int(11) unsigned NOT NULL,
+  `countryID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`paymentID`,`countryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_paymentmeans_countries` (`paymentID`, `countryID`)
+SELECT `paymentID`, `countryID` FROM `s_core_paymentmeans_countries`;
+DROP TABLE IF EXISTS `s_core_paymentmeans_countries`;
+RENAME TABLE `new_s_core_paymentmeans_countries` TO `s_core_paymentmeans_countries`;
 
-ALTER TABLE `s_core_paymentmeans_subshops` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_paymentmeans_subshops` (
+  `paymentID` int(11) unsigned NOT NULL,
+  `subshopID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`paymentID`,`subshopID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_paymentmeans_subshops` (`paymentID`, `subshopID`)
+SELECT `paymentID`, `subshopID` FROM `s_core_paymentmeans_subshops`;
+DROP TABLE IF EXISTS `s_core_paymentmeans_subshops`;
+RENAME TABLE `new_s_core_paymentmeans_subshops` TO `s_core_paymentmeans_subshops`;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_plugins` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -2025,7 +2378,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_plugins` (
   `update_version` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `namespace` (`namespace`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
 ('1', 'Core', 'Log', 'Log', 'Default', '', '', '1', '2012-08-28 00:00:00', '2010-10-18 00:00:00', '2010-10-18 00:00:00', NULL, 'shopware AG', 'Copyright © 2010, shopware AG', '', '1', 'http://www.shopware.de/wiki/', '', 'http://www.shopware.de/', NULL, NULL, '0', '0', '0', NULL, NULL),
 ('2', 'Core', 'ErrorHandler', 'ErrorHandler', 'Default', '', '', '1', '2012-08-28 00:00:00', '2010-10-18 00:00:00', '2010-10-18 00:00:00', NULL, 'shopware AG', 'Copyright © 2010, shopware AG', '', '1', 'http://www.shopware.de/wiki/', '', 'http://www.shopware.de/', NULL, NULL, '0', '0', '0', NULL, NULL),
@@ -2064,26 +2417,95 @@ INSERT IGNORE INTO `new_s_core_plugins` (`id`, `namespace`, `name`, `label`, `so
 ('44', 'Core', 'RestApi', 'RestApi', 'Default', '', '', '1', '2012-07-13 12:03:13', '2012-07-13 12:03:36', '2012-07-13 12:03:36', NULL, 'shopware AG', 'Copyright © 2012, shopware AG', '', '1.0.0', 'http://wiki.shopware.de', '', 'http://www.shopware.de/', NULL, NULL, '0', '0', '0', NULL, NULL),
 ('45', 'Backend', 'StoreApi', 'StoreApi', 'Default', NULL, NULL, '1', '2012-08-19 14:34:36', '2012-08-19 14:34:46', '2012-08-19 14:34:46', '2012-08-21 09:59:19', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1.0.0', NULL, NULL, NULL, NULL, NULL, '1', '0', '0', NULL, NULL),
 ('46', 'Core', 'PluginManager', 'PluginManager', 'Default', NULL, NULL, '1', '2012-08-19 14:34:36', '2012-08-19 14:34:46', '2012-08-19 14:34:59', '2012-08-21 09:59:19', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1.0.0', NULL, NULL, NULL, NULL, NULL, '1', '0', '0', NULL, NULL);
+DROP TABLE IF EXISTS `backup_s_core_plugins`;
 RENAME TABLE `s_core_plugins` TO `backup_s_core_plugins`;
 RENAME TABLE `new_s_core_plugins` TO `s_core_plugins`;
 
-ALTER TABLE `s_core_pricegroups` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_pricegroups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_pricegroups` (`id`, `description`)
+SELECT `id`, `description` FROM `s_core_pricegroups`;
+DROP TABLE IF EXISTS `s_core_pricegroups`;
+RENAME TABLE `new_s_core_pricegroups` TO `s_core_pricegroups`;
 
-ALTER TABLE `s_core_pricegroups_discounts` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_pricegroups_discounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupID` int(11) NOT NULL,
+  `customergroupID` int(11) NOT NULL,
+  `discount` double NOT NULL,
+  `discountstart` double NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groupID` (`groupID`,`customergroupID`,`discountstart`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_pricegroups_discounts` (`id`, `groupID`, `customergroupID`, `discount`, `discountstart`)
+SELECT `id`, `groupID`, `customergroupID`, `discount`, `discountstart` FROM `s_core_pricegroups_discounts`;
+DROP TABLE IF EXISTS `s_core_pricegroups_discounts`;
+RENAME TABLE `new_s_core_pricegroups_discounts` TO `s_core_pricegroups_discounts`;
 
-ALTER TABLE `s_core_rewrite` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_rewrite` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `search` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `replace` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_rewrite` (`id`, `search`, `replace`)
+SELECT `id`, `search`, `replace` FROM `s_core_rewrite`;
+DROP TABLE IF EXISTS `s_core_rewrite`;
+RENAME TABLE `new_s_core_rewrite` TO `s_core_rewrite`;
 
-ALTER TABLE `s_core_rewrite_urls` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_rewrite_urls` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `org_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `main` int(1) unsigned NOT NULL,
+  `subshopID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `path` (`path`,`subshopID`),
+  KEY `org_path` (`org_path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_rewrite_urls` (`id`, `org_path`, `path`, `main`, `subshopID`)
+SELECT `id`, `org_path`, `path`, `main`, `subshopID` FROM `s_core_rewrite_urls`;
+DROP TABLE IF EXISTS `s_core_rewrite_urls`;
+RENAME TABLE `new_s_core_rewrite_urls` TO `s_core_rewrite_urls`;
 
-ALTER TABLE `s_core_rulesets` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_rulesets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `paymentID` int(11) NOT NULL,
+  `rule1` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value1` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `rule2` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value2` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_rulesets` (`id`, `paymentID`, `rule1`, `value1`, `rule2`, `value2`)
+SELECT `id`, `paymentID`, `rule1`, `value1`, `rule2`, `value2` FROM `s_core_rulesets`;
+DROP TABLE IF EXISTS `s_core_rulesets`;
+RENAME TABLE `new_s_core_rulesets` TO `s_core_rulesets`;
 
-ALTER TABLE `s_core_sessions` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_sessions` (
+  `id` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `expiry` int(11) unsigned NOT NULL,
+  `expireref` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created` int(11) unsigned NOT NULL,
+  `modified` int(11) unsigned NOT NULL,
+  `data` longtext COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `expiry` (`expiry`),
+  KEY `expireref` (`expireref`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_sessions` (`id`, `expiry`, `expireref`, `created`, `modified`, `data`)
+SELECT `id`, `expiry`, `expireref`, `created`, `modified`, `data` FROM `s_core_sessions`;
+DROP TABLE IF EXISTS `s_core_sessions`;
+RENAME TABLE `new_s_core_sessions` TO `s_core_sessions`;
 
 CREATE TABLE IF NOT EXISTS `s_core_shop_currencies` (
   `shop_id` int(11) unsigned NOT NULL,
   `currency_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`shop_id`,`currency_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_shop_currencies` (`shop_id`, `currency_id`) VALUES
 ('1', '1'),
 ('1', '2');
@@ -2092,7 +2514,7 @@ CREATE TABLE IF NOT EXISTS `s_core_shop_pages` (
   `shop_id` int(11) unsigned NOT NULL,
   `group_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`shop_id`,`group_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_shops` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -2119,7 +2541,7 @@ CREATE TABLE IF NOT EXISTS `s_core_shops` (
   PRIMARY KEY (`id`),
   KEY `main_id` (`main_id`),
   KEY `host` (`host`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
 ('1', NULL, 'Deutsch', NULL, '0', '', '', '', '0', NULL, NULL, '11', '4', '3', '1', '1', '1', NULL, '0', '1', '1'),
 ('2', '1', 'Englisch', '', '0', NULL, NULL, '', '0', NULL, NULL, NULL, NULL, '4', '2', '1', '1', NULL, '0', '0', '0');
@@ -2135,7 +2557,7 @@ CREATE TABLE IF NOT EXISTS `new_s_core_snippets` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `namespace` (`namespace`,`shopID`,`name`,`localeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2651 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2651 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`) VALUES
 ('1', 'backend/error/index', '1', '1', 'ErrorIndexTitle', 'Fehler', '2010-01-01 00:00:00', '2010-09-28 11:54:19'),
 ('2', 'frontend/index/header', '1', '1', 'IndexMetaRobots', 'index,follow', '2010-01-01 00:00:00', '2010-09-28 11:54:19'),
@@ -3957,19 +4379,87 @@ INSERT IGNORE INTO `new_s_core_snippets` (`id`, `namespace`, `shopID`, `localeID
 ('2648', 'frontend/account/order_item', '1', '2', 'OrderItemInfoPartiallyCompleted', 'Partially completed', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 ('2649', 'frontend/account/order_item', '1', '2', 'OrderItemInfoClarificationNeeded', 'Clarification needed', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 ('2650', 'frontend/account/order_item', '1', '2', 'OrderItemInfoReadyForShipping', 'Ready for shipping', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+DROP TABLE IF EXISTS `backup_s_core_snippets`;
 RENAME TABLE `s_core_snippets` TO `backup_s_core_snippets`;
 RENAME TABLE `new_s_core_snippets` TO `s_core_snippets`;
 
-ALTER TABLE `s_core_states` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_states` (
+  `id` int(11) NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  `group` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `mail` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_states` (`id`, `description`, `position`, `group`, `mail`)
+SELECT `id`, `description`, `position`, `group`, `mail` FROM `s_core_states`;
+DROP TABLE IF EXISTS `s_core_states`;
+RENAME TABLE `new_s_core_states` TO `s_core_states`;
 
-ALTER TABLE `s_core_subscribes` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_subscribes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subscribe` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(11) unsigned NOT NULL,
+  `listener` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pluginID` int(11) unsigned DEFAULT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `subscribe` (`subscribe`,`type`,`listener`)
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
+('1', 'Enlight_Bootstrap_InitResource_Auth', '0', 'Shopware_Plugins_Backend_Auth_Bootstrap::onInitResourceAuth', '36', '0'),
+('2', 'Enlight_Controller_Action_PreDispatch', '0', 'Shopware_Plugins_Backend_Auth_Bootstrap::onPreDispatchBackend', '36', '0'),
+('3', 'Enlight_Bootstrap_InitResource_Menu', '0', 'Shopware_Plugins_Backend_Menu_Bootstrap::onInitResourceMenu', '37', '0'),
+('4', 'Enlight_Bootstrap_InitResource_Api', '0', 'Shopware_Plugins_Core_Api_Bootstrap::onInitResourceApi', '17', '0'),
+('5', 'Enlight_Controller_Action_PostDispatch', '0', 'Shopware_Plugins_Core_ControllerBase_Bootstrap::onPostDispatch', '15', '100'),
+('6', 'Enlight_Controller_Front_StartDispatch', '0', 'Shopware_Plugins_Core_ErrorHandler_Bootstrap::onStartDispatch', '2', '0'),
+('7', 'Enlight_Bootstrap_InitResource_Log', '0', 'Shopware_Plugins_Core_Log_Bootstrap::onInitResourceLog', '1', '0'),
+('8', 'Enlight_Controller_Front_RouteStartup', '0', 'Shopware_Plugins_Core_Log_Bootstrap::onRouteStartup', '1', '0'),
+('9', 'Enlight_Plugins_ViewRenderer_FilterRender', '0', 'Shopware_Plugins_Core_PostFilter_Bootstrap::onFilterRender', '13', '0'),
+('10', 'Enlight_Controller_Front_RouteStartup', '0', 'Shopware_Plugins_Core_Router_Bootstrap::onRouteStartup', '8', '0'),
+('11', 'Enlight_Controller_Front_RouteShutdown', '0', 'Shopware_Plugins_Core_Router_Bootstrap::onRouteShutdown', '8', '0'),
+('12', 'Enlight_Controller_Router_FilterAssembleParams', '0', 'Shopware_Plugins_Core_Router_Bootstrap::onFilterAssemble', '8', '0'),
+('13', 'Enlight_Controller_Router_FilterUrl', '0', 'Shopware_Plugins_Core_Router_Bootstrap::onFilterUrl', '8', '0'),
+('14', 'Enlight_Controller_Router_Assemble', '0', 'Shopware_Plugins_Core_Router_Bootstrap::onAssemble', '8', '100'),
+('15', 'Enlight_Controller_Front_PreDispatch', '0', 'Shopware_Plugins_Core_Shop_Bootstrap::onPreDispatch', '12', '0'),
+('16', 'Enlight_Bootstrap_InitResource_Shop', '0', 'Shopware_Plugins_Core_Shop_Bootstrap::onInitResourceShop', '12', '0'),
+('17', 'Enlight_Bootstrap_InitResource_System', '0', 'Shopware_Plugins_Core_System_Bootstrap::onInitResourceSystem', '10', '0'),
+('18', 'Enlight_Bootstrap_InitResource_Modules', '0', 'Shopware_Plugins_Core_System_Bootstrap::onInitResourceModules', '10', '0'),
+('19', 'Enlight_Bootstrap_InitResource_Adodb', '0', 'Shopware_Plugins_Core_System_Bootstrap::onInitResourceAdodb', '10', '0'),
+('21', 'Enlight_Controller_Front_PreDispatch', '0', 'Shopware_Plugins_Core_ViewportForward_Bootstrap::onPreDispatch', '11', '10'),
+('23', 'Enlight_Controller_Action_PostDispatch', '0', 'Shopware_Plugins_Frontend_Compare_Bootstrap::onPostDispatch', '20', '0'),
+('24', 'Enlight_Controller_Front_DispatchLoopShutdown', '0', 'Shopware_Plugins_Frontend_Statistics_Bootstrap::onDispatchLoopShutdown', '31', '0'),
+('25', 'Enlight_Plugins_ViewRenderer_FilterRender', '0', 'Shopware_Plugins_Frontend_Seo_Bootstrap::onFilterRender', '22', '0'),
+('26', 'Enlight_Controller_Action_PostDispatch', '0', 'Shopware_Plugins_Frontend_Seo_Bootstrap::onPostDispatch', '22', '0'),
+('27', 'Enlight_Controller_Action_PostDispatch', '0', 'Shopware_Plugins_Frontend_TagCloud_Bootstrap::onPostDispatch', '34', '0'),
+('30', 'Enlight_Controller_Front_StartDispatch', '0', 'Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onStartDispatch', '19', '0'),
+('31', 'Enlight_Controller_Router_Route', '0', 'Shopware_Plugins_Frontend_RouterOld_Bootstrap::onRoute', '24', '10'),
+('32', 'Enlight_Controller_Router_Assemble', '0', 'Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble', '24', '10'),
+('37', 'Enlight_Controller_Action_PostDispatch', '0', 'Shopware_Plugins_Frontend_LastArticles_Bootstrap::onPostDispatch', '23', '0'),
+('38', 'Enlight_Controller_Front_RouteShutdown', '0', 'Shopware_Plugins_Frontend_InputFilter_Bootstrap::onRouteShutdown', '35', '0'),
+('40', 'Enlight_Bootstrap_InitResource_Payments', '0', 'Shopware_Plugins_Frontend_Payment_Bootstrap::onInitResourcePayments', '39', '0'),
+('41', 'Enlight_Controller_Dispatcher_ControllerPath_Backend_Check', '0', 'Shopware_Plugins_Backend_Check_Bootstrap::onGetControllerPathBackend', '40', '0'),
+('52', 'Enlight_Bootstrap_InitResource_BackendSession', '0', 'Shopware_Plugins_Backend_Auth_Bootstrap::onInitResourceBackendSession', '36', '0'),
+('53', 'Enlight_Bootstrap_InitResource_Acl', '0', 'Shopware_Plugins_Backend_Auth_Bootstrap::onInitResourceAcl', '36', '0'),
+('55', 'Enlight_Controller_Action_PreDispatch', '0', 'Shopware_Plugins_Backend_Locale_Bootstrap::onPreDispatchBackend', '43', '0'),
+('56', 'Enlight_Controller_Front_DispatchLoopStartup', '0', 'Shopware_Plugins_Core_RestApi_Bootstrap::onDispatchLoopStartup', '44', '0'),
+('57', 'Enlight_Controller_Front_PreDispatch', '0', 'Shopware_Plugins_Core_RestApi_Bootstrap::onFrontPreDispatch', '44', '0'),
+('58', 'Enlight_Bootstrap_InitResource_Auth', '0', 'Shopware_Plugins_Core_RestApi_Bootstrap::onInitResourceAuth', '44', '0'),
+('59', 'Enlight_Controller_Front_DispatchLoopShutdown', '0', 'Shopware_Plugins_Core_Log_Bootstrap::onDispatchLoopShutdown', '1', '500'),
+('60', 'Enlight_Controller_Dispatcher_ControllerPath_Backend_PluginManager', '0', 'Shopware_Plugins_Core_PluginManager_Bootstrap::onGetPluginController', '46', '0'),
+('61', 'Enlight_Controller_Dispatcher_ControllerPath_Backend_Store', '0', 'Shopware_Plugins_Core_PluginManager_Bootstrap::onGetStoreController', '46', '0'),
+('62', 'Enlight_Bootstrap_InitResource_StoreApi', '0', 'Shopware_Plugins_Backend_StoreApi_Bootstrap::onInitResourceStoreApi', '45', '0'),
+('63', 'Enlight_Controller_Action_PreDispatch', '0', 'Shopware_Plugins_Backend_StoreApi_Bootstrap::onPreDispatch', '45', '0');
+DROP TABLE IF EXISTS `backup_s_core_subscribes`;
+RENAME TABLE `s_core_subscribes` TO `backup_s_core_subscribes`;
+RENAME TABLE `new_s_core_subscribes` TO `s_core_subscribes`;
 
 CREATE TABLE IF NOT EXISTS `new_s_core_tax` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tax` decimal(10,2) NOT NULL,
   `description` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_tax` (`id`, `tax`, `description`)
 SELECT `id`, `tax`, `description` FROM `s_core_tax`;
 DROP TABLE IF EXISTS `s_core_tax`;
@@ -3990,7 +4480,7 @@ CREATE TABLE IF NOT EXISTS `s_core_tax_rules` (
   KEY `countryID` (`countryID`),
   KEY `stateID` (`stateID`),
   KEY `areaID` (`areaID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4006,7 +4496,7 @@ CREATE TABLE IF NOT EXISTS `s_core_templates` (
   `plugin_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `basename` (`template`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_templates` (`id`, `template`, `name`, `description`, `author`, `license`, `esi`, `style_support`, `emotion`, `version`, `plugin_id`) VALUES
 ('4', 'orange', 'Orange', NULL, 'shopware AG', 'AGPL', '0', '0', '0', '1', NULL),
 ('11', 'emotion_orange', 'Emotion Orange', NULL, 'shopware AG', 'AGPL', '1', '0', '1', '2', NULL),
@@ -4019,9 +4509,30 @@ INSERT IGNORE INTO `s_core_templates` (`id`, `template`, `name`, `description`, 
 ('20', 'emotion_black', 'Emotion Black', NULL, 'shopware AG', 'AGPL', '1', '0', '1', '2', NULL),
 ('21', 'emotion_pink', 'Emotion Pink', NULL, 'shopware AG', 'AGPL', '1', '0', '1', '2', NULL);
 
-ALTER TABLE `s_core_translations` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_translations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `objecttype` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `objectdata` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `objectkey` int(11) unsigned NOT NULL,
+  `objectlanguage` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `objecttype` (`objecttype`,`objectkey`,`objectlanguage`)
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_translations` (`id`, `objecttype`, `objectdata`, `objectkey`, `objectlanguage`)
+SELECT `id`, `objecttype`, `objectdata`, `objectkey`, `objectlanguage` FROM `s_core_translations`;
+DROP TABLE IF EXISTS `s_core_translations`;
+RENAME TABLE `new_s_core_translations` TO `s_core_translations`;
 
-ALTER TABLE `s_core_units` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_core_units` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `unit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_core_units` (`id`, `unit`, `description`)
+SELECT `id`, `unit`, `description` FROM `s_core_units`;
+DROP TABLE IF EXISTS `s_core_units`;
+RENAME TABLE `new_s_core_units` TO `s_core_units`;
 
 CREATE TABLE IF NOT EXISTS `s_core_widget_views` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -4032,7 +4543,7 @@ CREATE TABLE IF NOT EXISTS `s_core_widget_views` (
   `position` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `widget_id` (`widget_id`,`auth_id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_core_widgets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -4040,7 +4551,7 @@ CREATE TABLE IF NOT EXISTS `s_core_widgets` (
   `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
 ('1', 'swag-sales-widget', 'Umsatz Heute und Gestern'),
 ('2', 'swag-upload-widget', 'Drag and Drop Upload'),
@@ -4065,7 +4576,7 @@ CREATE TABLE IF NOT EXISTS `new_s_crontab` (
   `pluginID` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID`)
 SELECT `id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID` FROM `s_crontab`;
 DROP TABLE IF EXISTS `s_crontab`;
@@ -4083,7 +4594,7 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_banners` (
   `extension` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `liveshoppingID` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_banners` (`id`, `description`, `valid_from`, `valid_to`, `img`, `link`, `link_target`, `categoryID`, `extension`, `liveshoppingID`)
 SELECT `id`, `description`, `valid_from`, `valid_to`, `img`, `link`, `link_target`, `categoryID`, `extension`, `liveshoppingID` FROM `s_emarketing_banners`;
 DROP TABLE IF EXISTS `s_emarketing_banners`;
@@ -4095,7 +4606,7 @@ CREATE TABLE IF NOT EXISTS `s_emarketing_banners_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `bannerID` (`bannerID`),
   CONSTRAINT `s_emarketing_banners_attributes_ibfk_1` FOREIGN KEY (`bannerID`) REFERENCES `s_emarketing_banners` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emarketing_banners_statistics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4106,9 +4617,27 @@ CREATE TABLE IF NOT EXISTS `s_emarketing_banners_statistics` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `display_date` (`bannerID`,`display_date`),
   KEY `bannerID` (`bannerID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_emarketing_lastarticles` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_lastarticles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `img` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `articleID` int(11) unsigned NOT NULL,
+  `sessionID` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `userID` int(11) unsigned NOT NULL,
+  `shopID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `articleID` (`articleID`,`sessionID`,`shopID`),
+  KEY `userID` (`userID`),
+  KEY `time` (`time`),
+  KEY `sessionID` (`sessionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_lastarticles` (`id`, `img`, `name`, `articleID`, `sessionID`, `time`, `userID`, `shopID`)
+SELECT `id`, `img`, `name`, `articleID`, `sessionID`, `time`, `userID`, `shopID` FROM `s_emarketing_lastarticles`;
+DROP TABLE IF EXISTS `s_emarketing_lastarticles`;
+RENAME TABLE `new_s_emarketing_lastarticles` TO `s_emarketing_lastarticles`;
 
 CREATE TABLE IF NOT EXISTS `new_s_emarketing_partner` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4132,17 +4661,56 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_partner` (
   `active` int(1) NOT NULL DEFAULT '0',
   `userID` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_partner` (`id`, `idcode`, `datum`, `company`, `contact`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`)
 SELECT `id`, `idcode`, `datum`, `company`, `contact`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active` FROM `s_emarketing_partner`;
 DROP TABLE IF EXISTS `s_emarketing_partner`;
 RENAME TABLE `new_s_emarketing_partner` TO `s_emarketing_partner`;
 
-ALTER TABLE `s_emarketing_promotion_articles` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL DEFAULT '0',
+  `articleordernumber` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_articles` (`id`, `parentID`, `articleordernumber`, `name`, `type`, `position`, `image`, `link`, `target`)
+SELECT `id`, `parentID`, `articleordernumber`, `name`, `type`, `position`, `image`, `link`, `target` FROM `s_emarketing_promotion_articles`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_articles`;
+RENAME TABLE `new_s_emarketing_promotion_articles` TO `s_emarketing_promotion_articles`;
 
-ALTER TABLE `s_emarketing_promotion_banner` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_banner` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `linkTarget` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_banner` (`id`, `parentID`, `image`, `link`, `linkTarget`, `description`)
+SELECT `id`, `parentID`, `image`, `link`, `linkTarget`, `description` FROM `s_emarketing_promotion_banner`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_banner`;
+RENAME TABLE `new_s_emarketing_promotion_banner` TO `s_emarketing_promotion_banner`;
 
-ALTER TABLE `s_emarketing_promotion_containers` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_containers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `promotionID` int(11) NOT NULL DEFAULT '0',
+  `container` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_containers` (`id`, `promotionID`, `container`, `type`, `description`, `position`)
+SELECT `id`, `promotionID`, `container`, `type`, `description`, `position` FROM `s_emarketing_promotion_containers`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_containers`;
+RENAME TABLE `new_s_emarketing_promotion_containers` TO `s_emarketing_promotion_containers`;
 
 CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_html` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4150,19 +4718,79 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_html` (
   `headline` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `html` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_promotion_html` (`id`, `parentID`, `headline`, `html`)
 SELECT `id`, `parentID`, `headline`, `html` FROM `s_emarketing_promotion_html`;
 DROP TABLE IF EXISTS `s_emarketing_promotion_html`;
 RENAME TABLE `new_s_emarketing_promotion_html` TO `s_emarketing_promotion_html`;
 
-ALTER TABLE `s_emarketing_promotion_links` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL DEFAULT '0',
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_links` (`id`, `parentID`, `description`, `link`, `target`, `position`)
+SELECT `id`, `parentID`, `description`, `link`, `target`, `position` FROM `s_emarketing_promotion_links`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_links`;
+RENAME TABLE `new_s_emarketing_promotion_links` TO `s_emarketing_promotion_links`;
 
-ALTER TABLE `s_emarketing_promotion_main` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_main` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentID` int(11) NOT NULL,
+  `positionGroup` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `datum` date NOT NULL,
+  `start` date NOT NULL,
+  `end` date NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `linktarget` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `active` int(1) NOT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parentID` (`parentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_main` (`id`, `parentID`, `positionGroup`, `datum`, `start`, `end`, `image`, `description`, `link`, `linktarget`, `active`, `position`)
+SELECT `id`, `parentID`, `positionGroup`, `datum`, `start`, `end`, `image`, `description`, `link`, `linktarget`, `active`, `position` FROM `s_emarketing_promotion_main`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_main`;
+RENAME TABLE `new_s_emarketing_promotion_main` TO `s_emarketing_promotion_main`;
 
-ALTER TABLE `s_emarketing_promotion_positions` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotion_positions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `promotionID` int(11) NOT NULL DEFAULT '0',
+  `containerID` int(11) NOT NULL DEFAULT '0',
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotion_positions` (`id`, `promotionID`, `containerID`, `position`)
+SELECT `id`, `promotionID`, `containerID`, `position` FROM `s_emarketing_promotion_positions`;
+DROP TABLE IF EXISTS `s_emarketing_promotion_positions`;
+RENAME TABLE `new_s_emarketing_promotion_positions` TO `s_emarketing_promotion_positions`;
 
-ALTER TABLE `s_emarketing_promotions` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_promotions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `category` int(11) NOT NULL DEFAULT '0',
+  `mode` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `ordernumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `link_target` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `valid_from` date NOT NULL DEFAULT '0000-00-00',
+  `valid_to` date NOT NULL DEFAULT '0000-00-00',
+  `position` int(11) NOT NULL DEFAULT '0',
+  `img` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `liveshoppingID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category` (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_promotions` (`id`, `description`, `category`, `mode`, `ordernumber`, `link`, `link_target`, `valid_from`, `valid_to`, `position`, `img`, `liveshoppingID`)
+SELECT `id`, `description`, `category`, `mode`, `ordernumber`, `link`, `link_target`, `valid_from`, `valid_to`, `position`, `img`, `liveshoppingID` FROM `s_emarketing_promotions`;
+DROP TABLE IF EXISTS `s_emarketing_promotions`;
+RENAME TABLE `new_s_emarketing_promotions` TO `s_emarketing_promotions`;
 
 CREATE TABLE IF NOT EXISTS `new_s_emarketing_referer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4170,13 +4798,24 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_referer` (
   `referer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_referer` (`id`, `userID`, `referer`, `date`)
 SELECT `id`, `userID`, `referer`, `date` FROM `s_emarketing_referer`;
 DROP TABLE IF EXISTS `s_emarketing_referer`;
 RENAME TABLE `new_s_emarketing_referer` TO `s_emarketing_referer`;
 
-ALTER TABLE `s_emarketing_tellafriend` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_tellafriend` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datum` date NOT NULL DEFAULT '0000-00-00',
+  `recipient` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `sender` int(11) NOT NULL DEFAULT '0',
+  `confirmed` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_tellafriend` (`id`, `datum`, `recipient`, `sender`, `confirmed`)
+SELECT `id`, `datum`, `recipient`, `sender`, `confirmed` FROM `s_emarketing_tellafriend`;
+DROP TABLE IF EXISTS `s_emarketing_tellafriend`;
+RENAME TABLE `new_s_emarketing_tellafriend` TO `s_emarketing_tellafriend`;
 
 CREATE TABLE IF NOT EXISTS `new_s_emarketing_voucher_codes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4186,7 +4825,7 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_voucher_codes` (
   `cashed` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_voucher_codes` (`id`, `voucherID`, `userID`, `code`, `cashed`)
 SELECT `id`, `voucherID`, `userID`, `code`, `cashed` FROM `s_emarketing_voucher_codes`;
 DROP TABLE IF EXISTS `s_emarketing_voucher_codes`;
@@ -4213,7 +4852,7 @@ CREATE TABLE IF NOT EXISTS `new_s_emarketing_vouchers` (
   `subshopID` int(1) DEFAULT NULL,
   `taxconfig` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_emarketing_vouchers` (`id`, `description`, `vouchercode`, `numberofunits`, `value`, `minimumcharge`, `shippingfree`, `bindtosupplier`, `valid_from`, `valid_to`, `ordercode`, `modus`, `percental`, `numorder`, `customergroup`, `restrictarticles`, `strict`, `subshopID`, `taxconfig`)
 SELECT `id`, `description`, `vouchercode`, `numberofunits`, `value`, `minimumcharge`, `shippingfree`, `bindtosupplier`, `valid_from`, `valid_to`, `ordercode`, `modus`, `percental`, `numorder`, `customergroup`, `restrictarticles`, `strict`, `subshopID`, `taxconfig` FROM `s_emarketing_vouchers`;
 DROP TABLE IF EXISTS `s_emarketing_vouchers`;
@@ -4225,9 +4864,18 @@ CREATE TABLE IF NOT EXISTS `s_emarketing_vouchers_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `voucherID` (`voucherID`),
   CONSTRAINT `s_emarketing_vouchers_attributes_ibfk_1` FOREIGN KEY (`voucherID`) REFERENCES `s_emarketing_vouchers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_emarketing_vouchers_cashed` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_emarketing_vouchers_cashed` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL DEFAULT '0',
+  `voucherID` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_emarketing_vouchers_cashed` (`id`, `userID`, `voucherID`)
+SELECT `id`, `userID`, `voucherID` FROM `s_emarketing_vouchers_cashed`;
+DROP TABLE IF EXISTS `s_emarketing_vouchers_cashed`;
+RENAME TABLE `new_s_emarketing_vouchers_cashed` TO `s_emarketing_vouchers_cashed`;
 
 CREATE TABLE IF NOT EXISTS `s_emotion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4251,7 +4899,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion` (
   `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emotion_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4259,14 +4907,14 @@ CREATE TABLE IF NOT EXISTS `s_emotion_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `emotionID` (`emotionID`),
   CONSTRAINT `s_emotion_attributes_ibfk_1` FOREIGN KEY (`emotionID`) REFERENCES `s_emotion_backup` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emotion_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `emotion_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emotion_element` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4277,7 +4925,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion_element` (
   `end_row` int(11) NOT NULL,
   `end_col` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emotion_element_value` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4289,7 +4937,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion_element_value` (
   PRIMARY KEY (`id`),
   KEY `emotionID` (`elementID`),
   KEY `fieldID` (`fieldID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_emotion_grid` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4299,7 +4947,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion_grid` (
   `width` int(11) NOT NULL,
   `height` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_emotion_grid` (`id`, `name`, `cols`, `rows`, `width`, `height`) VALUES
 ('1', 'first-grid', '4', '10', '150', '150');
 
@@ -4335,13 +4983,21 @@ CREATE TABLE IF NOT EXISTS `new_s_export` (
   `multishopID` int(11) DEFAULT NULL,
   `variant_export` int(11) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`)
 SELECT `id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export` FROM `s_export`;
 DROP TABLE IF EXISTS `s_export`;
 RENAME TABLE `new_s_export` TO `s_export`;
 
-ALTER TABLE `s_export_articles` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_export_articles` (
+  `feedID` int(11) NOT NULL,
+  `articleID` int(11) NOT NULL,
+  PRIMARY KEY (`feedID`,`articleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_export_articles` (`feedID`, `articleID`)
+SELECT `feedID`, `articleID` FROM `s_export_articles`;
+DROP TABLE IF EXISTS `s_export_articles`;
+RENAME TABLE `new_s_export_articles` TO `s_export_articles`;
 
 CREATE TABLE IF NOT EXISTS `s_export_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4349,19 +5005,46 @@ CREATE TABLE IF NOT EXISTS `s_export_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `exportID` (`exportID`),
   CONSTRAINT `s_export_attributes_ibfk_1` FOREIGN KEY (`exportID`) REFERENCES `s_export` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_export_categories` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_export_categories` (
+  `feedID` int(11) NOT NULL,
+  `categoryID` int(11) NOT NULL,
+  PRIMARY KEY (`feedID`,`categoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_export_categories` (`feedID`, `categoryID`)
+SELECT `feedID`, `categoryID` FROM `s_export_categories`;
+DROP TABLE IF EXISTS `s_export_categories`;
+RENAME TABLE `new_s_export_categories` TO `s_export_categories`;
 
-ALTER TABLE `s_export_suppliers` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_export_suppliers` (
+  `feedID` int(11) NOT NULL,
+  `supplierID` int(11) NOT NULL,
+  PRIMARY KEY (`feedID`,`supplierID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_export_suppliers` (`feedID`, `supplierID`)
+SELECT `feedID`, `supplierID` FROM `s_export_suppliers`;
+DROP TABLE IF EXISTS `s_export_suppliers`;
+RENAME TABLE `new_s_export_suppliers` TO `s_export_suppliers`;
 
-ALTER TABLE `s_filter` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_filter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  `comparable` int(1) NOT NULL,
+  `sortmode` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_filter` (`id`, `name`, `position`, `comparable`, `sortmode`)
+SELECT `id`, `name`, `position`, `comparable`, `sortmode` FROM `s_filter`;
+DROP TABLE IF EXISTS `s_filter`;
+RENAME TABLE `new_s_filter` TO `s_filter`;
 
 CREATE TABLE IF NOT EXISTS `s_filter_articles` (
   `articleID` int(10) unsigned NOT NULL,
   `valueID` int(10) unsigned NOT NULL,
   PRIMARY KEY (`articleID`,`valueID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_filter_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4369,11 +5052,32 @@ CREATE TABLE IF NOT EXISTS `s_filter_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `filterID` (`filterID`),
   CONSTRAINT `s_filter_attributes_ibfk_1` FOREIGN KEY (`filterID`) REFERENCES `s_filter` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_filter_options` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_filter_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `filterable` int(1) NOT NULL,
+  `default` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_filter_options` (`id`, `name`, `filterable`, `default`)
+SELECT `id`, `name`, `filterable`, `default` FROM `s_filter_options`;
+DROP TABLE IF EXISTS `s_filter_options`;
+RENAME TABLE `new_s_filter_options` TO `s_filter_options`;
 
-ALTER TABLE `s_filter_relations` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_filter_relations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupID` int(11) NOT NULL,
+  `optionID` int(11) NOT NULL,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groupID` (`groupID`,`optionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_filter_relations` (`id`, `groupID`, `optionID`, `position`)
+SELECT `id`, `groupID`, `optionID`, `position` FROM `s_filter_relations`;
+DROP TABLE IF EXISTS `s_filter_relations`;
+RENAME TABLE `new_s_filter_relations` TO `s_filter_relations`;
 
 CREATE TABLE IF NOT EXISTS `new_s_filter_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4382,9 +5086,10 @@ CREATE TABLE IF NOT EXISTS `new_s_filter_values` (
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `optionID` (`optionID`,`value`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_filter_values` (`id`, `optionID`, `value`)
 SELECT `id`, `optionID`, `value` FROM `s_filter_values`;
+DROP TABLE IF EXISTS `backup_s_filter_values`;
 RENAME TABLE `s_filter_values` TO `backup_s_filter_values`;
 RENAME TABLE `new_s_filter_values` TO `s_filter_values`;
 
@@ -4398,7 +5103,7 @@ CREATE TABLE IF NOT EXISTS `s_library_component` (
   `cls` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pluginID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_library_component` (`id`, `name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`) VALUES
 ('2', 'HTML-Element', '', NULL, '', 'component_html', 'html-text-element', NULL),
 ('3', 'Banner', 'emotion-components-banner', 'getBannerMappingLinks', '', 'component_banner', 'banner-element', NULL),
@@ -4427,7 +5132,7 @@ CREATE TABLE IF NOT EXISTS `s_library_component_field` (
   `default_value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `allow_blank` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_library_component_field` (`id`, `componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`) VALUES
 ('3', '3', 'file', 'mediaselectionfield', '', 'Bild', '', '', '', '', '', '', '', '0'),
 ('4', '2', 'text', 'tinymce', '', 'Text', 'Anzuzeigender Text', 'HTML-Text', 'Geben Sie hier den Text ein der im Element angezeigt werden soll.', '', '', '', '', '0'),
@@ -4483,7 +5188,7 @@ CREATE TABLE IF NOT EXISTS `s_media` (
   PRIMARY KEY (`id`),
   KEY `Album` (`albumID`),
   KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_media_album` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4491,7 +5196,7 @@ CREATE TABLE IF NOT EXISTS `s_media_album` (
   `parentID` int(11) DEFAULT NULL,
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
 ('-12', 'Hersteller', NULL, '12'),
 ('-11', 'Blog', NULL, '3'),
@@ -4514,7 +5219,7 @@ CREATE TABLE IF NOT EXISTS `s_media_album_settings` (
   `icon` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `albumID` (`albumID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thumbnail_size`, `icon`) VALUES
 ('1', '-10', '0', '', 'sprite-blue-folder'),
 ('2', '-9', '0', '', 'sprite-blue-folder'),
@@ -4537,7 +5242,7 @@ CREATE TABLE IF NOT EXISTS `s_media_association` (
   PRIMARY KEY (`id`),
   KEY `Media` (`mediaID`),
   KEY `Target` (`targetID`,`targetType`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `s_media_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4545,7 +5250,7 @@ CREATE TABLE IF NOT EXISTS `s_media_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `mediaID` (`mediaID`),
   CONSTRAINT `s_media_attributes_ibfk_1` FOREIGN KEY (`mediaID`) REFERENCES `s_media` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4586,9 +5291,10 @@ CREATE TABLE IF NOT EXISTS `new_s_order` (
   KEY `temporaryID` (`temporaryID`),
   KEY `ordernumber` (`ordernumber`),
   KEY `transactionID` (`transactionID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`)
 SELECT `id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr` FROM `s_order`;
+DROP TABLE IF EXISTS `backup_s_order`;
 RENAME TABLE `s_order` TO `backup_s_order`;
 RENAME TABLE `new_s_order` TO `s_order`;
 
@@ -4604,7 +5310,7 @@ CREATE TABLE IF NOT EXISTS `s_order_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `orderID` (`orderID`),
   CONSTRAINT `s_order_attributes_ibfk_1` FOREIGN KEY (`orderID`) REFERENCES `s_order` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_order_basket` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4633,9 +5339,10 @@ CREATE TABLE IF NOT EXISTS `new_s_order_basket` (
   KEY `sessionID` (`sessionID`),
   KEY `articleID` (`articleID`),
   KEY `datum` (`datum`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_order_basket` (`id`, `sessionID`, `userID`, `articlename`, `articleID`, `ordernumber`, `shippingfree`, `quantity`, `price`, `netprice`, `datum`, `modus`, `esdarticle`, `partnerID`, `lastviewport`, `useragent`, `config`, `currencyFactor`, `liveshoppingID`, `bundleID`, `bundle_join_ordernumber`)
 SELECT `id`, `sessionID`, `userID`, `articlename`, `articleID`, `ordernumber`, `shippingfree`, `quantity`, `price`, `netprice`, `datum`, `modus`, `esdarticle`, `partnerID`, `lastviewport`, `useragent`, `config`, `currencyFactor`, `liveshoppingID`, `bundleID`, `bundle_join_ordernumber` FROM `s_order_basket`;
+DROP TABLE IF EXISTS `backup_s_order_basket`;
 RENAME TABLE `s_order_basket` TO `backup_s_order_basket`;
 RENAME TABLE `new_s_order_basket` TO `s_order_basket`;
 
@@ -4651,7 +5358,7 @@ CREATE TABLE IF NOT EXISTS `s_order_basket_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `basketID` (`basketID`),
   CONSTRAINT `s_order_basket_attributes_ibfk_2` FOREIGN KEY (`basketID`) REFERENCES `s_order_basket` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_order_billingaddress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4675,9 +5382,10 @@ CREATE TABLE IF NOT EXISTS `new_s_order_billingaddress` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `orderID` (`orderID`),
   KEY `userid` (`userID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid`)
 SELECT `id`, `userID`, `orderID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid` FROM `s_order_billingaddress`;
+DROP TABLE IF EXISTS `backup_s_order_billingaddress`;
 RENAME TABLE `s_order_billingaddress` TO `backup_s_order_billingaddress`;
 RENAME TABLE `new_s_order_billingaddress` TO `s_order_billingaddress`;
 
@@ -4693,9 +5401,24 @@ CREATE TABLE IF NOT EXISTS `s_order_billingaddress_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `billingID` (`billingID`),
   CONSTRAINT `s_order_billingaddress_attributes_ibfk_2` FOREIGN KEY (`billingID`) REFERENCES `s_order_billingaddress` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_order_comparisons` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_order_comparisons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sessionID` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(11) NOT NULL DEFAULT '0',
+  `articlename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `articleID` (`articleID`),
+  KEY `sessionID` (`sessionID`),
+  KEY `datum` (`datum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_order_comparisons` (`id`, `sessionID`, `userID`, `articlename`, `articleID`, `datum`)
+SELECT `id`, `sessionID`, `userID`, `articlename`, `articleID`, `datum` FROM `s_order_comparisons`;
+DROP TABLE IF EXISTS `s_order_comparisons`;
+RENAME TABLE `new_s_order_comparisons` TO `s_order_comparisons`;
 
 CREATE TABLE IF NOT EXISTS `new_s_order_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4720,9 +5443,10 @@ CREATE TABLE IF NOT EXISTS `new_s_order_details` (
   KEY `articleID` (`articleID`),
   KEY `ordernumber` (`ordernumber`),
   KEY `articleordernumber` (`articleordernumber`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `config`)
 SELECT `id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `config` FROM `s_order_details`;
+DROP TABLE IF EXISTS `backup_s_order_details`;
 RENAME TABLE `s_order_details` TO `backup_s_order_details`;
 RENAME TABLE `new_s_order_details` TO `s_order_details`;
 
@@ -4738,9 +5462,25 @@ CREATE TABLE IF NOT EXISTS `s_order_details_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `detailID` (`detailID`),
   CONSTRAINT `s_order_details_attributes_ibfk_1` FOREIGN KEY (`detailID`) REFERENCES `s_order_details` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_order_documents` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_order_documents` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `type` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `orderID` int(11) unsigned NOT NULL,
+  `amount` double NOT NULL,
+  `docID` int(11) NOT NULL,
+  `hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `orderID` (`orderID`),
+  KEY `userID` (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_order_documents` (`ID`, `date`, `type`, `userID`, `orderID`, `amount`, `docID`, `hash`)
+SELECT `ID`, `date`, `type`, `userID`, `orderID`, `amount`, `docID`, `hash` FROM `s_order_documents`;
+DROP TABLE IF EXISTS `s_order_documents`;
+RENAME TABLE `new_s_order_documents` TO `s_order_documents`;
 
 CREATE TABLE IF NOT EXISTS `s_order_documents_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4748,9 +5488,22 @@ CREATE TABLE IF NOT EXISTS `s_order_documents_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `documentID` (`documentID`),
   CONSTRAINT `s_order_documents_attributes_ibfk_1` FOREIGN KEY (`documentID`) REFERENCES `s_order_documents` (`ID`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_order_esd` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_order_esd` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `serialID` int(255) NOT NULL DEFAULT '0',
+  `esdID` int(11) NOT NULL DEFAULT '0',
+  `userID` int(11) NOT NULL DEFAULT '0',
+  `orderID` int(11) NOT NULL DEFAULT '0',
+  `orderdetailsID` int(11) NOT NULL DEFAULT '0',
+  `datum` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_order_esd` (`id`, `serialID`, `esdID`, `userID`, `orderID`, `orderdetailsID`, `datum`)
+SELECT `id`, `serialID`, `esdID`, `userID`, `orderID`, `orderdetailsID`, `datum` FROM `s_order_esd`;
+DROP TABLE IF EXISTS `s_order_esd`;
+RENAME TABLE `new_s_order_esd` TO `s_order_esd`;
 
 CREATE TABLE IF NOT EXISTS `s_order_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4769,11 +5522,35 @@ CREATE TABLE IF NOT EXISTS `s_order_history` (
   KEY `current_order_status` (`order_status_id`),
   KEY `previous_payment_status` (`previous_payment_status_id`),
   KEY `previous_order_status` (`previous_order_status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_order_notes` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_order_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sUniqueID` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(11) NOT NULL DEFAULT '0',
+  `articlename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  `ordernumber` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `datum` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_order_notes` (`id`, `sUniqueID`, `userID`, `articlename`, `articleID`, `ordernumber`, `datum`)
+SELECT `id`, `sUniqueID`, `userID`, `articlename`, `articleID`, `ordernumber`, `datum` FROM `s_order_notes`;
+DROP TABLE IF EXISTS `s_order_notes`;
+RENAME TABLE `new_s_order_notes` TO `s_order_notes`;
 
-ALTER TABLE `s_order_number` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_order_number` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `number` int(20) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=929 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_order_number` (`id`, `number`, `name`, `desc`)
+SELECT `id`, `number`, `name`, `desc` FROM `s_order_number`;
+DROP TABLE IF EXISTS `s_order_number`;
+RENAME TABLE `new_s_order_number` TO `s_order_number`;
 
 CREATE TABLE IF NOT EXISTS `new_s_order_shippingaddress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4793,9 +5570,10 @@ CREATE TABLE IF NOT EXISTS `new_s_order_shippingaddress` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `orderID` (`orderID`),
   KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `countryID`)
 SELECT `id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `countryID` FROM `s_order_shippingaddress`;
+DROP TABLE IF EXISTS `backup_s_order_shippingaddress`;
 RENAME TABLE `s_order_shippingaddress` TO `backup_s_order_shippingaddress`;
 RENAME TABLE `new_s_order_shippingaddress` TO `s_order_shippingaddress`;
 
@@ -4811,16 +5589,29 @@ CREATE TABLE IF NOT EXISTS `s_order_shippingaddress_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `shippingID` (`shippingID`),
   CONSTRAINT `s_order_shippingaddress_attributes_ibfk_1` FOREIGN KEY (`shippingID`) REFERENCES `s_order_shippingaddress` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_plugin_recommendations` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_plugin_recommendations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categoryID` int(11) NOT NULL,
+  `banner_active` int(1) NOT NULL,
+  `new_active` int(1) NOT NULL,
+  `bought_active` int(1) NOT NULL,
+  `supplier_active` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `categoryID_2` (`categoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_plugin_recommendations` (`id`, `categoryID`, `banner_active`, `new_active`, `bought_active`, `supplier_active`)
+SELECT `id`, `categoryID`, `banner_active`, `new_active`, `bought_active`, `supplier_active` FROM `s_plugin_recommendations`;
+DROP TABLE IF EXISTS `s_plugin_recommendations`;
+RENAME TABLE `new_s_plugin_recommendations` TO `s_plugin_recommendations`;
 
 CREATE TABLE IF NOT EXISTS `s_plugin_widgets_notes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL,
   `notes` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4851,7 +5642,7 @@ CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch` (
   `status_link` mediumtext COLLATE utf8_unicode_ci,
   `calculation_sql` mediumtext COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_premium_dispatch` (`id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`)
 SELECT `id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql` FROM `s_premium_dispatch`;
 DROP TABLE IF EXISTS `s_premium_dispatch`;
@@ -4863,19 +5654,74 @@ CREATE TABLE IF NOT EXISTS `s_premium_dispatch_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `dispatchID` (`dispatchID`),
   CONSTRAINT `s_premium_dispatch_attributes_ibfk_1` FOREIGN KEY (`dispatchID`) REFERENCES `s_premium_dispatch` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_premium_dispatch_categories` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch_categories` (
+  `dispatchID` int(11) unsigned NOT NULL,
+  `categoryID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`dispatchID`,`categoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_dispatch_categories` (`dispatchID`, `categoryID`)
+SELECT `dispatchID`, `categoryID` FROM `s_premium_dispatch_categories`;
+DROP TABLE IF EXISTS `s_premium_dispatch_categories`;
+RENAME TABLE `new_s_premium_dispatch_categories` TO `s_premium_dispatch_categories`;
 
-ALTER TABLE `s_premium_dispatch_countries` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch_countries` (
+  `dispatchID` int(11) NOT NULL,
+  `countryID` int(11) NOT NULL,
+  PRIMARY KEY (`dispatchID`,`countryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_dispatch_countries` (`dispatchID`, `countryID`)
+SELECT `dispatchID`, `countryID` FROM `s_premium_dispatch_countries`;
+DROP TABLE IF EXISTS `s_premium_dispatch_countries`;
+RENAME TABLE `new_s_premium_dispatch_countries` TO `s_premium_dispatch_countries`;
 
-ALTER TABLE `s_premium_dispatch_holidays` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch_holidays` (
+  `dispatchID` int(11) unsigned NOT NULL,
+  `holidayID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`dispatchID`,`holidayID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_dispatch_holidays` (`dispatchID`, `holidayID`)
+SELECT `dispatchID`, `holidayID` FROM `s_premium_dispatch_holidays`;
+DROP TABLE IF EXISTS `s_premium_dispatch_holidays`;
+RENAME TABLE `new_s_premium_dispatch_holidays` TO `s_premium_dispatch_holidays`;
 
-ALTER TABLE `s_premium_dispatch_paymentmeans` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_dispatch_paymentmeans` (
+  `dispatchID` int(11) NOT NULL,
+  `paymentID` int(11) NOT NULL,
+  PRIMARY KEY (`dispatchID`,`paymentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_dispatch_paymentmeans` (`dispatchID`, `paymentID`)
+SELECT `dispatchID`, `paymentID` FROM `s_premium_dispatch_paymentmeans`;
+DROP TABLE IF EXISTS `s_premium_dispatch_paymentmeans`;
+RENAME TABLE `new_s_premium_dispatch_paymentmeans` TO `s_premium_dispatch_paymentmeans`;
 
-ALTER TABLE `s_premium_holidays` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_holidays` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `calculation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `date` (`date`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_holidays` (`id`, `name`, `calculation`, `date`)
+SELECT `id`, `name`, `calculation`, `date` FROM `s_premium_holidays`;
+DROP TABLE IF EXISTS `s_premium_holidays`;
+RENAME TABLE `new_s_premium_holidays` TO `s_premium_holidays`;
 
-ALTER TABLE `s_premium_shippingcosts` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_premium_shippingcosts` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `from` decimal(10,3) unsigned NOT NULL,
+  `value` decimal(10,2) NOT NULL,
+  `factor` decimal(10,2) NOT NULL,
+  `dispatchID` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `from` (`from`,`dispatchID`)
+) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_premium_shippingcosts` (`id`, `from`, `value`, `factor`, `dispatchID`)
+SELECT `id`, `from`, `value`, `factor`, `dispatchID` FROM `s_premium_shippingcosts`;
+DROP TABLE IF EXISTS `s_premium_shippingcosts`;
+RENAME TABLE `new_s_premium_shippingcosts` TO `s_premium_shippingcosts`;
 
 CREATE TABLE IF NOT EXISTS `new_s_search_fields` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -4885,28 +5731,79 @@ CREATE TABLE IF NOT EXISTS `new_s_search_fields` (
   `tableID` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `field` (`field`,`tableID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_search_fields` (`id`, `name`, `relevance`, `field`, `tableID`)
 SELECT `id`, `name`, `relevance`, `field`, `tableID` FROM `s_search_fields`;
 DROP TABLE IF EXISTS `s_search_fields`;
 RENAME TABLE `new_s_search_fields` TO `s_search_fields`;
 
-ALTER TABLE `s_search_index` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_search_index` (
+  `keywordID` int(11) NOT NULL,
+  `fieldID` int(11) NOT NULL,
+  `elementID` int(11) NOT NULL,
+  PRIMARY KEY (`keywordID`,`fieldID`,`elementID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_search_index` (`keywordID`, `fieldID`, `elementID`)
+SELECT `keywordID`, `fieldID`, `elementID` FROM `s_search_index`;
+DROP TABLE IF EXISTS `s_search_index`;
+RENAME TABLE `new_s_search_index` TO `s_search_index`;
 
-ALTER TABLE `s_search_keywords` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_search_keywords` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `soundex` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `keyword` (`keyword`),
+  KEY `soundex` (`soundex`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_search_keywords` (`id`, `keyword`, `soundex`)
+SELECT `id`, `keyword`, `soundex` FROM `s_search_keywords`;
+DROP TABLE IF EXISTS `s_search_keywords`;
+RENAME TABLE `new_s_search_keywords` TO `s_search_keywords`;
 
-ALTER TABLE `s_search_tables` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_search_tables` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `table` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `referenz_table` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `foreign_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `where` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_search_tables` (`id`, `table`, `referenz_table`, `foreign_key`, `where`)
+SELECT `id`, `table`, `referenz_table`, `foreign_key`, `where` FROM `s_search_tables`;
+DROP TABLE IF EXISTS `s_search_tables`;
+RENAME TABLE `new_s_search_tables` TO `s_search_tables`;
 
-ALTER TABLE `s_statistics_currentusers` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_statistics_currentusers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `remoteaddr` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `page` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `time` datetime DEFAULT NULL,
+  `userID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_statistics_currentusers` (`id`, `remoteaddr`, `page`, `time`, `userID`)
+SELECT `id`, `remoteaddr`, `page`, `time`, `userID` FROM `s_statistics_currentusers`;
+DROP TABLE IF EXISTS `s_statistics_currentusers`;
+RENAME TABLE `new_s_statistics_currentusers` TO `s_statistics_currentusers`;
 
-ALTER TABLE `s_statistics_pool` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_statistics_pool` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `remoteaddr` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `datum` date NOT NULL DEFAULT '0000-00-00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_statistics_pool` (`id`, `remoteaddr`, `datum`)
+SELECT `id`, `remoteaddr`, `datum` FROM `s_statistics_pool`;
+DROP TABLE IF EXISTS `s_statistics_pool`;
+RENAME TABLE `new_s_statistics_pool` TO `s_statistics_pool`;
 
 CREATE TABLE IF NOT EXISTS `new_s_statistics_referer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `datum` date NOT NULL DEFAULT '0000-00-00',
   `referer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_statistics_referer` (`id`, `datum`, `referer`)
 SELECT `id`, `datum`, `referer` FROM `s_statistics_referer`;
 DROP TABLE IF EXISTS `s_statistics_referer`;
@@ -4933,11 +5830,56 @@ CREATE TABLE IF NOT EXISTS `new_s_statistics_visitors` (
   `uniquevisits` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `datum` (`datum`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_statistics_visitors` (`id`, `datum`, `pageimpressions`, `uniquevisits`)
 SELECT `id`, `datum`, `pageimpressions`, `uniquevisits` FROM `s_statistics_visitors`;
 DROP TABLE IF EXISTS `s_statistics_visitors`;
 RENAME TABLE `new_s_statistics_visitors` TO `s_statistics_visitors`;
+
+CREATE TABLE IF NOT EXISTS `new_s_ticket_support` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uniqueID` varchar(32) NOT NULL,
+  `userID` int(10) NOT NULL,
+  `employeeID` int(5) NOT NULL,
+  `ticket_typeID` int(10) NOT NULL,
+  `statusID` int(5) NOT NULL DEFAULT '1',
+  `email` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `receipt` datetime NOT NULL,
+  `last_contact` datetime NOT NULL,
+  `additional` text NOT NULL,
+  `isocode` varchar(3) NOT NULL DEFAULT 'de',
+  `shop_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT IGNORE INTO `new_s_ticket_support` (`id`, `uniqueID`, `userID`, `employeeID`, `ticket_typeID`, `statusID`, `email`, `subject`, `message`, `receipt`, `last_contact`, `additional`, `isocode`)
+SELECT `id`, `uniqueID`, `userID`, `employeeID`, `ticket_typeID`, `statusID`, `email`, `subject`, `message`, `receipt`, `last_contact`, `additional`, `isocode` FROM `s_ticket_support`;
+DROP TABLE IF EXISTS `s_ticket_support`;
+RENAME TABLE `new_s_ticket_support` TO `s_ticket_support`;
+
+CREATE TABLE IF NOT EXISTS `new_s_ticket_support_mails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `frommail` varchar(255) NOT NULL,
+  `fromname` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `contentHTML` text NOT NULL,
+  `ishtml` int(11) NOT NULL,
+  `attachment` varchar(255) NOT NULL,
+  `sys_dependent` tinyint(1) NOT NULL DEFAULT '0',
+  `isocode` varchar(3) NOT NULL,
+  `shop_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT IGNORE INTO `new_s_ticket_support_mails` (`id`, `name`, `description`, `frommail`, `fromname`, `subject`, `content`, `contentHTML`, `ishtml`, `attachment`, `sys_dependent`, `isocode`)
+SELECT `id`, `name`, `description`, `frommail`, `fromname`, `subject`, `content`, `contentHTML`, `ishtml`, `attachment`, `sys_dependent`, `isocode` FROM `s_ticket_support_mails`;
+DROP TABLE IF EXISTS `s_ticket_support_mails`;
+RENAME TABLE `new_s_ticket_support_mails` TO `s_ticket_support_mails`;
 
 CREATE TABLE IF NOT EXISTS `new_s_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4968,7 +5910,7 @@ CREATE TABLE IF NOT EXISTS `new_s_user` (
   KEY `firstlogin` (`firstlogin`),
   KEY `lastlogin` (`lastlogin`),
   KEY `pricegroupID` (`pricegroupID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_user` (`id`, `password`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`)
 SELECT `id`, `password`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil` FROM `s_user`;
 DROP TABLE IF EXISTS `s_user`;
@@ -4980,7 +5922,7 @@ CREATE TABLE IF NOT EXISTS `s_user_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userID` (`userID`),
   CONSTRAINT `s_user_attributes_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `s_user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `new_s_user_billingaddress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -5003,9 +5945,10 @@ CREATE TABLE IF NOT EXISTS `new_s_user_billingaddress` (
   `birthday` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_user_billingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid`, `birthday`)
 SELECT `id`, `userID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid`, `birthday` FROM `s_user_billingaddress`;
+DROP TABLE IF EXISTS `backup_s_user_billingaddress`;
 RENAME TABLE `s_user_billingaddress` TO `backup_s_user_billingaddress`;
 RENAME TABLE `new_s_user_billingaddress` TO `s_user_billingaddress`;
 
@@ -5021,9 +5964,21 @@ CREATE TABLE IF NOT EXISTS `s_user_billingaddress_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `billingID` (`billingID`),
   CONSTRAINT `s_user_billingaddress_attributes_ibfk_1` FOREIGN KEY (`billingID`) REFERENCES `s_user_billingaddress` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `s_user_debit` ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8, COLLATE utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `new_s_user_debit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL DEFAULT '0',
+  `account` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `bankcode` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `bankname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `bankholder` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT IGNORE INTO `new_s_user_debit` (`id`, `userID`, `account`, `bankcode`, `bankname`, `bankholder`)
+SELECT `id`, `userID`, `account`, `bankcode`, `bankname`, `bankholder` FROM `s_user_debit`;
+DROP TABLE IF EXISTS `s_user_debit`;
+RENAME TABLE `new_s_user_debit` TO `s_user_debit`;
 
 CREATE TABLE IF NOT EXISTS `new_s_user_shippingaddress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -5041,9 +5996,10 @@ CREATE TABLE IF NOT EXISTS `new_s_user_shippingaddress` (
   `stateID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userID` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_user_shippingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `countryID`)
 SELECT `id`, `userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `countryID` FROM `s_user_shippingaddress`;
+DROP TABLE IF EXISTS `backup_s_user_shippingaddress`;
 RENAME TABLE `s_user_shippingaddress` TO `backup_s_user_shippingaddress`;
 RENAME TABLE `new_s_user_shippingaddress` TO `s_user_shippingaddress`;
 
@@ -5059,50 +6015,98 @@ CREATE TABLE IF NOT EXISTS `s_user_shippingaddress_attributes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `shippingID` (`shippingID`),
   CONSTRAINT `s_user_shippingaddress_attributes_ibfk_1` FOREIGN KEY (`shippingID`) REFERENCES `s_user_shippingaddress` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `cb_events`;
+
 DROP TABLE IF EXISTS `cb_orders`;
+
 DROP TABLE IF EXISTS `eos_reserved_orders`;
+
 DROP TABLE IF EXISTS `paypal_orders`;
 
+DROP TABLE IF EXISTS `backup_s_articles_groups`;
 RENAME TABLE `s_articles_groups` TO `backup_s_articles_groups`;
+
+DROP TABLE IF EXISTS `s_articles_groups_accessories`;
+
+DROP TABLE IF EXISTS `s_articles_groups_accessories_option`;
+
+DROP TABLE IF EXISTS `backup_s_articles_groups_option`;
 RENAME TABLE `s_articles_groups_option` TO `backup_s_articles_groups_option`;
+
+DROP TABLE IF EXISTS `backup_s_articles_groups_prices`;
 RENAME TABLE `s_articles_groups_prices` TO `backup_s_articles_groups_prices`;
+
+DROP TABLE IF EXISTS `backup_s_articles_groups_settings`;
 RENAME TABLE `s_articles_groups_settings` TO `backup_s_articles_groups_settings`;
+
 DROP TABLE IF EXISTS `s_articles_groups_templates`;
+
+DROP TABLE IF EXISTS `backup_s_articles_groups_value`;
 RENAME TABLE `s_articles_groups_value` TO `backup_s_articles_groups_value`;
 
 DROP TABLE IF EXISTS `s_core_auth_files`;
+
 DROP TABLE IF EXISTS `s_core_checklist`;
+
+DROP TABLE IF EXISTS `backup_s_core_config`;
 RENAME TABLE `s_core_config` TO `backup_s_core_config`;
+
 DROP TABLE IF EXISTS `s_core_config_groups`;
+
 DROP TABLE IF EXISTS `s_core_config_text`;
+
 DROP TABLE IF EXISTS `s_core_config_text_groups`;
+
 DROP TABLE IF EXISTS `s_core_engine_fieldsets`;
+
 DROP TABLE IF EXISTS `s_core_engine_queries`;
+
 DROP TABLE IF EXISTS `s_core_engine_values`;
+
 DROP TABLE IF EXISTS `s_core_hookpoints`;
+
 DROP TABLE IF EXISTS `s_core_im`;
+
 DROP TABLE IF EXISTS `s_core_licences`;
+
 DROP TABLE IF EXISTS `s_core_modules`;
+
+DROP TABLE IF EXISTS `backup_s_core_plugin_configs`;
 RENAME TABLE `s_core_plugin_configs` TO `backup_s_core_plugin_configs`;
+
+DROP TABLE IF EXISTS `backup_s_core_plugin_elements`;
 RENAME TABLE `s_core_plugin_elements` TO `backup_s_core_plugin_elements`;
+
 DROP TABLE IF EXISTS `s_core_queries`;
+
 DROP TABLE IF EXISTS `s_core_statistics`;
+
 DROP TABLE IF EXISTS `s_core_unadjusted`;
+
 DROP TABLE IF EXISTS `s_core_variants`;
+
 DROP TABLE IF EXISTS `s_core_viewports`;
+
 DROP TABLE IF EXISTS `s_emarketing_searchbanner`;
+
 DROP TABLE IF EXISTS `s_export_settings`;
+
 DROP TABLE IF EXISTS `s_help`;
+
 DROP TABLE IF EXISTS `s_plugin_benchmark_log`;
+
 DROP TABLE IF EXISTS `s_shippingcosts`;
+
 DROP TABLE IF EXISTS `s_shippingcosts_areas`;
+
 DROP TABLE IF EXISTS `s_shippingcosts_dispatch`;
+
 DROP TABLE IF EXISTS `s_shippingcosts_dispatch_countries`;
+
 DROP TABLE IF EXISTS `s_user_creditcard`;
+
 DROP TABLE IF EXISTS `s_user_service`;
+
 DROP TABLE IF EXISTS `saferpay_orders`;
-DROP TABLE IF EXISTS `s_articles_groups_accessories`;
-DROP TABLE IF EXISTS `s_articles_groups_accessories_option`;
