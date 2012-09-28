@@ -35,12 +35,12 @@ use         Shopware\Components\Model\ModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
- * Shopware text model represents a text container type.
+ * Shopware text model represents a link container type.
  *
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\Table(name="s_campaigns_html")
+ * @ORM\Table(name="s_campaigns_links")
  */
-class Text extends ModelEntity
+class Link extends ModelEntity
 {
     /**
      * Autoincrement ID
@@ -64,7 +64,7 @@ class Text extends ModelEntity
 
     /**
      * OWNING SIDE
-     * Owning side of relation between container type 'text' and parent container
+     * Owning side of relation between container type 'article' and parent container
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -73,121 +73,50 @@ class Text extends ModelEntity
     protected $container;
 
     /**
-     * Headline of the element
+     * Description of the link / link text
+     * @var string $description
      *
-     * @var string $headline
-     * @ORM\Column(name="headline", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="string", nullable=false)
      */
-    private $headline;
+    private $description;
 
     /**
-     * (HTML) content of the model
-     *
-     * @var string $content
-     * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
-     */
-    private $content;
-
-    /**
-     * @var string $image
-     * @ORM\Column(name="image", type="string", length=255 , nullable=false)
-     */
-    private $image;
-
-    /**
+     * the actual link
      * @var string $link
-     * @ORM\Column(name="link", type="string", length=255 , nullable=false)
+     *
+     * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link;
 
     /**
-     * @var string $alignment
-     * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
+     * Link target, e.g. _blank / _parent
+     * @var string $target
+     *
+     * @ORM\Column(name="target", type="string", nullable=false)
      */
-    private $alignment;
+    private $target;
 
     /**
-     * @param string $alignment
+     * @var integer position
+     *
+     * @ORM\Column(name="position", type="integer", length=255, nullable=false)
      */
-    public function setAlignment($alignment)
+    private $position;
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
     {
-        $this->alignment = $alignment;
+        $this->description = $description;
     }
 
     /**
      * @return string
      */
-    public function getAlignment()
+    public function getDescription()
     {
-        return $this->alignment;
-    }
-
-    /**
-     * @param \Shopware\Models\Newsletter\Container $container
-     * @return \Shopware\Models\Newsletter\Container
-     */
-    public function setContainer($container)
-    {
-        $this->container = $container;
-        $container->setType('ctText');
-//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
-    }
-
-    /**
-     * @return \Shopware\Models\Newsletter\Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-
-    /**
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param string $headline
-     */
-    public function setHeadline($headline)
-    {
-        $this->headline = $headline;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * @param string $image
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
+        return $this->description;
     }
 
     /**
@@ -204,6 +133,57 @@ class Text extends ModelEntity
     public function getLink()
     {
         return $this->link;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param string $target
+     */
+    public function setTarget($target)
+    {
+        $this->target = $target;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @param \Shopware\Models\Newsletter\Container $container
+     * @return \Shopware\Models\Newsletter\Container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+        $container->setType('ctLinks');
+//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
+    }
+
+    /**
+     * @return \Shopware\Models\Newsletter\Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
 

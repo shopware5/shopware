@@ -38,9 +38,9 @@ use         Shopware\Components\Model\ModelEntity,
  * Shopware text model represents a text container type.
  *
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\Table(name="s_campaigns_html")
+ * @ORM\Table(name="s_campaigns_articles")
  */
-class Text extends ModelEntity
+class Article extends ModelEntity
 {
     /**
      * Autoincrement ID
@@ -64,7 +64,7 @@ class Text extends ModelEntity
 
     /**
      * OWNING SIDE
-     * Owning side of relation between container type 'text' and parent container
+     * Owning side of relation between container type 'article' and parent container
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -73,54 +73,48 @@ class Text extends ModelEntity
     protected $container;
 
     /**
-     * Headline of the element
+     * Ordernumber of the article
      *
-     * @var string $headline
-     * @ORM\Column(name="headline", type="string", length=255, nullable=false)
+     * @var string $number
+     * @ORM\Column(name="articleordernumber", type="string", length=16777215 , nullable=false)
      */
-    private $headline;
+    private $number;
 
     /**
-     * (HTML) content of the model
+     * OWNING SIDE
+     * Owning side of the uni-direction relation between article-Container and article ordernumber
      *
-     * @var string $content
-     * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber")
+     * @var \Shopware\Models\Article\Detail
      */
-    private $content;
+    protected $articleDetail;
 
     /**
-     * @var string $image
-     * @ORM\Column(name="image", type="string", length=255 , nullable=false)
+     * Name of the article
+     * "Zufall" for random articles - else the article's name
+     *
+     * @var string $name
+     * @ORM\Column(name="name", type="string", length=16777215 , nullable=false)
      */
-    private $image;
+    private $name;
 
     /**
-     * @var string $link
-     * @ORM\Column(name="link", type="string", length=255 , nullable=false)
+     * Type of the container - "random" or "fix"
+     *
+     * @var string $type
+     * @ORM\Column(name="type", type="string", length=255 , nullable=false)
      */
-    private $link;
+    private $type;
 
     /**
-     * @var string $alignment
-     * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
+     * Position of this container
+     *
+     * @var integer $position
+     * @ORM\Column(name="position", type="string", length=255 , nullable=false)
      */
-    private $alignment;
+    private $position;
 
-    /**
-     * @param string $alignment
-     */
-    public function setAlignment($alignment)
-    {
-        $this->alignment = $alignment;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAlignment()
-    {
-        return $this->alignment;
-    }
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
@@ -129,7 +123,7 @@ class Text extends ModelEntity
     public function setContainer($container)
     {
         $this->container = $container;
-        $container->setType('ctText');
+        $container->setType('ctArticles');
 //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
@@ -141,69 +135,68 @@ class Text extends ModelEntity
         return $this->container;
     }
 
-
     /**
-     * @param string $content
+     * @param string $name
      */
-    public function setContent($content)
+    public function setName($name)
     {
-        $this->content = $content;
+        $this->name = $name;
     }
 
     /**
      * @return string
      */
-    public function getContent()
+    public function getName()
     {
-        return $this->content;
+        return $this->name;
     }
 
     /**
-     * @param string $headline
+     * @param int $position
      */
-    public function setHeadline($headline)
+    public function setPosition($position)
     {
-        $this->headline = $headline;
+        $this->position = $position;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getHeadline()
+    public function getPosition()
     {
-        return $this->headline;
+        return $this->position;
     }
 
     /**
-     * @param string $image
+     * @param string $type
      */
-    public function setImage($image)
+    public function setType($type)
     {
-        $this->image = $image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string $link
-     */
-    public function setLink($link)
-    {
-        $this->link = $link;
+        $this->type = $type;
     }
 
     /**
      * @return string
      */
-    public function getLink()
+    public function getType()
     {
-        return $this->link;
+        return $this->type;
+    }
+
+    /**
+     * @param \Shopware\Models\Article\Detail $articleDetail
+     */
+    public function setArticleDetail($articleDetail)
+    {
+        $this->articleDetail = $articleDetail;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Detail
+     */
+    public function getArticleDetail()
+    {
+        return $this->articleDetail;
     }
 }
 
