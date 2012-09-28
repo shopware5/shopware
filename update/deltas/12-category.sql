@@ -1,10 +1,30 @@
-UPDATE `s_categories` SET `metakeywords` = NULL WHERE `metakeywords` = '';
-UPDATE `s_categories` SET `metadescription` = NULL WHERE `metadescription` = '';
-UPDATE `s_categories` SET `cmsheadline` = NULL WHERE `cmsheadline` = '';
-UPDATE `s_categories` SET `cmstext` = NULL WHERE `cmstext` = '';
-UPDATE `s_categories` SET `template` = NULL WHERE `template` = '';
-UPDATE `s_categories` SET `external` = NULL WHERE `external` = '';
-UPDATE `s_categories` SET `added` = NOW(), `changed` = NOW();
+TRUNCATE `s_categories`;
+
+INSERT INTO `s_categories` (
+  `id`, `parent`, `description`, `position`, `active`, `left`, `right`
+)
+VALUES (
+  1, NULL, 'Root', '0', 1, 1, 2
+);
+
+INSERT IGNORE INTO s_categories (
+  `id` , `parent` , `description` , `position` , `metakeywords`,
+  `metadescription` , `cmsheadline` , `cmstext` , `template` , `noviewselect` ,
+  `active` , `blog` , `showfiltergroups` ,
+  `external` , `hidefilter` , `hidetop`,
+  `added`, `changed`
+)
+SELECT
+  `id` , `parent` , `description` , `position` ,
+  IF(`metakeywords`='', NULL, `metakeywords`),
+  IF(`metadescription`='', NULL, `metadescription`),
+  IF(`cmsheadline`='', NULL, `cmsheadline`),
+  IF(`cmstext`='', NULL, `cmstext`),
+  IF(`template`='', NULL, `template`), `noviewselect` ,
+  `active` , `blog` , `showfiltergroups` ,
+  IF(`external`='', NULL, `external`), `hidefilter` , `hidetop`,
+  NOW() as `added`, NOW() as `changed`
+FROM `backup_s_categories`;
 
 INSERT IGNORE INTO s_categories_attributes (categoryID, attribute1, attribute2, attribute3, attribute4, attribute5, attribute6)
 SELECT id,
@@ -20,10 +40,3 @@ DELETE ac
 FROM s_articles_categories ac, s_categories c
 WHERE ac.categoryID = c.id
 AND (SELECT 1 FROM s_categories WHERE parent = c.id LIMIT 1) IS NOT NULL;
-
-INSERT INTO `s_categories` (
-  `id`, `parent`, `description`, `position`, `active`, `left`, `right`
-)
-VALUES (
-  1, NULL, 'Root', '0', 1, 1, 2
-);
