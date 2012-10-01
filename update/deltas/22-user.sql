@@ -24,4 +24,3 @@ FROM `backup_s_user_shippingaddress`;
 
 UPDATE s_user SET lockeduntil = NULL WHERE lockeduntil = '0000-00-00 00:00:00';
 UPDATE s_user_billingaddress SET birthday = NULL WHERE birthday = '0000-00-00 00:00:00';
-
