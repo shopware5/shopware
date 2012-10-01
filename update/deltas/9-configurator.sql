@@ -15,9 +15,12 @@ FROM backup_s_articles_groups g, s_articles_details d
 LEFT JOIN backup_s_articles_groups_settings s
 ON s.articleID = d.articleID
 AND s.type < 3
+LEFT JOIN s_article_configurator_sets c
+ON c.name = CONCAT('Set-', d.ordernumber)
 WHERE g.groupID = 1
 AND g.articleID = d.articleID
-AND d.kind = 1;
+AND d.kind = 1
+AND c.id IS NULL;
 
 UPDATE s_articles a, s_articles_details d, s_article_configurator_sets s
 SET a.configurator_set_id = s.id
@@ -30,12 +33,16 @@ FROM backup_s_articles_groups s
 LEFT JOIN s_article_configurator_groups t
 ON t.name = CONCAT(articleID, '-', groupID, '-', groupname)
 WHERE t.id IS NULL
-ORDER BY articleID, groupID;
+ORDER BY articleID, groupID, position;
 
 INSERT IGNORE INTO `s_article_configurator_options` (`group_id`, `name`, `position`)
 SELECT g.id as group_id, o.optionname as name, o.optionposition as position
-FROM backup_s_articles_groups_option o, s_article_configurator_groups g
-WHERE g.name LIKE CONCAT(articleID, '-', groupID, '-%');
+FROM backup_s_articles_groups_option o
+JOIN s_article_configurator_groups g
+ON g.name LIKE CONCAT(articleID, '-', groupID, '-%')
+LEFT JOIN s_article_configurator_options c
+ON c.name = o.optionname AND c.group_id=g.id
+WHERE c.id IS NULL;
 
 INSERT IGNORE INTO `s_article_configurator_set_group_relations` (`set_id`, `group_id`)
 SELECT s.id, g.id
@@ -71,3 +78,7 @@ AND t.from = 1
 AND t.articledetailsID = d.id
 WHERE p.price != 0
 AND t.id IS NULL;
+
+UPDATE `s_article_configurator_groups`
+SET `name` = SUBSTRING_INDEX(name, '-', -1)
+WHERE `name` LIKE '%-%-%';
