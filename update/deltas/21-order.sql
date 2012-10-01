@@ -51,4 +51,3 @@ SELECT id,
   IF(text5='', NULL, text5),
   IF(text6='', NULL, text6)
 FROM `backup_s_order_shippingaddress`;
-
