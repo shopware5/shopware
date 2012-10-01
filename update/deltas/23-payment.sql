@@ -10,8 +10,7 @@ WHERE embediframe != '';
 
 UPDATE `s_core_paymentmeans`
 SET `name` = 'paypal_old', `active` = 0
-WHERE name = 'paypal'
-AND (SELECT 1 FROM `s_core_paymentmeans` WHERE `name` = 'paypal_old') IS NULL;
+WHERE name = 'paypal' AND template != '';
 
 UPDATE `s_core_paymentmeans`
 SET `name` = 'paypal', `template` = '', `class` = ''
