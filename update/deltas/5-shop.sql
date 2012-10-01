@@ -65,7 +65,7 @@ UPDATE `s_core_shops` SET `base_path` = NULL WHERE `base_path` = '';
 SET @value = (SELECT `value` FROM `backup_s_core_config` WHERE `name` LIKE 'sUSESSL');
 UPDATE `s_core_shops` SET `secure` = @value WHERE `default` = 1;
 
-
+TRUNCATE s_core_multilanguage;
 INSERT IGNORE INTO `s_core_multilanguage` (
   `id`, `isocode`, `locale`, `parentID`, `skipbackend`,
   `name`, `defaultcustomergroup`, `template`, `doc_template`,
