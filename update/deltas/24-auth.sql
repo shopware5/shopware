@@ -1,3 +1,3 @@
 UPDATE `s_core_auth` SET `roleID` = '1',
 `failedlogins` = '0',
-`lockeduntil` = NULL;
+`lockeduntil` = '2000-01-01 00:00:00';
