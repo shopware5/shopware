@@ -12,9 +12,17 @@ UPDATE s_articles_prices SET pseudoprice = NULL WHERE pseudoprice = 0;
 UPDATE s_articles_prices SET baseprice = NULL WHERE baseprice = 0;
 UPDATE s_articles_prices SET percent = NULL WHERE percent = 0;
 
+DELETE s FROM s_articles_relationships s, s_articles_details d
+WHERE s.relatedarticle = d.ordernumber
+AND d.kind != 1;
+
 UPDATE s_articles_relationships s, s_articles_details d
 SET s.relatedarticle = d.articleID
 WHERE s.relatedarticle = d.ordernumber;
+
+DELETE s FROM s_articles_similar s, s_articles_details d
+WHERE s.relatedarticle = d.ordernumber
+AND d.kind != 1;
 
 UPDATE s_articles_similar s, s_articles_details d
 SET s.relatedarticle = d.articleID

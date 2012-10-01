@@ -285,7 +285,7 @@ class Shopware_Install extends Slim
                 if(!empty($query) && $db->exec($query) === false) {
                     $errorInfo = $db->errorInfo();
                     $msg = 'Das Datenbank-Update konnte nicht abgeschlossen werden. <br>' .
-                           'Ein Fehler beim Import der Datei " ' . $delta . '" ist aufgetretten. <br>' .
+                           'Ein Fehler beim Import der Datei " ' . $delta . '" ist aufgetreten. <br>' .
                            '['. $errorInfo[0] . '] ' . $errorInfo[2];
                     echo json_encode(array(
                         'message' => $msg,
@@ -313,7 +313,7 @@ class Shopware_Install extends Slim
             if($db->exec($query) === false) {
                 $errorInfo = $db->errorInfo();
                 $msg = 'Die Datenbank-Wiederherstellung konnte nicht abgeschlossen werden. <br>' .
-                       'Ein Fehler beim Import des Backups ist aufgetretten. <br>' .
+                       'Ein Fehler beim Import des Backups ist aufgetreten. <br>' .
                        '['. $errorInfo[0] . '] ' . $errorInfo[2];
                 echo json_encode(array(
                     'message' => $msg,
