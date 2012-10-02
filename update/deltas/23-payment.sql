@@ -15,3 +15,6 @@ WHERE name = 'paypal' AND template != '';
 UPDATE `s_core_paymentmeans`
 SET `name` = 'paypal', `template` = '', `class` = ''
 WHERE name = 'paypalexpress';
+
+UPDATE `s_core_paymentmeans` SET `active` = '0',
+`pluginID` = NULL WHERE `pluginID` IS NOT NULL;

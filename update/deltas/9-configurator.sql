@@ -52,8 +52,12 @@ AND g.name LIKE CONCAT(a.id, '-%');
 
 INSERT IGNORE INTO `s_article_configurator_set_option_relations` (`set_id`, `option_id`)
 SELECT r.set_id, o.id as option_id
-FROM s_article_configurator_set_group_relations r, s_article_configurator_options o
-WHERE o.group_id = r.group_id;
+FROM s_articles a, s_article_configurator_sets s, s_article_configurator_groups g,
+  s_article_configurator_set_group_relations r, s_article_configurator_options o
+WHERE a.configurator_set_id = s.id
+AND g.name LIKE CONCAT(a.id, '-%')
+AND g.id = r.group_id
+AND o.group_id = r.group_id;
 
 INSERT IGNORE INTO `s_article_configurator_option_relations` (`article_id`, `option_id`)
 SELECT d.id, o.id FROM backup_s_articles_groups_value v, s_articles_details d, s_articles a,
