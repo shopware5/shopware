@@ -409,8 +409,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
         Enlight_Components_Session::start($options);
 
-        $referer = $this->request->getHeader('referer');
-        if($refererCheck && $referer !== null
+        if($refererCheck && ($referer = $this->request->getHeader('referer')) !== null
           && strpos($referer, 'http') === 0) {
             $referer = substr($referer, 0, strpos($referer, '/backend/'));
             $referer .= '/backend/';
@@ -421,8 +420,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                 throw new Exception('Referer check for backend session failed');
             }
         }
-        $client = $this->request->getHeader('userAgent');
-        if($clientCheck && $client !== null) {
+        if($clientCheck && ($client = $this->request->getHeader('userAgent')) !== null) {
             if(!isset($_SESSION['__SW_CLIENT'])) {
                 $_SESSION['__SW_CLIENT'] = $client;
             } elseif ($client !==  $_SESSION['__SW_CLIENT']) {
