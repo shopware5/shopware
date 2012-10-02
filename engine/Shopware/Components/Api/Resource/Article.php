@@ -1130,7 +1130,7 @@ class Article extends Resource
                     //persist the model into the model manager
                     $this->getManager()->persist($media);
                     $this->getManager()->persist($image);
-                    $this->getManager()->flush();
+                    $this->getManager()->flush($image);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
                 }
