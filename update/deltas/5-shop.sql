@@ -1,6 +1,6 @@
 INSERT IGNORE INTO `s_core_templates` (`template`, `name`, `description`, `author`, `license`, `version`)
 SELECT
-  SUBSTRING_INDEX(template, '/', 2) as template,
+  SUBSTRING_INDEX(template, '/', -1) as template,
   CONCAT(UCASE(SUBSTRING(template, 11, 1)),LCASE(SUBSTRING(template, 12))) as name,
   NULL, 'shopware AG', 'New BSD', 1
 FROM backup_s_core_multilanguage

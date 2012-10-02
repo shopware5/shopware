@@ -8,4 +8,4 @@ AND CONCAT('i:', c.value, ';') != e.value
 AND CONCAT('s:', LENGTH(c.value), ':"', c.value, '";') != e.value
 AND (e.value != 'b:0;' OR c.value != 0)
 AND (e.value != 'b:1;' OR c.value != 1)
-AND e.name NOT IN ('detailtemplates', 'fuzzysearchlastupdate', 'seostaticurls', 'seoqueryalias');
+AND e.name NOT IN ('detailtemplates', 'fuzzysearchlastupdate', 'seostaticurls', 'seoqueryalias', 'botBlackList');
