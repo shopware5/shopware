@@ -192,6 +192,12 @@ class Category extends Resource
             throw new ApiException\CustomValidationException("A name is required");
         }
 
+        // in order to have a consistent interface within the REST Api, one might want
+        // to set the parent category by using 'parentId' instead of 'parent'
+        if(isset($params['parentId']) && !isset($params['parent'])) {
+            $params['parent'] = $params['parentId'];
+        }
+
         if (!empty($params['parent'])) {
             $params['parent'] = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
             if (!$params['parent']) {
