@@ -174,9 +174,9 @@ class Banner extends ModelEntity
      */
     public function setContainer($container)
     {
-//        $this->container = $container;
+        $this->container = $container;
         $container->setType('ctBanner');
-        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
+//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'banner');
     }
 
     /**
