@@ -78,7 +78,7 @@ class Article extends ModelEntity
      * @var string $number
      * @ORM\Column(name="articleordernumber", type="string", length=16777215 , nullable=false)
      */
-    private $number;
+    private $number = '';
 
     /**
      * OWNING SIDE

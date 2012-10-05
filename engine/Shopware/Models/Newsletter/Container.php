@@ -83,16 +83,42 @@ class Container extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * Inverse side of the association between the container and its child
-     * As a container can have various child-types, one would probably want to have a additional
-     * getChild() method returning the correct child depending on the containers type
-     *
-     * As right now only simple text-newsletters are supported, there is just the text-child
+     * Inverse side of the association between the container and its text-child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Text
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "update", "remove"})
      */
     protected $text;
+
+    /**
+     * INVERSE SIDE
+     *
+     * Inverse side of the association between the container and its banner child
+     *
+     * @var \Shopware\Models\Newsletter\ContainerType\Banner
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "update", "remove"})
+     */
+    protected $banner;
+
+    /**
+     * INVERSE SIDE
+     *
+     * Inverse side of the association between the container and its link childs
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "update", "remove"})
+     */
+    protected $links;
+
+    /**
+    * INVERSE SIDE
+    *
+    * Inverse side of the association between the container and its article childs
+    *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist", "update", "remove"})
+    */
+    protected $articles;
 
     /**
      * Description of the container
@@ -120,6 +146,15 @@ class Container extends ModelEntity
      * @var \Shopware\Models\Newsletter\Newsletter
      */
     protected $newsletter;
+
+    /**
+     * Class constructor. Initials the containers array.
+     */
+    public function __construct()
+    {
+        $this->links     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles     = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * @param string $description
@@ -219,6 +254,63 @@ class Container extends ModelEntity
     public function getText()
     {
         return $this->text;
+    }
+
+
+    /**
+     * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
+     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     */
+    public function setArticles($articles)
+    {
+        $return = $this->setOneToMany($articles, '\Shopware\Models\Newsletter\ContainerType\Article', 'articles', 'container');
+        $this->setType('ctArticles');
+        return $return;
+    }
+
+    /**
+     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param \Shopware\Models\Newsletter\ContainerType\Banner $banner
+     * @return \Shopware\Models\Newsletter\ContainerType\Banner
+     */
+    public function setBanner($banner)
+    {
+        $this->setType('ctBanner');
+        return $this->banner = $banner;
+    }
+
+    /**
+     * @return \Shopware\Models\Newsletter\ContainerType\Banner
+     */
+    public function getBanner()
+    {
+        return $this->banner;
+    }
+
+    /**
+     * @param \Shopware\Models\Newsletter\ContainerType\Link $links
+     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     */
+    public function setLinks($links)
+    {
+        $return = $this->setOneToMany($links, '\Shopware\Models\Newsletter\ContainerType\Link', 'links', 'container');
+        $this->setType('ctLinks');
+        return $return;
+    }
+
+    /**
+     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     */
+    public function getLinks()
+    {
+        return $this->links;
     }
 
     /**
