@@ -66,7 +66,7 @@ class Link extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      * @var \Shopware\Models\Newsletter\Container
      */

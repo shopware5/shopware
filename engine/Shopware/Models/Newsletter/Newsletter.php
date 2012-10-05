@@ -166,7 +166,7 @@ class Newsletter extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * This is the inverse side of the association between newsletters and mail-addreses whcih have already
+     * This is the inverse side of the association between newsletters and mail-addreses which have already
      * received the given newsletter.
      *
      * @var \Doctrine\Common\Collections\ArrayCollection

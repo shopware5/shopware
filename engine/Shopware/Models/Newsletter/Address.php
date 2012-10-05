@@ -114,7 +114,7 @@ class Address extends ModelEntity
      * The lastNewsletter property is the owning side of the association between a newsletter and a mail-address
      * The association is joined over the lastNewletterId and Newsletter.id
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="containers")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="addresses")
      * @ORM\JoinColumn(name="lastmailing", referencedColumnName="id")
      * @var \Shopware\Models\Newsletter\Newsletter
      */
