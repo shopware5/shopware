@@ -374,8 +374,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
 
                         new Ext.Window({
                             title : '{s name=preview}Preview: {/s}' + newsletter.get('subject'),
-                            width : 600,
-                            height: 480,
+                            width : 940,
+                            height: 600,
                             layout : 'fit',
                             items : [{
                                 xtype : "component",
