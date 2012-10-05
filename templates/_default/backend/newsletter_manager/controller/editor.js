@@ -145,6 +145,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                       me.subApplication.mailingStore.reload();
 
                   }else{
+                      if(rawData && rawData.data) {
+                          Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
+                          return;
+                      }
                       Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
                   }
               }
@@ -182,6 +186,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                             Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.successTitle, me.snippets.testNewsletter.successMessage, me.snippets.growl);
                         },
                         failure: function(response) {
+                            if(rawData && rawData.data) {
+                                Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.errorTitle, me.snippets.testNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
+                                return;
+                            }
                             Shopware.Notification.createGrowlMessage(me.snippets.testNewsletter.errorTitle, me.snippets.testNewsletter.errorMessage, me.snippets.growl);
                         }
                     });
@@ -273,8 +281,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         settings.set('senderMail', senderRecord.get('email'));
 
         return settings;
-        
-
     },
 
     /**
@@ -384,6 +390,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                     }
 
                 }else{
+                    if(rawData && rawData.data) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage + "\r\n<br />" + rawData.data, me.snippets.growl);
+                        return;
+                    }
                     Shopware.Notification.createGrowlMessage(me.snippets.saveNewsletter.errorTitle, me.snippets.saveNewsletter.errorMessage, me.snippets.growl);
                 }
             }
