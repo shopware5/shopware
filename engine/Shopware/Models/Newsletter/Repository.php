@@ -232,12 +232,18 @@ class Repository extends ModelRepository
             'mailing',
             'container',
             'text',
+            'articles',
+            'links',
+            'banner',
             'addresses'
 //            'orders'
         ));
         $builder->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
                 ->leftJoin('mailing.containers', 'container')
                 ->leftJoin('container.text', 'text')
+                ->leftJoin('container.articles', 'articles')
+                ->leftJoin('container.links', 'links')
+                ->leftJoin('container.banner', 'banner')
                 ->leftJoin('mailing.addresses', 'addresses')
                 ->where('mailing.status > -1');
 
