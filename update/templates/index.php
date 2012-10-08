@@ -2,28 +2,49 @@
 <!-- Start page -->
 <div id="start">
     <div class="page-header">
-        <h2><?php echo $translation["start_install"];?></h2>
+        <h2>Update starten</h2>
     </div>
 
     <div class="alert alert-success">
         <?php echo $translation["thank_you_message"];?>
     </div>
 
-    <form action="<?php echo $app->urlFor('system'); ?>" method="post">
-        <label for="language"><?php echo $translation["select_language"];?></label>
+<?php if(isset($flash['loginError'])) { ?>
+    <div class="alert alert-error">
+        Ihr Login war nicht erfolgreich. Bitte überprüfen Sie Ihre Eingabe und probieren es erneut.
+    </div>
+<?php } ?>
 
-        <select id="language" name="language" class="language-selection">
-            <option value="0"><?php echo $translation["select_language_choose"];?></option>
-            <option value="de"<?php if ($language == "de") { ?>
-                    selected="selected"<?php } ?>><?php echo $translation["select_language_de"];?></option>
-            <option value="en"<?php if ($language == "en") { ?>
-                    selected="selected"<?php } ?>><?php echo $translation["select_language_en"];?></option>
-        </select>
-
+    <form class="form-horizontal login" action="<?php echo $app->urlFor('login'); ?>" method="post">
+        <div class="control-group">
+            <label class="control-label" for="username">Benutzername:</label>
+            <div class="controls">
+                <input type="text" id="username" name="username">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="password">Passwort:</label>
+            <div class="controls">
+                <input type="password" id="password" name="password">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="language">Sprache:</label>
+            <div class="controls">
+                <select id="language" name="language">
+                    <option value="de"<?php if ($language == "de") { ?> selected="selected"<?php } ?>>
+                        <?php echo $translation["select_language_de"];?>
+                    </option>
+                    <option value="en"<?php if ($language == "en") { ?> selected="selected"<?php } ?>>
+                        <?php echo $translation["select_language_en"];?>
+                    </option>
+                </select>
+            </div>
+        </div>
         <div class="actions clearfix">
-
             <input type="submit" class="right primary" value="<?php echo $translation["forward"];?>" />
         </div>
     </form>
+
 </div>
 <?php $this->display('footer.php');?>

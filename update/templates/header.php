@@ -24,10 +24,10 @@
 
     <div class="meta">
         <p>
-            <strong>Shopware Version:</strong> <?php echo Shopware_Install::UPDATE_VERSION; ?>
+            <strong>Shopware Version:</strong> <?php echo Shopware_Update::UPDATE_VERSION; ?>
         </p>
         <p>
-            <strong>Update Script Version:</strong> <?php echo Shopware_Install::VERSION; ?>
+            <strong>Update Script Version:</strong> <?php echo Shopware_Update::VERSION; ?>
         </p>
     </div>
 </div>
@@ -35,25 +35,27 @@
     <header>
         <ul class="navi-tabs clearfix">
             <li class="<?php if ($action == "index") echo "active"; else { echo "disabled"; }; ?>">
-              <a href="<?php echo $app->urlFor('index', array()); ?>">Start / Sprachauswahl</a>
+              <a href="<?php echo $app->urlFor('index', array()); ?>">Start / Login</a>
             </li>
             <li class="<?php if ($action == "system") echo "active"; else { echo "disabled";}; ?>">
-              <a href="<?php echo $app->urlFor('system', array()); ?>">Systemvoraussetzungen</a>
+              <a href="<?php echo $app->urlFor('system', array()); ?>">System überprüfen</a>
             </li>
             <li class="<?php if ($action == "compatibility") echo "active"; else { echo "disabled";}; ?>">
                 <a href="<?php echo $app->urlFor('index', array()); ?>">Kompatibilität</a>
             </li>
-            <li class="<?php if ($action == "database") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('database'); ?>">Update durchführen</a>
+            <li class="<?php if ($action == "main") echo "active"; else { echo "disabled";}; ?>">
+                <a href="<?php echo $app->urlFor('main'); ?>">Update durchführen</a>
+            </li>
+            <li class="<?php if ($action == "restore") echo "active"; else { echo "disabled";}; ?>">
+                <a href="<?php echo $app->urlFor('restore'); ?>">Backup einspielen</a>
             </li>
             <li class="<?php if ($action == "custom") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('index'); ?>">Anpassungen / Module</a>
+                <a href="<?php echo $app->urlFor('custom'); ?>">Anpassungen / Module</a>
             </li>
             <li class="<?php if ($action == "finish") echo "active"; else { echo "disabled";}; ?>">
                 <a href="">Abschluss</a>
             </li>
          </ul>
     </header>
-
     <section class="content">
         <div class="inner-container">
