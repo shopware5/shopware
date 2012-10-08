@@ -7,11 +7,11 @@ SET filename = CONCAT('media/unknown/', filename)
 WHERE filename NOT LIKE '%/%';
 
 UPDATE s_emarketing_banners
-SET img = CONCAT('media/banner/', img)
+SET img = CONCAT('media/image/', img)
 WHERE img NOT LIKE '%/%' AND img != '';
 
 UPDATE s_emarketing_promotions
-SET img = CONCAT('media/banner/', img)
+SET img = CONCAT('media/image/', img)
 WHERE img NOT LIKE '%/%' AND img != '';
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
@@ -52,7 +52,7 @@ AND m.id IS NULL;
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
   -2 as albumID,  SUBSTRING_INDEX(img, '.', 1) as name, b.description,
-  CONCAT('media/banner/', img) as `path`,
+  CONCAT('media/image/', img) as `path`,
   'IMAGE' as `type`, SUBSTRING_INDEX(img, '.', -1) as `extension`,
   0 as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_emarketing_banners b
@@ -64,7 +64,7 @@ AND m.id IS NULL;
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
   -2 as albumID,  SUBSTRING_INDEX(img, '.', 1) as name, b.description,
-  CONCAT('media/banner/', img) as `path`,
+  CONCAT('media/image/', img) as `path`,
   'IMAGE' as `type`, SUBSTRING_INDEX(img, '.', -1) as `extension`,
   0 as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_emarketing_promotions b

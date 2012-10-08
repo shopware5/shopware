@@ -87,7 +87,7 @@
 </div>
 <?php } ?>
 
-<?php if(!empty($fields)) { ?>
+<?php if(!empty($fields) && !empty($targetFields)) { ?>
 <div class="page-header page-restore">
     <h2>Konfigurator-Felder übernehmen</h2>
 </div>

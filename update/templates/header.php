@@ -20,7 +20,7 @@
 <body>
 
 <div class="info">
-    <img src="assets/images/logo_installer.png" alt="Shopware Updater" class="logo"/>
+    <img src="assets/images/logo_updater.png" alt="Shopware Updater" class="logo"/>
 
     <div class="meta">
         <p>
@@ -38,10 +38,7 @@
               <a href="<?php echo $app->urlFor('index', array()); ?>">Start / Login</a>
             </li>
             <li class="<?php if ($action == "system") echo "active"; else { echo "disabled";}; ?>">
-              <a href="<?php echo $app->urlFor('system', array()); ?>">System überprüfen</a>
-            </li>
-            <li class="<?php if ($action == "compatibility") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('index', array()); ?>">Kompatibilität</a>
+              <a href="<?php echo $app->urlFor('system', array()); ?>">System / Kompatibilität</a>
             </li>
             <li class="<?php if ($action == "main") echo "active"; else { echo "disabled";}; ?>">
                 <a href="<?php echo $app->urlFor('main'); ?>">Update durchführen</a>
@@ -50,7 +47,7 @@
                 <a href="<?php echo $app->urlFor('restore'); ?>">Backup einspielen</a>
             </li>
             <li class="<?php if ($action == "custom") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('custom'); ?>">Anpassungen / Module</a>
+                <a href="<?php echo $app->urlFor('custom'); ?>">Anpassungen übernehmen</a>
             </li>
             <li class="<?php if ($action == "finish") echo "active"; else { echo "disabled";}; ?>">
                 <a href="">Abschluss</a>

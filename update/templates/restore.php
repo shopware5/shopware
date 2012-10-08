@@ -25,20 +25,6 @@
                 }
             });
         });
-
-        var $pageHeader = $('.page-header');
-        $pageHeader.live('click', function() {
-            var $this = $(this);
-            if ($(this).find('i').hasClass('icon-chevron-down')){
-                $(this).find('i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
-            }else {
-                $(this).find('i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
-            }
-            $this.next('.page').toggle();
-        });
-        $('.page').hide();
-        $pageHeader.prepend('<i>');
-        $('.page-header i').addClass('icon-chevron-up');
     });
 </script>
 <div id="start">
