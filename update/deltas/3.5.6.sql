@@ -2318,7 +2318,8 @@ CREATE TABLE IF NOT EXISTS `new_s_core_paymentmeans` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT IGNORE INTO `new_s_core_paymentmeans` (`id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`)
 SELECT `id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID` FROM `s_core_paymentmeans`;
-DROP TABLE IF EXISTS `s_core_paymentmeans`;
+DROP TABLE IF EXISTS `backup_s_core_paymentmeans`;
+RENAME TABLE `s_core_paymentmeans` TO `backup_s_core_paymentmeans`;
 RENAME TABLE `new_s_core_paymentmeans` TO `s_core_paymentmeans`;
 
 CREATE TABLE IF NOT EXISTS `s_core_paymentmeans_attributes` (
@@ -6027,10 +6028,6 @@ DROP TABLE IF EXISTS `paypal_orders`;
 
 DROP TABLE IF EXISTS `backup_s_articles_groups`;
 RENAME TABLE `s_articles_groups` TO `backup_s_articles_groups`;
-
-DROP TABLE IF EXISTS `s_articles_groups_accessories`;
-
-DROP TABLE IF EXISTS `s_articles_groups_accessories_option`;
 
 DROP TABLE IF EXISTS `backup_s_articles_groups_option`;
 RENAME TABLE `s_articles_groups_option` TO `backup_s_articles_groups_option`;

@@ -10,10 +10,12 @@ html, body {
 	line-height: 0;
 	height: 0;
 }
+/*
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     width: 100%;
 }
 select { width: 100% }
+*/
 label { font-weight: bold }
 
 /** STRUCTURE */
@@ -211,7 +213,7 @@ header ul.navi-tabs li.disabled {
 }
 .actions .right {
     float: right;
-    margin-right: 5px;
+    margin: 0 5px 5px 0;
 }
 table.table .success, table.table .success *:not(i) { background: #DFF0D8 !important; color: #468847; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
 table.table .error, table.table .error *:not(i) { background: #F2DEDE !important; color: #B94A48; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);}
@@ -303,4 +305,7 @@ input.inline-success:focus {
     -moz-user-select: none;
     padding-left: 20px;
     cursor:pointer;
+}
+.table .checkbox, .table select {
+    margin: 0;
 }

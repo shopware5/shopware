@@ -36,16 +36,6 @@ set_include_path(
     dirname(dirname(__FILE__)) . '/' . PATH_SEPARATOR
 );
 
-// Check active shopware 4 installation
-//if (file_exists('../cache/templates/compile/')) {
-//    header('Content-type: text/html; charset=utf-8', true, 503);
-//    echo "<h4>Der Installer wurde bereits ausgeführt</h4>";
-//    echo "<p>Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!</p>";
-//    echo "<h4>The installation process has already been finished.</h4>";
-//    echo "<p> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!</p>";
-//    exit;
-//}
-
 // Check the minimum required php version
 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
@@ -57,7 +47,7 @@ if (version_compare(PHP_VERSION, '5.3.0', '<')) {
 }
 
 require_once 'Slim/Slim.php';
-require_once 'Shopware/Install.php';
+require_once 'Shopware/Update.php';
 
-$app = new Shopware_Install();
+$app = new Shopware_Update();
 return $app->run();
