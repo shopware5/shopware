@@ -63,7 +63,7 @@
             </div>
         </div>
     <?php } ?>
-    <?php if(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '<')) { ?>
+    <?php if(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '>')) { ?>
         <div class="page-header page-database">
             <h2>Datenbank-Update duchführen</h2>
         </div>
@@ -74,7 +74,7 @@
             </span>
             <div class="actions clearfix">
                 <a id="link-update" href="<?php echo $app->urlFor('action', array('action' => 'database')); ?>" class="right primary ajax-loading">
-                    Update starten
+                    Update durchführen
                 </a>
             </div>
         </div>

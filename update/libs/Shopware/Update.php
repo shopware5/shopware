@@ -72,18 +72,13 @@ class Shopware_Update extends Slim
         $db = $this->config('db');
         $sql = "SELECT value FROM s_core_config WHERE name = 'sVERSION'";
         $query = $db->query($sql);
-        $version = $query ? $query->fetchColumn(0) : '4.0.3';
+        $version = $query ? $query->fetchColumn(0) : self::UPDATE_VERSION;
         return $version;
     }
 
     public function initTranslation()
     {
         return include 'assets/translation/' . $this->config('language') . '.php';
-    }
-
-    public function initPath()
-    {
-        return realpath('../') . DIRECTORY_SEPARATOR;
     }
 
     public function session($key, $value = null)
@@ -116,6 +111,7 @@ class Shopware_Update extends Slim
             'channel' => 'http://files.shopware.de/download.php',
             'package' => 'install',
             'format' => 'zip',
+            'storeLink' => 'http://store.shopware.de/shopware.php/sViewport,search?sSearch=',
             'sourceDir' => realpath('.') . DIRECTORY_SEPARATOR . 'source' . DIRECTORY_SEPARATOR,
             'backupDir' => realpath('backup/') . DIRECTORY_SEPARATOR,
             'targetDir' => realpath('../') . DIRECTORY_SEPARATOR,
@@ -128,6 +124,20 @@ class Shopware_Update extends Slim
                 'Application.php',
                 'shopware.php',
                 '.htaccess'
+            ),
+            'chmodPaths' => array(
+                'cache/database/',
+                'cache/templates/',
+                'engine/Library/Mpdf/tmp/',
+                'engine/Library/Mpdf/ttfontdata/',
+                'media/archive/',
+                'media/image/',
+                'media/image/thumbnail/',
+                'media/music/',
+                'media/pdf/',
+                'media/unknown/',
+                'media/video/',
+                'media/temp/',
             )
         ));
 
@@ -158,6 +168,7 @@ class Shopware_Update extends Slim
             $app->render('system.php', array(
                 'action' => 'system',
                 'system' => $system,
+                'customs' => $app->getCustomList(),
                 'error' => false
             ));
         })->via('GET', 'POST')->name('system');
@@ -190,77 +201,6 @@ class Shopware_Update extends Slim
             $targetTemplates = array_map('basename', $targetTemplates);
             $templates = array_diff($templates, $targetTemplates);
 
-            $pluginDirs = array(
-                'engine/Shopware/Plugins/Community/Backend/',
-                'engine/Shopware/Plugins/Community/Core/',
-                'engine/Shopware/Plugins/Default/Frontend/',
-                'engine/Shopware/Plugins/Local/Backend/',
-                'engine/Shopware/Plugins/Local/Core/',
-                'engine/Shopware/Plugins/Local/Frontend/'
-            );
-            $pluginPaths = array();
-            foreach($pluginDirs as $pluginDir) {
-                $pluginPaths = array_merge($pluginPaths, glob($backupDir . $pluginDir . '*', GLOB_ONLYDIR));
-            }
-            $plugins = array();
-            foreach($pluginPaths as $pluginPath) {
-                $pluginFile = $pluginPath . '/Bootstrap.php';
-                if(!file_exists($pluginFile)) {
-                    continue;
-                }
-                $plugin = array();
-                preg_match('#(\w+)/(\w+)/(\w+)$#', $pluginPath, $match);
-                list(, $plugin['source'], $plugin['namespace'], $plugin['name']) = $match;
-                $sql = '
-                    SELECT
-                      p.id, p.label, p.description, p.installation_date as installed,
-                      p.active, p.autor as author, p.version, p.link,
-                      p.source, p.namespace, p.name
-                    FROM backup_s_core_plugins p
-                    WHERE p.namespace = :namespace AND p.name = :name AND p.source = :source
-                ';
-                $query = $db->prepare($sql);
-                $query->execute($plugin);
-                $plugin = $query->fetch(PDO::FETCH_ASSOC);
-                if($plugin === false) {
-                    continue;
-                }
-                $pluginContent = file_get_contents($pluginFile);
-                $tests = array(
-                    'zend' => '<\?php @Zend;',
-                    'ioncube' => '<\?php //0046a',
-                    'license' => 'License\(\)->checkLicense',
-                    'config' => 's_core_config[^_]|Config\(\)->Templates|Config\(\)->Snippets',
-                    'utf8' => 'utf8_decode|utf8_encode',
-                    'checkout_button' => 'frontend_checkout_confirm_agb',
-                    'attribute' => 'ob_attr|od_attr|s_user_billingaddress.text1',
-                    'bootstrap' => 'function getName|function getSource',
-                    'db' => 'config\.php',
-                    'global' => '\$_GET|\$_POST',
-                    'this' => 'Enlight_Class::Instance',
-                    'document_root' => '\$_SERVER\[.DOCUMENT_ROOT.\]',
-                    'shop' => 'Shop\(\)->Locale\(\)|Shop\(\)->Config\(\)|Session\(\)->Shop|Shopware_Models_',
-                    'api' =>'Shopware\(\)->Api',
-                    'template_engine' => 'register_modifier'
-                );
-                foreach($tests as $name => $test) {
-                    $tests[$name] = '?<' . $name . '>' . $test;
-                }
-                $tests = '#(' . implode(')|(', $tests) . ')#i';
-                $plugin['compatibility'] = array();
-                if(preg_match_all($tests, $pluginContent, $matches)) {
-                    foreach($matches as $name => $match) {
-                        if(!is_int($name)) {
-                            $match = array_diff($match, array(''));
-                            if(count($match) > 0) {
-                                $plugin['compatibility'][] = $name;
-                            }
-                        }
-                    }
-                }
-                $plugins[] = $plugin;
-            }
-
             $connectors = glob($backupDir . 'engine/connectors/*', GLOB_ONLYDIR);
             $connectors = array_map('basename', $connectors);
             $connectors = array_diff($connectors, array(
@@ -283,9 +223,9 @@ class Shopware_Update extends Slim
                 )
             ";
             $query = $db->query($sql);
-            $fields = $query->fetchColumn();
-            if($fields !== false) {
-                $fields = explode(',', $fields);
+            $fields = array();
+            if($query !== false && ($result = $query->fetchColumn()) !== false) {
+                $fields = explode(',', $result);
             }
 
             $sql = '
@@ -294,15 +234,18 @@ class Shopware_Update extends Slim
                 WHERE variantable = 1
             ';
             $query = $db->query($sql);
-            $targetFields = $query->fetchAll(PDO::FETCH_KEY_PAIR);
-            $targetFields['weight'] = 'Gewicht';
-            $targetFields['supplierNumber'] = 'Herstellernummer';
+            $targetFields = array();
+            if($query !== false) {
+                $targetFields = $query->fetchAll(PDO::FETCH_KEY_PAIR);
+                $targetFields['weight'] = 'Gewicht';
+                $targetFields['supplierNumber'] = 'Herstellernummer';
+            }
 
             $app->render('custom.php', array(
                 'action' => 'custom',
                 'app' => $app,
                 'templates' => $templates,
-                'plugins' => $plugins,
+                'plugins' => $app->getPluginList(false),
                 'connectors' => $connectors,
                 'fields' => $fields,
                 'targetFields' => $targetFields
@@ -335,12 +278,12 @@ class Shopware_Update extends Slim
         $username = $this->request()->post('username');
         if($username !== null) {
             $sql = '
-                    SELECT id, name, email, IF(lockeduntil > NOW(), lockeduntil, NULL) as locked
-                    FROM s_core_auth
-                    WHERE username = :username
-                    AND password = MD5(CONCAT(:secret, MD5(:password)))
-                    AND active = 1 AND admin = 1
-                ';
+                SELECT id, name, email, IF(lockeduntil > NOW(), lockeduntil, NULL) as locked
+                FROM s_core_auth
+                WHERE username = :username
+                AND password = MD5(CONCAT(:secret, MD5(:password)))
+                AND active = 1 AND admin = 1
+            ';
             $db = $this->initDb();
             $query = $db->prepare($sql);
             $query->execute(array(
@@ -504,7 +447,7 @@ class Shopware_Update extends Slim
         ));
     }
 
-    public function updateDatabaseAction()
+    public function databaseAction()
     {
         set_time_limit(0);
         /** @var $db PDO */
@@ -780,12 +723,12 @@ class Shopware_Update extends Slim
         $db = $this->config('db');
         $dirs = array(
             -1 => array('images/articles/', 'media/image/'),
-            -2 => array('images/banner/', 'media/banner/'),
-            -2 => array('images/cms/', 'media/banner/'),
+            -2 => array('images/banner/', 'media/image/'),
+            -2 => array('images/cms/', 'media/image/'),
             -10 => array('files/downloads/', 'media/unknown/'),
             -12 => array('images/supplier/', 'media/image/'),
         );
-        $baseDir = $this->initPath();
+        $baseDir = $this->config('targetDir');
 
         $testDirs = array();
         foreach($dirs as $dir) {
@@ -849,7 +792,7 @@ class Shopware_Update extends Slim
     public function progressConfig()
     {
         $DB_HOST = null; $DB_USER = null; $DB_PASSWORD = null; $DB_DATABASE = null;
-        $configFile = $this->initPath() . 'config.php';
+        $configFile = $this->config('targetDir') . 'config.php';
         $config = include $configFile;
 
         if($DB_HOST !== null && !is_array($config)) {
@@ -961,7 +904,7 @@ class Shopware_Update extends Slim
 
     public function progressCache()
     {
-        $path = $this->initPath();
+        $path = $this->config('targetDir');
         $dirs = array(
             'cache/database/',
             'cache/templates/',
@@ -996,6 +939,286 @@ class Shopware_Update extends Slim
             }
         }
         return $success;
+    }
+
+    /**
+     * @param   bool $backup
+     * @return  array
+     */
+    public function getCustomList($backup = false)
+    {
+        $plugins = $this->getPluginList($backup);
+        $modules = $this->getModuleList($backup);
+        $payments = $this->getPaymentList($backup);
+        $connectors = $this->getConnectorList($backup);
+        $customs = array_merge($plugins, $modules, $connectors, $payments);
+
+        $method = "product";
+        $query = array (
+            'order' => array ('field' => 'a.datum', 'direction' => 'desc'),
+            'criterion' =>
+            array (
+                //'version' => array(4000),
+                'pluginName' => array_keys($customs),
+            ),
+        );
+        $soreResults = $this->doStoreApiRequest($method, $query);
+        if(!empty($soreResults['products'])) {
+            foreach($soreResults['products'] as $product) {
+                if(!isset($product['plugin_names'][0])) {
+                    continue;
+                }
+                $name = $product['plugin_names'][0];
+                $customs[$name]['author'] = $product['supplierName'];
+                $customs[$name]['label'] = $product['name'];
+                $customs[$name]['link'] = $product['attributes']['store_url'];
+                $customs[$name]['updateVersion'] = $product['attributes']['version'];
+            }
+        }
+        return $customs;
+    }
+
+    /**
+     * @param   bool $backup
+     * @return  array
+     */
+    public function getPluginList($backup = false)
+    {
+        $backupDir = $this->config('backupDir');
+        $targetDir = $this->config('targetDir');
+        $baseDir = $backup ? $backupDir : $targetDir;
+        $baseDir .= 'engine/Shopware/Plugins/';
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $table = $backup ? 'backup_s_core_plugins' : 's_core_plugins';
+
+        $sql = "
+            SELECT
+              p.name, p.id, p.label, p.description, p.installation_date as installed,
+              p.active, p.autor as author, p.version, p.link,
+              p.source, p.namespace, p.name
+            FROM $table p
+            WHERE p.source IN ('Community', 'Local')
+            ORDER BY p.source, p.label
+        ";
+        $query = $db->prepare($sql);
+        $query->execute();
+        if($query === false) {
+            return array();
+        }
+        $plugins = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = array();
+        foreach($plugins as $plugin) {
+            $pluginPath = "$baseDir{$plugin['source']}/{$plugin['namespace']}/{$plugin['name']}/";
+            $pluginFile = $pluginPath . 'Bootstrap.php';
+            if(file_exists($pluginFile)) {
+                $plugin['compatibility'] = $this->doCompatibilityCheck($pluginFile);
+            }
+            $result[$plugin['name']] = $plugin;
+        }
+        return $result;
+    }
+
+    /**
+     * @param   bool $backup
+     * @return  array
+     */
+    public function getModuleList($backup = false)
+    {
+        $mapping = array(
+            'sGROUPS'           => array('name' => 'SwagBusinessEssentials'),
+            'sFUZZY'            => array('name' => 'SwagFuzzy'),
+            'sMAILCAMPAIGNS'    => array('name' => 'SwagNewsletter'),
+            'sTICKET'           => array('name' => 'SwagTicketSystem'),
+            'sBUNDLE'           => array('name' => 'SwagBundle'),
+            'sLIVE'             => array('name' => 'SwagLiveshopping'),
+            'sLANGUAGEPACK'     => array('name' => 'SwagMultiShop'),
+            'sPRICESEARCH'      => array('name' => 'SwagProductExport', 'label' => 'Produkt-Exporte', 'version' => 'default'),
+            'sARTICLECONF'      => array('name' => 'SwagConfigurator', 'label' => 'Artikel Konfigurator', 'version' => 'default')
+        );
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $table = $backup ? 'backup_s_core_licences' : 's_core_licences';
+        $sql = "
+            SELECT
+              IF(l.module LIKE 'sLANGUAGEPACK%', 'sLANGUAGEPACK', l.module) as licence,
+              MAX(IF(l.inactive=0, 1, 0)) as active,
+              MIN(l.module LIKE '%-J%') as type
+            FROM $table l
+            GROUP BY licence
+        ";
+        $query = $db->prepare($sql);
+        $query->execute();
+        if($query !== false) {
+            $modules = $query->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $modules = array();
+        }
+        $result = array();
+        foreach($modules as $module) {
+            if(isset($mapping[$module['licence']])) {
+                $module = array_merge($module, $mapping[$module['licence']]);
+                if(!isset($module['source'])) {
+                    $module['source'] = 'Module';
+                }
+                if(!isset($module['label'])) {
+                    $module['label'] = substr($module['name'], 4);
+                }
+                if(!isset($module['link'])) {
+                    $module['link'] = $this->config('storeLink') . urlencode($module['name']);
+                }
+                $result[$module['name']] = $module;
+            }
+
+        }
+        return $result;
+    }
+
+    /**
+     * @param   bool $backup
+     * @return  array
+     */
+    public function getConnectorList($backup = false)
+    {
+        $backupDir = $this->config('backupDir');
+        $targetDir = $this->config('targetDir');
+        $baseDir = $backup ? $backupDir : $targetDir;
+        $connectors = glob($baseDir . 'engine/connectors/*', GLOB_ONLYDIR);
+        $connectors = array_map('basename', $connectors);
+        $connectors = array_diff($connectors, array(
+            'api', 'clickandbuy', 'export', 'ipayment',
+            'moneybookers', 'paypalexpress', 'saferpay', 'sofort'
+        ));
+        $result = array();
+        foreach($connectors as $connector) {
+            $result[$connector] = array(
+                'label' => 'Schnittstelle: ' . ucfirst($connector),
+                'name' => $connector,
+                'source' => 'Connector',
+                'active' => true,
+                'link' => $this->config('storeLink') . urlencode($connector)
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * @param   bool $backup
+     * @return  array
+     */
+    public function getPaymentList($backup = false)
+    {
+        $db = $this->config('db');
+        $table = $backup ? 'backup_s_core_paymentmeans' : 's_core_paymentmeans';
+        $sql = "
+            SELECT p.name, p.description as label, p.active
+            FROM $table p
+            JOIN s_order o
+            ON o.paymentID = p.id
+            WHERE p.embediframe != ''
+            GROUP BY p.id
+            ORDER BY label
+        ";
+        $query = $db->prepare($sql);
+        $query->execute();
+        if($query == false) {
+            return array();
+        }
+        $modules = $query->fetchAll(PDO::FETCH_ASSOC);
+        $result = array();
+        foreach($modules as $module) {
+            $result[$module['name']] = array_merge($module, array(
+                'label' => 'Zahlungsart: ' . $module['label'],
+                'source' => 'Payment',
+                'link' => $this->config('storeLink') . urlencode($module['label'])
+            ));
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $method
+     * @param array $query
+     * @return mixed
+     */
+    public function doStoreApiRequest($method, $query)
+    {
+        $url = 'http://store.shopware.de/storeApi';
+        $data = array(
+            'method' => 'call',
+            'arg0' => 'GET',
+            'arg1' => $method,
+            'arg2' => json_encode($query),
+            'rest' => 1
+        );
+        $data = http_build_query($data, '', '&');
+        $options = array('http' => array(
+            'method' => 'POST',
+            'user_agent' => $this->request()->getUserAgent(),
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n"
+                      . "Content-Length: " . strlen($data) . "\r\n"
+                      . 'Referer: http://' . $this->request()->getUrl() . "\r\n",
+            'content' => $data
+        ));
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if(!preg_match('#<_search_result>(.+?)</_search_result>#', $result, $match)) {
+            return null;
+        }
+        $match = json_decode(htmlspecialchars_decode($match[1]), true);
+        if($match === null) {
+            return null;
+        }
+        foreach($match as $key => $data) {
+            if(strpos($key, '_') === 0) {
+                $match[substr($key, 1)] = json_decode($data, true);
+                unset($match[$key]);
+            }
+        }
+        return $match;
+    }
+
+    /**
+     * @param $file
+     * @return array
+     */
+    public function doCompatibilityCheck($file)
+    {
+        $pluginContent = file_get_contents($file);
+        $tests = array(
+            'zend' => '<\?php @Zend;',
+            'ioncube' => '<\?php //0046a',
+            'license' => 'License\(\)->checkLicense',
+            'config' => 's_core_config[^_]|Config\(\)->Templates|Config\(\)->Snippets',
+            'utf8' => 'utf8_decode|utf8_encode',
+            'checkout_button' => 'frontend_checkout_confirm_agb',
+            'attribute' => 'ob_attr|od_attr|s_user_billingaddress.text1',
+            'bootstrap' => 'function getName|function getSource',
+            'db' => 'config\.php',
+            'global' => '\$_GET|\$_POST',
+            'this' => 'Enlight_Class::Instance',
+            'document_root' => '\$_SERVER\[.DOCUMENT_ROOT.\]',
+            'shop' => 'Shop\(\)->Locale\(\)|Shop\(\)->Config\(\)|Session\(\)->Shop|Shopware_Models_',
+            'api' =>'Shopware\(\)->Api',
+            'template_engine' => 'register_modifier'
+        );
+        foreach($tests as $name => $test) {
+            $tests[$name] = '?<' . $name . '>' . $test;
+        }
+        $tests = '#(' . implode(')|(', $tests) . ')#i';
+        $compatibility = array();
+        if(preg_match_all($tests, $pluginContent, $matches)) {
+            foreach($matches as $name => $match) {
+                if(!is_int($name)) {
+                    $match = array_diff($match, array(''));
+                    if(count($match) > 0) {
+                        $compatibility[] = $name;
+                    }
+                }
+            }
+        }
+        return $compatibility;
     }
 
     public static function autoload($class)
