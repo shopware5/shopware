@@ -43,6 +43,29 @@
             }
         });
 
+        $('form.ajax-loading').submit(function() {
+            $this = $(this);
+            $.loading($this.find('[type=submit]').attr('value'));
+            $.ajax({
+                type: 'POST',
+                url: $this.attr('action'),
+                data: $this.serialize(),
+                dataType: 'json',
+                success: function(result) {
+                    $('#messages').empty();
+                    $.removeLoading();
+                    if(!result || !result.success) {
+                        $('<div class="alert alert-error"></div>')
+                            .html(result.message).appendTo('#messages');
+                    } else if(result.message) {
+                        $('<div class="alert alert-success"></div>')
+                            .html(result.message).appendTo('#messages');
+                    }
+                }
+            });
+            return false;
+        });
+
        //$('.primary').bind('click', function(event) {
        //    var active = $('.navi-tabs li.active'),
        //        $this = $(this),

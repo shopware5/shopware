@@ -145,3 +145,5 @@ ALTER TABLE `s_user` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8
 ALTER TABLE `s_user_billingaddress` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE `s_user_debit` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE `s_user_shippingaddress` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE `s_articles_groups_accessories` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE `s_articles_groups_accessories_option` ENGINE = InnoDB, CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;

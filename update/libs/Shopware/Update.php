@@ -50,7 +50,7 @@ class Shopware_Update extends Slim
             isset($config['username']) ? $config['username'] : null,
             isset($config['password']) ? $config['password'] : null
         );
-        $db->exec("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'; SET FOREIGN_KEY_CHECKS = 0;");
+        $db->exec("SET NAMES 'utf8'; SET FOREIGN_KEY_CHECKS = 0;");
         return $db;
     }
 
@@ -517,6 +517,33 @@ class Shopware_Update extends Slim
         $this->response()->header('Content-Disposition', 'attachment; filename="' . $file . '";');
         $this->response()->header('Content-Length', $size);
         echo stream_get_contents($fp);
+    }
+
+    public function updateFieldsAction()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $fields = $this->request()->post('field');
+        foreach($fields as $sourceField => $targetField) {
+            if(empty($targetField)) {
+                continue;
+            }
+            $targetField = preg_replace('#[^a-z0-9]#i', '', (string)$targetField);
+            $targetTable = in_array($targetField, array('weight', 'supplierNumber')) ? 'd' : 't';
+            $targetField = $targetTable . '.' . $targetField;
+            $sourceField = 's.gv_attr' . (1 + $sourceField);
+            $sql = "
+                UPDATE backup_s_articles_groups_value s, s_articles_details d, s_articles_attributes t
+                SET $targetField = $sourceField
+                WHERE d.ordernumber = s.ordernumber
+                AND t.articledetailsID = d.id
+            ";
+            $db->exec($sql);
+        }
+        echo json_encode(array(
+            'message' => 'Konfigurator-Felder wurden erfolgreich übernommen.',
+            'success' => true
+        ));
     }
 
     public function progressAction()
