@@ -43,7 +43,8 @@ class Shopware_Components_DbDiff_Mysql
                 $diff .= "RENAME TABLE `$table` TO `$backupTable`;\n";
             }
         } elseif(empty($targetFields)) {
-            $diff .= $this->getTable($this->source, $table, array('ifNotExists' => true));
+            $diff .= "DROP TABLE IF EXISTS `$table`;\n";
+            $diff .= $this->getTable($this->source, $table);
             $diff .= $this->getTableData($this->source, $table);
         } else {
             $new = !empty($options['backup']) || count($sourceFields) != count($targetFields);

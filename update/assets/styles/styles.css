@@ -309,3 +309,14 @@ input.inline-success:focus {
 .table .checkbox, .table select {
     margin: 0;
 }
+.progress {
+    position: relative;
+}
+.progress .bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.progress .message {
+    position: relative;
+}
