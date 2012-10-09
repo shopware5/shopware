@@ -7,6 +7,7 @@
 </div>
 <?php } ?>
 
+<?php if(!empty($system)) { ?>
 <div class="page-header">
     <h2><?php echo $translation["system_requirements_header"];?></h2>
 </div>
@@ -14,7 +15,7 @@
 <span class="help-block">
     <?php echo $translation["step2_php_info"];?>
 </span>
-<table class="table table-striped">
+<table id="table-system" class="table table-striped">
     <thead>
     <tr>
         <th><?php echo $translation["step2_system_colcheck"];?></th>
@@ -29,12 +30,10 @@
         <?php
         if ($result["result"]) {
             $class = "success";
+        } elseif ($result["error"]) {
+            $class = "error";
         } else {
-            if ($result["error"]) {
-                $class = "error";
-            } else {
-                $class = "warning";
-            }
+            $class = "warning";
         }
         ?>
     <tr class="<?php echo $class; ?>">
@@ -54,6 +53,7 @@
     </tbody>
 </table>
 </div>
+<?php } ?>
 
 <?php if(!empty($customs)) { ?>
 <div class="page-header page-restore">
@@ -95,7 +95,7 @@
                 <?php } elseif(!isset($plugin['version'])) { ?>
                 Noch kein Update im Store verfügbar
                 <?php } elseif($plugin['version'] == 'default') { ?>
-                Im der Standard-Installation enthalten
+                In der Standard-Installation enthalten
                 <?php } else { ?>
                 Ja
                 <?php } ?>
@@ -109,18 +109,19 @@
             <?php } ?>
         </tbody>
     </table>
-    <div class="actions clearfix">
-        <a id="link-update" href="<?php echo $app->urlFor('action', array('action' => 'database')); ?>" class="right primary ajax-loading">
-
-        </a>
-    </div>
 </div>
 <?php } ?>
-
+<?php
+    $subject = "Update-Angebot von {$app->config('currentVersion')} auf {$app->config('updateVersion')}";
+    $body = "";
+?>
 <div class="actions clearfix">
     <a href="<?php echo $app->urlFor('index'); ?>" class="secondary"><?php echo $translation["back"];?></a>
-    <a id="link-next" href="<?php echo $app->urlFor('action', array('action' => 'main')); ?>" class="right primary">
-        <?php echo $translation["forward"];?>
+    <a id="link-next" href="<?php echo $app->urlFor('main'); ?>" class="right primary">
+        Mit Update fortfahren
+    </a>
+    <a id="link-update" href="mailto:sales@shopware.de?subject=<?php echo rawurlencode($subject)?>" class="right primary ajax-loading">
+        Angebot zum Update anfordern
     </a>
 </div>
 

@@ -97,7 +97,7 @@
 
         <div class="actions clearfix" style="margin: 18px 0">
             <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
-            <a id="link-next" href="<?php echo $app->urlFor('finish'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
+            <a id="link-next" href="<?php echo $app->urlFor('custom'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
         </div>
 
 </div>
