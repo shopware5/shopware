@@ -272,7 +272,7 @@ div.supplier ul li.image {background-color: #fff;}
 .table .ordernumber, .table .supplier, .table .zoom_picture {color: #999;}
 
 /* Row specific row coloring */
-.table .bundle_row, #basket .bundle_row {background-color:transparent;color:#000;border-color:#DFDFDF;}
+.table .bundle_row, #basket .bundle_row {background-color:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
 .table .table_foot #aggregation_left strong, .table .table_foot #aggregation strong {color: #707070;}
 .table .table_foot #aggregation .border, .table .table_foot #aggregation .doubleborder {border-color: #dfdfdf;}
 
@@ -2244,14 +2244,7 @@ div.ajax_add_article .bottom h2 {
 	position: absolute;
 	top: 0; left: 0;
 }
-.table .table_row .item_bundle {
-	background: url(../images/icons/basket_item_bundle.jpg) no-repeat 0 0;
-	display: block;
-	position: absolute;
-	height: 100px; width: 18px;
-	text-indent: -9999em;
-	top: -10px; left: -10px;
-}
+
 
 #basket .table .voucher .action a.del, #basket .table .selected_premium a.del,
 .table .table_row .action a.del {top: 20px;}
@@ -2296,8 +2289,7 @@ div.table_foot input.button_tablefoot {text-indent: -9999em; width: 22px; paddin
 #basket .cart .selected_premium .grid_3,
 #basket .cart .rebate .grid_3,
 #basket .cart .voucher .grid_3,
-#basket .cart .small_quantities .grid_3,
-#basket .cart .bundle_row .grid_3 {width: 275px;}
+#basket .cart .small_quantities .grid_3 {width: 275px;}
 
 #basket .table .voucher .voucher_img,
 #finished .table .voucher_img,
@@ -2309,6 +2301,7 @@ div.table_foot input.button_tablefoot {text-indent: -9999em; width: 22px; paddin
 	left: 10px; top: 15px;
 }
 
+#basket .table .small_quantities {min-height: 45px !important;}
 #basket .table .noborder {min-height: 40px !important;}
 
 /** CART - BOX **/
@@ -2850,17 +2843,11 @@ div.listing .artbox .star {
 #content #confirm .table .rebate .push_3 {left: 190px; width: 140px;}
 
 /** SMALL QUANTITIES **/
-#basket .table .small_quantities,
-#basket .table .bundle_row {min-height: 45px !important;}
 #content #confirm .table .small_quantities {min-height: 70px !important;}
 #content #confirm .table .small_quantities .grid_6 {margin-left: 85px !important;}
 #content #confirm .table .small_quantities .push_4 {left: 255px;}
 
-/** BUNDLE ROW **/
-#basket .table .bundle_row {background: url(../images/icons/ico_basket_bundle_rabatt.png) no-repeat 30px center;}
-
-#content #confirm .table .table_row, 
-#finished .table .table_row {min-height: 100px;}
+#content #confirm .table .table_row, #finished .table .table_row {min-height: 100px;}
 
 #content #confirm .table .table_row form  {background-color: #fff; }
 #content #confirm .table .table_row .grid_6 {margin: 15px 10px 0 10px;}
