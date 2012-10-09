@@ -28,8 +28,22 @@
                         $('<div class="alert alert-error"></div>')
                                 .html(result.message).appendTo('#messages');
                     } else if(result.message) {
-                        $('<div class="alert alert-success"></div>')
-                                .html(result.message).appendTo('#messages');
+                        var progress = $('.loading-mask .progress');
+                        if(!progress.length) {
+                            progress = $('<div class="progress progress-striped active">')
+                                     . append('<div class="bar">')
+                                     . append('<div class="message">')
+                                     . appendTo('.loading-mask');
+                        }
+                        if(result.progress) {
+                            progress.show();
+                            progress.children('.bar').css('width', '' + (result.progress * 100) + '%');
+                            progress.children('.message').text(result.message);
+                        } else {
+                            progress.hide();
+                            $('<div class="alert alert-success"></div>')
+                                    .html(result.message).appendTo('#messages');
+                        }
                     }
                 }
             });

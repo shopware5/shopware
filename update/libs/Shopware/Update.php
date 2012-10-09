@@ -130,6 +130,9 @@ class Shopware_Update extends Slim
                 'cache/templates/',
                 'engine/Library/Mpdf/tmp/',
                 'engine/Library/Mpdf/ttfontdata/',
+                'engine/Shopware/Models/Attribute/',
+                'engine/Shopware/Proxies/',
+                'engine/Shopware/Plugins/Community/',
                 'media/archive/',
                 'media/image/',
                 'media/image/thumbnail/',
@@ -520,17 +523,26 @@ class Shopware_Update extends Slim
     {
         $next = (int)$this->request()->post('next') ?: 1;
         switch($next) {
-            case 1: $method = 'download'; break;
-            case 2: $method = 'unpack'; break;
-            case 3: $method = 'move'; break;
-            case 4: $method = 'config'; break;
-            case 5: $method = 'media'; break;
-            case 6: $method = 'category'; break;
-            case 7: $method = 'cache'; break;
+            case 1: $action = 'cache'; break;
+            case 2: $action = 'download'; break;
+            case 3: $action = 'unpack'; break;
+            case 4: $action = 'move'; break;
+            case 5: $action = 'config'; break;
+            case 6: $action = 'media'; break;
+            case 7: $action = 'category'; break;
+            default: $action = 'notFound'; break;
         }
-        $method = 'progress' . ucfirst($method);
+        $method = 'progress' . ucfirst($action);
         if(method_exists($this, $method)) {
-            $result = $this->$method();
+            try {
+                $result = $this->$method();
+            } catch(Exception $e) {
+                $result = array(
+                    'message' => 'Ein Fehler im Update-Schritt "' . $action .'" ist aufgetreten: <br> '
+                               . $e->getMessage(),
+                    'success' => false
+                );
+            }
             if(!isset($result['offset'])) {
                 $next++;
             }
@@ -551,8 +563,11 @@ class Shopware_Update extends Slim
         $format = $this->config('format');
         $sourceDir = $this->config('sourceDir');
         $sourceFile = $sourceDir . $package . '.' . $format;
+        $size = 39161 * 1028;
 
-        if(file_exists($sourceFile) || !file_exists($sourceDir)) {
+        if((!$offset && file_exists($sourceFile))
+          || !file_exists($sourceDir)
+          || file_exists($sourceDir . 'shopware.php')) {
             return array(
                 'success' => true,
             );
@@ -598,6 +613,8 @@ class Shopware_Update extends Slim
                 $offset += ftell($source);
                 return array(
                     'success' => true,
+                    'progress' => round($offset / $size, 2),
+                    'message' => 'Update-Package herunterladen',
                     'offset' => $offset
                 );
             }
@@ -617,6 +634,8 @@ class Shopware_Update extends Slim
         $format = $this->config('format');
         $sourceDir = $this->config('sourceDir');
         $sourceFile = $sourceDir . $package . '.' . $format;
+        $updatePaths = $this->config('updatePaths');
+        $chmodPaths = $this->config('chmodPaths');
 
         if(!file_exists($sourceFile)) {
             return array(
@@ -647,16 +666,41 @@ class Shopware_Update extends Slim
             );
         }
 
+        umask(0);
+
         while (list($position, $entry) = $source->each()) {
-            $name = $sourceDir . $entry->getName();
+            $name = $entry->getName();
+            $targetName = $sourceDir . $name;
             $result = true;
 
+            $match = false;
+            foreach($updatePaths as $testPath) {
+                if(strpos($name, $testPath) === 0) {
+                    $match = true;
+                    break;
+                }
+            }
+            if(!$match) {
+                continue;
+            }
+
             if ($entry->isDir()) {
-                if (!file_exists($name)) {
-                    $result = mkdir($name);
+                if (!file_exists($targetName)) {
+                    $result = mkdir($targetName);
                 }
             } else {
-                $result = file_put_contents($name, $entry->getContents()) !== false;
+                $result = file_put_contents($targetName, $entry->getContents()) !== false;
+            }
+
+            $match = false;
+            foreach($chmodPaths as $testPath) {
+                if(strpos($name, $testPath) === 0) {
+                    $match = true;
+                    break;
+                }
+            }
+            if($match) {
+                chmod($targetName, 0777);
             }
 
             if (!$result && (!is_dir($name) || !filesize($name))) {
@@ -665,7 +709,8 @@ class Shopware_Update extends Slim
 
             if (time() - $requestTime >= 20 || ($position + 1) % 1000 == 0) {
                 return array(
-                    'progress' => ($position + 1) . ' von ' . $count . ' Dateien entpackt.',
+                    'progress' => round(($position + 1) / $count, 2),
+                    'message' => 'Dateien entpacken',
                     'success' => true,
                     'offset' => $position + 1
                 );
@@ -689,6 +734,13 @@ class Shopware_Update extends Slim
         if(!file_exists($sourceDir)) {
             return array(
                 'success' => true,
+            );
+        }
+        if(!is_writable($sourceDir)) {
+            return array(
+                'message' => 'Das Shopware-Verzeichnis ist nicht beschreibbar!<br>' .
+                    'Bitte passen Sie die Schreibrechte vom Shopware-Verzeichnis an.',
+                'success' => false,
             );
         }
 
