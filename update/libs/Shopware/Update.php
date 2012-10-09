@@ -201,13 +201,6 @@ class Shopware_Update extends Slim
             $targetTemplates = array_map('basename', $targetTemplates);
             $templates = array_diff($templates, $targetTemplates);
 
-            $connectors = glob($backupDir . 'engine/connectors/*', GLOB_ONLYDIR);
-            $connectors = array_map('basename', $connectors);
-            $connectors = array_diff($connectors, array(
-                'api', 'clickandbuy', 'export', 'ipayment',
-                'moneybookers', 'paypalexpress', 'saferpay', 'sofort'
-            ));
-
             $sql = "
                 SELECT `value`
                 FROM `backup_s_core_config`
@@ -246,7 +239,6 @@ class Shopware_Update extends Slim
                 'app' => $app,
                 'templates' => $templates,
                 'plugins' => $app->getPluginList(false),
-                'connectors' => $connectors,
                 'fields' => $fields,
                 'targetFields' => $targetFields
             ));
@@ -542,7 +534,7 @@ class Shopware_Update extends Slim
             if(!isset($result['offset'])) {
                 $next++;
             }
-            if(!empty($result['success']) && $next < 7) {
+            if(!empty($result['success']) && $next < 8) {
                 $result['next'] = $next;
             }
             echo json_encode($result);
