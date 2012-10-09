@@ -1,5 +1,9 @@
 {extends file='parent:frontend/checkout/cart_item.tpl'}
 
+{block name='frontend_checkout_cart_item_image' prepend}
+	<span class="item_bundle">{se name="CartItemBundle"}Bundle{/se}</span>
+{/block}
+
 {block name='frontend_checkout_cart_item_voucher_details'}
 	<div class="voucher_img">&nbsp;</div>
 	<div class="basket_details">
