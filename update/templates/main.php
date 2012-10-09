@@ -22,7 +22,7 @@
                         $.removeLoading();
                     }
                     if(!last) {
-                        $('.alert').remove();
+                        $('#messages').empty();
                     }
                     if(!result || !result.success) {
                         $('<div class="alert alert-error"></div>')

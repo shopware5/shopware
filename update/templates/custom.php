@@ -112,7 +112,8 @@
         <tr>
             <td><?php echo $field;?></td>
             <td>
-                <select name="targetField[<?php echo $fieldIndex;?>]">
+                <select name="field[<?php echo $fieldIndex;?>]">
+                    <option value="">Nicht übernehmen</option>
                 <?php foreach($targetFields as $targetName => $targetField) { ?>
                     <option value="<?php echo $targetName;?>"><?php echo $targetField;?></option>
                 <?php } ?>
