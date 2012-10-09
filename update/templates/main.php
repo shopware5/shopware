@@ -4,6 +4,7 @@
         $('.ajax-loading').live('click', function(event) {
             event.preventDefault();
             var me = $(this);
+            me.attr('disabled', 'disabled');
             $.loading(me.text());
             $.ajaxLoading($(this).attr('href'));
         });
@@ -36,7 +37,7 @@
 
         <?php if(!file_exists('backup/database.php')) { ?>
             $next = $('.page-backup');
-        <?php } elseif(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '<')) { ?>
+        <?php } elseif(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '>')) { ?>
             $next = $('.page-database');
         <?php } else { ?>
             $next = $('.page-main');
