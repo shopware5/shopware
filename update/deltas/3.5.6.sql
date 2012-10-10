@@ -5313,7 +5313,8 @@ DROP TABLE IF EXISTS `s_core_hookpoints`;
 
 DROP TABLE IF EXISTS `s_core_im`;
 
-DROP TABLE IF EXISTS `s_core_licences`;
+DROP TABLE IF EXISTS `backup_s_core_licences`;
+RENAME TABLE `s_core_licences` TO `backup_s_core_licences`;
 
 DROP TABLE IF EXISTS `s_core_modules`;
 

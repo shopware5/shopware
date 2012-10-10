@@ -35,7 +35,8 @@
 
         $('.check-all input[type=checkbox]').live('click', function() {
             var $this = $(this),
-                $fields = $('input[name=' + $this.attr('name') + ']');
+                name = $this.attr('name').replace(/([ #;&,.+*~':"!^$[\]()=>|\/@])/g,'\\$1'),
+                $fields = $('input[name=' + name + ']');
             if($(this).attr('checked')) {
                 $fields.attr('checked', 'checked');
             } else {

@@ -4,7 +4,7 @@ class Shopware_Update extends Slim
     const VERSION = '1.0.0';
     const UPDATE_VERSION = '4.0.3';
 
-    public function initDb()
+    public function initDbConfig()
     {
         $DB_HOST = null; $DB_USER = null; $DB_PASSWORD = null; $DB_DATABASE = null;
         $config = include 'config.php';
@@ -30,6 +30,12 @@ class Shopware_Update extends Slim
                 }
             }
         }
+        return $config;
+    }
+
+    public function initDb()
+    {
+        $config = $this->initDbConfig();
 
         $dsn = array();
         if(isset($config['host'])) {
@@ -109,21 +115,46 @@ class Shopware_Update extends Slim
             'currentVersion' => $this->initCurrentVersion(),
             'updateVersion' => self::UPDATE_VERSION,
             'channel' => 'http://files.shopware.de/download.php',
-            'package' => 'install',
+            'package' => 'install_4.0.3',
             'format' => 'zip',
             'storeLink' => 'http://store.shopware.de/shopware.php/sViewport,search?sSearch=',
+            'updateDir' => realpath('.') . DIRECTORY_SEPARATOR,
             'sourceDir' => realpath('.') . DIRECTORY_SEPARATOR . 'source' . DIRECTORY_SEPARATOR,
             'backupDir' => realpath('backup/') . DIRECTORY_SEPARATOR,
             'targetDir' => realpath('../') . DIRECTORY_SEPARATOR,
+            'testPaths' => array(
+                '',
+                'images/',
+                'templates/',
+                'templates/_default/',
+                'update/backup/',
+                'update/source/',
+                '.htaccess',
+                'config.php',
+                'shopware.php',
+                'Application.php',
+                'shopware.php',
+                '.htaccess'
+            ),
+            'updateDirs' => array(
+                '',
+                'templates/',
+            ),
             'updatePaths' => array(
                 'cache/',
                 'engine/',
                 'media/',
                 'snippets/',
-                'templates/',
+                'templates/_default/',
+                'templates/_emotion/',
+                'templates/_emotion_local/',
+                'templates/emotion_*',
+                'templates/orange/',
+                'templates/license.txt',
                 'Application.php',
                 'shopware.php',
-                '.htaccess'
+                '.htaccess',
+                '*.txt'
             ),
             'chmodPaths' => array(
                 'cache/database/',
@@ -133,6 +164,7 @@ class Shopware_Update extends Slim
                 'engine/Shopware/Models/Attribute/',
                 'engine/Shopware/Proxies/',
                 'engine/Shopware/Plugins/Community/',
+                'engine/Shopware/Plugins/Local/',
                 'media/archive/',
                 'media/image/',
                 'media/image/thumbnail/',
@@ -193,16 +225,8 @@ class Shopware_Update extends Slim
         })->via('GET', 'POST')->name('restore');
 
         $this->get('/custom', function () use ($app) {
-            $backupDir = $app->config('backupDir');
-            $targetDir = $app->config('targetDir');
             /** @var $db PDO */
             $db = $app->config('db');
-
-            $templates = glob($backupDir . 'templates/*', GLOB_ONLYDIR);
-            $templates = array_map('basename', $templates);
-            $targetTemplates = glob($targetDir . 'templates/*', GLOB_ONLYDIR);
-            $targetTemplates = array_map('basename', $targetTemplates);
-            $templates = array_diff($templates, $targetTemplates);
 
             $sql = "
                 SELECT `value`
@@ -240,8 +264,7 @@ class Shopware_Update extends Slim
             $app->render('custom.php', array(
                 'action' => 'custom',
                 'app' => $app,
-                'templates' => $templates,
-                'plugins' => $app->getPluginList(false),
+                'customs' => $app->getCustomList(true),
                 'fields' => $fields,
                 'targetFields' => $targetFields
             ));
@@ -353,7 +376,8 @@ class Shopware_Update extends Slim
             's_articles_groups_option',
             's_articles_groups_prices',
             's_articles_groups_settings',
-            's_articles_groups_value'
+            's_articles_groups_value',
+            's_core_licences'
         );
         $mapping = array(
             's_addon_premiums' => array(
@@ -436,7 +460,7 @@ class Shopware_Update extends Slim
         }
 
         echo json_encode(array(
-            'message' => 'Datenbank-Backup wurde erfolgreich durchgeführt.',
+            'message' => 'Das Datenbank-Backup wurde erfolgreich durchgeführt.',
             'success' => true,
             'file' => $file
         ));
@@ -502,7 +526,7 @@ class Shopware_Update extends Slim
             }
         }
         echo json_encode(array(
-            'message' => 'Datenbank wurde erfolgreich wiederhergestellt.',
+            'message' => 'Die Datenbank wurde erfolgreich wiederhergestellt.',
             'success' => true
         ));
     }
@@ -541,7 +565,113 @@ class Shopware_Update extends Slim
             $db->exec($sql);
         }
         echo json_encode(array(
-            'message' => 'Konfigurator-Felder wurden erfolgreich übernommen.',
+            'message' => 'Die Konfigurator-Felder wurden erfolgreich übernommen.',
+            'success' => true
+        ));
+    }
+
+    public function updatePluginsAction()
+    {
+        $targetDir = $this->config('targetDir') . 'templates' . DIRECTORY_SEPARATOR;
+        $backupDir = $this->config('backupDir') . 'templates' . DIRECTORY_SEPARATOR;
+
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $plugins = $this->request()->post('plugin');
+        $plugins = array_map('intval', $plugins);
+        $plugins = implode(', ', $plugins);
+        $sql = "
+            SELECT p.id, p.name, p.source, p.namespace, p.label
+            FROM backup_s_core_plugins p
+            WHERE p.id IN ($plugins)
+        ";
+        $query = $db->query($sql);
+        if($query === false) {
+            return;
+        }
+        $plugins = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        try {
+            foreach($plugins as $plugin) {
+                $sql = "
+                    INSERT IGNORE INTO s_core_plugins (
+                      namespace, name, label, source, description, description_long,
+                      active, added, installation_date, author, copyright, license,
+                      version, support, link
+                    )
+                    SELECT
+                      b.namespace, b.name, b.label, b.source, b.description, b.description_long,
+                      b.active, b.added, b.installation_date, b.autor as author, b.copyright, b.license,
+                      b.version, b.support, b.link
+                    FROM backup_s_core_plugins b
+                    WHERE b.id = :id
+                ";
+                $db->prepare($sql)->execute(array('id' => $plugin['id']));
+                $sql = "
+                    SELECT p.id
+                    FROM backup_s_core_plugins b, s_core_plugins p
+                    WHERE b.name = p.name AND b.namespace = p.namespace
+                    AND b.id = :id
+                ";
+                $query = $db->prepare($sql);
+                $query->execute(array('id' => $plugin['id']));
+                $newId = $query->fetchColumn();
+                if(empty($newId)) {
+                    continue;
+                }
+                $sql = "
+                    INSERT IGNORE INTO s_core_menu (
+                      `parent`, `hyperlink`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`
+                    )
+                    SELECT `parent`, `hyperlink`, `name`, `onclick`, `class`, `position`, `active`, :newId
+                    FROM backup_s_core_menu WHERE pluginID = :id
+                ";
+                $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
+                $sql = "
+                    INSERT IGNORE INTO s_core_subscribes (
+                      `subscribe`, `type`, `listener`, `pluginID`, `position`
+                    )
+                    SELECT `subscribe`, `type`, `listener`, :newId, `position`
+                    FROM backup_s_core_subscribes WHERE pluginID = :id
+                ";
+                $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
+                $sql = "
+                    INSERT INTO s_core_config_forms (name, label, description, plugin_id)
+                    SELECT p.name, p.label, IF(p.description='', NULL, p.description) as description, :newId
+                    FROM  backup_s_core_plugins p, backup_s_core_plugin_elements pc
+                    WHERE pc.pluginID = p.id
+                    AND p.id = :id
+                    LIMIT 1
+                ";
+                $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
+                $sql = "
+                    SELECT
+                      f.id as form_id, e.name,
+                      IF(e.value='', NULL, e.value) as `value`,
+                      e.label,
+                      IF(e.description='', NULL, e.description) as `description`,
+                      e.type, e.required, e.order, e.scope,
+                      e.filters, e.validators,
+                      IF(e.options IN ('', 'Array'), NULL, e.options) as `options`
+                    FROM  backup_s_core_plugin_elements e, s_core_config_forms f
+                    WHERE f.plugin_id = :newId
+                    AND e.pluginID = :id
+                ";
+                $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
+            }
+        } catch(Exception $e) {
+            echo json_encode(array(
+                'message' => "Ein Fehler bei der Übernahme des Plugins \"{$plugin['label']}\" ist aufgetreten: <br>"
+                           . $e->getMessage(),
+                'success' => false
+            ));
+            return;
+        }
+
+        echo json_encode(array(
+            'message' => 'Die Plugins wurden erfolgreich übernommen.',
             'success' => true
         ));
     }
@@ -662,6 +792,7 @@ class Shopware_Update extends Slim
         $sourceDir = $this->config('sourceDir');
         $sourceFile = $sourceDir . $package . '.' . $format;
         $updatePaths = $this->config('updatePaths');
+        $updateDirs = $this->config('updateDirs');
         $chmodPaths = $this->config('chmodPaths');
 
         if(!file_exists($sourceFile)) {
@@ -695,28 +826,35 @@ class Shopware_Update extends Slim
 
         umask(0);
 
+        foreach($updateDirs as $updateDir) {
+            if(!file_exists($sourceDir . $updateDir)) {
+                mkdir($sourceDir . $updateDir, 0755);
+            }
+        }
+
+        $testPattern = array();
+        foreach($updatePaths as $testPath) {
+            $testPath = preg_quote($testPath, '#');
+            $testPath = str_replace('\*', '[^/]*', $testPath);
+            $testPattern[] = $testPath;
+        }
+        $testPattern = '#^' . implode('|^', $testPattern) . '#';
+
         while (list($position, $entry) = $source->each()) {
             $name = $entry->getName();
             $targetName = $sourceDir . $name;
             $result = true;
 
-            $match = false;
-            foreach($updatePaths as $testPath) {
-                if(strpos($name, $testPath) === 0) {
-                    $match = true;
-                    break;
-                }
-            }
-            if(!$match) {
+            if(!preg_match($testPattern, $name)) {
                 continue;
             }
 
             if ($entry->isDir()) {
                 if (!file_exists($targetName)) {
-                    $result = mkdir($targetName);
+                    mkdir($targetName, 0755);
                 }
             } else {
-                $result = file_put_contents($targetName, $entry->getContents()) !== false;
+                file_put_contents($targetName, $entry->getContents());
             }
 
             $match = false;
@@ -755,8 +893,10 @@ class Shopware_Update extends Slim
     {
         $backupDir = $this->config('backupDir');
         $sourceDir = $this->config('sourceDir');
-        $targetDir = realpath('../') . DIRECTORY_SEPARATOR;
+        $updateDir = $this->config('updateDir');
+        $targetDir = $this->config('targetDir');
         $updatePaths = $this->config('updatePaths');
+        $updateDirs = $this->config('updateDirs');
 
         if(!file_exists($sourceDir)) {
             return array(
@@ -771,7 +911,29 @@ class Shopware_Update extends Slim
             );
         }
 
+        chdir($sourceDir);
+        $realUpdatePaths = array();
         foreach($updatePaths as $updatePath) {
+            if(strpos($updatePath, '*') !== false) {
+                foreach(glob($updatePath, GLOB_MARK) as $realUpdatePath) {
+                    $realUpdatePaths[] = $realUpdatePath;
+                }
+            } else {
+                $realUpdatePaths[] = $updatePath;
+            }
+        }
+        chdir($updateDir);
+
+        foreach($updateDirs as $updateDir) {
+            if(!file_exists($backupDir. $updateDir)) {
+                mkdir($backupDir. $updateDir, 0777, true);
+            }
+            if(!file_exists($targetDir. $updateDir)) {
+                mkdir($targetDir. $updateDir, 0777, true);
+            }
+        }
+
+        foreach($realUpdatePaths as $updatePath) {
             if(file_exists($targetDir . $updatePath)) {
                 rename($targetDir . $updatePath, $backupDir . $updatePath);
             }
@@ -780,7 +942,9 @@ class Shopware_Update extends Slim
             }
         }
 
-        @unlink($sourceDir);
+        foreach(array_reverse($updateDirs) as $updateDir) {
+            rmdir($sourceDir . $updateDir);
+        }
 
         return array(
             'message' => 'Die Update-Dateien wurden erfolgreich verschoben.',
@@ -862,41 +1026,28 @@ class Shopware_Update extends Slim
 
     public function progressConfig()
     {
-        $DB_HOST = null; $DB_USER = null; $DB_PASSWORD = null; $DB_DATABASE = null;
-        $configFile = $this->config('targetDir') . 'config.php';
-        $config = include $configFile;
+        $backupDir = $this->config('backupDir');
+        $targetDir = $this->config('targetDir');
+        $configFile = 'config.php';
+        $config = $this->initDbConfig();
 
-        if($DB_HOST !== null && !is_array($config)) {
-            if(!is_writable($configFile)) {
-                $msg = 'Die Konfiguration kann nicht übernommen werden.<br>' .
-                       'Die Datei "config.php" ist nicht beschreibar.';
-                return array(
-                    'message' => $msg,
-                    'success' => false
-                );
-            }
-            if(strpos($DB_HOST, ':') !== false) {
-                list($host, $port) = explode(':', $DB_HOST);
-            } else {
-                $host = $DB_HOST;
-            }
-            $config = array(
-                'db' => array(
-                    'username' => $DB_USER,
-                    'password' => $DB_PASSWORD,
-                    'dbname' => $DB_DATABASE,
-                    'host' => $host
-                ),
+        if(!is_writable($targetDir)) {
+            $msg = 'Die Konfiguration kann nicht übernommen werden.<br>' .
+                'Die Datei "config.php" ist nicht schreibbar.';
+            return array(
+                'message' => $msg,
+                'success' => false
             );
-            if(isset($port)) {
-                if(is_numeric($port)) {
-                    $config['db']['port'] = $port;
-                } else {
-                    $config['db']['unix_socket'] = $port;
-                }
+        }
+
+        if(!file_exists($backupDir . $configFile)) {
+            if(file_exists($targetDir . $configFile)) {
+                rename($targetDir . $configFile, $backupDir . $configFile);
             }
-            $template = '<?php return ' . var_export($config, true) . ';';
-            file_put_contents($configFile, $template);
+            $template = '<?php return ' . var_export(array(
+                'db' => $config
+            ), true) . ';';
+            file_put_contents($targetDir . $configFile, $template);
         }
 
         return array(
