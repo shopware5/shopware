@@ -50,9 +50,12 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
         var me = this;
         return [{
             xtype: 'gridcolumn',
-            dataIndex: 'name',
+            dataIndex: 'language',
             text: '{s name=locale/table/name_text}Name{/s}',
-            flex: 1
+            flex: 1,
+            renderer: function (v,p,record){
+                return record.data.language + ' (' + record.data.territory + ')';
+            }
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'locale',
