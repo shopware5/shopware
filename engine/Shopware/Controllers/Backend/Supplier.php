@@ -111,6 +111,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
         $suppliers = $query->getArrayResult();
 
+        foreach ($suppliers as &$supplier){
+            $supplier["description"] = strip_tags($supplier["description"]);
+        }
+
         $this->View()->assign(array(
             'success' => !empty($suppliers),
             'data'    => $suppliers,
@@ -219,6 +223,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     protected function getSingleSupplier($id)
     {
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
+
 
         if (empty($data)) {
             $this->View()->assign(array('success' => false, 'message' => 'Supplier not found'));
