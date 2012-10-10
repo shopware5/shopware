@@ -53,7 +53,13 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
 
     getColumns: function() {
         var me = this;
-        return [{
+        return [
+        {
+            dataIndex: 'id',
+            text: '{s name=country/table/id_text}Id{/s}',
+            flex: 1
+        },
+        {
             dataIndex: 'name',
             text: '{s name=country/table/name_text}Name{/s}',
             flex: 1
