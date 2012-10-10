@@ -385,6 +385,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                     emptyText: me.snippets.basePrice.empty,
                     store: me.unitStore,
                     displayField: 'name',
+                    editable:false,
                     valueField: 'id'
                 }, {
                     xtype: 'numberfield',
@@ -434,16 +435,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                     height: 100
                 }, {
                     name: 'description',
-                    grow: true,
-                    growMin: 30,
-                    growMax: 300,
+                    height: 100,
                     fieldLabel: me.snippets.descriptions.description.label,
                     supportText: me.snippets.descriptions.description.support
                 }, {
                     name: 'keywords',
-                    grow: true,
-                    growMin: 30,
-                    growMax: 300,
+                    height: 100,
                     fieldLabel: me.snippets.descriptions.keywords.label,
                     supportText: me.snippets.descriptions.keywords.support
                 }

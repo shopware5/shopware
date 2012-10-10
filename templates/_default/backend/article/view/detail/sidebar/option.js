@@ -247,6 +247,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
             queryMode: 'local',
             valueField: 'id',
             displayField: 'name',
+            editable: false,
             emptyText: me.snippets.empty
         });
 

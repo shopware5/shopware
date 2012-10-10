@@ -244,7 +244,8 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
                 allowBlank: false,
                 store: me.taxStore,
                 valueField: 'id',
-                displayField: 'name'
+                displayField: 'name',
+                editable: false
             }, {
                 xtype: 'combo',
                 name: 'template',
@@ -253,7 +254,8 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
                 emptyText: me.snippets.empty,
                 store: me.templateStore,
                 valueField: 'id',
-                displayField: 'name'
+                displayField: 'name',
+                editable: false
             }, {
                 xtype: 'checkbox',
                 name: 'priceGroupActive',
@@ -268,7 +270,8 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
                 emptyText: me.snippets.empty,
                 store: me.priceGroupStore,
                 valueField: 'id',
-                displayField: 'name'
+                displayField: 'name',
+                editable: false
             }
         ];
     }
