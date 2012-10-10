@@ -175,9 +175,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         try{
 
             $params = $this->Request()->getParams();
-
+            unset($params["action"]);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
             $existingModel = $repository->findByName($params['name']);
+
             if($existingModel){
                 throw new \Doctrine\ORM\ORMException('The name is already in use.');
             }
