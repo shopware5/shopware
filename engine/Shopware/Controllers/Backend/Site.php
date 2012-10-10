@@ -195,7 +195,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //build the structure
         $node = array(
             'id' => $idPrefix . $site->getId(),
-            'description' => $site->getDescription() . "(" . $site->getId() . ")",
+            'text' => $site->getDescription() . "(" . $site->getId() . ")",
+            'description' => $site->getDescription(),
             'helperId' => $site->getId(),
             'tpl1variable' => $site->getTpl1Variable(),
             'tpl2variable' => $site->getTpl2Variable(),
