@@ -813,24 +813,13 @@ class	sExport
 	{
 		if(empty($categoryID))
 			$categoryID = $this->sSettings["categoryID"];
-		$path = "";
-		while (!empty($categoryID))
-		{
-			$sql = "
-			    SELECT c.id as categoryID, c.description
-			    FROM s_articles_categories a, s_categories c
-				WHERE a.articleID=$articleID
-				AND c.parent=$categoryID
-				AND a.categoryID = c.id
-				ORDER BY a.id ASC LIMIT 1
-			";
-			$category = $this->sDB->GetRow($sql);
-			if(empty($category))
-				break;
-			$path = empty($path) ? $category["description"] : $path . $separator . $category["description"];
-			$categoryID = $category["categoryID"];
-		}
-		return htmlspecialchars_decode($path);
+
+        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($categoryID));
+
+        foreach ($breadcrumb as $breadcrumbObj){
+            $breadcrumbs[] = $breadcrumbObj["name"];
+        }
+        return htmlspecialchars_decode(implode($separator,$breadcrumbs));
 	}
 
 	public function sGetCountry ($country)
