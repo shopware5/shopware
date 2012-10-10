@@ -974,7 +974,10 @@ class sAdmin
 		if(isset($p["emailConfirmation"]) || isset($p["email"])) {
 			$p["email"] = strtolower($p["email"]);
 			// Check email
-			if (empty($p["email"]) || !preg_match("/^.+@.+\\..+$/", $p["email"])){
+
+            $validator = new Zend_Validate_EmailAddress();
+
+			if (empty($p["email"]) || !$validator->isValid($p["email"])){
 				$sErrorFlag["email"] = true;
 				$sErrorMessages[] = $this->snippetObject->get('MailFailure','Please enter a valid mail address');
 			}
