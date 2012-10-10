@@ -209,10 +209,19 @@ class Shopware_Update extends Slim
         })->via('GET', 'POST')->name('system');
 
         $this->get('/main', function () use ($app) {
+            $targetDir = $app->config('targetDir');
+            $testDirs = $app->config('updateDirs');
+            $testDirs[] = 'update/backup/';
+            $testDirs[] = 'update/source/';
+            foreach($testDirs as $key => $testDir) {
+                if(!file_exists($targetDir . $testDir) || is_writable($targetDir . $testDir)) {
+                    unset($testDirs[$key]);
+                }
+            }
             $app->render('main.php', array(
                 'action' => 'main',
                 'app' => $app,
-                'error' => false
+                'testDirs' => $testDirs
             ));
         })->via('GET', 'POST')->name('main');
 
@@ -232,7 +241,7 @@ class Shopware_Update extends Slim
                 SELECT `value`
                 FROM `backup_s_core_config`
                 WHERE `name` = 'sCONFIGCUSTOMFIELDS'
-                OR (
+                AND (
                   SELECT 1 FROM backup_s_articles_groups_value
                   WHERE gv_attr1 IS NOT NULL
                   OR gv_attr2 IS NOT NULL
@@ -264,7 +273,7 @@ class Shopware_Update extends Slim
             $app->render('custom.php', array(
                 'action' => 'custom',
                 'app' => $app,
-                'customs' => $app->getCustomList(true),
+                'customs' => $app->getCustomList(),
                 'fields' => $fields,
                 'targetFields' => $targetFields
             ));
@@ -377,7 +386,8 @@ class Shopware_Update extends Slim
             's_articles_groups_prices',
             's_articles_groups_settings',
             's_articles_groups_value',
-            's_core_licences'
+            's_core_licences',
+            's_core_paymentmeans'
         );
         $mapping = array(
             's_addon_premiums' => array(
@@ -572,8 +582,8 @@ class Shopware_Update extends Slim
 
     public function updatePluginsAction()
     {
-        $targetDir = $this->config('targetDir') . 'templates' . DIRECTORY_SEPARATOR;
-        $backupDir = $this->config('backupDir') . 'templates' . DIRECTORY_SEPARATOR;
+        $targetDir = $this->config('targetDir');
+        $backupDir = $this->config('backupDir');
 
         /** @var $db PDO */
         $db = $this->config('db');
@@ -595,6 +605,19 @@ class Shopware_Update extends Slim
 
         try {
             foreach($plugins as $plugin) {
+                $pluginPath = array(
+                    'engine',
+                    'Shopware',
+                    'Plugins',
+                    $plugin['source'],
+                    $plugin['namespace'],
+                    $plugin['name'],
+                    ''
+                );
+                $pluginPath = implode(DIRECTORY_SEPARATOR, $pluginPath);
+                if(file_exists($backupDir . $pluginPath)) {
+                    rename($backupDir . $pluginPath, $targetDir. $pluginPath);
+                }
                 $sql = "
                     INSERT IGNORE INTO s_core_plugins (
                       namespace, name, label, source, description, description_long,
@@ -681,16 +704,17 @@ class Shopware_Update extends Slim
         $next = (int)$this->request()->post('next') ?: 1;
         switch($next) {
             case 1: $action = 'cache'; break;
-            case 2: $action = 'download'; break;
-            case 3: $action = 'unpack'; break;
-            case 4: $action = 'move'; break;
-            case 5: $action = 'config'; break;
-            case 6: $action = 'media'; break;
-            case 7: $action = 'category'; break;
+            case 2: $action = 'config'; break;
+            case 3: $action = 'media'; break;
+            case 4: $action = 'category'; break;
+            case 5: $action = 'download'; break;
+            case 6: $action = 'unpack'; break;
+            case 7: $action = 'move'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
         if(method_exists($this, $method)) {
+            set_time_limit(0);
             try {
                 $result = $this->$method();
             } catch(Exception $e) {
@@ -942,12 +966,21 @@ class Shopware_Update extends Slim
             }
         }
 
-        foreach(array_reverse($updateDirs) as $updateDir) {
-            rmdir($sourceDir . $updateDir);
+        try {
+            foreach(array_reverse($updateDirs) as $updateDir) {
+                rmdir($sourceDir . $updateDir);
+            }
+        } catch(Exception $e) {
+            return array(
+                'message' => 'Das Update-Verzeichnis "update/source/" konnte nicht gelöscht werden.<br>' .
+                    'Bitte löschen Sie das Verzeichnis manuell. Danach ist das Update abgeschloßen.',
+                'success' => false,
+            );
         }
 
+
         return array(
-            'message' => 'Die Update-Dateien wurden erfolgreich verschoben.',
+            'message' => 'Das Datei-Update wurde erfolgreich abgeschloßen.',
             'success' => true
         );
     }
@@ -1164,16 +1197,16 @@ class Shopware_Update extends Slim
     }
 
     /**
-     * @param   bool $backup
      * @return  array
      */
-    public function getCustomList($backup = false)
+    public function getCustomList()
     {
+        $backup = !file_exists('update/source/');
         $plugins = $this->getPluginList($backup);
         $modules = $this->getModuleList($backup);
         $payments = $this->getPaymentList($backup);
         $connectors = $this->getConnectorList($backup);
-        $customs = array_merge($plugins, $modules, $connectors, $payments);
+        $customs = array_merge($plugins, $modules, $connectors, $payments, $plugins);
 
         $method = "product";
         $query = array (
@@ -1194,7 +1227,9 @@ class Shopware_Update extends Slim
                 $customs[$name]['author'] = $product['supplierName'];
                 $customs[$name]['label'] = $product['name'];
                 $customs[$name]['link'] = $product['attributes']['store_url'];
-                $customs[$name]['updateVersion'] = $product['attributes']['version'];
+                if(!empty($product['attributes']['shopware_compatible'])) {
+                    $customs[$name]['updateVersion'] = $product['attributes']['version'];
+                }
             }
         }
         return $customs;
@@ -1216,8 +1251,8 @@ class Shopware_Update extends Slim
 
         $sql = "
             SELECT
-              p.name, p.id, p.label, p.description, p.installation_date as installed,
-              p.active, p.autor as author, p.version, p.link,
+              p.name, p.id, p.label, p.description,
+              p.active, p.version, p.link,
               p.source, p.namespace, p.name
             FROM $table p
             WHERE p.source IN ('Community', 'Local')
@@ -1350,10 +1385,16 @@ class Shopware_Update extends Slim
         $modules = $query->fetchAll(PDO::FETCH_ASSOC);
         $result = array();
         foreach($modules as $module) {
+            if(in_array($module['name'], array('paypal', 'ipayment'))) {
+                $module['version'] = $module['name'] == 'paypal' ? 'default' : null;
+                $module['name'] = 'SwagPayment' . ucfirst($module['name']);
+                $module['link'] = $this->config('storeLink') . urlencode($module['name']);
+            } else {
+                $module['link'] = $this->config('storeLink') . urlencode($module['label']);
+            }
             $result[$module['name']] = array_merge($module, array(
                 'label' => 'Zahlungsart: ' . $module['label'],
-                'source' => 'Payment',
-                'link' => $this->config('storeLink') . urlencode($module['label'])
+                'source' => 'Payment'
             ));
         }
         return $result;

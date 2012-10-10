@@ -1,4 +1,15 @@
 <?php $this->display('header.php'); ?>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        $('.page').hide();
+        $('.page-header').prepend('<i>');
+        $('.page-header i').addClass('icon-chevron-up');
+
+        $next = $('.page-system');
+        $next.next('.page').show();
+        $next.find('i').removeClass('icon-chevron-down').addClass('icon-chevron-down');
+    });
+</script>
 <div id="start">
 
 <?php if ($error) { ?>
@@ -8,7 +19,7 @@
 <?php } ?>
 
 <?php if(!empty($system)) { ?>
-<div class="page-header">
+<div class="page-system page-header">
     <h2><?php echo $translation["system_requirements_header"];?></h2>
 </div>
 <div class="page">
@@ -87,13 +98,16 @@
             <td><?php echo ucfirst($plugin['source']);?></td>
             <td>
                 <?php if (!empty($plugin['updateVersion'])) {?>
+                <?php if (!empty($plugin['id']) && empty($plugin['compatibility'])) {?>
+                    Ja /
+                    <?php } ?>
                 Update im Store verfügbar
                 <?php } elseif (!empty($plugin['compatibility'])) {?>
                 Nein (<?php echo implode(', ', $plugin['compatibility']); ?>)
                 <?php } elseif($plugin['source'] == 'Connector') { ?>
                 Update bitte manuell überprüfen
                 <?php } elseif(!isset($plugin['version'])) { ?>
-                Noch kein Update im Store verfügbar
+                Nein / Kein Update im Store gefunden
                 <?php } elseif($plugin['version'] == 'default') { ?>
                 In der Standard-Installation enthalten
                 <?php } else { ?>
@@ -118,11 +132,9 @@
 <div class="actions clearfix">
     <a href="<?php echo $app->urlFor('index'); ?>" class="secondary"><?php echo $translation["back"];?></a>
     <a id="link-next" href="<?php echo $app->urlFor('main'); ?>" class="right primary">
-        Mit Update fortfahren
+        Weiter
     </a>
-    <a id="link-update" href="mailto:sales@shopware.de?subject=<?php echo rawurlencode($subject)?>" class="right primary ajax-loading">
-        Angebot zum Update anfordern
-    </a>
+
 </div>
 
 </div>

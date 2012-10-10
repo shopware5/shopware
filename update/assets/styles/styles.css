@@ -297,14 +297,13 @@ input.inline-success:focus {
     position: relative;
 }
 .page-header i {
-    left: 0;
-    position: absolute;
-    top: 10px;
+    width: 20px;
+    margin-top: -2px;
 }
 .page-header h2 {
     -moz-user-select: none;
-    padding-left: 20px;
-    cursor:pointer;
+    display: inline-block;
+    cursor: pointer;
 }
 .table .checkbox, .table select {
     margin: 0;
@@ -319,4 +318,11 @@ input.inline-success:focus {
 }
 .progress .message {
     position: relative;
+}
+.actions .disabled {
+    cursor: not-allowed;
+    border: 1px solid #647589;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px #999999, -1px 0 0 0 #B4C0CB inset, 1px 0 0 0 #B4C0CB inset;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARUlEQVQIHQXBMQrCAAAEwbCdkP8/zdLGLiBYKnK7znB/PPl8f1yvNypTMqZYuGEHbqzQcGNGiskUPUixUHGiYZJhcZ63P5JXTiD7nrAzAAAAAElFTkSuQmCC") repeat-x scroll 0 0 transparent;
 }
