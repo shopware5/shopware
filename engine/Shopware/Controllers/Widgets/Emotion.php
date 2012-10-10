@@ -335,10 +335,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
         } else {
             $selectedManufacturers = $data["selected_manufacturers"];
+            $manufacturers = array();
 
-            foreach ($selectedManufacturers as $manufacturer) {
-                $manufacturers[] = $manufacturer["supplierId"];
+            foreach ($selectedManufacturers as $k => $manufacturer) {
+                $manufacturers[$k] = $manufacturer["supplierId"];
             }
+
+            ksort($manufacturers);
+
+
 
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->select('supplier.id', 'supplier.name', 'supplier.image', 'supplier.link', 'supplier.description')
