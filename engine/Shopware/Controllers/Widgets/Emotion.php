@@ -338,12 +338,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $manufacturers = array();
 
             foreach ($selectedManufacturers as $k => $manufacturer) {
-                $manufacturers[$k] = $manufacturer["supplierId"];
+                $manufacturers[] = $manufacturer["supplierId"];
             }
-
-            ksort($manufacturers);
-
-
 
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->select('supplier.id', 'supplier.name', 'supplier.image', 'supplier.link', 'supplier.description')
@@ -352,6 +348,18 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->setParameter(1, $manufacturers);
 
             $data["values"] = $builder->getQuery()->getArrayResult();
+
+            $temporaryValues = array();
+            foreach ($manufacturers as $manufacturer){
+                foreach ($data["values"] as $value){
+                    if ($value["id"] == $manufacturer){
+                        $temporaryValues[] = $value;
+                    }
+                }
+            }
+
+            $data["values"] = $temporaryValues;
+
             foreach ($data["values"] as &$value) {
                 $query = array('sViewport' => 'cat', 'sCategory' => $category, 'sPage' => 1, 'sSupplier' => $value["id"]);
                 $value["link"] = Shopware()->Router()->assemble($query);
