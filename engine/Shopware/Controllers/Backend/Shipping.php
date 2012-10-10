@@ -131,6 +131,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $params['shippingFree'] = null;
         }
 
+        $params['shippingFree'] = str_replace(",",".",$params["shippingFree"]);
+
         $params['payments']        = new \Doctrine\Common\Collections\ArrayCollection();
         $params['holidays']        = new \Doctrine\Common\Collections\ArrayCollection();
         $params['countries']       = new \Doctrine\Common\Collections\ArrayCollection();
