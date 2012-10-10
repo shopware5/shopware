@@ -8,7 +8,7 @@
 </div>
 <?php } ?>
 
-<?php if(!empty($plugins)) { ?>
+<?php if(!empty($customs)) { ?>
 <div class="page-header page-restore">
     <h2>Plugins / Erweiterungen übernehmen</h2>
 </div>
@@ -19,76 +19,64 @@
         <tr>
             <th class="check-all">
                 <label class="checkbox">
-                    <input type="checkbox" name="plugin[]">
+                    <input type="checkbox" name="plugin[]" value="">
                 </label>
             </th>
             <th>Name</th>
             <th>Aktiv</th>
             <th>Quelle</th>
             <th>Kompatibel</th>
+            <th>Store-Link</th>
         </tr>
         </thead>
         <tbody>
-            <?php foreach($plugins as $plugin) { ?>
-        <tr class="<?php echo empty($plugin['compatibility']) ? 'success' : 'warning'; ?>">
+<?php foreach($customs as $plugin) { ?>
+<?php
+    if (isset($plugin['version']) && empty($plugin['compatibility'])) {
+        $class = 'success';
+    } elseif (isset($plugin['updateVersion'])) {
+        $class = 'warning';
+    } else {
+        $class = 'error';
+    }
+?>
+        <tr class="<?php echo $class; ?>">
             <td>
+                <?php if(!empty($plugin['id']) && empty($plugin['updateVersion']) && empty($plugin['compatibility'])) { ?>
                 <label class="checkbox">
                     <input type="checkbox" name="plugin[]" value="<?php echo $plugin['id'];?>">
                 </label>
+                <?php } ?>
             </td>
             <td><?php echo $plugin['label'];?></td>
             <td><?php echo $plugin['active'] ? 'Ja' : 'Nein';?></td>
             <td><?php echo ucfirst($plugin['source']);?></td>
-            <td class="success">
-                <?php if (!empty($plugin['compatibility'])) {?>
-                    Nein (<?php echo implode(', ', $plugin['compatibility']); ?>)
+            <td>
+                <?php if (!empty($plugin['updateVersion'])) {?>
+                Update im Store verfügbar
+                <?php } elseif (!empty($plugin['compatibility'])) {?>
+                Nein (<?php echo implode(', ', $plugin['compatibility']); ?>)
+                <?php } elseif($plugin['source'] == 'Connector') { ?>
+                Update bitte manuell überprüfen
+                <?php } elseif(!isset($plugin['version'])) { ?>
+                Noch kein Update im Store verfügbar
+                <?php } elseif($plugin['version'] == 'default') { ?>
+                In der Standard-Installation enthalten
                 <?php } else { ?>
-                    Ja
+                Ja
+                <?php } ?>
+            </td>
+            <td>
+                <?php if (isset($plugin['link'])) {?>
+                <a href="<?php echo $plugin['link']; ?>" target="_blank">[link]</a>
                 <?php } ?>
             </td>
         </tr>
-            <?php } ?>
+<?php } ?>
         </tbody>
     </table>
     <div class="actions clearfix">
         <input type="submit" class="right primary" value="Anpassungen übernehmen" />
-    </div>
-</form>
-</div>
-<?php } ?>
-
-<?php if(!empty($templates)) { ?>
-<div class="page-header page-restore">
-    <h2>Templates übernehmen</h2>
-</div>
-<div class="page">
-<form class="ajax-loading" action="<?php echo $app->urlFor('action', array('action' => 'updateTemplates')); ?>">
-    <table class=" table table-striped">
-        <thead>
-        <tr>
-            <th class="check-all">
-                <label class="checkbox">
-                    <input type="checkbox">
-                </label>
-            </th>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-            <?php foreach($templates as $template) { ?>
-        <tr>
-            <td>
-                <label class="checkbox">
-                    <input type="checkbox" name="template" value="<?php echo $plugin['id'];?>">
-                </label>
-            </td>
-            <td><?php echo $template;?></td>
-        </tr>
-            <?php } ?>
-        </tbody>
-    </table>
-    <div class="actions clearfix">
-        <input type="submit" class="right primary" value="Templates übernehmen" />
     </div>
 </form>
 </div>
