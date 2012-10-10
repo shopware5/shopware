@@ -48,15 +48,18 @@ Ext.define('Shopware.apps.Config.view.form.Widget', {
         return [{
             dataIndex: 'label',
             text: 'Label',
-            flex: 1
+            flex: 1,
+            sortable:false
         }, {
             dataIndex: 'column',
             text: 'Column',
-            flex: 1
+            flex: 1,
+            sortable: false
         }, {
             dataIndex: 'position',
             text: 'Position',
-            flex: 1
+            flex: 1,
+            sortable: false
         }, me.getActionColumn()];
     },
 
