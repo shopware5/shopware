@@ -42,10 +42,17 @@ Ext.define('Shopware.apps.Blog.view.main.Window', {
     alias: 'widget.blog-main-window',
     border: false,
     autoShow: true,
-    layout: 'border',
-    height: 650,
-    minHeight: 400,
-    width: 925,
+    layout:'fit',
+    /**
+     * Define window width
+     * @integer
+     */
+    width:'60%',
+    /**
+     * Define window height
+     * @integer
+     */
+    height:'90%',
 
     /**
      * Initializes the component and builds up the main interface
