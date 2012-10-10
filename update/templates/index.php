@@ -6,7 +6,7 @@
     </div>
 
     <div class="alert alert-success">
-        <?php echo $translation["thank_you_message"];?>
+        Bitte loggen Sie sich für das Update mit den Shopware-Zugangsdaten ein.
     </div>
 
 <?php if(isset($flash['loginError'])) { ?>

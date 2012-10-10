@@ -42,7 +42,7 @@
 ?>
         <tr class="<?php echo $class; ?>">
             <td>
-                <?php if(!empty($plugin['id']) && empty($plugin['updateVersion']) && empty($plugin['compatibility'])) { ?>
+                <?php if(!empty($plugin['id']) && empty($plugin['compatibility'])) { ?>
                 <label class="checkbox">
                     <input type="checkbox" name="plugin[]" value="<?php echo $plugin['id'];?>">
                 </label>
@@ -53,13 +53,16 @@
             <td><?php echo ucfirst($plugin['source']);?></td>
             <td>
                 <?php if (!empty($plugin['updateVersion'])) {?>
+                    <?php if (!empty($plugin['id']) && empty($plugin['compatibility'])) {?>
+                    Ja /
+                    <?php } ?>
                 Update im Store verfügbar
                 <?php } elseif (!empty($plugin['compatibility'])) {?>
                 Nein (<?php echo implode(', ', $plugin['compatibility']); ?>)
                 <?php } elseif($plugin['source'] == 'Connector') { ?>
                 Update bitte manuell überprüfen
                 <?php } elseif(!isset($plugin['version'])) { ?>
-                Noch kein Update im Store verfügbar
+                Nein / Kein Update im Store gefunden
                 <?php } elseif($plugin['version'] == 'default') { ?>
                 In der Standard-Installation enthalten
                 <?php } else { ?>

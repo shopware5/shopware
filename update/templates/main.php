@@ -4,7 +4,10 @@
         $('.ajax-loading').live('click', function(event) {
             event.preventDefault();
             var me = $(this);
-            me.attr('disabled', 'disabled');
+            if(me.hasClass('disabled')) {
+                return;
+            }
+            me.addClass('disabled');
             $.loading(me.text());
             $.ajaxLoading($(this).attr('href'));
         });
@@ -48,71 +51,77 @@
                 }
             });
         };
-
-        <?php if(!file_exists('backup/database.php')) { ?>
-            $next = $('.page-backup');
-        <?php } elseif(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '>')) { ?>
-            $next = $('.page-database');
-        <?php } else { ?>
-            $next = $('.page-main');
-        <?php } ?>
-
-        $next.next('.page').show();
-        $next.find('i').removeClass('icon-chevron-down').addClass('icon-chevron-down');
     });
 </script>
 <div id="start">
-    <div id="messages"></div>
+
+<?php if(!empty($testDirs)) { ?>
+<div class="alert alert-error">
+    <strong>Achtung:</strong> Für das Update werden für folgende Verzeichnisse Schreibrechte benötigt.<br><br>
+    <?php foreach($testDirs as $testDir) { ?>
+    <?php echo $testDir ?: '. (Shopware-Verzeichnis)'; ?><br>
+    <?php } ?>
+</div>
+<?php } ?>
+
+<div id="messages"></div>
+
 <?php if(!file_exists('backup/database.php')) { ?>
-        <div class="page-header page-backup">
-            <h2>Datenbank-Backup erstellen</h2>
+    <div class="page-header page-backup">
+        <h2>1. Datenbank-Backup erstellen</h2>
+    </div>
+    <div class="page">
+        <span class="help-block">
+            .....
+        </span>
+        <div class="actions clearfix">
+            <a id="link-backup" href="<?php echo $app->urlFor('action', array('action' =>'backupDatabase')); ?>" class="right primary ajax-loading">
+                Backup erstellen
+            </a>
         </div>
-        <div class="page">
-            <span class="help-block">
-                .....
-            </span>
-            <div class="actions clearfix">
-                <a id="link-backup" href="<?php echo $app->urlFor('action', array('action' =>'backupDatabase')); ?>" class="right primary ajax-loading">
-                    Backup erstellen
-                </a>
-            </div>
-        </div>
-    <?php } ?>
-    <?php if(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '>')) { ?>
-        <div class="page-header page-database">
-            <h2>Datenbank-Update duchführen</h2>
-        </div>
-        <div class="page">
-            <span class="help-block">
-                Aktuelle Version: <?php echo $app->config('currentVersion')?><br>
-                Update Version: <?php echo $app->config('updateVersion')?>
-            </span>
-            <div class="actions clearfix">
-                <a id="link-update" href="<?php echo $app->urlFor('action', array('action' => 'database')); ?>" class="right primary ajax-loading">
-                    Update durchführen
-                </a>
-            </div>
-        </div>
-    <?php } ?>
+    </div>
+<?php } ?>
 
-        <div class="page-header page-main">
-            <h2>Generelles Update starten</h2>
+<?php if(version_compare($app->config('updateVersion'), $app->config('currentVersion'), '>')) { ?>
+    <div class="page-header page-database">
+        <h2>2. Datenbank-Update duchführen</h2>
+    </div>
+    <div class="page">
+        <span class="help-block">
+            Aktuelle Version: <?php echo $app->config('currentVersion')?><br>
+            Update Version: <?php echo $app->config('updateVersion')?>
+        </span>
+        <div class="actions clearfix">
+            <a id="link-update" href="<?php echo $app->urlFor('action', array('action' => 'database')); ?>" class="right primary ajax-loading">
+                Update durchführen
+            </a>
         </div>
-        <div class="page">
-            <span class="help-block">
-                Artikel-Bilder/Konfiguration übernehmen, Cache leeren, Kategoriebaum erstellen
-            </span>
-            <div class="actions clearfix">
-                <a id="link-progress" href="<?php echo $app->urlFor('action', array('action' => 'progress')); ?>" class="right primary ajax-loading">
-                    Update durchführen
-                </a>
-            </div>
-        </div>
+    </div>
+<?php } ?>
 
-        <div class="actions clearfix" style="margin: 18px 0">
-            <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
-            <a id="link-next" href="<?php echo $app->urlFor('custom'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
+<?php if(file_exists('update/source/')) { ?>
+    <div class="page-header page-main">
+        <h2>3. Generelles Update starten</h2>
+    </div>
+    <div class="page">
+        <span class="help-block">
+            Artikel-Bilder/Konfiguration übernehmen, Cache leeren, Kategoriebaum erstellen
+        </span>
+        <div class="actions clearfix">
+            <a id="link-progress" href="<?php echo $app->urlFor('action', array('action' => 'progress')); ?>" class="right primary ajax-loading">
+                Update durchführen
+            </a>
         </div>
+    </div>
+<?php } else { ?>
+    <div class="alert alert-success">
+        Das Update wurde erfolgreich abgeschlossen. Bitte fahren Sie mit der Übernahme der Anpassungen fort.
+    </div>
+<?php }  ?>
 
+    <div class="actions clearfix" style="margin: 18px 0">
+        <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
+        <a id="link-next" href="<?php echo $app->urlFor('custom'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
+    </div>
 </div>
 <?php $this->display('footer.php');?>

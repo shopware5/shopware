@@ -9,14 +9,12 @@
             var $this = $(this);
             if ($(this).find('i').hasClass('icon-chevron-down')){
                 $(this).find('i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
-            }else {
+                $this.next('.page').hide();
+            } else if($(this).find('i').hasClass('icon-chevron-up')) {
                 $(this).find('i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+                $this.next('.page').show();
             }
-            $this.next('.page').toggle();
         });
-        $('.page').hide();
-        $pageHeader.prepend('<i>');
-        $('.page-header i').addClass('icon-chevron-up');
 
         $('*[data-loading]').click(function(event) {
             event.preventDefault();
