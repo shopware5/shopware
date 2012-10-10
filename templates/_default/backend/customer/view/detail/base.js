@@ -190,6 +190,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             fieldLabel:me.snippets.group,
             valueField:'key',
             displayField:'name',
+            editable:false,
             allowBlank:false,
             anchor:'95%',
             labelWidth:150,
