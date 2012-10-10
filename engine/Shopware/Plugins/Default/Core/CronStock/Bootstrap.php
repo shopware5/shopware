@@ -48,56 +48,49 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
     {
         $sql = '
 			SELECT
-			    d.ordernumber,
-				d.id,
-				a.id as `articleID`,
-				a.name,
-				a.description,
-				a.description_long,
-				a.shippingtime,
-				a.datum as `added`,
-				a.shippingfree,
-				a.releasedate,
-				a.topseller,
-				a.keywords,
-				a.minpurchase,
-				a.purchasesteps,
-				a.maxpurchase,
-				a.purchaseunit,
-				a.referenceunit,
-				a.taxID,
-				a.supplierID,
-				a.unitID,
-				a.changetime as `changed`,
-				d.id as `articledetailsID`,
-				d.ordernumber,
-				d.suppliernumber,
-				d.kind,
-				d.additionaltext,
-				d.impressions,
-				d.sales,
-				d.active,
-				d.instock,
-				d.stockmin,
-				d.weight,
-				d.position,
-				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10, 
-				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
-				s.name as supplier,
-				u.unit,
-				t.tax
-			FROM s_articles a
-			INNER JOIN s_articles_details as d
-			INNER JOIN s_articles_attributes as at
-			LEFT JOIN s_articles_supplier as s
-			ON a.supplierID = s.id
-			LEFT JOIN s_core_units as u
-			ON a.unitID = u.id
-			LEFT JOIN s_core_tax as t
-			ON a.taxID = t.id
-			WHERE d.articleID = a.id
-			AND d.id = at.articledetailsID
-			AND stockmin > instock
+            d.ordernumber,
+            d.id,
+            a.id as `articleID`,
+            d.unitID,
+            a.name,
+            a.description,
+            a.description_long,
+            a.shippingtime,
+            a.datum as `added`,
+            a.topseller,
+            a.keywords,
+            a.taxID,
+            a.supplierID,
+            a.changetime as `changed`,
+            d.id as `articledetailsID`,
+            d.ordernumber,
+            d.suppliernumber,
+            d.kind,
+            d.additionaltext,
+            d.impressions,
+            d.sales,
+            d.active,
+            d.instock,
+            d.stockmin,
+            d.weight,
+            d.position,
+            at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
+            at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
+            s.name as supplier,
+            u.unit,
+            t.tax
+        FROM s_articles a
+        INNER JOIN s_articles_details as d
+        INNER JOIN s_articles_attributes as at
+        LEFT JOIN s_articles_supplier as s
+        ON a.supplierID = s.id
+        LEFT JOIN s_core_units as u
+        ON d.unitID = u.id
+        LEFT JOIN s_core_tax as t
+        ON a.taxID = t.id
+        WHERE d.articleID = a.id
+        AND d.id = at.articledetailsID
+        AND stockmin > instock
 		';
         $articles = Shopware()->Db()->fetchAssoc($sql);
         $data = array(
