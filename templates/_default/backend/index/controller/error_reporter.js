@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
 
         // Override the default error reporter
         window.onerror = function(message, file, lineNumber) {
-            alert('{s name="error_reporter/file"}File:{/s} ' + file + "\r" + '{s name="error_reporter/line"}Line number:{/s} ' + lineNumber + "\n\r" + '{s name="error_reporter/message"}Message:{/s} ' + message);
+            //alert('{s name="error_reporter/file"}File:{/s} ' + file + "\r" + '{s name="error_reporter/line"}Line number:{/s} ' + lineNumber + "\n\r" + '{s name="error_reporter/message"}Message:{/s} ' + message);
             return !me.displayErrors;
         };
 
