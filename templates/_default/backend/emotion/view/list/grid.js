@@ -95,7 +95,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             header: '{s name=grid/column/category_name}Category name{/s}',
             dataIndex: 'emotions.categoriesNames',
             flex: 2,
-            renderer: me.categoryColumn
+            renderer: me.categoryColumn,
+            sortable: false
         }, {
             header: '{s name=grid/column/name}Name{/s}',
             dataIndex: 'emotions.name',
