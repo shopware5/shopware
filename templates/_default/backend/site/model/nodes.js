@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
         { name: 'id', type: 'string', convert: function(v, r) { return r.data.key || v; } },
         { name: 'description', type: 'string' },
         { name: 'name', type: 'string' },
-        { name: 'text', convert: function(v, r) { return r.data.description || r.data.name; } },
+        { name: 'text', convert: function(v, r) { return r.data.name ? r.data.name : v; } },
         { name: 'helperId', type: 'int' },
         { name: 'tpl1variable', type: 'string' },
         { name: 'tpl1path', type: 'string' },

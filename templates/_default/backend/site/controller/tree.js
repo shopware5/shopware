@@ -116,6 +116,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
      * @param record
      */
     onItemClick: function(item,record) {
+
         var me = this,
             form = me.getDetailForm(),
             /*{if {acl_is_allowed privilege=deleteGroup}}*/
@@ -158,7 +159,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
 			});
             //load record into the form
             //hotfix find a better solution for this after beta
-            record.data.description = record.data.description.split("(")[0];
+            //record.data.description = record.data.description.split("(")[0];
             form.loadRecord(record);
 
             //build and set the embed code
