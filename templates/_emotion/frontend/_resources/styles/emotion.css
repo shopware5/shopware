@@ -72,7 +72,7 @@ a.link {color:#666}
 
 /* Drop down menu */
 #mainNavigation ul li.dropactive:hover a {background-image: none;background-color: #000;border-color: #000;border-bottom-color: #dfdfdf;color: #fff;}
-#mainNavigation ul li.dropactive:hover ul.dropdown li:hover a {color: #fff;background-color: #333333;}
+#mainNavigation ul li.dropactive:hover ul.dropdown li:hover a {color: #fff;background-color: transparent;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li a {color: #e1540f; background-color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover a {color: #fff;background-color: #e1540f;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover li a {color: #e1540f;background-color: #fff;}
@@ -578,7 +578,8 @@ a:hover {color:#e1540f;}
 #header #logo {margin: 0;}
 #header #logo a {background: url(../images/logo.jpg) no-repeat;width: 151px; height: 41px;margin: 40px 0 0;}
 
-#mainNavigation ul li.dropactive:hover ul.dropdown li.sub {background: url(../images/icons/ico_listing-next.png) 240px center no-repeat;}
+#mainNavigation ul li.dropactive:hover ul.dropdown li.sub {background: url(../images/icons/ico_listing-next.png) 230px center no-repeat;}
+#mainNavigation ul li.dropactive:hover ul.dropdown li.sub:hover {background: url(../images/backgrounds/left_nav_arrow_right_active.png) 235px center no-repeat #333;}
 #content #left ul li.active li a {background: url(../images/icons/ico_listing-next.png) no-repeat left center !important;}
 
 /** FONT **/
@@ -911,7 +912,7 @@ div.ajax_login_form .lostpassword {color: #e1540f;}
 #mainNavigation ul li.dropactive:hover a span {background: #000; height: 38px; color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li a {height:25px;line-height:25px; padding: 0 20px 0 10px;}
 #mainNavigation ul li.dropactive a:hover span {height: 39px;}
-#mainNavigation ul li.dropactive:hover ul.dropdown li.sub ul {margin: 0px; border: 0;}
+#mainNavigation ul li.dropactive:hover ul.dropdown li.sub ul {margin: 0px; border: 0; border-left: 1px solid #333;}
 
 #mainNavigation ul li.active.dropactive:hover a {background: url(../images/backgrounds/mainnav_shadow.png) no-repeat -3px 3px transparent; border: 0 none;}
 
@@ -3526,7 +3527,7 @@ body .outer-select * {padding: 0;margin: 0;}
 /* FANCY SELECT LISTING ACTIONS */
 .listing_actions .outer-select .inner-select {height: 10px;line-height: 10px;}
 .listing_actions .outer-select select {height: 24px;}
-.listing_actions .outer-select {margin-top: 3px !important;}
+.listing_actions .outer-select {margin-top: 3px !important; margin-bottom: 5px !important;}
 
 /*	TRUSTED SHOPS HEADER
 	-------------------------------------------- */
