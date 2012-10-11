@@ -43,7 +43,7 @@ OR m.switchCurrencies LIKE CONCAT('%|', c.id, '|%');
 
 DELETE t FROM s_core_translations t
 LEFT JOIN s_core_multilanguage m
-On t.objectlanguage=m.isocode;
+ON t.objectlanguage=m.isocode
 WHERE m.id IS NULL;
 
 UPDATE s_core_translations t, backup_s_core_multilanguage m
