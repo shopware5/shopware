@@ -828,6 +828,9 @@ ul#servicenavi li a:hover {background: #f0f0f0; text-decoration: none; color: #e
 	padding-left: 0;
 	padding-right: 0;
 }
+.ajax_basket_result .inner_cart div {height: 20px;}
+.ajax_basket_result .inner_cart .thumbnail {height: 20px; margin: 0 5px 0 0;}
+.ajax_basket_result .inner_cart .thumbnail img {height: 20px;}
 .ajax_basket_result .inner_cart div span strong {margin-right: 5px;}
 
 div.ajax_login_form .lostpassword {color: #e1540f;}
