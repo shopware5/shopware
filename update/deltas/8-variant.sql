@@ -57,3 +57,20 @@ UPDATE s_articles_details d
 SET d.active =1
 WHERE d.kind =2
 AND d.additionaltext IS NOT NULL;
+
+INSERT INTO s_articles_img (parent_id, article_detail_id)
+SELECT i.id, d.id
+FROM s_articles_img i
+JOIN s_articles_details d
+ON i.relations != ''
+AND i.relations = d.ordernumber
+LEFT JOIN s_articles_img r
+ON r.parent_id = i.id
+AND d.id = r.article_detail_id
+WHERE i.articleID IS NOT NULL
+AND r.id IS NULL;
+
+UPDATE s_articles_img i, s_articles_details d
+SET i.relations = ''
+WHERE i.relations = d.ordernumber
+AND i.relations != '';
