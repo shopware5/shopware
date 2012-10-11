@@ -66,7 +66,7 @@
 
 <div id="messages"></div>
 
-<?php if(!file_exists('backup/database.php')) { ?>
+<?php if(!file_exists($app->config('backupDir') . 'database.php')) { ?>
     <div class="page-header page-backup">
         <h2>1. Datenbank-Backup erstellen</h2>
     </div>
@@ -99,7 +99,7 @@
     </div>
 <?php } ?>
 
-<?php if(file_exists('update/source/')) { ?>
+<?php if(file_exists($app->config('sourceDir'))) { ?>
     <div class="page-header page-main">
         <h2>3. Generelles Update starten</h2>
     </div>

@@ -661,7 +661,7 @@ class Shopware_Update extends Slim
                 ";
                 $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
                 $sql = "
-                    INSERT INTO s_core_config_forms (name, label, description, plugin_id)
+                    INSERT IGNORE INTO s_core_config_forms (name, label, description, plugin_id)
                     SELECT p.name, p.label, IF(p.description='', NULL, p.description) as description, :newId
                     FROM  backup_s_core_plugins p, backup_s_core_plugin_elements pc
                     WHERE pc.pluginID = p.id
@@ -670,6 +670,11 @@ class Shopware_Update extends Slim
                 ";
                 $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
                 $sql = "
+                    INSERT INTO `s_core_config_elements` (
+                      `form_id`, `name`, `value`, `label`, `description`,
+                      `type`, `required`, `position`, `scope`,
+                      `filters`, `validators`, `options`
+                    )
                     SELECT
                       f.id as form_id, e.name,
                       IF(e.value='', NULL, e.value) as `value`,
@@ -705,11 +710,11 @@ class Shopware_Update extends Slim
         switch($next) {
             case 1: $action = 'cache'; break;
             case 2: $action = 'config'; break;
-            case 3: $action = 'media'; break;
-            case 4: $action = 'category'; break;
-            case 5: $action = 'download'; break;
-            case 6: $action = 'unpack'; break;
-            case 7: $action = 'move'; break;
+            case 3: $action = 'category'; break;
+            case 4: $action = 'download'; break;
+            case 5: $action = 'unpack'; break;
+            case 6: $action = 'move'; break;
+            case 7: $action = 'media'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
@@ -1052,7 +1057,6 @@ class Shopware_Update extends Slim
         }
         return array(
             'message' => 'Die Artikel-Bilder wurden erfolgreich übernommen.',
-            'next' => 'cache',
             'success' => true
         );
     }
@@ -1201,7 +1205,7 @@ class Shopware_Update extends Slim
      */
     public function getCustomList()
     {
-        $backup = !file_exists('update/source/');
+        $backup = !file_exists($this->config('sourceDir'));
         $plugins = $this->getPluginList($backup);
         $modules = $this->getModuleList($backup);
         $payments = $this->getPaymentList($backup);
@@ -1243,8 +1247,7 @@ class Shopware_Update extends Slim
     {
         $backupDir = $this->config('backupDir');
         $targetDir = $this->config('targetDir');
-        $baseDir = $backup ? $backupDir : $targetDir;
-        $baseDir .= 'engine/Shopware/Plugins/';
+        $baseDir = 'engine/Shopware/Plugins/';
         /** @var $db PDO */
         $db = $this->config('db');
         $table = $backup ? 'backup_s_core_plugins' : 's_core_plugins';
@@ -1269,8 +1272,10 @@ class Shopware_Update extends Slim
         foreach($plugins as $plugin) {
             $pluginPath = "$baseDir{$plugin['source']}/{$plugin['namespace']}/{$plugin['name']}/";
             $pluginFile = $pluginPath . 'Bootstrap.php';
-            if(file_exists($pluginFile)) {
-                $plugin['compatibility'] = $this->doCompatibilityCheck($pluginFile);
+            if(file_exists($backupDir . $pluginFile)) {
+                $plugin['compatibility'] = $this->doCompatibilityCheck($backupDir . $pluginFile);
+            } elseif(file_exists($targetDir . $pluginFile)) {
+                $plugin['compatibility'] = $this->doCompatibilityCheck($targetDir . $pluginFile);
             }
             $result[$plugin['name']] = $plugin;
         }
@@ -1456,7 +1461,7 @@ class Shopware_Update extends Slim
             'config' => 's_core_config[^_]|Config\(\)->Templates|Config\(\)->Snippets',
             'utf8' => 'utf8_decode|utf8_encode',
             'checkout_button' => 'frontend_checkout_confirm_agb',
-            'attribute' => 'ob_attr|od_attr|s_user_billingaddress.text1',
+            'attribute' => 'ob_attr|od_attr|s_user_billingaddress.text1|ac_attr',
             'bootstrap' => 'function getName|function getSource',
             'db' => 'config\.php',
             'global' => '\$_GET|\$_POST',
