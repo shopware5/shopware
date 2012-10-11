@@ -53,3 +53,7 @@ AND d.articleID = a.id
 AND o.group_id = 1
 AND o.name = d.additionaltext;
 
+UPDATE s_articles_details d
+SET d.active =1
+WHERE d.kind =2
+AND d.additionaltext IS NOT NULL;
