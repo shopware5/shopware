@@ -1,7 +1,6 @@
-UPDATE s_articles_details d, backup_s_articles_groups_value v
-SET v.standard = 1
-WHERE v.articleID = d.articleID
-AND d.ordernumber = v.ordernumber
+DELETE d FROM s_articles_details d, backup_s_articles_groups g
+WHERE g.groupID = 1
+AND g.articleID = d.articleID
 AND d.kind = 1;
 
 UPDATE s_articles_details d, backup_s_articles_groups_value v
@@ -9,6 +8,8 @@ SET d.ordernumber = v.ordernumber, d.active = v.active, d.instock = v.instock
 WHERE v.articleID = d.articleID
 AND d.kind = 1
 AND v.standard = 1;
+
+ALTER TABLE `s_article_configurator_groups` ADD INDEX ( `name` );
 
 INSERT IGNORE INTO `s_articles_details` (`articleID`, `ordernumber`, `kind`, `active`, `instock`)
 SELECT `articleID`, `ordernumber`, IF(`standard` = 1, 1, 2) as `kind`, `active`, `instock`
@@ -33,7 +34,7 @@ WHERE a.main_detail_id = d.id
 AND s.name = CONCAT('Set-', d.ordernumber);
 
 INSERT INTO `s_article_configurator_groups` (`name`, `description`, `position`)
-SELECT CONCAT(articleID, '-', groupID, '-', groupname) as name, groupdescription as description, groupposition as position
+SELECT STRAIGHT_JOIN CONCAT(articleID, '-', groupID, '-', groupname) as name, groupdescription as description, groupposition as position
 FROM backup_s_articles_groups s
 LEFT JOIN s_article_configurator_groups t
 ON t.name = CONCAT(articleID, '-', groupID, '-', groupname)
@@ -41,7 +42,7 @@ WHERE t.id IS NULL
 ORDER BY articleID, groupID, position;
 
 INSERT IGNORE INTO `s_article_configurator_options` (`group_id`, `name`, `position`)
-SELECT g.id as group_id, o.optionname as name, o.optionposition as position
+SELECT STRAIGHT_JOIN g.id as group_id, o.optionname as name, o.optionposition as position
 FROM backup_s_articles_groups_option o
 JOIN s_article_configurator_groups g
 ON g.name LIKE CONCAT(articleID, '-', groupID, '-%')
@@ -50,13 +51,13 @@ ON c.name = o.optionname AND c.group_id=g.id
 WHERE c.id IS NULL;
 
 INSERT IGNORE INTO `s_article_configurator_set_group_relations` (`set_id`, `group_id`)
-SELECT s.id, g.id
+SELECT STRAIGHT_JOIN s.id, g.id
 FROM s_articles a, s_article_configurator_sets s, s_article_configurator_groups g
 WHERE a.configurator_set_id = s.id
 AND g.name LIKE CONCAT(a.id, '-%');
 
 INSERT IGNORE INTO `s_article_configurator_set_option_relations` (`set_id`, `option_id`)
-SELECT r.set_id, o.id as option_id
+SELECT STRAIGHT_JOIN r.set_id, o.id as option_id
 FROM s_articles a, s_article_configurator_sets s, s_article_configurator_groups g,
   s_article_configurator_set_group_relations r, s_article_configurator_options o
 WHERE a.configurator_set_id = s.id
