@@ -1,3 +1,8 @@
+UPDATE s_articles_details d, backup_s_articles_groups_value v
+SET v.standard = 1
+WHERE v.articleID = d.articleID
+AND d.ordernumber = v.ordernumber
+AND d.kind = 1;
 
 UPDATE s_articles_details d, backup_s_articles_groups_value v
 SET d.ordernumber = v.ordernumber, d.active = v.active, d.instock = v.instock
