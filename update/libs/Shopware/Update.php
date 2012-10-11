@@ -970,7 +970,7 @@ class Shopware_Update extends Slim
         }
 
         foreach($realUpdatePaths as $updatePath) {
-            if(file_exists($targetDir . $updatePath)) {
+            if(file_exists($targetDir . $updatePath) && !file_exists($backupDir . $updatePath)) {
                 rename($targetDir . $updatePath, $backupDir . $updatePath);
             }
             if(file_exists($sourceDir . $updatePath)) {
@@ -1002,21 +1002,21 @@ class Shopware_Update extends Slim
         /** @var $db PDO */
         $db = $this->config('db');
         $dirs = array(
-            -1 => array('images/articles/', 'media/image/'),
-            -2 => array('images/banner/', 'media/image/'),
-            -2 => array('images/cms/', 'media/image/'),
-            -10 => array('files/downloads/', 'media/unknown/'),
-            -12 => array('images/supplier/', 'media/image/'),
+            array(-1  ,'images/articles/', 'media/image/'),
+            array(-2  ,'images/banner/', 'media/image/'),
+            array(-2  ,'images/cms/', 'media/image/'),
+            array(-10 ,'files/downloads/', 'media/unknown/'),
+            array(-12 ,'images/supplier/', 'media/image/'),
         );
         $baseDir = $this->config('targetDir');
 
         $testDirs = array();
         foreach($dirs as $dir) {
-            if(file_exists($baseDir. $dir[0]) && !is_writable($baseDir. $dir[0])) {
-                $testDirs[] = $dir[0];
-            }
-            if(!file_exists($baseDir . $dir[1]) || !is_writable($baseDir. $dir[1])) {
+            if(file_exists($baseDir. $dir[1]) && !is_writable($baseDir. $dir[1])) {
                 $testDirs[] = $dir[1];
+            }
+            if(!file_exists($baseDir . $dir[2]) || !is_writable($baseDir. $dir[2])) {
+                $testDirs[] = $dir[2];
             }
         }
         if(!empty($testDirs)) {
@@ -1029,7 +1029,7 @@ class Shopware_Update extends Slim
             );
         }
 
-        foreach($dirs as $albumId => $dir) {
+        foreach($dirs as $dir) {
             $sql = '
                 SELECT `thumbnail_size`
                 FROM `s_media_album_settings`
@@ -1037,15 +1037,15 @@ class Shopware_Update extends Slim
                 AND `create_thumbnails` =1
             ';
             $query = $db->prepare($sql);
-            $query->execute(array(':albumId' => $albumId));
+            $query->execute(array(':albumId' => $dir[0]));
             $thumbs = $query->fetchColumn(0);
             if($thumbs !== false) {
                 $thumbs = explode(';', $thumbs);
             }
-            if(!file_exists($baseDir . $dir[0])) {
+            if(!file_exists($baseDir . $dir[1])) {
                 continue;
             }
-            $iterator = new DirectoryIterator($baseDir . $dir[0]);
+            $iterator = new DirectoryIterator($baseDir . $dir[1]);
             foreach ($iterator as $file) {
                 if($file->isDot()) {
                     continue;
@@ -1058,9 +1058,9 @@ class Shopware_Update extends Slim
                     }
                     $newName = 'thumbnail/' . $match[1] . $thumbs[$match[2]] . $match[3];
                 }
-                rename($baseDir . $dir[0] . $name, $baseDir . $dir[1] . $newName);
+                rename($baseDir . $dir[1] . $name, $baseDir . $dir[2] . $newName);
             }
-            @rmdir($baseDir . $dir[0]);
+            @rmdir($baseDir . $dir[1]);
         }
         return array(
             'message' => 'Die Artikel-Bilder wurden erfolgreich übernommen.',
@@ -1105,13 +1105,21 @@ class Shopware_Update extends Slim
         /** @var $db PDO */
         $db = $this->config('db');
 
+        $sql = "SELECT COUNT(*) FROM s_categories c WHERE c.left = 0 LIMIT 1";
+        $count = $db->query($sql)->fetchColumn();
+        if(empty($count)) {
+            return array(
+                'success' => true
+            );
+        }
+
         $sql = 'UPDATE s_categories c SET c.left = 0, c.right = 0, c.level = 0';
         $db->exec($sql);
         $sql = 'UPDATE s_categories c SET c.left = 1, c.right = 2 WHERE c.id = 1';
         $db->exec($sql);
 
         $categoryIds = array(1);
-        while(list(, $categoryId) = each($categoryIds)) {
+        while(($categoryId = array_shift($categoryIds)) !== null) {
             $sql = 'SELECT c.right, c.level FROM s_categories c WHERE c.id = :categoryId';
             $query = $db->prepare($sql);
             $query->execute(array('categoryId' => $categoryId));
@@ -1121,6 +1129,9 @@ class Shopware_Update extends Slim
             $query = $db->prepare($sql);
             $query->execute(array('categoryId' => $categoryId));
             $childrenIds = $query->fetchAll(PDO::FETCH_COLUMN);
+            if(empty($childrenIds)) {
+                continue;
+            }
 
             foreach($childrenIds as $childrenId) {
                 $sql = 'UPDATE s_categories c SET c.right = c.right + 2 WHERE c.right >= :right';
@@ -1139,11 +1150,11 @@ class Shopware_Update extends Slim
                 ));
 
                 $right += 2;
-                $categoryIds[] = $childrenId;
             }
+            $categoryIds = array_merge($childrenIds, $categoryIds);
         }
 
-        $sql = 'DELETE FROM s_categories c WHERE c.left = 0';
+        $sql = 'DELETE c FROM s_categories c WHERE c.left = 0';
         $db->exec($sql);
 
         return array(
