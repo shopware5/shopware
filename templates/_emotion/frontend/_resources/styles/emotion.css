@@ -93,8 +93,8 @@ a.link {color:#666}
 .ajax_basket_result .inner_cart div {background-color: #fff; height: auto;}
 .ajax_basket_result .inner_cart div.premium {background-color: #E6EFC2; color: #264409;}
 .ajax_basket_result .inner_cart div.premium a {color: #264409;}
-.ajax_basket_result .inner_cart div.bundle {background-color: #FBE3E4;color:#8A1F11;}
-.ajax_basket_result .inner_cart div.bundle a {color: #8a1f11}
+.ajax_basket_result .inner_cart div.bundle {background-color: #fff;color:#000;}
+.ajax_basket_result .inner_cart div.bundle a {color: #000}
 .ajax_basket_result .inner_cart {border-color: #fff;background-color: #dfdfdf;}
 
 /*	BREADCRUMB
@@ -272,7 +272,7 @@ div.supplier ul li.image {background-color: #fff;}
 .table .ordernumber, .table .supplier, .table .zoom_picture {color: #999;}
 
 /* Row specific row coloring */
-.table .bundle_row, #basket .bundle_row {background-color:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
+.table .bundle_row, #basket .bundle_row {background-color:#fff;color:#000;border-color:#dfdfdf;}
 .table .table_foot #aggregation_left strong, .table .table_foot #aggregation strong {color: #707070;}
 .table .table_foot #aggregation .border, .table .table_foot #aggregation .doubleborder {border-color: #dfdfdf;}
 
