@@ -1249,9 +1249,24 @@ class Shopware_Update extends Slim
                 $customs[$name]['author'] = $product['supplierName'];
                 $customs[$name]['label'] = $product['name'];
                 $customs[$name]['link'] = $product['attributes']['store_url'];
-                if(!empty($product['attributes']['shopware_compatible'])) {
+                if(!empty($product['attributes']['shopware_compatible'])
+                    && strpos($product['attributes']['shopware_compatible'], '4.0.') !== false) {
                     $customs[$name]['updateVersion'] = $product['attributes']['version'];
+                } else {
+                    $customs[$name]['updateVersion'] = '';
                 }
+            }
+        }
+        foreach ($customs as $name => $custom) {
+            if(in_array($name, array('Heidelpay', 'SwagButtonSolution', 'SwagLangLite'))) {
+                unset($customs[$name]['id']);
+                $customs[$name]['updateVersion'] = 'default';
+            }
+            if($custom['label'] == '[plugin_name]') {
+                $customs[$name]['label'] = $name;
+            }
+            if(empty($custom['link']) || $custom['link'] == 'http://www.shopware.de/') {
+                $customs[$name]['link'] = $this->config('storeLink') . urlencode($name);
             }
         }
         return $customs;
@@ -1294,6 +1309,8 @@ class Shopware_Update extends Slim
                 $plugin['compatibility'] = $this->doCompatibilityCheck($backupDir . $pluginFile);
             } elseif(file_exists($targetDir . $pluginFile)) {
                 $plugin['compatibility'] = $this->doCompatibilityCheck($targetDir . $pluginFile);
+            } else {
+                continue;
             }
             $result[$plugin['name']] = $plugin;
         }
@@ -1309,13 +1326,13 @@ class Shopware_Update extends Slim
         $mapping = array(
             'sGROUPS'           => array('name' => 'SwagBusinessEssentials'),
             'sFUZZY'            => array('name' => 'SwagFuzzy'),
-            'sMAILCAMPAIGNS'    => array('name' => 'SwagNewsletter'),
-            'sTICKET'           => array('name' => 'SwagTicketSystem'),
-            'sBUNDLE'           => array('name' => 'SwagBundle'),
-            'sLIVE'             => array('name' => 'SwagLiveshopping'),
+            'sMAILCAMPAIGNS'    => array('name' => 'SwagNewsletter', 'updateVersion' => ''),
+            'sTICKET'           => array('name' => 'SwagTicketSystem', 'updateVersion' => ''),
+            'sBUNDLE'           => array('name' => 'SwagBundle', 'updateVersion' => ''),
+            'sLIVE'             => array('name' => 'SwagLiveshopping', 'updateVersion' => ''),
             'sLANGUAGEPACK'     => array('name' => 'SwagMultiShop'),
-            'sPRICESEARCH'      => array('name' => 'SwagProductExport', 'label' => 'Produkt-Exporte', 'version' => 'default'),
-            'sARTICLECONF'      => array('name' => 'SwagConfigurator', 'label' => 'Artikel Konfigurator', 'version' => 'default')
+            'sPRICESEARCH'      => array('name' => 'SwagProductExport', 'label' => 'Produkt-Exporte', 'updateVersion' => 'default'),
+            'sARTICLECONF'      => array('name' => 'SwagConfigurator', 'label' => 'Artikel Konfigurator', 'updateVersion' => 'default')
         );
         /** @var $db PDO */
         $db = $this->config('db');
@@ -1345,9 +1362,6 @@ class Shopware_Update extends Slim
                 if(!isset($module['label'])) {
                     $module['label'] = substr($module['name'], 4);
                 }
-                if(!isset($module['link'])) {
-                    $module['link'] = $this->config('storeLink') . urlencode($module['name']);
-                }
                 $result[$module['name']] = $module;
             }
 
@@ -1376,8 +1390,7 @@ class Shopware_Update extends Slim
                 'label' => 'Schnittstelle: ' . ucfirst($connector),
                 'name' => $connector,
                 'source' => 'Connector',
-                'active' => true,
-                'link' => $this->config('storeLink') . urlencode($connector)
+                'active' => true
             );
         }
         return $result;
@@ -1408,10 +1421,12 @@ class Shopware_Update extends Slim
         $modules = $query->fetchAll(PDO::FETCH_ASSOC);
         $result = array();
         foreach($modules as $module) {
+            if($module['name'] == 'paypalexpress') {
+                $module['name'] = 'paypal';
+            }
             if(in_array($module['name'], array('paypal', 'ipayment'))) {
-                $module['version'] = $module['name'] == 'paypal' ? 'default' : null;
+                $module['updateVersion'] = $module['name'] == 'paypal' ? 'default' : null;
                 $module['name'] = 'SwagPayment' . ucfirst($module['name']);
-                $module['link'] = $this->config('storeLink') . urlencode($module['name']);
             } else {
                 $module['link'] = $this->config('storeLink') . urlencode($module['label']);
             }
@@ -1443,8 +1458,8 @@ class Shopware_Update extends Slim
             'method' => 'POST',
             'user_agent' => $this->request()->getUserAgent(),
             'header' => "Content-type: application/x-www-form-urlencoded\r\n"
-                      . "Content-Length: " . strlen($data) . "\r\n"
-                      . 'Referer: http://' . $this->request()->getUrl() . "\r\n",
+                . "Content-Length: " . strlen($data) . "\r\n"
+                . 'Referer: http://' . $this->request()->getUrl() . "\r\n",
             'content' => $data
         ));
         $context = stream_context_create($options);
