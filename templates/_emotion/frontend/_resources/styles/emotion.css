@@ -2098,7 +2098,7 @@ div.blogInteract {
 #content .ajaxSlider .article_box p.price.up, .modal .ajaxSlider .article_box p.price.up {bottom: 10px;}
 
 /* MARGIN TOPSELLER SLIDER LISTING */
-#content .topseller-slider {margin-bottom: 20px;}
+#content .topseller-slider {margin-bottom: 10px;}
 
 /** SLIDER DETAILSEITE **/
 #content .horizontal_slider {overflow: hidden; display: block;}

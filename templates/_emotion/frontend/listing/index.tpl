@@ -27,9 +27,12 @@
     {if !$sLiveShopping}
         {include file='frontend/listing/banner.tpl' sLiveShopping=$sLiveShopping}
     {/if}
-    {if !$hasEmotion && !$sSupplierInfo}
-        {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
-    {/if}
+{/block}
+
+{block name="frontend_listing_index_text" append}
+	{if !$hasEmotion && !$sSupplierInfo}
+	    {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
+	{/if}
 {/block}
 
 {* Trusted shops logo *}
