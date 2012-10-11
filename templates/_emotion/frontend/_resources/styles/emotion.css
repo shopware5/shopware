@@ -1101,7 +1101,7 @@ div.listing {width: 808px;}
 .listing_actions a.more:hover {background: url(../images/icons/ico_listing-next-active.png) no-repeat right center #fff;}
 .listing_actions a.prev {background: url(../images/icons/ico_listing-prev.png) no-repeat right center #fff;}
 .listing_actions a.prev:hover {background: url(../images/icons/ico_listing-prev-active.png) no-repeat right center #fff;}
-.listing_actions.bottom, .listing_actions.normal {height: 35px;}
+.listing_actions.bottom, .listing_actions.normal {height: auto;}
 .listing_actions .articleperpage {float: right;}
 .listing_actions .list-settings {float: left; margin-left: 100px;}
 .listing_actions .list-settings .table-view, .listing_actions .list-settings .list-view {border: 0; margin-top: 5px;}
@@ -1387,11 +1387,12 @@ div#notes .table_row .action a.basket:hover {background-color: #d82e00 ;border-c
 	font-size: 0; line-height: 0;
 }
 
-#footer .footer_menu h1 {
+#footer .footer_menu .head {
 	color: #e1540f;
 	font-weight: bold;
 	font-size: 14px;
 	margin-bottom: 10px;
+	display: block;	
 }
 #footer .footer_menu p {color: #777; font-size: 11px;}
 #footer .footer_menu p .phone {font-size: 20px;}

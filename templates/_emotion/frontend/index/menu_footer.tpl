@@ -2,12 +2,12 @@
 <div class="footer_menu">
 	
 	<div class="footer_column col1">
-		<h1>{s name="sFooterServiceHotlineHead"}Service Hotline{/s}</h1>
+		<span class="head">{s name="sFooterServiceHotlineHead"}Service Hotline{/s}</span>
 		<p>{s name="sFooterServiceHotline"}Telefonische Unterst&uuml;tzung und Beratung unter:<br /><br /><strong style="font-size:19px;">0180 - 000000</strong><br/>Mo-Fr, 09:00 - 17:00 Uhr{/s}</p>
 	</div>
 	
 	<div class="footer_column col2">
-		<h1>{s name="sFooterShopNavi1"}Shop Service{/s}</h1>
+		<span class="head">{s name="sFooterShopNavi1"}Shop Service{/s}</span>
 		<ul>
 		{foreach from=$sMenu.gBottom item=item  key=key name="counter"}
 			<li>
@@ -19,7 +19,7 @@
 		</ul>
 	</div>
 	<div class="footer_column col3">
-		<h1>{s name="sFooterShopNavi2"}Informationen{/s}</h1>
+		<span class="head">{s name="sFooterShopNavi2"}Informationen{/s}</span>
 		<ul>
 		{foreach from=$sMenu.gBottom2 item=item key=key name="counter"}
 			<li>
@@ -31,7 +31,7 @@
 		</ul>
 	</div>
 	<div class="footer_column col4 last">
-		<h1>{s name="sFooterNewsletterHead"}Newsletter{/s}</h1>
+		<span class="head">{s name="sFooterNewsletterHead"}Newsletter{/s}</span>
 		<p>
 			{s name="sFooterNewsletter"}Abonnieren Sie den kostenlosen DemoShop Newsletter und verpassen Sie keine Neuigkeit oder Aktion mehr aus dem DemoShop.{/s}
 		</p>
