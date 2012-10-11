@@ -28,24 +28,25 @@
     });
 </script>
 <div id="start">
-        <div class="page-header page-restore">
-            <h2>Datenbank-Backup wiederherstellen</h2>
+<?php if(file_exists($app->config('backupDir') . 'database.php')) { ?>
+    <div class="page-header page-restore">
+        <h2>Datenbank-Backup wiederherstellen</h2>
+    </div>
+    <div class="page">
+        <span class="help-block">
+            .....
+        </span>
+        <div class="actions clearfix">
+            <a id="link-restore" href="<?php echo $app->urlFor('action', array('action' =>'restoreDatabase')); ?>" class="right primary ajax-loading">
+                Backup wiederherstellen
+            </a>
+            <a href="<?php echo $app->urlFor('action', array('action' => 'downloadDatabase')); ?>" class="right secondary">Backup herunterladen</a>
         </div>
-        <div class="page">
-            <span class="help-block">
-                .....
-            </span>
-            <div class="actions clearfix">
-                <a id="link-restore" href="<?php echo $app->urlFor('action', array('action' =>'restoreDatabase')); ?>" class="right primary ajax-loading">
-                    Backup wiederherstellen
-                </a>
-                <a href="<?php echo $app->urlFor('action', array('action' => 'downloadDatabase')); ?>" class="right secondary">Backup herunterladen</a>
-            </div>
-        </div>
-        <div class="actions clearfix" style="margin: 18px 0">
-            <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
-            <a id="link-next" href="<?php echo $app->urlFor('finish'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
-        </div>
-
+    </div>
+<?php } ?>
+    <div class="actions clearfix" style="margin: 18px 0">
+        <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
+        <a id="link-next" href="<?php echo $app->urlFor('finish'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
+    </div>
 </div>
 <?php $this->display('footer.php');?>
