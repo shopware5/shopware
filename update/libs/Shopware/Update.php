@@ -543,14 +543,21 @@ class Shopware_Update extends Slim
 
     public function downloadDatabaseAction()
     {
+        ob_end_clean();
+        set_time_limit(0);
         $backup = 'backup/database.php';
-        $fp = fopen($backup, 'r');
-        $size = filesize($backup) - strlen(fgets($fp));
+        $handle = fopen($backup, 'r');
+        $size = filesize($backup) - strlen(fgets($handle));
         $file = basename($backup, '.php') . '.sql';
-        $this->response()->header('Content-Type', 'application/force-download');
-        $this->response()->header('Content-Disposition', 'attachment; filename="' . $file . '";');
-        $this->response()->header('Content-Length', $size);
-        echo stream_get_contents($fp);
+        header('Content-Type: application/force-download', true);
+        header('Content-Disposition: attachment; filename="' . $file . '";');
+        header('Content-Length: ' . $size);
+        $this->response()->write(ob_get_clean());
+        while (!feof($handle)) {
+            echo fread($handle, 8192); flush();
+        }
+        fclose($handle);
+        exit();
     }
 
     public function updateFieldsAction()
