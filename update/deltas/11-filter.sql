@@ -1,4 +1,4 @@
-INSERT INTO `s_filter_articles`
+INSERT IGNORE INTO `s_filter_articles`
 SELECT f1.`articleID`, f2.id as `valueID`
 FROM `backup_s_filter_values` f1
 LEFT JOIN `s_filter_values` f2
