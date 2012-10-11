@@ -77,41 +77,46 @@
             <th>Name</th>
             <th>Aktiv</th>
             <th>Quelle</th>
-            <th>Kompatibel</th>
-            <th>Store-Link</th>
+            <th>grds. Kompatibel</th>
+            <th>Store-Info</th>
+            <th>Link</th>
         </tr>
         </thead>
         <tbody>
             <?php foreach($customs as $plugin) { ?>
-<?php
-    if (isset($plugin['version']) && empty($plugin['compatibility'])) {
-        $class = 'success';
-    } elseif (isset($plugin['updateVersion'])) {
-        $class = 'warning';
-    } else {
-        $class = 'error';
-    }
-?>
+            <?php
+            if (isset($plugin['compatibility']) && empty($plugin['compatibility'])) {
+                $class = 'success';
+            } elseif (!empty($plugin['updateVersion'] )) {
+                $class = $plugin['updateVersion'] == 'default' ? 'success' : 'warning';
+            } else {
+                $class = 'error';
+            }
+            ?>
         <tr class="<?php echo $class; ?>">
             <td><?php echo $plugin['label'];?></td>
             <td><?php echo $plugin['active'] ? 'Ja' : 'Nein';?></td>
             <td><?php echo ucfirst($plugin['source']);?></td>
             <td>
-                <?php if (!empty($plugin['updateVersion'])) {?>
-                <?php if (!empty($plugin['id']) && empty($plugin['compatibility'])) {?>
-                    Ja /
-                    <?php } ?>
-                Update im Store verfügbar
-                <?php } elseif (!empty($plugin['compatibility'])) {?>
+                <?php if (!empty($plugin['compatibility'])) {?>
                 Nein (<?php echo implode(', ', $plugin['compatibility']); ?>)
                 <?php } elseif($plugin['source'] == 'Connector') { ?>
-                Update bitte manuell überprüfen
+                Nein
                 <?php } elseif(!isset($plugin['version'])) { ?>
-                Nein / Kein Update im Store gefunden
-                <?php } elseif($plugin['version'] == 'default') { ?>
-                In der Standard-Installation enthalten
+                Nein
                 <?php } else { ?>
                 Ja
+                <?php } ?>
+            </td>
+            <td>
+                <?php if($plugin['source'] == 'Connector') { ?>
+                Update bitte manuell überprüfen.
+                <?php } elseif(!empty($plugin['updateVersion']) && $plugin['updateVersion'] == 'default') { ?>
+                In der Standard-Installation enthalten.
+                <?php } elseif (!empty($plugin['updateVersion'])) {?>
+                Update ist im Store verfügbar.
+                <?php } elseif(isset($plugin['updateVersion'])) { ?>
+                Noch kein Update im Store verfügbar.
                 <?php } ?>
             </td>
             <td>
@@ -125,16 +130,12 @@
     </table>
 </div>
 <?php } ?>
-<?php
-    $subject = "Update-Angebot von {$app->config('currentVersion')} auf {$app->config('updateVersion')}";
-    $body = "";
-?>
+
 <div class="actions clearfix">
     <a href="<?php echo $app->urlFor('index'); ?>" class="secondary"><?php echo $translation["back"];?></a>
     <a id="link-next" href="<?php echo $app->urlFor('main'); ?>" class="right primary">
         Weiter
     </a>
-
 </div>
 
 </div>
