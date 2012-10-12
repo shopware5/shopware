@@ -38,6 +38,10 @@
                                      . append('<div class="message">')
                                      . appendTo('.loading-mask');
                         }
+                        if(result.warning) {
+                            $('<div class="alert alert-warning"></div>')
+                                    .html(result.warning).appendTo('#messages');
+                        }
                         if(result.progress) {
                             progress.show();
                             progress.children('.bar').css('width', '' + (result.progress * 100) + '%');

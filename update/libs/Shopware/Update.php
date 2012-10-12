@@ -185,7 +185,9 @@ class Shopware_Update extends Slim
         $app = $this;
 
         $this->hook('slim.before.router', function () use ($app) {
-            if($app->config('auth') === null && $app->request()->getPathInfo() !== '/') {
+            if($app->config('auth') === null
+              && $app->request()->getPathInfo() !== '/'
+              && $app->request()->getPathInfo() !== '/test') {
                 $this->redirect($this->urlFor('index'));
             }
         });
@@ -197,6 +199,10 @@ class Shopware_Update extends Slim
         })->via('GET')->name('index');
 
         $this->get('/', array($this, 'loginAction'))->via('POST')->name('login');
+
+        $this->get('/test', function () use ($app) {
+            echo 'Hello';
+        })->via('GET', 'POST')->name('test');
 
         $this->get('/system', function () use ($app) {
             $system = new Shopware_Components_Check_System();
@@ -722,6 +728,7 @@ class Shopware_Update extends Slim
             case 5: $action = 'unpack'; break;
             case 6: $action = 'move'; break;
             case 7: $action = 'media'; break;
+            case 8: $action = 'cleanup'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
@@ -739,7 +746,7 @@ class Shopware_Update extends Slim
             if(!isset($result['offset'])) {
                 $next++;
             }
-            if(!empty($result['success']) && $next < 8) {
+            if(!empty($result['success']) && $next < 9) {
                 $result['next'] = $next;
             }
             echo json_encode($result);
@@ -933,6 +940,7 @@ class Shopware_Update extends Slim
         $targetDir = $this->config('targetDir');
         $updatePaths = $this->config('updatePaths');
         $updateDirs = $this->config('updateDirs');
+        $warning = null;
 
         if(!file_exists($sourceDir)) {
             return array(
@@ -976,23 +984,25 @@ class Shopware_Update extends Slim
             if(file_exists($sourceDir . $updatePath)) {
                 rename($sourceDir . $updatePath, $targetDir . $updatePath);
             }
-        }
 
-        try {
-            foreach(array_reverse($updateDirs) as $updateDir) {
-                rmdir($sourceDir . $updateDir);
+            if ($updatePath == '.htaccess') {
+                $testUrl = $this->request()->getScheme() . '://' .
+                    $this->request()->getHostWithPort() .
+                    $this->urlFor('test');
+                $test = @file_get_contents($testUrl);
+                if (empty($test) || $test != 'Hello') {
+                    $warning = 'Die .htaccess-Datei konnte nicht übernommen werden. <br>' .
+                               'Bitte führen Sie das Update der Datei manuell durch. <br>' .
+                               'Die neue .htaccess-Datei finden Sie unter ".htaccess-update".';
+                    rename($targetDir . $updatePath, $targetDir . $updatePath . '-update');
+                    rename($backupDir . $updatePath, $targetDir . $updatePath);
+                }
             }
-        } catch(Exception $e) {
-            return array(
-                'message' => 'Das Update-Verzeichnis "update/source/" konnte nicht gelöscht werden.<br>' .
-                    'Bitte löschen Sie das Verzeichnis manuell. Danach ist das Update abgeschloßen.',
-                'success' => false,
-            );
         }
-
 
         return array(
             'message' => 'Das Datei-Update wurde erfolgreich abgeschloßen.',
+            'warning' => $warning,
             'success' => true
         );
     }
@@ -1064,6 +1074,29 @@ class Shopware_Update extends Slim
         }
         return array(
             'message' => 'Die Artikel-Bilder wurden erfolgreich übernommen.',
+            'success' => true
+        );
+    }
+
+    public function progressCleanup()
+    {
+        $sourceDir = $this->config('sourceDir');
+        $updateDirs = $this->config('updateDirs');
+
+        try {
+            foreach(array_reverse($updateDirs) as $updateDir) {
+                rmdir($sourceDir . $updateDir);
+            }
+        } catch(Exception $e) {
+            return array(
+                'message' => 'Das Update-Verzeichnis "update/source/" konnte nicht gelöscht werden.<br>' .
+                    'Bitte löschen Sie das Verzeichnis manuell. Danach ist das Update abgeschloßen.',
+                'success' => false,
+            );
+        }
+
+        return array(
+            'message' => 'Das Update-Verzeichnis wurde erfolgreich gelöscht.',
             'success' => true
         );
     }
