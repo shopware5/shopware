@@ -155,35 +155,18 @@ class sConfigurator
 
         //if some items was selected from the user, we have to select the first available variant
         if (!empty($selectedItems)) {
-            //first we create a small query builder with the article details and the prices
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->select(array('detail', 'prices'))
-                    ->from('Shopware\Models\Article\Detail', 'detail')
-                    ->leftJoin('detail.prices', 'prices')
-                    ->leftJoin('prices.customerGroup', 'customerGroup')
-                    ->where('detail.articleId = ?1')
-                    ->andWhere('customerGroup.key = :customerGroup')
-                    ->setParameter(1, $id)
-                    ->setParameter('customerGroup', $customerGroupKey)
-                    ->orderBy('detail.kind', 'ASC')
-                    ->addOrderBy('customerGroup.id', 'ASC')
-                    ->addOrderBy('prices.from', 'ASC');
-
-            //now we iterate all selected groups with their options to filter the available variant
-            foreach($selectedItems as $optionId) {
-                if (empty($optionId)) {
-                    continue;
-                }
-                $alias = 'option' . $optionId;
-                $builder->addSelect($alias);
-                $builder->innerJoin('detail.configuratorOptions', $alias);
-                $builder->andWhere($alias . '.id = :' . $alias);
-                $builder->addOrderBy($alias . '.position', 'ASC');
-                $builder->setParameter($alias, $optionId);
-            }
-
+            $builder = $this->getSelectionQueryBuilder($selectedItems);
+            $builder->setParameter('articleId', $id);
+            $builder->setParameter('customerGroup', $customerGroupKey);
             $selected = $builder->getQuery()->getArrayResult();
 
+            if (empty($selected)) {
+                $builder = $this->getSelectionQueryBuilder($selectedItems);
+                $builder->setParameter('articleId', $id);
+                $builder->setParameter('customerGroup', 'EK');
+                $selected = $builder->getQuery()->getArrayResult();
+            }
+            
             //we can only set one variant as select, so we select the first one
             $detailData = $selected[0];
             if (!empty($detailData)) {
@@ -276,6 +259,34 @@ class sConfigurator
         return $articleData;
     }
 
+    public function getSelectionQueryBuilder($selectedItems = array()) {
+        //first we create a small query builder with the article details and the prices
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('detail', 'prices'))
+                ->from('Shopware\Models\Article\Detail', 'detail')
+                ->leftJoin('detail.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->where('detail.articleId = :articleId')
+                ->andWhere('customerGroup.key = :customerGroup')
+                ->orderBy('detail.kind', 'ASC')
+                ->addOrderBy('customerGroup.id', 'ASC')
+                ->addOrderBy('prices.from', 'ASC');
+
+        //now we iterate all selected groups with their options to filter the available variant
+        foreach($selectedItems as $optionId) {
+            if (empty($optionId)) {
+                continue;
+            }
+            $alias = 'option' . $optionId;
+            $builder->addSelect($alias);
+            $builder->innerJoin('detail.configuratorOptions', $alias);
+            $builder->andWhere($alias . '.id = :' . $alias);
+            $builder->addOrderBy($alias . '.position', 'ASC');
+            $builder->setParameter($alias, $optionId);
+        }
+        return $builder;
+    }
+    
     private function getDefaultPrices($detailId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
