@@ -62,12 +62,12 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         '<?php
 class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_Proxy
 {
-    public function excuteParent($method, $args=null)
+    public function excuteParent($method, $args = array())
     {
         return $this->executeParent($method, $args);
     }
 
-    public function executeParent($method, $args=null)
+    public function executeParent($method, $args = array())
     {
         return call_user_func_array(array($this, \'parent::\' . $method), $args);
     }
