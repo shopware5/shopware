@@ -185,7 +185,7 @@ class Basket extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Basket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist", "update"})
      * @var \Shopware\Models\Attribute\Basket
      */
     protected $attribute;
@@ -204,7 +204,7 @@ class Basket extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Basket', 'attribute', 'orderBasket');
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderBasket', 'attribute', 'orderBasket');
     }
 
     /**

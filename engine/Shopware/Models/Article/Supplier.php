@@ -115,7 +115,7 @@ class Supplier extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Supplier", mappedBy="articleSupplier", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist", "update"})
      * @var \Shopware\Models\Attribute\Supplier
      */
     protected $attribute;
@@ -261,7 +261,7 @@ class Supplier extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Supplier', 'attribute', 'supplier');
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'supplier');
     }
 
 }
