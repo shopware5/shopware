@@ -337,11 +337,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 
         if(record.get('installed') === null) {
             record.set('installed', new Date());
-            me.onInstallPlugin(record, pluginStore);
         } else {
             record.set('installed', null);
-            me.onUninstallPlugin(record, pluginStore);
         }
+        me.onInstallPlugin(record, pluginStore);
     },
 
     /**
@@ -355,16 +354,43 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
     onInstallPlugin: function(record, store) {
         var me = this;
 
+        var listing = me.getPluginGrid();
+        if (listing) {
+            listing.setLoading(true);
+        }
+
         record.save({
            callback: function(record, operation) {
-               var rawData = operation.records[0].getProxy().reader.rawData;
+               var rawData = null,
+                   result = operation.records[0];
+
+               if (listing) {
+                   listing.setLoading(false);
+               }
+
+               if (result instanceof Ext.data.Model
+                       && operation.records[0].getProxy()
+                       && operation.records[0].getProxy().reader
+                       && operation.records[0].getProxy().reader.rawData) {
+
+                   rawData = operation.records[0].getProxy().reader.rawData;
+               }
 
                if(operation.wasSuccessful()) {
-                   Shopware.Notification.createGrowlMessage(me.snippets.manager.title, Ext.String.format(me.snippets.manager.successful_install, record.get('label')));
+
+                   //uninstalled?
+                   if (record.get('installed') === null) {
+                       Shopware.Notification.createGrowlMessage(me.snippets.manager.title, Ext.String.format(me.snippets.manager.successful_uninstall, record.get('label')));
+                   } else {
+                       Shopware.Notification.createGrowlMessage(me.snippets.manager.title, Ext.String.format(me.snippets.manager.successful_install, record.get('label')));
+                   }
+
+                   //sort store to regroup the store records
                    store.sort();
+
                    if (rawData.invalidateCache) {
                       me.displayCacheClearMessage(rawData.invalidateCache, record);
-                   } else {
+                   } else if (record.get('installed') !== null) {
                        var optionWindow = me.getView('manager.Options').create({
                            record: record
                        }).show();
