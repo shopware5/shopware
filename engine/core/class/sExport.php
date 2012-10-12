@@ -814,7 +814,8 @@ class	sExport
 		if(empty($categoryID))
 			$categoryID = $this->sSettings["categoryID"];
 
-        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($categoryID));
+        $articleCategoryId = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($articleID,$categoryID);
+        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
 
         foreach ($breadcrumb as $breadcrumbObj){
             $breadcrumbs[] = $breadcrumbObj["name"];
