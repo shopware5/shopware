@@ -1063,16 +1063,18 @@ class Order extends ModelEntity
         $orderStatus = $changeSet['orderStatus'];
         $paymentStatus = $changeSet['paymentStatus'];
 
-
-
         //order or payment status changed?
         if ($orderStatus[0] instanceof Status || $paymentStatus[0] instanceof Status) {
             $history = new History();
 
             $history->setOrder($this);
             $history->setChangeDate(new \DateTime());
-            $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-            $history->setUser($user);
+            $history->setUser(null);
+
+            if (Shopware()->Auth() && Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
+                $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
+                $history->setUser($user);
+            }
 
             //order status changed?
             if ($orderStatus[0] instanceof Status && $orderStatus[1]) {
