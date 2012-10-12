@@ -1,7 +1,17 @@
 DELETE d FROM s_articles_details d, backup_s_articles_groups g
 WHERE g.groupID = 1
 AND g.articleID = d.articleID
-AND d.kind = 1;
+AND d.kind = 2;
+
+DELETE at FROM s_articles_attributes at
+LEFT JOIN s_articles_details d
+ON d.id = at.articledetailsID
+WHERE d.id IS NULL;
+
+DELETE p FROM s_articles_prices p
+LEFT JOIN s_articles_details d
+ON d.id = p.articledetailsID
+WHERE d.id IS NULL;
 
 UPDATE s_articles_details d, backup_s_articles_groups_value v
 SET d.ordernumber = v.ordernumber, d.active = v.active, d.instock = v.instock
@@ -14,6 +24,8 @@ ALTER TABLE `s_article_configurator_groups` ADD INDEX ( `name` );
 INSERT IGNORE INTO `s_articles_details` (`articleID`, `ordernumber`, `kind`, `active`, `instock`)
 SELECT `articleID`, `ordernumber`, IF(`standard` = 1, 1, 2) as `kind`, `active`, `instock`
 FROM backup_s_articles_groups_value;
+
+UPDATE s_articles a, s_articles_details d SET main_detail_id = d.id WHERE a.id = d.articleID AND d.kind = 1;
 
 INSERT IGNORE INTO `s_articles_attributes` (`articleID`, `articledetailsID`)
 SELECT articleID, id
@@ -35,10 +47,11 @@ AND c.id IS NULL;
 UPDATE s_articles a, s_articles_details d, s_article_configurator_sets s
 SET a.configurator_set_id = s.id
 WHERE a.main_detail_id = d.id
-AND s.name = CONCAT('Set-', d.ordernumber);
+AND s.name = CONCAT('Set-', d.ordernumber)
+AND d.kind = 1;
 
 INSERT INTO `s_article_configurator_groups` (`name`, `description`, `position`)
-SELECT STRAIGHT_JOIN CONCAT(articleID, '-', groupID, '-', groupname) as name, groupdescription as description, groupposition as position
+SELECT STRAIGHT_JOIN CONCAT(articleID, '-', groupID, '-', CONVERT(groupname USING utf8)) as name, groupdescription as description, groupposition as position
 FROM backup_s_articles_groups s
 LEFT JOIN s_article_configurator_groups t
 ON t.name = CONCAT(articleID, '-', groupID, '-', groupname)

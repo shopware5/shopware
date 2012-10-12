@@ -188,7 +188,7 @@ class Shopware_Update extends Slim
             if($app->config('auth') === null
               && $app->request()->getPathInfo() !== '/'
               && $app->request()->getPathInfo() !== '/test') {
-                $this->redirect($this->urlFor('index'));
+                $app->redirect($app->urlFor('index'));
             }
         });
 
@@ -728,7 +728,8 @@ class Shopware_Update extends Slim
             case 5: $action = 'unpack'; break;
             case 6: $action = 'move'; break;
             case 7: $action = 'media'; break;
-            case 8: $action = 'cleanup'; break;
+            case 8: $action = 'mapping'; break;
+            case 9: $action = 'cleanup'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
@@ -746,7 +747,7 @@ class Shopware_Update extends Slim
             if(!isset($result['offset'])) {
                 $next++;
             }
-            if(!empty($result['success']) && $next < 9) {
+            if(!empty($result['success']) && $next < 10) {
                 $result['next'] = $next;
             }
             echo json_encode($result);
@@ -1074,6 +1075,131 @@ class Shopware_Update extends Slim
         }
         return array(
             'message' => 'Die Artikel-Bilder wurden erfolgreich übernommen.',
+            'success' => true
+        );
+    }
+
+    public function progressMapping()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $sql = "
+            SELECT o.id
+            FROM s_article_configurator_set_group_relations s
+            JOIN s_article_configurator_groups g
+            ON g.id = s.group_id
+            AND :group LIKE REPLACE(g.name, ' ', '')
+            JOIN s_article_configurator_options o
+            ON o.group_id = g.id
+            AND :option LIKE REPLACE(o.name, ' ', '')
+            WHERE s.set_id = :setId
+        ";
+        $optionQuery = $db->prepare($sql);
+        $sql = "
+            INSERT INTO s_article_img_mappings ( image_id ) VALUES ( :imageId )
+        ";
+        $mappingQuery = $db->prepare($sql);
+        $sql = "
+        	INSERT INTO s_article_img_mapping_rules ( mapping_id, option_id )
+			VALUES ( :mappingId, :optionId );
+		";
+        $ruleQuery = $db->prepare($sql);
+        $sql = "
+            SELECT a.name, a.id as articleId, i.id as imageId, i.relations, s.id as setId
+            FROM s_articles_img i
+            JOIN s_articles a
+            ON a.id = i.articleID
+            JOIN s_article_configurator_sets s
+            ON s.id = a.configurator_set_id
+            WHERE i.articleID IS NOT NULL
+            AND (i.relations LIKE '||{_%}'
+            OR i.relations LIKE '&{_%}')
+        ";
+        $query = $db->query($sql);
+        while($image = $query->fetch(PDO::FETCH_ASSOC)) {
+            preg_match('#(.+){(.+)}#', $image['relations'], $match);
+            $orRelation = $match[1] == '||';
+            $relations = explode('/', $match[2]);
+            $options = array();
+            foreach($relations as $option) {
+                list($group, $option) = explode(':', $option);
+                $optionQuery->execute(array(
+                    'group' => $group,
+                    'option' => $option,
+                    'setId' => $image['setId']
+                ));
+                $optionId = $optionQuery->fetchColumn();
+                if($optionId !== false) {
+                    $options[] = $optionId;
+                }
+            }
+            if(empty($options)) {
+
+            } elseif($orRelation) {
+                foreach ($options as $optionId) {
+                    $mappingQuery->execute(array(
+                        'imageId' => $image['imageId']
+                    ));
+                    $mappingId = $db->lastInsertId();
+                    $ruleQuery->execute(array(
+                        'mappingId' => $mappingId,
+                        'optionId' => $optionId
+                    ));
+                    $sql = "
+			        	INSERT INTO s_articles_img ( parent_id, article_detail_id )
+			        	SELECT :imageId, article_id
+			        	FROM s_article_configurator_option_relations
+			        	WHERE option_id = :optionId
+			        ";
+                    $imageQuery = $db->prepare($sql);
+                    $imageQuery->execute(array(
+                        'imageId' => $image['imageId'],
+                        'optionId' => $optionId
+                    ));
+                }
+            } else {
+                $mappingQuery->execute(array(
+                    'imageId' => $image['imageId']
+                ));
+                $mappingId = $db->lastInsertId();
+                foreach ($options as $optionId) {
+                    $ruleQuery->execute(array(
+                        'mappingId' => $mappingId,
+                        'optionId' => $optionId
+                    ));
+                }
+                $params = array(
+                    'imageId' => $image['imageId']
+                );
+                $sql = "
+		        	INSERT INTO s_articles_img ( parent_id, article_detail_id )
+		        	SELECT :imageId, d.id
+		        	FROM s_articles_details d
+		        ";
+                foreach ($options as $i => $optionId) {
+                    $sql .= "
+            			JOIN s_article_configurator_option_relations r$i
+			        	ON r$i.option_id = :option$i
+            			AND r$i.article_id = d.id
+            		";
+                    $params['option' . $i] = $optionId;
+                }
+                $imageQuery = $db->prepare($sql);
+                $imageQuery->execute($params);
+            }
+
+            $sql = "
+	        	UPDATE s_articles_img
+	        	SET relations = ''
+	        	WHERE id = :imageId
+	        ";
+            $imageQuery = $db->prepare($sql);
+            $imageQuery->execute(array(
+                'imageId' => $image['imageId'],
+            ));
+        }
+        return array(
+            'message' => 'Die Bilder-Mapping wurde erfolgreich übernommen.',
             'success' => true
         );
     }
