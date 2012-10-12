@@ -374,7 +374,12 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         switch(fieldModel.get('type')) {
             case 'text':
-                field = Ext.create('Ext.form.field.Text');
+                field = Ext.create('Ext.form.field.Text', {
+                    fieldLabel: fieldModel.get('label'),
+                    name: 'attribute[' + fieldModel.get('name') + ']',
+                    translationName: fieldModel.get('name'),
+                    translatable: fieldModel.get('translatable')
+                });
                 break;
             case 'boolean':
                 field = Ext.create('Ext.form.field.Checkbox', {
@@ -397,7 +402,12 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 field = Ext.create('Ext.form.field.Number');
                 break;
             case 'textarea':
-                field = Ext.create('Ext.form.field.TextArea');
+                field = Ext.create('Ext.form.field.TextArea', {
+                    fieldLabel: fieldModel.get('label'),
+                    name: 'attribute[' + fieldModel.get('name') + ']',
+                    translationName: fieldModel.get('name'),
+                    translatable: fieldModel.get('translatable')
+                });
                 break;
             case 'time':
                 field = Ext.create('Ext.form.field.Time', {
@@ -405,7 +415,12 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 });
                 break;
             case 'html':
-                field = Ext.create('Ext.form.field.TinyMCE');
+                field = Ext.create('Ext.form.field.TinyMCE', {
+                    fieldLabel: fieldModel.get('label'),
+                    name: 'attribute[' + fieldModel.get('name') + ']',
+                    translationName: fieldModel.get('name'),
+                    translatable: fieldModel.get('translatable')
+                });
                 break;
             case 'article':
                 field = Ext.create('Shopware.form.ArticleSearch', {
@@ -420,16 +435,15 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             default:
         }
 
+        console.log("field", fieldModel.get('label'), field, fieldModel);
         Ext.apply(field, {
             fieldLabel: fieldModel.get('label'),
             allowBlank: (!fieldModel.get('required')),
             value: fieldModel.get('default'),
-            name: 'attribute[' + fieldModel.get('name') + ']',
-            translationName: fieldModel.get('name'),
             anchor: '100%',
             helpText: fieldModel.get('help'),
             editable: true,
-            translatable: fieldModel.get('translatable')
+            name: 'attribute[' + fieldModel.get('name') + ']',
         });
         return field;
     }
