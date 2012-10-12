@@ -124,7 +124,7 @@ class Document extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDocument", mappedBy="document", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist", "update"})
      * @var \Shopware\Models\Attribute\OrderDocument
      */
     protected $attribute;
@@ -333,7 +333,7 @@ class Document extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderDocument', 'attribute', 'orderDocument');
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'orderDocument');
     }
 
 }
