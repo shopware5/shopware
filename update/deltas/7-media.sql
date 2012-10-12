@@ -27,48 +27,48 @@ AND m.id IS NULL;
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
-  -6 as albumID, SUBSTRING_INDEX(filename, '.', 1) as name, d.description,
-  CONCAT('media/unknown/', filename) as `path`,
+  -6 as albumID, SUBSTRING_INDEX(REPLACE(filename, 'media/unknown/', ''), '.', 1) as name, d.description,
+  filename as `path`,
   'UNKNOWN' as `type`, SUBSTRING_INDEX(filename, '.', -1) as `extension`,
   d.size as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_articles_downloads d
 LEFT JOIN s_media m
-ON m.name = SUBSTRING_INDEX(filename, '.', 1)
+ON m.path = filename
 WHERE filename LIKE 'media/unknown/%'
 AND m.id IS NULL;
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
-  -12 as albumID,  SUBSTRING_INDEX(img, '.', 1) as name, s.name as description,
-  CONCAT('media/image/', img) as `path`,
+  -12 as albumID,  SUBSTRING_INDEX(REPLACE(img, 'media/image/', ''), '.', 1) as name, s.name as description,
+  img as `path`,
   'IMAGE' as `type`, SUBSTRING_INDEX(img, '.', -1) as `extension`,
   0 as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_articles_supplier s
 LEFT JOIN s_media m
-ON m.name = SUBSTRING_INDEX(img, '.', 1)
+ON m.path = img
 WHERE img != ''
 AND m.id IS NULL;
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
-  -2 as albumID,  SUBSTRING_INDEX(img, '.', 1) as name, b.description,
-  CONCAT('media/image/', img) as `path`,
+  -2 as albumID,  SUBSTRING_INDEX(REPLACE(img, 'media/image/', ''), '.', 1) as name, b.description,
+  img as `path`,
   'IMAGE' as `type`, SUBSTRING_INDEX(img, '.', -1) as `extension`,
   0 as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_emarketing_banners b
 LEFT JOIN s_media m
-ON m.name = SUBSTRING_INDEX(img, '.', 1)
+ON m.path = img
 WHERE img != ''
 AND m.id IS NULL;
 
 INSERT INTO `s_media` (`albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`)
 SELECT
-  -2 as albumID,  SUBSTRING_INDEX(img, '.', 1) as name, b.description,
-  CONCAT('media/image/', img) as `path`,
+  -2 as albumID,  SUBSTRING_INDEX(REPLACE(img, 'media/image/', ''), '.', 1) as name, b.description,
+  img as `path`,
   'IMAGE' as `type`, SUBSTRING_INDEX(img, '.', -1) as `extension`,
   0 as `file_size`, 0 as `userID`, NOW() as `created`
 FROM s_emarketing_promotions b
 LEFT JOIN s_media m
-ON m.name = SUBSTRING_INDEX(img, '.', 1)
+ON m.path = img
 WHERE img != ''
 AND m.id IS NULL;
