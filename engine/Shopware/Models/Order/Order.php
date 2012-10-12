@@ -1071,7 +1071,7 @@ class Order extends ModelEntity
             $history->setChangeDate(new \DateTime());
             $history->setUser(null);
 
-            if (Shopware()->Auth() && Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
+            if (Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
                 $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
                 $history->setUser($user);
             }
