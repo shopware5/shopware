@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                 return false;
             }
 
-            grid.setLoading(true);
+            //grid.setLoading(true);
             record.destroy({
                 success: function() {
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
@@ -237,11 +237,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                 },
                 callback: function() {
                     me.reloadTree();
-                    store.load({
-                        'callback': function() {
-                            grid.setLoading(false);
-                        }
-                    });
+                    store.load();
                 }
             });
         });
