@@ -30,14 +30,6 @@ class Customer extends ModelEntity
 
 
 /**
- * @var integer $swagShoeSize
- *
- * @ORM\Column(name="swag_shoe_size", type="integer", nullable=true)
- */
- protected $swagShoeSize;
-
-
-/**
  * @var integer $articleId
  *
  * @ORM\Column(name="article_id", type="integer", nullable=false)
