@@ -78,22 +78,6 @@ class OrderBasket extends ModelEntity
 
 
 /**
- * @var boolean $swagBonus
- *
- * @ORM\Column(name="swag_bonus", type="boolean", nullable=false)
- */
- protected $swagBonus;
-
-
-/**
- * @var integer $bundleId
- *
- * @ORM\Column(name="bundle_id", type="integer", nullable=true)
- */
- protected $bundleId;
-
-
-/**
  * @var \Shopware\Models\Order\Basket
  *
  * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Basket", inversedBy="attribute")
@@ -206,32 +190,7 @@ public function setAttribute6($attribute6)
     $this->attribute6 = $attribute6;
     return $this;
 }
-        
 
-public function getSwagBonus()
-{
-    return $this->swagBonus;
-}
-        
-
-public function setSwagBonus($swagBonus)
-{
-    $this->swagBonus = $swagBonus;
-    return $this;
-}
-        
-
-public function getBundleId()
-{
-    return $this->bundleId;
-}
-        
-
-public function setBundleId($bundleId)
-{
-    $this->bundleId = $bundleId;
-    return $this;
-}
         
 
 public function getOrderBasket()

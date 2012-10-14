@@ -77,12 +77,6 @@ class OrderDetail extends ModelEntity
  protected $attribute6;
 
 
-/**
- * @var boolean $swagBonus
- *
- * @ORM\Column(name="swag_bonus", type="boolean", nullable=false)
- */
- protected $swagBonus;
 
 
 /**
@@ -200,18 +194,6 @@ public function setAttribute6($attribute6)
 }
         
 
-public function getSwagBonus()
-{
-    return $this->swagBonus;
-}
-        
-
-public function setSwagBonus($swagBonus)
-{
-    $this->swagBonus = $swagBonus;
-    return $this;
-}
-        
 
 public function getOrderDetail()
 {
