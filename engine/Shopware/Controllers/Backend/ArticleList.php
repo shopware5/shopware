@@ -129,28 +129,28 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         /** @var $articleDetail \Shopware\Models\Article\Detail   */
         $articleDetail = $this->getDetailRepository()->find($id);
-        if (!$articleDetail) {
+        if (!is_object($articleDetail)) {
             $this->View()->assign(array(
                 'success' => false
             ));
+        }else {
+            if ($articleDetail->getKind() == 1) {
+                $article = $articleDetail->getArticle();
+                $this->removePrices($article->getId());
+                $this->removeArticleEsd($article->getId());
+                $this->removeAttributes($article->getId());
+                $this->removeArticleDetails($article);
+                Shopware()->Models()->remove($article);
+            } else {
+                Shopware()->Models()->remove($articleDetail);
+            }
+
+            Shopware()->Models()->flush();
+
+            $this->View()->assign(array(
+                'success' => true
+            ));
         }
-
-        if ($articleDetail->getKind() == 1) {
-            $article = $articleDetail->getArticle();
-            $this->removePrices($article->getId());
-            $this->removeArticleEsd($article->getId());
-            $this->removeAttributes($article->getId());
-            $this->removeArticleDetails($article);
-            Shopware()->Models()->remove($article);
-        } else {
-            Shopware()->Models()->remove($articleDetail);
-        }
-
-        Shopware()->Models()->flush();
-
-        $this->View()->assign(array(
-            'success' => true
-        ));
     }
 
     /**
