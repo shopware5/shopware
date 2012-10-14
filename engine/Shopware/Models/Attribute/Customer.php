@@ -28,31 +28,6 @@ class Customer extends ModelEntity
  */
  protected $customerId;
 
-
-/**
- * @var integer $articleId
- *
- * @ORM\Column(name="article_id", type="integer", nullable=false)
- */
- protected $articleId;
-
-
-/**
- * @var string $varcharColumn
- *
- * @ORM\Column(name="varchar_column", type="string", nullable=true)
- */
- protected $varcharColumn;
-
-
-/**
- * @var string $textColumn
- *
- * @ORM\Column(name="text_column", type="text", nullable=false)
- */
- protected $textColumn;
-
-
 /**
  * @var \Shopware\Models\Customer\Customer
  *
@@ -88,59 +63,6 @@ public function setCustomerId($customerId)
     $this->customerId = $customerId;
     return $this;
 }
-        
-
-public function getSwagShoeSize()
-{
-    return $this->swagShoeSize;
-}
-        
-
-public function setSwagShoeSize($swagShoeSize)
-{
-    $this->swagShoeSize = $swagShoeSize;
-    return $this;
-}
-        
-
-public function getArticleId()
-{
-    return $this->articleId;
-}
-        
-
-public function setArticleId($articleId)
-{
-    $this->articleId = $articleId;
-    return $this;
-}
-        
-
-public function getVarcharColumn()
-{
-    return $this->varcharColumn;
-}
-        
-
-public function setVarcharColumn($varcharColumn)
-{
-    $this->varcharColumn = $varcharColumn;
-    return $this;
-}
-        
-
-public function getTextColumn()
-{
-    return $this->textColumn;
-}
-        
-
-public function setTextColumn($textColumn)
-{
-    $this->textColumn = $textColumn;
-    return $this;
-}
-        
 
 public function getCustomer()
 {
