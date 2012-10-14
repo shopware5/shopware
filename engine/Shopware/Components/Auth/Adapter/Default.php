@@ -86,7 +86,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      * How many seconds is a login is valid?
      * @var int
      */
-    protected $expiry = 7200;
+    protected $expiry = 21600;
 
     /**
      * Set some properties only available at runtime
@@ -149,6 +149,25 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         }
         return $result;
     }
+
+    protected function updateExpiry()
+    {
+       if ($this->expiryColumn === null) {
+           return;
+       }
+
+       $user = $this->getResultRowObject();
+
+       $this->_zendDb->update(
+           $this->_tableName,
+           array($this->expiryColumn => Zend_Date::now()),
+           $this->_zendDb->quoteInto(
+               $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $user->username
+           )
+       );
+    }
+
+
 
     /**
      * Set the property failed logins to a new value
