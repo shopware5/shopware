@@ -422,14 +422,56 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     getPagingbar: function() {
         var me = this;
+        var pageSize = Ext.create('Ext.form.field.ComboBox', {
+            labelWidth: 120,
+            cls: Ext.baseCSSPrefix + 'page-size',
+            queryMode: 'local',
+            width: 180,
+            listeners: {
+                scope: me,
+                select: me.onPageSizeChange
+            },
+            store: Ext.create('Ext.data.Store', {
+                fields: [ 'value' ],
+                data: [
+                    { value: '20' },
+                    { value: '40' },
+                    { value: '60' },
+                    { value: '80' },
+                    { value: '100' },
+                    { value: '250' },
+                ]
+            }),
+            displayField: 'value',
+            valueField: 'value'
+        });
+        pageSize.setValue(me.articleStore.pageSize);
 
-        return {
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: me.articleStore
-        };
+        var pagingBar = Ext.create('Ext.toolbar.Paging', {
+            store: me.articleStore,
+            dock:'bottom',
+            displayInfo:true
+        });
+
+        pagingBar.insert(pagingBar.items.length - 2, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);
+        return pagingBar;
     },
+    /**
+     * Event listener method which fires when the user selects
+     * a entry in the "number of orders"-combo box.
+     *
+     * @event select
+     * @param [object] combo - Ext.form.field.ComboBox
+     * @param [array] records - Array of selected entries
+     * @return void
+     */
+    onPageSizeChange: function(combo, records) {
+        var record = records[0],
+            me = this;
 
+        me.articleStore.pageSize = record.get('value');
+        me.articleStore.loadPage(1);
+    },
     /**
      * Special ExtJS 4 method which will be fired
      * when the component is rendered.
