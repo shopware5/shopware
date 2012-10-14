@@ -736,14 +736,7 @@ class sOrder
 		$this->sUserData["additional"]["payment"]["description"] = html_entity_decode($this->sUserData["additional"]["payment"]["description"]);
 
 
-		if ($this->sUserData["additional"]["payment"]["table"]){
-			$paymentTable = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-			SELECT * FROM {$this->sUserData["additional"]["payment"]["table"]}
-			WHERE userID=?",array($this->sUserData["additional"]["user"]["id"]));
-			$this->sSYSTEM->sSMARTY->assign("sPaymentTable",$paymentTable);
-		} else {
-			$this->sSYSTEM->sSMARTY->assign("sPaymentTable","");
-		}
+
 
 		$sOrderDetails = array();
 		foreach ($this->sBasketData["content"] as $content)
@@ -821,6 +814,8 @@ class sOrder
     {
 		$variables = Enlight()->Events()->filter('Shopware_Modules_Order_SendMail_FilterVariables', $variables, array('subject' => $this));
 
+
+
         $context = array(
             'sOrderDetails' => $variables["sOrderDetails"],
 
@@ -848,6 +843,16 @@ class sOrder
             'sNet'    => $this->sNet,
 
         );
+
+        // Support for individual paymentmeans with custom-tables
+        if ($variables["additional"]["payment"]["table"]){
+            $paymentTable = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            SELECT * FROM {$variables["additional"]["payment"]["table"]}
+            WHERE userID=?",array($variables["additional"]["user"]["id"]));
+            $context["sPaymentTable"] = $paymentTable;
+        } else {
+            $context["sPaymentTable"] = array();
+        }
 
         if ($variables["sDispatch"]) {
             $context['sDispatch'] = $variables["sDispatch"];
