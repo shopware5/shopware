@@ -61,6 +61,9 @@ Ext.define('Shopware.apps.Category.store.Article', {
      */
     proxy: {
         type: 'ajax',
+        actionMethods: [
+            { create: 'POST', read: 'POST', update: 'POST', destroy: 'POST'}
+        ] ,
 
         /**
          * Configure the url mapping for the different
