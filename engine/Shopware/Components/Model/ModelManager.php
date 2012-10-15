@@ -33,7 +33,6 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityManager,
-    Doctrine\ORM\Tools\DisconnectedClassMetadataFactory,
     Doctrine\ORM\ORMException,
     Doctrine\Common\EventManager,
     Doctrine\DBAL\Connection,
@@ -85,7 +84,7 @@ class ModelManager extends EntityManager
     public function __call($name, $args)
     {
         /** @todo make path custom able */
-        if(strpos($name, '\\') === false) {
+        if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
         $name = 'Shopware\\Models\\' . $name;
@@ -266,13 +265,7 @@ class ModelManager extends EntityManager
 
         $generator->generateAttributeModels($tableNames);
 
-        $config = $this->getConfiguration();
-        if (!$config->getAutoGenerateProxyClasses()) {
-            $metadata     = $this->getMetadataFactory()->getAllMetadata();
-            $proxyFactory = $this->getProxyFactory();
-            $proxyFactory->generateProxyClasses($metadata);
-        }
-
+        $this->regenerateProxies();
     }
 
     /**
@@ -284,25 +277,24 @@ class ModelManager extends EntityManager
      * @param string $type Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
      * @param bool $nullable Allow null property
      * @param null $default Default value of the column
-     * @throws \Symfony\Component\Routing\Exception\InvalidParameterException
+     * @throws \InvalidArgumentException
      */
     public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
     {
-        // todo@dr throw some more suited exception
         if (empty($table)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No table name passed');
+            throw new \InvalidArgumentException('No table name passed');
         }
         if (strpos($table, '_attributes') === false) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('The passed table name is no attribute table');
+            throw new \InvalidArgumentException('The passed table name is no attribute table');
         }
         if (empty($prefix)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No column prefix passed');
+            throw new \InvalidArgumentException('No column prefix passed');
         }
         if (empty($column)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No column name passed');
+            throw new \InvalidArgumentException('No column name passed');
         }
         if (empty($type)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No column type passed');
+            throw new \InvalidArgumentException('No column type passed');
         }
 
         $null = ($nullable) ? " NULL " : " NOT NULL ";
@@ -325,22 +317,21 @@ class ModelManager extends EntityManager
      * @param $table
      * @param $prefix
      * @param $column
-     * @throws \Symfony\Component\Routing\Exception\InvalidParameterException
+     * @throws \InvalidArgumentException
      */
     public function removeAttribute($table, $prefix, $column)
     {
-        // todo@dr throw some more suited exception
         if (empty($table)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No table name passed');
+            throw new \InvalidArgumentException('No table name passed');
         }
         if (strpos($table, '_attributes') === false) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('The passed table name is no attribute table');
+            throw new \InvalidArgumentException('The passed table name is no attribute table');
         }
         if (empty($prefix)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No column prefix passed');
+            throw new \InvalidArgumentException('No column prefix passed');
         }
         if (empty($column)) {
-            throw new \Symfony\Component\Routing\Exception\InvalidParameterException('No column name passed');
+            throw new \InvalidArgumentException('No column name passed');
         }
 
         $sql = 'ALTER TABLE ' . $table . ' DROP ' . $prefix . '_' . $column;
@@ -352,8 +343,11 @@ class ModelManager extends EntityManager
      */
     public function regenerateProxies()
     {
-        $metadatas    = $this->getMetadataFactory()->getAllMetadata();
-        $proxyFactory = $this->getProxyFactory();
-        $proxyFactory->generateProxyClasses($metadatas);
+        $config = $this->getConfiguration();
+        if (!$config->getAutoGenerateProxyClasses()) {
+            $metadata     = $this->getMetadataFactory()->getAllMetadata();
+            $proxyFactory = $this->getProxyFactory();
+            $proxyFactory->generateProxyClasses($metadata);
+        }
     }
 }

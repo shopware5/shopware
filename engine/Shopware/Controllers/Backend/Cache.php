@@ -301,7 +301,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         foreach ($files as $file) {
             unlink($file);
         }
-        //Shopware()->Models()->regenerateProxies();
+
+        Shopware()->Models()->regenerateProxies();
     }
 
     /**
