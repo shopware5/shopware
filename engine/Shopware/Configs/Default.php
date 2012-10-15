@@ -113,7 +113,7 @@ return array_merge($customConfig, array(
     ), $customConfig['hook']),
     'model' => array_merge(array(
         'autoGenerateProxyClasses' => (PHP_OS === 'WINNT'),
-        'attributeDir' => dirname($this->AppPath()),
+        'attributeDir' => $this->AppPath('Models_Attribute'),
         'proxyDir' => $this->AppPath('Proxies'),
         'proxyNamespace' => $this->App() . '\Proxies'
     ), $customConfig['model']),

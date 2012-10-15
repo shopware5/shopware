@@ -125,7 +125,7 @@ class Document extends ModelEntity
     /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Shopware\Models\Attribute\OrderDocument
+     * @var \Shopware\Models\Attribute\Document
      */
     protected $attribute;
 
@@ -320,7 +320,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\OrderDocument
+     * @return \Shopware\Models\Attribute\Document
      */
     public function getAttribute()
     {
@@ -328,8 +328,8 @@ class Document extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\OrderDocument|array|null $attribute
-     * @return \Shopware\Models\Attribute\OrderDocument
+     * @param \Shopware\Models\Attribute\Document|array|null $attribute
+     * @return \Shopware\Models\Attribute\Document
      */
     public function setAttribute($attribute)
     {

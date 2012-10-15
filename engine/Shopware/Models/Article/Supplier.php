@@ -116,7 +116,7 @@ class Supplier extends ModelEntity
     /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist", "update"})
-     * @var \Shopware\Models\Attribute\Supplier
+     * @var \Shopware\Models\Attribute\ArticleSupplier
      */
     protected $attribute;
 
@@ -248,7 +248,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Supplier
+     * @return \Shopware\Models\Attribute\ArticleSupplier
      */
     public function getAttribute()
     {
@@ -256,8 +256,8 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Supplier|array|null $attribute
-     * @return \Shopware\Models\Attribute\Supplier
+     * @param \Shopware\Models\Attribute\ArticleSupplier|array|null $attribute
+     * @return \Shopware\Models\Attribute\ArticleSupplier
      */
     public function setAttribute($attribute)
     {

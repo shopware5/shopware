@@ -31,333 +31,717 @@
  */
 
 namespace Shopware\Components\Model;
-use Doctrine\ORM\Tools\EntityGenerator,
-    Doctrine\ORM\Tools\DisconnectedClassMetadataFactory,
-    Doctrine\ORM\ORMException,
-    Doctrine\Common\EventManager,
-    Doctrine\DBAL\Connection,
-    Doctrine\Common\Util\Inflector,
-    Doctrine\ORM\Mapping\ClassMetadata;
 
-class Generator extends EntityGenerator
+class Generator
 {
-    protected static $_classTemplate =
-        '<?php
-
-<namespace>
-
-use Doctrine\ORM\Mapping as ORM,
-    Shopware\Components\Model\ModelEntity;
-
-<entityAnnotation>
-<entityClassName> extends ModelEntity
-{
-<entityBody>
-}';
-
-    public $tableMappings = array();
+    /**
+     * Definition of the "create target directory failure" exception.
+     */
+    const CREATE_TARGET_DIRECTORY_FAILED = 1;
 
     /**
-     * @var ModelManager
+     * Contains the standard php file header tag
      */
-    protected $em = null;
+    const PHP_FILE_HEADER = '<?php';
+
+    /**
+     * Contains the AGPLv3 licence
+     */
+    const SHOPWARE_LICENCE = '
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Attribute
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @author     shopware AG
+ */
+';
+
+    /**
+     * Contains the required namespaces for a shopware model
+     */
+    const NAMESPACE_HEADER = '
+namespace Shopware\Models\Attribute;
+use Shopware\Components\Model\ModelEntity,
+    Doctrine\ORM\Mapping AS ORM,
+    Symfony\Component\Validator\Constraints as Assert,
+    Doctrine\Common\Collections\ArrayCollection;
+';
+
+    /**
+     * Definition of the standard shopware model class header.
+     */
+    const CLASS_HEADER = '
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="%tableName%")
+ */
+class %className% extends ModelEntity
+{
+    ';
+
+    /**
+     * Definition of the standard shopware model property
+     */
+    const COLUMN_PROPERTY = '
+    /**
+     * @var %propertyType% $%propertyName%
+    %ID%
+     * @ORM\Column(name="%columnName%", type="%columnType%", nullable=%nullable%)
+     */
+     protected $%propertyName%;
+';
+
+    /**
+     * Definition of the standard shopware id property.
+     */
+    const PRIMARY_KEY = ' * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")';
+
+    /**
+     * Definition of a standard shopware association property.
+     */
+    const ASSOCIATION_PROPERTY = '
+    /**
+     * @var \%foreignClass%
+     *
+     * @ORM\OneToOne(targetEntity="%foreignClass%", inversedBy="attribute")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="%localColumn%", referencedColumnName="%foreignColumn%")
+     * })
+     */
+    protected $%property%;
+    ';
+
+    /**
+     * Definition of the standard shopware getter and setter
+     * functions of a single model column property.
+     */
+    const COLUMN_FUNCTIONS = '
+    public function get%upperPropertyName%()
+    {
+        return $this->%lowerPropertyName%;
+    }
+
+    public function set%upperPropertyName%($%lowerPropertyName%)
+    {
+        $this->%lowerPropertyName% = $%lowerPropertyName%;
+        return $this;
+    }
+    ';
+
+    /**
+     * Definition of the standard shopware getter and setter
+     * functions of a single model association property.
+     */
+    const ASSOCIATION_FUNCTIONS = '
+    public function get%upperPropertyName%()
+    {
+        return $this->%lowerPropertyName%;
+    }
+
+    public function set%upperPropertyName%($%lowerPropertyName%)
+    {
+        $this->%lowerPropertyName% = $%lowerPropertyName%;
+        return $this;
+    }
+    ';
+
+    /**
+     * Contains the schema manager which is used to get the database definition
+     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
+     */
+    protected $schemaManager = null;
+
+    /**
+     * Contains the table mapping for the existing showpare models.
+     * @var array
+     */
+    protected $tableMapping = array();
+
+    /**
+     * Target path for the generated models
+     * @var string
+     */
+    protected $path = '';
+
+    /**
+     * Path of the shopware models directory.
+     * @var string
+     */
+    protected $modelPath = '';
+
+
+    /**
+     * @param string $modelPath
+     */
+    public function setModelPath($modelPath)
+    {
+        $this->modelPath = $modelPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelPath()
+    {
+        return $this->modelPath;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
+     */
+    public function setSchemaManager($schemaManager)
+    {
+        $this->schemaManager = $schemaManager;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     */
+    public function getSchemaManager()
+    {
+        return $this->schemaManager;
+    }
+
+    /**
+     * @param array $tableMapping
+     */
+    public function setTableMapping($tableMapping)
+    {
+        $this->tableMapping = $tableMapping;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTableMapping()
+    {
+        if (empty($this->tableMapping)) {
+            $this->tableMapping = $this->createTableMapping();
+        }
+        return $this->tableMapping;
+    }
 
     /**
      * Generates the models for the extension tables like s_user_extension.
      * This tables can be modified from plugins so we have to generate the models after each plugin installation.
-     */
-    public function generateAttributeModels($entityManager, $path, $tableNames = array())
-    {
-        $this->em = $entityManager;
-
-        $this->setGenerateAnnotations(true);
-        $this->setGenerateStubMethods(true);
-        $this->setRegenerateEntityIfExists(true);
-        $this->setUpdateEntityIfExists(false);
-        $this->setBackupExisting(false);
-
-        $tableMapping = $this->getTableMapping();
-        $this->tableMappings = $tableMapping;
-        $allMetaData = $this->getAttributeTablesMetaData();
-
-        if (count($allMetaData) > 0) {
-            /**@var $metaData \Doctrine\ORM\Mapping\ClassMetadata*/
-            foreach ($allMetaData as $metaData) {
-                if (empty($metaData)) {
-                    continue;
-                }
-
-                if (count($tableNames) && !in_array($metaData->getTableName(), $tableNames)) {
-                    continue;
-                }
-
-                if (array_key_exists($metaData->name, $tableMapping)) {
-                    $this->writeEntityClass($metaData, $path);
-                }
-            }
-        }
-    }
-
-    /**
-     * Generate a PHP5 Doctrine 2 entity class from the given ClassMetadataInfo instance
      *
-     * @param ClassMetadataInfo $metadata
-     * @return string $code
+     * @param array $tableNames
+     * @return array
      */
-    public function generateEntityClass(ClassMetadataInfo $metadata)
+    public function generateAttributeModels($tableNames = array())
     {
-        $placeHolders = array(
-            '<namespace>',
-            '<entityAnnotation>',
-            '<entityClassName>',
-            '<entityBody>'
-        );
+        if (empty($this->tableMapping)) {
+            $this->tableMapping = $this->createTableMapping();
+        }
 
-        $replacements = array(
-            $this->_generateEntityNamespace($metadata),
-            $this->_generateEntityDocBlock($metadata),
-            $this->_generateEntityClassName($metadata),
-            $this->_generateEntityBody($metadata)
-        );
+        $this->createTargetDirectory();
+        if (!file_exists($this->getPath())) {
+            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED);
+        }
 
-        $code = str_replace($placeHolders, $replacements, self::$_classTemplate);
-        return str_replace('<spaces>', $this->_spaces, $code);
+        /**@var $table \Doctrine\DBAL\Schema\Table*/
+        foreach($this->getSchemaManager()->listTables() as $table) {
+            if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
+                continue;
+            }
+            if (strpos($table->getName(), '_attributes') === false) {
+                continue;
+            }
+
+            $this->generateModel($table);
+        }
+
+        return array('success' => true);
     }
 
     /**
+     * Creates a new directory for the models which will be generated.
+     */
+    protected function createTargetDirectory()
+    {
+        return mkdir($this->getPath(), 0777);
+    }
+
+    /**
+     * The generate model function create the doctrine model for 
+     * the passed table name.
+     * 
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return int
+     */
+    protected function generateModel($table)
+    {
+        //first we have to create the file header for a standard php file
+        $fileHeader = self::PHP_FILE_HEADER;
+
+        //after the file header created, we can add the shopware AGPLv3 licence tag
+        $licenceHeader = self::SHOPWARE_LICENCE;
+
+        //after the licence added, we can declare all namespace and used namespaces
+        $namespaceHeader = self::NAMESPACE_HEADER;
+
+        //the last header is the class header, which contains the definition of the class
+        $classHeader = $this->getClassDefinition($table);
+
+        //now all headers are defined, we can add the class content.
+        //first we create all normal column properties.
+        $columnProperties = $this->getColumnsProperties($table);
+
+        //after the normal column properties created, we can add the association properties.
+        $associationProperties = $this->getAssociationProperties($table);
+
+        //now all properties are declared, but the properties needs getter and setter function to get access from extern
+        $columnFunctions = $this->getColumnsFunctions($table);
+
+        //the association properties needs getter and setter, too.
+        $associationFunctions = $this->getAssociationsFunctions($table);
+
+        //to concat the different source code paths, we create an array with all source code fragments
+        $paths = array(
+            $fileHeader,
+            $licenceHeader,
+            $namespaceHeader,
+            $classHeader,
+            implode("\n", $columnProperties),
+            implode("\n", $associationProperties),
+            implode("\n", $columnFunctions),
+            implode("\n", $associationFunctions),
+            '}'
+        );
+
+        //than we implode the source code paths with a line break
+        $sourceCode = implode("\n", $paths);
+
+        //at least we need a file name for the current table object.
+        $className = $this->getClassNameOfTableName($table->getName());
+        if (strpos($table->getName(), '_attributes')) {
+            $tableName = str_replace('_attributes', '', $table->getName());
+            $className = $this->getClassNameOfTableName($tableName);
+        }
+
+        return file_put_contents($this->getPath() . $className . '.php', $sourceCode);
+    }
+
+    /**
+     * Returns the class definition for the passed table object
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return mixed
+     */
+    protected function getClassDefinition($table)
+    {
+        $source = self::CLASS_HEADER;
+        $className = $table->getName();
+
+        //check if the passed table is an shopware attribute table.
+        if (strpos($table->getName(), '_attributes')) {
+
+            //if the table is an attribute table we have to use the class name of the parent table.
+            $parentClass = str_replace('_attributes', '', $table->getName());
+            $className = $this->getClassNameOfTableName($parentClass);
+
+            //if the passed table is not an attribute table, we have to check if the table is already declared
+        } else if (array_key_exists($table->getName(), $this->getTableMapping())) {
+
+            //if this is the case we will use the already declared class name
+            $className = $this->tableMapping[$table->getName()]['class'];
+        }
+
+        $source = str_replace('%className%', $className, $source);
+        $source = str_replace('%tableName%', $table->getName(), $source);
+        return $source;
+    }
+
+    /**
+     * Helper function to get a class name of the passed table.
+     * This function uses the internal property "tableMapping".
+     * The tableMapping array contains the class names and namespace for
+     * each already declared shopware model/table.
+     *
+     * @param $tableName
+     * @return string
+     */
+    protected function getClassNameOfTableName($tableName)
+    {
+        if (!array_key_exists($tableName, $this->tableMapping)) {
+            return '';
+        }
+
+        $parentTable = $this->tableMapping[$tableName];
+        $fragments = explode("\\", $parentTable['namespace']);
+        $lastFragment = array_pop($fragments);
+
+        if ($lastFragment === $parentTable['class']) {
+            $fullName = $parentTable['class'];
+        } else {
+            $fullName = $lastFragment . ucfirst($parentTable['class']);
+        }
+
+        return ucfirst($fullName);
+    }
+
+    /**
+     * The getColumnsProperties function creates the source code
+     * for all table column properties. This function returns
+     * only the defintion of the properties, not of the getters and seters.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
      * @return array
      */
-    private function getAttributeTablesMetaData()
+    protected function getColumnsProperties($table)
     {
-        $factory = $this->getFactoryWithDatabaseDriver();
-        $allMetaData = $factory->getAllMetadata();
-        $extensionTables = array();
+        $columns = array();
+        /**@var $column \Doctrine\DBAL\Schema\Column*/
+        foreach($table->getColumns() as $column) {
+            $columns[] = $this->getColumnProperty($table,$column);
+        }
+        return $columns;
+    }
 
-        /**@var $metaData \Doctrine\ORM\Mapping\ClassMetadata*/
-        foreach ($allMetaData as $metaData) {
-            if (strpos($metaData->getTableName(), '_attributes') !== false) {
-                $extensionTables[] = $metaData;
+    /**
+     * The getColumnProperty function creates the source code
+     * for the passed column. The table parameter is used
+     * to check the column foreign/primary key.
+     * This function creates only the property definition for a single
+     * column, not the getter and setter function.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return string
+     */
+    protected function getColumnProperty($table, $column)
+    {
+        $source = self::COLUMN_PROPERTY;
+
+        $source = str_replace('%columnName%', $column->getName(), $source);
+
+        $source = str_replace('%propertyName%', $this->getPropertyNameOfColumnName($table, $column), $source);
+
+        $source = str_replace('%nullable%', $this->getColumnNullProperty($column), $source);
+
+        $source = str_replace('%columnType%', $column->getType()->getName(), $source);
+
+        $source = str_replace('%propertyType%', $this->getPropertyTypeOfColumnType($column), $source);
+
+        $primary = ' *';
+        if ($this->isPrimaryColumn($table, $column)) {
+            $primary = self::PRIMARY_KEY;
+        }
+
+        $source = str_replace('%ID%', $primary, $source);
+
+        return $source;
+    }
+
+
+    /**
+     * Helper function to convert the table column name to the shopware standard definition of
+     * a class property. Filters the under score words to camcel case and
+     * checks if the passed column is a foreign key column.
+     * If the passed column is a foreign key column the function uses the class
+     * name of the foreign table as property with an additional suffix "Id".
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $column \Doctrine\DBAL\Schema\Column
+     *
+     * @return string
+     */
+    protected function getPropertyNameOfColumnName($table, $column)
+    {
+        $filter = new \Zend_Filter_Word_UnderscoreToCamelCase();
+        $foreignKey = $this->getColumnForeignKey($table, $column);
+        if ($foreignKey instanceof \Doctrine\DBAL\Schema\ForeignKeyConstraint) {
+            $table = $foreignKey->getForeignTableName();
+
+            $fullName = $this->getClassNameOfTableName($table);
+            return lcfirst($fullName) . 'Id';
+        } else {
+            return lcfirst($filter->filter($column->getName()));
+        }
+    }
+
+    /**
+     * Helper function to get the foreign key for the
+     * passed column object.
+     * If the column has a foreign key definition, the class name
+     * of the foreign table will be used for the property name of the column.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return bool|\Doctrine\DBAL\Schema\ForeignKeyConstraint
+     */
+    protected function getColumnForeignKey($table, $column)
+    {
+        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        foreach($table->getForeignKeys() as $foreignKey) {
+            foreach($foreignKey->getLocalColumns() as $foreignKeyColumn) {
+                if ($foreignKeyColumn === $column->getName()) {
+                    return $foreignKey;
+                }
             }
         }
-        return $extensionTables;
+        return null;
     }
 
     /**
-     * Creates a mapping array for each shopware model.
-     * The array key is the table name and the array item contains the model name and the namespace of the model.
+     * Helper function to covnert the boolean value of the function "column->getNotNull()" to
+     * a string which can be used for the doctrine annoation.
+     *
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return string
+     */
+    protected function getColumnNullProperty($column)
+    {
+        if ($column->getNotnull()) {
+            return 'false';
+        } else {
+            return 'true';
+        }
+    }
+
+    /**
+     * Helper function to convert some database types into supported
+     * php types. For example the database type "text" will be converted
+     * to "string"
+     *
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return string
+     */
+    public function getPropertyTypeOfColumnType($column)
+    {
+        if ($column->getType() instanceof \Doctrine\DBAL\Types\TextType) {
+            return 'string';
+        } else {
+            return $column->getType()->getName();
+        }
+    }
+
+    /**
+     * Helper function to check if the passed column is the primary key
+     * column.
+     * In this case doctrine requires the @ORM\ID annoation and a primary key
+     * strategy.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return bool
+     */
+    protected function isPrimaryColumn($table, $column)
+    {
+        if ($table->getPrimaryKey() === null) {
+            return false;
+        }
+        foreach($table->getPrimaryKey()->getColumns() as $primaryColumn) {
+            if ($column->getName() === $primaryColumn) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The getAssociationProperties function creates the source
+     * code for the doctrine associaton properties for the passed table object.
+     * This function creates only the property definition source code, not the getter
+     * and setter source code for the properties.
+     * @param $table \Doctrine\DBAL\Schema\Table
      * @return array
      */
-    private function getTableMapping()
+    protected function getAssociationProperties($table)
     {
-        $driver = $this->getDatabaseDriver();
-        $allMetaData = $this->em->getMetadataFactory()->getAllMetadata();
-        $tableMapping = array();
-        /**@var $metaData \Doctrine\ORM\Mapping\ClassMetadata*/
-        foreach ($allMetaData as $metaData) {
-            $arrayKey = $driver->getClassNameForTable($metaData->getTableName());
-            $tableMapping[$arrayKey] = array(
-                'namespace' => $metaData->namespace,
-                'name' => str_replace($metaData->namespace . '\\', '', $metaData->name)
+        $associations = array();
+        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        foreach($table->getForeignKeys() as $foreignKey) {
+            $associations[] = $this->getAssociationProperty($table, $foreignKey);
+        }
+        return $associations;
+    }
+
+    /**
+     * Helper function to create the source code for a single table association.
+     * This function creates only the source code for the property definition.
+     * The getter and setter function for the properties are created over the
+     * "getAssociationFunctions" function.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @return string
+     */
+    protected function getAssociationProperty($table, $foreignKey)
+    {
+        $source = self::ASSOCIATION_PROPERTY;
+
+        if (!array_key_exists($foreignKey->getForeignTableName(), $this->tableMapping)) {
+            return '';
+        }
+
+        $referenceTable = $this->tableMapping[$foreignKey->getForeignTableName()];
+        $className = $this->getClassNameOfTableName($foreignKey->getForeignTableName());
+        $namespace = $referenceTable['namespace'] . '\\' . $referenceTable['class'];
+
+        $localColumn = $foreignKey->getLocalColumns();
+        $foreignColumn = $foreignKey->getForeignColumns();
+
+        $source = str_replace('%foreignClass%', $namespace, $source);
+        $source = str_replace('%localColumn%', $localColumn[0], $source);
+        $source = str_replace('%foreignColumn%', $foreignColumn[0], $source);
+        $source = str_replace('%property%', lcfirst($className), $source);
+        return $source;
+    }
+
+    /**
+     * The getColumnsFunctions function creates the source code for the
+     * getter and setter for all table columns properties.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return array
+     */
+    protected function getColumnsFunctions($table)
+    {
+        $functions = array();
+        foreach($table->getColumns() as $column) {
+            $functions[] = $this->getColumnFunctions($table, $column);
+        }
+        return $functions;
+
+    }
+
+    /**
+     * Helper function to create the getter and setter source code
+     * for the passed column object.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $column \Doctrine\DBAL\Schema\Column
+     * @return string
+     */
+    protected function getColumnFunctions($table, $column)
+    {
+        $source = self::COLUMN_FUNCTIONS;
+
+        $property = $this->getPropertyNameOfColumnName($table, $column);
+
+        $source = str_replace('%upperPropertyName%', ucfirst($property), $source);
+        $source = str_replace('%lowerPropertyName%', lcfirst($property), $source);
+
+        return $source;
+    }
+
+    /**
+     * Creates the getter and setter functions source code for all association
+     * properties of the passed table object.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return array
+     */
+    protected function getAssociationsFunctions($table)
+    {
+        $columns = array();
+        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        foreach($table->getForeignKeys() as $foreignKey) {
+            $columns[] = $this->getAssociationFunctions($foreignKey);
+        }
+        return $columns;
+    }
+
+    /**
+     * Creates the getter and setter function source code for the passed
+     * foreign key constraint object.
+     *
+     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @return string
+     */
+    protected function getAssociationFunctions($foreignKey)
+    {
+        $source = self::ASSOCIATION_FUNCTIONS;
+        $className = $this->getClassNameOfTableName($foreignKey->getForeignTableName());
+
+        $source = str_replace('%upperPropertyName%', ucfirst($className), $source);
+        $source = str_replace('%lowerPropertyName%', lcfirst($className), $source);
+        return $source;
+    }
+
+    /**
+     * Helper function to create an table - class mapping of all defined
+     * shopware models.
+     * Used for the parent classes of attributes and association target entities.
+     * @return array
+     */
+    public function createTableMapping()
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->getModelPath()),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $classes = array();
+
+        /**@var $file SplFileInfo*/
+        foreach($iterator as $file) {
+            if ($file->isDir() || $file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $content = file_get_contents($file->getPathname());
+
+            //preg match for the model class name!
+            $matches = array();
+            preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
+            $className = $matches[1];
+
+            //preg match for the model namespace!
+            $matches = array();
+            preg_match('/namespace\s+(.*);/', $content, $matches);
+            $namespace = $matches[1];
+
+            //preg match for the model table name!
+            $matches = array();
+            preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
+            $tableName = $matches[1];
+
+            $classes[$tableName] = array(
+                'class' => $className,
+                'namespace' => $namespace
             );
         }
-
-        return $tableMapping;
-    }
-
-    /**
-     * Creates a disconnected meta data factory with a database mapping driver
-     * to get the meta data for the extension tables directly from the database.
-     *
-     * @return Doctrine\ORM\Tools\DisconnectedClassMetadataFactory
-     */
-    private function getFactoryWithDatabaseDriver()
-    {
-        $driver = $this->getDatabaseDriver();
-        $this->em->getConfiguration()->setMetadataDriverImpl($driver);
-        $factory = new DisconnectedClassMetadataFactory();
-        $factory->setEntityManager($this->em);
-        return $factory;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\DatabaseDriver
-     */
-    private function getDatabaseDriver()
-    {
-        $platform = $this->em->getConnection()->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');
-        $driver = new \Shopware\Components\Model\DatabaseDriver(
-            $this->em->getConnection()->getSchemaManager()
-        );
-        return $driver;
-    }
-
-    /**
-     * Generated and write entity class to disk for the given ClassMetadataInfo instance
-     *
-     * @param ClassMetadataInfo $metadata
-     * @param string            $outputDirectory
-     * @throws \RuntimeException
-     * @return void
-     */
-    public function writeEntityClass(ClassMetadataInfo $metadata, $outputDirectory)
-    {
-        //Shopware fix. Here we check the shopware model mappings to set the correct namespace for the passed meta data.
-        if (array_key_exists($metadata->name, $this->tableMappings)) {
-            $name = $metadata->name;
-            $metadata->name = $this->tableMappings[$name]['namespace'] . '\\' . $this->tableMappings[$name]['name'];
-            $metadata->namespace = $this->tableMappings[$name]['namespace'];
-
-            //all shopware attributes tables has an @OneToOne association.
-            if (strpos($metadata->getTableName(), '_attributes') !== false) {
-                foreach ($metadata->associationMappings as &$mapping) {
-                    $mapping['type'] = 1;
-                    $mapping['inversedBy'] = 'attribute';
-                }
-            }
-        }
-
-        $outputDirectory = rtrim($outputDirectory, '/');
-        $path = $outputDirectory . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $metadata->name) . $this->_extension;
-        $dir = dirname($path);
-
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true);
-        }
-        $this->_isNew = !file_exists($path) || (file_exists($path) && $this->_regenerateEntityIfExists);
-
-        if (!$this->_isNew) {
-            $this->_parseTokensInEntityFile(file_get_contents($path));
-        } else {
-            $this->_staticReflection[$metadata->name] = array('properties' => array(), 'methods' => array());
-        }
-
-        if ($this->_backupExisting && file_exists($path)) {
-            $backupPath = dirname($path) . DIRECTORY_SEPARATOR . basename($path) . "~";
-            if (!copy($path, $backupPath)) {
-                throw new \RuntimeException("Attempt to backup overwritten entity file but copy operation failed.");
-            }
-        }
-        // If entity doesn't exist or we're re-generating the entities entirely
-        if ($this->_isNew) {
-            $code = $this->generateEntityClass($metadata);
-            file_put_contents($path, $code);
-            // If entity exists and we're allowed to update the entity class
-        } else {
-            if (!$this->_isNew && $this->_updateEntityIfExists) {
-                $code = $this->generateUpdatedEntityClass($metadata, $path);
-                file_put_contents($path, $code);
-            }
-        }
-    }
-
-    protected function _generateEntityAssociationMappingProperties(ClassMetadataInfo $metadata)
-    {
-        $lines = array();
-
-        foreach ($metadata->associationMappings as $key => $associationMapping) {
-            if ($this->_hasProperty($associationMapping['fieldName'], $metadata)) {
-                continue;
-            }
-            //check if the target entity is a mapped shopware model
-            if (array_key_exists($associationMapping['targetEntity'], $this->tableMappings)) {
-
-                //draw mapping for the shopware model
-                $mapping = $this->tableMappings[$associationMapping['targetEntity']];
-
-                //explode namespace to generate an unique property name
-                $namespaces = explode('\\', $mapping['namespace']);
-
-                //if the last namespace fragment equals the mapping name then use only the mapping name
-                //otherwise concat the mapping name and the last namespace fragment.
-                //example (Namespace equals Name):
-                //      Namespace           => Shopware\Models\Article
-                //      Target Entity Name  => Article
-                //      Result              => $article
-                //
-                //example (Namespace not equals Name):
-                //      Namespace           => Shopware\Models\Article
-                //      Target Entity Name  => Detail
-                //      Result              => $articleDetail
-                if ($namespaces[count($namespaces) - 1] !== $mapping['name']) {
-                    $fieldName = lcfirst($namespaces[count($namespaces) - 1]) . $mapping['name'];
-                } else {
-                    $fieldName = lcfirst($mapping['name']);
-                }
-
-                //save original name
-                $associationMapping['original'] = array(
-                    'targetEntity' => $associationMapping['targetEntity'],
-                    'fieldName' => $associationMapping['fieldName'],
-                );
-
-                //set new entity and field name based on the shopware mapping
-                $associationMapping['targetEntity'] = $mapping['namespace'] . '\\' . $mapping['name'];
-                $associationMapping['fieldName'] = $fieldName;
-
-                //set new field mapping to generate an id property for the association
-                $associationMapping['fieldMapping'] = array(
-                    'fieldName' => $fieldName . 'Id',
-                    'columnName' => $associationMapping['joinColumns'][0]['name'],
-                    'type' => 'integer',
-                    'nullable' => true,
-                );
-
-                //use internal helper function to get the column default
-                $default = $this->getColumnDefault($associationMapping['fieldMapping']);
-                //generate the property doc block for the id property.
-                $lines[] = $this->_generateFieldMappingPropertyDocBlock($associationMapping['fieldMapping'], $metadata);
-                $lines[] = $this->_spaces . 'private $' . $associationMapping['fieldMapping']['fieldName']
-                    . $default . ";\n";
-
-                $metadata->associationMappings[$key] = $associationMapping;
-            }
-
-            //generates the association property
-            $lines[] = $this->_generateAssociationMappingPropertyDocBlock($associationMapping, $metadata);
-            $lines[] = $this->_spaces . 'private $' . $associationMapping['fieldName']
-                . ($associationMapping['type'] == 'manyToMany' ? ' = array()' : null) . ";\n";
-        }
-
-        return implode("\n", $lines);
-    }
-
-    protected function _generateEntityFieldMappingProperties(ClassMetadataInfo $metadata)
-    {
-        $lines = array();
-
-        foreach ($metadata->fieldMappings as $fieldMapping) {
-            if ($this->_hasProperty($fieldMapping['fieldName'], $metadata) ||
-                $metadata->isInheritedField($fieldMapping['fieldName'])
-            ) {
-                continue;
-            }
-
-            $default = $this->getColumnDefault($fieldMapping);
-            $lines[] = $this->_generateFieldMappingPropertyDocBlock($fieldMapping, $metadata);
-            $lines[] = $this->_spaces . 'private $' . $fieldMapping['fieldName']
-                . $default . ";\n";
-        }
-
-        return implode("\n", $lines);
-    }
-
-    /**
-     * Internal helper function to get the column default declaration.
-     * @param $fieldMapping
-     * @return null|string
-     */
-    protected function getColumnDefault($fieldMapping)
-    {
-        if (isset($fieldMapping['default'])) {
-            return ' = ' . var_export($fieldMapping['default'], true);
-        } else {
-            if ($fieldMapping['nullable'] == 1) {
-                return ' = null';
-            } else {
-                return null;
-            }
-        }
+        return $classes;
     }
 
 }
