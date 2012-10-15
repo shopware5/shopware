@@ -1623,20 +1623,22 @@ class Shopware_Update extends Slim
         ));
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
-        if(!preg_match('#<_search_result>(.+?)</_search_result>#', $result, $match)) {
+        if(($start = strpos($result, '<_search_result>')) === false) {
             return null;
         }
-        $match = json_decode(htmlspecialchars_decode($match[1]), true);
-        if($match === null) {
+        $result = substr($result, $start + strlen('<_search_result>'));
+        $result = substr($result, 0, strpos($result, '</_search_result>'));
+        $result = json_decode(htmlspecialchars_decode($result), true);
+        if($result === null) {
             return null;
         }
-        foreach($match as $key => $data) {
+        foreach($result as $key => $data) {
             if(strpos($key, '_') === 0) {
-                $match[substr($key, 1)] = json_decode($data, true);
-                unset($match[$key]);
+                $result[substr($key, 1)] = json_decode($data, true);
+                unset($result[$key]);
             }
         }
-        return $match;
+        return $result;
     }
 
     /**
