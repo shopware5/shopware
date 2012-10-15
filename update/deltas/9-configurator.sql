@@ -32,7 +32,7 @@ SELECT articleID, id
 FROM s_articles_details;
 
 INSERT IGNORE INTO `s_article_configurator_sets` (`name`, `public`, `type`)
-SELECT CONCAT('Set-', d.ordernumber) as name, 0 as public, IFNULL(s.type, 1) as type
+SELECT CONCAT('Set-', d.ordernumber) as name, 0 as public, IFNULL(s.type, 0) as type
 FROM backup_s_articles_groups g, s_articles_details d
 LEFT JOIN backup_s_articles_groups_settings s
 ON s.articleID = d.articleID
