@@ -310,7 +310,6 @@ class sConfigurator
      */
     private function mergeSelectedAndArticleData($articleData, $selected, $selectedPrice)
     {
-
         $articleData['minpurchase'] = empty($selected['minpurchase']) ? $articleData['minpurchase'] : $selected['minpurchase'];
         $articleData['maxpurchase'] = empty($selected['maxpurchase']) ? $articleData['maxpurchase'] : $selected['maxpurchase'];
         $articleData['purchasesteps'] = empty($selected['purchasesteps']) ? $articleData['purchasesteps'] : $selected['purchasesteps'];
@@ -350,6 +349,13 @@ class sConfigurator
         $articleData["releasedate"] = empty($selected['releasedate']) ? $articleData['releasedate'] : $selected['releasedate'];
         $articleData["shippingtime"] = empty($selected['shippingtime']) ? $articleData['shippingtime'] : $selected['shippingtime'];
         $articleData["shippingfree"] = isset($selected['shippingfree']) ? $selected['shippingfree'] : $articleData['shippingfree'];
+
+        if (!empty($selected['attributes'])) {
+            foreach($selected['attributes'] as $key => $value) {
+                $articleData[$key] = $value;
+            }
+        }
+
         return $articleData;
     }
 
@@ -516,12 +522,35 @@ class sConfigurator
             'releasedate' => $data['releaseDate'],
             'shippingtime' => $data['shippingTime']
         );
+        $detail['attributes'] = $this->getDetailAttributes($data['id']);
 
         if (count($data['prices']) > 1) {
             $detail['sBlockPrices'] = $data['prices'];
         }
 
         return $detail;
+    }
+
+    /**
+     * Helper function to get the detail attributes for the passed detail id.
+     * @param $detailId
+     *
+     * @return mixed
+     */
+    protected function getDetailAttributes($detailId)
+    {
+        if (empty($detailId)) {
+            return array();
+        }
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('attribute'))
+                ->from('Shopware\Models\Attribute\Article', 'attribute')
+                ->where('attribute.articleDetailId = :articleDetailId')
+                ->setFirstResult(0)
+                ->setMaxResults(1)
+                ->setParameters(array('articleDetailId' => $detailId));
+
+        return $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
     /**
