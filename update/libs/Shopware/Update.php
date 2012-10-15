@@ -1389,6 +1389,10 @@ class Shopware_Update extends Slim
         $connectors = $this->getConnectorList($backup);
         $customs = array_merge($plugins, $modules, $connectors, $payments, $plugins);
 
+        if(empty($customs)) {
+            return $customs;
+        }
+
         $method = "product";
         $query = array (
             'order' => array ('field' => 'a.datum', 'direction' => 'desc'),
