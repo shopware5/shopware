@@ -67,9 +67,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $article = $this->resource->getOneByNumber($id);
         }else{
             $article = $this->resource->getOne($id);
@@ -107,9 +107,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $article = $this->resource->updateByNumber($id, $params);
         }else{
             $article = $this->resource->update($id, $params);
@@ -133,9 +133,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $this->resource->deleteByNumber($id);
         }else{
             $this->resource->delete($id);

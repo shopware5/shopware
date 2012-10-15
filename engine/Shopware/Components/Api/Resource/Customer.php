@@ -59,7 +59,7 @@ class Customer extends Resource
                 ->leftJoin('customer.billing', 'billing')
                 ->where('billing.number = ?1')
                 ->setParameter(1, $number);
-        
+
         $id = $builder->getQuery()->getOneOrNullResult();
 
         if (!$id) {
@@ -193,9 +193,9 @@ class Customer extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
-    public function updateByNumber($number, $params) {
+    public function updateByNumber($number, $params)
+    {
         $id = $this->getIdFromNumber($number);
-
         return $this->update($id, $params);
     }
 
@@ -246,9 +246,9 @@ class Customer extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function deleteByNumber($number) {
+    public function deleteByNumber($number)
+    {
         $id = $this->getIdFromNumber($number);
-
         return $this->delete($id);
     }
 

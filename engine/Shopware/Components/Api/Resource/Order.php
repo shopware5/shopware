@@ -49,7 +49,8 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function getIdFromNumber($number) {
+    public function getIdFromNumber($number)
+    {
         if (empty($number)) {
             throw new ApiException\ParameterMissingException();
         }
@@ -70,7 +71,8 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public  function getOneByNumber($number) {
+    public  function getOneByNumber($number)
+    {
         $id = $this->getIdFromNumber($number);
         return $this->getOne($id);
     }
@@ -158,7 +160,8 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function updateByNumber($number, $params) {
+    public function updateByNumber($number, $params)
+    {
         $id = $this->getIdFromNumber($number);
         return $this->update($id, $params);
     }
