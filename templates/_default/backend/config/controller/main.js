@@ -212,7 +212,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             me.shopStore.each(function(shop) {
                 fieldName = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
                 fieldValue = values[fieldName];
-                if(fieldValue !== '' && fieldValue !== null) {
+                if(fieldValue !== null) {
                     valueStore.add({
                         shopId: shop.get('id'),
                         value: fieldValue
