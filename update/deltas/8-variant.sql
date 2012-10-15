@@ -70,6 +70,24 @@ AND d.id = r.article_detail_id
 WHERE i.articleID IS NOT NULL
 AND r.id IS NULL;
 
+INSERT INTO s_article_img_mappings (image_id)
+SELECT i.parent_id FROM s_articles_img i
+LEFT JOIN s_article_img_mappings m
+ON m.image_id = i.parent_id
+WHERE i.parent_id IS NOT NULL
+AND m.id IS NULL;
+
+INSERT INTO s_article_img_mapping_rules (mapping_id, option_id)
+SELECT m.id, r.option_id FROM s_articles_img i
+JOIN s_article_img_mappings m
+ON m.image_id = i.parent_id
+JOIN s_article_configurator_option_relations r
+ON r.article_id = i.article_detail_id
+LEFT JOIN s_article_img_mapping_rules s
+ON s.mapping_id = m.id AND s.option_id = r.option_id
+WHERE i.parent_id IS NOT NULL
+AND s.id IS NULL;
+
 UPDATE s_articles_img i, s_articles_details d
 SET i.relations = ''
 WHERE i.relations = d.ordernumber
