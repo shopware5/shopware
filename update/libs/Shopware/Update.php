@@ -1002,7 +1002,7 @@ class Shopware_Update extends Slim
         }
 
         return array(
-            'message' => 'Das Datei-Update wurde erfolgreich abgeschloßen.',
+            'message' => 'Das Datei-Update wurde erfolgreich abgeschlossen.',
             'warning' => $warning,
             'success' => true
         );
@@ -1199,7 +1199,7 @@ class Shopware_Update extends Slim
             ));
         }
         return array(
-            'message' => 'Die Bilder-Mapping wurde erfolgreich übernommen.',
+            'message' => 'Das Bilder-Mapping wurde erfolgreich übernommen.',
             'success' => true
         );
     }
@@ -1222,7 +1222,7 @@ class Shopware_Update extends Slim
         }
 
         return array(
-            'message' => 'Das Update-Verzeichnis wurde erfolgreich gelöscht.',
+            'message' => 'Die Update-Dateien wurden erfolgreich gelöscht.',
             'success' => true
         );
     }
