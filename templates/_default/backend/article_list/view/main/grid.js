@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             dataIndex: 'number',
             flex: 2,
             editor: {
-                regex: /^[a-zA-Z0-9-_.]+$/,
+                regex: /^[a-zA-Z0-9-_. ]+$/,
                 regexText: me.snippets.regexNumberValidation,
                 allowBlank: false,
                 enableKeyEvents:true,
