@@ -67,7 +67,13 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $customer = $this->resource->getOne($id);
+        $isConvenientId = $this->Request()->getParam('convenientId');
+
+        if(isset($isConvenientId)){
+            $customer = $this->resource->getOneByNumber($id);
+        }else{
+            $customer = $this->resource->getOne($id);
+        }
 
         $this->View()->assign('data', $customer);
         $this->View()->assign('success', true);
@@ -100,9 +106,15 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
         $params = $this->Request()->getPost();
 
-        $customer = $this->resource->update($id, $params);
+        if(isset($isConvenientId)){
+            $customer = $this->resource->updateByNumber($id, $params);
+        }else{
+            $customer = $this->resource->update($id, $params);
+        }
+
 
         $location = $this->apiBaseUrl . 'customers/' . $customer->getId();
         $data = array(
@@ -122,8 +134,13 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
 
-        $this->resource->delete($id);
+        if(isset($isConvenientId)){
+            $this->resource->deleteByNumber($id);
+        }else{
+            $this->resource->delete($id);
+        }
 
         $this->View()->assign(array('success' => true));
     }

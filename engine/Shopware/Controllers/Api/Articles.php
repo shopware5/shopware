@@ -67,8 +67,13 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
 
-        $article = $this->resource->getOne($id);
+        if(isset($isConvenientId)){
+            $article = $this->resource->getOneByNumber($id);
+        }else{
+            $article = $this->resource->getOne($id);
+        }
 
         $this->View()->assign('data', $article);
         $this->View()->assign('success', true);
@@ -102,8 +107,13 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
+        $isConvenientId = $this->Request()->getParam('convenientId');
 
-        $article = $this->resource->update($id, $params);
+        if(isset($isConvenientId)){
+            $article = $this->resource->updateByNumber($id, $params);
+        }else{
+            $article = $this->resource->update($id, $params);
+        }
 
         $location = $this->apiBaseUrl . 'articles/' . $article->getId();
         $data = array(
@@ -123,8 +133,14 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
 
-        $this->resource->delete($id);
+        if(isset($isConvenientId)){
+            $this->resource->deleteByNumber($id);
+        }else{
+            $this->resource->delete($id);
+        }
+
 
         $this->View()->assign(array('success' => true));
     }

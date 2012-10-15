@@ -50,6 +50,41 @@ class Article extends Resource
     }
 
     /**
+     * Little helper function for the ...ByNumber methods
+     * @param $number
+     * @return int
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function getIdFromNumber($number) {
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        $articleDetail = $this->getDetailRepository()->findOneBy(array('number' => $number));
+
+        if (!$articleDetail) {
+            throw new ApiException\NotFoundException("Article by number {$number} not found");
+        }
+
+        return $articleDetail->getArticle()->getId();
+    }
+
+    /**
+     * Convenience method to get a article by number
+     * @param string $number
+     * @return array|\Shopware\Models\Article\Article
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function getOneByNumber($number) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->getOne($id);
+    }
+
+    /**
      * @param int $id
      * @return array|\Shopware\Models\Article\Article
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -202,6 +237,21 @@ class Article extends Resource
     }
 
     /**
+     * Convenience method to update a article by number
+     * @param string $number
+     * @param array $params
+     * @return \Shopware\Models\Article\Article
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function updateByNumber($number, array $params) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->update($id, $params);
+    }
+
+    /**
      * @param int $id
      * @param array $params
      * @return \Shopware\Models\Article\Article
@@ -249,6 +299,19 @@ class Article extends Resource
         }
 
         return $article;
+    }
+
+    /**
+     * convenience function to delete a article by number
+     * @param string $number
+     * @return \Shopware\Models\Article\Article
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function deleteByNumber($number) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->delete($id);
     }
 
     /**

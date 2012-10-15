@@ -41,6 +41,40 @@ class Order extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Order\Order');
     }
 
+
+    /**
+     * Little helper function for the ...ByNumber methods
+     * @param $number
+     * @return int
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function getIdFromNumber($number) {
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /** @var $orderModel \Shopware\Models\Order\Order */
+        $orderModel = $this->getRepository()->findOneBy(array('number' => $number));
+
+        if (!$orderModel) {
+            throw new ApiException\NotFoundException("Order by number {$number} not found");
+        }
+
+        return $orderModel->getId();
+    }
+
+    /**
+     * @param string $number
+     * @return array|\Shopware\Models\Order\Order
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public  function getOneByNumber($number) {
+        $id = $this->getIdFromNumber($number);
+        return $this->getOne($id);
+    }
+
     /**
      * @param int $id
      * @return array|\Shopware\Models\Order\Order
@@ -114,6 +148,19 @@ class Order extends Resource
         }
 
         return array('data' => $orders, 'total' => $totalResult);
+    }
+
+    /**
+     * @param string $number
+     * @param array $params
+     * @return \Shopware\Models\Order\Order
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function updateByNumber($number, $params) {
+        $id = $this->getIdFromNumber($number);
+        return $this->update($id, $params);
     }
 
     /**
