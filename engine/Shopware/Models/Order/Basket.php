@@ -186,12 +186,12 @@ class Basket extends ModelEntity
     /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Shopware\Models\Attribute\Basket
+     * @var \Shopware\Models\Attribute\OrderBasket
      */
     protected $attribute;
 
     /**
-     * @return \Shopware\Models\Attribute\Basket
+     * @return \Shopware\Models\Attribute\OrderBasket
      */
     public function getAttribute()
     {
@@ -199,8 +199,8 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Basket|array|null $attribute
-     * @return \Shopware\Models\Attribute\Basket
+     * @param \Shopware\Models\Attribute\OrderBasket|array|null $attribute
+     * @return \Shopware\Models\Attribute\OrderBasket
      */
     public function setAttribute($attribute)
     {

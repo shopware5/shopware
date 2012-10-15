@@ -41,7 +41,7 @@ Doctrine\ORM\Mapping AS ORM;
  *
  * todo@all: Documentation
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity
  * @ORM\Table(name=" s_blog_tags")
  */
 class Tag extends ModelEntity
