@@ -435,7 +435,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             default:
         }
 
-        console.log("field", fieldModel.get('label'), field, fieldModel);
         Ext.apply(field, {
             fieldLabel: fieldModel.get('label'),
             allowBlank: (!fieldModel.get('required')),

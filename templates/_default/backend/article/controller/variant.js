@@ -90,6 +90,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             surchargeSave: '{s name=variant/failure/surcharge_saved}An error occurred while saving the configurator price surcharge:{/s}',
             groupRemove: '{s name=variant/failure/group_removed}An error occurred while removing the configurator group [0]:{/s}',
             optionRemove: '{s name=variant/failure/option_removed}An error occurred while removing the configurator option [0]:{/s}',
+            optionBounded: '{s name=variant/failure/option_bounded}You are trying to delete an active, used configurator option. This option is used by the following articles:{/s}',
             dependencyRemove: '{s name=variant/failure/dependency_removed}An error occurred while removing the configurator dependency:{/s}',
             surchargeRemove: '{s name=variant/failure/surcharge_removed}An error occurred while removing the configurator price surcharge:{/s}',
             articleNotFoundViolation: "{s name=variant/failure/article_not_found_violation}The article and first variant couldn't be determined. Please reload the detail page.{/s}",
@@ -1163,7 +1164,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                             } else {
                                 articleString = articles.join('<br>');
                             }
-                            message = Ext.String.format(me.snippets.failure.optionRemove, name);
+                            message = Ext.String.format(me.snippets.failure.optionBounded, name);
                             Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message + '<br>' + articleString, me.snippets.growlMessage);
                         } else {
                             if ( Ext.isString(message) && message.length > 0 ) {
