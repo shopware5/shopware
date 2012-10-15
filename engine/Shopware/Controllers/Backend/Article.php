@@ -2500,6 +2500,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareLinkAssociatedData($data)
     {
         foreach($data['links'] as &$linkData) {
+            $linkData['link'] = trim($linkData['link']);
             $linkData['attribute'] = $linkData['attribute'][0];
         }
         return $data;
