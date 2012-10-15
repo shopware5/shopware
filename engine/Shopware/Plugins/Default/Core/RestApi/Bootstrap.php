@@ -139,7 +139,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         $path = array_pad($path, 7, null);
 
         $type     = $path[1];
-        $id       = is_numeric($path[2]) ? (int) $path[2] : false;
+        $id       = $path[2];
         $subType  = !empty($path[3]) ? $path[3] : false;
         $subId    = is_numeric($path[4]) ? (int) $path[4] : false;
 

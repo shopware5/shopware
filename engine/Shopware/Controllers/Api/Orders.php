@@ -67,8 +67,13 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
 
-        $order = $this->resource->getOne($id);
+        if(isset($isConvenientId)){
+            $order = $this->resource->getOneByNumber($id);
+        }else{
+            $order = $this->resource->getOne($id);
+        }
 
         $this->View()->assign('data', $order);
         $this->View()->assign('success', true);
@@ -82,9 +87,14 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
+        $isConvenientId = $this->Request()->getParam('convenientId');
         $params = $this->Request()->getPost();
 
-        $order = $this->resource->update($id, $params);
+        if(isset($isConvenientId)){
+            $order = $this->resource->updateByNumber($id, $params);
+        }else{
+            $order = $this->resource->update($id, $params);
+        }
 
         $location = $this->apiBaseUrl . 'orders/' . $order->getId();
         $data = array(

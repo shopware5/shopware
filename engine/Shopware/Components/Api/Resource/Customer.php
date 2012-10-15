@@ -42,6 +42,46 @@ class Customer extends Resource
     }
 
     /**
+     * Little helper function for the ...ByNumber methods
+     * @param $number
+     * @return int
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function getIdFromNumber($number) {
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('customer.id'))
+                ->from('\Shopware\Models\Customer\Customer', 'customer')
+                ->leftJoin('customer.billing', 'billing')
+                ->where('billing.number = ?1')
+                ->setParameter(1, $number);
+        
+        $id = $builder->getQuery()->getOneOrNullResult();
+
+        if (!$id) {
+            throw new ApiException\NotFoundException("Customer by number {$number} not found");
+        }
+
+        return $id['id'];
+    }
+
+    /**
+     * @param string $number
+     * @return array|\Shopware\Models\Customer\Customer
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function getOneByNumber($number) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->getOne($id);
+    }
+
+    /**
      * @param int $id
      * @return array|\Shopware\Models\Customer\Customer
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -143,6 +183,22 @@ class Customer extends Resource
         return $customer;
     }
 
+
+    /**
+     * @param string $number
+     * @param array $params
+     * @return \Shopware\Models\Customer\Customer
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    public function updateByNumber($number, $params) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->update($id, $params);
+    }
+
     /**
      * @param int $id
      * @param array $params
@@ -182,6 +238,18 @@ class Customer extends Resource
         $this->flush();
 
         return $customer;
+    }
+
+    /**
+     * @param string $number
+     * @return \Shopware\Models\Customer\Customer
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function deleteByNumber($number) {
+        $id = $this->getIdFromNumber($number);
+
+        return $this->delete($id);
     }
 
     /**
