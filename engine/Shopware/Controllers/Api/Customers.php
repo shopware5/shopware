@@ -67,9 +67,9 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $customer = $this->resource->getOneByNumber($id);
         }else{
             $customer = $this->resource->getOne($id);
@@ -106,10 +106,10 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $customer = $this->resource->updateByNumber($id, $params);
         }else{
             $customer = $this->resource->update($id, $params);
@@ -134,9 +134,9 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $this->resource->deleteByNumber($id);
         }else{
             $this->resource->delete($id);

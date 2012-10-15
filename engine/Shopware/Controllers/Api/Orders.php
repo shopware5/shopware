@@ -67,9 +67,9 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $order = $this->resource->getOneByNumber($id);
         }else{
             $order = $this->resource->getOne($id);
@@ -87,10 +87,10 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $isConvenientId = $this->Request()->getParam('convenientId');
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
-        if(isset($isConvenientId)){
+        if($useNumberAsId){
             $order = $this->resource->updateByNumber($id, $params);
         }else{
             $order = $this->resource->update($id, $params);

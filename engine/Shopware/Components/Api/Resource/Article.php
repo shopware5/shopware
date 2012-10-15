@@ -56,7 +56,8 @@ class Article extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function getIdFromNumber($number) {
+    public function getIdFromNumber($number)
+    {
         if (empty($number)) {
             throw new ApiException\ParameterMissingException();
         }
@@ -68,7 +69,9 @@ class Article extends Resource
             throw new ApiException\NotFoundException("Article by number {$number} not found");
         }
 
-        return $articleDetail->getArticle()->getId();
+        return $articleDetail
+                ->getArticle()
+                ->getId();
     }
 
     /**
@@ -78,9 +81,9 @@ class Article extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function getOneByNumber($number) {
+    public function getOneByNumber($number)
+    {
         $id = $this->getIdFromNumber($number);
-
         return $this->getOne($id);
     }
 
@@ -245,9 +248,9 @@ class Article extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function updateByNumber($number, array $params) {
+    public function updateByNumber($number, array $params)
+    {
         $id = $this->getIdFromNumber($number);
-
         return $this->update($id, $params);
     }
 
@@ -308,9 +311,9 @@ class Article extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function deleteByNumber($number) {
+    public function deleteByNumber($number)
+    {
         $id = $this->getIdFromNumber($number);
-
         return $this->delete($id);
     }
 
