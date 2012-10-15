@@ -1040,6 +1040,25 @@ class Shopware_Update extends Slim
             );
         }
 
+        $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sIMAGESIZES'";
+        $query = $db->query($sql);
+        $sizes = $query->fetchColumn();
+        if(!empty($sizes)) {
+            $sizes = explode(';', $sizes);
+            $newSizes = array_fill(0, count($sizes), null);
+            foreach($sizes as $size) {
+                $size = explode(':', $size);
+                if(count($size) < 3) {
+                    continue;
+                }
+                $newSizes[$size[2]] = $size[0] . 'x' . $size[1];
+            }
+            $newSizes = implode(';', $newSizes);
+            $sql = 'UPDATE s_media_album_settings SET thumbnail_size = :size WHERE id = :albumId';
+            $query = $db->prepare($sql);
+            $query->execute(array('albumId' => -1, 'size' => $newSizes));
+        }
+
         foreach($dirs as $dir) {
             $sql = '
                 SELECT `thumbnail_size`
@@ -1048,7 +1067,7 @@ class Shopware_Update extends Slim
                 AND `create_thumbnails` =1
             ';
             $query = $db->prepare($sql);
-            $query->execute(array(':albumId' => $dir[0]));
+            $query->execute(array('albumId' => $dir[0]));
             $thumbs = $query->fetchColumn(0);
             if($thumbs !== false) {
                 $thumbs = explode(';', $thumbs);
