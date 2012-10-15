@@ -357,8 +357,11 @@ class %className% extends ModelEntity
             $tableName = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($tableName);
         }
+        $file = $this->getPath() . $className . '.php';
 
-        return file_put_contents($this->getPath() . $className . '.php', $sourceCode);
+        if (file_put_contents($file, $sourceCode) == false) {
+            throw new \Exception("File: " . $file . " isn't writable, please check the file permissions for this model!", 501);
+        }
     }
 
     /**
