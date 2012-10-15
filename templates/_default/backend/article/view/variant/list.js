@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 var oldNumber = e.record.get('number'),
                     newNumber = e.record.get('details.number') || e.record.get('number');
 
-                if(!newNumber || !newNumber.match(/^[a-zA-Z0-9-_.]+$/)) {
+                if(!newNumber || !newNumber.match(/^[a-zA-Z0-9-_. ]+$/)) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
                     e.record.set('number', oldNumber);
                     e.record.set('details.number', oldNumber);

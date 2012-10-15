@@ -2274,7 +2274,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     throw new \Exception("Article ordernumber may not be empty");
                 }
                 if(!empty($articleData['ordernumber'])) {
-                    if(preg_match('/[^a-zA-Z0-9-_.]/', $articleData['ordernumber']) !== 0) {
+                    if(preg_match('/[^a-zA-Z0-9-_. ]/', $articleData['ordernumber']) !== 0) {
                         throw new \Exception("Invalid ordernumber: {$articleData['ordernumber']}");
                     }
                 }
