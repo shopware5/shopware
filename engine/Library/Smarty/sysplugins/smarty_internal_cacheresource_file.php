@@ -100,9 +100,11 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
     public function writeCachedContent(Smarty_Internal_Template $_template, $content)
     {
         if (Smarty_Internal_Write_File::writeFile($_template->cached->filepath, $content, $_template->smarty) === true) {
-            $_template->cached->timestamp = filemtime($_template->cached->filepath);
+            $_template->cached->timestamp = @filemtime($_template->cached->filepath);
             $_template->cached->exists = !!$_template->cached->timestamp;
-            return true;
+            if ($_template->cached->exists) {
+                return true;
+            }
         }
         return false;
     }
@@ -176,7 +178,7 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
             $_cacheDirs = new RecursiveDirectoryIterator($_dir);
             $_cache = new RecursiveIteratorIterator($_cacheDirs, RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($_cache as $_file) {
-                if (substr($_file->getBasename(),0,1) == '.' || strpos($_file, '.svn') !== false) continue;
+                if (substr(basename($_file->getPathname()),0,1) == '.' || strpos($_file, '.svn') !== false) continue;
                 // directory ?
                 if ($_file->isDir()) {
                     if (!$_cache->isDot()) {

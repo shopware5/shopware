@@ -2,7 +2,7 @@
 /**
  * Project:     Smarty: the PHP compiling template engine
  * File:        Smarty.class.php
- * SVN:         $Id: Smarty.class.php 4551 2012-02-06 20:45:10Z rodneyrehm $
+ * SVN:         $Id: Smarty.class.php 4658 2012-09-11 16:23:30Z uwe.tews@googlemail.com $
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@
  * @author Uwe Tews
  * @author Rodney Rehm
  * @package Smarty
- * @version 3.1.8
+ * @version 3.1.12
  */
 
 /**
@@ -57,7 +57,7 @@ if (!defined('SMARTY_PLUGINS_DIR')) {
     define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DS);
 }
 if (!defined('SMARTY_MBSTRING')) {
-    define('SMARTY_MBSTRING', function_exists('mb_strlen'));
+    define('SMARTY_MBSTRING', function_exists('mb_split'));
 }
 if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
     // UTF-8 can only be done properly when mbstring is available!
@@ -113,7 +113,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * smarty version
      */
-    const SMARTY_VERSION = 'Smarty-3.1.8';
+    const SMARTY_VERSION = 'Smarty-3.1.12';
 
     /**
      * define variable scopes
@@ -189,8 +189,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Flag denoting if PCRE should run in UTF-8 mode
      */
     public static $_UTF8_MODIFIER = 'u';
-    
-    
+
+    /**
+     * Flag denoting if operating system is windows
+     */
+    public static $_IS_WINDOWS = false;
+
     /**#@+
      * variables
      */
@@ -1277,7 +1281,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
         }
         // plugin filename is expected to be: [type].[name].php
         $_plugin_filename = "{$_name_parts[1]}.{$_name_parts[2]}.php";
-        
+
         $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
 
         // loop through plugin dirs and find the plugin
@@ -1298,7 +1302,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                     } else {
                         $file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
                     }
-                    
+
                     if ($file !== false) {
                         require_once($file);
                         return $file;
@@ -1464,6 +1468,9 @@ class Smarty extends Smarty_Internal_TemplateBase {
     }
 }
 
+// Check if we're running on windows
+Smarty::$_IS_WINDOWS = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+
 // let PCRE (preg_*) treat strings as ISO-8859-1 if we're not dealing with UTF-8
 if (Smarty::$_CHARSET !== 'UTF-8') {
     Smarty::$_UTF8_MODIFIER = '';
@@ -1474,6 +1481,9 @@ if (Smarty::$_CHARSET !== 'UTF-8') {
  * @package Smarty
  */
 class SmartyException extends Exception {
+    public function __construct($message) {
+        $this->message = htmlentities($message);
+    }
 }
 
 /**
