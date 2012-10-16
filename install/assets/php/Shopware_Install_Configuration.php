@@ -221,10 +221,10 @@ class Shopware_Install_Configuration
 
         $sql = "
          INSERT INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value`) VALUES
-         (NULL, (SELECT id FROM s_core_config_elements WHERE name='mail'), 1, CONCAT('s:', LENGTH(?), ':\"', ?, '\";'));
+         (NULL, (SELECT id FROM s_core_config_elements WHERE name='mail'), 1, ?);
          ";
         $prepareStatement = $this->getDatabase()->prepare($sql);
-        $prepareStatement->execute(array($params["c_config_mail"],$params["c_config_mail"]));
+        $prepareStatement->execute(array(serialize($params["c_config_mail"])));
 
          // Shop name
          $sql = "
@@ -236,10 +236,10 @@ class Shopware_Install_Configuration
 
          $sql = "
           INSERT INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value`) VALUES
-          (NULL, (SELECT id FROM s_core_config_elements WHERE name='shopName'), 1, CONCAT('s:', LENGTH(?), ':\"', ?, '\";'));
+          (NULL, (SELECT id FROM s_core_config_elements WHERE name='shopName'), 1, ?);
           ";
          $prepareStatement = $this->getDatabase()->prepare($sql);
-         $prepareStatement->execute(array($params["c_config_shopName"],$params["c_config_shopName"]));
+         $prepareStatement->execute(array(serialize($params["c_config_shopName"])));
 
      }catch(PDOException $e){
          $this->setError($e->getMessage());

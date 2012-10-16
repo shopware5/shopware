@@ -46,6 +46,7 @@ $app->config('install.requirements', new Shopware_Install_Requirements());
 $app->config('install.requirementsPath', new Shopware_Install_Requirements_Path());
 $app->config('install.language',$selectedLanguage);
 
+$app->contentType('Content-type: text/html; charset=utf-8');
 
 // Save post - parameters
 $params = $app->request()->params();
