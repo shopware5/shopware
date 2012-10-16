@@ -260,13 +260,28 @@ class ModelManager extends EntityManager
         );
 
         $generator->setSchemaManager(
-            $this->getConnection()->getSchemaManager()
+            $this->getOwnSchemaManager()
         );
 
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateProxies();
     }
+
+    /**
+     * Helper function to create an own database schema manager to remove
+     * all dependencies to the existing shopware models and meta data caches.
+     * @return Doctrine\DBAL\Doctrine\DBAL\Connection
+     */
+    private function getOwnSchemaManager()
+    {
+        /**@var $connection \Doctrine\DBAL\Connection*/
+        $connection = \Doctrine\DBAL\DriverManager::getConnection(
+            array('pdo' => Shopware()->Db()->getConnection())
+        );
+        return $connection->getSchemaManager();
+    }
+
 
     /**
      * Shopware helper function to extend an attribute table.
@@ -297,6 +312,16 @@ class ModelManager extends EntityManager
             throw new \InvalidArgumentException('No column type passed');
         }
 
+        $name = $prefix . '_' . $column;
+
+        if (!$this->tableExist($table)) {
+            throw new \InvalidArgumentException("Table doesn't exist");
+        }
+
+        if ($this->columnExist($table, $name)) {
+            return;
+        }
+
         $null = ($nullable) ? " NULL " : " NOT NULL ";
 
         if (is_string($default) && strlen($default) > 0) {
@@ -307,7 +332,7 @@ class ModelManager extends EntityManager
             $defaultValue = $default;
         }
 
-        $sql = 'ALTER TABLE ' . $table . ' ADD ' . $prefix . '_' . $column . ' ' . $type . ' ' . $null . ' DEFAULT ' . $defaultValue;
+        $sql = 'ALTER TABLE ' . $table . ' ADD ' . $name . ' ' . $type . ' ' . $null . ' DEFAULT ' . $defaultValue;
         Shopware()->Db()->query($sql, array($table, $prefix, $column, $type, $null, $defaultValue));
     }
 
@@ -334,7 +359,18 @@ class ModelManager extends EntityManager
             throw new \InvalidArgumentException('No column name passed');
         }
 
-        $sql = 'ALTER TABLE ' . $table . ' DROP ' . $prefix . '_' . $column;
+
+        $name = $prefix . '_' . $column;
+
+        if (!$this->tableExist($table)) {
+            throw new \InvalidArgumentException("Table doesn't exist");
+        }
+
+        if (!$this->columnExist($table, $name)) {
+            return;
+        }
+
+        $sql = 'ALTER TABLE ' . $table . ' DROP ' . $name;
         Shopware()->Db()->query($sql);
     }
 
@@ -350,4 +386,34 @@ class ModelManager extends EntityManager
             $proxyFactory->generateProxyClasses($metadata);
         }
     }
+
+    /**
+     * Helper function to check if the table is realy exist.
+     * @param $tableName
+     *
+     * @return bool
+     */
+    private function tableExist($tableName)
+    {
+        $sql = "SHOW TABLES LIKE '" . $tableName . "'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return !empty($result);
+    }
+
+    /**
+     * Internal helper function to check if a database table column exist.
+     *
+     * @param $tableName
+     * @param $columnName
+     *
+     * @return bool
+     */
+    private function columnExist($tableName, $columnName)
+    {
+        $sql= "SHOW COLUMNS FROM " . $tableName . " LIKE '" . $columnName . "'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return !empty($result);
+    }
+
+
 }
