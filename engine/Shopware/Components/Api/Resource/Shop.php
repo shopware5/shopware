@@ -57,6 +57,8 @@ class Shop extends Resource
         }
 
         $builder = $this->getRepository()->createQueryBuilder('shop')
+                ->select('shop', 'currency')
+                ->leftJoin('shop.currency', 'currency')
                 ->where('shop.id = :id')
                 ->setParameter(':id', $id);
 
