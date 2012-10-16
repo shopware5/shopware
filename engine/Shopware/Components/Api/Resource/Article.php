@@ -314,11 +314,14 @@ class Article extends Resource
      * @return \Shopware\Models\Article\Article
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Exception
      */
     public function deleteByNumber($number)
     {
-        $id = $this->getIdFromNumber($number);
-        return $this->delete($id);
+        throw new \Exception("Deleting articles by number isn't possible, yet.");
+        
+//        $id = $this->getIdFromNumber($number);
+//        return $this->delete($id);
     }
 
     /**
