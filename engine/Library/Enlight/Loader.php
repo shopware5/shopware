@@ -403,7 +403,8 @@ class Enlight_Loader
         if ($this->classMapChanged) {
             file_put_contents(
                 $classMap,
-                '<?php return ' . var_export($this->classMap, true) . ';'
+                '<?php return ' . var_export($this->classMap, true) . ';',
+                LOCK_EX
             );
         }
     }
