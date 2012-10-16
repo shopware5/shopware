@@ -624,9 +624,12 @@ class Article extends Resource
             $allGroups[] = $group;
         }
 
-//        $configuratorSet->getOptions()->clear();
+        // Clear needed in order to allow updates on configuratorSet. When removed constraints in
+        // s_article_configurator_set_group_relations and s_article_configurator_set_option_relations
+        // might fail.
+        $configuratorSet->getOptions()->clear();
         $configuratorSet->setOptions($allOptions);
-//        $configuratorSet->getGroups()->clear();
+        $configuratorSet->getGroups()->clear();
         $configuratorSet->setGroups($allGroups);
 
         $data['configuratorSet'] = $configuratorSet;
