@@ -519,16 +519,24 @@ class Shopware_Update extends Slim
         set_time_limit(0);
         /** @var $db PDO */
         $db = $this->config('db');
+        $offset = (int)$this->request()->post('offset') ?: 0;
         $version = $this->config('currentVersion');
-        if(!file_exists("deltas/$version.sql")) {
+        if($offset == 0 && $version != '3.5.6') {
             echo json_encode(array(
                 'message' => "Das Datenbank-Update unterstützt die Shopware-Version $version nicht.",
                 'success' => true
             ));
             return;
         }
-        $deltas = glob('deltas/*-*.sql'); natsort($deltas);
-        array_unshift($deltas, "deltas/$version.sql");
+        $deltas = glob('deltas/' . $offset . '-*.sql');
+        if(empty($deltas)) {
+            echo json_encode(array(
+                'message' => 'Das Datenbank-Update wurde erfolgreich durchgeführt.',
+                'success' => true
+            ));
+            return;
+        }
+        natsort($deltas);
         foreach($deltas as $delta) {
             $import = new Shopware_Components_DbImport_Sql($delta);
             foreach($import as $query) {
@@ -546,9 +554,12 @@ class Shopware_Update extends Slim
                 }
             }
         }
+        $offset++;
         echo json_encode(array(
-            'message' => 'Das Datenbank-Update wurde erfolgreich durchgeführt.',
-            'success' => true
+            'success' => true,
+            'progress' => round($offset / 20, 2),
+            'message' => 'Datenbank-Update durchführen',
+            'offset' => $offset
         ));
     }
 

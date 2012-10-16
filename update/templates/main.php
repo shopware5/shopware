@@ -19,7 +19,7 @@
                 dataType: 'json',
                 data: last,
                 success: function(result) {
-                    if(result && result.next) {
+                    if(result && (result.next || result.progress)) {
                         $.ajaxLoading(url, result);
                     } else {
                         $.removeLoading();
