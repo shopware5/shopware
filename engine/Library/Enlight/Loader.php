@@ -385,27 +385,39 @@ class Enlight_Loader
     /**
      * @param string $classMap
      */
-    public function readClassMap($classMap)
+    public function readClassMap($classFile)
     {
         $this->classMapChanged = false;
-        if (file_exists($classMap)) {
-            $this->classMap = (array) include $classMap;
+        if (file_exists($classFile)) {
+            $this->classMap = (array) include $classFile;
         } else {
             $this->classMap = array();
         }
     }
 
     /**
-     * @param string $classMap
+     * @param string $classFile
+     * @return bool
      */
-    public function saveClassMap($classMap)
+    public function saveClassMap($classFile)
     {
         if ($this->classMapChanged) {
-            file_put_contents(
-                $classMap,
-                '<?php return ' . var_export($this->classMap, true) . ';',
-                LOCK_EX
-            );
+            $tempFile = dirname($classFile) . DIRECTORY_SEPARATOR . uniqid('wrt', true);
+            $data = '<?php return ' . var_export($this->classMap, true);
+            if (!file_put_contents($tempFile, $data)) {
+                return false;
+            }
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                @unlink($classFile);
+                $success = @rename($tempFile, $classFile);
+            } else {
+                $success = @rename($tempFile, $classFile);
+                if (!$success) {
+                    @unlink($classFile);
+                    $success = @rename($tempFile, $classFile);
+                }
+            }
+            return $success;
         }
     }
 
