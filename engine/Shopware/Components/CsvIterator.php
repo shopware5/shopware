@@ -35,7 +35,7 @@
 class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 {
     const DEFAULT_DELIMITER = ';';
-    const DEFAULT_LENGTH = 4096;
+    const DEFAULT_LENGTH = 60000;
 
     /**
      * The CSV file handler.
@@ -75,7 +75,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * @var integer
      * @access private
      */
-    private $_length = 4096;
+    private $_length = 60000;
 
     /**
      * The row counter.
@@ -104,10 +104,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This is the constructor. It try to open the CSV file.
      *
-     * @access public
      * @param string $filename The fullpath of the CSV file.
      * @param string $delimiter The delimiter.
-     * @param integer $length The amount of bytes to be read on each iteration.
+     * @param integer $header
      *
      * @throws Exception
      */
@@ -116,6 +115,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         if (($this->_handler = fopen($filename, 'r')) === false) {
             throw new Exception("The file '$filename' cannot be opened");
         }
+
+        $this->_newline = $this->getNewLineType();
+
         $this->_delimiter = $delimiter;
         if(empty($header))
         {
@@ -126,6 +128,34 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         {
         	$this->_header = $header;
         }
+    }
+
+    /**
+     * Helper function to determine the newline type of the file
+     * @throws \Exception
+     * @return string Detected new line type
+     */
+    private function getNewLineType()
+    {
+        $newLineWin = "\r\n";
+        $newLineNix = "\n";
+
+
+
+        $content = fread($this->_handler, 2048);
+        $pos = strpos($content, "\n");
+        if($pos !== false && $pos > 1) {
+            if(substr($content, $pos-1, 1) === "\r") {
+                rewind($this->_handler);
+                return $newLineWin;
+            }else{
+                rewind($this->_handler);
+                return $newLineNix;
+            }
+        }
+
+        throw new Exception("New line detection failed");
+
     }
 
     public function SetFieldmark($fieldmark)
