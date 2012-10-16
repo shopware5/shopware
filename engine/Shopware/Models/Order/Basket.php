@@ -54,29 +54,14 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    private $customerId = null;
+    protected $customerId = null;
 
     /**
      * @var integer $articleId
      *
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
-    private $articleId = null;
-
-    /**
-     * @var integer $liveShoppingId
-     *
-     * @ORM\Column(name="liveshoppingID", type="integer", nullable=true)
-     */
-    private $liveShoppingId= null;
-
-    /**
-     * @var integer $bundleId
-     *
-     * @ORM\Column(name="bundleID", type="integer", nullable=true)
-     */
-
-    private $bundleId = null;
+    protected $articleId = null;
 
     /**
      * @var string $partnerId
@@ -97,7 +82,7 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="ordernumber", type="string", length=30, nullable=true)
      */
-    private $orderNumber = null;
+    protected $orderNumber = null;
 
     /**
      * @var int $shippingFree
@@ -177,13 +162,6 @@ class Basket extends ModelEntity
     private $currencyFactor;
 
     /**
-     * @var string $bundleJoinOrderNumber
-     *
-     * @ORM\Column(name="bundle_join_ordernumber", type="string", length=255, nullable=true)
-     */
-    private $bundleJoinOrderNumber = null;
-
-    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist", "update"})
      * @var \Shopware\Models\Attribute\OrderBasket
@@ -229,38 +207,6 @@ class Basket extends ModelEntity
     public function getArticleName()
     {
         return $this->articleName;
-    }
-
-    /**
-     * @param int $bundleId
-     */
-    public function setBundleId($bundleId)
-    {
-        $this->bundleId = $bundleId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBundleId()
-    {
-        return $this->bundleId;
-    }
-
-    /**
-     * @param string $bundleJoinOrderNumber
-     */
-    public function setBundleJoinOrderNumber($bundleJoinOrderNumber)
-    {
-        $this->bundleJoinOrderNumber = $bundleJoinOrderNumber;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBundleJoinOrderNumber()
-    {
-        return $this->bundleJoinOrderNumber;
     }
 
     /**
@@ -325,22 +271,6 @@ class Basket extends ModelEntity
     public function getLastViewPort()
     {
         return $this->lastViewPort;
-    }
-
-    /**
-     * @param int $liveShoppingId
-     */
-    public function setLiveShoppingId($liveShoppingId)
-    {
-        $this->liveShoppingId = $liveShoppingId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLiveShoppingId()
-    {
-        return $this->liveShoppingId;
     }
 
     /**
@@ -503,4 +433,38 @@ class Basket extends ModelEntity
     {
         $this->orderNumber = $orderNumber;
     }
+
+    /**
+     * @param int $articleId
+     */
+    public function setArticleId($articleId)
+    {
+        $this->articleId = $articleId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getArticleId()
+    {
+        return $this->articleId;
+    }
+
+    /**
+     * @param int $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+
 }
