@@ -1111,7 +1111,7 @@ class Article extends Resource
         }
 
         $downloads = array();
-        foreach ($data['downloads'] as &$downloadData) {
+        foreach ($data['downloads'] as $key => &$downloadData) {
             if (isset($downloadData['id'])) {
                 $download = $this->getManager()
                                  ->getRepository('Shopware\Models\Article\Download')
@@ -1133,7 +1133,11 @@ class Article extends Resource
                 $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -6));
 
                 $media->setFile($file);
-                $media->setDescription('');
+                if(isset($downloadData['name']) && !empty($downloadData['name'])) {
+                    $media->setDescription($downloadData['name']);
+                } else {
+                    $media->setDescription('');
+                }
                 $media->setCreated(new \DateTime());
                 $media->setUserId(0);
 
