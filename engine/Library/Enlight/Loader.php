@@ -403,7 +403,7 @@ class Enlight_Loader
     {
         if ($this->classMapChanged) {
             $tempFile = dirname($classFile) . DIRECTORY_SEPARATOR . uniqid('wrt', true);
-            $data = '<?php return ' . var_export($this->classMap, true);
+            $data = '<?php return ' . var_export($this->classMap, true) . ';';
             if (!file_put_contents($tempFile, $data)) {
                 return false;
             }
