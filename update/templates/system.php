@@ -1,13 +1,13 @@
 <?php $this->display('header.php'); ?>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        $('.page').hide();
-        $('.page-header').prepend('<i>');
-        $('.page-header i').addClass('icon-chevron-up');
+        //$('.page').hide();
+        //$('.page-header').prepend('<i>');
+        //$('.page-header i').addClass('icon-chevron-up');
 
-        $next = $('.page-system');
-        $next.next('.page').show();
-        $next.find('i').removeClass('icon-chevron-down').addClass('icon-chevron-down');
+        //$next = $('.page-system');
+        //$next.next('.page').show();
+        //$next.find('i').removeClass('icon-chevron-down').addClass('icon-chevron-down');
     });
 </script>
 <div id="start">
