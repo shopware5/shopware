@@ -331,7 +331,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $user->fromArray($params);
 
             // Do logout
-            $user->setSessionId('');
+            // $user->setSessionId('');
 
             Shopware()->Models()->persist($user);
             Shopware()->Models()->flush();
