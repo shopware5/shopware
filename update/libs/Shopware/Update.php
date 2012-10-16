@@ -294,6 +294,38 @@ class Shopware_Update extends Slim
             }
         })->via('GET', 'POST')->name('action');
 
+        $this->get('/license', function () use ($app) {
+            $app->render('license.php', array(
+                'action' => 'license',
+                'error' => null,
+                'product' => 'CE',
+                'license' => null,
+                'app' => $app
+            ));
+        })->name('license');
+
+        $this->post('/license', function () use ($app) {
+            $request = $app->request();
+            $error = null;
+            $host = $this->request()->getHost();
+            $product = $request->post('product');
+            $license = $request->post('license');
+            $result = $this->doLicensePluginInstall($host, $product, $license);
+            if(empty($result['success'])) {
+                $app->render('license.php', array(
+                    'action' => 'license',
+                    'error' => isset($result['error']) ? $result['error'] : null,
+                    'message' => isset($result['message']) ? $result['message'] : null,
+                    'product' => $product,
+                    'license' => $license,
+                    'host' => $host,
+                    'app' => $app
+                ));
+            } else {
+                $app->redirect($app->urlFor('finish'));
+            }
+        });
+
         $this->get('/finish', function () use ($app) {
             $app->render('finish.php', array(
                 'action' => 'finish',
@@ -790,7 +822,7 @@ class Shopware_Update extends Slim
         $options = array('http' => array(
             'method' => 'GET',
             'user_agent' => $this->request()->getUserAgent(),
-            'header' => 'Referer: http://' .$this->request()->getUrl() . "\r\n"
+            'header' => 'Referer: ' .$this->request()->getUrl() . "\r\n"
         ));
         $context = stream_context_create($options);
 
@@ -1641,7 +1673,7 @@ class Shopware_Update extends Slim
             'user_agent' => $this->request()->getUserAgent(),
             'header' => "Content-type: application/x-www-form-urlencoded\r\n"
                 . "Content-Length: " . strlen($data) . "\r\n"
-                . 'Referer: http://' . $this->request()->getUrl() . "\r\n",
+                . 'Referer: ' . $this->request()->getUrl() . "\r\n",
             'content' => $data
         ));
         $context = stream_context_create($options);
@@ -1706,6 +1738,215 @@ class Shopware_Update extends Slim
         return $compatibility;
     }
 
+    /**
+     * @param $host
+     * @param $product
+     * @param $license
+     * @return array
+     */
+    public function doLicenseCheck($host, $product, $license)
+    {
+        if($product == 'ce') {
+            return array('success' => true);
+        }
+        if(empty($license)) {
+            return array('success' => false, 'error' => 'EMPTY');
+        }
+        $url = 'http://store.shopware.de/downloads/check_license';
+        $data = array(
+            'license' => $license,
+            'host' => $host,
+            'product' => $product
+        );
+        $data = http_build_query($data, '', '&');
+        $options = array('http' => array(
+            'method' => 'POST',
+            'user_agent' => $this->request()->getUserAgent(),
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n"
+                . "Content-Length: " . strlen($data) . "\r\n"
+                . 'Referer: ' . $this->request()->getUrl() . "\r\n",
+            'content' => $data
+        ));
+        $context = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $response = json_decode($response, true);
+        return $response;
+    }
+
+    /**
+     * @param $host
+     * @param $product
+     * @param $license
+     * @return array
+     */
+    public function doLicensePluginInstall($host, $product, $license)
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $license = $this->doLicenseCheck($host, $product, $license);
+        if(empty($license['success'])) {
+            return $license;
+        }
+        try {
+            $this->doLicensePluginDownload();
+        } catch (Exception $e) {
+            return array(
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error' => 'OTHER'
+            );
+        }
+
+
+        $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
+        $db->query($sql);
+
+        $sql = "
+            INSERT INTO s_core_licenses (
+              module, host, label, license, version, type,
+              source, added, creation, expiration, active
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?,
+                0, NOW(), NOW(), ?, 1
+            )
+        ";
+        $query = $db->prepare($sql);
+        $info = $license['info'];
+        $query->execute(array(
+            $info['module'],
+            $info['host'],
+            isset($info['label']) ? $info['label'] : $info['module'],
+            $info['license'],
+            $info['version'],
+            $info['type'],
+            substr($info['expiration'], 0, 4) . '-' .
+            substr($info['expiration'], 4, 2) . '-' .
+            substr($info['expiration'], 6, 2)
+        ));
+
+        $sql = "
+            INSERT IGNORE INTO s_core_plugins (
+              namespace, name, label, source, active, added,
+              installation_date, update_date, refresh_date,
+              author, copyright, version,
+              capability_update, capability_install, capability_enable
+            ) VALUES (
+              ?, ? ,?, ?, ?, NOW(),
+              NOW(), NOW(), NOW(),
+              ?, ?, ?, ?, ?, ?
+            )
+        ";
+        $data = array(
+            'Core',
+            'SwagLicense',
+            'Lizenz-Manager',
+            'Community',
+            1,
+            'shopware AG',
+            'Copyright © 2012, shopware AG',
+            '1.0.2',
+            1, 1, 1
+        );
+        $query = $db->prepare($sql);
+        $query->execute($data);
+
+        $sql = "SELECT id FROM s_core_plugins WHERE name = 'SwagLicense'";
+        $pluginId = $db->query($sql)->fetchColumn();
+
+        $sql = "
+            INSERT IGNORE INTO `s_core_config_forms` (`id`, `parent_id`, `name`, `label`, `description`, `position`, `scope`, `plugin_id`) VALUES
+            (NULL, 92, 'license', 'Lizenz-Manager', NULL, 0, 0, ?);
+        ";
+        $query = $db->prepare($sql);
+        $query->execute(array(
+            $pluginId
+        ));
+        $sql = "
+            INSERT IGNORE INTO s_core_subscribes (subscribe, listener, pluginID)
+            VALUES (?, ?, ?)
+        ";
+        $query = $db->prepare($sql);
+        $query->execute(array(
+            'Enlight_Bootstrap_InitResource_License',
+            'onInitResourceLicense', $pluginId
+        ));
+        $query->execute(array(
+            'Enlight_Controller_Action_PostDispatch_Backend_Index',
+            'onPostDispatchBackendIndex', $pluginId
+        ));
+        $query->execute(array(
+            'Enlight_Controller_Front_DispatchLoopStartup',
+            'onDispatchLoopStartup', $pluginId
+        ));
+        $query->execute(array(
+            'Enlight_Controller_Action_PostDispatch_Backend_Config',
+            'onPostDispatchBackendConfig', $pluginId
+        ));
+        $query->execute(array(
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_License',
+            'onGetControllerPathBackend', $pluginId
+        ));
+
+        return array(
+            'success' => true
+        );
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function doLicensePluginDownload()
+    {
+        $url = 'http://store.shopware.de/downloads/get_license_plugin/shopwareVersion/4000';
+
+        $targetDir = $this->config('targetDir');
+        $tempDir = $targetDir. 'media/temp/';
+        $pluginFile = $tempDir . 'plugin' . md5($url) . '.zip';
+        $pluginDir = $targetDir. 'engine/Shopware/Plugins/Community/';
+
+        if (!file_exists($pluginDir) || !is_writable($pluginDir)) {
+            throw new Exception('Plugin dir does not exists or is not writable.');
+        }
+        if (!file_exists($tempDir) || !is_writable($tempDir)) {
+            throw new Exception('Temp dir does not exists or is not writable.');
+        }
+
+        $options = array('http' => array(
+            'user_agent' => $this->request()->getUserAgent(),
+            'header' => 'Referer: ' . $this->request()->getUrl() . "\r\n"
+        ));
+        $context = stream_context_create($options);
+        $stream = fopen($url, 'rb', false, $context);
+
+        file_put_contents($pluginFile, $stream);
+        try {
+            if (!class_exists('ZipArchive')) {
+                throw new Exception('Zip extension not found failure.');
+            }
+            $zip = new ZipArchive();
+            if (!$zip->open($pluginFile)) {
+                throw new Exception('Plugin file can not open failure.');
+            }
+            $zip->open($pluginFile);
+            $zip->extractTo($targetDir);
+            if (!$zip->extractTo($targetDir)) {
+                throw new Exception('Plugin file can not extract failure.');
+            }
+        } catch(Exception $e) {
+            if(isset($zip)) {
+                $zip->close();
+            }
+            if(file_exists($pluginFile)) {
+                unlink($pluginFile);
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $class
+     */
     public static function autoload($class)
     {
         if (strpos($class, 'Shopware') !== 0) {
