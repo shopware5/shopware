@@ -107,6 +107,7 @@ class Article extends Resource
             'configuratorSet',
             'configuratorSetGroups',
             'mainDetail',
+            'mainDetailPrices',
             'PARTIAL categories.{id, name}',
             'PARTIAL similar.{id, name}',
             'PARTIAL accessories.{id, name}',
@@ -120,12 +121,14 @@ class Article extends Resource
             'mainDetailAttribute',
             'propertyGroup',
             'details',
+            'prices',
             'configuratorOptions',
         ))
         ->from('Shopware\Models\Article\Article', 'article')
         ->leftJoin('article.configuratorSet', 'configuratorSet')
         ->leftJoin('configuratorSet.groups', 'configuratorSetGroups')
         ->leftJoin('article.mainDetail', 'mainDetail')
+        ->leftJoin('mainDetail.prices', 'mainDetailPrices')
         ->leftJoin('article.tax', 'tax')
         ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
         ->leftJoin('article.links', 'links')
@@ -137,6 +140,7 @@ class Article extends Resource
         ->leftJoin('article.customerGroups', 'customerGroups')
         ->leftJoin('article.supplier', 'supplier')
         ->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
+        ->leftJoin('details.prices', 'prices')
         ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
         ->leftJoin('article.propertyGroup', 'propertyGroup')
         ->leftJoin('details.configuratorOptions', 'configuratorOptions')
