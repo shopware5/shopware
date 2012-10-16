@@ -140,16 +140,20 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         $newLineWin = "\r\n";
         $newLineNix = "\n";
 
+        $pos = false;
+        $content = '';
+        while($pos === false && !feof($this->_handler)) {
+            $content .= fread($this->_handler, 1024);
+            // Get first appearance of \n
+            $pos = strpos($content, "\n");
+        }
 
-
-        $content = fread($this->_handler, 2048);
-        $pos = strpos($content, "\n");
         if($pos !== false && $pos > 1) {
+            rewind($this->_handler);
+            // Check if the previous char is a \r. If it is we have a windows EOL
             if(substr($content, $pos-1, 1) === "\r") {
-                rewind($this->_handler);
                 return $newLineWin;
             }else{
-                rewind($this->_handler);
                 return $newLineNix;
             }
         }
