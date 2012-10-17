@@ -123,8 +123,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        //SW-2099 - Fix clean file cache
-
         if ($cache['config'] == 'on') {
             $this->clearCompilerCache();
         }
@@ -290,19 +288,19 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected function clearProxyCache()
     {
-        $queryCache     = Shopware()->Models()->getConfiguration()->getQueryCacheImpl();
-        $metaDataCache  = Shopware()->Models()->getConfiguration()->getMetadataCacheImpl();
-
-        $queryCache->deleteAll();
-        $metaDataCache->deleteAll();
+        $configuration = Shopware()->Models()->getConfiguration();
+        $metaDataCache = $configuration->getMetadataCacheImpl();
+        if(method_exists($metaDataCache, 'deleteAll')) {
+            $metaDataCache->deleteAll();
+        }
 
         $dir = Shopware()->AppPath('Proxies');
         $files = glob($dir . '*.php');
         foreach ($files as $file) {
-            unlink($file);
+            if(strpos($file, '__' . Shopware::REVISION . '__') === false) {
+                unlink($file);
+            }
         }
-
-        Shopware()->Models()->regenerateProxies();
     }
 
     /**

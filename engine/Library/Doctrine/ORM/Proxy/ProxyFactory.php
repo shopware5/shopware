@@ -34,13 +34,13 @@ use Doctrine\ORM\EntityManager,
 class ProxyFactory
 {
     /** The EntityManager this factory is bound to. */
-    private $_em;
+    protected $_em;
     /** Whether to automatically (re)generate proxy classes. */
-    private $_autoGenerate;
+    protected $_autoGenerate;
     /** The namespace that contains all proxy classes. */
-    private $_proxyNamespace;
+    protected $_proxyNamespace;
     /** The directory that contains all proxy classes. */
-    private $_proxyDir;
+    protected $_proxyDir;
 
     /**
      * Used to match very simple id methods that don't need
@@ -108,7 +108,7 @@ class ProxyFactory
      * @param string $className
      * @return string
      */
-    private function getProxyFileName($className)
+    protected function getProxyFileName($className)
     {
         return $this->_proxyDir . DIRECTORY_SEPARATOR . '__CG__' . str_replace('\\', '', $className) . '.php';
     }
@@ -143,7 +143,7 @@ class ProxyFactory
      * @param $proxyClassName
      * @param $file The path of the file to write to.
      */
-    private function _generateProxyClass($class, $fileName, $file)
+    protected function _generateProxyClass($class, $fileName, $file)
     {
         $methods = $this->_generateMethods($class);
         $sleepImpl = $this->_generateSleep($class);
@@ -181,7 +181,7 @@ class ProxyFactory
      * @param ClassMetadata $class
      * @return string The code of the generated methods.
      */
-    private function _generateMethods(ClassMetadata $class)
+    protected function _generateMethods(ClassMetadata $class)
     {
         $methods = '';
 
@@ -262,7 +262,7 @@ class ProxyFactory
      * @param ClassMetadata $class
      * @return bool
      */
-    private function isShortIdentifierGetter($method, $class)
+    protected function isShortIdentifierGetter($method, $class)
     {
         $identifier = lcfirst(substr($method->getName(), 3));
         $cheapCheck = (
@@ -293,7 +293,7 @@ class ProxyFactory
      * @param $class
      * @return string
      */
-    private function _generateSleep(ClassMetadata $class)
+    protected function _generateSleep(ClassMetadata $class)
     {
         $sleepImpl = '';
 
@@ -320,7 +320,7 @@ class ProxyFactory
     }
 
     /** Proxy class code template */
-    private static $_proxyClassTemplate =
+    protected static $_proxyClassTemplate =
 '<?php
 
 namespace <namespace>;

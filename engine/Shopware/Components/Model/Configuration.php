@@ -54,13 +54,7 @@ class Configuration extends BaseConfiguration
         $proxyDir = realpath($proxyDir);
         $this->setProxyDir($proxyDir);
         $this->setProxyNamespace($options['proxyNamespace']);
-
-        if (isset($options['autoGenerateProxyClasses']) && $options['autoGenerateProxyClasses']) {
-            $this->setAutoGenerateProxyClasses(true);
-        } else {
-            $this->setAutoGenerateProxyClasses(false);
-        }
-
+        $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
         $this->setAttributeDir($options['attributeDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
