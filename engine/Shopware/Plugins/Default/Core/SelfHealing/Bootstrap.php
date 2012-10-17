@@ -67,7 +67,6 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     protected $subject = null;
 
-    static public $isDone;
 
     /**
      * Standard plugin install function.
@@ -83,8 +82,8 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     public function install()
     {
         $this->subscribeEvent(
-            'Enlight_Controller_Front_PostDispatch',
-            'onPostDispatch',
+            'Enlight_Controller_Front_Exception',
+            'onDispatchException',
             -9999
         );
 
@@ -195,29 +194,19 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      *
      * @param Enlight_Event_EventArgs $arguments
      */
-    public function onPostDispatch(Enlight_Event_EventArgs $arguments)
+    public function onDispatchException(Enlight_Event_EventArgs $arguments)
     {
-        /**@var $response Enlight_Controller_Response_ResponseHttp*/
-        $response = $arguments->getResponse();
+        $result = $this->exceptionHandling(
+            $arguments->getException()
+        );
 
-        if ($response->isException()) {
-            $exceptions = $response->getException();
-
-            $results = array();
-            /**@var $exception Exception */
-            foreach($exceptions as $exception) {
-                $results[] = $this->exceptionHandling($exception);
-            }
-
-            foreach($results as $result) {
-                if ($result === self::RE_DISPATCH_COMMAND) {
-                    $this->response->setRedirect(
-                        $this->request->getRequestUri()
-                    );
-                    $this->response->sendResponse();
-                    $this->response->sendHeaders();
-                }
-            }
+        if ($result === self::RE_DISPATCH_COMMAND) {
+            $this->response->setRedirect(
+                $this->request->getRequestUri()
+            );
+            $this->response->sendResponse();
+            $this->response->sendHeaders();
+            exit();
         }
     }
 
@@ -237,7 +226,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     {
         if (strpos($exception->getMessage(), 'Shopware\Models\Attribute') !== false) {
             if (strpos($exception->getMessage(), 'does not exist') !== false ||
-                strpos($exception->getMessage(), 'cannot be found') !== false) {
+                    strpos($exception->getMessage(), 'cannot be found') !== false) {
 
                 $this->generateModels();
 
