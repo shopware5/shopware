@@ -120,13 +120,21 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         }
 
         $eventArgs = new Enlight_Controller_EventArgs(array(
-            'subject' => $this
-        ));
+                                                           'subject' => $this
+                                                      ));
 
-        Enlight_Application::Instance()->Events()->notify(
-            'Enlight_Controller_Front_StartDispatch',
-            $eventArgs
-        );
+        try {
+            Enlight_Application::Instance()->Events()->notify(
+                'Enlight_Controller_Front_StartDispatch',
+                $eventArgs
+            );
+        }
+        catch (Exception $e) {
+            $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
+            if ($this->throwExceptions()) {
+                throw $e;
+            }
+        }
 
         if (!$this->router) {
             $this->setRouter('Enlight_Controller_Router_Default');
@@ -145,7 +153,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         $eventArgs->set('response', $this->Response());
 
         try {
-
             /**
              * Notify plugins of router startup
              */
@@ -161,6 +168,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                 $this->router->route($this->request);
             }
             catch (Exception $e) {
+                $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
                 if ($this->throwExceptions()) {
                     throw $e;
                 }
@@ -195,6 +203,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                  * Notify plugins of dispatch startup
                  */
                 try {
+
                     Enlight_Application::Instance()->Events()->notify(
                         'Enlight_Controller_Front_PreDispatch',
                         $eventArgs
@@ -214,13 +223,16 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                         $this->dispatcher->dispatch($this->request, $this->response);
                     }
                     catch (Exception $e) {
+                        $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
                         if ($this->throwExceptions()) {
                             throw $e;
                         }
                         $this->response->setException($e);
                     }
+
                 }
                 catch (Exception $e) {
+                    $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
                     if ($this->throwExceptions()) {
                         throw $e;
                     }
@@ -236,10 +248,12 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             } while (!$this->request->isDispatched());
         }
         catch (Exception $e) {
+            $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
             if ($this->throwExceptions()) {
                 throw $e;
             }
             $this->response->setException($e);
+
         }
 
         /**
@@ -252,6 +266,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             );
         }
         catch (Exception $e) {
+            $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
             if ($this->throwExceptions()) {
                 throw $e;
             }
@@ -262,18 +277,43 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             return $this->response;
         }
 
-        if (!Enlight_Application::Instance()->Events()->notifyUntil(
-            'Enlight_Controller_Front_SendResponse', $eventArgs
-        )) {
-            $this->Response()->sendResponse();
+        try {
+            if (!Enlight_Application::Instance()->Events()->notifyUntil(
+                'Enlight_Controller_Front_SendResponse', $eventArgs
+            )) {
+                $this->Response()->sendResponse();
+            }
+
+            Enlight_Application::Instance()->Events()->notify(
+                'Enlight_Controller_Front_AfterSendResponse',
+                $eventArgs
+            );
+        }
+        catch (Exception $e) {
+            $this->throwDispatchExceptionNotifyEvent($eventArgs, $e);
+            if ($this->throwExceptions()) {
+                throw $e;
+            }
+            $this->response->setException($e);
         }
 
+        return 0;
+    }
+
+    /**
+     * Helper function to fire the Enlight_Controller_Front_Exception event.
+     * This event is fired when an exception thrown with the Enlight_Controller_Front::dispatch() function.
+     *
+     * @param $eventArgs
+     * @param $exception
+     */
+    private function throwDispatchExceptionNotifyEvent($eventArgs, $exception)
+    {
+        $eventArgs->set('exception', $exception);
         Enlight_Application::Instance()->Events()->notify(
-            'Enlight_Controller_Front_AfterSendResponse',
+            'Enlight_Controller_Front_Exception',
             $eventArgs
         );
-
-        return 0;
     }
 
     /**
