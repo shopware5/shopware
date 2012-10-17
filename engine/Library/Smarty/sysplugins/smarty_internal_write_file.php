@@ -76,7 +76,6 @@ class Smarty_Internal_Write_File {
         if (!$success) {
             @unlink($_tmp_file);
             trigger_error("unable to write file {$_filepath}");
-            return false;
         }
 
         error_reporting($_error_reporting);
