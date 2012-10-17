@@ -41,8 +41,14 @@ class Smarty_Internal_Write_File {
         $_tmp_file = $_dirpath . DS . uniqid('wrt', true);
         if (!file_put_contents($_tmp_file, $_contents)) {
             error_reporting($_error_reporting);
+            umask($old_umask);
             throw new SmartyException("unable to write file {$_tmp_file}");
-            return false;
+        }
+
+        if ($smarty->_file_perms !== null) {
+            // set file permissions
+            chmod($_tmp_file, $smarty->_file_perms);
+            umask($old_umask);
         }
         
         /*
@@ -68,20 +74,12 @@ class Smarty_Internal_Write_File {
             }
         }
         if (!$success) {
-            //error_reporting($_error_reporting);
-            //throw new SmartyException("unable to write file {$_filepath}");
-            //return false;
+            return false;
             @unlink($_tmp_file);
             trigger_error("unable to write file {$_filepath}");
         }
 
-        if ($smarty->_file_perms !== null) {
-            // set file permissions
-            chmod($_filepath, $smarty->_file_perms);
-            umask($old_umask);
-        }
         error_reporting($_error_reporting);
         return $success;
     }
-
 }
