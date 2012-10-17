@@ -1403,16 +1403,16 @@ class Shopware_Update extends Slim
             if(@unserialize($row['value']) !== false) {
                 continue;
             }
-            $value = unserialize(utf8_decode($row['value']));
+            $value = @unserialize(utf8_decode($row['value']));
             if(is_array($value)) {
                 array_walk_recursive($value, function(&$input) {
                     if(is_string($input)) {
                         $input = utf8_encode($input);
                     }
                 });
+                $row['value'] = serialize($value);
+                $updateQuery->execute($row);
             }
-            $row['value'] = serialize($value);
-            $updateQuery->execute($row);
         }
 
         return array(
