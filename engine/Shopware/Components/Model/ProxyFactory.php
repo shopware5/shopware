@@ -88,7 +88,7 @@ class ProxyFactory extends ProxyFactoryBase
     protected function getProxyFileName($className)
     {
         return $this->_proxyDir . DIRECTORY_SEPARATOR .
-               '__' . \Shopware::REVISION . '__' .
+               \Shopware::REVISION . '__CG__' .
                str_replace('\\', '', $className) . '.php';
     }
 }
