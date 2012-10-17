@@ -767,12 +767,13 @@ class Shopware_Update extends Slim
             case 1: $action = 'cache'; break;
             case 2: $action = 'config'; break;
             case 3: $action = 'category'; break;
-            case 4: $action = 'download'; break;
-            case 5: $action = 'unpack'; break;
-            case 6: $action = 'move'; break;
-            case 7: $action = 'media'; break;
-            case 8: $action = 'mapping'; break;
-            case 9: $action = 'cleanup'; break;
+            case 4: $action = 'translation'; break;
+            case 5: $action = 'download'; break;
+            case 6: $action = 'unpack'; break;
+            case 7: $action = 'move'; break;
+            case 8: $action = 'media'; break;
+            case 9: $action = 'mapping'; break;
+            case 10: $action = 'cleanup'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
@@ -790,7 +791,7 @@ class Shopware_Update extends Slim
             if(!isset($result['offset'])) {
                 $next++;
             }
-            if(!empty($result['success']) && $next < 10) {
+            if(!empty($result['success']) && $next < 11) {
                 $result['next'] = $next;
             }
             echo json_encode($result);
@@ -1384,6 +1385,42 @@ class Shopware_Update extends Slim
         );
     }
 
+    public function progressTranslation()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+
+        $sql = "
+            SELECT t.id, t.objectdata as value
+            FROM s_core_translations t
+        ";
+        $query = $db->query($sql);
+
+        $sql = 'UPDATE s_core_translations t SET t.objectdata = :value WHERE t.id = :id';
+        $updateQuery = $db->prepare($sql);
+
+        while(($row = $query->fetch(PDO::FETCH_ASSOC)) !== false) {
+            if(@unserialize($row['value']) !== false) {
+                continue;
+            }
+            $value = unserialize(utf8_decode($row['value']));
+            if(is_array($value)) {
+                array_walk_recursive($value, function(&$input) {
+                    if(is_string($input)) {
+                        $input = utf8_encode($input);
+                    }
+                });
+            }
+            $row['value'] = serialize($value);
+            $updateQuery->execute($row);
+        }
+
+        return array(
+            'message' => 'Die Übersetzungen wurden erfolgreich übernommen.',
+            'success' => true
+        );
+    }
+
     public function progressTable()
     {
         $db = $this->initDb();
@@ -1933,16 +1970,15 @@ class Shopware_Update extends Slim
         file_put_contents($pluginFile, $stream);
         try {
             if (!class_exists('ZipArchive')) {
-                throw new Exception('Zip extension not found failure.');
+                throw new Exception('Zip extension not be found failure.');
             }
             $zip = new ZipArchive();
             if (!$zip->open($pluginFile)) {
-                throw new Exception('Plugin file can not open failure.');
+                throw new Exception('Plugin file can not be open failure.');
             }
             $zip->open($pluginFile);
-            $zip->extractTo($targetDir);
-            if (!$zip->extractTo($targetDir)) {
-                throw new Exception('Plugin file can not extract failure.');
+            if (!$zip->extractTo($pluginDir)) {
+                throw new Exception('Plugin file can not be extract failure.');
             }
         } catch(Exception $e) {
             if(isset($zip)) {
@@ -1953,6 +1989,7 @@ class Shopware_Update extends Slim
             }
             throw $e;
         }
+        unlink($pluginFile);
     }
 
     /**
