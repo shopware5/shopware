@@ -206,7 +206,6 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
             $results = array();
             /**@var $exception Exception */
             foreach($exceptions as $exception) {
-
                 $results[] = $this->exceptionHandling($exception);
             }
 
