@@ -319,9 +319,6 @@ class Article extends Resource
     public function deleteByNumber($number)
     {
         throw new \Exception("Deleting articles by number isn't possible, yet.");
-        
-//        $id = $this->getIdFromNumber($number);
-//        return $this->delete($id);
     }
 
     /**
@@ -1173,8 +1170,15 @@ class Article extends Resource
             return $data;
         }
 
-        $images = $article->getImages();
+        // remove assigned images
+        if (empty($data['images'])) {
+            $images = $article->getImages();
+            $images->clear();
+            unset($data['images']);
+            return $data;
+        }
 
+        $images = $article->getImages();
         $position = 1;
 
         foreach ($data['images'] as &$imageData) {
@@ -1207,10 +1211,9 @@ class Article extends Resource
                 $media->setUserId(0);
 
                 try {
-                    //persist the model into the model manager
+                    //persist the model into the model manager this uploads and resizes the image
                     $this->getManager()->persist($media);
-                    $this->getManager()->persist($image);
-                    $this->getManager()->flush($image);
+                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
                 }
@@ -1225,7 +1228,31 @@ class Article extends Resource
             }
 
             $image->fromArray($imageData);
+
+            // if image is set as main set other images to secondary
+            if ($image->getMain() == 1) {
+                /** @var $image \Shopware\Models\Article\Image */
+                foreach ($images as $otherImage) {
+                    $otherImage->setMain(2);
+                }
+            }
+
             $images->add($image);
+        }
+
+        $hasMain = false;
+
+        /** @var $image \Shopware\Models\Article\Image */
+        foreach ($images as $image) {
+            if ($image->getMain() == 1) {
+                $hasMain = true;
+                break;
+            }
+        }
+
+        if (!$hasMain) {
+            $image = $images->get(0);
+            $image->setMain(1);
         }
 
         unset($data['images']);
