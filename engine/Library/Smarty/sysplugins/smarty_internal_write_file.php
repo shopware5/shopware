@@ -67,11 +67,12 @@ class Smarty_Internal_Write_File {
                 $success = @rename($_tmp_file, $_filepath);
             }
         }
-
         if (!$success) {
-            error_reporting($_error_reporting);
-            throw new SmartyException("unable to write file {$_filepath}");
-            return false;
+            //error_reporting($_error_reporting);
+            //throw new SmartyException("unable to write file {$_filepath}");
+            //return false;
+            @unlink($_tmp_file);
+            trigger_error("unable to write file {$_filepath}");
         }
 
         if ($smarty->_file_perms !== null) {
@@ -80,9 +81,7 @@ class Smarty_Internal_Write_File {
             umask($old_umask);
         }
         error_reporting($_error_reporting);
-        return true;
+        return $success;
     }
 
 }
-
-?>
