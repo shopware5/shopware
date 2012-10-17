@@ -388,12 +388,28 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 });
                 break;
             case 'select':
-                field = Ext.create('Ext.form.field.ComboBox', {
-                    store: fieldModel.get('store'),
-                    valueField: 'id',
-                    forceSelection: true,
-                    displayField: 'name'
-                });
+                if (fieldModel.get('store') == "ArrayStore"){
+                    field = Ext.create('Ext.form.field.ComboBox', {
+                       store: Ext.create('Ext.data.ArrayStore',{
+                           fields: [
+                            'id','name'
+                           ],
+                           data: Ext.JSON.decode(fieldModel.get('default'))
+                       }),
+                       valueField: 'id',
+                       forceSelection: true,
+                       displayField: 'name'
+                   });
+
+                }else {
+                    field = Ext.create('Ext.form.field.ComboBox', {
+                        store: fieldModel.get('store'),
+                        valueField: 'id',
+                        forceSelection: true,
+                        displayField: 'name'
+                    });
+
+                }
                 break;
             case 'date':
                 field = Ext.create('Ext.form.field.Date');

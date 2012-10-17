@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.ArticleList.store.List', {
     autoLoad: false,
     model : 'Shopware.apps.ArticleList.model.List',
     remoteSort: true,
-    remoteFilter: true
+    remoteFilter: true,
+    pageSize: 40
 });
 //{/block}

@@ -104,10 +104,11 @@ Ext.define('Shopware.apps.Config.view.form.Attribute', {
             name: 'store',
             fieldLabel: '{s name=attribute/detail/store_label}Store{/s}',
             supportText: '{s name=attribute/detail/store_help}Possible values​​: base.Payment, base.Country etc.{/s}'
-        }/*,{
+        },{
+            xtype: 'textarea',
             name: 'default',
             fieldLabel: '{s name=attribute/detail/default_label}Default value{/s}'
-        }*/,{
+        },{
             name: 'label',
             fieldLabel: '{s name=attribute/detail/label_label}Field label{/s}'
         },{
