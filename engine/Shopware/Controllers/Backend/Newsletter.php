@@ -501,7 +501,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$sql = "
 			SELECT id, code
 			FROM s_emarketing_voucher_codes evc
-			WHERE evc.voucherID=? AND evc.userID=0 AND evc.cashed=0
+			WHERE evc.voucherID=? AND evc.userID IS NULL AND evc.cashed=0
 			LIMIT 1
 			FOR UPDATE
 		";
