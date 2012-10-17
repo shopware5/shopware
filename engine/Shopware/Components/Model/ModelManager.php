@@ -52,6 +52,25 @@ class ModelManager extends EntityManager
     protected $validator;
 
     /**
+     * Creates a new EntityManager that operates on the given database connection
+     * and uses the given Configuration and EventManager implementations.
+     *
+     * @param \Doctrine\DBAL\Connection $conn
+     * @param \Shopware\Components\Model\Configuration $config
+     * @param \Doctrine\Common\EventManager $eventManager
+     */
+    protected function __construct(Connection $conn, Configuration $config, EventManager $eventManager)
+    {
+        parent::__construct($conn, $config, $eventManager);
+        $this->proxyFactory = new ProxyFactory(
+            $this,
+            $config->getProxyDir(),
+            $config->getProxyNamespace(),
+            $config->getAutoGenerateProxyClasses()
+        );
+    }
+
+    /**
      * Factory method to create EntityManager instances.
      *
      * @param mixed $conn An array with the connection parameters or an existing
@@ -265,13 +284,48 @@ class ModelManager extends EntityManager
 
         $generator->generateAttributeModels($tableNames);
 
-        $this->regenerateProxies();
+        $this->regenerateAttributeProxies($tableNames);
+    }
+
+    /**
+     * Generates Doctrine proxy classes
+     *
+     * @param array $tableNames
+     */
+    public function regenerateAttributeProxies($tableNames = array())
+    {
+        $allMetaData = $this->getMetadataFactory()->getAllMetadata();
+        $proxyFactory = $this->getProxyFactory();
+
+        $attributeMetaData = array();
+        /**@var $metaData \Doctrine\ORM\Mapping\ClassMetadata*/
+        foreach ($allMetaData as $metaData) {
+            $tableName = $metaData->getTableName();
+            if (strpos($tableName, '_attributes') === false) {
+                continue;
+            }
+            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
+                continue;
+            }
+            $attributeMetaData[] = $metaData;
+        }
+        $proxyFactory->generateProxyClasses($attributeMetaData);
+    }
+
+    /**
+     * Generates Doctrine proxy classes
+     */
+    public function regenerateProxies()
+    {
+        $metadata = $this->getMetadataFactory()->getAllMetadata();
+        $proxyFactory = $this->getProxyFactory();
+        $proxyFactory->generateProxyClasses($metadata);
     }
 
     /**
      * Helper function to create an own database schema manager to remove
      * all dependencies to the existing shopware models and meta data caches.
-     * @return Doctrine\DBAL\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection
      */
     private function getOwnSchemaManager()
     {
@@ -359,7 +413,6 @@ class ModelManager extends EntityManager
             throw new \InvalidArgumentException('No column name passed');
         }
 
-
         $name = $prefix . '_' . $column;
 
         if (!$this->tableExist($table)) {
@@ -372,19 +425,6 @@ class ModelManager extends EntityManager
 
         $sql = 'ALTER TABLE ' . $table . ' DROP ' . $name;
         Shopware()->Db()->query($sql);
-    }
-
-    /**
-     * Generates Doctrine proxy classes
-     */
-    public function regenerateProxies()
-    {
-        $config = $this->getConfiguration();
-        if (!$config->getAutoGenerateProxyClasses()) {
-            $metadata     = $this->getMetadataFactory()->getAllMetadata();
-            $proxyFactory = $this->getProxyFactory();
-            $proxyFactory->generateProxyClasses($metadata);
-        }
     }
 
     /**
@@ -414,6 +454,4 @@ class ModelManager extends EntityManager
         $result = Shopware()->Db()->fetchRow($sql);
         return !empty($result);
     }
-
-
 }
