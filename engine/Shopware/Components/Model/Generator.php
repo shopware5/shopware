@@ -260,11 +260,20 @@ class %className% extends ModelEntity
         return $this->tableMapping;
     }
 
+    public function getSourceCodeForTable($tableName)
+    {
+        $table = $this->getSchemaManager()->listTableDetails($tableName);
+
+        return $this->generateModel($table);
+    }
+
     /**
      * Generates the models for the extension tables like s_user_extension.
      * This tables can be modified from plugins so we have to generate the models after each plugin installation.
      *
      * @param array $tableNames
+     *
+     * @throws \Exception
      * @return array
      */
     public function generateAttributeModels($tableNames = array())
@@ -286,11 +295,35 @@ class %className% extends ModelEntity
             if (strpos($table->getName(), '_attributes') === false) {
                 continue;
             }
-
-            $this->generateModel($table);
+            $sourceCode = $this->generateModel($table);
+            $this->createModelFile($table, $sourceCode);
         }
 
         return array('success' => true);
+    }
+
+    /**
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param $sourceCode string
+     *
+     * @return int
+     * @throws \Exception
+     */
+    public function createModelFile($table, $sourceCode)
+    {
+        //at least we need a file name for the current table object.
+        $className = $this->getClassNameOfTableName($table->getName());
+        if (strpos($table->getName(), '_attributes')) {
+            $tableName = str_replace('_attributes', '', $table->getName());
+            $className = $this->getClassNameOfTableName($tableName);
+        }
+        $file = $this->getPath() . $className . '.php';
+
+        if (file_exists($file) && !is_writable($file)) {
+            throw new \Exception("File: " . $file . " isn't writable, please check the file permissions for this model!", 501);
+        }
+
+        return file_put_contents($file, $sourceCode);
     }
 
     /**
@@ -298,6 +331,9 @@ class %className% extends ModelEntity
      */
     protected function createTargetDirectory()
     {
+        if (file_exists($this->getPath())) {
+            return true;
+        }
         return mkdir($this->getPath(), 0777);
     }
 
@@ -351,17 +387,7 @@ class %className% extends ModelEntity
         //than we implode the source code paths with a line break
         $sourceCode = implode("\n", $paths);
 
-        //at least we need a file name for the current table object.
-        $className = $this->getClassNameOfTableName($table->getName());
-        if (strpos($table->getName(), '_attributes')) {
-            $tableName = str_replace('_attributes', '', $table->getName());
-            $className = $this->getClassNameOfTableName($tableName);
-        }
-        $file = $this->getPath() . $className . '.php';
-
-        if (!is_writable($file) || file_put_contents($file, $sourceCode) === false) {
-            throw new \Exception("File: " . $file . " isn't writable, please check the file permissions for this model!", 501);
-        }
+        return $sourceCode;
     }
 
     /**
@@ -732,11 +758,19 @@ class %className% extends ModelEntity
             //preg match for the model namespace!
             $matches = array();
             preg_match('/namespace\s+(.*);/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
             $namespace = $matches[1];
 
             //preg match for the model table name!
             $matches = array();
             preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
+
+            //repositories has no table annoation.
+            if (count($matches) === 0) {
+                continue;
+            }
             $tableName = $matches[1];
 
             $classes[$tableName] = array(
