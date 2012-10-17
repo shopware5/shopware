@@ -1549,6 +1549,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
         $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
 
+        $recreateImagesLater = array();
+
         foreach ($results as $imageData) {
             if(!empty($imageData['relations'])) {
                 $relations = array();
@@ -1647,6 +1649,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         'option_id' => $optionModel->getId()
                     ));
                 }
+
+                $recreateImagesLater[] = $article->getId();
+
             }
 
             // Prevent multiple images from being a preview
@@ -1662,8 +1667,18 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 );
             }
 
-
             $total++;
+        }
+
+        try {
+            // Clear the entity manager and rebuild images in order to get proper variant images
+            Shopware()->Models()->clear();
+            foreach($recreateImagesLater as $articleId) {
+                $this->recreateVariantImages($articleId);
+            }
+        } catch(\Exception $e) {
+            $errors[] = sprintf("Error building variant images. If no other errors occurred, the images have been
+                uploaded but the image-variant mapping in the shop frontend might fail. Errormessage: %s", $e->getMessage());
         }
 
         if (!empty($errors)) {
@@ -1682,6 +1697,54 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         ));
         
         return;
+    }
+
+    /**
+     * Helper method which creates images for variants based on the image mappings
+     * @param $articleId
+     */
+    protected function recreateVariantImages($articleId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $images = $builder->select(array('images', 'mappings', 'rules', 'option'))
+                ->from('Shopware\Models\Article\Image', 'images')
+                ->innerJoin('images.mappings', 'mappings')
+                ->leftJoin('mappings.rules', 'rules')
+                ->leftJoin('rules.option', 'option')
+                ->where('images.articleId = ?1')
+                ->andWhere('images.parentId IS NULL')
+                ->setParameter(1, $articleId)
+                ->getQuery();
+
+        $images = $images->execute();
+
+        /** @var \Shopware\Models\Article\Image $image */
+        foreach ($images as $image) {
+            $query      = $this->getArticleRepository()->getArticleImageDataQuery($image->getId());
+            $imageData  = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $this->getArticleRepository()->getDeleteImageChildrenQuery($image->getId())->execute();
+
+            foreach ($image->getMappings() as $mapping) {
+                $options = array();
+
+                foreach ($mapping->getRules() as $rule) {
+                    $options[] = $rule->getOption();
+                }
+
+                $imageData['path'] = null;
+                $imageData['parent'] = $image;
+
+                $details = $this->getArticleRepository()->getDetailsForOptionIdsQuery($articleId, $options)->getResult();
+
+                foreach ($details as $detail) {
+                    $newImage = new \Shopware\Models\Article\Image();
+                    $newImage->fromArray($imageData);
+                    $newImage->setArticleDetail($detail);
+                    Shopware()->Models()->persist($newImage);
+                    Shopware()->Models()->flush();
+                }
+            }
+        }
     }
 
     /**
