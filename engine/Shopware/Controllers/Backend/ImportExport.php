@@ -1593,7 +1593,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $image = new \Shopware\Models\Article\Image();
 
             try {
-                $path = $this->load($imageData['image'], basename($imageData['image']));
+                $name = pathinfo($imageData['image'],  PATHINFO_FILENAME);
+                $path = $this->load($imageData['image'], $name);
             } catch (\Exception $e) {
                 $errors[] = "Could not load image {$imageData['image']}";
                 continue;
