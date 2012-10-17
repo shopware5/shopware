@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.Attribute', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/article/fields"}{/block}
+		//{block name="backend/article/model/attribute/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int', useNull : true },
         { name: 'articleDetailId', type: 'int', useNull : true },
