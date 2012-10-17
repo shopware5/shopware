@@ -13,6 +13,7 @@ SELECT
 	(
 	  SELECT IF(id=m.id, NULL, id) as id FROM backup_s_core_multilanguage
 	  WHERE CONCAT('|', switchLanguages, '|') LIKE CONCAT('%|', m.id, '|%')
+	  AND m.default != 1
 	  ORDER BY `default` DESC, id LIMIT 1
 	) as main_id,
 	name,
@@ -28,8 +29,10 @@ SELECT
     (SELECT id FROM backup_s_core_multilanguage WHERE isocode=m.fallback) as `fallback_id`,
     1 as active
 FROM backup_s_core_multilanguage m;
+UPDATE `s_core_shops` SET `default` = IF(`id`=1, 1, 0);
 UPDATE s_core_shops SET base_path = NULL, secure_base_path = NULL;
 UPDATE s_core_shops SET host = NULL, hosts = NULL WHERE main_id IS NOT NULL;
+UPDATE s_core_shops SET main_id = 1 WHERE host IS NULL AND main_id IS NULL AND id != 1;
 
 TRUNCATE s_core_shop_currencies;
 INSERT INTO s_core_shop_currencies
@@ -62,7 +65,6 @@ WHERE u.language=m.isocode;
 UPDATE s_core_multilanguage m
 SET m.isocode=m.id;
 
-UPDATE `s_core_shops` SET `default` = IF(`id`=1, 1, 0);
 SET @value = (SELECT `value` FROM `backup_s_core_config` WHERE `name` LIKE 'sHOST');
 UPDATE `s_core_shops` SET `host` = TRIM(@value) WHERE `default`=1;
 SET @value = (SELECT REPLACE(`value`, @value, '') FROM `backup_s_core_config` WHERE `name` LIKE 'sBASEPATH');

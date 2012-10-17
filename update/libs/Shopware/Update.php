@@ -767,7 +767,7 @@ class Shopware_Update extends Slim
             case 1: $action = 'cache'; break;
             case 2: $action = 'config'; break;
             case 3: $action = 'category'; break;
-            case 4: $action = 'translation'; break;
+            case 4: $action = 'other'; break;
             case 5: $action = 'download'; break;
             case 6: $action = 'unpack'; break;
             case 7: $action = 'move'; break;
@@ -1385,20 +1385,19 @@ class Shopware_Update extends Slim
         );
     }
 
-    public function progressTranslation()
+    public function progressOther()
     {
         /** @var $db PDO */
         $db = $this->config('db');
 
+        // Import translations
         $sql = "
             SELECT t.id, t.objectdata as value
             FROM s_core_translations t
         ";
         $query = $db->query($sql);
-
         $sql = 'UPDATE s_core_translations t SET t.objectdata = :value WHERE t.id = :id';
         $updateQuery = $db->prepare($sql);
-
         while(($row = $query->fetch(PDO::FETCH_ASSOC)) !== false) {
             if(@unserialize($row['value']) !== false) {
                 continue;
@@ -1412,6 +1411,60 @@ class Shopware_Update extends Slim
                 });
                 $row['value'] = serialize($value);
                 $updateQuery->execute($row);
+            }
+        }
+
+        // Import router last update
+        $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sROUTERLASTUPDATE'";
+        $lastUpdate = $db->query($sql)->fetchColumn();
+        $lastUpdate = @unserialize($lastUpdate);
+        if(!empty($lastUpdate)) {
+            $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` = 'routerlastupdate'";
+            $elementId = $db->query($sql)->fetchColumn();
+            $sql = "DELETE FROM `s_core_config_values` WHERE `element_id` = :elementId";
+            $db->prepare($sql)->execute(array('elementId' => $elementId));
+            $sql = '
+              INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
+              VALUES (:elementId, :shopId, :value);
+            ';
+            $updateQuery = $db->prepare($sql);
+            foreach($lastUpdate as $shopId => $value) {
+                $updateQuery->execute(array(
+                    'elementId' => $elementId,
+                    'shopId' => $shopId,
+                    'value' => serialize($value)
+                ));
+            }
+        }
+
+        // Import page groups
+        $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sCMSPOSITIONS'";
+        $groups = $db->query($sql)->fetchColumn();
+        if(!empty($groups)) {
+            $groups = explode(';', $groups);
+            $sql = '
+                SELECT 1 FROM `s_cms_static_groups` WHERE `key` = :key
+            ';
+            $selectQuery = $db->prepare($sql);
+            $sql = '
+               INSERT INTO `s_cms_static_groups` ( `name`, `key`, `active`)
+               VALUES (:name, :key, 1);
+            ';
+            $insertQuery = $db->prepare($sql);
+            foreach($groups as $group) {
+                list($name, $key) = explode(':', $group);
+                $key = trim($key);
+                if(empty($key) || empty($name)) {
+                    continue;
+                }
+                $selectQuery->execute(array('key' => $key));
+                if($selectQuery->fetchColumn()) {
+                    continue;
+                }
+                $insertQuery->execute(array(
+                    'name' => $name,
+                    'key' => $key
+                ));
             }
         }
 
@@ -1766,7 +1819,8 @@ class Shopware_Update extends Slim
             'document_root' => '\$_SERVER\[.DOCUMENT_ROOT.\]',
             'shop' => 'Shop\(\)->Locale\(\)|Shop\(\)->Config\(\)|Session\(\)->Shop|Shopware_Models_',
             'api' =>'Shopware\(\)->Api',
-            'template_engine' => 'register_modifier'
+            'template_engine' => 'register_modifier',
+            'backend' => 'backend_index_javascript'
         );
         foreach($tests as $name => $test) {
             $tests[$name] = '?<' . $name . '>' . $test;
