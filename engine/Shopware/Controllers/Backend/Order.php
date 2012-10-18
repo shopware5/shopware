@@ -356,12 +356,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             foreach($orders as $key => $order) {
                 //we need to set the billing and shipping attributes to the first array level to load the data into a form panel
                 //same for locale
-                $order[0]['billingAttribute'] = $order[0]['billing']['attribute'];
-                $order[0]['shippingAttribute'] = $order[0]['shipping']['attribute'];
+                $order['billingAttribute'] = $order['billing']['attribute'];
+                $order['shippingAttribute'] = $order['shipping']['attribute'];
                 $order['locale']= $order['languageSubShop']['locale'];
-
-                unset($order[0]['billing']['attribute']);
-                unset($order[0]['shipping']['attribute']);
+                $order['debit'] = $order['customer']['debit'];
+                unset($order['billing']['attribute']);
+                unset($order['shipping']['attribute']);
                 $orders[$key] = $order;
             }
 

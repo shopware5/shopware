@@ -157,6 +157,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
      */
     associations:[
         { type:'hasMany', model:'Shopware.apps.Base.model.Customer', name:'getCustomer', associationKey:'customer' },
+        { type:'hasMany', model:'Shopware.apps.Order.model.Debit', name:'getDebit', associationKey:'debit' },
         { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShop', associationKey:'shop' },
         { type:'hasMany', model:'Shopware.apps.Base.model.Dispatch', name:'getDispatch', associationKey:'dispatch' },
         { type:'hasMany', model:'Shopware.apps.Base.model.PaymentStatus', name:'getPaymentStatus', associationKey:'paymentStatus' },
