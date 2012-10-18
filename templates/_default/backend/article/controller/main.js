@@ -458,7 +458,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             anchor: '100%',
             helpText: fieldModel.get('help'),
             editable: true,
-            name: 'attribute[' + fieldModel.get('name') + ']',
+            name: 'attribute[' + fieldModel.get('name') + ']'
         });
         return field;
     }
