@@ -107,6 +107,10 @@ RENAME TABLE s_emotion TO s_emotion_backup;
 INSERT IGNORE INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
 SELECT `id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified` FROM s_emotion_backup;
 RENAME TABLE s_emotion_new TO s_emotion;
+ALTER TABLE  `s_emotion_attributes` DROP FOREIGN KEY  `s_emotion_attributes_ibfk_1` ;
+ALTER TABLE  `s_emotion_attributes` ADD FOREIGN KEY (  `emotionID` ) REFERENCES  `s_emotion` (
+`id`
+) ON DELETE CASCADE ON UPDATE NO ACTION ;
 DROP TABLE s_emotion_backup;
 
 -- 12-fix-vat-service-label.sql
