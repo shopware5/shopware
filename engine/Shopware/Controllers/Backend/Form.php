@@ -178,6 +178,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $params = $this->Request()->getParams();
         $params['attribute'] = $params['attribute'][0];
 
+        // unset fields - fields should only be updated via the updateField-Action
+        unset($params['fields']);
+
         $result->fromArray($params);
         $this->getManager()->persist($result);
         $this->getManager()->flush();
