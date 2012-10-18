@@ -1848,7 +1848,7 @@ class Shopware_Update extends Slim
      */
     public function doLicenseCheck($host, $product, $license)
     {
-        if($product == 'ce') {
+        if($product == 'CE') {
             return array('success' => true);
         }
         if(empty($license)) {
@@ -1886,7 +1886,7 @@ class Shopware_Update extends Slim
         /** @var $db PDO */
         $db = $this->config('db');
         $license = $this->doLicenseCheck($host, $product, $license);
-        if(empty($license['success'])) {
+        if(empty($license['success']) || empty($license['info'])) {
             return $license;
         }
         try {
