@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      */
     snippets: {
     	upload: {
-	    	text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'	
+	    	text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
     	},
         success: {
             title: '{s name=media/success/title}Success{/s}',
@@ -138,6 +138,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             return false;
         }
         form.getForm().updateRecord(record);
+
+        return true;
     },
 
     /**
@@ -435,7 +437,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      */
     onSidebarMediaUpload: function(field) {
         var dropZone = this.getSidebarMediaDropZone(), me = this;
-        
+
         if(Ext.isIE || Ext.isSafari) {
         	var form = field.ownerCt;
         	form.submit({
@@ -530,6 +532,10 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         var me = this,
             infoView = me.getMediaInfo();
 
+        if (infoView.record) {
+            me.onSaveImageSettings(infoView.settingsForm, infoView.record);
+        }
+
         if (media instanceof Ext.data.Model) {
             infoView.thumbnail.update(media.data);
             infoView.loadRecord(media);
@@ -620,4 +626,3 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
 });
 //{/block}
-3
