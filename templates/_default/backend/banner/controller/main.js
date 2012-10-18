@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
         'main.BannerForm' 
     ],
     stores : [ 'Category', 'Banner' ],
-    models : [ 'BannerDetail' ],
+    models : [ 'BannerDetail', 'Attribute' ],
     refs: [
         { ref:'addBannerButton', selector:'banner-view-main-panel button[action=addBanner]' },
         { ref:'deleteBannerButton', selector:'banner-view-main-panel button[action=deleteBanner]' },
@@ -157,14 +157,12 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             formBasis = form.getForm(),
             me      = this,
             store   = me.getStore('Banner'),
-            values  = form.getForm().getValues(),
-            record  = form.getRecord(),
-            data = Ext.Object.merge(record.data, values),
-        
-            model = Ext.create('Shopware.apps.Banner.model.BannerDetail', data);
+            record  = form.getRecord();
+
+        form.getForm().updateRecord(record);
 
         if (formBasis.isValid()) {
-            model.save({
+            record.save({
                 callback: function() {
                     Shopware.Msg.createGrowlMessage('', '{s name=saved_success}Banner has been saved.{/s}', '{s name=main_title}{/s}');
                     win.close();
