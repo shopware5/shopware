@@ -2353,6 +2353,8 @@ class sArticles
                 aDetails.purchaseunit,
                 aDetails.referenceunit,
                 aDetails.packunit,
+                aDetails.suppliernumber,
+                aDetails.ean,
                 weight,
                 a.laststock,
                 aDetails.unitID,
