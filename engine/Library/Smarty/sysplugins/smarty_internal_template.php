@@ -254,15 +254,15 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
         if (isset($_templateId[150])) {
             $_templateId = sha1($_templateId);
         }
-        if (isset($this->smarty->template_objects[$_templateId])) {
-            // clone cached template object because of possible recursive call
-            $tpl = clone $this->smarty->template_objects[$_templateId];
-            $tpl->parent = $this;
-            $tpl->caching = $caching;
-            $tpl->cache_lifetime = $cache_lifetime;
-        } else {
+//        if (isset($this->smarty->template_objects[$_templateId])) {
+//            // clone cached template object because of possible recursive call
+//            $tpl = clone $this->smarty->template_objects[$_templateId];
+//            $tpl->parent = $this;
+//            $tpl->caching = $caching;
+//            $tpl->cache_lifetime = $cache_lifetime;
+//        } else {
             $tpl = new $this->smarty->template_class($template, $this->smarty, $this, $cache_id, $compile_id, $caching, $cache_lifetime);
-        }
+//        }
         // get variables from calling scope
         if ($parent_scope == Smarty::SCOPE_LOCAL) {
             $tpl->tpl_vars = $this->tpl_vars;
