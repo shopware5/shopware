@@ -133,7 +133,7 @@
 
 <div class="actions clearfix">
     <a href="<?php echo $app->urlFor('index'); ?>" class="secondary"><?php echo $translation["back"];?></a>
-    <a id="link-next" href="<?php echo $app->urlFor('main'); ?>" class="right primary">
+    <a id="link-next" href="<?php echo $app->urlFor('license'); ?>" class="right primary">
         Weiter
     </a>
 </div>

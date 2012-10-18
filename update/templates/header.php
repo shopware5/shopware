@@ -40,6 +40,9 @@
             <li class="<?php if ($action == "system") echo "active"; else { echo "disabled";}; ?>">
               <a href="<?php echo $app->urlFor('system', array()); ?>">System / Kompatibilität</a>
             </li>
+            <li class="<?php if ($action == "license") echo "active"; else { echo "disabled";}; ?>">
+                <a href="<?php echo $app->urlFor('license'); ?>">Lizenz</a>
+            </li>
             <li class="<?php if ($action == "main") echo "active"; else { echo "disabled";}; ?>">
                 <a href="<?php echo $app->urlFor('main'); ?>">Update durchführen</a>
             </li>
@@ -48,9 +51,6 @@
             </li>
             <li class="<?php if ($action == "custom") echo "active"; else { echo "disabled";}; ?>">
                 <a href="<?php echo $app->urlFor('custom'); ?>">Anpassungen übernehmen</a>
-            </li>
-            <li class="<?php if ($action == "license") echo "active"; else { echo "disabled";}; ?>">
-                <a href="<?php echo $app->urlFor('license'); ?>">Lizenz</a>
             </li>
             <li class="<?php if ($action == "finish") echo "active"; else { echo "disabled";}; ?>">
                 <a href="">Abschluss</a>

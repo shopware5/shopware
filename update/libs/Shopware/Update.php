@@ -310,7 +310,7 @@ class Shopware_Update extends Slim
             $host = $app->request()->getHost();
             $product = $request->post('product');
             $license = $request->post('license');
-            $result = $app->doLicensePluginInstall($host, $product, $license);
+            $result = $app->doLicenseCheck($host, $product, $license);
             if(empty($result['success'])) {
                 $app->render('license.php', array(
                     'action' => 'license',
@@ -322,7 +322,10 @@ class Shopware_Update extends Slim
                     'app' => $app
                 ));
             } else {
-                $app->redirect($app->urlFor('finish'));
+                if(!empty($result['info'])) {
+                    $app->session('license', $result['info']);
+                }
+                $app->redirect($app->urlFor('main'));
             }
         });
 
@@ -764,16 +767,17 @@ class Shopware_Update extends Slim
     {
         $next = (int)$this->request()->post('next') ?: 1;
         switch($next) {
-            case 1: $action = 'media'; break;
+            case 1: $action = 'cache'; break;
             case 2: $action = 'config'; break;
             case 3: $action = 'category'; break;
             case 4: $action = 'other'; break;
-            case 5: $action = 'download'; break;
-            case 6: $action = 'unpack'; break;
-            case 7: $action = 'move'; break;
-            case 8: $action = 'media'; break;
-            case 9: $action = 'mapping'; break;
-            case 10: $action = 'cleanup'; break;
+            case 5: $action = 'mapping'; break;
+            case 6: $action = 'download'; break;
+            case 7: $action = 'unpack'; break;
+            case 8: $action = 'move'; break;
+            case 9: $action = 'media'; break;
+            case 10: $action = 'license'; break;
+            case 11: $action = 'cleanup'; break;
             default: $action = 'notFound'; break;
         }
         $method = 'progress' . ucfirst($action);
@@ -791,7 +795,7 @@ class Shopware_Update extends Slim
             if(!isset($result['offset'])) {
                 $next++;
             }
-            if(!empty($result['success']) && $next < 11) {
+            if(!empty($result['success']) && $next < 12) {
                 $result['next'] = $next;
             }
             echo json_encode($result);
@@ -1473,6 +1477,30 @@ class Shopware_Update extends Slim
         );
     }
 
+    public function progressLicense()
+    {
+        $info = $this->session('license');
+        if(empty($info)) {
+            return  array(
+                'success' => true
+            );
+        }
+
+        try {
+            $this->doLicensePluginDownload();
+            $this->doLicensePluginInstall($info);
+        } catch (Exception $e) {
+            return array(
+                'success' => false,
+                'message' => $e->getMessage()
+            );
+        }
+        return array(
+            'message' => 'Das Lizenz-Plugin wurde erfolgreich installiert.',
+            'success' => true
+        );
+    }
+
     public function progressTable()
     {
         $db = $this->initDb();
@@ -1875,29 +1903,12 @@ class Shopware_Update extends Slim
     }
 
     /**
-     * @param $host
-     * @param $product
-     * @param $license
-     * @return array
+     * @throws Exception
      */
-    public function doLicensePluginInstall($host, $product, $license)
+    public function doLicensePluginInstall($info)
     {
         /** @var $db PDO */
         $db = $this->config('db');
-        $license = $this->doLicenseCheck($host, $product, $license);
-        if(empty($license['success']) || empty($license['info'])) {
-            return $license;
-        }
-        try {
-            $this->doLicensePluginDownload();
-        } catch (Exception $e) {
-            return array(
-                'success' => false,
-                'message' => $e->getMessage(),
-                'error' => 'OTHER'
-            );
-        }
-
 
         $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
         $db->query($sql);
@@ -1912,7 +1923,6 @@ class Shopware_Update extends Slim
             )
         ";
         $query = $db->prepare($sql);
-        $info = $license['info'];
         $query->execute(array(
             $info['module'],
             $info['host'],
@@ -1921,8 +1931,8 @@ class Shopware_Update extends Slim
             $info['version'],
             $info['type'],
             substr($info['expiration'], 0, 4) . '-' .
-            substr($info['expiration'], 4, 2) . '-' .
-            substr($info['expiration'], 6, 2)
+                substr($info['expiration'], 4, 2) . '-' .
+                substr($info['expiration'], 6, 2)
         ));
 
         $sql = "
@@ -1987,10 +1997,6 @@ class Shopware_Update extends Slim
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_License',
             'onGetControllerPathBackend', $pluginId
         ));
-
-        return array(
-            'success' => true
-        );
     }
 
     /**
