@@ -185,7 +185,8 @@ class Repository extends ModelRepository
             'documentAttribute',
             'shippingAttribute',
             'subShop',
-            'locale'
+            'locale',
+            'debit'
         ));
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
@@ -196,6 +197,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('orders.shipping', 'shipping')

@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
             cls: 'secondary',
             handler:function () {
                 me.record.reject();
-                me.loadRecord(record);
+                me.loadRecord(me.record);
             }
         });
         buttons.push(cancelButton);
