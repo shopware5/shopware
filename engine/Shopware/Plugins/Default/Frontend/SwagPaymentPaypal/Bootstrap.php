@@ -440,7 +440,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             return;
         }
 
-        if ($request->getControllerName() == 'checkout' && $request->getControllerName() == 'account') {
+        if ($request->getControllerName() == 'checkout' || $request->getControllerName() == 'account') {
             $this->registerMyTemplateDir();
         }
 
@@ -569,7 +569,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
      */
     public function getVersion()
     {
-        return '2.0.5';
+        return '2.0.6';
     }
 
     /**
