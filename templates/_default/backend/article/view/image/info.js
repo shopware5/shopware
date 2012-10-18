@@ -80,7 +80,6 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         imageTitle: '{s name=image/info/image_title}Title{/s}',
         settings: '{s name=image/info/settings}Settings{/s}',
         treeTitle: '{s name=image/info/tree}Assignments{/s}',
-        saveSettings: '{s name=image/info/save_settings}Save settings{/s}',
         translateTitle: '{s name=image/info/translate_title}Translate title{/s}',
 
         attribute1: '{s name=image/info/attribute1}attribute1{/s}',
@@ -162,7 +161,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             tpl: me.createInfoPanelTemplate(),
             margin: '0 0 10',
             itemSelector: '.copy-image-path',
-            flex: 2,
+            flex: 1,
             renderData: []
         });
     },
@@ -200,29 +199,55 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
     createSettings: function() {
         var me = this;
 
+        var changeHandler = function() {
+            if (me.record) {
+                me.fireEvent('saveImageSettings', me.settingsForm, me.record);
+            }
+        }
+
         me.titleField = Ext.create('Ext.form.field.Text', {
             name: 'description',
             anchor: '100%',
             fieldLabel: me.snippets.imageTitle,
-            translatable: true
+            translatable: true,
+            listeners: {
+                blur: {
+                    fn: changeHandler
+                }
+            }
         });
 
         me.attr1Field = Ext.create('Ext.form.field.Text', {
             name: 'attribute[attribute1]',
             anchor: '100%',
-            fieldLabel: me.snippets.attribute1
+            fieldLabel: me.snippets.attribute1,
+            listeners: {
+                blur: {
+                    fn: changeHandler
+                }
+            }
         });
 
         me.attr2Field = Ext.create('Ext.form.field.Text', {
             name: 'attribute[attribute2]',
             anchor: '100%',
-            fieldLabel: me.snippets.attribute2
+            fieldLabel: me.snippets.attribute2,
+            listeners: {
+                blur: {
+                    fn: changeHandler
+                }
+            }
         });
 
         me.attr3Field = Ext.create('Ext.form.field.Text', {
             name: 'attribute[attribute3]',
             anchor: '100%',
-            fieldLabel: me.snippets.attribute3
+            fieldLabel: me.snippets.attribute3,
+            listeners: {
+                blur: {
+                    fn: changeHandler
+                }
+            }
         });
 
         me.settingToolbar = Ext.create('Ext.toolbar.Toolbar', {
@@ -240,16 +265,6 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
                     }
                 }, {
                     xtype: 'button',
-                    text: me.snippets.saveSettings,
-                    cls: 'small secondary',
-                    anchor: '50%',
-                    handler: function() {
-                        if (me.record) {
-                            me.fireEvent('saveImageSettings', me.settingsForm, me.record);
-                        }
-                    }
-                }, {
-                    xtype: 'button',
                     text: me.snippets.download,
                     anchor: '50%',
                     cls: 'small secondary',
@@ -262,7 +277,6 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
 
         me.settingsForm = Ext.create('Ext.form.Panel', {
             title: me.snippets.settings,
-            flex: 1,
             layout: 'anchor',
             plugins: [{
                 ptype: 'translation',
