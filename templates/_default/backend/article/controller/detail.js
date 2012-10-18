@@ -303,8 +303,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             propertyStore = me.getStore('Property');
 
-        if(article.id) {
-            propertyStore.getProxy().extraParams.articleId = article.getId();
+        if(article.get('id')) {
+            propertyStore.getProxy().extraParams.articleId = article.get('id');
         }
         propertyStore.each(function(property) {
             property.setDirty();
