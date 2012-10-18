@@ -307,10 +307,10 @@ class Shopware_Update extends Slim
         $this->post('/license', function () use ($app) {
             $request = $app->request();
             $error = null;
-            $host = $this->request()->getHost();
+            $host = $app->request()->getHost();
             $product = $request->post('product');
             $license = $request->post('license');
-            $result = $this->doLicensePluginInstall($host, $product, $license);
+            $result = $app->doLicensePluginInstall($host, $product, $license);
             if(empty($result['success'])) {
                 $app->render('license.php', array(
                     'action' => 'license',
@@ -764,7 +764,7 @@ class Shopware_Update extends Slim
     {
         $next = (int)$this->request()->post('next') ?: 1;
         switch($next) {
-            case 1: $action = 'cache'; break;
+            case 1: $action = 'media'; break;
             case 2: $action = 'config'; break;
             case 3: $action = 'category'; break;
             case 4: $action = 'other'; break;
@@ -1085,8 +1085,7 @@ class Shopware_Update extends Slim
         }
 
         $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sIMAGESIZES'";
-        $query = $db->query($sql);
-        $sizes = $query->fetchColumn();
+        $sizes = $db->query($sql)->fetchColumn();
         if(!empty($sizes)) {
             $sizes = explode(';', $sizes);
             $newSizes = array_fill(0, count($sizes), null);
@@ -1098,7 +1097,7 @@ class Shopware_Update extends Slim
                 $newSizes[$size[2]] = $size[0] . 'x' . $size[1];
             }
             $newSizes = implode(';', $newSizes);
-            $sql = 'UPDATE s_media_album_settings SET thumbnail_size = :size WHERE id = :albumId';
+            $sql = 'UPDATE s_media_album_settings SET thumbnail_size = :size WHERE albumID = :albumId';
             $query = $db->prepare($sql);
             $query->execute(array('albumId' => -1, 'size' => $newSizes));
         }
