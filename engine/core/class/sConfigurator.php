@@ -201,8 +201,11 @@ class sConfigurator
         }
 
         if (empty($selected)) {
-            $detail = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey)
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $query = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey);
+            $query->setFirstResult(0)
+                  ->setMaxResults(1);
+
+            $detail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             if ($article->getLastStock() && $detail['inStock'] < 1) {
                 $detail['active'] = 0;
             }
