@@ -70,168 +70,64 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
 
     /**
      * Standard plugin install function.
-     * Creates an event listener for the follwing events:
-     * <pre>
-     *      Enlight_Controller_Front_PostDispatch
-     *          ==>
-     *      Enlight_Controller_Front_StartDispatch
-     *          ==>
-     * </pre>
      * @return bool
      */
     public function install()
     {
         $this->subscribeEvent(
-            'Enlight_Controller_Front_Exception',
-            'onDispatchException',
-            -9999
+            'Enlight_Controller_Front_RouteShutdown',
+            'onDispatchEvent',
+            100
         );
 
         $this->subscribeEvent(
-            'Enlight_Controller_Front_StartDispatch',
-            'onStartDispatch',
-            -9999
+            'Enlight_Controller_Front_PostDispatch',
+            'onDispatchEvent',
+            100
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Controller_Front_DispatchLoopShutdown',
+            'onDispatchEvent',
+            100
         );
 
         return true;
     }
 
     /**
-     * Enligh event listener function of the Enlight_Controller_Front_StartDispatch event.
-     * Fired when the Enlight_Controller_Front start the dispatch process.
-     * This event listener is used to register the own error handler.
-     * The error handler capture all errors (NOT EXCEPTIONS!) and try to fix this errors.
+     * Listener method for the Enlight_Controller_Front_PostDispatch event.
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param   Enlight_Event_EventArgs $args
+     * @return  void
      */
-    public function onStartDispatch($args)
+    public function onDispatchEvent(Enlight_Event_EventArgs $args)
     {
-        $this->subject =  $args->getSubject();
+        if (!$args->getResponse()->isException()) {
+            return;
+        }
+        $exception = $args->getResponse()->getException();
+
+        $this->handleException($exception[0]);
+    }
+
+    /**
+     *
+     * @param $exception
+     */
+    public function handleException($exception)
+    {
         $this->request = new Enlight_Controller_Request_RequestHttp();
         $this->response = new Enlight_Controller_Response_ResponseHttp();
-        $this->registerErrorHandler(E_ALL | E_STRICT);
-    }
 
-    /**
-     * The registerErrorHandler function is the callback function of the new error handler.
-     * This function routs the php error to our own error handler function named "errorHandler"
-     *
-     * @link http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
-     * @param int $errorLevel
-     * @return \Shopware_Plugins_Core_SelfHealing_Bootstrap
-     */
-    public function registerErrorHandler($errorLevel = E_ALL)
-    {
-        // Only register once.  Avoids loop issues if it gets registered twice.
-        if ($this->_registeredErrorHandler) {
-            return $this;
-        }
+        if (strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+            $this->generateModels();
 
-        $this->_origErrorHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
-
-        $this->_registeredErrorHandler = true;
-
-        return $this;
-    }
-
-    /**
-     * The errorHandler function is the capture function of all php errors.
-     * This function validates the different error messages and tries to fix them.
-     * For example:
-     * If the key word "__CG__ShopwareModels" is set, the function regenerates all model proxies
-     * and redirect to the last request url.
-     *
-     * @link http://www.php.net/manual/en/function.set-error-handler.php Custom error handler
-     *
-     * @param int    $errno
-     * @param string $errstr
-     * @param string $errfile
-     * @param int    $errline
-     * @param array  $errcontext
-     *
-     * @throws Exception
-     * @return boolean
-     */
-    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
-    {
-        if (strpos($errstr, '__CG__ShopwareModels')) {
-            try {
-                Shopware()->Models()->regenerateProxies();
-            }
-            catch (Exception $e) {
-                if (strpos($e->getMessage(), 'Shopware\Models\Attribute') !== false) {
-                    try {
-                        $this->generateModels();
-                    } catch (Exception $e) {
-                        throw $e;
-                    }
-                    try {
-                        Shopware()->Models()->regenerateProxies();
-                    } catch (Exception $e) {
-                        throw $e;
-                    }
-                }
-            }
-
-            if ($this->request && $this->response) {
-                $this->response->setRedirect(
-                    $this->request->getRequestUri()
-                );
-                $this->response->sendResponse();
-            }
-        } else if ($this->_origErrorHandler !== null) {
-            return call_user_func($this->_origErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
-        }
-
-        return true;
-    }
-
-    /**
-     * The onPostDispatch function is an enlight event listener function of the Enlight_Controller_Front_PostDispatch
-     * event.
-     * This event is used to capture all shopware exceptions.
-     * The function captures the different exceptions and tries to fix them.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     */
-    public function onDispatchException(Enlight_Event_EventArgs $arguments)
-    {
-        $result = $this->exceptionHandling(
-            $arguments->getException()
-        );
-
-        if ($result === self::RE_DISPATCH_COMMAND) {
             $this->response->setRedirect(
                 $this->request->getRequestUri()
             );
             $this->response->sendResponse();
-            $this->response->sendHeaders();
             exit();
-        }
-    }
-
-    /**
-     * Internal helper function which handles a single exception.
-     * This function tries to fix the passed exception and returns the following command action.
-     * For example:
-     *  If the exception message contains the key word "Shopware\Models\Attribute" the function
-     *  regenerate all shopware attribute models and returns the RE_DISPATCH_COMMAND constant
-     *  which is the command to redirect to the last request url.
-     *
-     *
-     * @param $exception Exception
-     * @return int
-     */
-    private function exceptionHandling($exception)
-    {
-        if (strpos($exception->getMessage(), 'Shopware\Models\Attribute') !== false) {
-            if (strpos($exception->getMessage(), 'does not exist') !== false ||
-                    strpos($exception->getMessage(), 'cannot be found') !== false) {
-
-                $this->generateModels();
-
-                return self::RE_DISPATCH_COMMAND;
-            }
         }
     }
 
@@ -261,7 +157,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     /**
      * Helper function to create an own database schema manager to remove
      * all dependencies to the existing shopware models and meta data caches.
-     * @return Doctrine\DBAL\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
      */
     private function getSchemaManager()
     {
