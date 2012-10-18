@@ -39,7 +39,7 @@ function smarty_modifier_currency($value, $config = null, $position = null)
 
     if (!empty($config) && is_string($config)) {
         $config = strtoupper($config);
-        if (defined('Zend_Date::' . $config)) {
+        if (defined('Zend_Currency::' . $config)) {
             $config = array('display' => constant('Zend_Currency::' . $config));
         } else {
             $config = array();
@@ -50,7 +50,7 @@ function smarty_modifier_currency($value, $config = null, $position = null)
 
     if (!empty($position) && is_string($position)) {
         $position = strtoupper($position);
-        if (defined('Zend_Date::' . $position)) {
+        if (defined('Zend_Currency::' . $position)) {
             $config['position'] = constant('Zend_Currency::' . $position);
         }
     }
