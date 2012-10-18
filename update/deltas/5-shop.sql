@@ -50,7 +50,7 @@ ON t.objectlanguage=m.isocode
 OR t.objectlanguage=m.id
 WHERE m.id IS NULL;
 
-UPDATE s_core_translations t, backup_s_core_multilanguage m
+UPDATE IGNORE s_core_translations t, backup_s_core_multilanguage m
 SET t.objectlanguage=m.id
 WHERE t.objectlanguage=m.isocode;
 

@@ -28,6 +28,7 @@
                 <input type="password" id="password" name="password">
             </div>
         </div>
+<!--
         <div class="control-group">
             <label class="control-label" for="language">Sprache:</label>
             <div class="controls">
@@ -41,6 +42,7 @@
                 </select>
             </div>
         </div>
+-->
         <div class="actions clearfix">
             <input type="submit" class="right primary" value="<?php echo $translation["forward"];?>" />
         </div>
