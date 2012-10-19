@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             plugins: [{
                 ptype: 'translation',
                 pluginId: 'translation',
-                translationType: 'article',
+                translationType: 'articleimage',
                 translationMerge: false,
                 translationKey: null,
                 translationName: 'attributes'
