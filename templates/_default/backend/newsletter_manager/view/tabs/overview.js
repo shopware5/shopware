@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             },
             {
                 header: me.snippets.columns.clicked,
-                dataIndex: 'clicked',
+                dataIndex: 'mailing.clicked',
                 renderer: function(value, metaData, record) {
                     return record.get('clicked');
                 },
