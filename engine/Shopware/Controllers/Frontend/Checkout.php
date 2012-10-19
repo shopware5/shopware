@@ -108,35 +108,33 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	 */
 	public function cartAction()
  	{
-		$this->View()->sCountry = $this->getSelectedCountry();
-		$this->View()->sPayment = $this->getSelectedPayment();
-		$this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sUserData = $this->getUserData();
-		
-		$this->View()->sCountryList = $this->getCountryList();
+         $this->View()->sCountry = $this->getSelectedCountry();
+         $this->View()->sPayment = $this->getSelectedPayment();
+         $this->View()->sDispatch = $this->getSelectedDispatch();
+         $this->View()->sCountryList = $this->getCountryList();
+         $this->View()->sPayments = $this->getPayments();
+         $this->View()->sDispatches = $this->getDispatches();
+         $this->View()->sState = $this->getSelectedState();
 
-		$this->View()->sPayments = $this->getPayments();
-		$this->View()->sDispatches = $this->getDispatches();
-        $this->View()->sState = $this->getSelectedState();
+         $this->View()->sUserData = $this->getUserData();
 
-		$this->View()->sBasket = $this->getBasket();
-		
-		$this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-		$this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-		$this->View()->sAmount = $this->View()->sBasket['sAmount'];
-		$this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-		$this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-		$this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
-		
-		$this->View()->sMinimumSurcharge = $this->getMinimumCharge();
-		$this->View()->sPremiums = $this->getPremiums();
-		
-		$this->View()->sInquiry = $this->getInquiry();
-		$this->View()->sInquiryLink = $this->getInquiryLink();
-		
-		$this->View()->sTargetAction = 'cart';
+         $this->View()->sBasket = $this->getBasket();
 
-	}
+         $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
+         $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
+         $this->View()->sAmount = $this->View()->sBasket['sAmount'];
+         $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
+         $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
+         $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+
+         $this->View()->sMinimumSurcharge = $this->getMinimumCharge();
+         $this->View()->sPremiums = $this->getPremiums();
+
+         $this->View()->sInquiry = $this->getInquiry();
+         $this->View()->sInquiryLink = $this->getInquiryLink();
+
+         $this->View()->sTargetAction = 'cart';
+     }
 	
 	/**
 	 * Mostly equivalent to cartAction
@@ -493,6 +491,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getUserData()
     {
+        $system = Shopware()->System();
         $userData = $this->admin->sGetUserData();
         if (!empty($userData['additional']['countryShipping'])) {
             $sTaxFree = false;
@@ -505,17 +504,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             ) {
                 $sTaxFree = true;
             }
+
+            $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
+                SELECT * FROM s_core_customergroups
+                WHERE groupkey = ?
+            ", array($system->sUSERGROUP));
+
             if (!empty($sTaxFree)) {
-                Shopware()->System()->sUSERGROUPDATA['tax'] = 0;
-                Shopware()->System()->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
-                Shopware()->Session()->sUserGroupData = Shopware()->System()->sUSERGROUPDATA;
+                $system->sUSERGROUPDATA['tax'] = 0;
+                $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
+                Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
                 $userData['additional']['charge_vat'] = false;
                 $userData['additional']['show_net'] = false;
                 Shopware()->Session()->sOutputNet = true;
             } else {
                 $userData['additional']['charge_vat'] = true;
-                $userData['additional']['show_net'] = !empty(Shopware()->System()->sUSERGROUPDATA['tax']);
-                Shopware()->Session()->sOutputNet = empty(Shopware()->System()->sUSERGROUPDATA['tax']);
+                $userData['additional']['show_net'] = !empty($system->sUSERGROUPDATA['tax']);
+                Shopware()->Session()->sOutputNet = empty($system->sUSERGROUPDATA['tax']);
             }
         }
 
