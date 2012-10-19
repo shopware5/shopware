@@ -9,18 +9,18 @@
             }
             me.addClass('disabled');
             $.loading(me.text());
-            $.ajaxLoading($(this).attr('href'));
+            $.ajaxLoading($(this));
         });
 
-        $.ajaxLoading = function(url, last) {
+        $.ajaxLoading = function(link, last) {
             $.ajax({
-                url: url,
+                url: link.attr('href'),
                 type: 'POST',
                 dataType: 'json',
                 data: last,
                 success: function(result) {
                     if(result && (result.next || result.progress)) {
-                        $.ajaxLoading(url, result);
+                        $.ajaxLoading(link, result);
                     } else {
                         $.removeLoading();
                     }
@@ -28,6 +28,7 @@
                         $('#messages').empty();
                     }
                     if(!result || !result.success) {
+                        link.removeClass('disabled');
                         $('<div class="alert alert-error"></div>')
                                 .html(result.message).appendTo('#messages');
                     } else if(result.message) {

@@ -21,9 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
+ * @category   Shopware_Update
+ * @package    Shopware_Update
+ * @subpackage Shopware_Update
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Heiner Lohaus
