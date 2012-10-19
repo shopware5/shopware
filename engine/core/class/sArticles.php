@@ -3353,6 +3353,14 @@ class sArticles
             $imageData["src"][$key] = $thumbDir . $image['path'] . '_'. $size .'.'. $image['extension'];
         }
 
+        $translation = $this->sGetTranslation(array(), $imageData['id'], "articleimage");
+
+        if (!empty($translation)) {
+            if (!empty($translation['description'])) {
+                $imageData["res"]["description"] = $translation['description'];
+            }
+        }
+
         return $imageData;
     }
 
