@@ -1702,9 +1702,16 @@ class sShopwareImport
             $uploadFile = $uploadDir.$article_image['name'].'.tmp';
             if(!copy($article_image['image'], $uploadFile))
             {
-                $this->sAPI->sSetError("Copy image from '{$article_image['image']}' to '$uploadFile' not work", 10400);
+                $this->sAPI->sSetError("Copying image from '{$article_image['image']}' to '$uploadFile' did not work", 10400);
                 return false;
             }
+
+            // check the copied image
+            if(getimagesize($uploadFile) === false) {
+                unlink($uploadFile);
+                $this->sAPI->sSetError("The file'$uploadFile' is not a valid image", 10402);
+                return false;
+            };
         }
         else
         {
@@ -1723,7 +1730,6 @@ class sShopwareImport
                 return false;
             }
         }
-
         // Create new Media object and set the image
         $media = new \Shopware\Models\Media\Media();
         $file = new \Symfony\Component\HttpFoundation\File\File($uploadFile);
