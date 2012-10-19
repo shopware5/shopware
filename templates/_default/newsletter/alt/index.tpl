@@ -2,7 +2,7 @@
 {if $sCampaignContainer.type == "ctText"}
 {$sCampaignContainer.description|strip_tags|trim|strip}
 #################################################################
-{$sCampaignContainer.data.html|strip|strip_tags|strip|trim}
+{include file="string:{$sCampaignContainer.data.html|strip|strip_tags|strip|trim}"}
 {/if}
 {if $sCampaignContainer.type == "ctLinks"}
 {$sCampaignContainer.description|strip}
@@ -59,7 +59,7 @@ statt {$sArticle.pseudoprice|currency:use_shortname}
 
 
 Sie erhalten diesen Newsletter in der Text-Darstellung, besuchen Sie bitte unseren Shop
-um auf die Angebote zugreifen zu k�nnen.
+um auf die Angebote zugreifen zu können.
 {if $sUserGroup.tax}* Alle Preise inkl ges. MwSt{else}* Alle Preise zzgl. ges. MwSt{/if} zzgl. Versand und ggf. Nachnahmegeb&uuml;hren, wenn nicht anders beschrieben
 realisiert mit shopware von www.shopware.ag
-Copyright � 2008 shopware AG - Alle Rechte vorbehalten
+Copyright &copy; 2008 shopware AG - Alle Rechte vorbehalten

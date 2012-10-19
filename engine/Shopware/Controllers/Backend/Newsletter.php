@@ -110,8 +110,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		if(!$this->Request()->getParam('id')) {
 			$body = $this->trackFilter($body, $mailing['id']);
 		}
-		
-		
 
         if(empty($mailing['plaintext'])) {
             $body = $template->fetch('newsletter/index/'.$mailing['template'], $template);
@@ -200,7 +198,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 				$template->assign('sVoucher', $voucher, true);
 			}
 			
-
             if(empty($mailing['plaintext'])) {
                 $body = $template->fetch('newsletter/index/'.$mailing['template'], $template);
             }
@@ -345,7 +342,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$template->assign('sCampaign', $this->getMailingDetails($mailing['id']), true);
 		$template->assign('sConfig', Shopware()->Config());
 		$template->assign('sBasefile', Shopware()->Config()->BaseFile);
-		
+
 		if(!$template->isCached($mailing['template'])) {
 			$template->assign('sMailing', $mailing);
 			$template->assign('sStart', 'http://'.Shopware()->Config()->BasePath.'/'.Shopware()->Config()->BaseFile);
@@ -619,7 +616,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$source = preg_replace('#<a.+href="(.*)".*>#Umsi', '$1', $source);
 		$source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n","\n", ' '), $source);
 		$source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$source)));
-		$source = html_entity_decode($source);		
+		$source = html_entity_decode($source);
 		return $source;
 	}
 	
