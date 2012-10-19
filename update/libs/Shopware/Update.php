@@ -1,4 +1,38 @@
 <?php
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware_Update
+ * @package    Shopware_Update
+ * @subpackage Shopware_Update
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     Heiner Lohaus
+ * @author     $Author$
+ */
+
+/**
+ * Shopware Update
+ */
 class Shopware_Update extends Slim
 {
     const VERSION = '1.0.0';
@@ -1027,9 +1061,14 @@ class Shopware_Update extends Slim
         }
 
         foreach($realUpdatePaths as $updatePath) {
-            if(file_exists($targetDir . $updatePath) && !file_exists($backupDir . $updatePath)) {
+            if(file_exists($sourceDir . $updatePath) && file_exists($targetDir . $updatePath)) {
                 rename($targetDir . $updatePath, $backupDir . $updatePath);
             }
+
+            if ($updatePath == 'shopware.php') {
+                continue;
+            }
+
             if(file_exists($sourceDir . $updatePath)) {
                 rename($sourceDir . $updatePath, $targetDir . $updatePath);
             }
@@ -1273,7 +1312,12 @@ class Shopware_Update extends Slim
     public function progressCleanup()
     {
         $sourceDir = $this->config('sourceDir');
+        $targetDir = $this->config('targetDir');
         $updateDirs = $this->config('updateDirs');
+
+        if(file_exists($sourceDir . 'shopware.php')) {
+            rename($sourceDir . 'shopware.php', $targetDir . 'shopware.php');
+        }
 
         try {
             foreach(array_reverse($updateDirs) as $updateDir) {
