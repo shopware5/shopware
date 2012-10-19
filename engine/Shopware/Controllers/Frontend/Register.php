@@ -523,8 +523,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             unset($this->post["billing"]["country_state_".$this->post["billing"]["country"]]);
         }
 
-		if(!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business')
-		{
+        if(!empty($this->post['personal']['sValidation'])) {
+            $this->post['personal']['customer_type'] = 'business';
+        }
+
+		if(!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
 			$rules['company'] = array('required'=>1);
 			$rules['ustid'] = array('required'=>Shopware()->Config()->vatCheckEndabled);
 		}
