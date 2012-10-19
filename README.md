@@ -1,7 +1,7 @@
 # Shopware 4
 
-- **Version**: 4.0.2
-- **Release Date**: 14th September 2012
+- **Version**: 4.0.4
+- **Release Date**: 31th October 2012
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
 
@@ -34,16 +34,21 @@ In case you wish to contribute to Shopware, fork the master tree rather than clo
 
 2.) Set the correct directory permissions:
 
-		chmod 777 config.php
-		chmod 777 -R cache
-		chmod 777 -R files
-		chmod 777 -R media
-		chmod 777 -R engine/Libary/Mpdf/tmp
-		chmod 777 -R engine/Libary/Mpdf/ttfontdata
-		chmod 777 -R engine/Shopware/Plugins/Community
-		chmod 777 -R engine/Shopware/Proxies
-		chmod 777 -R engine/Shopware/Models/Attribute
-		
+		chmod 755 config.php
+		chmod 755 -R cache
+		chmod 755 -R files
+		chmod 755 -R media
+		chmod 755 -R engine/Libary/Mpdf/tmp
+		chmod 755 -R engine/Libary/Mpdf/ttfontdata
+		chmod 755 -R engine/Shopware/Plugins/Community
+		chmod 755 -R engine/Shopware/Proxies
+		chmod 755 -R engine/Shopware/Models/Attribute
+
+Depending on your server configuration it might be neccesarry to set whole write permissions (777) to the files and folders above.
+Also you can start testing with lower permissions due to security reasons (644 for example), if your php-process can write to
+those files.
+
+
 3.) Point your web browser at <http://yourwebsite.com/install/> and provide details for establishing a database connection, your used licence and take the basic configuration of your new store.
 
 ## Get involved
