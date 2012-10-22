@@ -176,6 +176,9 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function extendsTemplate($template_name)
     {
+        if ($this->template === null) {
+            return false;
+        }
         $this->Template()->extendsTemplate($template_name);
         return $this;
     }
@@ -190,6 +193,9 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function extendsBlock($spec, $content, $mode)
     {
+        if ($this->template === null) {
+            return false;
+        }
         $this->Template()->extendsBlock($spec, $content, $mode);
         return $this;
     }
