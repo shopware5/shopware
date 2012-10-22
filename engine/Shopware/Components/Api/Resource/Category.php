@@ -111,6 +111,12 @@ class Category extends Resource
         $category = new \Shopware\Models\Category\Category();
         $category->fromArray($params);
 
+        if (isset($params['id'])) {
+            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Category\Category');
+            $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+            $category->setPrimaryIdentifier($params['id']);
+        }
+
         $violations = $this->getManager()->validate($category);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
