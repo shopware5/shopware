@@ -108,7 +108,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 change: me.onEnableConfigurator
             },
             'article-detail-window combo[name=filterGroupId]': {
-                select: me.onChangePropertyGroup
+                select: me.onSelectPropertyGroup,
+                change: me.onChangePropertyGroup
             },
             'article-detail-window article-properties-field-set grid': {
                 beforeedit: me.onBeforePropertyEdit
@@ -737,7 +738,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * @param [string] value
      * @param [Ext.grid.Panel] grid
      */
-    onChangePropertyGroup: function (combo, records) {
+    onSelectPropertyGroup: function (combo, records) {
         var me = this,
             grid = me.getPropertyGrid(),
             propertyStore = me.getStore('Property'),
@@ -745,15 +746,30 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             propertyGroupId = records.length > 0 ? records[0].getId() : null;
 
         if (propertyGroupId) {
-            propertyStore.getProxy().extraParams.propertyGroupId
-                = propertyGroupId;
+            propertyStore.getProxy().extraParams.propertyGroupId = propertyGroupId;
             propertyStore.load();
 
-            valueStore.getProxy().extraParams.propertyGroupId
-                = propertyGroupId;
+            valueStore.getProxy().extraParams.propertyGroupId = propertyGroupId;
             valueStore.load();
             grid.show();
         } else {
+            grid.hide();
+        }
+    },
+
+    /**
+     * Event listener method which is fired when the user change the property combo box.
+     *
+     * @param [Ext.form.field.ComboBox] combo
+     */
+    onChangePropertyGroup: function (combo) {
+        var me = this,
+            grid = me.getPropertyGrid(),
+            form = me.getDetailForm(),
+            record = form.getRecord();
+
+        if (combo.getValue() === null) {
+            record.set('filterGroupId', null);
             grid.hide();
         }
     },
