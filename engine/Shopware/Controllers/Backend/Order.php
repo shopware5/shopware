@@ -34,6 +34,7 @@ use Shopware\Models\Order\Order as Order,
     Shopware\Models\Order\Billing as Billing,
     Shopware\Models\Order\Shipping as Shipping,
     Shopware\Models\Order\Detail as Detail,
+    Shopware\Models\Order\Document\Document as Document,
     Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 /**
  * Backend Controller for the order backend module.
@@ -1239,10 +1240,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     'message' => 'File not exist'
                 ));
             }
+            $orderModel = Shopware()->Models()->getRepository('Shopware\Models\Order\Document\Document')->findBy(array("hash"=>$this->Request()->getParam('id')));
+            $orderModel = Shopware()->Models()->toArray($orderModel);
+            $orderId = $orderModel[0]["documentId"];
+
             $response = $this->Response();
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
-            $response->setHeader('Content-disposition', 'attachment; filename=order-document.pdf' );
+            $response->setHeader('Content-disposition', 'attachment; filename='.$orderId.".pdf" );
             $response->setHeader('Content-Type', 'application/pdf');
             $response->setHeader('Content-Transfer-Encoding', 'binary');
             $response->setHeader('Content-Length', filesize($file));
