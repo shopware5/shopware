@@ -391,9 +391,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      */
     saveCategory: function(categoryName, attributeValues){
         var me = this,
-        treeStore = me.subApplication.treeStore,
         selectedNode = me.getSelectedNode(),
         parentNode = selectedNode.parentNode || selectedNode;
+
         var newCategory = me.getModel('Tree').create({
             'parentId'  : selectedNode.getId(),
             'name'      : categoryName,
@@ -411,7 +411,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             callback:function (self, operation) {
                 if (operation.success) {
                     Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    treeStore.load({ node: parentNode });
+                    me.reloadTree();
                 } else {
                     var rawData = self.proxy.reader.rawData;
                     if (rawData.message) {
@@ -423,6 +423,43 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             }
         });
     },
+
+    /**
+     * reloads the tree and restores the selection
+     */
+    reloadTree: function() {
+        var me = this,
+            tree = me.getCategoryTree(),
+            store = me.subApplication.treeStore,
+            selectedNode = me.getSelectedNode(),
+            parentNode = selectedNode.parentNode || selectedNode,
+            options = {
+                node : parentNode
+            },
+            sm = tree.getSelectionModel(),
+            selectedId;
+
+        if (sm.hasSelection()) {
+            selectedId = sm.getSelection()[0].getId();
+            Ext.apply(options, {
+                callback : function () {
+                    var node = this.store.getNodeById(this.idToSelect);
+
+                    if (node) {
+                        this.sm.select(node);
+                        node.expand();
+                    }
+                },
+                scope : {
+                    store : store,
+                    sm : sm,
+                    idToSelect : selectedId
+                }
+            });
+        }
+        store.load(options);
+    },
+
 
     /**
      * updates the given tab and add or remove it to the tabpanel
