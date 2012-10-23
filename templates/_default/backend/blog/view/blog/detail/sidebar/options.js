@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
     alias:'widget.blog-blog-detail-sidebar-options',
     border: 0,
     bodyPadding: 10,
+    autoScroll: true,
     collapsed: false,
     title: '{s name=detail/sidebar/options/title}Additional options{/s}',
     layout: {

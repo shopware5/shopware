@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Attributes', {
             region:'center',
             closable: false,
             collapsible: false,
+            autoScroll: true,
             defaults:{
                 labelWidth:100,
                 anchor: '100%',
