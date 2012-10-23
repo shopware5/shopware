@@ -339,6 +339,9 @@ class ModelManager extends EntityManager
         $connection = \Doctrine\DBAL\DriverManager::getConnection(
             array('pdo' => Shopware()->Db()->getConnection())
         );
+
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
         return $connection->getSchemaManager();
     }
 
