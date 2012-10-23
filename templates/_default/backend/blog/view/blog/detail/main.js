@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             flex: 2,
             closable: false,
             collapsible: true,
+            autoScroll: true,
             defaults:{
                 labelWidth:120,
                 minWidth:250,

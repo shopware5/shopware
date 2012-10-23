@@ -42,9 +42,12 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
     alias: 'widget.blog-blog-window',
     border: false,
     autoShow: true,
-    height: 768,
+    /**
+     * Define window height
+     * @integer
+     */
+    height:'90%',
     width: 1024,
-    minHeight: 600,
     modal:false,
     layout: {
         type: 'fit'
