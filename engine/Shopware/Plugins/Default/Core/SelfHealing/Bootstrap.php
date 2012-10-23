@@ -103,11 +103,12 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     public function onDispatchEvent(Enlight_Event_EventArgs $args)
     {
+
         if (!$args->getResponse()->isException()) {
             return;
         }
-        $exception = $args->getResponse()->getException();
 
+        $exception = $args->getResponse()->getException();
         $this->handleException($exception[0]);
     }
 
@@ -122,7 +123,6 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
 
         if (strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             $this->generateModels();
-
             $this->response->setRedirect(
                 $this->request->getRequestUri()
             );
@@ -165,6 +165,9 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $connection = \Doctrine\DBAL\DriverManager::getConnection(
             array('pdo' => Shopware()->Db()->getConnection())
         );
+
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
         return $connection->getSchemaManager();
     }
 
