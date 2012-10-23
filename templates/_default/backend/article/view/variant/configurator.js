@@ -58,11 +58,12 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
     snippets:{
         toolbar: {
             saveSet: '{s name=variant/configurator/save_set}Save set{/s}',
+            template: '{s name=variant/configurator/template}Define configurator template{/s}',
             loadSet: '{s name=variant/configurator/load_set}Load set{/s}',
             dependency: '{s name=variant/configurator/dependency}Set dependency{/s}',
             surcharge: '{s name=variant/configurator/surcharge}Define price surcharge{/s}',
             type: '{s name=variant/settings/type/label}Configurator type{/s}',
-            empty: '{s name=variant/settings/combo_empty}Please choose...{/s}',
+            empty: '{s name=variant/settings/combo_empty}Please choose...{/s}'
         },
         groups: {
             title: '{s name=variant/configurator/group/title}Manage attribute groups{/s}',
@@ -165,6 +166,14 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
              * @event
              */
             'definePriceSurcharge',
+
+            /**
+             * Event will be fired when the user clicks the "define configurator template" button
+             * which displayed in the top toolbar of the whole variant tab.
+             * @event
+             */
+            'defineConfiguratorTemplate',
+
 
             /**
              * Event will be fired when the user clicks on the "create" button in the
@@ -314,6 +323,13 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             }
         });
 
+        me.templateButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.toolbar.template,
+            handler: function() {
+                me.fireEvent('defineConfiguratorTemplate', me);
+            }
+        });
+
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
@@ -331,7 +347,9 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 { xtype:'tbspacer', width: 6 },
                 me.dependencyButton,
                 { xtype:'tbspacer', width: 12 },
-                me.surchargeButton
+                me.surchargeButton,
+                { xtype:'tbspacer', width: 12 },
+                me.templateButton
             ]
         });
     },

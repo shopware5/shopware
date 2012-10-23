@@ -259,6 +259,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ->orderBy('widgetView.column')
                     ->addOrderBy('widgetView.position');
                 break;
+            case 'attribute':
+                $builder->orderBy('attribute.position');
+                break;
             default:
                 break;
         }

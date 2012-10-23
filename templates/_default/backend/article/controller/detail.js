@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     refs: [
         { ref: 'mainWindow', selector: 'article-detail-window' },
+        { ref: 'baseFieldSet', selector: 'article-detail-window article-base-field-set' },
         { ref: 'configurator', selector: 'article-detail-window article-variant-configurator' },
         { ref: 'customerGroupCombo', selector: 'article-detail-window article-settings-field-set boxselect[name=avoidCustomerGroups]' },
         { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
@@ -193,7 +194,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         }
 
         // If supplierId is string we want to create a new supplier in our backend
-        var baseField  = mainWindow.down('article-base-field-set');
+        var baseField = me.getBaseFieldSet();
         var supplierId = baseField.supplierCombo.getModelData().supplierId;
         var supplierNeedsReload = false;
         if (typeof supplierId === "string") {

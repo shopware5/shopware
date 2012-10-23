@@ -894,6 +894,42 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects
+     * the defined configurator template for the passed article id.
+     *
+     * @param $articleId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getConfiguratorTemplateByArticleIdQuery($articleId)
+    {
+        $builder = $this->getConfiguratorTemplateByArticleIdQueryBuilder($articleId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function which creates the query builder object to select
+     * all configurator template data for the passed article id.
+     *
+     * @param $articleId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getConfiguratorTemplateByArticleIdQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        return $builder->select(array('template', 'prices', 'customerGroup', 'attribute', 'priceAttribute'))
+                       ->from('Shopware\Models\Article\Configurator\Template\Template', 'template')
+                       ->leftJoin('template.prices', 'prices')
+                       ->leftJoin('prices.customerGroup', 'customerGroup')
+                       ->leftJoin('template.attribute', 'attribute')
+                       ->leftJoin('prices.attribute', 'priceAttribute')
+                       ->where('template.articleId = :articleId')
+                       ->setParameters(array('articleId' => $articleId));
+    }
+
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects the prices for the passed article detail id.
      * Used for the article detail page in the article backend module.
      * @param $articleDetailId

@@ -127,7 +127,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
     init:function () {
@@ -185,6 +184,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 deleteOption: me.onDeleteOption,
                 editGroup: me.onEditGroup,
                 defineDependency: me.onDefineDependency,
+                defineConfiguratorTemplate: me.onDefineConfiguratorTemplate,
                 definePriceSurcharge: me.onDefinePriceSurcharge
             },
             'article-configurator-dependency-window': {
@@ -199,9 +199,92 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 saveVariant: me.onSaveVariant,
                 cancelEdit: me.onCancelEdit,
                 applyData: me.onApplyDataOnDetailPage
+            },
+            'article-configurator-template-window': {
+                saveTemplate: me.onSaveTemplate,
+                cancelEdit: me.onCancelEdit
+//                applyData: me.onApplyDataOnDetailPage
             }
         });
         me.callParent(arguments);
+    },
+
+    onDefineConfiguratorTemplate: function() {
+        var me = this,
+            template = null,
+            article = me.subApplication.article,
+            listing = me.getVariantListing();
+
+        var attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
+
+        if (article.getConfiguratorTemplate() instanceof Ext.data.Store && article.getConfiguratorTemplate().first() instanceof Ext.data.Model) {
+            template = article.getConfiguratorTemplate().first();
+        } else if (article.getMainDetail() instanceof Ext.data.Store && article.getMainDetail().first() instanceof Ext.data.Model) {
+            template = Ext.create('Shopware.apps.Article.model.ConfiguratorTemplate');
+            template.set('id', null);
+
+            template = me.setMainDetailDataIntoTemplate(template);
+            article.getConfiguratorTemplateStore = Ext.create('Ext.data.Store', {
+                model: 'Shopware.apps.Article.model.ConfiguratorTemplate'
+            });
+            article.getConfiguratorTemplateStore.add(template);
+
+        } else {
+            template = Ext.create('Shopware.apps.Article.model.ConfiguratorTemplate');
+            article.getConfiguratorTemplateStore = Ext.create('Ext.data.Store', {
+                model: 'Shopware.apps.Article.model.ConfiguratorTemplate'
+            });
+            article.getConfiguratorTemplateStore.add(template);
+        }
+
+        me.getView('variant.configurator.Template').create({
+            record: template,
+            article: article,
+            attributeFieldSet: attributeFieldSet,
+            customerGroupStore: listing.customerGroupStore,
+            unitStore: listing.unitStore
+        }).show();
+    },
+
+    /**
+     * Helper function to duplicate the main detail data into the passed object.
+     * @param template
+     * @return
+     */
+    setMainDetailDataIntoTemplate: function(template) {
+        var me = this,
+            article = me.subApplication.article;
+
+        var mainDetail = article.getMainDetail().first();
+        var prices = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' });
+        var attributes = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Attribute' });
+        template.set(mainDetail.data);
+
+        var priceStore = article.getPrice();
+        var lastFilter = priceStore.filters.items;
+        var attributeStore = article.getAttribute();
+
+        priceStore.clearFilter();
+
+        if (priceStore instanceof Ext.data.Store && priceStore.getCount() > 0) {
+            priceStore.each(function(item) {
+                var newPrice = Ext.create('Shopware.apps.Article.model.Price', item.data);
+                newPrice.set('id', null);
+                prices.add(newPrice);
+            });
+        }
+
+        if (attributeStore instanceof Ext.data.Store && attributeStore.getCount() > 0) {
+            var attribute = attributeStore.first();
+            var newAttribute = Ext.create('Shopware.apps.Article.model.Attribute', attribute.data);
+            newAttribute.set('id', null);
+            attributes.add(newAttribute);
+        }
+
+        priceStore.filter(lastFilter);
+        template.getPriceStore = prices;
+        template.getAttributeStore = attributes;
+        return template;
     },
 
     onSaveVariantInline: function(record) {
@@ -1287,9 +1370,25 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      *************************EVENTS OF THE VARIANT DETAIL PAGE***********************************
      *********************************************************************************************/
 
+    onSaveTemplate: function(win, form, template) {
+        var me = this, priceStore, number;
+
+        if (!form.getForm().isValid()) {
+            return;
+        }
+
+        if (form && template) {
+            form.getForm().updateRecord(template);
+            var articleController = me.getController('Detail');
+            articleController.onSaveArticle(me.getMainWindow(), win.article);
+            win.destroy();
+        }
+    },
+
     /**
      * Event listener function which fired when the user clicks the save button in the article variant detail window.
      * @param win
+     * @param form
      * @param variant
      */
     onSaveVariant: function(win, form,variant) {
