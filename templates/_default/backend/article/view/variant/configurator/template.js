@@ -176,6 +176,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         var me = this;
         me.items = me.createItems();
         me.dockedItems = [ me.createToolbar() ];
+        me.title = me.snippets.title;
         me.registerEvents();
         me.callParent(arguments);
 
