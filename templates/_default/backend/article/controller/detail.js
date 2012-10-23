@@ -208,6 +208,14 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         lastFilter = priceStore.filters.items;
 
         priceStore.clearFilter();
+
+        if (article.getConfiguratorTemplateStore instanceof Ext.data.Store && article.getConfiguratorTemplateStore.getCount() > 0) {
+            var template = article.getConfiguratorTemplateStore.first();
+            if (template.getPrice() instanceof Ext.data.Store) {
+                template.getPrice().clearFilter();
+            }
+        }
+
         if (!me.hasArticlePrice(priceStore)) {
             priceStore.filter(lastFilter);
             Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.noPriceGiven, me.snippets.growlMessage);
