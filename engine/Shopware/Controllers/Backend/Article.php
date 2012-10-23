@@ -2088,19 +2088,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $newPrices = array();
 
             foreach($prices as $priceData) {
-                $customerGroup = $priceData['customerGroup'];
-
-                $surcharge = $fullPriceSurcharge;
-                if ($customerGroup->getTaxInput()) {
-                    $surcharge = $fullPriceSurcharge / (100 + $tax->getTax()) * 100;
-                }
-
-                $priceData['price'] += $surcharge;
+                $priceData['price'] += $fullPriceSurcharge;
                 $newPrices[] = $priceData;
             }
             $variantData['prices'] = $newPrices;
         }
-
         return $variantData;
     }
 
@@ -2176,7 +2168,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];
 
-        $data['prices'] = $this->preparePricesAssociatedData($data['prices'], $article, $article->getTax());
+        foreach($data['prices'] as &$price) {
+            $customerGroup = $this->getCustomerGroupRepository()->find($price['customerGroup']['id']);
+            $price['customerGroup'] = $customerGroup;
+        }
 
         $template = new \Shopware\Models\Article\Configurator\Template\Template();
         $template->fromArray($data);
