@@ -43,8 +43,8 @@
  * @subpackage Variants
  */
 //{namespace name=backend/article/view/main}
-//{block name="backend/article/view/variant/detail"}
-Ext.define('Shopware.apps.Article.view.variant.Detail', {
+//{block name="backend/article/view/variant/configurator/template"}
+Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
     /**
      * Define that the order main window is an extension of the enlight application window
      * @string
@@ -54,12 +54,12 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-variant-detail-window',
+    cls:Ext.baseCSSPrefix + 'article-configurator-template-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-variant-detail-window',
+    alias:'widget.article-configurator-template-window',
     /**
      * Set no border for the window
      * @boolean
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
         data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
         save:'{s name=detail/save_button}Save article{/s}',
         cancel:'{s name=detail/cancel_button}Cancel{/s}',
-        title:'{s name=detail/title}Article details: [0]{/s}'
+        title:'{s name=detail/configurator_template}Configurator Template{/s}'
     },
 
     /**
@@ -181,9 +181,6 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
 
         if (me.record) {
             me.formPanel.loadRecord(me.record);
-            me.setTitle(Ext.String.format(me.snippets.title, me.record.get('additionalText')));
-        } else {
-            me.setTitle(Ext.String.format(me.snippets.title, '-'));
         }
     },
 
@@ -226,7 +223,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             cls:'primary',
             text: me.snippets.save,
             handler: function() {
-                me.fireEvent('saveVariant', me, me.formPanel, me.record);
+                me.fireEvent('saveTemplate', me, me.formPanel, me.record);
             }
         });
 
@@ -270,20 +267,14 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
     		 * @param [object] The variant detail window
     		 * @param [Ext.data.Model] The article variant record.
     		 */
-    		'saveVariant',
+    		'saveTemplate',
             /**
              * Event will be fired when the user clicks the cancel button.
              *
              * @event
              * @param [object] The variant detail window
              */
-            'cancelEdit',
-            /**
-             * Event will be fired when the user clicks the apply data button.
-             *
-             * @event
-             */
-            'applyData'
+            'cancelEdit'
     	);
     },
 
@@ -292,17 +283,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
      * @return array
      */
     createItems: function() {
-        var me = this, translationType = 'variant', translationKey = null;
-
-        if (me.record) {
-            if (me.record.get('kind') === 1) {
-                translationType = 'variantMain';
-                translationKey = me.record.get('articleId');
-            } else {
-                translationType = 'variant';
-                translationKey = me.record.get('id');
-            }
-        }
+        var me = this;
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             items: me.createFormItems(),
@@ -310,14 +291,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             bodyPadding: 10,
             defaults: {
                 labelWidth: 155
-            },
-            plugins: [{
-                ptype: 'translation',
-                pluginId: 'translation',
-                translationType: translationType,
-                translationMerge: false,
-                translationKey: translationKey
-            }]
+            }
         });
 
         return [me.formPanel];
@@ -330,27 +304,12 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
     createFormItems: function() {
         var me = this;
 
-        //creates the price button to apply the standard prices of the main article on all variants.
-        me.applyDataButton = Ext.create('Ext.button.Button', {
-            style: 'position: absolute !important; top: 5px !important; right: 10px !important;',
-            iconCls:'sprite-money--arrow',
-            text: me.snippets.data,
-            hidden: (me.record.get('kind') == 1),
-            action: 'applyData',
-            handler: function() {
-                me.fireEvent('applyData', me, me.record);
-            }
-        });
-        var buttonContainer = Ext.create('Ext.container.Container', {
-            items: [me.applyDataButton]
-        });
-
         var baseFieldSet = me.createBaseFieldSet();
         var priceFieldSet = me.createPriceFieldSet();
         var basePriceFieldSet = me.createBasePriceFieldSet();
         var settingFieldSet = me.createSettingsFieldSet();
 
-        return [ buttonContainer, baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet, me.attributeFieldSet ];
+        return [ baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet, me.attributeFieldSet ];
     },
 
     /**
@@ -359,12 +318,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
      * @return Ext.form.FieldSet
      */
     createBaseFieldSet: function() {
-        var me = this, articleId;
-
-        articleId = null;
-        if (me.record) {
-            articleId = me.record.get('id');
-        }
+        var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.baseFieldSet.title,
@@ -378,19 +332,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 xtype: 'textfield',
                 name: 'number',
                 fieldLabel: me.snippets.baseFieldSet.number,
-                allowBlank: false,
-                enableKeyEvents:true,
-                checkChangeBuffer:700,
-                vtype:'remote',
-                validationUrl: '{url action="validateNumber"}',
-                validationRequestParam: articleId,
-                validationErrorMsg: me.snippets.baseFieldSet.numberValidation
-            }, {
-                xtype: 'textfield',
-                allowBlank: false,
-                name: 'additionalText',
-                translatable: true,
-                fieldLabel: me.snippets.baseFieldSet.additionalText
+                allowBlank: false
             }, {
                 xtype: 'checkbox',
                 name: 'active',

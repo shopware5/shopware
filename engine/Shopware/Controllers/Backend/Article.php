@@ -1504,6 +1504,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder = Shopware()->Models()->createQueryBuilder();
         return $builder->select(array('elements'))
                 ->from('Shopware\Models\Article\Element', 'elements')
+                ->orderBy('elements.position')
                 ->getQuery()
                 ->getArrayResult();
     }
@@ -1547,6 +1548,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $added = $data[0]['added'];
             $data[0]['added'] = $added->format('d.m.Y');
         }
+
+        $data[0]['configuratorTemplate'] = $this->getRepository()->getConfiguratorTemplateByArticleIdQuery($id)->getArrayResult();
+        $prices = $data[0]['configuratorTemplate'][0]['prices'];
+        if (!empty($prices)) {
+            $data[0]['configuratorTemplate'][0]['prices'] = $this->formatPricesFromNetToGross($prices, $data[0]['tax']);
+        }
+
         return $data;
     }
 
@@ -1740,10 +1748,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //we need a second array with all group ids to iterate them easily in the sql generation
         $originals = array();
         $allOptions = array();
+
+        $groupPositions = array();
+
         foreach($groups as $group) {
             if (!$group['active']) {
                 continue;
             }
+
             $options = array();
             //we iterate the options to get the option ids in a one dimensional array.
             foreach($group['options'] as $option) {
@@ -1756,10 +1768,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             //if some options active, we save the group and the options in an internal array
             if (!empty($options)) {
                 $activeGroups[] = array('id' => $group['id'], 'options' => $options);
+                $groupPositions[$group['id']] = (int) $group['position'];
                 $originals[] = $group['id'];
             }
         }
-
+ 
         if (empty($activeGroups)) {
             return array();
         }
@@ -1769,7 +1782,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $firstId = $first['id'];
 
         //now we create plain sql templates to parse the ids over the sprintf function
-        $selectTemplate = "o%s.id as o%sId, o%s.name as o%sName, g%s.id as g%sId, g%s.name as g%sName";
+        $selectTemplate = "o%s.id as o%sId, o%s.name as o%sName, g%s.id as g%sId, g%s.name as g%sName, o%s.position as o%sPosition, g%s.position as g%sPosition ";
 
         $fromTemplate = "FROM s_article_configurator_options o%s
                             LEFT JOIN s_article_configurator_groups g%s ON g%s.id = o%s.group_id";
@@ -1780,23 +1793,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $whereTemplate = "WHERE o%s.group_id = %s
                           AND o%s.id IN (%s)";
 
+        asort($groupPositions);
+        $orders = array();
+        foreach($groupPositions as $id => $position) {
+            $orders[] = 'g' . $id . 'Position, o' . $id . 'Position';
+        }
+        $orderBy = ' ORDER BY ' . implode(' , ', $orders);
+
         $groupSql = array();
         $selectSql = array();
 
         //we have remove the first group id, but we need the first id in the select, from and where path.
-        $selectSql[] = sprintf($selectTemplate, $firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId);
+        $selectSql[] = sprintf($selectTemplate, $firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId);
         $groupSql[] = sprintf($fromTemplate, $firstId,$firstId,$firstId,$firstId);
         $whereSql = sprintf($whereTemplate, $firstId,$firstId,$firstId, implode(',', $first['options']));
 
         //now we iterate all other groups, and create a select sql path and a cross join sql path.
         foreach($activeGroups as $group) {
             $groupId = $group['id'];
-            $selectSql[] = sprintf($selectTemplate, $groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId);
+            $selectSql[] = sprintf($selectTemplate, $groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId);
             $groupSql[] = sprintf($joinTemplate, $groupId,$groupId,$groupId,$groupId,implode(',', $group['options']),$groupId,$groupId,$groupId);
         }
 
         //concat the sql statement
-        $sql= 'SELECT ' . implode(",\n", $selectSql) . ' ' . implode("\n", $groupSql) . ' ' . $whereSql . ' LIMIT ' . $offset . ',' . $limit;
+        $sql= 'SELECT ' . implode(",\n", $selectSql) . ' ' . implode("\n", $groupSql) . ' ' . $whereSql . $orderBy .  ' LIMIT ' . $offset . ',' . $limit;
 
         return array(
             'sql' => $sql,
@@ -2122,20 +2142,50 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $article
      * @return mixed
      */
-    protected function getDetailDataForVariantGeneration($article) {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $detailData = $builder->select(array('detail', 'prices', 'attribute', 'customerGroup'))
-                              ->from('Shopware\Models\Article\Detail', 'detail')
-                              ->leftJoin('detail.prices', 'prices')
-                              ->leftJoin('prices.customerGroup', 'customerGroup')
-                              ->leftJoin('detail.attribute', 'attribute')
-                              ->where('detail.id = ?1')
-                              ->setParameter(1, $article->getMainDetail()->getId())
-                              ->getQuery()
-                              ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+    protected function getDetailDataForVariantGeneration($article)
+    {
+        $detailData = $this->getRepository()
+                           ->getConfiguratorTemplateByArticleIdQuery($article->getId())
+                           ->getArrayResult();
 
-        return $detailData;
+        if (empty($detailData)) {
+            $this->createConfiguratorTemplate($article);
+            $detailData = $this->getRepository()
+                    ->getConfiguratorTemplateByArticleIdQuery($article->getId())
+                    ->getArrayResult();
+
+        }
+        return $detailData[0];
     }
+
+    /**
+     * @param $article \Shopware\Models\Article\Article
+     */
+    protected function createConfiguratorTemplate($article)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('detail', 'prices', 'customerGroup', 'attribute', 'priceAttribute'))
+                ->from('Shopware\Models\Article\Detail', 'detail')
+                ->leftJoin('detail.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('detail.attribute', 'attribute')
+                ->leftJoin('prices.attribute', 'priceAttribute')
+                ->where('detail.id = :id')
+                ->setParameters(array('id' => $article->getMainDetail()->getId()));
+
+        $data = $builder->getQuery()->getArrayResult();
+        $data = $data[0];
+
+        $data['prices'] = $this->preparePricesAssociatedData($data['prices'], $article, $article->getTax());
+
+        $template = new \Shopware\Models\Article\Configurator\Template\Template();
+        $template->fromArray($data);
+        $template->setArticle($article);
+
+        Shopware()->Models()->persist($template);
+        Shopware()->Models()->flush();
+    }
+
 
     /**
      * This function prepares the posted extJs data. First all ids resolved to the assigned shopware models.
@@ -2181,6 +2231,40 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs article download data
         $data = $this->prepareDownloadAssociatedData($data);
 
+        $data = $this->prepareConfiguratorTemplateData($data, $article);
+        return $data;
+    }
+
+    /**
+     * Internal helper function which resolves the passed configurator template foreign keys
+     * with the associated models.
+     * @param $data
+     * @param $article
+     *
+     * @return mixed
+     */
+    protected function prepareConfiguratorTemplateData($data, $article)
+    {
+        if (empty($data['configuratorTemplate'])) {
+            unset($data['configuratorTemplate']);
+            return $data;
+        }
+        $data['configuratorTemplate'] = $data['configuratorTemplate'][0];
+        $data['configuratorTemplate']['attribute'] = $data['configuratorTemplate']['attribute'][0];
+
+        if (empty($data['configuratorTemplate'])) {
+            $data['configuratorTemplate'] = null;
+            return $data;
+        }
+
+        if (!empty($data['configuratorTemplate']['unitId'])) {
+            $data['configuratorTemplate']['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $data['configuratorTemplate']['unitId']);
+        } else {
+            $data['configuratorTemplate']['unit'] = null;
+        }
+
+        $data['configuratorTemplate']['prices'] = $this->preparePricesAssociatedData($data['configuratorTemplate']['prices'], $article, $data['tax']);
+        $data['configuratorTemplate']['article'] = $article;
         return $data;
     }
 

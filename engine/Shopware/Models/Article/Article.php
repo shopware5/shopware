@@ -392,6 +392,12 @@ class Article extends ModelEntity
     protected $propertyValues;
 
     /**
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @var \Shopware\Models\Article\Configurator\Template\Template
+     */
+    protected $configuratorTemplate;
+
+    /**
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
@@ -1093,5 +1099,23 @@ class Article extends ModelEntity
     public function setPropertyValues($propertyValues)
     {
         $this->propertyValues = $propertyValues;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Configurator\Template\Template
+     */
+    public function getConfiguratorTemplate()
+    {
+        return $this->configuratorTemplate;
+    }
+
+    /**
+     * @param \Shopware\Models\Article\Configurator\Template\Template $configuratorTemplate
+     * @return \Shopware\Models\Article\Article
+     */
+    public function setConfiguratorTemplate($configuratorTemplate)
+    {
+        $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
+        return $this;
     }
 }
