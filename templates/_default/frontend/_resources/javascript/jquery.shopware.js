@@ -68,6 +68,8 @@
  */
 jQuery(document).ready(function ($) {
 
+	$.touchyOptions.useDelegation = false;
+
     // Removes hiding class for all script related elements
     $('.hide_script').removeClass('hide_script');
 
@@ -757,23 +759,26 @@ jQuery(document).ready(function ($) {
         }
 
         this.each(function () {
+        
+        	var slider = Object.create($.ajaxSlider);
 
             if (config.debug === true) {
                 console.group('Slider: .' + $(this).attr('class'));
             }
 
-            $.ajaxSlider.debugMode('Mode: ' + mode, config);
+            slider.debugMode('Mode: ' + mode, config);
 
             config._this = $(this);
+            slider._self = $(this);
 
-            $.ajaxSlider.debugMode('Create Container', config);
+            slider.debugMode('Create Container', config);
 
             // Create slider outer container and replace selector
             config._container = $('<div>', {
                 'class': config.containerClass
             }).appendTo(config._this);
 
-            $.ajaxSlider.debugMode('Container created', config);
+            slider.debugMode('Container created', config);
 
             // Save slider mode
             config._mode = mode;
@@ -782,7 +787,7 @@ jQuery(document).ready(function ($) {
             config._this.addClass(config.layout + '_slider');
 
             if (config.title !== '' && config.headline) {
-                $.ajaxSlider.debugMode('Create headline', config);
+                slider.debugMode('Create headline', config);
 
                 // Create headline
                 config._headline = $('<h2>', {
@@ -791,7 +796,7 @@ jQuery(document).ready(function ($) {
                 }).prependTo(config._container);
             }
 
-            $.ajaxSlider.debugMode('Create left arrow', config);
+            slider.debugMode('Create left arrow', config);
 
             // Left arrow
             config._leftArrow = $('<a>', {
@@ -801,7 +806,7 @@ jQuery(document).ready(function ($) {
                 'href': '#slideLeft'
             }).appendTo(config._container).hide();
 
-            $.ajaxSlider.debugMode('Create right arrow', config);
+            slider.debugMode('Create right arrow', config);
 
             // Right arrow
             config._rightArrow = $('<a>', {
@@ -816,27 +821,28 @@ jQuery(document).ready(function ($) {
                 config._rightArrow.hide();
             }
 
-
-            $.ajaxSlider.debugMode('Select mode', config);
+            slider.debugMode('Select mode', config);
+            slider.setConfig(config);
+            slider.config = config;
 
             // Mode selection
             switch (mode) {
             case 'ajax':
-                $.ajaxSlider.ajaxMode(config);
+                slider.ajaxMode(config);
                 break;
             case 'locale':
-                $.ajaxSlider.localeMode(config);
+                slider.localeMode(config);
                 break;
             default:
-                $.ajaxSlider.debugMode('The passed mode is not supported', config);
+                slider.debugMode('The passed mode is not supported', config);
                 return false;
             }
 
             if (config.rotate === true) {
-                $.ajaxSlider.debugMode('Create rotation', config);
+                slider.debugMode('Create rotation', config);
 
                 var timeout = window.setTimeout(function() {
-                    $.ajaxSlider.rotateSlider(config);
+                    slider.rotateSlider(config);
                     timeout = null;
                 }, 80);
 
@@ -847,8 +853,6 @@ jQuery(document).ready(function ($) {
             console.groupEnd();
         }
 
-        $.ajaxSlider.config = config;
-
         // Return this to support jQuery's chaining
         return this;
     };
@@ -856,16 +860,22 @@ jQuery(document).ready(function ($) {
     $.ajaxSlider = {
 
         /**
-         * Declare the configuration in a global scope here.
-         * @default null
-         * @object
-         */
-        config: null,
-
-        /**
          * Indicates if we're dealing with an iPad
          */
         isiPad: navigator.userAgent.match(/iPad/i) != null,
+        
+        /**
+         * $.ajaxSlider.setConfig
+         *
+         * Helper method which sets the configuration object
+         * of the ajaxSlider object.
+         *
+         * @param (obj) config - the plugin config
+         */
+        setConfig: function(config) {
+	   		this.config = config;
+	   		return true;  
+        },
 
         /**
          * $.ajaxSlider.createContainers
@@ -1223,18 +1233,40 @@ jQuery(document).ready(function ($) {
                     }
 
                     // Right arrow
-                    config._rightArrow.bind('click', function (event) {
+                    config._rightArrow.bind('click touchstart', function (event) {
                         $.ajaxSlider.rightArrow(event, config);
                     });
 
                     // Left arrow
-                    config._leftArrow.bind('click', function (event) {
+                    config._leftArrow.bind('click touchstart', function (event) {
                         $.ajaxSlider.leftArrow(event, config);
                     });
-
+                    
                     // Swipe gestures
-                    config._container.find('*').bind('touchy-swipe', function(event, $target, data) {
+                    config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
 	               		me.handleSwipeGestures(data, event, config);
+                    });
+                    
+                    config._this.find('a').bind('touchstart', function(event) {
+                    	var link = $(this), touchTimeout;
+                    	event.preventDefault();
+                    	
+                    	if(!link.attr('href') && !config.swipeRunning) {
+                    		return false;
+                    	}
+                    	
+                    	touchTimeout = window.setTimeout(function(event) {
+	                    	if(!link.attr('href')) {
+	                    		return false;
+	                    	}
+	                    	
+	                    	if(!config.swipeRunning) {
+		                    	window.location.href = link.attr('href');
+	                    	}
+	                    	window.clearTimeout(touchTimeout);
+	                    	touchTimeout = null;
+                    	}, 200)
+                    	
                     });
 
                     timeout = null;
@@ -1309,18 +1341,40 @@ jQuery(document).ready(function ($) {
                 }
 
                 // Right arrow
-                config._rightArrow.bind('click', function (event) {
+                config._rightArrow.bind('click touchstart', function (event) {
                     $.ajaxSlider.rightArrow(event, config);
                 });
 
                 // Left arrow
-                config._leftArrow.bind('click', function (event) {
+                config._leftArrow.bind('click touchstart', function (event) {
                     $.ajaxSlider.leftArrow(event, config);
                 });
 
                 // Swipe gestures
-                config._container.find('*').bind('touchy-swipe', function(event, $target, data) {
+                config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
                		me.handleSwipeGestures(data, event, config);
+                });
+                
+                config._this.find('a').bind('touchstart', function(event) {
+                	var link = $(this), touchTimeout;
+                	event.preventDefault();
+                	
+                	if(!link.attr('href') && !config.swipeRunning) {
+                		return false;
+                	}
+                	
+                	touchTimeout = window.setTimeout(function(event) {
+                    	if(!link.attr('href')) {
+                    		return false;
+                    	}
+                    	
+                    	if(!config.swipeRunning) {
+	                    	window.location.href = link.attr('href');
+                    	}
+                    	window.clearTimeout(touchTimeout);
+                    	touchTimeout = null;
+                	}, 200)
+                	
                 });
             }
         },
@@ -1493,15 +1547,15 @@ jQuery(document).ready(function ($) {
                 config._rightArrow.hide();
             }
 
-            config._leftArrow.bind('click', function (event) {
+            config._leftArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.leftArrow(event, config);
             });
-            config._rightArrow.bind('click', function (event) {
+            config._rightArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.rightArrow(event, config);
             });
 
             // Swipe gestures
-            config._container.find('*').bind('touchy-swipe', function(event, $target, data) {
+            config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
            		me.handleSwipeGestures(data, event, config);
             });
         },
@@ -1526,15 +1580,15 @@ jQuery(document).ready(function ($) {
                 config._rightArrow.hide();
             }
 
-            config._leftArrow.bind('click', function (event) {
+            config._leftArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.leftArrow(event, config);
             });
-            config._rightArrow.bind('click', function (event) {
+            config._rightArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.rightArrow(event, config);
             });
 
     		// Swipe gestures
-            config._container.find('*').bind('touchy-swipe', function(event, $target, data) {
+            config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
            		me.handleSwipeGestures(data, event, config);
             });
         },
