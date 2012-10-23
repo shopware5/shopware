@@ -3,7 +3,7 @@
 	<title>Newsletter</title>
 	<style type="text/css">
 		a:link, a:visited {
-			color:#fff;
+			color:#8c8c8c;
 			text-decoration:none;
 		}
 		a:hover, a:active {
@@ -22,7 +22,7 @@
 	</style>
 </head>
 
-<body style="height:100%; font-family:Arial, Helvetica, sans-serif; padding:0; background-color:#f6f3ec;" background="#f6f3ec;margin:0;padding:0;" leftmargin="0" topmargin="0">
+<body style="height:100%; font-family:Arial, Helvetica, sans-serif; padding:0; background-color:#f6f3ec;" background="#ffffff;margin:0;padding:0;" leftmargin="0" topmargin="0">
 
 <table align="center" width="100%" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c;">
 <tr>

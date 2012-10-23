@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/newsletter_manager/main}
+//{namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Subwindow for creating a new newsletter or edit an existing one
@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
     stateful: true,
     stateId: 'shopware-newsletter-manager-newsletter-window',
     title: '{s name=titleCreateNewsletter}Create new newsletter{/s}',
+    cls: Ext.baseCSSPrefix + 'newsletter-window',
 
     record: null,
 

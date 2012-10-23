@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/newsletter_manager/main}
+//{namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Editor
@@ -39,6 +39,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-settings',
     title: '{s name=title/Settings}Settings{/s}',
+    ui: 'shopware-ui',
+
+    cls: Ext.baseCSSPrefix + 'newsletter-settings-panel',
 
     layout: 'anchor', //anchor
     defaults: {
