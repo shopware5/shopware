@@ -50,7 +50,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         } else {
             // @deprecated - support for shopware 3.x campaigns
             $campaignId = (int)$this->Request()->sCampaign;
-            if (empty($$campaignId)) {
+            if (empty($campaignId)) {
                 return $this->forward('index', 'index');
             }
             $campaign = Shopware()->Modules()->Marketing()->sCampaignsGetDetail($campaignId);
