@@ -33,7 +33,7 @@
         
         <tr>
         <td valign="top" style="color:#000; font-size:12px; background-color:#fff; height:5px; padding: 8px 10px 5px 10px; font-weight:bold;">
-       {$sArticle.articleName|truncate:20:"[..]"}
+            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" target="_blank" title="{$sArticle.articleName}" style="color:#000000;text-decoration:underline;font-size:11px;">{$sArticle.articleName|truncate:20:"[..]"}</a>
         
         </td>
         </tr>
@@ -75,7 +75,7 @@
               
                </td>
               <td>
-              <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" target="_blank" title="{$sArticle.articleName}" style="color:#8c8c8c;text-decoration:underline;font-size:11px;">{se name='NewsletterBoxArticleLinkDetails'}Mehr Infos{/se}</a>
+              <!--<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" target="_blank" title="{$sArticle.articleName}" style="color:#8c8c8c;text-decoration:underline;font-size:11px;">{se name='NewsletterBoxArticleLinkDetails'}Mehr Infos{/se}</a>-->
              
               </td>
             </tr>

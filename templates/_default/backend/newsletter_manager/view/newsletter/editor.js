@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/newsletter_manager/main}
+//{namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Editor
@@ -84,11 +84,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
         var me = this;
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            ui: 'shopware-ui',
             items: [
                 {
                     xtype: 'textfield',
                     vtype: 'email',
                     checkChangeBuffer: 200,
+                    ui: 'shopware-ui',
                     listeners: {
                         change: function(field, value) {
                             var button = Ext.getCmp('sendMail');

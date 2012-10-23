@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/newsletter_manager/main}
+//{namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware Controller - Overview controller
@@ -373,7 +373,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                         var url = location.href.substr(0, pos) + "/backend/Newsletter/view?id=" + rawData.data.id;
 
                         new Ext.Window({
-                            title : '{s name=preview}Preview: {/s}' + newsletter.get('subject'),
+                            title : '{s name=preview}Preview: {/s} ' + newsletter.get('subject'),
                             width : 940,
                             height: 600,
                             layout : 'fit',

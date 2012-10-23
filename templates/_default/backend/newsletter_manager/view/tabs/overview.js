@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/newsletter_manager/main}
+//{namespace name="backend/newsletter_manager/main"}
 
 /**
  * Shopware UI - Overview
