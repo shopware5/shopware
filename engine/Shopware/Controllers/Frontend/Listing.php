@@ -84,8 +84,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $campaign['categoryId'] = $categoryId;
             $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
-        $this->View()->assign('campaignsData', $campaigns);
-
         $showListing = true;
         $hasEmotion = false; 
 
