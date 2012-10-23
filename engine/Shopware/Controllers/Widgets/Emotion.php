@@ -40,7 +40,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     /**
      * Get emotion by category
-     * @param $repository
+     * @param $repository \Shopware\Models\Emotion\Repository
      * @return array
      */
     public function getEmotion($repository)

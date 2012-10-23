@@ -744,7 +744,8 @@ class %className% extends ModelEntity
 
         /**@var $file SplFileInfo*/
         foreach($iterator as $file) {
-            if ($file->isDir() || $file->getExtension() !== 'php') {
+            $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+            if ($file->isDir() || $extension !== 'php') {
                 continue;
             }
 
