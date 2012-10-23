@@ -294,6 +294,12 @@ class ModelManager extends EntityManager
      */
     public function regenerateAttributeProxies($tableNames = array())
     {
+        $metaDataCache = $this->getConfiguration()->getMetadataCacheImpl();
+
+        if(method_exists($metaDataCache, 'deleteAll')) {
+            $metaDataCache->deleteAll();
+        }
+
         $allMetaData = $this->getMetadataFactory()->getAllMetadata();
         $proxyFactory = $this->getProxyFactory();
 
