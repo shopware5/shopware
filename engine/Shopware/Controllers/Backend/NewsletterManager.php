@@ -513,12 +513,17 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getCampaignsRepository()->getListAddressesQuery($filter, $sort, $limit, $offset);
-        $totalResult = Shopware()->Models()->getQueryCount($query);
-        $addresses = $query->getArrayResult();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        //returns the customer data
+        $result = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $addresses,
+            'data' => $result,
             'total' => $totalResult,
         ));
     }
@@ -533,12 +538,19 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getCampaignsRepository()->getListSenderQuery($filter, $sort, $limit, $offset);
-        $totalResult = Shopware()->Models()->getQueryCount($query);
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        //returns the customer data
+        $result = $paginator->getIterator()->getArrayCopy();
+
         $sender = $query->getArrayResult();
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $sender,
+            'data' => $result,
             'total' => $totalResult,
         ));
 
