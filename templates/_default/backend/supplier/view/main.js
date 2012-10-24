@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Supplier.view.Main', {
     layout : 'border',
     alias : 'widget.supplierGrid',
     width : 800,
-    height : 600,
+    height : '90%',
     maximizable : true,
     minimizable: true,
     stateful : true,

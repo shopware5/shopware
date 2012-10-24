@@ -44,8 +44,9 @@ Ext.define('Shopware.apps.Vote.view.main.Window', {
     alias: 'widget.vote-main-window',
     autoShow: true,
     layout: 'border',
-    height: 650,
+    height: '90%',
     width: 925,
+    autoScroll: true,
     stateful:true,
     stateId:'shopware-votes-window',
 

@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     layout : 'fit',
     title : '{s name=title}Supplier - edit{/s}',
     width : 700,
+    height : '90%',
     stateful : true,
     stateId : 'shopware-supplier-edit',
 
@@ -150,6 +151,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             defaults : me.getFormDefaults(),
             bodyPadding : 10,
             border : 0,
+            autoScroll: true,
             items : [
                 {
                     xtype : 'container',

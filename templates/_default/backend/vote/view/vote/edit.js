@@ -156,6 +156,7 @@ Ext.define('Shopware.apps.Vote.view.vote.Edit', {
             padding: '10px',
             renderTpl: template,
             region: 'north',
+            autoScroll: true,
             itemSelector: 'b',
             renderData: me.record.data
         });
@@ -168,6 +169,7 @@ Ext.define('Shopware.apps.Vote.view.vote.Edit', {
             collapsible : false,
             split : false,
             region : 'center',
+            autoScroll: true,
             border: 0,
             defaults : {
                 labelStyle : 'font-weight: 700; text-align: left;',
