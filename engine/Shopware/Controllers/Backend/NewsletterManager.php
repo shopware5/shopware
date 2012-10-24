@@ -626,7 +626,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $ids = implode(', ', $ids);
 
         $addresses = array();
-        if($ids !== ', ') {
+        if($ids !== '') {
             $sql = "SELECT lastmailing, COUNT(lastmailing) as addressCount
             FROM `s_campaigns_mailaddresses`
             WHERE lastmailing
