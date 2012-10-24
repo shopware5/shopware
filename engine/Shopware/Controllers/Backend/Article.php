@@ -1510,49 +1510,308 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    protected function getArticleData($articleId)
+    {
+        return $this->getRepository()
+                    ->getArticleBaseDataQuery($articleId)
+                    ->getArrayResult();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleCategories($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleCategoriesQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['categories'])) {
+            return array();
+        }
+
+        $sql= "SELECT categoryID FROM s_articles_categories WHERE articleID = ? ORDER BY id ASC";
+        $categorySort = Shopware()->Db()->fetchCol($sql, array($articleId));
+
+        $categories = array();
+        foreach($categorySort as $sort) {
+            $category = $result[0]['categories'][$sort];
+            $category['name'] = $this->getCategoryRepository()->getPathById($sort, 'name', '>');
+            $categories[] = $category;
+        }
+        return $categories;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleSimilars($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleSimilarsQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['similar'])) {
+            return array();
+        } else {
+            return $result[0]['similar'];
+        }
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleRelated($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleRelatedQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['related'])) {
+            return array();
+        } else {
+            return $result[0]['related'];
+        }
+    }
+
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleImages($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleWithImagesQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['images'])) {
+            return array();
+        } else {
+            return $result[0]['images'];
+        }
+    }
+
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleLinks($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleLinksQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['links'])) {
+            return array();
+        } else {
+            return $result[0]['links'];
+        }
+    }
+
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleDownloads($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleDownloadsQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['downloads'])) {
+            return array();
+        } else {
+            return $result[0]['downloads'];
+        }
+    }
+
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleCustomerGroups($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleCustomerGroupsQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['customerGroups'])) {
+            return array();
+        } else {
+            return $result[0]['customerGroups'];
+        }
+    }
+
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleConfiguratorSet($articleId)
+    {
+        $result = $this->getRepository()
+                ->getArticleConfiguratorSetQuery($articleId)
+                ->getArrayResult();
+
+        if (empty($result[0]['configuratorSet'])) {
+            return array();
+        } else {
+            return $result[0]['configuratorSet'];
+        }
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     *
+     * @param $configuratorSetId
+     * @return array
+     */
+    public function getArticleDependencies($configuratorSetId)
+    {
+        return $this->getRepository()
+                    ->getConfiguratorDependenciesQuery($configuratorSetId)
+                    ->getArrayResult();
+
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     *
+     * @param $configuratorSetId
+     * @return array
+     */
+    public function getArticlePriceSurcharges($configuratorSetId)
+    {
+        return $this->getRepository()
+                    ->getConfiguratorPriceSurchargesQuery($configuratorSetId)
+                    ->getArrayResult();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     *
+     * @param $articleId
+     * @param $tax
+     *
+     * @return array
+     */
+    public function getArticleConfiguratorTemplate($articleId, $tax)
+    {
+        $query = $this->getRepository()->getConfiguratorTemplateByArticleIdQuery($articleId);
+
+        $configuratorTemplate = $query->getArrayResult();
+
+        $prices = $configuratorTemplate['prices'];
+        if (!empty($prices)) {
+            $configuratorTemplate['prices'] = $this->formatPricesFromNetToGross($prices, $tax);
+        }
+
+        return $configuratorTemplate;
+    }
+
+    /**
+     * Helper function to get a one or null result over the pagination extension
+     * @param $query \Doctrine\ORM\Query
+     *
+     * @return array
+     */
+    private function getOneOrNullResult($query)
+    {
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        return $paginator->getIterator()->getArrayCopy();
+    }
+
+
+    /**
      * Internal helper function to get the article data of the passed id.
      * @param $id
      * @return array
      */
     protected function getArticle($id)
     {
-        $data = $this->getRepository()->getArticleQuery($id)->getArrayResult();
+        $data = $this->getArticleData($id);
+        $tax = $data[0]['tax'];
 
-        $data[0]['mainPrices'] = $this->getPrices($data[0]['mainDetail']['id'], $data[0]['tax']);
-        $data[0]['attribute'] = $this->getRepository()->getAttributesQuery($data[0]['mainDetail']['id'])->getArrayResult();
+        $data[0]['categories'] = $this->getArticleCategories($id);
+        $data[0]['similar'] = $this->getArticleSimilars($id);
+        $data[0]['related'] = $this->getArticleRelated($id);
+        $data[0]['images'] = $this->getArticleImages($id);
+        $data[0]['links'] = $this->getArticleLinks($id);
+        $data[0]['downloads'] = $this->getArticleDownloads($id);
+        $data[0]['customerGroups'] = $this->getArticleCustomerGroups($id);
+        $data[0]['mainPrices'] = $this->getPrices($data[0]['mainDetail']['id'], $tax);
+        $data[0]['configuratorSet'] = $this->getArticleConfiguratorSet($id);
+        $data[0]['dependencies'] = array();
+        $data[0]['priceSurcharges'] = array();
 
-        $configuratorSet = $this->getRepository()
-                                ->getArticleConfiguratorSetByArticleIdQuery($id)
-                                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        if (!empty($configuratorSet)) {
-            $data[0]['configuratorSet'] = array($configuratorSet['configuratorSet']);
-        } else {
-            $data[0]['configuratorSet'] = null;
+        if (!empty($data[0]['configuratorSetId'])) {
+            $data[0]['dependencies'] = $this->getArticleDependencies($data[0]['configuratorSetId']);
+            $data[0]['priceSurcharges'] = $this->getArticlePriceSurcharges($data[0]['configuratorSetId']);
         }
 
-        $sql= "SELECT categoryID FROM s_articles_categories WHERE articleID = ? ORDER BY id ASC";
-        $categorySort = Shopware()->Db()->fetchCol($sql, array($id));
+        $data[0]['configuratorTemplate'] = $this->getArticleConfiguratorTemplate($id, $tax);
 
-        $categories = array();
-        foreach($categorySort as $sort) {
-            $category = $data[0]['categories'][$sort];
-            $category['name'] = $this->getCategoryRepository()->getPathById($sort, 'name', '>');
-            $categories[] = $category;
-        }
-        $data[0]['categories'] = $categories;
-
-        $data[0]['dependencies'] = $this->getRepository()->getConfiguratorDependenciesQuery($data[0]['configuratorSet'][0]['id'])->getArrayResult();
-        $data[0]['priceSurcharges'] = $this->getRepository()->getConfiguratorPriceSurchargesQuery($data[0]['configuratorSet'][0]['id'])->getArrayResult();
         if ($data[0]['added'] && $data[0]['added'] instanceof \DateTime) {
             $added = $data[0]['added'];
             $data[0]['added'] = $added->format('d.m.Y');
-        }
-
-        $data[0]['configuratorTemplate'] = $this->getRepository()->getConfiguratorTemplateByArticleIdQuery($id)->getArrayResult();
-        $prices = $data[0]['configuratorTemplate'][0]['prices'];
-        if (!empty($prices)) {
-            $data[0]['configuratorTemplate'][0]['prices'] = $this->formatPricesFromNetToGross($prices, $data[0]['tax']);
         }
 
         return $data;
