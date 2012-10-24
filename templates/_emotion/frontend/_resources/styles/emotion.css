@@ -2846,11 +2846,10 @@ div.listing .artbox .star {
 
 /** SMALL QUANTITIES **/
 #content #confirm .table .small_quantities {min-height: 70px !important;}
-#content #confirm .table .small_quantities .grid_6 {margin-left: 85px !important;}
+#content #confirm .table .small_quantities .grid_6 {margin-left: 95px !important; width: 340px;}
 #content #confirm .table .small_quantities .push_4 {left: 255px;}
 #basket .table .small_quantities,
 #content #confirm .table .small_quantities {background: url(../images/icons/ico_basket_bundle_rabatt.png) no-repeat 30px center #fff; min-height: 45px !important;}
-
 
 #content #confirm .table .table_row, #finished .table .table_row {min-height: 100px;}
 
