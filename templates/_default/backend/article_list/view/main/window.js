@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     title : '{s name=list/title}Article list{/s}',
     layout: 'border',
     width: 990,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-articleList-main-window',
 

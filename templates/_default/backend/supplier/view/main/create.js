@@ -43,6 +43,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
     layout : 'fit',
     title : '{s name=title}Supplier - Create{/s}',
     width : 700,
+    height : '90%',
+    autoScroll: true,
     stateful : true,
     stateId : 'shopware-supplier-create',
 
@@ -78,6 +80,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             split       : false,
             region      : 'center',
             width       : '100%',
+            autoScroll: true,
             defaults : me.getFormDefaults(),
             bodyPadding : 10,
             items : [
