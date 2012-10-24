@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
 
         return Ext.create('Ext.grid.Panel', {
             store: me.store,
-            height: 155,
+            height: 255,
             name: 'property-grid',
             cls: Ext.baseCSSPrefix + 'free-standing-grid ' + Ext.baseCSSPrefix + 'article-properties-grid',
             title: '{s name=detail/property/title}Properties{/s}',
