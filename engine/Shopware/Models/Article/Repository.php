@@ -36,6 +36,322 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleBaseDataQuery($articleId)
+    {
+        return $this->getArticleBaseDataQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleBaseDataQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'mainDetail', 'tax', 'attribute'));
+        $builder->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.mainDetail', 'mainDetail')
+                ->leftJoin('article.tax', 'tax')
+                ->leftJoin('mainDetail.attribute', 'attribute')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleCategoriesQuery($articleId)
+    {
+        return $this->getArticleCategoriesQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleCategoriesQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'categories'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleSimilarsQuery($articleId)
+    {
+        return $this->getArticleSimilarsQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleSimilarsQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'similar', 'similarDetail'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.similar', 'similar')
+                ->leftJoin('similar.mainDetail', 'similarDetail')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleRelatedQuery($articleId)
+    {
+        return $this->getArticleRelatedQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleRelatedQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'accessories', 'accessoryDetail'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.related', 'accessories')
+                ->leftJoin('accessories.mainDetail', 'accessoryDetail')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleWithImagesQuery($articleId)
+    {
+        return $this->getArticleWithImagesQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleWithImagesQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.images', 'images')
+                ->leftJoin('images.attribute', 'imageAttribute')
+                ->leftJoin('images.mappings', 'imageMapping')
+                ->leftJoin('imageMapping.rules', 'mappingRule')
+                ->leftJoin('mappingRule.option', 'ruleOption')
+                ->where('article.id = :articleId')
+                ->andWhere('images.parentId IS NULL')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleLinksQuery($articleId)
+    {
+        return $this->getArticleLinksQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleLinksQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'links', 'linkAttribute'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.links', 'links')
+                ->leftJoin('links.attribute', 'linkAttribute')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleDownloadsQuery($articleId)
+    {
+        return $this->getArticleDownloadsQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleDownloadsQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'downloads', 'downloadAttribute'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.downloads', 'downloads')
+                ->leftJoin('downloads.attribute', 'downloadAttribute')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleCustomerGroupsQuery($articleId)
+    {
+        return $this->getArticleCustomerGroupsQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleCustomerGroupsQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'customerGroups'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.customerGroups', 'customerGroups')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleConfiguratorSetQuery($articleId)
+    {
+        return $this->getArticleConfiguratorSetQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * Used for the article backend module to load the article data into
+     * the module. This function selects only some fragments for the whole article
+     * data. The full article data stack is defined in the
+     * Shopware_Controller_Backend_Article::getArticle function
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleConfiguratorSetQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article', 'configuratorSet', 'groups', 'options'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->innerJoin('article.configuratorSet', 'configuratorSet')
+                ->leftJoin('configuratorSet.groups', 'groups')
+                ->leftJoin('configuratorSet.options', 'options')
+                ->addOrderBy('groups.position', 'ASC')
+                ->addOrderBy('options.groupId', 'ASC')
+                ->addOrderBy('options.position', 'ASC')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+
+
     /**
      * Returns an instance of \Doctrine\ORM\Query object which selects all data about a single article.
      * The query selects the article, main detail of the article, assigned categories, assigned similar and related articles,
@@ -60,34 +376,45 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array(
-                      'article', 'mainDetail',
-                      'categories', 'similar',
-                      'accessories', 'accessoryDetail',
-                      'similarDetail', 'images',
-                      'links', 'downloads',
-                      'tax', 'linkAttribute', 'customerGroups',
-                      'imageAttribute', 'downloadAttribute', 'propertyValues',
-                      'imageMapping', 'mappingRule', 'ruleOption'
+                      'article',
+                      'mainDetail',
+                      'tax',
+                      'categories',
+                      'similar',
+                      'accessories',
+                      'accessoryDetail',
+                      'similarDetail',
+                      'images',
+                      'links',
+                      'downloads',
+                      'linkAttribute',
+                      'customerGroups',
+                      'imageAttribute',
+                      'downloadAttribute',
+                      'propertyValues',
+                      'imageMapping',
+                      'mappingRule',
+                      'ruleOption'
                 ))
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.mainDetail', 'mainDetail')
-                ->leftJoin('article.tax', 'tax')
                 ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
-                ->leftJoin('article.links', 'links')
-                ->leftJoin('article.images', 'images')
-                ->leftJoin('article.downloads', 'downloads')
-                ->leftJoin('article.related', 'accessories')
-                ->leftJoin('article.propertyValues', 'propertyValues')
-                ->leftJoin('accessories.mainDetail', 'accessoryDetail')
                 ->leftJoin('article.similar', 'similar')
+                ->leftJoin('article.related', 'accessories')
+                ->leftJoin('accessories.mainDetail', 'accessoryDetail')
                 ->leftJoin('similar.mainDetail', 'similarDetail')
+                ->leftJoin('article.images', 'images')
+                ->leftJoin('article.links', 'links')
+                ->leftJoin('article.downloads', 'downloads')
+                ->leftJoin('article.tax', 'tax')
                 ->leftJoin('links.attribute', 'linkAttribute')
+                ->leftJoin('article.customerGroups', 'customerGroups')
                 ->leftJoin('images.attribute', 'imageAttribute')
+                ->leftJoin('downloads.attribute', 'downloadAttribute')
+                ->leftJoin('article.propertyValues', 'propertyValues')
                 ->leftJoin('images.mappings', 'imageMapping')
                 ->leftJoin('imageMapping.rules', 'mappingRule')
                 ->leftJoin('mappingRule.option', 'ruleOption')
-                ->leftJoin('downloads.attribute', 'downloadAttribute')
-                ->leftJoin('article.customerGroups', 'customerGroups')
                 ->where('article.id = ?1')
                 ->andWhere('images.parentId IS NULL')
                 ->setParameter(1, $articleId);
