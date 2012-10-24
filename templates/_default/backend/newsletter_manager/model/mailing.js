@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
 //        { name: 'groups', type: 'string' },
         { name: 'subject', type: 'string' },
         { name: 'status', type: 'int' },
+        { name: 'addresses', type: 'int' },
         { name: 'customerGroup', type: 'string' },
         { name: 'senderName', type: 'string' },
         { name: 'senderMail', type: 'string' },
@@ -98,7 +99,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
      */
     associations:[
         // Addresses which have already received this mail
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Recipient', name:'getAddresses', associationKey:'addresses' },
+//        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Recipient', name:'getAddresses', associationKey:'addresses' },
         // Container elements
         { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Container', name:'getContainers', associationKey:'containers' },
         // Groups which this newsletter addresses

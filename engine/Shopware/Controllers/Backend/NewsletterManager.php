@@ -618,11 +618,33 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
+        // Get address count via plain sql in order to improve the speed
+        $ids = array();
+        foreach($result as $newsletter) {
+            $ids[] = $newsletter['id'];
+        }
+        $ids = implode(', ', $ids);
+
+        $addresses = array();
+        if($ids !== ', ') {
+            $sql = "SELECT lastmailing, COUNT(lastmailing) as addressCount
+            FROM `s_campaigns_mailaddresses`
+            WHERE lastmailing
+            IN ( $ids )";
+            $addresses = Shopware()->Db()->fetchAssoc($sql);
+        }
+
         // join newsletters and corrsponding revenues
         foreach($result as $key => $value){
             // Groups are stored serialized in the database.
             // Here they will be unserialized and flattened in order to match the ExJS RecipientGroup store
             $result[$key]['groups'] = $this->unserializeGroup($result[$key]['groups']);
+
+            if(!isset($addresses[$value['id']])) {
+                $result[$key]['addresses'] = 0;
+            }else{
+                $result[$key]['addresses'] = $addresses[$value['id']]['addressCount'];
+            }
 
             $revenue = $revenues['sCampaign'. $value['id']]['revenue'];
             if($revenue !== null) {
