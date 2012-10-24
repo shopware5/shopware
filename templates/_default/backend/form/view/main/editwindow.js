@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Form.view.main.Editwindow', {
     /*{/if}*/
 
     layout: 'fit',
-
+    height : '90%',
     width: 860,
 
     /**

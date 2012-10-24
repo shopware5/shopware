@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.RiskManagement.view.main.Window', {
     bodyBorder: false,
     autoShow: true,
     layout: 'border',
-    height: 650,
+    height: '90%',
     width: 925,
 
     stateful:true,

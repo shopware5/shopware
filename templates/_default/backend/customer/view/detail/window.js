@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * Define the height of the window
      * @integer
      */
-    height:600,
+    height:'90%',
 
     /**
      * Display no footer button for the detail window

@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Config.view.main.Window', {
     cls: Ext.baseCSSPrefix + 'template-main-window',
     hideNavigation: false,
     width: 1100,
+    height:'90%',
 
     loadTitle: function(record) {
         var me = this,
@@ -68,7 +69,7 @@ Ext.define('Shopware.apps.Config.view.main.Window', {
             me.renderTo = Ext.getBody();
             me.unstyled = true;
             me.width = '100%';
-            me.height = '100%';
+            me.height = '90%';
         }
         me.callParent(arguments);
     },

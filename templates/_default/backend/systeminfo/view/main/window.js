@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
     layout: 'fit',
     stateful:true,
     stateId:'shopware-systeminfo-window',
-	height: 650,
+	height: '90%',
  	width: 925,
 	overflow: 'hidden',
 

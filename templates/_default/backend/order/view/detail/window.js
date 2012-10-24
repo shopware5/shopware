@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
      * Define window height
      * @integer
      */
-    height:600,
+    height:'90%',
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
