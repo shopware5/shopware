@@ -991,7 +991,6 @@ div#breadcrumb .sep {background: url("../images/backgrounds/left_nav_arrow_right
 	height: 31px;
 	border-bottom: 1px solid #dfdfdf;
 	border-left: 1px solid #dfdfdf;
-	overflow: hidden;
 	display: block;
 }
 #content .inner .custom_subnavi ul,
@@ -2305,8 +2304,6 @@ div.table_foot input.button_tablefoot {text-indent: -9999em; width: 22px; paddin
 	display:block;
 	left: 10px; top: 15px;
 }
-
-#basket .table .small_quantities {min-height: 45px !important;}
 #basket .table .noborder {min-height: 40px !important;}
 
 /** CART - BOX **/
@@ -2851,6 +2848,9 @@ div.listing .artbox .star {
 #content #confirm .table .small_quantities {min-height: 70px !important;}
 #content #confirm .table .small_quantities .grid_6 {margin-left: 85px !important;}
 #content #confirm .table .small_quantities .push_4 {left: 255px;}
+#basket .table .small_quantities,
+#content #confirm .table .small_quantities {background: url(../images/icons/ico_basket_bundle_rabatt.png) no-repeat 30px center #fff; min-height: 45px !important;}
+
 
 #content #confirm .table .table_row, #finished .table .table_row {min-height: 100px;}
 
