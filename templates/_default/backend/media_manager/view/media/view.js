@@ -378,6 +378,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             cls: Ext.baseCSSPrefix + 'more-info',
             style: 'background: #fff',
             collapsible: true,
+            autoScroll:true,
             region: 'east',
             width: 205,
             items: [ me.infoView ]

@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Form.view.main.Mainwindow', {
     title : '{s name=title}Forms{/s}',
     layout: 'border',
     width: 800,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-form-mainwindow',
 

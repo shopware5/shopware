@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Window', {
 
     layout: 'border',
     width: 980,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-snippet-main-window',
 

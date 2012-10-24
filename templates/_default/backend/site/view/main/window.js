@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
     alias: 'widget.site-mainWindow',
     layout: 'border',
     width: 1200,
-    height: 700,
+    height: '90%',
     autoShow: true,
     resizable: true,
     maximizable: true,

@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
     stateful: true,
     stateId: 'shopware-importexport-mainwindow',
 
-    height: 680,
+    height: '90%',
     autoScroll: true,
 
     layout: {

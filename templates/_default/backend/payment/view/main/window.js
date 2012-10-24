@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
     border: false,
     autoShow: true,
     layout: 'border',
-    height: 650,
+    height: '90%',
     width: 925,
 
     stateful:true,

@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
     alias : 'widget.payment-main-formpanel',
     region: 'center',
     layout: 'anchor',
+    autoScroll: true,
     bodyPadding: '10px',
     name:  'formpanel',
     preventHeader: true,
