@@ -143,10 +143,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 flex: 2,
                 renderer: function(value, metaData, record){
                     var me = this,
-                        addresses = record.getAddresses();
+                        addresses = record.get('addresses');
                         status = record.get('status');
                     if(status == 1){
-                        var done = addresses.count(),
+                        var done = addresses,
                             percentage = 0;
                         if(done > 0) {
                             percentage = 100/done*record.get('recipients');

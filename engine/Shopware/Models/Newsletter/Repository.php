@@ -226,7 +226,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListNewslettersQueryBuilder($filter = null, $order = null) {
-        
+
+        // Joining the addresses will have a massive impact on query time if many addresses needs to be joined
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'mailing',
@@ -235,8 +236,7 @@ class Repository extends ModelRepository
             'articles',
             'links',
             'banner',
-            'addresses'
-//            'orders'
+//            'addresses'
         ));
         $builder->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
                 ->leftJoin('mailing.containers', 'container')
@@ -244,7 +244,7 @@ class Repository extends ModelRepository
                 ->leftJoin('container.articles', 'articles')
                 ->leftJoin('container.links', 'links')
                 ->leftJoin('container.banner', 'banner')
-                ->leftJoin('mailing.addresses', 'addresses')
+//                ->leftJoin('mailing.addresses', 'addresses')
                 ->where('mailing.status > -1');
 
         if($filter !== null) {
