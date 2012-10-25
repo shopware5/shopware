@@ -760,6 +760,18 @@ jQuery(document).ready(function ($) {
 
         this.each(function () {
 
+
+            // IE 7 & 8 Fix for Object.create($.ajaxSlider)
+            if (typeof Object.create !== "function") {
+                Object.create = (function () {
+                    function F() {} // created only once
+                    return function (o) {
+                        F.prototype = o; // reused on each invocation
+                        return new F();
+                    };
+                })();
+            }
+
             var slider = Object.create($.ajaxSlider);
 
             if (config.debug === true) {
