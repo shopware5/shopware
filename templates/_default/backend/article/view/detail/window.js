@@ -526,7 +526,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
         me.imageUpload = Ext.create('Shopware.apps.Article.view.image.Upload', {
             article: me.article,
-            margin: 10
+            margin: 10,
+            flex: 1,
+            autoScroll:true
         });
         me.imageInfo = Ext.create('Shopware.apps.Article.view.image.Info', {
             margin: 10,

@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Default: 600 px
      * @integer
      */
-    height: 600,
+    height: '90%',
 
     /**
      * Width setting for this window in pixel
