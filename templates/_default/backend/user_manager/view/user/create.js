@@ -37,12 +37,14 @@
  */
 //{block name="backend/user_manager/view/user/create"}
 Ext.define('Shopware.apps.UserManager.view.user.Create', {
-    extend: 'Ext.window.Window',
+    extend: 'Enlight.app.Window',
     alias : 'widget.usermanager-user-create',
     title : '{s name="create_user/title"}Add/edit user{/s}',
     layout: 'fit',
     autoShow: true,
+    autoScroll:true,
     width       : 700,
+    height: '90%',
     bodyPadding : 5,
     modal: true,
 
@@ -148,6 +150,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         this.formPanel = Ext.create('Ext.form.Panel', {
             border      : false,
             layout      : 'anchor',
+            autoScroll:true,
             title: '{s name="create_user/tab_user"}User{/s}',
             bodyPadding : 10,
             defaults    : {

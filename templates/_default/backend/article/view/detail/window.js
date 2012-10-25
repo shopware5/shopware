@@ -463,13 +463,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
 
         me.categoryDropZone = Ext.create('Shopware.apps.Article.view.category.DropZone', {
-            height: 180,
+            flex:1,
+            autoScroll:true,
             margin: 10
         });
 
         me.categoryNotice = Ext.create('Ext.panel.Panel', {
             title: me.snippets.categoryNoticeTitle,
-
             bodyPadding: 10,
             height: 65,
             margin: 10,
@@ -484,6 +484,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.categoryList = Ext.create('Shopware.apps.Article.view.category.List', {
             article: me.article,
             flex: 1,
+            autoScroll:true,
             margin: 10
         });
 
@@ -492,6 +493,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             bodyPadding: 10,
             name: 'category-tab',
             plain: true,
+            autoScroll:true,
             layout: {
                 align: 'stretch',
                 type: 'vbox'

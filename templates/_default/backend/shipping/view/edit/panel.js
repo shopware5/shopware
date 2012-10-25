@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Height of the window
      * @string
      */
-    height      : 680,
+    height      : '90%',
     /**
      * Scroll if necessary
      * @boolean
@@ -202,6 +202,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
 
         return Ext.create('Ext.form.Panel', {
             bodyPadding: 8,
+            autoScroll:true,
             region: 'center',
             /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
             plugins:[
