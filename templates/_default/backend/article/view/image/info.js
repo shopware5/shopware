@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         align: 'stretch'
     },
 
+    autoScroll:true,
     /**
      * Defaults for the panel items
      * @object
@@ -161,6 +162,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             tpl: me.createInfoPanelTemplate(),
             margin: '0 0 10',
             itemSelector: '.copy-image-path',
+            autoScroll:true,
             flex: 1,
             renderData: []
         });
@@ -278,6 +280,8 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         me.settingsForm = Ext.create('Ext.form.Panel', {
             title: me.snippets.settings,
             layout: 'anchor',
+            flex:1,
+            autoScroll:true,
             plugins: [{
                 ptype: 'translation',
                 pluginId: 'translation',

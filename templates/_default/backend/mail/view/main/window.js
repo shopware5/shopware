@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
     title : '{s name=title}Email templates{/s}',
     layout: 'border',
     width: 860,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-mail-window',
 
