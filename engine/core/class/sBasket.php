@@ -438,7 +438,7 @@ class sBasket
 		$sTicket = stripslashes($sTicket);
 		$sTicket = strtolower($sTicket);
 		$sql = "
-		SELECT * FROM s_emarketing_vouchers WHERE LOWER(vouchercode)=?
+		SELECT * FROM s_emarketing_vouchers WHERE modus = 0 AND LOWER(vouchercode)=?
 		AND ((valid_to>=now() AND valid_from<=now()) OR valid_to is NULL)
 		";
 
