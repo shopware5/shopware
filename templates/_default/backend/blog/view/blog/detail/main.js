@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 type: 'anchor'
             },
             bodyPadding: 10,
-            flex: 2,
+            flex: 3,
             closable: false,
             collapsible: true,
             autoScroll: true,
@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 type: 'anchor'
             },
             flex: 7,
+            autoScroll:true,
             bodyPadding: 10,
             defaults:{
                 anchor: '100%'
