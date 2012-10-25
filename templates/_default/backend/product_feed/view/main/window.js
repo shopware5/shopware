@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.ProductFeed.view.main.Window', {
     border: false,
     autoShow: true,
     layout: 'border',
-    height: 650,
+    height: '90%',
     width: 925,
 
     /**

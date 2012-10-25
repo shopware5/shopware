@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
     autoShow:true,
     layout: 'fit',
     width: 860,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-newsletter-manager-newsletter-window',
     title: '{s name=titleCreateNewsletter}Create new newsletter{/s}',

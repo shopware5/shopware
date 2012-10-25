@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Banner.view.Main', {
     layout: 'fit',
     alias: 'widget.bannermanager',
     width: 1000,
-    height: 650,
+    height: '90%',
     maximizable: true,
     stateful: true,
     stateId: 'BannerManager',

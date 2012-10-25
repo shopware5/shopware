@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Window', {
     layout: 'border',
     title: '{s name=title}Statistics{/s}',
     width:1024,
-    height:600,
+    height:'90%',
     stateId:'shopware-statistics-main-window',
 
     initComponent: function() {

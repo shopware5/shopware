@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
     border: false,
     autoShow: true,
     layout: 'fit',
-    height: 650,
+    height: '90%',
     /**
      * Display no footer button for the detail window
      * @boolean

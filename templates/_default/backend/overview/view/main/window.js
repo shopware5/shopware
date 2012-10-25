@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Overview.view.main.Window', {
     title : '{s name=title}Overview{/s}',
     layout: 'fit',
     width: 800,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-overview-main-window',
 

@@ -36,6 +36,7 @@ Ext.define('Shopware.apps.PluginManager.view.store.Navigation', {
     alias: 'widget.plugin-manager-store-navigation',
     border: 0,
     padding: 10,
+    autoScroll:true,
     cls: Ext.baseCSSPrefix + 'plugin-manager-navigation',
 
     /**

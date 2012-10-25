@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
     border: 0,
     bodyPadding: 10,
     layout: 'column',
+    autoScroll:true,
     defaults: {
         columnWidth: 0.5
     },
