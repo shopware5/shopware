@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
     border: false,
     layout: 'fit',
     autoShow: true,
-    height: 550,
+    height: '90%',
     width: 725,
     stateful: true,
     stateId: 'emotion-detail-settings-window',
