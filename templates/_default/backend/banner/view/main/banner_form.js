@@ -149,30 +149,41 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
      * @return [object] generated Ext.container.Container
      */
     createValidFromContainer: function() {
+        var me = this;
+
+        me.validFromField = Ext.create('Ext.form.field.Date', {
+                format      : 'd.m.Y',
+                fieldLabel  : '{s name=form_add/from_label}Active from{/s}',
+                name        : 'validFromDate',
+                supportText : '{s name=form_add/from_support}Format: dd.mm.jjjj{/s}',
+                columnWidth : .6,
+                minValue    : new Date(),
+                value       : new Date(),
+                allowBlank  : true,
+                listeners: {
+                    change: function(field, newValue) {
+                        me.validToField.setMinValue(newValue);
+                    }
+                }
+            }
+        );
+
         return Ext.create('Ext.container.Container', {
             layout      : 'column',
             anchor      : '100%',
             defaults: {
                 labelStyle  : 'font-weight: 700; text-align: right;'
             },
-            items   : [{
-                xtype       : 'datefield',
-                format      : 'd.m.Y',
-                name        : 'validFromDate',
-                fieldLabel  : '{s name=form_add/from_label}Active from{/s}',
-                supportText : '{s name=form_add/from_support}Format: dd.mm.jjjj{/s}',
-                columnWidth : .6,
-                value       : new Date(),
-                allowBlank  : true,
-                vtype: 'daterange',
-                endDateField: 'validToDate'
-            }, {
-                name        : 'validFromTime',
+            items   : [
+                ,me.validFromField,
+            {
                 margin      : '0 0 0 10',
                 format      : 'H:i',
                 xtype       : 'timefield',
+                name        : 'validFromTime',
                 supportText : '{s name=form_add/from_time_support}Format: hh:mm{/s}',
-                columnWidth : .4
+                columnWidth : .4,
+                minDate     : new Date()
             }]
         })
     },
@@ -183,29 +194,37 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
      * @return [object] generated Ext.container.Container
      */
     createValidUntilContainer: function() {
+        var me = this;
+
+        me.validToField = Ext.create('Ext.form.field.Date', {
+            format      : 'd.m.Y',
+            fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
+            name        : 'validToDate',
+            supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
+            columnWidth : .60,
+            allowBlank  : true,
+            listeners: {
+                change: function(field, newValue) {
+                    me.validFromField.setMaxValue(newValue);
+                }
+            }
+        });
+
         return Ext.create('Ext.container.Container', {
             layout      : 'column',
             anchor      : '100%',
             defaults        : {
                 labelStyle  : 'font-weight: 700; text-align: right;'
             },
-            items       : [{
-                xtype       : 'datefield',
-                format      : 'd.m.Y',
-                name        : 'validToDate',
-                fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
-                supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
-                columnWidth : .6,
-                allowBlank  : true,
-                vtype       : 'daterange',//add type
-                startDateField: 'validFromDate' //start date field
-            }, {
-                name        : 'validToTime',
+            items       : [
+                me.validToField,
+            {
                 margin      : '0 0 0 10',
                 xtype       : 'timefield',
+                name        : 'validToTime',
                 format      : 'H:i',
                 supportText : '{s name=form_add/to_time_support}Format: hh:mm{/s}',
-                columnWidth : .4
+                columnWidth : .40
             }]
         })
     },

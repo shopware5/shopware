@@ -192,14 +192,9 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
      * @return [object] generated Ext.container.Container
      */
     createValidFromContainer: function() {
-        return Ext.create('Ext.container.Container', {
-            layout      : 'column',
-            anchor      : '100%',
-            defaults: {
-                labelStyle  : 'font-weight: 700; text-align: right;'
-            },
-            items   : [{
-                xtype       : 'datefield',
+        var me = this;
+
+        me.validFromField = Ext.create('Ext.form.field.Date', {
                 format      : 'd.m.Y',
                 fieldLabel  : '{s name=form_add/from_label}Active from{/s}',
                 name        : 'validFromDate',
@@ -208,9 +203,23 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
                 minValue    : new Date(),
                 value       : new Date(),
                 allowBlank  : true,
-                vtype       : 'daterange',//type here
-                endDateField: 'validToDate'//and end date field
-            }, {
+                listeners: {
+                    change: function(field, newValue) {
+                        me.validToField.setMinValue(newValue);
+                    }
+                }
+            }
+        );
+
+        return Ext.create('Ext.container.Container', {
+            layout      : 'column',
+            anchor      : '100%',
+            defaults: {
+                labelStyle  : 'font-weight: 700; text-align: right;'
+            },
+            items   : [
+                ,me.validFromField,
+            {
                 margin      : '0 0 0 10',
                 format      : 'H:i',
                 xtype       : 'timefield',
@@ -228,23 +237,31 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
      * @return [object] generated Ext.container.Container
      */
     createValidUntilContainer: function() {
+        var me = this;
+
+        me.validToField = Ext.create('Ext.form.field.Date', {
+            format      : 'd.m.Y',
+            fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
+            name        : 'validToDate',
+            supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
+            columnWidth : .60,
+            allowBlank  : true,
+            listeners: {
+                change: function(field, newValue) {
+                    me.validFromField.setMaxValue(newValue);
+                }
+            }
+        });
+
         return Ext.create('Ext.container.Container', {
             layout      : 'column',
             anchor      : '100%',
             defaults        : {
                 labelStyle  : 'font-weight: 700; text-align: right;'
             },
-            items       : [{
-                xtype       : 'datefield',
-                format      : 'd.m.Y',
-                fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
-                name        : 'validToDate',
-                supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
-                columnWidth : .60,
-                allowBlank  : true,
-                vtype       : 'daterange',
-                startDateField: 'validFromDate'
-            }, {
+            items       : [
+                me.validToField,
+            {
                 margin      : '0 0 0 10',
                 xtype       : 'timefield',
                 name        : 'validToTime',
