@@ -1756,9 +1756,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $configuratorTemplate = $query->getArrayResult();
 
-        $prices = $configuratorTemplate['prices'];
+        $prices = $configuratorTemplate[0]['prices'];
+
         if (!empty($prices)) {
-            $configuratorTemplate['prices'] = $this->formatPricesFromNetToGross($prices, $tax);
+            $configuratorTemplate[0]['prices'] = $this->formatPricesFromNetToGross($prices, $tax);
         }
 
         return $configuratorTemplate;
