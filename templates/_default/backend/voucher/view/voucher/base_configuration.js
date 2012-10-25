@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
     alias:'widget.voucher-voucher-base_configuration',
     title:'{s name=detail_general/win_title/configuration}Configuration{/s}',
     autoShow:true,
+    autoScroll:true,
     bodyPadding:10,
 
     //Text for the ModusCombobox

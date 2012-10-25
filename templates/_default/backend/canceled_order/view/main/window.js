@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.main.Window', {
     alias : 'widget.canceled-order-main-window',
     layout: 'fit',
     width: 860,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-canceledOrders-main-window',
 

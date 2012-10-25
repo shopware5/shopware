@@ -43,7 +43,8 @@ Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
     border: false,
     autoShow: true,
     layout: 'border',
-    height: 630,
+    height: '90%',
+    autoScroll:true,
     width: 905,
     modal: true,
     /**

@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
     alias: 'widget.newsletter-manager-newsletter-editor',
     title: '{s name=title/Editor}Newsletter Editor{/s}',
     layout: 'fit',
-
+    autoScroll:true,
     defaults: {
         bodyBorder: 0
     },

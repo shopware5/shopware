@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     alias: 'widget.newsletter-manager-newsletter-settings',
     title: '{s name=title/Settings}Settings{/s}',
     ui: 'shopware-ui',
-
+    autoScroll:true,
     cls: Ext.baseCSSPrefix + 'newsletter-settings-panel',
 
     layout: 'anchor', //anchor

@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
     alias : 'widget.newsletter-manager-main-window',
     layout: 'fit',
     width: 860,
-    height: 600,
+    height: '90%',
     stateful: true,
     stateId: 'shopware-newsletter-manager-main-window',
     title: '{s name=title}Newsletter Manager{/s}',

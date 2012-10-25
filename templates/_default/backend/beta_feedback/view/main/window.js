@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.BetaFeedback.view.main.Window', {
     border: false,
     layout: 'fit',
     autoShow: true,
-    height: 600,
+    height: '90%',
     width: 800,
     stateful: true,
     stateId: 'beta-feedback-main-window',

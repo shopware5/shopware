@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
         type:'border'
     },
     width: 950,
-    height: 600,
+    height: '90%',
     autoShow: true,
     stateful: true,
     stateId: 'shopware-notification-main-window',
