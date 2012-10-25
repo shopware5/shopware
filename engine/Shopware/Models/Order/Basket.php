@@ -75,7 +75,7 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="articlename", type="string", length=255, nullable=false)
      */
-    private $articleName;
+    private $articleName = '';
 
     /**
      * @var string $orderNumber
@@ -131,35 +131,35 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="esdarticle", type="integer", nullable=false)
      */
-    private $esdArticle;
+    private $esdArticle = 0;
 
     /**
      * @var string $lastViewPort
      *
      * @ORM\Column(name="lastviewport", type="string", length=255, nullable=false)
      */
-    private $lastViewPort;
+    private $lastViewPort = '';
 
     /**
      * @var string $userAgent
      *
      * @ORM\Column(name="useragent", type="string", length=255, nullable=false)
      */
-    private $userAgent;
+    private $userAgent = '';
 
     /**
      * @var string $config
      *
      * @ORM\Column(name="config", type="text", nullable=false)
      */
-    private $config;
+    private $config = '';
 
     /**
      * @var float $currencyFactor
      *
      * @ORM\Column(name="currencyFactor", type="float", nullable=false)
      */
-    private $currencyFactor;
+    private $currencyFactor = 1;
 
     /**
      * INVERSE SIDE
