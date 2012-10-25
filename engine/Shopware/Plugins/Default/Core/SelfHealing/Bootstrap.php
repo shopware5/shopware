@@ -103,7 +103,6 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     public function onDispatchEvent(Enlight_Event_EventArgs $args)
     {
-
         if (!$args->getResponse()->isException()) {
             return;
         }
@@ -114,20 +113,31 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
 
     /**
      *
-     * @param $exception
+     * @param $exception Exception
+     *
+     * @throws Exception
+     * @return void
      */
     public function handleException($exception)
     {
         $this->request = new Enlight_Controller_Request_RequestHttp();
         $this->response = new Enlight_Controller_Response_ResponseHttp();
 
-        if (strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
-            $this->generateModels();
-            $this->response->setRedirect(
-                $this->request->getRequestUri()
-            );
-            $this->response->sendResponse();
-            exit();
+        if (strpos($exception->getMessage(), 'Shopware\Models\Attribute') &&
+           (strpos($exception->getMessage(), 'found') OR strpos($exception->getMessage(), 'exist'))) {
+
+            $result = $this->generateModels();
+
+            if ($result['success'] === true) {
+                $this->response->setRedirect(
+                    $this->request->getRequestUri()
+                );
+                $this->response->sendResponse();
+                exit();
+            } else {
+
+                die("Failed to create the attribute models, please check the permissions of the engine/Shopware/Models/Attribute directory");
+            }
         }
     }
 
@@ -151,7 +161,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
             $this->getSchemaManager()
         );
 
-        $generator->generateAttributeModels(array());
+        return $generator->generateAttributeModels(array());
     }
 
     /**

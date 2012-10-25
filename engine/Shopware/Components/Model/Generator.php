@@ -287,6 +287,7 @@ class %className% extends ModelEntity
             return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED);
         }
 
+        $errors = array();
         /**@var $table \Doctrine\DBAL\Schema\Table*/
         foreach($this->getSchemaManager()->listTables() as $table) {
             if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
@@ -296,10 +297,14 @@ class %className% extends ModelEntity
                 continue;
             }
             $sourceCode = $this->generateModel($table);
-            $this->createModelFile($table, $sourceCode);
+            $result = $this->createModelFile($table, $sourceCode);
+            if ($result === false) {
+                $errors[] = $table->getName();
+            }
+
         }
 
-        return array('success' => true);
+        return array('success' => empty($errors), 'errors' => $errors);
     }
 
     /**
@@ -317,13 +322,16 @@ class %className% extends ModelEntity
             $tableName = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($tableName);
         }
+
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
             throw new \Exception("File: " . $file . " isn't writable, please check the file permissions for this model!", 501);
         }
 
-        return file_put_contents($file, $sourceCode);
+        $result = file_put_contents($file, $sourceCode);
+        return ($result !== false);
+
     }
 
     /**
