@@ -1789,6 +1789,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getArticle($id)
     {
         $data = $this->getArticleData($id);
+
+        $data[0]['attribute'] = $data[0]['mainDetail']['attribute'];
         $tax = $data[0]['tax'];
 
         $data[0]['categories'] = $this->getArticleCategories($id);
