@@ -1338,7 +1338,6 @@ class sShopwareImport
         $categoryRepository = $this->getCategoryRepository();
         // If user wants to update the category
         if($category['updateID']) {
-            $createNewCategory = false;
             $model = $categoryRepository->find((int) $category['updateID']);
             if($model === null) {
                 $this->sAPI->sSetError("Category {$category['updateID']} not found", 10405);
