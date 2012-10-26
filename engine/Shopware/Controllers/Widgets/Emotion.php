@@ -141,7 +141,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $data[$entry['name']] = $value;
                 }
 
-                // todo@all Event setzen für Custom-Elements ?
                 $data = Enlight()->Events()->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, array('subject' => $this, 'element' => $element));
 
                 if (!empty($component['convertFunction'])) {
@@ -151,7 +150,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $element['data'] = $data;
 
             }
-            //print_r($emotions);exit;
         }
 
         $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
@@ -186,7 +184,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     /**
      * Gets the specific blog entry from the database.
+     *
      * @param $data
+     * @param $category
+     * @param $element
      * @internal param $ {Array} $data
      * @return array {Array} $data
      */
