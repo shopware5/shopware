@@ -62,7 +62,7 @@ Ext.define('Shopware.Notification', {
      *
      * @integer
      */
-    hideDelay: 8000,
+    hideDelay: 2500,
 
     /**
      * Used easing type for the fade in and fade out animation
