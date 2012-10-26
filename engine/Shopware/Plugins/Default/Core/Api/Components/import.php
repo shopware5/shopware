@@ -1333,9 +1333,12 @@ class sShopwareImport
             }
         }
 
+        $model = null;
+
         $categoryRepository = $this->getCategoryRepository();
         // If user wants to update the category
         if($category['updateID']) {
+            $createNewCategory = false;
             $model = $categoryRepository->find((int) $category['updateID']);
             if($model === null) {
                 $this->sAPI->sSetError("Category {$category['updateID']} not found", 10405);
@@ -1346,8 +1349,13 @@ class sShopwareImport
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
 
-        // Create a new category
-        }else{
+        // try to find a existing category by name and parent
+        } elseif(isset($category['parent']) && isset($category['name']) ) {
+            $model = $categoryRepository->findOneBy(array('parent' => $category['parent'], 'name' => $category['name']));
+        }
+
+        // Create a new category if no model was set, yet
+        if(!$model) {
             if(isset($category['parent'])) {
                 $parentModel = $categoryRepository->find((int) $category['parent']);
                 if($parentModel === null) {
