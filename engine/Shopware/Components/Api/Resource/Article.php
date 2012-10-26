@@ -1356,6 +1356,7 @@ class Article extends Resource
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":
+            case "https":
             case "file":
                 $counter = 1;
                 if($baseFilename === null) {

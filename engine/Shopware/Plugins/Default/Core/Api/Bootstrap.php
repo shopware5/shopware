@@ -138,6 +138,7 @@ class sAPI
 		switch ($url_array['scheme']) {
 			case "ftp":
 			case "http":
+			case "https":
 			case "file":
 				$hash = "";
 				$dir = Shopware()->DocPath('media_' . 'temp');

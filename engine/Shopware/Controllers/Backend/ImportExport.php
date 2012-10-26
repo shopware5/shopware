@@ -3578,6 +3578,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":
+            case "https":
             case "file":
                 $counter = 1;
                 if($baseFilename === null) {
