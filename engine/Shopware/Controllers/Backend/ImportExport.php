@@ -1598,7 +1598,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $name = pathinfo($imageData['image'],  PATHINFO_FILENAME);
                 $path = $this->load($imageData['image'], $name);
             } catch (\Exception $e) {
-                $errors[] = "Could not load image {$imageData['image']}";
+                $errors[] = sprintf("Could not load image {$imageData['image']}: %s", $e->getMessage());
                 continue;
             }
             
@@ -1618,7 +1618,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $this->getManager()->persist($media);
                 $this->getManager()->flush();
             } catch (\Doctrine\ORM\ORMException $e) {
-                $errors[] = "Could not move image";
+                $errors[] = sprintf("Could not move image: %s", $e->getMessage());
                 continue;
             }
 
