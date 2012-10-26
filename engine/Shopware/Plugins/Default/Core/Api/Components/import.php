@@ -1701,12 +1701,16 @@ class sShopwareImport
         if(empty($article_image['name']))
         {
             $article_image['name'] =  md5(uniqid(mt_rand(), true));
+        } else {
+            $article_image['name']  = pathinfo($article_image['image'],  PATHINFO_FILENAME);;
+
         }
 
         // Copy image to local temp dir
         if(!empty($article_image['image']))
         {
-            $uploadFile = $uploadDir.$article_image['name'].'.tmp';
+
+            $uploadFile = $uploadDir.$article_image['name'];
             if(!copy($article_image['image'], $uploadFile))
             {
                 $this->sAPI->sSetError("Copying image from '{$article_image['image']}' to '$uploadFile' did not work", 10400);
