@@ -101,6 +101,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 FROM s_emotion_categories ec, s_emotion e
                 WHERE ec.category_id = ?
                 AND e.id = ec.emotion_id
+                AND e.is_landingpage = 0
                 AND (e.valid_to >= NOW() OR e.valid_to IS NULL)
             ", array($categoryId));
             $hasEmotion = !empty($emotion['id']);
