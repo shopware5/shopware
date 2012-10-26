@@ -1536,7 +1536,9 @@ jQuery(document).ready(function ($) {
             // Set navigation point to active
             if (config.navigation || config.showNumbers) {
                 // Set this navigation point as active
-                config._activeNavigation.removeClass('active');
+                if(config._activeNavigation) {
+                    config._activeNavigation.removeClass('active');
+                }
                 config._activeNavigation = config._this.find('#slideNavigation' + (slideNumber + 1)).addClass('active');
             }
         },
