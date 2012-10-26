@@ -1702,7 +1702,7 @@ class sShopwareImport
         {
             $article_image['name'] =  md5(uniqid(mt_rand(), true));
         } else {
-            $article_image['name']  = pathinfo($article_image['image'],  PATHINFO_FILENAME);;
+            $article_image['name']  = pathinfo($article_image['name'],  PATHINFO_FILENAME);;
 
         }
 
