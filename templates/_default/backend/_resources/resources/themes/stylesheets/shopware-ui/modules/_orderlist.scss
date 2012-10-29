@@ -76,7 +76,7 @@
                 border-right: 1px solid $border-color !important;
             }
         }
-
+ 
         .#{$prefix}filter-options {
 
             .#{$prefix}filter-form .#{$prefix}panel-body {
@@ -88,20 +88,10 @@
                     margin: 0;
                 }
                 .#{$prefix}search-article-live-field {
-                    .#{$prefix}field-label-cell {
-                        width: 125px !important;
-                        font-weight: 700 !important;
-                    }
-
                     .#{$prefix}form-item-body {
                         display: block !important;
+                        width: 168px !important;
                     }
-                    .#{$prefix}form-trigger-wrap {
-                        position: relative !important;
-                        right: 0;
-                        width: 104%;
-                    }
-
                 }
             }
         }
