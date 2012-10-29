@@ -131,7 +131,7 @@ class sBasket
 			$supplierSQL = "OR s_articles.supplierID = $supplier ";
 		}
 		return  $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-		AS totalAmount FROM s_order_basket, s_articles WHERE sessionID=? AND modus=0 AND s_order_basket.articleID=s_articles.id 
+		AS totalAmount FROM s_order_basket, s_articles WHERE sessionID=? AND modus=0 AND s_order_basket.articleID=s_articles.id
 		AND
 		(
 		$articleSQL
@@ -170,7 +170,7 @@ class sBasket
 	 * @return void
 	 */
 	public function sInsertDiscount () {
-		
+
 		// Get possible discounts
 		$getDiscounts = $this->sSYSTEM->sDB_CONNECTION->GetAll("
 		SELECT basketdiscount, basketdiscountstart FROM s_core_customergroups_discounts
@@ -214,7 +214,7 @@ class sBasket
 		$discount = $basketAmount / 100 * $basketDiscount;
 		$discount = $discount * -1;
 		$discount = round($discount,2);
-		
+
 		if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])){
 			$tax = $this->sSYSTEM->sMODULES['sBASKET']->getMaxTax();
 		}else {
@@ -437,8 +437,8 @@ class sBasket
 
 		$sTicket = stripslashes($sTicket);
 		$sTicket = strtolower($sTicket);
-		$sql = "
-		SELECT * FROM s_emarketing_vouchers WHERE modus = 0 AND LOWER(vouchercode)=?
+        $sql = "
+		SELECT * FROM s_emarketing_vouchers WHERE modus != 1 AND LOWER(vouchercode)=?
 		AND ((valid_to>=now() AND valid_from<=now()) OR valid_to is NULL)
 		";
 
@@ -449,7 +449,7 @@ class sBasket
 			$userid = $this->sSYSTEM->_SESSION["sUserId"];
 			$sql = "
 			SELECT s_order_details.id AS id FROM s_order, s_order_details
-			WHERE s_order.userID = $userid AND s_order_details.orderID=s_order.id 
+			WHERE s_order.userID = $userid AND s_order_details.orderID=s_order.id
 			AND s_order_details.articleordernumber = '{$ticketResult["ordercode"]}'
 			AND s_order_details.ordernumber!='0'
 			";
@@ -470,7 +470,7 @@ class sBasket
 			SELECT COUNT(id) AS vouchers FROM s_order_details WHERE articleordernumber='{$ticketResult["ordercode"]}'
 			AND s_order_details.ordernumber!='0'
 			");
-		}else {
+		} else {
 			// Check for individual voucher - code
 			$sql = "
 			SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,description, numberofunits,customergroup, value,restrictarticles, minimumcharge, shippingfree, bindtosupplier,
@@ -482,14 +482,14 @@ class sBasket
 				s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
 			AND
 				LOWER(code) = ?
-			AND 
+			AND
 				cashed != 1
 			AND ((s_emarketing_vouchers.valid_to>=now() AND s_emarketing_vouchers.valid_from<=now()) OR s_emarketing_vouchers.valid_to is NULL)
 			";
 			$ticketResult = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($sTicket));
 			if ($ticketResult["description"]){
 				$indivualCode = true;
-			}else {
+			} else {
 				$indivualCode = false;
 			}
 		}
@@ -701,16 +701,16 @@ class sBasket
 		$sql = '
 			SELECT SUM(d.weight*b.quantity) as weight
 			FROM s_order_basket b
-			
+
 			LEFT JOIN s_articles a
 			ON b.articleID=a.id
 			AND b.modus=0
 			AND b.esdarticle=0
-			
+
 			LEFT JOIN s_articles_details d
 			ON (d.ordernumber=b.ordernumber)
 			AND d.articleID=a.id
-	
+
 			WHERE b.sessionID=?
 		';
 		$weight = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
@@ -880,7 +880,7 @@ class sBasket
 			}else {
 				$tax = $this->sSYSTEM->sCONFIG['sDISCOUNTTAX'];
 			}
-			
+
 			if (!$tax) $tax = 119;
 
 			if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
@@ -1106,7 +1106,7 @@ class sBasket
 
 					}
 				}
-				
+
 				$tax = $value["tax_rate"];
 
 				// If shop is in net mode, we have to consider
@@ -1128,7 +1128,7 @@ class sBasket
 						// Basket discount
 					}elseif ($value["modus"]==2){
 						$getArticles[$key]["amountWithTax"] = round(1 * (round($price,2) / 100 * (100+$tax)),2);
-						
+
 						if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()){
 							$discount += ($getArticles[$key]["amountWithTax"]/100*($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
 						}
@@ -1289,7 +1289,7 @@ class sBasket
 	/**
 	 * Add product to bookmarks
 	 * @param int $articleID
-	 * @param string $articleName 
+	 * @param string $articleName
 	 * @param string $articleOrdernumber
 	 * @access public
      * @deprecated
@@ -1339,7 +1339,7 @@ class sBasket
 			empty($this->sSYSTEM->_COOKIE['sUniqueID']) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE['sUniqueID'],
 			isset($this->sSYSTEM->_SESSION['sUserId']) ? $this->sSYSTEM->_SESSION['sUserId'] : 0
 		));
-		
+
 		if(empty($getArticles)) {
 			return $getArticles;
 		}
@@ -1365,7 +1365,7 @@ class sBasket
 		}
 		return $getArticles;
 	}
-	
+
 	/**
 	 * Returns the number of notepad entries
 	 * @deprecated
@@ -1445,7 +1445,7 @@ class sBasket
 			$quantity = $queryAdditionalInfo["maxpurchase"];
 		}
 
-        
+
         if (!$this->sSYSTEM->sSESSION_ID || !$id) {
             return false;
         }
@@ -1694,13 +1694,13 @@ class sBasket
 
 		$sql = "
 			SELECT s_articles.id AS articleID, name AS articleName, taxID, additionaltext, s_articles_details.shippingfree,laststock,instock, s_articles_details.id as articledetailsID, ordernumber
-			FROM s_articles, s_articles_details 
+			FROM s_articles, s_articles_details
 			WHERE s_articles_details.ordernumber=?
 			AND s_articles_details.articleID=s_articles.id
 			AND s_articles.active = 1
 			AND (
-				SELECT articleID 
-				FROM s_articles_avoid_customergroups 
+				SELECT articleID
+				FROM s_articles_avoid_customergroups
 				WHERE articleID = s_articles.id AND customergroupID = ".$this->sSYSTEM->sUSERGROUPDATA["id"]."
 			) IS NULL
 		";
@@ -1763,7 +1763,7 @@ class sBasket
                 AND s_core_tax.id=?
                 ";
                 $getPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($this->sSYSTEM->sUSERGROUP,$getArticle["articledetailsID"],$getArticle["taxID"]));
-                
+
                 if (empty($getPrice["price"])){
                     $sql = "SELECT price,s_core_tax.tax AS tax FROM s_articles_prices,s_core_tax WHERE
                     s_articles_prices.pricegroup='EK'
