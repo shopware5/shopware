@@ -929,10 +929,6 @@ class	sExport
 	public function sGetDispatchBasket ($article, $countryID=null, $paymentID = null)
 	{
 		$sql_select = '';
-		if(!empty($this->sSystem->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT']))
-		{
-			$sql_select .= ', '.$this->sSystem->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
-		}
 		$sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
 		$calculations = $this->sDB->GetAssoc($sql);
 		if(!empty($calculations))
@@ -944,8 +940,8 @@ class	sExport
 
 		$sql = "
 			SELECT
-				MIN(IFNULL(g.instock,d.instock)>=b.quantity) as instock,
-				MIN(IFNULL(g.instock,d.instock)>=(b.quantity+d.stockmin)) as stockmin,
+				MIN(d.instock>=b.quantity) as instock,
+				MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
 				MIN(a.laststock) as laststock,
 				SUM(d.weight*b.quantity) as weight,
 				SUM(IF(a.id,b.quantity,0)) as count_article,
@@ -980,12 +976,8 @@ class	sExport
 			AND b.modus=0
 			AND b.esdarticle=0
 
-			LEFT JOIN s_articles_groups_value g
-			ON g.ordernumber=b.ordernumber
-			AND g.articleID=a.id
-
 			LEFT JOIN s_articles_details d
-			ON (d.ordernumber=b.ordernumber OR g.valueID IS NOT NULL)
+			ON (d.ordernumber=b.ordernumber)
 			AND d.articleID=a.id
 
 			LEFT JOIN s_articles_attributes at
@@ -1005,6 +997,8 @@ class	sExport
 
 			GROUP BY b.sessionID
 		";
+
+        try {
 		$basket = $this->sDB->GetRow($sql,array(
 			$article["articleID"],
 			$article["ordernumber"],
@@ -1014,6 +1008,11 @@ class	sExport
 			$article["esd"],
 			$this->sCurrency["factor"]
 		));
+        } catch(Exception $e) {
+            echo $e->getMessage();
+            exit();
+        }
+
 		if(empty($basket))
 		{
 			return false;
@@ -1037,21 +1036,7 @@ class	sExport
 			$payment["surcharge"] += $payment["country_surcharge"][$country["countryiso"]];
 		$payment['surcharge'] = round($payment['surcharge']*$this->sCurrency["factor"],2);
 
-		if (!empty($this->sSystem->sCONFIG['sPREMIUMSHIPPIUNG']))
-		{
-			return $this->sGetArticlePremiumShippingcosts($article,$payment,$country,$dispatch);
-		}
-		if(!empty($article["esd"])||(!empty($article["shippingfree"])&&!empty($dispatch["shippingfree"])))
-			return 0;
-
-		$dispatch = $this->sGetDispatch($dispatch,(int)$country["id"]);
-		if(empty($dispatch)) return false;
-
-		if (!empty($country["shippingfree"]) && !empty($dispatch["shippingfree"]) && $article["price"]>=$country["shippingfree"]*$this->sCurrency["factor"])
-			return 0;
-
-
-        return 0;
+        return $this->sGetArticlePremiumShippingcosts($article,$payment,$country,$dispatch);
 	}
 
 	public function sGetPremiumDispatch ($basket, $dispatch = null)
@@ -1324,6 +1309,7 @@ class	sExport
 			LIMIT 1
 		";
 		$result = $this->sDB->GetRow($sql);
+
 		if(empty($result)) return false;
 
 		$result['shippingcosts'] = $result['value'];
@@ -1338,6 +1324,8 @@ class	sExport
 		{
 			$result['shippingcosts'] += $payment['surcharge'];
 		}
+
+
 		return $result['shippingcosts'];
 	}
 }
