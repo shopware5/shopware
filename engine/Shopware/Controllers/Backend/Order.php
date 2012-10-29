@@ -363,6 +363,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $order['debit'] = $order['customer']['debit'];
                 unset($order['billing']['attribute']);
                 unset($order['shipping']['attribute']);
+
+                //find the instock of the article
+                foreach ($order["details"] as &$orderDetail) {
+                    $articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+                    $article = $articleRepository->findOneBy(array('number' => $orderDetail["articleNumber"]));
+                    if ($article instanceof \Shopware\Models\Article\Detail) {
+                        $orderDetail['inStock'] = $article->getInStock();
+                    }
+                }
+
                 $orders[$key] = $order;
             }
 
