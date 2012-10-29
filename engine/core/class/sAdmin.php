@@ -1207,16 +1207,6 @@ class sAdmin
 			}
             $this->sSYSTEM->sUSERGROUP = $getUser["customergroup"];
 
-			if(!empty($getUser["pricegroupID"]))
-			{
-				$sql = "SELECT id FROM s_core_customerpricegroups WHERE id=? AND active=1";
-				$getUser["pricegroupID"] = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($getUser["pricegroupID"]));
-				if(!empty($getUser["pricegroupID"]))
-				{
-					$this->sSYSTEM->sUSERGROUP = "PG".$getUser["pricegroupID"];
-				}
-			}
-
 			$this->sSYSTEM->_SESSION["sUserGroup"] = $this->sSYSTEM->sUSERGROUP;
 			$this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
 
