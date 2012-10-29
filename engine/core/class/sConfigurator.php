@@ -96,8 +96,14 @@ class sConfigurator
                 //if the group exist, we save the option id into in helper array. This helper array is only used for "configurator - tables".
                 $optionsIds[] = $optionId;
 
+                $selected = 0;
                 if (empty($selectedItems)) {
-                    $selected = 0;
+                    /**@var $mainDetailOption \Shopware\Models\Article\Configurator\Option*/
+                    foreach($article->getMainDetail()->getConfiguratorOptions() as $mainDetailOption) {
+                        if ($mainDetailOption->getId() === $optionId) {
+                            $selected = 1;
+                        }
+                    }
                 } else {
                     $selected = (int) (array_key_exists($groupId, $selectedItems) && $selectedItems[$groupId] == $optionId);
                 }
@@ -112,13 +118,16 @@ class sConfigurator
             }
         }
 
+
         //now we iterate all groups to convert them from the old property structure to new one.
         $sConfigurator = array();
         foreach($data['groups'] as $group) {
             $data = $this->getConvertGroupData($group);
+            $isSelected = (int) array_key_exists($group['id'], $selectedItems) && !empty($selectedItems[$group['id']]);
             //if the current group id exists in the post data, the group was selected already.
-            $data['user_selected'] = (int) array_key_exists($group['id'], $selectedItems) && !empty($selectedItems[$group['id']]);
-            $data['selected'] = (int) array_key_exists($group['id'], $selectedItems) && !empty($selectedItems[$group['id']]);
+            $data['user_selected'] = $isSelected;
+            $data['selected'] = $isSelected;
+
             $sConfigurator[] = $data;
         }
 
