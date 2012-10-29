@@ -142,7 +142,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		$paymentData = isset($this->session['sRegister']['payment']['object']) ? $this->session['sRegister']['payment']['object'] : false;
 				
 		$this->admin->sSaveRegister();
-		
+
 		if(!empty($paymentData))
 		{
 			$paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
@@ -291,7 +291,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 				$this->View()->register->billing->form_data['ustid'] = preg_replace('#[^0-9A-Z\+\*\.]#','',strtoupper($this->View()->register->billing->form_data['ustid']));
 			}
 		}
-		
+
 		$checkData = $this->validateBilling();
 
 		if (!empty($checkData['sErrorMessages']))
@@ -529,14 +529,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
 		if(!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
 			$rules['company'] = array('required'=>1);
-			$rules['ustid'] = array('required'=>Shopware()->Config()->vatCheckEndabled);
+			$rules['ustid'] = array('required'=>(Shopware()->Config()->vatCheckRequired && Shopware()->Config()->vatCheckEndabled));
 		}
 		$rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validateBilling_FilterRules', $rules, array('subject'=>$this));
 
 		$this->admin->sSYSTEM->_POST = $this->post['billing'];
 
 		$checkData = $this->admin->sValidateStep2($rules, false);
-		
+
 		if(empty($checkData['sErrorMessages'])) {
 			$this->session['sCountry'] = (int) $this->session['sRegister']['billing']['country'];
 		}
