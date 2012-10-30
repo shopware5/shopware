@@ -6,4 +6,4 @@ DELETE FROM `s_core_config_elements` WHERE `name` LIKE 'bonusSystem';
 
 -- //@UNDO
 
--- //chi
+-- //

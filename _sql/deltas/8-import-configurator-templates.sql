@@ -1,20 +1,5 @@
 
-
 -- //
-
--- phpMyAdmin SQL Dump
--- version 3.4.5deb1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Erstellungszeit: 22. Okt 2012 um 12:36
--- Server Version: 5.1.63
--- PHP-Version: 5.4.4-1~oneiric+1
-
-SET FOREIGN_KEY_CHECKS=0;
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_templates` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -107,7 +92,6 @@ ALTER TABLE `s_article_configurator_templates_attributes`
 
 ALTER TABLE `s_article_configurator_template_prices_attributes`
   ADD CONSTRAINT `s_article_configurator_template_prices_attributes_ibfk_1` FOREIGN KEY (`template_price_id`) REFERENCES `s_article_configurator_template_prices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-SET FOREIGN_KEY_CHECKS=1;
 
 -- //@UNDO
 
