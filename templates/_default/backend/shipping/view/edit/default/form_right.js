@@ -264,6 +264,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
                 allowNegative: false,
                 minValue: 0,
                 emptyText: '{s name=right_shipping_free_emptyText}Never{/s}',
+                allowDecimals: true,
                 listeners: {
                     blur: function(field, obv) {
                         var value = field.getValue();

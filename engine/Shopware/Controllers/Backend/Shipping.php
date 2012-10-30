@@ -110,7 +110,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     private function saveDispatch()
     {
-
         $params = $this->Request()->getParams();
         $dispatchModel = null;
         $id = (int)$this->Request()->get('id');
@@ -127,11 +126,12 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $countries                 = $params['countries'];
         $categories                = $params['categories'];
 
-        if($params['shippingFree'] === "" || $params['shippingFree'] === "0") {
-            $params['shippingFree'] = null;
-        }
 
-        $params['shippingFree'] = str_replace(",",".",$params["shippingFree"]);
+        if(!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
+            $params['shippingFree'] = null;
+        }else{
+            $params['shippingFree'] = floatval(str_replace(',' , '.', $params['shippingFree']));
+        }
 
         $params['payments']        = new \Doctrine\Common\Collections\ArrayCollection();
         $params['holidays']        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -181,6 +181,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getPayments()->add($paymentModel);
             }
         }
+        error_log("1->".$dispatchModel->getShippingFree());
 
         // Convert the countries to there country models
         foreach ($countries as $country) {
@@ -192,6 +193,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getCountries()->add($countryModel);
             }
         }
+        error_log("2->".$dispatchModel->getShippingFree());
 
         foreach ($categories as $category) {
             if (empty($category['id'])) {
@@ -203,6 +205,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getCategories()->add($categoryModel);
             }
         }
+        error_log("3->".$dispatchModel->getShippingFree());
 
         foreach ($holidays as $holiday) {
             if (empty($holiday['id'])) {
@@ -214,6 +217,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getHolidays()->add($holidayModel);
             }
         }
+        error_log("4->".$dispatchModel->getShippingFree());
+
+        if($params['shippingFree'] === null) {
+            error_log("isnull");
+        }
 
         try {
             $this->getManager()->flush();
@@ -222,6 +230,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
             return;
         }
+        error_log("->".$dispatchModel->getShippingFree());
+
         $this->View()->assign(array('success' => true, 'data' => $params));
     }
 
