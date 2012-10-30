@@ -57,9 +57,9 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
         { name : 'surchargeCalculation' },
         { name : 'taxCalculation' },
 
-        { name : 'shippingFree' },
-        { name : 'customerGroupId', useNull:true, defaultValue: null },
-        { name : 'bindShippingFree',  useNull:true, defaultValue: null },
+        { name : 'shippingFree', useNull: true },
+        { name : 'customerGroupId', useNull: true, defaultValue: null },
+        { name : 'bindShippingFree',  useNull: true, defaultValue: null },
         { name : 'bindTimeFrom', type: 'date', dateFormat: 'H:i',  useNull:true, defaultValue: null },
         { name : 'bindTimeTo', type: 'date', dateFormat: 'H:i', useNull:true, defaultValue: null },
         {
