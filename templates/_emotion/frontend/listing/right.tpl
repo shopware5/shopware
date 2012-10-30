@@ -1,8 +1,3 @@
-{* Campaign right top *}
-{block name='frontend_listing_right_campaign_top'}
-	{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
-{/block}
-
 {* Properties filter *}
 {block name='frontend_listing_right_filter_properties'}
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
@@ -25,15 +20,5 @@
 	
 {/block}
 
-{* Campaign right middle *}
-{block name='frontend_listing_right_campaign_middle'}
-{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
-{/block}
-
 {* Topseller *}
 {block name='frontend_listing_right_topseller'}{/block}
-
-{* Campaign right bottom *}
-{block name='frontend_listing_right_campaign_bottom'}
-{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
-{/block}
