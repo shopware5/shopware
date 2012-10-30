@@ -303,6 +303,9 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
 
         if (me.dispatchStore) {
             var dispatch = me.dispatchStore.getById(value);
+            if(!dispatch) {
+                return '';
+            }
             return dispatch.get('name');
         } else {
             return '';
@@ -318,6 +321,9 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
 
         if (me.paymentStore) {
             var payment = me.paymentStore.getById(value);
+            if(!payment) {
+                return '';
+            }
             return payment.get('description');
         } else {
             return '';
