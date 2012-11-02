@@ -2320,6 +2320,7 @@ class sArticles
         }
         if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
             $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($id);
+            $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
         }
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
