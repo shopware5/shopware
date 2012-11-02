@@ -657,7 +657,7 @@ class sMarketing
                         unset($articleData);
                         foreach ($getArticles as $article) {
                             if ($article["type"]) {
-                                $category = $this->sSYSTEM->_GET["sCategory"] ? $this->sSYSTEM->_GET["sCategory"] : 0;
+                                $category = $this->sSYSTEM->_GET["sCategory"] ? $this->sSYSTEM->_GET["sCategory"] : $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"];
                                 $tmpContainer = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($article["type"], $category, $article['articleordernumber']);
 
                                 if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
