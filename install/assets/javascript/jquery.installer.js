@@ -1,4 +1,5 @@
-(function($){
+;(function($, undefined) {
+    "use strict";
 
     $(document).ready(function() {
         // Set js class on the html tag
@@ -17,7 +18,7 @@
 
             var $this = $(this);
 
-            if($this.attr('data-loading') == 'false') {
+            if($this.attr('data-loading') === 'false') {
                 return false;
             }
 
@@ -35,9 +36,7 @@
         });
 
         $('.primary').bind('click', function(event) {
-            var active = $('.navi-tabs li.active'),
-                next = active.next('li'),
-                $this = $(this),
+            var $this = $(this),
                 form = $this.parents('form');
 
             if(!$.checkForm(form)) {
@@ -46,7 +45,7 @@
             }
         });
 
-        $('.secondary').bind('click', function(event) {
+        $('.secondary').bind('click', function() {
             var active = $('.navi-tabs li.active'),
                 prev = active.prev('li');
 
@@ -54,17 +53,11 @@
         });
 
         $('input').bind('keyup', function() {
-
-            /*if(!$.checkForm($(this).parents('form'))) {
-               // return false;
-            }*/
-
             var required = $(this).attr('required');
-            if(required ) {
+            if(required) {
                 var $this = $(this);
 
                 if(!$this.val().length) {
-
                     $this.removeClass('inline-success').addClass('inline-error');
                 } else {
                     $this.removeClass('inline-error').addClass('inline-success');
@@ -92,7 +85,8 @@
         var loadingDiv = $('<div>', {
             'class': 'loading-mask',
             'html': text
-        }).hide();;
+        }).hide();
+
         var overlay = $('<div>', { 'class': 'overlay' }).hide();
         overlay.css('opacity', 0);
 
@@ -109,17 +103,18 @@
         loadingDiv.close = function() {
             loadingDiv.fadeOut().hide();
             overlay.fadeOut().hide();
-        }
+        };
 
         overlay.appendTo($('body')).show();
         overlay.animate({
             opacity: 0.2
         }, 350);
-        loadingDiv.appendTo($('body')).show();;
+
+        loadingDiv.appendTo($('body')).show();
         loadingDiv.animate({
             opacity: 1
         }, 350);
-    }
+    };
 
     $.checkForm = function(form) {
         var inputs = form.find('input'),
@@ -155,7 +150,7 @@
         });
 
         return success;
-    }
+    };
 
     $.fn.fancyTabs = function(settings) {
         var config = {};

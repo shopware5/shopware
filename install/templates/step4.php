@@ -31,7 +31,7 @@ if (!defined("installer")){
 
         <div class="actions clearfix">
             <a href="<?php echo $app->urlFor('step3', array()); ?>" class="secondary"><?php echo $language["back"];?></a>
-            <input type="submit" class="right primary" value="<?php echo $language["forward"];?>"" data-loading="true" data-loading-text="<?php echo $language["step_3_loading"]; ?>" />
+            <input type="submit" class="right primary" value="<?php echo $language["forward"];?>" data-loading="true" data-loading-text="<?php echo $language["step_3_loading"]; ?>" />
         </div>
     </form>
 </div>
