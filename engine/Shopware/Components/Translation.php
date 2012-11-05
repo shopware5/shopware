@@ -70,13 +70,13 @@ class Shopware_Components_Translation
                         'txtArtikel'          => 'name',
                         'txtshortdescription' => 'description',
                         'txtlangbeschreibung' => 'descriptionLong',
-                        'txtzusatztxt'        => 'additionaltext',
+                        'txtzusatztxt'        => 'additionalText',
                         'txtkeywords'         => 'keywords',
                         'txtpackunit'         => 'packUnit'
                     );
                 } else {
                     $map = array(
-                        'txtzusatztxt' => 'additionaltext',
+                        'txtzusatztxt' => 'additionalText',
                         'txtpackunit'  => 'packUnit'
                     );
                 }

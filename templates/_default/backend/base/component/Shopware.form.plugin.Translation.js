@@ -262,7 +262,7 @@ Ext.define('Shopware.form.plugin.Translation',
             Ext.Error.raise('Your ExtJS application does not support sub applications');
         }
 
-        me.translationKey = me.client.getForm().getRecord().getId();
+        var key = me.translationKey || me.client.getForm().getRecord().getId();
         me.translatableFieldsConfig = me.getFieldValues(me.translatableFields);
 
         Shopware.app.Application.addSubApplication({
@@ -272,7 +272,7 @@ Ext.define('Shopware.form.plugin.Translation',
             translatableFields: me.translatableFieldsConfig,
             translationType: me.translationType,
             translationMerge: me.translationMerge,
-            translationKey: me.translationKey
+            translationKey: key
         });
     },
 

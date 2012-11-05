@@ -3748,6 +3748,12 @@ class sArticles
                     'txtpackunit' => 'packunit'
                 );
                 break;
+            case 'configuratorgroup':
+                $map = array(
+                    'description' => 'groupdescription',
+                    'name' => 'groupname',
+                );
+                break;
             default:
                 return $data;
         }
@@ -3840,6 +3846,11 @@ class sArticles
                 break;
             case 'download':
                 $map = array('downloadname' => 'description');
+                break;
+            case 'configuratoroption':
+                $map = array(
+                    'name' => 'optionname',
+                );
                 break;
         }
 

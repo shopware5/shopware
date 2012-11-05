@@ -35,7 +35,6 @@
  */
 class sConfigurator
 {
-
     const TYPE_STANDARD = 0;
     const TYPE_SELECTION = 1;
     const TYPE_TABLE = 2;
@@ -45,7 +44,20 @@ class sConfigurator
 	 *
 	 * @var sSystem
 	 */
-	var $sSYSTEM;
+    public $sSYSTEM;
+
+    /**
+     * @var sArticles
+     */
+    public $module;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        $this->module = Shopware()->Modules()->Articles();
+    }
 
     /**
      * DONE
@@ -67,6 +79,7 @@ class sConfigurator
         $repository = Shopware()->Models()->Article();
         /**@var $article \Shopware\Models\Article\Article*/
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $id);
+
         //the data property contains now the configurator set. Set configurator set has the array keys "options" and "groups"
         //where the assigned configurator options and groups are.
         $data = $repository->getArticleConfiguratorSetByArticleIdIndexedByIdsQuery($id)
@@ -110,6 +123,7 @@ class sConfigurator
 
                 //now we convert the configurator option data from the old property structure to new one.
                 $option = $this->getConvertedOptionData($option);
+                $option = $this->module->sGetTranslation($option, $option['optionID'], 'configuratoroption');
                 $option['user_selected'] = $selected;
                 $option['selected'] = $selected;
 
@@ -117,7 +131,6 @@ class sConfigurator
                 $data['groups'][$groupId]['options'][$optionId] = $option;
             }
         }
-
 
         //now we iterate all groups to convert them from the old property structure to new one.
         $sConfigurator = array();
@@ -127,9 +140,10 @@ class sConfigurator
             //if the current group id exists in the post data, the group was selected already.
             $data['user_selected'] = $isSelected;
             $data['selected'] = $isSelected;
-
-            $sConfigurator[] = $data;
+            $sConfigurator[$data['groupID']] = $data;
         }
+
+        $sConfigurator = $this->module->sGetTranslations($sConfigurator, 'configuratorgroup');
 
         /**
          * If the configurator set is configured as a table configurator, we have to create the "table structure array"
@@ -256,8 +270,12 @@ class sConfigurator
             } else {
                 $articleData['sBlockPrices'] = array();
             }
-
-            $articleData = $this->mergeSelectedAndArticleData($articleData, $selected, $selectedPrice);
+            if($selected['kind'] > 1) {
+                $articleData = $this->mergeSelectedAndArticleData($articleData, $selected, $selectedPrice);
+                $articleData = $this->module->sGetTranslation($articleData, $selected['valueID'], 'variant');
+            } else {
+                $articleData["active"] = $selected["active"];
+            }
             $articleData["sConfiguratorSelection"] = $selected;
         }
 
@@ -271,6 +289,10 @@ class sConfigurator
         return $articleData;
     }
 
+    /**
+     * @param array $selectedItems
+     * @return Shopware\Components\Model\QueryBuilder
+     */
     public function getSelectionQueryBuilder($selectedItems = array()) {
         //first we create a small query builder with the article details and the prices
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -299,7 +321,7 @@ class sConfigurator
         return $builder;
     }
     
-    private function getDefaultPrices($detailId)
+    protected function getDefaultPrices($detailId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         return $builder->select(array('prices'))
@@ -343,14 +365,15 @@ class sConfigurator
             $articleData["sUnit"] = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($selected["unitID"]);
         }
 
-        $articleData['pricegroup']   = $selectedPrice['customerGroupKey'];
+        $articleData['pricegroup'] = $selectedPrice['customerGroupKey'];
         $articleData["pricenumeric"] = $selectedPrice['pricenumeric'];
-        $articleData["price"]        = $selectedPrice['price'];
-        $articleData["pseudoprice"]  = $selectedPrice['pseudoPrice'];
+        $articleData["price"] = $selectedPrice['price'];
+        $articleData["pseudoprice"] = $selectedPrice['pseudoPrice'];
 
-        $articleData["ordernumber"]  = $selected["ordernumber"];
-        $articleData["instock"]      = $selected["instock"];
-        $articleData["active"]       = $selected["active"];
+        $articleData["ordernumber"] = $selected["ordernumber"];
+        $articleData["additionaltext"] = $selected["additionaltext"];
+        $articleData["instock"] = $selected["instock"];
+        $articleData["active"] = $selected["active"];
         $articleData["suppliernumber"] = empty($selected['suppliernumber']) ? $articleData['suppliernumber'] : $selected['suppliernumber'];
         $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
         $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
@@ -592,13 +615,11 @@ class sConfigurator
      */
     private function getConvertGroupData($data)
     {
-        $translation = $this->getGroupTranslation($data['id'], array('name' => $data['name'], 'description' => $data['description']));
-
         return array(
             'groupID' => $data['id'],
-            'groupname' => $translation['name'],
+            'groupname' => $data['name'],
             'groupnameOrig' => $data['name'],
-            'groupdescription' => $translation['description'],
+            'groupdescription' => $data['description'],
             'groupdescriptionOrig' => $data['description'],
             'groupimage' => '',
             'postion' => $data['position'],
@@ -614,55 +635,16 @@ class sConfigurator
      * @param $data
      * @return array
      */
-    private function getConvertedOptionData($data)
+    protected function getConvertedOptionData($data)
     {
-        $translation = $this->getOptionTranslation($data['id'], array('name' => $data['name']));
-
         return array(
             'optionID' => $data['id'],
             'groupID' => $data['groupId'],
             'optionnameOrig' => $data['name'],
-            'optionname' => $translation['name'],
+            'optionname' => $data['name'],
             'optionposition' => $data['position'],
             'optionactive' => 1,
         );
-    }
-
-    /**
-     * @param $optionId
-     * @param $fallback
-     * @return mixed
-     */
-    public function getOptionTranslation($optionId, $fallback)
-    {
-        $sql= "SELECT objectdata
-               FROM s_core_translations
-               WHERE objecttype = ?
-               AND objectkey = ?
-               AND objectlanguage = ?";
-
-        $data = Shopware()->Db()->fetchOne($sql, array('configuratoroption', $optionId, Shopware()->Shop()->getId()));
-        if ($data) {
-            return unserialize($data);
-        } else {
-            return $fallback;
-        }
-    }
-
-    public function getGroupTranslation($groupId, $fallback)
-    {
-        $sql= "SELECT objectdata
-               FROM s_core_translations
-               WHERE objecttype = ?
-               AND objectkey = ?
-               AND objectlanguage = ?";
-        $data = Shopware()->Db()->fetchOne($sql, array('configuratorgroup', $groupId, Shopware()->Shop()->getId()));
-
-        if ($data) {
-            return unserialize($data);
-        } else {
-            return $fallback;
-        }
     }
 
     /**
@@ -670,7 +652,7 @@ class sConfigurator
      * @param $article \Shopware\Models\Article\Article
      * @return array
      */
-    private function getConfiguratorSettings($data, $article)
+    protected function getConfiguratorSettings($data, $article)
     {
         $settings = $this->getConvertedSettings($data, $article);
         //if no template configured use default templates.
@@ -691,20 +673,15 @@ class sConfigurator
         return $settings;
     }
 
-
 	/**
 	 * Returns the group options for the product configurator.
 	 *
-	 * @param unknown_type $id
-	 * @param unknown_type $article
-	 * @return unknown
+	 * @param int $id
+	 * @param array $article
+	 * @return array
 	 */
 	public function sGetArticleConfig ($id, $article)
 	{
         return $this->getArticleConfigurator($id, $article);
 	}
 }
-
-
-
-
