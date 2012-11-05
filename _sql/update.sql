@@ -79,38 +79,50 @@ Profile:
 UPDATE `s_core_config_elements` SET `value` = 's:2773:"antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;gulliver;harvest;htdig;ia_archiver;jeeves;jennybot;linkwalker;lycos;mercator;moget;muscatferret;myweb;netcraft;nomad;petersnews;scooter;slurp;unlost_web_crawler;voila;voyager;webbase;weblayers;wget;wisenutbot;acme.spider;ahoythehomepagefinder;alkaline;arachnophilia;aretha;ariadne;arks;aspider;atn.txt;atomz;auresys;backrub;bigbrother;blackwidow;blindekuh;bloodhound;brightnet;bspider;cactvschemistryspider;cassandra;cgireader;checkbot;churl;cmc;collective;combine;conceptbot;coolbot;core;cosmos;cruiser;cusco;cyberspyder;deweb;dienstspider;digger;diibot;directhit;dnabot;download_express;dragonbot;dwcp;e-collector;ebiness;eit;elfinbot;emacs;emcspider;esther;evliyacelebi;nzexplorer;fdse;felix;fetchrover;fido;finnish;fireball;fouineur;francoroute;freecrawl;funnelweb;gama;gazz;gcreep;getbot;geturl;golem;grapnel;griffon;gromit;hambot;havindex;hometown;htmlgobble;hyperdecontextualizer;iajabot;ibm;iconoclast;ilse;imagelock;incywincy;informant;infoseek;infoseeksidewinder;infospider;inspectorwww;intelliagent;irobot;israelisearch;javabee;jbot;jcrawler;jobo;jobot;joebot;jubii;jumpstation;katipo;kdd;kilroy;ko_yappo_robot;labelgrabber.txt;larbin;legs;linkidator;linkscan;lockon;logo_gif;macworm;magpie;marvin;mattie;mediafox;merzscope;meshexplorer;mindcrawler;momspider;monster;motor;mwdsearch;netcarta;netmechanic;netscoop;newscan-online;nhse;northstar;occam;octopus;openfind;orb_search;packrat;pageboy;parasite;patric;pegasus;perignator;perlcrawler;phantom;piltdownman;pimptrain;pioneer;pitkow;pjspider;pka;plumtreewebaccessor;poppi;portalb;puu;python;raven;rbse;resumerobot;rhcs;roadrunner;robbie;robi;robofox;robozilla;roverbot;rules;safetynetrobot;search_au;searchprocess;senrigan;sgscout;shaggy;shaihulud;sift;simbot;site-valet;sitegrabber;sitetech;slcrawler;smartspider;snooper;solbot;spanner;speedy;spider_monkey;spiderbot;spiderline;spiderman;spiderview;spry;ssearcher;suke;suntek;sven;tach_bw;tarantula;tarspider;techbot;templeton;teoma_agent1;titin;titan;tkwww;tlspider;ucsd;udmsearch;urlck;valkyrie;victoria;visionsearch;vwbot;w3index;w3m2;wallpaper;wanderer;wapspider;webbandit;webcatcher;webcopy;webfetcher;webfoot;weblinker;webmirror;webmoose;webquest;webreader;webreaper;websnarf;webspider;webvac;webwalk;webwalker;webwatch;whatuseek;whowhere;wired-digital;wmir;wolp;wombat;worm;wwwc;wz101;xget;awbot;bobby;boris;bumblebee;cscrawler;daviesbot;ezresult;gigabot;gnodspider;internetseer;justview;linkbot;linkchecker;nederland.zoek;perman;pompos;pooodle;redalert;shoutcast;slysearch;ultraseek;webcompass;yandex;robot;yahoo;bot;psbot;crawl;RSS;larbin;ichiro;Slurp;msnbot;bot;Googlebot;ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;spider;HTTPClient";' WHERE `s_core_config_elements`.`name` = 'botBlackList';
 
 -- 11-add-show-listing-option.sql
+-- Remove old cruft
 DROP TABLE IF EXISTS s_emotion_backup;
+DROP TABLE IF EXISTS s_emotion_new;
+
+-- Create backup of table
+CREATE TABLE s_emotion_backup LIKE s_emotion;
+INSERT INTO s_emotion_backup SELECT * FROM s_emotion;
+
+-- Create table with new Structure
 CREATE TABLE IF NOT EXISTS `s_emotion_new` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `cols` int(11) DEFAULT NULL,
-  `cell_height` int(11) NOT NULL,
-  `article_height` int(11) NOT NULL,
-  `container_width` int(11) NOT NULL,
-  `rows` int(11) NOT NULL,
-  `valid_from` datetime DEFAULT NULL,
-  `valid_to` datetime DEFAULT NULL,
-  `userID` int(11) DEFAULT NULL,
-  `show_listing` int(1) NOT NULL,
-  `is_landingpage` int(1) NOT NULL,
-  `landingpage_block` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `landingpage_teaser` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `seo_keywords` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `seo_description` text COLLATE utf8_unicode_ci NOT NULL,
-  `create_date` datetime DEFAULT NULL,
-  `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `modified` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `active` int(1) NOT NULL,
+    `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    `cols` int(11) DEFAULT NULL,
+    `cell_height` int(11) NOT NULL,
+    `article_height` int(11) NOT NULL,
+    `container_width` int(11) NOT NULL,
+    `rows` int(11) NOT NULL,
+    `valid_from` datetime DEFAULT NULL,
+    `valid_to` datetime DEFAULT NULL,
+    `userID` int(11) DEFAULT NULL,
+    `show_listing` int(1) NOT NULL,
+    `is_landingpage` int(1) NOT NULL,
+    `landingpage_block` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    `landingpage_teaser` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    `seo_keywords` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    `seo_description` text COLLATE utf8_unicode_ci NOT NULL,
+    `create_date` datetime DEFAULT NULL,
+    `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    `modified` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
-RENAME TABLE s_emotion TO s_emotion_backup;
+
+-- Migrate data from backup table
 INSERT IGNORE INTO s_emotion_new (`id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified`)
-SELECT `id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified` FROM s_emotion_backup;
+            SELECT `id`,`active`, `name`,`cols`,`cell_height`,`article_height`,`container_width`,`rows`,`valid_from`,`valid_to`,`userID`,`is_landingpage`,`landingpage_block`,`landingpage_teaser`,`seo_keywords`,`seo_description`,`create_date`,`template`,`modified` FROM s_emotion_backup;
+
+-- Drop old table
+DROP TABLE s_emotion;
+
+-- Rename new table
 RENAME TABLE s_emotion_new TO s_emotion;
-ALTER TABLE  `s_emotion_attributes` DROP FOREIGN KEY  `s_emotion_attributes_ibfk_1` ;
-ALTER TABLE  `s_emotion_attributes` ADD FOREIGN KEY (  `emotionID` ) REFERENCES  `s_emotion` (
-`id`
-) ON DELETE CASCADE ON UPDATE NO ACTION ;
+
+-- Drop backup table
 DROP TABLE s_emotion_backup;
 
 -- 12-fix-vat-service-label.sql
