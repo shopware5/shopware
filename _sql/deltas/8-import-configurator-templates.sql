@@ -57,7 +57,9 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_templates_attributes` (
   `attr19` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `attr20` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `articleID` (`template_id`)
+  KEY `templateID` (`template_id`),
+  CONSTRAINT `s_article_configurator_templates_attributes_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `s_article_configurator_templates` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
@@ -82,16 +84,10 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_template_prices_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `template_price_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `priceID` (`template_price_id`)
+  UNIQUE KEY `priceID` (`template_price_id`),
+  CONSTRAINT `s_article_configurator_template_prices_attributes_ibfk_1` FOREIGN KEY (`template_price_id`) REFERENCES `s_article_configurator_template_prices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
-ALTER TABLE `s_article_configurator_templates_attributes`
-  ADD CONSTRAINT `s_article_configurator_templates_attributes_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `s_article_configurator_templates` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
-
-ALTER TABLE `s_article_configurator_template_prices_attributes`
-  ADD CONSTRAINT `s_article_configurator_template_prices_attributes_ibfk_1` FOREIGN KEY (`template_price_id`) REFERENCES `s_article_configurator_template_prices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- //@UNDO
 
