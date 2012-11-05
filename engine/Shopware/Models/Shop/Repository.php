@@ -288,6 +288,9 @@ class Repository extends ModelRepository
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = null;
         $host = $request->getHttpHost();
+        if(empty($host)) {
+            return $shop;
+        }
         $requestPath = $request->getRequestUri();
 
         $builder = $this->getActiveQueryBuilder();
