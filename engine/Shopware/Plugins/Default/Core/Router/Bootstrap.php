@@ -181,11 +181,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost();
             }
             if(isset($newPath)) {
-                $url = sprintf('%s%s',
-                    $newPath,
-                    $request->getRequestUri()
-                );
-                $response->setRedirect($url, 301);
+                $newPath .= $shop->getBasePath();
+                $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
                 $this->initServiceMode($request);
@@ -256,7 +253,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                     $request->getScheme(),
                     $request->isSecure() ? $newShop->getSecureHost() : $newShop->getHost(),
                     $request->isSecure() ? $newShop->getSecureBasePath() : $newShop->getBasePath(),
-                    $request->getPathInfo()
+                    '' //$request->getPathInfo()
                 );
                 $response->setRedirect($url);
                 return;
