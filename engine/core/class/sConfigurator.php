@@ -684,4 +684,56 @@ class sConfigurator
 	{
         return $this->getArticleConfigurator($id, $article);
 	}
+
+
+    /**
+     * Returns the translation of an single configurator option.
+     *
+     * @deprecated
+     * @param int $optionId
+     * @param string $fallback
+     * @return mixed
+     */
+    public function getOptionTranslation($optionId, $fallback)
+    {
+        $sql= "SELECT objectdata
+               FROM s_core_translations
+               WHERE objecttype = ?
+               AND objectkey = ?
+               AND objectlanguage = ?";
+
+        $data = Shopware()->Db()->fetchOne($sql, array('configuratoroption', $optionId, Shopware()->Shop()->getId()));
+        if ($data) {
+            return unserialize($data);
+        } else {
+            return $fallback;
+        }
+    }
+
+    /**
+     * Returns the translation of an single configurator group.
+     *
+     * @deprecated
+     *
+     * @param int $groupId
+     * @param string $fallback
+     *
+     * @return mixed
+     */
+    public function getGroupTranslation($groupId, $fallback)
+    {
+        $sql= "SELECT objectdata
+               FROM s_core_translations
+               WHERE objecttype = ?
+               AND objectkey = ?
+               AND objectlanguage = ?";
+        $data = Shopware()->Db()->fetchOne($sql, array('configuratorgroup', $groupId, Shopware()->Shop()->getId()));
+
+        if ($data) {
+            return unserialize($data);
+        } else {
+            return $fallback;
+        }
+    }
+
 }
