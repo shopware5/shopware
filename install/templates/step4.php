@@ -4,7 +4,7 @@ if (!defined("installer")){
 }
 ?>
 <!-- Start page -->
-<div id="start">
+<div id="start" class="step4">
     <div class="page-header">
         <h2><?php echo $language["step4_header"];?></h2>
     </div>
