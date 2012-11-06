@@ -2826,7 +2826,7 @@ class sArticles
 
         $sql = "
             SELECT
-                a.id as articleID, d.id AS articleDetailsID,
+                a.id as articleID, d.id AS articleDetailsID, d.kind,
                 d.ordernumber, datum, sales, topseller as highlight,
                 a.description, a.description_long,
                 s.name AS supplierName, s.img AS supplierImg,
@@ -2891,6 +2891,12 @@ class sArticles
         $getPromotionResult = $this->sGetTranslation(
             $getPromotionResult, $getPromotionResult["articleID"], 'article', $this->sSYSTEM->sLanguage
         );
+
+        if ($getPromotionResult['kind'] != 1) {
+            $getPromotionResult = $this->sGetTranslation(
+                $getPromotionResult, $getPromotionResult['articleDetailsID'], 'variant', $this->sSYSTEM->sLanguage
+            );
+        }
 
         // Load article properties (Missing support for multilanguage)
         if ($getPromotionResult["filtergroupID"]) {
