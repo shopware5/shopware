@@ -13,20 +13,33 @@
             form.attr('action', action).trigger('submit');
         });
 
-        $('*[data-loading]').click(function(event) {
-            event.preventDefault();
+        /**
+         * Due to the fact that the IE <= 9 are having problems
+         * with the $.loading-plugin, we're providing the plugin
+         * to non-IE users and IE users just get an disabled button
+         * with an decreased opacity.
+         */
+        if(!$.browser.msie) {
+            $('*[data-loading]').click(function(event) {
+                event.preventDefault();
 
-            var $this = $(this);
+                var $this = $(this);
 
-            if($this.attr('data-loading') === 'false') {
-                return false;
-            }
+                if($this.attr('data-loading') === 'false') {
+                    return false;
+                }
 
-            var text = $this.attr('data-loading-text');
-            $.loading(text);
-            $this.parents("form").trigger("submit");
-            //return true;
-        });
+                var text = $this.attr('data-loading-text');
+                $.loading(text);
+                $this.parents("form").trigger("submit");
+            });
+        } else {
+            $('.step4 input:submit').bind('click', function() {
+                var $this = $(this);
+
+                $this.attr('disabled', 'disabled').css('opacity', '0.5');
+            })
+        }
 
         // Bind the tabs plugin to our tab navigation
         $('.navi-tabs').fancyTabs({
