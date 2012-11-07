@@ -1,7 +1,7 @@
 # Shopware 4
 
 - **Version**: 4.0.4
-- **Release Date**: 31th October 2012
+- **Release Date**: 6th November 2012
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
 
@@ -64,18 +64,18 @@ If you are not sure, how to contribute code under right license and right way yo
 To start contributing, just fork the master tree and clone your fork to your local machine:
 
 		git clone git@github.com:[YOUR USERNAME]/shopware-4.git
-		
+
 After having done this, configure the remotes, fetch the latest changes and switch to the `Community-Branch`:
 
 		cd shopware-4
 		git remote add upstream git://github.com/ShopwareAG/shopware-4.git
 		git fetch upstream
 		git checkout Community-Branch
-		
+
 Now you're ready to start hacking and contributing to Shopware. If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
 
 		git push
-		
+
 ... and send us a pull request with your changes to the branch `Community-Branch`. We'll verify the pull request and merge it with the Community Branch repository.
 
 **Please keep in mind that all verified and merged pull requests are released with the next minor version of Shopware.**
