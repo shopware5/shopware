@@ -1853,7 +1853,7 @@ class sShopwareImport
             return;
         }
 
-        $detailId = Shopware()->DB()->fetchOne("SELECT id FROM s_article_details WHERE ordernumber=?", array($number));
+        $detailId = Shopware()->DB()->fetchOne("SELECT id FROM s_articles_details WHERE ordernumber=?", array($number));
         if($detailId === false) {
                 return;
         }
