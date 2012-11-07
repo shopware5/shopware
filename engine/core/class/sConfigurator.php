@@ -140,10 +140,9 @@ class sConfigurator
             //if the current group id exists in the post data, the group was selected already.
             $data['user_selected'] = $isSelected;
             $data['selected'] = $isSelected;
-            $sConfigurator[$data['groupID']] = $data;
+            $data = $this->module->sGetTranslation($data, $group['id'], 'configuratorgroup');
+            $sConfigurator[] = $data;
         }
-
-        $sConfigurator = $this->module->sGetTranslations($sConfigurator, 'configuratorgroup');
 
         /**
          * If the configurator set is configured as a table configurator, we have to create the "table structure array"
