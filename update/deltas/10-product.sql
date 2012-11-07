@@ -47,3 +47,28 @@ UPDATE s_articles_details SET stockmin = NULL WHERE stockmin = 0;
 
 DELETE FROM `s_core_engine_elements`
 WHERE `domname` NOT LIKE 'attr%';
+
+CREATE TABLE IF NOT EXISTS `s_core_customerpricegroups_prices` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pricegroup` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `from` int(10) unsigned NOT NULL,
+  `to` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `articleID` int(11) NOT NULL DEFAULT '0',
+  `articledetailsID` int(11) NOT NULL DEFAULT '0',
+  `price` double NOT NULL DEFAULT '0',
+  `pseudoprice` double DEFAULT NULL,
+  `baseprice` double DEFAULT NULL,
+  `percent` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `articleID` (`articleID`),
+  KEY `articledetailsID` (`articledetailsID`),
+  KEY `pricegroup_2` (`pricegroup`,`from`,`articledetailsID`),
+  KEY `pricegroup` (`pricegroup`,`to`,`articledetailsID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+INSERT IGNORE INTO `s_core_customerpricegroups_prices`
+SELECT `pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`
+FROM `s_articles_prices`
+WHERE `pricegroup` LIKE 'PG%';
+DELETE FROM `s_articles_prices` WHERE `pricegroup` LIKE 'PG%';
+
+UPDATE `s_articles_attributes` SET `attr17` = NOW() WHERE `attr17` = '0000-00-00';

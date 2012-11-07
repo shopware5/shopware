@@ -36,7 +36,7 @@
 class Shopware_Update extends Slim
 {
     const VERSION = '1.0.0';
-    const UPDATE_VERSION = '4.0.3';
+    const UPDATE_VERSION = '4.0.4';
 
     public function initDbConfig()
     {
@@ -149,7 +149,7 @@ class Shopware_Update extends Slim
             'currentVersion' => $this->initCurrentVersion(),
             'updateVersion' => self::UPDATE_VERSION,
             'channel' => 'http://files.shopware.de/download.php',
-            'package' => 'install_4.0.3',
+            'package' => 'install_' . self::UPDATE_VERSION,
             'format' => 'zip',
             'storeLink' => 'http://store.shopware.de/shopware.php/sViewport,search?sSearch=',
             'updateDir' => realpath('.') . DIRECTORY_SEPARATOR,
