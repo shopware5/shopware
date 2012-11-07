@@ -97,6 +97,7 @@ class sShopwareImport
             LEFT JOIN s_articles_details d ON d.id=".(int)$article['maindetailsID']."
             WHERE a.id=".(int) $article['articleID'];
         $result = Shopware()->Db()->fetchRow($sql);
+
         if($result['configurator_set_id'] !== null) {
             $configuratorID = (int) $result['configurator_set_id'];
         }else{
@@ -110,50 +111,79 @@ class sShopwareImport
             }
         }
 
-        //create a generic group for the 1-dim-variants
-        $genericGroupName = Shopware()->Db()->quote($result['ordernumber']."generatedOldVariant");
-        $sql = "SELECT id FROM s_article_configurator_groups WHERE name={$genericGroupName}";
-        $result = Shopware()->Db()->fetchOne($sql);
-        if($result === false) {
-            $sql = "INSERT INTO `s_article_configurator_groups` (name,description,position) VALUES({$genericGroupName},'',1)";
-            $this->sDB->Execute($sql);
-            $groupID = (int) $this->sDB->Insert_ID();
-        }else{
-            $groupID = (int) $result['id'];
-        }
-        
-        $optionName = Shopware()->Db()->quote($article['additionaltext']);
-        $sql = "SELECT id FROM s_article_configurator_options WHERE name={$optionName}";
-        $result = Shopware()->Db()->fetchOne($sql);
-        if($result === false) {
-            $sql = "INSERT INTO `s_article_configurator_options` (group_id,name,position) VALUES({$groupID},{$optionName},1)";
-            $this->sDB->Execute($sql);
-            $optionID = (int) $this->sDB->Insert_ID();
-        }else{
-            $optionID = (int) $result['id'];
+        $ordernumber = $result['ordernumber'];
+
+        $optionIDs = array();
+        $groupIDs = array();
+
+
+        $groupNames = null;
+        if(isset($article['variant_group_names'])) {
+            // make sure that the number of group names matches the number of options
+            if(count(explode("|", $article['additionaltext'])) == count(explode("|", $article['variant_group_names']))) {
+                $groupNames = explode("|", $article['variant_group_names']);
+            }
+
         }
 
-        // Set relations
-        $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_group_relations` WHERE group_id={$groupID} AND set_id={$configuratorID}";
+        foreach(explode("|", $article['additionaltext']) as $idx => $option) {
+            $hidx = $idx+1;
+            $option = trim(str_replace("'", "", $option));
 
-        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
-            $sql = "INSERT INTO `s_article_configurator_set_group_relations` (set_id,group_id) VALUES({$configuratorID},{$groupID})";
-            $this->sDB->Execute($sql);
+//            $genericGroupName = Shopware()->Db()->quote($result['ordernumber']."generatedOldVariant");
+            if($groupNames) {
+                $genericGroupName = Shopware()->Db()->quote($groupNames[$idx]);
+            } else {
+                $genericGroupName = Shopware()->Db()->quote("Group #{$ordernumber}/{$hidx}");
+            }
+            $sql = "SELECT id FROM s_article_configurator_groups WHERE name={$genericGroupName}";
+            $result = Shopware()->Db()->fetchOne($sql);
+
+            if($result === false) {
+                $sql = "INSERT INTO `s_article_configurator_groups` (name,description,position) VALUES({$genericGroupName},'',1)";
+                $this->sDB->Execute($sql);
+                $groupID = (int) $this->sDB->Insert_ID();
+            }else{
+                $groupID = (int) $result;
+            }
+            $optionName = Shopware()->Db()->quote($option);
+            $sql = "SELECT id FROM s_article_configurator_options WHERE name={$optionName} AND group_id={$groupID}";
+            $result = Shopware()->Db()->fetchOne($sql);
+            if($result === false) {
+                $sql = "INSERT INTO `s_article_configurator_options` (group_id,name,position) VALUES({$groupID},{$optionName},1)";
+                $this->sDB->Execute($sql);
+                $optionIDs[] = (int) $this->sDB->Insert_ID();
+            }else{
+                $optionIDs[] = (int) $result;
+            }
+
+            $groupIDs[] = $groupID;
         }
 
-        $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_option_relations` WHERE option_id={$optionID} AND set_id={$configuratorID}";
-        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
-            $sql = "INSERT INTO `s_article_configurator_set_option_relations` (set_id,option_id) VALUES({$configuratorID},{$optionID})";
-            $this->sDB->Execute($sql);
+        foreach($groupIDs as $groupID) {
+            // set-group relations
+            $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_group_relations` WHERE group_id={$groupID} AND set_id={$configuratorID}";
+            if((int) Shopware()->Db()->fetchOne($sql) === 0) {
+                $sql = "INSERT INTO `s_article_configurator_set_group_relations` (set_id,group_id) VALUES({$configuratorID},{$groupID})";
+                $this->sDB->Execute($sql);
+            }
         }
 
+        foreach($optionIDs as $optionID) {
+            // set-option relations
+            $sql = "SELECT COUNT(*) FROM `s_article_configurator_set_option_relations` WHERE option_id={$optionID} AND set_id={$configuratorID}";
+            if((int) Shopware()->Db()->fetchOne($sql) === 0) {
+                $sql = "INSERT INTO `s_article_configurator_set_option_relations` (set_id,option_id) VALUES({$configuratorID},{$optionID})";
+                $this->sDB->Execute($sql);
+            }
 
-        $sql = "SELECT COUNT(*) FROM `s_article_configurator_option_relations` WHERE option_id={$optionID} AND article_id={$article['articledetailsID']}";
-        if((int) Shopware()->Db()->fetchOne($sql) === 0) {
-            $sql = "INSERT INTO `s_article_configurator_option_relations` (article_id,option_id) VALUES({$article['articledetailsID']},{$optionID})";
-            $this->sDB->Execute($sql);
+            // option-article relations
+            $sql = "SELECT COUNT(*) FROM `s_article_configurator_option_relations` WHERE option_id={$optionID} AND article_id={$article['articledetailsID']}";
+            if((int) Shopware()->Db()->fetchOne($sql) === 0) {
+                $sql = "INSERT INTO `s_article_configurator_option_relations` (article_id,option_id) VALUES({$article['articledetailsID']},{$optionID})";
+                $this->sDB->Execute($sql);
+            }
         }
-
 
         return $configuratorID;
 
@@ -1366,13 +1396,12 @@ class sShopwareImport
             }
 
             $model = new \Shopware\Models\Category\Category();
-
             $model ->fromArray($category);
             $model->setParent($parentModel);
 
             Shopware()->Models()->persist($model);
-
             Shopware()->Models()->flush();
+            
         }
 
         // set category attributes
@@ -1766,7 +1795,7 @@ class sShopwareImport
             $this->sAPI->sSetError("Article '{$article_image['articleID']}' not found", 10404);
             return false;
         }
-        $media->setArticles($article);
+//        $media->setArticles($article);
         //set media album, if no one passed set the unsorted album.
         if (isset($article_image["albumID"])) {
             $media->setAlbumId($article_image["albumID"]);
@@ -1800,9 +1829,110 @@ class sShopwareImport
         Shopware()->Models()->persist($articleImage);
         Shopware()->Models()->flush();
 
+//        if($article_image['relations'] !== '') {
+//            $this->createImageRelationsFromArticleNumber($articleImage->getId(), $article->getId(), $article_image['relations']);
+//        }
+
         return $articleImage->getId();
+    }
+
+    /**
+     * Helper function which gets the configurator options associated with a given "relations" ordernumber.
+     *
+     * In SW4 image relations cannot be set via ordernumber - images are related to articles over configurator options.
+     * So we need to get the options associated with the given ordernumber, first.
+     * Then the image mapping is created based on that configurator options
+     *
+     * @param $imageId
+     * @param $articleId
+     * @param $number
+     */
+    private function createImageRelationsFromArticleNumber($imageId,$articleId, $number)
+    {
+        if(!$number) {
+            return;
+        }
+
+        $detailId = Shopware()->DB()->fetchOne("SELECT id FROM s_article_details WHERE ordernumber=?", array($number));
+        if($detailId === false) {
+                return;
+        }
+
+        $sql = "SELECT cor.option_id as optionId
+        FROM s_article_configurator_option_relations cor
+        WHERE cor.article_id=?";
+
+        $relations = Shopware()->Db()->fetchAll($sql, array($detailId));
+
+        // Set mappings
+        if(!empty($relations)) {
+            foreach($relations as $relation){
+                $optionModel = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $relation['optionId']);
+
+                Shopware()->Db()->insert('s_article_img_mappings', array(
+                    'image_id' => $imageId
+                ));
+                $mappingID = Shopware()->Db()->lastInsertId();
+                Shopware()->Db()->insert('s_article_img_mapping_rules', array(
+                    'mapping_id' => $mappingID,
+                    'option_id' => $optionModel->getId()
+                ));
+            }
+
+            $this->recreateVariantImages($articleId);
+
+        }
 
     }
+
+    /**
+     * Helper method which creates images for variants based on the image mappings
+     * @param $articleId
+     */
+    protected function recreateVariantImages($articleId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $images = $builder->select(array('images', 'mappings', 'rules', 'option'))
+                ->from('Shopware\Models\Article\Image', 'images')
+                ->innerJoin('images.mappings', 'mappings')
+                ->leftJoin('mappings.rules', 'rules')
+                ->leftJoin('rules.option', 'option')
+                ->where('images.articleId = ?1')
+                ->andWhere('images.parentId IS NULL')
+                ->setParameter(1, $articleId)
+                ->getQuery();
+
+        $images = $images->execute();
+
+        /** @var \Shopware\Models\Article\Image $image */
+        foreach ($images as $image) {
+            $query      = $this->getArticleRepository()->getArticleImageDataQuery($image->getId());
+            $imageData  = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $this->getArticleRepository()->getDeleteImageChildrenQuery($image->getId())->execute();
+
+            foreach ($image->getMappings() as $mapping) {
+                $options = array();
+
+                foreach ($mapping->getRules() as $rule) {
+                    $options[] = $rule->getOption();
+                }
+
+                $imageData['path'] = null;
+                $imageData['parent'] = $image;
+
+                $details = $this->getArticleRepository()->getDetailsForOptionIdsQuery($articleId, $options)->getResult();
+
+                foreach ($details as $detail) {
+                    $newImage = new \Shopware\Models\Article\Image();
+                    $newImage->fromArray($imageData);
+                    $newImage->setArticleDetail($detail);
+                    Shopware()->Models()->persist($newImage);
+                    Shopware()->Models()->flush();
+                }
+            }
+        }
+    }
+
 
 	/**
 	 * Löschen von einem Artikel zugeordneten Bildern
