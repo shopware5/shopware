@@ -466,7 +466,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$customerGroups = '1=2';
 		}
 		
-		$limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;	
+		$limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;
+        $limit = max(1, $limit);
 
 		$sql = "
             SELECT sc.email
