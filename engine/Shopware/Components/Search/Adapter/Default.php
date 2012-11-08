@@ -373,8 +373,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (empty($last) || empty($result['not_force'])
             || strtotime($last) < strtotime($result['current']) - $interval
         ) {
-            @ini_set("memory_limit", "256M");
-            @set_time_limit(0);
             $this->buildSearchIndex();
         }
     }
@@ -1173,6 +1171,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function buildSearchIndex()
     {
+        @ini_set("memory_limit", "256M");
+        @set_time_limit(0);
+
         // Set time of last cache rebuild
         $sql = '
             SET @parent = (SELECT id FROM s_core_config_elements WHERE name = \'fuzzysearchlastupdate\');
