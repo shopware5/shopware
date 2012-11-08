@@ -851,7 +851,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             text: me.snippets.groups.createAndActivate,
             name: 'create-option-button',
             handler: function() {
-                me.fireEvent('createOption', me.optionNameField.getValue(), (me.createOptionButton.action === 'create'));
+                me.fireEvent('createOption', me.optionNameField.getValue(), (me.createOptionButton.action === 'activate'));
                 me.optionNameField.reset();
             },
             menu: {
