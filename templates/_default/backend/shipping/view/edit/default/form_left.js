@@ -126,7 +126,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
             },
             {
                 fieldLabel: '{s name=left_tracking_url}Tracking URL{/s}',
-                name: 'statusLink',
+                translatable: true,
+                name: 'statusLink'
             },
             {
                 fieldLabel: '{s name=left_comment_tracking}Comment{/s}',

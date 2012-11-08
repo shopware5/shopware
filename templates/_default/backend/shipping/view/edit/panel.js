@@ -209,7 +209,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
                 {
                     // Includes the default translation plugin
                     ptype:'translation',
-                    translationType:'config_dispatch'
+                    translationType:'config_dispatch',
+                    translationMerge: true
                 }
             ],
             /*{/if}*/
