@@ -181,7 +181,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getPayments()->add($paymentModel);
             }
         }
-        error_log("1->".$dispatchModel->getShippingFree());
 
         // Convert the countries to there country models
         foreach ($countries as $country) {
@@ -193,7 +192,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getCountries()->add($countryModel);
             }
         }
-        error_log("2->".$dispatchModel->getShippingFree());
 
         foreach ($categories as $category) {
             if (empty($category['id'])) {
@@ -205,7 +203,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getCategories()->add($categoryModel);
             }
         }
-        error_log("3->".$dispatchModel->getShippingFree());
 
         foreach ($holidays as $holiday) {
             if (empty($holiday['id'])) {
@@ -217,11 +214,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $dispatchModel->getHolidays()->add($holidayModel);
             }
         }
-        error_log("4->".$dispatchModel->getShippingFree());
-
-        if($params['shippingFree'] === null) {
-            error_log("isnull");
-        }
 
         try {
             $this->getManager()->flush();
@@ -230,7 +222,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
             return;
         }
-        error_log("->".$dispatchModel->getShippingFree());
 
         $this->View()->assign(array('success' => true, 'data' => $params));
     }
@@ -453,7 +444,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $param['dispatch'] = $dispatch;
             // set data to model and overwrite the image field
             $shippingCostModel->fromArray($param);
-            
+
             try {
                 $manager->persist($shippingCostModel);
                 $data[] = $this->getManager()->toArray($shippingCostModel);

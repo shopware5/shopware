@@ -335,7 +335,7 @@ class Customer extends Resource
             if ($customer->getShop()) {
                 $shopId = $customer->getShop()->getId();
             }
-             error_log($customer->getAccountMode());
+
             // If accountmode is 1 (no real user account), email is allowed to be non-unique
             if($customer->getAccountMode() == 1) {
                 return true;
