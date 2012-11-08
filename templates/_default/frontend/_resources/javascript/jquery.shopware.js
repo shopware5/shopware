@@ -4322,7 +4322,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                         }
                 }
                 var pos = appendTo.offset();
-                zoomDiv = $(document.body).append($.format('<div id="cloud-zoom-big" class="cloud-zoom-big" style="display:none;position:absolute;left:%0px;top:%1px;width:%2px;height:%3px;background-image:url(\'%4\');z-index:99;"></div>', pos.left + sImg.width() + 15, pos.top - 4, w, h, zoomImage.src)).find(':last');
+                zoomDiv = $(document.body).append($.format('<div id="cloud-zoom-big" class="cloud-zoom-big" style="display:none;position:absolute;left:%0px;top:%1px;width:%2px;height:%3px;background:#FFF url(\'%4\') no-repeat;z-index:99;"></div>', pos.left + sImg.width() + 15, pos.top - 4, w, h, zoomImage.src)).find(':last');
 
                 // Add the title from title tag.
                 if (sImg.attr('title') && opts.showTitle) {
