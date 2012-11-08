@@ -65,7 +65,9 @@ CREATE TABLE IF NOT EXISTS `s_core_customerpricegroups_prices` (
   KEY `pricegroup_2` (`pricegroup`,`from`,`articledetailsID`),
   KEY `pricegroup` (`pricegroup`,`to`,`articledetailsID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
-INSERT IGNORE INTO `s_core_customerpricegroups_prices`
+INSERT IGNORE INTO `s_core_customerpricegroups_prices` (
+  `pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`
+)
 SELECT `pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`
 FROM `s_articles_prices`
 WHERE `pricegroup` LIKE 'PG%';
