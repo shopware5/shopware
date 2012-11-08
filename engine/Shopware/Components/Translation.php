@@ -102,6 +102,13 @@ class Shopware_Components_Translation
                     'description' => 'name'
                 );
                 break;
+            case 'config_dispatch':
+                $map = array(
+                    'dispatch_name' => 'name',
+                    'dispatch_description' => 'description',
+                    'dispatch_status_link' => 'statusLink'
+                );
+                break;
             default:
                 $map = false;
                 break;
