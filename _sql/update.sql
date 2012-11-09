@@ -319,87 +319,42 @@ INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`va
 INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
 INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
 INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
+
 -- 1-fix-emotion-foreign-key.sql
--- //
 
 DROP TABLE IF EXISTS s_emotion_attributes_new;
-DROP TABLE IF EXISTS s_emotion_attributes_backup;
-
--- Copy structure and data to new table, this does _not_ copy the foreign keys, that's exacly what we want
 CREATE TABLE s_emotion_attributes_new LIKE s_emotion_attributes;
 INSERT INTO s_emotion_attributes_new SELECT * FROM s_emotion_attributes;
-
-RENAME TABLE s_emotion_attributes TO s_emotion_attributes_backup, s_emotion_attributes_new TO s_emotion_attributes;
-
--- Add missing foreign key
+DROP TABLE IF EXISTS s_emotion_attributes;
+RENAME TABLE s_emotion_attributes_new TO s_emotion_attributes;
 ALTER TABLE `s_emotion_attributes` ADD FOREIGN KEY ( `emotionID` ) REFERENCES `s_emotion` (
-        `id`
+ `id`
 ) ON DELETE CASCADE ON UPDATE NO ACTION ;
-
-DROP TABLE s_emotion_attributes_backup;
 
 -- 2-trim-links.sql
--- //
 
-UPDATE `s_articles_information` SET `link` = TRIM( `link` ) ;
+UPDATE `s_articles_information` SET `link` = TRIM(`link`) ;
 
 -- 3-fix-blog-attributes.sql
--- //
 
 DROP TABLE IF EXISTS s_blog_attributes_new;
-DROP TABLE IF EXISTS s_blog_attributes_backup;
-
--- Copy structure and data to new table, this does _not_ copy the foreign keys, that's exacly what we want
 CREATE TABLE s_blog_attributes_new LIKE s_blog_attributes;
 INSERT INTO s_blog_attributes_new SELECT * FROM s_blog_attributes;
-
-RENAME TABLE s_blog_attributes TO s_blog_attributes_backup, s_blog_attributes_new TO s_blog_attributes;
-
--- Add missing foreign key
+DROP TABLE IF EXISTS s_blog_attributes;
+RENAME TABLE s_blog_attributes_new TO s_blog_attributes;
 ALTER TABLE `s_blog_attributes` ADD FOREIGN KEY ( `blog_id` ) REFERENCES `s_blog` (
-        `id`
+  `id`
 ) ON DELETE CASCADE ON UPDATE NO ACTION ;
 
-DROP TABLE s_blog_attributes_backup;
-
 -- 4-fix-cronstock-mail.sql
--- //
 
 UPDATE s_core_config_mails SET ishtml = 0 WHERE name = 'sARTICLESTOCK';
 
-
 -- 5-fix-config-values-length.sql
--- //
 
 ALTER TABLE `s_core_config_values` CHANGE `value` `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
--- 6-install-self-healing.sql
-
-
--- //
-
-DELETE FROM s_core_plugins WHERE name = 'SelfHealing';
-
-INSERT IGNORE INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
-(NULL, 'Core', 'SelfHealing', 'SelfHealing', 'Default', NULL, NULL, 1, '2012-10-16 12:13:54', '2012-10-16 14:07:23', '2012-10-16 14:07:23', '2012-10-16 14:07:23', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1.0.0', NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, NULL);
-
-SET @parent = (SELECT id FROM s_core_plugins WHERE name='SelfHealing');
-
-DELETE FROM s_core_subscribes WHERE listener
-IN (
-	'Shopware_Plugins_Core_SelfHealing_Bootstrap::onDispatchLoopShutdown',
-	'Shopware_Plugins_Core_SelfHealing_Bootstrap::onStartDispatch'
-);
-
-INSERT IGNORE INTO  `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
-(NULL, 'Enlight_Controller_Front_DispatchLoopShutdown', 0, 'Shopware_Plugins_Core_SelfHealing_Bootstrap::onDispatchLoopShutdown', @parent, -9999),
-(NULL, 'Enlight_Controller_Front_StartDispatch', 0, 'Shopware_Plugins_Core_SelfHealing_Bootstrap::onStartDispatch', @parent, -9999);
-
-
 -- 7-update-self-healing.sql
-
-
--- //
 
 DELETE FROM s_core_plugins WHERE name = 'SelfHealing';
 
@@ -417,8 +372,6 @@ INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginI
 (NULL, 'Enlight_Controller_Front_DispatchLoopShutdown', 0, 'Shopware_Plugins_Core_SelfHealing_Bootstrap::onDispatchEvent', @parent, 100);
 
 -- 8-import-configurator-templates.sql
-
--- //
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_templates` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -451,7 +404,6 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_templates` (
   KEY `articleID` (`article_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
 CREATE TABLE IF NOT EXISTS `s_article_configurator_templates_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `template_id` int(11) unsigned DEFAULT NULL,
@@ -478,9 +430,7 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_templates_attributes` (
   PRIMARY KEY (`id`),
   KEY `templateID` (`template_id`),
   CONSTRAINT `s_article_configurator_templates_attributes_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `s_article_configurator_templates` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
 
 CREATE TABLE IF NOT EXISTS `s_article_configurator_template_prices` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -498,7 +448,6 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_template_prices` (
   KEY `template_id` (`template_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
 CREATE TABLE IF NOT EXISTS `s_article_configurator_template_prices_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `template_price_id` int(11) unsigned DEFAULT NULL,
@@ -507,39 +456,35 @@ CREATE TABLE IF NOT EXISTS `s_article_configurator_template_prices_attributes` (
   CONSTRAINT `s_article_configurator_template_prices_attributes_ibfk_1` FOREIGN KEY (`template_price_id`) REFERENCES `s_article_configurator_template_prices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
 -- 9-adds-context-for-old-template-mails.sql
--- //
 
 UPDATE `s_core_config_mails` SET `context` = 'a:4:{s:5:"sName";s:11:"Peter Meyer";s:8:"sArticle";s:10:"Blumenvase";s:5:"sLink";s:31:"http://shop.example.org/test123";s:8:"sComment";s:36:"Hey Peter - das musst du dir ansehen";}'
 WHERE `s_core_config_mails`.`name` = 'sTELLAFRIEND';
 
-UPDATE `s_core_config_mails` SET 
+UPDATE `s_core_config_mails` SET
 `context` = 'a:2:{s:12:"sArticleName";s:20:"ESD Download Artikel";s:5:"sMail";s:23:"max.mustermann@mail.com";}'
 WHERE `s_core_config_mails`.`name` = 'sNOSERIALS';
 
-
-UPDATE `s_core_config_mails` SET 
+UPDATE `s_core_config_mails` SET
 `context`= 'a:2:{s:9:"sPassword";s:7:"xFqr3zp";s:5:"sMail";s:18:"nutzer@example.org";}'
 WHERE `s_core_config_mails`.`name` = 'sPASSWORD';
-
 
 UPDATE `s_core_config_mails`  SET `context` = 'a:30:{s:5:"sShop";s:7:"Deutsch";s:8:"sShopURL";s:27:"http://trunk.qa.shopware.in";s:7:"sConfig";a:0:{}s:5:"sMAIL";s:14:"xy@example.org";s:7:"country";s:1:"2";s:13:"customer_type";s:7:"private";s:10:"salutation";s:4:"Herr";s:9:"firstname";s:8:"Banjimen";s:8:"lastname";s:6:"Ercmer";s:5:"phone";s:8:"55555555";s:3:"fax";N;s:5:"text1";N;s:5:"text2";N;s:5:"text3";N;s:5:"text4";N;s:5:"text5";N;s:5:"text6";N;s:11:"sValidation";N;s:9:"birthyear";s:0:"";s:10:"birthmonth";s:0:"";s:8:"birthday";s:0:"";s:11:"dpacheckbox";N;s:7:"company";s:0:"";s:6:"street";s:14:"Musterstreaße";s:12:"streetnumber";s:2:"55";s:7:"zipcode";s:5:"55555";s:4:"city";s:11:"Musterhsuen";s:10:"department";s:0:"";s:15:"shippingAddress";N;s:7:"stateID";N;}'
 WHERE `s_core_config_mails`.`name` = 'sREGISTERCONFIRMATION';
 
-UPDATE `s_core_config_mails` SET 
+UPDATE `s_core_config_mails` SET
 `context`= 'a:2:{s:8:"customer";s:11:"Peter Meyer";s:4:"user";s:11:"Hans Maiser";}'
 WHERE `s_core_config_mails`.`name` = 'sVOUCHER';
 
 -- 10-remove-bonussytem-from-config.sql
--- //
 
 SET @parent = (SELECT id FROM `s_core_config_elements` WHERE `name` LIKE 'bonusSystem');
 DELETE FROM `s_core_config_values` WHERE `element_id` = @parent;
 DELETE FROM `s_core_config_elements` WHERE `name` LIKE 'bonusSystem';
 
 -- 11-improve-customer-incrementation.sql
--- //
 
-UPDATE `s_order_number` SET `s_order_number`.`number`=`s_order_number`.`number`+1 WHERE `s_order_number`.`name` ='user';
-
+UPDATE s_order_number n, s_user_billingaddress u
+SET n.number = n.number+1
+WHERE n.name = 'user'
+AND n.number = u.customernumber;
