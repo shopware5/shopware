@@ -55,13 +55,13 @@ class Shopware extends Enlight_Application
     {
         Shopware($this);
 
-        $this->oldPath = dirname(dirname(__DIR__)) . $this->DS();
-
         if ($options === null) {
             $options = $this->AppPath() . 'Configs/Default.php';
         }
 
         parent::__construct($environment, $options);
+
+        $this->oldPath = dirname(dirname($this->appPath)) . $this->DS();
     }
 
     /**
