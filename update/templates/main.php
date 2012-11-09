@@ -62,7 +62,7 @@
 
 <?php if(!empty($testDirs)) { ?>
 <div class="alert alert-error">
-    <strong>Achtung:</strong> Für das Update werden für folgende Verzeichnisse Schreibrechte benötigt.<br><br>
+    <strong>Achtung:</strong> Für das Update werden für folgende Verzeichnisse/Dateien Schreibrechte benötigt.<br><br>
     <?php foreach($testDirs as $testDir) { ?>
     <?php echo $testDir ?: '. (Shopware-Verzeichnis)'; ?><br>
     <?php } ?>

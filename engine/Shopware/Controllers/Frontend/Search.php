@@ -53,10 +53,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function supplierSearchAction()
     {
-        $search = urldecode($this->Request()->sSearch);
+        $search = $this->Request()->sSearch;
 
         $variables = Shopware()->Modules()->Articles()->sGetArticlesByName('a.name ASC', '', 'supplier', $search);
-        $search = urldecode($this->Request()->sSearchText);
+        $search = $this->Request()->sSearchText;
 
 
         foreach ($variables['sPerPage'] as $perPageKey => &$perPage) {
@@ -141,7 +141,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function defaultSearchAction()
     {
-        $term = urldecode(trim(strip_tags(htmlspecialchars_decode(stripslashes($this->Request()->sSearch)))));
+        $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($this->Request()->sSearch))));
 
         // Load search configuration
         $config = $this->getSearchConfiguration($term);

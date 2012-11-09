@@ -188,9 +188,7 @@ class Shopware_Update extends Slim
                 'templates/_default/',
                 'update/backup/',
                 'update/source/',
-                '.htaccess',
                 'config.php',
-                'shopware.php',
                 'Application.php',
                 'shopware.php',
                 '.htaccess'
@@ -275,7 +273,7 @@ class Shopware_Update extends Slim
 
         $this->get('/main', function () use ($app) {
             $targetDir = $app->config('targetDir');
-            $testDirs = $app->config('updateDirs');
+            $testDirs = $app->config('testPaths');
             $testDirs[] = 'update/backup/';
             $testDirs[] = 'update/source/';
             foreach($testDirs as $key => $testDir) {
@@ -1067,8 +1065,9 @@ class Shopware_Update extends Slim
         $realUpdatePaths = array();
         foreach($updatePaths as $updatePath) {
             if(strpos($updatePath, '*') !== false) {
-                foreach(glob($updatePath, GLOB_MARK) as $realUpdatePath) {
-                    $realUpdatePaths[] = $realUpdatePath;
+                $paths = glob($updatePath, GLOB_MARK);
+                if(!empty($paths)) {
+                    $realUpdatePaths = array_merge($realUpdatePaths, $paths);
                 }
             } else {
                 $realUpdatePaths[] = $updatePath;
