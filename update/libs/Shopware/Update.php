@@ -133,6 +133,31 @@ class Shopware_Update extends Slim
         }
     }
 
+    public function getBasePath()
+    {
+        static $basePath;
+        if ($basePath === null) {
+            $filename = (isset($_SERVER['SCRIPT_FILENAME']))
+                ? basename($_SERVER['SCRIPT_FILENAME'])
+                : '';
+            $baseUrl = $this->request()->getRootUri();
+            if (empty($baseUrl)) {
+                $basePath = '';
+                return $this;
+            }
+            if (basename($baseUrl) === $filename) {
+                $basePath = dirname($baseUrl);
+            } else {
+                $basePath = $baseUrl;
+            }
+            if (substr(PHP_OS, 0, 3) === 'WIN') {
+                $basePath = str_replace('\\', '/', $basePath);
+            }
+            $basePath = rtrim($basePath, '/');
+        }
+        return $basePath;
+    }
+
     public function __construct($userSettings = array())
     {
         parent::__construct($userSettings);
