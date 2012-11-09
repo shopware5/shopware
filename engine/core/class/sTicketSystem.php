@@ -482,7 +482,7 @@ class sTicketSystem
 		{
 			$sql = "SELECT *
 					FROM `s_core_multilanguage`
-					WHERE `default` = 1";
+					WHERE `default` = 1 limit 1";
 			if($this->sDbType == "adodb")
 			{
 				$result = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
