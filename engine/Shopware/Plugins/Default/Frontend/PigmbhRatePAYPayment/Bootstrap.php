@@ -1370,23 +1370,16 @@ class Shopware_Plugins_Frontend_PigmbhRatePAYPayment_Bootstrap extends Shopware_
     }
 
     /**
-     * Plugin unistall method
+     * Plugin uninstall method
      *
      * @return	bool
      */
     public function uninstall() {
         $sql = "DELETE FROM `s_core_paymentmeans` WHERE `name` IN ('RatePAYInvoice','RatePAYRate','RatePAYDebit')";
         Shopware()->Db()->query($sql);
-        $sql = "DELETE FROM `s_core_subscribes` WHERE `listener` LIKE '%RatePAYPayment%'";
-        Shopware()->Db()->query($sql);
         $sql = "DELETE FROM `s_core_menu` WHERE `name` LIKE 'RatePAY'";
         Shopware()->Db()->query($sql);
-        $sql = "SELECT `id` FROM `s_core_plugins` WHERE `name` LIKE 'PigmbhRatePAYPayment' ";
-        $mypluginid = Shopware()->Db()->fetchOne($sql);
-        $sql = "DELETE FROM `s_core_plugin_elements` WHERE `pluginID` = ?";
-        Shopware()->Db()->query($sql, array($mypluginid));
-        $sql = "DELETE FROM `s_core_plugin_configs` WHERE `pluginID` = ?";
-        Shopware()->Db()->query($sql, array($mypluginid));
+
         $sql = "DELETE FROM `s_core_documents_box` WHERE `name` LIKE '%pi_ratepay%' ";
         Shopware()->Db()->query($sql);
         $sql = "DROP TABLE IF EXISTS `pi_ratepay_private_key`";
