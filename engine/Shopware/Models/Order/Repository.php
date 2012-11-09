@@ -216,7 +216,7 @@ class Repository extends ModelRepository
             $builder = $this->filterListQuery($builder, $filters);
         }
         $builder->andWhere($builder->expr()->notIn('orders.status', array('-1', '4')));
-        $builder->andWhere('orders.number > 0');
+        $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
             //add order by path
