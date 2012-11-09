@@ -183,9 +183,12 @@ class Shopware_Update extends Slim
             'targetDir' => realpath('../') . DIRECTORY_SEPARATOR,
             'testPaths' => array(
                 '',
+                'cache/',
+                'engine/',
                 'images/',
                 'templates/',
                 'templates/_default/',
+                'templates/orange/',
                 'update/backup/',
                 'update/source/',
                 'config.php',
