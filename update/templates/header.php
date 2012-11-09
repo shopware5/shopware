@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-
+    <base href="<?php echo $app->getBasePath(); ?>/" />
     <title>Shopware 4 - Updater</title>
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="assets/styles/bootstrap.min.css" media="all"/>
