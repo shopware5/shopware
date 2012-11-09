@@ -43,7 +43,7 @@ class Shopware extends Enlight_Application
 
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
-    protected $oldPath = '';
+    protected $oldPath = null;
 
     /**
      * Constructor method
@@ -55,13 +55,15 @@ class Shopware extends Enlight_Application
     {
         Shopware($this);
 
+        if($this->oldPath === null) {
+            $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
+        }
+
         if ($options === null) {
             $options = $this->AppPath() . 'Configs/Default.php';
         }
 
         parent::__construct($environment, $options);
-
-        $this->oldPath = dirname(dirname($this->appPath)) . $this->DS();
     }
 
     /**
