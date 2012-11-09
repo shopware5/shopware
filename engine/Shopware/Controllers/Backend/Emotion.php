@@ -271,17 +271,21 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data['attribute'] = $data['attribute'][0];
             $data['modified'] = new \DateTime();
             $data['elements'] = $this->fillElements($emotion, $data);
-            if (!empty($data['categories'])) {
-                $categories = array();
-                foreach($data['categories'] as $category) {
-                     $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
-                }
-                $data['categories'] = $categories;
 
-            } elseif (!empty($data['categoryId'])) {
-                $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
-            } else {
+            if(empty($data['categories'])) {
                 $data['categories'] = null;
+            }
+            else {
+                if($data['isLandingPage']) {
+                    $categories = array();
+                    foreach($data['categories'] as $category) {
+                        $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+                    }
+                    $data['categories'] = $categories;
+                }
+                else {
+                    $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
+                }
             }
 
             unset($data['user']);
