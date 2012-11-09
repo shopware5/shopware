@@ -763,7 +763,7 @@ class Shopware_Update extends Slim
                 ";
                 $db->prepare($sql)->execute(array('id' => $plugin['id'], 'newId' => $newId));
                 $sql = "
-                    INSERT INTO `s_core_config_elements` (
+                    INSERT IGNORE INTO `s_core_config_elements` (
                       `form_id`, `name`, `value`, `label`, `description`,
                       `type`, `required`, `position`, `scope`,
                       `filters`, `validators`, `options`
