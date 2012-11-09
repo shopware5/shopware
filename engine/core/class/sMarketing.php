@@ -276,7 +276,7 @@ class sMarketing
 			$activeShopId = Shopware()->Shop()->getId();
 			$activeFactor = $this->sSYSTEM->sCurrency["factor"];
 			if($premium['subshopID'] === "0"){
-				$sql= "SELECT factor FROM s_core_currencies WHERE id=(SELECT defaultcurrency FROM s_core_multilanguage WHERE `default` = 1)";
+				$sql= "SELECT factor FROM s_core_currencies WHERE id=(SELECT defaultcurrency FROM s_core_multilanguage WHERE `default` = 1 limit 1)";
 				$premiumFactor = Shopware()->Db()->fetchOne($sql, array());
 			}else{
 				$sql= "SELECT factor FROM s_core_currencies WHERE id=(SELECT defaultcurrency FROM s_core_multilanguage WHERE id=?)";
