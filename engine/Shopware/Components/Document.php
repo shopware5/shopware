@@ -136,6 +136,12 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
 	protected $_documentBid;
 
+    /**
+     * Ref to the translation component
+     *
+     * @var \Shopware\Components\Translation
+     */
+    protected $translationComponent;
 
 	/**
 	 * Static function to initiate document class
@@ -185,6 +191,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
 		}
 
+        $d->setTranslationComponent();
 		$d->initTemplateEngine();
 
 		return $d;
@@ -257,6 +264,32 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		$Document["voucher"] = $this->getVoucher($this->_config["voucher"]);
 		$this->_view->assign('Document',$Document);
 
+
+        // Translate payment and dispatch depending on the order's language
+        // and replace the default payment/dispatch text
+        $dispatchId = $this->_order->order->dispatchID;
+        $paymentId  = $this->_order->order->paymentID;
+        $translationPayment = $this->translationComponent->read($this->_order->order->language, 'config_payment', 1);
+        $translationDispatch = $this->translationComponent->read($this->_order->order->language, 'config_dispatch', 1);
+
+        if(isset($translationPayment[$paymentId])) {
+            if(isset($translationPayment[$paymentId]['description'])) {
+                $this->_order->payment->description = $translationPayment[$paymentId]['description'];
+            }
+            if(isset($translationPayment[$paymentId]['additionalDescription'])) {
+                $this->_order->payment->additionaldescription = $translationPayment[$paymentId]['additionalDescription'];
+            }
+        }
+
+        if(isset($translationDispatch[$dispatchId])) {
+            if(isset($translationDispatch[$dispatchId]['dispatch_name'])) {
+                $this->_order->dispatch->name = $translationDispatch[$dispatchId]['dispatch_name'];
+            }
+            if(isset($translationDispatch[$dispatchId]['dispatch_description'])) {
+                $this->_order->dispatch->description= $translationDispatch[$dispatchId]['dispatch_description'];
+            }
+        }
+
 		$this->_view->assign('Order',$this->_order->__toArray());
 		$this->_view->assign('Containers',$this->_document->containers->getArrayCopy());
 
@@ -303,9 +336,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		SELECT * FROM s_core_documents_box WHERE documentID = ?
 		",array($id),ArrayObject::ARRAY_AS_PROPS));
 
-		$translationComponent = new Shopware_Components_Translation();
-
-		$translation = $translationComponent->read($this->_order->order->language, 'documents', 1);
+		$translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
 		
 		foreach ($this->_document->containers as $key => $container){
 
@@ -421,6 +452,13 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 			throw new Enlight_Exception("Path ".$path." not found");
 		}
 	}
+
+    /**
+     * Sets the translation component
+     */
+    protected function setTranslationComponent() {
+        $this->translationComponent = new Shopware_Components_Translation();
+    }
 
 	/**
 	 * Set order
