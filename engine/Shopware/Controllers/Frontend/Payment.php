@@ -107,7 +107,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
 			$order->sComment = Shopware()->Session()->sComment;
 			$order->sBasketData = $basket;
 			$order->sAmount = $basket['sAmount'];
-			$order->sAmountWithTax = $basket['AmountNumeric'];
+			$order->sAmountWithTax = !empty($basket['AmountWithTaxNumeric']) ? $basket['AmountWithTaxNumeric'] : $basket['AmountNumeric'];
 			$order->sAmountNet = $basket['AmountNetNumeric'];
 			$order->sShippingcosts = $basket['sShippingcosts'];
 			$order->sShippingcostsNumeric = $basket['sShippingcostsWithTax'];
