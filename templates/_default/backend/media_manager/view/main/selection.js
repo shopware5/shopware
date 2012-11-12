@@ -49,6 +49,17 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
     height: 500,
     width: 650,
 
+    /**
+     * Forces the window to be on front
+     * @boolean
+     * @default false
+     */
+    forceToFront: false,
+
+    /**
+     * Collection of used snippets.
+     * @object
+     */
 	snippets:{
 		album: '{s name="selection/album"}Album{/s}',
 		searchText: '{s name="selection/search_text"}Search...{/s}',
