@@ -3,12 +3,11 @@
         [{foreach $menu as $category}
             {if ($category->onclick || $category->action || $category->hasChildren()) && {acl_is_allowed privilege=read resource=$category->controller|lower}}
                 {if $category->isVisible()} {
-                        {if $level === 0}xtype: 'hoverbutton',{/if}
+                        {if $level === 0}{if $category->hasChildren()}xtype: 'hoverbutton',{else}xtype: 'button',{/if}{/if}
                         {$name = null}
                         {if $category->controller}{$name = $category->controller}{/if}
                         {if $category->action && $category->action != 'Index'}{$name = "{$category->controller}/{$category->action}"}{/if}
                         text: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}{if $category->shortcut}&nbsp;<span class='shortcut'>({$category->shortcut})</span>{/if}",
-                        clickEvent: 'mouseover',
                         {if $category->controller && $category->action}handler: function() {
                             Shopware.app.Application.addSubApplication({
                                 name: 'Shopware.apps.{$category->controller}'
