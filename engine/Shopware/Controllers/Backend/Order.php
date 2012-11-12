@@ -1195,15 +1195,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $renderer = "pdf"; // html / pdf
 
 
-        $deliveryDate = $this->Request()->getParam('displayDate', null);
+        $deliveryDate = $this->Request()->getParam('deliveryDate', null);
         if (!empty($deliveryDate)) {
             $deliveryDate = new \DateTime($deliveryDate);
             $deliveryDate = $deliveryDate->format('d.m.Y');
         }
 
 
-        $displayDate = $this->Request()->getParam('deliveryDate', null);
-        if (!empty($deliveryDate)) {
+        $displayDate = $this->Request()->getParam('displayDate', null);
+        if (!empty($displayDate)) {
             $displayDate = new \DateTime($displayDate);
             $displayDate = $displayDate->format('d.m.Y');
         }
