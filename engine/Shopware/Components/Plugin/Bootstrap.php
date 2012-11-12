@@ -262,16 +262,23 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new menu item instance
      *
      * @param array $options
-     * @return Shopware\Models\Menu\Menu
+     * @return Shopware\Models\Menu\Menu|null
      */
     public function createMenuItem(array $options)
     {
-        if(!isset($options['label']) || !isset($options['parent'])) {
-            return;
+        if(!isset($options['label'])) {
+            return null;
+        }
+        if(isset($options['parent'])
+          && $options['parent'] instanceof \Shopware\Models\Menu\Menu) {
+            $parentId = $options['parent']->getId();
+        } else {
+            $parentId = null;
+            unset($options['parent']);
         }
         $item = $this->Menu()->findOneBy(array(
             'label' => $options['label'],
-            'parentId' => $options['parent']->getId()
+            'parentId' => $parentId
         ));
         if($item === null) {
             $item = new Shopware\Models\Menu\Menu();
