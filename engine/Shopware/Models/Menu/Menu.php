@@ -114,7 +114,7 @@ class Menu extends ModelEntity
      * @var integer $parent
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
-    private $parentId = 0;
+    private $parentId;
 
     /**
      * @var Menu
