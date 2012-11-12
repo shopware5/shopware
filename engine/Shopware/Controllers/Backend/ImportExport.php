@@ -1579,7 +1579,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             if (empty($imageData['ordernumber']) || empty($imageData['image'])) {
-                continue; 
+                continue;
             }
             $counter++;
 
@@ -2356,22 +2356,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     if (!empty($articleData['similar'])) {
                         $similars = explode('|', $articleData['similar']);
                         foreach ($similars as $similarId) {
-                            if (is_numeric($similarId)) {
-                                $updateData['similar'][] = array('id' => $similarId);
-                            } else {
-                                $updateData['similar'][] = array('number' => $similarId);
-                            }
+                            $updateData['similar'][] = array('number' => $similarId);
                         }
                     }
 
                     if (!empty($articleData['crosselling'])) {
                         $crossSellings = explode('|', $articleData['crosselling']);
                         foreach ($crossSellings as $crosssellingId) {
-                            if (is_numeric($crosssellingId)) {
-                                $updateData['related'][] = array('id' => $crosssellingId);
-                            } else {
-                                $updateData['related'][] = array('number' => $crosssellingId);
-                            }
+                            $updateData['related'][] = array('number' => $crosssellingId);
                         }
                     }
 
@@ -2778,13 +2770,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $updateData = array();
                 $updateData['variants'][] = $detailData;
             }
-
             $result = $articleResource->update($articleModel->getId(), $updateData);
         } else {
             $updateData['mainDetail'] = $detailData;
             $result = $articleResource->create($updateData);
         }
-
         return $result;
     }
 
@@ -3028,7 +3018,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         // userId and custumernumber will be ignored as there is not distinction between accountmode 0 and 1 in
         // old export files
-        if (!empty($customerData['email']) && !empty($customerData['subshopID'])) {            /** \Shopware\Models\Customer\Customer $customerModel */
+        if (!empty($customerData['email']) && !empty($customerData['subshopID'])) {
+            /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email'], 'shopId' => $customerData['subshopID']));
 
         } elseif (!empty($customerData['email'])) {
