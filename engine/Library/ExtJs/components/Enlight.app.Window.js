@@ -51,6 +51,12 @@ Ext.define('Enlight.app.Window', {
     focusable: true,
 
     /**
+     * Forces the window to be on front at start up
+     * @boolean
+     */
+    forceToFront: false,
+
+    /**
      * Extend from the standard ExtJS 4 controller
      * @string
      */
@@ -211,7 +217,7 @@ Ext.define('Enlight.app.Window', {
 
         // Define the render area of the window
         var viewport = Shopware.app.Application.viewport;
-        if(viewport && Shopware.apps.Index) {
+        if(viewport && Shopware.apps.Index && me.forceToFront == false) {
             var activeDesktop = viewport.getActiveDesktop(),
                 activeEl = activeDesktop.getEl();
 
@@ -232,18 +238,51 @@ Ext.define('Enlight.app.Window', {
             me.minimizable = false;
         }
 
+        if(me.forceToFront) {
+            me.minimizable = false;
+        }
+
         me.callParent(arguments);
         me.isWindowOnFront = true;
         me.center();
 	},
 
+    /**
+     * Special ExtJS method which will be called
+     * after the window is shown.
+     *
+     * @public
+     * @return void
+     */
     afterShow: function() {
-        this.callParent(arguments);
+        var me = this;
+
+        me.callParent(arguments);
         Ext.Function.defer(function() {
             window.scrollTo(0, 0);
         }, 10);
+
+        if(me.forceToFront) {
+            var el = me.getEl(), elDom;
+
+            // If we're not having a window, don't try to set the style(s)
+            if(!el) {
+                return false;
+            }
+            elDom = el.dom;
+
+            // Setting the style with vanilla js to prevent issues with the Ext.ZIndexManager
+            el.dom.style.zIndex = "999999";
+        }
     },
 
+    /**
+     * Special ExtJS method which will be called
+     * after the window is rendered.
+     *
+     * @public
+     * @return void
+     */
     afterRender: function() {
         var me = this;
         me.callParent(arguments);

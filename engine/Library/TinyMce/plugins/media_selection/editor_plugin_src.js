@@ -14,6 +14,7 @@
  * @link http://www.shopware.de/
  * @author st.pohl <stp@shopware.de>
  * @date 2012-03-14
+ * @modifed 2012-11-12
  * @license http://www.shopware.de/license
  * @package tinymce-plugins
  * @subpackage media-selection
@@ -77,6 +78,7 @@
             // Register the command so that it can be invoked
             // by using tinyMCE.activeEditor.execCommand('mceMediaSelection');
             ed.addCommand('mceMediaSelection', function() {
+                var forceToFront = false;
                 if(typeof(Shopware.app.Application.addSubApplication) !== 'function') {
 
                     Ext.Error.raise({
@@ -85,10 +87,15 @@
                     });
                 }
 
+                if(me.ed.settings && me.ed.settings.fullscreen_is_enabled) {
+                   forceToFront = true;
+                }
+
                 // Opens the media selection and registers a callback method to process the incoming image(s)
                 Shopware.app.Application.addSubApplication({
                     name: 'Shopware.apps.MediaManager',
                     layout: 'small',
+                    forceToFront: forceToFront,
                     selectionMode: 'single',
                     eventScope: me,
                     mediaSelectionCallback: me._processImage
