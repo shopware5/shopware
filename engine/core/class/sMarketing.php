@@ -371,19 +371,18 @@ class sMarketing
         $link = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=";
 
         foreach ($articles as $articleId => $article) {
-            $name = (strip_tags(html_entity_decode($article['articleName'])));
-
-            $name = preg_replace("/[^a-zA-Z0-9äöüßÄÖÜ\-´`.]/", " ", $name);
+            $name = strip_tags(html_entity_decode($article['articleName'], ENT_QUOTES, 'UTF-8'));
+            $name = preg_replace("/[^\\w0-9äöüßÄÖÜ´`.-]/u", " ", $name);
             $name = preg_replace('/\s\s+/', ' ', $name);
             $name = preg_replace('/\(.*\)/', '', $name);
             $name = trim($name, " -");
-
             $articles[$articleId]["articleID"] = $articleId;
             $articles[$articleId]["name"] = $name;
             $articles[$articleId]["class"] = $class . round($pos / $anz * $steps);
             $articles[$articleId]["link"] = $link . $articleId;
             $pos++;
         }
+
         shuffle($articles);
         return $articles;
     }
