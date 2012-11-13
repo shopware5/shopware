@@ -632,12 +632,19 @@ class	sExport
 		elseif($this->sSettings["variant_export"]==2)
 		{
 			$sql_add_group_by = "d.id";
-            $configurator_settings_sql = ", (
-            SELECT GROUP_CONCAT(CONCAT(acg.name, ':', aco.name) SEPARATOR ', ')
-            FROM s_article_configurator_option_relations cor
-                        LEFT JOIN s_article_configurator_options aco ON aco.id=cor.option_id
-                        LEFT JOIN s_article_configurator_groups acg ON acg.id=aco.group_id
-            WHERE cor.article_id=d.id
+            // If an article is a configurator article, show which configurator groups and options are set
+            $configurator_settings_sql = "
+            , (
+                SELECT
+                    GROUP_CONCAT(CONCAT(acg.name, ':', aco.name) SEPARATOR ', ')
+                FROM
+                    s_article_configurator_option_relations cor
+                LEFT JOIN
+                    s_article_configurator_options aco ON aco.id=cor.option_id
+                LEFT JOIN
+                    s_article_configurator_groups acg ON acg.id=aco.group_id
+                WHERE
+                    cor.article_id=d.id
             ) as configurator_settings";
 		}
 		else
