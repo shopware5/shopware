@@ -449,6 +449,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 }, {
                     name: 'referenceUnit',
                     submitLocaleSeparator: false,
+                    decimalPrecision: 3,
                     fieldLabel: me.snippets.basePrice.basicUnit
                 }, {
                     name: 'packUnit',
@@ -503,27 +504,33 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             } , {
                 xtype: 'numberfield',
                 name: 'weight',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.settings.weight
             }, {
                 xtype: 'numberfield',
                 name: 'inStock',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.settings.stock
             }, {
                 xtype: 'numberfield',
                 name: 'stockMin',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.settings.minStock
             }, {
                 xtype: 'numberfield',
                 name: 'minPurchase',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.settings.minimumOrder
             }, {
                 xtype: 'numberfield',
                 name: 'purchaseSteps',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.settings.graduation
             }, {
                 xtype: 'numberfield',
                 name: 'maxPurchase',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.settings.maximumOrder
             }, {
                 xtype: 'datefield',
@@ -569,16 +576,19 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             }, {
                 xtype: 'numberfield',
                 name: 'width',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.settings.width
             }, {
                 xtype: 'numberfield',
                 name: 'height',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.settings.height
             }, {
                 xtype: 'numberfield',
                 name: 'len',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.settings.len
             }]

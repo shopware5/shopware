@@ -211,10 +211,12 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[inStock]',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.stock
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[stockMin]',
+                decimalPrecision: 0,
                 fieldLabel: me.snippets.minStock
             }, {
                 xtype: 'datefield',
@@ -233,10 +235,12 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             } , {
                xtype: 'numberfield',
                name: 'mainDetail[minPurchase]',
+               decimalPrecision: 0,
                fieldLabel: me.snippets.minimumOrder
            }, {
                xtype: 'numberfield',
                name: 'mainDetail[purchaseSteps]',
+               decimalPrecision: 0,
                fieldLabel: me.snippets.graduation
            }, {
                xtype: 'numberfield',
@@ -261,6 +265,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[weight]',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.weight
             }, {
@@ -291,16 +296,19 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[width]',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.width
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[height]',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.height
             }, {
                 xtype: 'numberfield',
                 name: 'mainDetail[len]',
+                decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 fieldLabel: me.snippets.len
             }
