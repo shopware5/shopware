@@ -501,8 +501,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             $this->Application()->getOption('Model')
         );
 
-        $cacheResource = $this->Application()->Cache();
-        $config->setCacheResource($cacheResource);
+        if($config->getMetadataCacheImpl() === null) {
+            $cacheResource = $this->Application()->Cache();
+            $config->setCacheResource($cacheResource);
+        }
 
         $hookManager = $this->Application()->Hooks();
         $config->setHookManager($hookManager);
@@ -529,10 +531,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initModels()
     {
-       /** @var $config \Doctrine\ORM\Configuration */
+       /** @var $config \Shopware\Components\Model\Configuration */
         $config = $this->getResource('ModelConfig');
-
-        $cache = $config->getMetadataCacheImpl();
 
         // register standard doctrine annotations
         Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
@@ -549,10 +549,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             'Gedmo/Mapping/Annotation/All.php'
         );
 
-        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
-            new Doctrine\Common\Annotations\AnnotationReader,
-            $cache
-        );
+        $cachedAnnotationReader = $config->getAnnotationsReader();
 
         $annotationDriver = new Doctrine\ORM\Mapping\Driver\AnnotationDriver(
             $cachedAnnotationReader, array(
