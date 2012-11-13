@@ -59,6 +59,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @object
      */
     snippets:{
+        form:{
+            errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
+            errorMessage: '{s name=message/password/form/error_message}The field [0] is not valid{/s}'
+        },
         password:{
             support:'{s name=message/password/generated_password}The generated password is:{/s}',
             successTitle:'{s name=message/password/success_title}Successfully{/s}',
@@ -394,9 +398,24 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             win = btn.up('window'),
             form = win.down('form'),
             model = form.getRecord(),
+            missingField = "Unknown field",
             listStore = me.subApplication.getStore('List');
 
-        if ( !form.getForm().isValid() ) {
+        if (!form.getForm().isValid() ) {
+            // check which field is not valid in order to tell the user, why the customer cannot be saved
+            // SW-4322
+            form.getForm().getFields().each(function(f){
+          		 if(!f.validate()){
+                    if(f.fieldLabel){
+                        missingField = f.fieldLabel;
+                    }else if(f.name){
+                        missingField = f.name;
+                    }
+                    Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
+                    return false;
+          		 }
+
+          	 });
             return;
         }
 
