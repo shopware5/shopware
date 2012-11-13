@@ -35,7 +35,7 @@
  */
 class Shopware_Update extends Slim
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.2';
     const UPDATE_VERSION = '4.0.4';
 
     public function initDbConfig()
