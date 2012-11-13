@@ -397,6 +397,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                     xtype: 'numberfield',
                     submitLocaleSeparator: false,
                     name: 'mainDetail[referenceUnit]',
+                    decimalPrecision: 3,
                     fieldLabel: me.snippets.basePrice.basicUnit
                 }, {
                     name: 'mainDetail[packUnit]',
