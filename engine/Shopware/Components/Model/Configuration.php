@@ -33,10 +33,13 @@
 namespace Shopware\Components\Model;
 use \Doctrine\ORM\Configuration as BaseConfiguration;
 
+/**
+ *
+ */
 class Configuration extends BaseConfiguration
 {
     /**
-     * @var
+     * @var string
      */
     protected $attributeDir;
 
@@ -62,37 +65,90 @@ class Configuration extends BaseConfiguration
 
         $this->addCustomStringFunction('DATE_FORMAT', 'DoctrineExtensions\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'DoctrineExtensions\Query\Mysql\IfNull');
+
+        if(isset($options['cacheProvider'])) {
+            $this->setCacheProvider($options['cacheProvider']);
+        }
     }
 
-    public function setCacheResource($cacheResource)
+    public function setCacheProvider($provider)
+    {
+        if(!class_exists($provider, false)) {
+            $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
+        }
+        if(!class_exists($provider)) {
+            throw new \Exception('Doctrine cache provider "' . $provider. "' not found failure.");
+        }
+        $cache = new $provider();
+        $this->setMetadataCacheImpl($cache);
+        $this->setQueryCacheImpl($cache);
+    }
+
+    /**
+     * @param \Zend_Cache_Core $cacheResource
+     */
+    public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
         // Check if native Doctrine ApcCache may be used
-        if ($cacheResource->getBackend() instanceof Zend_Cache_Backend_Apc) {
+        if ($cacheResource->getBackend() instanceof \Zend_Cache_Backend_Apc) {
             $cache = new \Doctrine\Common\Cache\ApcCache();
         } else {
-            $cache = new \Shopware\Components\Model\Cache($cacheResource);
+            $cache = new Cache($cacheResource);
         }
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
     }
 
+    /**
+     * @return \Doctrine\Common\Annotations\AnnotationReader
+     */
+    public function getAnnotationsReader()
+    {
+        $reader = new \Doctrine\Common\Annotations\AnnotationReader;
+        $cache = $this->getMetadataCacheImpl();
+        if ($this->getMetadataCacheImpl() instanceof Cache) {
+            $reader = new \Doctrine\Common\Annotations\FileCacheReader(
+                $reader,
+                $this->getProxyDir()
+            );
+        } else {
+            $reader = new \Doctrine\Common\Annotations\CachedReader(
+                $reader,
+                $cache
+            );
+        }
+        return $reader;
+    }
+
+    /**
+     * @param null $hookManager
+     */
     public function setHookManager($hookManager = null)
     {
         $this->_attributes['hookManager'] = $hookManager;
     }
 
+    /**
+     * @return null
+     */
     public function getHookManager()
     {
         return isset($this->_attributes['hookManager']) ?
             $this->_attributes['hookManager'] : null;
     }
 
+    /**
+     * @param string $attributeDir
+     */
     public function setAttributeDir($attributeDir)
     {
         $this->attributeDir = $attributeDir;
     }
 
+    /**
+     * @return string
+     */
     public function getAttributeDir()
     {
         return $this->attributeDir;

@@ -115,7 +115,8 @@ return array_merge($customConfig, array(
         'autoGenerateProxyClasses' => false,
         'attributeDir' => $this->AppPath('Models_Attribute'),
         'proxyDir' => $this->AppPath('Proxies'),
-        'proxyNamespace' => $this->App() . '\Proxies'
+        'proxyNamespace' => $this->App() . '\Proxies',
+        'cacheProvider' => null // supports Apc, Array, Wincache and Xcache
     ), $customConfig['model']),
     'backendSession' => array_merge(array(
         'name' => 'SHOPWAREBACKEND',
