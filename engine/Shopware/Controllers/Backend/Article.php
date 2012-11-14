@@ -1646,8 +1646,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (empty($result[0]['links'])) {
             return array();
         } else {
-            return $result[0]['links'];
+            // map the link target to the boolean format that is expected by the ExtJS backend module
+            $links = $result[0]['links'];
+            foreach($links as &$linkData) {
+                $linkData['target'] = ($linkData['target'] === "_blank") ? true : false;
+            }
         }
+
+        return $links;
     }
 
 
@@ -2853,6 +2859,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach($data['links'] as &$linkData) {
             $linkData['link'] = trim($linkData['link']);
             $linkData['attribute'] = $linkData['attribute'][0];
+            // map the boolean ExtJS link target to the string format which used in the database
+            $linkData['target'] = ($linkData['target'] === true) ? "_blank" : "_parent";
         }
         return $data;
     }
