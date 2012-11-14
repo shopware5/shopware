@@ -375,7 +375,6 @@ class sConfigurator
         $articleData["active"] = $selected["active"];
         $articleData["suppliernumber"] = empty($selected['suppliernumber']) ? $articleData['suppliernumber'] : $selected['suppliernumber'];
         $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
-        $articleData["stockmin"] = empty($selected['stockmin']) ? $articleData['stockmin'] : $selected['stockmin'];
         $articleData["weight"] = empty($selected['weight']) ? $articleData['weight'] : $selected['weight'];
         $articleData["width"] = empty($selected['width']) ? $articleData['width'] : $selected['width'];
         $articleData["length"] = empty($selected['length']) ? $articleData['length'] : $selected['length'];
