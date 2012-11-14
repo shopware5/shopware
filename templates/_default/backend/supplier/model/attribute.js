@@ -31,11 +31,11 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/media_manager/model/attribute"}
+//{block name="backend/supplier/model/attribute"}
 Ext.define('Shopware.apps.Supplier.model.Attribute', {
 	extend: 'Ext.data.Model',
 	fields: [
-		//{block name="backend/media_manager/model/attribute/fields"}{/block}
+		//{block name="backend/supplier/model/attribute/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'supplierId', type: 'int', useNull: true }
     ]
