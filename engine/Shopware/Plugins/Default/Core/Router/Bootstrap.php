@@ -107,14 +107,19 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        if (($shop = $request->getCookie('shop')) !== null) {
-            $shop = $repository->getActiveById($shop);
-        } if($shop === null) {
-            $shop = $repository->getActiveByRequest($request);
-        } if($shop === null) {
-            $shop = $repository->getActiveDefault();
+        try {
+            /** @var $repository Shopware\Models\Shop\Repository */
+            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            if (($shop = $request->getCookie('shop')) !== null) {
+                $shop = $repository->getActiveById($shop);
+            } if($shop === null) {
+                $shop = $repository->getActiveByRequest($request);
+            } if($shop === null) {
+                $shop = $repository->getActiveDefault();
+            }
+        } catch (Exception $e) {
+            $args->getResponse()->setException($e);
+            return;
         }
 
         if (!$shop->getHost()) {
