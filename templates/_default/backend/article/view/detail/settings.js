@@ -245,6 +245,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
            }, {
                xtype: 'numberfield',
                name: 'mainDetail[maxPurchase]',
+               decimalPrecision: 0,
                fieldLabel: me.snippets.maximumOrder
            }
         ];
