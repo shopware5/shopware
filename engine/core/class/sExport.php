@@ -946,6 +946,9 @@ class	sExport
 	public function sGetDispatchBasket ($article, $countryID=null, $paymentID = null)
 	{
 		$sql_select = '';
+        if(!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
+            $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
+        }
 		$sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
 		$calculations = $this->sDB->GetAssoc($sql);
 		if(!empty($calculations))
