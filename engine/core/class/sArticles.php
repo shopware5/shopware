@@ -3637,21 +3637,37 @@ class sArticles
 
         $numberOfArticles = (int)$this->sSYSTEM->sCONFIG['sLASTARTICLESTOSHOW'];
 
-        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll('
-			SELECT img, name, articleID
-			FROM s_emarketing_lastarticles
-			WHERE sessionID=?
-			AND articleID!=?
-			AND shopID=?
+        $categoryWhere = "
+            AND c.id=sc.category_id
+            AND c2.active=1
+            AND c2.left >= c.left
+            AND c2.right <= c.right
+            AND ac.articleID=l.articleID
+            AND ac.categoryID=c2.id
+        ";
+        $categoryFrom = "s_categories c, s_categories c2, s_articles_categories ac, ";
+
+        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+			SELECT img, l.name, l.articleID
+			FROM {$categoryFrom} s_emarketing_lastarticles l
+
+			LEFT JOIN s_core_shops sc ON sc.id=l.shopID
+
+			WHERE l.sessionID=?
+			AND l.articleID!=?
+			AND l.shopID=?
+			{$categoryWhere}
+
+            GROUP BY l.articleID
 			ORDER BY time DESC
-			LIMIT ' . $numberOfArticles . '
-		', array(
+			LIMIT {$numberOfArticles}
+		", array(
             $this->sSYSTEM->sSESSION_ID,
             (int)$currentArticle,
             $this->sSYSTEM->sLanguage
         ));
 
-        foreach ($queryArticles as $articleKey => $articleValue) {
+    foreach ($queryArticles as $articleKey => $articleValue) {
             $queryArticles[$articleKey]['linkDetails'] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . '?sViewport=detail&sArticle=' . $articleValue['articleID'];
 
             if (preg_match('/443/', $_SERVER['SERVER_PORT'])) {
