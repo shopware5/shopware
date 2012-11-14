@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Article.model.Link', {
         { name: 'articleId', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'link', type: 'string' },
-        { name: 'target', type: 'string' }
+        { name: 'target', type: 'boolean', defaultValue: true }
 
     ],
     associations: [

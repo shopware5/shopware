@@ -67,6 +67,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Link', {
             grid: {
                 title:'{s name=detail/sidebar/links/link/grid/title}Created links{/s}',
                 delete:'{s name=detail/sidebar/links/link/grid/delete}Remove link{/s}',
+                external:'{s name=detail/sidebar/links/link/grid/external}External{/s}',
                 edit:'{s name=detail/sidebar/links/link/grid/edit}Edit link{/s}'
             }
         },
@@ -242,18 +243,36 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Link', {
             height: 100,
             store: me.article.getLink(),
             minHeight: 100,
+            plugins: [
+                Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1
+                })
+            ],
             maxHeight: 100,
             margin: '20 0 0',
             columns: [
                 {
                     header: me.snippets.link.name,
                     dataIndex: 'name',
-                    flex: 1
+                    flex: 2
                 }, {
                     header: me.snippets.link.link,
                     dataIndex: 'link',
-                    flex: 1
+                    flex: 2
                 }, {
+                    xtype: 'booleancolumn',
+                    header: me.snippets.link.grid.external,
+                    dataIndex: 'target',
+                    flex: 1,
+                    editor: {
+                        xtype: 'checkbox'
+                    },
+                    // return true / false instead of active/inactive
+                    renderer: function(value) {
+                        return value;
+                    }
+                }, {
+
                     xtype: 'actioncolumn',
                     width: 30,
                     items: [
