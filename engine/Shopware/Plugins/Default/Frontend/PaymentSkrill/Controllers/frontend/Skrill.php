@@ -7,8 +7,8 @@
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
+ * The texts of the GNU Affero General Public License and of our
+ * proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -31,7 +31,7 @@
  */
 
 class Shopware_Controllers_Frontend_PaymentSkrill extends Shopware_Controllers_Frontend_Payment
-{
+    {
     private static $pay_to_email;
     private static $secret_word;
     private static $hide_login = 1;
@@ -40,36 +40,72 @@ class Shopware_Controllers_Frontend_PaymentSkrill extends Shopware_Controllers_F
     private static $skrill_url;
     
     private $sid;
-    private $payment_methods;
-
-    public function indexAction()
-    {
-        switch($this->getPaymentShortName()) {
-            case 'skrill' :
-                $this->payment_methods = 'ACC';
-                return $this->redirect(array('action' => 'gateway', 'forceSecure' => true));
-                break;
-            default :
-                return $this->redirect(array('controller' => 'checkout'));
-        }
-    }
-
-    public function gatewayAction()
-    {
-        $config = $this->Config();
-        $router = $this->Front()->Router();
-
-        mt_srand(time());
-        $transaction_id = mt_rand();
-
-        $userinfo = $this->getUser();
-        if (!$userinfo) // Redirect to payment failed page
+    
+    public function indexAction ()
         {
-            $this->forward('cancel');
-        }
-
-        $uniquePaymentID = $this->createPaymentUniqueId();
-	    $post_vars = array( // General details
+        switch ($this->getPaymentShortName())
+            {
+	    case 'skrill_wlt' :
+	    case 'skrill_vsa' :
+	    case 'skrill_msc' :
+	    case 'skrill_vsd' :
+	    case 'skrill_vse' :
+	    case 'skrill_amx' :
+	    case 'skrill_din' :
+	    case 'skrill_jcb' :
+	    case 'skrill_mae' :
+	    case 'skrill_lsr' :
+	    case 'skrill_slo' :
+	    case 'skrill_gcb' :
+	    case 'skrill_sft' :
+	    case 'skrill_did' :
+	    case 'skrill_gir' :
+	    case 'skrill_ent' :
+	    case 'skrill_ebt' :
+	    case 'skrill_so2' :
+	    case 'skrill_npy' :
+	    case 'skrill_pli' :
+	    case 'skrill_dnk' :
+	    case 'skrill_csi' :
+	    case 'skrill_psp' :
+	    case 'skrill_epy' :
+	    case 'skrill_bwi' :
+	    case 'skrill_pwy' :
+            case 'skrill_pay' :
+		if (preg_match('/skrill_(.+)/',$this->getPaymentShortName(), $matches))
+		    $payment_methods = strtoupper($matches[1]);
+		return $this->redirect(array('action' => 'gateway',
+					     'payment' => $payment_methods,
+					     'forceSecure' => true));
+		break;
+	    case 'skrill_acc' :
+            case 'skrill' :
+		$payment_methods = 'ACC';
+		return $this->redirect(array('action' => 'gateway',
+					     'payment' => $payment_methods,
+					     'forceSecure' => true));
+		break;
+	    default :
+                return $this->redirect(array('controller' => 'checkout'));
+            }
+	}
+        
+    public function gatewayAction()
+        {
+	$config = $this->Config();
+        $router = $this->Front()->Router();
+	
+	mt_srand(time());
+	$transaction_id = mt_rand();
+        if ($this->Request()->payment == 'PAY')
+            $transaction_id = 'PAYOLUTION_INVOICE-' . $transaction_id;
+	
+	$userinfo = $this->getUser();
+	if (!$userinfo) // Redirect to payment failed page
+	    $this->forward('cancel');
+	
+	$uniquePaymentID = $this->createPaymentUniqueId();
+	$post_vars = array( // General details
 		    'prepare_only'	=> '1',
 		    'hide_login'	=> $config->hideLogin,
 		    
@@ -81,16 +117,15 @@ class Shopware_Controllers_Frontend_PaymentSkrill extends Shopware_Controllers_F
 		    'cancel_url'	=> $router->assemble(array('action' => 'cancel', 'forceSecure' => true)),
 		    
 		    // Merchant details
-		    'payment_methods'	=> $this->payment_methods,
+		    'payment_methods'	=> $this->Request()->payment,
 		    'pay_to_email'	=> $config->merchantEmail,
 		    'recipient_description'
 					=> Shopware()->Config()->ShopName,
 		    'logo_url'		=> $config->logoUrl,
 		    'transaction_id'	=> $transaction_id,
-		    'merchant_fields'	=> 'shopware_paymentid, platform',
+		    'merchant_fields'	=> 'shopware_paymentid',
 		    'shopware_paymentid'
 					=> $uniquePaymentID,
-		    'platform'		=> '21477261',
 
 		    // Customer details
 		    'pay_from_email'	=> $userinfo["additional"]["user"]["email"],
@@ -108,25 +143,48 @@ class Shopware_Controllers_Frontend_PaymentSkrill extends Shopware_Controllers_F
 		    'amount'		=> $this->getAmount(),
 		    'currency'		=> $this->getCurrencyShortName()
 		    );
-
-        if (!$this->_preparePayment($post_vars)) {
-            $this->forward('fail');
-        } else {
-	        $this->View()->addTemplateDir(dirname(__FILE__) . '/Views/frontend/payment_skrill/');
-	        $this->View()->gatewayUrl = $config->skrillUrl . '?sid=' . $this->sid;
-	        $this->View()->hideLogin =  $config->hideLogin;
-        }
-	}
+        
+        //Payolution code
+        if ($this->Request()->payment == 'PAY')
+            {
+            $post_vars['wpf_redirect'] = '1';
+            }
 	
-    public function failAction ()
+	$this->View()->errorStatus = 0;
+	if (!$this->_preparePayment($post_vars))
+	    {
+            $this->forward('fail');
+            }
+        else
+            {
+            $this->View()->addTemplateDir(dirname(__FILE__) . '/Views/frontend/payment_skrill/');
+            $this->View()->gatewayUrl = $config->skrillUrl . '?sid=' . $this->sid;
+            
+            if ($this->Request()->payment == 'PAY')
+                {
+                $this->View()->iframeHeight = 700;
+                }
+            elseif ($config->hideLogin)
+                {
+                $this->View()->iframeHeight = 600;
+                }
+            else
+                {
+                $this->View()->iframeHeight = 720;
+                }
+
+            $this->View()->hideLogin =  $config->hideLogin;
+            }
+	}
+        
+     public function failAction ()
 	{
-        //$this->View()->addTemplateDir(dirname(__FILE__) . '/Views/frontend/payment_skrill/');
         $this->View()->extendsTemplate('fail.tpl');
 	}
-	
+
     public function cancelAction ()
 	{
-		return $this->redirect(array('controller' => 'checkout'));
+	return $this->redirect(array('controller' => 'checkout'));
 	}
 
     public function finishAction ()
@@ -247,6 +305,7 @@ class Shopware_Controllers_Frontend_PaymentSkrill extends Shopware_Controllers_F
             $msg .= $rbuff;
             }
         $response = $this->_parseSID($msg);
+
         if (!count($response))
 	    {
 	    fclose($fps);
