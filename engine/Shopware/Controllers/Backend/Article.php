@@ -1467,6 +1467,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $propertyValues->clear();
         $models->flush();
 
+        // If no property group is set for the article, don't recreate the property values
+        $propertyGroup = $article->getPropertyGroup();
+        if(!$propertyGroup) {
+            $this->View()->assign(array(
+                'success' => true
+            ));
+            return;
+        }
+
+        // recreate property values
         foreach($properties as $property) {
             if(empty($property['value'])) {
                 continue;
