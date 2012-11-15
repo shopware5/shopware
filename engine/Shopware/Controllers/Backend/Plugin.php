@@ -245,7 +245,9 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
             'Plugins', $plugin->getSource(), $plugin->getNamespace(), $plugin->getName()
         )));
 
-        if ($plugin->getInstalled() !== null) {
+        if($plugin->getSource() === "Default") {
+            $message = "'Default' Plugins may not be deleted.";
+        } elseif ($plugin->getInstalled() !== null) {
             $message = 'Please uninstall the plugin first.';
         } elseif (!$this->deletePath($pluginPath)) {
             $message = 'Plugin path "' . $pluginPath . '" could not be deleted.';
