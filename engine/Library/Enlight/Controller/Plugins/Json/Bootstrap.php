@@ -237,7 +237,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     protected static function convertDateTime(&$value, $key)
     {
         if($value instanceof DateTime) {
-            $value = 'Date(' . $value->getTimestamp() * 1000 . ')';
+            $value = 'Date(' . (int)$value->getTimestamp() . '000)';
         }
     }
 
