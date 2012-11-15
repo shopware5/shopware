@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
         me.supplierCombo = Ext.create('Shopware.form.field.PagingComboBox', {
             fieldLabel: 'Hersteller auswählen',
             valueField: 'id',
+            pageSize: 15,       // SW-4341 without pageSize being set no pagination is shown
             labelWidth: 155,
             displayField: 'name',
             store: me.searchStore,
