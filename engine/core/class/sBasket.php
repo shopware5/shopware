@@ -1411,7 +1411,7 @@ class sBasket
 		FROM s_articles, s_order_basket, s_articles_details
 
 		WHERE s_order_basket.articleID = s_articles.id
-		AND s_articles.main_detail_id = s_articles_details.id
+		AND s_order_basket.ordernumber = s_articles_details.ordernumber
 		AND s_order_basket.id=?
 		AND
 		s_order_basket.sessionID=?
