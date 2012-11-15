@@ -200,7 +200,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 },
 
                 getClass: function(value, metadata, record, rowIdx) {
-                   if (record.get('installed') != null)  {
+                   if (record.get('installed') != null || record.get('source') == 'Default')  {
                        return Ext.baseCSSPrefix + 'hidden';
                    }
                }
