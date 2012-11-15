@@ -1799,7 +1799,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $this->getManager()->close();
             echo json_encode(array(
                 'success' => false,
-                'message' => sprintf("Error: %s", $e->getMessage())
+                'message' => sprintf("Error in line {$counter}: %s", $e->getMessage())
             ));
             return;
         }
@@ -1877,7 +1877,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             /** @var $parent \Shopware\Models\Category\Category */
             $categoryRepository->persistAsFirstChildOf($categoryModel, $parent);
         }
-
 
         return $categoryModel;
     }
@@ -3011,6 +3010,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         /** @var \Shopware\Components\Api\Resource\Customer $customerResource */
         $customerResource = \Shopware\Components\Api\Manager::getResource('customer');
 
+        $customerModel = null;
+
         if (empty($customerData['email'])) {
             return false;
         }
@@ -3025,6 +3026,16 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         } elseif (!empty($customerData['email'])) {
             /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email']));
+        }
+
+        // if no user was found by email, its save to find one via customernumber
+        if(!$customerModel && !empty($customerData['customernumber'])) {
+            /** \Shopware\Models\Customer\Billing $billingModel */
+            $billingModel = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Billing')->findOneBy(array('number' => $customerData['customernumber']));
+            if($billingModel) {
+                /** \Shopware\Models\Customer\Customer $customerModel */
+                $customerModel = $billingModel->getCustomer();
+            }
         }
 
         if (!$customerModel) {
