@@ -37,9 +37,9 @@
  */
 class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    public $sql_regex = 's_core_|s_order_|benchmark.*\(|insert.+into|update.+set|(?:delete|select).+from|drop.+(?:table|database)|truncate.+table|union.+select';
-    public $xss_regex = 'javascript:|src\s*=|on[a-z]+\s*=|style\s*=';
-    public $rfi_regex = '\.\./|\\0|2\.2250738585072011e-308';
+    public $sqlRegex = 's_core_|s_order_|s_user|benchmark.*\(|(?:insert|replace).+into|update.+set|(?:delete|select).+from|(?:alter|rename|create|drop|truncate).+(?:database|table)|union.+select';
+    public $xssRegex = 'javascript:|src\s*=|on[a-z]+\s*=|style\s*=';
+    public $rfiRegex = '\.\./|\\0';
 
     /**
      * Install plugin method
@@ -57,12 +57,11 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
         $form->setParent($parent);
-        $form->setElement('checkbox', 'sql_protection', array('label' => 'SQL-Injection-Schutz aktivieren', 'value' => true));
-        $form->setElement('textarea', 'sql_regex', array('label' => 'SQL-Injection-Filter', 'value' => $this->sql_regex));
-        $form->setElement('checkbox', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
-        $form->setElement('textarea', 'xss_regex', array('label' => 'XSS-Filter', 'value' => $this->xss_regex));
-        $form->setElement('checkbox', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
-        $form->setElement('textarea', 'rfi_regex', array('label' => 'RemoteFileInclusion-Filter', 'value' => $this->rfi_regex));
+
+        $form->setElement('boolean', 'sql_protection', array('label' => 'SQL-Injection-Schutz aktivieren', 'value' => true));
+        $form->setElement('boolean', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
+        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
+        $form->setElement('textarea', 'own_filter', array('label' => 'Eigener Filter', 'value' => null));
 
         return true;
     }
@@ -92,14 +91,17 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $config = $this->Config();
 
         $regex = array();
-        if (!empty($config->sql_protection) && !empty($config->sql_regex)) {
-            $regex[] = $config->sql_regex;
+        if (!empty($config->sql_protection)) {
+            $regex[] = $this->sqlRegex;
         }
-        if (!empty($config->xss_protection) && !empty($config->xss_regex)) {
-            $regex[] = $config->xss_regex;
+        if (!empty($config->xss_protection)) {
+            $regex[] = $this->xssRegex;
         }
-        if (!empty($config->rfi_protection) && !empty($config->rfi_regex)) {
-            $regex[] = $config->rfi_regex;
+        if (!empty($config->rfi_protection)) {
+            $regex[] = $this->rfiRegex;
+        }
+        if (!empty($config->own_filter)) {
+            $regex[] = $this->own_filter;
         }
 
         if (empty($regex)) {
