@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         messages: {
             tableConfigurator: '{s name=variant/message/notice}A table configurator can only have two active groups!{/s}',
             warningTitle: '{s name=variant/message/option/warning_title}Warning{/s}',
+            optionExists: '{s name=variant/message/option/option_exists}There is already an option named [0]{/s}',
             noValidForm: '{s name=variant/message/option/no_valid_form}The base data form panel is invalid, please check the values of the this tab.{/s}',
             articleNotSaved: "{s name=variant/message/option/article_not_saved}The article wasn't saved, please check the different tab panels for valid data.{/s}",
             saveArticleBefore: '{s name=variant/message/option/save_article_before_generate}If you generate article variants all current changes will be reverted, do you want to save the article first?{/s}',
@@ -1110,6 +1111,13 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 position = item.get('position') + 1;
             }
         });
+
+        // SW-4440 There cannot be two options with the same name
+        if(optionListing.getStore().findRecord('name', name)) {
+            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, Ext.String.format(me.snippets.messages.optionExists, name), me.snippets.growlMessage);
+            return;
+        }
+
 
         var record = Ext.create('Shopware.apps.Article.model.ConfiguratorOption', {
             name: name,
