@@ -195,17 +195,31 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $entryAmount = (int)$data['entry_amount'];
 
+        // Get the category model for the given category ID
+        /** @var $category \Shopware\Models\Category\Category */
+        $category = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+
+        if(!$category) {
+            return $data;
+        }
+
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('blog', 'media', 'mappingMedia'))
             ->from('Shopware\Models\Blog\Blog', 'blog')
             ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
             ->leftJoin('mappingMedia.media', 'media')
+            ->leftJoin('blog.category', 'category')
             ->where('blog.active = 1')
             ->andWhere('blog.displayDate <= ?1')
+            ->andWhere('category.left >= ?2')
+            ->andWhere('category.right <= ?3')
             ->orderBy('blog.displayDate', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults($entryAmount)
-            ->setParameter(1, date('Y-m-d H:i:s'));
+            ->setParameter(1, date('Y-m-d H:i:s'))
+            ->setParameter(2, $category->getLeft())
+            ->setParameter(3, $category->getRight());
+
 
         $result = $builder->getQuery()->getArrayResult();
 

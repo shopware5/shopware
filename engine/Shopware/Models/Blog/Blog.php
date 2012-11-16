@@ -115,6 +115,12 @@ class Blog extends ModelEntity
     private $categoryId = null;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
+    /**
      * @var string $template
      *
      * @ORM\Column(name="template", type="string", nullable=false)
@@ -224,6 +230,22 @@ class Blog extends ModelEntity
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return \Shopware\Models\Category\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param \Shopware\Models\Category\Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
     /**
