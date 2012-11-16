@@ -216,15 +216,6 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
         $form = $this->Form();
 
         // API settings
-        $form->setElement('button', 'paypalButtonApi', array(
-            'label' => 'Jetzt API-Signatur erhalten',
-            'handler' => "function(btn) {
-                //var sandbox = btn.up('form').down('[elementName=paypalSandbox]').getValue();
-                //'https://www.sandbox.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true'
-                var link = 'https://www.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true';
-                window.open(link, '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=540');
-            }"
-        ));
         $form->setElement('text', 'paypalUsername', array(
             'label' => 'API-Benutzername',
             'required' => true
@@ -243,8 +234,20 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             'required' => true,
             'readOnly' => true
         ));
+        $form->setElement('button', 'paypalButtonApi', array(
+            'label' => '<strong>Jetzt API-Signatur erhalten</strong>',
+            'handler' => "function(btn) {
+                //var sandbox = btn.up('form').down('[elementName=paypalSandbox]').getValue();
+                //'https://www.sandbox.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true'
+                var link = 'https://www.paypal.com/de/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true';
+                window.open(link, '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=540');
+            }"
+        ));
         $form->setElement('boolean', 'paypalSandbox', array(
             'label' => 'Sandbox-Modus aktivieren'
+        ));
+        $form->setElement('boolean', 'paypalErrorMode', array(
+            'label' => 'Fehlermeldungen ausgeben'
         ));
 
         // Payment page settings
@@ -307,11 +310,11 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             'value' => true,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
-        $form->setElement('boolean', 'paypalAddressOverride', array(
-            'label' => 'Lieferadresse in PayPal ändern erlauben',
-            'value' => false,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-        ));
+        //$form->setElement('boolean', 'paypalAddressOverride', array(
+        //    'label' => 'Lieferadresse in PayPal ändern erlauben',
+        //    'value' => false,
+        //    'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        //));
         $form->setElement('select', 'paypalStatusId', array(
             'label' => 'Zahlstatus nach der kompletter Zahlung',
             'value' => 12,
@@ -402,7 +405,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
     public function onGetControllerPathFrontend(Enlight_Event_EventArgs $args)
     {
         $this->registerMyTemplateDir();
-        return dirname(__FILE__) . '/Controllers/Frontend/PaymentPaypal.php';
+        return $this->Path() . 'Controllers/Frontend/PaymentPaypal.php';
     }
 
     /**
@@ -417,7 +420,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
         $this->Application()->Snippets()->addConfigDir(
             $this->Path() . 'Snippets/'
         );
-        return dirname(__FILE__) . '/Controllers/Backend/PaymentPaypal.php';
+        return $this->Path() . 'Controllers/Backend/PaymentPaypal.php';
     }
 
     /**
@@ -467,7 +470,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
 
         if (!empty($config->paypalExpressButtonLayer)
             && $request->getControllerName() == 'checkout' && $request->getActionName() == 'ajax_add_article') {
-            $view->PaypalShow = $showButton;
+            $view->PaypalShowButton = $showButton;
             $view->PaypalLocale = $this->Application()->Locale()->toString();
             $view->extendsBlock(
                 'frontend_checkout_ajax_add_article_action_buttons',
@@ -478,7 +481,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
 
         if (!empty($config->paypalExpressButton)
           && $request->getControllerName() == 'checkout' && $request->getActionName() == 'cart') {
-            $view->PaypalShow = $showButton;
+            $view->PaypalShowButton = $showButton;
             $view->PaypalLocale = $this->Application()->Locale()->toString();
             $view->extendsBlock(
                 'frontend_checkout_actions_confirm',
@@ -569,7 +572,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
      */
     public function getVersion()
     {
-        return '2.0.6';
+        return '2.0.8';
     }
 
     /**
