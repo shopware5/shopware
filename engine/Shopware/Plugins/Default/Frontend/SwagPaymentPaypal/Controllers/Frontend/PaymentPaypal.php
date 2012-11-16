@@ -43,7 +43,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
 	public function indexAction()
 	{
         $config = $this->Plugin()->Config();
-        if($config->get('paypalBillingAgreement', true)
+        if($config->get('paypalBillingAgreement')
           && empty(Shopware()->Session()->PaypalResponse['TOKEN'])
           && !empty(Shopware()->Session()->sUserId)) {
             $sql = 'SELECT * FROM s_user_attributes WHERE userID=?';
@@ -107,20 +107,16 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
 //            'NOSHIPPING' => 0, //todo@hl
 //            'REQCONFIRMSHIPPING' => 0,
             'ALLOWNOTE' => 1, //todo@hl
-            'ADDROVERRIDE' => $config->get('paypalAddressOverride', true) ? 1 : 0,
+            'ADDROVERRIDE' => $paymentAction == 'Authorization' ? 0 : 1,
             'BRANDNAME' => $shopName,
             'LOGOIMG' => $logoImage,
             'CARTBORDERCOLOR' => $borderColor,
             'CUSTOM' => $this->createPaymentUniqueId(),
 //            'SOLUTIONTYPE' => $config->get('paypalAllowGuestCheckout') ? 'Sole' : 'Mark',
             'TOTALTYPE' => $this->getUser() !== null ? 'Total' : 'EstimatedTotal',
-            //'L_BILLINGAGREEMENTDESCRIPTION0' => '9.99 per month for 2 years',
-            //'L_BILLINGAGREEMENTCUSTOM0' => 'Custom?'
         );
-        if($config->get('paypalBillingAgreement', true) && $this->getUser() !== null) {
+        if($config->get('paypalBillingAgreement') && $this->getUser() !== null) {
             $params['BILLINGTYPE'] = 'MerchantInitiatedBilling';
-            $params['L_PAYMENTTYPE0'] = 'InstantOnly';
-            $params['L_BILLINGTYPE0'] = 'MerchantInitiatedBilling';
         }
 
         $params = array_merge($params, $this->getBasketParameter());
@@ -130,7 +126,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
 
         Shopware()->Session()->PaypalResponse = $response;
 
-        if($config->get('paypalSandbox') && $response['ACK'] == 'SuccessWithWarning') {
+        if($response['ACK'] == 'SuccessWithWarning') {
             $response['ACK'] = 'Success';
         }
 		if(!empty($response['ACK']) && $response['ACK'] == 'Success') {
@@ -181,10 +177,6 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         } else {
             $details['PAYMENTACTION'] = 'Sale';
         }
-
-        //10411
-        //10422
-        //10416 > gateway
 
         switch(!empty($details['CHECKOUTSTATUS']) ? $details['CHECKOUTSTATUS'] : null) {
             case 'PaymentActionCompleted':
@@ -463,9 +455,9 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
             $params['AMT'] = $basket['AmountNumeric'];
         }
         $params['AMT'] = number_format($params['AMT'], 2, '.', '');
-        $params["SHIPPINGAMT"] = number_format($params['SHIPPINGAMT'], 2, '.', '');
-        $params["ITEMAMT"] = number_format($params['AMT'] - $params["SHIPPINGAMT"], 2, '.', '');
-        $params["TAXAMT"] = number_format(0, 2, '.', '');
+        $params['SHIPPINGAMT'] = number_format($params['SHIPPINGAMT'], 2, '.', '');
+        $params['ITEMAMT'] = number_format($params['AMT'] - $params['SHIPPINGAMT'], 2, '.', '');
+        $params['TAXAMT'] = number_format(0, 2, '.', '');
 
         $config = $this->Plugin()->Config();
         if($config->get('paypalTransferCart')) {

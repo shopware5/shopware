@@ -9,18 +9,12 @@
 {block name='frontend_index_content'}
 <div id="center" class="grid_13">
 
-{if !empty($PaypalResponse.ACK) && $PaypalResponse.ACK == 'Failure' && $PaypalConfig.paypalSandbox}
+{if !empty($PaypalResponse.ACK) && $PaypalResponse.ACK == 'Failure'
+  && ($PaypalConfig.paypalSandbox || $PaypalConfig.paypalErrorMode)}
     <h2>{se name=PaymentDebugErrorMessage}Ein Fehler ist aufgetreten.{/se}</h2>
     {$i=0}{while isset($PaypalResponse["L_LONGMESSAGE{$i}"])}
         <h3>[{$PaypalResponse["L_ERRORCODE{$i}"]}] - {$PaypalResponse["L_SHORTMESSAGE{$i}"]|escape|nl2br} {$PaypalResponse["L_LONGMESSAGE{$i}"]|escape|nl2br}</h3>
     {$i=$i+1}{/while}
-{elseif !empty($BillsafeResponse->status) && $BillsafeResponse->status == 'DECLINED'}
-	<h2>{se name=PaymentFailMessage}Leider ist der Rechnungskauf mit BillSAFE nicht möglich.{/se}</h2>
-	{if $BillsafeConfig.debug && $BillsafeResponse->declineReason}
-		<h2>[{$BillsafeResponse->declineReason->code}] - {$BillsafeResponse->declineReason->message|escape|nl2br}</h2>
-	{/if}
-	<br />
-	<h3>{se name=PaymentFailInfo}Bitte versuchen Sie es mit einer anderen Zahlungsart nochmal.{/se}</h3>
 {else}
     <h2>{se name=PaymentErrorMessage}Es ist ein Problem aufgetreten und die Bestellung konnte nicht abgeschlossen werden.{/se}</h2>
     <br />
