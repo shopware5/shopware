@@ -3927,7 +3927,7 @@ CREATE TABLE IF NOT EXISTS `s_core_shops` (
 --
 
 INSERT INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
-(1, NULL, 'Deutsch', NULL, 0, '', '', '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
+(1, NULL, 'Deutsch', NULL, 0, NULL, '', '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
 (2, 1, 'Englisch', '', 0, NULL, NULL, '', 0, NULL, NULL, NULL, NULL, 4, 2, 1, 1, NULL, 0, 0, 0);
 
 -- --------------------------------------------------------
