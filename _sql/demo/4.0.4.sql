@@ -6339,21 +6339,8 @@ INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`,
 (894, 249, 'routercampaigntemplate', 's:64:"{sCategoryPath categoryID=$campaign.categoryId}/{$campaign.name}";', 'SEO-Urls Landingpage-Template', NULL, 'text', 0, 0, 1, NULL, NULL, NULL),
 (897, 191, 'paymentSurchargeAbsolute', 's:25:"Zuschlag für Zahlungsart";', 'Pauschaler Aufschlag für Zahlungsart (Bezeichnung)', NULL, 'text', 1, 0, 1, NULL, NULL, NULL),
 (898, 191, 'paymentSurchargeAbsoluteNumber', 's:19:"sw-payment-absolute";', 'Pauschaler Aufschlag für Zahlungsart (Bestellnummer)', NULL, 'text', 1, 0, 1, NULL, NULL, NULL),
-(899, 262, 'StoreApiUrl', 's:33:"http://store.shopware.de/storeApi";', 'Store API Url', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(900, 264, 'cacheControllers', 's:300:"frontend/listing 3600\r\nfrontend/index 3600\r\nfrontend/detail 3600\r\nfrontend/campaign 14400\r\nwidgets/listing 14400\r\nfrontend/custom 14400\r\nfrontend/sitemap 14400\r\nfrontend/blog 14400\r\nwidgets/index 3600\r\nwidgets/checkout 3600\r\nwidgets/compare 3600\r\nwidgets/emotion 14400\r\nwidgets/recommendation 14400\r\n";', 'Cache-Controller / Zeiten', NULL, 'textarea', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(901, 264, 'noCacheControllers', 's:98:"frontend/checkout checkout\nfrontend/note checkout\nfrontend/detail detail\nfrontend/compare compare\n";', 'NoCache-Controller / Tags', NULL, 'textarea', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(902, 264, 'proxyBan', 'b:0;', 'Proxy-BAN aktivieren', 'Das automatische Leeren des Caches aktivieren.', 'boolean', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(903, 264, 'proxy', 'N;', 'Alternative Proxy-Url', 'Link zum Http-Proxy mit „http://“ am Anfang.', 'text', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(904, 264, 'admin', 'b:0;', 'Admin-View', 'Cache bei Artikel-Vorschau und Schnellbestellung deaktivieren', 'boolean', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(905, 265, 'tsSeal', 's:0:"";', 'Trusted Shop Siegel', NULL, 'textarea', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(906, 265, 'tsSealBlock', 's:24:"frontend_index_left_menu";', 'Smarty Block f&uuml;r das Trusted Shop Siegel', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(907, 265, 'tsEID', 's:0:"";', 'Trusted Shop ID', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(908, 265, 'tsWebServiceUser', 's:0:"";', 'Trusted User', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(909, 265, 'tsWebServicePassword', 's:0:"";', 'Trusted User Password', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d),
-(910, 265, 'testSystemActive', 's:1:"0";', 'Test System aktivieren', NULL, 'checkbox', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(911, 265, 'ratingActive', 's:1:"1";', 'Trusted Shop Rating aktivieren', NULL, 'checkbox', 0, 0, 0, NULL, NULL, 0x613a303a7b7d),
-(912, 265, 'Test Connection', 'N;', 'Verbindung, Login und Trusted Shop Zertifikat testen', NULL, 'button', 0, 0, 0, NULL, NULL, 0x613a313a7b733a31303a2261747472696275746573223b613a333a7b733a373a2268616e646c6572223b733a3731313a2266756e6374696f6e2028297b0d0a202020202020202020202020202020204578742e416a61782e72657175657374287b0d0a2020202020202020202020202020202020202073636f70653a746869732c0d0a2020202020202020202020202020202020202075726c3a2077696e646f772e6c6f636174696f6e2e70726f746f636f6c2b272f2f272b77696e646f772e6c6f636174696f6e2e686f73742b77696e646f772e6c6f636174696f6e2e706174686e616d652e7265706c616365282f706c7567696e2f2c2727292b273f636f6e74726f6c6c65723d5472757374656453686f707326616374696f6e3d74657374436f6e6e656374696f6e272c0d0a20202020202020202020202020202020202020737563636573733a2066756e6374696f6e28726573756c742c7265717565737429207b0d0a20202020202020202020202020202020202020202020202020766172206a736f6e526573706f6e7365203d204578742e4a534f4e2e6465636f646528726573756c742e726573706f6e736554657874293b0d0a20202020202020202020202020202020202020202020202053686f70776172652e4e6f74696669636174696f6e2e63726561746547726f776c4d6573736167652827272c6a736f6e526573706f6e73652e6d6573736167652c2027537761675472757374656453686f7073457863656c6c656e636527293b0d0a202020202020202020202020202020202020207d2c0d0a202020202020202020202020202020202020206661696c7572653a2066756e6374696f6e2829207b0d0a2020202020202020202020202020202020202020202020204578742e4d657373616765426f782e616c6572742827557073272c2755726c206e6f7420726561636861626c6527293b0d0a202020202020202020202020202020202020207d0d0a202020202020202020202020202020207d293b0d0a202020202020202020202020207d223b733a343a2274657874223b733a353a225374617274223b733a353a227874797065223b733a363a22627574746f6e223b7d7d),
-(913, 265, 'Import Action', 'N;', 'Trusted Shop Artikel und Rating Image importieren (Trusted Shop ID, Web Service User und Passwort ben&ouml;tigt)', NULL, 'button', 0, 0, 0, NULL, NULL, 0x613a313a7b733a31303a2261747472696275746573223b613a333a7b733a373a2268616e646c6572223b733a3732333a2266756e6374696f6e2028297b0d0a202020202020202020202020202020204578742e416a61782e72657175657374287b0d0a2020202020202020202020202020202020202073636f70653a746869732c0d0a2020202020202020202020202020202020202075726c3a2077696e646f772e6c6f636174696f6e2e70726f746f636f6c2b272f2f272b77696e646f772e6c6f636174696f6e2e686f73742b77696e646f772e6c6f636174696f6e2e706174686e616d652e7265706c616365282f706c7567696e2f2c2727292b273f636f6e74726f6c6c65723d5472757374656453686f707326616374696f6e3d696d706f7274427579657250726f74656374696f6e4974656d73272c0d0a20202020202020202020202020202020202020737563636573733a2066756e6374696f6e28726573756c742c7265717565737429207b0d0a20202020202020202020202020202020202020202020202020766172206a736f6e526573706f6e7365203d204578742e4a534f4e2e6465636f646528726573756c742e726573706f6e736554657874293b0d0a20202020202020202020202020202020202020202020202053686f70776172652e4e6f74696669636174696f6e2e63726561746547726f776c4d6573736167652827272c6a736f6e526573706f6e73652e6d6573736167652c2027537761675472757374656453686f7073457863656c6c656e636527293b0d0a202020202020202020202020202020202020207d2c0d0a202020202020202020202020202020202020206661696c7572653a2066756e6374696f6e2829207b0d0a2020202020202020202020202020202020202020202020204578742e4d657373616765426f782e616c6572742827557073272c2755726c206e6f7420726561636861626c6527293b0d0a202020202020202020202020202020202020207d0d0a202020202020202020202020202020207d293b0d0a202020202020202020202020207d223b733a343a2274657874223b733a353a225374617274223b733a353a227874797065223b733a363a22627574746f6e223b7d7d);
+(899, 262, 'StoreApiUrl', 's:33:"http://store.shopware.de/storeApi";', 'Store API Url', NULL, 'text', 0, 0, 1, NULL, NULL, 0x613a303a7b7d);
+
 
 -- --------------------------------------------------------
 
@@ -6881,8 +6868,6 @@ INSERT INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value`) VALU
 (50, 843, 1, 's:8:"51,51,51";'),
 (56, 674, 1, 's:19:"your.email@shop.com";'),
 (57, 673, 1, 's:8:"Demoshop";'),
-(59, 900, 1, 's:287:"frontend/listing 3600\nfrontend/index 3600\nfrontend/detail 3600\nfrontend/campaign 14400\nwidgets/listing 14400\nfrontend/custom 14400\nfrontend/sitemap 14400\nfrontend/blog 14400\nwidgets/index 3600\nwidgets/checkout 3600\nwidgets/compare 3600\nwidgets/emotion 14400\nwidgets/recommendation 14400\n";'),
-(60, 902, 1, 'b:1;'),
 (81, 656, 1, 's:52:"www.shopware.de,\nwww.shopware.ag,\nwww.shopware-ag.de";'),
 (88, 226, 1, 's:1:"2";'),
 (89, 227, 1, 's:2:"15";'),
@@ -6890,12 +6875,6 @@ INSERT INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value`) VALU
 (117, 270, 1, 's:1:"3";'),
 (118, 271, 1, 'b:1;'),
 (141, 890, 1, 's:33:"X41495A6E65ECDDCD554A02C0601D1C97";'),
-(240, 905, 1, 's:2081:"<!-- Trusted Shops Siegel -->\n\n<div id="tsBox" style="font-size: 80%"><div style="background-color:#FFFFFF;font-family: Verdana, Arial, Helvetica, sans-serif;background-image: url(images/bg_yellow.jpg);background-repeat: repeat;background-position: left top;vertical-align:middle;width:114px;margin-top:0px;border:1px solid #C0C0C0;padding:2px;" id="tsInnerBox">\n<div style="text-align:center;width:110px;float:left; border:0px solid; padding:2px;" id="tsSeal"><a\n	target="_blank"\n	href="https://www.trustedshops.de/shop/certificate.php?shop_id=X41495A6E65ECDDCD554A02C0601D1C97"><img\n	style="border: 0px none;" src="images/trustedshops_m.png"\n	title="Klicken Sie auf das G&uuml;tesiegel, um die G&uuml;ltigkeit zu pr&uuml;fen!"></a></div>\n<div style="text-align:center;line-height:125%;width:110px;float:left;border:0px solid; padding:2px;" id="tsText"><a style="font-weight:normal;text-decoration:underline;color:#000000;" title="Mehr Informationen zu Testzertifikat f&uuml;r Shopsystempartner Excellence" href="http://www.trustedshops.de/profil/Testzertifikat-fuer-Shopsystempartner-Excellence_X41495A6E65ECDDCD554A02C0601D1C97.html" target="_blank">Testzertifikat für Shopsystempartner Excellence</a><a style="font-weight:normal;text-decoration:none;color:#000000;" href="http://www.trustedshops.de/kaufen/tipp/''..''.html" >, Ihr Spezialist für ,</a> <span style="font-weight:normal;text-decoration:none;color:#000000;">ist ein von Trusted Shops geprüfter Onlinehändler mit Zertifikat und</span> <a style="font-weight:normal;text-decoration:underline;color:#000000;" href="http://www.trustedshops.de/guetesiegel/kaeuferschutz.html#fifth_aspect" target="_blank">Käuferschutz.</a> <a style="font-weight:normal;text-decoration:none;color:#000000;" title="Mehr Informationen zu Testzertifikat f&uuml;r Shopsystempartner Excellence" href="http://www.trustedshops.de/profil/Testzertifikat-fuer-Shopsystempartner-Excellence_X41495A6E65ECDDCD554A02C0601D1C97.html" target="_blank">Mehr...</a></div>\n<div style="clear: both;"></div>\n</div>\n</div>\n\n<!-- / Trusted Shops Siegel -->\n\n\n";'),
-(241, 907, 1, 's:33:"X41495A6E65ECDDCD554A02C0601D1C97";'),
-(242, 908, 1, 's:4:"test";'),
-(243, 909, 1, 's:4:"test";'),
-(244, 910, 1, 'b:1;'),
-(245, 911, 1, 'b:1;'),
 (250, 312, 1, 'b:1;'),
 (267, 304, 1, 's:2:"50";'),
 (268, 310, 1, 'b:0;'),
@@ -10654,7 +10633,7 @@ CREATE TABLE IF NOT EXISTS `s_core_shops` (
 --
 
 INSERT INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
-(1, NULL, 'Deutsch', NULL, 0, '', NULL, '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
+(1, NULL, 'Deutsch', NULL, 0, NULL, NULL, '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
 (2, 1, 'Englisch', 'English', 0, NULL, NULL, '', 0, NULL, NULL, NULL, NULL, 39, 2, 1, 1, 2, 0, 0, 1);
 
 -- --------------------------------------------------------
