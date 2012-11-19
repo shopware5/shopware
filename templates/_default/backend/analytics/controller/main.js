@@ -31,6 +31,8 @@
 /**
  * todo@all: Documentation
  */
+//{namespace name=backend/analytics/view/main}
+//{block name="backend/analytics/controller/main"}
 Ext.define('Shopware.apps.Analytics.controller.Main', {
 
     /**
@@ -40,6 +42,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     extend:'Enlight.app.Controller',
 
     /**
+     * References to specific elements in the module
      * @array
      */
     refs:[
@@ -249,6 +252,11 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         // Support custom stores
         var store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
 
+        // If we're having a store, return here
+        if(!store) {
+            return false;
+        }
+
         // Special directive for month charts
         if(me.selectedType === 'month') {
             var me = this,
@@ -265,3 +273,4 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         store.load();
     }
 });
+//{/block}
