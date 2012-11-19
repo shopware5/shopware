@@ -93,11 +93,11 @@ return array_merge($customConfig, array(
         'zend.ze1_compatibility_mode' => 0
     ), $customConfig['phpSettings']),
     'cache' => array(
-        'frontendOptions' => array(
+        'frontendOptions' => array_merge(array(
             'automatic_serialization' => true,
             'automatic_cleaning_factor' => 0,
             'lifetime' => 3600
-        ),
+        ), $customConfig['cache']['frontendOptions']),
         'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
         'backendOptions' => array_merge(array(
             'hashed_directory_umask' => 0771,
