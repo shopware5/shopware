@@ -441,8 +441,34 @@ class Article extends Resource
             return $data;
         }
 
+        $setFirstVariantMain = false;
+        // delete old main, if it has no configurator options
+        // and if non of the following variants has the mainDetail's number
+        $oldMainDetail = $article->getMainDetail();
+        if($oldMainDetail) {
+            $mainDetailGetsConfigurator = false;
+            foreach ($data['variants'] as $variantData) {
+                if(isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])){
+                    $mainDetailGetsConfigurator = true;
+                }
+            }
+
+            if(!$mainDetailGetsConfigurator && count($oldMainDetail->getConfiguratorOptions()) === 0) {
+                Shopware()->Models()->remove($oldMainDetail);
+                $setFirstVariantMain = true;
+            }
+        }
+
         $variants = array();
         foreach ($data['variants'] as $variantData) {
+
+            // if the mainDetail was deleted, set the first variant as mainDetail
+            // if another variant has set isMain to true, this variant will become
+            // a usual variant again
+            if($setFirstVariantMain) {
+                $setFirstVariantMain = false;
+                $data['variants']['isMain'] = true;
+            }
 
             if (isset($variantData['id'])) {
                 $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
@@ -527,12 +553,35 @@ class Article extends Resource
                 $newMain = $variant;
                 $newMain->setKind(1);
 
-                // todo@dn Check if has configurator - delete else
-                $oldMain = $data['mainDetail'];
-                $oldMain['kind'] = 2;
+                // Check for old main articles:
+                // If old main article has configurator options, use it as a usual variant
+                // if the old main article does not have any configurator options, delete it
+                if(isset($data['mainDetail'])) {
+                    $oldMain = $data['mainDetail'];
+
+
+                    if($oldMain instanceof \Shopware\Models\Article\Detail) {
+                        $oldMain->setKind(2);
+                        if($oldMain->getNumber() && $oldMain->getConfiguratorOptions()) {
+                            $variant = $oldMain;
+                        }else{
+                            Shopware()->Models()->remove($oldMain);
+                        }
+                    }else{
+                        $oldMain['kind'] = 2;
+                        if(!empty($oldMain['number']) && !empty($oldMain['configuratorOptions'])) {
+                            $variant = $oldMain;
+                        }elseif(!empty($oldMain['number'])){
+                            $oldMain = $this->getDetailRepository()->findOneBy(array('number' => $oldMain['number']));
+                            if($oldMain){
+                                Shopware()->Models()->remove($oldMain);
+                            }
+                        }
+                    }
+
+                }
 
                 $data['mainDetail'] = $newMain;
-//                $variant = $oldMain;
             }
 
             $variants[] = $variant;
@@ -624,6 +673,7 @@ class Article extends Resource
             }
 
             $groupData['options'] = $groupOptions;
+            
             $group->fromArray($groupData);
             $allGroups[] = $group;
         }
@@ -635,6 +685,8 @@ class Article extends Resource
         $configuratorSet->setOptions($allOptions);
         $configuratorSet->getGroups()->clear();
         $configuratorSet->setGroups($allGroups);
+
+        Shopware()->Models()->persist($configuratorSet);
 
         $data['configuratorSet'] = $configuratorSet;
 
