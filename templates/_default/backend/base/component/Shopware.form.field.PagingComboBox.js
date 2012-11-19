@@ -77,14 +77,39 @@ Ext.define('Shopware.form.field.PagingComboBox',
     },
 
     /**
+     * Default page size for the component. If the component has an store and
+     * the store has a page size, this will be used instead.
+     *
+     * @default 15
+     * @integer
+     */
+    defaultPageSize: 15,
+
+    /**
+     * Always use the [defaultPageSize] if truthy. The associated store page size
+     * will be ignored.
+     *
+     * @default false
+     * @boolean
+     */
+    forceDefaultPageSize: false,
+
+    /**
      * The createPicker function creates a boundlist which contains the paging toolbar.
      * To modify the toolbar, this function has to be overridden.
      * @return Ext.view.BoundList
      */
     createPicker: function() {
-        var me = this,
-            pagingComboBox = this,
-            picker,
+        var pagingComboBox = this,
+            me = pagingComboBox;
+
+        if(me.store.pageSize && !me.forceDefaultPageSize) {
+            me.pageSize = me.store.pageSize;
+        } else {
+            me.pageSize = me.defaultPageSize;
+        }
+
+        var picker,
             menuCls = Ext.baseCSSPrefix + 'menu',
             pickerCfg = Ext.apply({
                 xtype: 'boundlist',
