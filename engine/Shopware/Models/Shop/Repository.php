@@ -354,6 +354,7 @@ class Repository extends ModelRepository
             $shop->setCustomerScope($main->getCustomerScope());
         }
         if ($shop->getSecure()) {
+            $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());
             $baseUrl = $shop->getSecureBasePath();
             if($shop->getBaseUrl() != $shop->getBasePath()
                 && strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
