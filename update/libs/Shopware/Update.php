@@ -1526,8 +1526,11 @@ class Shopware_Update extends Slim
             ';
             $insertQuery = $db->prepare($sql);
             foreach($groups as $group) {
-                list($name, $key) = explode(':', $group);
-                $key = trim($key);
+                $group = explode(':', $group);
+                if(count($group) != 2) {
+                    continue;
+                }
+                list($name, $key) = $group;
                 if(empty($key) || empty($name)) {
                     continue;
                 }
@@ -1920,17 +1923,18 @@ class Shopware_Update extends Slim
             'template_engine' => 'register_modifier',
             'backend' => 'backend_index_javascript'
         );
+        $names = array_keys($tests);
         foreach($tests as $name => $test) {
-            $tests[$name] = '?<' . $name . '>' . $test;
+            //$tests[$name] = '?<' . $name . '>' . $test;
         }
-        $tests = '#(' . implode(')|(', $tests) . ')#i';
+        $regex = '#(' . implode(')|(', $tests) . ')#i';
         $compatibility = array();
-        if(preg_match_all($tests, $pluginContent, $matches)) {
-            foreach($matches as $name => $match) {
-                if(!is_int($name)) {
+        if(preg_match_all($regex, $pluginContent, $matches)) {
+            foreach($matches as $index => $match) {
+                if($index != 0) {
                     $match = array_diff($match, array(''));
                     if(count($match) > 0) {
-                        $compatibility[] = $name;
+                        $compatibility[] = $names[$index - 1];
                     }
                 }
             }
