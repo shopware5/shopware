@@ -49,6 +49,14 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         { ref:'toField', selector:'analytics-toolbar datefield[name=to_date]' }
     ],
 
+
+    /**
+     * Contains the currently displayed mode
+     * @default null
+     * @string
+     */
+    selectedType: null,
+
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
@@ -75,15 +83,20 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
         me.control({
             'analytics-navigation':{
+
                 /**
                  * Select an item in navigation
                  * @param tree
                  * @param record
-                 * @param index
                  */
                 select:function (tree, record) {
                     if (!record.data.action) {
                         return;
+                    }
+
+                    // Cache the selected data type
+                    if(record.data.id) {
+                        me.selectedType = record.data.id;
                     }
 
                     // If a custom store is defined ...
@@ -232,15 +245,23 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         if (Ext.typeOf(value) != 'date') {
             return;
         }
+
         // Support custom stores
         var store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
 
-        if (field.name == "from_date") {
-            store.getProxy().extraParams.fromDate = value;
+        // Special directive for month charts
+        if(me.selectedType === 'month') {
+            var me = this,
+                from = me.getFromField().getValue(),
+                to = me.getToField().getValue();
+
+            if(to.getFullYear() == from.getFullYear() && (to.getMonth() - from.getMonth()) <= 0) {
+                Ext.Msg.alert('{s name=alert/time_range_too_short_title}Time range too short{/s}', '{s name=alert/time_range_too_short}Your selected time range is too short.{/s}');
+                return false;
+            }
         }
-        else {
-            store.getProxy().extraParams.toDate = value;
-        }
+
+        store.getProxy().extraParams[(field.name == 'from_date' ? 'fromDate' : 'toDate')] = value;
         store.load();
     }
 });

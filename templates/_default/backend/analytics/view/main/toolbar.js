@@ -40,7 +40,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
 
     initComponent: function() {
         var me = this,
-        today = new Date();
+            today = new Date();
+
         Ext.applyIf(me, {
             items: [{
                 xtype: 'splitbutton',
@@ -63,7 +64,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 labelWidth: 50,
                 width:150,
                 name: 'from_date',
-                value: new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
+                value: new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()),
+                maxValue: today
             },
             {
                 xtype: 'datefield',
@@ -71,7 +73,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 name: 'to_date',
                 width:130,
                 labelWidth: 30,
-                value: today
+                value: today,
+                maxValue: today
             },
             { xtype: 'tbspacer' },
 
