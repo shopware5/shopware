@@ -125,8 +125,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!$shop->getHost()) {
             $shop->setHost($request->getHttpHost());
         }
+        if (!$shop->getBaseUrl()) {
+            $shop->setBaseUrl($request->getBaseUrl());
+        }
         if (!$shop->getBasePath()) {
-            $shop->setBasePath($request->getBaseUrl());
+            $shop->setBasePath($request->getBasePath());
         }
         if (!$shop->getSecureBasePath()) {
             $shop->setSecureBasePath($shop->getBasePath());
@@ -147,19 +150,20 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request->getBasePath();
 
         if ($request->isSecure()) {
-            $request->setBaseUrl($shop->getSecureBasePath());
+            $request->setBaseUrl($shop->getSecureBaseUrl());
         } else {
-            $request->setBaseUrl($shop->getBasePath());
+            $request->setBaseUrl($shop->getBaseUrl());
         }
 
         // Update path info
         $request->setPathInfo();
 
-        if (($host = $request->getHeader('X_FORWARDED_HOST') !== null)
+        if (($host = $request->getHeader('X_FORWARDED_HOST')) !== null
             && $host === $shop->getSecureHost()
         ) {
             $request->setSecure();
-            $request->setBaseUrl($shop->getSecureBasePath());
+            $request->setBasePath($shop->getSecureBasePath());
+            $request->setBaseUrl($shop->getSecureBaseUrl());
             $request->setHttpHost($shop->getSecureHost());
         }
 
@@ -182,7 +186,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
                 $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost();
-            } elseif ($request->getHttpHost() !== $shop->getHost()) {
+            } elseif (!$request->isSecure() && $request->getHttpHost() !== $shop->getHost()) {
                 $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost();
             }
             if(isset($newPath)) {
@@ -199,7 +203,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param $request
+     * @param Enlight_Controller_Request_RequestHttp $request
      */
     protected function initServiceMode($request)
     {
@@ -252,13 +256,13 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $newShop = $repository->getActiveById($cookieValue);
             if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
-                || ($newShop->getBasePath() !== null && $newShop->getBasePath() !== $shop->getBasePath())
+                || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
             ) {
                 $url = sprintf('%s://%s%s%s',
                     $request->getScheme(),
                     $request->isSecure() ? $newShop->getSecureHost() : $newShop->getHost(),
-                    $request->isSecure() ? $newShop->getSecureBasePath() : $newShop->getBasePath(),
-                    '' //$request->getPathInfo()
+                    $request->isSecure() ? $newShop->getSecureBaseUrl() : $newShop->getBaseUrl(),
+                    '/' //$request->getPathInfo()
                 );
                 $response->setRedirect($url);
                 return;
@@ -340,9 +344,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         /** @var $shop \Shopware\Models\Shop\Shop */
         $this->shop = $shop = $bootstrap->getResource('Shop');
         $this->secure = $shop->getSecure();
-        $this->basePath = $shop->getHost() . $shop->getBasePath();
-        if ($shop->getSecureHost() !== null) {
-            $this->secureBasePath = $shop->getSecureHost() . $shop->getSecureBasePath();
+        $this->basePath = $shop->getHost() . $shop->getBaseUrl();
+        if ($shop->getSecure()) {
+            $this->secureBasePath = $shop->getSecureHost() . $shop->getSecureBaseUrl();
         } else {
             $this->secureBasePath = $this->basePath;
         }

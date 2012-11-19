@@ -228,6 +228,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     'shop.name as name',
                     'shop.host as host',
                     'shop.basePath as basePath',
+                    'shop.baseUrl as baseUrl',
                     'shop.default as default',
                     'IFNULL(main.default, shop.default) as orderValue1',
                     'IFNULL(main.name, shop.name) as orderValue2'

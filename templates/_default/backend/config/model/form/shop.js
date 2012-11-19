@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
         { name: 'active', type: 'boolean', defaultValue: true },
         { name: 'host', type: 'string', useNull: true },
         { name: 'basePath', type: 'string', useNull: true },
+        { name: 'baseUrl', type: 'string', useNull: true },
         { name: 'secure', type: 'boolean' },
         { name: 'secureHost', type: 'string', useNull: true },
         { name: 'secureBasePath', type: 'string', useNull: true },

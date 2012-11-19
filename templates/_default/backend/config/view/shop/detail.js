@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     mainField = form.down('[name=mainId]'),
                     fields = form.query('[isMainField]'),
                     requiredFields = form.query('[isMainRequired]'),
-                    securePathField = form.down('[name=secureBasePath]'),
+                    //securePathField = form.down('[name=secureBasePath]'),
                     secureField = form.down('[name=secure]'),
                     scopeField = form.down('[name=customerScope]'),
                     action = value ? 'show' : 'hide';
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                 if(!value) {
                     secureField.setValue(false);
                 }
-                securePathField[value ? 'hide' : 'show']();
+                //securePathField[value ? 'hide' : 'show']();
                 scopeField.hide();
             }
         };
@@ -101,9 +101,15 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             isMainField: true,
             hidden: true
         },{
+            name: 'baseUrl',
+            emptyText: '{s name=shop/detail/url_empty_text}/shop/en{/s}',
+            fieldLabel: '{s name=shop/detail/url_label}Base url{/s}'
+        },{
             name: 'basePath',
-            emptyText: '{s name=shop/detail/path_empty_text}/shop/en{/s}',
-            fieldLabel: '{s name=shop/detail/path_label}Base path{/s}'
+            emptyText: '{s name=shop/detail/path_empty_text}/shop{/s}',
+            fieldLabel: '{s name=shop/detail/path_label}Base path{/s}',
+            isMainField: true,
+            hidden: true
         },{
             xtype: 'config-element-boolean',
             name: 'secure',
@@ -113,8 +119,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             handler: function(button, value) {
                 var form = button.up('form'),
                     fields = form.query('[isSecure]'),
-                    secureField = form.down('[name=secureBasePath]'),
-                    mainField = form.down('[name=mainId]'),
                     show = value ? 'show' : 'hide';
                 Ext.each(fields, function(field) {
                     field[show]();
@@ -122,23 +126,18 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         field.setValue(null);
                     }
                 });
-                if(value) {
-                    secureField.show();
-                } else if(!mainField.getValue()) {
-                    secureField.hide();
-                }
             }
         },{
             name: 'secureHost',
             emptyText: '{s name=shop/detail/secure_host_empty_text}secure.example.com{/s}',
             fieldLabel: '{s name=shop/detail/secure_host_label}SSL host{/s}',
             hidden: true,
-            isMainField: true,
             isSecure: true
         },{
             name: 'secureBasePath',
-            emptyText: '{s name=shop/detail/secure_path_empty_text}/secure/en{/s}',
+            emptyText: '{s name=shop/detail/secure_path_empty_text}/secure{/s}',
             fieldLabel: '{s name=shop/detail/secure_path_label}SSL base path{/s}',
+            hidden: true,
             isSecure: true
         },{
             xtype: 'config-element-textarea',
