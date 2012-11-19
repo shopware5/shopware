@@ -304,21 +304,27 @@ class Repository extends ModelRepository
         $shops = $builder->getQuery()->getResult();
 
         foreach ($shops as $currentShop) {
-            $this->getEntityManager()->detach($currentShop);
-            if ($currentShop->getBasePath() === null) {
+            $this->fixActive($currentShop);
+            if ($currentShop->getBaseUrl() === null) {
                 $shop = $currentShop;
-            } elseif (strpos($requestPath, $currentShop->getBasePath()) === 0) {
+            } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
+                $shop = $currentShop;
+                break;
+            } elseif ($currentShop->getSecureHost() !== null
+               && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
                 $shop = $currentShop;
                 break;
             }
         }
 
-        if ($shop === null) {
-            $builder = $this->getActiveQueryBuilder();
-            $builder->andWhere('shop.hosts LIKE :host')
-                ->setParameter('host', '%' . $host . '%');
-            $shop = $builder->getQuery()->getOneOrNullResult();
+        if ($shop !== null) {
+            return $shop;
         }
+
+        $builder = $this->getActiveQueryBuilder();
+        $builder->andWhere('shop.hosts LIKE :host')
+            ->setParameter('host', '%' . $host . '%');
+        $shop = $builder->getQuery()->getOneOrNullResult();
 
         if ($shop !== null) {
             $this->fixActive($shop);
@@ -333,16 +339,27 @@ class Repository extends ModelRepository
     protected function fixActive($shop)
     {
         $this->getEntityManager()->detach($shop);
-
-        if ($shop->getMain() !== null) {
-            $this->getEntityManager()->detach($shop->getMain());
-            $shop->setHost($shop->getMain()->getHost());
-            $shop->setSecure($shop->getMain()->getSecure());
-            $shop->setSecureHost($shop->getMain()->getSecureHost());
-            $shop->setTemplate($shop->getMain()->getTemplate());
-            $shop->setCurrencies($shop->getMain()->getCurrencies());
-            $shop->setChildren($shop->getMain()->getChildren());
-            $shop->setCustomerScope($shop->getMain()->getCustomerScope());
+        $main = $shop->getMain();
+        if ($main !== null) {
+            $this->getEntityManager()->detach($main);
+            $shop->setHost($main->getHost());
+            $shop->setSecure($main->getSecure());
+            $shop->setSecureHost($main->getSecureHost());
+            $shop->setSecureBasePath($main->getSecureBasePath());
+            $shop->getBaseUrl($main->getBaseUrl());
+            $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
+            $shop->setTemplate($main->getTemplate());
+            $shop->setCurrencies($main->getCurrencies());
+            $shop->setChildren($main->getChildren());
+            $shop->setCustomerScope($main->getCustomerScope());
+        }
+        if ($shop->getSecure()) {
+            $baseUrl = $shop->getSecureBasePath();
+            if($shop->getBaseUrl() != $shop->getBasePath()
+                && strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
+                $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
+            }
+            $shop->setSecureBaseUrl($baseUrl);
         }
     }
 }

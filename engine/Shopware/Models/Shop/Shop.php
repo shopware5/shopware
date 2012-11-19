@@ -89,10 +89,16 @@ class Shop extends ModelEntity
     private $host;
 
     /**
-     * @var string $title
+     * @var string $basePath
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
     private $basePath;
+
+    /**
+     * @var string $baseUrl
+     * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
+     */
+    private $baseUrl;
 
     /**
      * @var string $hosts
@@ -113,10 +119,15 @@ class Shop extends ModelEntity
     private $secureHost;
 
     /**
-     * @var string $title
+     * @var string $secureBasePath
      * @ORM\Column(name="secure_base_path", type="string", length=255, nullable=true)
      */
     private $secureBasePath;
+
+    /**
+     * @var string $secureBaseUrl
+     */
+    private $secureBaseUrl;
 
     /**
      * @var Template $template
@@ -298,6 +309,22 @@ class Shop extends ModelEntity
     public function setBasePath($basePath)
     {
         $this->basePath = $basePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * @param string $baseUrl
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -506,6 +533,22 @@ class Shop extends ModelEntity
     public function setSecureBasePath($secureBasePath)
     {
         $this->secureBasePath = $secureBasePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecureBaseUrl()
+    {
+        return $this->secureBaseUrl;
+    }
+
+    /**
+     * @param string $secureBaseUrl
+     */
+    public function setSecureBaseUrl($secureBaseUrl)
+    {
+        $this->secureBaseUrl = $secureBaseUrl;
     }
 
     /**

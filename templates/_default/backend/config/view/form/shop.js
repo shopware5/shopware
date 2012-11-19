@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Config.view.form.Shop', {
             helpText: '{s name=shop/table/host_help}{/s}',
             flex: 1
         }, {
-            dataIndex: 'basePath',
+            dataIndex: 'baseUrl',
             text: '{s name=shop/table/path_text}Path{/s}',
             helpText: '{s name=shop/table/path_help}{/s}',
             flex: 1
