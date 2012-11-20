@@ -46,9 +46,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
-        if(empty($categoryId)) {
-            return $this->redirect(array('controller' => 'index'), array('code' => 301));
-        }
+
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
         if (!empty($categoryContent['external'])) {
@@ -126,7 +124,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
-        $this->View()->assign($categoryArticles);
 
         if(empty($categoryContent['noViewSelect'])
             && !empty($categoryArticles['sTemplate'])
@@ -151,6 +148,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
             $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
         }
+
+        $this->View()->assign($categoryArticles);
 
         $this->View()->assign(array(
             'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
