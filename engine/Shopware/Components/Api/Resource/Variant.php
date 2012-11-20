@@ -68,7 +68,7 @@ class Variant extends Resource
         }
 
         $builder = $this->getRepository()->getDetailsByIdsQuery(array($id));
-        /** @var $order \Shopware\Models\Article\Detail */
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
         $articleDetail = $builder->getOneOrNullResult($this->getResultMode());
 
         if (!$articleDetail) {
@@ -92,7 +92,7 @@ class Variant extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $orderModel \Shopware\Models\Article\Detail */
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
         $articleDetail = $this->getRepository()->findOneBy(array('number' => $number));
 
         if (!$articleDetail) {
@@ -129,7 +129,7 @@ class Variant extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $media \Shopware\Models\Article\Detail */
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
         $articleDetail = $this->getRepository()->find($id);
 
         if (!$articleDetail) {
@@ -143,7 +143,7 @@ class Variant extends Resource
         $this->getManager()->remove($articleDetail);
         $this->flush();
 
-        return $media;
+        return $articleDetail;
     }
 
 }
