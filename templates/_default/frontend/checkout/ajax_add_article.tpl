@@ -17,32 +17,33 @@
 {/if}
 
 <div class="ajax_add_article">
+    {block name='frontend_checkout_ajax_add_article_middle'}
 	<div class="middle">
 		{if $sArticle}
 		<div class="article_box">
-		
+
 			{* Thumbnail *}
 			<div class="thumbnail">
-				<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}" class="artbox_thumb" {if $sArticle.image.src} 
+				<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}" class="artbox_thumb" {if $sArticle.image.src}
 					style="background: url({$sArticle.image.src.1}) no-repeat center center"{/if}>
 					{if !$sArticle.image.src}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}
 				</a>
 			</div>
-			
+
 			{* Title *}
 			<strong class="title">{$sArticleName|truncate:37|strip_tags}</strong>
-			
+
 			{* Ordernumber *}
 			<span class="ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</span>
-			
+
 			{* Price *}
 			<strong class="price">{$sArticle.price|currency}</strong>
-			
+
 			{* Quantity *}
 			<span class="quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</span>
 		</div>
 		{/if}
-		
+
 		{* Actions *}
 		<div class="actions">
 			{block name='frontend_checkout_ajax_add_article_action_buttons'}
@@ -57,6 +58,7 @@
 		</div>
 		<div class="space">&nbsp;</div>
 	</div>
+    {/block}
 	
 	<div class="bottom">
 		{block name='frontend_checkout_ajax_add_article_cross_selling'}
