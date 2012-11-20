@@ -390,7 +390,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 
                    if (rawData.invalidateCache) {
                       me.displayCacheClearMessage(rawData.invalidateCache, record);
-                   } else if (record.get('installed') !== null) {
+                   }
+
+                   if (record.get('installed') !== null) {
                        var optionWindow = me.getView('manager.Options').create({
                            record: record
                        }).show();
@@ -428,9 +430,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                         } else {
                             Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_failed);
                         }
-                        me.getView('manager.Options').create({
-                            record: record
-                        }).show();
                     }
                 });
             } else {
