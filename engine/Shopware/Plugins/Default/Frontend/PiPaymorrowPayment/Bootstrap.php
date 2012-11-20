@@ -871,21 +871,11 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
         Shopware()->Db()->query($sql);
         $sql = "DELETE FROM s_crontab WHERE name like '%Paymorrow%'";
         Shopware()->Db()->query($sql);
-
-        // Usually \engine\Shopware\Components\Plugin\Namespace will do most of the cleanup for you
-        // s_core_plugin_elements and s_core_plugin_configs do not exist any more
-        $em = Shopware()->Models();
-
-        if($this->hasForm()) {
-            $form = $this->Form();
-            if($form->getId()) {
-                $em->remove($form);
-            } else {
-                $em->detach($form);
-            }
-            $em->flush();
-        }
-
+        $mypluginid = Shopware()->Db()->fetchOne("SELECT id FROM s_core_plugins WHERE name = 'PiPaymorrowPayment' ");
+        $sql = "DELETE FROM s_core_plugin_elements WHERE pluginID = " . (int)$mypluginid . "";
+        Shopware()->Db()->query($sql);
+        $sql = "DELETE FROM s_core_plugin_configs WHERE pluginID = " . (int)$mypluginid . "";
+        Shopware()->Db()->query($sql);
         $sql = "DELETE FROM s_core_documents_box WHERE name like '%Paymorrow%'";
         Shopware()->Db()->query($sql);
         return true;
