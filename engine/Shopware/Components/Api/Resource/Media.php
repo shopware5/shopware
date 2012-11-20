@@ -153,6 +153,16 @@ class Media extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
+        // When a media's image was changed, we need to recreate thumbnails.
+        // Therefore the onSave method of the media model needs to be called.
+        // As ist listens to prePersist, this can only be done, when a model
+        // is persisted for the first time.
+        // In other words: Changing images for a media model is not possible
+        // right now. It might also have massiv side-effects when other
+        // modules use a specific image.
+        // SW-4464
+//        $media->onSave();
+
         $this->flush();
 
         return $media;
@@ -218,7 +228,8 @@ class Media extends Resource
         if(isset($params['file'])) {
             if(!file_exists($params['file'])) {
                 try {
-                    $path = $this->load($params['file'], basename($params['file']));
+                    $name = pathinfo($params['file'],  PATHINFO_FILENAME);
+                    $path = $this->load($params['file'], $name);
                 } catch (\Exception $e) {
                     throw new \Exception(sprintf("Could not load image %s", $params['file'] ));
                 }
