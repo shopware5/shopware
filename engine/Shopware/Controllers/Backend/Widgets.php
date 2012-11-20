@@ -211,6 +211,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = Shopware()->Db()->fetchAll($sql,array($timeBack));
 
+        $result[] = array();
         foreach ($data as $row){
             $result[] = array(
             "timestamp" => strtotime($row["date"]),
@@ -236,7 +237,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ");
 
         foreach ($fetchLoggedInUsers as &$user){
-            $user["customer"] = htmlentities($user["customer"]);
+            $user["customer"] = htmlentities($user["customer"], null,"UTF-8");
         }
 
         $this->View()->assign(array(
@@ -285,7 +286,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $result = Shopware()->Db()->fetchAll($sql);
         foreach ($result as &$order){
-            $order["customer"] = htmlentities($order["company"] ? $order["company"] : $order["firstname"]." ".$order["lastname"],ENT_QUOTES);
+            $order["customer"] = htmlentities($order["company"] ? $order["company"] : $order["firstname"]." ".$order["lastname"],ENT_QUOTES,"UTF-8");
             $amount = round(($order["invoice_amount"]/$order["currencyFactor"]),2);
             $order["amount"] = $amount;
             if (strlen($order["customer"])>25){
@@ -367,9 +368,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $fetchUsersToUnlock = Shopware()->Db()->fetchAll($sql);
 
         foreach ($fetchUsersToUnlock as &$user){
-            $user["customergroup_name"] = htmlentities($user["customergroup_name"]);
-            $user["company_name"] = htmlentities($user["company_name"]);
-            $user["customer"] = htmlentities($user["customer"]);
+            $user["customergroup_name"] = htmlentities($user["customergroup_name"],null,"UTF-8");
+            $user["company_name"] = htmlentities($user["company_name"],null,"UTF-8");
+            $user["customer"] = htmlentities($user["customer"],null,"UTF-8");
             $user["date"] = date('d.m.Y H:i:s', strtotime($user["lastlogin"]));
         }
         
