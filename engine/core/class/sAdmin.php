@@ -873,6 +873,9 @@ class sAdmin
 		$p = $this->sSYSTEM->_POST;
 
 		foreach ($rules as $ruleKey => $ruleValue){
+
+            $p[$ruleKey] = trim($p[$ruleKey]);
+
 			if (empty($p[$ruleKey]) && !empty($rules[$ruleKey]["required"]) && empty($rules[$ruleKey]["addicted"])){
 				$sErrorFlag[$ruleKey] = true;
 			}
@@ -972,7 +975,7 @@ class sAdmin
 		$p = $this->sSYSTEM->_POST;
 
 		if(isset($p["emailConfirmation"]) || isset($p["email"])) {
-			$p["email"] = strtolower($p["email"]);
+			$p["email"] = strtolower(trim($p["email"]));
 			// Check email
 
             $validator = new Zend_Validate_EmailAddress();
@@ -984,7 +987,7 @@ class sAdmin
 
 			// Check email confirmation if needed
 			if(isset($p["emailConfirmation"])) {
-				$p["emailConfirmation"] = strtolower($p["emailConfirmation"]);
+				$p["emailConfirmation"] = strtolower(trim($p["emailConfirmation"]));
 				if($p["email"] != $p["emailConfirmation"]){
 					$sErrorFlag["emailConfirmation"] = true;
 					$sErrorMessages[] = $this->snippetObject->get('MailFailureNotEqual','The mail addresses entered are not equal');
