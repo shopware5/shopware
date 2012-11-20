@@ -1620,7 +1620,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                     success: function(record, operation) {
                         Shopware.Notification.createGrowlMessage(me.snippets.success.title, me.snippets.success.surchargeRemove, me.snippets.growlMessage);
                         fieldSet.remove(row);
-                        store.remove(row);
+                        store.remove(row.record);
                     },
                     failure: function(record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
