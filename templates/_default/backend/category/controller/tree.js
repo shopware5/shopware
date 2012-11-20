@@ -35,7 +35,7 @@
  *
  * The category management controller handles the initialisation of the category tree.
  */
-/* {block name=backend/category/controller/tree} */
+// {block name="backend/category/controller/tree"}
 Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**

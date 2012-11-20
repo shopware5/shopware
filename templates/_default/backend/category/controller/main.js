@@ -36,7 +36,7 @@
  * The category management controller handles the initialisation of the mainWindow and takes care
  * of most of the communication to and from the server.
  */
-/* {block name=backend/category/controller/main} */
+// {block name="backend/category/controller/main"}
 Ext.define('Shopware.apps.Category.controller.Main', {
     /**
      * Extend from the standard ExtJS 4 controller

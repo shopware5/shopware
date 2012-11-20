@@ -35,7 +35,7 @@
  * 
  * Model to access the settings for category templates aka sCATEGORYTEMPLATES
  */
-/* {block name="backend/category/model/template"} */
+// {block name="backend/category/model/template"}
 Ext.define('Shopware.apps.Category.model.Template', {
 
     /**
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Category.model.Template', {
      * @array
      */
     fields:[
-		/* {block name="backend/category/model/template/fields"}{/block} */
+		// {block name="backend/category/model/template/fields"}{/block}
         { name : 'template', type: 'string' },
         { name : 'name', type: 'string' } 
     ]

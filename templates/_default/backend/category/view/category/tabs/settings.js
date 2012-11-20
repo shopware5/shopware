@@ -35,7 +35,7 @@
  *
  * Shows all Category detail settings
  */
-/* {block name=backend/category/view/tabs/settings} */
+// {block name="backend/category/view/tabs/settings"}
 Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
    /**
     * Parent Element Ext.container.Container
