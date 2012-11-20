@@ -1,6 +1,11 @@
 
-UPDATE `s_core_snippets` SET `value` = 'Ändern' WHERE `name`='CheckoutDispatchLinkSend' AND `namespace`='frontend/checkout/confirm_dispatch' AND shopID = 1;
+UPDATE `s_core_snippets`
+SET `value` = "Ändern"
+WHERE `name` LIKE 'CheckoutDispatchLinkSend'
+AND `namespace` LIKE 'frontend/checkout/confirm_dispatch'
+AND `value` LIKE "Ã„ndern";
 
 -- //@UNDO
 
 -- //
+
