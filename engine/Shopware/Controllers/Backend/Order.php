@@ -1217,7 +1217,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'voucher'                 => $this->Request()->getParam('voucher', null),
                 'date'                    => $displayDate,
                 'delivery_date'           => $deliveryDate,
-                'shippingCostsAsPosition' => true,
+                // Don't show shipping costs on delivery note #SW-4303
+                'shippingCostsAsPosition' => (int) $documentType !== 2,
                 '_renderer'               => $renderer,
                 '_preview'                => $this->Request()->getParam('preview', false),
                 '_previewForcePagebreak'  => $this->Request()->getParam('pageBreak', null),
