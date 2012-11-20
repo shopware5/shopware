@@ -35,7 +35,7 @@
  * a proxy configuration.
  *
  */
-/* {block name="backend/category/model/tree"} */
+// {block name="backend/category/model/tree"}
 Ext.define('Shopware.apps.Category.model.Tree', {
 
     /**
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Category.model.Tree', {
      * @object
      */
     fields:[
-		/* {block name="backend/category/model/tree/fields"}{/block} */
+		// {block name="backend/category/model/tree/fields"}{/block}
         { name : 'id', type: 'integer', useNull:true },
         { name : 'parentId', type: 'integer' },
         { name : 'name', type: 'string' },
