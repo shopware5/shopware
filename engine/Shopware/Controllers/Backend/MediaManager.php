@@ -535,7 +535,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         //validate create thumbnail property of the album settings
-        if (isset($params['createThumbnails']) && !empty($params['createThumbnails'])) {
+        if (isset($params['createThumbnails'])) {
             $settings->setCreateThumbnails($params['createThumbnails']);
         }
 
