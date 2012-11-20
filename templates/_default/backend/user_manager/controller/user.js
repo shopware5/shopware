@@ -52,6 +52,18 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      */
     appContent: null,
 
+    /**
+     * Contains all snippets for the controller
+     * @object
+     */
+    snippets:{
+        form:{
+            errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
+            errorMessage: '{s name=message/password/form/error_message}The field -[0]- is not valid{/s}'
+        },
+		growlMessage:'{s name=message/growlMessage}User manager{/s}'
+    },
+
     refs: [
         { ref: 'userCreateWindow', selector: 'usermanager-user-create' },
         { ref: 'userCreateForm', selector: 'usermanager-user-create form' }
@@ -108,10 +120,27 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * @param formPnl
      */
     onSaveUser: function(record, formPnl) {
+        var me = this,
+            missingField = "Unknown field";
+
         if (!formPnl.getForm().isValid()){
+            // check which field is not valid in order to tell the user, why the customer cannot be saved
+            // SW-4322
+            formPnl.getForm().getFields().each(function(f){
+                 if(!f.validate()){
+                    if(f.fieldLabel){
+                        missingField = f.fieldLabel;
+                    }else if(f.name){
+                        missingField = f.name;
+                    }
+                    Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
+                    return false;
+                 }
+
+             });
             return;
+
         }
-        var me = this;
         var values = formPnl.getForm().getValues();
 
         formPnl.getForm().updateRecord(record);
