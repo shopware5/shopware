@@ -267,7 +267,9 @@ class sCategories
         $category = $this->repository
             ->getActiveByIdQuery($id, $this->customerGroupId)
             ->getArrayResult();
-
+        if(empty($category[0])) {
+            return null;
+        }
         $category = $category[0];
 
         $detailUrl = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
