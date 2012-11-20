@@ -1,19 +1,19 @@
 /**
 	Shopware 3.5 Template Colors
 	http://shopware.de
-	
+
 	@package		default
 	@subpackage		css
 	@category		design
-	@version		v1 
+	@version		v1
 	@author			stp/Shopware AG <info@shopware.ag>
 	@copyright		Copyright (c) 2010 Shopware AG (http://www.shopware.de)
-	
+
 	This stylesheets contains all color hexcodes which are used in
 	the default template.
-	
+
 	MAIN COLORS
-	
+
 	Borders: 		#c7c7c7
 	Backgrounds:	#f5f5f5
 	Highlights: 	#dd4800
@@ -75,7 +75,7 @@ a.link {color:#666}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover a {color: #fff;background-color: #dd4800;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover li a {color: #dd4800;background-color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover li:hover a {background-color: #dd4800;color:#fff;}
-#mainNavigation ul li.dropactive:hover ul.dropdown li li:hover a {color: #fff;} 
+#mainNavigation ul li.dropactive:hover ul.dropdown li li:hover a {color: #fff;}
 #mainNavigation ul li.dropactive:hover li:hover a {color: #fff;background-color: #dd4800;}
 #mainNavigation li:hover ul.dropdown, #mainNavigation li:hover ul.droplevel {background-color: #fff; border-color: #000;}
 #mainNavigation ul li.dropactive:hover ul.droplevel {background-color: #fff;border-color: #000;}
@@ -117,7 +117,7 @@ div#breadcrumb .sep {color:#ccc}
 #content #left ul li.active ul.submenu ul, #content #left ul li.active ul.submenu ul.submenu ul.submenu {border-color: #EFE9E2;}
 #content #left ul#servicenav {border-color: #c7c7c7; border-left-color: #fff;}
 #content #left ul#servicenav li.heading {color: #636363;border-left-color:#e3e3e3;border-bottom-color:#e3e3e3;}
-#content #left ul#servicenav li a {color:#7f7f7f} 
+#content #left ul#servicenav li a {color:#7f7f7f}
 #content #left ul li.active li.active li .level3 li.active a {color: #dd4800;}
 
 /*	SIDEBAR RIGHT
@@ -145,7 +145,7 @@ div.supplier ul li.image {background-color: #fff;}
 .blogentry .post_metadata span {border-color:#e6e6e6;}
 #center .teaser_small h1, #content .orders h1, #content .downloads h1, #content #ticket h1 {color: #999;}
 #content .cat_text .inner_container, #content .register .supplier_register .inner_container {border-color: #c7c7c7;}
-#content .cat_text h1, #content .custom h1, #content .supplier_register h1 {color: #dd4800;} 
+#content .cat_text h1, #content .custom h1, #content .supplier_register h1 {color: #dd4800;}
 #supplierfilter, .notice {border-color: #dd4800;background-color: #fff;}
 .notice, .notice a {color:#333;}
 
@@ -352,7 +352,7 @@ div.orderdata_box div, #newsletterfrm, #frmRegister {background-color: #f7f7f7;}
 /*	ENTRIES
 	------------------------ */
 #listing-blog .blogbox, #content .blogbox, .contentdetail, .newsletter_entry, .newsletter_detail, .newsletter_detail .newsletter_content {border-color: #c7c7c7;}
-#content .listing_box, #content .listing_box h2.headingbox_nobg {border-color: #c7c7c7;} 
+#content .listing_box, #content .listing_box h2.headingbox_nobg {border-color: #c7c7c7;}
 .listing_box .blogbox p {color: #555;}
 .blogbox h2, .contentlisting_box h2, .contentdetail h2, .newsletter_entry h2, .newsletter_detail h2 {color: #262626;}
 .blogbox .post_metadata {color: #A8A7A7;}
@@ -426,7 +426,7 @@ li.searchresult ul li {border-color:#c7c7c7}
 li.searchresult ul li:hover {background-color:#f3f3f3}
 li.searchresult_supplier {background-color: #f1f1f1;border-bottom-color:#777;}
 li.searchresult_supplier h2 {color: #888}
-li.searchresult_supplier a.resultlink {border-color: #999;background-color: #fff;} 
+li.searchresult_supplier a.resultlink {border-color: #999;background-color: #fff;}
 li.searchresult_supplier a.searchthumb {border-color: #999}
 .searchresult .active {background-color:#e9e9e9;}
 
@@ -476,16 +476,16 @@ div#left div.searchbox h3 {color: #758E00}
 
 /*	SITEMAP
 	------------------------ */
-ul#categories_s li {border-color: #fff;} 
-ul#categories_s, ul#categories_s a.active {background-color: #dd4800;}
-ul#categories_s a.active {color: #fff;}
-ul#categories_s ul {border-color: #fff;}
+ul.categories_s li {border-color: #fff;}
+ul.categories_s, ul.categories_s a.active {background-color: #dd4800;}
+ul.categories_s a.active {color: #fff;}
+ul.categories_s ul {border-color: #fff;}
 
-ul#categories_s ul a, ul#categories_s ul a.active {background-color: #f5f5f5}
-ul#categories_s ul a.active {color: #333;}
-ul#categories_s ul ul a.active {background-color: #f5f5f5;color: #333;}
-ul#categories_s ul ul ul a {background: #f5f5f5;}
-ul#categories_s ul ul ul a.active {background-color: #fff;color: #000;}
+ul.categories_s ul a, ul.categories_s ul a.active {background-color: #f5f5f5}
+ul.categories_s ul a.active {color: #333;}
+ul.categories_s ul ul a.active {background-color: #f5f5f5;color: #333;}
+ul.categories_s ul ul ul a {background: #f5f5f5;}
+ul.categories_s ul ul ul a.active {background-color: #fff;color: #000;}
 
 /*	BUNDLE
 	------------------------ */
@@ -503,7 +503,7 @@ ul#categories_s ul ul ul a.active {background-color: #fff;color: #000;}
 #content .inner .liveshopping_container .liveshopping_right .live_price_normal .bottom, #content .inner .liveshopping_container .liveshopping_right .live_price_normal .bottom strong {color: #f5f5f5}
 #content .liveshopping_container .liveshopping_middle .quantity .liveprice_container_up div.right, #content .liveshopping_container .liveshopping_middle .quantity .liveprice_container_down div.right,
 #content .liveshopping_container .liveshopping_middle .middle,
-#content .liveshopping_container .liveshopping_middle .middle strong, 
+#content .liveshopping_container .liveshopping_middle .middle strong,
 #content .liveshopping_detail .live_price_normal .bottom .price {color: #fff;}
 .liveshopping_detail .time_bars .time_processbar_container, .liveshopping_container .time_bars .time_processbar_container, .liveshopping_container .time_bars .instock_processbar_container, .liveshopping_detail .time_bars .instock_processbar_container {border-color: #ccc;}
 .liveshopping_detail .time_bars .time_processbar_container div, .liveshopping_container .time_bars .time_processbar_container div, .liveshopping_container .time_bars .instock_processbar_container div, .liveshopping_detail .instock_processbar_container div {background-color: #fff}

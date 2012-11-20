@@ -1,19 +1,19 @@
 /**
 	Shopware 3.5 Template Colors
 	http://shopware.de
-	
+
 	@package		default
 	@subpackage		css
 	@category		design
-	@version		v1 
+	@version		v1
 	@author			stp/Shopware AG <info@shopware.ag>
 	@copyright		Copyright (c) 2010 Shopware AG (http://www.shopware.de)
-	
+
 	This stylesheets contains all color hexcodes which are used in
 	the default template.
-	
+
 	MAIN COLORS
-	
+
 	Borders: 		#c7c7c7
 	Backgrounds:	#f5f5f5
 	Highlights: 	#dd4800
@@ -36,7 +36,7 @@
  * - #fbe3e4
  * - #efe9e2
  -----------------------------------------------*/
- 
+
 /* #f5f5f5 */
 html,
 body,
@@ -70,8 +70,8 @@ div.table_foot .box,
 form.comments,
 .compare_desc div,
 .tellafriend fieldset,
-ul#categories_s ul a, ul#categories_s ul a.active,
-ul#categories_s ul ul a.active {
+ul.categories_s ul a, ul.categories_s ul a.active,
+ul.categories_s ul ul a.active {
 	background-color: #f5f5f5;
 }
 
@@ -103,7 +103,7 @@ li.searchresult_supplier a.resultlink,
 #content div#left div.searchbox ul,
 #center.supportrequest h2,
 .tellafriend h2,
-ul#categories_s ul ul ul a.active,
+ul.categories_s ul ul ul a.active,
 .liveshopping_detail .time_bars .time_processbar_container div,
 .liveshopping_container .time_bars .time_processbar_container div,
 .liveshopping_container .time_bars .instock_processbar_container div,
@@ -169,7 +169,7 @@ div.table_row.bundle_row, div.table_row.bundle {
  * - #dadada
  * - #efebe2
  -----------------------------------------------*/
- 
+
 /* #c7c7c7 */
 .container_20,
 hr.smallline,
@@ -312,8 +312,8 @@ tfoot .last,
 div#breadcrumb,
 #content #left ul li,
 #compareHighlight,
-ul#categories_s li,
-ul#categories_s ul {
+ul.categories_s li,
+ul.categories_s ul {
 	border-color: #fff;
 }
 
