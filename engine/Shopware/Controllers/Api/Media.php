@@ -105,7 +105,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 
         $media = $this->resource->update($id, $params);
 
-        $location = $this->apiBaseUrl . 'categories/' . $media->getId();
+        $location = $this->apiBaseUrl . 'media/' . $media->getId();
         $data = array(
             'id'       => $media->getId(),
             'location' => $location
