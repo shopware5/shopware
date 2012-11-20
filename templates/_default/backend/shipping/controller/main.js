@@ -381,12 +381,14 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
      * The costs matrix behaves differently based
      * on the chosen calculation in the default form
      *
+     * todo@all Duplicates getCalculationConfig in the backend controller
+     *
      * Returns an object containing following attributes
      * - decimalPrecision
      * - minChange
      * - startValue
      *
-     * @param [integer] calculationType
+     * @param calculationType integer
      * @return Object
      */
     getConfig: function(calculationType) {

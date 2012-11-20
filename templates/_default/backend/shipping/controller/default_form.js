@@ -279,7 +279,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             costsMatrixStore = costsGrid.getStore();
 
         costsMatrixStore.getProxy().extraParams = {
-            dispatchId : dispatchId
+            dispatchId : dispatchId,
+            minChange: me.currentConfig.minChange
         };
         // clean the whole grid - to avoid headaches during updates, we build everything from scratch
         costsMatrixStore.each(function(element) {

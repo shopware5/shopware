@@ -274,6 +274,44 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
+     * Helper function to get some settings for the cost matrix
+     * todo@all Duplicates getConfig in ExtJS main controller
+     *
+     * @param $calculationType
+     * @return array
+     */
+    private function getCalculationConfig($calculationType) {
+        switch ($calculationType)
+        {
+            case 1:
+                return array(
+                    'decimalPrecision' => 2,
+                    'minChange' => 0.01,
+                    'startValue' => 0
+                );
+                break;
+
+            case 2:
+            case 3:
+                return array(
+                    'decimalPrecision' => 0,
+                    'minChange' => 1,
+                    'startValue' => 1
+                );
+                break;
+
+            case 0:
+            default:
+                return array(
+                    'decimalPrecision' => 3,
+                    'minChange' => 0.001,
+                    'startValue' => 0
+                );
+                break;
+        }
+    }
+
+    /**
      * Returns all entries based on a given dispatch Id.
      */
     public function getCostsMatrixAction()
@@ -290,8 +328,16 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $filter = $filter[0]['value'];
         }
         $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $sort, $limit, $offset);
-
         $result = $query->getArrayResult();
+
+        // if minChange was not passed, get it in order to show a proper cost matrix
+        if($minChange === null) {
+            $dispatch = $this->getRepository()->getShippingCostsQuery($dispatchId)->getArrayResult();
+            if($dispatch) {
+                $config = $this->getCalculationConfig(isset($dispatch[0]['calculation']) ? $dispatch[0]['calculation'] : 0);
+                $minChange = $config['minChange'];
+            }
+        }
 
         $i     = 0;
         $nodes = array();
