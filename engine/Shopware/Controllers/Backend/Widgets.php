@@ -221,7 +221,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         // Get current users online
-        $currentUsers = Shopware()->Db()->fetchOne("SELECT COUNT(DISTINCT remoteaddr) FROM s_statistics_currentusers");
+        $currentUsers = Shopware()->Db()->fetchOne("SELECT COUNT(DISTINCT remoteaddr) FROM s_statistics_currentusers WHERE time > DATE_SUB(NOW(), INTERVAL 3 MINUTE)");
         if (empty($currentUsers)) $currentUsers = 0;
 
         // Get current users logged in
