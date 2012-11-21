@@ -1851,6 +1851,8 @@ jQuery(document).ready(function ($) {
  * Liveshopping Plugin
  * for Shopware
  *
+ * @deprecated
+ *
  * Shopware AG (c) 2010
  */ (function ($) {
 
@@ -2130,7 +2132,7 @@ jQuery.fn.liveSearch = function (conf) {
         liveSearch = jQuery('<div id="' + config.id + '"></div>').appendTo(document.body).hide().slideUp(0);
 
         // Close live-search when clicking outside it
-        jQuery(document.body).click(function (event) {
+        jQuery(document.body).bind('click.search', function (event) {
             var clicked = jQuery(event.target);
 
             if (!(clicked.is('#' + config.id) || clicked.parents('#' + config.id).length || clicked.is('input'))) {
@@ -2575,6 +2577,8 @@ jQuery.fn.liveSearch = function (conf) {
 /**
  * Bundle Plugin
  * for Shopware
+ *
+ * @deprecated
  *
  * Shopware AG (c) 2010
  */ (function ($) {
@@ -3428,7 +3432,6 @@ jQuery.fn.liveSearch = function (conf) {
     //Initialize the basket module
     //and binds the needed events
     $.basket.init = function () {
-
         var width = 660;
         var position = 'fixed';
 
@@ -3542,9 +3545,9 @@ jQuery.fn.liveSearch = function (conf) {
                     $($.basket.options.basketResult).empty().html($.basket.options.emptyText);
                 }
                 $($.basket.options.basketResult).addClass('active').slideDown('fast');
-                $(document.body).bind('click', function () {
+                $(document.body).bind('click.basket', function () {
                     $($.basket.options.basketResult).removeClass('active').slideUp('fast');
-                    $(document.body).unbind('click');
+                    //$(document.body).unbind('click.basket');
                 });
             }
         });
