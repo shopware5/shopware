@@ -2232,7 +2232,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $updateData['categories'] = $this->prepareImportXmlData($article['categories']['category']);
                 }
 
-                if (isset($article['variants'])) {
+                if (isset($article['variants']) && !empty($article['variants'])) {
                     $updateData['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
                     foreach ($article['variants'] as $key => $variant) {
                         if (isset($variant['prices'])) {
