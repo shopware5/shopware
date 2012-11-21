@@ -421,7 +421,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $metaDataFactory = $this->getManager()->getMetadataFactory();
-        $attributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\Article')->getFieldNames();
+        $attributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\Article')->fieldNames;
+
         $attributeFields = array_flip($attributeFields);
         unset($attributeFields['id']);
         unset($attributeFields['articleDetailId']);
@@ -429,8 +430,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $attributeFields = array_flip($attributeFields);
 
         $selectAttributes = array();
-        foreach ($attributeFields as $field) {
-            $selectAttributes[] = 'at.' . $field . ' as attr_' . $field;
+        foreach ($attributeFields as $columnName => $fieldName) {
+            $selectAttributes[] = 'at.' . $columnName . ' as attr_' . $fieldName;
         }
         $selectAttributes = implode(",\n", $selectAttributes);
 
