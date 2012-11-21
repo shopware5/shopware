@@ -188,10 +188,10 @@
                 }
                 $($.basket.options.basketParent).addClass('active');
                 $($.basket.options.basketResult).addClass('active').slideDown('fast');
-                $(document.body).bind('click', function() {
+                $(document.body).bind('click.basket', function() {
 					$($.basket.options.basketResult).removeClass('active').slideUp('fast');
 					$($.basket.options.basketParent).removeClass('active');
-					$(document.body).unbind('click');
+					$(document.body).unbind('click.basket');
 				});
             }
         });
