@@ -170,7 +170,7 @@ class sRewriteTable
 			DELETE ru FROM s_core_rewrite_urls ru
 			LEFT JOIN s_categories c
 			ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
-			AND c.external=''
+			AND (c.external = '' OR c.external IS NULL)
 			WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
 			AND c.id IS NULL
 		";
