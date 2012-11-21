@@ -2187,16 +2187,16 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $results = $this->prepareImportXmlData($results['article']);
 
         foreach ($results as $article) {
-            if (empty($article['id']) && empty($article['ordernumber'])) {
+            if (empty($article['id']) && empty($article['mainDetail']['number'])) {
                 continue;
             }
 
             try {
                 $counter++;
 
-                if (isset($article['ordernumber'])) {
+                if (isset($article['mainDetail']['number'])) {
                     /** @var \Shopware\Models\Article\Detail $articleDetailModel */
-                    $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $article['ordernumber']));
+                    $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $article['mainDetail']['number']));
                     if ($articleDetailModel) {
                         /** @var \Shopware\Models\Article\Article $articleModel */
                         $articleModel = $articleDetailModel->getArticle();
@@ -2212,9 +2212,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup'));
-                $detailData = $this->mapFields($article, $articleDetailMapping);
+                $detailData = $this->mapFields($article, $articleDetailMapping, array('mainDetail'));
 
-                $updateData['mainDetail'] = $detailData;
+                $updateData['mainDetail'] = $detailData['mainDetail'];
 
                 if (isset($article['similar'])) {
                     $updateData['similar'] = $this->prepareImportXmlData($article['related']['similar']);
