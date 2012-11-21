@@ -168,7 +168,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $d->_compatibilityMode = false;
 		if (!empty($orderID)){
 			$d->_subshop = Shopware()->Db()->fetchRow("
-			SELECT s_core_multilanguage.id,doc_template, template, isocode,locale FROM s_order,s_core_multilanguage WHERE s_order.subshopID = s_core_multilanguage.id AND s_order.id = ?
+			SELECT s_core_multilanguage.id,doc_template, template, isocode,locale FROM s_order,s_core_multilanguage WHERE s_order.language = s_core_multilanguage.id AND s_order.id = ?
 			",array($orderID));
 
 			if (empty($d->_subshop["doc_template"])) $d->setTemplate($d->_defaultPath);
@@ -337,7 +337,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		",array($id),ArrayObject::ARRAY_AS_PROPS));
 
 		$translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
-		
+
 		foreach ($this->_document->containers as $key => $container){
 
 			if (!is_numeric($key)) continue;
@@ -471,7 +471,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		}
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $shop = $repository->getActiveById($this->_order->order->subshopID);
+        // "language" actually refers to a language-shop and not to a locale
+        $shop = $repository->getActiveById($this->_order->order->language);
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->_order->order->currencyID));
         $shop->registerResources(Shopware()->Bootstrap());
