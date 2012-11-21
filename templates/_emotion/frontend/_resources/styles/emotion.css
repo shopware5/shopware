@@ -2387,10 +2387,14 @@ div.table_foot input.button_tablefoot {text-indent: -9999em; width: 22px; paddin
 
 /** CART - FOOTER **/
 #basket .cart .table_foot {
-	float: left;
-	width: 386px; 
+	float: right;
+	width: 385px; 
 	padding: 0 30px 30px 50px; 
-	border-color:#dfdfdf; border-style: none solid solid;border-width: 0 1px 1px;
+	border-color:#dfdfdf; 
+	border-style: none solid solid;
+	border-width: 0 1px 1px;
+	position: relative;
+	top: 0; right: 0;
 	
 	/*CSS3*/
 	-webkit-box-shadow: 0 0 4px #ddd;
@@ -2860,6 +2864,7 @@ div.listing .artbox .star {
 	margin: 0 8px !important;
 	padding: 0;
 	border: 0;
+	position: relative;
 	width: 976px;
 	float: right;
 	margin-top: -1px !important;
@@ -2869,12 +2874,16 @@ div.listing .artbox .star {
 	background: #fff;
 	padding: 0 30px 30px;
 	margin-bottom: 10px;
-	border: 1px solid #dfdfdf;
-	width: 390px;
+	border-color: #DFDFDF #DFDFDF;
+	border-style: none solid solid;
+	border-width: 0 1px 1px;	
+    width: 390px;
+	position: relative;
+	right: 0; top: 1px;
 }
 #content #confirm .table .table_foot .tablefoot_inner .notice {width: 280px; margin: 0 30px 20px;}
-#content #confirm .table .table_foot .tablefoot_inner-left {float: left;width: 524px; height: 193px;margin-top: 1px; border-top: 1px solid #dfdfdf;}
-#content #confirm .table_foot #aggregation_left {width: 220px;margin: 0 0 0 30px; padding-top: 30px; border-top: 1px solid #dfdfdf;}
+#content #confirm .table .table_foot .tablefoot_inner-left {float: left;width: 524px; height: 214px2;margin-top: 1px; border-top: 1px solid #dfdfdf;}
+#content #confirm .table_foot #aggregation_left {width: 228px;margin: 0 0 0 30px; padding-top: 30px; border-top: 1px solid #dfdfdf;}
 #content #confirm .table_foot #aggregation {margin: 0; padding-top: 30px; border-top: 1px solid #dfdfdf;}
 
 #content #confirm .table .table_foot .box {width: 330px; padding: 30px 0 30px 15px;}
