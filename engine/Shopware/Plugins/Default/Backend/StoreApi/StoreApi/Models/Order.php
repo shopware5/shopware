@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -19,8 +20,7 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- */<?php
-
+ */
 
 class Shopware_StoreApi_Models_Order extends Shopware_StoreApi_Models_Model
 {
