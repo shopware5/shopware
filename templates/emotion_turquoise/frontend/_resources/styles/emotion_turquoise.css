@@ -263,7 +263,7 @@ div#notes .table_row .first a.zoom_picture {color: #a1a1a1}
 div#notes .table_row .action a.basket {border-color: #efebe2;}
 div.table_foot input.button_tablefoot {color: #fff;}
 #content div.table_foot .totalamount strong {color: #333}
-div#notes .table_row .action a.basket {color: #1db3b8;}
+div#notes .table_row .action a.basket {color: #fff;}
 
 /* change details */
 .info div {border-color: #dfdfdf;}
