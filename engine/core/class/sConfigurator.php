@@ -223,11 +223,11 @@ class sConfigurator
         }
 
         if (empty($selected)) {
+            // Limiting the results with setMaxResults(1) will result in only one price being selected SW-4465
             $query = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey);
-            $query->setFirstResult(0)
-                  ->setMaxResults(1);
+            $detail = $query->getArrayResult();
+            $detail = array_pop($detail);
 
-            $detail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             if ($article->getLastStock() && $detail['inStock'] < 1) {
                 $detail['active'] = 0;
             }
