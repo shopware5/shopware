@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Deprecated.view.main.Window', {
 	maximizable: true,
 	bodyBorder: 0,
 	border: 0,
-	cls: Ext.baseCSSPrefix + 'window-deprecated',
 	layout: 'fit',
 
 	// Custom configuration options
