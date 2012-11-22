@@ -26,6 +26,7 @@
 <link rel="icon" href="{link file='backend/_resources/images/index/favicon.ico'}" type="image/x-icon">
 <link rel="shortcut icon" href="{link file='backend/_resources/images/index/favicon.ico'}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="https://cdn.shopware.de/assets/library/resources/css/all.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.shopware.de/assets/library/resources/css/theme-gray.css" />
 {/block}
 {block name="backend_index_javascript"}
 <script type="text/javascript" src="https://cdn.shopware.de/assets/library/base.js"></script>
