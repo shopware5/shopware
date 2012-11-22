@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
 
     /**
      * Creates the field set items which displayed in the left column of the base field set
-     * @return array
+     * @return Array
      */
     createLeftElements: function() {
         var me =this, articleId = null;
@@ -197,7 +197,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             allowBlank: false,
             fieldLabel: me.snippets.supplier,
             labelWidth: 155,
-            anchor: '100%',
+            anchor: '100%'
         });
 
         return [
