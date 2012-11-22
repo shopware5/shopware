@@ -108,6 +108,9 @@ Ext.define('Shopware.apps.Config.controller.Plugin', {
             case 'deactivate':
                 title = '{s name=deactivate_plugin}Deactivate plugin: [name]{/s}';
                 break;
+            case 'update':
+                title = '{s name=update_plugin}Update plugin: [name]{/s}';
+                break;
         }
 
         title = new Ext.Template(title);
@@ -146,6 +149,7 @@ Ext.define('Shopware.apps.Config.controller.Plugin', {
                     message = '{s name=action_successful}The action have been executed successfully.{/s}';
                     message = new Ext.Template(message).applyTemplate(plugin.data);
                     Shopware.Notification.createGrowlMessage(title, message, win.title);
+                    store.load();
                 },
                 failure: function (batch) {
                     message = '{s name=action_failed}The action could not be executed.{/s}';
@@ -154,6 +158,7 @@ Ext.define('Shopware.apps.Config.controller.Plugin', {
                         message += '<br />' + batch.proxy.reader.rawData.message;
                     }
                     Shopware.Notification.createGrowlMessage(title, message, win.title);
+                    store.load();
                 }
             });
         });
@@ -172,7 +177,9 @@ Ext.define('Shopware.apps.Config.controller.Plugin', {
         uninstallButton.hide();
         if(plugin) {
             if(plugin.get('installed')) {
-                uninstallButton.show();
+                if(plugin.get('capabilityInstall')) {
+                    uninstallButton.show();
+                }
                 installButton.hide();
             } else {
                 if(plugin.get('source') == 'Community') {

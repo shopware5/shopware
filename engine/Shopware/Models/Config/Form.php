@@ -89,7 +89,7 @@ class Form extends ModelEntity
     private $pluginId;
 
     /**
-     * @var string $position
+     * @var integer $position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
@@ -204,6 +204,22 @@ class Form extends ModelEntity
     }
 
     /**
+     * @return integer
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param integer $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
      * @param string $name
      * @return Element
      */
@@ -237,6 +253,21 @@ class Form extends ModelEntity
             }
         }
         $this->addElement($type, $name, $options);
+        return $this;
+    }
+
+    /**
+     * @param string|Element $element
+     * @return Form
+     */
+    public function removeElement($element)
+    {
+        if (!$element instanceof Element) {
+            $element = $this->getElement($element);
+        }
+        if($element !== null) {
+            $this->elements->removeElement($element);
+        }
         return $this;
     }
 
@@ -332,16 +363,15 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTranslations()
     {
         return $this->translations;
     }
 
-
     /**
-     * @param FormTranslation
+     * @param $translation FormTranslation
      * @return \Shopware\Models\Config\Form
      */
     public function addTranslation($translation)
@@ -351,7 +381,6 @@ class Form extends ModelEntity
         return $this;
     }
 
-
     /**
      * @return bool
      */
@@ -359,6 +388,4 @@ class Form extends ModelEntity
     {
         return $this->translations->count() > 0;
     }
-
-
 }
