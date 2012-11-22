@@ -62,7 +62,8 @@ Ext.define('Shopware.apps.Config.view.plugin.Table', {
 			actionColumn:{
 				tooltipInstall: '{s name=table/action_column/tooltip_install}Install (ALT + ENTER){/s}',
 				tooltipEdit: '{s name=table/action_column/tooltip_edit}Edit plugin config{/s}',
-				tooltipDelete: '{s name=table/action_column/tooltip_delete}Delete plugin{/s}'
+				tooltipDelete: '{s name=table/action_column/tooltip_delete}Delete plugin{/s}',
+                tooltipUninstall: '{s name=table/action_column/tooltip_uninstall}Uninstall plugin (ALT + RETURN){/s}'
 			}
 		}
 	},
@@ -157,7 +158,7 @@ Ext.define('Shopware.apps.Config.view.plugin.Table', {
         var me = this;
         return {
             xtype: 'actioncolumn',
-            width: 70,
+            width: 80,
             items: [{
                 iconCls: 'sprite-puzzle--plus',
                 action: 'install',
@@ -167,19 +168,46 @@ Ext.define('Shopware.apps.Config.view.plugin.Table', {
                     me.fireEvent('installPlugin', { action: 'install' });
                 },
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('installed'))  {
+                    if (record.get('installed')) {
                         return 'x-hidden';
                     }
                 }
             },{
                 iconCls: 'sprite-puzzle--plus',
                 action: 'update',
+                tooltip: 'Update plugin',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     view.getSelectionModel().select(rowIndex);
                     me.fireEvent('updatePlugin', { action: 'update' });
                 },
                 getClass: function(value, metadata, record, rowIdx) {
                     if (!record.get('updateVersion'))  {
+                        return 'x-hidden';
+                    }
+                }
+            },{
+                iconCls: 'sprite-puzzle--minus',
+                action: 'uninstall',
+                tooltip: me.snippets.table.actionColumn.tooltipUninstall,
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    view.getSelectionModel().select(rowIndex);
+                    me.fireEvent('uninstallPlugin', { action: 'uninstall' });
+                },
+                getClass: function(value, metadata, record, rowIdx) {
+                    if (!record.get('installed') || !record.get('capabilityInstall'))  {
+                        return 'x-hidden';
+                    }
+                }
+            },{
+                iconCls: 'sprite-puzzle--minus',
+                action: 'delete',
+                tooltip: me.snippets.table.actionColumn.tooltipDelete,
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    view.getSelectionModel().select(rowIndex);
+                    me.fireEvent('deletePlugin', { action: 'delete' });
+                },
+                getClass: function(value, metadata, record, rowIdx) {
+                    if (record.get('installed') || record.get('source') != 'Community')  {
                         return 'x-hidden';
                     }
                 }
@@ -193,19 +221,6 @@ Ext.define('Shopware.apps.Config.view.plugin.Table', {
                 },
                 getClass: function(value, metadata, record, rowIdx) {
                     if (!record.get('configFormId'))  {
-                        return 'x-hidden';
-                    }
-                }
-            },{
-                iconCls: 'sprite-puzzle--minus',
-                action: 'uninstall',
-                tooltip: me.snippets.table.actionColumn.tooltipDelete,
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    view.getSelectionModel().select(rowIndex);
-                    me.fireEvent('deletePlugin', { action: 'uninstall' });
-                },
-                getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('installed') || record.get('source') != 'Community')  {
                         return 'x-hidden';
                     }
                 }

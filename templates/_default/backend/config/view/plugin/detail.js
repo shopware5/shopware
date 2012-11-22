@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Config.view.plugin.Detail', {
     },
 
     /**
-     * @return array
+     * @return Array
      */
     getItems: function() {
         var me = this;

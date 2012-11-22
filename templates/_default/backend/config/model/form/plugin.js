@@ -57,7 +57,10 @@ Ext.define('Shopware.apps.Config.model.form.Plugin', {
         { name: 'installed', type:'date' },
         { name: 'configFormId', type:'int', convert: function(v, record) {
             return v || record.raw.configForms && record.raw.configForms[0] && record.raw.configForms[0].id;
-        } }
+        } },
+        { name: 'capabilityUpdate', type: 'boolean' },
+        { name: 'capabilityEnable', type: 'boolean' },
+        { name: 'capabilityInstall', type: 'boolean' }
     ]
 });
 //{/block}

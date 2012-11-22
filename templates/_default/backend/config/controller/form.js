@@ -331,6 +331,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         }
     },
 
+    //todo@all Wrong place?
     onSelectCustomerGroupOnTax: function(field, newValue, oldValue) {
         var me = this,
         addButton = me.getTaxRuleAddButton();
@@ -371,7 +372,6 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 				elementStore = elementComboBox.getStore(),
 				activeRecord = elementStore.getById(values['elements']),
 				fieldName = activeRecord.get('name');
-
 
 			activeRecord.set('value', values[fieldName + '_Value']);
 			activeRecord.set('style', values[fieldName + '_Style']);

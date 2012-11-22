@@ -254,9 +254,12 @@ Ext.define('Shopware.apps.Config.controller.Main', {
      */
     initForm: function(form) {
         var me = this;
+
         if(me.shopStore.isLoading()) {
-            return Ext.Function.createDelayed(me.initForm, 100, me, [form]);
+            Ext.defer(me.initForm, 100, me, [ form ]);
+            return false;
         }
+
         var win = me.mainWindow,
             panel = win.contentPanel,
             formPanel,
