@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             title:'{s name=detail/base/title_new}Head data{/s}',
             number: '{s name=detail/base/number}Article number{/s}',
             active: '{s name=detail/base/active}Active{/s}',
-            activeBox: '{s name=detail/base/active_box_2}Product can be purchases{/s}',
+            activeBox: '{s name=detail/base/active_box}Product can be purchases{/s}',
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
             additionalText: '{s name=detail/base/additional_text}Additional text{/s}'
         },
