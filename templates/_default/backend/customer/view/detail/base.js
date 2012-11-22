@@ -208,21 +208,39 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             editable:false,
             anchor:'95%',
             labelWidth:150,
-            minWidth:250
+            minWidth:250,
+            listeners: {
+                // When the selected job changes, validate the mail address again
+                change: function(combo, newValue, oldValue, eOpts) {
+                    var me = this,
+                        fieldSet = me.up('fieldset');
+
+                    fieldSet.customerMail.validationRequestParams = { 'param' : fieldSet.record.get('id'),'subshopId' : newValue};
+
+                    // set oldValue to null in order to force a re-check
+                    // else VType 'remote' will just return "oldValid"
+                    fieldSet.customerMail.oldValue = null;
+                    fieldSet.customerMail.validate();
+                }
+            }
         });
 
-        return [{
-            fieldLabel:me.snippets.email.label,
-            name:'email',
-            allowBlank:false,
-            required:true,
-            enableKeyEvents:true,
-            checkChangeBuffer:700,
-            vtype:'remote',
-            validationUrl: '{url action="validateEmail"}',
-            validationRequestParams:{ 'param' : me.record.get('id'),'subshopId' : me.record.get('shopId')},
-            validationErrorMsg:me.snippets.email.message
-        },
+        me.customerMail = Ext.create('Ext.form.field.Text', {
+                fieldLabel:me.snippets.email.label,
+                labelWidth:150,
+                name:'email',
+                allowBlank:false,
+                required:true,
+                enableKeyEvents:true,
+                checkChangeBuffer:700,
+                vtype:'remote',
+                validationUrl: '{url action="validateEmail"}',
+                validationRequestParams:{ 'param' : me.record.get('id'),'subshopId' : me.record.get('shopId')},
+                validationErrorMsg:me.snippets.email.message
+            });
+
+        return [
+            me.customerMail,
             me.customerGroupCombo,
             me.shopStoreCombo,
         {
