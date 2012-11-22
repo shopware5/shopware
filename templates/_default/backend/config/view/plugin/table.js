@@ -220,7 +220,7 @@ Ext.define('Shopware.apps.Config.view.plugin.Table', {
                     me.fireEvent('editPlugin', me, record);
                 },
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (!record.get('configFormId'))  {
+                    if (!record.get('active') || !record.get('configFormId'))  {
                         return 'x-hidden';
                     }
                 }
