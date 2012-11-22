@@ -138,8 +138,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		'valueField'=>'myId','displayField'=>'displayText',
 		'mode' => 'local',
 		'triggerAction' => 'all',
-		'store' => '
-		new Ext.data.ArrayStore({
+		'store' => 'new Ext.data.ArrayStore({
         id: 0,
         fields: [
             "myId",
@@ -165,8 +164,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		'valueField'=>'myId','displayField'=>'displayText',
 		'mode' => 'local',
 		'triggerAction' => 'all',
-		'store' => '
-		new Ext.data.ArrayStore({
+		'store' => 'new Ext.data.ArrayStore({
         id: 0,
         fields: [
             "myId",
@@ -181,8 +179,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		'valueField'=>'myId','displayField'=>'displayText',
 		'mode' => 'local',
 		'triggerAction' => 'all',
-		'store' => '
-		new Ext.data.ArrayStore({
+		'store' => 'new Ext.data.ArrayStore({
         id: 0,
         fields: [
             "myId",
@@ -196,8 +193,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		'valueField'=>'myId','displayField'=>'displayText',
 		'mode' => 'local',
 		'triggerAction' => 'all',
-		'store' => '
-		new Ext.data.ArrayStore({
+		'store' => 'new Ext.data.ArrayStore({
         id: 0,
         fields: [
             "myId",
@@ -241,8 +237,7 @@ class Shopware_Plugins_Frontend_HeidelPayment_Bootstrap extends Shopware_Compone
 		'valueField'=>'myId','displayField'=>'displayText',
 		'mode' => 'local',
 		'triggerAction' => 'all',
-		'store' => '
-		new Ext.data.ArrayStore({
+		'store' => 'new Ext.data.ArrayStore({
         id: 0,
         fields: [
             "myId",
