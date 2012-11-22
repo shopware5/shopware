@@ -103,6 +103,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 		    WHERE ( a.name LIKE $search
                 OR t.name LIKE $search
                 OR s.name LIKE $search
+                OR d.id IS NOT NULL
             )
         ";
         $sql = Shopware()->Db()->limit($sql, $this->searchLimit);
