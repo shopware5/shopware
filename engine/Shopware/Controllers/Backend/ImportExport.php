@@ -1858,9 +1858,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $categoryModel = new \Shopware\Models\Category\Category();
             $categoryModel->setPrimaryIdentifier($category['categoryID']);
 //            $this->getManager()->persist($categoryModel);
+            $categoryModel->fromArray($updateData);
+        }else{
+            $categoryModel->fromArray($updateData);
+            return $categoryModel;
         }
 
-        $categoryModel->fromArray($updateData);
+
 
         // find a neighbour with less/equal position value
         if($categoryModel->getPosition() > 0) {
@@ -1875,6 +1879,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $categoryRepository->persistAsNextSiblingOf($categoryModel, $previous);
         // Else set current model as first child of its parent
         } else {
+
             /** @var $parent \Shopware\Models\Category\Category */
             $categoryRepository->persistAsFirstChildOf($categoryModel, $parent);
         }
