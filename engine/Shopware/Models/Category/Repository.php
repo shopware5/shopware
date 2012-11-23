@@ -228,7 +228,7 @@ class Repository extends TreeRepository
             ->leftJoin('c.attribute', 'attribute')
             ->where('c.active=1')
             ->addOrderBy('c.left')
-            ->having('articleCount > 0 OR c.external IS NOT NULL');
+            ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
 
         if(isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
