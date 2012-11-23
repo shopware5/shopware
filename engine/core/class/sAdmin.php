@@ -1007,7 +1007,7 @@ class sAdmin
 			if ($edit && (!$p["password"] && !$p["passwordConfirmation"])){
 
 			}else {
-				if (strlen($p["password"]) == 0 || !$p["password"] || !$p["passwordConfirmation"] || (strlen($p["password"])<$this->sSYSTEM->sCONFIG['sMINPASSWORD'])){
+				if (strlen(trim($p["password"])) == 0 || !$p["password"] || !$p["passwordConfirmation"] || (strlen($p["password"])<$this->sSYSTEM->sCONFIG['sMINPASSWORD'])){
 
 					$sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
 
