@@ -69,6 +69,8 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
        { name: 'link', type: 'string' },
        { name: 'icon', type: 'string' },
 
+       { name: 'updateVersion', type: 'string', useNull: true },
+
        { name: 'capabilityUpdate', type: 'boolean' },
        { name: 'capabilityEnable', type: 'boolean' },
        { name: 'capabilityInstall', type: 'boolean' },

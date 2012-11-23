@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
 		edit_plugin: '{s name=manager/grid/edit_plugin}Edit plugin{/s}',
 		install_uninstall_plugin: '{s name=manager/grid/install_uninstall_plugin}Install / uninstall plugin{/s}',
 		delete_plugin: '{s name=manager/grid/delete_plugin}Delete plugin{/s}',
+		update_plugin_info: '{s name=manager/grid/update_plugin_info}Update plugin{/s}',
 		manual_add_plugin: '{s name=manager/grid/manual_add}Add plugin manually{/s}',
 		search: '{s name=manager/grid/search}Search...{/s}',
 		bought: '{s name=manager/grid/bought}Bought{/s}',
@@ -112,7 +113,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
      * Creates the grid column model for the grid panel.
      *
      * @public
-     * @return [array] - computed columns
+     * @return Array - computed columns
      */
     createColumns: function() {
         var me = this;
