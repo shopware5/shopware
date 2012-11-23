@@ -243,7 +243,8 @@ Ext.define('Shopware.form.plugin.Translation',
 
 
         field.getEl().setStyle('position', 'relative');
-        globeIcon.appendTo(field.getEl());
+        console.log(field);
+        globeIcon.insertAfter(field.inputEl);
         me.icons.push(globeIcon);
     },
 
