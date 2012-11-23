@@ -151,7 +151,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $filter = $this->Request()->getParam('filter', null);
 
             if (empty($start) && empty($filter)) {
-                $this->refreshPluginList();
+                try {
+                    $this->refreshPluginList();
+                } catch (Exception $e) {
+
+                }
             }
 
             $plugins = $this->getPlugins($category, $start, $limit, $sort, $filter);
@@ -246,6 +250,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     ->setParameter('pluginManager', 'PluginManager')
                     ->setParameter('storeApi', 'StoreApi');
 
+            
             $plugins = $builder->getQuery()->getArrayResult();
             $plugins = $this->getCommunityStore()->getUpdateablePlugins($plugins);
 
@@ -398,12 +403,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $activated = $plugin->getActive();
             $installed = $plugin->getInstalled();
 
-            if ($plugin->getActive()) {
-                $result = $bootstrap->disable();
-                $plugin->setActive(false);
-                Shopware()->Models()->flush();
-            }
-
             $tmpPath = '/tmp/' . $plugin->getName() . '_BACKUP';
             if (file_exists($tmpPath)) {
                 $this->removeDirectory($tmpPath);
@@ -462,7 +461,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
         return $plugins;
     }
-
 
     public function restorePluginAction()
     {
@@ -546,6 +544,15 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $installed = $this->Request()->getParam('installed', null);
 
         $plugin = $this->getPluginByName($name);
+
+        $bootstrap = $this->getPluginBootstrap($plugin);
+
+        if ($plugin->getActive() && $bootstrap) {
+            $result = $bootstrap->disable();
+            $plugin->setActive(false);
+            Shopware()->Models()->flush();
+        }
+
         $result = $this->savePlugin(
             $plugin->getId(),
             array(
@@ -725,7 +732,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     }
                     $name = $dir->getFilename();
                     $plugin = $collection->get($name);
-                    if ($plugin === null) {
+                
+                    if ($plugin === null ) {
                         $plugin = $collection->initPlugin($name, new Enlight_Config(array(
                             'source' => $source,
                             'path' => $dir->getPathname() . DIRECTORY_SEPARATOR
