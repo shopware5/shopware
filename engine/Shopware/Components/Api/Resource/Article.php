@@ -779,9 +779,53 @@ class Article extends Resource
             if (empty($data['mainDetail']['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['mainDetail']['unitId']));
             }
+        }elseif(!empty($data['mainDetail']['unit'])) {
+            $data['mainDetail']['unit'] = $this->prepareUnitAssociatedData($data['mainDetail']['unit']);
         }
 
         return $data;
+    }
+
+    /**
+     * Find a unit by a given ID. If no ID is passed, find it by name or description
+     * @param $unitData
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return \Shopware\Models\Article\Unit|null
+     */
+    protected function prepareUnitAssociatedData($unitData)
+    {
+        if(empty($unitData)) {
+            return null;
+        }
+
+        /** @var $unit Shopware\Models\Article\Unit */
+        $unit = null;
+        $unitRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Unit');
+
+        if(isset($unitData['id'])) {
+            $unit = $this->getManager()->find('Shopware\Models\Article\Unit', $unitData['id']);
+            if(!$unit) {
+                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
+            }
+        }elseif(isset($unitData['unit'])) {
+            $findBy= array('unit' => $unitData['unit']);
+            $unit = $unitRepository->findOneBy($findBy);
+        }elseif(isset($unitData['name'])) {
+            $findBy= array('name' => $unitData['name']);
+            $unit = $unitRepository->findOneBy($findBy);
+        }
+
+        if(!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
+            $unit = new \Shopware\Models\Article\Unit();
+        }elseif(!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
+            throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+        }
+        $unit->fromArray($unitData);
+
+        Shopware()->Models()->persist($unit);
+        Shopware()->Models()->flush($unit);
+
+        return $unit;
     }
 
     /**
@@ -1324,6 +1368,8 @@ class Article extends Resource
             if (empty($variantData['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $variantData['unitId']));
             }
+        }elseif(!empty($variantData['unit'])) {
+            $variantData['unit'] = $this->prepareUnitAssociatedData($variantData['unit']);
         }
 
         return $variantData;
