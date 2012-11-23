@@ -1167,7 +1167,15 @@ class sArticles
                 $articles[$articleKey]["purchaseunit"] = (float)$articles[$articleKey]["purchaseunit"];
                 $articles[$articleKey]["referenceunit"] = (float)$articles[$articleKey]["referenceunit"];
 
-                $basePrice = str_replace(",",".",$articles[$articleKey]["price"]);
+                // SW-4508 Don't use cheapest price for baseprice calculation
+                $p = Shopware()->Db()->fetchOne(
+                    "SELECT `price` FROM `s_articles_prices` WHERE articledetailsID=? ORDER BY `from` ASC LIMIT 1",
+                    array($articles[$articleKey]["articleDetailsID"])
+                );
+                $p = $this->sCalculatingPrice($p, $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
+
+                $basePrice = str_replace(",",".",$p);
+
                 $basePrice = $basePrice / $articles[$articleKey]["purchaseunit"] * $articles[$articleKey]["referenceunit"];
                 $basePrice = $this->sFormatPrice($basePrice);
                 $articles[$articleKey]["referenceprice"] = $basePrice;
