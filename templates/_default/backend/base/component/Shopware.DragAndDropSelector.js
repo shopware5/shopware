@@ -405,7 +405,7 @@ Ext.define('Shopware.DragAndDropSelector',
      * @return void
      */
     destroy: function() {
-        this.fromStore.destroy();
+        this.fromStore = null;
         Ext.destroyMembers(this, 'fromField', 'toField');
         this.callParent();
     }
