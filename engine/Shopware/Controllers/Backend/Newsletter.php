@@ -129,7 +129,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		
 		echo $body;
 	}
-	
+
 	/**
 	 * Mail action method
 	 * 
@@ -219,20 +219,24 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$mail->clearRecipients();
 			$mail->addTo($user['email']);
             /**
-             * @SW-44 Check if mail-address is valid
+             * SW-44 Check if mail-address is valid
              */
             $validator = new Zend_Validate_EmailAddress();
             if (!$validator->isValid($user['email'])) {
-                continue;
+                echo "Skipped invalid email\n";
+                // SW-4526
+                // Don't `continue` with next iteration without setting user's lastmailing
+                // else the mailing.status will never be set to 2
+                // and sending the mail will block
+            }else{
+                try {
+                    $mail->send();
+                     $counter++;
+                } catch (Exception $e) {
+                    echo $e->getMessage() . "\n";
+                }
             }
 
-			try {
-				$mail->send();
-                $counter++;
-			} catch (Exception $e) {
-				echo $e->getMessage() . "\n";
-			}
-			
 			if(empty($mailingID)) {
 				//echo "Send mail to ".$user['email']."\n";
 				$sql = 'UPDATE s_campaigns_mailaddresses SET lastmailing=? WHERE email=?';
