@@ -227,6 +227,7 @@ class sCategories
             $categories[$category['category']['id']] = array_merge($category['category'], array(
                 'description' => $category['category']['name'],
                 'childrenCount' => $category['childrenCount'],
+                'media' => $category['category']['media'],
                 'articleCount' => $category['articleCount'],
                 'hidetop' => $category['category']['hideTop'],
                 'link' => $category['category']['external'] ? : $url . $category['category']['id'],
@@ -300,7 +301,10 @@ class sCategories
         if (preg_match('#article_listing_([1-4]col).tpl#', $category['template'], $match)) {
             $category['layout'] = $match[1];
         }
-
+//echo "<pre>";
+//print_r($category);
+//echo "</pre>";
+//exit();
         return $category;
     }
 
