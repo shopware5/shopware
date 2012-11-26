@@ -137,7 +137,9 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
             $form->setElement('text', 'server_url', array(
                 'label' => 'Server URL',
                 'value' => 'paymorrow.net',
-                            'scope'=>Shopware_Components_Form::SCOPE_SHOP
+                'attributes' => array(
+                    "uniqueId" => 'server_url'
+                )
             ));
             $form->setElement('button', 'button_2', array(
                 'label' => '<b style="color:red;width: 800px;">'
@@ -146,15 +148,24 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
             ));
             $form->setElement('text', 'merchant_id_sandbox', array(
                 'label' => 'MerchantID Testmodus',
-                'value' => 'shopwaretest'
+                'value' => 'shopware4test',
+                'attributes' => array(
+                    "uniqueId" => 'merchant_id_sandbox'
+                )
             ));
             $form->setElement('text', 'security_code_sandbox', array(
                 'label' => 'Passwort Testmodus',
-                'value' => 'shopwarekey'
+                'value' => 'shopware4key',
+                'attributes' => array(
+                    "uniqueId" => 'security_code_sandbox'
+                )
             ));
             $form->setElement('text', 'server_url_sandbox', array(
                 'label' => 'Server URL Testmodus',
-                'value' => 'test.paymorrow.net'
+                'value' => 'test.paymorrow.net',
+                'attributes' => array(
+                    "uniqueId" => 'server_url_sandbox'
+                )
             ));
             $form->setElement('button', 'button_3', array(
                 'label' => '<b style="color:red;width: 800px;">'
@@ -169,12 +180,18 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
             $form->setElement('text', 'server_path', array(
                 'label' => 'Server Pfad',
                 'value' => '/perth/services/PaymorrowService.Paymorrow',
-                'required' => true
+                'required' => true,
+                'attributes' => array(
+                    "uniqueId" => 'server_path'
+                )
             ));
             $form->setElement('text', 'server_port', array(
                 'label' => 'Server Port',
                 'value' => '443',
-                'required' => true
+                'required' => true,
+                'attributes' => array(
+                    "uniqueId" => 'server_port'
+                )
             ));
             $form->setElement('text', 'basket_min', array(
                 'label' => 'Warenkorb Mindestbetrag f&uuml;r Paymorrow Rechnung in &euro;',
@@ -204,66 +221,43 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
 
             $form->setElement('combo', 'katergorie', array(
                 'label' => 'Kategorie zuweisen',
-                'value' => '28',
-                'scope' => Shopware_Components_Form::SCOPE_SHOP,
-                'attributes' => array(
-                    'valueField' => 'myId',
-                    'displayField' => 'displayText',
-                    'mode' => 'local',
-                    'triggerAction' => 'all',
-                    'store' => '
-                                new Ext.data.ArrayStore({
-                        id: 0,
-                        fields: [
-                            "myId",
-                            "displayText"
-                        ],
-                    data: [ [1, "Accessoires"], [2, "Alcohol"], [3, "Antiques"], [4, "Art"], [5, "Books"], 
-                            [6, "Cameras"], [7, "Caraccessoires"], [8, "Clothing"], [9, "Computergames"], 
-                            [10, "Computers"], [11, "Craft"], [12, "Decoration"], [13, "Diy"], [14, "Electronics"], 
-                            [15, "Ethnic"], [16, "Fashion"], [17, "Flatscreensrt"], [18, "Flowers"], [19, "Food"], 
-                            [20, "Furniture"], [21, "Garden"], [22, "Gifts"], [23, "Health"], [24, "Hobby"], 
-                            [25, "Jewelry"], [26, "Laptops"], [27, "Magazines"], [28, "Misc"], [29, "Movies"], 
-                            [30, "Music"], [31, "Niche"], [32, "Officesupplies"], [33, "OTCDrugs"], [34, "Petsupplies"],
-                            [35, "Photography"], [36, "Prescriptiondrugs"], [37, "religious"], [38, "Shoes"],
-                            [39, "Software"], [40, "Sports"], [41, "Stationary"], [42, "Tickets"], [43, "Tobacco"], 
-                            [44, "Tools"], [44, "Toys"], [44, "Watches"], [44, "Wedding"], [44, "Whiteware"] 
-                      ]
-                    })
-                 '
-                    )));
+                'value' => 'Misc',
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+                'store' => array(
+                    array("Accessoires", "Accessoires"), array("Alcohol", "Alcohol"), array("Antiques", "Antiques"), array("Art", "Art"), array("Books", "Books"),
+                    array("Cameras", "Cameras"), array("Caraccessoires", "Caraccessoires"), array("Clothing", "Clothing"), array("Computergames", "Computergames"),
+                    array("Computers", "Computers"), array("Craft", "Craft"), array("Decoration","Decoration"), array("Diy","Diy"), array("Electronics","Electronics"),
+                    array("Ethnic", "Ethnic"), array("Fashion", "Fashion"), array("Flatscreensrt", "Flatscreensrt"), array("Flowers", "Flowers"), array("Food", "Food"),
+                    array("Furniture", "Furniture"), array("Garden", "Garden"), array("Gifts", "Gifts"), array("Health", "Health"), array("Hobby", "Hobby"),
+                    array("Jewelry", "Jewelry"), array("Laptops", "Laptops"), array("Magazines", "Magazines"), array("Misc", "Misc"), array("Movies", "Movies"),
+                    array("Music", "Music"), array("Niche", "Niche"), array("Officesupplies", "Officesupplies"), array("OTCDrugs", "OTCDrugs"), array("Petsupplies", "Petsupplies"),
+                    array("Photography", "Photography"), array("Prescriptiondrugs", "Prescriptiondrugs"), array("religious", "religious"), array("Shoes", "Shoes"),
+                    array("Software", "Software"), array("Sports", "Sports"), array("Stationary", "Stationary"), array("Tickets", "Tickets"), array("Tobacco", "Tobacco"),
+                    array("Tools", "Tools"), array("Toys", "Toys"), array("Watches", "Watches"), array("Wedding", "Wedding"), array("Whiteware", "Whiteware")
+                )
+            ));
             $form->setElement('button', 'button_5', array(
                 'label' => '<b style="width: 800px;">'
                 . 'Aktivieren Sie hier die Versandarten, die Sie mit Paymorrow anbieten</b>',
                 'value' => ''
             ));
-            $form->setElement('combo', 'versand', array(
+            $form->setElement('select', 'versand', array(
                 'label' => 'Versandart zuweisen',
-                'scope' => Shopware_Components_Form::SCOPE_SHOP,
-                'value' => '13',
-                'attributes' => array(
-                    'valueField' => 'myShippingId',
-                    'displayField' => 'displayTextShipping',
-                    'mode' => 'local',
-                    'triggerAction' => 'all',
-                    'store' => '
-                                new Ext.data.ArrayStore({
-                        id: 0,
-                        fields: [
-                            "myShippingId",
-                            "displayTextShipping"
-                        ],
-                        data: [ [1, "DHL STANDARD"], [2, "DHL EXPRESS"], [3, "DPD STANDARD"], [4, "DPD EXPRESS"], 
-                                [5, "FEDEX STANDARD"], [6, "FEDEX EXPRESS"], [7, "GLS STANDARD"], [8, "GLS EXPRESS"], 
-                                [9, "GO! STANDARD"], [10, "GO! EXPRESS"], [11, "HERMES STANDARD"],[12, "HERMES EXPRESS"], 
-                                [13, "MISC STANDARD"], [14, "MISC EXPRESS"], [15, "TNT STANDARD"], [16, "TNT EXPRESS"], 
-                                [17, "TRANSOFLEX STANDARD"], [18, "TRANSOFLEX EXPRESS"], [19, "UPS STANDARD"], 
-                                [20, "UPS EXPRESS"]
-                          ]
-                        })
-                '
-                    )));
-            $form->save();
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+                'value' => 'MISC STANDARD',
+                'store' => array(
+                    array("DHL STANDARD", "DHL STANDARD"), array("DHL EXPRESS","DHL EXPRESS"),
+                    array("DPD STANDARD","DPD STANDARD"), array("DPD EXPRESS","DPD EXPRESS"),
+                    array("FEDEX STANDARD","FEDEX STANDARD"), array("FEDEX EXPRESS","FEDEX EXPRESS"),
+                    array("GLS STANDARD","GLS STANDARD"), array("GLS EXPRESS","GLS EXPRESS"),
+                    array("GO! STANDARD","GO! STANDARD"), array("GO! EXPRESS","GO! EXPRESS"),
+                    array("HERMES STANDARD","HERMES STANDARD"),array("HERMES EXPRESS","HERMES EXPRESS"),
+                    array("MISC STANDARD","MISC STANDARD"), array("MISC EXPRESS","MISC EXPRESS"),
+                    array("TNT STANDARD","TNT STANDARD"), array("TNT EXPRESS","TNT EXPRESS"),
+                    array("TRANSOFLEX STANDARD","TRANSOFLEX STANDARD"), array("TRANSOFLEX EXPRESS","TRANSOFLEX EXPRESS"),
+                    array("UPS STANDARD","UPS STANDARD"), array("UPS EXPRESS","UPS EXPRESS")
+                )
+            ));
         }
         catch (Exception $e) {
             $this->uninstall();
@@ -669,7 +663,6 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
                         $piPaymorrowUserbirthday = explode("-", $piPaymorrowUserdata["billingaddress"]["birthday"]);
                         $piPaymorrowUserage = piPaymorrowAgeCalculator($piPaymorrowUserbirthday[2], $piPaymorrowUserbirthday[1], $piPaymorrowUserbirthday[0]);
                         if ($piPaymorrowUserage < 18) {
-                            print_r($piPaymorrowUserage);
                             $piPaymorrowView->pi_Paymorrow_paymentWarningText = $piPaymorrowView->pi_Paymorrow_lang['warning']['toyoung'];
                             $piPaymorrowView->sPaymorrowPaymentError = true;
                         }
@@ -710,7 +703,7 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
      *
      * @param Enlight_Event_EventArgs|Enlight_Hook_HookArgs $args
      */
-    public static function onBeforeRenderDocument(Enlight_Hook_HookArgs $args) {
+    public function onBeforeRenderDocument(Enlight_Hook_HookArgs $args) {
         $document = $args->getSubject();
         if ($document->_order->payment['name'] != 'PaymorrowInvoice'
                 && $document->_order->payment['name'] != 'PaymorrowRate'
@@ -760,7 +753,7 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
      * @param Shopware_Components_Cron_CronJob $job
      * @internal param \Enlight_Event_EventArgs $args
      */
-    public static function myPaymorrowCron(Shopware_Components_Cron_CronJob $job) {
+    public function myPaymorrowCron(Shopware_Components_Cron_CronJob $job) {
         try{
             require_once dirname(__FILE__) . '/paymorrow_direct_webservice_client/inc/paymorrow_merchant_portal_api.php';
             $OrdersNotSend = Shopware()->Db()->fetchAll("
@@ -833,13 +826,8 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
         return array(
             'version' => $this->getVersion(),
             'autor' => 'Payintelligent GmbH',
-            'copyright' => 'Copyright (c) 2011, Payintelligent GmbH',
+            'copyright' => 'Copyright (c) 2012, Payintelligent GmbH',
             'label' => 'Paymorrow Payment Module',
-            'source' => 'Community',
-            'description' => '',
-            'changes' => 'Ready for Shopware 3.5.5',
-            'license' => '',
-            'link' => 'http://www.payintelligent.de/',
             'support' => 'http://www.payintelligent.de/'
         );
     }
@@ -850,7 +838,7 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
      * @return String with Plugin Version
      */
     public function getVersion(){
-       return "1.2.1";
+       return "1.2.3";
     }
 
     /**
@@ -870,11 +858,6 @@ class Shopware_Plugins_Frontend_PiPaymorrowPayment_Bootstrap extends Shopware_Co
         $sql = "DELETE FROM s_core_states WHERE description like '%Paymorrow%'";
         Shopware()->Db()->query($sql);
         $sql = "DELETE FROM s_crontab WHERE name like '%Paymorrow%'";
-        Shopware()->Db()->query($sql);
-        $mypluginid = Shopware()->Db()->fetchOne("SELECT id FROM s_core_plugins WHERE name = 'PiPaymorrowPayment' ");
-        $sql = "DELETE FROM s_core_plugin_elements WHERE pluginID = " . (int)$mypluginid . "";
-        Shopware()->Db()->query($sql);
-        $sql = "DELETE FROM s_core_plugin_configs WHERE pluginID = " . (int)$mypluginid . "";
         Shopware()->Db()->query($sql);
         $sql = "DELETE FROM s_core_documents_box WHERE name like '%Paymorrow%'";
         Shopware()->Db()->query($sql);

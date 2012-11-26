@@ -69,6 +69,10 @@ class Shopware_Controllers_Frontend_PiPaymentPaymorrow extends Shopware_Controll
             
             $sql = "SELECT id FROM s_order WHERE ordernumber = ?";
             $orderID = Shopware()->Db()->fetchOne($sql, array($orderNumber));
+			if($piPaymorrowUser["billingaddress"]["stateID"] == '') {
+				$piPaymorrowUser["billingaddress"]["stateID"] = 0;
+				$piPaymorrowUser["shippingaddress"]["stateID"] = 0;
+			}
             Shopware()->Modules()->Order()->sSaveBillingAddress($piPaymorrowUser["billingaddress"], $orderID);
             Shopware()->Modules()->Order()->sSaveShippingAddress($piPaymorrowUser["shippingaddress"], $orderID);
         }
