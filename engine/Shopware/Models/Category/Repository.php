@@ -200,9 +200,6 @@ class Repository extends TreeRepository
                 ->andWhere('c.parentId = ?0')
                 ->setParameter(0, $parentId);
 
-        $builder->leftJoin('c.media', 'media')
-                   ->addSelect('media');
-
         return $builder->getQuery();
     }
 
@@ -282,9 +279,6 @@ class Repository extends TreeRepository
         $builder = $this->getActiveQueryBuilder($customerGroupId)
             ->andWhere('c.id = ?0')
             ->setParameter(0, $id);
-
-        $builder->leftJoin('c.media', 'media')
-            ->addSelect('media');
 
         return $builder->getQuery();
     }
