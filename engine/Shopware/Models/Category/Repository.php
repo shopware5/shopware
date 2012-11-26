@@ -222,9 +222,11 @@ class Repository extends TreeRepository
             ->select(array(
                 'c as category',
                 'attribute',
+                'media',
                 '(c.right - c.left - 1) / 2 as childrenCount',
                 '(' . $articleSelect . ') as articleCount'
             ))
+            ->leftJoin('c.media', 'media')
             ->leftJoin('c.attribute', 'attribute')
             ->where('c.active=1')
             ->addOrderBy('c.left')
