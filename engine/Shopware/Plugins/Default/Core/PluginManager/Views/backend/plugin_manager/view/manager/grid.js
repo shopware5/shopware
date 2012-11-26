@@ -105,6 +105,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
             'editPlugin',
             'manualInstall',
             'selectionChange',
+            'updatePluginInfo',
             'deleteplugin'
         );
     },
@@ -156,7 +157,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         }, {
             xtype: 'actioncolumn',
             header: me.snippets.actions,
-            width: 70,
+            width: 90,
             items: [
         /*{if {acl_is_allowed privilege=update}}*/
 			{
@@ -179,6 +180,9 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 iconCls: 'sprite-minus-circle',
                 tooltip: me.snippets.install_uninstall_plugin,
                 handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                    if (record.get('updateVersion')) {
+                        record.set('version', record.get('updateVersion'));
+                    }
                     me.fireEvent('uninstallInstall', grid, item, eOpts, record);
                 },
 
@@ -205,7 +209,21 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                        return Ext.baseCSSPrefix + 'hidden';
                    }
                }
+            },
+            {
+                iconCls: 'sprite-arrow-circle-135',
+                tooltip: me.snippets.update_plugin_info,
+                handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                    record.set('version', record.get('updateVersion'));
+                    me.fireEvent('updatePluginInfo', record, me.pluginStore);
+                },
+                getClass: function(value, metadata, record, rowIdx) {
+                    if (record.get('updateVersion') == null) {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
+                }
             }
+
         /*{/if}*/]
         }];
     },
