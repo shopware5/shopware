@@ -91,6 +91,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                 'changeCategory': me.onChangeCategory
             },
             'plugin-manager-manager-grid': {
+                'updatePluginInfo' : me.onUpdatePluginInfo,
                 'search': me.onSearchPlugin,
                 'editPlugin': me.onEditPlugin,
                 'edit': me.onAfterCellEditing,
@@ -341,6 +342,23 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             record.set('installed', null);
         }
         me.onInstallPlugin(record, pluginStore);
+    },
+
+    onUpdatePluginInfo: function(record, store) {
+        var me = this;
+        var listing = me.getPluginGrid();
+
+        if (listing) {
+            listing.setLoading(true);
+        }
+        record.save({
+            callback: function(record, operation) {
+                if (listing) {
+                    listing.setLoading(false);
+                }
+                store.sort();
+            }
+        });
     },
 
     /**

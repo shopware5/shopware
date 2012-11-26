@@ -597,9 +597,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 } else {
                     $result = $namespace->uninstallPlugin($bootstrap);
                 }
-            }
-
-            if(!isset($result) || !$plugin->getActive() !== empty($data['active'])) {
+            } else {
                 if (!empty($data['active'])) {
                     $result = $bootstrap->enable();
                 } else {
@@ -611,6 +609,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 }
                 Shopware()->Models()->flush();
             }
+
         } catch (Exception $e) {
             return array(
                 'success' => false,
