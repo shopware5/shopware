@@ -57,6 +57,26 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
         me.callParent(arguments);
     },
 
+    /**
+     * Override the loadRecord method of config-base-detail in order to
+     * and make the default's customer group key "EK" non-editable
+     * @param record
+     */
+    loadRecord: function(record) {
+        var me = this,
+            groupKeyField;
+
+        groupKeyField = me.down('field[name=key]');
+
+        if(record && record.get('id') === 1 && groupKeyField) {
+            groupKeyField.setDisabled(true);
+        }else if(groupKeyField) {
+            groupKeyField.setDisabled(false);
+        }
+
+        me.callOverridden(arguments);
+    },
+
     getItems: function() {
         var me = this;
         return [{
