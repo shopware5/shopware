@@ -91,7 +91,9 @@ class Media extends ModelEntity
      * Contains the default thumbnail sizes which used for backend modules.
      * @var array
      */
-    private $defaultThumbnails = array();
+    private $defaultThumbnails = array(
+        array(140,140)
+    );
 
     /**
      * All known file extensions and the mapped media type
