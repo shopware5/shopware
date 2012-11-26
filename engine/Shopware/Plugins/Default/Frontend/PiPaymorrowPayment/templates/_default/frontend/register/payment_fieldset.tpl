@@ -255,7 +255,7 @@
     {block name='frontend_checkout_payment_fieldset_input_radio'}
         {if ($pi_Paymorrow_no_Paymorrow || $sPaymorrowPaymentError || $sUserData.billingaddress.birthday=="0000-00-00" || !$sUserData['billingaddress']['phone'])&& ($payment_mean.name == "PaymorrowInvoice" || $payment_mean.name == "PaymorrowRate")}
         <div id="pi_Paymorrow_paymentWarning">
-            <center>{$pi_Paymorrow_paymentWarningText}</center>{$sPaymorrowPaymentError}
+            <center>{$pi_Paymorrow_paymentWarningText}</center>
         </div>
         <div class="grid_5 first">
             <input type="radio" name="register[payment]" class="radio" value="{$payment_mean.id}"
