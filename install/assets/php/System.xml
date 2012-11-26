@@ -39,6 +39,9 @@
 	<requirement>
 	 	<name>curl</name><group>extension</group><required>7.0.0</required>
 	</requirement>
+    <requirement>
+        <name>soap</name><group>extension</group><required>1</required>
+    </requirement>
 	<requirement>
 	 	<name>openssl</name><group>extension</group><required>1</required>
 	</requirement>
@@ -73,7 +76,7 @@
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
-	 	<name>memory_limit</name><group>config</group><required>128M</required><error>true</error>
+	 	<name>memory_limit</name><group>config</group><required>128M</required>
 	</requirement>
 	<requirement>
 	 	<name>max_execution_time</name><group>config</group><required>30</required>
