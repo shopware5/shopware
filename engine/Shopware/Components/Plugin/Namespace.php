@@ -279,7 +279,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function installPlugin(Shopware_Components_Plugin_Bootstrap $plugin)
     {
+        $newInfo = $plugin->getInfo();
+        $newInfo = new Enlight_Config($newInfo, true);
+        $plugin->Info()->merge($newInfo);
         $this->registerPlugin($plugin);
+
         $this->setConfig($plugin->getName(), $plugin->Config());
         $id = $this->getPluginId($plugin->getName());
 
