@@ -259,7 +259,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
             ) {
                 $url = sprintf('%s://%s%s%s',
-                    $request->getScheme(),
+                    $request::SCHEME_HTTP, //$request->getScheme(),
                     $request->isSecure() ? $newShop->getSecureHost() : $newShop->getHost(),
                     $request->isSecure() ? $newShop->getSecureBaseUrl() : $newShop->getBaseUrl(),
                     '/' //$request->getPathInfo()
