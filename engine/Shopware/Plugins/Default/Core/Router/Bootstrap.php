@@ -258,11 +258,17 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
                 || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
             ) {
+//                $url = sprintf('%s://%s%s%s',
+//                    $request->getScheme(),
+//                    $request->isSecure() ? $newShop->getSecureHost() : $newShop->getHost(),
+//                    $request->isSecure() ? $newShop->getSecureBaseUrl() : $newShop->getBaseUrl(),
+//                    $request->getPathInfo()
+//                );
                 $url = sprintf('%s://%s%s%s',
-                    $request::SCHEME_HTTP, //$request->getScheme(),
-                    $request->isSecure() ? $newShop->getSecureHost() : $newShop->getHost(),
-                    $request->isSecure() ? $newShop->getSecureBaseUrl() : $newShop->getBaseUrl(),
-                    '/' //$request->getPathInfo()
+                    $request::SCHEME_HTTP,
+                    $newShop->getHost(),
+                    $newShop->getBaseUrl(),
+                    '/'
                 );
                 $response->setRedirect($url);
                 return;
