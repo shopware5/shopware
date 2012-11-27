@@ -329,6 +329,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         // Save upgrades
         $shop->registerResources($bootstrap);
+
+        if($request->isSecure()) {
+            $template = $bootstrap->getResource('Template');
+            $template->setCompileId($template->getCompileId() . '_secure');
+        }
     }
 
     /**
