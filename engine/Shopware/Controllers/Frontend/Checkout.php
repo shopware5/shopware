@@ -37,25 +37,25 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 {
 	/**
 	 * Reference to sAdmin object (core/class/sAdmin.php)
-	 * 
+	 *
 	 * @var sAdmin
 	 */
 	protected $admin;
-	
+
 	/**
 	 * Reference to sBasket object (core/class/sBasket.php)
-	 * 
+	 *
 	 * @var sBasket
 	 */
 	protected $basket;
-	
+
 	/**
 	 * Reference to Shopware session object (Shopware()->Session)
-	 * 
+	 *
 	 * @var Zend_Session_Namespace
 	 */
 	protected $session;
-	
+
 	/**
 	 * Init method that get called automatically
 	 *
@@ -89,7 +89,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $amount = $this->basket->sGetAmount();
         $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
     }
-		
+
 	/**
 	 * Forward to cart or confirm action depending on user state
 	 */
@@ -101,7 +101,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 			$this->forward('confirm');
 		}
 	}
-	
+
 	/**
 	 * Read all data from objects / models that are required in cart view
 	 * (User-Data / Payment-Data / Basket-Data etc.)
@@ -117,7 +117,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
          $this->View()->sState = $this->getSelectedState();
 
          $this->View()->sUserData = $this->getUserData();
-
          $this->View()->sBasket = $this->getBasket();
 
          $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
@@ -135,7 +134,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
          $this->View()->sTargetAction = 'cart';
      }
-	
+
 	/**
 	 * Mostly equivalent to cartAction
 	 * Get user- basket- and payment-data for view assignment
@@ -170,22 +169,22 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
 		$this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
 		$this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
-		
+
 		$this->View()->sPremiums = $this->getPremiums();
-		
+
 		$this->View()->sNewsletter = isset($this->session['sNewsletter']) ? $this->session['sNewsletter'] : null;
 		$this->View()->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : null;
-		
+
 		$this->View()->sShowEsdNote = $this->getEsdNote();
 		$this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
 		$this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
 
 		$this->saveTemporaryOrder();
-		
+
 		if($this->getMinimumCharge()) {
 			return $this->forward('cart');
 		}
-		
+
 		$this->session['sOrderVariables'] = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
 
         $agbChecked = $this->Request()->getParam('sAGB');
@@ -195,7 +194,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
 		$this->View()->sTargetAction = 'confirm';
 	}
-	
+
 	/**
 	 * Called from confirmAction View
 	 * Customers requests to finish current order
@@ -219,16 +218,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 				return;
 			}
 		}
-		
+
 		if(empty($this->session['sOrderVariables'])||$this->getMinimumCharge()||$this->getEsdNote()||$this->getDispatchNoOrder()) {
 			return $this->forward('confirm');
 		}
-		
+
 		$checkQuantities = $this->basket->sCheckBasketQuantities();
 		if (!empty($checkQuantities['hideBasket'])){
 			return $this->forward('confirm');
 		}
-		
+
 		$this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
 
 		if ($this->basket->sCountBasket()>0
@@ -247,58 +246,58 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 				$this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
 			}
             $this->saveOrder();
-			
+
 			if(!empty(Shopware()->Config()->DeleteCacheAfterOrder)) {
 				Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Shopware_Adodb'));
 			}
 		}
-		
+
 		$this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
 	}
-	
+
 	/**
 	 * If any external payment mean chooses by customer
 	 * Forward to payment page after order submitting
 	 */
 	public function paymentAction()
 	{
-		if(empty($this->session['sOrderVariables']) 
+		if(empty($this->session['sOrderVariables'])
 		  || $this->getMinimumCharge()
 		  || $this->getEsdNote()
 		  || $this->getDispatchNoOrder()) {
 			return $this->forward('confirm');
 		}
-		
+
 		if($this->Request()->getParam('sNewsletter')!==null) {
 			$this->session['sNewsletter'] = $this->Request()->getParam('sNewsletter') ? true : false;
 		}
 		if($this->Request()->getParam('sComment')!==null) {
 			$this->session['sComment'] = trim(strip_tags($this->Request()->getParam('sComment')));
 		}
-		
+
 		if (!Shopware()->Config()->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
 			$this->View()->sAGBError = true;
 			return $this->forward('confirm');
 		}
-		
+
 		$this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
 		$this->View()->sAGBError = false;
-		
+
 		if(empty($this->View()->sPayment['embediframe'])
 		  && empty($this->View()->sPayment['action'])) {
 			return $this->forward('confirm');
 		}
-		
+
 		if(!empty($this->session['sNewsletter'])) {
 			$this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
 		}
-		
+
 		if(!empty($this->View()->sPayment['embediframe'])) {
 			$embedded = $this->View()->sPayment['embediframe'];
 			$embedded = preg_replace('#^[./]+#', '', $embedded);
 			$embedded .= '?sCoreId='.Shopware()->SessionID();
 			$embedded .= '&sAGB=1';
-			
+
 			$this->View()->sEmbedded = $embedded;
 		} else {
 			$action = explode('/', $this->View()->sPayment['action']);
@@ -309,7 +308,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 			));
 		}
 	}
-	
+
 	/**
 	 * Add an article to cart directly from cart / confirm view
 	 * @param sAdd = ordernumber
@@ -320,7 +319,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$ordernumber = $this->Request()->getParam('sAdd');
 		$quantity = $this->Request()->getParam('sQuantity');
 		$articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
-		
+
 		$this->View()->sBasketInfo = $this->getInstockInfo($ordernumber, $quantity);
 
 		if(!empty($articleID))
@@ -339,7 +338,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 					}
 				}
 			}
-			
+
 			$this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
 			$this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
 		}
@@ -355,7 +354,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 			$this->forward($this->Request()->getParam('sTargetAction', 'index'));
 		}
 	}
-	
+
 	/**
 	 * Add more then one article directly from cart / confirm view
 	 * @param sAddAccessories = List of article ordernumbers separated by ;
@@ -368,7 +367,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		if(is_string($accessories)) {
 			$accessories = explode(';', $accessories);
 		}
-		
+
 		if(!empty($accessories)&&is_array($accessories)) {
 			foreach ($accessories as $key => $accessory) {
 				try {
@@ -379,14 +378,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 					}
 					$this->basket->sAddArticle($accessory, $quantity);
 				} catch (Exception $e) {
-					
+
 				}
 			}
 		}
-		
+
 		$this->forward($this->Request()->getParam('sTargetAction', 'index'));
 	}
-	
+
 	/**
 	 * Delete an article from cart -
 	 * @param sDelete = id from s_basket identifying the product to delete
@@ -400,7 +399,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		$this->forward($this->Request()->getParam('sTargetAction', 'index'));
 	}
-	
+
 	/**
 	 * Change quantity of a certain product
 	 * @param sArticle = The article to update
@@ -415,10 +414,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		$this->forward($this->Request()->getParam('sTargetAction', 'index'));
 	}
-	
+
 	/**
 	 * Add voucher to cart
-	 * 
+	 *
 	 * At failure view variable sVoucherError will give further information
 	 * At success return to cart / confirm view
 	 */
@@ -483,7 +482,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
 		$this->forward($this->Request()->getParam('sTargetAction', 'index'));
 	}
-	
+
 	/**
 	 * Get complete user-data as an array to use in view
 	 *
@@ -526,7 +525,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         return $userData;
     }
-	
+
 	/**
 	 * Create temporary order in s_order_basket on confirm page
 	 * Used to track failed / aborted orders
@@ -534,7 +533,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	public function saveTemporaryOrder()
 	{
 		$order = Shopware()->Modules()->Order();
-		
+
 		$order->sUserData = $this->View()->sUserData;
 		$order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
 		$order->sBasketData = $this->View()->sBasket;
@@ -547,11 +546,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$order->bookingId = Shopware()->System()->_POST['sBooking'];
 		$order->dispatchId = $this->session['sDispatch'];
 		$order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
-		
+
 		$order->sDeleteTemporaryOrder();	// Delete previous temporary orders
 		$order->sCreateTemporaryOrder();	// Create new temporary order
 	}
-	
+
 	/**
      * Finish order - set some object properties to do this
      */
@@ -584,15 +583,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	 * @return unknown
 	 */
 	public function getInstockInfo($ordernumber, $quantity)
-	{		
+	{
 		if(empty($ordernumber))	{
 			return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutSelectVariant', 'Please select an option to place the required product in the cart', true);
 		}
-		
+
 		$quantity = max(1, (int) $quantity);
 		$instock = $this->getAvailableStock($ordernumber);
 		$instock['quantity'] += $quantity;
-						
+
 		if(empty($instock['articleID'])) {
 			return  Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNotFound', 'Product could not be found.', true);
 		}
@@ -607,7 +606,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get current stock from a certain product defined by $ordernumber
 	 * Support for multidimensional variants
@@ -639,7 +638,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		));
 		return $row;
 	}
-	
+
 	/**
 	 * Get Shippingcosts as an array (brutto / netto) depending on selected country / payment
 	 *
@@ -653,7 +652,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$shippingcosts = $this->admin->sGetShippingcosts($country, $payment['surcharge'], $payment['surchargestring']);
 		return empty($shippingcosts) ? array('brutto'=>0, 'netto'=>0) : $shippingcosts;
 	}
-	
+
 	/**
 	 * Return complete basket data to view
 	 * Basket items / Shippingcosts / Amounts / Tax-Rates
@@ -777,7 +776,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
 		return $result;
 	}
-	
+
 	/**
 	 * Get similar shown products to display in ajax add dialog
 	 *
@@ -789,7 +788,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
 
 		$similarId = Shopware()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
-				
+
 		$similars = array();
 		if(!empty($similarId))
 		foreach ($similarId as $similarID){
@@ -800,7 +799,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		return $similars;
 	}
-	
+
 	/**
 	 * Get articles that bought in combination with last added product to
 	 * display on cart page
@@ -811,7 +810,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	public function getBoughtToo($articleID)
 	{
 		Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
-		
+
 		$alsoBoughtId = Shopware()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
 		$alsoBoughts = array();
 		if(!empty($alsoBoughtId))
@@ -823,7 +822,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		return $alsoBoughts;
 	}
-	
+
 	/**
 	 * Get configured minimum charge to check in order processing
 	 *
@@ -833,7 +832,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	{
 		return $this->basket->sCheckMinimumCharge();
 	}
-	
+
 	/**
 	 * Check if order is possible under current conditions (dispatch)
 	 *
@@ -843,7 +842,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         return !empty(Shopware()->Config()->PremiumShippingNoOrder) && (empty($this->session['sDispatch']) || empty($this->session['sCountry']));
     }
-	
+
 	/**
 	 * Get all premium products that are configured and available for this order
 	 *
@@ -856,7 +855,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		if(!empty($result)) return array();
 		return Shopware()->Modules()->Marketing()->sGetPremiums();
 	}
-	
+
 	/**
 	 * Check if any electronically distribution product is in basket
 	 *
@@ -867,7 +866,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$payment = empty($this->View()->sUserData['additional']['payment']) ? $this->session['sOrderVariables']['sUserData']['additional']['payment'] : $this->View()->sUserData['additional']['payment'];
 		return $this->basket->sCheckForESD() && !$payment['esdactive'];
 	}
-	
+
 	/**
 	 * Check if a custom inquiry possibility should displayed on cart page
 	 * Compare configured inquirevalue with current amount
@@ -892,7 +891,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get link to inquiry form if getInquiry returend true
 	 *
@@ -902,7 +901,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	{
 		return Shopware()->Config()->get('sBASEFILE').'?sViewport=support&sFid='.Shopware()->Config()->get('sINQUIRYID').'&sInquiry=basket';
 	}
-	
+
 	/**
 	 * Get all countries from database via sAdmin object
 	 *
@@ -912,7 +911,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	{
 		return $this->admin->sGetCountryList();
 	}
-	
+
 	/**
 	 * Get all dispatches available in selected country from sAdmin object
 	 *
@@ -926,7 +925,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		}
 		return $this->admin->sGetDispatches($country['id']);
 	}
-	
+
 	/**
 	 * Returns all available payment methods from sAdmin object
 	 *
@@ -936,7 +935,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	{
 		return $this->admin->sGetPaymentMeans();
 	}
-	
+
 	/**
 	 * Get current selected country - if no country is selected, choose first one from list
 	 * of available countries
@@ -977,7 +976,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
         return array("id" => $this->session['sState']);
     }
-	
+
 	/**
 	 * Get selected payment or do payment mean selection automatically
 	 *
@@ -1008,7 +1007,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$this->session['sPaymentID'] = (int) $payment['id'];
 		return $payment;
 	}
-	
+
 	/**
 	 * Get selected dispatch or select a default dispatch
 	 *
@@ -1038,26 +1037,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     /**
 	 * Ajax add article action
-	 * 
+	 *
 	 * Loads the ajax padding plugin.
 	 */
 	public function ajaxAddArticleAction()
 	{
 		Enlight()->Plugins()->Controller()->Json()->setPadding();
 	}
-	
+
 	/**
 	 * Ajax cart action
-	 * 
+	 *
 	 * Loads the cart in order to send via ajax.
 	 */
 	public function ajaxCartAction()
 	{
 		Enlight()->Plugins()->Controller()->Json()->setPadding();
-		
+
 		//$this->View()->sUserData = $this->getUserData();
 		$this->View()->sBasket = $this->getBasket();
-		
+
 		$this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
 		$this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
 		$this->View()->sAmount = $this->View()->sBasket['sAmount'];
@@ -1065,7 +1064,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 		$this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
 		$this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
 	}
-	
+
 	/**
 	 * Get current amount from cart via ajax to display in realtime
 	 */
