@@ -28,3 +28,10 @@
 .slider-manufacturer .sliding_container .slide .inner-slide { height: 100% }
 .slider-manufacturer .sliding_container .supplier a { display: block }
 .slider-manufacturer .sliding_container .supplier span { display: inline-block }
+
+#basket .actions { position: relative !important; height: 40px }
+#basket .actions a { float: none !important; position: static !important }
+
+#basket .basket_bottom_paypal { float: none }
+#basket .actions a.button-right,
+#basket .basket_bottom_paypal { position: absolute !important; top: 0px !important; right: 0 !important; }
