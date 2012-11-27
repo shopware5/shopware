@@ -121,12 +121,19 @@ class Shopware_Install_Database
             $sql = "SHOW VARIABLES LIKE 'have_innodb';";
             $result = $this->database->query($sql)->fetchColumn(1);
             if($result != 'YES') {
-                $this->setError("Database-Error!: MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.<br/>");
+                $this->setError("Database-Error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
             }
         } catch(PDOException $e) { }
 
-        // 5.1.0
+        try {
+            $sql = "SELECT @@SESSION.sql_mode;";
+            $result = $this->database->query($sql)->fetchColumn(0);
+            if(strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+                $this->setError("Database-Error!: The MySQL strict mode is active. Please consult your hosting provider to solve this problem.<br/>");
+                return false;
+            }
+        } catch(PDOException $e) { }
 
         return true;
     }
