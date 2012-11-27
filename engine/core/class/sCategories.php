@@ -301,10 +301,7 @@ class sCategories
         if (preg_match('#article_listing_([1-4]col).tpl#', $category['template'], $match)) {
             $category['layout'] = $match[1];
         }
-//echo "<pre>";
-//print_r($category);
-//echo "</pre>";
-//exit();
+
         return $category;
     }
 
