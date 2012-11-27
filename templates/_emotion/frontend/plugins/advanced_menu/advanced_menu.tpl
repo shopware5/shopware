@@ -12,12 +12,12 @@
 {/function}
 
 <div id="mainNavigation">
-    <li class="{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
-        <a href="{url controller='index'}" title="{s name='IndexLinkHome'}{/s}" class="first{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
-            {se name='IndexLinkHome'}Home{/se}
-        </a>
-    </li>
 	<ul>
+        <li class="{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
+            <a href="{url controller='index'}" title="{s name='IndexLinkHome'}{/s}" class="first{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
+                {se name='IndexLinkHome'}Home{/se}
+            </a>
+        </li>
 	    {foreach from=$sAdvancedMenu item=sCategory}
             {if !$sCategory.hidetop}
 			<li class="{if !empty($sCategory.flag)}active{/if}{if $sCategory.sub} dropactive{/if}">
