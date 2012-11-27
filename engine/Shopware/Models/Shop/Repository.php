@@ -357,9 +357,12 @@ class Repository extends ModelRepository
             $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
             $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());
             $baseUrl = $shop->getSecureBasePath();
-            if($shop->getBaseUrl() != $shop->getBasePath()
-                && strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
-                $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
+            if($shop->getBaseUrl() != $shop->getBasePath()) {
+                if(!$shop->getBasePath()) {
+                    $baseUrl .= $shop->getBaseUrl();
+                } elseif(strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
+                    $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
+                }
             }
             $shop->setSecureBaseUrl($baseUrl);
         }
