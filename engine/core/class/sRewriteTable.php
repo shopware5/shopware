@@ -169,8 +169,19 @@ class sRewriteTable
         $sql = "
 			DELETE ru FROM s_core_rewrite_urls ru
 			LEFT JOIN s_categories c
+			ON c.id = REPLACE(ru.org_path, 'sViewport=blog&sCategory=', '')
+			AND c.blog = 1
+			WHERE ru.org_path LIKE 'sViewport=blog&sCategory=%'
+			AND c.id IS NULL
+		";
+        $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+
+        $sql = "
+			DELETE ru FROM s_core_rewrite_urls ru
+			LEFT JOIN s_categories c
 			ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
-			AND (c.external = '' OR c.external IS NULL OR c.blog = 1)
+			AND (c.external = '' OR c.external IS NULL)
+			AND c.blog = 0
 			WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
 			AND c.id IS NULL
 		";
@@ -409,7 +420,7 @@ class sRewriteTable
             return false;
         }
         $sql_rewrite = 'UPDATE s_core_rewrite_urls SET main=0 WHERE org_path=? AND path!=? AND subshopID=?';
-        $this->sSYSTEM->sDB_CONNECTION->Execute($sql_rewrite, array($org_path, $path, $this->sSYSTEM->sSubShop['id']));
+        $this->sSYSTEM->sDB_CONNECTION->Execute($sql_rewrite, array($org_path, $path, Shopware()->Shop()->getId()));
         $sql_rewrite = '
 			INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
 			VALUES (?, ?, 1, ?)
