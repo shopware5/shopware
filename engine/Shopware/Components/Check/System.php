@@ -193,7 +193,22 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return phpversion();
 		}
 	}
-	
+
+    public function checkMysqlStrictMode()
+    {
+        try {
+            $sql = "SELECT @@SESSION.sql_mode;";
+            $result = Shopware()->Db()->query($sql)->fetchColumn(0);
+            if(strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+                return true;
+            }
+        } catch(PDOException $e) {
+            return true;
+        }
+
+        return false;
+    }
+
 	/**
      * Checks the mysql version
      *
