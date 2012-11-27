@@ -341,6 +341,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     {
         $bootstrap = $this->Application()->Bootstrap();
 
+        if(!$bootstrap->hasResource('Shop')) {
+            return;
+        }
+
         /** @var $shop \Shopware\Models\Shop\Shop */
         $this->shop = $shop = $bootstrap->getResource('Shop');
         $this->secure = $shop->getSecure();
