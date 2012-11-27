@@ -316,7 +316,7 @@ class Repository extends TreeRepository
      */
     public  function getActiveArticleIdByCategoryId($category)
     {
-        if (!is_object($category)) {
+        if ($category !== null && !$category instanceof Category) {
             $category = $this->find($category);
         }
         if($category === null) {
