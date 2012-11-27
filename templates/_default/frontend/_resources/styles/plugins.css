@@ -702,6 +702,19 @@ a.searchthumb {
 #content #left .filter_search .searchbox li { display: block; height: auto }
 #content #left .filter_search .searchbox li.head { height: auto; border-top: 1px solid #DFDFDF }
 
+#basket .actions { position: relative }
+#basket .actions a.button-right { top: 0 }
+.basket_bottom_paypal {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+#basket .actions .button-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 /*	IPAD RELATED STYLES
 	------------------------ */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
