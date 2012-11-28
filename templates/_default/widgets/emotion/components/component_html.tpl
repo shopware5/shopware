@@ -1,6 +1,6 @@
 <div class="html-text-inner-element">
 <div class="inner">
-    {if $Data.cms_title}
+    {if $Data.text}
         <h2 class="headline">{$Data.cms_title}</h2>
 
         <div class="text">
