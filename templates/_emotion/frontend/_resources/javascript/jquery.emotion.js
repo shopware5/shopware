@@ -113,7 +113,21 @@
 	        	$('div#searchresults').slideUp();
 	        });
         }
-        
+
+        /** Set overflow:scroll feature and set .text height **/
+        $('.html-text-inner-element').each(function(){
+            var $this = $(this),
+                $innerEl = $this.find('.text'),
+                $offset = $innerEl.offset().top - $this.offset().top + 20;
+
+            if($this.height() < $innerEl.height()) {
+                $innerEl.css('overflow-y', 'scroll');
+                $innerEl.css('height', $this.height() - $offset + 'px');
+            }
+        });
+
+
+
         /** Auto suggestion on iOS devices */
         if($.isiPad()) {
 	       	$('input#searchfield, .register input[type=text]').attr({
