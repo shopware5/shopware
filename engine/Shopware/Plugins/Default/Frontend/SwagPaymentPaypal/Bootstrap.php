@@ -57,13 +57,14 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
 
         try {
             $this->Application()->Models()->addAttribute(
-                's_user_attributes',
-                'swag_payal',
-                'billing_agreement_id',
-                'VARCHAR(255)'
+                's_order_attributes', 'swag_payal',
+                'billing_agreement_id', 'VARCHAR(255)'
             );
-            $this->Application()->Models()->generateAttributeModels(array('s_user_attributes'));
         } catch(Exception $e) { }
+
+        $this->Application()->Models()->generateAttributeModels(array(
+            's_order_attributes'
+        ));
 
         return true;
     }
@@ -75,21 +76,47 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
     {
         try {
             $this->Application()->Models()->removeAttribute(
-                's_user_attributes',
+                's_order_attributes',
                 'swag_payal',
                 'billing_agreement_id'
             );
-            $this->Application()->Models()->generateAttributeModels(array('s_user_attributes'));
+            $this->Application()->Models()->generateAttributeModels(array(
+                's_order_attributes'
+            ));
         } catch(Exception $e) { }
 
         return true;
     }
 
     /**
+     * @param string $version
      * @return bool
      */
     public function update($version)
     {
+        if(strpos($version, '2.0.') === 0) {
+            try {
+                $this->Application()->Models()->removeAttribute(
+                    's_user_attributes',
+                    'swag_payal',
+                    'billing_agreement_id'
+                );
+            } catch(Exception $e) { }
+            try {
+                $this->Application()->Models()->addAttribute(
+                    's_order_attributes', 'swag_payal',
+                    'billing_agreement_id', 'VARCHAR(255)'
+                );
+            } catch(Exception $e) { }
+
+            $this->Application()->Models()->generateAttributeModels(array(
+                's_order_attributes', 's_user_attributes'
+            ));
+
+            //Remove old element
+            $element = $this->Form()->getElement('paypalAllowGuestCheckout');
+            $this->Form()->getElements()->removeElement($element);
+        }
         //Update form
         $this->createMyForm();
         return true;
@@ -125,9 +152,6 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
     {
         $payment = $this->Payment();
         $payment->setActive(true);
-//       if (!empty($this->Config()->checkoutLogoId)) {
-//           $payment->setAdditionalDescription()
-//       }
         return true;
     }
 
@@ -278,7 +302,6 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
 
-
         // Payment settings
         $form->setElement('boolean', 'paypalPaymentActionPending', array(
             'label' => 'Zahlungen nur autorisieren (Auth-Capture)',
@@ -295,11 +318,6 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             'value' => true,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
-        //$form->setElement('boolean', 'paypalAllowGuestCheckout', array(
-        //    'label' => 'PayPal-Gast-Konto erlauben',
-        //    'value' => true,
-        //    'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-        //));
         $form->setElement('boolean', 'paypalExpressButton', array(
             'label' => 'Express-Kauf-Button im Warenkorb anzeigen',
             'value' => true,
@@ -338,6 +356,9 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
         ));
     }
 
+    /**
+     *
+     */
     public function createMyTranslations()
     {
         $form = $this->Form();
@@ -356,10 +377,8 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
                 'paypalPaymentActionPending' => 'Only authorize payments (Auth-Capture)',
                 'paypalBillingAgreement' => 'Billing agreement / Activate "Buy it now"',
                 'paypalTransferCart' => 'Transfer basket to PayPal',
-                'paypalAllowGuestCheckout' => 'Allow PayPal guest account',
                 'paypalExpressButton' => 'Show express-purchase button in basket',
                 'paypalExpressButtonLayer' => 'Show express-purchase button in modal box',
-                'paypalAddressOverride' => 'Allow changing shipping address on paypal',
                 'paypalStatusId' => 'Payment state after completing the payment',
                 'paypalPendingStatusId' => 'Payment state after being authorized',
                 'paypalStatusMail' => 'Send mail on payment state change'
@@ -572,7 +591,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
      */
     public function getVersion()
     {
-        return '2.0.8';
+        return '2.1.1';
     }
 
     /**
@@ -583,7 +602,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
         return array(
             'version' => $this->getVersion(),
             'label' => $this->getLabel(),
-            'description' => file_get_contents(dirname(__FILE__) .'/info.txt')
+            'description' => file_get_contents($this->Path() . 'info.txt')
         );
     }
 
@@ -599,7 +618,6 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             'Shopware_Components_Paypal',
             $this->Path() . 'Components/Paypal/'
         );
-
         $client = new Shopware_Components_Paypal_Client($this->Config());
         return $client;
     }
