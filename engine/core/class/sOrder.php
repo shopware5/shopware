@@ -658,7 +658,10 @@ class sOrder
 
 			$this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 			$orderdetailsID = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
-			if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$orderdetailsID){
+
+            $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
+
+            if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$orderdetailsID){
 				mail($this->sSYSTEM->sCONFIG['sMAIL'],"Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]}",$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().$sql);
 				die("Fatal order failure, please try again later, order was not processed");
 			}
@@ -720,7 +723,11 @@ class sOrder
 			}
 
 		} // For every artice in basket
-		Enlight()->Events()->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', array('subject'=>$this,'details'=>$this->sBasketData["content"]));
+
+		Enlight()->Events()->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', array(
+            'subject' => $this,
+            'details' => $this->sBasketData['content'],
+        ));
 
 		// Assign variables
 		foreach ($this->sUserData["billingaddress"] as $key => $value){
