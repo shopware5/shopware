@@ -39,7 +39,14 @@ class sRewriteTable
 {
     public $sSYSTEM;
 
+    /**
+     * @var Enlight_Template_Manager
+     */
     protected $template;
+
+    /**
+     * @var
+     */
     protected $data;
 
     /**
@@ -199,15 +206,16 @@ class sRewriteTable
 
     protected function sCreateRewriteTableStatic()
     {
-        if (!empty($this->sSYSTEM->sCONFIG['sSEOSTATICURLS'])) {
-            $static = array();
-            $urls = $this->template->fetch('string:' . $this->sSYSTEM->sCONFIG['sSEOSTATICURLS'], $this->data);
-            if (!empty($urls))
-                foreach (explode("\n", $urls) as $url) {
-                    list($key, $value) = explode(',', trim($url));
-                    if (empty($key) || empty($value)) continue;
-                    $static[$key] = $value;
-                }
+        if (empty($this->sSYSTEM->sCONFIG['sSEOSTATICURLS'])) {
+            return;
+        }
+        $static = array();
+        $urls = $this->template->fetch('string:' . $this->sSYSTEM->sCONFIG['sSEOSTATICURLS'], $this->data);
+        if (!empty($urls))
+        foreach (explode("\n", $urls) as $url) {
+            list($key, $value) = explode(',', trim($url));
+            if (empty($key) || empty($value)) continue;
+            $static[$key] = $value;
         }
         foreach ($static as $org_path => $name) {
             $path = $this->sCleanupPath($name, false);
@@ -217,7 +225,7 @@ class sRewriteTable
 
     protected function sCreateRewriteTableCategories()
     {
-        if (empty($this->sSYSTEM->sCONFIG['sROUTERCATEGORYTEMPLATE'])) {
+        if (empty(Shopware()->Config()->routerCategoryTemplate)) {
             return;
         }
 
@@ -235,18 +243,18 @@ class sRewriteTable
             ));
         }
 
+        $template = 'string:' . Shopware()->Config()->routerCategoryTemplate;
+        $template = $this->template->createTemplate($template, $this->data);
+
         foreach ($categories as $category) {
             if (!empty($category['external'])) {
                 continue;
             }
 
-            $this->data->assign('sCategory', $category);
-            $path = $this->template->fetch(
-                'string:' . $this->sSYSTEM->sCONFIG['sROUTERCATEGORYTEMPLATE'],
-                $this->data
-            );
-
+            $template->assign('sCategory', $category);
+            $path = $template->fetch();
             $path = $this->sCleanupPath($path, false);
+
             if($category['blog']) {
                 $orgPath = 'sViewport=blog&sCategory=' . $category['id'];
             } else {
@@ -340,7 +348,7 @@ class sRewriteTable
 
         foreach ($blogArticles as $blogArticle) {
             $this->data->assign('blogArticle', $blogArticle);
-            $path = $this->template->fetch('string:' . Shopware()->Config()->routerblogtemplate, $this->data);
+            $path = $this->template->fetch('string:' . Shopware()->Config()->routerBlogTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
 
             $org_path = 'sViewport=blog&sAction=detail&sCategory=' . $blogArticle['categoryId'] . '&blogArticle=' . $blogArticle['id'];
@@ -361,7 +369,7 @@ class sRewriteTable
            $campaign = $campaign[0];
 
            $this->data->assign('campaign', $campaign);
-           $path = $this->template->fetch('string:' . Shopware()->Config()->routercampaigntemplate, $this->data);
+           $path = $this->template->fetch('string:' . Shopware()->Config()->routerCampaignTemplate, $this->data);
            $path = $this->sCleanupPath($path, false);
 
            $org_path = 'sViewport=campaign&sCategory=' . $campaign['categoryId'] . '&emotionId=' . $campaign['id'];
