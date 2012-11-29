@@ -118,7 +118,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The privileges property is the inverse side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Rule", mappedBy="role")
+     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Rule", mappedBy="role", cascade={"remove"})
      *
      * @var $rules \Doctrine\Common\Collections\ArrayCollection
      */
