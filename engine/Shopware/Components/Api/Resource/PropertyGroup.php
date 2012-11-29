@@ -25,14 +25,13 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Property\Group as GroupModel;
-use Shopware\Models\Property\Option as OptionModel;
-use Shopware\Models\Property\Relation as RelationModel;
-use Shopware\Models\Property\Value as ValueModel;
-
 
 /**
  * Property API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class PropertyGroup extends Resource
 {
@@ -191,31 +190,30 @@ class PropertyGroup extends Resource
     private function preparePropertyData($params, $propertyGroup = null)
     {
         // if property group is created, we need to set some default values
-        if(!$propertyGroup) {
-            if(!isset($params['name']) || empty($params['name'])) {
+        if (!$propertyGroup) {
+            if (!isset($params['name']) || empty($params['name'])) {
                 throw new ApiException\CustomValidationException("A name is required");
             }
-            if(!isset($params['position']) || empty($params['position'])) {
+            if (!isset($params['position']) || empty($params['position'])) {
                 // Set position to end
                 // $params['position'] = Shopware()->Db()->fetchOne("SELECT MAX(position)+1 FROM s_filter");
                 // Set position to zero
                 $params['position'] = 0;
             }
-            if(!isset($params['comparable']) || empty($params['comparable'])) {
+            if (!isset($params['comparable']) || empty($params['comparable'])) {
                 // Set comparable
                 $params['comparable'] = 0;
             }
-            if(!isset($params['sortmode']) || empty($params['sortmode'])) {
+            if (!isset($params['sortmode']) || empty($params['sortmode'])) {
                 // Set sortmode
                 $params['sortmode'] = 0;
             }
-        }else{
-            if(isset($params['name']) && empty($params['name'])) {
+        } else {
+            if (isset($params['name']) && empty($params['name'])) {
                 throw new ApiException\CustomValidationException("Name must not be empty");
             }
         }
 
         return $params;
     }
-
 }

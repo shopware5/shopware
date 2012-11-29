@@ -28,6 +28,10 @@ use Shopware\Components\Api\Exception as ApiException;
 
 /**
  * Abstract API Resource Class
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 abstract class Resource
 {

@@ -27,9 +27,12 @@ namespace Shopware\Components\Api\Resource;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Order\Order as OrderModel;
 
-
 /**
  * Order API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Order extends Resource
 {
@@ -71,7 +74,7 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public  function getOneByNumber($number)
+    public function getOneByNumber($number)
     {
         $id = $this->getIdFromNumber($number);
         return $this->getOne($id);

@@ -27,9 +27,12 @@ namespace Shopware\Components\Api\Resource;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Category\Category as CategoryModel;
 
-
 /**
  * Category API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
 {
@@ -194,13 +197,13 @@ class Category extends Resource
 
     private function prepareCategoryData($params, $category = null)
     {
-        if(!isset($params['name'])) {
+        if (!isset($params['name'])) {
             throw new ApiException\CustomValidationException("A name is required");
         }
 
         // in order to have a consistent interface within the REST Api, one might want
         // to set the parent category by using 'parentId' instead of 'parent'
-        if(isset($params['parentId']) && !isset($params['parent'])) {
+        if (isset($params['parentId']) && !isset($params['parent'])) {
             $params['parent'] = $params['parentId'];
         }
 
@@ -213,17 +216,15 @@ class Category extends Resource
             unset($params['parent']);
         }
 
-        if(!empty($params['attribute'])) {
-            foreach($params['attribute'] as $key=>$value) {
-                if(is_numeric($key)) {
+        if (!empty($params['attribute'])) {
+            foreach ($params['attribute'] as $key => $value) {
+                if (is_numeric($key)) {
                     $params['attribute']['attribute'.$key] = $value;
                     unset($params[$key]);
                 }
             }
         }
 
-
         return $params;
     }
-
 }

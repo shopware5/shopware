@@ -27,9 +27,12 @@ namespace Shopware\Components\Api\Resource;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Customer\Customer as CustomerModel;
 
-
 /**
  * Customer API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Customer extends Resource
 {
@@ -48,7 +51,8 @@ class Customer extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function getIdFromNumber($number) {
+    public function getIdFromNumber($number)
+    {
         if (empty($number)) {
             throw new ApiException\ParameterMissingException();
         }
@@ -75,7 +79,8 @@ class Customer extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function getOneByNumber($number) {
+    public function getOneByNumber($number)
+    {
         $id = $this->getIdFromNumber($number);
 
         return $this->getOne($id);
@@ -161,7 +166,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('create');
 
-        if(isset($params['accountmode']) && $params['accountmode'] == 0) {
+        if (isset($params['accountmode']) && $params['accountmode'] == 0) {
             if (isset($params['email']) && !$this->isEmailUnique($params['email'], null, $params['shopId'])) {
                 throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
             }
@@ -286,7 +291,7 @@ class Customer extends Resource
         }
 
         // if accountmode is not set, set it to be a full user account
-        if(!isset($params['accountMode']) || empty($params['accountMode'])){
+        if (!isset($params['accountMode']) || empty($params['accountMode'])) {
             $params['accountMode'] = 0;
         }
 
@@ -337,7 +342,7 @@ class Customer extends Resource
             }
 
             // If accountmode is 1 (no real user account), email is allowed to be non-unique
-            if($customer->getAccountMode() == 1) {
+            if ($customer->getAccountMode() == 1) {
                 return true;
             }
 

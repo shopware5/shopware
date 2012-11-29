@@ -27,9 +27,12 @@ namespace Shopware\Components\Api\Resource;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
 
-
 /**
  * Article API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Article extends Resource
 {
@@ -367,7 +370,7 @@ class Article extends Resource
         $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
-        foreach($details as $detail) {
+        foreach ($details as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
@@ -445,15 +448,15 @@ class Article extends Resource
         // delete old main, if it has no configurator options
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
-        if($oldMainDetail) {
+        if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
-                if(isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])){
+                if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
                     $mainDetailGetsConfigurator = true;
                 }
             }
 
-            if(!$mainDetailGetsConfigurator && count($oldMainDetail->getConfiguratorOptions()) === 0) {
+            if (!$mainDetailGetsConfigurator && count($oldMainDetail->getConfiguratorOptions()) === 0) {
                 Shopware()->Models()->remove($oldMainDetail);
                 $setFirstVariantMain = true;
             }
@@ -465,7 +468,7 @@ class Article extends Resource
             // if the mainDetail was deleted, set the first variant as mainDetail
             // if another variant has set isMain to true, this variant will become
             // a usual variant again
-            if($setFirstVariantMain) {
+            if ($setFirstVariantMain) {
                 $setFirstVariantMain = false;
                 $data['variants']['isMain'] = true;
             }
@@ -556,24 +559,24 @@ class Article extends Resource
                 // Check for old main articles:
                 // If old main article has configurator options, use it as a usual variant
                 // if the old main article does not have any configurator options, delete it
-                if(isset($data['mainDetail'])) {
+                if (isset($data['mainDetail'])) {
                     $oldMain = $data['mainDetail'];
 
 
-                    if($oldMain instanceof \Shopware\Models\Article\Detail) {
+                    if ($oldMain instanceof \Shopware\Models\Article\Detail) {
                         $oldMain->setKind(2);
-                        if($oldMain->getNumber() && $oldMain->getConfiguratorOptions()) {
+                        if ($oldMain->getNumber() && $oldMain->getConfiguratorOptions()) {
                             $variant = $oldMain;
-                        }else{
+                        } else {
                             Shopware()->Models()->remove($oldMain);
                         }
-                    }else{
+                    } else {
                         $oldMain['kind'] = 2;
-                        if(!empty($oldMain['number']) && !empty($oldMain['configuratorOptions'])) {
+                        if (!empty($oldMain['number']) && !empty($oldMain['configuratorOptions'])) {
                             $variant = $oldMain;
-                        }elseif(!empty($oldMain['number'])){
+                        } elseif (!empty($oldMain['number'])) {
                             $oldMain = $this->getDetailRepository()->findOneBy(array('number' => $oldMain['number']));
-                            if($oldMain){
+                            if ($oldMain) {
                                 Shopware()->Models()->remove($oldMain);
                             }
                         }
@@ -673,7 +676,7 @@ class Article extends Resource
             }
 
             $groupData['options'] = $groupOptions;
-            
+
             $group->fromArray($groupData);
             $allGroups[] = $group;
         }
@@ -779,7 +782,7 @@ class Article extends Resource
             if (empty($data['mainDetail']['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['mainDetail']['unitId']));
             }
-        }elseif(!empty($data['mainDetail']['unit'])) {
+        } elseif (!empty($data['mainDetail']['unit'])) {
             $data['mainDetail']['unit'] = $this->prepareUnitAssociatedData($data['mainDetail']['unit']);
         }
 
@@ -794,30 +797,30 @@ class Article extends Resource
      */
     protected function prepareUnitAssociatedData($unitData)
     {
-        if(empty($unitData)) {
+        if (empty($unitData)) {
             return null;
         }
 
-        /** @var $unit Shopware\Models\Article\Unit */
+        /** @var $unit \Shopware\Models\Article\Unit */
         $unit = null;
         $unitRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Unit');
 
-        if(isset($unitData['id'])) {
+        if (isset($unitData['id'])) {
             $unit = $this->getManager()->find('Shopware\Models\Article\Unit', $unitData['id']);
-            if(!$unit) {
+            if (!$unit) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
             }
-        }elseif(isset($unitData['unit'])) {
+        } elseif (isset($unitData['unit'])) {
             $findBy= array('unit' => $unitData['unit']);
             $unit = $unitRepository->findOneBy($findBy);
-        }elseif(isset($unitData['name'])) {
+        } elseif (isset($unitData['name'])) {
             $findBy= array('name' => $unitData['name']);
             $unit = $unitRepository->findOneBy($findBy);
         }
 
-        if(!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
+        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
             $unit = new \Shopware\Models\Article\Unit();
-        }elseif(!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
+        } elseif (!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
             throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
         }
         $unit->fromArray($unitData);
@@ -1116,19 +1119,19 @@ class Article extends Resource
             $option = null;
 
             // Get value by id
-            if(isset($valueData['id'])) {
+            if (isset($valueData['id'])) {
                 $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->find($valueData['id']);
-                if(!$value) {
+                if (!$value) {
                     throw new ApiException\CustomValidationException(sprintf("Property value by id %s not found", $valueData['id']));
                 }
-            // Get / create value by name
-            }elseif(isset($valueData['value'])) {
+                // Get / create value by name
+            } elseif (isset($valueData['value'])) {
                 //get option
-                if(isset($valueData['option'])) {
+                if (isset($valueData['option'])) {
                     // get option by id
-                    if(isset($valueData['option']['id'])) {
+                    if (isset($valueData['option']['id'])) {
                         $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['option']['id']);
-                        if(!$option) {
+                        if (!$option) {
                             throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
                         }
                         $filters = array(
@@ -1138,11 +1141,11 @@ class Article extends Resource
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
                         /** @var \Shopware\Models\Property\Relation $relation  */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
-                        if(!$relation) {
+                        if (!$relation) {
                             $propertyGroup->addOption($option);
                         }
-                    // get/create option depending on associated filtergroups
-                    }elseif(isset($valueData['option']['name'])) {
+                        // get/create option depending on associated filtergroups
+                    } elseif (isset($valueData['option']['name'])) {
                         // if a name is passed and there is a matching option/group relation, get this option
                         // if only a name is passed, create a new option
                         $filters = array(
@@ -1152,20 +1155,20 @@ class Article extends Resource
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
                         /** @var \Shopware\Models\Property\Relation $relation  */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
-                        if(!$relation) {
+                        if (!$relation) {
                             $option = new \Shopware\Models\Property\Option();
                             $propertyGroup->addOption($option);
-                        }else{
+                        } else {
                             $option = $relation->getOption();
                         }
-                    }else{
+                    } else {
                         throw new ApiException\CustomValidationException("A property option need to be given for each property value");
                     }
                     $option->fromArray($valueData['option']);
-                    if($option->isFilterable() === null) {
+                    if ($option->isFilterable() === null) {
                         $option->setFilterable(false);
                     }
-                }else{
+                } else {
                     throw new ApiException\CustomValidationException("A property option need to be given for each property value");
                 }
                 // create the value
@@ -1174,18 +1177,18 @@ class Article extends Resource
                     'value' => $valueData['value'],
                     'optionId' => $option->getId()
                 ));
-                if(!$value) {
+                if (!$value) {
                     $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
                 }
-                if(isset($valueData['position'])) {
+                if (isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
                 }
                 Shopware()->Models()->persist($value);
-            }else{
+            } else {
                 throw new ApiException\CustomValidationException("Name or id for property value required");
             }
             $models[] = $value;
-            }
+        }
 
         $data['propertyValues'] = $models;
         return $data;
@@ -1226,7 +1229,7 @@ class Article extends Resource
                 $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -6));
 
                 $media->setFile($file);
-                if(isset($downloadData['name']) && !empty($downloadData['name'])) {
+                if (isset($downloadData['name']) && !empty($downloadData['name'])) {
                     $media->setDescription($downloadData['name']);
                 } else {
                     $media->setDescription('');
@@ -1291,7 +1294,7 @@ class Article extends Resource
             }
 
             if (isset($imageData['link'])) {
-                $name = pathinfo($imageData['link'],  PATHINFO_FILENAME);
+                $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
                 $path = $this->load($imageData['link'], $name);
 
                 $file = new \Symfony\Component\HttpFoundation\File\File($path);
@@ -1368,7 +1371,7 @@ class Article extends Resource
             if (empty($variantData['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $variantData['unitId']));
             }
-        }elseif(!empty($variantData['unit'])) {
+        } elseif (!empty($variantData['unit'])) {
             $variantData['unit'] = $this->prepareUnitAssociatedData($variantData['unit']);
         }
 
@@ -1419,7 +1422,7 @@ class Article extends Resource
             }
 
             $data = array_intersect_key($translation, array_flip($whitelist));
-            $translationWriter->write($shop->getId(), 'article', $articleId,  $data);
+            $translationWriter->write($shop->getId(), 'article', $articleId, $data);
         }
     }
 
@@ -1430,7 +1433,7 @@ class Article extends Resource
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function load($url, $baseFilename=null)
+    protected function load($url, $baseFilename = null)
     {
         $destPath = Shopware()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
@@ -1450,24 +1453,24 @@ class Article extends Resource
         }
 
         $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/",$urlArray['path']);
+        $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":
             case "https":
             case "file":
                 $counter = 1;
-                if($baseFilename === null) {
+                if ($baseFilename === null) {
                     $filename = md5(uniqid(rand(), true));
-                }else{
+                } else {
                     $filename = $baseFilename;
                 }
 
                 while (file_exists("$destPath/$filename")) {
-                    if($baseFilename) {
+                    if ($baseFilename) {
                         $filename = "$counter-$baseFilename";
                         $counter++;
-                    }else{
+                    } else {
                         $filename = md5(uniqid(rand(), true));
                     }
                 }

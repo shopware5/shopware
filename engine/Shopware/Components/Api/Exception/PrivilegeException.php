@@ -34,6 +34,10 @@ namespace Shopware\Components\Api\Exception;
 
 /**
  * Shopware API Component
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Exception
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class PrivilegeException extends \Enlight_Exception
 {

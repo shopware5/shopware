@@ -26,9 +26,12 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 
-
 /**
  * Media API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Media extends Resource
 {
@@ -198,47 +201,47 @@ class Media extends Resource
     private function prepareMediaData($params, $media = null)
     {
         // in create mode, album is a required param
-        if(!$media && (!isset($params['album']) || empty($params['album']))) {
+        if (!$media && (!isset($params['album']) || empty($params['album']))) {
             throw new ApiException\ParameterMissingException();
         }
-        if(!$media && (!isset($params['file']) || empty($params['file']))) {
+        if (!$media && (!isset($params['file']) || empty($params['file']))) {
             throw new ApiException\ParameterMissingException();
 
         }
-        if(!$media && (!isset($params['description']) || empty($params['description']))){
+        if (!$media && (!isset($params['description']) || empty($params['description']))) {
             throw new ApiException\ParameterMissingException();
         }
-        if(!$media && (!isset($params['userId']) || empty($params['userId']))){
+        if (!$media && (!isset($params['userId']) || empty($params['userId']))) {
             $params['userId'] = 0;
         }
-        if(!$media && (!isset($params['created']) || empty($params['created']))){
+        if (!$media && (!isset($params['created']) || empty($params['created']))) {
             $params['created'] = new \DateTime();
         }
 
 
         // Check / set album
-        if(isset($params['album'])) {
+        if (isset($params['album'])) {
             $album = Shopware()->Models()->find('\Shopware\Models\Media\Album', $params['album']);
-            if(!$album) {
+            if (!$album) {
                 throw new ApiException\CustomValidationException(sprintf("Album by id %s not found", $params['album']));
             }
             $params['album'] = $album;
         }
 
-        if(isset($params['file'])) {
-            if(!file_exists($params['file'])) {
+        if (isset($params['file'])) {
+            if (!file_exists($params['file'])) {
                 try {
-                    $name = pathinfo($params['file'],  PATHINFO_FILENAME);
+                    $name = pathinfo($params['file'], PATHINFO_FILENAME);
                     $path = $this->load($params['file'], $name);
                 } catch (\Exception $e) {
                     throw new \Exception(sprintf("Could not load image %s", $params['file'] ));
                 }
-            }else{
+            } else {
                 $path = $params['file'];
             }
             $params['file'] = new \Symfony\Component\HttpFoundation\File\File($path);
-            if(!isset($params['name'])) {
-                $params['name'] = pathinfo($path,  PATHINFO_FILENAME);
+            if (!isset($params['name'])) {
+                $params['name'] = pathinfo($path, PATHINFO_FILENAME);
             }
         }
 
@@ -255,7 +258,7 @@ class Media extends Resource
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function load($url, $baseFilename=null)
+    protected function load($url, $baseFilename = null)
     {
         $destPath = Shopware()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
@@ -275,23 +278,23 @@ class Media extends Resource
         }
 
         $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/",$urlArray['path']);
+        $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":
             case "file":
                 $counter = 1;
-                if($baseFilename === null) {
+                if ($baseFilename === null) {
                     $filename = md5(uniqid(rand(), true));
-                }else{
+                } else {
                     $filename = $baseFilename;
                 }
 
                 while (file_exists("$destPath/$filename")) {
-                    if($baseFilename) {
+                    if ($baseFilename) {
                         $filename = "$counter-$baseFilename";
                         $counter++;
-                    }else{
+                    } else {
                         $filename = md5(uniqid(rand(), true));
                     }
                 }
@@ -315,5 +318,4 @@ class Media extends Resource
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
         );
     }
-
 }

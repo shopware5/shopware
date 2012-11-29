@@ -26,9 +26,12 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 
-
 /**
- * Shop API Resource
+ * CustomerGroup API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class CustomerGroup extends Resource
 {
@@ -190,17 +193,18 @@ class CustomerGroup extends Resource
      * @param array $discounts
      * @param \Shopware\Models\Customer\Group $group
      */
-    private function saveDiscounts($discounts, $group) {
+    private function saveDiscounts($discounts, $group)
+    {
 
         $oldDiscounts = $group->getDiscounts();
-        foreach($oldDiscounts as $oldDiscount) {
-            if(!in_array($oldDiscount, $discounts)) {
+        foreach ($oldDiscounts as $oldDiscount) {
+            if (!in_array($oldDiscount, $discounts)) {
                 Shopware()->Models()->remove($oldDiscount);
             }
         }
         Shopware()->Models()->flush();
         /** @var \Shopware\Models\Customer\Discount $discount */
-        foreach($discounts as $discount) {
+        foreach ($discounts as $discount) {
             $discount->setGroup($group);
             Shopware()->Models()->persist($discount);
         }
@@ -242,15 +246,15 @@ class CustomerGroup extends Resource
         );
 
         $requiredParams = array('name', 'key', 'tax', 'taxInput', 'mode');
-        foreach($requiredParams as $param){
-            if(!$customerGroup) {
-                if((!isset($params[$param]) || empty($params[$param])) && !array_key_exists($param, $defaults)) {
+        foreach ($requiredParams as $param) {
+            if (!$customerGroup) {
+                if ((!isset($params[$param]) || empty($params[$param])) && !array_key_exists($param, $defaults)) {
                     throw new ApiException\ParameterMissingException($param);
-                }if(array_key_exists($param, $defaults)) {
+                }if (array_key_exists($param, $defaults)) {
                     $params[$param] = $defaults[$param];
                 }
-            }else{
-                if(isset($params[$param]) && empty($params[$param])) {
+            } else {
+                if (isset($params[$param]) && empty($params[$param])) {
                     throw new \Exception('param $param may not be empty');
                 }
             }
@@ -258,14 +262,14 @@ class CustomerGroup extends Resource
 
         $discountRepository = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Discount');
 
-        if(isset($params['discounts'])) {
+        if (isset($params['discounts'])) {
             $discounts = array();
-            foreach($params['discounts'] as $discount) {
+            foreach ($params['discounts'] as $discount) {
                 $discountModel = null;
-                if($customerGroup) {
+                if ($customerGroup) {
                     $discountModel = $discountRepository->findOneBy(array("group"=>$customerGroup, "discount" => $discount['discount'], "value" => $discount['value']));
                 }
-                if($discountModel === null) {
+                if ($discountModel === null) {
                     $discountModel = new \Shopware\Models\Customer\Discount();
                 }
                 $discountModel->setDiscount($discount['discount']);
@@ -276,11 +280,11 @@ class CustomerGroup extends Resource
         }
 
 
-//        if(isset($params['taxId'])) {
+//        if (isset($params['taxId'])) {
 //            $tax = Shopware()->Models()->find('\Shopware\Models\Tax\Tax', $params['taxId']);
-//            if($tax !== null) {
+//            if ($tax !== null) {
 //                $params['tax'] = $tax;
-//            }else{
+//            } else {
 //                throw new \Exception("{$params['taxId']} is not a valid tax id");
 //            }
 //        }
@@ -288,5 +292,4 @@ class CustomerGroup extends Resource
 
         return $params;
     }
-
 }
