@@ -10,7 +10,7 @@
      {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
      {if $sArticle@index%3==0}<tr>{/if}
      <!-- ANFANG Artikel  -->
-       <td height="320" width="180" align="center" valign="top" border="0" cellpadding="0" cellspacing="0" style="border: 1px solid #c6c6c6; padding:0;margin:0; width:180px;">
+       <td height="320" width="180" align="center" valign="top" border="0" cellpadding="0" cellspacing="0" style="border: 1px solid #dfdfdf; padding:0;margin:0; width:180px;">
        
        <!--ARTIKEL CONTENT-->
                                     

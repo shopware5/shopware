@@ -13,7 +13,7 @@
 	    </td>
 	    
 	<tr>
-	<td style="font-size:13px; text-align:left; color:#8c8c8c;margin:0;padding:0;">	<div style="border-bottom:1px solid #C6C6C6; height:6px;line-height:6px;padding:0;margin:0;">&nbsp;</div>
+	<td style="font-size:13px; text-align:left; color:#8c8c8c;margin:0;padding:0;">	<div style="border-bottom:1px solid #dfdfdf; height:6px;line-height:6px;padding:0;margin:0;">&nbsp;</div>
 </td>
 	</tr>
 	    

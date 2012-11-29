@@ -30,7 +30,7 @@
 <table align="center" width="100%" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c;">
 <tr>
 <td>
-<table align="center" width="560" bgcolor="#ffffff" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c; border:1px solid #c6c6c6;">
+<table align="center" width="560" bgcolor="#ffffff" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c; border:1px solid #dfdfdf;">
 <tr>
 <td>
 
