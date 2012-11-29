@@ -1,11 +1,11 @@
 {if !$sCampaignContainer.data.image}
-<table width="560" border="0" cellspacing="10" cellpadding="0" style="color:#494949; line-height:17px; font-size:11px; padding:15px; width:560px; background-color: #fff;border: 1px solid #c6c6c6;">
+<table width="560" border="0" cellspacing="10" cellpadding="0" style="color:#494949; line-height:17px; font-size:13px; padding:15px; width:560px; background-color: #fff;border: 1px solid #c6c6c6;">
   <tr>
     <td>
     <h2 style="color:#000; line-height:20px; font-size:16px; font-weight:bold; padding:0px 0px 0px 0px; margin:0px; text-transform:uppercase;">
     	{include file="string:`$sCampaignContainer.description`"}
     </h2>
-   	{include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:12px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
+   	{include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:13px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
     </td>
   </tr>
 </table>
@@ -25,10 +25,10 @@
 		</td>
 	   <td height="120" valign="top" style="padding:0px;font-size:11px;color:#e14900;">
 	   
-	   <table width="100%" height="100%" border="0" cellspacing="10" cellpadding="0" style="padding:0px;font-size:11px;color:#494949;">
+	   <table width="100%" height="100%" border="0" cellspacing="10" cellpadding="0" style="padding:0px;font-size:13px;color:#494949;">
 	   <tr>
 	   <td>
-	   {include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:12px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
+	   {include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:13px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
 	   </td>
 	   </tr>
 	   </table>
@@ -40,11 +40,11 @@
 	{else}
 	<table width="560" height="120" border="0" cellspacing="0" cellpadding="0" style=" background-color: #fff;border:1px solid #c6c6c6;">
 	  <tr>
-	    <td height="120" valign="top" style="padding:0px;font-size:11px;color:#494949;">
-	    <table width="100%" height="100%" border="0" cellspacing="10" cellpadding="0" style="padding:0px;font-size:11px;color:#494949;">
+	    <td height="120" valign="top" style="padding:0px;font-size:13px;color:#494949;">
+	    <table width="100%" height="100%" border="0" cellspacing="10" cellpadding="0" style="padding:0px;font-size:13px;color:#494949;">
 	   <tr>
 	   <td>
-	   {include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:12px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
+	   {include file="string:{$sCampaignContainer.data.html|replace:'<h2':'<h2 style="font-size:13px;color:#e14900; text-transform:uppercase;line-height:14px;" '}"}
 	    </td>
 	    </tr>
 	    </table>

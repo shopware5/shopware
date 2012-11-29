@@ -4,19 +4,22 @@
 	<style type="text/css">
 		a:link, a:visited {
 			color:#8c8c8c;
+            font-size:13px;
 			text-decoration:none;
 		}
 		a:hover, a:active {
 			color:#fff;
+            font-size:13px;
 			text-decoration:none;
 		}
 		a:hover {
 			color:#fff;
+            font-size:13px;
 			text-decoration:none;
 		}
 		div#navi_unten a {
 			color:#8c8c8c;
-			font-size: 12px !important;
+			font-size: 13px !important;
 			text-decoration:none;
 		}
 	</style>
@@ -34,19 +37,17 @@
 {include file="newsletter/index/header.tpl"}
 
 {foreach from=$sCampaign.containers item=sCampaignContainer}
-
-{if $sCampaignContainer.type == "ctBanner"}
-	{include file="newsletter/container/banner.tpl"}	
-{elseif $sCampaignContainer.type == "ctText"}	
-	{include file="newsletter/container/text.tpl"}	
-{elseif $sCampaignContainer.type == "ctSuggest"}
-	{include file="newsletter/container/suggest.tpl" sCampaignContainer=$sRecommendations}	
-{else if $sCampaignContainer.type == "ctArticles"}
-	{include file="newsletter/container/article.tpl"}   
-{else if $sCampaignContainer.type == "ctLinks"}
-	{include file="newsletter/container/link.tpl"}
-{/if}
-
+    {if $sCampaignContainer.type == "ctBanner"}
+        {include file="newsletter/container/banner.tpl"}
+    {elseif $sCampaignContainer.type == "ctText"}
+        {include file="newsletter/container/text.tpl"}
+    {elseif $sCampaignContainer.type == "ctSuggest"}
+        {include file="newsletter/container/suggest.tpl" sCampaignContainer=$sRecommendations}
+    {else if $sCampaignContainer.type == "ctArticles"}
+        {include file="newsletter/container/article.tpl"}
+    {else if $sCampaignContainer.type == "ctLinks"}
+        {include file="newsletter/container/link.tpl"}
+    {/if}
 {/foreach}
 
 {include file="newsletter/index/footer.tpl"}
