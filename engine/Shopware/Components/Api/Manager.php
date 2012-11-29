@@ -34,6 +34,10 @@ namespace Shopware\Components\Api;
 
 /**
  * API Manger
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Manager
 {
@@ -41,7 +45,7 @@ class Manager
      * @param $name
      * @return Resource\Resource
      */
-    static public function getResource($name)
+    public static function getResource($name)
     {
         $name = ucfirst($name);
         $class = __NAMESPACE__ . '\\Resource\\' . $name;

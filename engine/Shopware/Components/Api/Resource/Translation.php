@@ -26,9 +26,12 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 
-
 /**
  * Translation API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Translation extends Resource
 {
@@ -41,7 +44,7 @@ class Translation extends Resource
      */
     public function getTranslationComponent()
     {
-        if($this->translationWriter === null) {
+        if ($this->translationWriter === null) {
             $this->translationWriter = new \Shopware_Components_Translation();
         }
         return $this->translationWriter;
@@ -50,7 +53,8 @@ class Translation extends Resource
     /**
      * @param \Shopware_Components_Translation $translationWriter
      */
-    public function setTranslationComponent($translationWriter) {
+    public function setTranslationComponent($translationWriter)
+    {
         $this->translationWriter = $translationWriter;
     }
 
@@ -59,7 +63,8 @@ class Translation extends Resource
      * @param array $translation
      * @return array
      */
-    private function prepareTranslationForOutput($translation) {
+    private function prepareTranslationForOutput($translation)
+    {
         $translation['objectdata'] = unserialize($translation['objectdata']);
         return $translation;
     }
@@ -130,7 +135,12 @@ class Translation extends Resource
         $params = $this->prepareTranslationData($params);
 
         $translationWriter = $this->getTranslationComponent();
-        $translationWriter->write($params['objectlanguage'], $params['objecttype'], $params['objectkey'], $params['objectdata']);
+        $translationWriter->write(
+            $params['objectlanguage'],
+            $params['objecttype'],
+            $params['objectkey'],
+            $params['objectdata']
+        );
 
         $sql  = '
             SELECT `id`
@@ -144,14 +154,14 @@ class Translation extends Resource
             $params['objectkey'],
             $params['objectlanguage']
         ));
-        
-        if($id) {
+
+        if ($id) {
             $translation = $this->getOne($id);
-        }else{
+        } else {
             throw new \Exception("Translation wasn't inserted properly");
         }
 
-        
+
         return $translation;
     }
 
@@ -179,7 +189,12 @@ class Translation extends Resource
         $this->delete($id);
 
         $translationWriter = $this->getTranslationComponent();
-        $translationWriter->write($params['objectlanguage'], $params['objecttype'], $params['objectkey'], $params['objectdata']);
+        $translationWriter->write(
+            $params['objectlanguage'],
+            $params['objecttype'],
+            $params['objectkey'],
+            $params['objectdata']
+        );
 
         $sql  = '
             SELECT `id`
@@ -194,15 +209,13 @@ class Translation extends Resource
             $params['objectlanguage']
         ));
 
-        if($id) {
+        if ($id) {
             $translation = $this->getOne($id);
-        }else{
+        } else {
             throw new \Exception("Translation wasn't inserted properly");
         }
 
-
         return $translation;
-
     }
 
     /**
@@ -234,28 +247,26 @@ class Translation extends Resource
     private function prepareTranslationData($params, $translation = null)
     {
         $requiredParams = array('objecttype', 'objectdata', 'objectkey', 'objectlanguage');
-        foreach($requiredParams as $param){
-            if(!$translation) {
-                if(!isset($params[$param]) || empty($params[$param])) {
+        foreach ($requiredParams as $param) {
+            if (!$translation) {
+                if (!isset($params[$param]) || empty($params[$param])) {
                     throw new ApiException\ParameterMissingException($param);
                 }
-            }else{
-                if(isset($params[$param]) && empty($params[$param])) {
+            } else {
+                if (isset($params[$param]) && empty($params[$param])) {
                     throw new \Exception('param $param may not be empty');
                 }
             }
         }
 
-        if(!is_array($params['objectdata'])) {
+        if (!is_array($params['objectdata'])) {
             throw new \Exception("objectdata needs to be an array");
         }
 
-        if($translation) {
+        if ($translation) {
             $params = array_merge($translation, $params);
         }
 
         return $params;
     }
-
-
 }

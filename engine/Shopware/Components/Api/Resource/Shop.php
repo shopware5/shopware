@@ -26,9 +26,12 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 
-
 /**
  * Shop API Resource
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Api\Resource
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Shop extends Resource
 {
@@ -199,77 +202,77 @@ class Shop extends Resource
     private function prepareShopData($params, $shop = null)
     {
         $requiredParams = array('name', 'localeId', 'currencyId', 'customerGroupId', 'categoryId');
-        foreach($requiredParams as $param){
-            if(!$shop) {
-                if(!isset($params[$param]) || empty($params[$param])) {
+        foreach ($requiredParams as $param) {
+            if (!$shop) {
+                if (!isset($params[$param]) || empty($params[$param])) {
                     throw new ApiException\ParameterMissingException($param);
                 }
-            }else{
-                if(isset($params[$param]) && empty($params[$param])) {
+            } else {
+                if (isset($params[$param]) && empty($params[$param])) {
                     throw new \Exception('param $param may not be empty');
                 }
             }
         }
 
-        if(isset($params['currencyId'])) {
+        if (isset($params['currencyId'])) {
             $currency = Shopware()->Models()->find('\Shopware\Models\Shop\Currency', $params['currencyId']);
-            if($currency !== null) {
+            if ($currency !== null) {
                 $params['currency'] = $currency;
-            }else{
+            } else {
                 throw new \Exception("{$params['currencyId']} is not a valid currency id");
             }
         }
 
-        if(isset($params['localeId'])) {
+        if (isset($params['localeId'])) {
             $locale = Shopware()->Models()->find('\Shopware\Models\Shop\Locale', $params['localeId']);
-            if($locale !== null) {
+            if ($locale !== null) {
                 $params['locale'] = $locale;
-            }else{
+            } else {
                 throw new \Exception("{$params['localeId']} is not a valid locale id");
             }
         }
 
-        if(isset($params['customerGroupId'])) {
+        if (isset($params['customerGroupId'])) {
             $customerGroup = Shopware()->Models()->find('\Shopware\Models\Customer\Group', $params['customerGroupId']);
-            if($customerGroup !== null) {
+            if ($customerGroup !== null) {
                 $params['customerGroup'] = $customerGroup;
-            }else{
+            } else {
                 throw new \Exception("{$params['customerGroupId']} is not a valid customerGroup id");
             }
         }
 
-        if(isset($params['mainId'])) {
+        if (isset($params['mainId'])) {
             $shop = Shopware()->Models()->find('\Shopware\Models\Shop\Shop', $params['mainId']);
-            if($shop !== null) {
+            if ($shop !== null) {
                 $params['main'] = $shop;
-            }else{
+            } else {
                 throw new \Exception("{$params['mainId']} is not a valid shop id");
             }
         }
 
-        if(isset($params['templateId'])) {
+        if (isset($params['templateId'])) {
             $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['templateId']);
-            if($template !== null) {
+            if ($template !== null) {
                 $params['template'] = $template;
-            }else{
+            } else {
                 throw new \Exception("{$params['templateId']} is not a valid template id");
             }
         }
 
-        if(isset($params['documentTemplateId'])) {
+        if (isset($params['documentTemplateId'])) {
             $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['documentTemplateId']);
-            if($template !== null) {
+            if ($template !== null) {
                 $params['documentTemplate'] = $template;
-            }else{
+            } else {
                 throw new \Exception("{$params['documentTemplateId']} is not a valid template id");
             }
         }
 
-        if(isset($params['categoryId'])) {
+        if (isset($params['categoryId'])) {
             $category = Shopware()->Models()->find('\Shopware\Models\Category\Category', $params['categoryId']);
-            if($category !== null) {
+            if ($category !== null) {
                 $params['category'] = $category;
-            }else{
+            } else {
                 throw new \Exception("{$params['categoryId']} is not a valid category id");
             }
         }
@@ -277,5 +280,4 @@ class Shop extends Resource
 
         return $params;
     }
-
 }
