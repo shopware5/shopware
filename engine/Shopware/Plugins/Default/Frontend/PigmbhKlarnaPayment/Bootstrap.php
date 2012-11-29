@@ -239,62 +239,22 @@ class Shopware_Plugins_Frontend_PigmbhKlarnaPayment_Bootstrap extends Shopware_C
                 'value' => ''
             ));
             $piKlarnaForm->setElement('combo', 'showLogos', array(
-                'scope' => Shopware_Components_Form::SCOPE_SHOP,
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
                 'label' => 'Logos anzeigen(Ist eine Zahlungsart deaktiviert, wird diese nicht angezeigt)',
-                'value' => '1',
-                'attributes' => array(
-                    'valueField' => 'myId', 'displayField' => 'displayText',
-                    'mode' => 'local',
-                    'triggerAction' => 'all',
-                    'store' => 'new Ext.data.ArrayStore({
-		                id: 2,
-		                fields: [
-		                   "myId",
-		                   "displayText"
-		                ],
-		                data: [[1, "links"], [2, "rechts"], [3, "nicht anzeigen"]]
-		    	    })'
-                )
+                'value' => 'links',
+                'store' => array(array("links", "links"),array("rechts", "rechts"),array("nicht anzeigen", "nicht anzeigen"))
             ));
             $piKlarnaForm->setElement('combo', 'InvoiceBanner', array(
-                'scope' => Shopware_Components_Form::SCOPE_SHOP,
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
                 'label' => 'Klarna Rechnungskauf Banner anzeigen',
-                'value' => '1',
-                'attributes' => array(
-                    'valueField' => 'myId',
-                    'displayField' => 'displayText',
-                    'uniqueId' => 'InvoiceBanner',
-                    'mode' => 'local',
-                    'triggerAction' => 'all',
-                    'store' => 'new Ext.data.ArrayStore({
-		                id: 0,
-		                fields: [
-		                   "myId",
-		                   "displayText"
-		                ],
-		                data: [[1, "links"], [2, "rechts"], [3, "oben"], [4, "nicht anzeigen"]]
-		    	    })'
-                )
+                'value' => 'links',
+                'store' => array(array("links", "links"),array("rechts", "rechts"),array("oben", "oben"),array("nicht anzeigen", "nicht anzeigen"))
             ));
             $piKlarnaForm->setElement('combo', 'RatepayBanner', array(
-                'scope' => Shopware_Components_Form::SCOPE_SHOP,
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
                 'label' => 'Klarna Ratenkauf Banner anzeigen',
-                'value' => '1',
-                'attributes' => array(
-                    'valueField' => 'myId',
-                    'displayField' => 'displayText',
-                    'uniqueId' => 'RatepayBanner',
-                    'mode' => 'local',
-                    'triggerAction' => 'all',
-                    'store' => 'new Ext.data.ArrayStore({
-		                id: 1,
-		                fields: [
-		                   "myId",
-		                   "displayText"
-		                ],
-		                data: [[1, "links"], [2, "rechts"], [3, "oben"], [4, "nicht anzeigen"]]
-		    	    })'
-                )
+                'value' => 'links',
+                'store' => array(array("links", "links"),array("rechts", "rechts"),array("oben", "oben"),array("nicht anzeigen", "nicht anzeigen"))
             ));
             $piKlarnaForm->setElement('checkbox', 'piKlarnaShowBannerOnStartpage', array(
                 'scope' => Shopware_Components_Form::SCOPE_SHOP,
@@ -344,7 +304,6 @@ class Shopware_Plugins_Frontend_PigmbhKlarnaPayment_Bootstrap extends Shopware_C
                 'label' => 'Warenkorb Maximalbetrag in &euro;',
                 'value' => '1500'
             ));
-            $piKlarnaForm->save();
         }
         catch (Exception $e) {
             throw new Exception('<b>Fehler beim erstellen des Einstellungsformulars(createForm)</b><br />' . $e);
@@ -578,12 +537,7 @@ class Shopware_Plugins_Frontend_PigmbhKlarnaPayment_Bootstrap extends Shopware_C
             $sql = "DELETE FROM s_core_rulesets WHERE paymentID = ? OR paymentID = ? AND(rule2 like 'ORDERVALUELESS' OR rule2 like 'ORDERVALUEMORE')";
             Shopware()->Db()->query($sql, array((int)$piKlarnaRateId,(int)$piKlarnaInvoiceId));
             foreach($piKlarnaConfig as $key => $value) {
-                if ($value['pi_klarna_active'] == false) {
-                    $sql = "Insert into s_core_rulesets (`paymentID`, `rule1`, `value1`, `rule2`, `value2`)
-                            VALUES(?,'SUBSHOP',?,'0',''), (?,'SUBSHOP',?,'0','')";
-                    Shopware()->Db()->query($sql, array((int)$piKlarnaInvoiceId, (int)$key, (int)$piKlarnaRateId, (int)$key));
-                }
-                elseif ($value['pi_klarna_active'] == true) {
+                if ($value['pi_klarna_active'] == true) {
                     $sql ="DELETE FROM s_core_rulesets WHERE paymentID = ? AND rule1 like 'SUBSHOP' AND value1 = ?";
                     Shopware()->Db()->query($sql,array((int)$piKlarnaInvoiceId, (int)$key));
                     Shopware()->Db()->query($sql,array((int)$piKlarnaRateId, (int)$key));
