@@ -281,6 +281,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $newInfo = $plugin->getInfo();
         $newInfo = new Enlight_Config($newInfo, true);
+        unset($newInfo->source);
         $plugin->Info()->merge($newInfo);
         $this->registerPlugin($plugin);
 
@@ -369,6 +370,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $oldVersion = $this->getInfo($name, 'version');
         $newInfo = $plugin->getInfo();
         $newInfo = new Enlight_Config($newInfo, true);
+        unset($newInfo->source);
 
         $result = $plugin->update($oldVersion);
         $success = is_bool($result) ? $result : !empty($result['success']);
