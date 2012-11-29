@@ -152,6 +152,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
 
     onUpdatePlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
         var me = this;
+        var window = me.getMainWindow();
+
+        if (window) {
+            window.setLoading(true);
+        }
 
         Ext.Ajax.request({
             url:'{url controller="PluginManager" action="downloadUpdate"}',
@@ -163,6 +168,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             },
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText);
+
+                if (window) {
+                    window.setLoading(false);
+                }
 
                 if (response.success === true) {
                     if (response.activated) {
