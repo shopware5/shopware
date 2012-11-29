@@ -180,16 +180,34 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         );
         $response = $this->finishCheckout($details);
 
-        if($response['ACK'] != 'Success') {
-            $this->View()->loadTemplate('frontend/payment_paypal/return.tpl');
-            $this->View()->PaypalConfig = $this->Plugin()->Config();
-            $this->View()->PaypalResponse = $response;
+        if($this->Request()->isXmlHttpRequest()) {
+            if($response['ACK'] != 'Success') {
+                $data = array(
+                    'success' => false,
+                    'message' => "[{$response['L_ERRORCODE0']}] - {$response['L_SHORTMESSAGE0']}"
+                );
+            } else {
+                $data = array(
+                    'success' => false,
+                    'data' => array(array(
+                        'orderNumber' => $response['INVNUM'],
+                        'transactionId' => $response['TRANSACTIONID'],
+                    ))
+                );
+            }
+            echo Zend_Json::encode($data);
         } else {
-            $this->redirect(array(
-                'controller' => 'checkout',
-                'action' => 'finish',
-                'sUniqueID' => $response['CUSTOM']
-            ));
+            if($response['ACK'] != 'Success') {
+                $this->View()->loadTemplate('frontend/payment_paypal/return.tpl');
+                $this->View()->PaypalConfig = $this->Plugin()->Config();
+                $this->View()->PaypalResponse = $response;
+            } else {
+                $this->redirect(array(
+                    'controller' => 'checkout',
+                    'action' => 'finish',
+                    'sUniqueID' => $response['CUSTOM']
+                ));
+            }
         }
     }
 
@@ -351,6 +369,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
             $result = $client->doExpressCheckoutPayment($params);
         }
 
+        $result['INVNUM'] = $params['INVNUM'];
         $result['CUSTOM'] = $params['CUSTOM'];
 
         if(!empty($result['BILLINGAGREEMENTID'])) {
@@ -376,7 +395,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         ';
         Shopware()->Db()->query($sql, array(
             $result['TRANSACTIONID'],
-            "{$details['EMAIL']} ({$details['PAYERSTATUS']})\r\n",
+            isset($details['EMAIL']) ? "{$details['EMAIL']} ({$details['PAYERSTATUS']})\r\n" : null,
             isset($details['NOTE']) ? $details['NOTE'] : null,
             $params['CUSTOM'],
             isset($params['TOKEN']) ? $params['TOKEN'] : $params['REFERENCEID']
