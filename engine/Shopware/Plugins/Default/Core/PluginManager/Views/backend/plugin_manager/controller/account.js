@@ -116,6 +116,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
         if (!record || record.get('download').length === 0) {
             return;
         }
+		
+		if(grid) {
+			grid.setLoading(true);
+		}
+		
         Ext.Ajax.request({
             url:'{url controller="Store" action="download"}',
             method: 'POST',
@@ -125,6 +130,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText),
                     message;
+								
+				if(grid) {
+					grid.setLoading(false);
+				}
+					
                 if (response.success) {
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.downloadsuccessful);
                 } else {
