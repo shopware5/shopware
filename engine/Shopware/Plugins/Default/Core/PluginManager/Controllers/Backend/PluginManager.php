@@ -561,6 +561,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                  'active' => $activated
             )
         );
+        if (empty($result)) {
+            $result = array('success' => true);
+        }
         $this->View()->assign($result);
     }
 
