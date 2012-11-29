@@ -114,6 +114,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                 '-',
                 {
                     xtype: 'button',
+                    name: 'preview',
                     text: '{s name=preview}Preview{/s}',
                     handler: function() {
                         me.fireEvent('openPreview', me.tinyMce);
