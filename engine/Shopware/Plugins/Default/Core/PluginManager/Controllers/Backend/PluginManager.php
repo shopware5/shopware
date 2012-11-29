@@ -150,12 +150,10 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $sort = $this->Request()->getParam('sort', null);
             $filter = $this->Request()->getParam('filter', null);
 
-            if (empty($start) && empty($filter)) {
-                try {
-                    $this->refreshPluginList();
-                } catch (Exception $e) {
+            try {
+                $this->refreshPluginList();
+            } catch (Exception $e) {
 
-                }
             }
 
             $plugins = $this->getPlugins($category, $start, $limit, $sort, $filter);
