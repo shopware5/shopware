@@ -63,6 +63,15 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
 		}
 	}
 
+    /**
+     * Express payment action method.
+     */
+    public function expressAction()
+    {
+        unset(Shopware()->Session()->sOrderVariables);
+        $this->forward('gateway');
+    }
+
 	/**
 	 * Gateway payment action method.
 	 * 
