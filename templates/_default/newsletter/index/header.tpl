@@ -9,4 +9,4 @@
 
 
 <div style="height:30px;">&nbsp;</div>
-<p style="border-width:1px;border-style:solid;border-color:#dfdfdf;"></p>
+<p style="border-top:0px;border-bottom:1px;border-style:solid;border-color:#dfdfdf;"></p>
