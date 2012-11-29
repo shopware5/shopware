@@ -277,10 +277,25 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
                 }
 
                 if (response.success === true) {
+                    var pluginNames = record.get('plugin_names');
+                    if (Ext.isArray(pluginNames) && Ext.Array.contains(pluginNames, 'SwagLicense')) {
+                        Ext.Ajax.request({
+                            url:'{url controller="PluginManager" action="refreshPluginList"}',
+                            method: 'POST',
+                            callback: function(request, opts, operation) {
+                                Ext.Ajax.request({
+                                    url:'{url controller="PluginManager" action="installLicensePlugin"}',
+                                    method: 'POST'
+                                });
+                            }
+                        });
+                    }
+
                     Shopware.Notification.createGrowlMessage(me.snippets.store.title, me.snippets.store.successful_install);
                     if (response.license && response.license.length > 0) {
                         me.insertProductLicense(response.license);
                     }
+
 
                     if (response.isMultiShopPlugin) {
                         message = me.snippets.store.multiShopNotice;
