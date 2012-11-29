@@ -409,8 +409,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             if (file_exists($bootstrap->Path())) {
                 rename($bootstrap->Path(), $tmpPath);
             }
+            $source = 'Community';
+            if (strlen($plugin->getSource()) > 0) {
+                $source = ucfirst(strtolower($plugin->getSource()));
+            }
 
-            $result = $this->getCommunityStore()->downloadPlugin($url);
+            $result = $this->getCommunityStore()->downloadPlugin($url, $source);
             $result['activated'] = $activated;
             $result['installed'] = $installed;
             $this->View()->assign($result);
@@ -546,7 +550,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $bootstrap = $this->getPluginBootstrap($plugin);
 
         if ($plugin->getActive() && $bootstrap) {
-            $result = $bootstrap->disable();
             $plugin->setActive(false);
             Shopware()->Models()->flush();
         }
@@ -559,9 +562,21 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                  'active' => $activated
             )
         );
+
         if (empty($result)) {
             $result = array('success' => true);
         }
+
+        if ($activated && ($result['success'] || $result === true) ) {
+            Shopware()->Models()->clear();
+            $plugin = $this->getPluginByName($name);
+            /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+            $plugin->setActive(true);
+        }
+        $plugin->setUpdateVersion($plugin->getVersion());
+
+        Shopware()->Models()->flush();
+
         $this->View()->assign($result);
     }
 

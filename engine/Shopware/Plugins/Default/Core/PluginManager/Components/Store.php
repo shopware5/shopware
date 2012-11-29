@@ -203,13 +203,16 @@ class CommunityStore
         return $resultSet;
     }
 
-
     /**
      * Helper function to download the zip file from the passed url.
-     * @param $url
+     *
+     * @param        $url
+     *
+     * @param string $source
+     *
      * @return array
      */
-    public function downloadPlugin($url)
+    public function downloadPlugin($url, $source = 'Community')
     {
         $name = 'plugin' . md5($url) . '.zip';
         $tmp = Shopware()->DocPath() . 'files/downloads/' . $name;
@@ -222,7 +225,7 @@ class CommunityStore
             ));
             $client->setStream($tmp);
             $client->request('GET');
-            $this->decompressFile($tmp);
+            $this->decompressFile($tmp, $source);
         } catch (Exception $e) {
             $message = $e->getMessage();
         }
@@ -239,11 +242,13 @@ class CommunityStore
     /**
      * Decompress a given plugin zip file.
      *
-     * @param  $file
+     * @param        $file
+     * @param string $source
      */
-    public function decompressFile($file)
+    public function decompressFile($file, $source = 'Community')
     {
-        $target = Shopware()->AppPath('Plugins_Community');
+        $target = Shopware()->AppPath('Plugins_' . $source);
+
         $filter = new Zend_Filter_Decompress(array(
             'adapter' => 'Zip',
             'options' => array(
