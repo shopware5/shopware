@@ -41,7 +41,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     title: '{s name=title/Settings}Settings{/s}',
     autoScroll:true,
 
-    layout: 'anchor', //anchor
+    cls: 'shopware-form',
+    layout: 'anchor',
     defaults: {
         anchor: '100%',
         margin: 10
