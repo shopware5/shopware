@@ -111,14 +111,6 @@ class Order extends ModelEntity
 
 
     /**
-     * @var string $swagIpaymentDescription
-     *
-     * @ORM\Column(name="swag_ipayment_description", type="string", nullable=true)
-     */
-     protected $swagIpaymentDescription;
-
-
-    /**
      * @var \Shopware\Models\Order\Order
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="attribute")
@@ -221,18 +213,6 @@ class Order extends ModelEntity
     public function setAttribute6($attribute6)
     {
         $this->attribute6 = $attribute6;
-        return $this;
-    }
-    
-
-    public function getSwagIpaymentDescription()
-    {
-        return $this->swagIpaymentDescription;
-    }
-
-    public function setSwagIpaymentDescription($swagIpaymentDescription)
-    {
-        $this->swagIpaymentDescription = $swagIpaymentDescription;
         return $this;
     }
     
