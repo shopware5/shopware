@@ -2483,6 +2483,15 @@ div.step_box ul li.active .icon {background: url(../images/backgrounds/bg_stepnu
 #basket .table .table_row, #basket .table .table_foot,
 #basket .table .selected_premium, #basket .table .selected_premium {min-height: 80px;}
 
+#confirm .emotion-country_notice {
+    border-top: 1px dashed #dfdfdf;
+    padding: 8px 0 0;
+    float: none;
+    clear: both;
+    color: #999;
+    margin: 12px 0 0 28px;
+    width: 310px;
+}
 
 /** SUPPLIERFILTER, NOTICE **/
 #supplierfilter, .notice {

@@ -268,12 +268,6 @@
 
 
                     {block name='frontend_checkout_confirm_footer'}
-                        {* Include country specific notice message *}
-                        <div class="country-notice grid_16 first">
-                            {if $sCountry.notice && {config name=countrynotice}}
-                                <p>{$sCountry.notice}</p>
-                            {/if}
-                        </div>
 
                         {if !$sLaststock.hideBasket}
                             {block name='frontend_checkout_confirm_submit'}
