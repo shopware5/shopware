@@ -20,4 +20,12 @@
             {/foreach}
         {/if}
 	</div>
+
+    {if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
+        <div class="clear"></div>
+        <div class="emotion-country_notice">
+        {* Include country specific notice message *}
+            <p>{include file="string:{$sCountry.notice}"}</p>
+        </div>
+    {/if}
 {/block}
