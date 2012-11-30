@@ -325,6 +325,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
         me.deleteRecipientButton = Ext.create('Ext.button.Button', {
             text: '{s name=deleteSelected}Delete selected{/s}',
+            iconCls: 'sprite-minus-circle',
             disabled: true,
             handler: function() {
                 var selectionModel = me.getSelectionModel(),
@@ -347,6 +348,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 {
                     xtype: 'button',
                     text: '{s name=addRecipient}Add recipient{/s}',
+                    iconCls: 'sprite-plus-circle',
                     handler: function() {
                         me.fireEvent('addRecipient');
                     }

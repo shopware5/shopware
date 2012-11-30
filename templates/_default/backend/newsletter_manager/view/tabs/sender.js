@@ -184,6 +184,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
         me.deleteSenderButton = Ext.create('Ext.button.Button', {
             text: '{s name=deleteSelected}Delete selected{/s}',
             disabled: true,
+            iconCls: 'sprite-minus-circle',
             handler: function() {
                 var selectionModel = me.getSelectionModel(),
                     records = selectionModel.getSelection();
@@ -203,6 +204,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
                 /*{if {acl_is_allowed privilege=write}}*/
                 {
                     xtype: 'button',
+                    iconCls: 'sprite-plus-circle',
                     text: '{s name=createNewSender}Create new sender{/s}',
                     handler: function () {
                         me.fireEvent('createNewSender');

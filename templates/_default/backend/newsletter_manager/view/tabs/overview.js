@@ -283,6 +283,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 {
                     xtype: 'button',
                     text: '{s name=createNewNewsletter}Create new newsletter{/s}',
+                    iconCls: 'sprite-plus-circle',
                     handler: function() {
                         me.fireEvent('createNewNewsletter');
                     }
