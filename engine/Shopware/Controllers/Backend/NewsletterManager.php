@@ -643,7 +643,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             if(!isset($addresses[$value['id']])) {
                 $result[$key]['addresses'] = 0;
             }else{
-                $result[$key]['addresses'] = $addresses[$value['id']]['addressCount'];
+                $result[$key]['addresses'] = (int) $addresses[$value['id']]['addressCount'];
             }
 
             $revenue = $revenues['sCampaign'. $value['id']]['revenue'];
