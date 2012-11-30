@@ -33,6 +33,10 @@
         position: relative;
     }
 }
+.#{$prefix}plugin-manager-manager-grid .#{$prefix}grid-cell-first .#{$prefix}grid-cell-inner div {
+    top: 2px;
+    position: relative;
+}
 .#{$prefix}plugin-manager-navigation {
     @include inner-border(0 1px 0 0, #fff);
     background: #f0f2f4;
