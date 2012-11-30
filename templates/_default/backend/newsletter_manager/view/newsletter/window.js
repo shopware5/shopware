@@ -45,7 +45,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
     stateId: 'shopware-newsletter-manager-newsletter-window',
     title: '{s name=titleCreateNewsletter}Create new newsletter{/s}',
     cls: Ext.baseCSSPrefix + 'newsletter-window',
-
+    defaults: {
+        bodyBorder: 0
+    },
     record: null,
 
     /**

@@ -211,6 +211,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
 
         me.deleteSelected = Ext.create('Ext.button.Button',{
             text: '{s name=deleteSelected}Delete selected{/s}',
+            iconCls: 'sprite-minus-circle',
             disabled: true,
             handler: function() {
                 var selectionModel = me.getSelectionModel(),
@@ -232,6 +233,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 /*{if {acl_is_allowed privilege=write}}*/
                 {
                     xtype: 'button',
+                    iconCls: 'sprite-plus-circle',
                     text: '{s name=createOwnNewsletterGroup}Create own newsletter group{/s}',
                     handler: function() {
                         me.fireEvent('createNewsletterGroup', me.store);

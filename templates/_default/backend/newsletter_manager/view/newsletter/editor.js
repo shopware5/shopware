@@ -89,7 +89,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                 {
                     xtype: 'textfield',
                     vtype: 'email',
+                    name: 'mailAddress',
                     checkChangeBuffer: 200,
+                    padding: '0 0 0 8',
                     ui: 'shopware-ui',
                     listeners: {
                         change: function(field, value) {
@@ -104,6 +106,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                 {
                     xtype: 'button',
                     id: 'sendMail',
+                    name: 'sendMail',
+                    iconCls:'sprite-mail-send',
                     text: '{s name=sendTestMail}Send testmail{/s}',
                     handler: function() {
                         me.fireEvent('sendTestMail', me.form);
@@ -114,6 +118,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                 '-',
                 {
                     xtype: 'button',
+                    iconCls: 'sprite-globe--arrow',
                     name: 'preview',
                     text: '{s name=preview}Preview{/s}',
                     handler: function() {

@@ -39,9 +39,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-settings',
     title: '{s name=title/Settings}Settings{/s}',
-    ui: 'shopware-ui',
     autoScroll:true,
-    cls: Ext.baseCSSPrefix + 'newsletter-settings-panel',
 
     layout: 'anchor', //anchor
     defaults: {
@@ -91,6 +89,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         return [
             {
                 xtype: 'fieldset',
+                defaults: {
+                    anchor: '100%'
+                },
                 title: '{s name=campaignSettings}Newsletter settings{/s}',
                 items: me.getCampaignFieldset(),
                 flex: 1
@@ -185,7 +186,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 fieldLabel: '{s name=customerGroups}Customer groups{/s}',
                 items: me.customerGroups,
                 labelWidth: 170,
-                columns: 3,
+                columns: 2,
                 vertical: false,
                 name: 'customerGroups'
             },
@@ -194,7 +195,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 fieldLabel: '{s name=ownNewsletterGroups}Own recipient groups{/s}',
                 labelWidth: 170,
                 items: me.newsletterGroups,
-                columns: 3,
+                columns: 2,
                 vertical: false,
                 name: 'newsletterGroups'
             }
