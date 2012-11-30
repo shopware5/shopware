@@ -162,6 +162,13 @@ class Basket extends ModelEntity
     private $currencyFactor = 1;
 
     /**
+     * @var float $taxRate
+     *
+     * @ORM\Column(name="tax_rate", type="float", nullable=false)
+     */
+    protected $taxRate = 0;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist", "update"})
      * @var \Shopware\Models\Attribute\OrderBasket
@@ -466,5 +473,19 @@ class Basket extends ModelEntity
         return $this->customerId;
     }
 
+    /**
+     * @return float
+     */
+    public function getTaxRate()
+    {
+        return $this->taxRate;
+    }
 
+    /**
+     * @param float $taxRate
+     */
+    public function setTaxRate($taxRate)
+    {
+        $this->taxRate = $taxRate;
+    }
 }
