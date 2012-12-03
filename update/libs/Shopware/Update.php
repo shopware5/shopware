@@ -35,7 +35,7 @@
  */
 class Shopware_Update extends Slim
 {
-    const VERSION = '1.0.3';
+    const VERSION = '1.0.4';
     const UPDATE_VERSION = '4.0.4';
 
     public function initDbConfig()
@@ -1422,7 +1422,7 @@ class Shopware_Update extends Slim
             $query->execute(array('categoryId' => $categoryId));
             list($right, $level) = $query->fetch(PDO::FETCH_NUM);
 
-            $sql = 'SELECT c.id FROM s_categories c WHERE c.parent = :categoryId';
+            $sql = 'SELECT c.id FROM s_categories c WHERE c.parent = :categoryId ORDER BY c.position, c.id';
             $query = $db->prepare($sql);
             $query->execute(array('categoryId' => $categoryId));
             $childrenIds = $query->fetchAll(PDO::FETCH_COLUMN);

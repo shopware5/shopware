@@ -92,3 +92,5 @@ UPDATE s_articles_img i, s_articles_details d
 SET i.relations = ''
 WHERE i.relations = d.ordernumber
 AND i.relations != '';
+
+UPDATE s_articles_details SET active = 1;
