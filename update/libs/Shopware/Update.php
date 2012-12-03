@@ -224,6 +224,7 @@ class Shopware_Update extends Slim
                 'engine/Shopware/Models/Attribute/',
                 'engine/Shopware/Proxies/',
                 'engine/Shopware/Plugins/Community/',
+                'engine/Shopware/Plugins/Default/',
                 'engine/Shopware/Plugins/Local/',
                 'media/archive/',
                 'media/image/',
