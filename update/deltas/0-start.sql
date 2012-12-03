@@ -1606,7 +1606,7 @@ CREATE TABLE `s_core_config_values` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `element_id` int(11) unsigned NOT NULL,
   `shop_id` int(11) unsigned DEFAULT NULL,
-  `value` text COLLATE utf8_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `shop_id` (`shop_id`),
   KEY `element_id` (`element_id`)
