@@ -42,7 +42,11 @@
 	{if !$sArticle.liveshoppingData.valid_to_ts}
 		{* Graduated prices *}
         {if $sArticle.sBlockPrices && ($sArticle.sConfiguratorSettings.type!=2 || $sArticle.pricegroupActive) && !$sArticle.liveshoppingData.valid_to_ts}
-            {include file="frontend/detail/block_price.tpl" sArticle=$sArticle}
+
+            {* Include block prices *}
+            {block name="frontend_detail_data_block_price_include"}
+                {include file="frontend/detail/block_price.tpl" sArticle=$sArticle}
+            {/block}
 
             {* Article price *}
             {block name='frontend_detail_data_price_info'}
