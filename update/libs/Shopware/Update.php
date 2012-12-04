@@ -164,7 +164,7 @@ class Shopware_Update extends Slim
 
         spl_autoload_register(array(__CLASS__, 'autoload'));
 
-        $this->contentType('Content-type: text/html; charset=utf-8');
+        $this->contentType('text/html; charset=utf-8');
 
         $this->config('db', $this->initDb());
         $this->config('language', $this->session('language') ?: 'de');
@@ -1675,7 +1675,7 @@ class Shopware_Update extends Slim
             }
         }
         foreach ($customs as $name => $custom) {
-            if(in_array($name, array('Heidelpay', 'SwagButtonSolution', 'SwagLangLite'))) {
+            if(in_array($name, array('Heidelpay', 'SwagButtonSolution', 'SwagLangLite', 'SwagTrustedShopsExcellence'))) {
                 unset($customs[$name]['id']);
                 $customs[$name]['updateVersion'] = 'default';
             }
@@ -1746,7 +1746,8 @@ class Shopware_Update extends Slim
             'sMAILCAMPAIGNS'    => array('name' => 'SwagNewsletter', 'updateVersion' => ''),
             'sTICKET'           => array('name' => 'SwagTicketSystem', 'updateVersion' => ''),
             'sBUNDLE'           => array('name' => 'SwagBundle', 'updateVersion' => ''),
-            'sLIVE'             => array('name' => 'SwagLiveshopping', 'updateVersion' => ''),
+            'sLIVE'             => array('name' => 'SwagLiveShopping', 'updateVersion' => ''),
+            'sBONUS'            => array('name' => 'SwagBonusSystem', 'updateVersion' => ''),
             'sLANGUAGEPACK'     => array('name' => 'SwagMultiShop'),
             'sPRICESEARCH'      => array('name' => 'SwagProductExport', 'label' => 'Produkt-Exporte', 'updateVersion' => 'default'),
             'sARTICLECONF'      => array('name' => 'SwagConfigurator', 'label' => 'Artikel Konfigurator', 'updateVersion' => 'default')
@@ -1925,9 +1926,6 @@ class Shopware_Update extends Slim
             'backend' => 'backend_index_javascript'
         );
         $names = array_keys($tests);
-        foreach($tests as $name => $test) {
-            //$tests[$name] = '?<' . $name . '>' . $test;
-        }
         $regex = '#(' . implode(')|(', $tests) . ')#i';
         $compatibility = array();
         if(preg_match_all($regex, $pluginContent, $matches)) {
