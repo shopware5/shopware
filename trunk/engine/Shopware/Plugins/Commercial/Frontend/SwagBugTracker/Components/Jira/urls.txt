@@ -1,0 +1,18 @@
+Issues with SubIssues
+=====================
+
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=13239
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=13265
+
+Issues with Comments
+====================
+
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=12014
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=12390
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=13562
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=13378
+
+Issues the remote user can edit/delete
+======================================
+
+http://jira.shopware.de/engine/Shopware/Components/Jira/UseCases/issue.php?p=10100&i=14383

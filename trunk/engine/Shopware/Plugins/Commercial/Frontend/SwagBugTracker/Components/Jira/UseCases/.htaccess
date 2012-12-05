@@ -1,0 +1,7 @@
+order deny,allow
+deny from all
+allow from 217.86.205.141
+allow from 217.86.247.176
+allow from 217.86.247.175
+allow from 217.86.247.177
+allow from 217.86.247.178

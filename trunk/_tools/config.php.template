@@ -1,0 +1,12 @@
+<?php
+/*
+Shopware 2.0.4 - Database-Config
+=======================================================================
+(c) 2008, Hamann-Media GmbH
+*/
+// HOST-1
+$DB_HOST = '%host%';
+$DB_USER = '%user%';
+$DB_PASSWORD = '%password%';
+$DB_DATABASE = '%database%';
+

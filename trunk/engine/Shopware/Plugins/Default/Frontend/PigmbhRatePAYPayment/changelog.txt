@@ -1,0 +1,237 @@
+***********************************************************
+**********| Version 2.0.8 - Released 2012-08-13 |**********
+***********************************************************
+Files:  all
+------------------------------------
+* replaced Language File, using now Shopware Language System
+* added forceSecture true in Controller
+* added B2B Switch
+
+***********************************************************
+**********| Version 2.0.7 - Released 2012-07-26 |**********
+***********************************************************
+Files:  Bootstrap.php
+------------------------------------
+* replaced frontend logos with new ones
+
+
+***********************************************************
+**********| Version 2.0.6 - Released 2012-07-24 |**********
+***********************************************************
+Files: all
+------------------------------------
+* fixed smaller bugs
+
+
+***********************************************************
+**********| Version 2.0.5 - Released 2012-06-25 |**********
+***********************************************************
+Files: all
+------------------------------------
+* all sql executes are prepared statements and integers are typecastet now
+* all variables are inititated now
+* templates folder Renamed to Views
+* deletet _default folder from Views folder
+* Backend and frontend folder added to controller folder
+* removed unused variables
+
+
+***********************************************************
+**********| Version 2.0.4 - Released 202-06-15 |***********
+***********************************************************
+
+Files: all
+------------------------------------
+* resolved all shopware code review points
+
+
+***********************************************************
+**********| Version 2.0.3 - Released 202-06-14 |***********
+***********************************************************
+Files: functions/functions.php
+------------------------------------
+* fixed bug with Payment Change for RatePAY debit
+* fixed bug in RatePAY debit pdf invoice
+* changed name of debit to ELV for logs
+
+Files: all
+------------------------------------
+Plugin renamed to PigmbhRatePAYPayment
+
+
+***********************************************************
+**********| Version 2.0.2 - Released 202-06-08 |***********
+***********************************************************
+Files: functions/functions.php
+------------------------------------
+* fixed bug with rate installment amount
+
+Directory: Ratenrechner/images/
+------------------------------------
++ new info icon and new ratepay calculator logo
+
+
+***********************************************************
+**********| Version 2.0.1 - Released 202-06-06 |***********
+***********************************************************
+Files:  Bootstrap.php
+        controller/ratepayFrontend.php
+        functions/functions.php
+------------------------------------
+* fixed bug that payment_confirm could be executed more then one time
+
+Files:  Bootstrap.php
+        controller/ratepayBackend.php
+        templates/_default/backend/plugins/PiRatePAYPayment/index.php
+------------------------------------
+* over-worked the pdf invoices. Especially the cancelation invoice
+
+Files:  Bootstrap.php
+        controller/ratepayBackend.php
+        controller/ratepayFrontend.php
+------------------------------------
+* new column 'einzelpreis_net' for table 'pi_ratepay_order_detail'. This price is used for all backend actions now.
+
+
+***********************************************************
+**********| Version 2.0.0 - Released 202-05-24 |***********
+***********************************************************
+Files:all
+------------------------------------
+* refactoring
+* new payment: RatePAY debit
+* some bugfixes
+
+
+***********************************************************
+**********| Version 1.0.8 - Released 2011-05-15 |**********
+***********************************************************
+Files:all
+------------------------------------
+* fixed invoice templates
+* fixed bug with ratepay links
+* fixed problem with birthday
+
+
+***********************************************************
+**********| Version 1.0.7 - Released 2011-04-09 |**********
+***********************************************************
+Files:all
+------------------------------------
+* fixed payment and orderstates
+
+
+***********************************************************
+**********| Version 1.0.6 - Released 2011-03-27 |**********
+***********************************************************
+File:functions/functions.php
+------------------------------------
+* umlauts fix
+
+
+***********************************************************
+**********| Version 1.0.5 - Released 2011-03-26 |**********
+***********************************************************
+File:functions/functions.php
+------------------------------------
+* umlauts fix
+
+File: \controller\ratepayBackend.php
+------------------------------------
+* img fix for order overview
+
+
+***********************************************************
+**********| Version 1.0.4 - Released 2011-03-09 |**********
+***********************************************************
+File: \templates\_default\frontend\checkout\confirm.tpl
+------------------------------------
+* AGB fix
+
+
+***********************************************************
+**********| Version 1.0.3 - Released 2011-03-06 |**********
+***********************************************************
+Files:/templates/_default/frontend/checkout/confirm.tpl
+------------------------------------
+* fixed Javascript
++ improved stability and error handling of the rate calulator
+
+Files:all
+------------------------------------
+* Complete Refactoring
+* Changed some texts
+* removed md5 encoding for secret key
+
+File: \Bootstrap.php
+------------------------------------
+* Rate calulator is no longer shown in cart
+
+
+
+***********************************************************
+**********| Version 1.0.2 - Released 2011-02-17 |**********
+***********************************************************
+Files:functions/ratePAY_functions.php
+------------------------------------
+* fixed logging function for payment init
+
+File: /Bootstrap.php
+------------------------------------
+* some stability approvements in onPostRatepayDispatch function
+
+File: /templates/_default/frontend/register/payment_fieldset.tpl
+------------------------------------
+* improved stability with input fields
+
+File: /templates/_default/frontend/checkout/confirm.tpl
+------------------------------------
++ Order can only be send if AGB are accepted now
++ If RatePAY installment is selected the order can only be send if AGB are accepted and a rate is selected now
+
+
+
+***********************************************************
+**********| Version 1.0.1 - Released 2011-12-12 |**********
+***********************************************************
+Files:functions/ratePAY_functions.php
+------------------------------------
++ added customer and RatePAY result reason to logging
+
+Files:all
+------------------------------------
++ added Multishop support
+
+File: \Bootstrap.php
+------------------------------------
+Set new headers
+
+***********************************************************
+**********| Version 1.0.0 - Released 2011-11-30 |**********
+***********************************************************
+Files:functions/ratePAY_functions.php
+------------------------------------
+* fixed logging function
+
+
+***********************************************************
+**********| Version 0.9.9 - Released 2011-11-25 |**********
+***********************************************************
+Files:All
+------------------------------------
++ added missing function comments
+
+File: \local\Ratepay_lang_de_DE.php
+------------------------------------
+* warning texts are now sepperated for rate and invoice
+
+File: \Bootstrap.php
+------------------------------------
+* changed name of 'RatePAY rate' to 'RatePAY Ratenzahlung'
+
+
+
+
+
+
+

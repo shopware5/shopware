@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./TestHelper.php">
+    <testsuites>
+        <testsuite name="Shopware_AllTests">
+            <file>./AllTests.php</file>
+        </testsuite>
+    </testsuites>
+    <selenium>
+        <browser name="Firefox"
+                 browser="*firefox"
+                 host="localhost"
+                 port="4444"
+                 timeout="5"/>
+    </selenium>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../engine/Shopware/</directory>
+            <exclude>
+                <directory>../engine/Shopware/Proxies</directory>
+                <directory>../engine/Shopware/Plugins/Community</directory>
+                <directory>../engine/Shopware/Components/Xml</directory>
+                <directory>../engine/Shopware/Models/_generated</directory>
+                <directory suffix="Meta.php">../engine/Shopware/Plugins/</directory>
+                <directory suffix="Version.php">../engine/Shopware/Plugins/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Shopware" basedir="." default="prepare-deploy">
+
+	<target name="prepare-deploy" depends="create-package-directories,create-sql,create-install,create-patch,check-patch,save-patch"
+			description="Start deploy for ${shopware.deploy.to} diff from ${shopware.deploy.from}">
+    </target>
+
+	<target name="prepare-packages"
+	 		description="Prepare packages with php helper script">
+	  <exec executable="/usr/bin/php5" failonerror="true">
+		  <arg value="${basedir}/deploy.php" />
+		  <arg value="-t${shopware.deploy.to}" />
+		  <arg value="-d${shopware.deploy.from}" />
+	  </exec>
+	</target>
+
+	<target name="create-sql">
+		<echo message="Prepare SQL-Databases" />
+		<exec executable="mysql" failonerror="true">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="-e DROP DATABASE IF EXISTS shopware"/>
+		</exec>
+		<exec executable="mysql" failonerror="true">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="-e DROP DATABASE IF EXISTS shopware_demo"/>
+		</exec>
+		<exec executable="mysql" failonerror="true">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="-e CREATE DATABASE shopware"/>
+		</exec>
+		<exec executable="mysql" failonerror="true">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="-e CREATE DATABASE shopware_demo"/>
+		</exec>
+		<echo message="Import sql from previous release" />
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/archive/dump${shopware.deploy.from}_demo.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware_demo"/>
+		</exec>
+
+
+
+
+
+
+
+
+
+        <echo message="Sync databases with latest updates" />
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/${shopware.deploy.to}.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware_demo"/>
+		</exec>
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/${shopware.deploy.to}.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware"/>
+		</exec>
+		
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/install.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware_demo"/>
+		</exec>
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/install.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware"/>
+		</exec>
+		
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/install.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware_demo"/>
+		</exec>
+		<exec executable="mysql" failonerror="true" input="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/install.sql">
+			<arg value="-uroot"/>
+			<arg value="-pdeltavista11X"/>
+			<arg value="shopware"/>
+		</exec>
+
+		<echo message="Dump new databases" />
+		<exec executable="mysqldump" output="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump.sql">
+			<arg value="--user=root" />
+			<arg value="--password=deltavista11X" />
+			<arg value="shopware" />
+		</exec>
+		<exec executable="mysqldump" output="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump_demo.sql">
+			<arg value="--user=root" />
+			<arg value="--password=deltavista11X" />
+			<arg value="shopware_demo" />
+		</exec>
+	</target>
+	<!--
+	<target name="create-install">
+		<echo message="Create install packages" />
+		<mkdir dir="../../releaseArchive/${shopware.deploy.to}/" />
+	</target>
+	-->
+	<target name="create-install" depends="create-install-plain,create-install-ioncube,create-install-zend,create-install-ioncube-demo,create-install-zend-demo">
+		<echo message="Create install packages" />
+		<mkdir dir="../../releaseArchive/${shopware.deploy.to}/" />
+	</target>
+	
+	<target name="create-install-plain">
+		<echo message="Create install plain package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-plain" overwrite="true">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/clean"/>
+		</copy>
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/install-plain/import.sql" overwrite="true" failonerror="true" />
+				
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/install_plain_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-plain" update="true"/>
+	</target>
+
+	<target name="create-install-ioncube">
+		<echo message="Create install ioncube package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/ioncube"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/clean"/>
+		</copy>
+		
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube/import.sql" overwrite="true" failonerror="true" />
+			
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/install_ioncube_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube" update="true"/>
+	</target>
+
+	<target name="create-install-zend">
+		<echo message="Create install zend package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/zend"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/clean"/>
+		</copy>
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend/import.sql" overwrite="true" failonerror="true" />
+				
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/install_zend_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend" update="true"/>
+	</target>
+
+	<target name="create-install-ioncube-demo">
+		<echo message="Create install ioncube package with demodata" />
+		
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube-demo">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/ioncube"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube-demo">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/clean"/>
+			<fileset dir="../../data/demo/"/>
+		</copy>
+
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump_demo.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube-demo/import.sql" overwrite="true" failonerror="true" />
+
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/demo_ioncube_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube-demo" update="true"/>
+	</target>
+
+	<target name="create-install-zend-demo">
+		<echo message="Create install zend package with demodata" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend-demo">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/zend"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend-demo">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/clean"/>
+			<fileset dir="../../data/demo/"/>
+		</copy>
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/deployment/sql/dump_demo.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend-demo/import.sql" overwrite="true" failonerror="true" />
+
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/demo_zend_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend-demo" update="true"/>
+	</target>
+		
+
+	<target name="create-patch" depends="create-patch-plain,create-patch-ioncube,create-patch-zend">
+		<echo message="Create patch packages" />
+		
+		<copy todir="../../releaseArchive/${shopware.deploy.to}/" overwrite="true">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/deployment/">
+				 <include name="**/*.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="check-patch">
+		<echo message="Check patch packages" />
+		
+		<exec executable="/usr/bin/php5" failonerror="true">
+		  <arg value="${basedir}/deploy_finish.php" />
+		  <arg value="-t${shopware.deploy.to}" />
+		</exec>
+	</target>
+	
+	<target name="save-patch">
+		<echo message="Save patch on download server" />
+		
+		<scp todir="filnawbt:ebqgbqyn@files.shopware.de:www.files.shopware.de/deployment/" trust="yes">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/deployment/">
+				<include name="**/*_zend_*.zip"/>
+				<include name="**/*_ioncube_*.zip"/>
+			</fileset>
+		</scp>
+		
+		<sshexec
+			host="files.shopware.de"
+			username="filnawbt"
+			password="ebqgbqyn"
+			trust="true"
+			command="cd www.files.shopware.de/deployment/; php unpack.php t=${shopware.deploy.to}"/>
+	</target>
+
+	<target name="create-patch-plain">
+		<echo message="Create patch plain package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-plain" overwrite="true">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/diff"/>
+		</copy>
+
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/${shopware.deploy.to}.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-plain/update.sql" overwrite="true" failonerror="true" />
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/update_plain_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-plain" update="true"/>
+	</target>
+
+	<target name="create-patch-ioncube">
+		<echo message="Create patch ioncube package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/ioncube"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/diff"/>
+		</copy>
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/${shopware.deploy.to}.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube/update.sql" overwrite="true" failonerror="true" />
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/update_ioncube_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube" update="true"/>
+	</target>
+
+	<target name="create-patch-zend">
+		<echo message="Create patch zend package" />
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-zend">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/zend"/>
+		</copy>
+		<copy todir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-zend">
+			<fileset dir="${basedir}/workspace/${shopware.deploy.to}/checkout/diff"/>
+		</copy>
+		<echo message="Copy patch sql dump into package" />
+		<copy file="${basedir}/workspace/${shopware.deploy.to}/checkout/sql/${shopware.deploy.to}.sql" tofile="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-zend/update.sql" overwrite="true" failonerror="true" />
+		<zip destfile="${basedir}/workspace/${shopware.deploy.to}/deployment/update_zend_${shopware.deploy.to}.zip" basedir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-zend" update="true"/>
+	</target>
+
+	<target name="create-package-directories" depends="prepare-packages"
+			description="-> Generate folders for packages">
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-ioncube-demo" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-zend-demo" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/install-plain" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-zend" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/patch-ioncube" />
+		<mkdir dir="${basedir}/workspace/${shopware.deploy.to}/deployment/sql" />
+	</target>
+	
+	<target name="release">
+		<echo message="Release patch on download server" />
+		
+		<sshexec
+			host="files.shopware.de"
+			username="filnawbt"
+			password="ebqgbqyn"
+			trust="true"
+			command="cd www.files.shopware.de/deployment/; php release.php t=${shopware.deploy.to}"/>
+	</target>
+	
+</project>

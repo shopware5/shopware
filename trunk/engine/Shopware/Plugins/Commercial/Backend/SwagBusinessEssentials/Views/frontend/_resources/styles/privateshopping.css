@@ -1,0 +1,66 @@
+/**
+ * SHOPWARE B2BESSENTIALS STYLESHEET
+ *
+ * This Cascading Style Sheet contains all
+ * needed styles for the shopware plugin
+ * "b2bessentials"
+ *
+ * @author: st.hamann <sth@shopware.de>
+ * @author: s.pohl <stp@shopware.de>
+ * @copyright: shopware AG (c) 2011
+ * @date: 2011-09-07
+ * @package: styles
+ * @subpackage: privateshopping
+ */
+
+@charset "UTF-8"
+
+/*	PRIVATE SHOPPING LOGIN
+	-------------------------------------------- */
+.privateshopping .message {
+	padding: 15px;
+	border-left: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7;
+	margin: 15px 0 25px;
+}
+.privateshopping .message a { color: #dd4800 }
+.privateshopping .message .inner-message {
+	border: 2px solid #dd4800;
+	font-size: 12px;
+	font-weight: 700;
+	padding: 8px;
+	margin: 15px 15px 25px;
+}
+#login {
+	width: 978px;
+	margin: 0 0 15px 10px;
+	border: 1px solid #c7c7c7;
+	border-top: 0 none;
+}
+#login .grid_10 { margin-left: 250px }
+
+/*	PRIVATE SHOPPING REGISTER FINISHED
+	-------------------------------------------- */
+.psregister-finish .inner-container {
+	border: 1px solid #c7c7c7;
+	border-top: 0 none;
+	padding: 15px;
+	margin: 0 0 15px 0;
+	background: #f5f5f5;
+}
+.psregister-finish .inner-container .notice {
+	font-size: 12px;
+}
+
+/** TODO: Remove unnecessary style settings
+.ShoppingClubMessage {
+	font-weight:bold;
+	font-size:12px;
+	margin-left:10px;
+}
+
+.ShoppingClubRegister {
+	font-size:12px;
+	height:50px;
+	margin-left:10px;
+} */

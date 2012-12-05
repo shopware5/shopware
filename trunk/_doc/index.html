@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Shopware Modul Checkliste</title>
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+		
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/prettify.css" />
+	</head>
+	<body>
+		
+		<div class="topbar" data-scrollspy="scrollspy">
+			<div class="fill">
+				<div class="container">
+					<h3><a href="#">SW4 Modul Checkliste</a></h3>
+					
+					<ul>
+						<li>
+							<a href="#intro">Intro</a>
+						</li>
+						<li>
+							<a href="#structure">Struktur</a>
+						</li>
+						<li>
+							<a href="#generell">Allgemein</a>
+						</li>
+						<li>
+							<a href="#forms">Formulare</a>
+						</li>
+						<li>
+							<a href="#stores">Stores</a>
+						</li>
+						<li>
+							<a href="#grid">Grid</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	
+		<div class="container">
+			<section id="intro">
+			<div class="page-header">
+				<h1>Shopware Checkliste <small>f&uuml;r neue Backend-Module</small></h1>
+			</div>
+			
+			<p>
+				Dies ist eine Checkliste, die jeweils durchlaufen werden soll, wenn ein Modul vor der Fertigstellung ist. In dieser Checkliste befinden sich die wichtigsten Punkte, die ein Modul erf&uuml;llen muss. Jeder Entwickler ist daf&uuml;r verantwortlich, die entsprechenden Punkte zu implementieren, um eine Konsistenz modul&uuml;bergreifend zu erreichen.
+			</p>
+			</section>
+			
+			<section id="structure">
+				<div class="page-header">
+					<h2>Struktur <small>Namespace und Ordnerstruktur</small></h2>
+				</div>
+				
+				<div class="row">
+					<div class="span16">
+						<ol>
+							<li>
+								<h3><div class="checkbox"></div>Korrekte Ordnerstruktur verwendet?</h3>
+								
+								<p>
+									Damit jeder Entwickler das Modul weiterf&uuml;hren / debuggen / fixen kann, sollte folgende Orderstruktur verwendet werden:
+									
+<pre class="prettyprint lang-js">/
+  /controller
+    main.js - Beispiel-Controller f&uuml;r die SubApplikation
+  /model
+  /store
+  /view
+    /main - Jeder Controller bekommt eigene Views
+      list.js
+  app.js - Initialisiert die SubApplikation</pre>
+								</p>
+							</li>
+							<li>
+								<h3><div class="checkbox"></div>Namespace korrekt angegeben?</h3>
+								
+								<p>
+									Wurde der korrekte Namespace angegeben? Dies ist wichtig, damit der Auto-Loader korrekt funktioniert. Unser Prefix bei Namespaces ist <code>"Shopware."</code>. Dahinter folgt der Typ wie z.B. <code>"Shopware.view"</code> und der Name der Komponente wie z.B. <code>"Shopware.view.Viewport"</code>. Bei SubApplikationen, so wie jedes Modul sein wird, sieht der Namespace ein wenig anders aus, aber hat den gleichen Aufbau. Gehen wir davon aus dass wir aktuell die Benutzerverwaltung erstellt. Diese h&auml;tte als Namespace-Prefix <code>"Shopware.apps.Auth."</code>.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">// Subapplication init controller
+Shopware.apps.Auth
+
+// Subapplication controller - Controllername is "Main"
+Shopware.apps.Auth.controller.Main
+
+// Subapplication Store - Storename is "Users"
+Shopware.apps.Auth.store.Users
+
+// Subapplication Model - Modelname is "User"
+Showpare.apps.Auth.model.User
+
+// Subapplication view - Controllername is "Main"
+Shopware.apps.Auth.view.main.List</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div> Wurde ein Smarty-Block zur sp&auml;teren Anpassbarkeit in jede Modul-Datei hinterlegt?</h3>
+								
+								<p>
+									Es ist so vorgesehen, dass jeder Plugin-Entwickler sp&auml;ter die M&ouml;glichkeit haben soll jedes einzelnes Modul anzupassen. Deshalb sollte sich in jeder Modul-Datei ein Smarty-Block hinterlegt werden.
+								</p>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+			
+			<section id="generell">
+				<div class="page-header">
+					<h2>Allgemein</h2>
+				</div>
+				
+				<div class="row">
+					<div class="span16">
+						<ol>
+							<li>
+								<h3><div class="checkbox"></div>Standard-Layout benutzt?</h3>
+								<p>
+									Dieser Punkt ist sehr wichtig, da wir durch ein Standard-Layout eine Konsistenz in die Applikation bringen. Durch Konsistenz k&ouml;nnen wir eine Art "Sicherheit" f&uuml;r den Endkunden schaffen, der das Modul benutzt. Durch diese Art von "Sicherheit" wei&szlig; der Endkunde genau, wie er alle Module benutzen kann.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Korrekte Methodenbenennung</h3>
+								
+								<p>
+									Bitte achtet darauf, dass die Methoden korrekt in Camelcase (erstes Wort bitte "klein" schreiben) geschrieben sind und das alle Eventlistener-Methoden als Prefix "on" haben.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">onSaveBtn: function(btn, event) {
+   // do something
+}</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Korrektes UI angegeben?</h3>
+								
+								<p>
+									Als "ui"-Angabe sollte immer <code>"default shopware-ui"</code> gew&auml;hlt sein. Dadurch haben die Templater und Designer es sp&auml;ter einfacher, das Shopware-Design f&uuml;r das jeweilige Modul anzupassen bzw. zu gestalten.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">Ext.define('Shopware.view.Viewport', {
+   ui: 'default shopware-ui'
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Wurde ein Widget-Name bei Views angegeben?</h3>
+								
+								<p>
+									Ein Widget- bzw. Alias-Name bringt mehrere Vorteile mit sich. Zum einen besteht dann die M&ouml;glichkeit das Modul per <code>Ext.widget()</code> zu &ouml;ffnen und zum anderen hilft es ungemein bei der Adressierung in Selenium Tests.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">Ext.define('Shopware.apps.Auth.view.main.List', {
+   alias: 'widget.auth-main-list'
+})</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Resize des Moduls &uuml;berpr&uuml;ft?</h3>
+								
+								<p>
+									Kann ein Modul &uuml;ber die "Resize"-Funktion von ExtJS 4 verkleinert bzw. vergr&ouml;&szlig;ert werden, ohne dass das Layout zerst&ouml;rt wird. Um dies zu erreichen sollte man das <code>"border"</code>-Layout nutzen.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Dokumentation</h3>
+								
+								<p>
+									Wurde das Modul komplett "inline" durch kommentiert? Dies ist wichtig damit andere Entwickler nahtlos an dem Modul weiterarbeiten kann. Eine ordentliche Dokumentation erwartet ein "Klassenkommentar", welches die Komponente und deren Zweck beschreibt. Des Weiterem geh&ouml;rt auch &uuml;ber jede Methode ein Kommentar mit den erwarten Parametern und den R&uuml;ckgabewert. Wenn eigene Attribute verwendet wurden, sollten diese auch kommentiert werden.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">/**
+ * Shopware UI - Viewport
+ *
+ * This component creates the Shopware
+ * viewport. It's doubles the width of the viewport to
+ * holds the two desktops containers.
+ *
+ * @author: s.pohl &lt;stp@shopware.de&gt;
+ * @date: 2011-12-05
+ */
+Ext.define('Shopware.view.Viewport', {
+   extends: 'Ext.container.Viewport',
+   ui: 'default shopware-ui',
+
+   /** Holds the shopware desktops */
+   desktops: [],
+	
+   /**
+    * Initializes the component, binds the necessary event listeners
+    * and sets width to the double viewport width.
+    */
+    initComponent: function() {
+    
+       this.on('click', this.onViewportClick, this);
+
+       // do something
+       this.callParent(this);
+    }
+    
+    /**
+     * Event handler which do something if
+     * the user clicks on the viewport
+     *
+     * @param view - Ext.container.Viewport
+     */
+    onViewportClick: function(view) {
+       // do somehting on click
+    }
+}</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Modul komplett getestet?</h3>
+								
+								<p>
+									Wurde das Modul durch den Entwickler noch einmal komplett mit allen Funktionen und Konfigurationsm&ouml;glichkeiten durchgetestet? So k&ouml;nnen wir als Entwickler die QA entlasten.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>R&uuml;ckmeldung an den Benutzer?</h3>
+								
+								<p>
+									Wird dem Benutzer eine R&uuml;ckmeldung &uuml;ber Erfolg oder Misserfolg seiner Aktion gegeben? Diese R&uuml;ckmeldung kann entweder "Inline" im Modul selbst dargestellt werden oder &uuml;ber eine <code>Ext.MessageBox</code>. Bitte auch darauf achten, dass die Fehlermeldungen aussagekr&auml;ftig sind. Auf das Fehlverhalten von Benutzern kann hier nat&uuml;rlich eingegangen werden, wichtig ist, dass der Ton stimmt.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Textbausteine verwendet?</h3>
+								
+								<p>
+									Wurden f&uuml;r alle Texte im Modul Textbausteine verwendet? Dies ist wichtig, da das Shopware Backend sp&auml;ter in verschiedenen Sprachen zur Verf&uuml;gung gestellt werden soll.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Rechtschreibung &uuml;berpr&uuml;fen</h3>
+								
+								<p>
+									Bitte kontrolliert noch einmal Eure Rechtsschreibung. Rechtschreibfehler sind in einer professionellen Software nicht erw&uuml;nscht.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>History-Support</h3>
+								
+								<p>
+									Wurde der History-Support eingebaut, so dass der Benutzer auch &uuml;ber die Browser-Buttons navigieren kann? Weitere Informationen findet man in der ExtJS 4 Dokumentation unter dem Punkt <code>Ext.util.History</code>
+								</p>
+								
+<pre class="prettyprint lang-js linenums">// Handle tab changes on a TabPanel
+tabPanel.on('tabchange', function(tabPanel, tab){
+     Ext.History.add(tabPanel.id + ':' + tab.id);
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Ist das Modul "stateful"?</h3>
+								
+								<p>
+									In Shopware bieten wir einen State-Support an. Dies bedeutet, dass sich die Module immer an der gleichen Stelle und Gr&ouml;&szlig;e &ouml;ffnen. Dazu m&uuml;ssen in der Modulkonfiguration die beiden Attribute <code>"stateful"</code> und <code>"stateId"</code> gesetzt sein. Weitere Informationen findet man in der ExtJS 4 Dokumentation.
+								</p>
+								
+								<p class="example">
+<pre class="prettyprint lang-js linenums">Ext.define('Shopware.apps.Auth.view.List', {
+   stateful: true,
+   stateId: 'shopware-auth-list'
+});</pre>
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Werden die Events im Controller gesetzt?</h3>
+								
+								<p>
+									Um das MVC (Model-View-Controller) Prinzip korrekt umzusetzen, sollten alle Event-Listener im Controller des Moduls gesetzt werden. ExtJS 4 bietet zwar die M&ouml;glichkeit die Events in der View selbst zu setzen, dies ist aber nicht empfehlenswert.
+								</p>
+
+<pre class="prettyprint lang-js linenums">Ext.define('Shopware.apps.Auth.controller.Main', {
+   extends: 'Ext.app.Controller',
+	
+   init: function() {
+      this.controll({
+         'grid': {
+            render: this.onGridRender
+         },
+         'grid button[action=add]': {
+            click: this.onAddUser
+         }
+      })
+   }
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>K&ouml;nnen mehrere Fenster desselben Moduls ge&ouml;ffnet werden?</h3>
+								
+								<p>
+									Bitte pr&uuml;ft auch, ob ein Modul in mehreren Fenstern ge&ouml;ffnet werden kann. Sprich k&ouml;nnen mehrere Instanzen erstellt werden? Hier kann es zu Fehlern z.B. bei den <code>dockedItems</code> kommen.
+								</p>
+<pre class="prettyprint lang-js linenums">initComponent: function() {
+   //.. some logic
+   this.dockedItems = Ext.clone(this.dockedItems);
+   this.callParent(this);
+}</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Wurde der <code>Ext.FocusManager</code> verwendet?</h3>
+								
+								<p>
+									Der <code>Ext.FocusManager</code> bietet die M&ouml;glichkeit eine grundlegende Keyboard-Navigation ohne weitere Programmieraufwand zu implementieren. Der <code>Ext.FocusManager</code> ist standardm&auml;&szlig;ig aktiviert und muss in diesen Punkt nur gepr&uuml;ft werden.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Kann das Fenster minimiert und maximiert werden?</h3>
+								
+								<p>
+									Damit der Fenstermanager korrekt funktioniert und um den Benutzer ein Desktop-&auml;hnliches Verhalten zu bieten, sollten alle Fenster zumindest minimiert und maximiert werden k&ouml;nnen.
+								</p>
+
+<pre class="prettyprint lang-js linenums">Ext.create('Ext.window.Window', {
+   layout: 'border',
+   width: 800,
+   maximizable: true,
+   minimizable: true,
+   stateful: true,
+   stateId: 'shopware-auth-list',
+   title: 'Benutzerverwaltung',
+   items: [ this.getView('main.List') ]
+}).show();</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+			
+			<section id="forms">
+				<div class="page-header">
+					<h2>Formulare <small>und Formular-Elemente</small></h2>
+				</div>
+				
+				<div class="row">
+					<div class="span16">
+						<ol>
+							<li>
+								<h3><div class="checkbox"></div>Sind alle Labels "bold" und "rechtsb&uuml;ndig"?</h3>
+								
+								<p>
+									Um einen konsistenten Look'n'Feel zu bekommen, sollten alle Labels rechtsb&uuml;ndig und fett sein. Wichtig ist hier auch, dass alle Labels im Modul eine einheitliche L&auml;nge haben (z.B. 150px).
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Hilfs- und Placeholdertexte gesetzt?</h3>
+								
+								<p>
+									Dieser Punkt hilft die Usability unserer Backend-Module zu steigern. Durch Placeholdertexte geben wir ein Inline-Beispiel im Feld an. Hilfstexte k&ouml;nnen entweder unter ein Formular-Element gesetzt oder &uuml;ber ein Hilfe-Icon am Ende des Formular-Elementes zur Verf&uuml;gung gestellt werden.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">this.nameField = Ext.create('Ext.form.field.Text', {
+   fieldLabel: 'Name',
+   allowBlank: true,
+   supportText: 'Lorem ipsum dolor'
+   helpText: 'Lorem ipsum dolor'
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Findet eine Validierung statt?</h3>
+								
+								<p>
+									Um dem Benutzer die Angabe von Daten zu Erleichtern sollten immer alle eingegeben Daten validiert werden. ExtJS 4 bietet z.B. eine Validierung &uuml;ber das <code>Ext.data.Model</code> an. Weitere Informationen findet man in der ExtJS 4 Dokumentation.
+								</p>
+
+<pre class="prettyprint lang-js linenums">Ext.define('User', {
+   extend: 'Ext.data.Model',
+   fields: [
+        {name: 'name',     type: 'string'},
+        {name: 'age',      type: 'int'},
+        {name: 'gender',   type: 'string'}
+    ],
+    validations: [
+        {type: 'presence',  field: 'age'},
+        {type: 'length',    field: 'name',     min: 2},
+        {type: 'inclusion', field: 'gender',   list: ['Male', 'Female']}
+    ]
+});</pre>
+
+<p>Jetzt hat man die M&ouml;glichkeit &uuml;ber das <code>Ext.form.Panel</code> die Validierung per <code>form.isValid()</code> ansto&szlig;en und zu pr&uuml;fen</p>
+
+<pre class="prettyprint lang-js linenums">this.submitBtn = Ext.create('Ext.button.Button', {
+   text: 'Speichern',
+   formBind: true,     // wird nur einmal aktiv, wenn das Formular valide ist
+   handler: function() {
+      var form = this.up('form').getForm();
+      
+      if(form.isValid()) {
+         form.submit();
+      } else {
+         // Zeige Fehlermeldung an
+      }
+   }
+});</pre>
+
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Gewichtung der Buttons</h3>
+								
+								<p>
+									Wurde die Gewichtung der Buttons eingehalten? Der "Speichern"-Button sollte eine kontrastreiche Farbe erhalten und gr&ouml;&szlig;er sein als der "Abbrechen"-Button. Der "Speichern"-Button befindet sich immer rechts neben den "Abbrechen"-Button.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">this.buttons = [{
+   text: 'Abbrechen'
+}, {
+   text: 'Speichern',
+   action: 'save',
+   scale: 'large',      // "scale" beeinflusst die Gr&ouml;&szlig;e des Buttons
+   cls: 'primary'       // erh&auml;hlt durch die Klasse den Kontrast
+}];</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Beschriftung der Buttons</h3>
+								
+								<p>
+									Wurden die Buttons nach Sinn und Zweck beschriftet? Es ist wichtig, modulspezifische Buttontexte zu verwenden. So bekommt der Button einen besseren Bezug zum Formular und der Benutzer wei&szlig; genau was passiert, wenn er einen bestimmten Button bet&auml;tigt.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Wurden so wenig Formular-Elemente wie m&ouml;glich verwendet?</h3>
+								
+								<p>
+									Um das Backend so einfach wie M&ouml;glich zu halten, sollten wir auf &uuml;berfl&uuml;ssige Formular-Elemente verzichten. So k&ouml;nnen wir die Usability unserer Applikation steigern und den Workflow des Benutzers optimieren.
+								</p>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+			
+			<section id="stores">
+				<div class="page-header">
+					<h2>Stores <small>und Models</small></h2>
+				</div>
+				
+				<div class="row">
+					<div class="span16">
+						<ol>
+							<li>
+								<h3><div class="checkbox"></div>Felderdeklaration korrekt?</h3>
+								
+								<p>
+									Wurde bei der Felderdeklaration der richte Typ angegeben? Wurde bei einem Datumsfeld das richte Datumsformat hinterlegt?
+								</p>
+								
+<pre class="prettyprint lang-js linenums">Ext.define('User', {
+   extend: 'Ext.data.Model',
+   fields: [
+      {name: 'name',     type: 'string'},
+      {name: 'age',      type: 'int'},
+      {name: 'alive',    type: 'boolean', defaultValue: true}
+   ],
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div><code>storeId</code> hinterlegt?</h3>
+								
+								<p>
+									Um den <code>Ext.data.StoreManager</code> zu verwenden, um Stores z.B. f&uuml;r die komplette Applikation zur Verf&uuml;gung zu stellen muss eine <code>storeId</code> hinterlegt werden.
+								</p>
+<pre class="prettyprint lang-js linenums">Ext.create('Ext.data.Store', {
+   model: 'User',
+   storeId: 'usersStore'
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div><code>pageSize</code> hinterlegt?</h3>
+								
+								<p>
+									Eine <code>pageSize</code> sollte bei jedem Store hinterlegt sein, um ggf. sp&auml;ter ein Paging einzubauen.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">var store = Ext.create('Ext.data.Store', {
+   model: 'User',
+   pageSize: 10,
+   storeId: 'usersStore'
+});
+store.load({ params: { start: 0, limit: 10 } });</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Datenverarbeitung komplett Store basierend?</h3>
+								
+								<p>
+									Ist der komplette Datenaustausch mit dem serverseitigen Backend komplett auf Stores aufgebaut? ExtJS 4 bietet ein hervorrangendes System f&uuml;r die Datenverarbeitung - dieses sollte auch genutzt werden.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">Ext.define('Shopware.apps.Auth.model.Main', {
+   extend: 'Ext.data.Model',
+   fields: [ /** .. some fields */ ],
+   proxy: {
+      type: 'ajax',
+      api: {
+         read: 'backend/auth/getUsers',
+         create: 'backend/auth/createUser',
+         update: 'backend/auth/updateUser',
+         destroy: 'backend/auth/deleteUser'
+      },
+      reader: { type: 'json', root: 'data' }
+   }
+});</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+			
+			<section id="grid">
+				<div class="page-header">
+					<h2>Grids <small>und deren Toolbars</small></h2>
+				</div>
+				
+				<div class="row">
+					<div class="span16">
+						<ol>
+							<li>
+								<h3><div class="checkbox"></div>Wurde eine Paging-Toolbar eingebaut?</h3>
+								
+								<p>
+									Eine Paging-Toolbar bietet mehrere Vorteile. Es findet eine Performance-Steigerung statt, da nicht alle Datens&auml;tze auf einmal angezeigt werden und der Benutzer erf&auml;hrt direkt wie viele Eintr&auml;ge insgesamt zur Verf&uuml;gung stehen.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">Ext.create('Ext.grid.Panel', {
+   store: store,
+   columns: [
+       { header: 'Name',  dataIndex: 'name' },
+       { header: 'Email', dataIndex: 'email', flex: 1 },
+       { header: 'Phone', dataIndex: 'phone' }
+   ],
+   dockedItems: [{
+       xtype: 'pagingtoolbar',
+       store: store,   // gleicher Store wie beim GridPanel
+       dock: 'bottom',
+       displayInfo: true
+   }]
+});</pre>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Steht eine Suche zur Verf&uuml;gung?</h3>
+								
+								<p>
+									Steht dem Benutzer eine Suche zur Verf&uuml;gung, um schneller navigieren zu k&ouml;nnen? Die Suche sollte bei gro&szlig;en Datens&auml;tzen "Remote" &uuml;ber den <code>Ext.data.Store</code> laufen.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>K&ouml;nnen Spalten sortiert werden?</h3>
+								
+								<p>
+									Standardm&auml;&szlig;ig sind alle Spalten in ExtJS 4 sortierbar. Bei gro&szlig;en Datens&auml;tzen sollte das Sortieren "Remote" &uuml;ber den <code>Ext.data.Store</code> laufen.
+								</p>
+							</li>
+							
+							<li>
+								<h3><div class="checkbox"></div>Action-Buttons im Grid</h3>
+								
+								<p>
+									ExtJS 4 bietet f&uuml;r diesen Fall eine eigene Spalte namens <code>"actioncolumn"</code> an, womit man Action-Buttons anhand von einen Icon und einen Hilfetext erstellen kann.
+								</p>
+								
+<pre class="prettyprint lang-js linenums">this.columns = [{
+   xtype: 'actioncolumn',
+   width: 50,
+   items: [{
+      iconCls: 'delete',
+      action: 'delete',
+      cls: 'delete',
+      tooltip: 'L&ouml;scht diesen Benutzer',
+   }, {
+      iconCls: 'pencil',
+      cls: 'editBtn',
+      tooltip: 'Bearbeiten Sie diesen Benutzer'
+   }]
+}];</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+		</div>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.checklist.js"></script>
+		<script type="text/javascript" src="js/prettify.js"></script>
+		<script>$(function () { prettyPrint() })</script>
+	</body>
+</html>

@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="s_premium_dispatch_attributes">
+    </table>
+    <table name="s_premium_dispatch">
+        <column>id</column>
+        <column>name</column>
+        <column>type</column>
+        <column>description</column>
+        <column>comment</column>
+        <column>active</column>
+        <column>position</column>
+        <column>calculation</column>
+        <column>surcharge_calculation</column>
+        <column>tax_calculation</column>
+        <column>shippingfree</column>
+        <column>multishopID</column>
+        <column>customergroupID</column>
+        <column>bind_shippingfree</column>
+        <column>bind_time_from</column>
+        <column>bind_time_to</column>
+        <column>bind_instock</column>
+        <column>bind_laststock</column>
+        <column>bind_weekday_from</column>
+        <column>bind_weekday_to</column>
+        <column>bind_weight_from</column>
+        <column>bind_weight_to</column>
+        <column>bind_price_from</column>
+        <column>bind_price_to</column>
+        <column>bind_sql</column>
+        <column>status_link</column>
+        <column>calculation_sql</column>
+        <row>
+            <value>10</value>
+            <value>Aufschlag Versand nach PLZ</value>
+            <value>2</value>
+            <value></value>
+            <value>immer 3 &amp;euro;</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>3</value>
+            <value>0</value>
+            <value>1000.00</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>0</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>0</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>IFNULL(us.zipcode,ub.zipcode) = '48624'</value>
+            <value>&lt;a href=&quot;http://nolp.dhl.de/nextt-online-public/set_identcodes.do?lang=de&amp;zip=&amp;idc={$offerPosition.trackingcode}&quot; onclick=&quot;return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');&quot; target=&quot;_blank&quot;&gt;hier&lt;/a&gt;</value>
+            <value></value>
+        </row>
+        <row>
+            <value>9</value>
+            <value>Normal Versand</value>
+            <value>0</value>
+            <value></value>
+            <value>immer 3 &amp;euro;</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>3</value>
+            <value>0</value>
+            <value>1000.00</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>0</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>0</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>NULL</value>
+            <value>&lt;a href=&quot;http://nolp.dhl.de/nextt-online-public/set_identcodes.do?lang=de&amp;zip=&amp;idc={$offerPosition.trackingcode}&quot; onclick=&quot;return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');&quot; target=&quot;_blank&quot;&gt;hier&lt;/a&gt;</value>
+            <value></value>
+        </row>
+    </table>
+	<table name="s_export">
+		<column>id</column>
+		<column>name</column>
+		<column>last_export</column>
+		<column>active</column>
+		<column>hash</column>
+		<column>show</column>
+		<column>count_articles</column>
+		<column>expiry</column>
+		<column>interval</column>
+		<column>formatID</column>
+		<column>last_change</column>
+		<column>filename</column>
+		<column>encodingID</column>
+		<column>categoryID</column>
+		<column>currencyID</column>
+		<column>customergroupID</column>
+		<column>partnerID</column>
+		<column>languageID</column>
+		<column>active_filter</column>
+		<column>image_filter</column>
+		<column>stockmin_filter</column>
+		<column>instock_filter</column>
+		<column>price_filter</column>
+		<column>own_filter</column>
+		<column>header</column>
+		<column>body</column>
+		<column>footer</column>
+		<column>count_filter</column>
+		<column>multishopID</column>
+		<column>variant_export</column>
+		<row>
+			<value>1</value>
+			<value>Google Produktsuche</value>
+			<value>2011-03-24 17:44:32</value>
+			<value>1</value>
+			<value>0805bbb934287228edb5374083b81416</value>
+			<value>1</value>
+			<value>89</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>3456</value>
+			<value>2</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>export.txt</value>
+			<value>2</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{#BOM#}{strip}
+id{#S#}
+titel{#S#}
+beschreibung{#S#}
+link{#S#}
+bild_url{#S#}
+ean{#S#}
+gewicht{#S#}
+marke{#S#}
+mpn{#S#}
+zustand{#S#}
+produktart{#S#}
+preis{#S#}
+versand{#S#}
+standort{#S#}
+{&quot;währung&quot;|escape}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}{#S#}
+{$sArticle.description_long|strip_tags|html_entity_decode|trim|regex_replace:&quot;#[^\wöäüÖÄÜß\.%&amp;-+ ]#i&quot;:&quot;&quot;|strip|truncate:500:&quot;...&quot;:true|htmlentities|escape}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{$sArticle.image|image:4}{#S#}
+{$sArticle.attr6|escape}{#S#}
+{if $sArticle.weight}{$sArticle.weight|escape:&quot;number&quot;}{&quot; kg&quot;}{/if}{#S#}
+{$sArticle.supplier|escape}{#S#}
+{$sArticle.suppliernumber|escape}{#S#}
+Neu{#S#}
+{$sArticle.articleID|category:&quot; &gt; &quot;|escape}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+DE::DHL:{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;},AT::DHL:{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;at&quot;}{#S#}
+{#S#}
+{$sCurrency.currency}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Kelkoo</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>eeaa0dc27f4bbed6c64a80cae30de592</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>kelkoo.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+url{#S#}
+title{#S#}
+description{#S#}
+price{#S#}
+offerid{#S#}
+image{#S#}
+availability{#S#}
+deliverycost
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{$sArticle.name|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{$sArticle.ordernumber}{#S#}
+{$sArticle.image|image:5|escape}{#S#}
+{if $sArticle.instock}001{else}002{/if}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>billiger.de</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>a4b9457b445cda4194f7870fbe390928</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>billiger.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+id{#S#}
+hersteller{#S#}
+modell_nr{#S#}
+name{#S#}
+kategorie{#S#}
+preis{#S#}
+beschreibung{#S#}
+bild_klein{#S#}
+bild_gross{#S#}
+link{#S#}
+lieferzeit{#S#}
+lieferkosten{#S#}
+waehrung{#S#}
+aufbauservice{#S#}
+24_Std_service{#S#}
+EAN{#S#}
+ASIN{#S#}
+ISBN{#S#}
+PZN{#S#}
+ISMN{#S#}
+EPC{#S#}
+VIN{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber}|
+{$sArticle.supplier|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.articleID|category:&quot;&gt;&quot;|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.price|escape:&quot;number&quot;}|
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.image|image:3}|
+{$sArticle.image|image:5}|
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sCurrency.currency}|
+|
+|
+{$sArticle.attr6|replace:&quot;|&quot;:&quot;&quot;}|
+|
+|
+|
+|
+|
+|
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>Idealo</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>ce59fe3a849309da56dc5d5bb03ed571</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>idealo.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Kategorie|
+Hersteller|
+Produktbezeichnung|
+Hersteller-Artikelnummer|
+EAN|
+PZN|
+ISBN|
+Preis|
+Versandkosten Nachnahme|
+Versandkosten Vorkasse|
+Versandkosten Bankeinzug|
+Deeplink|
+Lieferzeit|
+Artikelnummer|
+Link Produktbild|
+Produkt Kurztext|
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}|
+{$sArticle.supplier|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.suppliernumber|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.attr6|escape}|
+|
+|
+{$sArticle.price|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;debit&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle.ordernumber|escape}|
+{$sArticle.image|image:5}{#S#}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}|
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Yatego</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>bbf96a5806c09e2b7f2c08d2e8347427</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>yatego.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+foreign_id{#S#}
+article_nr{#S#}
+title{#S#}
+categories{#S#}
+long_desc{#S#}
+picture{#S#}
+url{#S#}
+delivery_surcharge{#S#}
+price
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.suppliernumber|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|replace:&quot;|&quot;:&quot;&quot;|escape}{#S#}
+{$sArticle.image|image:2}{#S#}
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>6</value>
+			<value>schottenland.de</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>3ac312165216e4d7bfc162437c030a23</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>schottenland.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Hersteller|
+Produktbezeichnung|
+Produktbeschreibung|
+Preis|
+Verfügbarkeit|
+EAN|
+Hersteller AN|
+Deeplink|
+Artikelnummer|
+DAN_Ingram|
+Versandkosten Nachnahme|
+Versandkosten Vorkasse|
+Versandkosten Kreditkarte|
+Versandkosten Bankeinzug
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.supplier|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.price|escape:&quot;number&quot;}|
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle.attr6|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.suppliernumber|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.ordernumber|replace:&quot;|&quot;:&quot;&quot;}|
+|
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;credituos&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;debit&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>guenstiger.de</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>389d55ddc6f87ebf763cb59f601ec83e</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>guenstiger.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Bestellnummer|
+Hersteller|
+Bezeichnung|
+Preis|
+Lieferzeit|
+ProduktLink|
+FotoLink|
+Beschreibung|
+VersandNachnahme|
+VersandKreditkarte|
+VersandLastschrift|
+VersandBankeinzug|
+VersandRechnung|
+VersandVorkasse|
+EANCode|
+Gewicht
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.supplier|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.price|escape:&quot;number&quot;}|
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.image|image:2}|
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+|
+{$sArticle|@shippingcost:&quot;debit&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+|
+{$sArticle|@shippingcost:&quot;invoice&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle.attr6|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.weight|replace:&quot;|&quot;:&quot;&quot;}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>geizhals.at</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>faadfb9668557a4da362e736ac8e4312</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>geizhals.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+ID{#S#}
+Hersteller{#S#}
+Artikelbezeichnung{#S#}
+Kategorie{#S#}
+Beschreibungsfeld{#S#}
+Bild{#S#}
+Url{#S#}
+Lagerstandl{#S#}
+Versandkosten{#S#}
+VersandkostenNachname{#S#}
+Preis{#S#}
+EAN{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.supplier|escape}{#S#}
+{$sArticle.name|escape}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.image|image:3}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{$sArticle.attr6|escape}{#S#}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>9</value>
+			<value>Ciao</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>1</value>
+			<value>1e20fd3193528c029466eb61ce08a267</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>ciao.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Offer ID{#S#}
+Brand{#S#}
+Product Name{#S#}
+Category{#S#}
+Description{#S#}
+Image URL{#S#}
+Product URL{#S#}
+Delivery{#S#}
+ShippingCost{#S#}
+Price{#S#}
+Product ID{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.supplier|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.image|image:3}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{#S#}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>10</value>
+			<value>Pangora</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>3df5750af71e674b8d5dc2e95989b514</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>pangora.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+offer-id{#S#}
+mfname{#S#}
+label{#S#}
+merchant-category{#S#}
+description{#S#}
+image-url{#S#}
+offer-url{#S#}
+ships-in{#S#}
+release-date{#S#}
+delivery-charge{#S#}
+prices	old-prices{#S#}
+product-id{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.supplier|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.image|image:3|escape}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}{#S#}
+{$sArticle.releasedate|escape}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{#S#}
+{/strip}{#L#}
+
+</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Shopping.com</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1cf016e643884ca125fd0829d6e344da</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>shopping.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+MPN|
+EAN|
+Hersteller|
+Produktname|
+Produktbeschreibung|
+Preis|
+Produkt-URL|
+Produktbild-URL|
+Kategorie|
+Verfügbar|
+Verfügbarkeitsdetails|
+Versandkosten
+{/strip}{#L#}</value>
+			<value>{strip}
+|
+{$sArticle.attr6}|
+{$sArticle.supplier}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true}|
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode}|
+{$sArticle.price|escape:&quot;number&quot;}|
+{$sArticle.articleID|link:$sArticle.name}|
+{$sArticle.image|image:4}|
+{$sArticle.articleID|category:&quot;&gt;&quot;}|
+{if $sArticle.instock}Ja{else}Nein{/if}|
+{if $sArticle.instock}1-3 Werktage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>12</value>
+			<value>Hitmeister</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>dc389d83d6f94a16d326d210416b84de</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>hitmeister.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+ean{#S#}
+condition{#S#}
+price{#S#}
+comment{#S#}
+offer_id{#S#}
+location{#S#}
+count{#S#}
+delivery_time{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.attr6|escape}{#S#}
+100{#S#}
+{$sArticle.price*100}{#S#}
+{#S#}
+{$sArticle.ordernumber|escape}{#S#}
+{#S#}
+{#S#}
+{if $sArticle.instock}b{else}d{/if}{#S#}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>13</value>
+			<value>evendi.de</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>8bef8f031a9593dff144d3e0c70796d7</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>evendi.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Eindeutige Händler-Artikelnummer{#S#}
+Preis in Euro{#S#}
+Kategorie{#S#}
+Produktbezeichnung{#S#}
+Produktbeschreibung{#S#}
+Link auf Detailseite{#S#}
+Lieferzeit{#S#}
+EAN-Nummer{#S#}
+Hersteller-Artikelnummer{#S#}
+Link auf Produktbild{#S#}
+Hersteller{#S#}
+VersandVorkasse{#S#}
+VersandNachnahme{#S#}
+VersandLastschrift{#S#}
+VersandKreditkarte{#S#}
+VersandRechnung{#S#}
+VersandPayPal
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|escape}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{if $sArticle.instock}1-3 Werktage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}{#S#}
+{$sArticle.attr6|escape}{#S#}
+{$sArticle.suppliernumber|escape}{#S#}
+{$sArticle.image|image:2}{#S#}
+{$sArticle.supplier|escape}{#S#}
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle|@shippingcost:&quot;debit&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{#S#}
+{$sArticle|@shippingcost:&quot;invoice&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{$sArticle|@shippingcost:&quot;paypal&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}{#S#}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>14</value>
+			<value>affili.net</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>664cfcc85b1c60e8c5b7c0178f9a5cf2</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>affilinet.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+art_number{#S#}
+category{#S#}
+title{#S#}
+description{#S#}
+price{#S#}
+img_url{#S#}
+deeplink1{#S#}
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber}{#S#}
+{$sArticle.articleID|category:&quot;&gt;&quot;|escape}{#S#}
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}{#S#}
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|escape}{#S#}
+{$sArticle.price|escape:&quot;number&quot;}{#S#}
+{$sArticle.image|image:5|escape}{#S#}
+{$sArticle.articleID|link:$sArticle.name|escape}{#S#}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>15</value>
+			<value>Google Produktsuche XML</value>
+			<value>2011-03-24 17:26:11</value>
+			<value>1</value>
+			<value>a86fed5e80b5e92b06311214844de8f4</value>
+			<value>1</value>
+			<value>89</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>3</value>
+			<value>2008-09-27 09:52:17</value>
+			<value>export.xml</value>
+			<value>2</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{#BOM#}&lt;?xml version=&quot;1.0&quot; encoding=&quot;{#EN#}&quot; ?&gt;
+&lt;rss version=&quot;2.0&quot; xmlns:g=&quot;http://base.google.com/ns/1.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+&lt;channel&gt;
+	&lt;atom:link href=&quot;http://{$sConfig.sBASEPATH}/engine/connectors/export/{$sSettings.id}/{$sSettings.hash}/{$sSettings.filename}&quot; rel=&quot;self&quot; type=&quot;application/rss+xml&quot; /&gt;
+	&lt;title&gt;{$sConfig.sSHOPNAME}&lt;/title&gt;
+	&lt;description&gt;test&lt;/description&gt;
+	&lt;link&gt;http://{$sConfig.sBASEPATH}&lt;/link&gt;
+	&lt;language&gt;{$sLanguage.isocode}-{$sLanguage.isocode}&lt;/language&gt;
+	&lt;image&gt;
+		&lt;url&gt;http://{$sConfig.sBASEPATH}/templates/0/de/media/img/default/store/logo.gif&lt;/url&gt;
+		&lt;title&gt;{$sConfig.sSHOPNAME}&lt;/title&gt;
+		&lt;link&gt;http://{$sConfig.sBASEPATH}&lt;/link&gt;
+	&lt;/image&gt;</value>
+			<value>&lt;item&gt; 
+	&lt;title&gt;{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|escape}&lt;/title&gt;
+	&lt;guid&gt;{$sArticle.articleID|link:$sArticle.name|escape}&lt;/guid&gt;
+	&lt;link&gt;{$sArticle.articleID|link:$sArticle.name|escape}&lt;/link&gt;
+	&lt;description&gt;{$sArticle.description_long|strip_tags|trim|truncate:900:&quot;...&quot;|escape}&lt;/description&gt;
+	&lt;category&gt;{$sArticle.articleID|category:&quot; &gt; &quot;|escape}&lt;/category&gt;
+	{if $sArticle.changed}&lt;pubDate&gt;{$sArticle.changed|date:rss}&lt;/pubDate&gt;{/if}
+	&lt;g:bild_url&gt;{$sArticle.image|image:4}&lt;/g:bild_url&gt;
+{*&lt;g:verfallsdatum&gt;2006-12-20&lt;/g:verfallsdatum&gt;*}
+	&lt;g:preis&gt;{$sArticle.price|format:&quot;number&quot;}&lt;/g:preis&gt;
+{*&lt;g:preisart&gt;ab&lt;/g:preisart&gt;*}
+{*	&lt;g:währung&gt;{$sCurrency.currency}&lt;/g:währung&gt;*}
+{*	&lt;g:zahlungsmethode&gt;Barzahlung;Scheck;Visa;MasterCard;AmericanExpress;Lastschrift&lt;/g:zahlungsmethode&gt;*}
+{*&lt;g:menge&gt;20&lt;/g:menge&gt;*}
+	&lt;g:marke&gt;{$sArticle.supplier|escape}&lt;/g:marke&gt;
+	&lt;g:ean&gt;{$sArticle.attr6|escape}&lt;/g:ean&gt;
+{*&lt;g:hersteller&gt;{$sArticle.supplier|escape}&lt;/g:hersteller&gt;*}
+{*&lt;g:hersteller_kennung&gt;834&lt;/g:hersteller_kennung&gt;*}
+{*&lt;g:speicher&gt;512&lt;/g:speicher&gt;*}
+{*&lt;g:prozessorgeschwindigkeit&gt;2&lt;/g:prozessorgeschwindigkeit&gt;*}
+	&lt;g:modellnummer&gt;{$sArticle.suppliernumber|escape}&lt;/g:modellnummer&gt;
+{*&lt;g:größe&gt;14x14x3&lt;/g:größe&gt;*}
+	&lt;g:gewicht&gt;2&lt;/g:gewicht&gt;
+	&lt;g:zustand&gt;neu&lt;/g:zustand&gt;
+{*&lt;g:farbe&gt;schwarz&lt;/g:farbe&gt;*}
+	&lt;g:produktart&gt;{$sArticle.articleID|category:&quot;/&quot;|escape}&lt;/g:produktart&gt;
+&lt;/item&gt;</value>
+			<value>&lt;/channel&gt;
+&lt;/rss&gt;</value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>16</value>
+			<value>preissuchmaschine.de</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>77c6f9b3a431dde220c8bbd3b5b0ba79</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>1</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>preissuchmaschine.csv</value>
+			<value>1</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>{strip}
+Bestellnummer|
+Hersteller|
+Bezeichnung|
+Preis|
+Lieferzeit|
+ProduktLink|
+FotoLink|
+Beschreibung|
+VersandNachnahme|
+VersandKreditkarte|
+VersandLastschrift|
+VersandBankeinzug|
+VersandRechnung|
+VersandVorkasse|
+EANCode|
+Gewicht
+{/strip}{#L#}</value>
+			<value>{strip}
+{$sArticle.ordernumber|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.supplier|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.name|strip_tags|strip|truncate:80:&quot;...&quot;:true|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.price|escape:&quot;number&quot;}|
+{if $sArticle.instock}2 Tage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}|
+{$sArticle.articleID|link:$sArticle.name|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.image|image:2}|
+{$sArticle.description_long|strip_tags|strip|trim|truncate:900:&quot;...&quot;:true|html_entity_decode|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle|@shippingcost:&quot;cash&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+|
+{$sArticle|@shippingcost:&quot;debit&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+|
+{$sArticle|@shippingcost:&quot;invoice&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle|@shippingcost:&quot;prepayment&quot;:&quot;de&quot;:&quot;Deutsche Post Standard&quot;|escape:&quot;number&quot;}|
+{$sArticle.attr6|replace:&quot;|&quot;:&quot;&quot;}|
+{$sArticle.weight|replace:&quot;|&quot;:&quot;&quot;}
+{/strip}{#L#}</value>
+			<value></value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>17</value>
+			<value>RSS Feed-Template</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>882e999e81bb32cc7732c5a2cff03af8</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2000-01-01 00:00:00</value>
+			<value>0</value>
+			<value>3</value>
+			<value>0000-00-00 00:00:00</value>
+			<value>export.xml</value>
+			<value>2</value>
+			<null />
+			<value>1</value>
+			<value>1</value>
+			<value></value>
+			<null />
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;rss version=&quot;2.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+&lt;channel&gt;
+	&lt;atom:link href=&quot;http://{$sConfig.sBASEPATH}/engine/connectors/export/{$sSettings.id}/{$sSettings.hash}/{$sSettings.filename}&quot; rel=&quot;self&quot; type=&quot;application/rss+xml&quot; /&gt;
+	&lt;title&gt;{$sConfig.sSHOPNAME}&lt;/title&gt;
+	&lt;description&gt;Shopbeschreibung ...&lt;/description&gt;
+	&lt;link&gt;http://{$sConfig.sBASEPATH}&lt;/link&gt;
+	&lt;language&gt;{$sLanguage.isocode}-{$sLanguage.isocode}&lt;/language&gt;
+	&lt;image&gt;
+		&lt;url&gt;http://{$sConfig.sBASEPATH}/templates/0/de/media/img/default/store/logo.gif&lt;/url&gt;
+		&lt;title&gt;{$sConfig.sSHOPNAME}&lt;/title&gt;
+		&lt;link&gt;http://{$sConfig.sBASEPATH}&lt;/link&gt;
+	&lt;/image&gt;{#L#}</value>
+			<value>&lt;item&gt; 
+	&lt;title&gt;{$sArticle.name|strip_tags|htmlspecialchars_decode|strip|escape}&lt;/title&gt;
+	&lt;guid&gt;{$sArticle.articleID|link:$sArticle.name|escape}&lt;/guid&gt;
+	&lt;link&gt;{$sArticle.articleID|link:$sArticle.name}&lt;/link&gt;
+	&lt;description&gt;{if $sArticle.image}
+		&lt;a href=&quot;{$sArticle.articleID|link:$sArticle.name}&quot; style=&quot;border:0 none;&quot;&gt;
+			&lt;img src=&quot;{$sArticle.image|image:3}&quot; align=&quot;right&quot; style=&quot;padding: 0pt 0pt 12px 12px; float: right;&quot; /&gt;
+		&lt;/a&gt;
+{/if}
+		{$sArticle.description_long|strip_tags|regex_replace:&quot;/[^\wöäüÖÄÜß .?!,&amp;:%;\-\&quot;']/i&quot;:&quot;&quot;|trim|truncate:900:&quot;...&quot;|escape}
+	&lt;/description&gt;
+	&lt;category&gt;{$sArticle.articleID|category:&quot;&gt;&quot;|htmlspecialchars_decode|escape}&lt;/category&gt;
+{if $sArticle.changed} 	{assign var=&quot;sArticleChanged&quot; value=$sArticle.changed|strtotime}&lt;pubDate&gt;{&quot;r&quot;|date:$sArticleChanged}&lt;/pubDate&gt;{&quot;rn&quot;}{/if}
+&lt;/item&gt;{#L#}</value>
+			<value>&lt;/channel&gt;
+&lt;/rss&gt;</value>
+			<value>0</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+	</table>
+</dataset>

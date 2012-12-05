@@ -1,0 +1,126 @@
+<?php
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Blog
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @license    http://shopware.de/license
+ * @version    $Id$
+ * @author     M.Schmaeing
+ * @author     $Author$
+ */
+
+namespace Shopware\Models\Blog;
+
+use Shopware\Components\Model\ModelEntity,
+Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * Shopware Blog Tag Model
+ *
+ * todo@all: Documentation
+ *
+ * @ORM\Entity
+ * @ORM\Table(name=" s_blog_tags")
+ */
+class Tag extends ModelEntity
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer $blogId
+     *
+     * @ORM\Column(name="blog_id", type="integer", nullable=true)
+     */
+    private $blogId;
+
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", nullable=false)
+     */
+    private $name;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Blog\Blog $blog
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="tags")
+     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     */
+    protected $blog;
+
+    /**
+     * Gets the Id
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Gets the Name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets the Name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return \Shopware\Models\Blog\Blog
+     */
+    public function getBlog()
+    {
+        return $this->blog;
+    }
+
+    /**
+     * @param \Shopware\Models\Blog\Blog $blog
+     */
+    public function setBlog($blog)
+    {
+        $this->blog = $blog;
+    }
+}

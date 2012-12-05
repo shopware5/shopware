@@ -1,0 +1,233 @@
+***********************************************************
+********** Version 1.2.3 - Released 2012-07-19 |***********
+***********************************************************
+File: \paymorrow_direct_webservice_client\index.php
+------------------------------------
+* fixed paymorrow links for subshops
+
+
+***********************************************************
+********** Version 1.2.2 - Released 2012-07-04 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* some options are configurable for all subshop now
+
+***********************************************************
+********** Version 1.2.1 - Released 2012-07-04 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* all options are configurable for every subshop now
+
+
+***********************************************************
+********** Version 1.2.0 - Released 2012-07-04 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* Version changed to 1.2.0
+
+
+***********************************************************
+********** Version 1.1.7 - Released 2012-06-29 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
++ supports subshops now
+
+
+***********************************************************
+********** Version 1.1.6 - Released 2012-06-14 |***********
+***********************************************************
+File: \templates\_default\frontend\checkout\confirm.tpl
+------------------------------------
+* fixed AGB for other payments
+
+
+***********************************************************
+********** Version 1.1.5 - Released 2012-06-13 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* fixed bug at guest checkout when article quantity is changed
+
+File: \templates\_default\frontend\register\payment_fieldset.tpl
+------------------------------------
+* fixed css for surcharge
+
+
+***********************************************************
+********** Version 1.1.4 - Released 2012-05-25 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
++ improved cronjob
+
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* fixed some bugs in myCreateMail function
+
+
+***********************************************************
+********** Version 1.1.3 - Released 2012-05-16 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* fixed Bugs with error handling
+
+
+***********************************************************
+********** Version 1.1.2 - Released 2012-05-11 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* some bugfixes with NotifyAction
+
+
+***********************************************************
+********** Version 1.1.1 - Released 2012-04-05 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* Template is set for notify now.
+
+
+***********************************************************
+********** Version 1.1.0 - Released 2012-03-27 |***********
+***********************************************************
+File: \templates\_default\frontend\checkout\confirm.tpl
+------------------------------------
+* fixed AGB 
+* fixed displaying of payment fees
+
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* fixed template bug at payment notification
+
+
+***********************************************************
+********** Version 1.0.9 - Released 2012-03-07 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* fixed mySaveOrder function
+
+
+***********************************************************
+********** Version 1.0.8 - Released 2012-03-05 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* changed myCreateMail function
+
+File: \Bootstrap.php
+------------------------------------
+* fixed paymorrow accepted status
+* removed mailtext in pluginconfig
+
+File: \paymorrow_direct_webservice_client\index.php
+------------------------------------
++ added trim functions for article description and ordernumber
+
+
+***********************************************************
+********** Version 1.0.7 - Released 2012-02-23 |***********
+***********************************************************
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* fixed total amounts in order confirmation mail
+
+
+***********************************************************
+********** Version 1.0.6 - Released 2012-02-15 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* fixed a problem with templates made before shopware version 3.5.4
+* fixed userage check(caused an emtpy error message after checkout)
++ some changes in onPostPaymorrowDispatch function to improve stability
+
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
+* IFrame is included here now and not in the payment action anymore
+* fixed getPaymorrowPendingStatusId function
++ Logging is sepperated in iframe response and notify respone now
+
+File: \templates\_default\frontend\checkout\payment.tpl
+------------------------------------
+* changed name to gateway.tpl
++ extends frontend/index/index.tpl now
++ includes breadcrumbs now
+
+ 
+***********************************************************
+********** Version 1.0.5 - Released 2012-02-06 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
+* fixed customer- and ordernumber in e-mail
+* fixed customer order history
+* order is no longer marked as taxfree if customergroup tax is set to netto
+* if company is entered or customer is to young paymorrow isn´t available
+
+File: \paymorrow_direct_webservice_client\index.php
+------------------------------------
++ added trim functions
+* fixed articles with price and tax of 0
+
+
+***********************************************************
+********** Version 1.0.4 - Released 2012-01-25 |***********
+***********************************************************
+File: \Bootstrap.php
+------------------------------------
++ order states are now set correctly when the plugin get uninstalled and then get installed again
++ added field for extra text to plugin configuration. This text is shown at the bottom of emails-
+
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
++ mails get attachments that are set for sOrder mails
+* improved error handling
+
+
+***********************************************************
+********** Version 1.0.3 - Released 2012-01-23 |***********
+***********************************************************
+File: \paymorrow_direct_webservice_client\index.php
+------------------------------------
++ added trim function
+
+File: \controller\PiPaymentPaymorrow.php
+------------------------------------
++ mails are now also send to shop owner
+
+File: \templates\_default\frontend\checkout\payment_fieldset.tpl
+------------------------------------
++ added auto submit class
+
+
+
+***********************************************************
+********** Version 1.0.2 - Released 2012-01-05 |***********
+***********************************************************
+File: \paymorrow_direct_webservice_client\index.php
+------------------------------------
+* fixed notify URL
+
+File: \Bootstrap.php
+------------------------------------
++ improved error handling
+
+File: \paymorrow_direct_webservice_client\inc\communication.php
+------------------------------------
+* removed flush functions
+
+
+***********************************************************
+********** Version 1.0.1 - Released 2012-01-03 |***********
+***********************************************************
+File: \templates\_default\frontend\checkout\payment_fieldset.tpl
+File: \css\Paymorrowstyles.css
+------------------------------------
+* fixed css classes

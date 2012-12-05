@@ -1,0 +1,7 @@
+{
+    "name": "Emotion Black",
+    "author": "shopware AG",
+    "license": "New BSD",
+    "esi": true,
+    "emotion": true
+}

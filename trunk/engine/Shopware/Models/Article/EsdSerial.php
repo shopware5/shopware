@@ -1,0 +1,121 @@
+<?php
+/**
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Article
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     $Author$
+ */
+
+namespace Shopware\Models\Article;
+use Shopware\Components\Model\ModelEntity,
+Doctrine\ORM\Mapping AS ORM,
+Symfony\Component\Validator\Constraints as Assert,
+Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * todo@all: Documentation
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="s_articles_esd_serials")
+ */
+class EsdSerial extends ModelEntity
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string $serialnumber
+     *
+     * @ORM\Column(name="serialnumber", type="string", length=255, nullable=true)
+     */
+    private $serialnumber = '';
+
+    /**
+     * OWNING SIDE
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Esd", inversedBy="serials")
+     * @ORM\JoinColumn(name="esdID", referencedColumnName="id")
+     * @var \Shopware\Models\Article\Esd
+     */
+    protected $esd;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="serial")
+     * @var \Shopware\Models\Order\Esd
+     */
+    protected $esdOrder;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param esd $esd
+     * @return \Shopware\Models\Article\EsdSerial
+     */
+    public function setEsd(\Shopware\Models\Article\Esd $esd)
+    {
+        $this->esd = $esd;
+
+        return $this;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Esd
+     */
+    public function getEsd()
+    {
+        return $this->esd;
+    }
+
+    /**
+     * @param string $serialnumber
+     */
+    public function setSerialnumber($serialnumber)
+    {
+        $this->serialnumber = $serialnumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerialnumber()
+    {
+        return $this->serialnumber;
+    }
+}

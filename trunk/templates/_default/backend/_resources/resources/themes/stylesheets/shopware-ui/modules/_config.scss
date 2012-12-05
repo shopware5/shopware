@@ -1,0 +1,17 @@
+div[id^=config-main-window] {
+    div[id^=config-navigation] {
+        .#{$prefix}panel-body {
+            border-bottom-color: transparent;
+
+            .#{$prefix}toolbar {
+                @include reset-box-shadow;
+                border-color: #ebedef;
+                padding: 5px 0 5px 2px;
+            }
+        }
+    }
+
+    div[id^=config-main-panel] .#{$prefix}panel-body {
+        background: #ebedef;
+    }
+}

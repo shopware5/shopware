@@ -1,0 +1,11 @@
+div[id^=supplierGrid] {
+    .#{$prefix}grid-with-row-lines {
+        border-top: 0 none;
+        border-right: 0 none;
+    }
+}
+div[id^=supplier-main-edit] {
+    .#{$prefix}panel-body {
+        background: #F9FAFA !important;
+    }
+}

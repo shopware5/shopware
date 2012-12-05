@@ -1,0 +1,338 @@
+/*	=HEADER SHOPNAVI AND MY ACCOUNT
+	-------------------------------------------- */
+#header .user_points { height: 25px; width: auto; z-index: 9999; display: block; float: left; border-right: 1px solid #e8e8e8 }
+#header .user_points .user_points_inner {
+	background: url(../images/bonuspoint_top_small.png) no-repeat 5px center #fef7d6;
+	height: 21px;
+	width: auto;
+	line-height: 21px;
+	padding: 0 10px 0 35px;
+ 	-moz-user-select: none;
+	cursor: pointer;
+	z-index: 9999;
+	display: block;
+	margin: 2px
+}
+#header .current_points { color: #cd9a00; margin: 0 }
+.link_container {
+	background: #fff;
+	border-color: #d7d7d7;
+	border-style: solid;
+	border-width: 1px;
+	display: none;
+	padding: 2px;
+	position: absolute;
+	right: 0;
+	text-align: left;
+	top: 90px;
+	width: 190px;
+	z-index: 999;
+
+	/*CSS3*/
+	-webkit-box-shadow: 0 2px 3px #d6d6d6;
+	   -moz-box-shadow: 0 2px 3px #d6d6d6;
+	        box-shadow: 0 2px 3px #d6d6d6
+}
+
+.link_container .arrow {
+	background: url("../../../../../../../../../../../templates/_emotion/frontend/_resources/images/arrows/servicenav_arrow.png") no-repeat scroll right bottom transparent;
+	display: block;
+	height: 20px;
+	position: absolute;
+	right: 160px;
+	top: -19px;
+	width: 21px
+}
+
+.link_container li { padding: 5px 10px; line-height: 20px }
+.link_container li.last { border-top: none }
+.link_container li.first { background: #fef7d6; text-align: center; color: #cd9a00 }
+
+
+#header .inner .basket_points { left: 774px; top: 60px; position: absolute; color: #d0a11e; width: 160px; border-top: 1px solid #dfdfdf; font-size: 11px; padding: 0 2px }
+#shopnavi { top: 37px }
+#shopnavi .display .top { margin: 0 }
+#shopnavi .ajax_basket_container { margin-top: 16px }
+#shopnavi .ajax_basket_container div.ajax_loader { top: -20px }
+
+/*	=ACCORDION - TOPSELLER
+	-------------------------------------------- */
+.bonus_articles .accordion li.active ul.image { padding: 0 }
+
+.bonus_articles .accordion .detail a,
+.bonus_articles .accordion .detail .points { left: 15px; }
+.bonus_articles .accordion .detail .points {
+	padding-left: 17px;
+	position: relative;
+	top: 14px;
+	color: #333;
+	font-weight: 700;
+	height: 23px;
+	line-height: 23px;
+	background: url("../images/bonuspoint_small.png") no-repeat left center transparent
+}
+.bonus_articles .bonus_listing_link {
+	height: 31px;
+	display: block;
+	line-height: 32px;
+	text-align: center;
+	border-top: 1px solid #DFDFDF;
+	font-weight: 700;
+	width: 177px
+}
+
+/*	=RECOMMENDATION SLIDER
+	-------------------------------------------- */
+/* New articles slider */
+.bonus_system_slider .ajaxSlider {position: relative; margin-top: 0; margin-bottom: 15px;}
+.bonus_system_slider .ajaxSlider .sliding_outer {position: relative; overflow: hidden; left: 26px; width: 944px;}
+.bonus_system_slider .ajaxSlider .sliding_container .slide {width: 944px !important;}
+#content .bonus_system_slider .article_box {width: 205px;}
+
+#content .bonus_system_slider .ajaxSlider .article_box p.price { padding-left: 10px; background: url("../images/bonuspoint_small.png") no-repeat 45px top transparent; height: 20px; line-height: 20px; font-weight: normal; color: #666; margin-top: 10px }
+#content .bonus_system_slider .ajaxSlider .article_box p.price strong { color: #000; font-size: 15px }
+
+/*	=LISTING
+	-------------------------------------------- */
+.cat_text .inner_container.bonus { padding: 20px !important }
+.bonus_banner { margin-bottom: 20px }
+.listing .bonus-article .artbox .points { background: url("../images/bonuspoint_small.png") no-repeat 50px top transparent; line-height: 15px; padding-left: 75px; min-height: 22px; margin: 0; color: #666; position: absolute; bottom: 70px }
+.listing .bonus-article .artbox .points strong { font-size: 21px; color: #000 }
+.listing .bonus-article .artbox .points .not_enough strong { color: #A50102 }
+
+.listing .bonus-article .artbox .buynow { background: url("../images/button_right-small-bonus.png") repeat-x scroll right top !important; color: #fff; text-shadow: 0 1px 0 #de7110 }
+.listing .bonus-article .artbox .buynow:hover { background-position: right bottom !important }
+
+.listing .bonus-article .artbox .more { background: url("../images/button_right-small.png") repeat-x scroll right top !important }
+.listing .bonus-article .artbox .more:hover { background-position: right bottom !important }
+
+.listing .bonus-article .artbox .points .not_enough,
+.listing .bonus-article .artbox .points .further { color: #a50102 }
+.listing .bonus-article .artbox .points .further { font-size: 11px }
+.listing .bonus-article .artbox a.more { width: 217px !important; left: 0 !important }
+
+/*	=DETAIL PAGE
+	-------------------------------------------- */
+#detail .buy_for { margin-bottom: 5px; margin-top: 10px }
+#detail .buy_for .item input { margin-left: 0; margin-right: 10px }
+#detail .buy_for .item { height: 30px; }
+#detail .buy_for label { width: 270px; }
+
+#detail .buy_for label,
+#detail .buy_for input { float: left }
+#detail .points_for_article { height: 50px; line-height: 50px; position: relative; top: -8px; padding-left: 60px; color: #000 }
+#detail .points_for_article .after strong a { border-bottom: 1px dotted #DD4800 }
+#detail .points_for_article .after strong a:hover { text-decoration: none !important }
+
+#detail .points_for_article .before,
+#detail .points_for_article .image,
+#detail .points_for_article .after { float: left; }
+#detail .points_for_article .image { background: url("../images/detail_bonuspoint_bg.png") no-repeat left center transparent; width: 31px; text-align: center; color: #fff; margin: 0 5px; font-weight: 700 }
+#detail .buy_for .price-holder { color: #000; }
+/*	=ACCOUNT
+	-------------------------------------------- */
+#right_account .adminbox.bonus { border-bottom: 0; margin-bottom: 20px }
+#right_account .bonus-point-balance { font-size: 12px; border-width: 0 1px; border-style: none solid; border-color: #dfdfdf; color: #cd9a00; padding: 10px 15px; margin-bottom: 0 }
+#right_account .bonus-point-balance .value { float: right }
+#right_account  .bonus-point-balance span.snippet { font-weight: 700 }
+#content .orders.bonus .table_row { min-height: 20px }
+
+
+/*	=BASKET
+	-------------------------------------------- */
+#confirm .table .table_row, #finished .table .table_row { position: relative }
+.points_for_basket { font-size: 12px; margin: 5px 0; border-top: 1px solid #dfdfdf }
+.points_for_basket .inner_container,
+#confirm .points_for_basket .inner_container { width: auto; margin: 0 auto; display: table; border: 0 }
+.points_for_basket .after { line-height: 57px; float: left }
+.points_for_basket .after strong a { border-bottom: 1px dotted #DD4800 !important }
+.points_for_basket .after strong a:hover { text-decoration: none !important; }
+
+.points_for_basket .before,
+.points_for_basket .image { height: 57px; line-height: 57px; float: left }
+.points_for_basket .before,
+#confirm .points_for_basket .before { padding-left: 0; margin:0 }
+.points_for_basket .image {
+	width: 45px;
+	text-align: center;
+	font-weight: 700;
+	font-size: 16px;
+	margin: 0 5px;
+	color: #fff;
+	background: url("../images/checkout_bonuspoint_bg.png") no-repeat left center transparent;
+}
+
+/*	=BASKET BONUS POINT VOUCHER SLIDER
+	-------------------------------------------- */
+.basket_slider.table_row { padding: 0 }
+.basket_slider .header { padding: 20px 0 0 50px; color: #e04904; height: 35px; font-size: 12px; font-weight: 700; line-height: 35px }
+
+.basket_slider .inner-content {	padding: 0 50px; height: 200px; margin-top: 0 }
+.basket_slider .inner-content .headline { background: #f5f5f5; height: 35px; margin: 10px 0 0 }
+
+.basket_slider .inner-content .headline .points,
+.basket_slider .inner-content .headline .conversion_max { display: inline-block; padding: 10px 0; margin: 0 }
+.basket_slider .inner-content .headline .points { padding: 10px 20px; background: #fef7d6; float: left; color: #cd9a00; border-right: 1px solid #fff }
+.basket_slider .inner-content .headline .conversion_max { float: right; text-align: right; padding-right: 20px }
+.basket_slider .inner-content .slider { background: url("../images/checkout_bonus_slider_bg.png") repeat-x 0 0; border: 1px solid #dfdfdf; height: 10px;  margin: 10px 0;  cursor: pointer }
+.basket_slider .inner-content .slider .ui-slider-handle { height: 28px; width: 39px; top: -0.6em; border: none !important; cursor: move; background-color: transparent; background-position: 0 0 }
+.basket_slider .inner-content .slider .ui-slider-handle:hover { background-position: 0 bottom }
+.basket_slider .inner-content .slider-info { position: absolute; left: 45px; top: 140px }
+.basket_slider .inner-content .slider-info-top { width : 138px; height: 10px; background: url("../images/slider-info-sprite.png") no-repeat left center transparent }
+.basket_slider .inner-content .slider-info-bottom { width : 128px; border-radius: 0 0 4px 4px; padding: 5px; display: inline-block; position: relative; top: -2px; background: #696969; color: #fff }
+.basket_slider .inner-content .current_conversion {
+	background: url("../images/checkout_bonus_pricebg.png") no-repeat left center transparent;
+	line-height: 56px;
+	text-align: center;
+	font-weight: 700;
+	height: 48px; width: 142px;
+	font-size: 14px;
+	margin: 0 auto 5px;
+	color: #fff
+}
+.basket_slider .inner-content .add_bonus_voucher_form { text-align: center }
+.basket_slider .inner-content .add_bonus_voucher_form .add_bonus_voucher_button { width: 141px; text-align: center; margin-left: 5px; background-position: 0 0; padding: 0 }
+.basket_slider .inner-content .add_bonus_voucher_form .add_bonus_voucher_button:hover { background-position: 0 bottom }
+
+/*	=BONUS ITEM ORDER POSITIONS
+	-------------------------------------------- */
+.table_row.bonus_item .thumb_image { padding-left: 5px }
+.table_row .bonus_image { height: 100%; position: absolute; top: 0; left: 0; width: 24px; z-index: 1000 }
+.table_row .bonus_image .image-top,
+.table_row .bonus_image .image-bottom {	position: absolute;	height: 50%; width: 26px; left: 0 }
+.table_row .bonus_image .image-top { background: url("../images/checkout_bonus_bg.png") repeat-y left top transparent; top: 0 }
+.table_row .bonus_image .image-bottom { background: url("../images/checkout_bonus_bg.png") repeat-y left bottom transparent; bottom: 0 }
+.table_row .bonus_image .image-text {
+	background: url("../images/checkout_bonus_inner.png") no-repeat left center transparent;
+	height: 44px;
+	left: 0;
+	top: 50%;
+	position: absolute;
+	margin: -22px 0 0;
+	width: 24px;
+	z-index: 1000
+}
+
+/*	=SUM OF THE SPENDING AND EARNING BONUS POINTS
+	-------------------------------------------- */
+.table_foot .basket-points { position: relative; left: -235px; background: #f9f9f9; margin-top: 20px; width: 336px; padding: 0 15px }
+.table_foot .basket-points p { float: left; line-height: 12px; font-size: 12px; font-weight: 700; padding: 10px 0; margin-bottom: 0 !important; margin-top: 0 !important }
+#confirm .table_foot .basket-points,
+#finished .table_foot .basket-points { background: #f9f9f9; left: 15px; float: left;width: 300px }
+#finished .table_foot .basket-points { left: -10px; width: 230px }
+
+#finished .table_foot .basket-points .spending_right,
+#finished .table_foot .basket-points .earning_right { width: 80px }
+
+#finished .table_foot .basket-points .spending_left,
+#finished .table_foot .basket-points .earning_left { width: 150px }
+
+
+.table_foot .basket-points .spending_left,
+.table_foot .basket-points .spending_right,
+#confirm .table_foot .basket-points .spending_left,
+#confirm .table_foot .basket-points .spending_right { border-bottom: 1px solid #e2e2e2 }
+
+.table_foot .basket-points .earning_right,
+.table_foot .basket-points .spending_right { text-align: right; width: 100px }
+.table_foot .basket-points .earning_right {	color: #297721 }
+.table_foot .basket-points .spending_right { color: #ad0f03 }
+
+.bonus .table .table_row .grid_1,
+.bonus .table .table_row .grid_2,
+.bonus .table .table_row .grid_3,
+.bonus .table .table_row .grid_5,
+.bonus .table .table_row .grid_7 {
+	margin-top: 0;
+}
+
+#basket .table .bonus_item { min-height: 60px !important }
+#basket .table .bonus_item .bonus_clear { width: 255px }
+#confirm .table .bonus_item .bonus_clear { width: 310px !important }
+
+#basket .table_foot .basket-points { padding: 15px 15px }
+#basket .table_foot .basket-points .basket-points_left,
+#basket .table_foot .basket-points .basket-points_right {
+	float: left;
+	width: 168px;
+	text-align: center;
+}
+
+#basket .table_foot .basket-points .spending_top,
+#basket .table_foot .basket-points .spending_bottom,
+#basket .table_foot .basket-points .earning_top,
+#basket .table_foot .basket-points .earning_bottom {
+	display: block;
+	width: 168px;
+	padding: 5px 0;
+}
+#basket .table_foot .basket-points .spending_top,
+#basket .table_foot .basket-points .earning_top { color: #707070 }
+#basket .table_foot .basket-points .earning_bottom {	color: #297721 }
+#basket .table_foot .basket-points .spending_bottom { color: #ad0f03 }
+
+
+
+/*	= BONUS ARTICLE BASKET POINTS
+	-------------------------------------------- */
+#content #confirm .points_for_basket { margin-bottom: 20px }
+#content #confirm .points_for_basket h2 { font-weight: bold; margin: 20px 0 30px; padding: 0 }
+
+#content #confirm .points_for_basket .basket-points_left { border-right: 1px solid #dfdfdf }
+#content #confirm .points_for_basket .basket-points_left .image { margin: 0; width: 45px; height: 45px; line-height: 45px }
+
+#content #confirm .points_for_basket .basket-points_left,
+#content #confirm .points_for_basket .basket-points_right { float: left; width: 200px; text-align: center; color: #999 }
+
+#content #confirm .points_for_basket p { margin: 0 0 10px 0 }
+
+#content #confirm .points_for_basket .spending_bottom,
+#content #confirm .points_for_basket .earning_bottom { font-size: 21px; font-weight: bold }
+#content #confirm .points_for_basket .spending_bottom { color: #ad0f03 }
+#content #confirm .points_for_basket .earning_bottom { color: #297721 }
+
+#content #finished .basket-points .spending_top,
+#content #finished .basket-points .earning_top { color: #999; font-weight: normal }
+
+#content #finished .basket-points .spending_bottom { color: #ad0f03; float: right }
+#content #finished .basket-points .earning_bottom { color: #297721; float: right }
+
+/*	= BONUS ARTICLE TOPSELLER
+	-------------------------------------------- */
+#content #left .bonus_articles {
+	border-top: 0;
+	border-color: #D3D3D3;
+}
+#content #left .bonus_articles ul li { border: 0 none }
+#content #left .bonus_articles ul li:first-child { border: 0 none }
+#content #left .bonus_articles ul li.active { width: 177px }
+#content #left .bonus_articles .accordion li.active ul.image li a { background: transparent !important; width: 137px }
+#content #left .bonus_articles .accordion li { border-top: 1px solid #dfdfdf; background-color: transparent; width: 177px }
+#content #left .bonus_articles .accordion li .detail { background: url("../images/bonuspoint_small.png") no-repeat scroll 15px center transparent; top: -100px; width: 177px; height: 51px }
+#content #left .bonus_articles .accordion li.active .detail { top: -3px }
+#content #left .bonus_articles .accordion li .detail a { font-size: 12px; padding-top: 10px; padding-left: 25px }
+#content #left .bonus_articles .accordion li .detail .points { background: transparent; top: 23px; font-size: 11px; color: #666; height: 20px; line-height: 20px; padding-left: 25px; font-weight: normal; color: #666 }
+#content #left .bonus_articles .accordion li .detail .points strong { color: #000; font-size: 14px	 }
+
+#content #left .bonus_articles .accordion li ul.image,
+#content #left .bonus_articles .accordion li ul.image li { background: #fff }
+
+#content #left .bonus_articles .accordion li ul { padding: 5px 0 0 }
+#content #left .bonus_articles .accordion li ul li { border-top: 0 none; padding: 5px 0 0 }
+
+
+/*	= BONUS ARTICLE SLIDER
+	-------------------------------------------- */
+.slider-container .basket_article_slider { margin: 0 }
+.slider-container-loggedin .basket_article_slider { margin: 0 }
+
+.basket_article_slider .bonus_system_slider,
+.basket_article_slider { width: 998px }
+.basket_article_slider .ajaxSlider,
+.basket_article_slider .ajaxSlider .sliding_outer { }
+#content .bonus_system_slider .ajaxSlider .article_box .title { font-size: 14px }
+
+@media print {
+	.table_foot .basket-points { left: -215px; }
+	.table_row .bonus_image { display: none; }
+}

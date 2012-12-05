@@ -1,0 +1,637 @@
+
+.error.liveshopping_error p:last-child {
+    margin-bottom: 0;
+}
+.error.liveshopping_error a {
+    text-decoration: underline !important;
+}
+
+/** General styles **/
+.liveshopping.detail .headline {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.liveshopping_inner {
+    background: url(../images/ls_box_silver_bg.png) no-repeat center 0;
+    height: 171px;
+    width: 300px;
+    display: block;
+    margin-bottom: 30px;
+}
+
+/** Counter **/
+.liveshopping_inner .counter {
+    text-align: center;
+    height: 33px;
+    margin: 2px 7px 0 7px;
+    padding: 10px 0 0
+}
+
+.liveshopping_inner .counter_top {
+    font-size: 22px;
+    font-weight: bold;
+    color: #575757
+}
+
+.liveshopping_inner .counter_bottom {
+    font-size: 10px;
+    margin: 0 57px
+}
+
+.liveshopping_inner .counter_bottom span {
+    width: 43px;
+    display: block;
+    float: left !important
+}
+
+.liveshopping_inner .counter .colon {
+    color: #bbb
+}
+
+/** Box **/
+.liveshopping_inner .box {
+    background: url(../images/ls_box_red_bg.png) no-repeat center 0;
+    height: 77px;
+    padding: 17px 3px 14px 3px;
+    color: #fff;
+    position: relative
+}
+
+/** Box - left **/
+.liveshopping_inner .box_left {
+    width: 196px;
+    float: left !important;
+    border-right: 1px solid #fc1f47;
+    display: block;
+    padding-top: 15px;
+    height: 62px;
+    position: relative;
+}
+
+.liveshopping_time .box_left {
+    padding-top: 5px;
+    height: 77px;
+}
+
+.liveshopping_inner .box_left .liveshopping_price {
+    margin-left: 50px;
+    text-align: center;
+    text-shadow: 0 2px 0 #88050f
+}
+
+.liveshopping_inner .box_left .liveshopping_price strong {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px
+}
+
+/** Icon **/
+.liveshopping_inner .box_left .liveshopping_icon {
+    width: 44px;
+    height: 44px;
+    display: block;
+    position: absolute;
+    top: 32px;
+    left: 13px
+}
+.liveshopping_inner .box_left .liveshopping_icon img {
+    width: 32px;
+    height: 32px
+}
+.liveshopping_inner .box_left .liveshopping_icon.arrow {
+    top: 23px;
+}
+
+
+/** Time elapse **/
+.liveshopping_inner .box_left .elapse {
+    background: #8e060e;
+    border-bottom: 1px solid #ec1329;
+    height: 4px;
+    padding: 1px;
+    position: absolute;
+    width: 164px;
+    left: 15px;
+    bottom: 10px;
+}
+
+.liveshopping_inner .box_left .elapse_inner {
+    background: #fff;
+    height: 4px;
+    display: block;
+}
+
+/** Box - left **/
+.liveshopping_inner .box_right {
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 94px;
+    float: left !important;
+    border-left: 1px solid #b70d1d;
+    display: block;
+    height: 57px;
+    padding-top: 20px;
+    text-align: center;
+    text-shadow: 0 2px 0 #88050f;
+}
+
+/** Box - right **/
+.liveshopping_offer .liveshopping_inner .box_right {
+    background-image: url(../images/icon_percent.png)
+}
+
+.liveshopping_inner .box_right small {
+    font-size: 11px;
+}
+/* price */
+.liveshopping_inner .box_right strong {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+}
+
+/* price-listing */
+.listing .liveshopping_inner .box_right strong { font-size: 14px; display: inline; }
+
+
+/** Box - stock **/
+.liveshopping_inner .stock {
+    background: url(../images/ls_lager_bg.png) no-repeat center center;
+    height: 16px;
+    padding: 0 18px;
+    position: relative
+}
+
+.liveshopping_inner .stock .stock_wrapper {
+    position: relative;
+}
+
+
+/** Stock Tooltip **/
+.liveshopping_inner .stock .stock_tip {
+    position: absolute;
+    width: auto;
+    top: 8px
+}
+
+.liveshopping_inner .stock .stock_tip .stock_tip_inner {
+    background: url(../images/ls_tooltip_bg.png) no-repeat center bottom;
+    float: left !important;
+    display: block;
+    padding: 12px 5px 5px 5px;
+    color: #fff;
+    width: 93px;
+    height: 15px;
+    text-align: center;
+}
+
+/** Listing  **/
+.listing_liveshopping {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+/** width col 1 & col2 **/
+
+#listing .artbox .listing_liveshopping,
+#listing .artbox .listing_liveshopping .liveshopping_inner,
+#listing .artbox .listing_liveshopping .liveshopping_inner .box_right,
+#listing .artbox .listing_liveshopping .liveshopping_inner .counter,
+#listing-3col .artbox .listing_liveshopping,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_right,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .counter,
+#listing-2col .artbox .listing_liveshopping,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_right,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .counter,
+.emotion-listing .col1 .listing_liveshopping,
+.emotion-listing .col2 .listing_liveshopping,
+.emotion-listing .col1 .listing_liveshopping .liveshopping_inner,
+.emotion-listing .col2 .listing_liveshopping .liveshopping_inner,
+.emotion-listing .col1 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-listing .col2 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-listing .col1 .listing_liveshopping .liveshopping_inner .counter,
+.emotion-listing .col2 .listing_liveshopping .liveshopping_inner .counter {
+    width: 100%
+}
+
+.emotion-col3 .col2 .listing_liveshopping,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .counter {
+    width: auto
+}
+
+/** general styles col 1 & col2 **/
+#listing .artbox .listing_liveshopping,
+#listing-3col .artbox .listing_liveshopping,
+#listing-2col .artbox .listing_liveshopping,
+.emotion-col4 .col1 .listing_liveshopping,
+.emotion-col4 .col1 .listing_liveshopping,
+.emotion-col3 .col1 .listing_liveshopping {
+    right: 0px;
+    bottom: -1px;
+    right: -1px;
+    height: 79px;
+    border: 1px solid #8f0204;
+}
+
+/** general style col2 **/
+.emotion-col4 .col2 .listing_liveshopping {
+    height: 47px
+}
+
+/** general style col3 **/
+.emotion-col4 .col3 .listing_liveshopping {
+    right: 60px;
+    bottom: 50px
+}
+
+/** general style col3 **/
+.emotion-col3 .col2 .listing_liveshopping {
+    right: 30px;
+    bottom: 40px
+}
+
+/** inner style col1 & col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner {
+    height: 79px;
+    background: #8f0204;
+    margin: 0;
+    padding: 0
+}
+
+/** inner style col2 **/
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner {
+    height: 47px
+}
+
+/** inner style col3 **/
+#listing-1col .artbox .liveshopping_inner,
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner {
+    background: url(../images/ls_box_col3_silver_bg.png) no-repeat 5px 0;
+    padding-top: 15px;
+    width: 190px;
+    margin: 0;
+    height: 105px
+}
+/** Listing-1col inner style **/
+#listing-1col .artbox .liveshopping_inner {
+	height: 131px;
+}
+#listing-1col .artbox .liveshopping_inner .box_right {
+	border: 0;
+	padding: 0;
+	width: 100%;
+	height: 27px;
+}
+
+#listing-1col .artbox .liveshopping_wrapper {
+	position: absolute;
+	top: 10px; right: 10px;
+}
+
+
+/** inner style col4 **/
+.emotion-col4 .col4 .listing_liveshopping .liveshopping_inner,
+.emotion-col3 .col3 .listing_liveshopping .liveshopping_inner {
+    background: url(../images/ls_box_col4_silver_bg.png) no-repeat 5px 0;
+    padding-top: 15px
+}
+
+/** box style col1 & col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .box,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box {
+    background: url(../images/lssmall_box_red_bg.png) repeat-x center 0;
+    height: 69px;
+    padding: 5px 0
+}
+
+/** box style col2 **/
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box {
+    background: url(../images/lssmall_box_col2_red_bg.png) repeat-x center 0;
+    height: 37px
+}
+
+/** box style col3 **/
+#listing-1col .artbox .liveshopping_inner .box,
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner .box,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box {
+    background: url(../images/ls_box_col3_red_bg.png) repeat-x center 0;
+    height: 55px
+}
+
+/** box style col4 **/
+.emotion-col4 .col4 .listing_liveshopping .liveshopping_inner .box,
+.emotion-col3 .col3 .listing_liveshopping .liveshopping_inner .box {
+    background: url(../images/ls_box_col4_red_bg.png) repeat-x center 0
+}
+
+/** box-left style col1 & col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .box_left,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_left,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_left,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_left,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_left,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_left {
+    padding-top: 0;
+    border: 0;
+    width: 100%;
+    height: 40px
+}
+
+/** box-left style col2 **/
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_left {
+    width: 50%;
+    height: 38px;
+    border-right: 1px solid #f90000
+}
+
+/** box-left style col3 **/
+#listing-1col .artbox .liveshopping_inner .box_left,
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner .box_left,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box_left {
+    height: 40px;
+    padding: 0;
+    border: none;
+    width: 184px
+}
+
+/** icon style col1 & col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+    top: 0
+}
+
+/** icon style col1 **/
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+    left: 20px;
+    height: 30px;
+    width: 30px;
+    top: 5px
+}
+
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon img,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon img {
+    height: 30px;
+    width: 30px
+}
+
+/** icon style col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+    left: 20px;
+    height: 30px;
+    width: 30px;
+    top: 5px
+}
+
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon img {
+    height: 30px;
+    width: 30px
+}
+
+/** icon style col3 **/
+#listing-1col .artbox .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+    left: 20px;
+    height: 30px;
+    width: 30px;
+    top: 5px
+}
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+	left: 50px;
+}
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon {
+	left: 120px;
+}
+
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon img,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box_left .liveshopping_icon img {
+    height: 30px;
+    width: 30px
+}
+
+/** box-left text-style col1 **/
+.emotion-col4 .col1 .liveshopping_inner .box_left .liveshopping_price strong,
+.emotion-col3 .col1 .liveshopping_inner .box_left .liveshopping_price strong {
+    font-size: 18px;
+    margin-top: 5px
+}
+
+/** box-left text-style col2 **/
+.emotion-col4 .col2 .liveshopping_inner .box_left .liveshopping_price small {
+    font-size: 10px
+}
+
+.emotion-col4 .col2 .liveshopping_inner .box_left .liveshopping_price strong {
+    font-size: 18px;
+    margin-top: 5px
+}
+
+/** box-left text-style col3 **/
+#listing-1col .artbox .liveshopping_inner .box_left .liveshopping_price small,
+.emotion-col4 .col3 .liveshopping_inner .box_left .liveshopping_price small,
+.emotion-col3 .col2 .liveshopping_inner .box_left .liveshopping_price small {
+    font-size: 10px
+}
+
+#listing-1col .artbox .liveshopping_inner .box_left .liveshopping_price strong,
+.emotion-col4 .col3 .liveshopping_inner .box_left .liveshopping_price strong,
+.emotion-col3 .col2 .liveshopping_inner .box_left .liveshopping_price strong {
+    font-size: 18px;
+    margin-top: 0
+}
+
+/** box-right style col1 & col2 **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .box_right,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .box_right,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_right {
+    background: transparent;
+    padding-top: 0;
+    border: 0;
+    height: 34px;
+    line-height: 34px
+}
+
+/** box-right style col2 **/
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_right {
+    width: 49%;
+    height: 38px;
+    border-left: 1px solid #ce0404
+}
+
+/** box-right style col2 **/
+.emotion-col4 .col3 .listing_liveshopping .liveshopping_inner .box_right,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .box_right {
+    height: 38px;
+    border: none;
+    background: transparent;
+    padding-top: 5px;
+    width: 184px
+}
+
+/** text-style col1 & col2 **/
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .box_right small,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .box_right small,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .box_right small {
+    font-size: 11px
+}
+
+/** Stock **/
+#listing .artbox .listing_liveshopping .liveshopping_inner .stock,
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .stock,
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .stock,
+#listing-1col .artbox .liveshopping .liveshopping_inner .stock,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .stock,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .stock,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .stock,
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .stock,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .stock {
+    background: transparent;
+    padding: 0;
+    width: 38px;
+    height: 57px;
+    position: absolute;
+    top: -293px;
+    z-index: 999;
+    left: -1px;
+    text-align: center;
+}
+
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .stock,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .stock {
+    top: -230px
+}
+
+#listing .artbox .listing_liveshopping .liveshopping_inner .stock {top: -213px;}
+#listing-3col .artbox .listing_liveshopping .liveshopping_inner .stock {top: -213px;}
+#listing-2col .artbox .listing_liveshopping .liveshopping_inner .stock {top: -190px;}
+#listing-1col .artbox .liveshopping .liveshopping_inner .stock {top: -160px; left: -597px;}
+.emotion-col3 .col2 .listing_liveshopping .liveshopping_inner .stock {left: -308px; top: -173px;}
+
+
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .stock .stock_tip,
+.emotion-col4 .col1 .listing_liveshopping .liveshopping_inner .stock .stock_tip,
+.emotion-col3 .col1 .listing_liveshopping .liveshopping_inner .stock .stock_tip,
+.emotion-col4 .col2 .listing_liveshopping .liveshopping_inner .stock .stock_tip {
+    top: 0;
+    text-align: center
+}
+
+/** Counter */
+#listing .artbox .liveshopping_counter,
+#listing-3col .artbox .liveshopping_counter,
+#listing-2col .artbox .liveshopping_counter,
+.emotion-listing .emotion-element .liveshopping_counter {
+    background: url(../images/lssmall_box_silver_bg.png) no-repeat center 0;
+    position: absolute;
+    top: 0;
+    margin: 0;
+    width: 180px;
+    height: 24px;
+    padding-top: 4px;
+    left: 50%;
+    margin-left: -90px
+}
+
+#listing .artbox .liveshopping_counter .counter_top,
+#listing-3col .artbox .liveshopping_counter .counter_top,
+#listing-2col .artbox .liveshopping_counter .counter_top,
+.emotion-listing .emotion-element .liveshopping_counter .counter_top {
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    color: #444
+}
+
+#listing .artbox .liveshopping_counter small,
+#listing-3col .artbox .liveshopping_counter small,
+#listing-2col .artbox .liveshopping_counter small,
+.emotion-listing .emotion-element .liveshopping_counter small {
+    font-size: 10px;
+    font-weight: normal
+}
+
+.emotion-listing .listing_liveshopping .liveshopping_inner .counter {
+    top: 0
+}
+
+
+/** 1col-Listing **/
+#listing-1col .artbox .liveshopping_inner .counter_bottom {
+	width: 100%;
+	margin: 0 2px;
+}
+
+#listing-1col .artbox .liveshopping .liveshopping_inner .stock .stock_tip_arrow,
+#listing-1col .artbox .liveshopping_inner .box_left .elapse,
+#listing-1col .artbox .liveshopping_wrapper .headline {display: none;}
+
+.emotion-listing .detail_wrapper {
+    position: absolute;
+    right: 15%;
+    top: 20%
+}
+
+.emotion-listing .liveshopping_wrapper.col3 .detail_wrapper {
+    right: 2%;
+}
+
+.liveshopping_wrapper.listing-1col .stock_tip {
+    left: 0 !important;
+}
+.table .table_row .checkout_item_live_shopping {
+    float: left;
+    width: 18px;
+    background: none repeat scroll 0 0 #E00411;
+    display: block;
+    margin: -36px 0 0 -10px;
+    padding-bottom: 9999em;
+    margin-bottom: -9999em;
+}
+.table .table_row .checkout_item_live_shopping span {
+    background:  url('../images/ls_basket_icon.png') center center no-repeat;
+    width: 20px;
+    height: 75px;
+    position: absolute;
+    top: 50%;
+    margin-top: -36px
+}
+#content #confirm .table .table_row .checkout_item_live_shopping {height: 158px;}
+
+.liveshopping.listing .liveshopping_inner .stock .stock_tip {
+   *position: static !important;
+}
+
+.liveshopping .liveshopping_price.pseudo em {
+    text-decoration: line-through;
+}

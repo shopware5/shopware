@@ -1,0 +1,82 @@
+<?php
+include($this->DocPath().'config.php');
+
+return array(
+ 	'shop'=>array(
+	  'options' => array(
+	   'host'=>'%server%'
+	  ),
+	  'config' => array('data'=>array(
+	   'hostOriginal'=>'%server%', //Nur für den LizenzCheck
+	   'basePath'=>'%basepath%', // Wird im Frontend normalerweise nicht beachtet
+	  )),
+	  'options1' => array(
+	  ),
+	  'config1' => array('data'=>array(
+	  ))
+	 ),
+	 'license'=>array(
+	  'data'=>array(
+		%licences%	   
+	  )
+	 ),
+	'db' => array(
+		'username' => $DB_USER,
+		'password' => $DB_PASSWORD,
+		'dbname' => $DB_DATABASE,
+		'host' => $DB_HOST
+	),
+	'front' => array(
+		//'noErrorHandler' => false,
+		'throwExceptions' => true,
+		'returnResponse' => true,
+		//'useDefaultControllerAlways' => true,
+		'disableOutputBuffering' => false,
+		'showException' => true,
+		'noViewRenderer' => true
+	),
+	'template' => array(
+		'compileCheck' => true,
+		'compileLocking' => true,
+		'useSubDirs' => false,
+		'forceCompile' => false,
+		'ignoreNamespace' => false,
+		'errorReporting' => 0
+	),
+	'cache' => array(
+		'frontendOptions' => array(
+    		'automatic_serialization' => true,
+    		'automatic_cleaning_factor' => 0,
+    		'lifetime' => 3600
+    	),
+    	'backend' => 'File',
+    	'backendOptions' => array(
+			'hashed_directory_umask' => 0771,
+			'cache_file_umask' => 0644,
+			'hashed_directory_level' => 0,
+			'cache_dir' => $this->DocPath('cache_database'),
+			'file_name_prefix' => 'shopware'
+    	),
+	),
+	'session' => array(
+		//'unitTestEnabled' => true,
+		'name' => 'SHOPWARESID',
+		'cookie_lifetime' => 0,
+		'use_trans_sid' => false,
+		'gc_probability' => 1,
+		'gc_divisor' => 100,
+		'save_handler' => 'db'
+	),
+	'phpSettings'=>array(
+		//'error_reporting'=>E_ALL | E_STRICT,
+		'error_reporting'=>E_ALL ^ E_NOTICE,
+		'display_errors'=>1,
+		'date.timezone'=>'Europe/Berlin',
+		//'include_path'=>'.',
+		'zend.ze1_compatibility_mode'=>0
+	),
+	'autoloaderNamespaces'=>array(
+		'Shopware'=>$this->TestPath(),
+		'PHPUnit'=>'PHPUnit/'
+	),
+);

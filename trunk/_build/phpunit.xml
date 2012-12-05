@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../_tests/Shopware/TestHelper.php">
+	<testsuites>
+		<testsuite name="Shopware_AllTests">
+			 <file>../_tests/Shopware/Tests/AllTests.php</file>
+             <file>../_tests/Shopware/RegressionTests/AllTests.php</file>
+		</testsuite>
+	</testsuites>
+	<listeners>
+        <!--<listener class="Shopware_Components_Test_TicketListener">
+			<arguments>
+				<string>http://svn:pmnoQpr12@192.168.178.150/trac/login/xmlrpc</string>
+				<boolean>true</boolean>
+				<boolean>true</boolean>
+			</arguments>
+		</listener>
+		<listener class="Shopware_Components_Test_MailListener">
+			<arguments>
+				<string>te@shopware.de</string>
+				<array>
+					<element key="type"><string>smtp</string><string>smtp</string></element>
+					<element key="host"><string>172.16.0.101</string><string>172.16.0.101</string></element>
+				</array>
+			</arguments>
+		</listener>-->
+	</listeners>
+	<selenium>
+        <!--
+        <browser name="Opera on Win 7"
+            browser="*opera C:\Program Files (x86)\Opera\opera.exe"
+            host="windows.test.shopware.in"
+            port="4444"
+            timeout="2"/>
+        <browser name="Internet Explorer on Win 7"
+            browser="*iexploreproxy"
+            host="windows.test.shopware.in"
+            port="4444"
+            timeout="5"/>
+        <browser name="Safari on  Win 7"
+           browser="*safari"
+           host="windows.test.shopware.in"
+           port="4444"
+           timeout="30000" />
+        <browser name="Google Chrome on Win 7 (with Screenshot)"
+           browser="*googlechrome"
+           host="windows.test.shopware.in"
+           port="4444"
+           timeout="30"/>
+         -->
+        <browser name="Firefox on Win 7"
+            browser="*firefox"
+            host="windows.test.shopware.in"
+            port="4444"
+            timeout="30"/>
+	</selenium>
+	<filter>
+		<whitelist>
+            <directory suffix=".php">../engine/Shopware/</directory>
+			<exclude>
+				<directory>../engine/Shopware/Proxies</directory>
+				<directory>../engine/Shopware/Plugins/Community</directory>
+                <directory>../engine/Shopware/Components/Xml</directory>
+                <directory>../engine/Shopware/Models/_generated</directory>
+                <directory suffix="Meta.php">../engine/Shopware/Plugins/</directory>
+                <directory>../engine/Shopware/Plugins/Default/Frontend/BuiswPaymentPayone/</directory>
+                <directory suffix="Version.php">../engine/Shopware/Plugins/</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>

@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Shopware" basedir="../" default="build">
+
+    <property name="build.dir" location="${basedir}/_build"/>
+    <property file="${build.dir}/build.properties"/>
+
+    <target name="build" depends="build-daily"/>
+
+    <target name="build-daily">
+        <parallel>
+            <antcall target="test-static"/>
+            <antcall target="test-unit"/>
+            <antcall target="build-phpdoc"/>
+            <antcall target="build-phpcb"/>
+        </parallel>
+    </target>
+
+    <target name="build-continuous">
+        <parallel>
+            <antcall target="test-unit-continuous"/>
+        </parallel>
+    </target>
+
+    <target name="build-unit" depends="build-database, build-config, build-cache-dir" />
+
+    <target name="test-unit" depends="unit-library, unit-shopware"/>
+
+    <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
+
+    <target name="build-database">
+
+        <concat destfile="${build.dir}/deploy.template.sql">
+            <fileset file="${build.dir}/deploy.create.sql"/>
+            <fileset file="${sql.dir}/demo/4.0.4.sql"/>
+            <fileset file="${build.dir}/dbdeploy.install.sql"/>
+            <fileset file="${build.dir}/deploy.demo.sql"/>
+            <fileset file="${build.dir}/deploy.licence.sql"/>
+        </concat>
+
+        <copy file="${build.dir}/deploy.template.sql" toFile="${build.dir}/deploy.sql">
+            <filterset>
+                <filter token="database" value="${db.name}"/>
+                <filter token="host" value="${app.host}"/>
+                <filter token="path" value="${app.path}"/>
+            </filterset>
+        </copy>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/deploy.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+        </exec>
+
+        <antcall target="build-database-deploy"/>
+    </target>
+
+    <target name="build-database-deploy">
+        <exec executable="${script.phing}" dir="${build.dir}" failonerror="true">
+            <arg value="-f"/>
+            <arg value="build.database.xml"/>
+            <arg value="deploy"/>
+            <arg value="-Ddb.user=${db.user}"/>
+            <arg value="-Ddb.password=${db.password}"/>
+            <arg value="-Ddb.name=${db.name}"/>
+            <arg value="-Ddb.host=${db.host}"/>
+        </exec>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${build.database.deployfile}">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="${db.name}"/>
+        </exec>
+    </target>
+
+    <target name="copy-trunk">
+        <delete includeEmptyDirs="true" failonerror="false">
+            <fileset dir="/var/www/trunk/snippets/" includes="**/*"/>
+            <fileset dir="/var/www/trunk/templates/" includes="**/*"/>
+            <fileset dir="/var/www/trunk/engine/Shopware/" includes="**/*"/>
+        </delete>
+
+        <copy todir="/var/www/trunk" overwrite="true">
+            <fileset dir="/var/jenkins/workspace/Shopware-QA-Continuous"/>
+        </copy>
+        <delete includeEmptyDirs="true" failonerror="false">
+            <fileset dir="/var/www/trunk/cache/templates" includes="**/*"/>
+            <fileset dir="/var/www/trunk/cache/database" includes="**/*"/>
+            <fileset dir="/var/www/trunk/engine/Shopware/Proxies" includes="**/*"/>
+        </delete>
+        <mkdir dir="/var/www/trunk/cache/database"/>
+        <mkdir dir="/var/www/trunk/cache/templates"/>
+        <mkdir dir="/var/www/trunk/engine/Shopware/Proxies"/>
+        <mkdir dir="/var/www/trunk/images/articles"/>
+        <mkdir dir="/var/www/trunk/images/banner"/>
+        <mkdir dir="/var/www/trunk/images/cms"/>
+        <mkdir dir="/var/www/trunk/images/supplier"/>
+        <mkdir dir="/var/www/trunk/media/archive"/>
+        <mkdir dir="/var/www/trunk/media/banner"/>
+        <mkdir dir="/var/www/trunk/media/image"/>
+        <mkdir dir="/var/www/trunk/media/unknown"/>
+        <mkdir dir="/var/www/trunk/files/cms"/>
+        <mkdir dir="/var/www/trunk/files/config"/>
+        <mkdir dir="/var/www/trunk/files/documents"/>
+        <mkdir dir="/var/www/trunk/files/downloads"/>
+
+        <exec executable="sudo" os="Linux">
+             <arg value="rm"/>
+             <arg value="-R"/>
+             <arg value="/var/www/trunk/cache/templates"/>
+         </exec>
+
+        <exec executable="sudo" os="Linux">
+             <arg value="rm"/>
+             <arg value="-R"/>
+             <arg value="/var/www/trunk/cache/database"/>
+        </exec>
+
+        <exec executable="sudo" os="Linux">
+             <arg value="rm"/>
+             <arg value="-R"/>
+             <arg value="/var/www/trunk/engine/Shopware/Proxies/"/>
+        </exec>
+
+        <exec executable="sudo" os="Linux">
+            <arg value="rm"/>
+            <arg value="-R"/>
+            <arg value="/var/www/trunk/engine/Shopware/Models/Attribute/"/>
+        </exec>
+
+        <mkdir dir="/var/www/trunk/cache/database"/>
+
+        <mkdir dir="/var/www/trunk/cache/templates"/>
+        <mkdir dir="/var/www/trunk/engine/Shopware/Proxies"/>
+
+        <exec executable="sudo" os="Linux">
+             <arg value="chmod"/>
+             <arg value="-R"/>
+             <arg value="0777"/>
+             <arg value="/var/www/trunk/"/>
+        </exec>
+    </target>
+
+    <target name="build-phantom">
+        <copy todir="/var/www/phantom" overwrite="true">
+            <fileset dir="/var/jenkins/workspace/Shopware-Tests-Phantom"/>
+        </copy>
+        <delete includeEmptyDirs="true" failonerror="false">
+            <fileset dir="/var/www/phantom/cache/templates" includes="**/*"/>
+            <fileset dir="/var/www/phantom/cache/database" includes="**/*"/>
+            <fileset dir="/var/www/phantom/engine/Shopware/Proxies" includes="**/*"/>
+        </delete>
+        <mkdir dir="/var/www/phantom/cache/database"/>
+        <mkdir dir="/var/www/phantom/cache/templates"/>
+        <mkdir dir="/var/www/phantom/engine/Shopware/Proxies"/>
+        <mkdir dir="/var/www/phantom/images/articles"/>
+        <mkdir dir="/var/www/phantom/images/banner"/>
+        <mkdir dir="/var/www/phantom/images/cms"/>
+        <mkdir dir="/var/www/phantom/images/supplier"/>
+        <mkdir dir="/var/www/phantom/media/archive"/>
+        <mkdir dir="/var/www/phantom/media/banner"/>
+        <mkdir dir="/var/www/phantom/media/image"/>
+        <mkdir dir="/var/www/phantom/media/unknown"/>
+        <mkdir dir="/var/www/phantom/files/cms"/>
+        <mkdir dir="/var/www/phantom/files/config"/>
+        <mkdir dir="/var/www/phantom/files/documents"/>
+        <mkdir dir="/var/www/phantom/files/downloads"/>
+        <exec executable="sudo" os="Linux">
+             <arg value="chmod"/>
+             <arg value="-R"/>
+             <arg value="0777"/>
+             <arg value="/var/www/phantom/"/>
+         </exec>
+        <exec executable="php" failonerror="true">
+            <arg value="/var/jenkins/workspace/Shopware-Tests-Phantom/_tests/Phantom/client.php" />
+        </exec>
+    </target>
+
+    <target name="build-snapshot">
+        <!-- Make recursive copy of snapshot source -->
+       <copy todir="/var/www/${snapshot.target}" overwrite="true">
+           <fileset dir="/var/www/${snapshot.source}"/>
+       </copy>
+        <!-- Truncate cache folders in target -->
+        <delete includeEmptyDirs="true" failonerror="false">
+           <fileset dir="/var/www/${snapshot.target}/cache/templates/" includes="**/*.*"/>
+           <fileset dir="/var/www/${snapshot.target}/cache/database/" includes="**/*"/>
+           <fileset dir="/var/www/${snapshot.target}/engine/Shopware/Proxies/" includes="**/*.*"/>
+        </delete>
+        <!-- Set permissions in target -->
+        <exec executable="sudo" os="Linux">
+             <arg value="chmod"/>
+             <arg value="-R"/>
+             <arg value="0777"/>
+             <arg value="/var/www/${snapshot.target}/"/>
+        </exec>
+        <!-- Dump trunk database -->
+        <exec executable="mysqldump" failonerror="true" output="/var/www/${snapshot.target}/import.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--add-drop-table"/>
+            <arg value="${snapshot.database}"/>
+        </exec>
+
+        <!-- Import in snapshot database -->
+        <exec executable="${script.mysql}" failonerror="true" input="/var/www/${snapshot.target}/import.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="${db.name}"/>
+        </exec>
+
+        <!-- Update database parameters -->
+        <exec executable="${script.mysql}" failonerror="true">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="-e UPDATE s_core_multilanguage SET domainaliase = &quot;${app.host}&quot; WHERE `default`=1"/>
+            <arg value="${db.name}"/>
+        </exec>
+
+        <exec executable="${script.mysql}" failonerror="true">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="-e UPDATE s_core_shops SET host = &quot;${app.host}&quot;, hosts = &quot;${app.host}&quot;"/>
+            <arg value="${db.name}"/>
+        </exec>
+        <!-- Update snapshot configuration -->
+        <move file="${app.dir}/Configs/Custom.php" toFile="/var/www/${snapshot.target}/build.config.php"/>
+        <move file="/var/www/${snapshot.target}/build.config.php" toFile="/var/www/${snapshot.target}/engine/Shopware/Configs/Custom.php" overwrite="true">
+            <filterset begintoken="%" endtoken="%">
+                <filter token="db.name" value="${db.name}"/>
+                <filter token="db.host" value="${db.host}"/>
+                <filter token="db.user" value="${db.user}"/>
+                <filter token="db.password" value="${db.password}"/>
+            </filterset>
+        </move>
+
+    </target>
+
+    <target name="build-remote">
+           <!-- Make recursive copy of snapshot source -->
+            <copy todir="/var/sw4" overwrite="true">
+               <fileset dir="/var/jenkins/workspace/Shopware-QA-Remote"/>
+            </copy>
+           <!-- Truncate cache folders in target -->
+           <delete includeEmptyDirs="true" failonerror="false">
+              <fileset dir="/var/sw4/cache/templates/" includes="**/*.*"/>
+              <fileset dir="/var/sw4/cache/database/" includes="**/*"/>
+              <fileset dir="/var/sw4/engine/Shopware/Proxies/" includes="**/*.*"/>
+           </delete>
+           <!-- Set permissions in target -->
+            <exec executable="sudo" os="Linux">
+                 <arg value="rm"/>
+                 <arg value="-R"/>
+                 <arg value="/var/sw4/trunk/cache/templates"/>
+             </exec>
+
+            <exec executable="sudo" os="Linux">
+                 <arg value="rm"/>
+                 <arg value="-R"/>
+                 <arg value="/var/sw4/trunk/cache/database"/>
+            </exec>
+
+            <exec executable="sudo" os="Linux">
+                 <arg value="rm"/>
+                 <arg value="-R"/>
+                 <arg value="/var/sw4/trunk/engine/Shopware/Proxies/"/>
+            </exec>
+
+            <mkdir dir="/var/sw4/cache/database"/>
+            <mkdir dir="/var/sw4/cache/templates"/>
+            <mkdir dir="/var/sw4/engine/Shopware/Proxies"/>
+            <exec executable="sudo" os="Linux">
+                   <arg value="chmod"/>
+                   <arg value="-R"/>
+                   <arg value="0777"/>
+                   <arg value="/var/sw4/"/>
+           </exec>
+    </target>
+
+    <target name="build-cache-dir">
+        <exec executable="sudo" os="Linux">
+            <arg value="chmod"/>
+            <arg value="-R"/>
+            <arg value="0777"/>
+            <arg value="${cache.dir}/templates/"/>
+            <arg value="${cache.dir}/database/"/>
+            <arg value="${app.dir}/Proxies/"/>
+        </exec>
+
+        <delete includeEmptyDirs="true">
+            <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
+            <fileset dir="${cache.dir}/database/" includes="**/*"/>
+            <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
+            <fileset dir="${app.dir}/Proxies/" includes="**/*.*"/>
+        </delete>
+    </target>
+
+    <target name="build-config">
+        <move file="${app.dir}/Configs/Custom.php" toFile="${build.dir}/build.config.php"/>
+        <move file="${build.dir}/build.config.php" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
+            <filterset begintoken="%" endtoken="%">
+                <filter token="db.name" value="${db.name}"/>
+                <filter token="db.host" value="${db.host}"/>
+                <filter token="db.user" value="${db.user}"/>
+                <filter token="db.password" value="${db.password}"/>
+            </filterset>
+        </move>
+    </target>
+
+    <target name="unit-library"/>
+
+    <target name="unit-shopware" depends="build-unit">
+        <exec executable="${script.phpunit}" failonerror="false" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+            <arg value="--coverage-clover=${log.dir}/clover.xml"/>
+            <arg value="--coverage-html=${log.dir}/coverage"/>
+            <arg value="${test.dir.shopware}/Tests/AllTests.php"/>
+            <arg value="${test.dir.shopware}/RegressionTests/AllTests.php"/>
+        </exec>
+        <exec executable="${script.phpunit}" failonerror="true" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/selenium/junit_frontend.xml"/>
+            <arg value="${test.dir.shopware}/IntegrationTests/Frontend/AllTests.php"/>
+        </exec>
+        <exec executable="${script.phpunit}" failonerror="true" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/selenium/junit_backend.xml"/>
+            <arg value="${test.dir.shopware}/IntegrationTests/Backend/AllTests.php"/>
+        </exec>
+    </target>
+
+    <target name="unit-shopware-continuous" depends="build-unit">
+        <exec executable="${script.phpunit}" failonerror="true" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="test-static">
+        <parallel>
+            <antcall target="static-phpcs"/>
+            <antcall target="static-phpmd"/>
+            <antcall target="static-phpcpd"/>
+            <antcall target="static-phploc"/>
+            <antcall target="static-docblox"/>
+        </parallel>
+    </target>
+
+    <target name="static-phpcs">
+        <exec executable="phpcs" failonerror="false">
+            <arg value="--standard=${build.dir}"/>
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${log.dir}/checkstyle.xml"/>
+            <arg value="${app.dir}"/>
+        </exec>
+    </target>
+
+    <target name="static-phpmd">
+        <exec executable="phpmd" failonerror="false">
+            <arg value="${app.dir}"/>
+            <arg value="xml"/>
+            <arg value="codesize,design,unusedcode"/>
+            <arg value="--reportfile"/>
+            <arg value="${log.dir}/pmd.xml"/>
+        </exec>
+    </target>
+
+    <target name="static-phpcpd">
+        <exec executable="phpcpd" failonerror="false" output="/dev/null">
+            <arg value="--exclude"/>
+            <arg value="${app.dir}/Proxies/"/>
+             <arg value="--exclude"/>
+            <arg value="${app.dir}/Plugins/Default/Frontend/BuiswPaymentPayone"/>
+            <arg value="--log-pmd"/>
+            <arg value="${log.dir}/cpd.xml"/>
+            <arg value="${app.dir}"/>
+        </exec>
+    </target>
+
+    <target name="static-phploc">
+        <exec executable="phploc">
+            <arg value="--log-xml"/>
+            <arg value="${log.dir}/loc.xml"/>
+            <arg value="--log-csv"/>
+            <arg value="${log.dir}/loc.csv"/>
+            <arg value="--exclude"/>
+            <arg value="${app.dir}/Proxies/"/>
+            <arg value="--exclude"/>
+            <arg value="${app.dir}/Plugins/Default/Frontend/BuiswPaymentPayone"/>
+            <arg value="--count-tests"/>
+            <arg value="${app.dir}"/>
+        </exec>
+    </target>
+
+    <target name="static-docblox">
+        <exec executable="docblox">
+            <arg value="project:run"/>
+            <arg value="--template"/>
+            <arg value="checkstyle"/>
+            <arg value="-t"/>
+            <arg value="${log.dir}/docblox/"/>
+            <arg value="-d"/>
+            <arg value="${app.dir}"/>
+            <arg value="-q"/>
+        </exec>
+    </target>
+
+    <target name="build-phpdoc">
+<!-- // remove " " between "- -"
+        <exec executable="phpdoc">
+            <arg value="- -quiet"/>
+            <arg value="- -directory"/>
+            <arg value="${app.dir}"/>
+            <arg value="- -target"/>
+            <arg value="${log.dir}/api"/>
+        </exec>
+-->
+    </target>
+
+    <target name="build-phpcb">
+        <exec executable="phpcb" output="/dev/null">
+            <arg value="--log"/>
+            <arg value="${log.dir}"/>
+            <arg value="--output"/>
+            <arg value="${log.dir}/code-browser"/>
+            <arg value="--source"/>
+            <arg value="${app.dir}"/>
+        </exec>
+    </target>
+</project>

@@ -1,0 +1,23 @@
+body { background: url("../img/bg_body.png") repeat; }
+
+section { padding-top: 60px; }
+.checkbox {
+	margin: 10px 0 0;
+	display: block;
+	width: 18px; height: 18px;
+	background: url("../img/ui_checkbox.png") no-repeat;
+	cursor: pointer;
+}
+.checked .checkbox { background-position: left bottom }
+.checked h3, .checked p { text-decoration: line-through; color: #808080 }
+
+h3 { position: relative; padding: 0 0 0 24px; margin: 13px 0 0; }
+.topbar h3 { padding: 0; margin: 0 }
+h3 .checkbox { position: absolute; left: 0; top: 0px; }
+
+@media print {
+	body { background: #fff !important }
+	.topbar, .prettyprint, .checkbox { display: none }
+	h3 { padding: 0 }
+	section { padding-top: 20px }
+}

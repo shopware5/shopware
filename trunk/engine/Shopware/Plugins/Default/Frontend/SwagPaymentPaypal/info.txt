@@ -1,0 +1,32 @@
+<h1>Das ist PayPal Express</h1>
+<br />
+<p>Sobald Sie PayPal Express in Ihren Shop integriert haben, öffnen Sie die Tür zu 15 Millionen PayPal-Kunden und einer durchschnittlichen Umsatzsteigerung von 18,7%.<a href="#footnote-1"><abbr title="E-Commerce Center Handel, IZH6 Studie, Köln 2012"><sup>[1]</sup></abbr></a> Denn deutsche Online-Käufer sind besonders sicherheitsbewusst und halten beim Einkauf gezielt Ausschau nach PayPal.</p>
+<br />
+<p>
+<ul>
+<li>· Die Integration ist schnell erledigt.</li>
+<li>· Der Bezahlprozess ist für mobile Geräte optimiert.</li>
+<li>· Keine Einrichtungskosten oder monatlichen Grundgebühren.</li>
+<li>· Sobald Sie Geld empfangen, erheben wir eine Gebühr von 1,9% plus 0,35 Euro.</li>
+</ul>
+<a href="https://www.paypal-deutschland.de/haendler/was-ist-PayPal/das-kostet-PayPal.html" target="_blank">Weitere Information zu PayPal und entstehenden Kosten</a>
+</p>
+<br />
+<h1>Los geht’s</h1>
+<br />
+<strong>So eröffnen Sie ein Geschäftskonto</string>
+
+<p>Der Anmeldeprozess gliedert sich in drei einfache Schritte. Was Sie dazu brauchen? Ihre Firmen- und Bankdaten, E-Mail-Adresse und gegebenenfalls Ihre Steuernummer.</p>
+
+<p><strong>· Schritt 1:</strong> Klicken Sie auf "Jetzt Konto eröffnen" und geben Sie Ihre Geschäftsdaten ein.</p>
+<p><strong>· Schritt 2:</strong> Bestätigen Sie Ihre E-Mail-Adresse.</p>
+<p><strong>· Schritt 3:</strong> Fügen Sie nun noch Ihr Bankkonto Ihrem PayPal-Konto hinzu. Fertig.</p>
+
+
+<p>Nachdem Sie jetzt noch Ihr Bankkonto bestätigt haben, wird Ihnen Ihr Integrations-Partner eine einfache Anleitung geben, wie Sie den PayPal-Express-Button in Ihren Shop einbauen können.
+<br />
+<input value="JETZT KONTO ERÖFFNEN" onclick="window.open('http://altfarm.mediaplex.com/ad/ck/3484-158045-8030-0?PMA4=Shopware&PMA5=Cart&PMA6=Backend&PMA7=Profilseite&PMA8=Signup&mpro=https://www.paypal.com/de/cgi-bin/webscr?cmd=_registration-run-validated&account_type=2&country=DE&cid=MGWNA3M2236ULYNN');"  type="button" /><br />
+
+<p>Haben Sie Fragen? Dann <a href="https://www.paypal-deutschland.de/haendler/kontakt/index.html" target="_blank">schreiben Sie uns</a> oder rufen uns direkt an:  01805 23 32 05.</p>
+<br />
+<small><p id="footnote-1">[1] *E-Commerce Center Handel, IZH6 Studie, Köln 2012.</p></small>

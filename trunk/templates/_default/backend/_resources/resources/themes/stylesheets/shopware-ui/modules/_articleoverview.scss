@@ -1,0 +1,32 @@
+div[id^=articleList-main-window] {
+    .#{$prefix}panel-header-horizontal {
+        padding: 8px 4px 8px 4px;
+    }
+
+    .#{$prefix}window-body > .#{$prefix}container {
+        border-right: 0 none;
+
+        .#{$prefix}tree-panel {
+            .#{$prefix}panel-header {
+                border-right: 0 none;
+                border-left: 0 none;
+            }
+            .#{$prefix}panel-body {
+                border-right: 0 none;
+                border-bottom: 0 none;
+            }
+        }
+    }
+
+    .#{$prefix}tree-panel  + .#{$prefix}panel {
+        .#{$prefix}panel-header {
+            border-left: 0 none;
+            border-right: 0 none;
+        }
+
+        .#{$prefix}panel-body {
+            border-right: 0 none;
+            border-left: 0 none;
+        }
+    }
+}

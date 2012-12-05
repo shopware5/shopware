@@ -1,0 +1,20 @@
+/* HOME
+ -----------------*/
+
+/* TS SEAL*/
+#tsBox { margin: 18px 0 0 1px; }
+
+/* TS RATING */
+.ts_rating_box {border: 1px solid; border-color: #C7C7C7 #C7C7C7 #C7C7C7 #FFFFFF; margin-top: 18px; background: #f5f5f5; }
+.ts_rating_box img { text-align: center; margin: 5px 5px 5px 4px; }
+ 
+/* BASKET
+ -----------------*/
+.table_row.trusted_shops { background: url("../images/checkout_trusted_shops_bg.png") repeat-x scroll left top transparent; border-width: 1px 1px 0 1px; border-style: solid; border-color: #C7C7C7; }
+#confirm .table_row.trusted_shops {border-width: 1px 1px 1px 1px; margin-bottom: 10px;}
+.table_row.trusted_shops form {	color: #4f4f4f;	padding: 18px 40px 15px 30px; }
+.table_row.trusted_shops h5 { margin-bottom: 11px; font-size: 12px; }
+.table_row.trusted_shops input { margin: 2px 0 0 10px; padding-left: 17px; }
+.table_row.trusted_shops img { position: absolute; z-index: 1000; }
+.table_row.trusted_shops p a { color: #e04900; }
+.table_row.trusted_shops .text { padding-left: 108px; display: inline-block; }
