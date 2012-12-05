@@ -607,3 +607,122 @@ AND `value` LIKE "Plus {$key} VAT:";
 
 UPDATE `s_core_config_elements` SET `label`='Meta-Description von Artikel/Kategorien aufbereiten' WHERE `label`='Meta-Description von Artikel/Kategorien aufbereiteten' AND `name`='seometadescription';
 
+-- 1-add-newsletter-config.sql
+-- //
+
+SET @help_parent = (SELECT id FROM s_core_config_forms WHERE name='Other');
+
+INSERT IGNORE INTO `s_core_config_forms` (`id`, `parent_id`, `name`, `label`, `description`, `position`, `scope`, `plugin_id`) VALUES
+(NULL, @help_parent , 'Newsletter', 'Newsletter', NULL, 0, 0, NULL);
+
+SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Newsletter');
+
+INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
+(@parent, 'MailCampaignsPerCall', 'i:1000;', 'Anzahl der Mails, die pro Cronjob-Aufruf versendet werden', NULL, 'number', 1, 0, 0, NULL, NULL, NULL);
+
+-- 2-fix-google-product-export.sql
+-- Set multishopID to 1 if the default ID does not exist //
+
+UPDATE `s_export` SET `multishopID`=1 WHERE `multishopID` NOT IN (SELECT `id` FROM `s_core_shops`) AND `name`='Google Produktsuche';
+
+-- 3-fix-product-export-eans.sql
+-- replace attr6 with ean //
+
+UPDATE
+	`s_export`
+SET
+	`body` = REPLACE(`body`, '$sArticle.attr6', '$sArticle.ean')
+WHERE
+	`last_export` LIKE '2000%';
+
+
+-- 4-add-new-version-of-skrill-payment.sql
+
+
+UPDATE `s_core_plugins` SET `version` = '2.0.0', `update_version` = NULL WHERE `name` = 'PaymentSkrill';
+
+
+-- 5-update-input-filter-config.sql
+
+SET @parent = (SELECT f.id FROM s_core_config_forms f WHERE f.name = 'InputFilter');
+
+DELETE e FROM s_core_config_elements e
+WHERE e.form_id = @parent
+AND e.name LIKE '%_regex';
+
+INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
+(@parent, 'own_filter', 'N;', 'Eigener Filter', NULL, 'textarea', 0, 0, 0, NULL, NULL, NULL),
+(@parent, 'rfi_protection', 'b:1;', 'RemoteFileInclusion-Schutz aktivieren', NULL, 'boolean', 0, 0, 0, NULL, NULL, NULL),
+(@parent, 'sql_protection', 'b:1;', 'SQL-Injection-Schutz aktivieren', NULL, 'boolean', 0, 0, 0, NULL, NULL, NULL),
+(@parent, 'xss_protection', 'b:1;', 'XSS-Schutz aktivieren', NULL, 'boolean', 0, 0, 0, NULL, NULL, NULL);
+
+-- 6-add-shop-url.sql
+
+CREATE TABLE IF NOT EXISTS `s_core_shops_new` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `main_id` int(11) unsigned DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `position` int(11) NOT NULL,
+  `host` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `base_path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `base_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hosts` text COLLATE utf8_unicode_ci NOT NULL,
+  `secure` int(1) unsigned NOT NULL,
+  `secure_host` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `secure_base_path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `template_id` int(11) unsigned DEFAULT NULL,
+  `document_template_id` int(11) unsigned DEFAULT NULL,
+  `category_id` int(11) unsigned DEFAULT NULL,
+  `locale_id` int(11) unsigned DEFAULT NULL,
+  `currency_id` int(11) unsigned DEFAULT NULL,
+  `customer_group_id` int(11) unsigned DEFAULT NULL,
+  `fallback_id` int(11) unsigned DEFAULT NULL,
+  `customer_scope` int(1) NOT NULL,
+  `default` int(1) unsigned NOT NULL,
+  `active` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `main_id` (`main_id`),
+  KEY `host` (`host`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT IGNORE INTO `s_core_shops_new` (
+  `id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`,
+  `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`
+)
+SELECT
+  `id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`,
+  `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`
+FROM s_core_shops;
+
+DROP TABLE IF EXISTS s_core_shops;
+RENAME TABLE s_core_shops_new TO s_core_shops;
+
+UPDATE `s_core_shops` SET `base_url` = `base_path` WHERE `base_path` IS NOT NULL AND `main_id` IS NOT NULL;
+UPDATE `s_core_shops` SET `secure_base_path` = NULL, `secure_host` = NULL, `host` = NULL, `base_path` = NULL WHERE `main_id` IS NOT NULL;
+
+-- 7-change_snippet_confirm_dispatch.sql
+
+UPDATE `s_core_snippets`
+SET `value` = "Ändern"
+WHERE `name` LIKE 'CheckoutDispatchLinkSend'
+AND `namespace` LIKE 'frontend/checkout/confirm_dispatch'
+AND `value` LIKE "Ã„ndern";
+
+-- 8-change-snippet-document-index-tax.sql
+
+UPDATE `s_core_snippets`
+SET `value` = "zzgl. {$key}% MwSt:"
+WHERE `name` LIKE 'DocumentIndexTax'
+AND `value` LIKE "zzgl. {$key} MwSt:";
+
+UPDATE `s_core_snippets`
+SET `value` = "Plus {$key}% VAT:"
+WHERE `name` LIKE 'DocumentIndexTax'
+AND `value` LIKE "Plus {$key} VAT:";
+
+-- 9-fixes-seo-typo.sql
+--  //
+
+UPDATE `s_core_config_elements` SET `label`='Meta-Description von Artikel/Kategorien aufbereiten' WHERE `label`='Meta-Description von Artikel/Kategorien aufbereiteten' AND `name`='seometadescription';
+
