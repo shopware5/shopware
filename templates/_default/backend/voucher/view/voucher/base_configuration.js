@@ -117,6 +117,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
+            layout:'anchor',
             items:me.createGeneralFormLeft()
         });
 
@@ -127,6 +128,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
+            layout:'anchor',
             items:me.createGeneralFormRight()
         });
 
@@ -147,6 +149,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
+            layout:'anchor',
             items:me.createRestrictionFormLeft()
         });
 
@@ -158,6 +161,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
+            layout:'anchor',
             items:me.createRestrictionFormRight()
         });
 
@@ -393,9 +397,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype:'combobox',
                 name:'bindToSupplier',
-                editable:true,
                 fieldLabel:'{s name=detail_general/field/restrict_on_supplier}Restrict to supplier{/s}',
                 store:Ext.create('Shopware.store.Supplier').load(),
+                pageSize: 25,
                 valueField:'id',
                 displayField:'name'
             }
