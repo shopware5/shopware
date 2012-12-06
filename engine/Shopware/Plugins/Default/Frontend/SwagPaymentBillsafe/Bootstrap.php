@@ -165,6 +165,9 @@ class Shopware_Plugins_Frontend_SwagPaymentBillsafe_Bootstrap extends Shopware_C
     protected function createTable()
     {
         $payment = $this->Payment();
+
+        $sql = 'DELETE FROM `s_core_rulesets` WHERE `paymentID`=?';
+        Shopware()->Db()->query($sql, array($payment->getId()));
         
         $sql = "
 			INSERT INTO `s_core_rulesets` (`paymentID`, `rule1`, `value1`, `rule2`, `value2`) VALUES
@@ -175,8 +178,11 @@ class Shopware_Plugins_Frontend_SwagPaymentBillsafe_Bootstrap extends Shopware_C
 		";
         Shopware()->Db()->exec($sql);
 
-        $sql = 'INSERT INTO `s_core_paymentmeans_countries` (`paymentID`, `countryID`) VALUES (?, ?);';
+        $sql = 'INSERT IGNORE INTO `s_core_paymentmeans_countries` (`paymentID`, `countryID`) VALUES (?, ?);';
         Shopware()->Db()->query($sql, array($payment->getId(), 2));
+
+        $sql = 'DELETE FROM `s_core_documents_box` WHERE `name` LIKE ?';
+        Shopware()->Db()->query($sql, array('Billsafe_%'));
 
         $sql = "
 			INSERT INTO `s_core_documents_box` (`documentID`, `name`, `style`, `value`) VALUES
