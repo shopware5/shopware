@@ -436,37 +436,38 @@ class	sExport
 
     public function sGetImageLink($hash, $imageSize = null)
     {
+        if (empty($hash)) {
+            return "";
+        }
 
-        if (!empty($hash)) {
-            $sql = "SELECT articleID FROM s_articles_img WHERE img =?";
-            $articleId = Shopware()->Db()->fetchOne($sql, array($hash));
+        // get the image directory
+        $imageDir = 'http://' . $this->shop->getHost() . $this->request->getBasePath() . '/media/image/';
 
-            $imageSize = intval($imageSize);
-            $image = $this->getArticleRepository()->getArticleCoverImageQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        // if no imageSize was set, return the full image
+        if (null === $imageSize) {
+            return $imageDir . $hash;
+        }
 
-            if(empty($image)) {
-                return "";
-            }
-            //first we get all thumbnail sizes of the article album
-            $sizes = $this->articleMediaAlbum->getSettings()->getThumbnailSize();
+        // get filename and extension in order to insert thumbnail size later
+        $extension = pathinfo($hash, PATHINFO_EXTENSION);
+        $fileName = pathinfo($hash, PATHINFO_FILENAME);
+        $thumbDir = $imageDir . 'thumbnail/';
 
-            //now we get the configured image and thumbnail dir.
-            $imageDir = 'http://'. $this->shop->getHost() . $this->request->getBasePath()  . '/media/image/';
+        // get thumbnail sizes
+        $sizes = $this->articleMediaAlbum
+                ->getSettings()
+                ->getThumbnailSize();
 
-            $thumbDir = $imageDir . 'thumbnail/';
-
-            foreach ($sizes as $key => $size) {
-                if (strpos($size, 'x') === 0) {
-                    $size = $size . 'x' . $size;
-                }
-                $imageData[$key] = $thumbDir . $image['path'] . '_' . $size . '.' . $image['extension'];
-            }
-
-
-            if (!empty($imageData)) {
-                return $imageData[$imageSize];
+        foreach ($sizes as $key => &$size) {
+            if (strpos($size, 'x') === 0) {
+                $size = $size . 'x' . $size;
             }
         }
+
+        if(isset($sizes[$imageSize])) {
+            return $thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension;
+        }
+
         return "";
     }
 
@@ -748,7 +749,7 @@ class	sExport
 				u.unit,
 				u.description as unit_description,
 				t.tax,
-				i.img as image,
+				CONCAT(i.img, '.', i.extension) as image,
 
 				a.configurator_set_id as configurator,
 
