@@ -247,6 +247,8 @@ Ext.define('Shopware.DragAndDropSelector',
             me.getMiddleButtons(),
             me.toField
         ];
+
+        delete me.articleStore;
         me.callParent(arguments);
     },
     /**
@@ -342,8 +344,17 @@ Ext.define('Shopware.DragAndDropSelector',
         var me = this,
             fromList = me.fromField,
             selected = this.getSelections(fromList);
-        me.fromStore.remove(selected);
+
+        me.fromStore.load({
+            callback: function() {
+                Ext.each(selected, function(item) {
+                    var storeItem = me.fromStore.getById(item.get('id'));
+                    me.fromStore.remove(storeItem);
+                });
+            }
+        });
         me.toStore.add(selected);
+
         me.refreshStore();
     },
 
@@ -367,9 +378,10 @@ Ext.define('Shopware.DragAndDropSelector',
      */
     getSelections: function(list){
         var store = list.getStore(),
-                selections = list.getSelectionModel().getSelection();
+            selections = list.getSelectionModel().getSelection(),
+            result;
 
-        return Ext.Array.sort(selections, function(a, b){
+        result = Ext.Array.sort(selections, function(a, b){
             a = store.indexOf(a);
             b = store.indexOf(b);
 
@@ -380,12 +392,13 @@ Ext.define('Shopware.DragAndDropSelector',
             }
             return 0;
         });
+        return result;
     },
 
     /**
      * Refreshes the Store so send the latest selected items with the search
      */
-    refreshStore: function(){
+    refreshStore: function() {
         var me = this,
             ids = [];
         if(me.selectedItems != null){
