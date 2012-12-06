@@ -234,6 +234,13 @@ class Shopware_Update extends Slim
                 'media/unknown/',
                 'media/video/',
                 'media/temp/',
+            ),
+            'mediaDirs' => array(
+                array(-1  ,'images/articles/', 'media/image/'),
+                array(-2  ,'images/banner/', 'media/image/'),
+                array(-2  ,'images/cms/', 'media/image/'),
+                array(-10 ,'files/downloads/', 'media/unknown/'),
+                array(-12 ,'images/supplier/', 'media/image/'),
             )
         ));
 
@@ -247,8 +254,8 @@ class Shopware_Update extends Slim
 
         $this->hook('slim.before.router', function () use ($app) {
             if($app->config('auth') === null
-              && $app->request()->getPathInfo() !== '/'
-              && $app->request()->getPathInfo() !== '/test') {
+                && $app->request()->getPathInfo() !== '/'
+                && $app->request()->getPathInfo() !== '/test') {
                 $app->redirect($app->urlFor('index'));
             }
         });
@@ -607,8 +614,8 @@ class Shopware_Update extends Slim
                 if(!empty($query) && $db->exec($query) === false) {
                     $errorInfo = $db->errorInfo();
                     $msg = 'Das Datenbank-Update konnte nicht abgeschlossen werden. <br>' .
-                           'Ein Fehler beim Import der Datei " ' . $delta . '" ist aufgetreten. <br>' .
-                           '['. $errorInfo[0] . '] ' . $errorInfo[2];
+                        'Ein Fehler beim Import der Datei " ' . $delta . '" ist aufgetreten. <br>' .
+                        '['. $errorInfo[0] . '] ' . $errorInfo[2];
                     echo json_encode(array(
                         'message' => $msg,
                         'query' => $query,
@@ -638,8 +645,8 @@ class Shopware_Update extends Slim
             if($db->exec($query) === false) {
                 $errorInfo = $db->errorInfo();
                 $msg = 'Die Datenbank-Wiederherstellung konnte nicht abgeschlossen werden. <br>' .
-                       'Ein Fehler beim Import des Backups ist aufgetreten. <br>' .
-                       '['. $errorInfo[0] . '] ' . $errorInfo[2];
+                    'Ein Fehler beim Import des Backups ist aufgetreten. <br>' .
+                    '['. $errorInfo[0] . '] ' . $errorInfo[2];
                 echo json_encode(array(
                     'message' => $msg,
                     'query' => $query,
@@ -812,7 +819,7 @@ class Shopware_Update extends Slim
         } catch(Exception $e) {
             echo json_encode(array(
                 'message' => "Ein Fehler bei der Übernahme des Plugins \"{$plugin['label']}\" ist aufgetreten: <br>"
-                           . $e->getMessage(),
+                    . $e->getMessage(),
                 'success' => false
             ));
             return;
@@ -820,6 +827,193 @@ class Shopware_Update extends Slim
 
         echo json_encode(array(
             'message' => 'Die Plugins wurden erfolgreich übernommen.',
+            'success' => true
+        ));
+    }
+
+    /**
+     * @param $targetDir
+     * @return array
+     */
+    public function getRealUpdatePaths($targetDir)
+    {
+        $updatePaths = $this->config('updatePaths');
+        $updateDir = $this->config('updateDir');
+
+        chdir($targetDir);
+        $realUpdatePaths = array();
+        foreach($updatePaths as $updatePath) {
+            if(strpos($updatePath, '*') !== false) {
+                $paths = glob($updatePath, GLOB_MARK);
+                if(!empty($paths)) {
+                    $realUpdatePaths = array_merge($realUpdatePaths, $paths);
+                }
+            } else {
+                $realUpdatePaths[] = $updatePath;
+            }
+        }
+        chdir($updateDir);
+        return $realUpdatePaths;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImageSizes()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sIMAGESIZES'";
+        $sizes = $db->query($sql)->fetchColumn();
+        $sizes = explode(';', $sizes);
+        $newSizes = array_fill(0, count($sizes), null);
+        foreach($sizes as $size) {
+            $size = explode(':', $size);
+            if(count($size) < 3) {
+                continue;
+            }
+            $newSizes[$size[2]] = $size[0] . 'x' . $size[1];
+        }
+        return $newSizes;
+    }
+
+    public function rollbackMedia()
+    {
+        /** @var $db PDO */
+        $db = $this->config('db');
+        $dirs = $this->config('mediaDirs');
+        $baseDir = $this->config('targetDir');
+
+        foreach($dirs as $dir) {
+            if(!file_exists($baseDir . $dir[1])) {
+                mkdir($baseDir . $dir[1], 0777, true);
+            }
+        }
+
+        $sql = "
+              SELECT img as name, 1 as type FROM s_emarketing_banners WHERE img != ''
+            UNION ALL
+              SELECT image as name, 1 as type FROM s_emarketing_promotion_main
+            UNION ALL
+              SELECT img as name, 1 as type FROM s_emarketing_promotions WHERE img != ''
+            UNION ALL
+              SELECT img as name, 4 as type FROM s_articles_supplier WHERE img != ''
+            UNION ALL
+              SELECT filename as name, 3 as type FROM s_articles_downloads WHERE filename != ''
+        ";
+        $query = $db->query($sql);
+        while($image = $query->fetch(PDO::FETCH_ASSOC)) {
+            $name = basename($image['name']);
+            $dir = $dirs[$image['type']];
+            $file = $baseDir . $dir[2] . $name;
+            if(file_exists($file)) {
+                rename($file, $baseDir . $dir[1] . $name);
+            }
+        }
+        return true;
+    }
+
+    public function rollbackImage()
+    {
+        $dirs = $this->config('mediaDirs');
+        $baseDir = $this->config('targetDir');
+        $imageDir = $dirs[0];
+
+        if(!file_exists($baseDir . $imageDir[2])) {
+            return true;
+        }
+
+        $thumbs = $this->getImageSizes();
+        $thumbs = array_flip($thumbs);
+
+        $dirIterator = new RecursiveDirectoryIterator($baseDir . $imageDir[2]);
+        $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::LEAVES_ONLY);
+        foreach ($iterator as $file) {
+            $file = str_replace(DIRECTORY_SEPARATOR, '/', (string)$file);
+            $newName = $name = basename($file);
+            if(preg_match('#thumbnail/([^/]+?)_([0-9x]+)(.[a-z]+)$#', $file, $match)) {
+                if(!isset($thumbs[$match[2]])) {
+                    continue;
+                }
+                $newName = $match[1] . '_' . $thumbs[$match[2]] . $match[3];
+            }
+            rename($file, $baseDir . $imageDir[1] . $newName);
+        }
+
+        return true;
+    }
+
+    public function rollbackFile()
+    {
+        $backupDir = $this->config('backupDir');
+        $rollbackDir = $this->config('backupDir') . date('Y-m-d_H-i-s') .DIRECTORY_SEPARATOR;
+        $sourceDir = $this->config('sourceDir');
+        $targetDir = $this->config('targetDir');
+        $realUpdatePaths = $this->getRealUpdatePaths($targetDir);
+        $realUpdatePaths[] = 'config.php';
+        $updateDirs = $this->config('updateDirs');
+
+        foreach($updateDirs as $updateDir) {
+            if(!file_exists($rollbackDir. $updateDir)) {
+                mkdir($rollbackDir. $updateDir, 0777, true);
+            }
+        }
+
+        foreach($realUpdatePaths as $updatePath) {
+            if(file_exists($sourceDir . $updatePath)) {
+                rename($sourceDir . $updatePath, $rollbackDir . $updatePath);
+            } elseif(file_exists($targetDir . $updatePath)) {
+                rename($targetDir . $updatePath, $rollbackDir . $updatePath);
+            }
+            if(file_exists($backupDir . $updatePath)) {
+                rename($backupDir . $updatePath, $targetDir . $updatePath);
+            }
+        }
+
+        foreach(array_reverse($updateDirs) as $updateDir) {
+            if(file_exists($sourceDir . $updateDir)) {
+                rmdir($sourceDir . $updateDir);
+            }
+        }
+        return true;
+    }
+
+    public function rollbackAction()
+    {
+        set_time_limit(0);
+
+        $sourceDir = $this->config('sourceDir');
+        $targetDir = $this->config('targetDir');
+        $backupDir = $this->config('backupDir');
+        $warning = null;
+
+        if(!file_exists($backupDir . 'config.php')) {
+            echo json_encode(array(
+                'message' => 'Die Datei-Wiederherstellung wurde schon erfolgreich durchgeführt.',
+                'warning' => $warning,
+                'success' => true
+            ));
+            return;
+        }
+
+        $dirs = $this->config('mediaDirs');
+        foreach($dirs as $dir) {
+            if(!file_exists($targetDir . $dir[1])) {
+                mkdir($targetDir . $dir[1], 0777, true);
+            }
+        }
+
+        $this->rollbackMedia();
+        $this->rollbackImage();
+        $this->rollbackFile();
+
+        if(!file_exists($sourceDir) && !@mkdir($sourceDir, 0777)) {
+            $warning = 'Das Update-Verzeichnis "update/source/" konnte nicht wieder angelegt werden!';
+        }
+
+        echo json_encode(array(
+            'message' => 'Das Datei-Wiederherstellung wurde erfolgreich abgeschlossen.',
+            'warning' => $warning,
             'success' => true
         ));
     }
@@ -849,7 +1043,7 @@ class Shopware_Update extends Slim
             } catch(Exception $e) {
                 $result = array(
                     'message' => 'Ein Fehler im Update-Schritt "' . $action .'" ist aufgetreten: <br> '
-                               . $e->getMessage(),
+                        . $e->getMessage(),
                     'success' => false
                 );
             }
@@ -876,8 +1070,8 @@ class Shopware_Update extends Slim
         $size = 39161 * 1028;
 
         if((!$offset && file_exists($sourceFile))
-          || !file_exists($sourceDir)
-          || file_exists($sourceDir . 'shopware.php')) {
+            || !file_exists($sourceDir)
+            || file_exists($sourceDir . 'shopware.php')) {
             return array(
                 'success' => true,
             );
@@ -890,8 +1084,8 @@ class Shopware_Update extends Slim
         }
 
         $url = $this->config('channel') .
-               '?package=' . urlencode($package) .
-               '&format=' . urlencode($format);
+            '?package=' . urlencode($package) .
+            '&format=' . urlencode($format);
         if (!empty($offset)) {
             $url .= '&offset=' . (int)$offset;
         }
@@ -972,7 +1166,7 @@ class Shopware_Update extends Slim
             @unlink($sourceFile);
             return array(
                 'message' => 'Das Update-Package konnte nicht geöffnet werden. <br>' .
-                             $e->getMessage(),
+                    $e->getMessage(),
                 'success' => false
             );
         }
@@ -1035,7 +1229,9 @@ class Shopware_Update extends Slim
             }
         }
 
-        @unlink($sourceFile);
+        $source->close();
+        unlink($sourceFile);
+
         return array(
             'message' => 'Das Update-Package wurde erfolgreich entpackt.',
             'success' => true
@@ -1046,9 +1242,8 @@ class Shopware_Update extends Slim
     {
         $backupDir = $this->config('backupDir');
         $sourceDir = $this->config('sourceDir');
-        $updateDir = $this->config('updateDir');
         $targetDir = $this->config('targetDir');
-        $updatePaths = $this->config('updatePaths');
+        $realUpdatePaths = $this->getRealUpdatePaths($sourceDir);
         $updateDirs = $this->config('updateDirs');
         $warning = null;
 
@@ -1064,20 +1259,6 @@ class Shopware_Update extends Slim
                 'success' => false,
             );
         }
-
-        chdir($sourceDir);
-        $realUpdatePaths = array();
-        foreach($updatePaths as $updatePath) {
-            if(strpos($updatePath, '*') !== false) {
-                $paths = glob($updatePath, GLOB_MARK);
-                if(!empty($paths)) {
-                    $realUpdatePaths = array_merge($realUpdatePaths, $paths);
-                }
-            } else {
-                $realUpdatePaths[] = $updatePath;
-            }
-        }
-        chdir($updateDir);
 
         foreach($updateDirs as $updateDir) {
             if(!file_exists($backupDir. $updateDir)) {
@@ -1108,8 +1289,8 @@ class Shopware_Update extends Slim
                 $test = @file_get_contents($testUrl);
                 if (empty($test) || $test != 'Hello') {
                     $warning = 'Die .htaccess-Datei konnte nicht übernommen werden. <br>' .
-                               'Bitte führen Sie das Update der Datei manuell durch. <br>' .
-                               'Die neue .htaccess-Datei finden Sie unter ".htaccess-update".';
+                        'Bitte führen Sie das Update der Datei manuell durch. <br>' .
+                        'Die neue .htaccess-Datei finden Sie unter ".htaccess-update".';
                     rename($targetDir . $updatePath, $targetDir . $updatePath . '-update');
                     rename($backupDir . $updatePath, $targetDir . $updatePath);
                 }
@@ -1127,13 +1308,7 @@ class Shopware_Update extends Slim
     {
         /** @var $db PDO */
         $db = $this->config('db');
-        $dirs = array(
-            array(-1  ,'images/articles/', 'media/image/'),
-            array(-2  ,'images/banner/', 'media/image/'),
-            array(-2  ,'images/cms/', 'media/image/'),
-            array(-10 ,'files/downloads/', 'media/unknown/'),
-            array(-12 ,'images/supplier/', 'media/image/'),
-        );
+        $dirs = $this->config('mediaDirs');
         $baseDir = $this->config('targetDir');
 
         $testDirs = array();
@@ -1147,7 +1322,7 @@ class Shopware_Update extends Slim
         }
         if(!empty($testDirs)) {
             $msg = 'Bilder konnten nicht übernommen werden.<br>' .
-                   'Folgende Verzeichnisse sind nicht beschreibar:<br><br>';
+                'Folgende Verzeichnisse sind nicht beschreibar:<br><br>';
             $msg .= implode('<br>', $testDirs);
             return array(
                 'message' => $msg,
@@ -1155,19 +1330,9 @@ class Shopware_Update extends Slim
             );
         }
 
-        $sql = "SELECT `value` FROM `backup_s_core_config` WHERE `name` = 'sIMAGESIZES'";
-        $sizes = $db->query($sql)->fetchColumn();
+        $sizes = $this->getImageSizes();
         if(!empty($sizes)) {
-            $sizes = explode(';', $sizes);
-            $newSizes = array_fill(0, count($sizes), null);
-            foreach($sizes as $size) {
-                $size = explode(':', $size);
-                if(count($size) < 3) {
-                    continue;
-                }
-                $newSizes[$size[2]] = $size[0] . 'x' . $size[1];
-            }
-            $newSizes = implode(';', $newSizes);
+            $newSizes = implode(';', $sizes);
             $sql = 'UPDATE s_media_album_settings SET thumbnail_size = :size WHERE albumID = :albumId';
             $query = $db->prepare($sql);
             $query->execute(array('albumId' => -1, 'size' => $newSizes));
@@ -2144,8 +2309,8 @@ class Shopware_Update extends Slim
             return;
         }
         $file = dirname(__FILE__) . '/' .
-                str_replace('_', DIRECTORY_SEPARATOR, substr($class, 9)) .
-                '.php';
+            str_replace('_', DIRECTORY_SEPARATOR, substr($class, 9)) .
+            '.php';
         if (file_exists($file)) {
             require $file;
         }
