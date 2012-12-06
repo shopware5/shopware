@@ -1649,10 +1649,10 @@ class Shopware_Update extends Slim
 
         $method = "product";
         $query = array (
-            'order' => array ('field' => 'a.datum', 'direction' => 'desc'),
+            'order' => array ('field' => 'a.id', 'direction' => 'desc'),
             'criterion' =>
             array (
-                //'version' => array(4000),
+                //'version' => array(4040),
                 'pluginName' => array_keys($customs),
             ),
         );
@@ -1667,7 +1667,7 @@ class Shopware_Update extends Slim
                 $customs[$name]['label'] = $product['name'];
                 $customs[$name]['link'] = $product['attributes']['store_url'];
                 if(!empty($product['attributes']['shopware_compatible'])
-                    && strpos($product['attributes']['shopware_compatible'], '4.0.') !== false) {
+                  && strpos($product['attributes']['shopware_compatible'], '4.0.') !== false) {
                     $customs[$name]['updateVersion'] = $product['attributes']['version'];
                 } else {
                     $customs[$name]['updateVersion'] = '';
@@ -1675,6 +1675,9 @@ class Shopware_Update extends Slim
             }
         }
         foreach ($customs as $name => $custom) {
+            if(in_array($name, array('SwagBonusSystem'))) {
+                $customs[$name]['updateVersion'] = '1.0.0';
+            }
             if(in_array($name, array('Heidelpay', 'SwagButtonSolution', 'SwagLangLite', 'SwagTrustedShopsExcellence'))) {
                 unset($customs[$name]['id']);
                 $customs[$name]['updateVersion'] = 'default';
@@ -1729,6 +1732,12 @@ class Shopware_Update extends Slim
             } else {
                 continue;
             }
+            if($plugin['name'] == 'SwagLiveshopping') {
+                $plugin['name'] = 'SwagLiveShopping';
+            }
+            if($plugin['name'] == 'SwagBonussystem') {
+                $plugin['name'] = 'SwagBonusSystem';
+            }
             $result[$plugin['name']] = $plugin;
         }
         return $result;
@@ -1747,7 +1756,8 @@ class Shopware_Update extends Slim
             'sTICKET'           => array('name' => 'SwagTicketSystem', 'updateVersion' => ''),
             'sBUNDLE'           => array('name' => 'SwagBundle', 'updateVersion' => ''),
             'sLIVE'             => array('name' => 'SwagLiveShopping', 'updateVersion' => ''),
-            'sBONUS'            => array('name' => 'SwagBonusSystem', 'updateVersion' => ''),
+            'sSWAGBONUSSYSTEM'  => array('name' => 'SwagBonusSystem', 'updateVersion' => ''),
+            'sSWAGWIZARD'       => array('name' => 'SwagWizard', 'updateVersion' => ''),
             'sLANGUAGEPACK'     => array('name' => 'SwagMultiShop'),
             'sPRICESEARCH'      => array('name' => 'SwagProductExport', 'label' => 'Produkt-Exporte', 'updateVersion' => 'default'),
             'sARTICLECONF'      => array('name' => 'SwagConfigurator', 'label' => 'Artikel Konfigurator', 'updateVersion' => 'default')
