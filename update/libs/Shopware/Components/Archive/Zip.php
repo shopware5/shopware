@@ -1,6 +1,9 @@
 <?php
 class Shopware_Components_Archive_Zip extends Shopware_Components_Archive_Adapter
 {
+    /**
+     * @var ZipArchive
+     */
     protected $stream;
 
     public function __construct($fileName = null, $flags = null)
@@ -37,5 +40,10 @@ class Shopware_Components_Archive_Zip extends Shopware_Components_Archive_Adapte
     public function getEntry($position)
     {
         return $this->stream->statIndex($position);
+    }
+
+    public function close()
+    {
+        return $this->stream->close();
     }
 }

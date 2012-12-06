@@ -261,7 +261,7 @@ class Shopware_Components_Archive_Tar extends Shopware_Components_File_Adapter
         return true;
     }
 
-    protected function close()
+    public function close()
     {
         //if (isset($this->file)) {
         if (is_resource($this->file)) {

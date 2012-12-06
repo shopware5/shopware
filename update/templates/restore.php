@@ -44,6 +44,22 @@
         </div>
     </div>
 <?php } ?>
+<?php if(file_exists($app->config('backupDir') . 'shopware.php')
+  || file_exists($app->config('sourceDir') . 'shopware.php')) { ?>
+<div class="page-header page-restore">
+    <h2>Generelles Backup wiederherstellen</h2>
+</div>
+<div class="page">
+    <span class="help-block">
+        .....
+    </span>
+    <div class="actions clearfix">
+        <a href="<?php echo $app->urlFor('action', array('action' =>'rollback')); ?>" class="right primary ajax-loading">
+            Backup wiederherstellen
+        </a>
+    </div>
+</div>
+<?php } ?>
     <div class="actions clearfix" style="margin: 18px 0">
         <a href="<?php echo $app->urlFor('system'); ?>" class="secondary"><?php echo $translation["back"];?></a>
         <a id="link-next" href="<?php echo $app->urlFor('finish'); ?>" class="right primary"><?php echo $translation["forward"];?></a>
