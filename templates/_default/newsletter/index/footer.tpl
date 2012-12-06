@@ -1,4 +1,4 @@
-<table width="560"  border="0" cellspacing="0" cellpadding="0" style="color:#8c8c8c;width:560px; height:50px";>
+<table width="560"  border="0" cellspacing="0" cellpadding="0" style="color:#8c8c8c;width:560px; height:50px;font-family:Arial,Helvetica;">
   <tr>
     <td>
  	<div id="navi_unten">{s name='NewsletterFooterNavigation'}<a href="#" target="_blank" style="font-size:10px;">Kontakt</a> | <a href="#" target="_blank" style="font-size:10px;">Impressum</a>{/s}</div>

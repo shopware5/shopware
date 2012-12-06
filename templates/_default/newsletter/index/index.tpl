@@ -2,6 +2,9 @@
 <head>
 	<title>Newsletter</title>
 	<style type="text/css">
+        td {
+            font-family:Arial,Helvetica;
+        }
 		a:link, a:visited {
 			color:#8c8c8c;
             font-size:13px;
@@ -27,10 +30,10 @@
 
 <body style="height:100%; font-family:Arial, Helvetica, sans-serif; padding:0; background-color:#E9EBED;" background="#ffffff;margin:0;padding:0;" leftmargin="0" topmargin="0">
 
-<table align="center" width="100%" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c;">
+<table align="center" width="100%" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c;font-family:Arial,Helvetica;">
 <tr>
 <td>
-<table align="center" width="560" bgcolor="#ffffff" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c; border:1px solid #dfdfdf;">
+<table align="center" width="560" bgcolor="#ffffff" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c; border:1px solid #dfdfdf;font-family:Arial,Helvetica;">
 <tr>
 <td>
 
