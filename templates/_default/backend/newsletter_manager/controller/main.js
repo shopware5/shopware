@@ -60,7 +60,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Main', {
         me.subApplication.recipientGroupStore = me.getStore('RecipientGroup').load();
         me.subApplication.newsletterGroupStore = me.getStore('NewsletterGroup').load();
         me.subApplication.customerGroupStore = me.getStore('Shopware.apps.Base.store.CustomerGroup').load();
-        me.subApplication.shopStore = me.getStore('Shopware.apps.Base.store.Shop').load();
+        // Don't do the default filtering - get all shops
+        me.subApplication.shopStore = Ext.create('Shopware.apps.Base.store.Shop', {
+            filters: []
+        }).load();
 
         // Create main window, pass stores
         me.mainWindow = me.getView('main.Window').create({
