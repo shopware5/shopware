@@ -241,7 +241,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'combobox',
-                fieldLabel: '{s name=validForShops}Valid for these shops:{/s}',
+                fieldLabel: '{s name=languageSelection}Select Language:{/s}',
                 allowBlank: false,
                 store: me.shopStore,
                 valueField: 'id',
