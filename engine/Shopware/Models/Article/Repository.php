@@ -1498,10 +1498,14 @@ class Repository extends ModelRepository
         }
 
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
-            $builder->andWhere('articles.name LIKE ?1')
-                    ->orWhere('mainDetail.number LIKE ?1')
-                    ->orWhere('supplier.name LIKE ?1')
-                    ->setParameter(1, '%'.$filter[0]["value"].'%');
+            $builder->andWhere('(
+                    articles.name LIKE ?1
+                OR
+                    mainDetail.number LIKE ?1
+                OR
+                    supplier.name LIKE ?1
+            )');
+            $builder->setParameter(1, '%'.$filter[0]["value"].'%');
         }
         return $builder;
     }
