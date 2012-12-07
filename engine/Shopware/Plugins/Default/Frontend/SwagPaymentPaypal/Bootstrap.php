@@ -443,6 +443,18 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
     }
 
     /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        $locale = $this->Application()->Locale()->toString();
+        if(strpos($locale, 'de_') === 0) {
+            $locale = 'de_DE';
+        }
+        return $locale;
+    }
+
+    /**
      * Returns the path to a backend controller for an event.
      *
      * @param Enlight_Event_EventArgs $args
@@ -476,21 +488,10 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             );
         }
 
-        $showButton = true;
-        if($view->hasTemplate() && !empty($view->sPayments)) {
-            $showButton = false;
-            foreach($view->sPayments as $payment) {
-                if($payment['name'] == 'paypal') {
-                    $showButton = true;
-                    break;
-                }
-            }
-        }
-
         if (!empty($config->paypalExpressButtonLayer)
             && $request->getControllerName() == 'checkout' && $request->getActionName() == 'ajax_add_article') {
-            $view->PaypalShowButton = $showButton;
-            $view->PaypalLocale = $this->Application()->Locale()->toString();
+            $view->PaypalShowButton = true;
+            $view->PaypalLocale = $this->getLocale();
             $view->extendsBlock(
                 'frontend_checkout_ajax_add_article_action_buttons',
                 '{include file="frontend/payment_paypal/layer.tpl"}' . "\n",
@@ -500,13 +501,26 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
 
         if (!empty($config->paypalExpressButton)
           && $request->getControllerName() == 'checkout' && $request->getActionName() == 'cart') {
-            $view->PaypalShowButton = $showButton;
-            $view->PaypalLocale = $this->Application()->Locale()->toString();
+            $view->PaypalShowButton = true;
+            $view->PaypalLocale = $this->getLocale();
             $view->extendsBlock(
                 'frontend_checkout_actions_confirm',
                 '{include file="frontend/payment_paypal/express.tpl"}' . "\n",
                 'prepend'
             );
+        }
+
+        if(isset($view->PaypalShowButton)) {
+            $showButton = false;
+            $admin = Shopware()->Modules()->Admin();
+            $payments = isset($view->sPayments) ? $view->sPayments : $admin->sGetPaymentMeans();
+            foreach($payments as $payment) {
+                if($payment['name'] == 'paypal') {
+                    $showButton = true;
+                    break;
+                }
+            }
+            $view->PaypalShowButton = $showButton;
         }
 
         if ($request->getControllerName() == 'checkout' && $request->getActionName() == 'confirm') {
