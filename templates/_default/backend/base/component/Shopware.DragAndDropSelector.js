@@ -248,7 +248,6 @@ Ext.define('Shopware.DragAndDropSelector',
             me.toField
         ];
 
-        delete me.articleStore;
         me.callParent(arguments);
     },
     /**
@@ -345,16 +344,13 @@ Ext.define('Shopware.DragAndDropSelector',
             fromList = me.fromField,
             selected = this.getSelections(fromList);
 
-        me.fromStore.load({
-            callback: function() {
-                Ext.each(selected, function(item) {
-                    var storeItem = me.fromStore.getById(item.get('id'));
-                    me.fromStore.remove(storeItem);
-                });
-            }
-        });
+        //performance fix because ext js is slow in removing single things
+        var storeItems = me.fromStore.data.items;
+        me.fromStore.removeAll();
+        //storeItems contains now an array of Ext.data.Model
+        storeItems = me.fastRemoveStoreItems(storeItems, selected);
+        me.fromStore.add(storeItems);
         me.toStore.add(selected);
-
         me.refreshStore();
     },
 
@@ -366,7 +362,13 @@ Ext.define('Shopware.DragAndDropSelector',
         var me = this,
             toList = me.toField,
             selected = me.getSelections(toList);
-        me.toStore.remove(selected);
+
+        //performance fix because ext js is slow in removing single things
+        var storeItems = me.toStore.data.items;
+        me.toStore.removeAll();
+        //storeItems contains now an array of Ext.data.Model
+        storeItems = me.fastRemoveStoreItems(storeItems, selected);
+        me.toStore.add(storeItems);
         me.fromStore.add(selected);
         me.refreshStore();
     },
@@ -378,10 +380,9 @@ Ext.define('Shopware.DragAndDropSelector',
      */
     getSelections: function(list){
         var store = list.getStore(),
-            selections = list.getSelectionModel().getSelection(),
-            result;
+            selections = list.getSelectionModel().getSelection();
 
-        result = Ext.Array.sort(selections, function(a, b){
+        return Ext.Array.sort(selections, function(a, b){
             a = store.indexOf(a);
             b = store.indexOf(b);
 
@@ -392,7 +393,6 @@ Ext.define('Shopware.DragAndDropSelector',
             }
             return 0;
         });
-        return result;
     },
 
     /**
@@ -401,6 +401,9 @@ Ext.define('Shopware.DragAndDropSelector',
     refreshStore: function() {
         var me = this,
             ids = [];
+        if(me.toStore != null) {
+            me.selectedItems = me.toStore;
+        }
         if(me.selectedItems != null){
             me.selectedItems.each(function(element) {
                 ids.push(element.get('id'));
@@ -409,6 +412,28 @@ Ext.define('Shopware.DragAndDropSelector',
         me.fromStore.getProxy().extraParams = {
             'usedIds[]': ids
         };
+    },
+
+    /**
+     * removes the selectedItems from the storeItems
+     */
+    fastRemoveStoreItems: function(storeItems, selected) {
+        var toRemove = [];
+
+        //performance fix because ext js is slow in removing single things
+        for(var i in storeItems) {
+            var select = storeItems[i];
+            Ext.each(selected, function(item) {
+                if(select.get('id') === item.get('id')) {
+                    toRemove.unshift(i);
+                }
+            });
+        }
+
+        Ext.each(toRemove, function(index) {
+            Ext.Array.erase(storeItems, index, 1);
+        });
+        return storeItems;
     },
 
     /**

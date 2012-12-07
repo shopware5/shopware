@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     articleNumberRenderer: function(value, metaData, record) {
         var detailData = record.getDetail().first();
         if (detailData) {
-            return detailData.get('number')
+            return detailData.get('number');
         } else {
             return 'undefined';
         }
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     supplierRenderer: function(value, metaData, record) {
         var supplier = record.getSupplier().first();
         if (supplier) {
-            return supplier.get('name')
+            return supplier.get('name');
         } else {
             return 'undefined';
         }
