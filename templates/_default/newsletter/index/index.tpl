@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>Newsletter</title>
@@ -46,9 +47,9 @@
         {include file="newsletter/container/text.tpl"}
     {elseif $sCampaignContainer.type == "ctSuggest"}
         {include file="newsletter/container/suggest.tpl" sCampaignContainer=$sRecommendations}
-    {else if $sCampaignContainer.type == "ctArticles"}
+    {elseif $sCampaignContainer.type == "ctArticles"}
         {include file="newsletter/container/article.tpl"}
-    {else if $sCampaignContainer.type == "ctLinks"}
+    {elseif $sCampaignContainer.type == "ctLinks"}
         {include file="newsletter/container/link.tpl"}
     {/if}
 {/foreach}
