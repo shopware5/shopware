@@ -13,5 +13,5 @@
 
 {* some special spacing for old outlook versions *}
 <br>
-<div style="background:#dfdfdf;clear:both;float:none;height: 1px; line-height: 1px;">&nbsp;</div>
+<div height="1px" style="background:#dfdfdf;clear:both;float:none;height:1px; line-height:1px;font-size:1px;">&nbsp;</div>
 <br>
