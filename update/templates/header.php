@@ -8,19 +8,18 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <base href="<?php echo $app->getBasePath(); ?>/" />
     <title>Shopware 4 - Updater</title>
-    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="assets/styles/bootstrap.min.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="assets/styles/styles.css" media="all"/>
+    <link rel="shortcut icon" href="<?php echo $app->getBasePath(); ?>/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $app->getBasePath(); ?>/assets/styles/bootstrap.min.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo $app->getBasePath(); ?>/assets/styles/styles.css" media="all"/>
     <script src="//code.jquery.com/jquery-1.8.0.min.js"></script>
     <script>window.jQuery || document.write('<script src="assets/javascript/jquery-1.8.0.min.js"><\/script>')</script>
-    <script type="text/javascript" src="assets/javascript/jquery.installer.js"></script>
+    <script type="text/javascript" src="<?php echo $app->getBasePath(); ?>/assets/javascript/jquery.installer.js"></script>
 </head>
 <body>
 
 <div class="info">
-    <img src="assets/images/logo_updater.png" alt="Shopware Updater" class="logo"/>
+    <img src="<?php echo $app->getBasePath(); ?>/assets/images/logo_updater.png" alt="Shopware Updater" class="logo"/>
 
     <div class="meta">
         <p>
