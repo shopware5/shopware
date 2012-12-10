@@ -510,7 +510,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
             );
         }
 
-        if(isset($view->PaypalShowButton)) {
+        if($view->hasTemplate() && isset($view->PaypalShowButton)) {
             $showButton = false;
             $admin = Shopware()->Modules()->Admin();
             $payments = isset($view->sPayments) ? $view->sPayments : $admin->sGetPaymentMeans();
