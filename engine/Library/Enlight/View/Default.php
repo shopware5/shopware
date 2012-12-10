@@ -257,7 +257,10 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function getAssign($spec = null)
     {
-        return $this->Template()->getTemplateVars($spec);
+        if ($this->template !== null) {
+            return $this->template->getTemplateVars($spec);
+        }
+        return $this->engine->getTemplateVars($spec);
     }
 
     /**
