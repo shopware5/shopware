@@ -45,7 +45,7 @@ class Shopware_Update extends Slim
         $config = isset($config['db']) ? $config['db'] : array();
 
         if(isset($DB_HOST)) {
-            if(strpos($DB_HOST, ':')) {
+            if(strpos($DB_HOST, ':') !== false) {
                 list($host, $port) = explode(':', $DB_HOST);
             } else {
                 $host = $DB_HOST;
@@ -1270,7 +1270,8 @@ class Shopware_Update extends Slim
         }
 
         foreach($realUpdatePaths as $updatePath) {
-            if(file_exists($sourceDir . $updatePath) && file_exists($targetDir . $updatePath)) {
+            if((file_exists($sourceDir . $updatePath) && file_exists($targetDir . $updatePath))
+                || file_exists($targetDir . $updatePath) && !file_exists($backupDir . $updatePath) ) {
                 rename($targetDir . $updatePath, $backupDir . $updatePath);
             }
 
@@ -1832,7 +1833,7 @@ class Shopware_Update extends Slim
                 $customs[$name]['label'] = $product['name'];
                 $customs[$name]['link'] = $product['attributes']['store_url'];
                 if(!empty($product['attributes']['shopware_compatible'])
-                  && strpos($product['attributes']['shopware_compatible'], '4.0.') !== false) {
+                    && strpos($product['attributes']['shopware_compatible'], '4.0.') !== false) {
                     $customs[$name]['updateVersion'] = $product['attributes']['version'];
                 } else {
                     $customs[$name]['updateVersion'] = '';
