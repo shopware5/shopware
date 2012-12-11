@@ -91,3 +91,7 @@ AND m.id IS NULL;
 
 UPDATE `s_emarketing_banners` SET `valid_from` = NULL WHERE `valid_from` = '0000-00-00 00:00:00';
 UPDATE `s_emarketing_banners` SET `valid_to` = NULL WHERE `valid_to` = '0000-00-00 00:00:00';
+
+UPDATE s_articles_img i, s_media m
+SET i.media_id = m.id
+WHERE m.name = i.img;
