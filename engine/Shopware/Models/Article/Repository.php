@@ -764,23 +764,26 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.prices', 'prices')
                 ->leftJoin('prices.customerGroup', 'customerGroup')
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
-                ->andWhere('details.kind = 1')
                 ->andWhere('prices.customerGroupKey = :key')
+                ->addOrderBy('details.kind', 'ASC')
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('key', $customerGroupKey)
                 ->setParameter(1, $article->getId());
 
-    	return $builder;
-    }
+        if ($article->getLastStock()) {
+            $builder->andWhere('details.inStock > 0');
+        }
 
+        return $builder;
+    }
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      * @param $ids
