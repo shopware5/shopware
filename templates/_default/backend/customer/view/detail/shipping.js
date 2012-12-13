@@ -149,17 +149,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
         me.items = me.createShippingForm();
 
         me.callParent(arguments);
-
-        me.addEvents(
-
-            /**
-             * Fired when the user changes his country. Used to fill the state box
-             * @param field
-             * @param newValue
-             */
-            'countryChanged'
-
-        );
     },
 
     /**
@@ -176,7 +165,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
              * @event
              * @param [Ext.form.Panel] form - The form panel
              */
-            'copyAddress'
+            'copyAddress',
+            /**
+             * Fired when the user changes his country. Used to fill the state box
+             * @param field
+             * @param newValue
+             */
+            'countryChanged'
         );
     },
 
@@ -272,6 +267,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             valueField:'id',
             anchor:'100%',
             labelWidth:150,
+            queryMode: 'local',
             minWidth:250,
             displayField:'name',
             listeners: {
