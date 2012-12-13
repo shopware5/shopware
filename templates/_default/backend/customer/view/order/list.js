@@ -289,7 +289,11 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
 
         if (me.paymentStatusStore) {
             var paymentStatus = me.paymentStatusStore.getById(value);
-            return paymentStatus.get('description');
+            if (paymentStatus instanceof Ext.data.Model) {
+                return paymentStatus.get('description');
+            } else {
+                return '';
+            }
         } else {
             return '';
         }
