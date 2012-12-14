@@ -34,7 +34,7 @@
  * Backend - Management for Banner. Create | Modify | Delete.
  * Standard banner model
  */
-/*{block name="backend/banner/model/banner"}*/
+//{block name="backend/banner/model/banner"}
 Ext.define('Shopware.apps.Banner.model.BannerDetail', {
     /**
      * Extends the default extjs 4 model
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
      * @array
      */
     fields : [
-		/*{block name="backend/banner/model/banner/fields"}{/block}*/
+		//{block name="backend/banner/model/banner/fields"}{/block}
         { name : 'id',              type: 'int' },
         { name : 'description',     type: 'string' },
         { name : 'validFromDate', type: 'date', dateFormat: 'd.m.Y' },
@@ -101,4 +101,4 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
         }
     }
 });
-/* {/block} */
+//{/block}
