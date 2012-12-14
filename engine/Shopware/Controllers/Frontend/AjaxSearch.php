@@ -125,7 +125,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     {
         $config = array(
             "suggestSearch" => true,
-            "currentPage" => 0,
+            "currentPage" => 1,
             "restrictSearchResultsToCategory" => Shopware()->Shop()->get('parentID'),
             "resultsPerPage" => empty(Shopware()->Config()->MaxLiveSearchResults) ? 6 : (int)Shopware()->Config()->MaxLiveSearchResults
         );
