@@ -34,7 +34,7 @@
  * The Country-Model represents a single country.
  * It extends the base-country-model
  */
-/*{block name="backend/payment/model/country"}*/
+//{block name="backend/payment/model/country"}
 Ext.define('Shopware.apps.Payment.model.Country', {
 
     /**
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Payment.model.Country', {
      */
      //todo@ps paymentId
     fields:[
-		/*{block name="backend/payment/model/country/fields"}{/block}*/
+		//{block name="backend/payment/model/country/fields"}{/block}
         { name: 'surcharge', type: 'double' },
         { name: 'payment', type: 'int' }
     ],

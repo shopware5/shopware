@@ -33,7 +33,7 @@
  * 
  * todo@all: Documentation
  */
- /*{block name="backend/shipping/model/holiday"}*/
+//{block name="backend/shipping/model/holiday"}
 Ext.define('Shopware.apps.Shipping.model.Holiday', {
     /**
      * Extends the standard ExtJS 4
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
      * @array
      */
     fields : [
-		 /*{block name="backend/shipping/model/holiday/fields"}{/block}*/
+		//{block name="backend/shipping/model/holiday/fields"}{/block}
         { name : 'id',  type: 'integer' }, 
         { name : 'name',type: 'string' } 
     ],
@@ -67,4 +67,4 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
      */
     belongsTo:'Shopware.apps.Shipping.model.Dispatch'
 });
- /*{/block}*/
+//{/block}

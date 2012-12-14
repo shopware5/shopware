@@ -35,7 +35,7 @@
  * It only creates the main-window.
  * shopware AG (c) 2012. All rights reserved.
  */
-/* {block name=backend/systeminfo/controller/main} */
+//{block name=backend/systeminfo/controller/main}
 Ext.define('Shopware.apps.Systeminfo.controller.Main', {
 
     /**
@@ -71,4 +71,4 @@ Ext.define('Shopware.apps.Systeminfo.controller.Main', {
         this.callParent(arguments);
     }
 });
-/* {/block} */
+//{/block}

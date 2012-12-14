@@ -34,7 +34,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Standard supplier model
  */
-/*{block name="backend/supplier/model/supplier"}*/
+//{block name="backend/supplier/model/supplier"}
 Ext.define('Shopware.apps.Supplier.model.Supplier', {
     /**
      * Extends the standard ExtJS 4
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
      * @array
      */
     fields : [
-		/*{block name="backend/supplier/model/supplier/fields"}{/block}*/
+		//{block name="backend/supplier/model/supplier/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'count', type : 'int' },
@@ -91,5 +91,4 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
         { type: 'hasMany', model: 'Shopware.apps.Supplier.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
     ]
 });
-
-/*{/block}*/
+//{/block}
