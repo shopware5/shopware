@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
- /*{block name="backend/shipping/model/tax"}*/
+//{block name="backend/shipping/model/tax"}
 Ext.define('Shopware.apps.Shipping.model.Tax', {
     /**
      * Extends the default extjs 4 model
@@ -41,4 +41,4 @@ Ext.define('Shopware.apps.Shipping.model.Tax', {
      */
     extend : 'Shopware.apps.Base.model.Tax'
 });
-/* {/block} */
+//{/block}

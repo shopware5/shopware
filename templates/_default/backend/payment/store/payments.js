@@ -33,7 +33,7 @@
  *
  * The payment store is used to load the several payment-information.
  */
-/*{block name=backend/payment/store/category}*/
+//{block name=backend/payment/store/category}
 Ext.define('Shopware.apps.Payment.store.Payments', {
     extend : 'Ext.data.TreeStore',
     alias : 'store.payments',
@@ -41,4 +41,4 @@ Ext.define('Shopware.apps.Payment.store.Payments', {
     pageSize : 30,
     model : 'Shopware.apps.Payment.model.Payment'
 });
-/* {/block} */
+//{/block}

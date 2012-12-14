@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
- /*{block name="backend/shipping/model/dispatch"}*/
+//{block name="backend/shipping/model/dispatch"}
 Ext.define('Shopware.apps.Shipping.model.Dispatch', {
     /**
      * Extends the standard ExtJS 4
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
      * @array
      */
     fields : [
-		 /*{block name="backend/shipping/model/dispatch/fields"}{/block}*/
+		//{block name="backend/shipping/model/dispatch/fields"}{/block}
         { name : 'id' },
         { name : 'name' },
         { name : 'type' },
@@ -165,4 +165,4 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
     }
 }
 );
- /*{/block}*/
+//{/block}

@@ -33,7 +33,7 @@
 /**
  * todo@all: Documentation
  */
-/*{block name=backend/shipping/controller/costs_matrix}*/
+//{block name=backend/shipping/controller/costs_matrix}
 Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
     /**
      * Extend from the standard ExtJS 4
@@ -265,4 +265,4 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
         return this.getRightForm().calculationField;
     }
 });
- /*{/block}*/
+//{/block}
