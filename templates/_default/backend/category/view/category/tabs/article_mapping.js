@@ -44,17 +44,17 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     extend:'Ext.form.Panel',
     /**
      * Register the alias for this class.
-     * @string 
+     * @string
      */
     alias:'widget.category-category-tabs-article_mapping',
 
     cls: 'shopware-form',
 
     /**
-     * Specifies the border for this component. The border can be a single numeric 
-     * value to apply to all sides or it can be a CSS style specification for each 
+     * Specifies the border for this component. The border can be a single numeric
+     * value to apply to all sides or it can be a CSS style specification for each
      * style, for example: '10 5 3 10'.
-     * 
+     *
      * Default: 0
      * @integer
      */
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     autoShow : true,
     /**
      * used layout column
-     * 
+     *
      * @string
      */
     layout: 'fit',
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * Initialize the Shopware.apps.Category.view.category.tabs.ArticleMapping and defines the necessary
      * default configuration
      */
-    initComponent:function () 
+    initComponent:function ()
     {
         var me = this;
         me.items = me.getItems();
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     articleNumberRenderer: function(value, metaData, record) {
         var detailData = record.getDetail().first();
         if (detailData) {
-            return detailData.get('number')
+            return detailData.get('number');
         } else {
             return 'undefined';
         }
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     supplierRenderer: function(value, metaData, record) {
         var supplier = record.getSupplier().first();
         if (supplier) {
-            return supplier.get('name')
+            return supplier.get('name');
         } else {
             return 'undefined';
         }

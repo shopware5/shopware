@@ -239,7 +239,9 @@ class Repository extends ModelRepository
                 'locale', 'currency',
                 'template', 'currencies'
             ))
-            ->where('shop.active = 1');
+            ->where('shop.active = 1')
+            ->orderBy('shop.main')
+            ->addOrderBy('shop.position');
         return $baseBuilder;
     }
 
@@ -305,13 +307,15 @@ class Repository extends ModelRepository
 
         foreach ($shops as $currentShop) {
             $this->fixActive($currentShop);
-            if ($currentShop->getBaseUrl() === null) {
-                $shop = $currentShop;
+            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
+                if($shop === null) {
+                    $shop = $currentShop;
+                }
             } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
                 $shop = $currentShop;
                 break;
-            } elseif ($currentShop->getSecureHost() !== null
-               && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
+            } elseif ($currentShop->getSecure()
+              && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
                 $shop = $currentShop;
                 break;
             }
@@ -346,13 +350,14 @@ class Repository extends ModelRepository
             $shop->setSecure($main->getSecure());
             $shop->setSecureHost($main->getSecureHost());
             $shop->setSecureBasePath($main->getSecureBasePath());
-            $shop->getBaseUrl($main->getBaseUrl());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
+            $shop->setBaseUrl($shop->getBaseUrl() ?: $main->getBaseUrl());
             $shop->setTemplate($main->getTemplate());
             $shop->setCurrencies($main->getCurrencies());
             $shop->setChildren($main->getChildren());
             $shop->setCustomerScope($main->getCustomerScope());
         }
+        $shop->setBaseUrl($shop->getBaseUrl() ?: $shop->getBasePath());
         if ($shop->getSecure()) {
             $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
             $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());

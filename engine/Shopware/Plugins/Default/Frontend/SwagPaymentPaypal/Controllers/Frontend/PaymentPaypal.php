@@ -222,7 +222,6 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
 		$config = $this->Plugin()->Config();
         $client = $this->Plugin()->Client();
         $response = Shopware()->Session()->PaypalResponse;
-        unset(Shopware()->Session()->PaypalResponse);
 
         if($token !== null) {
             $details = $client->getExpressCheckoutDetails(array('token' => $token));
@@ -244,6 +243,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
             case 'PaymentActionNotInitiated':
                 // If user exits and order not finished
                 if($this->getUser() !== null && $this->getOrderNumber() === null) {
+                    unset(Shopware()->Session()->PaypalResponse);
                     $response = $this->finishCheckout($details);
                     if($response['ACK'] != 'Success') {
                         $this->View()->PaypalConfig = $config;
@@ -432,6 +432,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         $data['billing']['streetnumber'] = implode(' ', array_slice($street, 1));
         if(strlen($data['billing']['streetnumber']) > 4) {
             $data['billing']['street'] .= ' ' . $data['billing']['streetnumber'];
+            $data['billing']['streetnumber'] = '';
         }
         if(empty($data['billing']['streetnumber'])) {
             $data['billing']['streetnumber'] = ' ';

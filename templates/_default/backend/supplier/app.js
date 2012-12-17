@@ -33,7 +33,7 @@
  *
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  */
-/*{block name=backend/supplier/app}*/
+//{block name=backend/supplier/app}
 Ext.define('Shopware.apps.Supplier', {
     /**
      * Extends from our special controller, which handles the
@@ -105,5 +105,4 @@ Ext.define('Shopware.apps.Supplier', {
         return mainController.mainWindow;
     }
 });
-
-/*{/block}*/
+//{/block}

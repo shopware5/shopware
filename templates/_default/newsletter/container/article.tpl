@@ -2,11 +2,11 @@
 	{include file="string:`$sCampaignContainer.description`"}
 </h2>
 
-<table width="560" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;">
+<table width="560" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
 	<tr>
 	<td width="100%">            	                 
 
-     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;"> 
+     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
      {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
      {if $sArticle@index%3==0}<tr>{/if}
      <!-- ANFANG Artikel  -->
@@ -14,7 +14,7 @@
        
        <!--ARTIKEL CONTENT-->
                                     
-        <table width="100%" height="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="padding:0;margin:0;background-color:#ffffff;">
+        <table width="100%" height="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="padding:0;margin:0;background-color:#ffffff;font-family:Arial,Helvetica;">
         
         <tr>
         <td height="180" valign="center" style="text-align:center;background-color:#fff;">
@@ -46,7 +46,7 @@
         
         <tr>
         <td height="40" style="text-align:left; padding:10px;">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-family:Arial,Helvetica;">
             <tr>
               <td width="160">
 

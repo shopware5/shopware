@@ -33,7 +33,7 @@
  *
  * The Payment-Model represents a single Payment-mean.
  */
-/*{block name="backend/payment/model/payment"}*/
+//{block name="backend/payment/model/payment"}
 Ext.define('Shopware.apps.Payment.model.Payment', {
     /**
      * Extends the default extjs 4 model
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
      * @array
      */
     fields : [
-		/*{block name="backend/payment/model/payment/fields"}{/block}*/
+		//{block name="backend/payment/model/payment/fields"}{/block}
         { name : 'text',     type: 'string' },
         { name : 'id',       type: 'int' },
         { name : 'name',       type: 'string' },
@@ -100,4 +100,4 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
 
 
 });
-/* {/block} */
+//{/block}

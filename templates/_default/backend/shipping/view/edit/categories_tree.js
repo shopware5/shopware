@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-/*{block name=backend/shipping/view/edit/categories_tree}*/
+//{block name=backend/shipping/view/edit/categories_tree}
 Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
      /**
      * Based on Ext.form.Panel
@@ -137,4 +137,4 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
         return me.treeSelect;
     }
 });
-/*{/block}*/
+//{/block}

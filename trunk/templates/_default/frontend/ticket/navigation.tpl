@@ -1,1 +1,0 @@
-{extends file="frontend/account/content_right.tpl"}

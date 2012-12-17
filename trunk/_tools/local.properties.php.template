@@ -1,6 +1,0 @@
-<?php
-return array(
-	"defaultRoot"=>"/var/www",
-	"db"=> array("%host%"=>"localhost","%user%"=>"root","%password%"=>"root","%database%"=>"test"),
-	'host'=>'www.shopware.vm'
-);

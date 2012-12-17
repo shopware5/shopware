@@ -412,9 +412,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             activeTab = mainWindow.tabPanel.getActiveTab(),
             container;
 
+
         Ext.each(stores, function(store) {
-            var record = store.getAt(store.getCount()-1);
-            record.set('badge', 3);
+            var storeRecord = store.getAt(store.getCount()-1);
+            storeRecord.set('badge', record.get('badge'));
         });
 
         if(activeTab.initialTitle === 'manager') {

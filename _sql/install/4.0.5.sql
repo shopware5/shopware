@@ -1,3 +1,4 @@
+SET NAMES 'utf8';
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 SET FOREIGN_KEY_CHECKS = 0;
@@ -3926,7 +3927,7 @@ CREATE TABLE IF NOT EXISTS `s_core_shops` (
 --
 
 INSERT INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `hosts`, `secure`, `secure_host`, `secure_base_path`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
-(1, NULL, 'Deutsch', NULL, 0, '', '', '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
+(1, NULL, 'Deutsch', NULL, 0, NULL, '', '', 0, NULL, NULL, 11, 4, 3, 1, 1, 1, NULL, 0, 1, 1),
 (2, 1, 'Englisch', '', 0, NULL, NULL, '', 0, NULL, NULL, NULL, NULL, 4, 2, 1, 1, NULL, 0, 0, 0);
 
 -- --------------------------------------------------------
@@ -8615,18 +8616,15 @@ DELETE FROM `s_core_config_values` WHERE id < 56;
 ALTER TABLE `s_articles_details` CHANGE `purchaseunit` `purchaseunit` DECIMAL( 11, 4 ) UNSIGNED NULL DEFAULT NULL;
 
 -- 9-add-snippets-for-frontend-order-item.sql
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoCompleted', 'Komplett abgeschlossen');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoPartiallyCompleted', 'Teilweise abgeschlossen');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoClarificationNeeded', 'Klärung notwendig');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoReadyForShipping', 'Zur Lieferung bereit');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoCompleted', 'Komplett abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoPartiallyCompleted', 'Teilweise abgeschlossen');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoClarificationNeeded', 'Klärung notwendig');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 1, 'OrderItemInfoReadyForShipping', 'Zur Lieferung bereit');
 
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoCompleted', 'Completed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
-INSERT IGNORE INTO `s_core_snippets` (namespace,shopID,localeID,name,value) VALUES('frontend/account/order_item', 2, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
-
--- 10-remove-old-static-link-in-clean-install
-DELETE FROM `s_cms_static` WHERE `link` LIKE '%sViewport=content%';
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoCompleted', 'Completed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoPartiallyCompleted', 'Partially completed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoClarificationNeeded', 'Clarification needed');
+INSERT IGNORE INTO `s_core_snippets` (`namespace`,`shopID`,`localeID`,`name`,`value`) VALUES('frontend/account/order_item', 1, 2, 'OrderItemInfoReadyForShipping', 'Ready for shipping');
 -- 1-fix-emotion-foreign-key.sql
 -- //
 

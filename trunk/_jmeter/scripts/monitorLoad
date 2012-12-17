@@ -1,8 +1,0 @@
-#!/bin/bash
-
-FILE="load.log"
-
-echo -n > $FILE
-
-while [ true ] ; do echo -n "." ; vmstat -s 5 | xargs echo `date '+%d.%m.%Y %k:%M.%S'`"; " >> "$FILE" ; sleep 10 ; done 
-

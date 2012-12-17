@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-/*{block name=backend/shipping/view/edit/country}*/
+//{block name=backend/shipping/view/edit/country}
 Ext.define('Shopware.apps.Shipping.view.edit.Country', {
     /**
      * Based on Ext.panel.Panel
@@ -143,4 +143,4 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         ];
     }
 });
-/*{/block}*/
+//{/block}

@@ -33,7 +33,7 @@
  * 
  * todo@all: Documentation
  */
- /*{block name="backend/shipping/model/category_tree"}*/
+//{block name="backend/shipping/model/category_tree"}
 Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
     /**
      * Extends the default extjs 4 model
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
      * @array
      */
     fields : [
-		 /*{block name="backend/shipping/model/category_tree/fields"}{/block}*/
+        //{block name="backend/shipping/model/category_tree/fields"}{/block}
         { name : 'text',     type: 'string' },
         { name : 'id',       type: 'integer' },
         { name : 'parentId', type: 'integer' },
@@ -61,4 +61,4 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
         { name : 'checked',  type: 'string' }
     ]
 });
-/* {/block} */
+//{/block}

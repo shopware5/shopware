@@ -1,7 +1,0 @@
-Produktinformationen "Bundle"
-​Mit dem "Bundle"-Plugin können Sie beliebige Artikel in Shopware miteinander kombinieren, um diese dann als Bundle zu einem vergünstigten Preis anzubieten. Auf diese Weise können Sie beispielsweise Zubehörartikel zu einem reduzierten Preis in Verbindung mit dem Hauptartikel anbieten. Dabei können Sie sowohl prozentuale Rabatte als auch feste Preise für ein Bundle definieren. Im Warenkorb werden hierbei immer die Originalpreise der Artikel, zusammen mit einem Bundlerabatt ausgegeben. So müssen keine extra Artikel für Bundles angelegt werden.
-
-Funktionen:
-- Erstellen von beliebigen Bundles
-- Untersützung von prozentualen Rabatten und festen Preisen
-- "Zubehörbundles"

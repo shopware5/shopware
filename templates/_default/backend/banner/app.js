@@ -33,7 +33,7 @@
  *
  * Backend Banner Manager Application
  */
-/*{block name=backend/banner/app}*/
+//{block name=backend/banner/app}
 Ext.define('Shopware.apps.Banner', {
 
     /**
@@ -98,4 +98,4 @@ Ext.define('Shopware.apps.Banner', {
         return mainController.main;
     }
 });
-/*{/block}*/
+//{/block}

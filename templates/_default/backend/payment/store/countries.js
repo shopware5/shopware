@@ -34,11 +34,11 @@
  * The countries store is used to display all available countries.
  */
 
-/*{block name=backend/payment/store/countries}*/
+//{block name=backend/payment/store/countries}
 Ext.define('Shopware.apps.Payment.store.Countries', {
     extend : 'Ext.data.Store',
     autoLoad : false,
     pageSize : 30,
     model : 'Shopware.apps.Payment.model.Country'
 });
-/* {/block} */
+//{/block}

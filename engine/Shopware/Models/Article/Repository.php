@@ -697,14 +697,13 @@ class Repository extends ModelRepository
         $builder->select(array('details', 'prices'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('prices.customerGroup', 'customerGroup', 'WITH', 'customerGroup.key = :key')
                 ->innerJoin('details.configuratorOptions', 'options1')
                 ->innerJoin('details.configuratorOptions', 'options2')
                 ->where('details.articleId = ?1')
                 ->andWhere('details.active = 1')
                 ->andWhere('options1.id = ?2')
                 ->andWhere('options2.id = ?3')
-                ->andWhere('customerGroup.key = :key')
                 ->setParameter('key', $customerGroupKey)
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
@@ -765,23 +764,25 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('prices.customerGroup', 'customerGroup', 'WITH', 'customerGroup.key = :key')
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
-                ->andWhere('details.kind = 1')
-                ->andWhere('prices.customerGroupKey = :key')
+                ->addOrderBy('details.kind', 'ASC')
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('key', $customerGroupKey)
                 ->setParameter(1, $article->getId());
 
-    	return $builder;
-    }
+        if ($article->getLastStock()) {
+            $builder->andWhere('details.inStock > 0');
+        }
 
+        return $builder;
+    }
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      * @param $ids
@@ -1498,10 +1499,14 @@ class Repository extends ModelRepository
         }
 
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
-            $builder->andWhere('articles.name LIKE ?1')
-                    ->orWhere('mainDetail.number LIKE ?1')
-                    ->orWhere('supplier.name LIKE ?1')
-                    ->setParameter(1, '%'.$filter[0]["value"].'%');
+            $builder->andWhere('(
+                    articles.name LIKE ?1
+                OR
+                    mainDetail.number LIKE ?1
+                OR
+                    supplier.name LIKE ?1
+            )');
+            $builder->setParameter(1, '%'.$filter[0]["value"].'%');
         }
         return $builder;
     }

@@ -33,7 +33,7 @@
  * 
  * todo@all: Documentation
  */
-/*{block name="backend/shipping/model/costmatrix"}*/
+//{block name="backend/shipping/model/costmatrix"}
 Ext.define('Shopware.apps.Shipping.model.Costsmatrix', {
     /**
      * Extends the standard ExtJS 4
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Shipping.model.Costsmatrix', {
      * @array
      */
     fields:[
-		/*{block name="backend/shipping/model/costmatrix/fields"}{/block}*/
+		//{block name="backend/shipping/model/costmatrix/fields"}{/block}
         { name:'id', type:'integer' },
         { name:'from', type:'float' },
         { name:'value', type:'float' },
@@ -71,4 +71,4 @@ Ext.define('Shopware.apps.Shipping.model.Costsmatrix', {
         }
     }
 });
-/*{/block}*/
+//{/block}

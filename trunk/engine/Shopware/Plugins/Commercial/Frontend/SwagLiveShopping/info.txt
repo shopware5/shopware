@@ -1,6 +1,0 @@
-Produktinformationen "Liveshopping"
-​Mit der Liveshopping-Funktion können Sie zeitlich begrenzte Angebote einstellen, die den Kunden per Countdown visuell dargestellt werden. Sie können Ihre Produkte dabei plakativ für einen definierten Zeitraum oder eine definierte Menge zu einem Aktionspreis anbieten und flexibel steuern, in welchen Kategorien die Aktion prominent angezeigt werden soll.
-Es gibt 3 verschiedene Live-Shopping Widgets:
-- Standard: Artikel wird zu einem reduzierten Preis für eine bestimmte Zeit oder in einem begrenzten Kontingent angeboten
-- Countdown: Der Artikel wird jede Minute günstiger, die schnellen gewinnen.
-- Aufschlag: Der Artikel startet zu einem günstigen Preis und wird jede Minute teurer
