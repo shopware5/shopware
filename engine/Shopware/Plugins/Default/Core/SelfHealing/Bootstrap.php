@@ -123,11 +123,8 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $this->request = new Enlight_Controller_Request_RequestHttp();
         $this->response = new Enlight_Controller_Response_ResponseHttp();
 
-        if (strpos($exception->getMessage(), 'Shopware\Models\Attribute') &&
-           (strpos($exception->getMessage(), 'found') OR strpos($exception->getMessage(), 'exist'))) {
-
+        if ($this->isModelException($exception)) {
             $result = $this->generateModels();
-
             if ($result['success'] === true) {
                 $this->response->setRedirect(
                     $this->request->getRequestUri()
@@ -135,10 +132,49 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
                 $this->response->sendResponse();
                 exit();
             } else {
-
                 die("Failed to create the attribute models, please check the permissions of the engine/Shopware/Models/Attribute directory");
             }
         }
+    }
+
+    /**
+     * Helper function to validate if the thrown exception is an shopware attribute model exception.
+     *
+     * @param $exception Exception
+     *
+     * @return bool
+     */
+    private function isModelException(Exception $exception)
+    {
+        /**
+         * This case matches, when a query selects a doctrine association, which isn't defined in the doctrine model
+         */
+        if ($exception instanceof \Doctrine\ORM\Query\QueryException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+            return true;
+        }
+
+        /**
+         * This case matches, when a doctrine attribute model don't exist
+         */
+        if ($exception instanceof ReflectionException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+            return true;
+        }
+
+        /**
+         * This case matches, when a doctrine model field defined which not exist in the database
+         */
+        if ($exception instanceof PDOException && strpos($exception->getFile(), '/Doctrine/DBAL/')) {
+            return true;
+        }
+
+        /**
+         * This case matches, when a parent model selected and the child model loaded the attribute over the lazy loading process.
+         */
+        if ($exception instanceof \Doctrine\ORM\Mapping\MappingException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -156,7 +192,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $generator->setModelPath(
             Shopware()->AppPath('Models')
         );
-
+ 
         $generator->setSchemaManager(
             $this->getSchemaManager()
         );
