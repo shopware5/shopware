@@ -231,7 +231,7 @@ INSERT INTO `s_core_snippets` (`namespace`, `shopID`, `localeID`, `name`, `value
 ('sofort_multipay_errors', 1, 2, 'error_8019', 'The order cannot be completed due to an incorrect e-mail address. Please correct this and try again.', NOW(), NOW()),
 ('sofort_multipay_errors', 1, 2, 'error_8020', 'The order cannot be completed due to an incorrect telephone number. Please correct this and try again.', NOW(), NOW()),
 ('sofort_multipay_errors', 1, 2, 'error_8023', 'The order cannot be completed due to an incorrect BIC (Bank Identifier Code). Please correct this and try again.', NOW(), NOW()),
-('sofort_multipay_errors', 1, 2, 'error_8024', 'The order cannot be completed due to an incorrect country code. The delivery / billing address must be in Germany. please correct this and try again.', NOW(), NOW()),
+('sofort_multipay_errors', 1, 2, 'error_8024', 'The order cannot be completed due to an incorrect country code. The delivery/billing address must be in Germany. Please correct this and try again.', NOW(), NOW()),
 ('sofort_multipay_errors', 1, 2, 'error_8029', 'We can only support German accounts. Please correct this or try an alternative method of payment.', NOW(), NOW()),
 ('sofort_multipay_errors', 1, 2, 'error_8033', 'The total amount is too high. please correct this and try again.', NOW(), NOW()),
 ('sofort_multipay_errors', 1, 2, 'error_8034', 'The total amount is too low. Please correct this and try again.', NOW(), NOW()),

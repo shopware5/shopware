@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/library/sofortLib_sofortueberweisung_classic.php');
 /**
  * Bootstrap for sofort
  *
@@ -63,6 +62,17 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 		$this->createCoreConfigTable();
 		$this->createBackendMenu();
 		return true;
+	}
+	
+	
+	public function update($oldVersion) {
+		switch ($oldVersion) {
+			case '1.0.0':
+
+			break;
+		}
+
+        return true;
 	}
 	
 	
@@ -345,7 +355,7 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 	 * @param Enlight_Hook_HookArgs $args
 	 * @return bool
 	 */
-	static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
+static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
 		$doc = $args->getSubject();
 		$params = $args->getArgs();
 		// the chosen payment method
@@ -516,6 +526,7 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 	 * @return true
 	 */
 	private function createCoreConfigTable() {
+		require_once(dirname(__FILE__).'/library/sofortLib_sofortueberweisung_classic.php');
 		// get Form instance
 		/** @var $form Shopware\Models\Config\Form */
 		$form = $this->Form();
@@ -527,23 +538,23 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 			'supportText' => '',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
 			'attributes' => array(
-					"uniqueId" => 'sofort_api_key'
-					)
-					));
+                "uniqueId" => 'sofort_api_key'
+            )
+        ));
 					
-					// Flag if API Key is valid
-					$form->setElement('checkbox', 'sofort_api_key_valid', array(
+        // Flag if API Key is valid
+        $form->setElement('checkbox', 'sofort_api_key_valid', array(
 			'label' => 'Valid API Key',
 			'required' => false,
 			'supportText' => '',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
 			'attributes' => array(
-					"uniqueId" => 'sofort_api_key_valid'
-					)
-					));
+                "uniqueId" => 'sofort_api_key_valid'
+            )
+        ));
 					
-					// Check config key
-					$form->setElement('button', 'sofort_multipay_test_api_key', array(
+        // Check config key
+        $form->setElement('button', 'sofort_multipay_test_api_key', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay')->get('sofort_multipay_test_api_key'),
 			'required' => false,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
@@ -591,129 +602,91 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 					)
 					));
 					
-					// Payment Secret
-					$paymentSecret = SofortLib_SofortueberweisungClassic::generatePassword();
-					$form->setElement('text', 'paymentSecret', array(
+        // Payment Secret
+        $paymentSecret = SofortLib_SofortueberweisungClassic::generatePassword();
+        $form->setElement('text', 'paymentSecret', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_backend')->get('payment_secret'),
 			'required' => true,
 			'value' => $paymentSecret,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
+        ));
 					
-					// Payment Reason - Default shop name
-					$paymentReason = '-TRANSACTION-';
-					$form->setElement('text', 'paymentReason', array(
+        // Payment Reason - Default shop name
+        $paymentReason = '-TRANSACTION-';
+        $form->setElement('text', 'paymentReason', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_finish')->get('sofort_multipay_reason_1'),
 			'required' => true,
 			'value' => $paymentReason,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
+        ));
 					
 					
-					// Payment Reason - Default shop name
-					$paymentReason2 = Shopware()->Config()->shopname;
-					$form->setElement('text', 'paymentReason2', array(
+        // Payment Reason - Default shop name
+        $paymentReason2 = Shopware()->Config()->shopname;
+        $form->setElement('text', 'paymentReason2', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_finish')->get('sofort_multipay_reason_2'),
 			'required' => true,
 			'value' => $paymentReason2,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
+        ));
 					
 					
-					/** PAYMENT STATES **/
-					// open | pending
-					$form->setElement('combo', 'sofort_pending_state', array(
+        /** PAYMENT STATES **/
+        // open | pending
+        $form->setElement('combo', 'sofort_pending_state', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('payment_state_open'),
 			'value' => 17,
 			'store' => 'base.PaymentStatus',
 			'displayField' => 'description',
 			'valueField' => 'id',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
-					// Confirmed
-					$form->setElement('combo', 'sofort_confirmed_state', array(
+        ));
+        // Confirmed
+        $form->setElement('combo', 'sofort_confirmed_state', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('payment_state_confirmed'),
 			'value' => 12,
 			'store' => 'base.PaymentStatus',
 			'displayField' => 'description',
 			'valueField' => 'id',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
+        ));
 					
-					// canceled
-					$form->setElement('combo', 'sofort_canceled_state', array(
+        // canceled
+        $form->setElement('combo', 'sofort_canceled_state', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('payment_state_canceled'),
 			'value' => 35,
 			'store' => 'base.PaymentStatus',
 			'displayField' => 'description',
 			'valueField' => 'id',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-					));
+        ));
 					
-					/** Protection Services **/
-					// sofort ueberweisung customer protection
-					$form->setElement('checkbox', 'sofort_ueberweisung_customer_protection', array(
+        /** Protection Services **/
+        // sofort ueberweisung customer protection
+        $form->setElement('checkbox', 'sofort_ueberweisung_customer_protection', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay')->get('customer_protection_su'),
-					));
-					
-					//vorkassebysofort_customer_protection
-					/*
-					$form->setElement('checkbox', 'vorkassebysofort_customer_protection', array(
-					'label' => $this->snippets->getSnippet('sofort_multipay')->get('customer_protection_sv'),
-					));
-					*/
-					
-					//sofort_su_display
-					$form->setElement('combo', 'sofort_su_display', array(
-			'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('sofort_multipay_banner_or_text'),
-			'value'=>$this->snippets->getSnippet('sofort_multipay')->get('banner_su_desc'),
-			'attributes'=>array(
-					'valueField'=>'myId',
-					'displayField'=>'displayText',
-					'mode' => 'local',
-					'triggerAction' => 'all',
-					'store' => '
-					new Ext.data.ArrayStore({
-					id: 0,
-					fields: [
-					"myId",
-					"displayText"
-					],
-					data:
-					[
-						[1,"'.$this->snippets->getSnippet('sofort_multipay')->get('banner_su_desc').'" ],
-						[2, "'.$this->snippets->getSnippet('sofort_multipay')->get('text_su_desc').'"]
-					]
-		})'
-		),
-				'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP)
-		);
-		//sofort_sl_display
-		$form->setElement('combo', 'sofort_sl_display', array(
-				'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('sofort_multipay_banner_or_text'),
-				'value'=>$this->snippets->getSnippet('sofort_multipay')->get('banner_sl_desc'),
-				'attributes'=>array(
-						'valueField'=>'myId',
-						'displayField'=>'displayText',
-						'mode' => 'local',
-						'triggerAction' => 'all',
-						'store' => '
-						new Ext.data.ArrayStore({
-						id: 0,
-						fields: [
-						"myId",
-						"displayText"
-						],
-						data:
-						[
-						[1,"'.$this->snippets->getSnippet('sofort_multipay')->get('banner_sl_desc').'" ],
-						[2, "'.$this->snippets->getSnippet('sofort_multipay')->get('text_sl_desc').'"]
-						]
-	})'
-	),
-				'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP)
-	);
-	return true;
+        ));
+
+        $form->setElement('combo', 'sofort_su_display', array(
+            'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('sofort_multipay_banner_or_text'),
+            'value' => $this->snippets->getSnippet('sofort_multipay')->get('banner_su_desc'),
+            'store' => array(
+                array(1, $this->snippets->getSnippet('sofort_multipay')->get('banner_su_desc')),
+                array(2, $this->snippets->getSnippet('sofort_multipay')->get('text_su_desc'))
+            ),
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
+
+        $form->setElement('combo', 'sofort_sl_display', array(
+            'label' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('sofort_multipay_banner_or_text'),
+            'value' => $this->snippets->getSnippet('sofort_multipay')->get('banner_sl_desc'),
+            'store' => array(
+                array(1, $this->snippets->getSnippet('sofort_multipay')->get('banner_sl_desc')),
+                array(2, $this->snippets->getSnippet('sofort_multipay')->get('text_sl_desc'))
+            ),
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
+	    return true;
 	}
 	
 	
@@ -742,17 +715,19 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 	{
 		$i = 1;
 		foreach($this->products as $product) {
-			$paymentRow = Shopware()->Payments()->createRow(array(
-				'name' => $product['name'],
-				'description' => $product['description'],
-				'position' => $i,
-				'action' => $product['action'],
-				'active' => 0,
-				'esdactive' => $product['esdactive'],
-				'pluginID' => $this->getId(),
-				'template' => $product['template'],
-				'additionaldescription' => $product['additionaldescription'],
-			))->save();
+			$this->createPayment(
+				array(
+					'name' => $product['name'],
+					'description' => $product['description'],
+					'position' => $i,
+					'action' => $product['action'],
+					'active' => 0,
+					'esdactive' => $product['esdactive'],
+					'pluginID' => $this->getId(),
+					'template' => $product['template'],
+					'additionaldescription' => $product['additionaldescription'],
+				)
+			);
 			$i++;
 		}
 		return true;
@@ -827,18 +802,18 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 		$itemColumnExists = Shopware()->Db()->fetchOne('SELECT count(COLUMN_NAME) as count FROM information_schema.COLUMNS
 				WHERE TABLE_SCHEMA = "'.$databaseConfig['dbname'].'" AND TABLE_NAME = "sofort_status" AND COLUMN_NAME = "items"'
 				);
-				$commentColumnExists = Shopware()->Db()->fetchOne('SELECT count(COLUMN_NAME) as count FROM information_schema.COLUMNS
+        $commentColumnExists = Shopware()->Db()->fetchOne('SELECT count(COLUMN_NAME) as count FROM information_schema.COLUMNS
 				WHERE TABLE_SCHEMA = "'.$databaseConfig['dbname'].'" AND TABLE_NAME = "sofort_status" AND COLUMN_NAME = "comment"'
-				);
-				// update db if necessary
-				if($commentColumnExists == 0) {
-					Shopware()->Db()->exec('ALTER TABLE `sofort_status` ADD `comment` TEXT NOT NULL AFTER `invoice_objection`');
-				}
-				if($itemColumnExists == 0) {
-					Shopware()->Db()->exec('ALTER TABLE `sofort_status` ADD `items` TEXT NOT NULL AFTER `invoice_objection`');
-				}
+        );
+        // update db if necessary
+        if($commentColumnExists == 0) {
+            Shopware()->Db()->exec('ALTER TABLE `sofort_status` ADD `comment` TEXT NOT NULL AFTER `invoice_objection`');
+        }
+        if($itemColumnExists == 0) {
+            Shopware()->Db()->exec('ALTER TABLE `sofort_status` ADD `items` TEXT NOT NULL AFTER `invoice_objection`');
+        }
 				
-				return true;
+        return true;
 	}
 	
 	
@@ -874,10 +849,10 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 			);
 			return true;
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 * Remove sofort_product table
 	 */
 	private function removeProductTable() {
@@ -886,8 +861,8 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 			);
 			return true;
 	}
-	
-	
+
+
 	/**
 	 * remove sofort_status table
 	 * Enter description here ...
@@ -898,8 +873,8 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 			);
 			return true;
 	}
-	
-	
+
+
 	/**
 	 * Create the orders table
 	 * @return true
@@ -997,8 +972,9 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 		$userId = $view->sUserData['billingaddress']['id'];
 		
 		if(!empty($userId)) {
-			$sql = 'SELECT `ls_account_number`, `ls_bank_code`, `ls_holder` FROM `sofort_user_settings` WHERE userID = '.$userId.'';
-			$bankAccount = Shopware()->Db()->fetchAll($sql);
+			$sql = 'SELECT `ls_account_number`, `ls_bank_code`, `ls_holder` FROM `sofort_user_settings` WHERE userID = ?';
+			$fields = array($userId);
+			$bankAccount = Shopware()->Db()->fetchAll($sql, $fields);
 				
 			if(!empty($bankAccount)) {
 				return $bankAccount[0];
@@ -1492,7 +1468,7 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 	 * @see Shopware_Components_Plugin_Bootstrap::getVersion()
 	 */
 	public function getVersion(){
-		return "1.0.0";
+		return "1.0.1";
 	}
 	
 	
@@ -1518,7 +1494,7 @@ class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Compone
 		';
 		
 		return array(
-			'version' => $this->snippets->getSnippet('sofort_multipay_bootstrap')->get('sofort_multipay_version'),
+			'version' => $this->getVersion(),
 			'autor' => 'SOFORT AG',
 			'copyright' => 'SOFORT AG, 2012',
 			'label' => 'SOFORT Gateway',
