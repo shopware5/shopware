@@ -3882,6 +3882,12 @@ class sArticles
                     'name' => 'optionname',
                 );
                 break;
+            case 'configuratorgroup':
+                $map = array(
+                    'description' => 'groupdescription',
+                    'name' => 'groupname',
+                );
+                break;
         }
 
         $sql = "
