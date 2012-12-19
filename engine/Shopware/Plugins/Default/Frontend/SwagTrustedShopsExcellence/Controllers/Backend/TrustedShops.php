@@ -42,7 +42,8 @@ class Shopware_Controllers_Backend_TrustedShops extends Shopware_Controllers_Bac
     public function testConnectionAction()
     {
         //access to the plugin configuration
-        $config = Shopware()->Plugins()->Frontend()->SwagTrustedShopsExcellence()->Config();
+        $plugin  = Shopware()->Plugins()->Frontend()->SwagTrustedShopsExcellence();
+        $config = $plugin->Config();
         $message = "";
 
         //to import the trusted shop articles the trusted shop id must given
@@ -58,7 +59,7 @@ class Shopware_Controllers_Backend_TrustedShops extends Shopware_Controllers_Bac
 
         //check login
         $loginParams = array("tsId" => $config["id"], "wsUser" => $config["user"], "wsPassword" => $config["pw"]);
-        $tsDataModel = new TrustedShopsDataModel();
+        $tsDataModel = $plugin->getDataModel();
 
         if(!$tsDataModel->checkLogin($loginParams)) {
             $message .= $this->createMessageTag(" - Der Login bei Trusted Shop war nicht erfolgreich. Bitte überprüfen Sie Ihre Zugangsdaten.");
@@ -70,7 +71,6 @@ class Shopware_Controllers_Backend_TrustedShops extends Shopware_Controllers_Bac
         }
 
         $validCertifications = array("EXCELLENCE", "PRODUCTION", "INTEGRATION", "TEST");
-        $tsDataModel = new TrustedShopsDataModel();
         $certificated = $tsDataModel->checkCertificate();
 
         if(!in_array($certificated->stateEnum, $validCertifications)) {

@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__) . '/Models/TrustedShopsDataModel.php');
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -40,20 +39,46 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 	####################################################################################################################
 	# Plugins install methods ##########################################################################################
 	####################################################################################################################
-	/**
-	 * Returns the file path for meta information file.
-	 *
-	 * @access public
-	 * @return array meta information
-	 */
-	public function getInfo()
-	{
-		return include(dirname(__FILE__) . '/Meta.php');
-	}
 
-    public function getVersion() {
-        return '1.1.0';
+    /**
+     * Returns the meta information about the plugin
+     * as an array.
+     * Keep in mind that the plugin description located
+     * in the info.txt.
+     *
+     * @return array
+     */
+    public function getInfo()
+    {
+        return array(
+            'version'     => $this->getVersion(),
+            'label'       => $this->getLabel(),
+            'link'        => 'http://www.shopware.de/',
+            'description' => file_get_contents($this->Path() . 'info.txt')
+        );
     }
+
+    /**
+     * Returns the version of the plugin as a string
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return '1.1.1';
+    }
+
+    /**
+     * Returns the well-formatted name of the plugin
+     * as a sting
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Trusted Shops Excellence';
+    }
+
 
 	/**
 	 * Plugin install method to subscribe all required events.
@@ -74,6 +99,21 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 		return true;
 	}
 
+    /**
+     * Plugin update method to handle the update process
+     *
+     * @param string $oldVersion
+     * @return bool|void
+     */
+    public function update($oldVersion)
+    {
+        $this->createForm();
+
+        //get the latest trusted shops items
+        $this->updateTrustedShopsProtectionItems();
+
+        return true;
+    }
 	/**
 	 * This function subscribes all required events
 	 * @return void
@@ -160,11 +200,11 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 		//activate or deactivates the rating widget of trusted shops
 		$form->setElement('checkbox', 'ratingActive', array('label' => 'Trusted Shop Rating aktivieren', 'value' => '1'));
 
-        $form->setElement('button', 'Test Connection', array('label'=>'Verbindung, Login und Trusted Shop Zertifikat testen','attributes'=>array(
+        $form->setElement('button', 'Test Connection', array('label'=>'Verbindung, Login und Trusted Shop Zertifikat testen',
             'handler'=>'function (){
                 Ext.Ajax.request({
                    scope:this,
-                   url: window.location.protocol+\'//\'+window.location.host+window.location.pathname.replace(/plugin/,\'\')+\'?controller=TrustedShops&action=testConnection\',
+                   url: window.location.pathname+"TrustedShops/testConnection",
                    success: function(result,request) {
                          var jsonResponse = Ext.JSON.decode(result.responseText);
                         Shopware.Notification.createGrowlMessage(\'\',jsonResponse.message, \'SwagTrustedShopsExcellence\');
@@ -173,17 +213,15 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
                         Ext.MessageBox.alert(\'Ups\',\'Url not reachable\');
                    }
                 });
-             }',
-            'text' => 'Start',
-            'xtype' => 'button'
-        )));
+             }'
+        ));
 
 		//controller button to import the buyer protection articles
-        $form->setElement('button', 'Import Action', array('label'=>'Trusted Shop Artikel und Rating Image importieren (Trusted Shop ID, Web Service User und Passwort ben&ouml;tigt)','attributes'=>array(
+        $form->setElement('button', 'Import Action', array('label'=>'Trusted Shop Artikel und Rating Image importieren (Trusted Shop ID, Web Service User und Passwort ben&ouml;tigt)',
             'handler'=>'function (){
                 Ext.Ajax.request({
                    scope:this,
-                   url: window.location.protocol+\'//\'+window.location.host+window.location.pathname.replace(/plugin/,\'\')+\'?controller=TrustedShops&action=importBuyerProtectionItems\',
+                   url: window.location.pathname+"TrustedShops/importBuyerProtectionItems",
                    success: function(result,request) {
                          var jsonResponse = Ext.JSON.decode(result.responseText);
                         Shopware.Notification.createGrowlMessage(\'\',jsonResponse.message, \'SwagTrustedShopsExcellence\');
@@ -192,10 +230,8 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
                         Ext.MessageBox.alert(\'Ups\',\'Url not reachable\');
                    }
                 });
-             }',
-            'text' => 'Start',
-            'xtype' => 'button'
-        )));
+             }'
+        ));
 	}
 
 	/**
@@ -237,6 +273,16 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 		return dirname(__FILE__) . '/Controllers/Backend/TrustedShops.php';
 	}
 
+    public function getDataModel()
+    {
+        static $model;
+        if(!isset($model)) {
+            require_once($this->Path() . 'Models/TrustedShopsDataModel.php');
+            $model = new TrustedShopsDataModel();
+        }
+        return $model;
+    }
+
 	####################################################################################################################
 	# Plugins event and hook methods####################################################################################
 	####################################################################################################################
@@ -255,7 +301,7 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 		if(!empty($article)) {
 			$config = $this->getTrustedShopBasicConfig();
 
-			$tsDataModel = new TrustedShopsDataModel();
+			$tsDataModel = $this->getDataModel();
 			$returnValue = $tsDataModel->sendBuyerProtectionRequest($orderSubject,$article["ordernumber"]);
 
 			if(is_int($returnValue) && $returnValue > 0) {
@@ -383,7 +429,7 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 
 		//get plugin basic config
 		$config = $this->getTrustedShopBasicConfig();
-		$tsDataModel = new TrustedShopsDataModel();
+		$tsDataModel = $this->getDataModel();
 
 		//iterate the open trusted shop orders
 		foreach($trustedShopOrders as $order) {
@@ -462,7 +508,7 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
      */
 	public function updateTrustedShopsProtectionItems()
 	{
-		$tsDataModel = new TrustedShopsDataModel();
+		$tsDataModel = $this->getDataModel();
 		$TsProducts = $tsDataModel->getProtectionItems();
 		foreach($TsProducts->item as $product) {
             $articleData = array(
@@ -472,6 +518,8 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
                 'supplier' => 'Trusted Shops',
                 'mainDetail' => array(
                     'number' => $product->tsProductID,
+                    'active' => true,
+                    'instock' => 0,
                     'attribute' => array(
                         'attr19' => $product->protectedAmountDecimal,
                         'attr20' => $product->protectionDurationInt
@@ -615,7 +663,7 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 	{
 		$config = $this->getTrustedShopBasicConfig();
 
-		$tsDataModel = new TrustedShopsDataModel();
+		$tsDataModel = $this->getDataModel();
 		$params = array("tsId" => $config["id"], "activation" => 1, "wsUser" => $config["user"], "wsPassword" => $config["pw"], "partnerPackage" => "");
 		$tsDataModel->updateRatingWidgetState($params);
 
@@ -793,9 +841,10 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
 	{
 		$basket = $order->sBasketData;
 		foreach($basket["content"] as $article) {
-			if($article["trustedShopArticle"]) {
-				return $article;
-			}
+            $explode = explode('_',$article['ordernumber']);
+            if(count($explode) == 4 && substr($explode[0],0,2) == 'TS') {
+                return $article;
+            }
 		}
 		return array();
 	}
