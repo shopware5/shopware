@@ -98,7 +98,6 @@ class sAdmin
     /**
      * DEPRECATED , old vatid check
      * @deprecated
-     * @access public
      * @return -
      */
     public function sCheckTaxID($id, $country)
@@ -108,7 +107,6 @@ class sAdmin
 
     /**
      * Checks vat id with webservice
-     * @access public
      * @return array assoziative array with success / error codes
      */
     public function sValidateVat()
