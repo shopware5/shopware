@@ -62,18 +62,21 @@ class sAdmin
      */
     var $subshopId;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages');
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $shop->getCustomerScope();
         $this->subshopId = $shop->getId();
     }
 
-    /** Logout user and destroy session
-     * @access public
-     * @return -
+    /**
+     * Logout user and destroy session
+     *
+     * @return bool|void
      */
-    public function sLogout (){
+    public function sLogout ()
+    {
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_Logout_Start', array('subject'=>$this))){
             return false;
         }
