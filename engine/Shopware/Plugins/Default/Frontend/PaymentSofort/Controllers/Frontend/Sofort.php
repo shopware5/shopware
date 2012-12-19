@@ -1221,54 +1221,6 @@ class Shopware_Controllers_Frontend_Sofort extends Shopware_Controllers_Frontend
 	
 	/**
 	 * 
-	 * Put articles back into stock
-	 * @param string $articleId
-	 * @param int $quantity
-	 */
-	private function restockArticle($articleId, $quantity) {
-		$sql = 'UPDATE s_articles_details SET instock = instock + ? WHERE articleID = ?';
-		$fields = array(
-				$quantity,
-				$articleId,
-		);
-		return $this->Shopware->Db()->query($sql, $fields);
-	}
-	
-	
-	/**
-	 * 
-	 * Reset sales numbers for an aricle
-	 * @param string $articleId
-	 * @param int $quantity
-	 */
-	private function resetSoldArticles($articleId, $quantity) {
-		$sql = 'UPDATE s_articles_details SET sales = sales - ? WHERE articleID = ?';
-		$fields = array(
-				$quantity,
-				$articleId,
-		);
-		return $this->Shopware->Db()->query($sql, $fields);
-	}
-	
-	
-	/**
-	 * 
-	 * Get the articles of a particular order
-	 * @param string $transactionId
-	 */
-	private function fetchArticlesOfOrder($transactionId) {
-		$sql = 'SELECT od.articleID, od.quantity FROM `s_order` o
-		JOIN s_order_details od ON o.id = od.orderID
-		WHERE o.transactionID = ?';
-		$fields = array(
-				$transactionId,
-		);
-		return $this->Shopware->Db()->fetchAll($sql, $fields);
-	}
-	
-	
-	/**
-	 * 
 	 * Controller's error action
 	 */
 	public function errorAction() {
