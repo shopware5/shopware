@@ -767,8 +767,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup', 'WITH', 'customerGroup.key = :key')
+                ->leftJoin('details.prices', 'prices','WITH', 'prices.customerGroupKey = :key')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
                 ->addOrderBy('details.kind', 'ASC')
