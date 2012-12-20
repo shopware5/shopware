@@ -20,17 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * Frontend-Controller TrustedShops
- * Handles the add buyer protection action of the basket
- *
- * @copyright Copyright (c) 2011, Shopware AG
- * @author o.denter
- * @package Shopware
- * @subpackage Controllers_Frontend
- * @creation_date 07.04.11 16:26
  */
 
+/**
+ * Shopware Frontend Controller - SwagTrustedShopsExcellence
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ */
 class Shopware_Controllers_Frontend_TrustedShops extends Enlight_Controller_Action
 {
 

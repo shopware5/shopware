@@ -20,16 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ */
+
+/**
+ * Shopware TrustedShopsData Model
  *
- * This Model capsulates the whole data from and to the Trusted Shops Soap Service
+ * This Model capsulises the whole data from and to the Trusted Shops Soap Service
  *
- * @copyright Copyright (c) 2011, Shopware AG
- * @author m.schmaeing
- * @author $Author$
- * @package Shopware
- * @subpackage Controllers_Frontend
- * @creation_date 16.11.11 10:24
- * @version $Id$
+ * @category  Shopware
+ * @package   Shopware\Plugins\SwagTrustedShopsExcellenceShopware\Models
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class TrustedShopsDataModel
 {

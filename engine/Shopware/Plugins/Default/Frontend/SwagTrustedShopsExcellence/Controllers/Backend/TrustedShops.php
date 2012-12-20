@@ -20,17 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * Backend-Controller TrustedShops
- * Controller button handler for the plugin config to import the buyer protection articles.
- *
- * @copyright Copyright (c) 2011, Shopware AG
- * @author o.denter
- * @package Shopware
- * @subpackage Controllers_Frontend
- * @creation_date 07.04.11 16:26
  */
 
+/**
+ * Shopware Backend Controller - SwagTrustedShopsExcellence
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ */
 class Shopware_Controllers_Backend_TrustedShops extends Shopware_Controllers_Backend_ExtJs
 {
 

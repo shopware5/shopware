@@ -20,19 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * Bootstrap class for the trusted shops excellence plugin.
- *
- * @copyright Copyright (c) 2011, Shopware AG
- * @author o.denter
- * @author m.schmaeing
- * @author $Author$
- * @package Shopware
- * @subpackage Controllers_Frontend
- * @creation_date 16.11.11 09:36
- * @version $Id$
  */
 
+/**
+ * Shopware Trusted Shops Excellence Plugin - Bootstrap
+ *
+ * @category  Shopware
+ * @package   Shopware\Plugins\SwagTrustedShopsExcellence
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ */
 class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
 
@@ -65,7 +61,7 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
      */
     public function getVersion()
     {
-        return '1.1.1';
+        return '1.1.2';
     }
 
     /**
