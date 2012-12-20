@@ -537,10 +537,9 @@ static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
 			'required' => true,
 			'supportText' => '',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
-			'attributes' => array(
-                "uniqueId" => 'sofort_api_key'
+            "uniqueId" => 'sofort_api_key'
             )
-        ));
+        );
 					
         // Flag if API Key is valid
         $form->setElement('checkbox', 'sofort_api_key_valid', array(
@@ -548,19 +547,16 @@ static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
 			'required' => false,
 			'supportText' => '',
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
-			'attributes' => array(
-                "uniqueId" => 'sofort_api_key_valid'
-            )
+            "uniqueId" => 'sofort_api_key_valid'
         ));
-					
+
         // Check config key
         $form->setElement('button', 'sofort_multipay_test_api_key', array(
 			'label' => $this->snippets->getSnippet('sofort_multipay')->get('sofort_multipay_test_api_key'),
 			'required' => false,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
 			'action' => 'testApiKey',
-			'attributes' => array(
-					'handler' => 'function(){
+			'handler' => 'function(){
 						var apiKeyInput = this.up(\'form\').down(\'textfield[uniqueId=sofort_api_key]\'),
 						apiKeyValid = this.up(\'form\').down(\'checkbox[uniqueId=sofort_api_key_valid]\'),
 						url = window.location.pathname.split(\'/backend\')[0]
@@ -570,6 +566,7 @@ static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
 						Ext.MessageBox.alert(\'\',\''.$this->snippets->getSnippet('sofort_multipay_backend')->get('enter_credentials').'\');
 						//eidTextfieldObject.getEl().setStyle(\'background\',\'red\');
 						apiKeyValid.setValue(0);
+						box.hide();
 						return;
 					}
 					Ext.Ajax.request({
@@ -595,12 +592,8 @@ static function sofortPaymentAction(Enlight_Hook_HookArgs $args) {
 					// Pass all needed parameters
 					params: { apiKey: apiKeyInput.getValue() }
 					});
-				}
-					',
-					'text' => 'test',
-					'xtype' => 'button'
-					)
-					));
+				}'
+            ));
 					
         // Payment Secret
         $paymentSecret = SofortLib_SofortueberweisungClassic::generatePassword();
