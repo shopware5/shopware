@@ -2015,7 +2015,7 @@ class sShopwareImport
 	 * @access public
 	 * @return array  $inserts Array mit allen eingef�gten IDs aus s_articles_categories
 	 */
-	function sArticleCategory  ($articleID, $categoryID, $setParentCategories=true)
+	function sArticleCategory  ($articleID, $categoryID, $setParentCategories=false)
 	{
 		$inserts = array();
 		$categoryID = intval($categoryID);
@@ -2029,7 +2029,7 @@ class sShopwareImport
 		$categories = array();
 
         // Setting all parent categories for a given category is legacy behaviour of the API
-        // It was made optional, but still defaults to "true" in order to not brake existing scripts
+        // it is not recommended for shopware4 and therefore was removed from default behaviour
         if($setParentCategories) {
             while ($categoryID!=1 && !empty($categoryID)) {
                 $categories[] = $categoryID;
