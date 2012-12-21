@@ -2015,29 +2015,38 @@ class sShopwareImport
 	 * @access public
 	 * @return array  $inserts Array mit allen eingef�gten IDs aus s_articles_categories
 	 */
-	function sArticleCategory  ($articleID, $categoryID)
+	function sArticleCategory  ($articleID, $categoryID, $setParentCategories=true)
 	{
 		$inserts = array();
 		$categoryID = intval($categoryID);
 		$articleID = intval($articleID);
+
 		if(empty($categoryID)||empty($articleID))
 			return false;
+
 		$categoryparentID = $categoryID;
 		$parentID = $categoryID;
 		$categories = array();
-		while ($categoryID!=1 && !empty($categoryID))
-		{
-			$categories[] = $categoryID;
-			$sql = "SELECT parent FROM s_categories WHERE id=$categoryID";
-			$tmp = $this->sDB->GetOne($sql);
-			$parentID = $categoryID;
-			if (!empty($tmp)){
-				$categoryID = (int) $tmp;
-			} else {
-				$categoryID = 1;
-			}
-		}
-		$categories = implode(',', $categories);
+
+        // Setting all parent categories for a given category is legacy behaviour of the API
+        // It was made optional, but still defaults to "true" in order to not brake existing scripts
+        if($setParentCategories) {
+            while ($categoryID!=1 && !empty($categoryID)) {
+                $categories[] = $categoryID;
+                $sql = "SELECT parent FROM s_categories WHERE id=$categoryID";
+                $tmp = $this->sDB->GetOne($sql);
+                $parentID = $categoryID;
+                if (!empty($tmp)){
+                    $categoryID = (int) $tmp;
+                } else {
+                    $categoryID = 1;
+                }
+            }
+            $categories = implode(',', $categories);
+        } else {
+            $categories = $categoryID;
+        }
+
 
 		$sql = "
 			INSERT IGNORE INTO s_articles_categories (articleID, categoryID)
