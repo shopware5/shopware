@@ -376,26 +376,26 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array(
-                      'article',
-                      'mainDetail',
-                      'tax',
-                      'categories',
-                      'similar',
-                      'accessories',
-                      'accessoryDetail',
-                      'similarDetail',
-                      'images',
-                      'links',
-                      'downloads',
-                      'linkAttribute',
-                      'customerGroups',
-                      'imageAttribute',
-                      'downloadAttribute',
-                      'propertyValues',
-                      'imageMapping',
-                      'mappingRule',
-                      'ruleOption'
-                ))
+            'article',
+            'mainDetail',
+            'tax',
+            'categories',
+            'similar',
+            'accessories',
+            'accessoryDetail',
+            'similarDetail',
+            'images',
+            'links',
+            'downloads',
+            'linkAttribute',
+            'customerGroups',
+            'imageAttribute',
+            'downloadAttribute',
+            'propertyValues',
+            'imageMapping',
+            'mappingRule',
+            'ruleOption'
+        ))
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.mainDetail', 'mainDetail')
                 ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
@@ -427,8 +427,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getDetailsForOptionIdsQuery($articleId, $options) {
-    	$builder = $this->getDetailsForOptionIdsQueryBuilder($articleId, $options);
-    	return $builder->getQuery();
+        $builder = $this->getDetailsForOptionIdsQueryBuilder($articleId, $options);
+        return $builder->getQuery();
     }
 
     /**
@@ -439,7 +439,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getDetailsForOptionIdsQueryBuilder($articleId, $options) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->where('details.articleId = :articleId')
@@ -459,7 +459,7 @@ class Repository extends ModelRepository
             }
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -468,8 +468,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleImageDataQuery($imageId) {
-    	$builder = $this->getArticleImageDataQueryBuilder($imageId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleImageDataQueryBuilder($imageId);
+        return $builder->getQuery();
     }
 
     /**
@@ -479,12 +479,12 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleImageDataQueryBuilder($imageId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('image'))
                 ->from('Shopware\Models\Article\Image', 'image')
                 ->where('image.id = ?1')
                 ->setParameter(1, $imageId);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -493,8 +493,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getDeleteImageChildrenQuery($imageId) {
-    	$builder = $this->getDeleteImageChildrenQueryBuilder($imageId);
-    	return $builder->getQuery();
+        $builder = $this->getDeleteImageChildrenQueryBuilder($imageId);
+        return $builder->getQuery();
     }
 
     /**
@@ -504,12 +504,12 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getDeleteImageChildrenQueryBuilder($imageId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Image', 'images')
                 ->andWhere('images.parentId = ?1')
                 ->setParameter(1, $imageId);
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -547,8 +547,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleConfiguratorSetByArticleIdQuery($articleId) {
-    	$builder = $this->getArticleConfiguratorSetByArticleIdQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleConfiguratorSetByArticleIdQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -571,7 +571,7 @@ class Repository extends ModelRepository
                 ->addOrderBy('options.groupId', 'ASC')
                 ->addOrderBy('options.position', 'ASC');
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -580,8 +580,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleConfiguratorSetByArticleIdIndexedByIdsQuery($articleId) {
-    	$builder = $this->getArticleConfiguratorSetByArticleIdIndexedByIdsQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleConfiguratorSetByArticleIdIndexedByIdsQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -593,15 +593,15 @@ class Repository extends ModelRepository
     public function getArticleConfiguratorSetByArticleIdIndexedByIdsQueryBuilder($articleId) {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('article', 'configuratorSet', 'groups', 'options'))
-                        ->from('Shopware\Models\Article\Article', 'article')
-                        ->innerJoin('article.configuratorSet', 'configuratorSet')
-                        ->innerJoin('configuratorSet.groups', 'groups', null, null, 'groups.id')
-                        ->innerJoin('configuratorSet.options', 'options')
-                        ->where('article.id = ?1')
-                        ->setParameter(1, $articleId)
-                        ->addOrderBy('groups.position', 'ASC')
-                        ->addOrderBy('options.position', 'ASC');
-    	return $builder;
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->innerJoin('article.configuratorSet', 'configuratorSet')
+                ->innerJoin('configuratorSet.groups', 'groups', null, null, 'groups.id')
+                ->innerJoin('configuratorSet.options', 'options')
+                ->where('article.id = ?1')
+                ->setParameter(1, $articleId)
+                ->addOrderBy('groups.position', 'ASC')
+                ->addOrderBy('options.position', 'ASC');
+        return $builder;
     }
 
     /**
@@ -611,8 +611,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleDetailByConfiguratorOptionIdQuery($articleId, $optionId) {
-    	$builder = $this->getArticleDetailByConfiguratorOptionIdQueryBuilder($articleId, $optionId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleDetailByConfiguratorOptionIdQueryBuilder($articleId, $optionId);
+        return $builder->getQuery();
     }
 
     /**
@@ -623,7 +623,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleDetailByConfiguratorOptionIdQueryBuilder($articleId, $optionId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->innerJoin('details.prices', 'prices')
@@ -640,7 +640,7 @@ class Repository extends ModelRepository
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC');
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -649,8 +649,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQuery($optionsIds) {
-    	$builder = $this->getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQueryBuilder($optionsIds);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQueryBuilder($optionsIds);
+        return $builder->getQuery();
     }
 
     /**
@@ -660,12 +660,12 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQueryBuilder($optionsIds) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('groups', 'options'))
                 ->from('Shopware\Models\Article\Configurator\Group', 'groups')
                 ->innerJoin('groups.options', 'options', \Doctrine\ORM\Query\Expr\Join::WITH, 'options.id IN (?1)', 'options.id')
                 ->setParameter(1, $optionsIds);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -678,8 +678,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleDetailForTableConfiguratorOptionCombinationQuery($articleId, $firstOptionId, $secondOptionId, $article, $customerGroupKey) {
-    	$builder = $this->getArticleDetailForTableConfiguratorOptionCombinationQueryBuilder($articleId, $firstOptionId, $secondOptionId, $article, $customerGroupKey);
-    	return $builder->getQuery();
+        $builder = $this->getArticleDetailForTableConfiguratorOptionCombinationQueryBuilder($articleId, $firstOptionId, $secondOptionId, $article, $customerGroupKey);
+        return $builder->getQuery();
     }
 
     /**
@@ -693,11 +693,11 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleDetailForTableConfiguratorOptionCombinationQueryBuilder($articleId, $firstOptionId, $secondOptionId, $article, $customerGroupKey) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices'))
                 ->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup', 'WITH', 'customerGroup.key = :key')
+                ->leftJoin('details.prices', 'prices', 'WITH', 'prices.customerGroupKey = :key')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
                 ->innerJoin('details.configuratorOptions', 'options1')
                 ->innerJoin('details.configuratorOptions', 'options2')
                 ->where('details.articleId = ?1')
@@ -715,7 +715,7 @@ class Repository extends ModelRepository
             $builder->andWhere('details.inStock > 0');
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -724,8 +724,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleWithVariantsAndOptionsQuery($articleId) {
-    	$builder = $this->getArticleWithVariantsAndOptionsQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleWithVariantsAndOptionsQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -735,14 +735,14 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleWithVariantsAndOptionsQueryBuilder($articleId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('article', 'details', 'options'))
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.details', 'details')
                 ->leftJoin('details.configuratorOptions', 'options')
                 ->where('article.id = ?1')
                 ->setParameter(1, $articleId);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -752,8 +752,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey) {
-    	$builder = $this->getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey);
+        return $builder->getQuery();
     }
 
     /**
@@ -789,8 +789,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorSetsWithExcludedIdsQuery($ids) {
-    	$builder = $this->getConfiguratorSetsWithExcludedIdsQueryBuilder($ids);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorSetsWithExcludedIdsQueryBuilder($ids);
+        return $builder->getQuery();
     }
 
     /**
@@ -800,7 +800,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorSetsWithExcludedIdsQueryBuilder($ids) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('configuratorSet', 'groups', 'options'))
                 ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
                 ->leftJoin('configuratorSet.groups', 'groups')
@@ -815,7 +815,7 @@ class Repository extends ModelRepository
             $builder->andWhere($builder->expr()->notIn('configuratorSet.id', $ids));
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -824,8 +824,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorSetQuery($configuratorSetId) {
-    	$builder = $this->getConfiguratorSetQueryBuilder($configuratorSetId);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorSetQueryBuilder($configuratorSetId);
+        return $builder->getQuery();
     }
 
     /**
@@ -835,7 +835,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorSetQueryBuilder($configuratorSetId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('configuratorSet', 'groups', 'options'))
                 ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
                 ->leftJoin('configuratorSet.groups', 'groups')
@@ -845,7 +845,7 @@ class Repository extends ModelRepository
                 ->orderBy('groups.position', 'ASC')
                 ->addOrderBy('options.groupId', 'ASC')
                 ->addOrderBy('options.position', 'ASC');
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -854,8 +854,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorDependenciesQuery($configuratorSetId) {
-    	$builder = $this->getConfiguratorDependenciesQueryBuilder($configuratorSetId);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorDependenciesQueryBuilder($configuratorSetId);
+        return $builder->getQuery();
     }
 
     /**
@@ -865,14 +865,14 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorDependenciesQueryBuilder($configuratorSetId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder($configuratorSetId);
+        $builder = $this->getEntityManager()->createQueryBuilder($configuratorSetId);
         $builder->select(array('dependencies', 'dependencyParent', 'dependencyChild'))
                 ->from('Shopware\Models\Article\Configurator\Dependency', 'dependencies')
                 ->leftJoin('dependencies.parentOption', 'dependencyParent')
                 ->leftJoin('dependencies.childOption', 'dependencyChild')
                 ->where('dependencies.configuratorSetId = ?1')
                 ->setParameter(1, $configuratorSetId);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -881,8 +881,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorDependenciesIndexedByParentIdQuery($configuratorSetId) {
-    	$builder = $this->getConfiguratorDependenciesIndexedByParentIdQueryBuilder($configuratorSetId);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorDependenciesIndexedByParentIdQueryBuilder($configuratorSetId);
+        return $builder->getQuery();
     }
 
     /**
@@ -892,13 +892,13 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorDependenciesIndexedByParentIdQueryBuilder($configuratorSetId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('dependencies'))
                 ->from('Shopware\Models\Article\Configurator\Dependency', 'dependencies', 'dependencies.parentId')
                 ->where('dependencies.configuratorSetId = ?1')
                 ->setParameter(1, $configuratorSetId)
                 ->orderBy('dependencies.parentId', 'ASC');
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -907,8 +907,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorPriceSurchargesQuery($configuratorSetId) {
-    	$builder = $this->getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId);
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId);
+        return $builder->getQuery();
     }
 
 
@@ -920,14 +920,14 @@ class Repository extends ModelRepository
      */
     public function getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId) {
 
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('priceSurcharges', 'priceSurchargesParent', 'priceSurchargesChild'))
                 ->from('Shopware\Models\Article\Configurator\PriceSurcharge', 'priceSurcharges')
                 ->leftJoin('priceSurcharges.parentOption', 'priceSurchargesParent')
                 ->leftJoin('priceSurcharges.childOption', 'priceSurchargesChild')
                 ->where('priceSurcharges.configuratorSetId = ?1')
                 ->setParameter(1, $configuratorSetId);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -941,11 +941,11 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $ids = $builder->select('DISTINCT options.id')
-                       ->from('Shopware\Models\Article\Detail', 'detail')
-                       ->innerJoin('detail.configuratorOptions', 'options')
-                       ->where('detail.articleId = ?1')
-                       ->setParameter(1, $articleId)
-                       ->getQuery()->getArrayResult();
+                ->from('Shopware\Models\Article\Detail', 'detail')
+                ->innerJoin('detail.configuratorOptions', 'options')
+                ->where('detail.articleId = ?1')
+                ->setParameter(1, $articleId)
+                ->getQuery()->getArrayResult();
 
         $optionIds = array();
         foreach($ids as $id) {
@@ -960,8 +960,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorGroupsQuery() {
-    	$builder = $this->getConfiguratorGroupsQueryBuilder();
-    	return $builder->getQuery();
+        $builder = $this->getConfiguratorGroupsQueryBuilder();
+        return $builder->getQuery();
     }
 
     /**
@@ -970,13 +970,13 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorGroupsQueryBuilder() {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('groups', 'options'))
                 ->from('Shopware\Models\Article\Configurator\Group', 'groups')
                 ->leftJoin('groups.options', 'options')
                 ->orderBy('groups.position');
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -985,8 +985,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getFirstArticleDetailWithKindTwoQuery($articleId) {
-    	$builder = $this->getFirstArticleDetailWithKindTwoQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getFirstArticleDetailWithKindTwoQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -996,7 +996,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getFirstArticleDetailWithKindTwoQueryBuilder($articleId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->where('details.kind = 2')
@@ -1005,7 +1005,7 @@ class Repository extends ModelRepository
                 ->setFirstResult(0)
                 ->setMaxResults(1);
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -1013,8 +1013,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getAllConfiguratorOptionsIndexedByIdQuery() {
-    	$builder = $this->getAllConfiguratorOptionsIndexedByIdQueryBuilder();
-    	return $builder->getQuery();
+        $builder = $this->getAllConfiguratorOptionsIndexedByIdQueryBuilder();
+        return $builder->getQuery();
     }
 
     /**
@@ -1023,10 +1023,10 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAllConfiguratorOptionsIndexedByIdQueryBuilder() {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('options'))
                 ->from('Shopware\Models\Article\Configurator\Option', 'options', 'options.id');
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -1042,12 +1042,12 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getConfiguratorListIdsQuery($articleId, $filter = null, $sort = null, $offset = null, $limit = null) {
-    	$builder = $this->getConfiguratorListIdsQueryBuilder($articleId, $filter, $sort);
+        $builder = $this->getConfiguratorListIdsQueryBuilder($articleId, $filter, $sort);
         if ($limit != null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -1060,7 +1060,7 @@ class Repository extends ModelRepository
      */
     public function getConfiguratorListIdsQueryBuilder($articleId, $filter = null, $sort = null)
     {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('details.id')
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->where('details.articleId = ?1')
@@ -1081,7 +1081,7 @@ class Repository extends ModelRepository
             $builder->addOrderBy('details.id', 'ASC');
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -1091,8 +1091,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getDetailsByIdsQuery($ids, $sort = null) {
-    	$builder = $this->getDetailsByIdsQueryBuilder($ids, $sort);
-    	return $builder->getQuery();
+        $builder = $this->getDetailsByIdsQueryBuilder($ids, $sort);
+        return $builder->getQuery();
     }
 
     /**
@@ -1103,7 +1103,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getDetailsByIdsQueryBuilder($ids, $sort = null) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details','attribute','prices','customerGroup','configuratorOptions'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.configuratorOptions', 'configuratorOptions')
@@ -1120,7 +1120,7 @@ class Repository extends ModelRepository
         }
         $builder->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC');
-    	return $builder;
+        return $builder;
     }
 
 
@@ -1146,8 +1146,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('price_groups'))
-                       ->from('Shopware\Models\Price\Group', 'price_groups')
-                       ->orderBy('price_groups.name', 'ASC');
+                ->from('Shopware\Models\Price\Group', 'price_groups')
+                ->orderBy('price_groups.name', 'ASC');
     }
 
     /**
@@ -1170,8 +1170,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('taxes'))
-                       ->from('Shopware\Models\Tax\Tax', 'taxes')
-                       ->orderBy('taxes.name', 'ASC');
+                ->from('Shopware\Models\Tax\Tax', 'taxes')
+                ->orderBy('taxes.name', 'ASC');
     }
 
     /**
@@ -1194,8 +1194,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('units'))
-                       ->from('Shopware\Models\Article\Unit', 'units')
-                       ->orderBy('units.name', 'ASC');
+                ->from('Shopware\Models\Article\Unit', 'units')
+                ->orderBy('units.name', 'ASC');
     }
 
     /**
@@ -1217,8 +1217,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('properties'))
-                       ->from('Shopware\Models\Property\Group', 'properties')
-                       ->orderBy('properties.name', 'ASC');
+                ->from('Shopware\Models\Property\Group', 'properties')
+                ->orderBy('properties.name', 'ASC');
     }
 
     /**
@@ -1247,13 +1247,13 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('template', 'prices', 'customerGroup', 'attribute', 'priceAttribute'))
-                       ->from('Shopware\Models\Article\Configurator\Template\Template', 'template')
-                       ->leftJoin('template.prices', 'prices')
-                       ->leftJoin('prices.customerGroup', 'customerGroup')
-                       ->leftJoin('template.attribute', 'attribute')
-                       ->leftJoin('prices.attribute', 'priceAttribute')
-                       ->where('template.articleId = :articleId')
-                       ->setParameters(array('articleId' => $articleId));
+                ->from('Shopware\Models\Article\Configurator\Template\Template', 'template')
+                ->leftJoin('template.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('template.attribute', 'attribute')
+                ->leftJoin('prices.attribute', 'priceAttribute')
+                ->where('template.articleId = :articleId')
+                ->setParameters(array('articleId' => $articleId));
     }
 
 
@@ -1311,9 +1311,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('attribute'))
-                       ->from('Shopware\Models\Attribute\ArticleImage', 'attribute')
-                       ->where('attribute.articleImageId = ?1')
-                       ->setParameter(1, $imageId);
+                ->from('Shopware\Models\Attribute\ArticleImage', 'attribute')
+                ->where('attribute.articleImageId = ?1')
+                ->setParameter(1, $imageId);
     }
 
     /**
@@ -1338,9 +1338,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('attribute'))
-                       ->from('Shopware\Models\Attribute\ArticleLink', 'attribute')
-                       ->where('attribute.articleLinkId = ?1')
-                       ->setParameter(1, $linkId);
+                ->from('Shopware\Models\Attribute\ArticleLink', 'attribute')
+                ->where('attribute.articleLinkId = ?1')
+                ->setParameter(1, $linkId);
     }
 
     /**
@@ -1365,9 +1365,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('attribute'))
-                         ->from('Shopware\Models\Attribute\ArticleDownload', 'attribute')
-                         ->where('attribute.articleDownloadId = ?1')
-                         ->setParameter(1, $downloadId);
+                ->from('Shopware\Models\Attribute\ArticleDownload', 'attribute')
+                ->where('attribute.articleDownloadId = ?1')
+                ->setParameter(1, $downloadId);
     }
 
     /**
@@ -1392,9 +1392,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('attribute'))
-                      ->from('Shopware\Models\Attribute\Article', 'attribute')
-                      ->where('attribute.articleDetailId = ?1')
-                      ->setParameter(1, $articleDetailId);
+                ->from('Shopware\Models\Attribute\Article', 'attribute')
+                ->where('attribute.articleDetailId = ?1')
+                ->setParameter(1, $articleDetailId);
     }
 
     /**
@@ -1449,11 +1449,11 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('details'))
-                       ->from('Shopware\Models\Article\Detail', 'details')
-                       ->where('details.number = ?1')
-                       ->andWhere('details.id != ?2')
-                       ->setParameter(1, $number)
-                       ->setParameter(2, $articleDetailId);
+                ->from('Shopware\Models\Article\Detail', 'details')
+                ->where('details.number = ?1')
+                ->andWhere('details.id != ?2')
+                ->setParameter(1, $number)
+                ->setParameter(2, $articleDetailId);
     }
 
     /**
@@ -1560,8 +1560,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         return $builder->select(array('suppliers'))
-                       ->from('Shopware\Models\Article\Supplier', 'suppliers')
-                       ->orderBy('suppliers.name', 'ASC');
+                ->from('Shopware\Models\Article\Supplier', 'suppliers')
+                ->orderBy('suppliers.name', 'ASC');
     }
 
     /**
@@ -1632,12 +1632,12 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
-            'supplier.id as id',
-            'supplier.name as name',
-            'supplier.image as image',
-            'supplier.link as link',
-            'supplier.description as description',
-            $builder->expr()->count("articles.id") . ' as articleCounter')
+                'supplier.id as id',
+                'supplier.name as name',
+                'supplier.image as image',
+                'supplier.link as link',
+                'supplier.description as description',
+                $builder->expr()->count("articles.id") . ' as articleCounter')
         );
         $builder->from('Shopware\Models\Article\Supplier', 'supplier');
         $builder->leftJoin('supplier.articles', 'articles');
@@ -1660,14 +1660,14 @@ class Repository extends ModelRepository
         return $builder->getQuery();
     }
 
-	/**
-	 * Returns an instance of the \Doctrine\ORM\Query object which select a list of article votes.
-	 * @param null $filter
-	 * @param null $offset
-	 * @param null $limit
-	 * @param null $order
-	 * @return \Doctrine\ORM\Query
-	 */
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which select a list of article votes.
+     * @param null $filter
+     * @param null $offset
+     * @param null $limit
+     * @param null $order
+     * @return \Doctrine\ORM\Query
+     */
     public function getVoteListQuery($filter = null, $offset = null, $limit = null, $order = null)
     {
         $builder = $this->getVoteListQueryBuilder($filter, $order);
@@ -1678,13 +1678,13 @@ class Repository extends ModelRepository
         return $builder->getQuery();
     }
 
-	/**
-	 * Helper function to create the query builder for the "getVoteListQuery" function.
-	 * This function can be hooked to modify the query builder of the query object.
-	 * @param $filter
-	 * @param $order
-	 * @return \Doctrine\ORM\QueryBuilder
-	 */
+    /**
+     * Helper function to create the query builder for the "getVoteListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @param $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getVoteListQueryBuilder($filter, $order)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -1706,11 +1706,11 @@ class Repository extends ModelRepository
             $builder->where('article.name LIKE ?1')
                     ->setParameter(1, '%'.$filter.'%');
         }
-		if($order == null){
-        	$builder->addOrderBy('vote.datum', 'DESC');
-		}else{
-			$builder->addOrderBy($order);
-		}
+        if($order == null){
+            $builder->addOrderBy('vote.datum', 'DESC');
+        }else{
+            $builder->addOrderBy($order);
+        }
         return $builder;
     }
 
@@ -1752,9 +1752,9 @@ class Repository extends ModelRepository
             '( COUNT(notification.articleNumber) ) - ( SUM(notification.send) ) as notNotified',
             'article.name as name',
         ))
-        ->from('Shopware\Models\Article\Notification', 'notification')
-        ->leftJoin('notification.articleDetail', 'articleDetail')
-        ->leftJoin('articleDetail.article', 'article');
+                ->from('Shopware\Models\Article\Notification', 'notification')
+                ->leftJoin('notification.articleDetail', 'articleDetail')
+                ->leftJoin('articleDetail.article', 'article');
 
         if(!empty($summarize)) {
             return $builder;
@@ -1821,13 +1821,13 @@ class Repository extends ModelRepository
             'billing.customerId as customerId',
             "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as name",
         ))
-        ->from('Shopware\Models\Article\Notification', 'notification')
-        ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageIso = notification.language')
-        ->leftJoin('customer.billing', 'billing')
-        ->where('notification.articleNumber = :orderNumber')
-        ->setParameter("orderNumber",$articleOrderNumber);
+                ->from('Shopware\Models\Article\Notification', 'notification')
+                ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageIso = notification.language')
+                ->leftJoin('customer.billing', 'billing')
+                ->where('notification.articleNumber = :orderNumber')
+                ->setParameter("orderNumber",$articleOrderNumber);
 
-         //search part
+        //search part
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
             $builder->andWhere('(
                         notification.mail LIKE :search
@@ -1881,18 +1881,18 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(array(
-                    'esd.id as id',
-                    'esd.date as date',
-                    'esd.file as file',
-                    'esd.hasSerials as hasSerials',
-                    'COUNT(serials) as serialsTotal',
-                    'COUNT(esdOrder.id) as serialsUsed',
-                    'COUNT(esdOrder.id) as downloads',
-                    'article.name as name',
-                    'articleDetail.id as articleDetailId',
-                    'articleDetail.additionalText as additionalText',
-                    'article.id as articleId',
-                ))
+            'esd.id as id',
+            'esd.date as date',
+            'esd.file as file',
+            'esd.hasSerials as hasSerials',
+            'COUNT(serials) as serialsTotal',
+            'COUNT(esdOrder.id) as serialsUsed',
+            'COUNT(esdOrder.id) as downloads',
+            'article.name as name',
+            'articleDetail.id as articleDetailId',
+            'articleDetail.additionalText as additionalText',
+            'article.id as articleId',
+        ))
                 ->from('Shopware\Models\Article\Esd', 'esd')
                 ->leftJoin('esd.serials', 'serials')
                 ->leftJoin('serials.esdOrder', 'esdOrder')
@@ -1955,13 +1955,13 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(array(
-                    'serial.id as id',
-                    'serial.serialnumber as serialnumber',
-                    'esdOrder.date as date',
-                    'customer.id as customerId',
-                    'customer.accountMode as accountMode',
-                    'customer.email as customerEmail'
-                ))
+            'serial.id as id',
+            'serial.serialnumber as serialnumber',
+            'esdOrder.date as date',
+            'customer.id as customerId',
+            'customer.accountMode as accountMode',
+            'customer.email as customerEmail'
+        ))
                 ->from('Shopware\Models\Article\EsdSerial', 'serial')
                 ->leftJoin('serial.esdOrder', 'esdOrder')
                 ->leftJoin('esdOrder.customer', 'customer')
@@ -1983,7 +1983,7 @@ class Repository extends ModelRepository
             $builder->addOrderBy($order);
         }
 
-       return $builder;
+        return $builder;
     }
 
     /**
@@ -2059,8 +2059,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleCoverImageQuery($articleId) {
-    	$builder = $this->getArticleCoverImageQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleCoverImageQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -2070,7 +2070,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleCoverImageQueryBuilder($articleId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('images', 'attribute'))
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.attribute', 'attribute')
@@ -2081,10 +2081,10 @@ class Repository extends ModelRepository
                 ->setParameter('articleId', $articleId)
                 ->orderBy('images.main', 'ASC')
                 ->addOrderBy('images.position', 'ASC')
-				->setFirstResult(0)
-				->setMaxResults(1);
+                ->setFirstResult(0)
+                ->setMaxResults(1);
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -2094,8 +2094,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleFallbackCoverQuery($articleId) {
-    	$builder = $this->getArticleFallbackCoverQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleFallbackCoverQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -2107,18 +2107,18 @@ class Repository extends ModelRepository
      */
     public function getArticleFallbackCoverQueryBuilder($articleId) {
         $builder = $this->getEntityManager()->createQueryBuilder();
-           $builder->select(array('images', 'attribute'))
-                   ->from('Shopware\Models\Article\Image', 'images')
-                   ->leftJoin('images.attribute', 'attribute')
-                   ->where('images.articleId = :articleId')
-                   ->andWhere('images.parentId IS NULL')
-                   ->andWhere('images.main = :main')
-                   ->setParameter('main', 1)
-                   ->setParameter('articleId', $articleId)
-   				   ->setFirstResult(0)
-   				   ->setMaxResults(1);
+        $builder->select(array('images', 'attribute'))
+                ->from('Shopware\Models\Article\Image', 'images')
+                ->leftJoin('images.attribute', 'attribute')
+                ->where('images.articleId = :articleId')
+                ->andWhere('images.parentId IS NULL')
+                ->andWhere('images.main = :main')
+                ->setParameter('main', 1)
+                ->setParameter('articleId', $articleId)
+                ->setFirstResult(0)
+                ->setMaxResults(1);
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -2129,13 +2129,13 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getVariantImagesByArticleNumberQuery($number, $offset = null, $limit = null) {
-    	$builder = $this->getVariantImagesByArticleNumberQueryBuilder($number);
+        $builder = $this->getVariantImagesByArticleNumberQueryBuilder($number);
         if($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
 
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -2145,24 +2145,24 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVariantImagesByArticleNumberQueryBuilder($number) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(array(
-                    'imageParent.id',
-                    'imageParent.articleId',
-                    'imageParent.articleDetailId',
-                    'imageParent.description',
-                    'imageParent.path',
-                    'imageParent.main',
-                    'imageParent.position',
-                    'imageParent.width',
-                    'imageParent.height',
-                    'imageParent.extension',
-                    'imageParent.parentId',
-                    'attribute.attribute1',
-                    'attribute.attribute2',
-                    'attribute.attribute3',
-                 ))
+            'imageParent.id',
+            'imageParent.articleId',
+            'imageParent.articleDetailId',
+            'imageParent.description',
+            'imageParent.path',
+            'imageParent.main',
+            'imageParent.position',
+            'imageParent.width',
+            'imageParent.height',
+            'imageParent.extension',
+            'imageParent.parentId',
+            'attribute.attribute1',
+            'attribute.attribute2',
+            'attribute.attribute3',
+        ))
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->innerJoin('images.articleDetail', 'articleDetail')
                 ->innerJoin('images.parent', 'imageParent')
@@ -2172,7 +2172,7 @@ class Repository extends ModelRepository
                 ->orderBy('imageParent.main', 'ASC')
                 ->addOrderBy('imageParent.position', 'ASC');
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -2181,8 +2181,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getArticleImagesQuery($articleId) {
-    	$builder = $this->getArticleImagesQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getArticleImagesQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -2192,7 +2192,7 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleImagesQueryBuilder($articleId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('images'))
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.children','children')
@@ -2203,7 +2203,7 @@ class Repository extends ModelRepository
                 ->setParameter('articleId', $articleId)
                 ->addOrderBy('images.position', 'ASC');
 
-    	return $builder;
+        return $builder;
     }
 
 
@@ -2215,7 +2215,7 @@ class Repository extends ModelRepository
      */
     public function getRemovePricesQuery($articleId) {
         $builder = $this->getRemovePricesQueryBuilder($articleId);
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -2240,8 +2240,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getRemoveAttributesQuery($articleId) {
-    	$builder = $this->getRemoveAttributesQueryBuilder($articleId);
-    	return $builder->getQuery();
+        $builder = $this->getRemoveAttributesQueryBuilder($articleId);
+        return $builder->getQuery();
     }
 
     /**
@@ -2256,7 +2256,7 @@ class Repository extends ModelRepository
                 ->where('attribute.articleId = :id')
                 ->setParameter('id',$articleId);
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -2266,7 +2266,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveESDQuery($articleId) {
         $builder = $this->getRemoveESDQueryBuilder($articleId);
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -2291,8 +2291,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getRemoveImageQuery($detailId) {
-    	$builder = $this->getRemoveImageQueryBuilder($detailId);
-    	return $builder->getQuery();
+        $builder = $this->getRemoveImageQueryBuilder($detailId);
+        return $builder->getQuery();
     }
 
     /**
@@ -2316,8 +2316,8 @@ class Repository extends ModelRepository
      * @return \Doctrine\ORM\Query
      */
     public function getRemoveDetailQuery($detailId) {
-    	$builder = $this->getRemoveDetailQueryBuilder($detailId);
-    	return $builder->getQuery();
+        $builder = $this->getRemoveDetailQueryBuilder($detailId);
+        return $builder->getQuery();
     }
 
     /**
