@@ -32,7 +32,6 @@
 
 /**
  * Shopware TemplateMail Component
- * todo@all: Documentation
  */
 class Shopware_Components_TemplateMail
 {
@@ -92,25 +91,6 @@ class Shopware_Components_TemplateMail
     public function getShop()
     {
         return $this->shop;
-    }
-
-    /**
-     * @param boolean $isCompatibilityMode
-     * @return \Shopware_Components_TemplateMail
-     */
-    public function setIsCompatibilityMode($isCompatibilityMode = true)
-    {
-        $this->isCompatibilityMode = $isCompatibilityMode;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getIsCompatibilityMode()
-    {
-        return $this->isCompatibilityMode;
     }
 
     /**
@@ -255,9 +235,10 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
+        /** @var $attachment \Shopware\Models\Mail\Attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
-              && ($this->getShop() === null || $attachment->getShopId() != $this->getShop()->getId())) {
+                && ($this->getShop() === null || $attachment->getShopId() != $this->getShop()->getId())) {
                 continue;
             }
 
