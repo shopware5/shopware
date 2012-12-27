@@ -98,7 +98,8 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
                     $this->_config['password']
                 ), '******', $message
             );
-            throw new Zend_Db_Adapter_Exception($message, $e->getCode(), $e->getPrevious());
+            
+            throw new Zend_Db_Adapter_Exception($message, $e->getCode());
         }
 
         // finally, we delete the authorization data
