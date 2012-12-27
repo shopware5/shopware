@@ -30,16 +30,13 @@
  */
 
 /**
- *
  * Shopware Application
- *
- * todo@all: Documentation
  */
 class Shopware extends Enlight_Application
 {
-    const VERSION = '4.0.6';
+    const VERSION      = '4.0.6';
     const VERSION_TEXT = '';
-    const REVISION = '7282';
+    const REVISION     = '7282';
 
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
@@ -55,7 +52,7 @@ class Shopware extends Enlight_Application
     {
         Shopware($this);
 
-        if($this->oldPath === null) {
+        if ($this->oldPath === null) {
             $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
         }
 
