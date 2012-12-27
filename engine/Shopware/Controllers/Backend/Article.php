@@ -97,7 +97,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected $configuratorSetRepository = null;
 
-	public function initAcl(){
+	public function initAcl()
+    {
 		$this->addAclPermission("loadStores","read","Insufficient Permissions");
 		$this->addAclPermission("duplicateArticle","save","Insufficient Permissions");
 		$this->addAclPermission("save","save","Insufficient Permissions");
