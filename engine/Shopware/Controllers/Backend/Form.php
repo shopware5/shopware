@@ -56,7 +56,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('form');
         $this->addAclPermission('index', 'read');
         $this->addAclPermission('getForms', 'read');
         $this->addAclPermission('createForm', 'createupdate');
