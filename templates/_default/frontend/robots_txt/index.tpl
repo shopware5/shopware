@@ -1,4 +1,4 @@
-User-agent: *?
+User-agent: *
 
 Disallow: {url controller=compare fullPath=false}
 
