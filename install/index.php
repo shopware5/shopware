@@ -54,8 +54,8 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
 }
 
 // Redirect to no mod rewrite path
-if(!isset($_SERVER['MOD_REWRITE']) && isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['REQUEST_URI'])) {
-    if(empty($_SERVER['PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== 0) {
+if (!isset($_SERVER['MOD_REWRITE']) && isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['REQUEST_URI'])) {
+    if (empty($_SERVER['PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== 0) {
         header('Location: ' . $_SERVER['SCRIPT_NAME'], true);
         return;
     }
