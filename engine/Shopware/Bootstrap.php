@@ -260,6 +260,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         }
         unset($options['type'], $options['charset']);
 
+
         if ($transportName=='Zend_Mail_Transport_Smtp') {
             $transport = Enlight_Class::Instance($transportName, array($options['host'], $options));
         } elseif (!empty($options)) {
@@ -279,6 +280,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
                 !empty($options['from']['name']) ? $options['from']['name'] : null
             );
         }
+        
         if (!empty($options['replyTo']['email'])) {
             Enlight_Components_Mail::setDefaultReplyTo(
                 $options['replyTo']['email'],
