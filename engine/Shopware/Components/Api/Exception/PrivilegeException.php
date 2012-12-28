@@ -20,20 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
- * @author     $Author$
  */
 
 namespace Shopware\Components\Api\Exception;
 
 /**
- * Shopware API Component
+ * API Exception
  *
  * @category  Shopware
  * @package   Shopware\Components\Api\Exception
