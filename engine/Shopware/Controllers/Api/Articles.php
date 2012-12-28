@@ -69,9 +69,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $article = $this->resource->getOneByNumber($id);
-        }else{
+        } else {
             $article = $this->resource->getOne($id);
         }
 

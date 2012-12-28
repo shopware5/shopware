@@ -25,7 +25,6 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Order\Order as OrderModel;
 
 /**
  * Order API Resource

@@ -169,10 +169,8 @@ class Translation extends Resource
      * @param int $id
      * @param array $params
      * @return array
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Exception
      */
     public function update($id, array $params)
     {
@@ -234,7 +232,7 @@ class Translation extends Resource
         }
 
         // will throw a not found exception, if id is not found
-        $translation = $this->getOne($id);
+        $this->getOne($id);
 
         Shopware()->Db()->delete('s_core_translations',
         array(
@@ -244,6 +242,13 @@ class Translation extends Resource
         return true;
     }
 
+    /**
+     * @param array $params
+     * @param null $translation
+     * @return array
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Exception
+     */
     private function prepareTranslationData($params, $translation = null)
     {
         $requiredParams = array('objecttype', 'objectdata', 'objectkey', 'objectlanguage');

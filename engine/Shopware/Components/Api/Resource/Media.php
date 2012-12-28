@@ -43,7 +43,6 @@ class Media extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Media\Media');
     }
 
-
     /**
      * @param int $id
      * @return array|\Shopware\Models\Media\Media
@@ -141,7 +140,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $category \Shopware\Models\Media\Media */
+        /** @var $media \Shopware\Models\Media\Media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -198,26 +197,37 @@ class Media extends Resource
         return $media;
     }
 
+    /**
+     * @param array $params
+     * @param \Shopware\Models\Media\Media $media
+     * @return mixed
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws \Exception
+     */
     private function prepareMediaData($params, $media = null)
     {
         // in create mode, album is a required param
         if (!$media && (!isset($params['album']) || empty($params['album']))) {
             throw new ApiException\ParameterMissingException();
         }
+
         if (!$media && (!isset($params['file']) || empty($params['file']))) {
             throw new ApiException\ParameterMissingException();
 
         }
+
         if (!$media && (!isset($params['description']) || empty($params['description']))) {
             throw new ApiException\ParameterMissingException();
         }
+
         if (!$media && (!isset($params['userId']) || empty($params['userId']))) {
             $params['userId'] = 0;
         }
+
         if (!$media && (!isset($params['created']) || empty($params['created']))) {
             $params['created'] = new \DateTime();
         }
-
 
         // Check / set album
         if (isset($params['album'])) {
@@ -244,7 +254,6 @@ class Media extends Resource
                 $params['name'] = pathinfo($path, PATHINFO_FILENAME);
             }
         }
-
 
         return $params;
     }

@@ -698,6 +698,7 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
@@ -1207,7 +1208,7 @@ class Article extends Resource
         }
 
         $downloads = array();
-        foreach ($data['downloads'] as $key => &$downloadData) {
+        foreach ($data['downloads'] as &$downloadData) {
             if (isset($downloadData['id'])) {
                 $download = $this->getManager()
                                  ->getRepository('Shopware\Models\Article\Download')

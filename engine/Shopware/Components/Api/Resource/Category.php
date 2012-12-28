@@ -25,7 +25,6 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Category\Category as CategoryModel;
 
 /**
  * Category API Resource

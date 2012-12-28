@@ -130,7 +130,7 @@ class CustomerGroup extends Resource
 
         $result->fromArray($params);
 
-        $violations = $this->getManager()->validate($shop);
+        $violations = $this->getManager()->validate($result);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
         }
