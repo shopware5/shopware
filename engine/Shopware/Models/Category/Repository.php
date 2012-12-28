@@ -231,10 +231,9 @@ class Repository extends TreeRepository
 
         if(isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
-                    ->addSelect('cg.id HIDDEN')
-                    ->andHaving('cg.id IS NULL')
-                    ->groupBy("c.id")
-                    ->setParameter('cgId', $customerGroupId);
+                    ->setParameter('cgId', $customerGroupId)
+                    ->andHaving('COUNT(cg.id) = 0')
+                    ->groupBy('c.id');
         }
 
         return $builder;
