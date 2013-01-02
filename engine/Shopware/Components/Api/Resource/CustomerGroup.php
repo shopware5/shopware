@@ -279,17 +279,6 @@ class CustomerGroup extends Resource
             $params['discounts'] = $discounts;
         }
 
-
-//        if (isset($params['taxId'])) {
-//            $tax = Shopware()->Models()->find('\Shopware\Models\Tax\Tax', $params['taxId']);
-//            if ($tax !== null) {
-//                $params['tax'] = $tax;
-//            } else {
-//                throw new \Exception("{$params['taxId']} is not a valid tax id");
-//            }
-//        }
-
-
         return $params;
     }
 }
