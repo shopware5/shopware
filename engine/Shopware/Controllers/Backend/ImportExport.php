@@ -2740,7 +2740,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             // update?
             if(isset($articleModel) && $articleModel !== null) {
-                $updateData = array('variants'=>array());
+                if(!isset($updateData)) {
+                    $updateData = array('variants'=>array());
+                }
+                if(!isset($updateData['variants'])) {
+                    $updateData['variants'] = array();
+                }
                 $updateData['configuratorSet'] = $configuratorSet;
 
                 $detailData['configuratorOptions'] = $configuratorOptions;
