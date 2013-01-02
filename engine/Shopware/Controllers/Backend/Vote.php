@@ -104,10 +104,9 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
 
         try {
             $query = $this->getArticleRepository()->getVoteListQuery($filterValue, $start, $limit, $order);
-            $result = $query->getArrayResult();
-
             //total count for paging
             $totalResult = Shopware()->Models()->getQueryCount($query);
+            $result = $query->getArrayResult();
 
             $this->View()->assign(array("success"=>true, 'data'=>$result, 'total'=>$totalResult));
         }
