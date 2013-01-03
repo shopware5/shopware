@@ -31,6 +31,8 @@ Ext.override(Ext.picker.Date, {
     beforeRender: function () {
         var me = this;
         me.callOverridden();
-        me.todayBtn.addCls('small').addCls('secondary');
+        if(me.todayBtn) {
+            me.todayBtn.addCls('small').addCls('secondary');
+        }
     }
 });
