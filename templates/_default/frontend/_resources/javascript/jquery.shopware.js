@@ -348,28 +348,6 @@ jQuery(document).ready(function ($) {
 
 });
 
-(function($) {
-    $(document).ready(function() {
-        $('.table-configurator input.block-prices').change(function(event) {
-            event.preventDefault();
-
-            var $this = $(this), ordernumber;
-
-            // If there's no value, we didn't need to do anything
-            if(!$this.val()) {
-                return false;
-            }
-
-            // Sanitize the order number, so we don't getting any trouble with the selector engine
-            ordernumber = $this.val();
-            ordernumber = ordernumber.replace('\.', '\\.');
-
-            $('.all-block-prices .block-prices').addClass('hidden');
-            $('.all-block-prices').find('.' + ordernumber).removeClass('hidden');
-        })
-    });
-})(jQuery);
-
 /**
  * Shopware Button Solution
  *
