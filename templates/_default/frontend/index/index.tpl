@@ -28,6 +28,8 @@
 </noscript>
 {/block}
 
+{block name='frontend_index_before_page'}{/block}
+
 <div id="top"></div>
 <div class="container_20">
 
