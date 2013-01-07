@@ -95,10 +95,12 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 foreach ($ordernumbers as $ordernumber) {
                     if (in_array($ordernumber, Shopware()->Session()->sNotificatedArticles)) {
                         $notificationVariants[] = $ordernumber;
+                        if ($ordernumber === $view->sArticle['ordernumber']) {
+                            $view->NotifyAlreadyRegistered = true;
+                        }
                     }
                 }
             }
-        }
 
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
