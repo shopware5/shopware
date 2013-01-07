@@ -492,19 +492,11 @@ class
 
             $position["amount_netto"] = $position["netto"] * $position["quantity"];
 
-            $position["amount"] = round($position["price"],2) * $position["quantity"];
+            $position["amount"] = $position["price"] * $position["quantity"];
 
             $this->_amountNetto +=  $position["amount_netto"];
             $this->_amount += $position["amount"];
 
-            if ($this->_net ==  true) {
-                $position["price"] = $position["price"];
-                $position["netto"] = $position["netto"];
-            } else {
-                $position["netto"] = $position["netto"];
-                $position["price"] = $position["price"];
-                $position["price"] = round($position["price"],2);
-            }
             if (!empty($position["tax"])) {
                 $this->_tax[number_format(floatval($position["tax"]),2)] += round($position["amount"] / ($position["tax"]+100) *$position["tax"], 2);
             }
