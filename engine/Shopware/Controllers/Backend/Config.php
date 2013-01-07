@@ -561,6 +561,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $mappingRepository = $this->getRepository('pageGroup');
                     $data['mapping'] = $mappingRepository->find($data['mappingId']);
                     unset($data['mappingId']);
+                } else {
+                    $data['mapping'] = null;
                 }
                 break;
             case 'document':
