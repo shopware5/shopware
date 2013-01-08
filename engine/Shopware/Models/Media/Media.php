@@ -715,7 +715,7 @@ class Media extends ModelEntity
             return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
         } else {
             // do whatever you want to generate a unique name
-            return uniqid() . '.' . $this->extension();
+            return uniqid() . '.' . $this->extension;
         }
     }
 
@@ -1023,7 +1023,7 @@ class Media extends ModelEntity
         // The filesize in bytes.
         $this->fileSize  = $this->file->getSize();
         $this->name      = $this->removeSpecialCharacters($name);
-        $this->extension = $extension;
+        $this->extension = str_replace('.jpeg', '.jpg', $extension);
         $this->path = str_replace(Shopware()->OldPath(), '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {
