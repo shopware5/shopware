@@ -101,6 +101,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     }
                 }
             }
+        }
 
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
