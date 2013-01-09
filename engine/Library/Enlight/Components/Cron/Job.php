@@ -270,7 +270,7 @@ class Enlight_Components_Cron_Job
     public function setNext($next = null)
     {
         if (!$next instanceof Zend_Date) {
-            $next = new Zend_Date($next);
+            $next = new Zend_Date($next, is_string($next) ? Zend_Date::ISO_8601 : null);
         }
         $this->next = $next;
         return $this;
