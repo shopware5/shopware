@@ -136,7 +136,7 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
         $this->databaseTester = null;
 
         set_time_limit(0);
-        ini_set('memory_limit', -1);
+        ini_restore('memory_limit');
     }
 
     /**

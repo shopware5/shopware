@@ -1171,7 +1171,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function buildSearchIndex()
     {
-        @ini_set("memory_limit", "256M");
+        @ini_set("memory_limit", "512M");
         @set_time_limit(0);
 
         // Set time of last cache rebuild

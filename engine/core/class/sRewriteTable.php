@@ -125,7 +125,7 @@ class sRewriteTable
 
     public function sCreateRewriteTable($last_update)
     {
-        @ini_set('memory_limit', '256M');
+        @ini_set('memory_limit', '512M');
         @set_time_limit(0);
 
         $this->template = $this->sSYSTEM->sSMARTY;
