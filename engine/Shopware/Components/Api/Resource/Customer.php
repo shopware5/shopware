@@ -166,7 +166,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('create');
 
-        if (isset($params['accountmode']) && $params['accountmode'] == 0) {
+        if (isset($params['accountMode']) && $params['accountMode'] == 0) {
             if (isset($params['email']) && !$this->isEmailUnique($params['email'], null, $params['shopId'])) {
                 throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
             }
