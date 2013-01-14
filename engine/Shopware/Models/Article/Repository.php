@@ -1109,7 +1109,7 @@ class Repository extends ModelRepository
                 ->leftJoin('details.configuratorOptions', 'configuratorOptions')
                 ->leftJoin('details.prices', 'prices')
                 ->leftJoin('details.attribute', 'attribute')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->innerJoin('prices.customerGroup', 'customerGroup')
                 ->where('details.id IN (?1)')
                 ->setParameter(1, $ids);
 
