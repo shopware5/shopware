@@ -91,6 +91,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected $configuratorOptionRepository = null;
 
+    /**
+     * @var Shopware_Components_Translation
+     */
+    protected $translation = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
@@ -123,6 +127,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //    $this->View()->Template()->cached->timestamp = $noCache;
         //    $this->View()->Template()->cached->valid = false;
         //}
+    }
+
+    /**
+     * @return Shopware_Components_Translation
+     */
+    protected function getTranslationComponent()
+    {
+        if ($this->translation === null) {
+            $this->translation = new Shopware_Components_Translation();
+        }
+
+        return $this->translation;
     }
 
     /**
@@ -1124,8 +1140,73 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($mainDetail);
             Shopware()->Models()->persist($article);
             Shopware()->Models()->flush();
+
+            // if main variant changed, swap translations
+            if($mainDetail->getId() !== $detail->getId()) {
+                $this->swapDetailTranslations($detail, $mainDetail);
+            }
+
         }
         return $detail;
+    }
+
+    /**
+     * Helper method which swaps the translations of the newMainDetail and the oldMainDetail
+     * Needed because mainDetails' translations are stored for the article, not for the variant itself
+     * @param \Shopware\Models\Article\Detail $newMainDetail
+     * @param \Shopware\Models\Article\Detail $oldMainDetail
+     */
+    private function swapDetailTranslations($newMainDetail, $oldMainDetail)
+    {
+        $articleId = $oldMainDetail->getArticle()->getId();
+
+        // Get available translations for the old mainDetail (stored on the article)
+        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='article' AND objectkey=?";
+        $oldTranslations = Shopware()->Db()->fetchAssoc($sql, array($articleId));
+
+        // Get available translations for the new mainDetail (stored for the detail)
+        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='variant' AND objectkey=?";
+        $newTranslations = Shopware()->Db()->fetchAssoc($sql, array($newMainDetail->getId()));
+
+        // We need to determine which of the old article translations can be used for the translation of the
+        // variant which was the mainDetail before.
+        // We'll get a list of translatable variant fields from the variant which is going to become the new mainDetail
+        $translatedFields = array();
+        foreach ($newTranslations as $values) {
+            $data = $values['objectdata'];
+            foreach (unserialize($data) as $field => $translation) {
+                if (!array_key_exists($field, $translatedFields)) {
+                    $translatedFields[$field] = true;
+                }
+            }
+        }
+
+        // Save the old article translation as new variant translations
+        foreach ($oldTranslations as $language => $values) {
+            $data = unserialize($values['objectdata']);
+            $newData = array_intersect_key($data, $translatedFields);
+            $this->getTranslationComponent()->write(
+                $language,
+                'variant',
+                $oldMainDetail->getId(),
+                $newData,
+                false
+            );
+
+        }
+
+        // Save the new mainDetail translations as article translations
+        foreach ($newTranslations as $language => $values) {
+            $data = unserialize($values['objectdata']);
+            $newData = array_intersect_key($data, $translatedFields);
+            $this->getTranslationComponent()->write(
+                $language,
+                'article',
+                $articleId,
+                $newData,
+                false
+            );
+        }
     }
 
     /**
@@ -2819,12 +2900,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function preparePricesAssociatedData($prices, $article, $tax)
     {
-        foreach($prices as &$priceData) {
+        foreach($prices as $key => &$priceData) {
             //load the customer group of the price definition
             $customerGroup = $this->getCustomerGroupRepository()->findOneBy(array('key' => $priceData['customerGroupKey']));
 
-            //if no customer group founded, remove price and continue
+            //if no customer group found, remove price and continue
             if (!$customerGroup instanceof \Shopware\Models\Customer\Group) {
+                unset($prices[$key]);
                 continue;
             }
 
