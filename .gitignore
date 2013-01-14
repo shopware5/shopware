@@ -1,0 +1,37 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# PhpStorm-Project
+.idea/
+
+# Internal Repositories
+internal/
+engine/Shopware/Plugins/Commercial/
+
+# Userconfigurations
+config.php
+engine/Shopware/Configs/Custom.php
+
+# Caches/Proxies
+engine/Shopware/Proxies/
+cache/database/
+cache/templates/
+
+# User provided content
+media/archive/
+media/image/
+media/music/
+media/pdf/
+media/tmp/
+media/unknown/
+media/video/
+
+files/documents
+files/downloads
