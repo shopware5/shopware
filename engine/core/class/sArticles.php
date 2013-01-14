@@ -2657,8 +2657,11 @@ class sArticles
 
             if ($getArticle["sConfigurator"]) {
                 if ($getArticle["pricegroupActive"]) {
-                    $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
-                    $getArticle["price"] = $this->sFormatPrice($this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], str_replace(",", ".", $getArticle["price"]), 1, false));
+                    // The default variant's price group price is calculated above and is not overwritten by sGetArticleConfig
+                    if ($getArticle['sConfiguratorSelection']['kind'] !== 1) {
+                        $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
+                        $getArticle["price"] = $this->sFormatPrice($this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], str_replace(",", ".", $getArticle["price"]), 1, false));
+                    }
                 }
             }
 
