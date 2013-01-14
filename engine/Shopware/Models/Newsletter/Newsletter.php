@@ -439,7 +439,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     *  @param \Doctrine\Common\Collections\ArrayCollection $containers
+     * @param \Doctrine\Common\Collections\ArrayCollection $containers
      */
     public function setContainers($containers)
     {
