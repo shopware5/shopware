@@ -1,10 +1,9 @@
 <?php
 return array(
     'db' => array(
-        'username' => 'sw4_dev',
-        'password' => 'sw4_dev',
-        'dbname' => 'sw4_dev',
-        'host' => 'localhost',
-        'port' => '%db.port%'
-    ),
+        'username' => '%db.user%',
+        'password' => '%db.password%',
+        'dbname'   => '%db.name%',
+        'host'     => '%db.host%'
+    )
 );
