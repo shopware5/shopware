@@ -1353,7 +1353,9 @@ class sShopwareImport
         // we map from the old keys to doctrine keys
         $mappings = array(
             'description' => 'name',
-            'cmsheadline' => 'cmsHeadline'
+            'cmsheadline' => 'cmsHeadline',
+            'metakeywords' => 'metaKeywords',
+            'metadescription' => 'metaDescription'
         );
 
         foreach($mappings as $original => $new) {
@@ -1377,25 +1379,27 @@ class sShopwareImport
 
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-
-        // try to find a existing category by name and parent
-        } elseif(isset($category['parent']) && isset($category['name']) ) {
-            $model = $categoryRepository->findOneBy(array('parent' => $category['parent'], 'name' => $category['name']));
         }
+
 
         // Create a new category if no model was set, yet
         if(!$model) {
+            // try to find a existing category by name and parent
+            if (isset($category['parent']) && isset($category['name']) ) {
+                $model = $categoryRepository->findOneBy(array('parent' => $category['parent'], 'name' => $category['name']));
+            }
+            if(!$model) {
+                $model = new \Shopware\Models\Category\Category();
+            }
+
             if(isset($category['parent'])) {
                 $parentModel = $categoryRepository->find((int) $category['parent']);
                 if($parentModel === null) {
                     $this->sAPI->sSetError("Parent category {$category['parent']} not found", 10406);
                     return false;
                 }
-
-//                $category['parent'] = $parentModel;
             }
 
-            $model = new \Shopware\Models\Category\Category();
             $model ->fromArray($category);
             $model->setParent($parentModel);
 
