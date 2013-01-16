@@ -2805,6 +2805,20 @@ class sShopwareImport
 		return true;
 	}
 
+    function sDeleteAllOrders()
+    {
+        $sql = "
+        TRUNCATE s_order;
+        TRUNCATE s_order_details;
+        TRUNCATE s_order_billingaddress;
+        TRUNCATE s_order_billingaddress_attributes;
+        TRUNCATE s_order_shippingaddress;
+        TRUNCATE s_order_shippingaddress_attributes;
+        ";
+
+        Shopware()->Db()->query($sql);
+    }
+
 	/**
 	 * Alle Artikel löschen (z.B. bei komplettem Neu-Import notwendig)
 	 *
@@ -3801,9 +3815,11 @@ class sShopwareImport
 		if(isset($order['comment']))
 			$upset[] = "comment=".$this->sDB->qstr((string)$order['comment']);
 		if(!empty($article['cleareddate']))
-			$upset[] = "cleareddate=".$this->sDB->DBTimeStamp($order['cleareddate']);
-		elseif(isset($article['cleareddate']))
+			$upset[] = "cleareddate=".$order['cleareddate'];
+		elseif(isset($article['cleareddate'])) {
 			$upset[] = "cleareddate='0000-00-00'";
+
+        }
 		if(empty($upset))
 			return true;
 
