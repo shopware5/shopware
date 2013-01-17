@@ -904,12 +904,15 @@ class sArticles
         $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
 
+        $priceForBasePrice = "(SELECT price FROM s_articles_prices WHERE articledetailsID=aDetails.id AND pricegroup=IF(p.id IS NULL, 'EK', p.pricegroup) AND `from`=1 LIMIT 1 ) as priceForBasePrice";
+
+
         $sql = "
 			SELECT
 				a.id as articleID, aDetails.id AS articleDetailsID, a.notification as notification, weight, aDetails.ordernumber, a.datum, aDetails.releasedate,
 				additionaltext, aDetails.shippingfree,aDetails.shippingtime,instock, a.description AS description, description_long,
 				aSupplier.name AS supplierName, aSupplier.img AS supplierImg, a.name AS articleName, topseller as highlight,
-				$select_price as price, laststock,
+				$select_price as price, laststock, $priceForBasePrice,
 				sales, IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice, aTax.tax, taxID,
 				aDetails.minpurchase,
 				aDetails.purchasesteps,
@@ -1168,11 +1171,8 @@ class sArticles
                 $articles[$articleKey]["referenceunit"] = (float)$articles[$articleKey]["referenceunit"];
 
                 // SW-4508 Don't use cheapest price for baseprice calculation
-                $p = Shopware()->Db()->fetchOne(
-                    "SELECT `price` FROM `s_articles_prices` WHERE articledetailsID=? ORDER BY `from` ASC LIMIT 1",
-                    array($articles[$articleKey]["articleDetailsID"])
-                );
-                $p = $this->sCalculatingPrice($p, $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
+                $basePrice = str_replace(",",".",$articles[$articleKey]["priceForBasePrice"]);
+                $p = $this->sCalculatingPrice($basePrice, $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
 
                 $basePrice = str_replace(",",".",$p);
 
