@@ -307,15 +307,16 @@ class Repository extends ModelRepository
 
         foreach ($shops as $currentShop) {
             $this->fixActive($currentShop);
+        }
+        foreach ($shops as $currentShop) {
             if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
-                if($shop === null) {
+                if ($shop === null) {
                     $shop = $currentShop;
                 }
             } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
                 $shop = $currentShop;
                 break;
-            } elseif ($currentShop->getSecure()
-              && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
+            } elseif ($currentShop->getSecure() && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
                 $shop = $currentShop;
                 break;
             }
