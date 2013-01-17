@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
-//{block name="backend/cache/application"}
+//{block name="backend/config/application"}
 Ext.define('Shopware.apps.Config', {
 
     extend: 'Enlight.app.SubApplication',

@@ -122,6 +122,11 @@ class Shopware_Plugins_Frontend_SwagPaymentBillsafe_Bootstrap extends Shopware_C
         );
 
         $this->subscribeEvent(
+            'Enlight_Controller_Action_PostDispatch_Backend_Config',
+            'onPostDispatchConfig'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Controller_Action_PostDispatch',
             'onPostDispatch',
             110
@@ -475,6 +480,22 @@ class Shopware_Plugins_Frontend_SwagPaymentBillsafe_Bootstrap extends Shopware_C
         return $customer;
     }
 
+    /**
+     * Adds template directory to template path
+     * @param Enlight_Event_EventArgs $arguments
+     */
+    public function onPostDispatchConfig(Enlight_Event_EventArgs $arguments)
+    {
+        $view = $arguments->getSubject()->View();
+
+        //if the controller action name equals "load" we have to load all application components.
+        if ($arguments->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/');
+            $view->extendsTemplate(
+                'backend/config/view/form/document_billsafe.js'
+            );
+        }
+    }
     /**
      * Returns the path to a backend controller for an event.
      *
