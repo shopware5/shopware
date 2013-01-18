@@ -520,6 +520,11 @@ class Detail extends ModelEntity
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $repository->findOneBy(array('number' => $this->articleNumber));
 
+        // Do not increase instock for canceled orders
+        if ($this->getOrder() && $this->getOrder()->getOrderStatus()->getId() === -1) {
+            return;
+        }
+
         /**
          * before try to get the article, check if the association field (articleNumber) is not empty
          */

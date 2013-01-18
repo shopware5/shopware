@@ -638,14 +638,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 continue;
             }
 
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $model = $builder->select(array('orders'))
-                             ->from('Shopware\Models\Order\Order', 'orders')
-                             ->where('orders.id = ?1')
-                             ->setParameter(1, $order['id'])
-                             ->getQuery()
-                             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-
+            $model = Shopware()->Models()->find('\Shopware\Models\Order\Order', $order['id']);
             if (!$model instanceof \Shopware\Models\Order\Order) {
                 continue;
             }
