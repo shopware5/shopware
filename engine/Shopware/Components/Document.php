@@ -429,28 +429,15 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		$this->_template = clone Shopware()->Template();
 		$this->_view = $this->_template->createData();
 
-        // make path absolute if its not
-        if (strpos($this->_subshop["doc_template"],"templates")===false){
-            $path = Shopware()->DocPath('templates').$this->_subshop["doc_template"];
-        }else {
-            $path = $this->_subshop["doc_template"];
-        }
+        $path = basename($this->_subshop["doc_template"]);
 
         $this->_template->setTemplateDir(array(
-            $path,
-            Shopware()->DocPath() . '/_local/',
-            Shopware()->DocPath() . 'templates/_default/'
+            'custom' => $path,
+            'local' => '_local',
+            'emotion' => '_default',
         ));
 
-
         $this->_template->setCompileId(str_replace('/', '_', $path).'_'.$this->_subshop['id']);
-
-        // as the path was made absolute above, there should no need to check
-        // --> is_dir(Shopware()->DocPath().$path)
-        // here
-		if (!is_dir($path)){
-			throw new Enlight_Exception("Path ".$path." not found");
-		}
 	}
 
     /**
