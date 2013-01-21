@@ -35,7 +35,7 @@
  *
  * Used to restrict a Category temporary used to restrict a category by customerGroups
  */
-// {block name="backend/category/view/tabs/restriction"}
+//{block name="backend/category/view/tabs/restriction"}
 Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
    /**
     * Parent Element Ext.container.Container
@@ -126,7 +126,4 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
         return [me.ddSelector];
     }
 });
-
-/* {/block} */
-
-
+//{/block}

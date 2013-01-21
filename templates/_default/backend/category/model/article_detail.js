@@ -34,7 +34,7 @@
  * This Model is extended from the Ext.data.Model to add a the Articledetail orderNumber to the article mapping
  *
  */
-// {block name="backend/category/model/article_detail"}
+//{block name="backend/category/model/article_detail"}
 Ext.define('Shopware.apps.Category.model.ArticleDetail', {
 
     /**
@@ -49,4 +49,4 @@ Ext.define('Shopware.apps.Category.model.ArticleDetail', {
         { name: 'number', type: 'string' }
     ]
 });
-/* {/block} */
+//{/block}

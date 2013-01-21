@@ -35,7 +35,7 @@
  *
  * Displays the Main Window of the Category Module
  */
-// {block name="backend/category/view/main/window"}
+//{block name="backend/category/view/main/window"}
 Ext.define('Shopware.apps.Category.view.main.Window', {
 
     /**
@@ -209,5 +209,4 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         }]
     }
 });
-/* {/block} */
-
+//{/block}

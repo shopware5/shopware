@@ -35,7 +35,7 @@
  *
  * The category management controller handles the initialisation of the category tree.
  */
-// {block name="backend/category/controller/article_mapping"}
+//{block name="backend/category/controller/article_mapping"}
 Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
     /**
      * Extend from the standard ExtJS 4 controller
@@ -128,5 +128,5 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         store.filter(searchFilter);
     }
 });
-/* {/block} */
+//{/block}
 

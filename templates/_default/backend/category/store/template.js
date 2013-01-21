@@ -35,7 +35,7 @@
  *
  * The template store loads and stores category template data
  */
-// {block name="backend/category/store/template"}
+//{block name="backend/category/store/template"}
 Ext.define('Shopware.apps.Category.store.Template', {
     /**
      * Parent Object
@@ -92,6 +92,4 @@ Ext.define('Shopware.apps.Category.store.Template', {
         }
     }
 });
-/* {/block} */
-
-
+//{/block}

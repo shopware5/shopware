@@ -35,7 +35,7 @@
  * a proxy configuration.
  *
  */
-// {block name="backend/category/model/tree"}
+//{block name="backend/category/model/tree"}
 Ext.define('Shopware.apps.Category.model.Tree', {
 
     /**
@@ -83,4 +83,4 @@ Ext.define('Shopware.apps.Category.model.Tree', {
     ]
 
 });
-/* {/block} */
+//{/block}

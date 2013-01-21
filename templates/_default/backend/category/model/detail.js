@@ -122,4 +122,4 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         }
     ]
 });
-/* {/block} */
+//{/block}
