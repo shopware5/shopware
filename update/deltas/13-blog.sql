@@ -12,7 +12,7 @@ FROM s_blog b, s_articles_img i
 WHERE i.articleID = b.id;
 
 INSERT IGNORE INTO s_blog_comments
-SELECT NULL, articleID, name, headline, comment, datum, active, email, points
+SELECT NULL, articleID, name, headline, comment, datum, active, email, points*2
 FROM s_articles_vote;
 
 DELETE a, d, at, ac, c, i FROM s_articles a
