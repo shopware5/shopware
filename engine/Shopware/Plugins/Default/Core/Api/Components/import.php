@@ -2809,20 +2809,6 @@ class sShopwareImport
 		return true;
 	}
 
-    function sDeleteAllOrders()
-    {
-        $sql = "
-        TRUNCATE s_order;
-        TRUNCATE s_order_details;
-        TRUNCATE s_order_billingaddress;
-        TRUNCATE s_order_billingaddress_attributes;
-        TRUNCATE s_order_shippingaddress;
-        TRUNCATE s_order_shippingaddress_attributes;
-        ";
-
-        Shopware()->Db()->query($sql);
-    }
-
 	/**
 	 * Alle Artikel löschen (z.B. bei komplettem Neu-Import notwendig)
 	 *
