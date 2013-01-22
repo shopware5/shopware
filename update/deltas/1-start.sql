@@ -164,8 +164,9 @@ CREATE TABLE IF NOT EXISTS `new_s_crontab` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `action` (`action`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-INSERT IGNORE INTO `new_s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID`)
-SELECT `id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID` FROM `s_crontab`;
+INSERT IGNORE INTO `new_s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`)
+SELECT `id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`
+FROM `s_crontab` WHERE `pluginID` = 0;
 DROP TABLE IF EXISTS `s_crontab`;
 RENAME TABLE `new_s_crontab` TO `s_crontab`;
 
