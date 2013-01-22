@@ -595,7 +595,7 @@ class Shopware_Update extends Slim
         $db = $this->config('db');
         $offset = (int)$this->request()->post('offset') ?: 0;
         $version = $this->config('currentVersion');
-        if($offset == 0 && $version != '3.5.6') {
+        if($offset == 0 && $version != '3.5.6' && $version != '3.5.7') {
             echo json_encode(array(
                 'message' => "Das Datenbank-Update unterstützt die Shopware-Version $version nicht.",
                 'success' => true
