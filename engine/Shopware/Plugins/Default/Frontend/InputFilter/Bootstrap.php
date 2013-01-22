@@ -62,6 +62,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $form->setElement('boolean', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
         $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
         $form->setElement('textarea', 'own_filter', array('label' => 'Eigener Filter', 'value' => null));
+        $form->setElement('checkbox', 'refererCheck', array('label' => 'Referer-Check aktivieren', 'value' => 1));
 
         return true;
     }
@@ -74,8 +75,32 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
+        $front = $args->getSubject();
+        $response = $front->Response();
+        $config = $this->Config();
+
         if ($request->getModuleName() == 'backend' || $request->getModuleName() == 'api') {
             return;
+        }
+
+        if (!empty($config->refererCheck)
+            && $request->isPost()
+            && in_array($request->getControllerName(), array('account'))
+            && ($referer = $request->getHeader('Referer')) !== null
+            && strpos($referer, 'http') === 0
+        ) {
+            /** @var $shop Shopware_Models_Shop */
+            $shop = Shopware()->Shop();
+            $validHosts = array(
+                $shop->getHost(),
+                $shop->getSecureHost()
+            );
+            $host = parse_url($referer, PHP_URL_HOST);
+            if (!in_array($host, $validHosts)) {
+                $response->setException(
+                    new Exception('Referer check for frontend session failed')
+                );
+            }
         }
 
         $intVars = array('sCategory', 'sContent', 'sCustom');
@@ -88,7 +113,6 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             }
         }
 
-        $config = $this->Config();
 
         $regex = array();
         if (!empty($config->sql_protection)) {
