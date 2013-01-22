@@ -1,6 +1,6 @@
 <h2 class="headingbox largesize">{se name="ShippingHeader"}{/se}</h2>
 
-<form id="recalcShipping" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}"> 
+<form id="recalcShipping" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
 
 {* Delivery country *}
 {block name='frontend_checkout_shipping_costs_country'}
@@ -20,10 +20,10 @@
        {if $country.states}
            <div {if $country.id != $sCountry.id}class="hidden"{/if}>
                <p></p>
-               <p><label for="country_{$country.id}_states">{se name='RegisterBillingLabelState' force}Bundesstaat:{/se} </label></p>
+               <p><label for="country_{$country.id}_states">{se name='RegisterBillingLabelState'}Bundesstaat:{/se} </label></p>
 
                <select {if $country.id != $sCountry.id}disabled="disabled"{/if} name="sState" id="country_{$country.id}_states" class="auto_submit text">
-               <option value="" selected="selected">{s name='StateSelection' force}Bitte wählen:{/s}</option>
+               <option value="" selected="selected">{s name='StateSelection'}Bitte wählen:{/s}</option>
                    {foreach from=$country.states item=state}
                        <option value="{$state.id}" {if $state.id eq $sState.id}selected="selected"{/if}>{$state.name}</option>
                    {/foreach}
@@ -40,7 +40,7 @@
 	<p>
 		<label for="basket_payment_list">{se name="ShippingLabelPayment"}{/se}</label>
 	</p>
-	
+
 	{foreach from=$sPayments item=payment}
 		<div id="basket_payment_list">
 			<input id="basket_payment{$payment.id}" type="radio" name="sPayment" value="{$payment.id}" {if $payment.id eq $sPayment.id}checked="checked"{/if} class="auto_submit" />
