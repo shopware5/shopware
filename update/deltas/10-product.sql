@@ -73,4 +73,4 @@ FROM `s_articles_prices`
 WHERE `pricegroup` LIKE 'PG%';
 DELETE FROM `s_articles_prices` WHERE `pricegroup` LIKE 'PG%';
 
-UPDATE `s_articles_attributes` SET `attr17` = NOW() WHERE `attr17` = '0000-00-00';
+UPDATE `s_articles_attributes` SET `attr17` = null WHERE `attr17` = '0000-00-00';
