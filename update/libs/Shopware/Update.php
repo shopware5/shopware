@@ -274,6 +274,9 @@ class Shopware_Update extends Slim
 
         $this->get('/system', function () use ($app) {
             $system = new Shopware_Components_Check_System();
+            $system->setDb(
+                $app->config('db')
+            );
             $app->render('system.php', array(
                 'action' => 'system',
                 'system' => $system,

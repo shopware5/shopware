@@ -11,6 +11,12 @@
         <name>eAccelerator</name><group>extension</group><required>0</required>
         <notice>Using the eAccelerator is not recommended. Please use instead the APC cache.</notice>
     </requirement>
+    <requirement>
+        <name>MySQL</name><group>core</group><required>5.1.0</required><error>true</error>
+    </requirement>
+    <requirement>
+        <name>MySQL InnoDB</name><group>core</group><required>1</required><error>true</error>
+    </requirement>
 	<requirement>
 	 	<name>pdo</name><group>core</group><required>1</required>
 	</requirement>
@@ -18,7 +24,7 @@
 	 	<name>pdo_mysql</name><group>core</group><required>1</required>
 	</requirement>
 	<requirement>
-	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info><error>true</error>
+	 	<name>disk_free_space</name><group>core</group><required>5 GB</required>
 	</requirement>
 	<requirement>
 	 	<name>gd</name><group>extension</group><required>2.0.0</required>

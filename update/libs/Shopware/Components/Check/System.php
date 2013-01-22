@@ -1,7 +1,23 @@
 <?php
 class Shopware_Components_Check_System implements IteratorAggregate, Countable
 {
+    /**
+     * @var array
+     */
     protected $list;
+
+    /**
+     * @var PDO
+     */
+    protected $db;
+
+    /**
+     * @param PDO $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+    }
 
     /**
      * Returns the check list
@@ -133,6 +149,33 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     }
 
     /**
+     * Checks the mysql version
+     *
+     * @return string
+     */
+    public function checkMysql()
+    {
+        $sql = "SELECT VERSION()";
+        $result = $this->db->query($sql)->fetchColumn(0);
+        if (strpos($result, '-')) {
+            return substr($result, 0, strpos($result, '-'));
+        }
+        return $result;
+    }
+
+    /**
+     * Checks the mysql version
+     *
+     * @return string
+     */
+    public function checkMysqlInnodb()
+    {
+        $sql = "SHOW VARIABLES LIKE 'have_innodb';";
+        $result = $this->db->query($sql)->fetchColumn(1);
+        return $result == 'YES';
+    }
+
+    /**
      * Checks the curl version
      *
      * @return bool|string
@@ -254,7 +297,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public function checkDiskFreeSpace()
     {
         if (function_exists('disk_free_space')) {
-            return $this->encodeSize(disk_free_space(dirname(__FILE__)));
+            return $this->encodeSize(@disk_free_space(dirname(__FILE__)));
         } else {
             return false;
         }
