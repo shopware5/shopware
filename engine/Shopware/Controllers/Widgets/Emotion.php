@@ -345,6 +345,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         [manufacturer_slider_select] => horizontal
         )
          */
+
+        if (empty($data["manufacturer_type"])) {
+            return $data;
+        }
+
         // Get all manufacturers
         if ($data["manufacturer_type"] == "manufacturers_by_cat") {
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
@@ -442,6 +447,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $query = array('controller' => 'emotion', 'module' => 'widgets', 'action' => 'emotionNewcomer');
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
+            default;
+                // Prevent the slider form endless loading
+                $data['article_slider_type'] = 'selected_article';
+                return $data;
         }
 
         $data["values"] = $values;
