@@ -333,7 +333,7 @@ Ext.define('Enlight.app.Window', {
 
     // private
     onMoveStart: function() {
-        var me = this, activeWindows = me.getActiveWindows(), viewport = Shopware.app.Application.viewport;
+        var me = this, activeWindows = Shopware.app.Application.getActiveWindows(), viewport = Shopware.app.Application.viewport;
 
         if(viewport) {
             me.hiddenLayer = viewport.getHiddenLayer();
@@ -352,7 +352,7 @@ Ext.define('Enlight.app.Window', {
 
     // private
     onMoveEnd: function() {
-        var me = this, activeWindows = me.getActiveWindows(), viewport = Shopware.app.Application.viewport;
+        var me = this, activeWindows = Shopware.app.Application.getActiveWindows(), viewport = Shopware.app.Application.viewport;
 
         Ext.each(activeWindows, function(window) {
             if(!window.minimized && window != me) {
@@ -368,28 +368,6 @@ Ext.define('Enlight.app.Window', {
             me.hiddenLayer.setStyle('z-index', null);
             Ext.removeNode(me.hiddenLayer.dom);
         }
-    },
-
-    /**
-     * Helper method which returns all open windows.
-     *
-     * @private
-     * @return [array] active windows
-     */
-    getActiveWindows: function() {
-        var activeWindows = [];
-
-        Ext.each(Ext.WindowManager.zIndexStack, function (item) {
-            if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                activeWindows.push(item);
-            }
-
-            if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                activeWindows.push(item);
-            }
-        });
-
-        return activeWindows;
     },
 
     /**
