@@ -1018,8 +1018,23 @@ class sAdmin
             $this->sSYSTEM->_SESSION["sRegister"]["auth"]["accountmode"] = "1";	// Setting account-mode to NO_ACCOUNT
         }
 
-        // Check if email is already registered
+        // Check current password
+        if($edit && !empty(Shopware()->Config()->accountPasswordCheck)) {
+            $password = $p["currentPassword"];
+            $current = Shopware()->Session()->sUserPassword;
+            $snippet = Shopware()->Snippets()->getNamespace("frontend");
+            if(empty($password) || $current != md5($password)) {
+                $sErrorFlag['currentPassword'] = true;
+                if($p["password"]) {
+                    $sErrorFlag['password'] = true;
+                } else {
+                    $sErrorFlag['email'] = true;
+                }
+                $sErrorMessages[] = $snippet->get('AccountCurrentPassword', 'Das aktuelle Passwort stimmt nicht!', true);
+            }
+        }
 
+        // Check if email is already registered
         if (isset($p["email"]) && ($p["email"]!=$this->sSYSTEM->_SESSION["sUserMail"])){
             $addScopeSql = "";
             if ($this->scopedRegistration == true){
