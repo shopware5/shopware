@@ -171,6 +171,15 @@ Ext.define('Shopware.container.Viewport',
 		]
 	}),
 
+    afterRender: function() {
+        var me = this;
+
+        var appCls = Ext.ClassManager.get('Shopware.app.Application');
+        appCls.baseComponentIsReady(me);
+
+        me.callParent(arguments);
+    },
+
 	/**
 	 * Initializes the special SW 4 Viewport component which
 	 * supports multiple desktops and additional events compared
@@ -648,6 +657,7 @@ Ext.define('Shopware.container.Viewport',
 			},
 			to: { left: -(width * pos) }
 		});
+
 		return true;
 	},
 
@@ -669,6 +679,9 @@ Ext.define('Shopware.container.Viewport',
 			return false;
 		}
 
+        // Retrieve all active Windows
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+
 		html.animate({
 			duration: me.scrollDuration,
 			easing: me.scrollEasing,
@@ -676,12 +689,21 @@ Ext.define('Shopware.container.Viewport',
 				beforeanimate: function() {
 					Ext.suspendLayouts();
 					me.fireEvent('beforescroll', me, this, index);
+
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.hide();
+                    });
+
 				},
 				afteranimate: function() {
 					Ext.resumeLayouts(true);
 					me.activeDesktop = index;
 					me.fireEvent('afterscroll', me, this, index);
 					me.updateDesktopSwitcher();
+
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.show(window.el);
+                    });
 				}
 			},
 			to: { left: -(width * index) }

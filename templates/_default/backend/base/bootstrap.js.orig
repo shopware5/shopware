@@ -22,8 +22,11 @@
  */
 
 {* Include overrides *}
+<<<<<<< HEAD
 {include file='ExtJs/overrides/Ext.Base.js'}
+=======
 {include file='ExtJs/overrides/Ext.ClassManager.js'}
+>>>>>>> #SW-4052 - Import the performance optimization which includes the new asynchonous loader, the preloader, the modified viewport and the loading masks which will pop up if the customer clicks on a menu entry
 {include file='ExtJs/overrides/Ext.data.proxy.Server.js'}
 {include file='ExtJs/overrides/Ext.app.Application.js'}
 {include file='ExtJs/overrides/Ext.app.Controller.js'}

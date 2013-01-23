@@ -23,14 +23,23 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
     	singleton: true,
         autoCreateViewport: false,
         requires: [ 'Shopware.container.Viewport' ],
+        baseComponents: {
+            'Shopware.container.Viewport': false,
+            'Shopware.apps.Index.view.Menu': false,
+            'Shopware.apps.Index.view.Footer': false
+        },
         viewport: null,
         launch: function() {
+            var me = this,
+                preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application);
 
             /**
              * Activates the Ext.fx.Anim class globally and
              * drives the animations our CSS 3 if supported.
              */
             Ext.enableFx = true;
+
+            this.addEvents('baseComponentsReady', 'subAppLoaded');
 
             // Disable currency sign
             Ext.apply(Ext.util.Format, {
@@ -45,15 +54,45 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 			this.addSubApplication({
 				name: "Shopware.apps.{$app|escape}",
 				controller: {$controller},
-				params: {$params}
+				params: {$params},
+                localizedName: 'Shopware'
 			});
 {else}
             this.addSubApplication({
-                name: "Shopware.apps.Login"
+                name: "Shopware.apps.Login",
+                localizedName: 'Login'
             });
 {/if}
+        },
+
+        /**
+         * Checks if all base components are loaded and rendered.
+         * If truthy the preloader will be triggered.
+         *
+         * @param cmp - Component which calls the method
+         * @return void
+         */
+        baseComponentIsReady: function(cmp) {
+            var me = this,
+                allReady = true;
+
+            me.baseComponents[cmp.$className] = true;
+            Ext.iterate(me.baseComponents, function(index, item) {
+                if(!item) {
+                    allReady = false;
+                    return false;
+                }
+            });
+
+            if(allReady) {
+                window.setTimeout(function() {
+                    me.fireEvent('baseComponentsReady', me);
+                }, 1000);
+            }
         }
     });
+
+    /** Basic loader configuration  */
     Ext.Loader.setConfig({
 		enabled: true,
 		disableCaching: true,
