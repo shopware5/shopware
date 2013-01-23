@@ -238,7 +238,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         // Redirect if category is not available, inactive or external
         /** @var $category \Shopware\Models\Category\Category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
-        if ($category === null || !$category->getactive()) {
+        if ($category === null || !$category->getActive()) {
             $location = array('controller' => 'index');
         } elseif ($category->getExternal()) {
             $location = $category->getExternal();
