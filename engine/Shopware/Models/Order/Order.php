@@ -121,6 +121,13 @@ class Order extends ModelEntity
     private $paymentId;
 
     /**
+     * @var string $dispatchId
+     *
+     * @ORM\Column(name="dispatchID", type="integer", nullable=true)
+     */
+    private $dispatchId;
+
+    /**
      * @var string $partnerId
      *
      * @ORM\Column(name="partnerID", type="string", length=255, nullable=false)
