@@ -1,5 +1,6 @@
 ALTER TABLE `backup_s_core_config` CHANGE `value` `value` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 TRUNCATE TABLE `s_core_config_values`;
+ALTER TABLE `s_core_config_values` AUTO_INCREMENT = 100;
 -- SELECT e.name, e.value, CONCAT('s:', LENGTH(c.value), ':"', c.value, '";')
 INSERT INTO `s_core_config_values` (element_id, shop_id, value)
 SELECT e.id, 1, CONCAT('s:', LENGTH(c.value), ':"', c.value, '";') as value
