@@ -416,22 +416,4 @@ class Repository extends TreeRepository
         return $builder;
     }
 
-    /**
-     * Helper function which checks, if a given category is child of a given parent category
-     * @param $parent \Shopware\Models\Category\Category
-     * @param $child \Shopware\Models\Category\Category
-     * @return bool
-     */
-    public function isChildOf($parent, $child)
-    {
-        $builder = $this->createQueryBuilder('categories');
-        $builder->select('count(categories.id)')
-                ->andWhere('categories.left > :left AND categories.right < :right AND categories.id = :id')
-                ->setParameter("left", $parent->getLeft())
-                ->setParameter("right", $parent->getRight())
-                ->setParameter("id", $child->getId());
-
-        return (int)$builder->getQuery()->getSingleScalarResult() === 1;
-    }
-
 }

@@ -244,7 +244,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Redirect if blog's category is not a child of the current shop's category
         $shopCategory = Shopware()->Shop()->getCategory();
-        $isChild = ($shopCategory && $category) ? $this->getCategoryRepository()->isChildOf($shopCategory, $category) : false;
+        $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
             $location = array('controller' => 'index');
         }

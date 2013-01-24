@@ -858,4 +858,16 @@ class Category extends ModelEntity
     {
         $this->emotions = $emotions;
     }
+
+    /**
+     * Helper function which checks, if this category is child of a given parent category
+     * @param $parent \Shopware\Models\Category\Category
+     * @return bool
+     */
+    public function isChildOf($parent)
+    {
+        return ($parent->getLeft() < $this->getLeft() && $parent->getRight() > $this->getRight());
+    }
+
+
 }
