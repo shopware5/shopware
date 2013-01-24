@@ -75,26 +75,32 @@
 	{* Set new password *}
 	 <div class="grid_16 first password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} displayblock{/if}">
 	 	<div class="doublespace">&nbsp;</div>
-		{block name="frontend_account_index_change_password"}
-		<form method="post" action="{url action=saveAccount}">
-			<h2 class="headingbox_dark largesize">{se name='AccountLinkChangePassword'}{/se}</h2>
-    		<div class="inner_container">
-				{* New password *}
-	    		<p>
-	    			<label for="newpwd">{se name="AccountLabelNewPassword"}{/se}</label>
-	    			<input name="password" type="password" id="newpwd" class="text {if $sErrorFlag.password}instyle_error{/if}" />
-	    		</p>
-	    		
+        {block name="frontend_account_index_change_password"}
+         <form method="post" action="{url action=saveAccount}">
+             <h2 class="headingbox_dark largesize">{se name='AccountLinkChangePassword'}{/se}</h2>
+             <div class="inner_container">
+                 {if {config name=accountPasswordCheck}}
+                 <p>
+                     <label for="currentPassword">{se name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/se}</label>
+                     <input name="currentPassword" type="password" id="currentPassword" class="text {if $sErrorFlag.currentPassword}instyle_error{/if}" />
+                 </p>
+                 {/if}
+                 {* New password *}
+                 <p>
+                     <label for="newpwd">{se name="AccountLabelNewPassword"}{/se}</label>
+                     <input name="password" type="password" id="newpwd" class="text {if $sErrorFlag.password}instyle_error{/if}" />
+                 </p>
+
 	    		{* Repeat new Password *}
-	    		<p>
-	    			<label for="newpwdrepeat">{se name="AccountLabelRepeatPassword"}{/se}</label>
-	    			<input name="passwordConfirmation" id="newpwdrepeat" type="password" class="text {if $sErrorFlag.passwordConfirmation}instyle_error{/if}" />
-	    		</p>
-	    		
-	    		<input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="button-right small_right" />
-    		</div>
-    	</form>
-    	{/block}
+                 <p>
+                     <label for="newpwdrepeat">{se name="AccountLabelRepeatPassword"}{/se}</label>
+                     <input name="passwordConfirmation" id="newpwdrepeat" type="password" class="text {if $sErrorFlag.passwordConfirmation}instyle_error{/if}" />
+                 </p>
+
+                 <input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="button-right small_right" />
+             </div>
+         </form>
+        {/block}
 	</div>
 	
 	{* Edit mail address *}
@@ -104,19 +110,21 @@
 		<form method="post" action="{url action=saveAccount}">
 			<h2 class="headingbox_dark largesize">{se name='AccountLinkChangeMail'}{/se}</h2>
     		<div class="inner_container">
-    		
-				{* New password *}
+                {if {config name=accountPasswordCheck}}
+                <p>
+                    <label for="emailPassword">{se name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/se}</label>
+                    <input name="currentPassword" type="password" id="emailPassword" class="text {if $sErrorFlag.currentPassword}instyle_error{/if}" />
+                </p>
+                {/if}
 	    		<p>
 	    			<label for="newmail">{se name="AccountLabelNewMail"}{/se}*:</label>
 	    			<input name="email" type="text" id="newmail" class="text {if $sErrorFlag.email}instyle_error{/if}" />
 	    		</p>
-	    		
-	    		{* Repeat new Password *}
 	    		<p>
 	    			<label for="newmailrepeat">{se name="AccountLabelMail"}{/se}*:</label>
 	    			<input name="emailConfirmation" id="neweailrepeat" type="text" class="text {if $sErrorFlag.emailConfirmation}instyle_error{/if}" />
 	    		</p>
-	    		
+
 	    		<input type="submit" value="{s name='AccountLinkChangeMail'}{/s}" class="button-right small_right" />
     		</div>
     	</form>
