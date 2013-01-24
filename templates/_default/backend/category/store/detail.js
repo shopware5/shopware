@@ -33,7 +33,7 @@
  *
  * The detail store loads and stores all category detail information
  */
-// {block name="backend/category/store/detail"}
+//{block name="backend/category/store/detail"}
 Ext.define('Shopware.apps.Category.store.Detail', {
     /**
      * Extend for the standard ExtJS 4
@@ -58,4 +58,4 @@ Ext.define('Shopware.apps.Category.store.Detail', {
      */
     model:'Shopware.apps.Category.model.Detail'
 });
-/* {/block} */
+//{/block}

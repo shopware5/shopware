@@ -35,7 +35,7 @@
  * This component defines which controllers belong to the application and whether the bulk loading is activated or not.
  */
 
-// {block name="backend/category/app"}
+//{block name="backend/category/app"}
 Ext.define('Shopware.apps.Category', {
     /**
      * Extends from our special controller, which handles the
@@ -104,5 +104,4 @@ Ext.define('Shopware.apps.Category', {
         return me.mainWindow = mainController.mainWindow;
     }
 });
-/* {/block} */
-
+//{/block}

@@ -34,7 +34,7 @@
  * This Model is extended from the Shopware.apps.Base.model.Article to add the article association
  *
  */
-// {block name="backend/category/model/article"}
+//{block name="backend/category/model/article"}
 Ext.define('Shopware.apps.Category.model.Article', {
 
     /**
@@ -58,4 +58,4 @@ Ext.define('Shopware.apps.Category.model.Article', {
         }
     ]
 });
-/* {/block} */
+//{/block}

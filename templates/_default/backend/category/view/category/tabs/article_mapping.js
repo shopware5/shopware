@@ -35,7 +35,7 @@
  *
  * Shows the drag and drop selector to map articles to a category
  */
-// {block name="backend/category/view/tabs/article_mapping"}
+//{block name="backend/category/view/tabs/article_mapping"}
 Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
    /**
     * Parent Element Ext.container.Container
@@ -236,7 +236,4 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         });
     }
 });
-
-/* {/block} */
-
-
+//{/block}
