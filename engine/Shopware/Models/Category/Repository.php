@@ -415,4 +415,5 @@ class Repository extends TreeRepository
             ->having('childrenCount > 0 OR blog = 1');
         return $builder;
     }
+
 }

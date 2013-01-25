@@ -235,6 +235,24 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+        // Redirect if category is not available, inactive or external
+        /** @var $category \Shopware\Models\Category\Category */
+        $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
+        if ($category === null || !$category->getActive()) {
+            $location = array('controller' => 'index');
+        }
+
+        // Redirect if blog's category is not a child of the current shop's category
+        $shopCategory = Shopware()->Shop()->getCategory();
+        $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
+        if (!$isChild) {
+            $location = array('controller' => 'index');
+        }
+
+        if (isset($location)) {
+            return $this->redirect($location, array('code' => 301));
+        }
+
         //load the right template
         if (!empty($blogArticleData['template'])) {
             $this->View()->loadTemplate('frontend/blog/' . $blogArticleData['template']);
