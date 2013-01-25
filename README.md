@@ -78,11 +78,11 @@ To keep your master up-to-date:
 
 Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
 
-		git checkout -b feature/your-cool-feature		
+		git checkout -b feature/your-cool-feature
 
 If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
 
-		git push origin feature/your-cool-feature	
+		git push origin feature/your-cool-feature
 
 
 ... and send us a pull request with your changes. We'll verify the pull request and merge it with the `master` Branch.
@@ -90,6 +90,10 @@ If you're done hacking, filling bugs or building fancy new features push your ch
 **Please keep in mind that all verified and merged pull requests are released with the next minor version of Shopware.**
 
 For example if you're contributing to Shopware 4.0.3 your changes will be available in Shopware 4.0.4. We'll merge all changes from our contributors to the `master` branch before we release the next minor version, testing it through our quality assurance and pushing it out to the masses after all tests went well.
+
+### Coding standards
+All contributions should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding standards.
+
 
 ### How to report bugs / feature requests?
 
