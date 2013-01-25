@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
             title: '{s name=variant/configurator/dependency/title}Configurator dependency{/s}'
         },
         priceSurcharge: {
-            notice: '{s name=variant/configurator/price_surcharge/notice}In this area you have the opportunity to declare price surcharges for the product variants. You can define combinations which are supposed to be added on the standard prices of the product variants. Price surcharges are applied as a kind rule set, which offers the advantage to define surcharges based on several combinations of attribute groups and options. To define a price surcharge, please select the attribute group and option which is supposed to be added to the standard price from the attached selection boxes below.{/s}',
+            notice: '{s name=variant/configurator/price_surcharge/notice}In this area you have the opportunity to declare price surcharges for the product variants. You can define combinations which are supposed to be added on the standard prices of the product variants. Price surcharges are applied as a kind rule set, which offers the advantage to define surcharges based on several combinations of attribute groups and options. To define a price surcharge, please select the attribute group and option which is supposed to be added to the standard price from the attached selection boxes below.<br>Price surcharges need to be entered as net prices.{/s}',
             group: '{s name=variant/configurator/price_surcharge/group}Group{/s}',
             option: '{s name=variant/configurator/price_surcharge/option}Option{/s}',
             operator: '{s name=variant/configurator/price_surcharge/operator}Not with{/s}',
