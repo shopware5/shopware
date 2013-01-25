@@ -229,7 +229,7 @@ Ext.define('Shopware.form.plugin.Translation',
                 break;
             case 'textfield':
             default:
-                style = 'top: 3px; right: 3px;';
+                style = 'top: 3px; right: 3px; z-index:1;';
                 break;
         }
 

@@ -99,6 +99,15 @@ Ext.define('Shopware.form.field.CodeMirror',
     editorHeight: 0,
 
     /**
+     * Width of the underlying textarea
+     *
+     * @default 0
+     * @integer
+     */
+    editorWidth: 0,
+
+
+    /**
      * Property which holds the path to the mode directory of
      * the CodeMirror editor.
      * @string
@@ -162,6 +171,7 @@ Ext.define('Shopware.form.field.CodeMirror',
         var me = this;
 
         me.editorHeight = height;
+        me.editorWidth = width - 10;
         me.resizeEditor();
     },
 
@@ -233,7 +243,7 @@ Ext.define('Shopware.form.field.CodeMirror',
     resizeEditor: function() {
         var me = this,
             scroller,
-            height;
+            height, width;
 
         if (me.editor) {
             // Set the editor height
@@ -243,8 +253,16 @@ Ext.define('Shopware.form.field.CodeMirror',
                 height = me.editorHeight;
             }
 
+            // Set the editor width
+            if (me.width) {
+                width = me.width - 10;
+            } else {
+                width = me.editorWidth;
+            }
+
             scroller = Ext.get(me.editor.getScrollerElement());
             scroller.setHeight(height);
+            scroller.setWidth(width);
 
             me.editor.refresh();
         }
