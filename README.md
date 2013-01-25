@@ -61,26 +61,39 @@ If you are not sure, how to contribute code under right license and right way yo
 
 ### Start hacking
 
-To start contributing, just fork the master tree and clone your fork to your local machine:
+To start contributing, just fork the repository and clone your fork to your local machine:
 
 		git clone git@github.com:[YOUR USERNAME]/shopware-4.git
 
-After having done this, configure the remotes, fetch the latest changes and switch to the `Community-Branch`:
+After having done this, configure the upstream remote:
 
 		cd shopware-4
 		git remote add upstream git://github.com/ShopwareAG/shopware-4.git
-		git fetch upstream
-		git checkout Community-Branch
+		git config branch.master.remote upstream
 
-Now you're ready to start hacking and contributing to Shopware. If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
+To keep your master up-to-date:
 
-		git push
+		git checkout master
+		git pull --rebase
 
-... and send us a pull request with your changes to the branch `Community-Branch`. We'll verify the pull request and merge it with the Community Branch repository.
+Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
+
+		git checkout -b feature/your-cool-feature
+
+If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
+
+		git push origin feature/your-cool-feature
+
+
+... and send us a pull request with your changes. We'll verify the pull request and merge it with the `master` Branch.
 
 **Please keep in mind that all verified and merged pull requests are released with the next minor version of Shopware.**
 
 For example if you're contributing to Shopware 4.0.3 your changes will be available in Shopware 4.0.4. We'll merge all changes from our contributors to the `master` branch before we release the next minor version, testing it through our quality assurance and pushing it out to the masses after all tests went well.
+
+### Coding standards
+All contributions should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding standards.
+
 
 ### How to report bugs / feature requests?
 
