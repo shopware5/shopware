@@ -1357,8 +1357,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //created documents models would be overwritten.
         unset($data['documents']);
 
-        $data['billing'] = $data['billing'][0];
-        $data['shipping'] = $data['shipping'][0];
+        $data['billing'] = $this->prepareAddressData($data['billing'][0]);
+        $data['shipping'] = $this->prepareAddressData($data['shipping'][0]);
         $data['attribute'] = $data['attribute'][0];
         $data['billing']['attribute'] = $data['billingAttribute'][0];
         $data['shipping']['attribute'] = $data['shippingAttribute'][0];
@@ -1367,7 +1367,24 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         return $data;
     }
 
+    /**
+     * Prepare address data - loads countryModel from a given countryId
+     *
+     * @param $data Array
+     * @return Array
+     */
+    protected function prepareAddressData(array $data)
+    {
+        if (isset($data['countryId']) && !empty($data['countryId'])) {
+            $countryModel = $this->getCountryRepository()->find($data['countryId']);
+            if ($countryModel) {
+                $data['country'] = $countryModel;
+            }
+            unset($data['countryId']);
+        }
 
+        return $data;
+    }
 
     /**
      * Creates the status mail order for the passed order id and new status object.
