@@ -864,7 +864,7 @@ class Category extends ModelEntity
      * @param $parent \Shopware\Models\Category\Category
      * @return bool
      */
-    public function isChildOf($parent)
+    public function isChildOf(\Shopware\Models\Category\Category $parent)
     {
         return ($parent->getLeft() < $this->getLeft() && $parent->getRight() > $this->getRight());
     }
