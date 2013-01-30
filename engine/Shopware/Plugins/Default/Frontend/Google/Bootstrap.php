@@ -67,7 +67,10 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
             'value' => true,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
-
+        $form->setElement('text', 'blockIp', array(
+            'label' => 'IPs von Google Analytics ausklammern', 'value' => null,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
         return true;
     }
 
@@ -107,8 +110,14 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
             return;
         }
 
-        $view->extendsTemplate('frontend/plugins/google/index.tpl');
+        if (!empty($config->blockIp)
+            && strpos($config->blockIp, $request->getClientIp(false)) !== false
+        ) { 
+            return;
+        }
 
+        $view->extendsTemplate('frontend/plugins/google/index.tpl');
+    
         if (!empty($config->conversion_code)) {
             $view->GoogleConversionID = $config->conversion_code;
             $view->GoogleConversionLanguage = Shopware()->Locale()->getLanguage();
