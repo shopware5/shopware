@@ -186,12 +186,19 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $shop = $this->Application()->Shop();
 
             if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
-                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost();
+                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $shop->getBasePath();
             } elseif (!$request->isSecure() && $request->getHttpHost() !== $shop->getHost()) {
-                $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost();
+                $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost() . $shop->getBasePath();
             }
+
+            // Strip /shopware.php/ from string and perform a redirect
+            $preferBasePath = $this->Application()->Config()->preferBasePath;
+            if ($preferBasePath && strpos($request->getPathInfo(), '/shopware.php/') === 0) {
+                $removePath = $request->getBasePath() . '/shopware.php';
+                $newPath = str_replace($removePath, $request->getBasePath(), $request->getRequestUri());
+            }
+
             if(isset($newPath)) {
-                $newPath .= $shop->getBasePath();
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
