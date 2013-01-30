@@ -126,7 +126,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $shop->setHost($request->getHttpHost());
         }
         if (!$shop->getBaseUrl()) {
-            $shop->setBaseUrl($request->getBaseUrl());
+            $preferBasePath = $this->Application()->Config()->preferBasePath;
+            $shop->setBaseUrl($preferBasePath ? $request->getBasePath() : $request->getBaseUrl());
         }
         if (!$shop->getBasePath()) {
             $shop->setBasePath($request->getBasePath());
