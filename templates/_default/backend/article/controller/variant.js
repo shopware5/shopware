@@ -1113,7 +1113,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         });
 
         // SW-4440 There cannot be two options with the same name
-        if(optionListing.getStore().findRecord('name', name)) {
+        if(optionListing.getStore().findRecord('name', name, 0, false, false, true )) {
             Shopware.Notification.createGrowlMessage(me.snippets.failure.title, Ext.String.format(me.snippets.messages.optionExists, name), me.snippets.growlMessage);
             return;
         }
