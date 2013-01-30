@@ -188,7 +188,7 @@ class sConfigurator
                 $builder->setParameter('customerGroup', 'EK');
                 $selected = $builder->getQuery()->getArrayResult();
             }
-            
+
             //we can only set one variant as select, so we select the first one
             $detailData = $selected[0];
             if (!empty($detailData)) {
@@ -319,7 +319,7 @@ class sConfigurator
         }
         return $builder;
     }
-    
+
     protected function getDefaultPrices($detailId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -369,6 +369,7 @@ class sConfigurator
         $articleData["price"] = $selectedPrice['price'];
         $articleData["pseudoprice"] = $selectedPrice['pseudoPrice'];
 
+        $articleData["articleDetailsID"] = $selected["id"];
         $articleData["ordernumber"] = $selected["ordernumber"];
         $articleData["additionaltext"] = $selected["additionaltext"];
         $articleData["instock"] = $selected["instock"];
