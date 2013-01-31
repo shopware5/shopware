@@ -129,6 +129,10 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $this->resetRequest();
         $this->resetResponse();
 
+        // Force the assignments to be cleared. Needed for some test cases
+        if ($this->_view && $this->_view->hasTemplate()) {
+            $this->_view->clearAssign();
+        }
 
         $this->_view = null;
         $this->_template = null;
