@@ -143,6 +143,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $sFilterAuthor = urldecode($this->Request()->sFilterAuthor);
         $sFilterTags = urldecode($this->Request()->sFilterTags);
 
+
+        // Redirect if blog's category is not a child of the current shop's category
+        $shopCategory = Shopware()->Shop()->getCategory();
+        $category = $this->getCategoryRepository()->find($categoryId);
+        $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
+        if (!$isChild) {
+            $location = array('controller' => 'index');
+        }
+
+        if (isset($location)) {
+            return $this->redirect($location, array('code' => 301));
+        }
+
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
             Shopware()->Session()->sPerPage = (int)$this->Request()->sPerPage;
