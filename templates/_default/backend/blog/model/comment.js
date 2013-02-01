@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Blog.model.Comment', {
         { name : 'creationDate', type : 'date' },
         { name : 'active', type : 'boolean' },
         { name : 'points', type : 'float' },
-        { name : 'email', type : 'string' }
+        { name : 'eMail', type : 'string' }
     ],
 	/**
 	* If the name of the field is 'id' extjs assumes autmagical that

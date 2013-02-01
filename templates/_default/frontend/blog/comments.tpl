@@ -82,7 +82,7 @@
 		{/block}
 		
 		{* E-Mail *}
-        {if {config name=OptinVote} == true && !{$userLoggedIn}}
+        {if !{$userLoggedIn}}
             {block name='frontend_blog_comments_input_mail'}
             <p class="col">
                 <label for="sCommentMail">{se name="BlogLabelMail"}{/se}*:</label>
