@@ -149,11 +149,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $category = $this->getCategoryRepository()->find($categoryId);
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
-            $location = array('controller' => 'index');
-        }
-
-        if (isset($location)) {
-            return $this->redirect($location, array('code' => 301));
+            return $this->redirect(array('controller' => 'index'), array('code' => 301));
         }
 
         // PerPage
