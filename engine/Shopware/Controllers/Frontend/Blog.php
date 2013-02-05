@@ -152,6 +152,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
         }
 
+        //check if the blog category ist active
+        if($category != null) {
+            $isCategoryActive = $category->getActive();
+            if(empty($isCategoryActive)) {
+                return $this->redirect(array('controller' => 'index'), array('code' => 301));
+            }
+        }
+
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
             Shopware()->Session()->sPerPage = (int)$this->Request()->sPerPage;
