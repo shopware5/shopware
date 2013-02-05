@@ -244,6 +244,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+        //redirect if the blog item is not available
+        if(empty($blogArticleData) || empty($blogArticleData["active"])) {
+            return $this->redirect(array('controller' => 'index'), array('code' => 301));
+        }
+        
         // Redirect if category is not available, inactive or external
         /** @var $category \Shopware\Models\Category\Category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
