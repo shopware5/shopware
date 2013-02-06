@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Order.model.Position', {
         }
     },
     associations: [
-        { type:'hasMany', model:'Shopware.apps.Order.model.PositionAttribute', name:'getAttributes', associationKey:'attributes' }
+        { type:'hasMany', model:'Shopware.apps.Order.model.PositionAttribute', name:'getAttributes', associationKey:'attribute' }
     ]
 
 });
