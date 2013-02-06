@@ -146,7 +146,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Redirect if blog's category is not a child of the current shop's category
         $shopCategory = Shopware()->Shop()->getCategory();
-        $category = $this->getCategoryRepository()->find($categoryId);
+        $category = $this->getCategoryRepository()->findOneBy(array('id' => $categoryId, 'active' => true));
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
@@ -244,6 +244,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+        //redirect if the blog item is not available
+        if(empty($blogArticleData) || empty($blogArticleData["active"])) {
+            return $this->redirect(array('controller' => 'index'), array('code' => 301));
+        }
+        
         // Redirect if category is not available, inactive or external
         /** @var $category \Shopware\Models\Category\Category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
