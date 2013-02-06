@@ -17,13 +17,17 @@
 				</a>
 			{/if}
 			{foreach from=$sPages.pages item=page}
-				{if $sRequests.currentPage==$page}
-					<a title="{$sCategoryInfo.name}" class="navi on">{$page}</a>
-				{else}
-					<a href="{$sLinks.sPage}&sPage={$page}" title="{$sCategoryInfo.name}" class="navi">
-						{$page}
-					</a>
-				{/if}
+                {if $page<$sRequests.currentPage+4 AND $page>$sRequests.currentPage-4}
+                    {if $sRequests.currentPage==$page}
+                        <a title="{$sCategoryInfo.name}" class="navi on">{$page}</a>
+                        {else}
+                        <a href="{$sLinks.sPage}&sPage={$page}" title="{$sCategoryInfo.name}" class="navi">
+                            {$page}
+                        </a>
+                    {/if}
+                    {elseif $page==$sRequests.currentPage+4 OR $page==$sRequests.currentPage-4}
+                    <div class="more">...</div>
+                {/if}
 			{/foreach}
 			{if $sPages.next}
 				<a href="{$sLinks.sPage}&sPage={$sPages.next}" title="{s name='ListingLinkPrevious'}{/s}" class="navi more">{s name="ListingTextNext"}&gt;{/s}</a>
@@ -56,7 +60,7 @@
 		<label>{s name='ListingLabelItemsPerPage'}Artikel pro Seite:{/s}</label>
 		<select name="sPerPage" class="auto_submit">
 		{foreach from=$sPerPage item=perPage}
-	        <option value="{$perPage}" {if $perPage eq $sRequests.sPerPage}selected="selected"{/if}>{$perPage}</option>
+	        <option value="2" {if $perPage eq $sRequests.sPerPage}selected="selected"{/if}>{$perPage}</option>
 		{/foreach}
 		</select>
 	</div>
