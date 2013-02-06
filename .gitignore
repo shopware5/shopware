@@ -24,6 +24,7 @@ config.php
 engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
+tests/Shopware/TempFiles/
 engine/Shopware/Models/Attribute/
 engine/Shopware/Proxies/
 cache/database/
