@@ -466,6 +466,7 @@ class Repository extends ModelRepository
                 'comment.id',
                 'comment.active as active',
                 'comment.creationDate as creationDate',
+                'comment.email as eMail',
                 'comment.name as name',
                 'comment.points as points',
                 'comment.headline as headline',
