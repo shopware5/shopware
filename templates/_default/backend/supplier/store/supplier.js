@@ -34,7 +34,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Default store which keeps the supplier
  */
-//{block name=backend/supplier/store/supplier}
+//{block name="backend/supplier/store/supplier"}
 Ext.define('Shopware.apps.Supplier.store.Supplier', {
     /**
      * Extend for the standard ExtJS 4

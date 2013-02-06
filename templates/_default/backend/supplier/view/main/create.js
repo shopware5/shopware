@@ -36,7 +36,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Create a new supplier view
  */
-//{block name=backend/supplier/view/main/create}
+//{block name="backend/supplier/view/main/create"}
 Ext.define('Shopware.apps.Supplier.view.main.Create', {
     extend : 'Enlight.app.Window',
     alias : 'widget.supplier-main-create',

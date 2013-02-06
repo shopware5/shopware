@@ -36,7 +36,7 @@
  * View component which features a form panel to edit
  * a existing banner.
  */
-//{block name=backend/banner/view/main/banner_form}
+//{block name="backend/banner/view/main/banner_form"}
 Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
     extend : 'Enlight.app.Window',
     alias: 'widget.banner-view-main-banner-form',

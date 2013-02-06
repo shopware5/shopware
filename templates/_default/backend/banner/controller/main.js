@@ -35,7 +35,7 @@
  *
  * Features the business logic for the banner module.
  */
-//{block name=backend/banner/controller/main}
+//{block name="backend/banner/controller/main"}
 Ext.define('Shopware.apps.Banner.controller.Main', {
     extend : 'Ext.app.Controller',
     views : [ 

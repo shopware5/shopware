@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/main/list}
+//{block name="backend/shipping/view/main/list"}
 Ext.define('Shopware.apps.Shipping.view.main.List', {
     /**
      * Parent Class

@@ -33,7 +33,7 @@
  *
  * The tree store loads and stores the tree data
  */
-// {block name=backend/blog/store/tree}
+// {block name="backend/blog/store/tree"}
 Ext.define('Shopware.apps.Blog.store.Tree', {
     /**
      * Define that this component is an extension of the Ext.data.TreeStore

@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/store/shop}
+//{block name="backend/shipping/store/shop"}
 Ext.define('Shopware.apps.Shipping.store.Payment', {
     /**
      * Extend for the standard ExtJS 4

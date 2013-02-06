@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/edit/payment_means}
+//{block name="backend/shipping/view/edit/payment_means"}
 Ext.define('Shopware.apps.Shipping.view.edit.PaymentMeans', {
     /**
      * Based on Ext.panel.Panel

@@ -27,7 +27,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{block name=backend/emotion/view/components/manufacturer_slider}
+//{block name="backend/emotion/view/components/manufacturer_slider"}
 //{namespace name=backend/emotion/view/components/manufacturer_slider}
 Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
     extend: 'Shopware.apps.Emotion.view.components.Base',

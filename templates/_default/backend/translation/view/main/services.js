@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/translation/view/main/window}
+//{block name="backend/translation/view/main/window"}
 Ext.define('Shopware.apps.Translation.view.main.Services',
 /** @lends Ext.window.Window# */
 {

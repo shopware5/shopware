@@ -36,7 +36,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Default supplier view. Extends a grid view.
  */
-//{block name=backend/supplier/view/main/list}
+//{block name="backend/supplier/view/main/list"}
 Ext.define('Shopware.apps.Supplier.view.main.List', {
     extend : 'Ext.grid.Panel',
     alias : 'widget.supplier-main-list',

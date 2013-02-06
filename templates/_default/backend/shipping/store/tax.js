@@ -35,7 +35,7 @@
  * 
  * todo@all: Documentation
  */
-//{block name=backend/shipping/store/country}
+//{block name="backend/shipping/store/country"}
 Ext.define('Shopware.apps.Shipping.store.Tax', {
     /**
      * Extend for the standard ExtJS 4

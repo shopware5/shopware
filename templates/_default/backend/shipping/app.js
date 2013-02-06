@@ -33,7 +33,7 @@
  *
  * Backend - Management for Shipping options and costs
  */
-//{block name=backend/shipping/app}
+//{block name="backend/shipping/app"}
 Ext.define('Shopware.apps.Shipping', {
     /**
      * Extends from our special controller, which handles the

@@ -27,7 +27,7 @@
 
 //{namespace name=backend/config/view/form}
 
-//{block name=backend/config/view/template/detail}
+//{block name="backend/config/view/template/detail"}
 Ext.define('Shopware.apps.Config.view.template.Detail', {
     extend: 'Ext.form.Panel',
     alias: 'widget.config-template-detail',

@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/edit/dispatch_costs_matrix}
+//{block name="backend/shipping/view/edit/dispatch_costs_matrix"}
 Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
     extend : 'Ext.grid.Panel',
     /**

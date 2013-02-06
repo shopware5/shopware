@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/edit/advanced}
+//{block name="backend/shipping/view/edit/advanced"}
 Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
     /**
      * Based on Ext.form.Panel

@@ -35,7 +35,7 @@
  * handles the whole translations applications-wide.
  */
 
-//{block name=backend/translation/app}
+//{block name="backend/translation/app"}
 Ext.define('Shopware.apps.Translation',
 /** @lends Enlight.app.SubApplication# */
 {

@@ -33,7 +33,7 @@
 /**
  * todo@all: Documentation
  */
-//{block name=backend/shipping/controller/default_form}
+//{block name="backend/shipping/controller/default_form"}
 Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
     /**
      * Extend from the standard ExtJS 4

@@ -36,7 +36,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Default supplier view. Extends a grid view.
  */
-// {block name=backend/supplier/controller/main}
+// {block name="backend/supplier/controller/main"}
 Ext.define('Shopware.apps.Supplier.controller.Main', {
     /**
      * Extend from the standard ExtJS 4
