@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/translation/view/main/navigation}
+//{block name="backend/translation/view/main/navigation"}
 Ext.define('Shopware.apps.Translation.view.main.Navigation',
 /** @lends Ext.tree.Panel */
 {

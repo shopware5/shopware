@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/store/costmatrix}
+//{block name="backend/shipping/store/costmatrix"}
 Ext.define('Shopware.apps.Shipping.store.Costsmatrix', {
     /**
      * Extend for the standard ExtJS 4

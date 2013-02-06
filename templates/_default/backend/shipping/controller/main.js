@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/controller/main}
+//{block name="backend/shipping/controller/main"}
 Ext.define('Shopware.apps.Shipping.controller.Main', {
 
     /**

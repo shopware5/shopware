@@ -33,7 +33,7 @@
  * 
  * todo@all: Documentation
  */
-//{block name=backend/shipping/store/category}
+//{block name="backend/shipping/store/category"}
 Ext.define('Shopware.apps.Shipping.store.CategoryTree', {
     /**
      * Parent Object

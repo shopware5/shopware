@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/translation/view/main/form}
+//{block name="backend/translation/view/main/form"}
 Ext.define('Shopware.apps.Translation.view.main.Form',
 /** @lends Ext.form.Panel# */
 {

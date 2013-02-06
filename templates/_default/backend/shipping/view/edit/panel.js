@@ -33,7 +33,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/edit/panel}
+//{block name="backend/shipping/view/edit/panel"}
 Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
     /**
      * Extends the Enlight.app.Window

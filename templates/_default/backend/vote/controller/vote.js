@@ -38,7 +38,7 @@
  * deletes votes and offers the possibility to answer to them.
  *
  */
-//{block name=backend/vote/controller/vote}
+//{block name="backend/vote/controller/vote"}
 Ext.define('Shopware.apps.Vote.controller.Vote', {
 
     /**

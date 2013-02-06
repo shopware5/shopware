@@ -36,7 +36,7 @@
  * View component which features the main panel
  * of the module. It displays the banners.
  */
-//{block name=backend/banner/view/main/panel}
+//{block name="backend/banner/view/main/panel"}
 Ext.define('Shopware.apps.Banner.view.main.Panel', {
     extend: 'Ext.container.Container',
     alias : 'widget.banner-view-main-panel',

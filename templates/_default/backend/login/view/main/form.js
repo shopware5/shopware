@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/login/view/main/form}
+//{block name="backend/login/view/main/form"}
 Ext.define('Shopware.apps.Login.view.main.Form', {
     extend: 'Ext.form.Panel',
     plain: true,

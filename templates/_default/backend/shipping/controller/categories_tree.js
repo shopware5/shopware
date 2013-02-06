@@ -35,7 +35,7 @@
  * 
  * todo@all: Documentation
  */
-//{block name=backend/shipping/controller/categories_tree}
+//{block name="backend/shipping/controller/categories_tree"}
 Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
     /**
      * Extend from the standard ExtJS 4

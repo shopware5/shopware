@@ -36,7 +36,7 @@
  * This file contains the business logic for the Translation Manager module.
  */
 
-//{block name=backend/translation/controller/main}
+//{block name="backend/translation/controller/main"}
 Ext.define('Shopware.apps.Translation.controller.Main',
 /** @lends Ext.app.Controller# */
 {

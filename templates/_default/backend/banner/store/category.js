@@ -36,7 +36,7 @@
  * This store will be loaded automatically and will just request 30 items at once.
  * It will utilize the Banner Category Model @see Shopware.apps.Banner.model.Category
  */
-//{block name=backend/banner/store/category}
+//{block name="backend/banner/store/category"}
 Ext.define('Shopware.apps.Banner.store.Category', {
     extend : 'Shopware.store.CategoryTree',
     alias : 'store.category',

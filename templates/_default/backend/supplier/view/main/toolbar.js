@@ -36,7 +36,7 @@
  * Backend - Management for Suppliers. Create | Modify | Delete and Logo Management.
  * Create a new supplier view
  */
-//{block name=backend/supplier/view/main/toolbar}
+//{block name="backend/supplier/view/main/toolbar"}
 Ext.define('Shopware.apps.Supplier.view.main.Toolbar', {
     extend : 'Ext.toolbar.Toolbar',
     alias : 'widget.supplier-main-toolbar',

@@ -33,7 +33,7 @@
  * 
  * todo@all: Documentation
  */
-//{block name=backend/shipping/store/holiday}
+//{block name="backend/shipping/store/holiday"}
 Ext.define('Shopware.apps.Shipping.store.Holiday', {
     /**
      * Extend for the standard ExtJS 4

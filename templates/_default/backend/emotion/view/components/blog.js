@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{block name=backend/emotion/view/components/blog}
+//{block name="backend/emotion/view/components/blog"}
 //{namespace name=backend/emotion/view/components/blog}
 Ext.define('Shopware.apps.Emotion.view.components.Blog', {
     extend: 'Shopware.apps.Emotion.view.components.Base',

@@ -36,7 +36,7 @@
  * This file represents a panel which displays the detail
  * informations for a specific supplier.
  */
-//{block name=backend/supplier/view/main/detail}
+//{block name="backend/supplier/view/main/detail"}
 Ext.define('Shopware.apps.Supplier.view.main.Detail', {
     extend: 'Ext.panel.Panel',
     cls: 'detail-view',

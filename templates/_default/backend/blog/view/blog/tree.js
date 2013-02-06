@@ -36,7 +36,7 @@
  * This component contains a category tree. This tree is uses to manage 
  * the hierarchical order of categories. Its provides methods to create, delete, rearrange categories.
  */
-// {block name=backend/blog/view/blog/tree}
+// {block name="backend/blog/view/blog/tree"}
 Ext.define('Shopware.apps.Blog.view.blog.Tree', {
     /**
     * Parent Element Ext.tree.Panel

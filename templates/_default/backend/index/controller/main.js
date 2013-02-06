@@ -40,7 +40,7 @@
  */
 
 //{namespace name=backend/index/controller/main}
-//{block name=backend/index/controller/main}
+//{block name="backend/index/controller/main"}
 Ext.define('Shopware.apps.Index.controller.Main', {
 	extend: 'Ext.app.Controller',
 

@@ -35,7 +35,7 @@
  *
  * todo@all: Documentation
  */
-//{block name=backend/shipping/view/edit/default/form_left}
+//{block name="backend/shipping/view/edit/default/form_left"}
 Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
     extend      :'Ext.container.Container',
     /**

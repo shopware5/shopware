@@ -33,7 +33,7 @@
 /**
  * Shopware UI - Shipping Costs
  */
-//{block name=backend/shipping/view/main}
+//{block name="backend/shipping/view/main"}
 Ext.define('Shopware.apps.Shipping.view.Main', {
     extend      : 'Enlight.app.Window',
 

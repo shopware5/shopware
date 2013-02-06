@@ -33,7 +33,7 @@
  *
  * This controller only creates the main-window and sets the voteStore
  */
-//{block name=backend/vote/controller/main}
+//{block name="backend/vote/controller/main"}
 Ext.define('Shopware.apps.Vote.controller.Main', {
 
     /**

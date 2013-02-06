@@ -34,7 +34,7 @@
  * Model for the translatable languages.
  */
 
-//{block name=backend/translation/store/language}
+//{block name="backend/translation/store/language"}
 Ext.define('Shopware.apps.Translation.store.Language',
 /** @lends Ext.data.TreeStore# */
 {

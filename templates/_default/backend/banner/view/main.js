@@ -36,7 +36,7 @@
  * View component which features the main panel
  * of the module. It displays the banners.
  */
-//{block name=backend/banner/view/main}
+//{block name="backend/banner/view/main"}
 Ext.define('Shopware.apps.Banner.view.Main', {
     extend: 'Enlight.app.Window',
     layout: 'fit',

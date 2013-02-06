@@ -33,7 +33,7 @@
  *
  * This file represents the main window view
  */
-//{block name=backend/supplier/view/main}
+//{block name="backend/supplier/view/main"}
 Ext.define('Shopware.apps.Supplier.view.Main', {
     extend : 'Enlight.app.Window',
     layout : 'border',

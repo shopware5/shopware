@@ -27,7 +27,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{block name=backend/emotion/view/components/category_teaser}
+//{block name="backend/emotion/view/components/category_teaser"}
 //{namespace name=backend/emotion/view/components/category_teaser}
 Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
