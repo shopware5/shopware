@@ -58,8 +58,8 @@ class TestHelper extends Shopware
      */
     public function __construct()
     {
-        $this->testPath = __DIR__ . $this->DS();
-        $this->oldPath = realpath(__DIR__ . '/../../') . $this->DS();
+        $this->testPath = __DIR__ . '/';
+        $this->oldPath = realpath(__DIR__ . '/../../') . '/';
 
         parent::__construct('testing', $this->TestPath() . 'Configs/Default.php');
 
@@ -68,31 +68,21 @@ class TestHelper extends Shopware
         $this->Bootstrap()->loadResource('Db');
         $this->Bootstrap()->loadResource('Table');
         $this->Bootstrap()->loadResource('Plugins');
-        //$this->Bootstrap()->loadResource('Session');
 
+        // generate attribute models
         $attributeDir = $this->Bootstrap()->Models()->getConfiguration()->getAttributeDir();
-
         $this->Bootstrap()->Models()->getConfiguration()->setAttributeDir($this->oldPath . $attributeDir);
         $this->Bootstrap()->Models()->generateAttributeModels();
 
 
-        $this->Bootstrap()->Plugins()->Core()
-             ->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+        $this->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         /** @var $repository \Shopware\Models\Shop\Repository */
         $repository = $this->Bootstrap()->Models()->getRepository('Shopware\Models\Shop\Shop');
-
         $shop = $repository->getActiveDefault();
         $shop->registerResources($this->Bootstrap());
 
-        Enlight_Components_Test_Selenium_TestCase::setDefaultBrowserUrl(
-            'http://' . $shop->getHost() . $shop->getBasePath() . '/'
-        );
         $_SERVER['HTTP_HOST'] = $shop->getHost();
-
-        Shopware()->Models()->getRepository(
-            'Shopware\Models\Category\Category'
-        )->recover();
     }
 
     /**
@@ -104,8 +94,8 @@ class TestHelper extends Shopware
     public function TestPath($path = null)
     {
         if ($path !== null) {
-            $path = str_replace('_', $this->DS(), $path);
-            return $this->testPath . $path . $this->DS();
+            $path = str_replace('_', '/', $path);
+            return $this->testPath . $path . '/';
         }
         return $this->testPath;
     }
