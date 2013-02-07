@@ -50,7 +50,7 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
         //Login to the frontend
         $this->Request()
                 ->setMethod('POST')
-                ->setPost('email', 'hl@shopware.de')
+                ->setPost('email', 'test@example.com')
                 ->setPost('password', 'shopware');
         $this->dispatch('/account/login');
         $this->assertTrue($this->Response()->isRedirect());

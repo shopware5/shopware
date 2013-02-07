@@ -47,7 +47,7 @@
 			<value>35</value>
 			<value>0</value>
 			<value>1</value>
-			<value>sk@shopware.de</value>
+			<value>test0@example.com</value>
 			<value>9</value>
 			<value>9</value>
 		</row>
@@ -55,7 +55,7 @@
 			<value>71</value>
 			<value>1</value>
 			<value>0</value>
-			<value>andre@schuwo.net</value>
+			<value>test1@example.com</value>
 			<value>0</value>
 			<value>0</value>
 		</row>
@@ -63,7 +63,7 @@
 			<value>72</value>
 			<value>1</value>
 			<value>0</value>
-			<value>andre@schuwo.net</value>
+			<value>test2@example.com</value>
 			<value>0</value>
 			<value>0</value>
 		</row>
@@ -71,7 +71,7 @@
 			<value>70</value>
 			<value>1</value>
 			<value>0</value>
-			<value>andre@schuwo.net</value>
+			<value>test3@example.com</value>
 			<value>9</value>
 			<value>0</value>
 		</row>
@@ -79,7 +79,7 @@
 			<value>69</value>
 			<value>1</value>
 			<value>0</value>
-			<value>andre@schuwo.net</value>
+			<value>test4@example.com</value>
 			<value>9</value>
 			<value>0</value>
 		</row>
@@ -87,7 +87,7 @@
 			<value>65</value>
 			<value>1</value>
 			<value>0</value>
-			<value>ha@shopware.de</value>
+			<value>test5@example.com</value>
 			<value>0</value>
 			<value>0</value>
 		</row>
@@ -95,7 +95,7 @@
 			<value>66</value>
 			<value>1</value>
 			<value>0</value>
-			<value>info@shopware.de</value>
+			<value>test6@example.com</value>
 			<value>9</value>
 			<value>9</value>
 		</row>
@@ -103,7 +103,7 @@
 			<value>67</value>
 			<value>0</value>
 			<value>1</value>
-			<value>as@shopware.de</value>
+			<value>test7@example.com</value>
 			<value>9</value>
 			<value>9</value>
 		</row>
@@ -111,7 +111,7 @@
 			<value>68</value>
 			<value>0</value>
 			<value>1</value>
-			<value>info@shopware.de</value>
+			<value>test8@example.com</value>
 			<value>9</value>
 			<value>9</value>
 		</row>
