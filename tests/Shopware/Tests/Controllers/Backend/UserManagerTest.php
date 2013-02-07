@@ -37,7 +37,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
       'localeId' => 1,
       'roleId' => 1,
       'name' => "PHPUnit Testuser",
-      'email' => 'test@shopware.de',
+      'email' => 'test@example.com',
       'active' => 1,
       'admin' => 1,
       'salted' => 1

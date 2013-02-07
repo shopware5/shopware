@@ -78,27 +78,29 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
         $this->assertTrue($this->View()->success);
+
         $returnData = $this->View()->data;
         $this->assertEquals(2,count($returnData));
         $listingFirstEntry = $returnData[0];
         $listingSecondEntry = $returnData[1];
 
         // cause of the DataSet you can assert fix values
-        $this->assertEquals("ms@shopware.de", $listingFirstEntry["mail"]);
+        $this->assertEquals("test@example.de", $listingFirstEntry["mail"]);
         $this->assertEquals(0, $listingFirstEntry["notified"]);
 
-        $this->assertEquals("ms@shopware.ag", $listingSecondEntry["mail"]);
+        $this->assertEquals("test@example.org", $listingSecondEntry["mail"]);
         $this->assertEquals(1, $listingSecondEntry["notified"]);
-
 
         $params["orderNumber"] = "SW2003";
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
         $this->assertTrue($this->View()->success);
+
         $returnData = $this->View()->data;
-        $this->assertEquals(1,count($returnData));
-        $this->assertEquals("hl@shopware.de", $returnData[0]["mail"]);
-        $this->assertTrue(!empty($returnData[0]["name"]));
-        $this->assertTrue(!empty($returnData[0]["customerId"]));
+
+        $this->assertArrayCount(1, $returnData);
+        $this->assertEquals("test@example.com", $returnData[0]["mail"]);
+        $this->assertNotEmpty($returnData[0]["name"]);
+        $this->assertNotEmpty($returnData[0]["customerId"]);
     }
 }

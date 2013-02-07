@@ -50,7 +50,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
         $sql= "DELETE FROM s_articles_vote";
         Shopware()->Db()->query($sql, array());
         $sql = "INSERT INTO s_articles_vote (`articleID`, `name`, `headline`, `comment`, `points`, `datum`, `active`, `email`, `answer`, `answer_date`)
-                VALUES ('3', 'Patrick', 'Super!', 'Gutes Produkt!', '4', '2012-03-04 16:30:43', '1', 'ps@shopware.de', '', '')";
+                VALUES ('3', 'Patrick', 'Super!', 'Gutes Produkt!', '4', '2012-03-04 16:30:43', '1', 'test@example.com', '', '')";
         Shopware()->Db()->query($sql, array());
 
         $sql = "SELECT * FROM s_articles_vote WHERE articleID = 3 AND name='Patrick'";

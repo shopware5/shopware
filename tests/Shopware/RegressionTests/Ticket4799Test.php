@@ -23,8 +23,6 @@
  */
 
 /**
- * API Manger
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -48,7 +46,7 @@ class Shopware_RegressionTests_Ticket4799 extends Enlight_Components_Test_Plugin
     {
         $this->Request()
             ->setMethod('POST')
-            ->setPost('email', 'hl@shopware.de')
+            ->setPost('email', 'test@example.com')
             ->setPost('password', 'shopware');
         $this->dispatch('/account/login');
         $this->assertTrue($this->Response()->isRedirect());

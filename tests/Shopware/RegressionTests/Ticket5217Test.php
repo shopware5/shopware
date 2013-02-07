@@ -23,8 +23,6 @@
  */
 
 /**
- * API Manger
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -41,8 +39,9 @@ class Shopware_RegressionTests_Ticket5217 extends Enlight_Components_Test_TestCa
         $mail = new Enlight_Components_Mail();
 
         $mail->setBodyText('Test Hallo');
-        $mail->addTo('test@shopware.de');
+        $mail->addTo('test@example.com');
 
-        $mail->send($mailTransport);
+        $mail = $mail->send($mailTransport);
+        $this->assertInstanceOf('Zend_Mail', $mail);
     }
 }

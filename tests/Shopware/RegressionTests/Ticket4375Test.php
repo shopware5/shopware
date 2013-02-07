@@ -23,8 +23,6 @@
  */
 
 /**
- * API Manger
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -37,7 +35,7 @@ class Shopware_RegressionTests_Ticket4375 extends Enlight_Components_Test_Plugin
         $this->Request()
             ->setMethod('POST')
             ->setHeader('REFERER', 'http://wrong.com')
-            ->setPost('email', 'hl@shopware.de')
+            ->setPost('email', 'test@example.com')
             ->setPost('password', 'shopware');
         $this->dispatch('/account/login');
 
@@ -52,7 +50,7 @@ class Shopware_RegressionTests_Ticket4375 extends Enlight_Components_Test_Plugin
 
         $this->Request()
             ->setMethod('POST')
-            ->setPost('email', 'hl@shopware.de')
+            ->setPost('email', 'test@example.com')
             ->setPost('password', 'shopware');
 
         $this->dispatch('/account/login');
@@ -68,9 +66,8 @@ class Shopware_RegressionTests_Ticket4375 extends Enlight_Components_Test_Plugin
             ->setPost('currentPassword', '');
         $this->dispatch('/account/saveAccount');
 
-        if (!is_array($this->View()->sErrorMessages)) {
-            $this->fail("Expected sErrorMessages to be an array indicating an error");
-        }
+        $this->assertInternalType('array', $this->View()->sErrorMessages);
+        $this->assertContains('Das aktuelle Passwort stimmt nicht!', $this->View()->sErrorMessages);
 
         $this->reset();
     }
