@@ -23,8 +23,6 @@
  */
 
 /**
- * API Manger
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -37,10 +35,12 @@ class Shopware_RegressionTests_Ticket5148 extends Enlight_Components_Test_Plugin
     public function testStartDispatch()
     {
         $front = Shopware()->Front();
-        $eventArgs = $this->createEventArgs()
-          ->set('subject', $front);
+        $eventArgs = $this->createEventArgs()->set('subject', $front);
+
         $plugin = Shopware()->Plugins()->Core()->Debug();
         $plugin->Config()->AllowIP = '127.0.0.1';
         $plugin->onStartDispatch($eventArgs);
+
+        $this->assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
     }
 }

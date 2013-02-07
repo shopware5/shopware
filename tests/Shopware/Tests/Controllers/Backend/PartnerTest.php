@@ -327,7 +327,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->assertTrue(!empty($body));
 
         $this->Response()->clearBody();
-        $params["mapCustomerAccountValue"] = "hl@shopware.de";
+        $params["mapCustomerAccountValue"] = "test@example.com";
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();

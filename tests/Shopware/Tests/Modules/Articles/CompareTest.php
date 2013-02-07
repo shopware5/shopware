@@ -92,9 +92,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testDeleteComparison()
     {
-        //TODO - Activate after Model-Update
-        return;
-
         $article = $this->getTestArticleId();
         $this->assertTrue($this->Module()->sAddComparison($article));
         $this->Module()->sDeleteComparison($article);
@@ -106,8 +103,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testDeleteComparisons()
     {
-        //TODO - Activate after Model-Update
-        return;
 
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
@@ -122,8 +117,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testAddComparison()
     {
-        //TODO - Activate after Model-Update
-        return;
 
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertNotEmpty($this->Module()->sGetComparisons());
@@ -134,8 +127,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testGetComparisons()
     {
-        //TODO - Activate after Model-Update
-        return;
 
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
@@ -147,9 +138,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testGetComparisonList()
     {
-        //TODO - Activate after Model-Update
-        return;
-
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertEquals(count($this->Module()->sGetComparisonList()), 2);
