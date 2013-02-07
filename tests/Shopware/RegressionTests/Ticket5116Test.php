@@ -23,8 +23,6 @@
  */
 
 /**
- * API Manger
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -34,20 +32,37 @@ class Shopware_RegressionTests_Ticket5116 extends Enlight_Components_Test_Contro
     /**
      * Test case method
      */
-    public function testTicket5116()
+    public function testDefaultVariant()
+    {
+        // Request a variant that is not the default one
+        $this->Request()
+             ->setMethod('POST');
+
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+
+        $article = $this->View()->getAssign('sArticle');
+
+        $this->assertEquals('SW10201.2', $article['ordernumber']);
+        $this->assertEquals(444, $article['articleDetailsID']);
+    }
+
+    /**
+     * Test case method
+     */
+    public function testNonDefaultVariant()
     {
         // Request a variant that is not the default one
         $this->Request()
              ->setMethod('POST')
              ->setPost('group', array(
-                 6 => 28,
-                 7 => 17,
+                 6 => 15,
+                 7 => 65,
              ));
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
         $article = $this->View()->getAssign('sArticle');
-        $this->assertEquals('SW10201.2.3', $article['ordernumber']);
-        $this->assertEquals(833, $article['articleDetailsID']);
+        $this->assertEquals('SW10201.5', $article['ordernumber']);
+        $this->assertEquals('447', $article['articleDetailsID']);
     }
 }

@@ -62,13 +62,13 @@ EOD;
 Hallo,
 
 ihre Zugangsdaten zu http://demo.shopware.de lauten wie folgt:
-Benutzer: info@shopware.de
+Benutzer: info@example.de
 Passwort: 123muster
 EOD;
 
         $context = array(
             'sShopURL'  => 'http://demo.shopware.de',
-            'sMail'     => 'info@shopware.de',
+            'sMail'     => 'info@example.de',
             'sPassword' => '123muster',
         );
 
@@ -147,13 +147,13 @@ EOD;
 Email von Shopware 3.5 Demo (info@example.com)
 Hallo,
 ihre Zugangsdaten zu http://demo.shopware.de lauten wie folgt:
-Benutzer: info@shopware.de
+Benutzer: info@example.de
 Passwort: 123muster
 EOD;
         $context = array(
             'sConfig'   => array('sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'),
             'sShopURL'  => 'http://demo.shopware.de',
-            'sMail'     => 'info@shopware.de',
+            'sMail'     => 'info@example.de',
             'sPassword' => '123muster',
         );
 

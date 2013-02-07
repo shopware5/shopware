@@ -47,7 +47,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     public $testData = array(
         'name'        => 'Testmail123',
         'fromMail'    => 'Shopware Demoshop',
-        'fromName'    => 'info@shopware.de',
+        'fromName'    => 'test@example.com',
         'subject'     => 'Test Email Subject',
         'content'     => 'Plaintext Content Example',
         'contentHtml' => 'HTML Context Example',
@@ -60,7 +60,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
                     'iso' => 'de',
                     'id'  => 5,
                 ),
-                'sMail' => 'demo@shopware.de',
+                'sMail' => 'test@example.com',
             )
         )
     );
@@ -331,7 +331,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
                     'iso' => 'de',
                     'id'  => 5,
                 ),
-                'sMail' => 'demo@shopware.de',
+                'sMail' => 'test@example.com',
             )
         );
 
@@ -339,7 +339,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
             'sShop'            => 'Shopware',
             'sConfig.lang.iso' => 'de',
             'sConfig.lang.id'  => 5,
-            'sConfig.sMail'   => 'demo@shopware.de'
+            'sConfig.sMail'   => 'test@example.com'
         );
 
         $mail = new Mail();
