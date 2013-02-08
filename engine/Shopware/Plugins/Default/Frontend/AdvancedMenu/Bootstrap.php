@@ -137,7 +137,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         if (!empty($config->caching)) {
             if (!$cache->test($id)) {
-                $tree = $this->getCategoryTree($category, $depth);
+            $tree = $this->getCategoryTree($category, $depth);
                 $cache->save($tree, $id, array('Shopware_Plugin'), $config->cachetime);
             } else {
                 $tree = $cache->load($id);
