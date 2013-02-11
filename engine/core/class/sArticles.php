@@ -1245,7 +1245,7 @@ class sArticles
      * @return array
      */
     public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
-    {
+    { 
         if ($categoryId === null
             && !empty($this->sSYSTEM->_GET["sCategory"])
         ) {
@@ -1257,21 +1257,21 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
+        
         $db = Shopware()->Db();
         $language = $this->translationId;
         $categoryId = (int)$categoryId;
         $activeFilters = (array)$activeFilters;
 
         $addFilterSQL = "";
-        $addFilterWhere = "";
         if (!empty($activeFilters)) {
             foreach ($activeFilters as $key => $filter) {
                 $filter = (int)$filter;
                 if ($filter > 0) {
                     $addFilterSQL .= "
-                        INNER JOIN s_filter_articles fv$filter
-                        ON fv$filter.articleID = a.id
-                        AND fv$filter.valueID = $filter
+                        INNER JOIN s_filter_articles s_filter_articles$filter
+                        ON s_filter_articles$filter.articleID = s_articles.id
+                        AND s_filter_articles$filter.valueID = $filter
                     ";
                 } else {
                     unset($activeFilters[$key]);
@@ -1279,90 +1279,14 @@ class sArticles
             }
         }
 
-        $sql = "
-			SELECT
-				fv.optionID AS id,
-				COUNT(DISTINCT a.id) AS count,
-				fo.id AS optionID,
-				fo.name AS optionName,
-				f.id AS groupID,
-				f.name AS groupName,
-				fv.value AS optionValue,
-				fv.id AS valueID,
-				st.objectdata AS optionNameTranslation,
-				st2.objectdata AS groupNameTranslation,
-				st3.objectdata AS valueTranslation
-			FROM s_categories c, s_categories c2, s_articles_categories ac
-
-			JOIN s_filter_articles fa
-			ON fa.articleID=ac.articleID
-
-		    JOIN s_filter_values fv
-		    ON fv.id=fa.valueID
-
-		    JOIN s_filter_options fo
-		    ON fo.id=fv.optionID
-		    AND fo.filterable = 1
-
-		    JOIN s_articles a
-		    ON a.id=ac.articleID
-		    AND a.active =1
-			AND a.changetime <= NOW()
-
-			JOIN s_filter f
-			ON f.id=a.filtergroupID
-
-			LEFT JOIN s_filter_relations fr
-			ON f.id = fr.groupId AND fo.id = fr.optionId
-
-			LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=fa.articleID
-            AND ag.customergroupID={$this->customerGroupId}
-
-			LEFT JOIN s_core_translations AS st
-			ON st.objecttype='propertyoption'
-			AND st.objectkey=fv.optionID
-			AND st.objectlanguage='$language'
-
-			LEFT JOIN s_core_translations AS st2
-			ON st2.objecttype='propertygroup'
-			AND st2.objectkey=f.id
-			AND st2.objectlanguage='$language'
-
-			LEFT JOIN s_core_translations AS st3
-            ON st3.objecttype='propertyvalue'
-            AND st3.objectkey=fv.id
-            AND st3.objectlanguage='$language'
-
-			$addFilterSQL
-
-			WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
-
-			$addFilterWhere
-
-			GROUP BY fv.id
-			ORDER BY
-			  fr.position,
-			  fo.name ASC,
-			  IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
-			  IF(f.sortmode=2, COUNT(*) , 0) DESC,
-			  IF(f.sortmode=3, fv.position, 0),
-			  fv.value
-		";
-        $getProperties = $db->fetchAll($sql);
-
         $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
             . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
 
         $propertyArray = array();
 
         $propertyValues = array();
+
+        $getProperties = $this->getCategoryFilters($categoryId,$addFilterSQL, $language);
 
         foreach ($getProperties as $property) {
             if (!empty($property['optionNameTranslation'])) {
@@ -4131,4 +4055,267 @@ class sArticles
         // Deprecated
         return false;
     }
+
+    /**
+     * Returns an array with all active filters.
+     *
+     * @param $categoryId
+     * @param $addFilterSQL
+     * @param $language
+     *
+     * @return array
+     */
+    protected function getCategoryFilters($categoryId, $addFilterSQL, $language) {
+
+        //now we create an article count select statement with the already activated filters.
+        $allFilters = $this->getFilters($language);
+        $sort = array();
+        $filters = array();
+
+        //after we have all active filters for the current category, we can select the
+        //article count for each available next filter.
+        foreach($allFilters as $key => $filter) {
+            $valueId = $filter['valueID'];
+
+            //get article count for each possible additional filter value
+            $filter['count'] = Shopware()->Db()->fetchOne(
+                $this->getFilterArticleCountQuery($categoryId, $addFilterSQL, $valueId)
+            );
+
+            if ($filter['count'] <= 0) {
+                continue;
+            }
+            //we have to create a multiple dimensional sort array
+            //with the position of the filter, name of the options, the array index
+            //and the custom filter sort value.
+            $sort[] = array(
+                'filterPosition' => array('value' => $filter['filterPosition'], 'direction' => SORT_ASC),
+                'optionName'     => array('value' => $filter['optionName'],     'direction' => SORT_ASC),
+                'valueSort'      => $this->getFilterSortValue($filter),
+                'optionValue'    => array('value' => $filter['optionValue'],    'direction' => SORT_ASC),
+                'index'          => $key
+            );
+
+            $filters[$key] = $filter;
+        }
+
+        //return the filter array sorted by the multiple dimensional sort array
+        return $this->sortFilters($filters, $sort);
+    }
+
+    /**
+     * Helper function to get the custom filter sort value.
+     *
+     * @param $filter
+     *
+     * @return mixed
+     */
+    protected function getFilterSortValue($filter)
+    {
+        switch($filter['sortmode']) {
+            case 0:     //alphanumeric
+                return array(
+                    'value' => $filter['optionValue'],
+                    'direction' => SORT_ASC
+                );
+                break;
+            case 1:     //numeric
+                return array(
+                    'value' => (float) str_replace(',', '.', $filter['optionValue']),
+                    'direction' => SORT_ASC
+                );
+                break;
+            case 2:     //article count
+                return array(
+                    'value' => $filter['count'],
+                    'direction' => SORT_DESC
+                );
+                break;
+            case 3:     //position
+                return array(
+                    'value' => $filter['valuePosition'],
+                    'direction' => SORT_ASC
+                );
+                break;
+            default:
+                return array(
+                    'value' => $filter['optionValue'],
+                    'direction' => SORT_ASC
+                );
+                break;
+        }
+    }
+
+    /**
+     * Helper function to create the article count query.
+     *
+     * This function is used to select the article count for a single filter value.
+     * In case that the customer already selected, the function expects as $addFilterSql
+     * parameter an already prepared sql inner join condition.
+     * Example:
+     * <pre>
+     *  INNER JOIN s_filter_articles s_filter_articles31
+     *  ON s_filter_articles31.articleID = s_articles.id
+     *  AND s_filter_articles31.valueID = 31
+     * </pre>
+     *
+     * @param $categoryId
+     * @param $addFilterSQL
+     * @param $valueId
+     *
+     * @return string
+     */
+    protected function getFilterArticleCountQuery($categoryId, $addFilterSQL, $valueId)
+    {
+        $countSelect = "
+            SELECT COUNT(DISTINCT s_articles.id)
+            FROM s_articles
+            LEFT JOIN s_articles_avoid_customergroups
+                ON s_articles_avoid_customergroups.articleID = s_articles.id
+                AND s_articles_avoid_customergroups.customergroupID = {$this->customerGroupId}
+            LEFT JOIN s_categories c
+                ON c.id = $categoryId
+            LEFT JOIN s_categories c2
+                ON c2.left >= c.left
+                AND c2.right <= c.right
+                AND c2.active= 1
+            JOIN s_articles_categories ac
+                ON ac.articleID = s_articles.id
+                AND ac.categoryID = c2.id
+
+            $addFilterSQL
+        ";
+
+        $countCondition = "
+            WHERE s_articles_avoid_customergroups.articleID IS NULL
+            AND   s_articles.active = 1
+            AND   s_articles.changetime <= NOW()
+        ";
+
+        $valueSql = "
+            INNER JOIN s_filter_articles s2_filter_articles$valueId
+            ON s2_filter_articles$valueId.articleID = s_articles.id
+            AND s2_filter_articles$valueId.valueID = $valueId
+        ";
+
+        
+        return $countSelect . $valueSql . $countCondition;
+    }
+
+    /**
+     * Helper function get select all filters.
+     *
+     * Returns an array in the following format:
+     * <pre>
+     *   s_filter_values.optionID AS id,
+     *   s_filter.id AS groupID,
+     *   s_filter.name AS groupName,
+     *   s_filter_options.id as optionID,
+     *   s_filter_options.name as optionName,
+     *   s_filter_values.id as valueID,
+     *   s_filter_values.value as optionValue,
+     *   s_filter.sortmode,
+     *   s_filter_values.position as valuePosition,
+     *   s_filter_relations.position as filterPosition
+     * </pre>
+     *
+     * @param $language
+     *
+     * @return array
+     */
+    protected function getFilters($language) {
+        $sql = "
+            SELECT
+                s_filter_values.optionID AS id,
+                s_filter.id AS groupID,
+                s_filter.name AS groupName,
+                s_filter_options.id as optionID,
+                s_filter_options.name as optionName,
+                s_filter_values.id as valueID,
+                s_filter_values.value as optionValue,
+
+                s_filter.sortmode,
+                s_filter_values.position as valuePosition,
+                s_filter_relations.position as filterPosition,
+
+                s_core_translations.objectdata AS optionNameTranslation,
+				s_core_translations2.objectdata AS groupNameTranslation,
+				s_core_translations3.objectdata AS valueTranslation
+
+            FROM   s_filter
+                INNER JOIN s_filter_relations
+                    ON s_filter.id = s_filter_relations.groupID
+                INNER JOIN s_filter_options
+                    ON s_filter_options.id = s_filter_relations.optionID
+                INNER JOIN s_filter_values
+                    ON s_filter_values.optionID = s_filter_options.id
+
+                LEFT JOIN s_core_translations
+                    ON s_core_translations.objecttype='propertyoption'
+                    AND s_core_translations.objectkey=s_filter_values.optionID
+                    AND s_core_translations.objectlanguage='$language'
+
+                LEFT JOIN s_core_translations AS s_core_translations2
+                    ON s_core_translations2.objecttype='propertygroup'
+                    AND s_core_translations2.objectkey=s_filter.id
+                    AND s_core_translations2.objectlanguage='$language'
+
+                LEFT JOIN s_core_translations AS s_core_translations3
+                    ON s_core_translations3.objecttype='propertyvalue'
+                    AND s_core_translations3.objectkey=s_filter_values.id
+                    AND s_core_translations3.objectlanguage='$language'
+
+            GROUP BY s_filter_values.id
+        ";
+
+        return Shopware()->Db()->fetchAll($sql);
+    }
+
+    /**
+     * Helper function to sort the selected category filters.
+     *
+     * This function is used an array multi sort.
+     * The first sort condition is the filter option position which can be
+     * configured over the position field in the property backend module (saved in s_filter_relations.position).
+     * The second sort condition is the name of the options (s_filter_options.name).
+     * This two conditions are required to display the filter panels in the store front each time in the correct order.
+     *
+     * The last parameter is a custom parameter which can be configured for each filter in the s_filter.sortmode
+     * field. This parameter is set over the property backend module in the select box within the grid.
+     *
+     * @param $filters
+     * @param $sort
+     *
+     * @return array
+     */
+    protected function sortFilters($filters, $sort)
+    {
+        $directions = array(
+            'filterPosition' => $sort[0]['filterPosition']['direction'],
+            'optionName'     => $sort[0]['optionName']['direction'],
+            'valueSort'      => $sort[0]['valueSort']['direction'],
+            'optionValue'    => $sort[0]['optionValue']['direction'],
+        );
+
+        foreach($sort as $key => $row) {
+            $filterPosition[$key] = $row['filterPosition']['value'];
+            $optionName[$key] = $row['optionName']['value'];
+            $valueSort[$key] = $row['valueSort']['value'];
+            $optionValue[$key] = $row['optionValue']['value'];
+        }
+
+        array_multisort(
+            $filterPosition, $directions['filterPosition'],
+            $optionName,     $directions['optionName'],
+            $valueSort,      $directions['valueSort'],
+            $optionValue,    $directions['optionValue'],
+        $sort); 
+
+        $sortedFilters = array();
+        foreach($sort as $value) {
+            $sortedFilters[] = $filters[$value['index']];
+        }
+        return $sortedFilters;
+    }
+
 }
