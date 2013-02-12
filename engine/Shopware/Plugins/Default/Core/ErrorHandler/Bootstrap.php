@@ -68,7 +68,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var boolean
      */
-    protected $_registeredErrorHandler = false;
+    protected static $_registeredErrorHandler = false;
 
     /**
      * @var array
@@ -118,13 +118,13 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     public function registerErrorHandler($errorLevel = E_ALL)
     {
         // Only register once.  Avoids loop issues if it gets registered twice.
-        if ($this->_registeredErrorHandler) {
+        if (self::$_registeredErrorHandler) {
             return $this;
         }
 
         $this->_origErrorHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
 
-        $this->_registeredErrorHandler = true;
+        self::$_registeredErrorHandler = true;
         return $this;
     }
 
