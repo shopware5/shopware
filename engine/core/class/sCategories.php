@@ -218,7 +218,7 @@ class sCategories
         }
 
         $result = $this->repository
-            ->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth, true)
+            ->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth)
             ->getArrayResult();
 
         $categories = array();

@@ -288,10 +288,9 @@ class Repository extends TreeRepository
      * @param $id | category id
      * @param   null|int $customerGroupId
      * @param   null|int $depth
-     * @param bool $onlyWithActiveParent | returns only child's when all parents are active
      * @return  \Doctrine\ORM\Query
      */
-    public function getActiveChildrenByIdQuery($id, $customerGroupId = null, $depth = null, $onlyWithActiveParent = false)
+    public function getActiveChildrenByIdQuery($id, $customerGroupId = null, $depth = null)
     {
         $node = $this->find($id);
 
@@ -301,21 +300,22 @@ class Repository extends TreeRepository
             ->andWhere('c.right < ?1')
             ->setParameter(1, $node->getRight());
 
-        if($onlyWithActiveParent) {
-            $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
-            $subQueryBuilder->from($this->getEntityName(), 'c2')
-                    ->select('count(c2)')
-                    ->where('c2.left < c.left')
-                    ->andWhere('c2.right > c.right')
-                    ->andWhere('c2.level < c.level')
-                    ->andWhere('c2.active != :true');
+        //this subquery consider that only categories with active parents are selected
+        $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $subQueryBuilder->from($this->getEntityName(), 'c2')
+                ->select('count(c2)')
+                ->where('c2.left < c.left')
+                ->andWhere('c2.right > c.right')
+                ->andWhere('c2.level < c.level')
+                ->andWhere('c2.active != :true')
+                ->setFirstResult(0)
+                ->setMaxResults(1);
 
-            $subQueryDQL = $subQueryBuilder->getDQL();
+        $subQueryDQL = $subQueryBuilder->getDQL();
 
-            $builder->addSelect('(' . $subQueryDQL . ') as parentNotActive');
-            $builder->andHaving('parentNotActive = 0');
-            $builder->setParameter('true', true);
-        }
+        $builder->addSelect('(' . $subQueryDQL . ') as parentNotActive');
+        $builder->andHaving('parentNotActive = 0');
+        $builder->setParameter('true', true);
 
 
         if($depth !== null) {

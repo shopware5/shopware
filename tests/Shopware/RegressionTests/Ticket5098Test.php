@@ -23,7 +23,7 @@
  */
 
 /**
- * API Manger
+ * Regression Test for Ticket 5098
  *
  * @category  Shopware
  * @package   Shopware\Tests
@@ -68,16 +68,16 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
         $category = $this->getCategoryById($allCategories, 5);
         //search for Tees und Zubehör
         $result = $this->getCategoryById($category["sub"],11);
-        $this->assertTrue(empty($result));
+        $this->assertEmpty($result);
 
 
         //if the parent category is inactive the child's should not be displayed
         //category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
         $result = $this->getCategoryById($category["sub"],12);
-        $this->assertTrue(empty($result));
+        $this->assertEmpty($result);
 
         $result = $this->getCategoryById($category["sub"],13);
-        $this->assertTrue(empty($result));
+        $this->assertEmpty($result);
 
     }
 
@@ -97,24 +97,11 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
         //This category should always been in this structure because it always active
         $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
         //This category should not be in this array because the category is inactive
-        $this->assertTrue(!$this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
-
-        //This categories should be in the array because the option $onlyWithActiveParent is default on false
-        $this->assertTrue($this->isCategoryNameInArray("Tees",$categoryArray));
-        $this->assertTrue($this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
-
-
-
-        $categoryArray = $repository->getActiveChildrenByIdQuery(3, 1, 3, true)->getArrayResult();
-
-        //This category should always been in this structure because it always active
-        $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
-        //This category should not be in this array because the category is inactive
-        $this->assertTrue(!$this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
+        $this->assertFalse($this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
 
         //This categories should not be in the array because the option $onlyWithActiveParent is set to true so children will only be returned if the parent is active
-        $this->assertTrue(!$this->isCategoryNameInArray("Tees",$categoryArray));
-        $this->assertTrue(!$this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
+        $this->assertFalse($this->isCategoryNameInArray("Tees",$categoryArray));
+        $this->assertFalse($this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
 
     }
 
