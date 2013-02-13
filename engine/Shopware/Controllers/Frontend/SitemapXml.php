@@ -88,7 +88,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     public function readCategoryUrls($parentId)
     {
         $categories = $this->repository
-            ->getActiveChildrenByIdQuery($parentId, null, true)
+            ->getActiveChildrenByIdQuery($parentId, null, null, true)
             ->getArrayResult();
 
         foreach ($categories as $category) {

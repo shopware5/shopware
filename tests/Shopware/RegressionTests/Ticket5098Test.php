@@ -57,9 +57,10 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
     }
 
     /**
-     * Test Category Structure
+     * Test the sGetWholeCategoryTree method.
+     * This should now only return children when all parents are active
      */
-    public function testCategoryStructure()
+    public function testGetWholeCategoryTree()
     {
         $allCategories = Shopware()->Modules()->Categories()->sGetWholeCategoryTree(3,3);
 
@@ -78,14 +79,42 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
         $result = $this->getCategoryById($category["sub"],13);
         $this->assertTrue(empty($result));
 
+    }
+
+    /**
+     * Test if the Query returns depending on the options the right children
+     */
+    public function testGetActiveChildrenByIdQuery()
+    {
+
+        /**
+         * @var $repository Shopware\Models\Category\Repository
+         */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+
+        $categoryArray = $repository->getActiveChildrenByIdQuery(3, 1, 3)->getArrayResult();
+
+        //This category should always been in this structure because it always active
+        $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
+        //This category should not be in this array because the category is inactive
+        $this->assertTrue(!$this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
+
+        //This categories should be in the array because the option $onlyWithActiveParent is default on false
+        $this->assertTrue($this->isCategoryNameInArray("Tees",$categoryArray));
+        $this->assertTrue($this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
 
 
-        //todo@ms: write test for
-//        $result = $this->repository->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth, true)->getArrayResult(); and
-//        $result = $this->repository->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth)->getArrayResult(); and
 
-        //todo@ms: write test for sitemap and sitemap xml
+        $categoryArray = $repository->getActiveChildrenByIdQuery(3, 1, 3, true)->getArrayResult();
 
+        //This category should always been in this structure because it always active
+        $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
+        //This category should not be in this array because the category is inactive
+        $this->assertTrue(!$this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
+
+        //This categories should not be in the array because the option $onlyWithActiveParent is set to true so children will only be returned if the parent is active
+        $this->assertTrue(!$this->isCategoryNameInArray("Tees",$categoryArray));
+        $this->assertTrue(!$this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
 
     }
 
@@ -104,6 +133,23 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
             }
         }
         return null;
+    }
+
+    /**
+     * Helper method to check if an category name can be found in the given array
+     *
+     * @param $categoryName
+     * @param $categoryArray
+     * @return bool
+     */
+    private function isCategoryNameInArray($categoryName, $categoryArray) {
+        foreach ($categoryArray as $category) {
+            $category = $category["category"];
+            if($category["name"] == $categoryName) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
