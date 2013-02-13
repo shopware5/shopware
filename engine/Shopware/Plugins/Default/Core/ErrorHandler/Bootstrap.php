@@ -129,11 +129,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         // Only register once.  Avoids loop issues if it gets registered twice.
         if (self::$_registeredErrorHandler) {
+            set_error_handler(array($this, 'errorHandler'), $errorLevel);
             return $this;
         }
 
         self::$_origErrorHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
-
         self::$_registeredErrorHandler = true;
 
         return $this;
