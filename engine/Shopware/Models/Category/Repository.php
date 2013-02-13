@@ -307,7 +307,7 @@ class Repository extends TreeRepository
                 ->where('c2.left < c.left')
                 ->andWhere('c2.right > c.right')
                 ->andWhere('c2.level < c.level')
-                ->andWhere('c2.active != :true')
+                ->andWhere('c2.active != true')
                 ->setFirstResult(0)
                 ->setMaxResults(1);
 
@@ -315,7 +315,6 @@ class Repository extends TreeRepository
 
         $builder->addSelect('(' . $subQueryDQL . ') as parentNotActive');
         $builder->andHaving('parentNotActive = 0');
-        $builder->setParameter('true', true);
 
 
         if($depth !== null) {
