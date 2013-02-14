@@ -642,7 +642,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return $this->forward('downloads');
         }
 
-        if (Shopware()->Config()->get("sREDIRECTDOWNLOAD")) {
+        if (Shopware()->Config()->get("redirectDownload")) {
             $this->redirect($this->Request()->getBasePath() . '/' .  $file);
         } else {
             @set_time_limit(0);
@@ -653,10 +653,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-            $fp = fopen($filePath, 'rb');
-            while ( !feof($fp) && connection_status() == 0 ) {
-                echo fread($fp, 8192);
-            }
+            readfile($filePath);
         }
 	}
 
