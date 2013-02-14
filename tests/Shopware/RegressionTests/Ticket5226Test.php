@@ -30,6 +30,25 @@
 class Shopware_RegressionTests_Ticket5226 extends Enlight_Components_Test_Controller_TestCase
 {
     /**
+     * adds and writes a test file
+     */
+    public function setUp() {
+        parent::setUp();
+
+        $loremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+        sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+        et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+
+        $filePath = Shopware()->OldPath() . 'files/'.Shopware()->Config()->get('sESDKEY');
+        mkdir($filePath, 0777);
+        file_put_contents($filePath . '/shopware_packshot_community_edition_72dpi_rgb.png', $loremIpsum);
+    }
+
+    /**
      * Test if the download goes threw php
      */
     public function testDownloadESDViaPhp()
@@ -49,7 +68,7 @@ class Shopware_RegressionTests_Ticket5226 extends Enlight_Components_Test_Contro
         $this->assertEquals("Content-Disposition",$header[1]["name"]);
         $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"',$header[1]["value"]);
         $this->assertEquals('Content-Length',$header[2]["name"]);
-        $this->assertGreaterThan(160000,intval($header[2]["value"]));
+        $this->assertGreaterThan(630,intval($header[2]["value"]));
         $this->assertEquals(strlen($this->Response()->getBody()),intval($header[2]["value"]));
     }
 
