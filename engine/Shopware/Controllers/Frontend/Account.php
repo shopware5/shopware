@@ -635,12 +635,26 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
 		$file = 'files/'.Shopware()->Config()->get('sESDKEY').'/'.$download['file'];
 
-		if(!file_exists(Shopware()->OldPath().$file))
-		{
-			$this->View()->sErrorCode = 2;
-			return $this->forward('downloads');
-		}
-		$this->redirect($file);
+        $filePath = Shopware()->OldPath() . $file;
+
+        if (!file_exists($filePath)) {
+            $this->View()->sErrorCode = 2;
+            return $this->forward('downloads');
+        }
+
+        if (Shopware()->Config()->get("redirectDownload")) {
+            $this->redirect($this->Request()->getBasePath() . '/' .  $file);
+        } else {
+            @set_time_limit(0);
+            $this->Response()
+                    ->setHeader('Content-Type', 'application/octet-stream')
+                    ->setHeader('Content-Disposition', 'attachment; filename="'.$download['file'].'"')
+                    ->setHeader('Content-Length', filesize($filePath));
+
+            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+            readfile($filePath);
+        }
 	}
 
 	/**
