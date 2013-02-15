@@ -135,14 +135,15 @@ Ext.define('Shopware.apps.Order.controller.List', {
             callback:function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
-                    rawData = record.getProxy().getReader().rawData;
+                    proxyReader = record.getProxy().getReader(),
+                    rawData = proxyReader.rawData;
 
                 if ( operation.success === true ) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.changeStatus.successMessage, me.snippets.growlMessage);
                     record.set('invoiceAmount', rawData.data.invoiceAmount);
 
-                    //Check if a status mail created and create a model with the returned data and open the mail window.
-                    if (!Ext.isEmpty(rawData.data.mail)) {
+                    //Check if a status mail is created and create a model with the returned data and open the mail window.
+                    if (!Ext.isEmpty(rawData.data.mail) && !Ext.isEmpty(proxyReader.jsonData.data.mail.content)) {
                         var mail = Ext.create('Shopware.apps.Order.model.Mail', rawData.data.mail);
                         me.showOrderMail(mail)
                     }
