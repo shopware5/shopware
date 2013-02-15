@@ -188,8 +188,6 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                 }
             }
         });
-
-
     }
 });
 //{/block}
