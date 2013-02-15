@@ -105,6 +105,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return false;
         }
 
+        // Exception for Pre-Installed Plugins
+        if ($currentVersion == "1" && $updateVersion == "1.0.0") {
+            return false;
+        }
+
         return version_compare($updateVersion, $currentVersion, '>');
     }
 
