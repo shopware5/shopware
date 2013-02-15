@@ -385,6 +385,8 @@ class sConfigurator
         $articleData["shippingtime"] = empty($selected['shippingtime']) ? $articleData['shippingtime'] : $selected['shippingtime'];
         $articleData["shippingfree"] = isset($selected['shippingfree']) ? $selected['shippingfree'] : $articleData['shippingfree'];
 
+        $articleData["sReleasedate"] = $articleData["releasedate"];
+
         if (!empty($selected['attributes'])) {
             foreach($selected['attributes'] as $key => $value) {
                 $articleData[$key] = $value;
