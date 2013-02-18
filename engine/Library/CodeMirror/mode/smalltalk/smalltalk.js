@@ -1,4 +1,4 @@
-CodeMirror.defineMode('smalltalk', function(config, modeConfig) {
+CodeMirror.defineMode('smalltalk', function(config) {
 
 	var specialChars = /[+\-/\\*~<>=@%|&?!.:;^]/;
 	var keywords = /true|false|nil|self|super|thisContext/;
@@ -63,7 +63,7 @@ CodeMirror.defineMode('smalltalk', function(config, modeConfig) {
 
 		} else if (/\d/.test(aChar)) {
 			stream.eatWhile(/[\w\d]/);
-			token.name = 'number'
+			token.name = 'number';
 
 		} else if (/[\w_]/.test(aChar)) {
 			stream.eatWhile(/[\w\d_]/);
@@ -86,7 +86,7 @@ CodeMirror.defineMode('smalltalk', function(config, modeConfig) {
 		return new Token('string', stream.eat('\'') ? context.parent : context, false);
 	};
 
-	var nextTemporaries = function(stream, context, state) {
+	var nextTemporaries = function(stream, context) {
 		var token = new Token(null, context, false);
 		var aChar = stream.next();
 
@@ -100,7 +100,7 @@ CodeMirror.defineMode('smalltalk', function(config, modeConfig) {
 		}
 
 		return token;
-	}
+	};
 
 	return {
 		startState: function() {

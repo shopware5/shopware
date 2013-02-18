@@ -1,4 +1,4 @@
-CodeMirror.defineMode("go", function(config, parserConfig) {
+CodeMirror.defineMode("go", function(config) {
   var indentUnit = config.indentUnit;
 
   var keywords = {
@@ -18,11 +18,6 @@ CodeMirror.defineMode("go", function(config, parserConfig) {
     "cap":true, "close":true, "complex":true, "copy":true, "imag":true,
     "len":true, "make":true, "new":true, "panic":true, "print":true,
     "println":true, "real":true, "recover":true
-  };
-
-  var blockKeywords = {
-    "else":true, "for":true, "func":true, "if":true, "interface":true,
-    "select":true, "struct":true, "switch":true
   };
 
   var isOperatorChar = /[+\-*&^%:=<>!|\/]/;
@@ -47,7 +42,7 @@ CodeMirror.defineMode("go", function(config, parserConfig) {
     }
     if (/[\[\]{}\(\),;\:\.]/.test(ch)) {
       curPunc = ch;
-      return null
+      return null;
     }
     if (ch == "/") {
       if (stream.eat("*")) {
@@ -70,7 +65,7 @@ CodeMirror.defineMode("go", function(config, parserConfig) {
       return "keyword";
     }
     if (atoms.propertyIsEnumerable(cur)) return "atom";
-    return "word";
+    return "variable";
   }
 
   function tokenString(quote) {
@@ -144,7 +139,7 @@ CodeMirror.defineMode("go", function(config, parserConfig) {
       if (curPunc == "{") pushContext(state, stream.column(), "}");
       else if (curPunc == "[") pushContext(state, stream.column(), "]");
       else if (curPunc == "(") pushContext(state, stream.column(), ")");
-      else if (curPunc == "case") ctx.type = "case"
+      else if (curPunc == "case") ctx.type = "case";
       else if (curPunc == "}" && ctx.type == "}") ctx = popContext(state);
       else if (curPunc == ctx.type) popContext(state);
       state.startOfLine = false;
