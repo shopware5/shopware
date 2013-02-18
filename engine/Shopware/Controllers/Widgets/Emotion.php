@@ -462,7 +462,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $perPage = "$offset,$limit";
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS a.id AS id
+            SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
             FROM s_articles a, s_articles_categories ac,s_categories c,s_categories c2
             WHERE a.active=1
             AND a.id=ac.articleID
