@@ -453,9 +453,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 	 */
 	protected function setOrder(Shopware_Models_Document_Order $order){
 		$this->_order = $order;
-		if(floatval(phpversion()) >= 5.3){
-			$this->_order->order->currencyID = 1;
-		}
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         // "language" actually refers to a language-shop and not to a locale
