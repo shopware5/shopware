@@ -15,7 +15,7 @@ CodeMirror.defineMode("mysql", function(config) {
   var ops = wordRegexp(["str", "lang", "langmatches", "datatype", "bound", "sameterm", "isiri", "isuri",
                         "isblank", "isliteral", "union", "a"]);
   var keywords = wordRegexp([
-  	('ACCESSIBLE'),('ALTER'),('AS'),('BEFORE'),('BINARY'),('BY'),('CASE'),('CHARACTER'),('COLUMN'),('CONTINUE'),('CROSS'),('CURRENT_TIMESTAMP'),('DATABASE'),('DAY_MICROSECOND'),('DEC'),('DEFAULT'),
+  ('ACCESSIBLE'),('ALTER'),('AS'),('BEFORE'),('BINARY'),('BY'),('CASE'),('CHARACTER'),('COLUMN'),('CONTINUE'),('CROSS'),('CURRENT_TIMESTAMP'),('DATABASE'),('DAY_MICROSECOND'),('DEC'),('DEFAULT'),
 	('DESC'),('DISTINCT'),('DOUBLE'),('EACH'),('ENCLOSED'),('EXIT'),('FETCH'),('FLOAT8'),('FOREIGN'),('GRANT'),('HIGH_PRIORITY'),('HOUR_SECOND'),('IN'),('INNER'),('INSERT'),('INT2'),('INT8'),
 	('INTO'),('JOIN'),('KILL'),('LEFT'),('LINEAR'),('LOCALTIME'),('LONG'),('LOOP'),('MATCH'),('MEDIUMTEXT'),('MINUTE_SECOND'),('NATURAL'),('NULL'),('OPTIMIZE'),('OR'),('OUTER'),('PRIMARY'),
 	('RANGE'),('READ_WRITE'),('REGEXP'),('REPEAT'),('RESTRICT'),('RIGHT'),('SCHEMAS'),('SENSITIVE'),('SHOW'),('SPECIFIC'),('SQLSTATE'),('SQL_CALC_FOUND_ROWS'),('STARTING'),('TERMINATED'),
@@ -56,14 +56,13 @@ CodeMirror.defineMode("mysql", function(config) {
       curPunc = ch;
       return null;
     }
-    else if (ch == "-") {
-		ch2 = stream.next();
-		if(ch2=="-")
-		{
-			stream.skipToEnd();
-			return "comment";
-		}
-
+    else if (ch == "-" && stream.eat("-")) {
+      stream.skipToEnd();
+      return "comment";
+    }
+    else if (ch == "/" && stream.eat("*")) {
+      state.tokenize = tokenComment;
+      return state.tokenize(stream, state);
     }
     else if (operatorChars.test(ch)) {
       stream.eatWhile(operatorChars);
@@ -79,7 +78,7 @@ CodeMirror.defineMode("mysql", function(config) {
         stream.eatWhile(/[\w\d_\-]/);
         return "atom";
       }
-      var word = stream.current(), type;
+      var word = stream.current();
       if (ops.test(word))
         return null;
       else if (keywords.test(word))
@@ -117,6 +116,22 @@ CodeMirror.defineMode("mysql", function(config) {
     };
   }
 
+  function tokenComment(stream, state) {
+    for (;;) {
+      if (stream.skipTo("*")) {
+        stream.next();
+        if (stream.eat("/")) {
+          state.tokenize = tokenBase;
+          break;
+        }
+      } else {
+        stream.skipToEnd();
+        break;
+      }
+    }
+    return "comment";
+  }
+
 
   function pushContext(state, type, col) {
     state.context = {prev: state.context, indent: state.indent, col: col, type: type};
@@ -127,7 +142,7 @@ CodeMirror.defineMode("mysql", function(config) {
   }
 
   return {
-    startState: function(base) {
+    startState: function() {
       return {tokenize: tokenBase,
               context: null,
               indent: 0,
