@@ -1,0 +1,4 @@
+From: feature/sw-4052-backend-performance-js
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/base/bootstrap.js
+	MODIFY|templates/_default/backend/base/bootstrap.js
