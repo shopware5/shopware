@@ -1448,9 +1448,9 @@ jQuery(document).ready(function ($) {
             var links = config._slideNavigation.find('a');
 
             links.bind('click', function (event) {
-                config._activeSlide = parseInt($(this).text(), 10);
+                config._activeSlide = parseInt($(this).text(), 10) - 1;
                 window.clearInterval(config._rotateInterval);
-                $.ajaxSlider.animateContainerTo(config._activeSlide - 1, config);
+                $.ajaxSlider.animateContainerTo(config._activeSlide, config);
             });
 
         },
