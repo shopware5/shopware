@@ -1,6 +1,5 @@
-CodeMirror.defineMode("plsql", function(config, parserConfig) {
-  var indentUnit       = config.indentUnit,
-      keywords         = parserConfig.keywords,
+CodeMirror.defineMode("plsql", function(_config, parserConfig) {
+  var keywords         = parserConfig.keywords,
       functions        = parserConfig.functions,
       types            = parserConfig.types,
       sqlplus          = parserConfig.sqlplus,
@@ -72,8 +71,8 @@ CodeMirror.defineMode("plsql", function(config, parserConfig) {
       if (types && types.propertyIsEnumerable(stream.current().toLowerCase())) return ret("keyword", "variable-2");
       // is it one of the listed sqlplus keywords?
       if (sqlplus && sqlplus.propertyIsEnumerable(stream.current().toLowerCase())) return ret("keyword", "variable-3");
-      // default: just a "word"
-      return ret("word", "plsql-word");
+      // default: just a "variable"
+      return ret("word", "variable");
     }
   }
 
@@ -105,7 +104,7 @@ CodeMirror.defineMode("plsql", function(config, parserConfig) {
   // Interface
 
   return {
-    startState: function(basecolumn) {
+    startState: function() {
       return {
         tokenize: tokenBase,
         startOfLine: true

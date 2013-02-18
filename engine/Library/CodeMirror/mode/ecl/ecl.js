@@ -12,17 +12,6 @@ CodeMirror.defineMode("ecl", function(config) {
     return "meta";
   }
 
-  function tokenAtString(stream, state) {
-    var next;
-    while ((next = stream.next()) != null) {
-      if (next == '"' && !stream.eat('"')) {
-        state.tokenize = null;
-        break;
-      }
-    }
-    return "string";
-  }
-
   var indentUnit = config.indentUnit;
   var keyword = words("abs acos allnodes ascii asin asstring atan atan2 ave case choose choosen choosesets clustersize combine correlation cos cosh count covariance cron dataset dedup define denormalize distribute distributed distribution ebcdic enth error evaluate event eventextra eventname exists exp failcode failmessage fetch fromunicode getisvalid global graph group hash hash32 hash64 hashcrc hashmd5 having if index intformat isvalid iterate join keyunicode length library limit ln local log loop map matched matchlength matchposition matchtext matchunicode max merge mergejoin min nolocal nonempty normalize parse pipe power preload process project pull random range rank ranked realformat recordof regexfind regexreplace regroup rejected rollup round roundup row rowdiff sample set sin sinh sizeof soapcall sort sorted sqrt stepped stored sum table tan tanh thisnode topn tounicode transfer trim truncate typeof ungroup unicodeorder variance which workunit xmldecode xmlencode xmltext xmlunicode");
   var variable = words("apply assert build buildindex evaluate fail keydiff keypatch loadxml nothor notify output parallel sequential soapcall wait");
@@ -49,7 +38,7 @@ CodeMirror.defineMode("ecl", function(config) {
     }
     if (/[\[\]{}\(\),;\:\.]/.test(ch)) {
       curPunc = ch;
-      return null
+      return null;
     }
     if (/\d/.test(ch)) {
       stream.eatWhile(/[\w\.]/);
@@ -100,7 +89,7 @@ CodeMirror.defineMode("ecl", function(config) {
 	    }
     }
     if (atoms.propertyIsEnumerable(cur)) return "atom";
-    return "word";
+    return null;
   }
 
   function tokenString(quote) {
@@ -200,4 +189,4 @@ CodeMirror.defineMode("ecl", function(config) {
   };
 });
 
-CodeMirror.defineMIME("text/x-ecl");
+CodeMirror.defineMIME("text/x-ecl", "ecl");
