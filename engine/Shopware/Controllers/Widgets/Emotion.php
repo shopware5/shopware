@@ -330,22 +330,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getManufacturerSlider($data, $category, $element)
     {
 
-        /**
-         *   Array
-        (
-        [manufacturer_type] => manufacturers_by_cat
-        [manufacturer_category] => 3
-        [selected_manufacturers] =>
-        [manufacturer_slider_title] => Test
-        [manufacturer_slider_navigation] => 1
-        [manufacturer_slider_arrows] => 1
-        [manufacturer_slider_numbers] => 1
-        [manufacturer_slider_scrollspeed] => 500
-        [manufacturer_slider_rotation] => 1
-        [manufacturer_slider_select] => horizontal
-        )
-         */
-
         if (empty($data["manufacturer_type"])) {
             return $data;
         }
@@ -495,44 +479,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         return array("values" => $values, "pages" => $pages);
 
-        /**
-         *  [data] => Array
-        (
-        [objectId] => 072b030ba126b2f4b2374f342be9ed44
-        [article_slider_type] => newcomer
-        [selected_articles] =>
-        [article_slider_max_number] => 16
-        [article_slider_title] => Meu
-        [article_slider_navigation] =>
-        [article_slider_arrows] =>
-        [article_slider_numbers] =>
-        [article_slider_scrollspeed] => 500
-        [article_slider_rotation] =>
-        [article_slider_select] => vertical
-        )
-         */
     }
 
     private function getProductTopSeller($category, $offset = 0, $limit)
     {
-        /**
-         *
-         *  [data] => Array
-        (
-        [objectId] => 7f39f8317fbdb1988ef4c628eba02591
-        [article_slider_type] => topseller
-        [selected_articles] =>
-        [article_slider_max_number] => 16
-        [article_slider_title] => Top
-        [article_slider_navigation] =>
-        [article_slider_arrows] =>
-        [article_slider_numbers] =>
-        [article_slider_scrollspeed] => 500
-        [article_slider_rotation] =>
-        [article_slider_select] => vertical
-        )
-
-         */
         $perPage = "$offset,$limit";
 
         $sql = "
