@@ -95,7 +95,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Enlight_Components_Test_
 
     public function testCreateShouldBeSuccessful()
     {
-        // required field name is missing
         $testData = array(
             'name' => 'Testartikel',
             'description' => 'Test description',
