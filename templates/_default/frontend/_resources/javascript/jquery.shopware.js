@@ -962,6 +962,7 @@ jQuery(document).ready(function ($) {
                         } else {
                             config._slidesCount = pages.text();
                         }
+                        config._slidesCount = ~~(1*config._slidesCount);
                         pages.remove();
 
                         //Handling arrows
