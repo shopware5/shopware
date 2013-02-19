@@ -71,6 +71,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
             store.getProxy().extraParams.orderID = me.subApplication.params.orderId;
             store.load({
                 callback:function (records) {
+                    store.getProxy().extraParams.orderID = null;
                     var order = records[0];
                     me.showOrder(order);
                 }
