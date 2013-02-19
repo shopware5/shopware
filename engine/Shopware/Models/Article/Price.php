@@ -20,23 +20,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping AS ORM;
 
 /**
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Models\Article
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_prices")
@@ -152,12 +146,13 @@ class Price extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article|array|null $article
+     * @param  \Shopware\Models\Article\Article|array|null $article
      * @return \Shopware\Models\Article\Price
      */
     public function setArticle($article)
     {
         $this->article = $article;
+
         return $this;
     }
 
@@ -172,19 +167,20 @@ class Price extends ModelEntity
     }
 
     /**
-     * Set priceGroup
+     * Set customerGroup
      *
-     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @param  \Shopware\Models\Customer\Group $customerGroup
      * @return Price
      */
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = $customerGroup;
+
         return $this;
     }
 
     /**
-     * Get priceGroup
+     * Get customerGroup
      *
      * @return \Shopware\Models\Customer\Group
      */
@@ -194,36 +190,15 @@ class Price extends ModelEntity
     }
 
     /**
-     * Set priceGroup
-     *
-     * @param string $priceGroup
-     * @return Price
-     */
-    public function setPriceGroup($priceGroup)
-    {
-        $this->priceGroup = $priceGroup;
-        return $this;
-    }
-
-    /**
-     * Get priceGroup
-     *
-     * @return string
-     */
-    public function getPriceGroup()
-    {
-        return $this->priceGroup;
-    }
-
-    /**
      * Set from
      *
-     * @param integer $from
+     * @param  integer $from
      * @return Price
      */
     public function setFrom($from)
     {
         $this->from = $from;
+
         return $this;
     }
 
@@ -240,7 +215,7 @@ class Price extends ModelEntity
     /**
      * Set to
      *
-     * @param int|null $to
+     * @param  int|null $to
      * @return Price
      */
     public function setTo($to)
@@ -249,6 +224,7 @@ class Price extends ModelEntity
             $to = 'beliebig';
         }
         $this->to = $to;
+
         return $this;
     }
 
@@ -265,12 +241,13 @@ class Price extends ModelEntity
     /**
      * Set article detail id
      *
-     * @param Detail $detail
+     * @param  Detail $detail
      * @return Price
      */
     public function setDetail($detail)
     {
         $this->detail = $detail;
+
         return $this;
     }
 
@@ -287,12 +264,13 @@ class Price extends ModelEntity
     /**
      * Set price
      *
-     * @param float $price
+     * @param  float $price
      * @return Price
      */
     public function setPrice($price)
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -309,12 +287,13 @@ class Price extends ModelEntity
     /**
      * Set pseudoPrice
      *
-     * @param float $pseudoPrice
+     * @param  float $pseudoPrice
      * @return Price
      */
     public function setPseudoPrice($pseudoPrice)
     {
         $this->pseudoPrice = $pseudoPrice;
+
         return $this;
     }
 
@@ -331,12 +310,13 @@ class Price extends ModelEntity
     /**
      * Set basePrice
      *
-     * @param float $basePrice
+     * @param  float $basePrice
      * @return Price
      */
     public function setBasePrice($basePrice)
     {
         $this->basePrice = $basePrice;
+
         return $this;
     }
 
@@ -353,12 +333,13 @@ class Price extends ModelEntity
     /**
      * Set percent
      *
-     * @param float $percent
+     * @param  float $percent
      * @return Price
      */
     public function setPercent($percent)
     {
         $this->percent = $percent;
+
         return $this;
     }
 
@@ -381,7 +362,7 @@ class Price extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticlePrice|array|null $attribute
+     * @param  \Shopware\Models\Attribute\ArticlePrice|array|null $attribute
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setAttribute($attribute)
