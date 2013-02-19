@@ -136,15 +136,17 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             }
             $this->postDispatch();
         }
-
-        Enlight_Application::Instance()->Events()->notify(
-            __CLASS__ . '_PostDispatch_' . $this->controller_name,
-            $args
-        );
-        Enlight_Application::Instance()->Events()->notify(
-            __CLASS__ . '_PostDispatch',
-            $args
-        );
+        
+        if ($this->Request()->isDispatched()) {
+            Enlight_Application::Instance()->Events()->notify(
+                __CLASS__ . '_PostDispatch_' . $this->controller_name,
+                $args
+            );
+            Enlight_Application::Instance()->Events()->notify(
+                __CLASS__ . '_PostDispatch',
+                $args
+            );
+        }
     }
 
     /**
