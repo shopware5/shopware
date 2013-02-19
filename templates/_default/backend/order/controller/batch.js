@@ -272,6 +272,9 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             //display finish update progress bar and display finish message
             progressBar.updateProgress((index+1)/orders.length, me.snippets.done.message, true);
 
+            //reload the main order store to show the new generated documents on the detail page
+            me.subApplication.getStore('Order').load();
+
             //display shopware notification message that the batch process finished
             Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message, me.snippets.growlMessage);
 
