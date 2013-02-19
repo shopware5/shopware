@@ -558,6 +558,7 @@ class Detail extends ModelEntity
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() - $this->quantity);
             Shopware()->Models()->persist($article);
+            Shopware()->Models()->flush();
         }
     }
 
