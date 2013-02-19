@@ -538,7 +538,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 $article = array(
                     'L_NUMBER' . $key   => $item['ordernumber'],
                     'L_NAME' . $key     => $item['articlename'],
-                    'L_AMT' . $key      => number_format($amount / $item['quantity'], 2, '.', ''),
+                    'L_AMT' . $key      => $amount / $item['quantity'],
                     'L_QTY' . $key      => $item['quantity'],
 //                    'L_TAXAMT' . $key   => $tax
                 );
