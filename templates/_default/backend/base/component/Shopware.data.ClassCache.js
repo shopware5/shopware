@@ -115,7 +115,6 @@ Ext.define('Shopware.data.ClassCache',
 
         if(me.hasStorageSupport(storageType)) {
             me.storage = storageType;
-            return true;
         }
 
         if(me.hasListeners.storagechange) {
