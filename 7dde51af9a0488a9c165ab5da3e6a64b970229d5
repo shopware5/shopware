@@ -1,0 +1,4 @@
+From: feature/sw-5262-localstorage-class-cache-component
+To: feature/sw-4052-backend-performance-js
+Conflict: (content) Merge conflict in templates/_default/backend/base/bootstrap.js
+	MODIFY|templates/_default/backend/base/bootstrap.js
