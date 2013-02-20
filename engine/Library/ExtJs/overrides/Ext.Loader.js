@@ -117,7 +117,6 @@
 
                     // Re-new the cacheId
                     classCache.add('cacheId', disableCachingValue);
-                    console.log('clear cache and re-new cacheId');
                 }
 
                 // Is the class already cached...
