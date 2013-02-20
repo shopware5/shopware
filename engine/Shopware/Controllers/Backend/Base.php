@@ -304,6 +304,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         ));
 
         $builder->addFilter($this->Request()->getParam('filter', array()));
+
+        //use the query param because this is the default in ext js
+        $searchQuery = $this->Request()->getParam('query', array());
+        //search for values
+        if (!empty($searchQuery)) {
+            $builder->andWhere('s.name LIKE :searchQuery')
+                    ->setParameter('searchQuery', '%' . $searchQuery . '%');
+        }
+
+        
         $builder->addOrderBy($this->Request()->getParam('sort', array()));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
