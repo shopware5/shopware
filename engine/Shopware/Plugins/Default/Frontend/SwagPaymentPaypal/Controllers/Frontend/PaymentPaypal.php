@@ -528,6 +528,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 } else {
                     $amount = str_replace(',', '.', $item['amount']);
                 }
+                // Tax amount calculation / Not needed anymore
 //                if(empty($amount) || empty($user['additional']['charge_vat'])) {
 //                    $tax = 0;
 //                } elseif(!empty($item['tax'])) {
@@ -542,11 +543,6 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                     'L_QTY' . $key      => $item['quantity'],
 //                    'L_TAXAMT' . $key   => $tax
                 );
-//            if($item['modus'] == 4) {
-//                $article['type'] = 'handling';
-//            } else {
-//                $article['type'] = $price >= 0 ? 'goods' : 'voucher';
-//            }
                 $params = array_merge($params, $article);
             }
         }
