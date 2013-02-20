@@ -37,7 +37,7 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
-(function() {
+(function(classCache) {
     /**
      * Currently open loader requests
      *
@@ -95,7 +95,7 @@
         Ext.iterate(namespaces, function(key, namespace){
             var path = namespace.path,
                 cacheKey, disableCachingValue = this.getConfig('disableCachingValue'),
-                requestMethod = "post";
+                requestMethod = "post", cacheId = classCache.get('cacheId');
 
             // Get request of main subapplication app.js
             if (namespace.files.length <= 1 && namespace.files[0].indexOf('?file') !== -1) {
@@ -110,22 +110,24 @@
 
             // Support for localStorage
             cacheKey = getRequestKey(path, namespace.files);
-            try {
-                if(typeof(Storage)!=="undefined" && typeof(localStorage)!=="undefined") {
+            if(classCache.hasStorageSupport()) {
 
-                    // Clear localstorage if cachekey doesn't match
-                    if(localStorage.hasOwnProperty('cacheId') && localStorage.cacheId != disableCachingValue) {
-                        localStorage.clear();
-                    }
+                if(cacheId && cacheId != disableCachingValue) {
+                    classCache.clear();
 
-                    localStorage.cacheId = disableCachingValue;
-                    if(localStorage[cacheKey]) {
-                        Ext.globalEval(localStorage[cacheKey] + "\n//@ sourceURL=" + path);
-                        this.onFilesLoaded(namespace.classNames);
-                        return;
-                    }
+                    // Re-new the cacheId
+                    classCache.add('cacheId', disableCachingValue);
+                    console.log('clear cache and re-new cacheId');
                 }
-            } catch(e) { }
+
+                // Is the class already cached...
+                var data = classCache.get(cacheKey);
+                if(data) {
+                    Ext.globalEval(data + "\n//@ sourceURL=" + path);
+                    this.onFilesLoaded(namespace.classNames);
+                    return;
+                }
+            }
 
 
             if (this.syncModeEnabled) {
@@ -151,8 +153,10 @@
                     Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
 
                     this.onFilesLoaded(namespace.classNames);
-                    if(cacheKey) {
-                        localStorage[cacheKey] = response.responseText;
+
+                    // Add class to the class cache
+                    if(cacheKey && classCache.hasStorageSupport()) {
+                        classCache.add(cacheKey, response.responseText);
                     }
 
                     // Remove handled request from requestMap
@@ -162,7 +166,7 @@
                 },
                 failure: function(xhr) {
                     cleanIfAsyncRequestExists(cacheKey);
-                    // Rerequest classes. The old callbacks stays inside the
+                    // Re-request classes. The old callbacks stays inside the
                     // queue and will be triggered when loading is ready.
                     Ext.require(namespace.classNames);
                 }
@@ -218,7 +222,7 @@
             possibleClassNames = [],
             possibleClassName, classNames = [],
             namespaces = {}, separatedPath, prefix,
-            i, j, ln, subLn, cacheKey;
+            i, j, ln, subLn;
 
         if(!this.getConfig('disableCachingValue')) {
             this.setConfig('disableCachingValue', Ext.Date.now());
@@ -372,4 +376,4 @@
         return this;
     };
 
-})();
+})(Shopware.data.ClassCache);

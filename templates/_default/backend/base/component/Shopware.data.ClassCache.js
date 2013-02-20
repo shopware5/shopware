@@ -39,6 +39,10 @@
  * later usage. The used storage could be changed using the `setStorage`
  * method. Selectable are `localStorage` or `localSession`
  *
+ * The cache invalidation is unfortunately triggered through "Smarty". If
+ * the localStorage reaches the size limit the oldest entry (first entry in the storage)
+ * will be removed. After that the `add` method calls itself to retry to add the entry.
+ *
  * @example - Add entry to the storage
  * <code>
  *   Shopware.data.ClassCache.add('key', 'value');
@@ -279,11 +283,17 @@ Ext.define('Shopware.data.ClassCache',
      * @return { Boolean }
      */
     add: function(key, data) {
-        var me = this, item;
+        var me = this, item, index;
 
         try {
             item = window[me.storage].setItem(key, data);
-            me.map[me.getCount() - 1] = key;
+            index = me.indexOf(data);
+            if(index) {
+                me.map[index] = key;
+            } else {
+                me.map[me.getCount() - 1] = key;
+            }
+
         } catch(err) {
             me._clearLastItem();
             me.add.call(me, key, data);
@@ -316,7 +326,7 @@ Ext.define('Shopware.data.ClassCache',
     /**
      * Removes the passed item from the collection.
      *
-     * @param { Object|String|Number } item - The item which shoulb be removed
+     * @param { Object|String|Number } item - The item which should be removed
      * @returns { Boolean }
      */
     remove: function(item) {
@@ -376,7 +386,7 @@ Ext.define('Shopware.data.ClassCache',
      */
     _clearLastItem: function() {
         var me = this,
-            lastItem = me.last();
+            lastItem = me.first();
         return me.remove(lastItem);
     }
 });
