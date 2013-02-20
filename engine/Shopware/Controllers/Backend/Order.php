@@ -747,7 +747,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['attribute'] = $data['attribute'][0];
             $position->fromArray($data);
             $position->setOrder($order);
-            $position->setStatus($order->getOrderStatus());
 
             Shopware()->Models()->flush();
 
