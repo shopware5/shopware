@@ -171,11 +171,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Enlight_Components_Test_
                 )
             ),
 
-            'images' => array(
-                array('link' => 'http://lorempixel.com/640/480/food/'),
-                array('link' => 'http://lorempixel.com/640/480/food/')
-            ),
-
             'variants' => array(
                 array(
                     'number' => 'swTEST.variant.' . uniqid(),
