@@ -60,9 +60,15 @@ Ext.override(Ext.data.proxy.Server, {
                 me.fireEvent('exception', this, response, operation);
             }
         } else {
-            me.setException(operation, response);
-            me.fireEvent('exception', this, response, operation);
-            Ext.MessageBox.alert(operation.error.status + ' - ' + operation.error.statusText, Ext.util.Format.stripTags(response.responseText));
+            //user has been logged out reload the backend
+            if(response.status == 401) {
+                window.location.reload()
+            }
+            else {
+                me.setException(operation, response);
+                me.fireEvent('exception', this, response, operation);
+                Ext.MessageBox.alert(operation.error.status + ' - ' + operation.error.statusText, Ext.util.Format.stripTags(response.responseText));
+            }
         }
 
         //this callback is the one that was passed to the 'read' or 'write' function above

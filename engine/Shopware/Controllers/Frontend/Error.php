@@ -79,15 +79,6 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
         $error = $this->Request()->getParam('error_handler');
 
         if (!empty($error)) {
-            switch ($error->type) {
-                case 404:
-                    $this->Response()->setHttpResponseCode(404);
-                    break;
-                default:
-                    $this->Response()->setHttpResponseCode(503);
-                    break;
-            }
-
             if ($this->Front()->getParam('showException')) {
                 $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
                 $replace = array('', Enlight()->App() . '/', '');
@@ -104,6 +95,17 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                     'error_file' => $error_file,
                     'error_trace' => $error_trace
                 ));
+            }
+
+            $code = $error->exception->getCode();
+            switch ($code) {
+                case 404:
+                case 401:
+                    $this->Response()->setHttpResponseCode($code);
+                    break;
+                default:
+                    $this->Response()->setHttpResponseCode(503);
+                    break;
             }
 
             if($this->View()->getAssign('success') !== null) {
