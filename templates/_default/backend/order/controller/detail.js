@@ -247,10 +247,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             columns = editor.editor.items.items,
             articleId = e.record.get('articleId');
 
-        if(e.record.get('mode') == 0){
             columns[1].setValue(e.record.get('articleNumber'));
             columns[2].setValue(e.record.get('articleName'));
-        }
 
     },
 
