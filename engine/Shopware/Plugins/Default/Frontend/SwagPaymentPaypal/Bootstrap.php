@@ -605,7 +605,7 @@ class Shopware_Plugins_Frontend_SwagPaymentPaypal_Bootstrap extends Shopware_Com
      */
     public function getVersion()
     {
-        return '2.1.1';
+        return '2.1.2';
     }
 
     /**
