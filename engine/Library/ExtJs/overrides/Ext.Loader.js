@@ -26,10 +26,6 @@
  * This bends the controller/model/store/view paths
  * to our shopware default paths.
  *
- * TODO@STP - Check numPendingFiles if the calucation is correct
- *
- * TODO@STP - Evaluate if the preloader could load the code without evaluate the code itself. Only put it in the local storage and
- * evaluate it if it is "required" the next time.
  *
  * @category   Enlight
  * @package    Enlight_ExtJs
@@ -361,6 +357,8 @@
      *
      * @param { String/Object } name See { @link Ext.Function#flexSetter flexSetter }
      * @param { String } path See { @link Ext.Function#flexSetter flexSetter }
+     * @param bulk
+     * @param suffix
      * @return { Ext.Loader } this
      * @method
      */
