@@ -473,8 +473,7 @@ Ext.define('Enlight.app.SubApplication', {
 
 Ext.Class.registerPreprocessor('shopware.subappLoader', function(cls, data, hooks, fn) {
     var className = Ext.getClassName(cls),
-        // TODO@STP: Maybe a more specific match could be used here (eg. ^Enlight\.controller\.|...)
-        match = className.match(/^(.*)\.controller\.|(.*)\.apps\./),
+        match = className.match(/^(Shopware|Enlight)\.controller\.|(.*)\.apps\./),
         requires = [],
         modules = ['model', 'view', 'store', 'controller'],
         prefix;
@@ -503,16 +502,6 @@ Ext.Class.registerPreprocessor('shopware.subappLoader', function(cls, data, hook
         for (j = 0,subLn = items.length; j < subLn; j++) {
             item = items[j];
 
-            // we check the ClassManager here because the following
-            // logic assumes a specific organization of folders
-
-            /*
-            if(!Ext.isIE) {
-             if (Ext.ClassManager.isCreated(item)) {
-                 continue;
-             }
-            }
-*/
             prefix = Ext.Loader.getPrefix(item);
             if (prefix === '' || prefix === item) {
                 requires.push(data.name + '.' + module + '.' + item);
