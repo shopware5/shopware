@@ -367,6 +367,7 @@ Ext.define('Shopware.container.Viewport',
 			width = Ext.Element.getViewportWidth() * (me.getDesktopCount() || 1),
 			height = Ext.Element.getViewportHeight();
 
+
 		me.el.setSize(width, height);
 		me.fireEvent('resizeviewport', me, width, height);
 
@@ -391,12 +392,11 @@ Ext.define('Shopware.container.Viewport',
 		var me = this,
 			desktopSwitcher;
 
-        var task;
 		desktopSwitcher = Ext.create('Ext.view.View', {
 			renderTo: Ext.getBody(),
 			store: me.desktopSwitcherStore,
 			style: 'position: fixed; bottom: 18px; left: 0; text-align: center; z-index: 10',
-            width: '100%',
+            width: Ext.Element.getViewportWidth(),
             cls: Ext.baseCSSPrefix + 'desktop-switcher-outer-container',
 			itemSelector: '.x-desktop-switcher-control',
 			tpl: [
@@ -682,32 +682,53 @@ Ext.define('Shopware.container.Viewport',
         // Retrieve all active Windows
         var activeWindows = Shopware.app.Application.getActiveWindows();
 
-		html.animate({
-			duration: me.scrollDuration,
-			easing: me.scrollEasing,
-			listeners: {
-				beforeanimate: function() {
-					Ext.suspendLayouts();
-					me.fireEvent('beforescroll', me, this, index);
+        if(Ext.supports.CSS3DTransform) {
+            me.desktops.each(function(desktop) {
+                var el = desktop.getEl().dom,
+                    prefix = me._getVendorPrefix('transform', 'style');
 
-                    Ext.each(activeWindows, function(window) {
-                        window.el.shadow.hide();
-                    });
+                el.style[prefix] = 'translate3d(-' + width * index +'px, 0, 0)';
+            });
 
-				},
-				afteranimate: function() {
-					Ext.resumeLayouts(true);
-					me.activeDesktop = index;
-					me.fireEvent('afterscroll', me, this, index);
-					me.updateDesktopSwitcher();
+            var timeout = window.setTimeout(function() {
+                window.clearTimeout(timeout);
+                timeout = null;
 
-                    Ext.each(activeWindows, function(window) {
-                        window.el.shadow.show(window.el);
-                    });
-				}
-			},
-			to: { left: -(width * index) }
-		});
+                me.activeDesktop = index;
+                me.fireEvent('afterscroll', me, this, index);
+
+                window.setTimeout(function() {
+                    me.updateDesktopSwitcher();
+                }, 10);
+            }, 375);
+        } else {
+            html.animate({
+                duration: me.scrollDuration,
+                easing: me.scrollEasing,
+                listeners: {
+                    beforeanimate: function() {
+                        Ext.suspendLayouts();
+                        me.fireEvent('beforescroll', me, this, index);
+
+                        Ext.each(activeWindows, function(window) {
+                            window.getEl().shadow.hide();
+                        });
+
+                    },
+                    afteranimate: function() {
+                        Ext.resumeLayouts(true);
+                        me.activeDesktop = index;
+                        me.fireEvent('afterscroll', me, this, index);
+                        me.updateDesktopSwitcher();
+
+                        Ext.each(activeWindows, function(window) {
+                            window.el.shadow.show(window.el);
+                        });
+                    }
+                },
+                to: { left: -(width * index) }
+            });
+        }
 
 		return true;
 	},
@@ -813,5 +834,42 @@ Ext.define('Shopware.container.Viewport',
                 container.setPosition(position.x, position.y, false);
             }
         });
+    },
+
+    /**
+     * Tests if a property has a vendor prefix and returns the properly
+     * property.
+     *
+     * @param { String } prop - Property to test
+     * @param { String } propGroup - Group where the test property is located
+     * @returns { * } If the property was found, it will be returned. Otherwise false
+     * @private
+     */
+    _getVendorPrefix: function(prop, propGroup) {
+        var testEl = document.createElement('fakeElement'),
+            prefixes = ['', 'webkit', 'moz', 'ms', 'o'],
+            i, prefix, testProp;
+
+        // Modify the testEl
+        propGroup = propGroup || '';
+        if(propGroup.length) {
+            testEl = testEl[propGroup];
+        }
+
+        // Loop through the vendor prefixes
+        for(i in prefixes) {
+            prefix = prefixes[i];
+
+            // Vendor prefix property
+            if(prefix.length) {
+                prop = prop.charAt(0).toUpperCase() + prop.slice(1);
+            }
+            testProp = prefix + prop;
+
+            if(testEl[testProp] !== undefined) {
+                return testProp;
+            }
+        }
+        return false;
     }
 });
