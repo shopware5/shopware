@@ -190,6 +190,8 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.registerEvents();
         me.callParent(arguments);
         me.changeTitle();
+
+        me.on('storesLoaded', me.onStoresLoaded, me)
     },
 
     /**
@@ -211,7 +213,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
              * @event
              * @param [object] The detail window
              */
-            'cancel'
+            'cancel',
+
+            'storesLoaded'
         );
     },
 
@@ -224,15 +228,60 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createMainTabPanel: function() {
         var me = this;
 
+        me.categoryTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.categoryTab,
+            disabled: true,
+            layout: 'border',
+            name: 'category'
+        });
+
+        me.imageTab = Ext.create('Ext.container.Container', {
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            title: me.snippets.imageTab,
+            name: 'image',
+            disabled: true,
+            cls: Ext.baseCSSPrefix + 'image-tab-container'
+        });
+
+        me.variantTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.variantTab,
+            disabled: true,
+            layout: 'fit',
+            name: 'variant-tab',
+            disabled: true
+        });
+
+        me.esdTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.esdTab,
+            disabled: true,
+            name: 'esd-tab',
+            layout: 'card',
+            deferredRender: true,
+            disabled: true
+        });
+
+        me.statisticTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.statisticTab,
+            disabled: true,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            }
+        });
+
         return me.mainTab = Ext.create('Ext.tab.Panel', {
             name: 'main-tab-panel',
             items: [
                 me.createBaseTab(),
-                me.createCategoryTab(),
-                me.createImageTab(),
-                me.createVariantTab(),
-                me.createEsdTab(),
-                me.createStatisticTab()
+                me.categoryTab,
+                me.imageTab,
+                me.variantTab,
+                me.esdTab,
+                me.statisticTab
             ]
         });
     },
@@ -286,12 +335,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createDescriptionFieldSet(),
                 me.createBasePriceFieldSet(),
                 me.createSettingsFieldSet(),
-                me.createPropertiesFieldSet(),
-                me.attributeFieldSet
+                me.createPropertiesFieldSet()
             ]
         });
-
-        me.detailForm.loadRecord(me.article);
 
         return me.detailContainer = Ext.create('Ext.container.Container', {
             layout: 'border',
@@ -337,14 +383,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return Shopware.apps.Article.view.detail.Base
      */
     createBaseFieldSet: function() {
-        var me = this;
-        return Ext.create('Shopware.apps.Article.view.detail.Base', {
-            article: me.article,
-            supplierStore: me.supplierStore,
-            taxStore: me.taxStore,
-            templateStore: me.templateStore,
-            priceGroupStore: me.priceGroupStore
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Base');
     },
 
     /**
@@ -353,10 +392,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createPriceFieldSet: function() {
         var me = this;
 
-        return Ext.create('Shopware.apps.Article.view.detail.Prices', {
-            customerGroupStore: me.customerGroupStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Prices');
     },
 
 
@@ -451,7 +487,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
     /**
      * Creates the tab panel tab for the category selection.
-     * @return Ext.container.Container
+     * @return Array
      */
     createCategoryTab: function() {
         var me = this, rightContainer;
@@ -504,20 +540,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             ]
         });
 
-        return Ext.create('Ext.container.Container', {
-            layout: 'border',
-            name: 'category',
-            title: me.snippets.categoryTab,
-            items: [
-                me.categoryTree,
-                rightContainer
-            ]
-        });
+        return [ me.categoryTree, rightContainer ];
     },
 
     /**
      * Creates the image tab panel.
-     * @return Ext.container.Container
+     * @return Array
      */
     createImageTab: function() {
         var me = this, leftContainer;
@@ -551,19 +579,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             ]
         });
 
-        return Ext.create('Ext.container.Container', {
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            title: me.snippets.imageTab,
-            name: 'image',
-            cls: Ext.baseCSSPrefix + 'image-tab-container',
-            items: [
-                leftContainer,
-                me.imageInfo
-            ]
-        });
+        return [ leftContainer, me.imageInfo ];
     },
 
     /**
@@ -660,13 +676,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             margin: 10
         });
 
-        return Ext.create('Ext.panel.Panel', {
-            title: me.snippets.variantTab,
-            name: 'variant-tab',
-            disabled: (me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null),
-            layout: 'fit',
-            items: [ me.configuratorTab ]
-        });
+        return me.configuratorTab;
     },
 
 
@@ -743,29 +753,15 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             article: me.article
         });
 
-        return Ext.create('Ext.panel.Panel', {
-            name: 'esd-tab',
-            layout: 'card',
-            disabled: (me.article.get('id') === null),
-            deferredRender: true,
-            items: [ me.esdListing ],
-            title: me.snippets.esdTab
-        });
+        return me.esdListing;
     },
 
     /**
      * Creates the statistic tab which contains a graph for the article sales.
-     * @return Ext.container.Container
+     * @return Array
      */
     createStatisticTab: function() {
         var me = this;
-
-        if (me.article.get('id') === null) {
-            return Ext.create('Ext.container.Container', {
-                title: me.snippets.statisticTab,
-                disabled: true
-            });
-        }
 
         var statisticStore = Ext.create('Shopware.apps.Article.store.Statistic');
         var chartStore = Ext.create('Shopware.apps.Article.store.Statistic');
@@ -773,7 +769,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         statisticStore.getProxy().extraParams.articleId = me.article.get('id');
         chartStore.getProxy().extraParams.articleId = me.article.get('id');
         chartStore.getProxy().extraParams.chart = true;
-
 
         var list = Ext.create('Shopware.apps.Article.view.statistics.List', {
             flex: 1,
@@ -788,16 +783,33 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             store: chartStore
         });
 
-        return Ext.create('Ext.container.Container', {
-            title: me.snippets.statisticTab,
-            layout: {
-                align: 'stretch',
-                padding: 10,
-                type: 'vbox'
-            },
-            items: [ chart, list ],
-            disabled: false
-        });
+        return [ chart, list ];
+    },
+
+    onStoresLoaded: function() {
+        var me = this;
+
+        me.detailForm.add(me.attributeFieldSet);
+
+        // TODO@STP - Adjust the timeout
+        window.setTimeout(function() {
+            me.detailForm.loadRecord(me.article);
+        }, 10);
+
+        me.categoryTab.add(me.createCategoryTab());
+        me.categoryTab.setDisabled(false);
+
+        me.imageTab.add(me.createImageTab());
+        me.imageTab.setDisabled(false);
+
+        me.variantTab.add(me.createVariantTab());
+        me.variantTab.setDisabled((me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null))
+
+        me.esdTab.add(me.createEsdTab());
+        me.esdTab.setDisabled((me.article.get('id') === null));
+
+        me.statisticTab.add(me.createStatisticTab());
+        me.statisticTab.setDisabled(me.article.get('id') === null);
     }
 
 });

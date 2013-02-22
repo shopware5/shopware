@@ -58,6 +58,12 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
      */
     animCollapse: Ext.isChrome,
 
+    collapsible: true,
+
+    collapsed: true,
+
+    title: 'Artikel-Optionen',
+
     /**
      * Defines the component region
      */
@@ -92,13 +98,16 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
 	 */
     initComponent:function () {
         var me = this;
-        me.items = me.createElements();
+
+        if(me.article) {
+            me.items = me.createElements();
+        }
         me.callParent(arguments);
     },
 
     /**
      * Creates the elements for the sidebar container.
-     * @return array
+     * @return object
      */
     createElements: function() {
         var me = this;

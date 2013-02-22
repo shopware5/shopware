@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 allowBlank: false
             }
         });
-        columns = columns.concat(me.createDynamicColumns());
+        //columns = columns.concat(me.createDynamicColumns());
         columns = columns.concat(standardColumns);
         return columns;
     },
