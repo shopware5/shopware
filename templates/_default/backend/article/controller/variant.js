@@ -1780,9 +1780,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      */
     onEditVariant: function(record) {
         var me = this,
-            listing = me.getVariantListing();
+            listing = me.getVariantListing(),
+            attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
 
-        var attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
         me.getView('variant.Detail').create({
             record: record,
             article: me.subApplication.article,

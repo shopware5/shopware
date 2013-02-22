@@ -406,12 +406,13 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
      * Creates the field set for the price tabs and grids.
      */
     createPriceFieldSet: function() {
-        var me = this;
+        var me = this, priceFieldset = Ext.create('Shopware.apps.Article.view.detail.Prices'),
+            stores = [];
 
-        return Ext.create('Shopware.apps.Article.view.detail.Prices', {
-            customerGroupStore: me.customerGroupStore,
-            article: me.record
-        });
+        stores['customerGroups'] = me.customerGroupStore;
+        priceFieldset.onStoresLoaded(me.record, stores);
+
+        return priceFieldset;
     },
 
     /**
