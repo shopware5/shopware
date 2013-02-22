@@ -417,10 +417,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             },
             title: me.snippets.basePrice.title,
             items: [
-                {
-                    xtype: 'combobox',
-
-                }, {
+                me.unitComboBox, {
                     xtype: 'numberfield',
                     submitLocaleSeparator: false,
                     decimalPrecision: 4,
@@ -692,11 +689,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.variantListing = Ext.create('Shopware.apps.Article.view.variant.List', {
             border: false,
-            //article: me.article,
-            store: me.variantStore,
-            //unitStore: me.unitStore,
-            //configuratorGroupStore: me.configuratorGroupStore,
-            //customerGroupStore: me.customerGroupStore
+            store: me.variantStore
         });
 
         return Ext.create('Ext.container.Container', {
@@ -785,7 +778,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
     onStoresLoaded: function(article, stores) {
         var me = this;
-
+        me.article = article;
         me.detailForm.add(me.attributeFieldSet);
 
         me.unitComboBox.bindStore(stores['unit']);
@@ -808,6 +801,11 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.statisticTab.add(me.createStatisticTab());
         me.statisticTab.setDisabled(me.article.get('id') === null);
+
+        me.variantListing.unitStore = stores['unit'];
+        me.variantListing.configuratorGroupStore = stores['configuratorGroups'];
+        me.variantListing.customerGroupStore = stores['customerGroups'];
+        me.variantListing.article = article;
     }
 
 });
