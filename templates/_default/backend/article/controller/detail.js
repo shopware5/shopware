@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             mainWindow = me.getMainWindow(),
             article = me.subApplication.article,
-            variantTab = me.getVariantTab();
+            variantTab = mainWindow.variantTab;
 
         variantTab.setDisabled((article.get('id') === null || newValue === false || article.get('configuratorSetId') === null));
     },
@@ -351,8 +351,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         mainWindow.detailForm.loadRecord(article);
 
         me.loadPropertyStore(article);
-
-        console.log(mainWindow);
 
         esdTab.setDisabled(article.get('id') === null);
         esdListing.esdStore.getProxy().extraParams.articleId = article.get('id');
