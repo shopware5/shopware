@@ -692,11 +692,11 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.variantListing = Ext.create('Shopware.apps.Article.view.variant.List', {
             border: false,
-            article: me.article,
+            //article: me.article,
             store: me.variantStore,
-            unitStore: me.unitStore,
-            configuratorGroupStore: me.configuratorGroupStore,
-            customerGroupStore: me.customerGroupStore
+            //unitStore: me.unitStore,
+            //configuratorGroupStore: me.configuratorGroupStore,
+            //customerGroupStore: me.customerGroupStore
         });
 
         return Ext.create('Ext.container.Container', {
