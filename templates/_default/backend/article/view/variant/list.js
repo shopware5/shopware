@@ -103,7 +103,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * @return void
      */
     initComponent:function () {
-        var me = this;
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.storesloaded, me);
 
         me.registerEvents();
         me.selModel = me.getGridSelModel();
@@ -265,8 +268,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return [array] grid columns
      */
-    getColumns: function () {
+    getColumns: function (dynamic) {
         var me = this, standardColumns, columns = [];
+
+        dynamic = dynamic || false;
 
         standardColumns = [
             {
@@ -351,7 +356,11 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 allowBlank: false
             }
         });
-        //columns = columns.concat(me.createDynamicColumns());
+
+        if(dynamic) {
+            console.log('we are dynamic');
+            columns = columns.concat(me.createDynamicColumns());
+        }
         columns = columns.concat(standardColumns);
         return columns;
     },
@@ -551,8 +560,16 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             dock:'bottom',
             displayInfo:true
         });
-    }
+    },
 
+    storesloaded: function(article, stores) {
+        var me = this;
+        debugger;
+
+        console.log('onStoresLoaded');
+        me.configuratorGroupStore = stores['customerGroups'];
+        me.reconfigure(me.getStore(), me.getColumns(true));
+    }
 
 });
 //{/block}

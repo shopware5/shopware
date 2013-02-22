@@ -171,27 +171,7 @@ Ext.define('Shopware.apps.Article', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'Esd', 'Statistic' ],
-
-    /**
-     * Returns the main application window for this is expected
-     * by the Enlight.app.SubApplication class.
-     * The class sets a new event listener on the "destroy" event of
-     * the main application window to perform the destroying of the
-     * whole sub application when the user closes the main application window.
-     *
-     * This method will be called when all dependencies are solved and
-     * all member controllers, models, views and stores are initialized.
-     *
-     * @private
-     * @return [object] mainWindow - the main application window based on Enlight.app.Window
-     */
-    launch: function() {
-//        var me = this,
-//            mainController = me.getController('Main');
-//
-//        return mainController.mainWindow;
-    }
+    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'Esd', 'Statistic' ]
 });
 //{/block}
 
