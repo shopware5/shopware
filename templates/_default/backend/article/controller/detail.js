@@ -329,13 +329,14 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      */
     reconfigureAssociationComponents: function(article) {
         var me = this,
-            variantTab = me.getVariantTab(),
-            esdTab = me.getEsdTab(),
+            mainWindow = me.getMainWindow(),
+            variantTab = mainWindow.variantTab,
+            esdTab = mainWindow.esdTab,
             esdListing = me.getEsdListing(),
             variantListing = me.getVariantListing(),
             configurator = me.getConfigurator(),
-            priceFieldSet = me.getPriceFieldSet(),
-            mainWindow = me.getMainWindow();
+            priceFieldSet = me.getPriceFieldSet();
+
 
         if (article === null && me.subApplication.article) {
             me.reloadArticle(me.subApplication.article.get('id'));
@@ -350,6 +351,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         mainWindow.detailForm.loadRecord(article);
 
         me.loadPropertyStore(article);
+
+        console.log(mainWindow);
 
         esdTab.setDisabled(article.get('id') === null);
         esdListing.esdStore.getProxy().extraParams.articleId = article.get('id');

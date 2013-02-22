@@ -359,23 +359,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Creates the field set for the article property configuration.
      */
     createPropertiesFieldSet: function() {
-        var me = this;
-
-        return Ext.create('Shopware.apps.Article.view.detail.Properties', {
-            propertyStore: me.propertyStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Properties');
     },
 
     /**
      * Creates the field set for the article setting configuration.
      */
     createSettingsFieldSet: function() {
-        var me = this;
-        return Ext.create('Shopware.apps.Article.view.detail.Settings', {
-            customerGroupStore: me.customerGroupStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Settings');
     },
 
     /**
@@ -403,6 +394,19 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createBasePriceFieldSet: function() {
         var me = this;
 
+        me.unitComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'mainDetail[unitId]',
+            queryMode: 'local',
+            fieldLabel: me.snippets.basePrice.unit,
+            emptyText: me.snippets.basePrice.empty,
+            displayField: 'name',
+            editable:false,
+            valueField: 'id',
+            labelWidth: 155,
+            anchor: '100%',
+            xtype: 'textfield'
+        });
+
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             cls: Ext.baseCSSPrefix + 'article-base-price-field-set',
@@ -415,14 +419,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             items: [
                 {
                     xtype: 'combobox',
-                    name: 'mainDetail[unitId]',
-                    queryMode: 'local',
-                    fieldLabel: me.snippets.basePrice.unit,
-                    emptyText: me.snippets.basePrice.empty,
-                    store: me.unitStore,
-                    displayField: 'name',
-                    editable:false,
-                    valueField: 'id'
+
                 }, {
                     xtype: 'numberfield',
                     submitLocaleSeparator: false,
@@ -786,12 +783,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         return [ chart, list ];
     },
 
-    onStoresLoaded: function() {
+    onStoresLoaded: function(article, stores) {
         var me = this;
 
         me.detailForm.add(me.attributeFieldSet);
 
-        // TODO@STP - Adjust the timeout
+        me.unitComboBox.bindStore(stores['unit']);
+
         window.setTimeout(function() {
             me.detailForm.loadRecord(me.article);
         }, 10);
