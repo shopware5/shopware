@@ -97,11 +97,11 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
 
-        if(me.article) {
-            me.items = me.createElements();
-        }
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
+
         me.callParent(arguments);
     },
 
@@ -139,6 +139,12 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
                 animate: Ext.isChrome
             }
         ];
+    },
+
+    onStoresLoaded: function(article) {
+        var me = this;
+        me.article = article;
+        me.add(me.createElements());
     }
 });
 //{/block}

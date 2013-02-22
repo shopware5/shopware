@@ -256,6 +256,8 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         me.taxComboBox.bindStore(stores['taxes']);
         me.templateComboBox.bindStore(stores['templates']);
         me.priceGroupComboBox.bindStore(stores['priceGroups']);
+
+        me.numberField.validationRequestParam = article.getMainDetail().first().get('id');
     },
 
     /**
