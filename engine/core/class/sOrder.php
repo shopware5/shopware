@@ -821,8 +821,6 @@ class sOrder
     {
 		$variables = Enlight()->Events()->filter('Shopware_Modules_Order_SendMail_FilterVariables', $variables, array('subject' => $this));
 
-
-
         $context = array(
             'sOrderDetails' => $variables["sOrderDetails"],
 
@@ -869,16 +867,52 @@ class sOrder
             $context['sBookingID'] = $variables["sBookingID"];
         }
 
-        $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
+        $mail = null;
+
+        if ($event = Enlight_Application::Instance()->Events()->notifyUntil(
+            'Shopware_Modules_Order_SendMail_Create',
+            array(
+                'subject'   => $this,
+                'context'   => $context,
+                'variables' => $variables,
+            )
+        )) {
+            $mail = $event->getReturn();
+        }
+
+        if (!$mail instanceof \Zend_Mail) {
+            $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
+        }
+
         $mail->addTo($this->sUserData["additional"]["user"]["email"]);
 
-        if (!$this->sSYSTEM->sCONFIG["sNO_ORDER_MAIL"]){
+        if (!$this->sSYSTEM->sCONFIG["sNO_ORDER_MAIL"]) {
             $mail->addBcc($this->sSYSTEM->sCONFIG['sMAIL']);
         }
 
-        Enlight()->Events()->notify('Shopware_Modules_Order_SendMail_BeforeSend', array('subject'=>$this, 'mail'=>$mail));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Order_SendMail_BeforeSend',
+            array(
+                'subject'   => $this,
+                'mail'      => $mail,
+                'context'   => $context,
+                'variables' => $variables,
+            )
+        );
 
-        $mail->send();
+        $shouldSendMail = !(bool)Enlight_Application::Instance()->Events()->notifyUntil(
+            'Shopware_Modules_Order_SendMail_Send',
+            array(
+                'subject'   => $this,
+                'mail'      => $mail,
+                'context'   => $context,
+                'variables' => $variables,
+            )
+        );
+
+        if ($shouldSendMail) {
+            $mail->send();
+        }
 	}
 
 	/**
