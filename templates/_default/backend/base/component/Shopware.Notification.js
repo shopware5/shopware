@@ -474,7 +474,10 @@ Ext.define('Shopware.Notification', {
             renderTo: Ext.getBody()
         });
         growlMsg.update(msgData);
-        growlMsg.getEl().setStyle('opacity', 1);
+        growlMsg.getEl().setStyle({
+            'opacity': 1,
+            'left': Ext.Element.getViewportWidth() - 308 + 'px'
+        });
 
         // Fade out the growl like message after the given delay
         var task = new Ext.util.DelayedTask(function() {
