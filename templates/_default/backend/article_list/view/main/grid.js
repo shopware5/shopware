@@ -88,7 +88,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
              * Will be fired when the user clicks the delete articles button in the toolbar
              * @param records
              */
-            'deleteMultipleArticles'
+            'deleteMultipleArticles',
+
+            'triggerSplitView',
+
+            'productchange'
         );
 
         me.callParent(arguments);
@@ -120,6 +124,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 // Unlocks the delete button if the user has checked at least one checkbox
                 selectionchange: function (sm, selections) {
                     me.deleteButton.setDisabled(selections.length === 0);
+                    me.splitViewModeBtn.setDisabled(selections.length === 0);
+                    me.fireEvent('productchange', selections);
                 }
             }
         });
@@ -247,6 +253,36 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getToolbar: function() {
         var me = this, buttons = [];
 
+        me.splitViewModeBtn = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-ui-split-panel',
+            text: 'Split-View aktivieren',
+            disabled: true,
+            enableToggle: true,
+            handler: function() {
+                var selectionModel = me.getSelectionModel(),
+                    record = selectionModel.getSelection()[0];
+
+                me.fireEvent('triggerSplitView', this, record);
+            }
+        });
+
+        buttons.push(me.splitViewModeBtn);
+
+        /*{if {acl_is_allowed resource=article privilege=save}}*/
+        buttons.push(
+            Ext.create('Ext.button.Button', {
+                text: me.snippets.addArticle,
+                iconCls:'sprite-plus-circle-frame',
+                handler: function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Article',
+                        action: 'detail'
+                    });
+                }
+            })
+        );
+        /*{/if}*/
+
         //creates the delete button to remove all selected esds in one request.
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
@@ -254,7 +290,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             disabled: true,
             handler: function() {
                 var selectionModel = me.getSelectionModel(),
-                           records = selectionModel.getSelection();
+                    records = selectionModel.getSelection();
 
                 if (records.length > 0) {
                     me.fireEvent('deleteMultipleArticles', records);
@@ -264,21 +300,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         /*{if {acl_is_allowed resource=article privilege=delete}}*/
         buttons.push(me.deleteButton);
-        /*{/if}*/
-
-        /*{if {acl_is_allowed resource=article privilege=save}}*/
-        buttons.push(
-                Ext.create('Ext.button.Button', {
-                    text: me.snippets.addArticle,
-                    iconCls:'sprite-plus-circle-frame',
-                    handler: function() {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail'
-                        });
-                    }
-                })
-        );
         /*{/if}*/
 
         buttons.push({
@@ -439,7 +460,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                     { value: '60' },
                     { value: '80' },
                     { value: '100' },
-                    { value: '250' },
+                    { value: '250' }
                 ]
             }),
             displayField: 'value',

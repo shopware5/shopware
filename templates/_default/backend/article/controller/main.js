@@ -72,8 +72,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         var me = this;
 
         me.subApplication.addEvents('batchStoreLoaded');
-
         me.subApplication.on('batchStoreLoaded', me.onBatchStoreLoaded, me);
+        Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
@@ -101,6 +101,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         var tabPanel = me.mainWindow.createMainTabPanel();
         me.mainWindow.insert(0, tabPanel);
+
+        if(me.subApplication.params.splitViewMode) {
+            me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
+            me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
+        }
 
         return me.mainWindow;
     },
@@ -451,6 +456,30 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.mainWindow.fireEvent('storesLoaded', article, stores);
             }, 10);
         }
+    },
+
+    onSplitViewStoreChange: function(subApp, options) {
+        var me = this;
+
+        if(!options.hasOwnProperty('articleId')) {
+            return false;
+        }
+
+        me.mainWindow.setLoading(true);
+
+         //the batch store is responsible to load all required stores for the detail page in one request
+        me.batchStore = me.getStore('Batch');
+        me.batchStore.getProxy().extraParams.articleId = options.articleId;
+        me.batchStore.load({
+            callback: function(records, operation) {
+                var storeData = records[0],
+                    article = storeData.getArticle().first();
+
+                me.getController('Detail').reconfigureAssociationComponents(article);
+                me.mainWindow.changeTitle();
+                me.mainWindow.setLoading(false);
+            }
+        });
     }
 
 });
