@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
     init:function () {
@@ -102,7 +101,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         var tabPanel = me.mainWindow.createMainTabPanel();
         me.mainWindow.insert(0, tabPanel);
 
+        // Place the module to the right of the visbile screen real estate...
         if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+
             me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
             me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
         }
@@ -171,9 +172,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             }
         });
     },
-
-
-
 
     /**
      * The passed data object is the batch model which contains associations for each store
@@ -467,6 +465,12 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             return false;
         }
         mainWindow.on('destroy', me.onCloseSplitViewMode, me);
+        
+        // Cache the last selected row, so the user will not be
+		// interrupted in the split view mode
+		if(options.hasOwnProperty('selection')) {
+			me.subApplication.lastSelection = options.selection;
+		}
 
         me.detailStore = me.getStore('Detail');
         me.detailStore.getProxy().extraParams.articleId = options.articleId;

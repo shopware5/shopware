@@ -115,6 +115,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             articleStore: me.getStore('List').load()
         });
 
+        me.subApplication.articleGrid = me.getArticleGrid();
+
         me.mainWindow.show();
         me.callParent(arguments);
     },
