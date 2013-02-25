@@ -1273,7 +1273,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
     }
 
-
     /**
      * Internal helper function which insert the order detail association data into the passed data array
      * @param array $data
@@ -1282,7 +1281,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     private function getPositionAssociatedData($data) {
 
         //checks if the status id for the position is passed and search for the assigned status model
-        if (!empty($data['statusId'])) {
+        if ($data['statusId'] >= 0) {
             $data['status'] = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $data['statusId']);
         } else {
             unset($data['status']);
