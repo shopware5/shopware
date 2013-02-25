@@ -1457,6 +1457,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ));
     }
 
+    public function getArticleAction() {
+        $id = $this->Request()->getParam('articleId', null);
+        if (empty($id)) {
+            $this->View()->assign(array('success' => false, 'error' => 'No article id passed!'));
+        }
+        $article = $this->getArticle($id);
+        $this->View()->assign(array('success' => true, 'data' => $article));
+    }
 
     /**
      *
@@ -1616,6 +1624,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getArrayResult();
     }
 
+
     /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
@@ -1624,13 +1633,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @return array
      */
-    public function getArticleCategories($articleId)
-    {
-        $result = $this->getRepository()
-                ->getArticleCategoriesQuery($articleId)
-                ->getArrayResult();
+    public function getArticleCategories($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('categories'))
+                ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
+                ->leftJoin('categories.articles', 'article')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+        $result = $builder->getQuery()->getArrayResult();
 
-        if (empty($result[0]['categories'])) {
+        if (empty($result)) {
             return array();
         }
 
@@ -1639,7 +1651,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $categories = array();
         foreach($categorySort as $sort) {
-            $category = $result[0]['categories'][$sort];
+            $category = $result[$sort];
             $category['name'] = $this->getCategoryRepository()->getPathById($sort, 'name', '>');
             $categories[] = $category;
         }
@@ -1688,7 +1700,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
-
     /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
@@ -1697,19 +1708,21 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $articleId
      * @return array
      */
-    public function getArticleImages($articleId)
-    {
-        $result = $this->getRepository()
-                ->getArticleWithImagesQuery($articleId)
-                ->getArrayResult();
+    public function getArticleImages($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array( 'images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
+                ->from('Shopware\Models\Article\Image', 'images')
+                ->leftJoin('images.article', 'article')
+                ->leftJoin('images.attribute', 'imageAttribute')
+                ->leftJoin('images.mappings', 'imageMapping')
+                ->leftJoin('imageMapping.rules', 'mappingRule')
+                ->leftJoin('mappingRule.option', 'ruleOption')
+                ->where('article.id = :articleId')
+                ->andWhere('images.parentId IS NULL')
+                ->setParameters(array('articleId' => $articleId));
 
-        if (empty($result[0]['images'])) {
-            return array();
-        } else {
-            return $result[0]['images'];
-        }
+        return $builder->getQuery()->getArrayResult();
     }
-
 
     /**
      * Used for the article backend module to load the article data into
@@ -1793,15 +1806,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleConfiguratorSet($articleId)
     {
-        $result = $this->getRepository()
-                ->getArticleConfiguratorSetQuery($articleId)
-                ->getArrayResult();
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('configuratorSet', 'groups', 'options'))
+                ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
+                ->innerJoin('configuratorSet.articles', 'article')
+                ->leftJoin('configuratorSet.groups', 'groups')
+                ->leftJoin('configuratorSet.options', 'options')
+                ->addOrderBy('groups.position', 'ASC')
+                ->addOrderBy('options.groupId', 'ASC')
+                ->addOrderBy('options.position', 'ASC')
+                ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
 
-        if (empty($result[0]['configuratorSet'])) {
-            return array();
-        } else {
-            return $result[0]['configuratorSet'];
-        }
+        $result = $builder->getQuery()->getArrayResult();
+        return $result[0];
     }
 
     /**
@@ -1895,11 +1913,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data[0]['similar'] = $this->getArticleSimilars($id);
         $data[0]['related'] = $this->getArticleRelated($id);
         $data[0]['images'] = $this->getArticleImages($id);
+
         $data[0]['links'] = $this->getArticleLinks($id);
         $data[0]['downloads'] = $this->getArticleDownloads($id);
         $data[0]['customerGroups'] = $this->getArticleCustomerGroups($id);
         $data[0]['mainPrices'] = $this->getPrices($data[0]['mainDetail']['id'], $tax);
         $data[0]['configuratorSet'] = $this->getArticleConfiguratorSet($id);
+
         $data[0]['dependencies'] = array();
         $data[0]['priceSurcharges'] = array();
 
