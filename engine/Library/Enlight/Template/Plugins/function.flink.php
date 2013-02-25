@@ -26,7 +26,7 @@
  * @param $template
  * @return bool|mixed|string
  */
-function smarty_function_link($params, $template)
+function smarty_function_flink($params, $template)
 {
     $file = $params['file'];
 
