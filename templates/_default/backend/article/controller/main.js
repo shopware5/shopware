@@ -468,14 +468,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         }
         mainWindow.on('destroy', me.onCloseSplitViewMode, me);
 
-         //the batch store is responsible to load all required stores for the detail page in one request
-        me.batchStore = me.getStore('Batch');
-        me.batchStore.getProxy().extraParams.articleId = options.articleId;
-        me.batchStore.load({
+        me.detailStore = me.getStore('Detail');
+        me.detailStore.getProxy().extraParams.articleId = options.articleId;
+        me.detailStore.load({
             callback: function(records, operation) {
-                var storeData = records[0],
-                    article = storeData.getArticle().first();
-
+                var article = records[0];
                 me.getController('Detail').reconfigureAssociationComponents(article);
                 mainWindow.changeTitle();
             }

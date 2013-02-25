@@ -106,6 +106,7 @@ Ext.define('Shopware.apps.Article', {
      */
     stores:[
         'Batch',
+        'Detail',
         'CategoryPath',
         'CategoryTree',
         'Variant',
