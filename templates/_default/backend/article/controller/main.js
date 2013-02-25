@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         var tabPanel = me.mainWindow.createMainTabPanel();
         me.mainWindow.insert(0, tabPanel);
 
-        if(me.subApplication.params.splitViewMode) {
+        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
             me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
             me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
         }
@@ -448,7 +448,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
             if(edit) {
                 detailCtrl.loadPropertyStore(article);
-                //detailCtrl.reconfigureAssociationComponents(article);
                 me.mainWindow.changeTitle();
             }
 
@@ -459,13 +458,15 @@ Ext.define('Shopware.apps.Article.controller.Main', {
     },
 
     onSplitViewStoreChange: function(subApp, options) {
-        var me = this;
+        var me = this,
+            mainWindow = me.mainWindow,
+            form = mainWindow.detailForm;
 
+        // No article was passed...
         if(!options.hasOwnProperty('articleId')) {
             return false;
         }
-
-        me.mainWindow.setLoading(true);
+        mainWindow.on('destroy', me.onCloseSplitViewMode, me);
 
          //the batch store is responsible to load all required stores for the detail page in one request
         me.batchStore = me.getStore('Batch');
@@ -476,10 +477,13 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     article = storeData.getArticle().first();
 
                 me.getController('Detail').reconfigureAssociationComponents(article);
-                me.mainWindow.changeTitle();
-                me.mainWindow.setLoading(false);
+                mainWindow.changeTitle();
             }
         });
+    },
+
+    onCloseSplitViewMode: function() {
+        Shopware.app.Application.fireEvent('moduleConnector:splitViewClose', this);
     }
 
 });

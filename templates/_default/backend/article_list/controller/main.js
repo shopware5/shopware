@@ -60,6 +60,13 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         { ref: 'articleGrid', selector: 'articleList-main-grid' }
     ],
 
+    defaultState: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+    },
+
     /**
      * Contains all snippets for the component.
      * @object
@@ -98,7 +105,11 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             }
         });
 
-        Shopware.app.Application.addEvents('moduleConnector:splitView');
+        Shopware.app.Application.addEvents(
+            'moduleConnector:splitView',
+            'moduleConnector:splitViewClose'
+        );
+        Shopware.app.Application.on('moduleConnector:splitViewClose', me.onCloseSplitView, me);
 
         me.mainWindow = me.getView('main.Window').create({
             articleStore: me.getStore('List').load()
@@ -236,7 +247,12 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
     onTriggerSplitView: function(btn, record) {
         var me = this,
-            mainWindow = me.mainWindow;
+            mainWindow = me.mainWindow,
+            tmpPosition = mainWindow.getPosition(),
+            position = {
+                x: tmpPosition[0],
+                y: tmpPosition[1] - 40
+            };
 
         if(!record) {
             return;
@@ -245,6 +261,11 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         if(!me.hasOwnProperty('splitViewMode')) {
             me.splitViewMode = true;
         }
+
+        Shopware.Notification.createGrowlMessage('Split-View', 'Die "Split-View"-Ansicht wurde aktiviert');
+
+        me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());
+        me.defaultState = Ext.Object.merge(me.defaultState, position);
 
         // Prepare the article list
         mainWindow.sidebarPanel.collapse();
@@ -259,8 +280,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 splitViewMode: true,
                 articleId: record.get('articleId')
             }
-        }, false, function(appWrapper) {
-
         });
     },
 
@@ -268,6 +287,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         var me = this,
             record = selection[0];
 
+        // No record was selected...
         if(!record) {
             return false;
         }
@@ -275,6 +295,14 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         Shopware.app.Application.fireEvent('moduleConnector:splitView', me, {
             articleId: record.get('articleId')
         });
+    },
+
+    onCloseSplitView: function() {
+        var me = this,
+            mainWindow = me.mainWindow;
+
+        mainWindow.setSize(me.defaultState);
+        mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
     }
 });
 //{/block}
