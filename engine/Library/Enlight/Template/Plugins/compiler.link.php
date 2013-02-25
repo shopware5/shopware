@@ -63,14 +63,14 @@ class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
         $fullPath = !empty($_attr['fullPath']);
 
         if (preg_match('/^([\'"]?)[a-zA-Z0-9\/\.\-\_]+(\\1)$/', $_attr['file'], $match)) {
-            $compiler->smarty->loadPlugin('smarty_function_link');
-            return smarty_function_link(array(
+            $compiler->smarty->loadPlugin('smarty_function_flink');
+            return smarty_function_flink(array(
                 'file' => $file,
                 'fullPath' => $fullPath
             ), $compiler);
         }
 
-        return '<?php $_smarty_tpl->smarty->loadPlugin("smarty_function_link"); echo smarty_function_link(array(' .
+        return '<?php $_smarty_tpl->smarty->loadPlugin("smarty_function_flink"); echo smarty_function_flink(array(' .
             '"file" => ' . $_attr['file'] . ', ' .
             '"fullPath" => ' . var_export($fullPath, true) .
             '), $_smarty_tpl); ?>';
