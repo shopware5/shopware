@@ -299,14 +299,12 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         if(articleList) {
             var grid = articleList.articleGrid,
                 selModel = grid.getSelectionModel(),
-                selection = selModel.getSelection();
+                selection = selModel.getLastSelected();
 
             articleList.getStore('List').load({
                 scope: me,
                 callback: function() {
-
-
-                    selModel.select(selection);
+                    selModel.select(selection.index, false, true);
                 }
             });
         }
