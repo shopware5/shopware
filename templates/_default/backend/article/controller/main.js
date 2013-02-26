@@ -472,13 +472,16 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 			me.subApplication.lastSelection = options.selection;
 		}
 
+        mainWindow.saveButton.setDisabled(true);
+
         me.detailStore = me.getStore('Detail');
         me.detailStore.getProxy().extraParams.articleId = options.articleId;
         me.detailStore.load({
-            callback: function(records, operation) {
+            callback: function(records) {
                 var article = records[0];
                 me.getController('Detail').reconfigureAssociationComponents(article);
                 mainWindow.changeTitle();
+                mainWindow.saveButton.setDisabled(false);
             }
         });
     },
