@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         columnSupplier: '{s name=list/column_supplier}Supplier{/s}',
         columnActive:   '{s name=list/column_active}Active{/s}',
         columnStock:    '{s name=list/column_stock}Stock{/s}',
-        columnInfo:    '{s name=list/column_info}Info{/s}',
+        columnInfo:     '{s name=list/column_info}Info{/s}',
+        splitViewBtn:   '{s name=list/split_view_btn}Activate split view{/s}',
 
         tooltipEdit:   '{s name=list/tooltip_edit}Edit{/s}',
         emptytextSearch:  '{s name=list/emptytext_search}Search ...{/s}',
@@ -255,7 +256,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         me.splitViewModeBtn = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-ui-split-panel',
-            text: 'Split-View aktivieren',
+            text: me.snippets.splitViewBtn,
             disabled: true,
             enableToggle: true,
             handler: function() {
