@@ -73,6 +73,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
+        splitViewTitle: '{s name=splitview_title}Split-View{/s}',
+        splitViewText: '{s name=splitview_text}The split view mode has been activated.{/s}',
         messages: {
             successTitle: '{s name=messages/success}Success{/s}',
             deleteSuccess: '{s name=messages/delete_success}The selected articles have been removed{/s}',
@@ -264,7 +266,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             me.splitViewMode = true;
         }
 
-        Shopware.Notification.createGrowlMessage('Split-View', 'Die "Split-View"-Ansicht wurde aktiviert');
+        Shopware.Notification.createGrowlMessage(me.snippets.splitViewTitle, me.snippets.splitViewText);
 
         me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());
         me.defaultState = Ext.Object.merge(me.defaultState, position);
