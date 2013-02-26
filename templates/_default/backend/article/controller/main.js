@@ -464,7 +464,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         if(!options.hasOwnProperty('articleId')) {
             return false;
         }
-        mainWindow.on('destroy', me.onCloseSplitViewMode, me);
+
         
         // Cache the last selected row, so the user will not be
 		// interrupted in the split view mode
@@ -472,7 +472,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 			me.subApplication.lastSelection = options.selection;
 		}
 
-        mainWindow.saveButton.setDisabled(true);
+        // Both function calls could throw an error...
+        try {
+            mainWindow.saveButton.setDisabled(true);
+            mainWindow.on('destroy', me.onCloseSplitViewMode, me);
+        } catch(err) {  }
 
         me.detailStore = me.getStore('Detail');
         me.detailStore.getProxy().extraParams.articleId = options.articleId;
