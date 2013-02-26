@@ -174,7 +174,6 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             articleId = me.article.getMainDetail().first().get('id');
         }
 
-        var firstError = true;
         me.numberField = Ext.create('Ext.form.field.Text', {
             name: 'mainDetail[number]',
             dataIndex: 'mainDetail[number]',
@@ -187,18 +186,9 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             labelWidth: 155,
             anchor: '100%',
             vtype:'remote',
-            validationUrl: '{url action="validateNumber"}',
+            validationUrl: null,
             validationRequestParam: articleId,
-            validationErrorMsg: me.snippets.numberValidation,
-            listeners: {
-                scope: me,
-                'validitychange': function(field, isValid) {
-                    if(!isValid && firstError) {
-                        field.clearInvalid();
-                        firstError = false;
-                    }
-                }
-            }
+            validationErrorMsg: me.snippets.numberValidation
         });
 
         me.supplierCombo = Ext.create('Ext.form.field.ComboBox', {
@@ -258,6 +248,11 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         me.priceGroupComboBox.bindStore(stores['priceGroups']);
 
         me.numberField.validationRequestParam = article.getMainDetail().first().get('id');
+
+        // Delay the validation of the ordernumber
+        window.setTimeout(function() {
+            me.numberField.validationUrl = '{url action="validateNumber"}';
+        }, 1500);
     },
 
     /**

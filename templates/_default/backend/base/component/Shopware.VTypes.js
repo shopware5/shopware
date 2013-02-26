@@ -44,10 +44,10 @@ Ext.apply(Ext.form.VTypes, {
 
 Ext.apply(Ext.form.field.VTypes, {
     remote:function (val, field) {
+        var parameters;
 
         if (!field.validationUrl) {
-            Ext.Error.raise('The remote vType validation needs a validationUrl property');
-            return false;
+            return true;
         }
 
         if (!field.validationErrorMsg) {
