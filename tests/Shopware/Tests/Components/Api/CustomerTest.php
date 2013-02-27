@@ -92,6 +92,21 @@ class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test
         $this->resource->getOne('');
     }
 
+    /**
+     * @expectedException Shopware\Components\Api\Exception\CustomValidationException
+     * @expectedExceptionMessage Emailaddress test@example.com for shopId 1 is not unique
+     */
+    public function testCreateWithNonUniqueEmailShouldThrowException()
+    {
+        $testData = array(
+            "password" => "fooobar",
+            "active"   => true,
+            "email"    => 'test@example.com',
+        );
+
+        $this->resource->create($testData);
+    }
+
     public function testCreateShouldBeSuccessful()
     {
         $date = new DateTime();
@@ -105,7 +120,6 @@ class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test
 
         $testData = array(
             "password" => "fooobar",
-            "active"   => true,
             "email"    => uniqid() . 'test@foobar.com',
 
             "firstlogin" => $firstlogin,
@@ -144,6 +158,12 @@ class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertGreaterThan(0, $customer->getId());
+
+        // Test default values
+        $this->assertEquals($customer->getShop()->getId(), 1);
+        $this->assertEquals($customer->getAccountMode(), 0);
+        $this->assertEquals($customer->getGroup()->getKey(), "EK");
+        $this->assertEquals($customer->getActive(), true);
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
         $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);

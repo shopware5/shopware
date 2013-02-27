@@ -166,13 +166,13 @@ class Customer extends Resource
     {
         $this->checkPrivilege('create');
 
-        if (isset($params['accountmode']) && $params['accountmode'] == 0) {
+        $params = $this->prepareCustomerData($params);
+
+        if (isset($params['accountMode']) && $params['accountMode'] == 0) {
             if (isset($params['email']) && !$this->isEmailUnique($params['email'], null, $params['shopId'])) {
-                throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+                throw new ApiException\CustomValidationException(sprintf("Emailaddress %s for shopId %s is not unique", $params['email'], $params['shopId']));
             }
         }
-
-        $params = $this->prepareCustomerData($params);
 
         $customer = new CustomerModel();
         $customer->fromArray($params);
@@ -232,7 +232,7 @@ class Customer extends Resource
         $customer->fromArray($params);
 
         if (!$this->isEmailUnique($customer->getEmail(), $customer)) {
-            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s is not unique", $params['email']));
+            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s for shopId %s is not unique", $customer->getEmail(), $customer->getShop()->getId()));
         }
 
         $violations = $this->getManager()->validate($customer);
@@ -286,28 +286,40 @@ class Customer extends Resource
 
     private function prepareCustomerData($params, $customer = null)
     {
-        if ($customer === null && !isset($params['active'])) {
-            $params['active'] = true;
+        if ($customer === null) {
+            if (!isset($params['shopId'])) {
+                $params['shopId'] = 1;
+            }
+
+            if (!isset($params['active'])) {
+                $params['active'] = true;
+            }
+
+            // if accountmode is not set, set it to be a full user account
+            if (!isset($params['accountMode'])) {
+                $params['accountMode'] = 0;
+            }
+
+            if (!isset($params['groupKey'])) {
+                /** @var $shop \Shopware\Models\Shop\Shop */
+                $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+                $defaultGroupKey = $shop->getCustomerGroup()->getKey();
+                $params['groupKey'] = $defaultGroupKey;
+            }
         }
 
-        // if accountmode is not set, set it to be a full user account
-        if (!isset($params['accountMode']) || empty($params['accountMode'])) {
-            $params['accountMode'] = 0;
-        }
-
-        if (!empty($params['groupKey'])) {
+        if (isset($params['groupKey'])) {
             $params['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(array('key' => $params['groupKey']));
             if (!$params['group']) {
                 throw new ApiException\CustomValidationException(sprintf("CustomerGroup by key %s not found", $params['groupKey']));
             }
-        } else {
-            unset($params['group']);
         }
 
-        if (!empty($params['shopId'])) {
+        if (isset($params['shopId'])) {
             $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
-        } else {
-            unset($params['shop']);
+            if (!$params['shop']) {
+                throw new ApiException\CustomValidationException(sprintf("Shop by id %s not found", $params['shopId']));
+            }
         }
 
         if (!empty($params['priceGroupId'])) {
@@ -332,7 +344,6 @@ class Customer extends Resource
      */
     public function isEmailUnique($mail, $customer = null, $shopId = null)
     {
-
         $customerId = null;
         if ($customer) {
             $customerId = $customer->getId();
@@ -345,11 +356,9 @@ class Customer extends Resource
             if ($customer->getAccountMode() == 1) {
                 return true;
             }
-
         }
 
         $query = $this->getRepository()->getValidateEmailQuery($mail, $customerId, $shopId);
-
         $customer = $query->getArrayResult();
 
         return empty($customer);
