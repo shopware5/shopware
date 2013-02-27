@@ -51,12 +51,14 @@
         {include file="newsletter/container/article.tpl"}
     {elseif $sCampaignContainer.type == "ctLinks"}
         {include file="newsletter/container/link.tpl"}
+    {elseif isset($sCampaignContainer.templateName) }
+        {include file="newsletter/container/{$sCampaignContainer.templateName}.tpl"}
     {/if}
 {/foreach}
 
 {include file="newsletter/index/footer.tpl"}
 
-<!--FOOTER-->	     
+<!--FOOTER-->
 </tr>
 </td>
 </table>
