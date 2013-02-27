@@ -3109,6 +3109,9 @@ class sArticles
 
         $getPromotionResult = Shopware()->Db()->fetchRow($sql, array($this->sSYSTEM->sUSERGROUP, $value));
 
+        //have to support the old variable name sReleasedate for 3rd party template changes
+        $getPromotionResult["sReleaseDate"] = $getPromotionResult["sReleasedate"];
+
         if (empty($getPromotionResult)) {
             return false;
         }
