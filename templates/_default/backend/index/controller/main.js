@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	 */
 	init: function() {
         var me = this,
-            viewport = Shopware.app.Application.viewport = Ext.create('Shopware.container.Viewport');
+            mainApp = Shopware.app.Application,
+            viewport = mainApp.viewport = Ext.create('Shopware.container.Viewport');
 
         /** Create our menu and footer */
         me.menu =  me.getView('Menu').create();
@@ -67,6 +68,10 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
+
+        mainApp.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
+            loadPath: "{link file='backend/_resources/resources/css' fullPath}"
+        });
 	},
 
     /**
