@@ -115,18 +115,4 @@
         }
         .#{$prefix}menu-item-link, .#{$prefix}menu-item-text { color: #465c6b; }
     }
-
-    // Menu icons
-    .min-all {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico1.png') no-repeat left center;
-    }
-    .close-all {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico2.png') no-repeat left center;
-    }
-    .among-us {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico3.png') no-repeat left center;
-    }
-    .side-by-side {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico4.png') no-repeat left center;
-    }
 }
