@@ -95,11 +95,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 	 */
 	public function indexAction()
 	{
-		if ($this->basket->sCountBasket()<1 || empty($this->View()->sUserLoggedIn)) {
-			$this->forward('cart');
-		} else {
-			$this->forward('confirm');
-		}
+		$this->forward('cart');		
 	}
 
 	/**
