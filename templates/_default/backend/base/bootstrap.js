@@ -133,6 +133,7 @@
 {include file='backend/base/component/Shopware.grid.plugin.Translation.js'}
 {include file='backend/base/component/Shopware.form.PluginPanel.js'}
 {include file='backend/base/component/Shopware.component.Preloader.js'}
+{include file='backend/base/component/Shopware.component.IconPreloader.js'}
 
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/button.js'}

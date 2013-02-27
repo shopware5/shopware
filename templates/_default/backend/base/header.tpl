@@ -14,7 +14,7 @@
 
 {block name="backend/base/header/css"}
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/ext-all.css'}" />
-    <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/icon-set.css'}" />
+    <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set.css'}" />
     <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/lib/codemirror.css'}" />
     <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/theme/monokai.css'}" />
 {/block}
