@@ -91,10 +91,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * Opens the article detail page.
      * @return Ext.window.Window
      */
-    openMainWindow: function() {
+    openMainWindow: function(newArticle) {
         var me = this;
 
-        me.mainWindow = me.getView('detail.Window').create();
+        newArticle = newArticle || false;
+
+        me.mainWindow = me.getView('detail.Window').create({
+            newArticle: newArticle
+        });
         me.subApplication.setAppWindow(me.mainWindow);
         me.subApplication.articleWindow = me.mainWindow;
 
