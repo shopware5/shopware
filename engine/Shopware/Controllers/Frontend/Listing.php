@@ -66,12 +66,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return $this->redirect($location, array('code' => 301));
         }
 
-        $this->View()->assign(array(
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'sCategoryInfo' => $categoryContent
-        ));
 
         /**@var $repository \Shopware\Models\Emotion\Repository*/
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
@@ -83,9 +77,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
 
-        $this->View()->assign('campaigns', $campaigns);
         $showListing = true;
-        $hasEmotion = false; 
+        $hasEmotion = false;
+        $viewAssignments = array(
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'campaigns' => $campaigns,
+            'sCategoryInfo' => $categoryContent
+        );
 
         if (!$this->Request()->getQuery('sSupplier')
             && !$this->Request()->getQuery('sPage')
@@ -110,15 +110,17 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
              */
             if(empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
                 $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
-                $this->View()->sOffers = $offers;
+                $viewAssignments['sOffers'] = $offers;
                 if (!empty($offers)){
                     $showListing = false;
                 }
             }
         }
 
-        $this->View()->showListing = $showListing;
-        $this->View()->hasEmotion = $hasEmotion;
+        $viewAssignments['showListing'] = $showListing;
+        $viewAssignments['hasEmotion'] = $hasEmotion;
+        //assign the variables here for the emotion view
+        $this->View()->assign($viewAssignments);
         if (!$showListing) {
             return;
         }
@@ -139,14 +141,22 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             }
         }
 
+        $newTemplateLoaded = false;
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            //Shopware()->Config()->dontAttachSession = true;
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
 
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
+            $newTemplateLoaded = true;
+
         } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
             $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
+            $newTemplateLoaded = true;
+        }
+
+        if($newTemplateLoaded) {
+            //assign it again because load template was called
+            $this->View()->assign($viewAssignments);
         }
 
         $this->View()->assign($categoryArticles);
