@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
+     * @params  - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
     init:function () {
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             mainWindow = me.getMainWindow(),
             article = me.subApplication.article,
-            variantTab = me.getVariantTab();
+            variantTab = mainWindow.variantTab;
 
         variantTab.setDisabled((article.get('id') === null || newValue === false || article.get('configuratorSetId') === null));
     },
@@ -168,8 +168,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the save button of the main window.
      * Saves the current article
      *
-     * @param win
-     * @param article
+     * @param { Object } win
+     * @param { Object } article
+     * @param { Object } options
+     * @return { Boolean|void }
      */
     onSaveArticle: function(win, article, options) {
         var me = this, priceStore, lastFilter, message, mainWindow = me.getMainWindow(),
@@ -287,14 +289,24 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     refreshArticleList: function() {
-        var subApps = Shopware.app.Application.subApplications;
-        var articleList = subApps.findBy(function(item) {
+        var me = this,
+            subApps = Shopware.app.Application.subApplications,
+            articleList = subApps.findBy(function(item) {
             if(item.$className == 'Shopware.apps.ArticleList') {
                 return true;
             }
         });
         if(articleList) {
-            articleList.getStore('List').load();
+            var grid = articleList.articleGrid,
+                selModel = grid.getSelectionModel(),
+                selection = selModel.getLastSelected();
+
+            articleList.getStore('List').load({
+                scope: me,
+                callback: function() {
+                    selModel.select(selection.index, false, true);
+                }
+            });
         }
     },
 
@@ -329,13 +341,14 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      */
     reconfigureAssociationComponents: function(article) {
         var me = this,
-            variantTab = me.getVariantTab(),
-            esdTab = me.getEsdTab(),
+            mainWindow = me.getMainWindow(),
+            variantTab = mainWindow.variantTab,
+            esdTab = mainWindow.esdTab,
             esdListing = me.getEsdListing(),
             variantListing = me.getVariantListing(),
             configurator = me.getConfigurator(),
-            priceFieldSet = me.getPriceFieldSet(),
-            mainWindow = me.getMainWindow();
+            priceFieldSet = me.getPriceFieldSet();
+
 
         if (article === null && me.subApplication.article) {
             me.reloadArticle(me.subApplication.article.get('id'));

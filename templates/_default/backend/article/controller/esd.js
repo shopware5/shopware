@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'mediaDropZone', selector: 'article-detail-window article-esd-detail html5fileupload' },
         { ref: 'esdSerialsListing', selector: 'article-detail-window article-esd-serials' },
-        { ref: 'esdTab', selector: 'article-detail-window panel[name=esd-tab]' }
+        { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' }
     ],
 
     /**

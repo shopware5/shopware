@@ -100,8 +100,12 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
-        me.setTitle();
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
+
+        me.title = me.snippets.titleNew;
         me.items = me.createElements();
         me.callParent(arguments);
     },
@@ -110,7 +114,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * The setTitle function checks if the detail window opened with an article record or not.
      * If an article passed, the last change date will be displayed in the field set header.
      */
-    setTitle: function() {
+    changeTitle: function() {
         var me = this;
 
         if (me.article instanceof Ext.data.Model) {
@@ -119,6 +123,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         } else {
             me.title = me.snippets.titleNew;
         }
+        me.setTitle(me.title);
     },
 
     /**
@@ -181,7 +186,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             labelWidth: 155,
             anchor: '100%',
             vtype:'remote',
-            validationUrl: '{url action="validateNumber"}',
+            validationUrl: null,
             validationRequestParam: articleId,
             validationErrorMsg: me.snippets.numberValidation
         });
@@ -227,53 +232,81 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         ];
     },
 
+    onStoresLoaded: function(article, stores) {
+        var me = this;
+
+        // Change the title
+        me.article = article;
+        me.changeTitle();
+
+        // Bind the stores on the left side
+        me.supplierCombo.bindStore(stores['suppliers']);
+
+        // Bind the stores to the comboboxes on the right side
+        me.taxComboBox.bindStore(stores['taxes']);
+        me.templateComboBox.bindStore(stores['templates']);
+        me.priceGroupComboBox.bindStore(stores['priceGroups']);
+
+        me.numberField.validationRequestParam = article.getMainDetail().first().get('id');
+
+        // Delay the validation of the ordernumber
+        window.setTimeout(function() {
+            me.numberField.validationUrl = '{url action="validateNumber"}';
+        }, 1500);
+    },
+
     /**
      * Creates the field set items which displayed in the right column of the base field set
-     * @return array
+     * @return Array
      */
     createRightElements: function() {
         var me = this;
 
+        me.taxComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'taxId',
+            queryMode: 'local',
+            emptyText: me.snippets.empty,
+            fieldLabel: me.snippets.tax,
+            allowBlank: false,
+            valueField: 'id',
+            displayField: 'name',
+            editable: false,
+            labelWidth: 155,
+            anchor: '100%'
+        });
+
+        me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'template',
+            queryMode: 'local',
+            fieldLabel: me.snippets.template,
+            emptyText: me.snippets.empty,
+            valueField: 'id',
+            displayField: 'name',
+            editable: false,
+            labelWidth: 155,
+            anchor: '100%'
+        });
+
+        me.priceGroupComboBox = Ext.create('Ext.form.field.ComboBox', {
+            queryMode: 'local',
+            name: 'priceGroupId',
+            fieldLabel: me.snippets.priceGroup,
+            emptyText: me.snippets.empty,
+            valueField: 'id',
+            displayField: 'name',
+            editable: false,
+            labelWidth: 155,
+            anchor: '100%'
+        });
+
         return [
-            {
-                xtype: 'combo',
-                name: 'taxId',
-                queryMode: 'local',
-                emptyText: me.snippets.empty,
-                fieldLabel: me.snippets.tax,
-                allowBlank: false,
-                store: me.taxStore,
-                valueField: 'id',
-                displayField: 'name',
-                editable: false
-            }, {
-                xtype: 'combo',
-                name: 'template',
-                queryMode: 'local',
-                fieldLabel: me.snippets.template,
-                emptyText: me.snippets.empty,
-                store: me.templateStore,
-                valueField: 'id',
-                displayField: 'name',
-                editable: false
-            }, {
-                xtype: 'checkbox',
-                name: 'priceGroupActive',
-                fieldLabel: me.snippets.priceGroupActive,
-                inputValue: true,
-                uncheckedValue:false
-            } , {
-                xtype: 'combo',
-                queryMode: 'local',
-                name: 'priceGroupId',
-                fieldLabel: me.snippets.priceGroup,
-                emptyText: me.snippets.empty,
-                store: me.priceGroupStore,
-                valueField: 'id',
-                displayField: 'name',
-                editable: false
-            }
-        ];
+            me.taxComboBox, me.templateComboBox, {
+            xtype: 'checkbox',
+            name: 'priceGroupActive',
+            fieldLabel: me.snippets.priceGroupActive,
+            inputValue: true,
+            uncheckedValue:false
+        }, me.priceGroupComboBox ]
     }
 });
 //{/block}
