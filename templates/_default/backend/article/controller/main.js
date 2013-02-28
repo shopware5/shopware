@@ -65,11 +65,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
     init:function () {
         var me = this;
+
+        me.subApplication.addEvents('batchStoreLoaded');
+        me.subApplication.on('batchStoreLoaded', me.onBatchStoreLoaded, me);
+        Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
@@ -88,12 +91,27 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * Opens the article detail page.
      * @return Ext.window.Window
      */
-    openMainWindow: function() {
+    openMainWindow: function(newArticle) {
         var me = this;
 
-        me.mainWindow = me.getView('detail.Window').create();
+        newArticle = newArticle || false;
+
+        me.mainWindow = me.getView('detail.Window').create({
+            newArticle: newArticle
+        });
         me.subApplication.setAppWindow(me.mainWindow);
-        me.mainWindow.setLoading(true);
+        me.subApplication.articleWindow = me.mainWindow;
+
+        var tabPanel = me.mainWindow.createMainTabPanel();
+        me.mainWindow.insert(0, tabPanel);
+
+        // Place the module to the right of the visbile screen real estate...
+        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+
+            me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
+            me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
+        }
+
         return me.mainWindow;
     },
 
@@ -113,37 +131,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             callback: function(records, operation) {
                 var storeData = records[0];
 
-                //when store has been loaded use the first record as data array to create the required stores
-                if (operation.success === true) {
-                    //prepare the associated stores to use them in the detail page
-                    var stores = me.prepareAssociationStores(storeData);
-                    var article = me.prepareArticleDefaults(storeData, stores);
-                    me.subApplication.article = article;
-
-                    //create the detail window and pass the prepared stores
-                    Ext.apply(me.mainWindow, {
-                        article: article,
-                        customerGroupStore: stores['customerGroups'],
-                        shopStore: stores['shops'],
-                        taxStore: stores['taxes'],
-                        attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
-                        attributeFields: stores['attributeFields'],
-                        supplierStore: stores['suppliers'],
-                        templateStore: stores['templates'],
-                        dependencyStore: stores['dependencyStore'],
-                        priceSurchargeStore: stores['priceSurchargeStore'],
-                        unitStore: stores['unit'],
-                        propertyStore: stores['properties'],
-                        priceGroupStore: stores['priceGroups'],
-                        articleConfiguratorSet: stores['articleConfiguratorSet'],
-                        categoryTreeStore: stores['categories'],
-                        configuratorGroupStore: stores['configuratorGroups']
-                    });
-
-                    var tabPanel = me.mainWindow.createMainTabPanel();
-                    me.mainWindow.insert(0, tabPanel);
-                    me.mainWindow.setLoading(false);
-                }
+                me.subApplication.fireEvent('batchStoreLoaded', storeData, operation, false);
             }
         });
     },
@@ -184,47 +172,10 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             callback: function(records, operation) {
                 var storeData = records[0];
 
-                //when store has been loaded use the first record as data array to create the required stores
-                if (operation.success === true) {
-
-                    //prepare the associated stores to use them in the detail page
-                    var stores = me.prepareAssociationStores(storeData);
-                    var article = storeData.getArticle().first();
-                    me.subApplication.article = article;
-
-                    //create the detail window and pass the prepared stores
-                    Ext.apply(me.mainWindow, {
-                        article: article,
-                        customerGroupStore: stores['customerGroups'],
-                        shopStore: stores['shops'],
-                        taxStore: stores['taxes'],
-                        attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
-                        attributeFields: stores['attributeFields'],
-                        supplierStore: stores['suppliers'],
-                        templateStore: stores['templates'],
-                        unitStore: stores['unit'],
-                        propertyStore: stores['properties'],
-                        dependencyStore: stores['dependencyStore'],
-                        priceSurchargeStore: stores['priceSurchargeStore'],
-                        priceGroupStore: stores['priceGroups'],
-                        categoryTreeStore: stores['categories'],
-                        articleConfiguratorSet: stores['articleConfiguratorSet'],
-                        configuratorGroupStore: stores['configuratorGroups']
-                    });
-                    var tabPanel = me.mainWindow.createMainTabPanel();
-                    me.mainWindow.insert(0, tabPanel);
-
-                    me.getController('Detail').loadPropertyStore(article);
-
-                    me.mainWindow.changeTitle();
-                    me.mainWindow.setLoading(false);
-                }
+                me.subApplication.fireEvent('batchStoreLoaded', storeData, operation, true);
             }
         });
     },
-
-
-
 
     /**
      * The passed data object is the batch model which contains associations for each store
@@ -461,6 +412,90 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             name: 'attribute[' + fieldModel.get('name') + ']'
         });
         return field;
+    },
+
+    onBatchStoreLoaded: function(storeData, operation, edit) {
+        var me = this, stores, article, detailCtrl = me.getController('Detail');
+
+        edit = edit || false;
+
+        //when store has been loaded use the first record as data array to create the required stores
+        if (operation.success === true) {
+
+            //prepare the associated stores to use them in the detail page
+            stores = me.prepareAssociationStores(storeData)
+
+            if(edit) {
+                article = storeData.getArticle().first();
+            } else {
+                article = me.prepareArticleDefaults(storeData, stores);
+            }
+
+            me.subApplication.article = article;
+
+            Ext.apply(me.mainWindow, {
+                article: article,
+                customerGroupStore: stores['customerGroups'],
+                shopStore: stores['shops'],
+                attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
+                attributeFields: stores['attributeFields'],
+                unitStore: stores['unit'],
+                propertyStore: stores['properties'],
+                dependencyStore: stores['dependencyStore'],
+                priceSurchargeStore: stores['priceSurchargeStore'],
+                categoryTreeStore: stores['categories'],
+                articleConfiguratorSet: stores['articleConfiguratorSet'],
+                configuratorGroupStore: stores['configuratorGroups']
+            });
+
+            if(edit) {
+                detailCtrl.loadPropertyStore(article);
+                me.mainWindow.changeTitle();
+            }
+
+            window.setTimeout(function() {
+                me.mainWindow.fireEvent('storesLoaded', article, stores);
+            }, 10);
+        }
+    },
+
+    onSplitViewStoreChange: function(subApp, options) {
+        var me = this,
+            mainWindow = me.mainWindow,
+            form = mainWindow.detailForm;
+
+        // No article was passed...
+        if(!options.hasOwnProperty('articleId')) {
+            return false;
+        }
+
+        
+        // Cache the last selected row, so the user will not be
+		// interrupted in the split view mode
+		if(options.hasOwnProperty('selection')) {
+			me.subApplication.lastSelection = options.selection;
+		}
+
+        // Both function calls could throw an error...
+        try {
+            mainWindow.saveButton.setDisabled(true);
+            mainWindow.on('destroy', me.onCloseSplitViewMode, me);
+        } catch(err) {  }
+
+        me.detailStore = me.getStore('Detail');
+        me.detailStore.getProxy().extraParams.articleId = options.articleId;
+        me.detailStore.load({
+            callback: function(records) {
+                var article = records[0];
+                me.getController('Detail').reconfigureAssociationComponents(article);
+                mainWindow.changeTitle();
+                mainWindow.saveButton.setDisabled(false);
+            }
+        });
+    },
+
+    onCloseSplitViewMode: function() {
+        Shopware.app.Application.fireEvent('moduleConnector:splitViewClose', this);
     }
 
 });
