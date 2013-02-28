@@ -868,7 +868,6 @@ class sOrder
         }
 
         $mail = null;
-
         if ($event = Enlight_Application::Instance()->Events()->notifyUntil(
             'Shopware_Modules_Order_SendMail_Create',
             array(
@@ -880,7 +879,7 @@ class sOrder
             $mail = $event->getReturn();
         }
 
-        if (!$mail instanceof \Zend_Mail) {
+        if (!($mail instanceof \Zend_Mail)) {
             $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
         }
 
@@ -888,6 +887,16 @@ class sOrder
 
         if (!$this->sSYSTEM->sCONFIG["sNO_ORDER_MAIL"]) {
             $mail->addBcc($this->sSYSTEM->sCONFIG['sMAIL']);
+        }
+
+        $mail = Enlight()->Events()->filter('Shopware_Modules_Order_SendMail_Filter', $mail, array(
+            'subject'   => $this,
+            'context'   => $context,
+            'variables' => $variables,
+        ));
+
+        if (!($mail instanceof \Zend_Mail)) {
+            return;
         }
 
         Enlight()->Events()->notify(
@@ -903,9 +912,9 @@ class sOrder
         $shouldSendMail = !(bool)Enlight_Application::Instance()->Events()->notifyUntil(
             'Shopware_Modules_Order_SendMail_Send',
             array(
-                'subject'   => $this,
-                'mail'      => $mail,
-                'context'   => $context,
+                'subject' => $this,
+                'mail' => $mail,
+                'context' => $context,
                 'variables' => $variables,
             )
         );
