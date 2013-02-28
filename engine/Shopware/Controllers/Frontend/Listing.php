@@ -66,30 +66,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return $this->redirect($location, array('code' => 301));
         }
 
-        if(empty($categoryContent['noViewSelect'])
-                && !empty($categoryArticles['sTemplate'])
-                && !empty($categoryContent['layout'])) {
-            if ($categoryArticles['sTemplate'] == 'table') {
-                if($categoryContent['layout'] == '1col') {
-                    $categoryContent['layout'] = '3col';
-                    $categoryContent['template'] = 'article_listing_3col.tpl';
-                }
-            } else {
-                $categoryContent['layout'] = '1col';
-                $categoryContent['template'] = 'article_listing_1col.tpl';
-            }
-        }
-
-        if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            //Shopware()->Config()->dontAttachSession = true;
-            $this->Response()->setHeader('Content-Type', 'text/xml');
-            $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
-
-            $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
-        } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
-            $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
-        }
-
+        $this->View()->assign(array(
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryContent' => $categoryContent,
+            'sCategoryInfo' => $categoryContent
+        ));
 
         /**@var $repository \Shopware\Models\Emotion\Repository*/
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
@@ -143,14 +125,35 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
 
+        if(empty($categoryContent['noViewSelect'])
+            && !empty($categoryArticles['sTemplate'])
+            && !empty($categoryContent['layout'])) {
+            if ($categoryArticles['sTemplate'] == 'table') {
+                if($categoryContent['layout'] == '1col') {
+                    $categoryContent['layout'] = '3col';
+                    $categoryContent['template'] = 'article_listing_3col.tpl';
+                }
+            } else {
+                $categoryContent['layout'] = '1col';
+                $categoryContent['template'] = 'article_listing_1col.tpl';
+            }
+        }
+
+        if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
+            //Shopware()->Config()->dontAttachSession = true;
+            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
+
+            $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
+        } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
+            $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
+        }
+
         $this->View()->assign($categoryArticles);
 
         $this->View()->assign(array(
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
             'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'sCategoryInfo' => $categoryContent
+            'sCategoryContent' => $categoryContent
         ));
         if (empty($categoryContent["hideFilter"])) {
             $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId);
