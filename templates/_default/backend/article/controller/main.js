@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             dependencyStore = null, priceSurchargeStore = null,
             article = data.getArticle().first(), articleOptions,
             globalOptions, globalOption,
-            stores = [];
+            stores = [], globalApp = Shopware.app.Application;
 
         var supplierStore = Ext.create('Shopware.store.Supplier', {
             remoteFilter: false
@@ -288,8 +288,13 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         stores['priceSurchargeStore'] = priceSurchargeStore;
         stores['articleConfiguratorSet'] = articleConfiguratorSet;
 
-        var treeStore = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
-        stores['categories'] = treeStore;
+        // Place the category store on the main application to prevent
+        // multiple instances of the store
+        if(!globalApp.hasOwnProperty('articleCategoryTreeStore')) {
+            globalApp.articleCategoryTreeStore = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
+        }
+
+        stores['categories'] = Shopware.app.Application.articleCategoryTreeStore;
 
         return stores;
     },
