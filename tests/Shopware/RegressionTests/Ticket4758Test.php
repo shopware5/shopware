@@ -62,7 +62,7 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
     {
         $module = Shopware()->Modules()->Articles();
         //check prices for configurator article without pricegroup and without stapping
-        //$this->dispatch("/");
+        $this->dispatch("/");
         $articleData = $module->sGetArticleById(202);
         $this->assertEquals(0,$articleData["pricegroupID"]);
         $this->assertEquals(0,$articleData["pricegroupActive"]);
@@ -74,7 +74,7 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $sql = "UPDATE s_articles SET pricegroupActive = 1, pricegroupID = 1 WHERE id = 202";
         Shopware()->Db()->query($sql, array());
 
-        //$this->dispatch("/");
+        $this->dispatch("/");
         $articleData = $module->sGetArticleById(202);
         $this->assertEquals(1,$articleData["pricegroupID"]);
         $this->assertEquals(1,$articleData["pricegroupActive"]);
