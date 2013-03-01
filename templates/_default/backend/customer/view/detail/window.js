@@ -136,10 +136,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.shippingFieldSet.countryCombo.bindStore(stores.getCountryStore);
         me.debitFieldSet.paymentCombo.bindStore(stores.getPaymentStore);
 
-        me.orderGrid.dispatchStore = stores.getDispatchStore;
-        me.orderGrid.orderStatusStore = stores.getOrderStatusStore;
-        me.orderGrid.paymentStore = stores.getPaymentStore;
-        me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
+        if(me.hasOwnProperty('orderGrid')) {
+            me.orderGrid.dispatchStore = stores.getDispatchStore;
+            me.orderGrid.orderStatusStore = stores.getOrderStatusStore;
+            me.orderGrid.paymentStore = stores.getPaymentStore;
+            me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
+        }
         me.detailForm.loadRecord(me.record);
 
         me.billingFieldSet.countryStateStore = Ext.create('Shopware.store.CountryState');
@@ -249,12 +251,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      */
     getTabs:function () {
         var me = this,
-            form = me.createFormTab(),
-            order = me.createOrderTab();
+            form = me.createFormTab();
 
         if ( me.record.get('id') ) {
             /*{if {acl_is_allowed resource=order privilege=read}}*/
-                return [ form, order ];
+                return [ form, me.createOrderTab() ];
             /*{else}*/
                 return [ form ];
             /*{/if}*/
