@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Shipping.view.Main', {
             xtype: 'shipping-list',
             customerGroupStore: me.customerGroupStore,
             shopStore: me.shopStore,
-            dispatchStore: me.dispatchStore.load()
+            dispatchStore: me.dispatchStore
         }];
         me.callParent(arguments);
     }
