@@ -63,6 +63,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
                 localizedName: 'Login'
             });
 {/if}
+
+			me.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
+       			loadPath: "{link file='backend/_resources/resources/css' fullPath}"
+   			});
         },
 
         /**
