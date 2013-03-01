@@ -142,6 +142,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
         me.detailForm.loadRecord(me.record);
 
+        me.billingFieldSet.countryStateStore = Ext.create('Shopware.store.CountryState');
+        me.shippingFieldSet.countryStateStore = Ext.create('Shopware.store.CountryState');
 
         if (me.record instanceof Ext.data.Model &&
             me.record.getBilling() instanceof Ext.data.Store &&
@@ -151,8 +153,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
             if(billing.get('countryId')) {
                 
-                me.billingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = billing.get('countryId');
-                me.billingFieldSet.countryStateCombo.getStore().load({
+                me.billingFieldSet.countryStateStore.getProxy().extraParams.countryId = billing.get('countryId');
+                me.billingFieldSet.countryStateStore.load({
                     callback: function() {
                         if(billing.get('stateId')) {
                             me.billingFieldSet.countryStateCombo.setValue(billing.get('stateId'));
@@ -176,8 +178,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             shipping = me.record.getShipping().first();
 
             if(shipping.get('countryId')) {
-                me.shippingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = shipping.get('countryId');
-                me.shippingFieldSet.countryStateCombo.getStore().load({
+                me.shippingFieldSet.countryStateStore.getProxy().extraParams.countryId = shipping.get('countryId');
+                me.shippingFieldSet.countryStateStore.load({
                     callback: function() {
                         me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
                         if(shipping.get('stateId')) {

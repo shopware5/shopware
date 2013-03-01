@@ -239,7 +239,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             name:'billing[stateId]',
             action: 'billingStateId',
             fieldLabel:me.snippets.state,
-            store: Ext.create('Shopware.store.CountryState'),
+            store: me.countryStateStore,
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,

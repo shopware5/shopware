@@ -64,6 +64,7 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
             });
 {/if}
 
+			// Start preloading the icon sets
 			me.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
        			loadPath: "{link file='backend/_resources/resources/css' fullPath}"
    			});

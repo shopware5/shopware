@@ -282,7 +282,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             action: 'shippingStateId',
             forceSelection: true,
             fieldLabel:me.snippets.state,
-            store: Ext.create('Shopware.store.CountryState'),
+            store: me.countryStateStore,
             valueField: 'id',
             displayField: 'name',
             editable: false,
