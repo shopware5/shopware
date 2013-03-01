@@ -68,10 +68,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
-
-        mainApp.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
-            loadPath: "{link file='backend/_resources/resources/css' fullPath}"
-        });
 	},
 
     /**
