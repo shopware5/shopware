@@ -73,11 +73,6 @@ class sConfigurator
         //get posted groups and options
         $selectedItems = $this->sSYSTEM->_POST["group"];
         
-        echo "<pre>vdg";
-        print_r($selectedItems);
-        echo "</pre>";
-        exit();
-        
         if (empty($selectedItems)) {
             $selectedItems = array();
         }
