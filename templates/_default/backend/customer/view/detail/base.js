@@ -226,18 +226,26 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         });
 
         me.customerMail = Ext.create('Ext.form.field.Text', {
-                fieldLabel:me.snippets.email.label,
-                labelWidth:150,
-                name:'email',
-                allowBlank:false,
-                required:true,
-                enableKeyEvents:true,
-                checkChangeBuffer:700,
-                vtype:'remote',
-                validationUrl: '{url action="validateEmail"}',
-                validationRequestParams:{ 'param' : me.record.get('id'),'subshopId' : me.record.get('shopId')},
-                validationErrorMsg:me.snippets.email.message
-            });
+            fieldLabel:me.snippets.email.label,
+            labelWidth:150,
+            name:'email',
+            allowBlank:false,
+            required:true,
+            enableKeyEvents:true,
+            checkChangeBuffer:700,
+            vtype:'remote',
+            validationUrl: null,
+            validationRequestParams:{ 'param' : me.record.get('id'),'subshopId' : me.record.get('shopId')},
+            validationErrorMsg:me.snippets.email.message,
+            listeners: {
+                scope: me,
+                afterrender: function(field) {
+                    window.setTimeout(function() {
+                        field.validationUrl = '{url action="validateEmail"}';
+                    }, 500);
+                }
+            }
+        });
 
         return [
             me.customerMail,
