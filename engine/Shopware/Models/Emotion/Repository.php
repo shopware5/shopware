@@ -217,6 +217,8 @@ class Repository extends ModelRepository
                 ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
                 ->andWhere('emotions.isLandingPage = 0 ')
                 ->andWhere('emotions.active = 1 ')
+                ->addOrderBy(array(array('property' => 'elements.startRow','direction' => 'ASC')))
+                ->addOrderBy(array(array('property' => 'elements.startCol','direction' => 'ASC')))
                 ->setParameter(1, $categoryId);
 
         return $builder;
