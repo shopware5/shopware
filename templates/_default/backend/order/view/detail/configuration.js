@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
 
         me.title = me.snippets.form;
         me.items = [ me.createLeftItems(), me.createRightItems() ];
-        me.buttons = me.createButtons()
+        me.buttons = me.createButtons();
         me.callParent(arguments);
         me.loadDefaultConfiguration();
     },
@@ -258,7 +258,6 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
                 name: 'docComment'
             }, {
                 xtype: 'combobox',
-                queryMode: 'local',
                 fieldLabel: me.snippets.voucher,
                 name: 'voucher',
                 store: Ext.create('Shopware.apps.Order.store.Voucher'),
