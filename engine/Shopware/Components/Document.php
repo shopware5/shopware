@@ -390,7 +390,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 		$sqlVoucher = "SELECT s_emarketing_voucher_codes.id AS id, code, description, value, percental FROM s_emarketing_vouchers, s_emarketing_voucher_codes
 		 WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
 		 AND s_emarketing_voucher_codes.voucherID = s_emarketing_vouchers.id
-		 AND s_emarketing_voucher_codes.userID = 0
+		 AND s_emarketing_voucher_codes.userID IS NULL
 		 AND s_emarketing_voucher_codes.cashed = 0
 		 AND s_emarketing_vouchers.id=?
 		 GROUP BY s_emarketing_voucher_codes.voucherID
