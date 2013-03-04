@@ -72,6 +72,7 @@ class sConfigurator
 
         //get posted groups and options
         $selectedItems = $this->sSYSTEM->_POST["group"];
+        
         if (empty($selectedItems)) {
             $selectedItems = array();
         }
@@ -264,12 +265,17 @@ class sConfigurator
                 }
             }
 
-            if (count($selected['price']) > 1) {
+            if (!empty($articleData['pricegroupActive'])) {
+                $articleData['sBlockPrices'] = $this->module->sGetPricegroupDiscount(
+                    $this->sSYSTEM->sUSERGROUP, $articleData["pricegroupID"],
+                    $selected['price'][0]['priceNet'], 1, true, $articleData
+                );
+            } elseif (count($selected['price']) > 1) {
                 $articleData['sBlockPrices'] = $selected['price'];
             } else {
                 $articleData['sBlockPrices'] = array();
             }
-            if($selected['kind'] > 1) {
+            if ($selected['kind'] > 1) {
                 $articleData = $this->mergeSelectedAndArticleData($articleData, $selected, $selectedPrice);
                 $articleData = $this->module->sGetTranslation($articleData, $selected['valueID'], 'variant');
             } else {
@@ -407,6 +413,7 @@ class sConfigurator
         $prices = array();
         //iterate price to calculate the gross price.
         foreach($data as $price) {
+            $price['priceNet'] = $price["price"];
             $price['price'] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPrice($price["price"],$tax,$taxId);
             $price['pricenumeric'] =  $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($price["price"],$tax,false,false,$taxId,false);
             $prices[] = $price;
