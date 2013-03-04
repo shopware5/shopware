@@ -266,7 +266,7 @@ class sConfigurator
             }
 
             if (!empty($articleData['pricegroupActive'])) {
-                $articleData['sBlockPrices'] = $this->sSYSTEM->sMODULES['sArticles']->sGetPricegroupDiscount(
+                $articleData['sBlockPrices'] = $this->module->sGetPricegroupDiscount(
                     $this->sSYSTEM->sUSERGROUP, $articleData["pricegroupID"],
                     $selected['price'][0]['priceNet'], 1, true, $articleData
                 );
