@@ -29,6 +29,9 @@
  */
 class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Controller_TestCase
 {
+
+    const MAIN_VARIANT_ID = 444;
+    const VARIANT_ID = 445;
     /**
      * Set up test case, add the pricegroup
      */
@@ -74,7 +77,7 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
 
 
         //set stapping prices to the main variant with the detail id 444
-        $this->insertPriceStapping(444);
+        $this->insertPriceStapping(self::MAIN_VARIANT_ID);
 
         //check prices for configurator article with pricegroup and with stapping
         //the stapping shouldn't have any effect because of the pricegroup
@@ -103,7 +106,7 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
     public function testVariantArticlePriceGroups()
     {
         //reset the test data
-       $this->resetArticleData();
+       $this->resetArticleData(self::MAIN_VARIANT_ID);
 
         $this->Request()
                 ->setMethod('POST')
@@ -158,17 +161,18 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
     /**
      * helper method to resets the article data
      */
-    private function resetArticleData() {
+    private function resetArticleData($articleDetailsId) {
         // delete price group
         $sql = "UPDATE s_articles SET pricegroupActive = 0, pricegroupID = 0 WHERE id = 202;";
         Shopware()->Db()->query($sql);
 
         //reset the stapping prices
-        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 444";
-        Shopware()->Db()->query($sql);
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = ?";
+        Shopware()->Db()->query($sql, array($articleDetailsId));
+
         $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
-        ('EK', 1, 'beliebig', 202, 444, 17.638655462185, 0, 0, '0.00')";
-        Shopware()->Db()->query($sql);
+        ('EK', 1, 'beliebig', 202, ?, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql, array($articleDetailsId));
     }
 
     /**
@@ -231,18 +235,19 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         Shopware()->Db()->query($sql);
 
         //reset the stapping prices for the main variant
-        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 444";
-        Shopware()->Db()->query($sql);
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = ?";
+        Shopware()->Db()->query($sql, array(self::MAIN_VARIANT_ID));
+
         $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
-        ('EK', 1, 'beliebig', 202, 444, 17.638655462185, 0, 0, '0.00')";
-        Shopware()->Db()->query($sql);
+        ('EK', 1, 'beliebig', 202, ?, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql, array(self::MAIN_VARIANT_ID));
 
         //reset the stapping prices for the variant
-        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 445";
-        Shopware()->Db()->query($sql);
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = ?";
+        Shopware()->Db()->query($sql, array(self::VARIANT_ID));
         $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
-        ('EK', 1, 'beliebig', 202, 445, 17.638655462185, 0, 0, '0.00')";
-        Shopware()->Db()->query($sql);
+        ('EK', 1, 'beliebig', 202, ?, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql, array(self::VARIANT_ID));
     }
 
 }
