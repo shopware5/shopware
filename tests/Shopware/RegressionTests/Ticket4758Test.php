@@ -30,122 +30,191 @@
 class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * Set up test case, fix demo data where needed
+     * Set up test case, add the pricegroup
      */
     public function setUp()
     {
         parent::setUp();
 
-        // Create Pricegroup and add it to the articles
+        // Create Pricegroup
         $sql = "
-            INSERT INTO s_core_pricegroups_discounts (`groupID`, `customergroupID`, `discount`, `discountstart`) VALUES
+            REPLACE INTO s_core_pricegroups_discounts (`groupID`, `customergroupID`, `discount`, `discountstart`) VALUES
             (1, 1, 5, 1),
             (1, 1, 10, 2),
             (1, 1, 20, 3),
             (1, 1, 25, 4);
         ";
-
         Shopware()->Db()->query($sql);
     }
 
 
-//todo@ms main variante sollte hier ausreichen zu testen
     /**
-     * Test case method
-     *
-     * Konfigurator Artikel mit Preisgruppe
-     * Konfigurator Artikel ohne Preisgruppe
-     * Konfigurator Artikel mit Staffelpreise
-     * Konfigurator Artikel mit Staffelpreise und Preisgruppe
+     * Tests the prices with a main variant article
      */
-    public function testConfiguratorArticlePriceGroups()
+    public function testMainVariantArticlePriceGroups()
     {
-        $module = Shopware()->Modules()->Articles();
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
         //check prices for configurator article without pricegroup and without stapping
-        $this->dispatch("/");
-        $articleData = $module->sGetArticleById(202);
         $this->assertEquals(0,$articleData["pricegroupID"]);
         $this->assertEquals(0,$articleData["pricegroupActive"]);
         $this->assertTrue(empty($articleData["sBlockPrices"]));
-        $this->assertEquals('20,99',$articleData["sConfiguratorSelection"]["price"][0]["price"]);
+        $this->assertEquals('20,99',$articleData["price"]);
 
 
         //check prices for configurator article with pricegroup and without stapping
         $sql = "UPDATE s_articles SET pricegroupActive = 1, pricegroupID = 1 WHERE id = 202";
         Shopware()->Db()->query($sql, array());
 
-        $this->dispatch("/");
-        $articleData = $module->sGetArticleById(202);
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
         $this->assertEquals(1,$articleData["pricegroupID"]);
         $this->assertEquals(1,$articleData["pricegroupActive"]);
+        $this->assertPriceGroupBlockPrices($articleData);
+
+
+        //set stapping prices to the main variant with the detail id 444
+        $this->insertPriceStapping(444);
+
+        //check prices for configurator article with pricegroup and with stapping
+        //the stapping shouldn't have any effect because of the pricegroup
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+
+        //assert the same things because the pricegroup setting has a higher priority than the stapping prices
+        $this->assertEquals(1,$articleData["pricegroupID"]);
+        $this->assertEquals(1,$articleData["pricegroupActive"]);
+        $this->assertPriceGroupBlockPrices($articleData);
+
+        //check prices for the  article with stapping but without the pricegroup
+        $sql= "UPDATE s_articles SET pricegroupActive = 0 WHERE id = 202";
+        Shopware()->Db()->exec($sql);
+
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+        $this->assertEquals(1,$articleData["pricegroupID"]);
+        $this->assertEquals(0,$articleData["pricegroupActive"]);
+        $this->assertStappingPrices($articleData);
+    }
+
+    /**
+     * Tests the prices with a variant article
+     */
+    public function testVariantArticlePriceGroups()
+    {
+        //reset the test data
+       $this->resetArticleData();
+
+        $this->Request()
+                ->setMethod('POST')
+                ->setPost('group', array(
+            6 => 15,
+            7 => 63,
+        ));
+
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+
+        //check prices for configurator article without pricegroup and without stapping
+        $this->assertEquals(0,$articleData["pricegroupID"]);
+        $this->assertEquals(0,$articleData["pricegroupActive"]);
+        $this->assertTrue(empty($articleData["sBlockPrices"]));
+        $this->assertEquals('20,99',$articleData["sConfiguratorSelection"]["price"][0]["price"]);
+        $this->assertEquals(1,count($articleData["sConfiguratorSelection"]["price"]));
+
+        //check prices for configurator article with pricegroup and without stapping
+        $sql = "UPDATE s_articles SET pricegroupActive = 1, pricegroupID = 1 WHERE id = 202";
+        Shopware()->Db()->query($sql, array());
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+        $this->assertEquals(1,$articleData["pricegroupID"]);
+        $this->assertEquals(1,$articleData["pricegroupActive"]);
+        $this->assertPriceGroupBlockPrices($articleData);
+
+        //set stapping prices to the  variant with the detail id 445
+        $this->insertPriceStapping(445);
+
+        //check prices for configurator article with pricegroup and with stapping
+        //the stapping shouldn't have any effect because of the pricegroup
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+
+        //assert the same things because the pricegroup setting has a higher priority than the stapping prices
+        $this->assertEquals(1,$articleData["pricegroupID"]);
+        $this->assertEquals(1,$articleData["pricegroupActive"]);
+        $this->assertPriceGroupBlockPrices($articleData);
+
+        //check prices for the article with stapping but without the pricegroup
+        $sql= "UPDATE s_articles SET pricegroupActive = 0 WHERE id = 202";
+        Shopware()->Db()->exec($sql);
+
+        $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
+        $articleData = $this->View()->getAssign('sArticle');
+        $this->assertEquals(1,$articleData["pricegroupID"]);
+        $this->assertEquals(0,$articleData["pricegroupActive"]);
+        $this->assertStappingPrices($articleData);
+    }
+
+    /**
+     * helper method to resets the article data
+     */
+    private function resetArticleData() {
+        // delete price group
+        $sql = "UPDATE s_articles SET pricegroupActive = 0, pricegroupID = 0 WHERE id = 202;";
+        Shopware()->Db()->query($sql);
+
+        //reset the stapping prices
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 444";
+        Shopware()->Db()->query($sql);
+        $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
+        ('EK', 1, 'beliebig', 202, 444, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql);
+    }
+
+    /**
+     * helper method to insert the prices stapping
+     */
+    private function insertPriceStapping($articleDetailId) {
+        $sql= "
+        DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = :articleDetailId;
+        REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
+        ('EK', 1, '2', 202, :articleDetailId, 17.638655462185, 0, 0, '0.00'),
+        ('EK', 3, '4', 202, :articleDetailId, 15.126050420168, 0, 0, '5.26'),
+        ('EK', 5, '6', 202, :articleDetailId, 14.285714285714, 0, 0, '10.53'),
+        ('EK', 7, '10', 202, :articleDetailId, 13.445378151261, 0, 0, '15.79'),
+        ('EK', 11, 'beliebig', 202, :articleDetailId, 12.605042016807, 0, 0, '21.05');";
+        Shopware()->Db()->query($sql, array('articleDetailId' => $articleDetailId));
+    }
+
+    /**
+     * helper method to assert the block Prices
+     * @param $articleData
+     */
+    private function assertPriceGroupBlockPrices($articleData) {
         $this->assertFalse(empty($articleData["sBlockPrices"]));
         $this->assertEquals('19,94',$articleData["sBlockPrices"][0]["price"]);
         $this->assertEquals('18,89',$articleData["sBlockPrices"][1]["price"]);
         $this->assertEquals('16,79',$articleData["sBlockPrices"][2]["price"]);
         $this->assertEquals('15,74',$articleData["sBlockPrices"][3]["price"]);
         $this->assertEquals(4,count($articleData["sBlockPrices"]));
-
-
-        //todo@ms: easily change to the main variant
-        //set stapping prices to the variant with the detail id 445
-//        $sql= "INSERT INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
-//            ('EK', 1, '2', 202, 445, 17.638655462185, 0, 0, '0.00'),
-//            ('EK', 3, '4', 202, 445, 11.764705882353, 0, 0, '33.30'),
-//            ('EK', 5, 'beliebig', 202, 445, 8.4033613445378, 0, 0, '52.36');";
-//        Shopware()->Db()->query($sql);
-//
-//        //check prices for configurator article with pricegroup and with stapping
-//        //the stapping shouldn't have any effekt because of the pricegroup
-//
-////        $this->Request()->setMethod('POST')->setPost('group', array(6=>15,7 =>63));
-//
-//        $module->sSYSTEM->_POST = array('group' => array(6=>15,7 =>63));
-//        //$this->dispatch("/");
-//        $articleData = $module->sGetArticleById(202);
-//
-//
-//        $this->assertEquals(1,$articleData["pricegroupID"]);
-//        $this->assertEquals(1,$articleData["pricegroupActive"]);
-//        $this->assertFalse(empty($articleData["sBlockPrices"]));
-//        $this->assertEquals('19,94',$articleData["sBlockPrices"][0]["price"]);
-//        $this->assertEquals('18,89',$articleData["sBlockPrices"][1]["price"]);
-//        $this->assertEquals('16,79',$articleData["sBlockPrices"][2]["price"]);
-//        $this->assertEquals('15,74',$articleData["sBlockPrices"][3]["price"]);
-//        $this->assertEquals(4,count($articleData["sBlockPrices"]));
-
-
     }
 
     /**
-     *
-     * Artikel mit aktiver Preisgruppe
-     * Artikel ohne Preisgruppe
-     * Artikel mit Staffelpreise und Preisgruppe
+     * helper method to assert the stapping prices
+     * @param $articleData
      */
-    public function testArticlePriceGroups()
-    {
-        /**
-         * Testcases
-         *
-         * Artikel mit aktiver Preisgruppe
-         * Artikel ohne Preisgruppe
-         * Artikel mit Staffelpreise und Preisgruppe
-         *
-         *
-         *
-         *
-         *
-         */
-
-//        $this->dispatch("/");
-//        $articleData = Shopware()->Modules()->Articles()->sGetArticleById(202);
-//        echo "<pre>";
-//        print_r($articleData);
-//        echo "</pre>";
-//        exit();
-
-
+    private function assertStappingPrices($articleData) {
+        $articleBlockPrices = $articleData["sConfiguratorSelection"]["sBlockPrices"];
+        $this->assertFalse(empty($articleData["sBlockPrices"]));
+        $this->assertEquals('20,99',$articleBlockPrices[0]["price"]);
+        $this->assertEquals('18,00',$articleBlockPrices[1]["price"]);
+        $this->assertEquals('17,00',$articleBlockPrices[2]["price"]);
+        $this->assertEquals('16,00',$articleBlockPrices[3]["price"]);
+        $this->assertEquals('15,00',$articleBlockPrices[4]["price"]);
+        $this->assertEquals(5,count($articleBlockPrices));
     }
+
+
 
     /**
     * Cleaning up testData
@@ -159,9 +228,21 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         UPDATE s_articles SET pricegroupActive = 0, pricegroupID = 0 WHERE id = 202;
         DELETE FROM s_core_pricegroups_discounts WHERE `customergroupID` = 1 AND groupID = 1;
         ";
-        //todo@ms: delete variant prices for detailID 445
         Shopware()->Db()->query($sql);
 
+        //reset the stapping prices for the main variant
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 444";
+        Shopware()->Db()->query($sql);
+        $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
+        ('EK', 1, 'beliebig', 202, 444, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql);
+
+        //reset the stapping prices for the variant
+        $sql= "DELETE FROM`s_articles_prices` WHERE `articleID` = 202 AND articledetailsID = 445";
+        Shopware()->Db()->query($sql);
+        $sql= "REPLACE INTO `s_articles_prices` (`pricegroup`, `from`, `to`, `articleID`, `articledetailsID`, `price`, `pseudoprice`, `baseprice`, `percent`) VALUES
+        ('EK', 1, 'beliebig', 202, 445, 17.638655462185, 0, 0, '0.00')";
+        Shopware()->Db()->query($sql);
     }
 
 }
