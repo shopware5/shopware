@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Supplier
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Jens Schwehn
- * @author     $Author$
  */
 
 /**
  * Shopware Supplier Management
  *
- * todo
- * @all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend_ExtJs
 {
@@ -53,6 +46,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
         }
+
         return $this->repository;
     }
 
@@ -68,6 +62,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     {
         if (!$this->Request()->isPost()) {
             $this->View()->assign(array('success' => false));
+
             return;
         }
 
@@ -111,7 +106,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
         $suppliers = $query->getArrayResult();
 
-        foreach ($suppliers as &$supplier){
+        foreach ($suppliers as &$supplier) {
             $supplier["description"] = strip_tags($supplier["description"]);
         }
 
@@ -160,18 +155,13 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     public function saveSuppliers()
     {
-        $data = null;
-
         if (!$this->Request()->isPost()) {
-            $this->View()->assign(array(
-                'success' => false,
-                'errorMsg' => $this->namespace->get('empty_post', 'Empty Post request.')
-            ));
+            $this->View()->assign(array('success' => false));
 
             return;
         }
 
-        $id = (int)$this->Request()->get('id');
+        $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
         } else {
@@ -194,7 +184,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         if (empty($name)) {
             $this->View()->assign(array(
                 'success' => false,
-                'errorMsg' => $this->namespace->get('no_name_given', 'No supplier name given')
+                'errorMsg' => 'No supplier name given'
             ));
 
             return;
@@ -208,10 +198,12 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         } catch (Exception $e) {
             $errorMsg = $e->getMessage();
             $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));
+
             return;
         }
 
         $this->View()->assign(array('success' => true, 'data' => $params));
+
         return;
     }
 
@@ -224,13 +216,14 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     {
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
 
-
         if (empty($data)) {
             $this->View()->assign(array('success' => false, 'message' => 'Supplier not found'));
+
             return;
         }
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
+
         return;
     }
 
@@ -260,7 +253,6 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      * Method to define acl dependencies in backend controllers
      * <code>
      * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
-     * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
      * </code>
      */
     protected function initAcl()
