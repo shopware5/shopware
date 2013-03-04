@@ -135,7 +135,7 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $this->assertPriceGroupBlockPrices($articleData);
 
         //set stapping prices to the  variant with the detail id 445
-        $this->insertPriceStapping(445);
+        $this->insertPriceStapping(self::VARIANT_ID);
 
         //check prices for configurator article with pricegroup and with stapping
         //the stapping shouldn't have any effect because of the pricegroup
