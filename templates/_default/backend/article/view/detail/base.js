@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             labelWidth: 155,
             anchor: '100%',
             vtype:'remote',
-            validationUrl: null,
+            validationUrl: '{url action="validateNumber"}',
             validationRequestParam: articleId,
             validationErrorMsg: me.snippets.numberValidation
         });
@@ -248,11 +248,6 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         me.priceGroupComboBox.bindStore(stores['priceGroups']);
 
         me.numberField.validationRequestParam = article.getMainDetail().first().get('id');
-
-        // Delay the validation of the ordernumber
-        window.setTimeout(function() {
-            me.numberField.validationUrl = '{url action="validateNumber"}';
-        }, 1500);
     },
 
     /**

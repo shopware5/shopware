@@ -78,10 +78,6 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         anchor: '100%'
     },
 
-    requires: [
-        'Shopware.apps.Article.controller.Detail'
-    ],
-
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
