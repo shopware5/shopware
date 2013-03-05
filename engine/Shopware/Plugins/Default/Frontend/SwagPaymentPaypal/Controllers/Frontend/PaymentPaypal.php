@@ -524,9 +524,12 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         if($config->get('paypalTransferCart')) {
             foreach ($basket['content'] as $key => $item) {
                 if (!empty($user['additional']['charge_vat']) && !empty($item['amountWithTax'])) {
-                    $amount = $item['amountWithTax'];
+                    $amount = round($item['amountWithTax'], 2);
+                    $quantity = 1;
                 } else {
                     $amount = str_replace(',', '.', $item['amount']);
+                    $quantity = $item['quantity'];
+                    $amount = $amount / $item['quantity'];
                 }
                 $amount = round($amount, 2);
                 // Tax amount calculation / Not needed anymore
@@ -540,8 +543,8 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 $article = array(
                     'L_NUMBER' . $key   => $item['ordernumber'],
                     'L_NAME' . $key     => $item['articlename'],
-                    'L_AMT' . $key      => $amount / $item['quantity'],
-                    'L_QTY' . $key      => $item['quantity'],
+                    'L_AMT' . $key      => $amount,
+                    'L_QTY' . $key      => $quantity,
 //                    'L_TAXAMT' . $key   => $tax
                 );
                 $params = array_merge($params, $article);
