@@ -528,6 +528,7 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 } else {
                     $amount = str_replace(',', '.', $item['amount']);
                 }
+                $amount = round($amount, 2);
                 // Tax amount calculation / Not needed anymore
 //                if(empty($amount) || empty($user['additional']['charge_vat'])) {
 //                    $tax = 0;
