@@ -79,15 +79,6 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * Cleaning up old testData
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-    }
-
-    /**
      * Creates the dummy voucher
      *
      * @param bool $individualMode
@@ -106,7 +97,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * helper method to create the dummy object
+     * Helper method to create the dummy object
      *
      * @param bool $individualMode
      * @return \Shopware\Models\Voucher\Voucher

@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Test_Database_TestCase
+class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Module instance
@@ -51,6 +51,7 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Articles();
+        $this->module->sDeleteComparisons();
 
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';
         $sql = Shopware()->Db()->limit($sql, 5);
@@ -58,13 +59,12 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
     }
 
     /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     * Cleaning up testData
      */
-    protected function getDataSet()
+    protected function tearDown()
     {
-        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Articles').'Compare.xml');
+        parent::tearDown();
+        $this->module->sDeleteComparisons();
     }
 
     /**
@@ -117,7 +117,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testAddComparison()
     {
-
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertNotEmpty($this->Module()->sGetComparisons());
     }
@@ -127,7 +126,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testGetComparisons()
     {
-
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertEquals(count($this->Module()->sGetComparisons()), 2);
