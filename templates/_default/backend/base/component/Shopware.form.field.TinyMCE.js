@@ -124,7 +124,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             convert_urls : false,
             media_strict : false,
             relative_urls : true,
-            language: 'en', // German isn't supported in the current release version v3.5b1
+            language: Ext.editorLang.substring(0,2),
             mode: "textareas",
             theme: "advanced",
             skin: "o2k7",
