@@ -295,7 +295,7 @@ Ext.define('Shopware.data.ClassCache',
             }
 
         } catch(err) {
-            me._clearLastItem();
+            me.clear();
             me.add.call(me, key, data);
         }
 
