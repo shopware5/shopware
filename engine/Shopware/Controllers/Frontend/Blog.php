@@ -273,7 +273,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)) {
+        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
+                && $this->Request()->getParam('__cache') == null) {
+
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
                 'eMail' => $userData['additional']['user']['email'],
