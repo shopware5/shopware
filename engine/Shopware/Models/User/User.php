@@ -163,6 +163,13 @@ class User extends ModelEntity
     private $lockedUntil;
 
     /**
+     * @var boolean $extendedEditor
+     *
+     * @ORM\Column(name="extended_editor", type="boolean", nullable=false)
+     */
+    private $extendedEditor = false;
+
+    /**
      * The role property is the owning side of the association between user and role.
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
@@ -479,6 +486,25 @@ class User extends ModelEntity
     public function getLockedUntil()
     {
         return $this->lockedUntil;
+    }
+
+    /**
+     * @param boolean $extendedEditor
+     * @return User
+     */
+    public function setExtendedEditor($extendedEditor)
+    {
+        $this->extendedEditor = (bool) $extendedEditor;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExtendedEditor()
+    {
+        return $this->extendedEditor;
     }
 
     /**
