@@ -140,16 +140,17 @@ Ext.define('Shopware.form.field.TinyMCE',
             // Content CSS - Styles the tiny mce editor. Please note the append timestamp. It's used to prevent caching the stylesheet
             contentCSS: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
 
-            theme_advanced_buttons1: 'bold,italic,underline,|,fontsizeselect,forecolor,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,media_selection,|,code,fullscreen,',
-            theme_advanced_buttons2: '',
-            theme_advanced_buttons3: '',
-            theme_advanced_buttons4: ''
-            /*
+            /** {if $user->extended_editor eq 1} */
             theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect",
             theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
             theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,ltr,rtl,|,fullscreen",
             theme_advanced_buttons4 : "styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,|,insertdate,inserttime,preview,|,forecolor,backcolor,|,media_selection"
-            */
+            /** {else} */
+            theme_advanced_buttons1: 'bold,italic,underline,|,fontsizeselect,forecolor,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,media_selection,|,code,fullscreen,',
+            theme_advanced_buttons2: '',
+            theme_advanced_buttons3: '',
+            theme_advanced_buttons4: ''
+            /** {/if} */
         },
 
         /**
@@ -203,7 +204,6 @@ Ext.define('Shopware.form.field.TinyMCE',
         if(window.tinymce) {
             me.statics.initialized = true;
         }
-
         // Register additional events
         me.registerEvents();
     },
