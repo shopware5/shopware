@@ -164,6 +164,8 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+	    $identity = Shopware()->Auth()->getIdentity();
+		$this->View()->assign('user', $identity, true);
     }
 
     /**

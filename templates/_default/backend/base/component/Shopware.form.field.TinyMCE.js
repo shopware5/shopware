@@ -141,12 +141,14 @@ Ext.define('Shopware.form.field.TinyMCE',
             contentCSS: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
 
             /** {if $user->extended_editor eq 1} */
+            skin_variant: 'silver',
             theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect",
             theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
             theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,ltr,rtl,|,fullscreen",
             theme_advanced_buttons4 : "styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,|,insertdate,inserttime,preview,|,forecolor,backcolor,|,media_selection"
             /** {else} */
-            theme_advanced_buttons1: 'bold,italic,underline,|,fontsizeselect,forecolor,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,media_selection,|,code,fullscreen,',
+            skin_variant: 'shopware',
+            theme_advanced_buttons1: 'undo,redo,|,bold,italic,underline,|,fontsizeselect,forecolor,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,link,unlink,media_selection,|,code,fullscreen,',
             theme_advanced_buttons2: '',
             theme_advanced_buttons3: '',
             theme_advanced_buttons4: ''
