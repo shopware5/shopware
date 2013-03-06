@@ -77,20 +77,18 @@
 		{block name='frontend_blog_comments_input_name'}
 		<p class="col">
 			<label for="sCommentName">{se name="BlogLabelName"}{/se}*:</label>
-			<input name="name" type="text" id="sCommentName" value="{$sFormData.sVoteName|escape}" class="text{if $sErrorFlag.name} instyle_error{/if}" />
+			<input name="name" type="text" id="sCommentName" value="{$sFormData.name|escape}" class="text{if $sErrorFlag.name} instyle_error{/if}" />
 		</p>
 		{/block}
 		
 		{* E-Mail *}
-        {if !{$userLoggedIn}}
-            {block name='frontend_blog_comments_input_mail'}
-            <p class="col">
-                <label for="sCommentMail">{se name="BlogLabelMail"}{/se}*:</label>
-                <input name="eMail" type="text" id="sCommentMail" value="{$sFormData.sVoteMail|escape}" class="text{if $sErrorFlag.eMail} instyle_error{/if}" />
-            </p>
-            {/block}
-        {/if}
-		
+        {block name='frontend_blog_comments_input_mail'}
+        <p class="col">
+            <label for="sCommentMail">{se name="BlogLabelMail"}{/se}{if {config name=OptInVote}}*{/if}:</label>
+            <input name="eMail" type="text" id="sCommentMail" value="{$sFormData.eMail|escape}" class="text{if $sErrorFlag.eMail} instyle_error{/if}" />
+        </p>
+        {/block}
+
 		{* Voting *}
 		{block name='frontend_blog_comments_input_voting'}
 		<p class="col">
@@ -114,7 +112,7 @@
 		{block name='frontend_blog_comments_input_summary'}
 		<p class="col">
 			<label for="sCommentHeadline">{se name="BlogLabelSummary"}{/se}*:</label>
-			<input name="headline" type="text" value="{$_POST.headline|escape}" id="sCommentHeadline" class="text {if $sErrorFlag.headline}instyle_error{/if}" />
+			<input name="headline" type="text" value="{$sFormData.headline|escape}" id="sCommentHeadline" class="text {if $sErrorFlag.headline}instyle_error{/if}" />
 		</p>
 		{/block}
 		
@@ -122,7 +120,7 @@
 		{block name='frontend_blog_comments_input_comment'}
 		<p class="textarea">
 			<label for="sComment">{se name="BlogLabelComment"}{/se}*</label>
-			<textarea name="comment" id="sComment" class="text {if $sErrorFlag.comment}instyle_error{/if}" rows="5" cols="5">{$_POST.comment|escape}</textarea>
+			<textarea name="comment" id="sComment" class="text {if $sErrorFlag.comment}instyle_error{/if}" rows="5" cols="5">{$sFormData.comment|escape}</textarea>
 		</p>
 		{/block}
 		
