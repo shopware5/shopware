@@ -1245,7 +1245,7 @@ class sArticles
      * @return array
      */
     public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
-    { 
+    {
         if ($categoryId === null
             && !empty($this->sSYSTEM->_GET["sCategory"])
         ) {
@@ -1257,7 +1257,7 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        
+
         $db = Shopware()->Db();
         $language = $this->translationId;
         $categoryId = (int)$categoryId;
@@ -3108,13 +3108,12 @@ class sArticles
         }
 
         $getPromotionResult = Shopware()->Db()->fetchRow($sql, array($this->sSYSTEM->sUSERGROUP, $value));
-
-        //have to support the old variable name sReleasedate for 3rd party template changes
-        $getPromotionResult["sReleaseDate"] = $getPromotionResult["sReleasedate"];
-
         if (empty($getPromotionResult)) {
             return false;
         }
+
+        //have to support the old variable name sReleasedate for 3rd party template changes
+        $getPromotionResult["sReleaseDate"] = $getPromotionResult["sReleasedate"];
 
         $getPromotionResult = $this->sGetTranslation(
             $getPromotionResult, $getPromotionResult["articleID"], 'article', $this->sSYSTEM->sLanguage
@@ -4201,7 +4200,7 @@ class sArticles
             AND s2_filter_articles$valueId.valueID = $valueId
         ";
 
-        
+
         return $countSelect . $valueSql . $countCondition;
     }
 
@@ -4312,7 +4311,7 @@ class sArticles
             $optionName,     $directions['optionName'],
             $valueSort,      $directions['valueSort'],
             $optionValue,    $directions['optionValue'],
-        $sort); 
+        $sort);
 
         $sortedFilters = array();
         foreach($sort as $value) {
