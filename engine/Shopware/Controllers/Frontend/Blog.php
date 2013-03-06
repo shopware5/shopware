@@ -272,12 +272,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $blogArticleData['template']);
         }
 
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
-            && $this->Request()->getParam('__cache') !== null) {
+        $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
+        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
-                'sVoteMail' => $userData['additional']['user']['email'],
-                'sVoteName' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname']
+                'eMail' => $userData['additional']['user']['email'],
+                'name' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname']
             );
         }
 
@@ -402,7 +402,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     //save comment
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
-                    $this->View()->userLoggedIn = true;
                 }
 
                 $this->View()->sAction = $this->Request()->getActionName();
