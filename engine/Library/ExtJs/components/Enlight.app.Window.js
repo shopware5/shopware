@@ -176,6 +176,11 @@ Ext.define('Enlight.app.Window', {
             return true;
         }
 
+        // Hide the window before destroy to increase the visual closing of the window
+        if(me.hasOwnProperty('hide') && Ext.isFunction(me.hide)) {
+            me.hide();
+        }
+
         subWindows = windowManager.subWindows.items;
         Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function(button) {
             if (button == 'yes') {
