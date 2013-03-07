@@ -72,7 +72,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         me.subApplication.addEvents('batchStoreLoaded');
         me.subApplication.on('batchStoreLoaded', me.onBatchStoreLoaded, me);
-        Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
+
+        // Check if the module is running in split view mode...
+        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+            me.subApplication.splitViewActive = true;
+            Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
+        } else {
+            me.subApplication.splitViewActive = false;
+        }
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
@@ -419,6 +426,17 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         return field;
     },
 
+    /**
+     * Event listener method which will be fired when all stores are loaded.
+     *
+     * The method collects all necessary stores and throws an custom event which
+     * other sub components could register on.
+     *
+     * @param { Array } storeData - The received store data
+     * @param { Array } operation - Ext.data.Operation
+     * @param { Boolean } edit - Truthy if the article was just saved and reloaded, falsy if the article was changed.
+     * @return { void }
+     */
     onBatchStoreLoaded: function(storeData, operation, edit) {
         var me = this, stores, article, detailCtrl = me.getController('Detail');
 
@@ -464,6 +482,18 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         }
     },
 
+    /**
+     * Event listener method which will be triggered when the user changes the selected product in
+     * the product list module.
+     *
+     * The method checks if the currently openend instance of the product mask is running in split view mode
+     * and reloads the detail store of the selected product
+     *
+     * @param { Enlight.app.SubApplication } subApp - Sub application which triggers the split view, usally
+     *        the product list module
+     * @param { Array } options - Passed options
+     * @returns {boolean}
+     */
     onSplitViewStoreChange: function(subApp, options) {
         var me = this,
             mainWindow = me.mainWindow,
@@ -474,6 +504,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             return false;
         }
 
+        if(!me.subApplication.hasOwnProperty('splitViewActive') || !me.subApplication.splitViewActive) {
+            return false;
+        }
         
         // Cache the last selected row, so the user will not be
 		// interrupted in the split view mode
@@ -484,7 +517,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         // Both function calls could throw an error...
         try {
             mainWindow.saveButton.setDisabled(true);
-            mainWindow.on('destroy', me.onCloseSplitViewMode, me);
+            mainWindow.on('destroy', me.onCloseSplitViewMode, me, { single: true });
         } catch(err) {  }
 
         me.detailStore = me.getStore('Detail');
@@ -499,9 +532,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         });
     },
 
+    /**
+     * Event listener method which will be triggered when the product mask module
+     * will be closed.
+     *
+     * @return { void }
+     */
     onCloseSplitViewMode: function() {
         Shopware.app.Application.fireEvent('moduleConnector:splitViewClose', this);
     }
-
 });
 //{/block}
