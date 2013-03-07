@@ -423,13 +423,17 @@ Ext.define('Enlight.app.SubApplication', {
      * the event directly to the component (or it's HTML DOM elements).
      *
      * @public
-     * @param [object] selectors - Selectors to bind events on it
-     * @param [object] listeners - Associated event listeners for the selectors
-     * @param [string] controller - Name of the associated controller to catch the events there
-     * @return void
+     * @param { Object } selectors - Selectors to bind events on it
+     * @param { Object } listeners - Associated event listeners for the selectors
+     * @param { String } controller - Name of the associated controller to catch the events there
+     * @return { void|Boolean }
      */
     control: function(selectors, listeners, controller) {
-        this.eventbus.control(selectors, listeners, controller);
+        if(this.hasOwnProperty('eventbus') && this.eventbus) {
+            this.eventbus.control(selectors, listeners, controller);
+        } else {
+            return false;
+        }
     },
 
     /**

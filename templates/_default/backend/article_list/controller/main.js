@@ -75,6 +75,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         growlMessage: '{s name=growl_message}Article{/s}',
         splitViewTitle: '{s name=splitview_title}Split-View{/s}',
         splitViewText: '{s name=splitview_text}The split view mode has been activated.{/s}',
+        splitViewAlreadyActive: '{s name=split_view_already_active}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}',
         messages: {
             successTitle: '{s name=messages/success}Success{/s}',
             deleteSuccess: '{s name=messages/delete_success}The selected articles have been removed{/s}',
@@ -262,12 +263,20 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             return;
         }
 
+        // Is a split view already been up and running...
+        if(me.splitViewMode) {
+            Ext.MessageBox.alert(me.snippets.splitViewTitle, me.snippets.splitViewAlreadyActive);
+            return false;
+        }
+
+        // Add inidicator to the class that the split view mode is up and running...
         if(!me.hasOwnProperty('splitViewMode')) {
             me.splitViewMode = true;
         }
 
         Shopware.Notification.createGrowlMessage(me.snippets.splitViewTitle, me.snippets.splitViewText);
 
+        // Save the position and the size of the product list
         me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());
         me.defaultState = Ext.Object.merge(me.defaultState, position);
 
@@ -307,6 +316,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
         mainWindow.setSize(me.defaultState);
         mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
+        me.splitViewMode = false;
     }
 });
 //{/block}
