@@ -545,8 +545,6 @@ Ext.define('Shopware.container.Viewport',
         }
 
 		me.desktops.add(desktop);
-        me.on('afterrender', me.initializeDropZone, desktop);
-
 		me.fireEvent('createdesktop', me, desktop);
 		me.resizeViewport();
         me.updateDesktopSwitcher();
@@ -752,89 +750,6 @@ Ext.define('Shopware.container.Viewport',
 	scrollRight: function() {
 		return this.scroll('right');
 	},
-
-    /**
-     * Creates a drop zone for the desktop.
-     *
-     * @private
-     * @param [object] view - Ext.container.Container
-     * @return void
-     */
-    initializeDropZone: function(view) {
-        view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
-            ddGroup: 'desktop-article-dd',
-
-            /**
-             * Returns the target element from the event.
-             *
-             * @private
-             * @param [object] event - Ext.EventImplObj
-             * @return [object] target element
-             */
-            getTargetFromEvent: function(event) {
-                return event.getTarget(view.itemSelector);
-            },
-
-            /**
-             * Changes the drop indicator.
-             *
-             * @privaate
-             * @return [string] dropAllowed css class
-             */
-            onNodeOver: function() {
-                return Ext.dd.DropZone.prototype.dropAllowed;
-            },
-
-            /**
-             * Creates the desktop association and bind all
-             * necessary event listeners to the newly created
-             * element.
-             *
-             * @param [object] target - HTML element
-             * @param [object] dd - drag and drop element object
-             * @param [object] e - Ext.EventImplObj
-             * @param [object] data - drag and drop data
-             */
-            onNodeDrop: function(target, dd, e, data) {
-                var viewport = Shopware.app.Application.viewport,
-                    element = new Ext.dom.Element(data.ddel.cloneNode(true)).getHTML(),
-                    activeDesktop = viewport.getActiveDesktop(),
-                    id = Ext.id(),
-                    position = e.getPoint(),
-                    container = Ext.create('Ext.Component', {
-                        renderTo: activeDesktop.getEl(),
-                        shadow: false,
-                        constrainTo: activeDesktop.getEl(),
-                        constrain: true,
-                        cls: Ext.baseCSSPrefix + 'article-dd',
-                        html: '<div id="'+ id +'">' + element + '</div>',
-                        floating: true,
-                        draggable: {
-                            delegate: '#' + id
-                        }
-                    });
-
-
-                container.getEl().on({
-                    'dblclick': function() {
-
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: ~~(1 * data.record.articleId)
-                            }
-                        });
-                    },
-                    scope: container
-                });
-                container.getEl().on('click', function(event) {
-                    container.destroy();
-                }, container, { delegate: '.icon-close' });
-                container.setPosition(position.x, position.y, false);
-            }
-        });
-    },
 
     /**
      * Tests if a property has a vendor prefix and returns the properly
