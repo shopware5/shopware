@@ -817,7 +817,6 @@ class Shopware_RegressionTests_Ticket5394 extends Enlight_Components_Test_Contro
 
             $this->assertEquals($expected['sConfigurator'], $article['sConfigurator']);
 //            the api test cases modifies price ids and configurator options and groups.
-//            $this->assertEquals($expected['sConfiguratorSelection'], $article['sConfiguratorSelection']);
             $this->assertEquals($expected['sConfiguratorSettings'], $article['sConfiguratorSettings']);
         }
     }
