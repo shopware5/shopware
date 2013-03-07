@@ -492,7 +492,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * @param { Enlight.app.SubApplication } subApp - Sub application which triggers the split view, usally
      *        the product list module
      * @param { Array } options - Passed options
-     * @returns {boolean}
+     * @returns { Boolean }
      */
     onSplitViewStoreChange: function(subApp, options) {
         var me = this,
