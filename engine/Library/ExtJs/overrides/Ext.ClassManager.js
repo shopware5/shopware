@@ -74,5 +74,96 @@
         this.triggerCreated(className);
 
         return true;
-    }
+    };
+
+    Manager.createOverride = function(className, data, createdFn) {
+        var me = this,
+            overriddenClassName = data.override,
+            requires = data.requires,
+            uses = data.uses,
+            check = true,
+            classReady = function () {
+                var cls, temp;
+
+                if (requires) {
+                    temp = requires;
+                    requires = null; // do the real thing next time (which may be now)
+
+                    // Since the override is going to be used (its target class is now
+                    // created), we need to fetch the required classes for the override
+                    // and call us back once they are loaded:
+                    Ext.Loader.require(temp, classReady);
+                } else {
+                    // The target class and the required classes for this override are
+                    // ready, so we can apply the override now:
+                    cls = me.get(overriddenClassName);
+
+                    // Check if the override want to replace the article window
+                    if(data.override === 'Shopware.apps.Article.view.detail.Window') {
+                        check = me.checkOverride(cls, data);
+                    }
+
+                    // We don't want to apply these:
+                    delete data.override;
+                    delete data.requires;
+                    delete data.uses;
+
+                    // The override check was not successful
+                    if(!check) {
+                        data = { '_invalidPlugin': true, '_invalidClassName': className };
+                    } else {
+                        data['_invalidPlugin'] = false;
+                    }
+
+                    Ext.override(cls, data);
+
+                    // This pushes the overridding file itself into Ext.Loader.history
+                    // Hence if the target class never exists, the overriding file will
+                    // never be included in the build.
+                    me.triggerCreated(className);
+
+                    if (uses) {
+                        Ext.Loader.addUsedClasses(uses); // get these classes too!
+                    }
+
+                    if (createdFn) {
+                        createdFn.call(cls); // last but not least!
+                    }
+                }
+            };
+
+        me.existCache[className] = true;
+
+        // Override the target class right after it's created
+        me.onCreated(classReady, me, overriddenClassName);
+
+        return me;
+    };
+
+    /**
+     * Helper method which checks the override if it's suppports
+     * the new 4.1 way to extend the product mask module.
+     *
+     * The method transforms all functions of the override
+     * to a string and checks if one of the functions contains
+     * the string "registerAdditionalTab".
+     *
+     * @param { Ext.Class } cls - The class which should be overridden
+     * @param { Object } data - Object which contains all functions which should be
+     *        merged into the class.
+     * @returns { Boolean } Truthy if the override provides the new way, falsy if not.
+     */
+    Manager.checkOverride =  function(cls, data) {
+        var match = false;
+
+        for(var fnName in data) {
+            var fn = data[fnName].toString();
+            if(fn.match(/registerAdditionalTab/i)) {
+                match = true;
+                break;
+            }
+        }
+
+        return match;
+    };
 })(Ext.ClassManager, Ext.global);
