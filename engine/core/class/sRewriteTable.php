@@ -279,32 +279,37 @@ class sRewriteTable
 			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed,
 				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
-			JOIN s_articles_details d
-			ON d.id = a.main_detail_id
-			LEFT JOIN s_articles_attributes at
-			ON at.articledetailsID=d.id
-			LEFT JOIN s_articles_translations atr
-			ON atr.articleID=a.id
-			AND atr.languageID=?
-			LEFT JOIN s_articles_supplier s
-			ON s.id=a.supplierID
-			WHERE c.id=?
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
+			FROM s_articles a
 
-            AND a.active=1
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = ?
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
+
+			JOIN s_articles_details d
+			    ON d.id = a.main_detail_id
+
+			LEFT JOIN s_articles_attributes at
+			    ON at.articledetailsID=d.id
+
+			LEFT JOIN s_articles_translations atr
+			    ON atr.articleID=a.id
+			    AND atr.languageID=?
+
+			LEFT JOIN s_articles_supplier s
+			    ON s.id=a.supplierID
+
+			WHERE a.active=1
 			AND a.changetime > ?
 			GROUP BY a.id
 			ORDER BY a.changetime, a.id
 			LIMIT 1000
 		";
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
-            Shopware()->Shop()->getId(),
             Shopware()->Shop()->get('parentID'),
+            Shopware()->Shop()->getId(),
             $last_update
         ));
 

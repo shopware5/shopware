@@ -91,22 +91,21 @@ class sMarketing
             SELECT e1.articleID as id, COUNT(DISTINCT e1.id) AS hits
             FROM s_emarketing_lastarticles AS e1,
                 s_emarketing_lastarticles AS e2,
-                s_articles_categories ac,
-                s_categories c, s_categories c2,
                 s_articles a
+
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = {$this->categoryId}
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
             LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-            WHERE c.id={$this->categoryId}
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
 
-            AND ac.articleID=e1.articleID
+            WHERE ac.articleID = e1.articleID
             AND e2.articleID=$articleId
             AND e1.sessionID=e2.sessionID
             AND a.id=e1.articleID
@@ -143,27 +142,25 @@ class sMarketing
             FROM
                 s_order_details AS b1,
                 s_order_details AS b2,
-                s_articles_categories ac,
-                s_categories c, s_categories c2,
                 s_articles a
+
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = {$this->categoryId}
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
             LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-            WHERE c.id={$this->categoryId}
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+            WHERE ac.articleID = b1.articleID
+            AND b2.articleID = $articleID
+            AND a.id = b1.articleID
 
-            AND ac.articleID=b1.articleID
-            AND b2.articleID=$articleID
-            AND a.id=b1.articleID
-
-            AND a.active=1
-            AND a.mode=0
+            AND a.active = 1
+            AND a.mode = 0
             $where
             AND b1.orderID = b2.orderID AND b1.modus=0
             AND ag.articleID IS NULL
@@ -327,8 +324,13 @@ class sMarketing
 			  a.name as articleName,
 			  COUNT(r.articleID) as relevance
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac,
-                s_articles a
+			FROM s_articles a
+			INNER JOIN s_articles_categories ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = $categoryId
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
 			LEFT JOIN s_emarketing_lastarticles r
 			ON a.id = r.articleID
@@ -338,14 +340,7 @@ class sMarketing
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE c.id=$categoryId
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active=1
-	        AND ac.categoryID=c2.id
-	        AND ac.articleID=a.id
-
-	        AND a.active = 1
+			WHERE a.active = 1
 	        AND ag.articleID IS NULL
 
 			GROUP BY a.id
@@ -400,7 +395,14 @@ class sMarketing
 			  IF(s2.id, 1, 0)  -- Same category
 			    as relevance
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
+			FROM s_articles a
+
+            INNER JOIN s_articles_categories ac
+                ON ac.articleID=a.id
+                AND ac.categoryID = {$this->categoryId}
+            INNER JOIN s_categories c
+                ON c.id = ac.categoryID
+                AND c.active = 1
 
 			LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
@@ -420,14 +422,7 @@ class sMarketing
             ON s2.categoryID=s1.categoryID
             AND s2.articleID=a.id
 
-			WHERE c.id={$this->categoryId}
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active=1
-	        AND ac.categoryID=c2.id
-	        AND ac.articleID=a.id
-
-	        AND a.active = 1
+			WHERE a.active = 1
 	        AND ag.articleID IS NULL
 	        AND a.id!=$articleId
 
