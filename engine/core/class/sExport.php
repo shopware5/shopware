@@ -553,17 +553,12 @@ class	sExport
 		if(!empty($this->sSettings["categoryID"]))
 		{
 			$sql_add_join[] = "
-				JOIN s_categories c
-					ON c.id = {$this->sSettings["categoryID"]}
-				LEFT JOIN s_categories c2
-					ON c2.left > c.left
-					AND c2.right <= c.right
-				JOIN s_articles_categories act
-					ON act.articleID = a.id
-					AND (
-						act.categoryID = c.id
-						OR act.categoryID = c2.id
-					)
+                INNER JOIN s_articles_categories act
+                    ON  act.articleID = a.id
+                    AND act.categoryID = {$this->sSettings["categoryID"]}
+                INNER JOIN s_categories c
+                    ON  c.id = act.categoryID
+                    AND c.active = 1
 			";
 		}
 		if(empty($this->sSettings["image_filter"]))
@@ -604,12 +599,12 @@ class	sExport
 		if(empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1)
 		{
 
-			$sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
-			$sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
-			$sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
-			$sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
-			$sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
-			$sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
+            $sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
+            $sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
+            $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
+            $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
 		}
 
