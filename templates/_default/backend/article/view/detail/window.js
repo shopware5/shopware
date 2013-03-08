@@ -114,6 +114,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @object
      */
     snippets: {
+        titleGeneral: '{s name=window_title_general}Product details{/s}',
         titleNew: '{s name=window_title}Article details: new article{/s}',
         titleEdit:'{s name=window_title_edit}Article details : [0]{/s}',
         formTab:'{s name=base_data}Base data{/s}',
@@ -131,6 +132,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         cancel:'{s name=cancel_button}Cancel{/s}',
         categoryNotice:'{s name=category/category_notice}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
         categoryNoticeTitle:'{s name=category/category_assignment}Assign categories{/s}',
+        invalidPlugin: '{s name=window_invalid_plugin}The plugin [0] is not compatible with Shopware 4.1. Please uninstall the plugin or contact the provider regarding for a compatible version.{/s}',
         descriptions: {
             title:'{s name=detail/description/title}Description{/s}',
             description: {
@@ -191,7 +193,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.callParent(arguments);
         me.changeTitle();
 
-        me.on('storesLoaded', me.onStoresLoaded, me)
+        // A incompatible plugin was found, throw a alert to inform the user.
+        if(me._invalidPlugin) {
+            Ext.MessageBox.alert(me.snippets.titleGeneral, Ext.String.format(me.snippets.invalidPlugin, '"' + me['_invalidClassName'] + '"'));
+        }
+
+        me.on('storesLoaded', me.onStoresLoaded, me);
     },
 
     /**
@@ -807,6 +814,5 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.variantListing.customerGroupStore = stores['customerGroups'];
         me.variantListing.article = article;
     }
-
 });
 //{/block}
