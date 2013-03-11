@@ -82,26 +82,70 @@ class Repository extends TreeRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        $articleSelect = $this->getArticleQueryBuilder($selectOnlyActive)->getDQL();
-        $builder = $this->createQueryBuilder('c')
-            ->select(array(
-                'c.id as id',
-                'c.name as name',
-                'c.position as position',
-                'c.parentId as parentId',
-                '(c.right - c.left - 1) / 2 as childrenCount',
-                '(' . $articleSelect . ') as articleCount'
-            ));
+        /**@var $builder \Shopware\Components\Model\QueryBuilder*/
+        $builder = $this->createQueryBuilder('c');
+        $builder->select(array(
+            'c.id as id',
+            'c.name as name',
+            'c.position as position',
+            'c.parentId as parentId',
+        ));
+        $builder = $this->addChildrenCountSelect($builder);
+        $builder = $this->addArticleCountSelect($builder);
 
-        $builder->addFilter($filterBy);
-        $builder->addOrderBy('c.left');
-        $builder->addOrderBy($orderBy);
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
+        $builder->addOrderBy('c.parent');
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
 
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
 
         return $builder;
     }
+
+    /**
+     * @param $builder \Shopware\Components\Model\QueryBuilder
+     *
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function addChildrenCountSelect($builder) {
+        $subQuery = $this->getEntityManager()->createQueryBuilder();
+        $subQuery->from('Shopware\Models\Category\Category', 'c2')
+                 ->select('COUNT(c2.id)')
+                 ->where('c2.parentId = c.id');
+
+        $dql = $subQuery->getDQL();
+        $builder->addSelect('(' . $dql . ') as childrenCount');
+
+        return $builder;
+    }
+
+    /**
+     * @param      $builder \Shopware\Components\Model\QueryBuilder
+     * @param bool $onlyActive
+     *
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function addArticleCountSelect($builder, $onlyActive = false) {
+        $builder->addSelect('COUNT(articles) as articleCount');
+        if ($onlyActive) {
+            $builder->leftJoin('c.articles', 'articles', Expr\Join::WITH, 'articles.active=1');
+        } else {
+            $builder->leftJoin('c.articles', 'articles');
+        }
+        $builder->addGroupBy('c.id');
+        return $builder;
+    }
+
+
+
+
+
+
 
     /**
      * Returns the \Doctrine\ORM\Query to select the category detail information based on the category id
@@ -146,27 +190,6 @@ class Repository extends TreeRepository
             ->where("category.id = ?1")
             ->setParameter(1,$categoryId);
 
-        return $builder;
-    }
-
-    /**
-     * Helper function to create the query builder for the "getListQueryBuilder" function.
-     * This function can be hooked to modify the query builder of the query object.
-     *
-     * @param bool $selectOnlyActive
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    protected function getArticleQueryBuilder($selectOnlyActive = true)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from($this->getEntityName(), 'ac')
-            ->select('COUNT(a)')
-            ->join('ac.articles', 'a')
-            ->where('ac.right <= c.right AND ac.left >= c.left');
-
-        if($selectOnlyActive) {
-            $builder->andWhere('ac.active=1');
-        }
         return $builder;
     }
 
@@ -218,20 +241,18 @@ class Repository extends TreeRepository
     protected function getActiveQueryBuilder($customerGroupId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $articleSelect = $this->getActiveArticleQueryBuilder()->getDQL();
+
         $builder->from($this->getEntityName(), 'c')
-            ->select(array(
-                'c as category',
-                'attribute',
-                'media',
-                '(c.right - c.left - 1) / 2 as childrenCount',
-                '(' . $articleSelect . ') as articleCount'
-            ))
+            ->select(array('c as category', 'attribute', 'media'))
             ->leftJoin('c.media', 'media')
             ->leftJoin('c.attribute', 'attribute')
             ->where('c.active=1')
-            ->addOrderBy('c.left')
+            ->addOrderBy('c.parentId')
+            ->addOrderBy('c.position')
             ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
+
+        $builder = $this->addArticleCountSelect($builder, true);
+        $builder = $this->addChildrenCountSelect($builder);
 
         if(isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
@@ -260,6 +281,8 @@ class Repository extends TreeRepository
             ->join('c.articles', 'a', Expr\Join::WITH, 'a.id= ?0')
             ->setParameter(0, $articleId)
             ->addOrderBy('c.position');
+
+        //todo@performance: Hier muss der rekursive call eingebunden werden. Es sollen auch die Unterkategorien berücksichtigt werden.
         if ($parentId !== null) {
             $parent = $this->find($parentId);
             $builder->andWhere('c.left > ?1')
@@ -289,13 +312,14 @@ class Repository extends TreeRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all active children by the category id
      *
-     * @param $id | category id
+     * @param   $id | category id
      * @param   null|int $customerGroupId
      * @param   null|int $depth
      * @return  \Doctrine\ORM\Query
      */
     public function getActiveChildrenByIdQuery($id, $customerGroupId = null, $depth = null)
     {
+        //todo@performance: Hier prüfen was das ding eigentlich machen soll. (1x Ebene? Alle Ebenen?)
         $node = $this->find($id);
 
         $builder = $this->getActiveQueryBuilder($customerGroupId)
@@ -303,23 +327,6 @@ class Repository extends TreeRepository
             ->setParameter(0, $node->getLeft())
             ->andWhere('c.right < ?1')
             ->setParameter(1, $node->getRight());
-
-        //this subquery consider that only categories with active parents are selected
-        $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $subQueryBuilder->from($this->getEntityName(), 'c2')
-                ->select('count(c2)')
-                ->where('c2.left < c.left')
-                ->andWhere('c2.right > c.right')
-                ->andWhere('c2.level < c.level')
-                ->andWhere('c2.active != true')
-                ->setFirstResult(0)
-                ->setMaxResults(1);
-
-        $subQueryDQL = $subQueryBuilder->getDQL();
-
-        $builder->addSelect('(' . $subQueryDQL . ') as parentNotActive');
-        $builder->andHaving('parentNotActive = 0');
-
 
         if($depth !== null) {
             $depth += $node->getLevel();
@@ -336,6 +343,7 @@ class Repository extends TreeRepository
      */
     public  function getActiveArticleIdByCategoryId($category)
     {
+        //todo@performance: Prüfen was das ding machen soll.
         if ($category !== null && !$category instanceof Category) {
             $category = $this->find($category);
         }
@@ -382,13 +390,10 @@ class Repository extends TreeRepository
      */
     public function getBlogCategoriesByParentBuilder($parentId)
     {
+        //todo@performance: Was soll das ding machen?
         $categoryNode = $this->find($parentId);
         $builder = $this->createQueryBuilder('categories')
-            ->select(
-                array(
-                    'categories'
-                )
-            )
+            ->select(array('categories'))
             ->andWhere('categories.left > :left AND categories.right < :right AND categories.blog = 1')
             ->setParameter("left", $categoryNode->getLeft())
             ->setParameter("right", $categoryNode->getRight());
@@ -421,6 +426,8 @@ class Repository extends TreeRepository
      */
     public function getBlogCategoryTreeListBuilder()
     {
+        //todo@performance: Noch gebraucht?
+
         $builder = $this->createQueryBuilder('c')
             ->select(array(
                 'c.id as id',
