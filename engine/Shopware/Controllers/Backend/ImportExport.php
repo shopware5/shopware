@@ -3218,7 +3218,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.id as categoryID,
                 c.parent as parentID,
                 c.description,
-                ROUND(c.left - c2.left) as position,
+                c.position,
                 c.metakeywords,
                 c.metadescription,
                 c.cmsheadline,
@@ -3231,10 +3231,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.hidefilter
                 $attributesSelect
             FROM s_categories c
-            LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
-            LEFT JOIN s_categories c2 ON c2.id = c.parent
+            LEFT JOIN s_categories_attributes attr
+                ON attr.categoryID = c.id
             WHERE c.id != 1
-            ORDER BY c.left
+            ORDER BY c.parent, c.position
 
              LIMIT {$offset},{$limit}
         ";

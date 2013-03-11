@@ -155,7 +155,7 @@ class sCategories
         //return isset($result[0]) ? $result[0] : null;
         $sql = '
             SELECT c.id
-            FROM s_categories
+            FROM s_categories c
                 INNER JOIN s_articles_categories ac
                     ON  ac.articleID = ?
                     AND ac.categoryID = c.id

@@ -235,6 +235,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             return $data;
         }
 
+        //todo@performance: Hier wird ein Rekursiver call benötigt.
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('blog', 'media', 'mappingMedia'))
             ->from('Shopware\Models\Blog\Blog', 'blog')
