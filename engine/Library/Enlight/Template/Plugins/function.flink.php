@@ -79,15 +79,17 @@ function smarty_function_flink($params, $template)
             if (!file_exists($docPath . $file)) {
                 //return false;
             }
-            $file = $request->getBasePath() . '/' . $file;
+            if($request !== null) {
+                $file = $request->getBasePath() . '/' . $file;
+            }
         }
     }
 
-    if(empty($file)) {
+    if(empty($file) && $request !== null) {
         $file = $request->getBasePath() . '/';
     }
 
-    if (strpos($file, '/') === 0 && !empty($params['fullPath'])) {
+    if ($request !== null && strpos($file, '/') === 0 && !empty($params['fullPath'])) {
         $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
     }
 
