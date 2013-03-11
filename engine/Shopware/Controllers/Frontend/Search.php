@@ -380,14 +380,12 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         if (!empty($articles) && count($articles) == 1) {
             $sql = '
                 SELECT ac.articleID
-                FROM s_categories c, s_categories c2,
-                     s_articles_categories ac
-                WHERE c.id=?
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=?
-                AND ac.categoryID=c2.id
+                FROM  s_articles_categories ac
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+                    AND c.id = ?
+                WHERE ac.articleID = ?
                 LIMIT 1
             ';
             $articles = Shopware()->Db()->fetchCol($sql, array(Shopware()->Shop()->get('parentID'), $articles[0]));

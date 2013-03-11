@@ -149,15 +149,15 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 			SELECT
 				a.id,
 				DATE(a.changetime) as changed
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
-			WHERE c.id=?
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active = 1
-	        AND ac.articleID = a.id
-	        AND ac.categoryID = c2.id
-	        AND a.active=1
-	        GROUP BY a.id
+			FROM s_articles a
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID  = a.id
+                    AND ac.categoryID = ?
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+			WHERE a.active = 1
+			GROUP BY a.id
 		";
         $result = Shopware()->Db()->query($sql, array($parentId));
         if (!$result->rowCount()) {

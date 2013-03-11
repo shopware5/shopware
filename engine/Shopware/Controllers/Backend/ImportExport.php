@@ -3317,23 +3317,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         Shopware()->Db()->exec($sql);
 
         $sql = "
-                SELECT
-                c.id,
-                (
-                    SELECT COUNT(ac.id)
-                    FROM s_categories c2
-
-                    INNER JOIN s_articles_categories ac
-                    ON ac.categoryID = c2.id
-
-                    WHERE c2.left >= c.left
-                    AND c2.right <= c.right
-                ) as articleCount
-
-                FROM s_categories c
-                HAVING articleCount = 0
-                AND c.id <> 1
-                AND c.id NOT IN (SELECT category_id FROM s_core_shops)
+            SELECT c.id, COUNT(ac.articleID)
+            FROM s_categories c
+                LEFT JOIN s_articles_categories ac
+                    ON ac.categoryID = c.id
+            WHERE c.id != 1
+            AND c.id NOT IN (SELECT category_id FROM s_core_shops)
+            GROUP BY c.id
+            HAVING articleCount = 0
          ";
 
         $emptyCategories = Shopware()->Db()->fetchCol($sql);

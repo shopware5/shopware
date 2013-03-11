@@ -253,13 +253,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 		$sqlParams = array();
 		if (!empty($categoryId) && $categoryId !== 'NaN') {
 			$categorySql =  "
-				LEFT JOIN s_categories c
-					ON c.id = ?
-				LEFT JOIN s_categories c2
-					ON c2.left >= c.left
-					AND c2.right <= c.right
-				JOIN s_articles_categories ac
-					ON ac.articleID = articles.id AND ac.categoryID = c2.id
+                LEFT JOIN s_categories c
+                    ON  c.id = ?
+                    AND c.active = 1
+
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID  = articles.id
+                    AND ac.categoryID = c.id
 			";
 			$sqlParams[] = $categoryId;
 		}
