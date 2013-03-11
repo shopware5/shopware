@@ -323,18 +323,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     SELECT parent FROM s_categories
                     WHERE c.id=parent LIMIT 1
                 ) as `node`, ';
+
                 $sqlJoin = "
-                    JOIN s_categories c
-                    ON c.parent=$node
+                    INNER JOIN s_categories c
+                        ON  c.id = ac.categoryID
+                        AND c.active = 1
+                        AND c.parent=$node
 
-                    JOIN s_categories c2
-                    ON c2.active=1
-                    AND c2.left >= c.left
-                    AND c2.right <= c.right
-
-                    JOIN s_articles_categories ac
-                    ON ac.articleID=a.id
-                    AND ac.categoryID=c2.id
+                    INNER JOIN s_articles_categories ac
+                        ON  ac.articleID  = a.id
                 ";
                 break;
             case 'article':
