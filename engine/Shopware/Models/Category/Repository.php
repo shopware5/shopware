@@ -31,8 +31,7 @@
  */
 
 namespace Shopware\Models\Category;
-use Shopware\Components\Model\TreeRepository,
-    Shopware\Models\Article\Article,
+use \Shopware\Components\Model\ModelRepository,
     Doctrine\ORM\Query\Expr;
 
 /**
@@ -50,8 +49,69 @@ use Shopware\Components\Model\TreeRepository,
  *  - s_articles
  *  - s_articles_categories
  */
-class Repository extends TreeRepository
+class Repository extends ModelRepository
 {
+    public function getPathById($id, $field = 'name', $separator = ' > ') {
+        /**@var $category Category*/
+        $category = $this->find($id);
+
+        $before = $this->getCategoryPathBefore($category, $field, $separator);
+        $self = $category->getName();
+
+        if ($before !== '') {
+            return $before . $separator . $self;
+        } else {
+            return $self;
+        }
+    }
+
+    /**
+     * Helper function to select all path elements for the passed category.
+     *
+     * @param $category Category
+     * @param $field
+     * @param $separator
+     *
+     * @return string
+     */
+    protected function getCategoryPathBefore($category, $field, $separator) {
+        $parent = $category->getParent();
+        if (!$parent instanceof Category || $parent->getId() === 1) {
+            return '';
+        } else {
+            $parentValue = $this->getCategoryPathBefore($parent, $field, $separator);
+            $selfValue = $this->getCategoryPathQuery($parent->getId(), $field);
+
+            if ($parentValue !== '') {
+                return $parentValue . $separator . $selfValue;
+            } else {
+                return $selfValue;
+            }
+        }
+    }
+
+    protected function getCategoryPathQuery($id, $field) {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select('category.' . $field)
+                ->from('Shopware\Models\Category\Category', 'category')
+                ->where('category.id = :id')
+                ->setParameter('id', $id)
+                ->setFirstResult(0)
+                ->setMaxResults(1);
+
+        $result = $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+        );
+        if (is_array($result)) {
+            return $result[$field];
+        } else {
+            return '';
+        }
+    }
+
+
+
+
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
@@ -142,11 +202,6 @@ class Repository extends TreeRepository
     }
 
 
-
-
-
-
-
     /**
      * Returns the \Doctrine\ORM\Query to select the category detail information based on the category id
      * Used for detail information in the backend module.
@@ -194,27 +249,6 @@ class Repository extends TreeRepository
     }
 
     /**
-     * Helper function to create the query builder for the "getActiveQueryBuilder" function.
-     * This function can be hooked to modify the query builder of the query object.
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    protected function getActiveArticleQueryBuilder()
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from($this->getEntityName(), 'ac')
-            ->select('COUNT(a)')
-            ->join(
-                'ac.articles', 'a',
-                Expr\Join::WITH,
-                'a.active=1'
-            )
-            ->where('ac.active=1')
-            ->andWhere('ac.right <= c.right AND ac.left >= c.left');
-        return $builder;
-    }
-
-    /**
      * Returns the \Doctrine\ORM\Query to select all active category by parent
      *
      * @param $parentId
@@ -240,6 +274,7 @@ class Repository extends TreeRepository
      */
     protected function getActiveQueryBuilder($customerGroupId = null)
     {
+        /**@var $builder \Shopware\Components\Model\QueryBuilder*/
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->from($this->getEntityName(), 'c')
