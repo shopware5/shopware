@@ -1000,7 +1000,7 @@ class sArticles
         }
 
         $sql = "
-            SELECT COUNT(*) count
+            SELECT COUNT(DISTINCT a.id) count
 
             FROM s_categories c, s_categories c2, s_articles_categories ac
 
