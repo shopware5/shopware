@@ -261,7 +261,7 @@ class Supplier extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'supplier');
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'articleSupplier');
     }
 
 }

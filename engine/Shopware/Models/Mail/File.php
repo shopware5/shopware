@@ -80,6 +80,9 @@ abstract class File extends ModelEntity
      */
     public function getCreated()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return null;
+        }
         return $this->getMedia()->getCreated();
     }
 
@@ -89,6 +92,9 @@ abstract class File extends ModelEntity
      */
     public function getUserId()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return null;
+        }
         return $this->getMedia()->getUserId();
     }
 
@@ -98,6 +104,9 @@ abstract class File extends ModelEntity
      */
     public function getExtension()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return '';
+        }
         return $this->getMedia()->getExtension();
     }
 
@@ -107,6 +116,9 @@ abstract class File extends ModelEntity
      */
     public function getType()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return '';
+        }
         return $this->getMedia()->getType();
     }
 
@@ -116,6 +128,9 @@ abstract class File extends ModelEntity
      */
     public function getPath()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return '';
+        }
         return $this->getMedia()->getPath();
     }
 
@@ -125,6 +140,9 @@ abstract class File extends ModelEntity
      */
     public function getFileName()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return 'Media not found';
+        }
         return $this->getMedia()->getFileName();
     }
 
@@ -134,6 +152,9 @@ abstract class File extends ModelEntity
      */
     public function getDescription()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return '';
+        }
         return $this->getMedia()->getDescription();
     }
 
@@ -144,6 +165,9 @@ abstract class File extends ModelEntity
      */
     public function getAlbumId()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return null;
+        }
         return $this->getMedia()->getAlbumId();
     }
 
@@ -153,6 +177,9 @@ abstract class File extends ModelEntity
      */
     public function getName()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return 'Media not found';
+        }
         return $this->getMedia()->getName();
     }
 
@@ -162,6 +189,9 @@ abstract class File extends ModelEntity
      */
     public function getFileSize()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return '';
+        }
         return $this->getMedia()->getFileSize();
     }
 
@@ -171,6 +201,9 @@ abstract class File extends ModelEntity
      */
     public function getFormattedFileSize()
     {
+        if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
+            return 0;
+        }
         return $this->getMedia()->getFormattedFileSize();
     }
 }

@@ -12,7 +12,15 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         $helper = TestHelper::Instance();
-        $this->apiBaseUrl =  'http://' . $helper->Shop()->getHost() . $helper->Shop()->getBasePath() . '/api';
+
+        $hostname = $helper->Shop()->getHost();
+        if (empty($hostname)) {
+            $this->markTestSkipped(
+                'Hostname is not available.'
+            );
+        }
+
+        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
         Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
     }
@@ -201,6 +209,30 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('active', $data);
 
         $this->assertEquals('test@foobar.com', $data['email']);
+    }
+
+    public function testPutCustomersWithoutIdShouldFail()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
+
+        $requestData = array(
+            'active'  => true,
+            'email'   => 'test@foobar.com'
+        );
+        $requestData = Zend_Json::encode($requestData);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+        $this->assertEquals(405, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertFalse($result['success']);
     }
 
     /**

@@ -73,10 +73,12 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $info->setAllowModifications(true);
             $updateVersion = null;
             $updateSource = null;
-            if ($info->get('version') < $this->info->get('version')) {
+
+            if ($this->hasInfoNewerVersion($this->info, $info)) {
                 $updateVersion = $this->info->get('version');
                 $updateSource = $this->info->get('source');
             }
+
             $this->info->merge($info);
             if ($updateVersion !== null) {
                 $this->info->set('updateVersion', $updateVersion);
@@ -85,6 +87,30 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
         $this->info->set('capabilities', $this->getCapabilities());
         parent::__construct($name);
+    }
+
+    /**
+     * Returnswhether or not $updatePluginInfo contains a newer version than $currentPluginInfo
+     *
+     * @param \Enlight_Config $currentPluginInfo
+     * @param \Enlight_Config $updatePluginInfo
+     * @return bool
+     */
+    public function hasInfoNewerVersion(Enlight_Config $updatePluginInfo, Enlight_Config $currentPluginInfo)
+    {
+        $currentVersion = $currentPluginInfo->get('version');
+        $updateVersion = $updatePluginInfo->get('version');
+
+        if (empty($updateVersion)) {
+            return false;
+        }
+
+        // Exception for Pre-Installed Plugins
+        if ($currentVersion == "1" && $updateVersion == "1.0.0") {
+            return false;
+        }
+
+        return version_compare($updateVersion, $currentVersion, '>');
     }
 
     /**

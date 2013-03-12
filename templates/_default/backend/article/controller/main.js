@@ -184,6 +184,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         });
     },
 
+
+
+
     /**
      * The passed data object is the batch model which contains associations for each store
      * which is used for the detail page data selection, like the price group combo box or the supplier combo box.

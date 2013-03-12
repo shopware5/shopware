@@ -60,10 +60,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     initComponent: function() {
         var me = this;
 
-        me.categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath');
-        me.categoryPathStore.getProxy().extraParams.parents = true;
-        me.categoryPathStore.load();
-
         var gridStore = Ext.create('Ext.data.Store', {
             fields: [ 'display', 'value' ],
             data: [{
@@ -111,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             emptyText: '{s name=settings/select_category_empty}Please select...{/s}',
             pageSize: 15,
             fieldLabel: '{s name=settings/select_category_field}Select a category{/s}',
-            store: me.categoryPathStore ,
+            store: me.categoryPathStore,
             valueField: 'id',
             displayField: 'name'
         });

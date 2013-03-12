@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,19 +25,22 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Components_Api_TestCase
 {
-    /**
-     * @var \Shopware\Components\Api\Resource\Variant
-     */
-    private $resourceVariant;
-
     /**
      * @var \Shopware\Components\Api\Resource\Article
      */
     private $resourceArticle;
+
+    /**
+     * @return \Shopware\Components\Api\Resource\Variant
+     */
+    public function createResource()
+    {
+        return new \Shopware\Components\Api\Resource\Variant();
+    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -49,61 +52,10 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
 
         Shopware()->Models()->clear();
 
-        $this->resourceVariant = new \Shopware\Components\Api\Resource\Variant();
-        $this->resourceVariant->setAcl(Shopware()->Acl());
-        $this->resourceVariant->setManager(Shopware()->Models());
-
         $this->resourceArticle = new \Shopware\Components\Api\Resource\Article();
         $this->resourceArticle->setAcl(Shopware()->Acl());
         $this->resourceArticle->setManager(Shopware()->Models());
-
-
     }
-
-    protected function getAclMock()
-    {
-        $aclMock = $this->getMockBuilder('\Shopware_Components_Acl')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        $aclMock->expects($this->any())
-                ->method('has')
-                ->will($this->returnValue(true));
-
-        $aclMock->expects($this->any())
-                ->method('isAllowed')
-                ->will($this->returnValue(false));
-
-        return $aclMock;
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
-    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
-    {
-        $this->resourceVariant->setRole('dummy');
-        $this->resourceVariant->setAcl($this->getAclMock());
-
-        $this->resourceVariant->getOne(1);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
-    {
-        $this->resourceVariant->getOne(9999999);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
-    {
-        $this->resourceVariant->getOne('');
-    }
-
 
     // Creates a article with variants
     public function testCreateShouldBeSuccessful()
@@ -288,11 +240,11 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
      */
     public function testGetOneShouldBeSuccessful($article)
     {
-        $this->resourceVariant->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
         /** @var $articleDetail \Shopware\Models\Article\Detail */
         foreach ($article->getDetails() as $articleDetail) {
-            $articleDetailById = $this->resourceVariant->getOne($articleDetail->getId());
-            $articleDetailByNumber = $this->resourceVariant->getOneByNumber($articleDetail->getNumber());
+            $articleDetailById = $this->resource->getOne($articleDetail->getId());
+            $articleDetailByNumber = $this->resource->getOneByNumber($articleDetail->getNumber());
 
             $this->assertEquals($articleDetail->getId(), $articleDetailById->getId());
             $this->assertEquals($articleDetail->getId(), $articleDetailByNumber->getId());
@@ -310,7 +262,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
     public function testDeleteShouldBeSuccessful($article)
     {
 
-        $this->resourceVariant->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
 
         $deleteByNumber = true;
 
@@ -319,9 +271,9 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
             $deleteByNumber = !$deleteByNumber;
 
             if ($deleteByNumber) {
-                $result = $this->resourceVariant->delete($articleDetail->getId());
+                $result = $this->resource->delete($articleDetail->getId());
             } else {
-                $result = $this->resourceVariant->deleteByNumber($articleDetail->getNumber());
+                $result = $this->resource->deleteByNumber($articleDetail->getNumber());
             }
             $this->assertInstanceOf('\Shopware\Models\Article\Detail', $result);
             $this->assertEquals(null, $result->getId());
@@ -337,7 +289,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
      */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resourceVariant->delete(9999999);
+        $this->resource->delete(9999999);
     }
 
     /**
@@ -345,6 +297,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Enlight_Components_Test_
      */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resourceVariant->delete('');
+        $this->resource->delete('');
     }
 }

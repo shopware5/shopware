@@ -67,37 +67,16 @@ Ext.define('Shopware.apps.Order.controller.Main', {
 
         if (me.subApplication && me.subApplication.params && Ext.isNumeric(me.subApplication.params.orderId)) {
             //open the order detail page with the passed order id
-            var store = me.subApplication.getStore('Order'),
-                historyStore = Ext.create('Shopware.apps.Order.store.OrderHistory');
-
+            var store = me.subApplication.getStore('Order');
             store.getProxy().extraParams.orderID = me.subApplication.params.orderId;
-            historyStore.getProxy().extraParams.orderID = me.subApplication.params.orderId;
-
             store.load({
                 callback:function (records) {
-                    var order = records[0];
-                    var listStore = Ext.create('Shopware.apps.Order.store.ListBatch');
                     store.getProxy().extraParams.orderID = null;
-                    listStore.load({
-                        callback:function (records) {
-                            var record = records[0];
-                            var stores = me.getAssociationStores(record);
-
-                            me.mainWindow = me.getView('detail.Window').create({
-                                record: order,
-                                orderStatusStore: stores['orderStatusStore'],
-                                paymentStatusStore: stores['paymentStatusStore'],
-                                taxStore: me.getStore('Tax'),
-                                statusStore: stores['statusStore'],
-                                historyStore: historyStore.load()
-                            });
-                            me.subApplication.setAppWindow(me.mainWindow);
-                        }
-                    });
+                    var order = records[0];
+                    me.showOrder(order);
                 }
             });
         } else {
-
             var listStore = Ext.create('Shopware.apps.Order.store.ListBatch');
             listStore.load({
                 callback:function (records) {
@@ -134,6 +113,82 @@ Ext.define('Shopware.apps.Order.controller.Main', {
         stores['paymentStatusStore'] = paymentStatusStore;
         
         return stores;
+    },
+
+    /**
+     * Global helper function which opens the passed order record
+     * in the detail window.
+     * This function is used from the listing controller event listener function
+     * "onShowOrder" and from the main controller init() function when an order id passed
+     * to the sub application.
+     *
+     * @param record
+     */
+    showOrder: function(record) {
+        var me = this,
+            batchStore = me.getStore('DetailBatch'),
+            historyStore = me.getStore('OrderHistory'),
+            billing, shipping, billingStore, shippingStore;
+
+        batchStore.getProxy().extraParams = {
+            orderId: record.get('id')
+        };
+
+        historyStore.getProxy().extraParams = {
+            orderID: record.get('id')
+        };
+
+        batchStore.load({
+            callback: function(records, operation) {
+                var storeData = records[0];
+                //when store has been loaded use the first record as data array to create the required stores
+
+                if (operation.success === true) {
+                    //prepare the associated stores to use them in the detail page
+                    me.orderStatusStore =  storeData.getOrderStatus();
+                    me.paymentStatusStore =  storeData.getPaymentStatus();
+                    me.shopsStore = storeData.getShops();
+                    me.countriesStore = storeData.getCountries();
+                    me.paymentsStore = storeData.getPayments();
+                    me.documentTypesStore = storeData.getDocumentTypes();
+
+                    billingStore = record.getBilling();
+                    if(!billingStore == null){
+                        if (billingStore.getCount() === 0) {
+                            billing = Ext.create('Shopware.apps.Order.model.Billing', {
+                                orderId: record.get('id'),
+                                countryId: null
+                            });
+                            billingStore.add(billing);
+                        }
+                        billing = billingStore.first();
+                    }
+
+                    shippingStore = record.getShipping();
+                    if(shippingStore != null && billingStore != null) {
+                        if (shippingStore.getCount() === 0) {
+                            shipping = Ext.create('Shopware.apps.Order.model.Shipping', billing.data);
+                            shippingStore.add(shipping);
+                        }
+                    }
+
+                    me.getView('detail.Window').create({
+                        record: record,
+                        taxStore: me.getStore('Tax'),
+                        statusStore: Ext.create('Shopware.store.PositionStatus').load(),
+                        historyStore: historyStore.load(),
+                        orderStatusStore: me.orderStatusStore,
+                        paymentStatusStore:  me.paymentStatusStore,
+                        shopsStore: me.shopsStore,
+                        countriesStore: me.countriesStore,
+                        paymentsStore: me.paymentsStore,
+                        documentTypesStore: me.documentTypesStore
+
+                    });
+
+                }
+            }
+        });
     }
 });
 //{/block}
