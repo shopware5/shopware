@@ -43,9 +43,8 @@ class CustomerGroup extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Customer\Group');
     }
 
-
     /**
-     * @param int $id
+     * @param  int $id
      * @return array|\Shopware\Models\Customer\Group
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -79,10 +78,10 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param  int   $offset
+     * @param  int   $limit
+     * @param  array $criteria
+     * @param  array $orderBy
      * @return array
      */
     public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
@@ -112,7 +111,7 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param array $params
+     * @param  array $params
      * @return \Shopware\Models\Customer\Group
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
@@ -139,15 +138,14 @@ class CustomerGroup extends Resource
 
         $this->saveDiscounts($discounts, $result);
 
-
         $this->flush();
 
         return $result;
     }
 
     /**
-     * @param int $id
-     * @param array $params
+     * @param  int $id
+     * @param  array $params
      * @return \Shopware\Models\Customer\Group
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -199,19 +197,19 @@ class CustomerGroup extends Resource
         $oldDiscounts = $group->getDiscounts();
         foreach ($oldDiscounts as $oldDiscount) {
             if (!in_array($oldDiscount, $discounts)) {
-                Shopware()->Models()->remove($oldDiscount);
+                $this->getManager()->remove($oldDiscount);
             }
         }
-        Shopware()->Models()->flush();
+        $this->getManager()->flush();
         /** @var \Shopware\Models\Customer\Discount $discount */
         foreach ($discounts as $discount) {
             $discount->setGroup($group);
-            Shopware()->Models()->persist($discount);
+            $this->getManager()->persist($discount);
         }
     }
 
     /**
-     * @param int $id
+     * @param  int $id
      * @return \Shopware\Models\Customer\Group
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -237,38 +235,64 @@ class CustomerGroup extends Resource
         return $result;
     }
 
+    /**
+     * @param array $params
+     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return mixed
+     */
     private function prepareCustomerGroupData($params, $customerGroup = null)
     {
         $defaults = array(
             'taxInput' => 1,
-            'tax' => 1,
-            'mode' => 0
+            'tax'      => 1,
+            'mode'     => 0
         );
 
-        $requiredParams = array('name', 'key', 'tax', 'taxInput', 'mode');
-        foreach ($requiredParams as $param) {
-            if (!$customerGroup) {
-                if ((!isset($params[$param]) || empty($params[$param])) && !array_key_exists($param, $defaults)) {
-                    throw new ApiException\ParameterMissingException($param);
-                }if (array_key_exists($param, $defaults)) {
-                    $params[$param] = $defaults[$param];
-                }
-            } else {
-                if (isset($params[$param]) && empty($params[$param])) {
-                    throw new \Exception('param $param may not be empty');
-                }
+        if ($customerGroup === null) {
+            if (!isset($params['taxInput'])) {
+                $params['taxInput'] = $defaults['taxInput'];
+            }
+
+            if (!isset($params['tax'])) {
+                $params['tax'] = $defaults['tax'];
+            }
+
+            if (!isset($params['mode'])) {
+                $params['mode'] = $defaults['mode'];
+            }
+
+            if (empty($params['name'])) {
+                throw new ApiException\CustomValidationException(sprintf("Parameter '%s' is missing", 'name'));
+            }
+
+            if (empty($params['key'])) {
+                throw new ApiException\CustomValidationException(sprintf("Parameter '%s' is missing", 'key'));
             }
         }
 
-        $discountRepository = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Discount');
+        if (isset($params['name']) && empty($params['name'])) {
+            throw new ApiException\CustomValidationException(sprintf("Parameter '%s' is missing", 'name'));
+        }
+
+        if (isset($params['key']) && empty($params['key'])) {
+            throw new ApiException\CustomValidationException(sprintf("Parameter '%s' is missing", 'key'));
+        }
+
+        $discountRepository = $this->getManager()->getRepository('\Shopware\Models\Customer\Discount');
 
         if (isset($params['discounts'])) {
             $discounts = array();
             foreach ($params['discounts'] as $discount) {
                 $discountModel = null;
                 if ($customerGroup) {
-                    $discountModel = $discountRepository->findOneBy(array("group"=>$customerGroup, "discount" => $discount['discount'], "value" => $discount['value']));
+                    $discountModel = $discountRepository->findOneBy(array(
+                        'group'    => $customerGroup,
+                        'discount' => $discount['discount'],
+                        'value'    => $discount['value']
+                    ));
                 }
+
                 if ($discountModel === null) {
                     $discountModel = new \Shopware\Models\Customer\Discount();
                 }

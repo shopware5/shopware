@@ -192,12 +192,17 @@ abstract class Resource
     }
 
     /**
-    * @param object $entity
-    */
+     * @param object $entity
+     * @throws \Shopware\Components\Api\Exception\OrmException
+     */
     public function flush($entity = null)
     {
         if ($this->getAutoFlush()) {
-            $this->getManager()->flush($entity);
+            try {
+                $this->getManager()->flush($entity);
+            } catch (\Exception $e) {
+                throw new ApiException\OrmException($e->getMessage(), 0, $e);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,71 +25,31 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Customer
+     * @return \Shopware\Components\Api\Resource\Customer
      */
-    private $resource;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    public function createResource()
     {
-        parent::setUp();
-
-        Shopware()->Models()->clear();
-
-        $this->resource = new \Shopware\Components\Api\Resource\Customer();
-        $this->resource->setManager(Shopware()->Models());
-    }
-
-    protected function getAclMock()
-    {
-        $aclMock = $this->getMockBuilder('\Shopware_Components_Acl')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        $aclMock->expects($this->any())
-                ->method('has')
-                ->will($this->returnValue(true));
-
-        $aclMock->expects($this->any())
-                ->method('isAllowed')
-                ->will($this->returnValue(false));
-
-        return $aclMock;
+        return new \Shopware\Components\Api\Resource\Customer();
     }
 
     /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
+     * @expectedException Shopware\Components\Api\Exception\CustomValidationException
+     * @expectedExceptionMessage Emailaddress test@example.com for shopId 1 is not unique
      */
-    public function testGetOneWithMissinPrivilegeShouldThrowPrivilegeException()
+    public function testCreateWithNonUniqueEmailShouldThrowException()
     {
-        $this->resource->setRole('dummy');
-        $this->resource->setAcl($this->getAclMock());
+        $testData = array(
+            "password" => "fooobar",
+            "active"   => true,
+            "email"    => 'test@example.com',
+        );
 
-        $this->resource->getOne(1);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
-    {
-        $this->resource->getOne(9999999);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
-    {
-        $this->resource->getOne('');
+        $this->resource->create($testData);
     }
 
     public function testCreateShouldBeSuccessful()
@@ -105,7 +65,6 @@ class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test
 
         $testData = array(
             "password" => "fooobar",
-            "active"   => true,
             "email"    => uniqid() . 'test@foobar.com',
 
             "firstlogin" => $firstlogin,
@@ -144,6 +103,12 @@ class Shopware_Tests_Components_Api_CustomerTest extends Enlight_Components_Test
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertGreaterThan(0, $customer->getId());
+
+        // Test default values
+        $this->assertEquals($customer->getShop()->getId(), 1);
+        $this->assertEquals($customer->getAccountMode(), 0);
+        $this->assertEquals($customer->getGroup()->getKey(), "EK");
+        $this->assertEquals($customer->getActive(), true);
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
         $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);

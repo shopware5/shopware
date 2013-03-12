@@ -1,7 +1,5 @@
 # Shopware 4
 
-- **Version**: 4.0.6
-- **Release Date**: 06th January 2013
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
 

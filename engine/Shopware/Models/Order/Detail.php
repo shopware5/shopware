@@ -535,10 +535,19 @@ class Detail extends ModelEntity
     }
 
     /**
-     * If an position is added, the stock of the article will be reduced by the ordered quantity.
+     * If an position is added, the order amount has to be recalculated
      * @ORM\PrePersist
      */
     public function beforeInsert()
+    {
+        $this->calculateOrderAmount();
+    }
+
+    /**
+     * If an position is added, the stock of the article will be reduced by the ordered quantity.
+     * @ORM\PostPersist
+     */
+    public function afterInsert()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $repository->findOneBy(array('number' => $this->articleNumber));
@@ -549,8 +558,8 @@ class Detail extends ModelEntity
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() - $this->quantity);
             Shopware()->Models()->persist($article);
+            Shopware()->Models()->flush();
         }
-        $this->calculateOrderAmount();
     }
 
     /**

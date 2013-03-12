@@ -711,7 +711,9 @@ class Repository extends ModelRepository
                 ->setParameter(2, $firstOptionId)
                 ->setParameter(3, $secondOptionId);
 
-        if ($article->getLastStock()) {
+        if ($article instanceof Article && $article->getLastStock()) {
+            $builder->andWhere('details.inStock > 0');
+        } else if (is_array($article) && $article['lastStock']) {
             $builder->andWhere('details.inStock > 0');
         }
 
@@ -747,23 +749,29 @@ class Repository extends ModelRepository
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $article Article
+     *
+     * @param $articleId
      * @param $customerGroupKey
+     * @param $article
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey) {
-        $builder = $this->getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey);
+    public function getConfiguratorTablePreSelectionItemQuery($articleId, $customerGroupKey, $article) {
+        $builder = $this->getConfiguratorTablePreSelectionItemQueryBuilder($articleId, $customerGroupKey, $article);
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getConfiguratorTablePreSelectionQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param $article Article
+     *
+     * @param $articleId
      * @param $customerGroupKey
+     * @param $article
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getConfiguratorTablePreSelectionItemQueryBuilder($article, $customerGroupKey) {
+    public function getConfiguratorTablePreSelectionItemQueryBuilder($articleId, $customerGroupKey, $article) {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
@@ -775,9 +783,11 @@ class Repository extends ModelRepository
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('key', $customerGroupKey)
-                ->setParameter(1, $article->getId());
+                ->setParameter(1, $articleId);
 
-        if ($article->getLastStock()) {
+        if ($article instanceof Article && $article->getLastStock()) {
+            $builder->andWhere('details.inStock > 0');
+        } else if (is_array($article) && $article['lastStock']) {
             $builder->andWhere('details.inStock > 0');
         }
 

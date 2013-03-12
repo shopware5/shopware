@@ -5,26 +5,26 @@
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="grid_16 last" id="basket">
-	
+
 	{* If articles are in the basket... *}
 	{if $sBasket.content}
-	
-		
+
+
 		{* Add article informations *}
 		{block name='frontend_checkout_add_article'}
 			<noscript>
 				{include file='frontend/checkout/added.tpl'}
 			</noscript>
 		{/block}
-		
+
 		{* Error messages *}
 		{block name='frontend_checkout_cart_error_messages'}
 			{include file="frontend/checkout/error_messages.tpl"}
 		{/block}
-		
+
 
 		{block name='frontend_checkout_cart_deliveryfree'}{/block}
-		
+
 			<div class="table grid_16 cart">
 			{* Checkout *}
 			<div class="actions">
@@ -43,12 +43,14 @@
 			{block name='frontend_checkout_cart_cart_head'}
 				{include file="frontend/checkout/cart_header.tpl"}
 			{/block}
-			
+
 			{* Article items *}
 			{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-				{include file='frontend/checkout/cart_item.tpl'}	
+                {block name='frontend_checkout_cart_item'}
+				{include file='frontend/checkout/cart_item.tpl'}
+                {/block}
 			{/foreach}
-			
+
 			{* Premium articles *}
 			{block name='frontend_checkout_cart_premiums'}
                 <div class="table_row noborder">
@@ -65,23 +67,23 @@
                 	{/if}
                 </div>
 			{/block}
-			
+
 			{* Table foot *}
 			{block name='frontend_checkout_cart_cart_footer'}
-			
+
 			{include file="frontend/checkout/cart_footer.tpl"}
-			
+
 			</div>
-			
+
 			<div class="space">&nbsp;</div>
 			{* Action Buttons *}
 			{include file="frontend/checkout/actions.tpl"}
 			<div class="space">&nbsp;</div>
-			
-			
+
+
 			<div class="clear"></div>
 			<div class="doublespace"></div>
-			
+
 			{if $sPremiums}
 			<div class="table_head">
 				<div class="grid_19">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}Bitte w&auml;hlen Sie zwischen den folgenden Pr&auml;mien{/s}</div>
@@ -91,6 +93,6 @@
 			{include file='frontend/checkout/premiums.tpl'}
 			{/block}
 		</div>
-	{/if}	
+	{/if}
 </div>
 {/block}

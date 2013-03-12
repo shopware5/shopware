@@ -243,7 +243,9 @@
 
             {* Article items *}
             {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+                {block name='frontend_checkout_confirm_item'}
                 {include file='frontend/checkout/confirm_item.tpl'}
+                {/block}
             {/foreach}
 
             {* Table footer *}

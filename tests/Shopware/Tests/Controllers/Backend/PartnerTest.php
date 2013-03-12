@@ -63,7 +63,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     /**@var $model \Shopware\Models\Partner\Partner*/
     protected $repository = null;
 
-
     /**
      * Returns the test dataset
      *
@@ -73,7 +72,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     {
         return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Checkout').'Finish.xml');
     }
-
 
     /**
      * Standard set up for every test - just disable auth
@@ -122,7 +120,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      */
     public function testGetList()
     {
-
         //delete old data
         $repositoryData = $this->repository->findBy(array('company' => $this->dummyData["company"]));
         foreach ($repositoryData as $testDummy) {
@@ -286,7 +283,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/getChartData');
         $this->assertTrue($this->View()->success);
-        $this->assertTrue(!empty($this->View()->data));
+        $this->assertNotEmpty($this->View()->data);
 
         return $id;
     }
@@ -340,7 +337,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $body = $this->Response()->getBody();
         $this->assertTrue(empty($body));
     }
-
 
     /**
      * test deletePartner controller action

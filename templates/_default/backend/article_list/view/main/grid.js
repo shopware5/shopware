@@ -45,6 +45,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         columnName:     '{s name=list/column_name}Name{/s}',
         columnSupplier: '{s name=list/column_supplier}Supplier{/s}',
         columnActive:   '{s name=list/column_active}Active{/s}',
+        columnPrice:   '{s name=list/column_price}Price{/s}',
+        columnTax:   '{s name=list/column_tax}Tax{/s}',
         columnStock:    '{s name=list/column_stock}Stock{/s}',
         columnInfo:     '{s name=list/column_info}Info{/s}',
         splitViewBtn:   '{s name=list/split_view_btn}Activate split view{/s}',
@@ -203,7 +205,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             }
         }, {
             xtype: 'numbercolumn',
-            header: 'Price',
+            header: me.snippets.columnPrice,
             dataIndex: 'price',
             align: 'right',
             width: 55,
@@ -217,7 +219,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             }
         }, {
             xtype: 'numbercolumn',
-            header: 'Tax',
+            header: me.snippets.columnTax,
             dataIndex: 'tax',
             flex: 1
         }, {
