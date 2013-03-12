@@ -93,10 +93,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 scope: me,
                 change: function(field, value) {
                     if(value) {
+                        me.emotion.set('containerWidth', 1008);
+                        me.containerWidthField.setValue(1008);
                         me.categoryNameField.hide().setDisabled(true);
                         me.listingCheckbox.hide();
                         me.landingPageFieldSet.show();
                     } else {
+                        me.emotion.set('containerWidth', 808);
+                        me.containerWidthField.setValue(808);
                         me.categoryNameField.show().setDisabled(false);
                         me.landingPageFieldSet.hide();
                         me.listingCheckbox.show();
@@ -313,7 +317,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             supportText: '{s name=settings/fieldset/cell_height_info}Needed for calculating the complete height{/s}'
         });
 
-        var containerWidthField = Ext.create('Ext.form.field.Number', {
+        me.containerWidthField = Ext.create('Ext.form.field.Number', {
             fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
             name: 'containerWidth',
             supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}'
@@ -351,7 +355,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             collapsible: true,
             collapsed: true,
             defaults: me.defaults,
-            items: [ noticeContainer, boxHeightField, articleBoxHeight, containerWidthField, tplComboBox, actionToolbar ]
+            items: [ noticeContainer, boxHeightField, articleBoxHeight, me.containerWidthField, tplComboBox, actionToolbar ]
         });
 
         return fieldset;
