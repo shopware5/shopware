@@ -740,7 +740,7 @@ class sArticles
 
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
             'subject' => $this, 'id' => $categoryId
-          ))) {
+        ))) {
             return false;
         }
 
@@ -903,6 +903,7 @@ class sArticles
 
         $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
+        $now = Shopware()->Db()->quote(date('Y-m-d'));
 
         $priceForBasePrice = "(SELECT price FROM s_articles_prices WHERE articledetailsID=aDetails.id AND pricegroup=IF(p.id IS NULL, 'EK', p.pricegroup) AND `from`=1 LIMIT 1 ) as priceForBasePrice";
 
@@ -925,7 +926,6 @@ class sArticles
 				IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
 				attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
 				attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-				-- cd.discount,
 				IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
 				(a.configurator_set_id IS NOT NULL) as sConfigurator,
 				IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
@@ -934,10 +934,10 @@ class sArticles
 				   FROM s_articles_vote WHERE active=1
 				   AND articleID=a.id),
 				'0.00|00') as sVoteAverange,
-				IF(DATEDIFF(NOW(), a.datum)<=$markNew,1,0) as newArticle,
+				IF(DATEDIFF($now, a.datum)<=$markNew,1,0) as newArticle,
 				IF(aDetails.sales>=$topSeller,1,0) as topseller,
-				IF(aDetails.releasedate>CURDATE(),1,0) as sUpcoming,
-				IF(aDetails.releasedate>CURDATE(), aDetails.releasedate, '') as sReleasedate
+				IF(aDetails.releasedate>$now,1,0) as sUpcoming,
+				IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate
 			FROM s_categories c, s_categories c2, s_articles_categories ac
 
             JOIN s_articles AS a
@@ -1257,21 +1257,19 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
-
         $db = Shopware()->Db();
-        $language = $this->translationId;
         $categoryId = (int)$categoryId;
         $activeFilters = (array)$activeFilters;
 
-        $addFilterSQL = "";
+        $addFilterJoin = "";
         if (!empty($activeFilters)) {
             foreach ($activeFilters as $key => $filter) {
                 $filter = (int)$filter;
                 if ($filter > 0) {
-                    $addFilterSQL .= "
-                        INNER JOIN s_filter_articles s_filter_articles$filter
-                        ON s_filter_articles$filter.articleID = s_articles.id
-                        AND s_filter_articles$filter.valueID = $filter
+                    $addFilterJoin .= "
+                        INNER JOIN s_filter_articles fv$filter
+                        ON fv$filter.articleID = a.id
+                        AND fv$filter.valueID = $filter
                     ";
                 } else {
                     unset($activeFilters[$key]);
@@ -1279,14 +1277,99 @@ class sArticles
             }
         }
 
+        $addTranslationJoin = '';
+        $addTranslationSelect = '';
+        if($this->translationId !== null) {
+            $addTranslationSelect = '
+        		,
+				st.objectdata AS optionNameTranslation,
+				st2.objectdata AS groupNameTranslation,
+				st3.objectdata AS valueTranslation
+        	';
+            $addTranslationJoin = "
+        		LEFT JOIN s_core_translations AS st
+				ON st.objecttype='propertyoption'
+				AND st.objectkey=fv.optionID
+				AND st.objectlanguage='$this->translationId'
+	
+				LEFT JOIN s_core_translations AS st2
+				ON st2.objecttype='propertygroup'
+				AND st2.objectkey=f.id
+				AND st2.objectlanguage='$this->translationId'
+	
+				LEFT JOIN s_core_translations AS st3
+	            ON st3.objecttype='propertyvalue'
+	            AND st3.objectkey=fv.id
+	            AND st3.objectlanguage='$this->translationId'
+        	";
+        }
+
+        $sql = "
+			SELECT
+				fv.optionID AS id,
+				COUNT(DISTINCT a.id) AS count,
+				fo.id AS optionID,
+				fo.name AS optionName,
+				f.id AS groupID,
+				f.name AS groupName,
+				fv.value AS optionValue,
+				fv.id AS valueID
+				$addTranslationSelect
+			FROM s_categories c, s_categories c2, s_articles_categories ac
+
+			JOIN s_filter_articles fa
+			ON fa.articleID=ac.articleID
+
+		    JOIN s_filter_values fv
+		    ON fv.id=fa.valueID
+
+		    JOIN s_filter_options fo
+		    ON fo.id=fv.optionID
+		    AND fo.filterable = 1
+
+		    JOIN s_articles a
+		    ON a.id=ac.articleID
+		    AND a.active =1
+
+			JOIN s_filter f
+			ON f.id=a.filtergroupID
+
+			LEFT JOIN s_filter_relations fr
+			ON f.id = fr.groupId AND fo.id = fr.optionId
+
+			LEFT JOIN s_articles_avoid_customergroups ag
+            ON ag.articleID=fa.articleID
+            AND ag.customergroupID={$this->customerGroupId}
+
+			$addTranslationJoin
+
+			$addFilterJoin
+
+			WHERE c.id=$categoryId
+            AND c2.active=1
+	        AND c2.left >= c.left
+	        AND c2.right <= c.right
+	        AND ac.articleID=a.id
+	        AND ac.categoryID=c2.id
+	        AND ag.articleID IS NULL
+
+			GROUP BY fv.id
+			ORDER BY
+			  fr.position,
+			  fo.name ASC,
+			  IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
+			  IF(f.sortmode=2, COUNT(*) , 0) DESC,
+			  IF(f.sortmode=3, fv.position, 0),
+			  fv.value
+		";
+        $getProperties = $db->fetchAll($sql);
+
         $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
             . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
 
         $propertyArray = array();
 
         $propertyValues = array();
-
-        $getProperties = $this->getCategoryFilters($categoryId,$addFilterSQL, $language);
 
         foreach ($getProperties as $property) {
             if (!empty($property['optionNameTranslation'])) {
@@ -1390,7 +1473,6 @@ class sArticles
 		    JOIN s_articles a
 		    ON  ac.articleID=a.id
 		    AND a.active = 1
-			AND a.changetime <= NOW()
 
 			JOIN s_articles_supplier s
 			ON s.id=a.supplierID
@@ -1572,6 +1654,7 @@ class sArticles
     {
         $sLimitChart = $this->sSYSTEM->sCONFIG['sCHARTRANGE'];
         $sIntervalCharts = $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] ? $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] : 10;
+        $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
 
         if (!empty($category)) {
             $category = (int)$category;
@@ -1594,7 +1677,7 @@ class sArticles
 	        AND od.modus = 0
 
 	        LEFT JOIN s_order o
-	        ON o.ordertime>=DATE_SUB(NOW(),INTERVAL $sIntervalCharts DAY)
+	        ON o.ordertime>=DATE_SUB($now, INTERVAL $sIntervalCharts DAY)
 	        AND o.status >= 0
 	        AND o.id = od.orderID
 
@@ -1706,10 +1789,6 @@ class sArticles
                 $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id';
         }
 
-        if (!empty($blog)) {
-            $orderBy = 'a.changetime DESC, a.id';
-        }
-
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
                 (
@@ -1792,29 +1871,29 @@ class sArticles
 
         // Get articles position and previous, next article
         if (!empty($getAllArticles))
-        foreach ($getAllArticles as $allArticlesKey => $allArticlesValue) {
-            if ($allArticlesValue["id"] == $article) {
-                if ($getAllArticles[$allArticlesKey - 1]["id"]) {
-                    // Previous article
-                    $sNavigation["sPrevious"]["id"] = $getAllArticles[$allArticlesKey - 1]["id"];
-                    $sNavigation["sPrevious"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sPrevious"]["id"] . "&sCategory=" . $categoryId;
-                    $sNavigation["sPrevious"]["name"] = $getAllArticles[$allArticlesKey - 1]["articleName"];
+            foreach ($getAllArticles as $allArticlesKey => $allArticlesValue) {
+                if ($allArticlesValue["id"] == $article) {
+                    if ($getAllArticles[$allArticlesKey - 1]["id"]) {
+                        // Previous article
+                        $sNavigation["sPrevious"]["id"] = $getAllArticles[$allArticlesKey - 1]["id"];
+                        $sNavigation["sPrevious"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sPrevious"]["id"] . "&sCategory=" . $categoryId;
+                        $sNavigation["sPrevious"]["name"] = $getAllArticles[$allArticlesKey - 1]["articleName"];
 
+                    }
+                    if ($getAllArticles[$allArticlesKey + 1]["id"]) {
+                        // Next article
+                        $sNavigation["sNext"]["id"] = $getAllArticles[$allArticlesKey + 1]["id"];
+                        $sNavigation["sNext"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sNext"]["id"] . "&sCategory=" . $categoryId;
+                        $sNavigation["sNext"]["name"] = $getAllArticles[$allArticlesKey + 1]["articleName"];
+                    }
+                    $sNavigation["sCurrent"]["position"] = $allArticlesKey+1;
+                    $sNavigation["sCurrent"]["count"] = count($getAllArticles);
+                    $sNavigation["sCurrent"]["sCategory"] = $this->sSYSTEM->_GET["sCategory"];
+                    $sNavigation["sCurrent"]["sCategoryLink"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=cat&sCategory=" . $categoryId;
+                    $getCategoryName = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryContent($categoryId);
+                    $sNavigation["sCurrent"]["sCategoryName"] = $getCategoryName["description"];
                 }
-                if ($getAllArticles[$allArticlesKey + 1]["id"]) {
-                    // Next article
-                    $sNavigation["sNext"]["id"] = $getAllArticles[$allArticlesKey + 1]["id"];
-                    $sNavigation["sNext"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sNext"]["id"] . "&sCategory=" . $categoryId;
-                    $sNavigation["sNext"]["name"] = $getAllArticles[$allArticlesKey + 1]["articleName"];
-                }
-                $sNavigation["sCurrent"]["position"] = $allArticlesKey+1;
-                $sNavigation["sCurrent"]["count"] = count($getAllArticles);
-                $sNavigation["sCurrent"]["sCategory"] = $this->sSYSTEM->_GET["sCategory"];
-                $sNavigation["sCurrent"]["sCategoryLink"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=cat&sCategory=" . $categoryId;
-                $getCategoryName = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryContent($categoryId);
-                $sNavigation["sCurrent"]["sCategoryName"] = $getCategoryName["description"];
             }
-        }
 
         return $sNavigation;
     }
@@ -2397,8 +2476,8 @@ class sArticles
             // Building link 'More articles from this supplier'
             // =================================================.
             $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                  . "?sViewport=search&sSearch=" . $getArticle['supplierID']
-                  . "&sSearchMode=supplier&sSearchText=" . urlencode($getArticle['supplierName']);
+                . "?sViewport=search&sSearch=" . $getArticle['supplierID']
+                . "&sSearchMode=supplier&sSearchText=" . urlencode($getArticle['supplierName']);
 
             $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
                 "description" => $getArticle["supplierName"],
@@ -2452,9 +2531,9 @@ class sArticles
                 }
             } else {
 
-               if (!empty( $sCategoryID )){
-                $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
-                $sqlGetCategory = "
+                if (!empty( $sCategoryID )){
+                    $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
+                    $sqlGetCategory = "
 					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories, s_articles, s_articles_details
 					WHERE s_articles_categories.categoryID=" . $sCategoryID . "
 					AND s_articles.id=s_articles_categories.articleID AND s_articles.id=s_articles_details.articleID
@@ -2464,15 +2543,15 @@ class sArticles
 					ORDER BY s_articles_details.sales DESC LIMIT $similarLimit
 					";
 
-                $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetCategory, false, "article_" . $getArticle["articleID"]);
+                    $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetCategory, false, "article_" . $getArticle["articleID"]);
 
-                foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
-                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
-                    if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                        $getArticle["sSimilarArticles"][] = $tmpContainer;
+                    foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
+                        $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
+                        if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
+                            $getArticle["sSimilarArticles"][] = $tmpContainer;
+                        }
                     }
                 }
-               }
                 if (!count($getSimilarArticles)) {
                     $getArticle["sSimilarArticles"] = array();
                 }
@@ -2949,13 +3028,14 @@ class sArticles
                 }
                 if ($mode == 'top') {
                     $promotionTime = !empty($this->sSYSTEM->sCONFIG['sPROMOTIONTIME']) ? (int)$this->sSYSTEM->sCONFIG['sPROMOTIONTIME'] : 30;
+                    $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
                     $sql = "
                         SELECT od.articleID
                         FROM s_order as o, s_order_details od, $categoryFrom s_articles a $withImageJoin
                         LEFT JOIN s_articles_avoid_customergroups ag
                         ON ag.articleID=a.id
                         AND ag.customergroupID={$this->customerGroupId}
-                        WHERE o.ordertime > DATE_SUB(NOW(), INTERVAL $promotionTime DAY)
+                        WHERE o.ordertime > DATE_SUB($now, INTERVAL $promotionTime DAY)
                         AND o.id=od.orderID
                         AND od.modus=0 AND od.articleID=a.id
                         AND a.active=1 $categoryWhere
@@ -3041,7 +3121,7 @@ class sArticles
         } else {
             $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
             $markTop = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
-            // Used in emotion widget to fetch only articles that have an image assigned
+            $now = Shopware()->Db()->quote(date('Y-m-d'));
 
             $sql = "
                 SELECT
@@ -3062,20 +3142,15 @@ class sArticles
                     (a.configurator_set_id IS NOT NULL) as sConfigurator,
                     IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
                     IFNULL((SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes FROM s_articles_vote WHERE active=1 AND articleID=a.id),'0.00|00') as sVoteAverange,
-                    IF(DATE_SUB(CURDATE(), INTERVAL $markNew DAY) <= a.datum, 1, 0) as newArticle,
+                    IF(DATE_SUB($now, INTERVAL $markNew DAY) <= a.datum, 1, 0) as newArticle,
                     IF(d.sales>=$markTop, 1, 0) as topseller,
-                    IF(d.releasedate > CURDATE(), 1, 0) as sUpcoming,
-                    IF(d.releasedate > CURDATE(), d.releasedate, '') as sReleasedate,
+                    IF(d.releasedate > $now, 1, 0) as sUpcoming,
+                    IF(d.releasedate > $now, d.releasedate, '') as sReleasedate,
                     (SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind!=1 LIMIT 1) as sVariantArticle
                 FROM s_articles a
 
-                JOIN s_articles_details d
-                ON d.articleID=a.id
-                AND d.kind=1
-
-                -- JOIN s_articles_categories ac
-                -- ON ac.articleID=a.id
-                -- AND ac.categoryID={$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]['parentID']}
+				JOIN s_articles_details d
+				ON d.id=a.main_detail_id
 
                 JOIN s_articles_attributes at
                 ON at.articleID=a.id
@@ -3089,12 +3164,12 @@ class sArticles
                 LEFT JOIN s_articles_prices p
                 ON p.articleDetailsID=d.id
                 AND p.pricegroup=?
-                AND p.`from`='1'
+                AND p.from=1
 
                 LEFT JOIN s_articles_prices p2
                 ON p2.articleDetailsID=d.id
                 AND p2.pricegroup='EK'
-                AND p2.`from`='1'
+                AND p2.from=1
 
                 WHERE a.id=?
                 AND a.active=1
@@ -3324,8 +3399,8 @@ class sArticles
             //we have to check if the current variant has an own configured picture for a red shoe.
             //the query selects orders the result at first by the image main flag, at second for the position.
             $cover = $this->getArticleRepository()
-                           ->getVariantImagesByArticleNumberQuery($orderNumber, 0, 1)
-                           ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                ->getVariantImagesByArticleNumberQuery($orderNumber, 0, 1)
+                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         }
 
         //if we have found a configured article image which has the same options like the passed article order number
@@ -3337,8 +3412,8 @@ class sArticles
         //if we haven't found and variant image we have to select the first image which has no configuration.
         //the query orders the result at first by the image main flag, at second by the position.
         $cover = $this->getArticleRepository()
-                      ->getArticleCoverImageQuery($articleId)
-                      ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getArticleCoverImageQuery($articleId)
+            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         if (!empty($cover)) {
             return $this->getDataOfArticleImage($cover, $articleAlbum);
@@ -3387,15 +3462,15 @@ class sArticles
 
         //now we select all article images of the passed article id.
         $articleImages = $this->getArticleRepository()
-                              ->getArticleImagesQuery($articleId)
-                              ->getArrayResult();
+            ->getArticleImagesQuery($articleId)
+            ->getArrayResult();
 
         //if an order number passed to the function, we have to select the configured variant images
         $variantImages = array();
         if (!empty($ordernumber)) {
             $variantImages = $this->getArticleRepository()
-                                  ->getVariantImagesByArticleNumberQuery($ordernumber)
-                                  ->getArrayResult();
+                ->getVariantImagesByArticleNumberQuery($ordernumber)
+                ->getArrayResult();
         }
         //we have to collect the already added image ids, otherwise the images
         //would be displayed multiple times.
@@ -3600,7 +3675,7 @@ class sArticles
             $this->sSYSTEM->sLanguage
         ));
 
-    foreach ($queryArticles as $articleKey => $articleValue) {
+        foreach ($queryArticles as $articleKey => $articleValue) {
             $queryArticles[$articleKey]['linkDetails'] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . '?sViewport=detail&sArticle=' . $articleValue['articleID'];
 
             if (preg_match('/443/', $_SERVER['SERVER_PORT'])) {
@@ -4057,267 +4132,4 @@ class sArticles
         // Deprecated
         return false;
     }
-
-    /**
-     * Returns an array with all active filters.
-     *
-     * @param $categoryId
-     * @param $addFilterSQL
-     * @param $language
-     *
-     * @return array
-     */
-    protected function getCategoryFilters($categoryId, $addFilterSQL, $language) {
-
-        //now we create an article count select statement with the already activated filters.
-        $allFilters = $this->getFilters($language);
-        $sort = array();
-        $filters = array();
-
-        //after we have all active filters for the current category, we can select the
-        //article count for each available next filter.
-        foreach($allFilters as $key => $filter) {
-            $valueId = $filter['valueID'];
-
-            //get article count for each possible additional filter value
-            $filter['count'] = Shopware()->Db()->fetchOne(
-                $this->getFilterArticleCountQuery($categoryId, $addFilterSQL, $valueId)
-            );
-
-            if ($filter['count'] <= 0) {
-                continue;
-            }
-            //we have to create a multiple dimensional sort array
-            //with the position of the filter, name of the options, the array index
-            //and the custom filter sort value.
-            $sort[] = array(
-                'filterPosition' => array('value' => $filter['filterPosition'], 'direction' => SORT_ASC),
-                'optionName'     => array('value' => $filter['optionName'],     'direction' => SORT_ASC),
-                'valueSort'      => $this->getFilterSortValue($filter),
-                'optionValue'    => array('value' => $filter['optionValue'],    'direction' => SORT_ASC),
-                'index'          => $key
-            );
-
-            $filters[$key] = $filter;
-        }
-
-        //return the filter array sorted by the multiple dimensional sort array
-        return $this->sortFilters($filters, $sort);
-    }
-
-    /**
-     * Helper function to get the custom filter sort value.
-     *
-     * @param $filter
-     *
-     * @return mixed
-     */
-    protected function getFilterSortValue($filter)
-    {
-        switch($filter['sortmode']) {
-            case 0:     //alphanumeric
-                return array(
-                    'value' => $filter['optionValue'],
-                    'direction' => SORT_ASC
-                );
-                break;
-            case 1:     //numeric
-                return array(
-                    'value' => (float) str_replace(',', '.', $filter['optionValue']),
-                    'direction' => SORT_ASC
-                );
-                break;
-            case 2:     //article count
-                return array(
-                    'value' => $filter['count'],
-                    'direction' => SORT_DESC
-                );
-                break;
-            case 3:     //position
-                return array(
-                    'value' => $filter['valuePosition'],
-                    'direction' => SORT_ASC
-                );
-                break;
-            default:
-                return array(
-                    'value' => $filter['optionValue'],
-                    'direction' => SORT_ASC
-                );
-                break;
-        }
-    }
-
-    /**
-     * Helper function to create the article count query.
-     *
-     * This function is used to select the article count for a single filter value.
-     * In case that the customer already selected, the function expects as $addFilterSql
-     * parameter an already prepared sql inner join condition.
-     * Example:
-     * <pre>
-     *  INNER JOIN s_filter_articles s_filter_articles31
-     *  ON s_filter_articles31.articleID = s_articles.id
-     *  AND s_filter_articles31.valueID = 31
-     * </pre>
-     *
-     * @param $categoryId
-     * @param $addFilterSQL
-     * @param $valueId
-     *
-     * @return string
-     */
-    protected function getFilterArticleCountQuery($categoryId, $addFilterSQL, $valueId)
-    {
-        $countSelect = "
-            SELECT COUNT(DISTINCT s_articles.id)
-            FROM s_articles
-            LEFT JOIN s_articles_avoid_customergroups
-                ON s_articles_avoid_customergroups.articleID = s_articles.id
-                AND s_articles_avoid_customergroups.customergroupID = {$this->customerGroupId}
-            LEFT JOIN s_categories c
-                ON c.id = $categoryId
-            LEFT JOIN s_categories c2
-                ON c2.left >= c.left
-                AND c2.right <= c.right
-                AND c2.active= 1
-            JOIN s_articles_categories ac
-                ON ac.articleID = s_articles.id
-                AND ac.categoryID = c2.id
-
-            $addFilterSQL
-        ";
-
-        $countCondition = "
-            WHERE s_articles_avoid_customergroups.articleID IS NULL
-            AND   s_articles.active = 1
-            AND   s_articles.changetime <= NOW()
-        ";
-
-        $valueSql = "
-            INNER JOIN s_filter_articles s2_filter_articles$valueId
-            ON s2_filter_articles$valueId.articleID = s_articles.id
-            AND s2_filter_articles$valueId.valueID = $valueId
-        ";
-
-
-        return $countSelect . $valueSql . $countCondition;
-    }
-
-    /**
-     * Helper function get select all filters.
-     *
-     * Returns an array in the following format:
-     * <pre>
-     *   s_filter_values.optionID AS id,
-     *   s_filter.id AS groupID,
-     *   s_filter.name AS groupName,
-     *   s_filter_options.id as optionID,
-     *   s_filter_options.name as optionName,
-     *   s_filter_values.id as valueID,
-     *   s_filter_values.value as optionValue,
-     *   s_filter.sortmode,
-     *   s_filter_values.position as valuePosition,
-     *   s_filter_relations.position as filterPosition
-     * </pre>
-     *
-     * @param $language
-     *
-     * @return array
-     */
-    protected function getFilters($language) {
-        $sql = "
-            SELECT
-                s_filter_values.optionID AS id,
-                s_filter.id AS groupID,
-                s_filter.name AS groupName,
-                s_filter_options.id as optionID,
-                s_filter_options.name as optionName,
-                s_filter_values.id as valueID,
-                s_filter_values.value as optionValue,
-
-                s_filter.sortmode,
-                s_filter_values.position as valuePosition,
-                s_filter_relations.position as filterPosition,
-
-                s_core_translations.objectdata AS optionNameTranslation,
-				s_core_translations2.objectdata AS groupNameTranslation,
-				s_core_translations3.objectdata AS valueTranslation
-
-            FROM   s_filter
-                INNER JOIN s_filter_relations
-                    ON s_filter.id = s_filter_relations.groupID
-                INNER JOIN s_filter_options
-                    ON s_filter_options.id = s_filter_relations.optionID
-                INNER JOIN s_filter_values
-                    ON s_filter_values.optionID = s_filter_options.id
-
-                LEFT JOIN s_core_translations
-                    ON s_core_translations.objecttype='propertyoption'
-                    AND s_core_translations.objectkey=s_filter_values.optionID
-                    AND s_core_translations.objectlanguage='$language'
-
-                LEFT JOIN s_core_translations AS s_core_translations2
-                    ON s_core_translations2.objecttype='propertygroup'
-                    AND s_core_translations2.objectkey=s_filter.id
-                    AND s_core_translations2.objectlanguage='$language'
-
-                LEFT JOIN s_core_translations AS s_core_translations3
-                    ON s_core_translations3.objecttype='propertyvalue'
-                    AND s_core_translations3.objectkey=s_filter_values.id
-                    AND s_core_translations3.objectlanguage='$language'
-
-            GROUP BY s_filter_values.id
-        ";
-
-        return Shopware()->Db()->fetchAll($sql);
-    }
-
-    /**
-     * Helper function to sort the selected category filters.
-     *
-     * This function is used an array multi sort.
-     * The first sort condition is the filter option position which can be
-     * configured over the position field in the property backend module (saved in s_filter_relations.position).
-     * The second sort condition is the name of the options (s_filter_options.name).
-     * This two conditions are required to display the filter panels in the store front each time in the correct order.
-     *
-     * The last parameter is a custom parameter which can be configured for each filter in the s_filter.sortmode
-     * field. This parameter is set over the property backend module in the select box within the grid.
-     *
-     * @param $filters
-     * @param $sort
-     *
-     * @return array
-     */
-    protected function sortFilters($filters, $sort)
-    {
-        $directions = array(
-            'filterPosition' => $sort[0]['filterPosition']['direction'],
-            'optionName'     => $sort[0]['optionName']['direction'],
-            'valueSort'      => $sort[0]['valueSort']['direction'],
-            'optionValue'    => $sort[0]['optionValue']['direction'],
-        );
-
-        foreach($sort as $key => $row) {
-            $filterPosition[$key] = $row['filterPosition']['value'];
-            $optionName[$key] = $row['optionName']['value'];
-            $valueSort[$key] = $row['valueSort']['value'];
-            $optionValue[$key] = $row['optionValue']['value'];
-        }
-
-        array_multisort(
-            $filterPosition, $directions['filterPosition'],
-            $optionName,     $directions['optionName'],
-            $valueSort,      $directions['valueSort'],
-            $optionValue,    $directions['optionValue'],
-        $sort);
-
-        $sortedFilters = array();
-        foreach($sort as $value) {
-            $sortedFilters[] = $filters[$value['index']];
-        }
-        return $sortedFilters;
-    }
-
 }
