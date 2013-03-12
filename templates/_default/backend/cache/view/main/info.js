@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,12 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
-
 //{namespace name=backend/cache/view/main}
-
 //{block name="backend/cache/view/main/info"}
 Ext.define('Shopware.apps.Cache.view.main.Info', {
     extend: 'Ext.grid.Panel',

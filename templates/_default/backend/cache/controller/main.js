@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,18 +23,12 @@
  * @category   Shopware
  * @package    Shopware_Cache
  * @subpackage Cache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright  Copyright (c) 2013, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
 //{namespace name=backend/cache/view/main}
-
-/**
- * Shopware Controller - Cache backend module
- *
- * todo@all: Documentation
- */
 //{block name="backend/article/controller/main"}
 Ext.define('Shopware.apps.Cache.controller.Main', {
 
@@ -46,12 +40,29 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
     refs: [
         { ref: 'window', selector: 'cache-window' },
         { ref: 'info', selector: 'cache-info dataview' },
-        { ref: 'form', selector: 'cache-form' }
+        { ref: 'form', selector: 'cache-form' },
+
+        { ref: 'progressBar',    selector: 'cache-categories progressbar' },
+        { ref: 'progressWindow', selector: 'cache-categories' },
+        { ref: 'startButton',    selector: 'cache-categories button[action=start]' },
+        { ref: 'closeButton',    selector: 'cache-categories button[action=closeWindow]' },
+        { ref: 'cancelButton',   selector: 'cache-categories button[action=cancel]' }
     ],
 
     infoTitle: '{s name=form/message_title}Shop cache{/s}',
-
     infoMessageSuccess: '{s name=form/message}Shop cache has been cleared.{/s}',
+
+    /**
+     * Contains all snippets for the component
+     * @object
+     */
+    snippets: {
+        process: '{s name=controller/process}Category/Article connection [0] of [1]{/s}',
+        done: {
+            message: '{s name=controller/done_message}All categories have been fixed{/s}',
+            title: '{s name=controller/done_title}Successful{/s}'
+        }
+    },
 
     /**
      * Class property which holds the main application if it is created
@@ -60,6 +71,9 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
      * @object
      */
     mainWindow: null,
+
+    shouldCancel: false,
+    totalCount: 0,
 
     /**
      *
@@ -85,6 +99,7 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
                 }
             },
             'cache-form': {
+                fixCategories: me.onFixCategories,
                 actioncomplete: function(form, action) {
                     me.getStore('main.Info').load({
                         callback: function(records, operation) {
@@ -96,10 +111,118 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
                         }
                     });
                 }
+            },
+
+            'cache-categories': {
+                startProcess:  me.onStartProcess,
+                cancelProcess: me.onCancelProcess,
+                closeWindow:   me.onCloseProcessWindow
             }
         });
 
         me.callParent(arguments);
+    },
+
+    onFixCategories: function(view) {
+        var me = this;
+
+        me.getView('main.Categories').create().show();
+
+        Ext.Ajax.request({
+            url: '{url action=prepareTree}',
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+
+                me.totalCount = json.total;
+
+                var progressBar = me.getProgressBar();
+                progressBar.updateProgress(0);
+
+                me.getStartButton().enable();
+            }
+        });
+
+
+
+    },
+
+    /**
+     * @param { Array } selection
+     */
+    onStartProcess: function(selection) {
+        var me = this;
+        var progressBar = me.getProgressBar();
+
+        me.executeSingleOrder(0, progressBar);
+    },
+
+    /**
+     * @param { Integer } index
+     * @param { Ext.ProgressBar } progressBar
+     */
+    executeSingleOrder: function(index, progressBar) {
+        var me = this;
+        var batchSize = 5000;
+        var count = me.totalCount;
+
+        if (index >= count) {
+            //display finish update progress bar and display finish message
+            progressBar.updateProgress(1, me.snippets.done.message, true);
+
+            me.getCancelButton().disable();
+            me.getCloseButton().enable();
+
+            //display shopware notification message that the batch process finished
+            Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
+
+            return;
+        }
+
+         if (me.shouldCancel) {
+            me.getCloseButton().enable();
+            return;
+        }
+
+        //updates the progress bar value and text, the last parameter is the animation flag
+        progressBar.updateProgress((index+batchSize)/count, Ext.String.format(me.snippets.process, (index+batchSize), count), true);
+
+        Ext.Ajax.request({
+            url: '{url action=fixCategories}',
+            method: 'POST',
+            params: {
+                offset: index,
+                limit: batchSize
+            },
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+
+                // start recusive call here
+                me.executeSingleOrder(index + batchSize, progressBar);
+            },
+
+            failure: function(response) {
+                me.shouldCancel = true;
+                me.executeSingleOrder(index + batchSize, progressBar);
+            }
+        });
+    },
+
+
+    /**
+     * Cancel the order creation.
+     */
+    onCancelProcess: function() {
+        var me = this;
+        me.shouldCancel = true;
+    },
+
+    /**
+     * Cancel the document creation.
+     * @param { Enlight.app.Window } window
+     */
+    onCloseProcessWindow: function(window) {
+        var me = this;
+        window.destroy();
     }
 });
 //{/block}

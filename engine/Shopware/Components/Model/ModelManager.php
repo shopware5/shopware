@@ -463,4 +463,93 @@ class ModelManager extends EntityManager
         $result = Shopware()->Db()->fetchRow($sql);
         return !empty($result);
     }
+
+    /**
+     * @param integer $parentId
+     * @return array
+     */
+    public function getParentCategories($parentId)
+    {
+        static $cache = array();
+
+        if (isset($cache[$parentId])) {
+            return $cache[$parentId];
+        }
+
+        $parent = Shopware()->Db()->fetchRow("SELECT id, parent FROM  `s_categories` WHERE id = $parentId AND parent IS NOT NULL;");
+        if (!$parent) {
+            return false;
+        }
+
+        $result = array($parent['id']);
+
+        $parent = $this->getParentCategories($parent['parent']);
+        if ($parent) {
+            $result = array_merge($result, $parent);
+        }
+
+        $cache[$parentId] = $result;
+
+        return $result;
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param array $stats
+     */
+    public function fixCategoryTree($offset = 0, $limit = 0, &$stats = array())
+    {
+        $offset = (int) $offset;
+        $limit = (int) $limit;
+
+        $baseMemory = memory_get_usage();
+        $startTime = microtime(true);
+
+        $assignmentSql = "SELECT id FROM s_articles_categories c WHERE c.categoryID = :categoryId AND c.articleID = :articleID";
+        $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
+
+        $allAssignsSql = "
+            SELECT DISTINCT ac.id, ac.articleID, ac.categoryId, c.parent
+            FROM  s_articles_categories ac
+            INNER JOIN s_categories c
+            ON ac.categoryID = c.id
+        ";
+
+        $allAssignsSql = Shopware()->Db()->limit($allAssignsSql, $limit, $offset);
+        $assignments = Shopware()->Db()->query($allAssignsSql);
+
+        $newRows = 0;
+        Shopware()->Db()->beginTransaction();
+        while ($assignment = $assignments->fetch()) {
+
+            if (empty($assignment['parent'])) {
+                continue;
+            }
+
+            $parents = $this->getParentCategories($assignment['parent']);
+
+            if (empty($parents)) {
+                continue;
+            }
+
+            foreach ($parents as $parentId) {
+                $assignmentStmt->execute(array('categoryId' => $parentId, 'articleID' => $assignment['articleID']));
+                if ($assignmentStmt->fetchColumn() === false) {
+                    $newRows++;
+
+                    $articleId = (int) $assignment['articleID'];
+                    Shopware()->Db()->exec("INSERT INTO s_articles_categories (categoryId, articleID) VALUES ($parentId, $articleId)");
+                }
+            }
+        }
+        Shopware()->Db()->commit();
+
+        $stats = array(
+            'newRows'        => $newRows,
+            'runtime'        => number_format((microtime(true) - $startTime), 2) . " seconds",
+            'memory'         => number_format(((memory_get_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
+            'peakMemory'     => number_format(((memory_get_peak_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
+        );
+    }
 }
