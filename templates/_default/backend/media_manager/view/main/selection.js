@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
     autoShow: true,
     layout: 'border',
     height: 500,
-    width: 650,
+    width: 730,
 
     /**
      * Forces the window to be on front
