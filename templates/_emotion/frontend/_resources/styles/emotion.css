@@ -2652,7 +2652,8 @@ div#notes .table_row .action a.detail {border: 0;}
 
 div#notes .table_row .action {top: inherit;bottom: 15px;right: 15px;}
 div#notes .table_row .delete {top: 24px;right: 15px;}
-div#notes .table_row .rating {right: auto; left: 600px; top: 23px;}
+div#notes .table_row .rating {right: auto; left: 450px; top: 23px;}
+div#notes .table_row .rating.full_length {right: auto; left: 600px; top: 23px;}
 div#notes .table_row .price {top: 28px;}
 div#notes .table_row a.zoom_picture {left: 5px; top: 129px;}
 div#notes .table .table_head .grid_3 {float: right; width: 160px;}
@@ -2663,7 +2664,8 @@ div#notes .table_row .delete:hover {background-position: 0 bottom;}
 div#notes .table_row a.zoom_picture {background: url(../images/icons/ico_zoom-picture.png) no-repeat 0 0;}
 div#notes .table_row a.zoom_picture:hover {background-position: 0 bottom;}
 
-div#notes .table_row .delivery {top: 38px; right: auto; left: 590px; }
+div#notes .table_row .delivery {top: 30px; right: 0;}
+div#notes .table_row .delivery.full_length {top: 38px; right: auto; left: 590px; }
 div#notes .table_row .title {width: 450px;}
 
 
