@@ -1,7 +1,7 @@
 <div class="table_row {if $lastrow} lastrow{/if}">
 
 	{* Reviews *}
-	<div class="rating{if !$sUserLoggedIn} full_length{/if} ">
+	<div class="rating{if !$sUserLoggedIn} full_length{/if}">
 		<div class="star star{$sBasketItem.sVoteAverange.averange*2|round}"></div>
 	</div>
 
@@ -27,7 +27,7 @@
 
 		{* Delivery informations *}
 		{if {config name=BASKETSHIPPINGINFO}}
-			<div class="delivery{if !$sUserLoggedIn} full_length{/if} ">
+			<div class="delivery{if !$sUserLoggedIn} full_length{/if}">
 				{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sBasketItem}
 			</div>
 		{/if}
