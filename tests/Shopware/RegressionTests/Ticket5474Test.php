@@ -52,7 +52,6 @@ class Shopware_RegressionTests_Ticket5474 extends Enlight_Components_Test_Plugin
         $this->assertEquals(10, $articleData["id"]);
         $this->assertEquals('Aperitif-Glas Demi Sec', $articleData["name"]);
 
-        //todo@ms: check if the articleID or the id of the mainDetail is saved
         $mainDetailData = $articleData["mainDetail"];
         $this->assertTrue(!empty($mainDetailData));
         $this->assertEquals('16', $mainDetailData["id"]);
