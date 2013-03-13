@@ -1486,7 +1486,7 @@ class sBasket
         /*
         SW 2.1 - Load prices from defaultgroup if no own prices defined
         */
-        if (!$queryNewPrice["price"]){
+        if (!isset($queryNewPrice["price"])){
             // In the case no price is available for this customergroup, use price of default customergroup
             $sql = "SELECT s_articles_prices.price AS price,taxID,s_core_tax.tax AS tax,s_articles_details.id AS articleDetailsID, s_articles_details.articleID, s_order_basket.config, s_order_basket.ordernumber FROM s_articles_details, s_articles_prices, s_order_basket,
             s_articles, s_core_tax
@@ -1501,7 +1501,7 @@ class sBasket
             $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
         }
 
-        if (empty($queryNewPrice["price"])&&empty($queryNewPrice["config"])){
+        if (!isset($queryNewPrice["price"])&&empty($queryNewPrice["config"])){
             // If no price is set for default customergroup, delete article from basket
             $this->sDeleteArticle($id);
             return false;
@@ -1764,7 +1764,7 @@ class sBasket
                 ";
                 $getPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($this->sSYSTEM->sUSERGROUP,$getArticle["articledetailsID"],$getArticle["taxID"]));
 
-                if (empty($getPrice["price"])){
+                if (!isset($getPrice["price"])){
                     $sql = "SELECT price,s_core_tax.tax AS tax FROM s_articles_prices,s_core_tax WHERE
                     s_articles_prices.pricegroup='EK'
                     AND s_articles_prices.articledetailsID=?
@@ -1774,11 +1774,11 @@ class sBasket
                 }
 
 
-				if (!$getPrice["price"] && !$getArticle["free"]){
-					// No price could acquired
-					$this->sSYSTEM->E_CORE_WARNING ("BASKET-INSERT #01","No price acquired");
-					return;
-				}else {
+		if (!isset($getPrice["price"]) && !$getArticle["free"]){
+		    // No price could acquired
+		    $this->sSYSTEM->E_CORE_WARNING ("BASKET-INSERT #01","No price acquired");
+		    return;
+		}else {
 
                     // If configuration article
                     if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
