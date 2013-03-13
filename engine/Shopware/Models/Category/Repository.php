@@ -128,12 +128,12 @@ class Repository extends TreeRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
-            'category',
-            'PARTIAL articles.{id, name}',
-            'PARTIAL mainDetail.{id,number}',
-            'PARTIAL supplier.{id,name}',
-            'attribute',
-            'emotions', 'customerGroups', 'media'
+                'category',
+                'PARTIAL articles.{id, name}',
+                'PARTIAL mainDetail.{id,number}',
+                'PARTIAL supplier.{id,name}',
+                'attribute',
+                'emotions', 'customerGroups', 'media'
             ))
             ->from($this->getEntityName(), 'category')
             ->leftJoin('category.articles', 'articles')

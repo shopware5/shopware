@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket5474 extends Enlight_Components_Test_Plugin_TestCase
 {
@@ -47,18 +47,18 @@ class Shopware_RegressionTests_Ticket5474 extends Enlight_Components_Test_Plugin
         $categoryDetailArray = $repository->getDetailQuery(14)->getArrayResult();
 
         $articleData = $categoryDetailArray[0]["articles"][0];
-        $this->assertTrue(!empty($articleData));
+        $this->assertNotEmpty($articleData);
 
         $this->assertEquals(10, $articleData["id"]);
         $this->assertEquals('Aperitif-Glas Demi Sec', $articleData["name"]);
 
         $mainDetailData = $articleData["mainDetail"];
-        $this->assertTrue(!empty($mainDetailData));
+        $this->assertNotEmpty($mainDetailData);
         $this->assertEquals('16', $mainDetailData["id"]);
         $this->assertEquals('SW10010', $mainDetailData["number"]);
 
         $supplierData = $articleData["supplier"];
-        $this->assertTrue(!empty($supplierData));
+        $this->assertNotEmpty($supplierData);
         $this->assertEquals('2', $supplierData["id"]);
         $this->assertEquals('Feinbrennerei Sasse', $supplierData["name"]);
 
