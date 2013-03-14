@@ -524,15 +524,10 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
         if($config->get('paypalTransferCart')) {
             foreach ($basket['content'] as $key => $item) {
                 if (!empty($user['additional']['charge_vat']) && !empty($item['amountWithTax'])) {
-                    $amount = round($item['amountWithTax'], 2);
-                    $quantity = 1;
+                    $amount = $item['amountWithTax'];
                 } else {
                     $amount = str_replace(',', '.', $item['amount']);
-                    $quantity = $item['quantity'];
-                    $amount = $amount / $item['quantity'];
                 }
-                $amount = round($amount, 2);
-                // Tax amount calculation / Not needed anymore
 //                if(empty($amount) || empty($user['additional']['charge_vat'])) {
 //                    $tax = 0;
 //                } elseif(!empty($item['tax'])) {
@@ -543,10 +538,15 @@ class Shopware_Controllers_Frontend_PaymentPaypal extends Shopware_Controllers_F
                 $article = array(
                     'L_NUMBER' . $key   => $item['ordernumber'],
                     'L_NAME' . $key     => $item['articlename'],
-                    'L_AMT' . $key      => $amount,
-                    'L_QTY' . $key      => $quantity,
+                    'L_AMT' . $key      => number_format($amount / $item['quantity'], 2, '.', ''),
+                    'L_QTY' . $key      => $item['quantity'],
 //                    'L_TAXAMT' . $key   => $tax
                 );
+//            if($item['modus'] == 4) {
+//                $article['type'] = 'handling';
+//            } else {
+//                $article['type'] = $price >= 0 ? 'goods' : 'voucher';
+//            }
                 $params = array_merge($params, $article);
             }
         }
