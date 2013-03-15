@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/select_grid_field}Select a grid{/s}',
             name: 'gridId',
             allowBlank: false,
+            queryMode: 'remote',
             store: gridStore,
             displayField: 'name',
             valueField: 'id',

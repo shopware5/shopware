@@ -107,8 +107,9 @@ class Repository extends ModelRepository
     public function getEmotionDetailQueryBuilder($emotionId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute','categories'))
+        $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute','categories', 'grid'))
                 ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+                ->leftJoin('emotions.grid', 'grid')
                 ->leftJoin('emotions.elements', 'elements')
                 ->leftJoin('emotions.attribute', 'attribute')
                 ->leftJoin('elements.component', 'component')
