@@ -46,7 +46,22 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
      * @Object
      */
     snippets: {
-
+        columns: {
+            name: '{s name=grids/list/columns/name}Name{/s}',
+            cols: '{s name=grids/list/columns/cols}Column(s){/s}',
+            rows: '{s name=grids/list/columns/rows}Row(s){/s}',
+            cellHeight: '{s name=grids/list/columns/cellHeight}Cell height (in px){/s}',
+            articleHeight: '{s name=grids/list/columns/articleHeight}Article element height{/s}',
+            actions: '{s name=grids/list/columns/actions}Action(s){/s}'
+        },
+        tooltips: {
+            edit: '{s name=grids/list/tooltip/edit}Edit{/s}',
+            duplicate: '{s name=grids/list/tooltip/duplicate}Duplicate{/s}',
+            remove: '{s name=grids/list/tooltip/remove}Delete{/s}'
+        },
+        renderer: {
+            articleHeight: '{s name=grids/list/renderer/articleHeight}cell(s){/s}'
+        }
     },
 
     /**
@@ -60,10 +75,14 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
         me.addEvents('selectionChange');
 
         me.store = Ext.create('Ext.data.Store', {
-            fields: [ 'id', 'name' ]
+            fields: [ 'name', 'cols', 'rows', 'cellHeight', 'articleHeight' ],
+            data: [
+                { name: '6-spaltig', cols: 6, rows: 30, cellHeight: 185, articleHeight: 2 }
+            ]
         });
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
+        me.plugins = [ me.createEditor() ];
 
         me.callParent(arguments);
     },
@@ -78,24 +97,61 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
 
         return [{
             dataIndex: 'name',
-            header: 'Name',
-            flex: 1
+            header: me.snippets.columns.name,
+            flex: 1,
+            renderer: me.nameRenderer,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: false
+            }
         }, {
             dataIndex: 'cols',
-            header: 'Columns',
-            flex: 1
+            header: me.snippets.columns.cols,
+            flex: 1,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
         }, {
             dataIndex: 'rows',
-            header: 'Rows',
-            flex: 1
+            header: me.snippets.columns.rows,
+            flex: 1,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
         }, {
             dataIndex: 'cellHeight',
-            header: 'Cell height (in px)',
-            flex: 1
+            header: me.snippets.columns.cellHeight,
+            flex: 1,
+            renderer: me.cellHeightRenderer,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
         }, {
             dataIndex: 'articleHeight',
-            header: 'Article element height',
-            flex: 1
+            header: me.snippets.columns.articleHeight,
+            flex: 1,
+            renderer: me.articleHeightRenderer,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
+        }, {
+            xtype: 'actioncolumn',
+            header: me.snippets.columns.actions,
+            width: 85,
+            items: [{
+                iconCls: 'sprite-pencil',
+                tooltip: me.snippets.tooltips.edit
+            }, {
+                iconCls: 'sprite-blue-folder--plus',
+                tooltip: me.snippets.tooltips.duplicate
+            }, {
+                iconCls: 'sprite-minus-circle',
+                tooltip: me.snippets.tooltips.remove
+            }]
         }];
     },
 
@@ -116,6 +172,53 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 }
             }
         });
+    },
+
+    /**
+     * Creates the row editor
+     *
+     * @returns { Ext.grid.plugin.RowEditing }
+     */
+    createEditor: function() {
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToEdit: 2
+        });
+    },
+
+    /**
+     * Column renderer for the `name` column.
+     *
+     * The method wraps the value in `strong`-tags.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    nameRenderer: function(value) {
+        return Ext.String.format('<strong>[0]</strong>', value);
+    },
+
+    /**
+     * Column renderer for the `cellHeight` column.
+     *
+     * The method appends an `px` to the incoming value.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    cellHeightRenderer: function(value) {
+        return Ext.String.format('[0]px', value);
+    },
+
+    /**
+     * Column renderer for the `articleHeight` column.
+     *
+     * The method appends a localized `cell` string to the incoming value.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    articleHeightRenderer: function(value) {
+        return Ext.String.format('[0] [1]', value, this.snippets.renderer.articleHeight);
     }
 });
 //{/block}

@@ -57,7 +57,8 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         tab: {
             overview: '{s name=window/tab/overview}Overview{/s}',
             custom_grids: '{s name=window/tab/custom_grids}Grids management{/s}',
-            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}'
+            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}',
+            expert_settings: '{s name=window/tab/expert_settings}Expert settings{/s}'
         }
     },
 
@@ -84,7 +85,7 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         var me = this;
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {
-            items: [ me.createOverviewTab(), me.createCustomGridsTab(), me.createCustomTemplatesTab() ]
+            items: [ me.createOverviewTab(), me.createExpertSettingsTab() ]
         });
 
         return me.tabPanel;
@@ -114,6 +115,24 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         });
 
         return me.overviewContainer;
+    },
+
+    /**
+     * Creates the container which represents the expert settings tab.
+     *
+     * The tab contains the custom grids and custom templates tabs.
+     *
+     * @returns { Ext.tab.Panel }
+     */
+    createExpertSettingsTab: function() {
+        var me = this;
+
+        me.expertSettingsTabPanel = Ext.create('Ext.tab.Panel', {
+            title: me.snippets.tab.expert_settings,
+            items: [ me.createCustomGridsTab(), me.createCustomTemplatesTab() ]
+        });
+
+        return me.expertSettingsTabPanel;
     },
 
     /**
