@@ -120,19 +120,10 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 xtype: 'numberfield',
                 allowBlank: false
             }
-            editor: {
-                xtype: 'numberfield',
-                allowBlank: false
-            }
         }, {
             dataIndex: 'cellHeight',
             header: me.snippets.columns.cellHeight,
             flex: 1,
-            renderer: me.cellHeightRenderer,
-            editor: {
-                xtype: 'numberfield',
-                allowBlank: false
-            }
             renderer: me.cellHeightRenderer,
             editor: {
                 xtype: 'numberfield',
