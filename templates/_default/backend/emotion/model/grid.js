@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.Emotion.model.Grid', {
         { name: 'cols', type: 'int', defaultValue: 4 },
         { name: 'rows', type: 'int', defaultValue: 20 },
         { name: 'cellHeight', type: 'int', defaultValue: 185 },
-        { name: 'articleHeight', type: 'int', defaultValue: 2 }
+        { name: 'articleHeight', type: 'int', defaultValue: 2 },
+        { name: 'gutter', type: 'int', defaultValue: 10 }
     ],
 
     /**
