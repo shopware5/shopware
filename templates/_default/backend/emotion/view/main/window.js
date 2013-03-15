@@ -151,7 +151,8 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                 region: 'north'
             }, {
                 xtype: 'emotion-grids-list',
-                region: 'center'
+                region: 'center',
+                store: Ext.create('Shopware.apps.Emotion.store.Grids').load()
             }]
         });
 
