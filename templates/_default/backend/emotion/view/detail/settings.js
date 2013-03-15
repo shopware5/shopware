@@ -60,14 +60,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     initComponent: function() {
         var me = this;
 
-        var gridStore = Ext.create('Ext.data.Store', {
-            fields: [ 'display', 'value' ],
-            data: [{
-                display: '{s name=settings/three_columns}3 columns{/s}', value: 3
-            }, {
-                display: '{s name=settings/four_columns}4 columns{/s}', value: 4
-            }]
-        });
+        me.categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath');
+        me.categoryPathStore.getProxy().extraParams.parents = true;
+        me.categoryPathStore.load();
+
+        var gridStore = Ext.create('Shopware.apps.Emotion.store.Grids').load();
 
         me.nameField = Ext.create('Ext.form.field.Text', {
             fieldLabel: '{s name=settings/emotion_name_field}Emotion name{/s}',
@@ -114,10 +111,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         me.gridComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: '{s name=settings/select_grid_field}Select a grid{/s}',
-            name: 'cols',
+            name: 'gridId',
+            allowBlank: false,
             store: gridStore,
-            displayField: 'display',
-            valueField: 'value',
+            displayField: 'name',
+            valueField: 'id',
             emptyText: '{s name=settings/select_grid_empty}Please select...{/s}'
         });
 

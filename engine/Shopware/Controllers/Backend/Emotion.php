@@ -252,6 +252,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $data["createDate"] = new \DateTime();
             }
 
+            if (!empty($data['gridId'])) {
+                $data['grid'] = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $data['gridId']);
+            }
+
             if (!empty($data['validFrom']) && !empty($data['validFromTime'])) {
                 $fromDate = new \DateTime($data['validFrom']);
                 $fromTime = new \DateTime($data['validFromTime']);

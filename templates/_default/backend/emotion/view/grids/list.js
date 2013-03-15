@@ -120,10 +120,19 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 xtype: 'numberfield',
                 allowBlank: false
             }
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
         }, {
             dataIndex: 'cellHeight',
             header: me.snippets.columns.cellHeight,
             flex: 1,
+            renderer: me.cellHeightRenderer,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
             renderer: me.cellHeightRenderer,
             editor: {
                 xtype: 'numberfield',
@@ -172,6 +181,53 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 }
             }
         });
+    },
+
+    /**
+     * Creates the row editor
+     *
+     * @returns { Ext.grid.plugin.RowEditing }
+     */
+    createEditor: function() {
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToEdit: 2
+        });
+    },
+
+    /**
+     * Column renderer for the `name` column.
+     *
+     * The method wraps the value in `strong`-tags.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    nameRenderer: function(value) {
+        return Ext.String.format('<strong>[0]</strong>', value);
+    },
+
+    /**
+     * Column renderer for the `cellHeight` column.
+     *
+     * The method appends an `px` to the incoming value.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    cellHeightRenderer: function(value) {
+        return Ext.String.format('[0]px', value);
+    },
+
+    /**
+     * Column renderer for the `articleHeight` column.
+     *
+     * The method appends a localized `cell` string to the incoming value.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    articleHeightRenderer: function(value) {
+        return Ext.String.format('[0] [1]', value, this.snippets.renderer.articleHeight);
     },
 
     /**
