@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     createMappingGrid: function() {
         var me = this;
         me.mappingStore = Ext.create('Ext.data.Store', {
-            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'linklocation' ]
+            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'linkLocation' ]
         });
 
         me.rowEdit = Ext.create('Ext.grid.plugin.RowEditing', {
@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         // Combobox which will be used for the link type field
         me.linkComboBox = Ext.create('Ext.form.field.ComboBox', {
             queryMode: 'local',
-            name: 'linklocation',
+            name: 'linkLocation',
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'display' ],
                 data: [
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             flex: 2,
             editor: me.articleSearch
         }, {
-            dataIndex: 'linklocation',
+            dataIndex: 'linkLocation',
             header: '{s name=banner_mapping/column/link_type}Link type{/s}',
             flex: 1,
             editor: me.linkComboBox,
@@ -426,7 +426,6 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         });
 
         cmp.setPosition(config.x, config.y);
-        console.log(config);
 
         // Create the record for the `me.mappingStore`
         var record = me.mappingStore.add({
@@ -436,7 +435,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             width: config.width,
             resizerIndex: id,
             link: config.link,
-            linklocation: config.linklocation
+            linkLocation: config.linkLocation
         });
         record = record[0];
 
