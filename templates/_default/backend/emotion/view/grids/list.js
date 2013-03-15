@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
     initComponent: function() {
         var me = this;
 
-        me.addEvents('selectionChange');
+        me.addEvents('selectionChange', 'edit', 'duplicate', 'remove');
 
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
@@ -138,13 +138,25 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
             width: 85,
             items: [{
                 iconCls: 'sprite-pencil',
-                tooltip: me.snippets.tooltips.edit
+                tooltip: me.snippets.tooltips.edit,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('edit', grid, rec, row, col);
+                }
             }, {
                 iconCls: 'sprite-blue-folder--plus',
-                tooltip: me.snippets.tooltips.duplicate
+                tooltip: me.snippets.tooltips.duplicate,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('duplicate', grid, rec, row, col);
+                }
             }, {
                 iconCls: 'sprite-minus-circle',
-                tooltip: me.snippets.tooltips.remove
+                tooltip: me.snippets.tooltips.remove,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('remove', grid, rec, row, col);
+                }
             }]
         }];
     },

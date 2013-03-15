@@ -40,9 +40,18 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
 
     /**
      * Extend from the standard ExtJS 4 controller
-     * @string
+     * @String
      */
 	extend: 'Ext.app.Controller',
+
+    /**
+     * References to components
+     * @Array
+     */
+    refs: [
+        { ref: 'list', selector: 'emotion-grids-list' },
+        { ref: 'toolbar', selector: 'emotion-grids-toolbar' }
+    ],
 
     /**
      * Creates the necessary event listener for this
@@ -52,7 +61,45 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
      * @return void
      */
     init: function() {
+        var me = this;
 
+        me.control({
+            'emotion-grids-list': {
+                'selectionChange': me.onSelectionChange,
+                'edit': me.onEdit,
+                'duplicate': me.onDuplicate,
+                'remove': me.onRemove
+            }
+        });
+    },
+
+    onSelectionChange: function(selection) {
+        var me = this,
+            toolbar = me.getToolbar(),
+            btn = toolbar.deleteBtn;
+
+        btn.setDisabled(!selection.length);
+    },
+
+    onEdit: function(grid, rec, row, col) {
+        alert('Open Edit Window');
+    },
+
+    onDuplicate: function(grid, rec, row, col) {
+        var me = this;
+    },
+
+    onRemove: function(grid, rec, row, col) {
+        var store = grid.getStore();
+
+        store.remove(rec);
+        grid.setLoading(true);
+        rec.destroy({
+            callback: function() {
+                grid.setLoading(false);
+            }
+        });
     }
+
 });
 //{/block}
