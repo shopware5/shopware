@@ -125,9 +125,15 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         var me = this;
 
         me.customGridsContainer = Ext.create('Ext.container.Container', {
-            layout: 'fit',
+            layout: 'border',
             title: me.snippets.tab.custom_grids,
-            html: 'Custom grids'
+            items: [{
+                xtype: 'emotion-grids-toolbar',
+                region: 'north'
+            }, {
+                xtype: 'emotion-grids-list',
+                region: 'center'
+            }]
         });
 
         return me.customGridsContainer;
@@ -144,7 +150,9 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         me.customTemplatesTab = Ext.create('Ext.container.Container', {
             layout: 'fit',
             title: me.snippets.tab.custom_templates,
-            html: 'Custom templates'
+            items: [{
+                xtype: 'emotion-templates-list'
+            }]
         });
 
         return me.customTemplatesTab;
