@@ -43,11 +43,23 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     alias: 'widget.emotion-main-window',
     border: false,
     autoShow: true,
-    layout: 'border',
+    layout: 'fit',
     height: '90%',
     width: 800,
     stateful: true,
     stateId: 'emotion-main-window',
+
+    /**
+     * Object which are used in this component
+     * @Object
+     */
+    snippets: {
+        tab: {
+            overview: '{s name=window/tab/overview}Overview{/s}',
+            custom_grids: '{s name=window/tab/custom_grids}Grids management{/s}',
+            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}'
+        }
+    },
 
     /**
      * Initializes the component and builds up the main interface
@@ -57,15 +69,85 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     initComponent: function() {
         var me = this;
 
-        me.items = [{
-            xtype: 'emotion-list-toolbar',
-            region: 'north'
-        }, {
-            xtype: 'emotion-list-grid',
-            region: 'center'
-        }];
+        me.items = me.createTabPanel();
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Creates the tab panel which holds off the different
+     * areas of the emotion module.
+     *
+     * @returns { Ext.tab.Panel } the tab panel which contains the different areas
+     */
+    createTabPanel: function() {
+        var me = this;
+
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            items: [ me.createOverviewTab(), me.createCustomGridsTab(), me.createCustomTemplatesTab() ]
+        });
+
+        return me.tabPanel;
+    },
+
+    /**
+     * Creates a container which holds off the upper toolbar and the
+     * actual grid panel.
+     *
+     * The container will be used as the `overview` tab.
+     *
+     * @returns { Ext.container.Container }
+     */
+    createOverviewTab: function() {
+        var me = this;
+
+        me.overviewContainer = Ext.create('Ext.container.Container', {
+            layout: 'border',
+            title: me.snippets.tab.overview,
+            items: [{
+                xtype: 'emotion-list-toolbar',
+                region: 'north'
+            }, {
+                xtype: 'emotion-list-grid',
+                region: 'center'
+            }]
+        });
+
+        return me.overviewContainer;
+    },
+
+    /**
+     * Creates the container which represents the custom grids tab.
+     *
+     * @returns { Ext.container.Container }
+     */
+    createCustomGridsTab: function() {
+        var me = this;
+
+        me.customGridsContainer = Ext.create('Ext.container.Container', {
+            layout: 'fit',
+            title: me.snippets.tab.custom_grids,
+            html: 'Custom grids'
+        });
+
+        return me.customGridsContainer;
+    },
+
+    /**
+     * Creates the container which represents the custom templates tab.
+     *
+     * @returns { Ext.container.Container }
+     */
+    createCustomTemplatesTab: function() {
+        var me = this;
+
+        me.customTemplatesTab = Ext.create('Ext.container.Container', {
+            layout: 'fit',
+            title: me.snippets.tab.custom_templates,
+            html: 'Custom templates'
+        });
+
+        return me.customTemplatesTab;
     }
 });
 //{/block}
