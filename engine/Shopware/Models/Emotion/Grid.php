@@ -76,18 +76,25 @@ class Grid extends ModelEntity
     private $rows = 20;
 
     /**
-     * @var integer $categoryId
+     * @var integer $cellHeight
      *
      * @ORM\Column(name="cell_height", type="integer", nullable=false)
      */
     private $cellHeight = 185;
  
     /**
-     * @var integer $categoryId
+     * @var integer $articleHeight
      *
      * @ORM\Column(name="article_height", type="integer", nullable=false)
      */
     private $articleHeight = 2;
+
+    /**
+     * @var integer $gutter
+     *
+     * @ORM\Column(name="gutter", type="integer", nullable=false)
+     */
+    private $gutter = 10;
 
     /**
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="grid")
@@ -194,5 +201,22 @@ class Grid extends ModelEntity
         $this->id = null;
         $this->emotions = new ArrayCollection();
     }
+
+    /**
+     * @param int $gutter
+     */
+    public function setGutter($gutter)
+    {
+        $this->gutter = $gutter;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGutter()
+    {
+        return $this->gutter;
+    }
+
 
 }
