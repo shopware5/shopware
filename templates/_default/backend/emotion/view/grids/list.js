@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
             rows: '{s name=grids/list/columns/rows}Row(s){/s}',
             cellHeight: '{s name=grids/list/columns/cellHeight}Cell height (in px){/s}',
             articleHeight: '{s name=grids/list/columns/articleHeight}Article element height{/s}',
+            gutter: '{s name=grids/list/columns/gutter}Gutter{/s}',
             actions: '{s name=grids/list/columns/actions}Action(s){/s}'
         },
         tooltips: {
@@ -128,6 +129,15 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
             header: me.snippets.columns.articleHeight,
             flex: 1,
             renderer: me.articleHeightRenderer,
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false
+            }
+        }, {
+            dataIndex: 'gutter',
+            header: me.snippets.columns.gutter,
+            flex: 1,
+            renderer: me.cellHeightRenderer,
             editor: {
                 xtype: 'numberfield',
                 allowBlank: false
