@@ -138,69 +138,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * To recover the tree panel
-     */
-    public function indexAction()
-    {
-        if ($this->getRepository()->verify() !== true) {
-            $this->fixTree();
-        }
-        parent::indexAction();
-    }
-
-    /**
-     * Fix category tree
-     */
-    public function fixTree()
-    {
-        set_time_limit(360);
-        $db = Shopware()->Db();
-        $db->beginTransaction();
-
-        $sql = 'UPDATE s_categories c SET c.left = 0, c.right = 0, c.level = 0';
-        $db->exec($sql);
-        $sql = 'UPDATE s_categories c SET c.left = 1, c.right = 2 WHERE c.id = 1';
-        $db->exec($sql);
-
-        $categoryIds = array(1);
-        while(($categoryId = array_shift($categoryIds)) !== null) {
-            $sql = 'SELECT c.right, c.level FROM s_categories c WHERE c.id = :categoryId';
-            $query = $db->prepare($sql);
-            $query->execute(array('categoryId' => $categoryId));
-            list($right, $level) = $query->fetch(Zend_Db::FETCH_NUM);
-            $sql = 'SELECT c.id FROM s_categories c WHERE c.parent = :categoryId ORDER BY position, id';
-            $query = $db->prepare($sql);
-            $query->execute(array('categoryId' => $categoryId));
-            $childrenIds = $query->fetchAll(Zend_Db::FETCH_COLUMN);
-            if(empty($childrenIds)) {
-                continue;
-            }
-            foreach($childrenIds as $childrenId) {
-                $sql = 'UPDATE s_categories c SET c.right = c.right + 2 WHERE c.right >= :right';
-                $db->prepare($sql)->execute(array('right' => $right));
-                $sql = 'UPDATE s_categories c SET c.left = c.left + 2 WHERE c.left > :right';
-                $db->prepare($sql)->execute(array('right' => $right));
-                $sql = '
-                    UPDATE s_categories c
-                    SET c.left = :right, c.right = :right + 1, c.level = :level + 1
-                    WHERE c.id = :childrenId
-                ';
-                $db->prepare($sql)->execute(array(
-                    'right' => $right, 'level' => $level,
-                    'childrenId' => $childrenId
-                ));
-                $right += 2;
-            }
-            $categoryIds = array_merge($childrenIds, $categoryIds);
-        }
-
-        $sql = 'DELETE c FROM s_categories c WHERE c.left = 0';
-        $db->exec($sql);
-
-        $db->commit();
-    }
-
-    /**
      * Reads all known categories into an array to show it in the category treepanel
      */
     public function getListAction()
