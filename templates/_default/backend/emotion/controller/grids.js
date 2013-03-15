@@ -69,8 +69,17 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
                 'edit': me.onEdit,
                 'duplicate': me.onDuplicate,
                 'remove': me.onRemove
+            },
+            'emotion-grids-toolbar button[action=emotion-grids-new-grid]': {
+                click: me.onCreate
             }
         });
+    },
+
+    onCreate: function() {
+        var me = this;
+
+        me.getView('grids.Settings').create();
     },
 
     onSelectionChange: function(selection) {
@@ -82,7 +91,11 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
     },
 
     onEdit: function(grid, rec, row, col) {
-        alert('Open Edit Window');
+        var me = this;
+
+        me.getView('grids.Settings').create({
+            record: rec
+        });
     },
 
     onDuplicate: function(grid, rec, row, col) {
