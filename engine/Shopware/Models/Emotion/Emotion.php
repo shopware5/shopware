@@ -275,6 +275,19 @@ class Emotion extends ModelEntity
     protected $showListing;
 
     /**
+     * @var
+     * @ORM\Column(name="grid_id", type="integer", nullable=true)
+     */
+    protected $gridId = null;
+
+    /**
+     * @var Grid
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Grid", inversedBy="emotions")
+     * @ORM\JoinColumn(name="grid_id", referencedColumnName="id")
+     */
+    protected $grid;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -694,5 +707,21 @@ class Emotion extends ModelEntity
     public function setShowListing($showListing)
     {
         $this->showListing = $showListing;
+    }
+
+    /**
+     * @param \Shopware\Models\Emotion\Grid $grid
+     */
+    public function setGrid($grid)
+    {
+        $this->grid = $grid;
+    }
+
+    /**
+     * @return \Shopware\Models\Emotion\Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
     }
 }
