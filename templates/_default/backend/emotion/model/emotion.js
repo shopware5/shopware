@@ -53,10 +53,6 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'active', type: 'boolean' },
         { name: 'showListing', type: 'boolean' },
         { name: 'name', type: 'string' },
-//        { name: 'cols', type: 'int' },
-//        { name: 'rows', type: 'int' },
-//        { name: 'cellHeight', type: 'int' },
-//        { name: 'articleHeight', type: 'int' },
 
         { name: 'containerWidth', type: 'int' },
         { name: 'categoryId', type: 'int', useNull: true },
