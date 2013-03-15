@@ -207,7 +207,8 @@ class Repository extends ModelRepository
     public function getCategoryEmotionsQueryBuilder($categoryId)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions', 'elements', 'component'))
+        $builder->select(array('emotions', 'elements', 'component', 'grid'))
+                ->leftJoin('emotions.grid', 'grid')
                 ->leftJoin('emotions.elements', 'elements')
                 ->leftJoin('elements.component', 'component')
                 ->innerJoin('emotions.categories','categories')
