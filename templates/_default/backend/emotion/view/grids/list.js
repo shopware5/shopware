@@ -74,12 +74,6 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
 
         me.addEvents('selectionChange');
 
-        me.store = Ext.create('Ext.data.Store', {
-            fields: [ 'name', 'cols', 'rows', 'cellHeight', 'articleHeight' ],
-            data: [
-                { name: '6-spaltig', cols: 6, rows: 30, cellHeight: 185, articleHeight: 2 }
-            ]
-        });
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
         me.plugins = [ me.createEditor() ];
