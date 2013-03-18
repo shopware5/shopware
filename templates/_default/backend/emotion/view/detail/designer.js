@@ -321,10 +321,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     // Special behavior the article element
                     if(record.get('xType') == 'emotion-components-article' ||
                        record.get('xType') == 'emotion-components-article-slider') {
-                        rowSpan = 2;
+                        rowSpan = entry.data.settings.articleHeight;
                         height = Math.floor(rowSpan * colHeight);
                     }
-                    this.createPreviewElement(width, height, startCol - 1, startRow - 1, colWidth);
+                    this.createPreviewElement(width, height, startCol - 1, startRow - 1, colWidth, entry);
                 }
             },
 
@@ -339,7 +339,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
              * @param [integer] top - Top offset of the element
              * @param [integer] colWidth - calculated column width
              */
-            createPreviewElement: function(width, height, left, top, colWidth) {
+            createPreviewElement: function(width, height, left, top, colWidth, entry) {
                 var firstLayer = view.dataView.getEl().down('.x-emotion-grid-first-layer');
 
                 if(proxyElement) {
@@ -397,7 +397,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                     if (record.get('xType') == 'emotion-components-article' ||
                         record.get('xType') == 'emotion-components-article-slider') {
-                        elEndRow = startRow + 1;
+                        elEndRow = startRow + (entry.data.settings.articleHeight - 1);
 
                     }
                     record.set({
@@ -427,7 +427,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                     if(record.get('xType') == 'emotion-components-article' ||
                        record.get('xType') == 'emotion-components-article-slider') {
-                        elEndRow = startRow + 1;
+                        elEndRow = startRow + (entry.data.settings.articleHeight - 1);
                     }
 
                     var model = Ext.create('Shopware.apps.Emotion.model.EmotionElement', {
