@@ -321,8 +321,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         var tplComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: '{s name=settings/fieldset/select_template}Select Template{/s}',
-            name: 'tempalte',
-            value: 'Standard',
+            name: 'templateId',
+            valueField: 'id',
+            displayField: 'name',
+            queryMode: 'remote',
+            store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
             emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
         });
 

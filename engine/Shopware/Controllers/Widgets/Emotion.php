@@ -160,6 +160,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
+        if (empty($emotions[0]['template'])) {
+            $this->View()->loadTemplate('widgets/emotion/index.tpl');
+        } else {
+            $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
+        }
+
         $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
         $this->View()->assign('sEmotions', $emotions, true);
         $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));

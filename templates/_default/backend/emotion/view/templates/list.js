@@ -59,9 +59,7 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
 
         me.addEvents('selectionChange');
 
-        me.store = Ext.create('Ext.data.Store', {
-            fields: [ 'id', 'name' ]
-        });
+        me.store = Ext.create('Shopware.apps.Emotion.store.Templates').load();
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
 
