@@ -120,6 +120,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             emptyText: '{s name=settings/select_grid_empty}Please select...{/s}'
         });
 
+        var tplComboBox = Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: '{s name=settings/fieldset/select_template}Select Template{/s}',
+            name: 'templateId',
+            valueField: 'id',
+            displayField: 'name',
+            queryMode: 'remote',
+            store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
+            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
+        });
+
         me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: '{s name=settings/active}Active{/s}',
             boxLabel: '{s name=settings/active_box_label}Emotion will be visible in the store front{/s}',
@@ -138,9 +148,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         me.timingFieldSet =  me.createTimingFieldSet();
         me.landingPageFieldSet = me.createLandingpageFieldset();
-        me.additionalFieldSet = me.createAdditionalSettingsFieldset();
 
-        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet, me.additionalFieldSet ];
+        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
         me.callParent(arguments);
 
         me.loadRecord(me.emotion);
@@ -288,68 +297,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             hidden: true,
             defaults: me.defaults,
             items: [ displayField, mediaSelection, seoKeywords, seoDescription, me.categorySearchField, me.positionSelection ]
-        });
-
-        return fieldset;
-    },
-
-    createAdditionalSettingsFieldset: function() {
-        var me = this, fieldset;
-
-        var noticeContainer = Ext.create('Ext.container.Container', {
-            margin: '0 0 15',
-            html: '{s name=settings/fieldset/notice_container}In the advanced settings you have the option to specify your emotion individually to your shop. Please note that some settings can affect your storefront negatively or even destroy it completely.{/s}',
-            style: 'font-style: italic; color: #999'
-        });
-
-        var boxHeightField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=settings/fieldset/cell_height}Cell height{/s}',
-            name: 'cellHeight',
-            supportText: '{s name=settings/fieldset/cell_height_info}Needed for calculating the complete height{/s}'
-        });
-
-        me.containerWidthField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
-            name: 'containerWidth',
-            supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}'
-        });
-
-        var articleBoxHeight = Ext.create('Ext.form.field.Number', {
-            name: 'articleHeight',
-            fieldLabel: '{s name=settings/fieldset/article_height}Height of an article box{/s}'
-        });
-
-        var tplComboBox = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=settings/fieldset/select_template}Select Template{/s}',
-            name: 'templateId',
-            valueField: 'id',
-            displayField: 'name',
-            queryMode: 'remote',
-            store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
-            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
-        });
-
-        var actionToolbar = Ext.create('Ext.toolbar.Toolbar', {
-            unstyled: true,
-            ui: 'shopware-ui',
-            style: 'background: #fff; border: 0 none',
-            items: ['->', {
-                xtype: 'button',
-                text: '{s name=settings/fieldset/create_grid}Create a new grid{/s}',
-                disabled: true,
-                iconCls: 'sprite-grid',
-                action: 'emotion-detail-settings-create-new-grid'
-            }]
-        });
-
-        fieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=settings/fieldset/advanced_settings}Advanced settings{/s}',
-            margin: '15 0 0',
-            layout: 'anchor',
-            collapsible: true,
-            collapsed: true,
-            defaults: me.defaults,
-            items: [ noticeContainer, boxHeightField, articleBoxHeight, me.containerWidthField, tplComboBox, actionToolbar ]
         });
 
         return fieldset;
