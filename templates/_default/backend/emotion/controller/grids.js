@@ -282,13 +282,16 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
      *
      * @returns { Boolean }
      */
-    onSave: function() {
+    onSave: function(btn) {
         var me = this,
             win = me.getSettings(),
             form = win.formPanel,
-            rec = form.getRecord();
+            rec = form.getRecord(),
+            newRec = false;
 
+        btn.setDisabled(true);
         if(!form.getForm().isValid()) {
+            btn.setDisabled(false);
             return false;
         }
 
@@ -296,10 +299,14 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
             form.getForm().updateRecord(rec);
         } else {
             rec = Ext.create('Shopware.apps.Emotion.model.Grid', form.getForm().getValues());
+            newRec = true;
         }
 
         rec.save({
             callback: function() {
+                if(newRec) {
+                    me.getList().getStore().add(rec);
+                }
                 Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.edited, rec.get('name')));
                 win.destroy();
             }
