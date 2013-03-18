@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion_grid` (
   `cell_height` int(11) NOT NULL,
   `article_height` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
 INSERT INTO `s_emotion_grid` (`id`, `name`, `cols`, `rows`, `cell_height`, `article_height`) VALUES
