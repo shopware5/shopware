@@ -50,8 +50,18 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
      */
     refs: [
         { ref: 'list', selector: 'emotion-grids-list' },
-        { ref: 'toolbar', selector: 'emotion-grids-toolbar' }
+        { ref: 'toolbar', selector: 'emotion-grids-toolbar' },
+        { ref: 'settings', selector: 'emotion-view-grids-settings' }
     ],
+
+    snippets: {
+        title: '{s name=global/title}Emotions{/s}',
+        copie: '{s name=global/copie}Copie{/s}',
+        edited: '{s name=global/edited}The grid [0] was successfully edited.{/s}',
+        duplicated: '{s name=global/duplicated}The grid [0] was successfully duplicated.{/s}',
+        removed: '{s name=global/removed}The grid [0] was successfully removed.{/s}',
+        marked_removed: '{s name=global/marked_removed}The selected grids are successfully removed.{/s}'
+    },
 
     /**
      * Creates the necessary event listener for this
@@ -65,23 +75,73 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
 
         me.control({
             'emotion-grids-list': {
+                'edit': me.onInlineEdit,
                 'selectionChange': me.onSelectionChange,
-                'edit': me.onEdit,
+                'editEntry': me.onEdit,
                 'duplicate': me.onDuplicate,
                 'remove': me.onRemove
             },
+            'emotion-grids-toolbar': {
+                'searchGrids': me.onSearch
+            },
             'emotion-grids-toolbar button[action=emotion-grids-new-grid]': {
                 click: me.onCreate
+            },
+            'emotion-grids-toolbar button[action=emotion-grids-delete-marked-grids]': {
+                click: me.onMultipleRemove
+            },
+            'emotion-view-grids-settings button[action=emotion-save-grid]': {
+                click: me.onSave
             }
         });
     },
 
+    /**
+     * Event handler which will be triggered when the user updates an record
+     * using the row editor plugin for the list.
+     *
+     * @param { Object } editor
+     * @param { Object } values
+     * @returns { Boolean }
+     */
+    onInlineEdit: function(editor, values) {
+        var me = this,
+            grid = editor.grid,
+            record = values.record;
+
+        if(!record) {
+            return false;
+        }
+        grid.setLoading(true);
+        record.save({
+            callback: function() {
+                grid.setLoading(false);
+                Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.edited, record.get('name')));
+            }
+        });
+    },
+
+    /**
+     * Event listener method which will be triggered when the user wants to
+     * create a new grid.
+     *
+     * @returns { Void }
+     */
     onCreate: function() {
         var me = this;
 
         me.getView('grids.Settings').create();
     },
 
+    /**
+     * Event listener method which will be triggered when the user selects
+     * one or more entries in the list.
+     *
+     * The method just unlocks the `delete`-button.
+     *
+     * @param { Array } selection - Array of the selected records
+     * @returns { Void }
+     */
     onSelectionChange: function(selection) {
         var me = this,
             toolbar = me.getToolbar(),
@@ -90,7 +150,17 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
         btn.setDisabled(!selection.length);
     },
 
-    onEdit: function(grid, rec, row, col) {
+    /**
+     * Event handler method which will be triggered when the user
+     * clicks on the pencil icon in the list.
+     *
+     * The method opens the `settings` window to update the values.
+     *
+     * @param { Shopware.apps.Emotion.view.grids.List } grid
+     * @param { Shopware.apps.Emotion.model.Grid } rec
+     * @returns { Void }
+     */
+    onEdit: function(grid, rec) {
         var me = this;
 
         me.getView('grids.Settings').create({
@@ -98,21 +168,142 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
         });
     },
 
-    onDuplicate: function(grid, rec, row, col) {
+    /**
+     * Event listener method which will be triggered when the user
+     * clicks on the duplicate icon in the list.
+     *
+     * The method sends an AJAX requests to the server side and transforms
+     * the received JSON object to a record.
+     *
+     * @param { Shopware.apps.Emotion.view.grids.List } grid
+     * @param { Shopware.apps.Emotion.model.Grid } rec
+     * @returns { Boolean }
+     */
+    onDuplicate: function(grid, rec) {
         var me = this;
+
+        if(!rec) {
+            return false;
+        }
+
+        grid.setLoading(true);
+        Ext.Ajax.request({
+            url: '{url controller=Emotion action=duplicateGrid}',
+            params: { id: rec.get('id') },
+            success: function(response) {
+                var values = Ext.JSON.decode(response.responseText),
+                    duplicateRecord;
+
+                values.data.name += ' ' + me.snippets.copie;
+                duplicateRecord = Ext.create('Shopware.apps.Emotion.model.Grid', values.data);
+                grid.getStore().add(duplicateRecord);
+                grid.setLoading(false);
+                Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.duplicated, rec.get('name')));
+            }
+        });
     },
 
-    onRemove: function(grid, rec, row, col) {
-        var store = grid.getStore();
+    /**
+     * Event listener method which will be triggered when the user
+     * clicks the delete icon in the list.
+     *
+     * @param { Shopware.apps.Emotion.view.grids.List } grid
+     * @param { Shopware.apps.Emotion.model.Grid } rec
+     * @returns { Void }
+     */
+    onRemove: function(grid, rec) {
+        var me = this,
+            store = grid.getStore();
 
         store.remove(rec);
         grid.setLoading(true);
         rec.destroy({
             callback: function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.removed, rec.get('name')));
                 grid.setLoading(false);
             }
         });
-    }
+    },
 
+    /**
+     * Event listener method which will be triggered when the user
+     * clicks the `remove selected grids` button.
+     *
+     * The method loops through the selection and destroyies the records.
+     *
+     * @returns { Void }
+     */
+    onMultipleRemove: function() {
+        var me = this,
+            grid = me.getList(),
+            selModel = grid.getSelectionModel(),
+            selected = selModel.getSelection();
+
+        Ext.each(selected, function(item) {
+            item.destroy();
+        });
+
+        grid.getStore().load({
+            callback: function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.title, me.snippets.marked_removed);
+            }
+        })
+    },
+
+    /**
+     * Event listener method which will be triggered when the user clicks on the save
+     * button in the `settings` window.
+     *
+     * @returns { Boolean }
+     */
+    onSave: function() {
+        var me = this,
+            win = me.getSettings(),
+            form = win.formPanel,
+            rec = form.getRecord();
+
+        if(!form.getForm().isValid()) {
+            return false;
+        }
+
+        if(rec) {
+            form.getForm().updateRecord(rec);
+        } else {
+            rec = Ext.create('Shopware.apps.Emotion.model.Grid', form.getForm().getValues());
+        }
+
+        rec.save({
+            callback: function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.edited, rec.get('name')));
+                win.destroy();
+            }
+        });
+    },
+
+    /**
+     * Event listener method which will be (buffered) triggered
+     * when the user inserts a search term.
+     *
+     * The method uses a custom `filterBy`-method to search for the
+     * incoming value.
+     *
+     * @param { String } value - Search term
+     * @returns { Void }
+     */
+    onSearch: function(value) {
+        var me = this,
+            grid = me.getList(),
+            store = grid.getStore();
+
+        if(!value.length) {
+            store.clearFilter();
+        } else {
+            store.clearFilter(true);
+            store.filterBy(function(rec) {
+                var name = rec.get('name').toLowerCase();
+                return name.indexOf(value) !== -1;
+            });
+        }
+    }
 });
 //{/block}

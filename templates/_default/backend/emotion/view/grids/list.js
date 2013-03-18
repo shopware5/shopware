@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
     initComponent: function() {
         var me = this;
 
-        me.addEvents('selectionChange', 'edit', 'duplicate', 'remove');
+        me.addEvents('selectionChange', 'editEntry', 'duplicate', 'remove');
 
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 tooltip: me.snippets.tooltips.edit,
                 handler: function(grid, row, col) {
                     var rec = grid.getStore().getAt(row);
-                    me.fireEvent('edit', grid, rec, row, col);
+                    me.fireEvent('editEntry', grid, rec, row, col);
                 }
             }, {
                 iconCls: 'sprite-blue-folder--plus',
