@@ -60,7 +60,14 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
         edited: '{s name=global/edited}The grid [0] was successfully edited.{/s}',
         duplicated: '{s name=global/duplicated}The grid [0] was successfully duplicated.{/s}',
         removed: '{s name=global/removed}The grid [0] was successfully removed.{/s}',
-        marked_removed: '{s name=global/marked_removed}The selected grids are successfully removed.{/s}'
+        marked_removed: '{s name=global/marked_removed}The selected grids are successfully removed.{/s}',
+        confirm: {
+            remove: '{s name=global/confirm/remove}Are you sure you want to remove the grid [0]?{/s}',
+            marked_remove: '{s name=global/confirm/marked_remove}Are you sure you want to remove the selected grid(s)?{/s}'
+        },
+        alert: {
+            default_remove: '{s name=global/alert}Default grids could not be removed.{/s}'
+        }
     },
 
     /**
@@ -209,19 +216,30 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
      *
      * @param { Shopware.apps.Emotion.view.grids.List } grid
      * @param { Shopware.apps.Emotion.model.Grid } rec
-     * @returns { Void }
+     * @returns { Void|Boolean }
      */
     onRemove: function(grid, rec) {
         var me = this,
             store = grid.getStore();
 
-        store.remove(rec);
-        grid.setLoading(true);
-        rec.destroy({
-            callback: function() {
-                Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.removed, rec.get('name')));
-                grid.setLoading(false);
+        if(rec.data.id < 3) {
+            Ext.Msg.alert(me.snippets.title, me.snippets.alert.default_remove);
+            return false;
+        }
+
+        Ext.Msg.confirm(me.snippets.title, Ext.String.format(me.snippets.confirm.remove, rec.get('name')), function(btn) {
+            if(btn !== 'yes') {
+                return false;
             }
+
+            store.remove(rec);
+                grid.setLoading(true);
+                rec.destroy({
+                    callback: function() {
+                        Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.removed, rec.get('name')));
+                        grid.setLoading(false);
+                    }
+                });
         });
     },
 
@@ -239,15 +257,23 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
             selModel = grid.getSelectionModel(),
             selected = selModel.getSelection();
 
-        Ext.each(selected, function(item) {
-            item.destroy();
-        });
-
-        grid.getStore().load({
-            callback: function() {
-                Shopware.Notification.createGrowlMessage(me.snippets.title, me.snippets.marked_removed);
+        Ext.Msg.confirm(me.snippets.title, me.snippets.confirm.marked_remove, function(btn) {
+            if(btn !== 'yes') {
+                return false;
             }
-        })
+
+            Ext.each(selected, function(item) {
+                if(!item.data.id < 3) {
+                    item.destroy();
+                }
+            });
+
+            grid.getStore().load({
+                callback: function() {
+                    Shopware.Notification.createGrowlMessage(me.snippets.title, me.snippets.marked_removed);
+                }
+            });
+        });
     },
 
     /**
