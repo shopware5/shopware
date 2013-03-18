@@ -151,9 +151,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                         for(var i = 1; i <= cols; i++) {
                             if(i === cols) {
-                                columns += '<div class="col col-1x1 col-last"></div>';
+                                columns += '<div class="col col-1x1 col-last" style="width:' + (100 / cols) + '%"></div>';
                             } else {
-                                columns += '<div class="col col-1x1"></div>';
+                                columns += '<div class="col col-1x1" style="width:' + (100 / cols) + '%"></div>';
                             }
                         }
                         columns += '<div class="x-clear"></div>';
@@ -176,7 +176,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                                 component = element.getComponent().first();
 
                             height = height * 45 + 'px';
-
                             var specs = {
                                 cls: baseCls + ' x-emotion-element ' + (component.get('cls').length ? ' ' + component.get('cls') : ''),
                                 tag: 'div',
@@ -184,7 +183,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                                     top: (element.get('startRow') -1) * 45 + 'px',
                                     left: (element.get('startCol') -1) * baseWidth + 'px',
                                     height: height,
-                                    'line-height': height
+                                    'line-height': height,
+                                    width: (100 / values.settings.cols) * width + '%'
                                 },
                                 children: [
                                     { tag: 'div', cls: 'x-emotion-element-handle' },
