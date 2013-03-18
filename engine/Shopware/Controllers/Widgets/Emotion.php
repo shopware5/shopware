@@ -48,6 +48,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $categoryId = (int)$this->Request()->getParam('categoryId');
         $query = $repository->getCategoryEmotionsQuery($categoryId);
         $emotions = $query->getArrayResult();
+
+        foreach ($emotions as &$emotion) {
+            $emotion['rows'] = $emotion['grid']['rows'];
+            $emotion['cols'] = $emotion['grid']['cols'];
+            $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
+            $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
+            $emotion['gutter'] = $emotion['grid']['gutter'];
+        }
         return $emotions;
     }
 

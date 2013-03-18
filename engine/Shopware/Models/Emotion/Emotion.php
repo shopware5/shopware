@@ -96,20 +96,6 @@ class Emotion extends ModelEntity
     private $name;
 
     /**
-     * @var integer $cols
-     *
-     * @ORM\Column(name="cols", type="integer", nullable=false)
-     */
-    private $cols;
-
-    /**
-     * @var integer $rows
-     *
-     * @ORM\Column(name="rows", type="integer", nullable=false)
-     */
-    private $rows;
-
-    /**
      * Id of the associated \Shopware\Models\User\User which
      * created this emotion.
      *
@@ -118,20 +104,6 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $userId;
-
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="cell_height", type="integer", nullable=false)
-     */
-    private $cellHeight;
-
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="article_height", type="integer", nullable=false)
-     */
-    private $articleHeight;
 
     /**
      * @var integer $categoryId
@@ -461,38 +433,6 @@ class Emotion extends ModelEntity
     /**
      * @return int
      */
-    public function getCellHeight()
-    {
-        return $this->cellHeight;
-    }
-
-    /**
-     * @param int $cellHeight
-     */
-    public function setCellHeight($cellHeight)
-    {
-        $this->cellHeight = $cellHeight;
-    }
-
-    /**
-     * @return int
-     */
-    public function getArticleHeight()
-    {
-        return $this->articleHeight;
-    }
-
-    /**
-     * @param int $articleHeight
-     */
-    public function setArticleHeight($articleHeight)
-    {
-        $this->articleHeight = $articleHeight;
-    }
-
-    /**
-     * @return int
-     */
     public function getContainerWidth()
     {
         return $this->containerWidth;
@@ -504,38 +444,6 @@ class Emotion extends ModelEntity
     public function setContainerWidth($containerWidth)
     {
         $this->containerWidth = $containerWidth;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCols()
-    {
-        return $this->cols;
-    }
-
-    /**
-     * @param int $cols
-     */
-    public function setCols($cols)
-    {
-        $this->cols = $cols;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRows()
-    {
-        return $this->rows;
-    }
-
-    /**
-     * @param int $rows
-     */
-    public function setRows($rows)
-    {
-        $this->rows = $rows;
     }
 
     /**
