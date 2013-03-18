@@ -178,14 +178,6 @@ class Emotion extends ModelEntity
     private $createDate;
 
     /**
-     * Contains the template name for this emotion.
-     *
-     * @var string $template
-     * @ORM\Column(name="template", type="string", length=255, nullable=false)
-     */
-    private $template;
-
-    /**
      * Date of the last edit.
      *
      * @var \DateTime $modified
@@ -253,11 +245,24 @@ class Emotion extends ModelEntity
     protected $gridId = null;
 
     /**
+     * @var
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    protected $templateId = null;
+
+    /**
      * @var Grid
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Grid", inversedBy="emotions")
      * @ORM\JoinColumn(name="grid_id", referencedColumnName="id")
      */
     protected $grid;
+
+    /**
+     * @var Grid
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     */
+    protected $template;
 
     /**
      * Class constructor.
@@ -394,21 +399,6 @@ class Emotion extends ModelEntity
         return $this->user;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param string $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
 
     /**
      * @return \DateTime
@@ -631,5 +621,21 @@ class Emotion extends ModelEntity
     public function getGrid()
     {
         return $this->grid;
+    }
+
+    /**
+     * @return \Shopware\Models\Emotion\Grid
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param \Shopware\Models\Emotion\Grid $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 }
