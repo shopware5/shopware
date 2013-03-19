@@ -47,6 +47,8 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 	{
 		$category = Shopware()->Shop()->get('parentID');
 
+//        $this->testCategories();
+
 		$this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
 
         if(Shopware()->Shop()->getTemplate()->getVersion() == 1) {
@@ -57,5 +59,38 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 		if($this->Request()->getPathInfo() != '/') {
 			 $this->Response()->setHttpResponseCode(404);
 		}
+	}
+
+    private function testCategories() {
+
+        /**@var $repo \Shopware\Models\Category\Repository**/
+        $repo = Shopware()->Models()->Category();
+        $sql= "SELECT id FROM s_categories";
+        $ids = Shopware()->Db()->fetchCol($sql);
+        foreach($ids as $id) {
+            $filter = array(array('property' => 'c.parentId', 'value' => $id));
+            $query = $repo->getBlogCategoryTreeListQuery($filter);
+            $data = $query->getArrayResult();
+            foreach($data as &$subCategory) {
+                unset($subCategory['changed']);
+                unset($subCategory['cmsText']);
+                unset($subCategory['added']);
+                foreach($subCategory['emotions'] as &$emotion) {
+                    unset($emotion['createDate']);
+                    unset($emotion['modified']);
+                }
+                foreach($subCategory['articles'] as &$article) {
+                    unset($article['added']);
+                    unset($article['changed']);
+                    unset($article['description']);
+                    unset($article['descriptionLong']);
+                    unset($article['mainDetail']['releaseDate']);
+                }
+            }
+            echo "" . $id ."=> ";
+            var_export($data);
+            echo ",";
+        }
+        exit();
 	}
 }
