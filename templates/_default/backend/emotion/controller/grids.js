@@ -332,6 +332,7 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
             store.clearFilter();
         } else {
             store.clearFilter(true);
+            value = value.toLowerCase();
             store.filterBy(function(rec) {
                 var name = rec.get('name').toLowerCase();
                 return name.indexOf(value) !== -1;

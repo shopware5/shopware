@@ -52,6 +52,12 @@ div[id^=emotion-components-banner-mapping] {
     }
 }
 
+div[id^=emotion-main-window] {
+	.#{$prefix}grid-header-ct {
+		border-top: 0 none
+	}
+}
+
 
 .#{$prefix}hub-library {
     @include border-radius(0 4px 4px 0);

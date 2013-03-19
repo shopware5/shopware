@@ -36,12 +36,12 @@
  * This file contains the business logic for the User Manager module. The module
  * handles the whole administration of the backend users.
  */
-//{block name="backend/emotion/view/grids/settings"}
-Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
+//{block name="backend/emotion/view/templates/settings"}
+Ext.define('Shopware.apps.Emotion.view.templates.Settings', {
     extend: 'Enlight.app.Window',
-    alias: 'widget.emotion-view-grids-settings',
+    alias: 'widget.emotion-view-templates-settings',
     width: 600,
-    height: 450,
+    height: 250,
     autoShow: true,
     layout: 'fit',
 
@@ -50,28 +50,21 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
      * @Object
      */
     snippets: {
-        title_new: '{s name=grids/settings/title_new}Create new grid{/s}',
-        title_edit: '{s name=grids/settings/title_edit}Edit existing grid{/s}',
-        fieldset_title: '{s name=grids/settings/fieldset}Define grid{/s}',
+        invalid_template: '{s name=templates/error/invalid_template}The provided file seems to be not a valid template file{/s}',
+        title_new: '{s name=templates/settings/title_new}Create new template{/s}',
+        title_edit: '{s name=templates/settings/title_edit}Edit existing template{/s}',
+        fieldset_title: '{s name=templates/settings/fieldset}Define template{/s}',
         fields: {
-            name: '{s name=grids/settings/name}Name{/s}',
-            cols: '{s name=grids/settings/cols}Number of columns{/s}',
-            rows: '{s name=grids/settings/rows}Number of rows{/s}',
-            cell_height: '{s name=grids/settings/cell_height}Cell height{/s}',
-            article_height: '{s name=grids/settings/article_height}Article element height{/s}',
-            gutter: '{s name=grids/settings/gutter}Gutter{/s}'
+            name: '{s name=templates/settings/name}Name{/s}',
+            file: '{s name=templates/settings/file}Template file{/s}'
         },
         support: {
-            name: '{s name=grid/settings/support/name}Initial label of the grid.{/s}',
-            cols: '{s name=grid/settings/support/cols}Could not be modified within the designer.{/s}',
-            rows: '{s name=grid/settings/support/rows}Initial number of rows. New rows can be added in the designer.{/s}',
-            cell_height: '{s name=grid/settings/support/cell_height}Height of a cell (in px) in the storefront.{/s}',
-            article_height: '{s name=grid/settings/support/article_height}Number of cells, which occupies the article element.{/s}',
-            gutter: '{s name=grid/settings/support/gutter}Margin (in px) between the elements in the storefront.{/s}'
+            name: '{s name=templates/support/name}Initial description of the template.{/s}',
+            file: '{s name=templates/support/file}Template file name in the file system. The template must be under widgets/emotion.{/s}'
         },
         buttons: {
-            cancel: '{s name=grids/button/cancel}Cancel{/s}',
-            save: '{s name=grids/button/save}Save{/s}'
+            cancel: '{s name=templates/button/cancel}Cancel{/s}',
+            save: '{s name=templates/button/save}Save{/s}'
         }
     },
 
@@ -138,7 +131,6 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
     /**
      * Creates the form items for the settings window.
      *
-     *
      * @returns { Array }
      */
     createFormItems: function() {
@@ -152,47 +144,17 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
             supportText: support.name
         });
 
-        var colsCount = Ext.create('Ext.form.field.Number', {
-            name: 'cols',
-            fieldLabel: label.cols,
+        var template = Ext.create('Ext.form.field.Text', {
+            name: 'file',
+            fieldLabel: label.file,
             allowBlank: false,
-            minValue: 0,
-            supportText: support.cols
+            validator: function(value) {
+                return (/^((.*)\.tpl)$/.test(value)) ? true : me.snippets.invalid_template;
+            },
+            supportText: support.file
         });
 
-        var rowsCount = Ext.create('Ext.form.field.Number', {
-            name: 'rows',
-            fieldLabel: label.rows,
-            allowBlank: false,
-            minValue: 0,
-            supportText: support.rows
-        });
-
-        var cellHeight = Ext.create('Ext.form.field.Number', {
-            name: 'cellHeight',
-            fieldLabel: label.cell_height,
-            allowBlank: false,
-            minValue: 0,
-            supportText: support.cell_height
-        });
-
-        var articleHeight = Ext.create('Ext.form.field.Number', {
-            name: 'articleHeight',
-            fieldLabel: label.article_height,
-            allowBlank: false,
-            minValue: 0,
-            supportText: support.article_height
-        });
-
-        var gutter = Ext.create('Ext.form.field.Number', {
-            name: 'gutter',
-            fieldLabel: label.gutter,
-            allowBlank: false,
-            minValue: 0,
-            supportText: support.gutter
-        });
-
-        return [ name, colsCount, rowsCount, cellHeight, articleHeight, gutter ];
+        return [ name, template ];
     }
 });
 //{/block}
