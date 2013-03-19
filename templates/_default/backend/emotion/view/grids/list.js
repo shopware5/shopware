@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
         me.plugins = [ me.createEditor() ];
+        me.bbar = me.createPagingToolbar();
 
         me.callParent(arguments);
     },
@@ -166,6 +167,11 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                 handler: function(grid, row, col) {
                     var rec = grid.getStore().getAt(row);
                     me.fireEvent('remove', grid, rec, row, col);
+                },
+                getClass: function(value, metadata, record) {
+                    if (record.get('id') < 3)  {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
                 }
             }]
         }];
@@ -182,8 +188,6 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
         return Ext.create('Ext.selection.CheckboxModel', {
             listeners:{
                 selectionchange:function (sm, selections) {
-
-                    // todo - add checks for default one's
                     me.fireEvent('selectionChange', selections);
                 }
             }
@@ -199,6 +203,21 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
         return Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToEdit: 2
         });
+    },
+
+    /**
+     * Creates the paging toolbar at the bottom of the list.
+     *
+     * @returns { Ext.toolbar.Paging }
+     */
+    createPagingToolbar: function() {
+        var me = this,
+            toolbar = Ext.create('Ext.toolbar.Paging', {
+            store: me.store,
+            pageSize: 30
+        });
+
+        return toolbar;
     },
 
     /**

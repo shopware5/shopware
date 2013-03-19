@@ -168,10 +168,14 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         var me = this;
 
         me.customTemplatesTab = Ext.create('Ext.container.Container', {
-            layout: 'fit',
+            layout: 'border',
             title: me.snippets.tab.custom_templates,
             items: [{
-                xtype: 'emotion-templates-list'
+                xtype: 'emotion-templates-toolbar',
+                region: 'north'
+            }, {
+                xtype: 'emotion-templates-list',
+                region: 'center'
             }]
         });
 

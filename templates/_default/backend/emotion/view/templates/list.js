@@ -46,7 +46,17 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
      * @Object
      */
     snippets: {
-
+        invalid_template: '{s name=templates/error/invalid_template}The provided file seems to be not a valid template file{/s}',
+        columns: {
+            name: '{s name=templates/list/columns/name}Name{/s}',
+            file: '{s name=templates/list/columns/file}Template file{/s}',
+            actions: '{s name=grids/list/columns/actions}Action(s){/s}'
+        },
+        tooltips: {
+            edit: '{s name=grids/list/tooltip/edit}Edit{/s}',
+            duplicate: '{s name=grids/list/tooltip/duplicate}Duplicate{/s}',
+            remove: '{s name=grids/list/tooltip/remove}Delete{/s}'
+        }
     },
 
     /**
@@ -57,11 +67,13 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
     initComponent: function() {
         var me = this;
 
-        me.addEvents('selectionChange');
+        me.addEvents('selectionChange', 'editEntry', 'duplicate', 'remove');
 
         me.store = Ext.create('Shopware.apps.Emotion.store.Templates').load();
         me.columns = me.createColumns();
         me.selModel = me.createSelectionModel();
+        me.plugins = [ me.createEditor() ];
+        me.bbar = me.createPagingToolbar();
 
         me.callParent(arguments);
     },
@@ -74,7 +86,59 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
     createColumns: function() {
         var me = this;
 
-        return [];
+        return [{
+            dataIndex: 'name',
+            header: me.snippets.columns.name,
+            flex: 1,
+            renderer: me.nameRenderer,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: false
+            }
+        }, {
+            dataIndex: 'file',
+            header: me.snippets.columns.file,
+            flex: 1,
+            renderer: me.fileRenderer,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: false,
+                validator: function(value) {
+                    return (/^((.*)\.tpl)$/.test(value)) ? true : me.snippets.invalid_template;
+                }
+            }
+        }, {
+            xtype: 'actioncolumn',
+            header: me.snippets.columns.actions,
+            width: 85,
+            items: [{
+                iconCls: 'sprite-pencil',
+                tooltip: me.snippets.tooltips.edit,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('editEntry', grid, rec, row, col);
+                }
+            }, {
+                iconCls: 'sprite-blue-folder--plus',
+                tooltip: me.snippets.tooltips.duplicate,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('duplicate', grid, rec, row, col);
+                }
+            }, {
+                iconCls: 'sprite-minus-circle',
+                tooltip: me.snippets.tooltips.remove,
+                handler: function(grid, row, col) {
+                    var rec = grid.getStore().getAt(row);
+                    me.fireEvent('remove', grid, rec, row, col);
+                },
+                getClass: function(value, metadata, record) {
+                    if (record.get('id') < 2) {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
+                }
+            }]
+        }];
     },
 
     /**
@@ -88,12 +152,61 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
         return Ext.create('Ext.selection.CheckboxModel', {
             listeners:{
                 selectionchange:function (sm, selections) {
-
-                    // todo - add checks for default one's
                     me.fireEvent('selectionChange', selections);
                 }
             }
         });
+    },
+
+    /**
+     * Creates the paging toolbar at the bottom of the list.
+     *
+     * @returns { Ext.toolbar.Paging }
+     */
+    createPagingToolbar: function() {
+        var me = this,
+            toolbar = Ext.create('Ext.toolbar.Paging', {
+            store: me.store,
+            pageSize: 30
+        });
+
+        return toolbar;
+    },
+
+    /**
+     * Creates the row editor
+     *
+     * @returns { Ext.grid.plugin.RowEditing }
+     */
+    createEditor: function() {
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToEdit: 2
+        });
+    },
+
+    /**
+     * Column renderer for the `name` column.
+     *
+     * The method wraps the value in `strong`-tags.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    nameRenderer: function(value) {
+        return Ext.String.format('<strong>[0]</strong>', value);
+    },
+
+    /**
+     * Column renderer for the `file` column.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    fileRenderer: function(value) {
+        if(!value) {
+            return 'index.tpl'
+        }
+        return value;
     }
 });
 //{/block}

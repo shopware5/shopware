@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Emotion.model.Template', {
 		//{block name="backend/emotion/model/template/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
-        { name: 'file', type: 'int' }
+        { name: 'file', type: 'string' }
     ],
 
     /**
