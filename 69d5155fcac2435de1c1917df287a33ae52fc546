@@ -1,0 +1,6 @@
+From: feature/sw-5486-emotions-enhancements
+To: feature/sw-5486-emotions-enhancements
+Conflict: (content) Merge conflict in templates/_default/backend/emotion/view/detail/settings.js
+	MODIFY|templates/_default/backend/emotion/view/detail/settings.js
+Conflict: (content) Merge conflict in templates/_default/backend/_resources/resources/css/ext-all.css
+	MODIFY|templates/_default/backend/_resources/resources/css/ext-all.css
