@@ -52,6 +52,11 @@ Ext.define('Shopware.apps.Payment', {
 	* @string
 	*/
     loadPath : '{url controller="payment" action=load}',
+
+    /**
+     * Enable bulk loading
+     * @boolean
+     */
     bulkLoad: true,
 
     /**
@@ -74,7 +79,7 @@ Ext.define('Shopware.apps.Payment', {
 	* Requires controllers for sub-application
 	* @array
 	*/
-    controllers : [ 'Main', 'Payment' ],
+    controllers : [ 'Payment', 'Main' ],
         /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
