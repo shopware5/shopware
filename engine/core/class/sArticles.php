@@ -936,7 +936,6 @@ class sArticles
 				IF(aDetails.sales>=$topSeller,1,0) as topseller,
 				IF(aDetails.releasedate>$now,1,0) as sUpcoming,
 				IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate
-			FROM s_categories c, s_categories c2, s_articles_categories ac
 
 			FROM s_articles AS a
                 INNER JOIN s_articles_categories ac
@@ -1285,12 +1284,12 @@ class sArticles
 				ON st.objecttype='propertyoption'
 				AND st.objectkey=fv.optionID
 				AND st.objectlanguage='$this->translationId'
-	
+
 				LEFT JOIN s_core_translations AS st2
 				ON st2.objecttype='propertygroup'
 				AND st2.objectkey=f.id
 				AND st2.objectlanguage='$this->translationId'
-	
+
 				LEFT JOIN s_core_translations AS st3
 	            ON st3.objecttype='propertyvalue'
 	            AND st3.objectkey=fv.id
