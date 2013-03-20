@@ -432,8 +432,6 @@ class Repository extends ModelRepository
      */
     public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
     {
-        static $currentDepth = 0;
-
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id)
@@ -441,7 +439,7 @@ class Repository extends ModelRepository
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();
-        $currentDepth++;
+        $depth--;
 
         foreach($children as &$child) {
             $category = $child['category'];
@@ -450,7 +448,7 @@ class Repository extends ModelRepository
 
             $categories[] = $category;
             //check if no depth passed or the current depth is lower than the passed depth
-            if ($depth === null || $currentDepth < $depth) {
+            if ($depth === null|| $depth > 0) {
                 $subCategories = $this->getActiveChildrenList($child['category']['id'], $customerGroupId, $depth);
                 $categories = array_merge($categories, $subCategories);
             }
