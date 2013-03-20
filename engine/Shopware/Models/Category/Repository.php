@@ -57,7 +57,6 @@ class Repository extends ModelRepository
         $category = $this->find($id);
 
         $before = $this->getCategoryPathBefore($category, $field, $separator);
-        
         $self = $this->getCategoryPathQuery($id, $field);
 
         if (!$before) {
@@ -70,7 +69,7 @@ class Repository extends ModelRepository
 
         $before[$category->getId()] = $self;
         if ($separator !== null) {
-            return implode($separator, $before) . $separator . $self;
+            return implode($separator, $before);
         } else {
             return $before;
         }
@@ -374,7 +373,7 @@ class Repository extends ModelRepository
         $builder = $this->getActiveQueryBuilder($customerGroupId)
                 ->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $id);
-        
+
         return $builder->getQuery();
     }
 
