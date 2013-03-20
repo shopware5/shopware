@@ -63,10 +63,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         var gridStore = Ext.create('Ext.data.Store', {
             fields: [ 'display', 'value' ],
             data: [{
-                display: '{s name=settings/one_column}1 column{/s}', value: 1
-            }, {
-                display: '{s name=settings/two_columns}2 columns{/s}', value: 2
-            }, {
                 display: '{s name=settings/three_columns}3 columns{/s}', value: 3
             }, {
                 display: '{s name=settings/four_columns}4 columns{/s}', value: 4
