@@ -186,6 +186,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function getBreadcrumb($categoryId)
     {
-        return array_reverse(Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId));
+        $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
+        return array_reverse($breadcrumb);
     }
 }
