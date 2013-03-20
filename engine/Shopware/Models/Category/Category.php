@@ -37,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Repository")
  *
  * @category  Shopware
- * @package   Shopware\Bootstrap
+ * @package   Shopware\Models
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Category extends ModelEntity
