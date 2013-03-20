@@ -56,6 +56,13 @@ Ext.define('Shopware.apps.Partner', {
      */
     bulkLoad: true,
 
+    /**
+    * Sets the loading path for the sub-application.
+    *
+    * Note that you'll need a "loadAction" in your
+    * controller (server-side)
+    * @string
+    */
     loadPath:'{url action=load}',
 
     /**
@@ -80,7 +87,7 @@ Ext.define('Shopware.apps.Partner', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Main', 'Partner', 'Statistic'],
+    controllers:['Partner', 'Statistic', 'Main'],
 
     /**
      * Returns the main application window for this is expected
