@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Masks the viewport when the window is visible.
      * @boolean
      */
-    modal: true,
+    modal: false,
 
     /**
      * Initializes the component and builds up the main interface
