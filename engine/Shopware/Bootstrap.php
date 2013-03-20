@@ -559,10 +559,11 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $eventManager = new \Doctrine\Common\EventManager();
 
         // Create new shopware event subscriber to handle the entity lifecycle events.
-        $liveCycleSubscriber = new \Shopware\Components\Model\EventSubscriber(
+        $lifeCycleSubscriber = new \Shopware\Components\Model\EventSubscriber(
             $this->Application()->Events()
         );
-        $eventManager->addEventSubscriber($liveCycleSubscriber);
+        $eventManager->addEventSubscriber($lifeCycleSubscriber);
+        $eventManager->addEventSubscriber(new \Shopware\Components\Model\CategorySubscriber());
 
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
