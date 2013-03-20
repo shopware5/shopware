@@ -53,7 +53,6 @@ class Repository extends ModelRepository
 {
     public function getPathById($id, $field = 'name', $separator = null)
     {
-        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         /**@var $category Category */
         $category = $this->find($id);
 
@@ -153,7 +152,6 @@ class Repository extends ModelRepository
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getListQueryBuilder($filterBy, $orderBy, $limit, $offset, $selectOnlyActive);
         return $builder->getQuery();
     }
@@ -172,7 +170,6 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         /**@var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $this->createQueryBuilder('c');
         $builder->select(array(
@@ -246,7 +243,6 @@ class Repository extends ModelRepository
      */
     public function getDetailQuery($categoryId)
     {
-        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getDetailQueryBuilder($categoryId);
         return $builder->getQuery();
     }
@@ -261,7 +257,6 @@ class Repository extends ModelRepository
      */
     public function getDetailQueryBuilder($categoryId)
     {
-        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'category',
