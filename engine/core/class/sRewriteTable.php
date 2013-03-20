@@ -230,18 +230,7 @@ class sRewriteTable
         }
 
         $parentId = $this->baseCategory->getId();
-        $result = $this->repository
-            ->getActiveChildrenByIdQuery($parentId)
-            ->getArrayResult();
-
-        $categories = array();
-        foreach($result as $category){
-            $categories[$category['category']['id']] = array_merge($category['category'], array(
-                'description' => $category['category']['name'],
-                'childrenCount' => $category['childrenCount'],
-                'articleCount' => $category['articleCount']
-            ));
-        }
+        $categories = $this->repository->getActiveChildrenList($parentId);
 
         $template = 'string:' . Shopware()->Config()->routerCategoryTemplate;
         $template = $this->template->createTemplate($template, $this->data);

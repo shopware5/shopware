@@ -185,8 +185,12 @@ class sCategories
      */
     public function sGetCategoriesByParent ($id)
     {
-        $pathCategories = $this->repository
-            ->getPathById($id, array('id', 'name', 'blog'));
+//        $pathCategories = $this->repository
+//            ->getPathById($id, array('id', 'name', 'blog'));
+
+        //todo@performance: Ask MS why the fields parameter contains an array!
+        $pathCategories = $this->repository->getPathById($id,'name');
+
         $pathCategories = array_reverse($pathCategories);
 
         $categories = array();
@@ -215,28 +219,21 @@ class sCategories
             $parentId = $this->baseId;
         }
 
-        $result = $this->repository
-            ->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth)
-            ->getArrayResult();
+        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth);
+        $result = $this->mapCategoryTree($result);
+        return $result;
+    }
 
-        $categories = array();
-        foreach($result as $category){
-            $url = ($category['category']['blog']) ? $this->blogBaseUrl : $this->baseUrl;
-            $categories[$category['category']['id']] = array_merge($category['category'], array(
-                'description' => $category['category']['name'],
-                'childrenCount' => $category['childrenCount'],
-                'media' => $category['category']['media'],
-                'articleCount' => $category['articleCount'],
-                'hidetop' => $category['category']['hideTop'],
-                'link' => $category['category']['external'] ? : $url . $category['category']['id'],
-            ));
+    protected function mapCategoryTree($categories) {
+        foreach($categories as &$category) {
+            $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
+            $category['description'] = $category['name'];
+            $category['link'] = $category['external'] ? : $url . $category['id'];
+            $category['hidetop'] = $category['hideTop'];
+            if ($category['sub']) {
+                $category['sub'] = $this->mapCategoryTree($category['sub']);
+            }
         }
-
-        $categories = $this->repository->buildTree(
-            $categories,
-            array('childrenField' => 'sub')
-        );
-
         return $categories;
     }
 
@@ -263,9 +260,8 @@ class sCategories
         if ($id === null) {
             $id = $this->baseId;
         }
-        $category = $this->repository
-            ->getActiveByIdQuery($id, $this->customerGroupId)
-            ->getArrayResult();
+        $category = $this->repository->getActiveByIdQuery($id, $this->customerGroupId)->getArrayResult();
+
         if(empty($category[0])) {
             return null;
         }
