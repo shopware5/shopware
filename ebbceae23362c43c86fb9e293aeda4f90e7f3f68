@@ -1,0 +1,6 @@
+From: feature/sw-5416-denormalize-category-queries
+To: next
+Conflict: (content) Merge conflict in engine/core/class/sArticles.php
+	MODIFY|engine/core/class/sArticles.php
+Conflict: (content) Merge conflict in engine/Shopware/Models/Category/Repository.php
+	MODIFY|engine/Shopware/Models/Category/Repository.php
