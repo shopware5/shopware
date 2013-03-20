@@ -93,7 +93,7 @@ class Category extends ModelEntity
     /**
      * @ORM\Column(name="level", type="integer")
      */
-    private $level;
+    private $level = 0;
 
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
