@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,77 +20,36 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controlles
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
-{	
-	public function preDispatch()
-	{
-		if($this->Request()->getActionName() != 'index') {
-			$this->forward('index'); return;
-		}
+{
+    public function preDispatch()
+    {
+        if ($this->Request()->getActionName() != 'index') {
+            $this->forward('index'); return;
+        }
         $this->View()->loadTemplate('frontend/home/index.tpl');
-	}
-	
-	public function indexAction()
-	{
-		$category = Shopware()->Shop()->get('parentID');
+    }
 
-//        $this->testCategories();
+    public function indexAction()
+    {
+        $category = Shopware()->Shop()->get('parentID');
 
-		$this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
+        $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
 
-        if(Shopware()->Shop()->getTemplate()->getVersion() == 1) {
-		    $this->View()->sOffers = Shopware()->Modules()->Articles()->sGetPromotions($category);
+        if (Shopware()->Shop()->getTemplate()->getVersion() == 1) {
+            $this->View()->sOffers = Shopware()->Modules()->Articles()->sGetPromotions($category);
         }
-		$this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
+        $this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
 
-		if($this->Request()->getPathInfo() != '/') {
-			 $this->Response()->setHttpResponseCode(404);
-		}
-	}
-
-    private function testCategories() {
-
-        /**@var $repo \Shopware\Models\Category\Repository**/
-        $repo = Shopware()->Models()->Category();
-        $sql= "SELECT id FROM s_categories";
-        $ids = Shopware()->Db()->fetchCol($sql);
-        foreach($ids as $id) {
-            $filter = array(array('property' => 'c.parentId', 'value' => $id));
-            $query = $repo->getBlogCategoryTreeListQuery($filter);
-            $data = $query->getArrayResult();
-            foreach($data as &$subCategory) {
-                unset($subCategory['changed']);
-                unset($subCategory['cmsText']);
-                unset($subCategory['added']);
-                foreach($subCategory['emotions'] as &$emotion) {
-                    unset($emotion['createDate']);
-                    unset($emotion['modified']);
-                }
-                foreach($subCategory['articles'] as &$article) {
-                    unset($article['added']);
-                    unset($article['changed']);
-                    unset($article['description']);
-                    unset($article['descriptionLong']);
-                    unset($article['mainDetail']['releaseDate']);
-                }
-            }
-            echo "" . $id ."=> ";
-            var_export($data);
-            echo ",";
+        if ($this->Request()->getPathInfo() != '/') {
+             $this->Response()->setHttpResponseCode(404);
         }
-        exit();
-	}
+    }
 }
