@@ -252,7 +252,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         $params = $this->Request()->getParams();
 
-        $feedId = $params["feedId"];
+        $feedId = $params["id"];
         if(!empty($feedId)){
             //edit Product Feed
             $productFeed = Shopware()->Models()->ProductFeed()->find($feedId);

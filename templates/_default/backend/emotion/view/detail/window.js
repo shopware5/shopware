@@ -195,6 +195,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             }, {
                 xtype: 'emotion-detail-settings',
                 initialTitle: 'settings',
+                categoryPathStore: me.categoryPathStore,
                 emotion: me.emotion,
                 dataviewStore: me.dataviewStore
             }]

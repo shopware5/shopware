@@ -8,6 +8,9 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+# SASS/SCSS cache
+.sass-cache/
+
 # PhpStorm-Project
 .idea/
 

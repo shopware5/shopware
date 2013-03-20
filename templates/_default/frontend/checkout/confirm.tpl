@@ -32,7 +32,7 @@
 
 	{* Step box *}
 	{include file="frontend/register/steps.tpl" sStepActive="finished"}
-	
+
 	{* AGB is not accepted by user *}
 	{if $sAGBError}
 		<div class="error agb_confirm">
@@ -296,7 +296,9 @@
 
             {* Article items *}
             {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+                {block name='frontend_checkout_confirm_item'}
                 {include file='frontend/checkout/confirm_item.tpl'}
+                {/block}
             {/foreach}
 
             {* Table footer *}

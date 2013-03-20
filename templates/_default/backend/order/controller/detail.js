@@ -247,10 +247,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             columns = editor.editor.items.items,
             articleId = e.record.get('articleId');
 
-        if(e.record.get('mode') == 0){
             columns[1].setValue(e.record.get('articleNumber'));
             columns[2].setValue(e.record.get('articleName'));
-        }
 
     },
 
@@ -641,72 +639,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @param record
      */
     onShowDetail: function(record) {
-        var me = this,
-            batchStore = me.getStore('DetailBatch'),
-            historyStore = me.getStore('OrderHistory'),
-            billing, shipping, billingStore, shippingStore;
-
-        batchStore.getProxy().extraParams = {
-            orderId: record.get('id')
-        };
-
-        historyStore.getProxy().extraParams = {
-            orderID: record.get('id')
-        };
-
-        batchStore.load({
-            callback: function(records, operation) {
-                var storeData = records[0];
-                //when store has been loaded use the first record as data array to create the required stores
-
-                if (operation.success === true) {
-                    //prepare the associated stores to use them in the detail page
-                    me.orderStatusStore =  storeData.getOrderStatus();
-                    me.paymentStatusStore =  storeData.getPaymentStatus();
-                    me.shopsStore = storeData.getShops();
-                    me.countriesStore = storeData.getCountries();
-                    me.paymentsStore = storeData.getPayments();
-                    me.documentTypesStore = storeData.getDocumentTypes();
-
-                    billingStore = record.getBilling();
-                    if(!billingStore == null){
-                        if (billingStore.getCount() === 0) {
-                            billing = Ext.create('Shopware.apps.Order.model.Billing', {
-                                orderId: record.get('id'),
-                                countryId: null
-                            });
-                            billingStore.add(billing);
-                        }
-                        billing = billingStore.first();
-                    }
-
-                    shippingStore = record.getShipping();
-                    if(shippingStore != null && billingStore != null) {
-                        if (shippingStore.getCount() === 0) {
-                            shipping = Ext.create('Shopware.apps.Order.model.Shipping', billing.data);
-                            shippingStore.add(shipping);
-                        }
-                    }
-
-                    me.getView('detail.Window').create({
-                        record: record,
-                        taxStore: me.getStore('Tax'),
-                        statusStore: Ext.create('Shopware.store.PositionStatus').load(),
-                        historyStore: historyStore.load(),
-                        orderStatusStore: me.orderStatusStore,
-                        paymentStatusStore:  me.paymentStatusStore,
-                        shopsStore: me.shopsStore,
-                        countriesStore: me.countriesStore,
-                        paymentsStore: me.paymentsStore,
-                        documentTypesStore: me.documentTypesStore
-
-                    });
-
-                }
-            }
-        });
-
+        var me = this;
+        var mainController = me.subApplication.getController('Main');
+        mainController.showOrder(record);
     }
-
 });
 //{/block}

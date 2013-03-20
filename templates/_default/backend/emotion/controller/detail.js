@@ -280,16 +280,13 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
         var me = this,
             detailStore = me.getStore('Detail'),
-            listStore = scope.getStore()
+            listStore = scope.getStore();
 
         detailStore.getProxy().extraParams.id = listStore.getAt(rowIndex).get('id');
         detailStore.load({
             callback: function(records, operation) {
                 if (operation.success) {
                     me.openDetailWindow(records[0]);
-                } else {
-                    //todo@stp: Shopware.Notification.
-                    //todo@dr: Fehler meldung rein reichen
                 }
             }
         });
@@ -319,7 +316,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             callback: function() {
                 me.getView('detail.Window').create({
                     emotion: record,
-                    libraryStore: libraryStore
+                    libraryStore: libraryStore,
+                    categoryPathStore: me.subApplication.categoryPathStore
                 });
             }
         });

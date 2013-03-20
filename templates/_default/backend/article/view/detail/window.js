@@ -798,7 +798,154 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             items: [ chart, list ],
             disabled: false
         });
-    }
+    },
 
+    /**
+     * Helper method which is especially for third-party developers which want to to add an additional tab
+     * to the main tab panel which is used in the article module. he method provides an easy-to-use way to add a new tab
+     * and handles the event binding for further versions of Shopware.
+     *
+     * @example The following examples shows how to add a tab with a static content:
+     * <code>
+     * this.registerAdditionalTab({
+     *    title: 'Test-Tab',
+     *    tabConfig: { disabled: false },
+     *    contentFn: function(article, stores, eOpts) {
+     *       eOpts.tab.add({ xtype: 'panel', html: 'Tab-Content' });
+     *    }
+     * });
+     * </code>
+     *
+     * @throws Ext.Error - If no configuration object is passed the method raises an global Ext.Error
+     *         which kills the further processing of the method.
+     *
+     * @param  { Object } opts - Configuration object of the new tab
+     *         opts.title - { String } Title of the tab
+     *
+     *         opts.articleChangeFn - { Function } (optional) The callback method which will be triggered when
+     *         the article has been changed. The following parameters are passed to the callback function:
+     *             store - { Object } Instance of the `Shopware.apps.Article.store.Batch` which includes the
+     *             article data and all available associations which are used by the sub-components of this
+     *             component.
+     *             eOpts - { Object } Additional event parameters which are set by ExtJS. Please see the documentation
+     *             of Ext.util.Observable#addListener` method to see all available parameters.
+     *
+     *         opts.contentFn - { Function } The callback method which will be used to set the content of the tab.
+     *         The following parameters are passed to the callback function:
+     *             article - { Object } The article model, e.g. `Shopware.apps.Article.model.Article`
+     *             stores - { Object } All available stores of the article main window, which are used by it's sub-
+     *             compontents.
+     *             eOpts - { Object } Additional event parameters. The following custom paremeters are passed to the
+     *             function:
+     *                 tab - { Object } The newly created type
+     *                 config - { Object } The configuration object which was used to create the tab
+     *
+     *         opts.insertIndex - { Number } (optional) Numeric position (starting by 0) where the tab will be injected.
+     *         If the value is smaller than 0 or isn't passed, the tab will be inserted after the last available tab.
+     *
+     *         opts.tabConfig - { Object } (optional) Tab configuration of will be passsed in to create the tab
+     *         container. To modify the type of the created container, please use the second parameter `containerType`.
+     *
+     *         opts.scope - { Object } (optional) The scope which will be used in the callback methods `opts.contentFn`
+     *         and `opts.articleChangeFn`. If the parameter wasn't passed in, the scope will be set to this component,
+     *         e.g. `Shopware.apps.Article.view.detail.Window`.
+     *
+     * @param  { String } containerType (optional) - ExtJS component name which will be used as the
+     *         container for the tab content. The method supports full class names as well as
+     *         `xtypes`. If a class name is been used, class name needs to be in the namespace `Ext` or `Shopware`.
+     *         Default type is `Ext.container.Container`.
+     *
+     * @return { Boolean } - Truthy if the tab was sucessfully created, otherwise falsy.
+     */
+    registerAdditionalTab: function(opts, containerType) {
+        var me = this, tabPanel = me.mainTab, tabContainer, cfg = {},
+            defaultOpts = {
+                'title': 'Tab',
+                'articleChangeFn': Ext.emptyFn,
+                'contentFn': Ext.emptyFn,
+                'insertIndex': -1,
+                'tabConfig': {
+                    'disabled': true,
+                    'layout': 'fit'
+                },
+                'scope': me
+            }, availableStores;
+
+        // We're having no options for the new tab, so raise an error...
+        if(!opts || opts.length) {
+            Ext.Error.raise({
+                sourceClass: me.$className,
+                sourceMethod: 'registerAdditionalTab',
+                msg: 'The method needs at least a configuration object as a first parameter which ' +
+                     'includes the name of the tab and the callback method which inserts the content into '+
+                     'the newly created tab. Please see the example usage.'
+            });
+            return false;
+        }
+
+        // Check if the user configuration includes an `contentFn` which creates the content of the tab
+        if(!opts || !opts.hasOwnProperty('contentFn')) {
+            Ext.Error.raise({
+                sourceClass: me.$className,
+                sourceMethod: 'registerAdditionalTab',
+                msg: 'The method needs a callback method named `contentFn`, which will be used to insert the content ' +
+                     'inserts the content of the newly created tab.'
+            });
+            return false;
+        }
+
+        // Modify the passed parameter(s)
+        if(containerType && !containerType.match(/^(Ext|Shopware)/)) {
+
+            // Support for passing a `xtype` for the containerType
+            containerType = Ext.ClassManager.getNameByAlias(containerType);
+        }
+        containerType = (containerType && containerType.length) ? containerType : 'Ext.container.Container';
+
+        // Merge the passed user configuration with our default configuration
+        cfg = Ext.merge(cfg, defaultOpts, opts);
+
+        // Create the tab container
+        tabContainer = Ext.create(containerType, Ext.apply(cfg.tabConfig, {
+            title: cfg.title
+        }));
+
+        // Add the tab container to the main tab panel
+        if(cfg.insertIndex >= 0) {
+            tabPanel.insert(cfg.insertIndex, tabContainer);
+        } else {
+            tabPanel.add(tabContainer);
+        }
+
+        // Collects the available stores to provide a constant API which is compatible with further versions.
+        // It doesn't look great but that is necessary to provide the goal...
+        availableStores = {
+            customerGroupStore: me.customerGroupStore,
+            shopStore: me.shopStore,
+            taxStore: me.taxStore,
+            attributeFields: me.attributeFields,
+            supplierStore: me.supplierStore,
+            templateStore: me.templateStore,
+            dependencyStore: me.dependencyStore,
+            priceSurchargeStore: me.priceSurchargeStore,
+            unitStore: me.unitStore,
+            propertyStore: me.propertyStore,
+            priceGroupStore: me.priceGroupStore,
+            articleConfiguratorSet: me.articleConfiguratorSet,
+            categoryTreeStore: me.categoryTreeStore,
+            configuratorGroupStore: me.configuratorGroupStore
+        };
+
+        // Trigger the `contentFn` which sets the content of the tab container
+        cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
+
+        // Bind event listener which triggers when the article store was changed
+        me._batchStore.on('datachanged', cfg['articleChangeFn'], cfg.scope, {
+            tab: tabContainer,
+            config: cfg
+        });
+
+        return true;
+    }
 });
 //{/block}

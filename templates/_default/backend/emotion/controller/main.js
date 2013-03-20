@@ -54,7 +54,14 @@ Ext.define('Shopware.apps.Emotion.controller.Main', {
 	init: function() {
 		var me = this;
 
-        me.mainWindow = me.getView('main.Window').create();
+        //load the categoryPath store initial to show the right category combobox entries
+        me.subApplication.categoryPathStore =  me.subApplication.getStore('CategoryPath');
+        me.subApplication.categoryPathStore.getProxy().extraParams.parents = true;
+        me.subApplication.categoryPathStore.load();
+
+        me.mainWindow = me.getView('main.Window').create({
+            categoryPathStore: me.subApplication.categoryPathStore
+        });
 	}
 });
 //{/block}

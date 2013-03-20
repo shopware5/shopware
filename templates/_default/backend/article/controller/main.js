@@ -122,6 +122,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
                     //create the detail window and pass the prepared stores
                     Ext.apply(me.mainWindow, {
+                        _batchStore: me.batchStore,
                         article: article,
                         customerGroupStore: stores['customerGroups'],
                         shopStore: stores['shops'],
@@ -194,6 +195,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
                     //create the detail window and pass the prepared stores
                     Ext.apply(me.mainWindow, {
+                        _batchStore: me.batchStore,
                         article: article,
                         customerGroupStore: stores['customerGroups'],
                         shopStore: stores['shops'],

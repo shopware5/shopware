@@ -14,7 +14,7 @@
             <value>2010-10-04 10:46:54</value>
             <value>test@example.de</value>
             <value>0</value>
-            <value>de</value>
+            <value>1</value>
             <value>http://example.com/</value>
         </row>
         <row>
@@ -23,7 +23,7 @@
             <value>2010-10-05 10:46:54</value>
             <value>test@example.com</value>
             <value>1</value>
-            <value>de</value>
+            <value>1</value>
             <value>http://example.com/</value>
         </row>
         <row>
@@ -32,7 +32,7 @@
             <value>2010-10-04 10:46:54</value>
             <value>test@example.org</value>
             <value>1</value>
-            <value>de</value>
+            <value>1</value>
             <value>http://example.com/</value>
         </row>
     </table>
