@@ -378,12 +378,21 @@ class Repository extends ModelRepository
         return $builder->getQuery();
     }
 
-
-
+    /**
+     * Returns a tree structure result of all active category children of the passed category id.
+     * If the customer group id parameter is passed the function returns only this child categories
+     * which are allowed to displayed for the passed customer group id.
+     * The depth parameter can be used to shrink the sql result. If the parameters is set to false,
+     * all sub categories returned.
+     *
+     * @param      $id
+     * @param null $customerGroupId
+     * @param null $depth
+     *
+     * @return array
+     */
     public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null)
     {
-        static $currentDepth = 0;
-
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id)
@@ -391,9 +400,7 @@ class Repository extends ModelRepository
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();
-        if ($depth !== null && $currentDepth < $depth) {
-            $currentDepth++;
-        }
+        $depth--;
 
         foreach($children as &$child) {
             $category = $child['category'];
@@ -401,7 +408,7 @@ class Repository extends ModelRepository
             $category['articleCount'] = $child['articleCount'];
 
             //check if no depth passed or the current depth is lower than the passed depth
-            if ($depth === null || $currentDepth < $depth) {
+            if ($depth === null || $depth > 0 ) {
                 $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth);
             }
             $categories[] = $category;
@@ -410,6 +417,19 @@ class Repository extends ModelRepository
         return $categories;
     }
 
+    /**
+     * Returns a flat list of all active category children of the passed category id.
+     * If the customer group id parameter is passed the function returns only this child categories
+     * which are allowed to displayed for the passed customer group id.
+     * The depth parameter can be used to shrink the sql result. If the parameters is set to false,
+     * all sub categories returned.
+     *
+     * @param      $id
+     * @param null $customerGroupId
+     * @param null $depth
+     *
+     * @return array
+     */
     public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
     {
         static $currentDepth = 0;
@@ -421,9 +441,7 @@ class Repository extends ModelRepository
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();
-        if ($depth !== null && $currentDepth < $depth) {
-            $currentDepth++;
-        }
+        $currentDepth++;
 
         foreach($children as &$child) {
             $category = $child['category'];
