@@ -32,41 +32,21 @@
 
 class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    /**
-     * Constant to control a re dispatch
-     */
-    const RE_DISPATCH_COMMAND = 1;
-
-    /**
-     * Contains the original error handler
-     * @var callback
-     */
-    protected $_origErrorHandler = null;
-
-    /**
-     * Flag if an error handler registered
-     * @var boolean
-     */
-    protected $_registeredErrorHandler = false;
+    const redirectCookieString = 'ShopwarePluginsCoreSelfHealingRedirect';
 
     /**
      * Class property which contains the enlight http response object
+     *
      * @var Enlight_Controller_Response_ResponseHttp
      */
     protected $response = null;
 
     /**
      * Class property which contains the enlight http request object
+     *
      * @var Enlight_Controller_Request_RequestHttp
      */
     protected $request = null;
-
-    /**
-     * Class property which contains the current Enlight Front Controller
-     * @var Enlight_Controller_Front
-     */
-    protected $subject = null;
-
 
     /**
      * Standard plugin install function.
@@ -129,6 +109,8 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
                 $this->response->setRedirect(
                     $this->request->getRequestUri()
                 );
+
+                setcookie(self::redirectCookieString, true, time() + 5);
                 $this->response->sendResponse();
                 exit();
             } else {
@@ -146,6 +128,10 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     private function isModelException(Exception $exception)
     {
+        if (isset($_COOKIE[self::redirectCookieString])) {
+            return false;
+        }
+
         /**
          * This case matches, when a query selects a doctrine association, which isn't defined in the doctrine model
          */
@@ -192,7 +178,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $generator->setModelPath(
             Shopware()->AppPath('Models')
         );
- 
+
         $generator->setSchemaManager(
             $this->getSchemaManager()
         );
@@ -203,6 +189,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     /**
      * Helper function to create an own database schema manager to remove
      * all dependencies to the existing shopware models and meta data caches.
+     *
      * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
      */
     private function getSchemaManager()
@@ -216,6 +203,5 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
 
         return $connection->getSchemaManager();
     }
-
 }
 
