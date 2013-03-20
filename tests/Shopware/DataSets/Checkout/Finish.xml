@@ -55,7 +55,7 @@
 			<value></value>
 			<value>0000-00-00 00:00:00</value>
 			<value></value>
-			<value>de</value>
+			<value>1</value>
 			<value>9</value>
 			<value>EUR</value>
 			<value>1</value>
@@ -85,7 +85,7 @@
 			<value></value>
 			<value>0000-00-00 00:00:00</value>
 			<value></value>
-			<value>de</value>
+			<value>1</value>
 			<value>9</value>
 			<value>EUR</value>
 			<value>1</value>
@@ -121,13 +121,13 @@
 			<value></value>
 			<value>mr</value>
 			<value></value>
-			<value>Heiner</value>
-			<value>Lohaus</value>
-			<value>Hauptstr.</value>
-			<value>36</value>
-			<value>48624</value>
-			<value>Schöppingen</value>
-			<value>02555 / 997500</value>
+			<value>Max</value>
+			<value>Mustermann</value>
+			<value>Musterstr.</value>
+			<value>55</value>
+			<value>55555</value>
+			<value>Musterhausen</value>
+			<value>55555 / 555555</value>
 			<value></value>
 			<value>2</value>
 			<value></value>
@@ -212,12 +212,12 @@
 			<value></value>
 			<value></value>
 			<value>mr</value>
-			<value>Heiner</value>
-			<value>Lohaus</value>
-			<value>Hauptstr.</value>
-			<value>36</value>
-			<value>48624</value>
-			<value>Schöppingen</value>
+			<value>Max</value>
+			<value>Mustermann</value>
+			<value>Musterstr.</value>
+			<value>55</value>
+			<value>55555</value>
+			<value>Musterhausen</value>
 			<value>2</value>
 		</row>
 	</table>
@@ -260,7 +260,7 @@
 			<value>0</value>
 			<value>EK</value>
 			<value>0</value>
-			<value>de</value>
+			<value>1</value>
 			<value>1</value>
 			<value></value>
 			<null />
@@ -294,13 +294,13 @@
 			<value></value>
 			<value>mr</value>
 			<value>20001</value>
-			<value>Heiner</value>
-			<value>Lohaus</value>
-			<value>Hauptstr.</value>
-			<value>36</value>
-			<value>48624</value>
-			<value>Schöppingen</value>
-			<value>02555 / 997500</value>
+			<value>Max</value>
+			<value>Mustermann</value>
+			<value>Musterstr.</value>
+			<value>55</value>
+			<value>55555</value>
+			<value>Musterhausen</value>
+			<value>55555 / 555555</value>
 			<value></value>
 			<value>2</value>
 			<value></value>

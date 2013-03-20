@@ -39,11 +39,11 @@ class sConfigurator
     const TYPE_SELECTION = 1;
     const TYPE_TABLE = 2;
 
-	/**
-	 * The shopware system object.
-	 *
-	 * @var sSystem
-	 */
+    /**
+     * The shopware system object.
+     *
+     * @var sSystem
+     */
     public $sSYSTEM;
 
     /**
@@ -60,7 +60,40 @@ class sConfigurator
     }
 
     /**
-     * DONE
+     * Helper function to prevent a lazy loading of all inversed sides one to one
+     * associations of an article.
+     *
+     * @param $articleId
+     *
+     * @return mixed
+     */
+    protected function getSingleArticle($articleId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('article'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->where('article.id = :articleId')
+                ->setParameter('articleId', $articleId);
+
+        return $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+    }
+
+    /**
+     * Returns all configurator options for the passed variant id.
+     * @param $variantId
+     *
+     * @return array
+     */
+    protected function getConfiguratorOptionsForVariantId($variantId) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options'))
+                ->from('Shopware\Models\Article\Configurator\Option', 'options')
+                ->innerJoin('options.articles', 'details', 'WITH', 'details.id = :variantId')
+                ->addOrderBy('options.position')
+                ->setParameter('variantId', $variantId);
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
      * @param      $id
      * @param      $articleData
      * @param bool $recursiveCall
@@ -72,18 +105,22 @@ class sConfigurator
 
         //get posted groups and options
         $selectedItems = $this->sSYSTEM->_POST["group"];
+        
         if (empty($selectedItems)) {
             $selectedItems = array();
         }
+
         /**@var $repository \Shopware\Models\Article\Repository*/
         $repository = Shopware()->Models()->Article();
+
         /**@var $article \Shopware\Models\Article\Article*/
-        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $id);
+        $article = $this->getSingleArticle($id);
 
         //the data property contains now the configurator set. Set configurator set has the array keys "options" and "groups"
         //where the assigned configurator options and groups are.
         $data = $repository->getArticleConfiguratorSetByArticleIdIndexedByIdsQuery($id)
-                           ->getArrayResult();
+                ->getArrayResult();
+
         $data = $data[0]['configuratorSet'];
 
         $customerGroupKey = $this->sSYSTEM->sUSERGROUP;
@@ -98,6 +135,7 @@ class sConfigurator
         $settings = $this->getConfiguratorSettings($data, $article);
         $optionsIds = array();
 
+        $mainDetailOptions = $this->getConfiguratorOptionsForVariantId($article['mainDetailId']);
         //now we iterate all activated options and assign them to the corresponding group.
         foreach($data['options'] as $option) {
             //the convert functions changes the property names, so we save the ids in internal helper properties.
@@ -111,9 +149,10 @@ class sConfigurator
 
                 $selected = 0;
                 if (empty($selectedItems)) {
+
                     /**@var $mainDetailOption \Shopware\Models\Article\Configurator\Option*/
-                    foreach($article->getMainDetail()->getConfiguratorOptions() as $mainDetailOption) {
-                        if ($mainDetailOption->getId() === $optionId) {
+                    foreach($mainDetailOptions as $mainDetailOption) {
+                        if ($mainDetailOption['id'] === $optionId) {
                             $selected = 1;
                         }
                     }
@@ -164,8 +203,8 @@ class sConfigurator
 
         //now we check if the sQuantity property is set in the post.
         $quantity = 1;
-		if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
-			$quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
+        if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
+            $quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
         }
         $articleData["quantity"] = $quantity;
 
@@ -174,7 +213,6 @@ class sConfigurator
             $articleData["quantity"] = $articleData["minpurchase"];
 
         $selected = null;
-
         //if some items was selected from the user, we have to select the first available variant
         if (!empty($selectedItems)) {
             $builder = $this->getSelectionQueryBuilder($selectedItems);
@@ -192,7 +230,7 @@ class sConfigurator
             //we can only set one variant as select, so we select the first one
             $detailData = $selected[0];
             if (!empty($detailData)) {
-                if ($article->getLastStock() && $detailData['inStock'] < 1) {
+                if ($article['lastStock'] && $detailData['inStock'] < 1) {
                     $detailData['active'] = 0;
                 }
                 if (empty($detailData['prices'])) {
@@ -224,11 +262,11 @@ class sConfigurator
 
         if (empty($selected)) {
             // Limiting the results with setMaxResults(1) will result in only one price being selected SW-4465
-            $query = $repository->getConfiguratorTablePreSelectionItemQuery($article, $customerGroupKey);
-            $detail = $query->getArrayResult();
-            $detail = array_shift($detail);
+            $query = $repository->getConfiguratorTablePreSelectionItemQuery($id, $customerGroupKey, ($article['lastStock'] === 1));
+            $query->setFirstResult(0)->setMaxResults(1);
+            $detail = $this->getOneOrNullResult($query);
 
-            if ($article->getLastStock() && $detail['inStock'] < 1) {
+            if ($article['lastStock'] && $detail['inStock'] < 1) {
                 $detail['active'] = 0;
             }
             $preSelectedOptions = $detail['configuratorOptions'];
@@ -264,12 +302,17 @@ class sConfigurator
                 }
             }
 
-            if (count($selected['price']) > 1) {
+            if (!empty($articleData['pricegroupActive'])) {
+                $articleData['sBlockPrices'] = $this->module->sGetPricegroupDiscount(
+                    $this->sSYSTEM->sUSERGROUP, $articleData["pricegroupID"],
+                    $selected['price'][0]['priceNet'], 1, true, $articleData
+                );
+            } elseif (count($selected['price']) > 1) {
                 $articleData['sBlockPrices'] = $selected['price'];
             } else {
                 $articleData['sBlockPrices'] = array();
             }
-            if($selected['kind'] > 1) {
+            if ($selected['kind'] > 1) {
                 $articleData = $this->mergeSelectedAndArticleData($articleData, $selected, $selectedPrice);
                 $articleData = $this->module->sGetTranslation($articleData, $selected['valueID'], 'variant');
             } else {
@@ -284,8 +327,22 @@ class sConfigurator
         if ($recursiveCall) {
             $articleData['sError']['variantNotAvailable'] = true;
         }
-
         return $articleData;
+    }
+
+    /**
+     * Helper function to get one or null result for the passed query object.
+     * @param $query
+     *
+     * @return mixed
+     */
+    private function getOneOrNullResult($query)
+    {
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        return $paginator->getIterator()->current();
     }
 
     /**
@@ -385,6 +442,8 @@ class sConfigurator
         $articleData["shippingtime"] = empty($selected['shippingtime']) ? $articleData['shippingtime'] : $selected['shippingtime'];
         $articleData["shippingfree"] = isset($selected['shippingfree']) ? $selected['shippingfree'] : $articleData['shippingfree'];
 
+        $articleData["sReleasedate"] = $articleData["releasedate"];
+
         if (!empty($selected['attributes'])) {
             foreach($selected['attributes'] as $key => $value) {
                 $articleData[$key] = $value;
@@ -405,6 +464,7 @@ class sConfigurator
         $prices = array();
         //iterate price to calculate the gross price.
         foreach($data as $price) {
+            $price['priceNet'] = $price["price"];
             $price['price'] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPrice($price["price"],$tax,$taxId);
             $price['pricenumeric'] =  $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($price["price"],$tax,false,false,$taxId,false);
             $prices[] = $price;
@@ -446,12 +506,12 @@ class sConfigurator
         /**@var $repository \Shopware\Models\Article\Repository*/
         $repository = Shopware()->Models()->Article();
         $groups = $repository->getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQuery($optionsIds)
-                             ->getArrayResult();
+                ->getArrayResult();
 
         //now we check if the sQuantity property is set in the post.
         $quantity = 1;
-		if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
-			$quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
+        if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
+            $quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
         }
 
         $firstGroup = $groups[0];
@@ -485,7 +545,7 @@ class sConfigurator
 
                 $selected = false;
                 if (array_key_exists($firstGroup['id'], $selectedItems) &&
-                    array_key_exists($secondGroup['id'], $selectedItems)) {
+                        array_key_exists($secondGroup['id'], $selectedItems)) {
                     $selectedOptionIds = array($selectedItems[$secondGroup['id']], $selectedItems[$firstGroup['id']]);
                     $selected = (int) (in_array($firstKey, $selectedOptionIds) && in_array($secondKey, $selectedOptionIds));
                 }
@@ -598,10 +658,10 @@ class sConfigurator
     private function getConvertedSettings($data, $article)
     {
         $settings = array(
-            'articleID' => $article->getId(),
+            'articleID' => $article['id'],
             'type' => $data['type'],
             'template' => $data['template'],
-            'instock' => $article->getLastStock(),
+            'instock' => $article['lastStock'],
             'upprice' => 0
         );
         return $settings;
@@ -673,17 +733,17 @@ class sConfigurator
         return $settings;
     }
 
-	/**
-	 * Returns the group options for the product configurator.
-	 *
-	 * @param int $id
-	 * @param array $article
-	 * @return array
-	 */
-	public function sGetArticleConfig ($id, $article)
-	{
+    /**
+     * Returns the group options for the product configurator.
+     *
+     * @param int $id
+     * @param array $article
+     * @return array
+     */
+    public function sGetArticleConfig ($id, $article)
+    {
         return $this->getArticleConfigurator($id, $article);
-	}
+    }
 
 
     /**

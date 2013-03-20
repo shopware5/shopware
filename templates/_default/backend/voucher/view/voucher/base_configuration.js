@@ -400,6 +400,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 fieldLabel:'{s name=detail_general/field/restrict_on_supplier}Restrict to supplier{/s}',
                 store:Ext.create('Shopware.store.Supplier').load(),
                 pageSize: 25,
+                minChars:0,
                 valueField:'id',
                 displayField:'name'
             }

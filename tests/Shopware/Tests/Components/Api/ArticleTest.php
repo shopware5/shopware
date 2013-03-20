@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,77 +25,20 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Api_ArticleTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Article
+     * @return \Shopware\Components\Api\Resource\Article
      */
-    private $resource;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    public function createResource()
     {
-        parent::setUp();
-
-        Shopware()->Models()->clear();
-
-        $this->resource = new \Shopware\Components\Api\Resource\Article();
-        $this->resource->setAcl(Shopware()->Acl());
-        $this->resource->setManager(Shopware()->Models());
-    }
-
-    protected function getAclMock()
-    {
-        $aclMock = $this->getMockBuilder('\Shopware_Components_Acl')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        $aclMock->expects($this->any())
-                ->method('has')
-                ->will($this->returnValue(true));
-
-        $aclMock->expects($this->any())
-                ->method('isAllowed')
-                ->will($this->returnValue(false));
-
-        return $aclMock;
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
-    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
-    {
-        $this->resource->setRole('dummy');
-        $this->resource->setAcl($this->getAclMock());
-
-        $this->resource->getOne(1);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
-    {
-        $this->resource->getOne(9999999);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
-    {
-        $this->resource->getOne('');
+        return new \Shopware\Components\Api\Resource\Article();
     }
 
     public function testCreateShouldBeSuccessful()
     {
-        // required field name is missing
         $testData = array(
             'name' => 'Testartikel',
             'description' => 'Test description',
@@ -170,11 +113,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Enlight_Components_Test_
                         )
                     ),
                 )
-            ),
-
-            'images' => array(
-                array('link' => 'http://lorempixel.com/640/480/food/'),
-                array('link' => 'http://lorempixel.com/640/480/food/')
             ),
 
             'variants' => array(

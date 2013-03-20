@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,40 +20,26 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
+
 namespace   Shopware\Models\Emotion;
 use         Shopware\Components\Model\ModelRepository;
 
 /**
- * Repository for the \Shopware\Models\Emotion\Emotion model.
- * The repository is responsible for all CRUD function around the emotion model.
- * It contains all queries which executed in shopware to read, save, delete or update an shopware
- * emotion.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
+ * @category  Shopware
+ * @package   Shopware\Models\Emotion
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $filter
-     * @param $orderBy
-     * @param $offset
-     * @param $limit
+     * Returns an instance of the \Doctrine\ORM\Query object
+     *
+     * @param array $filter
+     * @param array $orderBy
+     * @param integer $offset
+     * @param integer $limit
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($filter = null, $orderBy = null, $offset = null, $limit = null)
@@ -63,14 +49,16 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param null $filter
-     * @param null $orderBy
+     *
+     * @param  array $filter
+     * @param  array $orderBy
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
@@ -97,20 +85,23 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $emotionId
+     * Returns an instance of the \Doctrine\ORM\Query object
+     *
+     * @param integer $emotionId
      * @return \Doctrine\ORM\Query
      */
     public function getEmotionDetailQuery($emotionId)
     {
         $builder = $this->getEmotionDetailQueryBuilder($emotionId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getEmotionDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param $emotionId
+     *
+     * @param integer $emotionId
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getEmotionDetailQueryBuilder($emotionId)
@@ -130,22 +121,25 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $elementId
-     * @param $componentId
+     * Returns an instance of the \Doctrine\ORM\Query object
+     *
+     * @param integer $elementId
+     * @param integer $componentId
      * @return \Doctrine\ORM\Query
      */
     public function getElementDataQuery($elementId, $componentId)
     {
         $builder = $this->getElementDataQueryBuilder($elementId, $componentId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getElementDataQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param $elementId
-     * @param $componentId
+     *
+     * @param integer $elementId
+     * @param integer $componentId
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getElementDataQueryBuilder($elementId, $componentId)
@@ -164,20 +158,23 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
-     * @param $emotionId
+     * Returns an instance of the \Doctrine\ORM\Query object
+     *
+     * @param integer $emotionId
      * @return \Doctrine\ORM\Query
      */
     public function getEmotionAttributesQuery($emotionId)
     {
         $builder = $this->getEmotionAttributesQueryBuilder($emotionId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getEmotionAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param $emotionId
+     *
+     * @param integer $emotionId
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getEmotionAttributesQueryBuilder($emotionId)
@@ -187,26 +184,27 @@ class Repository extends ModelRepository
                       ->from('Shopware\Models\Attribute\Emotion', 'attribute')
                       ->where('attribute.emotionId = ?1')
                       ->setParameter(1, $emotionId);
+
         return $builder;
     }
 
     /**
-     * @param $categoryId
+     * @param integer $categoryId
      * @return \Doctrine\ORM\Query
      */
     public function getCategoryEmotionsQuery($categoryId)
     {
         $builder = $this->getCategoryEmotionsQueryBuilder($categoryId);
+
         return $builder->getQuery();
     }
 
     /**
-     * @param $categoryId
-     * @return \Doctrine\ORM\Query
+     * @param integer $categoryId
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCategoryEmotionsQueryBuilder($categoryId)
     {
-
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions', 'elements', 'component'))
                 ->leftJoin('emotions.elements', 'elements')
@@ -217,13 +215,15 @@ class Repository extends ModelRepository
                 ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
                 ->andWhere('emotions.isLandingPage = 0 ')
                 ->andWhere('emotions.active = 1 ')
+                ->addOrderBy(array(array('property' => 'elements.startRow','direction' => 'ASC')))
+                ->addOrderBy(array(array('property' => 'elements.startCol','direction' => 'ASC')))
                 ->setParameter(1, $categoryId);
 
         return $builder;
     }
 
     /**
-     * @param $categoryId
+     * @param integer $categoryId
      * @return \Doctrine\ORM\Query
      */
     public function getCampaignByCategoryQuery($categoryId)
@@ -237,6 +237,7 @@ class Repository extends ModelRepository
                 ->andWhere('emotions.isLandingPage = 1 ')
                 ->andWhere('emotions.active = 1 ')
                 ->setParameter(1, $categoryId);
+
         return $builder->getQuery();
     }
 
@@ -255,7 +256,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return \Doctrine\ORM\Query
      */
     public function getEmotionById($id)
@@ -272,5 +273,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

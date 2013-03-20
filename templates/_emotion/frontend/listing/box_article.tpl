@@ -45,7 +45,7 @@
 
 {* Article Price *}
 {block name='frontend_listing_box_article_price'}
-<p class="{if $sArticle.pseudoprice}pseudoprice{else}price{/if}{if $sArticle.purchaseunit != $sArticle.referenceunit && !$sArticle.pseudoprice} both{/if}">
+<p class="{if $sArticle.pseudoprice}pseudoprice{else}price{/if}{if !$sArticle.pseudoprice} both{/if}">
     {if $sArticle.pseudoprice}
     	<span class="pseudo">{s name="reducedPrice"}Statt: {/s}{$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
     {/if}

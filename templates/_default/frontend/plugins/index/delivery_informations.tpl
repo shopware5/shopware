@@ -11,7 +11,7 @@
 		<p class="deliverable2">
 			{se name="DetailDataInfoNotAvailable"}{/se}
 		</p>
-	{elseif $sArticle.sReleaseDate}
+    {elseif $sArticle.sReleaseDate && $sArticle.sReleaseDate|date_format:"%Y%m%d" > $smarty.now|date_format:"%Y%m%d"}
 		<div class="status0">&nbsp;</div>
 	    <p class="deliverable2">
 	    	{se name="DetailDataInfoShipping"}{/se} {$sArticle.sReleaseDate|date:'date_long'}
