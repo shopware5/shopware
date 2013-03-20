@@ -89,32 +89,30 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function readCategoryUrls($parentId)
     {
-        $categories = $this->repository
-            ->getActiveChildrenByIdQuery($parentId)
-            ->getArrayResult();
+        $categories = $this->repository->getActiveChildrenList($parentId);
 
         foreach ($categories as $category) {
-            if(!empty($category['category']['external'])) {
+            if(!empty($category['external'])) {
                 continue;
             }
-	        //use a different link if it is a blog category
-	        if(!empty($category['category']['blog'])) {
-		        $category['link'] = $this->Front()->Router()->assemble(array(
-			        'sViewport' => 'blog',
-			        'sCategory' => $category['category']['id'],
-			        'title' => $category['category']['name']
-		        ));
-	        }
-	        else {
-	            $category['link'] = $this->Front()->Router()->assemble(array(
-	                'sViewport' => 'cat',
-	                'sCategory' => $category['category']['id'],
-	                'title' => $category['category']['name']
-	            ));
-	        }
+
+            //use a different link if it is a blog category
+            if (!empty($category['blog'])) {
+                $category['link'] = $this->Front()->Router()->assemble(array(
+                    'sViewport' => 'blog',
+                    'sCategory' => $category['id'],
+                    'title' => $category['name']
+                ));
+            } else {
+                $category['link'] = $this->Front()->Router()->assemble(array(
+                    'sViewport' => 'cat',
+                    'sCategory' => $category['id'],
+                    'title' => $category['name']
+                ));
+            }
 
             $this->printCategoryUrl(array(
-                'changed' => $category['category']['changed'],
+                'changed' => $category['changed'],
                 'link' => $category['link']
             ));
         }
