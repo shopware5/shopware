@@ -1,0 +1,4 @@
+From: feature/sw-5166-listview-mediamanager
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/_resources/resources/css/ext-all.css
+	MODIFY|templates/_default/backend/_resources/resources/css/ext-all.css
