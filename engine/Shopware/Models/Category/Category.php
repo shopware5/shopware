@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,15 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Category
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Models\Category;
@@ -44,6 +35,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")
+ *
+ * @category  Shopware
+ * @package   Shopware\Bootstrap
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Category extends ModelEntity
 {
@@ -89,11 +84,6 @@ class Category extends ModelEntity
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
     private $position;
-
-    /**
-     * @ORM\Column(name="level", type="integer")
-     */
-    private $level = 0;
 
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
@@ -351,15 +341,6 @@ class Category extends ModelEntity
     {
         return $this->parent;
     }
-
-    /**
-     * @return int
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
 
     /**
      * @param Category[] $children
@@ -846,7 +827,8 @@ class Category extends ModelEntity
      *
      * @return bool
      */
-    protected function isChildOfInternal(Category $category, Category $searched) {
+    protected function isChildOfInternal(Category $category, Category $searched)
+    {
         if ($category->getParent()->getId() === $searched->getId()) {
             return true;
         }
