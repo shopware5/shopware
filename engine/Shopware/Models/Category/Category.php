@@ -839,20 +839,22 @@ class Category extends ModelEntity
     }
 
     /**
+     * Helper function for the isChildOf function. This function is used for a recursive call.
+     *
      * @param $category Category
-     * @param $searched
+     * @param $searched Category
      *
      * @return bool
      */
-    protected function isChildOfInternal($category, $searched) {
-        if ($category->getParent() === $searched) {
+    protected function isChildOfInternal(Category $category, Category $searched) {
+        if ($category->getParent()->getId() === $searched->getId()) {
             return true;
-        } else if ($category->getParent() instanceof Category) {
-            return $this->isChildOfInternal($category->getParent(), $searched);
-        } else {
-            return false;
         }
+
+        if ($category->getParent() instanceof Category) {
+            return $this->isChildOfInternal($category->getParent(), $searched);
+        }
+
+        return false;
     }
-
-
 }
