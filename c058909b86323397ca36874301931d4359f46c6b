@@ -1,0 +1,212 @@
+From: feature/sw-5178-banner-mapping-link-type
+To: next
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/yaml/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/yaml/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/yaml/index.html
+	MODIFY|engine/Library/CodeMirror/mode/yaml/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/xquery/xquery.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/xquery/xquery.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/xquery/xquery.js
+	MODIFY|engine/Library/CodeMirror/mode/xquery/xquery.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/xquery/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/xquery/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/xquery/index.html
+	MODIFY|engine/Library/CodeMirror/mode/xquery/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/verilog/verilog.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/verilog/verilog.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/verilog/verilog.js
+	MODIFY|engine/Library/CodeMirror/mode/verilog/verilog.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/verilog/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/verilog/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/verilog/index.html
+	MODIFY|engine/Library/CodeMirror/mode/verilog/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/velocity/velocity.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/velocity/velocity.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/velocity/velocity.js
+	MODIFY|engine/Library/CodeMirror/mode/velocity/velocity.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/velocity/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/velocity/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/velocity/index.html
+	MODIFY|engine/Library/CodeMirror/mode/velocity/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/vbscript/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/vbscript/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/vbscript/index.html
+	MODIFY|engine/Library/CodeMirror/mode/vbscript/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.js
+	MODIFY|engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.css deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.css left in tree.
+	DELETE|engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.css
+	MODIFY|engine/Library/CodeMirror/mode/tiddlywiki/tiddlywiki.css
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/tiddlywiki/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/tiddlywiki/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/tiddlywiki/index.html
+	MODIFY|engine/Library/CodeMirror/mode/tiddlywiki/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/stex/stex.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/stex/stex.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/stex/stex.js
+	MODIFY|engine/Library/CodeMirror/mode/stex/stex.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/stex/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/stex/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/stex/index.html
+	MODIFY|engine/Library/CodeMirror/mode/stex/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/sparql/sparql.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/sparql/sparql.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/sparql/sparql.js
+	MODIFY|engine/Library/CodeMirror/mode/sparql/sparql.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/sparql/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/sparql/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/sparql/index.html
+	MODIFY|engine/Library/CodeMirror/mode/sparql/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/smalltalk/smalltalk.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/smalltalk/smalltalk.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/smalltalk/smalltalk.js
+	MODIFY|engine/Library/CodeMirror/mode/smalltalk/smalltalk.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/smalltalk/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/smalltalk/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/smalltalk/index.html
+	MODIFY|engine/Library/CodeMirror/mode/smalltalk/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/scheme/scheme.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/scheme/scheme.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/scheme/scheme.js
+	MODIFY|engine/Library/CodeMirror/mode/scheme/scheme.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/scheme/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/scheme/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/scheme/index.html
+	MODIFY|engine/Library/CodeMirror/mode/scheme/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rust/rust.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rust/rust.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rust/rust.js
+	MODIFY|engine/Library/CodeMirror/mode/rust/rust.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rust/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rust/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rust/index.html
+	MODIFY|engine/Library/CodeMirror/mode/rust/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ruby/ruby.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ruby/ruby.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ruby/ruby.js
+	MODIFY|engine/Library/CodeMirror/mode/ruby/ruby.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ruby/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ruby/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ruby/index.html
+	MODIFY|engine/Library/CodeMirror/mode/ruby/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rst/rst.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rst/rst.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rst/rst.js
+	MODIFY|engine/Library/CodeMirror/mode/rst/rst.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rst/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rst/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rst/index.html
+	MODIFY|engine/Library/CodeMirror/mode/rst/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rpm/spec/spec.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rpm/spec/spec.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rpm/spec/spec.js
+	MODIFY|engine/Library/CodeMirror/mode/rpm/spec/spec.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rpm/spec/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rpm/spec/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rpm/spec/index.html
+	MODIFY|engine/Library/CodeMirror/mode/rpm/spec/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rpm/changes/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rpm/changes/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rpm/changes/index.html
+	MODIFY|engine/Library/CodeMirror/mode/rpm/changes/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/rpm/changes/changes.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/rpm/changes/changes.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/rpm/changes/changes.js
+	MODIFY|engine/Library/CodeMirror/mode/rpm/changes/changes.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/r/r.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/r/r.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/r/r.js
+	MODIFY|engine/Library/CodeMirror/mode/r/r.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/r/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/r/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/r/index.html
+	MODIFY|engine/Library/CodeMirror/mode/r/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/python/python.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/python/python.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/python/python.js
+	MODIFY|engine/Library/CodeMirror/mode/python/python.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/python/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/python/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/python/index.html
+	MODIFY|engine/Library/CodeMirror/mode/python/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/properties/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/properties/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/properties/index.html
+	MODIFY|engine/Library/CodeMirror/mode/properties/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/plsql/plsql.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/plsql/plsql.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/plsql/plsql.js
+	MODIFY|engine/Library/CodeMirror/mode/plsql/plsql.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/plsql/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/plsql/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/plsql/index.html
+	MODIFY|engine/Library/CodeMirror/mode/plsql/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/perl/perl.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/perl/perl.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/perl/perl.js
+	MODIFY|engine/Library/CodeMirror/mode/perl/perl.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/perl/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/perl/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/perl/index.html
+	MODIFY|engine/Library/CodeMirror/mode/perl/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/pascal/pascal.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/pascal/pascal.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/pascal/pascal.js
+	MODIFY|engine/Library/CodeMirror/mode/pascal/pascal.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/pascal/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/pascal/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/pascal/index.html
+	MODIFY|engine/Library/CodeMirror/mode/pascal/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ntriples/ntriples.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ntriples/ntriples.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ntriples/ntriples.js
+	MODIFY|engine/Library/CodeMirror/mode/ntriples/ntriples.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ntriples/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ntriples/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ntriples/index.html
+	MODIFY|engine/Library/CodeMirror/mode/ntriples/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/mysql/mysql.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/mysql/mysql.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/mysql/mysql.js
+	MODIFY|engine/Library/CodeMirror/mode/mysql/mysql.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/mysql/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/mysql/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/mysql/index.html
+	MODIFY|engine/Library/CodeMirror/mode/mysql/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/lua/lua.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/lua/lua.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/lua/lua.js
+	MODIFY|engine/Library/CodeMirror/mode/lua/lua.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/lua/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/lua/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/lua/index.html
+	MODIFY|engine/Library/CodeMirror/mode/lua/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/less/less.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/less/less.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/less/less.js
+	MODIFY|engine/Library/CodeMirror/mode/less/less.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/less/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/less/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/less/index.html
+	MODIFY|engine/Library/CodeMirror/mode/less/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/jinja2/jinja2.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/jinja2/jinja2.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/jinja2/jinja2.js
+	MODIFY|engine/Library/CodeMirror/mode/jinja2/jinja2.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/jinja2/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/jinja2/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/jinja2/index.html
+	MODIFY|engine/Library/CodeMirror/mode/jinja2/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/javascript/javascript.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/javascript/javascript.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/javascript/javascript.js
+	MODIFY|engine/Library/CodeMirror/mode/javascript/javascript.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/javascript/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/javascript/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/javascript/index.html
+	MODIFY|engine/Library/CodeMirror/mode/javascript/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/haskell/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/haskell/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/haskell/index.html
+	MODIFY|engine/Library/CodeMirror/mode/haskell/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/haskell/haskell.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/haskell/haskell.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/haskell/haskell.js
+	MODIFY|engine/Library/CodeMirror/mode/haskell/haskell.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/groovy/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/groovy/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/groovy/index.html
+	MODIFY|engine/Library/CodeMirror/mode/groovy/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/groovy/groovy.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/groovy/groovy.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/groovy/groovy.js
+	MODIFY|engine/Library/CodeMirror/mode/groovy/groovy.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/go/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/go/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/go/index.html
+	MODIFY|engine/Library/CodeMirror/mode/go/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/go/go.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/go/go.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/go/go.js
+	MODIFY|engine/Library/CodeMirror/mode/go/go.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/gfm/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/gfm/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/gfm/index.html
+	MODIFY|engine/Library/CodeMirror/mode/gfm/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/gfm/gfm.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/gfm/gfm.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/gfm/gfm.js
+	MODIFY|engine/Library/CodeMirror/mode/gfm/gfm.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ecl/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ecl/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ecl/index.html
+	MODIFY|engine/Library/CodeMirror/mode/ecl/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/ecl/ecl.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/ecl/ecl.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/ecl/ecl.js
+	MODIFY|engine/Library/CodeMirror/mode/ecl/ecl.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/diff/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/diff/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/diff/index.html
+	MODIFY|engine/Library/CodeMirror/mode/diff/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/diff/diff.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/diff/diff.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/diff/diff.js
+	MODIFY|engine/Library/CodeMirror/mode/diff/diff.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/coffeescript/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/coffeescript/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/coffeescript/index.html
+	MODIFY|engine/Library/CodeMirror/mode/coffeescript/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/coffeescript/coffeescript.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/coffeescript/coffeescript.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/coffeescript/coffeescript.js
+	MODIFY|engine/Library/CodeMirror/mode/coffeescript/coffeescript.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/clojure/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/clojure/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/clojure/index.html
+	MODIFY|engine/Library/CodeMirror/mode/clojure/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/clojure/clojure.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/clojure/clojure.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/clojure/clojure.js
+	MODIFY|engine/Library/CodeMirror/mode/clojure/clojure.js
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/clike/index.html deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/clike/index.html left in tree.
+	DELETE|engine/Library/CodeMirror/mode/clike/index.html
+	MODIFY|engine/Library/CodeMirror/mode/clike/index.html
+Conflict: (delete/modify) engine/Library/CodeMirror/mode/clike/clike.js deleted in HEAD and modified in f65e8a856013d7927e8b1640e69f9c23ca9c6b61. Version f65e8a856013d7927e8b1640e69f9c23ca9c6b61 of engine/Library/CodeMirror/mode/clike/clike.js left in tree.
+	DELETE|engine/Library/CodeMirror/mode/clike/clike.js
+	MODIFY|engine/Library/CodeMirror/mode/clike/clike.js
