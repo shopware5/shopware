@@ -302,7 +302,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             categoryId: null,
             cellHeight: 185,
             articleHeight: 2,
-            containerWidth: 1008,
+            containerWidth: 808,
             template: 'Standard'
         });
         me.openDetailWindow(record);
