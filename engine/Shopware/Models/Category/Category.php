@@ -37,13 +37,11 @@ use Shopware\Components\Model\ModelEntity,
 Shopware\Models\Article\Article,
 Doctrine\Common\Collections\ArrayCollection;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Categories
  *
- * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")
  */
@@ -71,7 +69,6 @@ class Category extends ModelEntity
      * The parent category
      *
      * @var Category
-     * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
@@ -94,22 +91,9 @@ class Category extends ModelEntity
     private $position;
 
     /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="`left`", type="integer")
-     */
-    private $left;
-
-    /**
-     * @Gedmo\TreeLevel
      * @ORM\Column(name="level", type="integer")
      */
     private $level;
-
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="`right`", type="integer")
-     */
-    private $right;
 
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
@@ -376,21 +360,6 @@ class Category extends ModelEntity
         return $this->level;
     }
 
-    /**
-     * @return int
-     */
-    public function getLeft()
-    {
-        return $this->left;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRight()
-    {
-        return $this->right;
-    }
 
     /**
      * @param Category[] $children
@@ -866,7 +835,23 @@ class Category extends ModelEntity
      */
     public function isChildOf(\Shopware\Models\Category\Category $parent)
     {
-        return ($parent->getLeft() < $this->getLeft() && $parent->getRight() > $this->getRight());
+        return $this->isChildOfInternal($this, $parent);
+    }
+
+    /**
+     * @param $category Category
+     * @param $searched
+     *
+     * @return bool
+     */
+    protected function isChildOfInternal($category, $searched) {
+        if ($category->getParent() === $searched) {
+            return true;
+        } else if ($category->getParent() instanceof Category) {
+            return $this->isChildOfInternal($category->getParent(), $searched);
+        } else {
+            return false;
+        }
     }
 
 

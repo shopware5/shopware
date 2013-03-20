@@ -235,7 +235,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             return $data;
         }
 
-        //todo@performance: Hier wird ein Rekursiver call benötigt.
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('blog', 'media', 'mappingMedia'))
             ->from('Shopware\Models\Blog\Blog', 'blog')
@@ -244,15 +243,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->leftJoin('blog.category', 'category')
             ->where('blog.active = 1')
             ->andWhere('blog.displayDate <= ?1')
-            ->andWhere('category.left >= ?2')
-            ->andWhere('category.right <= ?3')
+            ->andWhere('category.id = ?2')
             ->orderBy('blog.displayDate', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults($entryAmount)
             ->setParameter(1, date('Y-m-d H:i:s'))
-            ->setParameter(2, $category->getLeft())
-            ->setParameter(3, $category->getRight());
-
+            ->setParameter(2, $category->getId());
 
         $result = $builder->getQuery()->getArrayResult();
 

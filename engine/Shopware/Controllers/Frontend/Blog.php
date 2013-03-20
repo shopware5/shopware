@@ -150,7 +150,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
-        }
+        } 
 
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
