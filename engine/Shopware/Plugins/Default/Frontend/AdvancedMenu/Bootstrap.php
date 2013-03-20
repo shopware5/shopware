@@ -148,7 +148,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         $path = $this->getCategoryPath($categoryFlag, $category);
 
-        //todo@performance: Don't work with the denormalized categories.
         $ref =& $tree;
         foreach ($path as $categoryId) {
             foreach($ref as $categoryKey => $category) {

@@ -185,11 +185,8 @@ class sCategories
      */
     public function sGetCategoriesByParent ($id)
     {
-//        $pathCategories = $this->repository
-//            ->getPathById($id, array('id', 'name', 'blog'));
-
-        //todo@performance: Ask MS why the fields parameter contains an array!
-        $pathCategories = $this->repository->getPathById($id,'name');
+        $pathCategories = $this->repository
+            ->getPathById($id, array('id', 'name', 'blog'));
 
         $pathCategories = array_reverse($pathCategories);
 

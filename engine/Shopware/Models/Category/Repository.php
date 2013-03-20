@@ -51,18 +51,29 @@ use \Shopware\Components\Model\ModelRepository,
  */
 class Repository extends ModelRepository
 {
-    public function getPathById($id, $field = 'name', $separator = ' > ')
+    public function getPathById($id, $field = 'name', $separator = null)
     {
+        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         /**@var $category Category */
         $category = $this->find($id);
 
         $before = $this->getCategoryPathBefore($category, $field, $separator);
-        $self = $category->getName();
+        
+        $self = $this->getCategoryPathQuery($id, $field);
 
-        if ($before !== '') {
-            return $before . $separator . $self;
+        if (!$before) {
+            if ($separator) {
+                return $self;
+            } else {
+                return array($category->getId() => $self);
+            }
+        }
+
+        $before[$category->getId()] = $self;
+        if ($separator !== null) {
+            return implode($separator, $before) . $separator . $self;
         } else {
-            return $self;
+            return $before;
         }
     }
 
@@ -73,7 +84,7 @@ class Repository extends ModelRepository
      * @param $field
      * @param $separator
      *
-     * @return string
+     * @return array
      */
     protected function getCategoryPathBefore($category, $field, $separator)
     {
@@ -83,23 +94,34 @@ class Repository extends ModelRepository
         $parent = $category->getParent();
 
         if (!$parent instanceof Category || $parent->getId() === 1) {
-            return '';
+            return null;
         } else {
             $parentValue = $this->getCategoryPathBefore($parent, $field, $separator);
             $selfValue = $this->getCategoryPathQuery($parent->getId(), $field);
 
-            if ($parentValue !== '') {
-                return $parentValue . $separator . $selfValue;
+            if ($parentValue) {
+                $parentValue[$parent->getId()] = $selfValue;
+                return $parentValue;
             } else {
-                return $selfValue;
+                return array($parent->getId() => $selfValue);
             }
         }
     }
 
-    protected function getCategoryPathQuery($id, $field)
+    protected function getCategoryPathQuery($id, $fields)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select('category.' . $field)
+
+        $selection = array();
+        if (is_array($fields)) {
+            foreach($fields as $field) {
+                $selection[] = 'category.' . $field;
+            }
+        } else {
+            $selection[] = 'category.' . $fields;
+        }
+
+        $builder->select($selection)
                 ->from('Shopware\Models\Category\Category', 'category')
                 ->where('category.id = :id')
                 ->setParameter('id', $id)
@@ -109,10 +131,11 @@ class Repository extends ModelRepository
         $result = $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
-        if (is_array($result)) {
-            return $result[$field];
+
+        if (is_array($fields)) {
+            return $result;
         } else {
-            return '';
+            return $result[$fields];
         }
     }
 
@@ -130,6 +153,7 @@ class Repository extends ModelRepository
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
     {
+        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getListQueryBuilder($filterBy, $orderBy, $limit, $offset, $selectOnlyActive);
         return $builder->getQuery();
     }
@@ -148,6 +172,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null, $selectOnlyActive = true)
     {
+        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         /**@var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $this->createQueryBuilder('c');
         $builder->select(array(
@@ -207,7 +232,6 @@ class Repository extends ModelRepository
         } else {
             $builder->leftJoin('c.articles', 'articles');
         }
-
         $builder->addGroupBy('c.id');
         return $builder;
     }
@@ -222,6 +246,7 @@ class Repository extends ModelRepository
      */
     public function getDetailQuery($categoryId)
     {
+        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getDetailQueryBuilder($categoryId);
         return $builder->getQuery();
     }
@@ -236,6 +261,7 @@ class Repository extends ModelRepository
      */
     public function getDetailQueryBuilder($categoryId)
     {
+        error_log(__METHOD__ . "\n", 3, '/var/www/mylog.log');
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'category',
@@ -270,8 +296,8 @@ class Repository extends ModelRepository
     public function getActiveByParentIdQuery($parentId, $customerGroupId = null)
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId)
-                ->andWhere('c.parentId = ?0')
-                ->setParameter(0, $parentId);
+                ->andWhere('c.parentId = :parentId')
+                ->setParameter('parentId', $parentId);
 
         return $builder->getQuery();
     }
@@ -297,7 +323,7 @@ class Repository extends ModelRepository
                 ))
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
-                ->where('c.active=1')
+                ->andWhere('c.active=1')
                 ->addOrderBy('c.parentId')
                 ->addOrderBy('c.position')
                 ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
@@ -305,13 +331,13 @@ class Repository extends ModelRepository
         $builder = $this->addArticleCountSelect($builder, true);
         $builder = $this->addChildrenCountSelect($builder);
 
-
         if (isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
                     ->setParameter('cgId', $customerGroupId)
                     ->andHaving('COUNT(cg.id) = 0')
                     ->groupBy('c.id');
         }
+
         return $builder;
     }
 
@@ -359,11 +385,12 @@ class Repository extends ModelRepository
 
 
 
-    public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null) {
+    public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null)
+    {
         static $currentDepth = 0;
 
         $builder = $this->getActiveQueryBuilder($customerGroupId);
-        $builder->where('c.parentId = :parent')
+        $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id)
                 ->addOrderBy('c.position', 'ASC');
 
@@ -388,11 +415,12 @@ class Repository extends ModelRepository
         return $categories;
     }
 
-    public function getActiveChildrenList($id, $customerGroupId = null, $depth = null) {
+    public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
+    {
         static $currentDepth = 0;
 
         $builder = $this->getActiveQueryBuilder($customerGroupId);
-        $builder->where('c.parentId = :parent')
+        $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id)
                 ->addOrderBy('c.position', 'ASC');
 
@@ -504,7 +532,6 @@ class Repository extends ModelRepository
      */
     public function getBlogCategoryTreeListBuilder()
     {
-        //todo@performance: Noch gebraucht?
         $subQuery = $this->getEntityManager()->createQueryBuilder();
         $subQuery->from('Shopware\Models\Category\Category', 'c2')
                 ->select('COUNT(c2.id)')
