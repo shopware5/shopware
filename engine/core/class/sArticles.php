@@ -1305,7 +1305,7 @@ class sArticles
         }
 
         $sql = "
-			SELECT
+			SELECT STRAIGHT_JOIN
 				fv.optionID AS id,
 				COUNT(DISTINCT a.id) AS count,
 				fo.id AS optionID,
