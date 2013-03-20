@@ -78,6 +78,9 @@ Ext.define('Shopware.apps.Banner', {
         'main.BannerForm' 
     ],
 
+    stores : [ 'Category', 'Banner' ],
+    models : [ 'BannerDetail', 'Attribute' ],
+
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

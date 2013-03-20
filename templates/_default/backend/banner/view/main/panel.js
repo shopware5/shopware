@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         var me = this;
 
         me.dataView = Ext.create('Ext.view.View', {
-            store: 'Banner',
+            store: me.bannerStore,
             region: 'center',
             tpl: me.getBannerListTemplate(),
             multiSelect: true,
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         return Ext.create('Ext.tree.Panel', {
             title: '{s name=view/tree_title}Catergories{/s}',
             collapsible: true,
-            store: 'Category',
+            store: this.categoryStore,
             region: 'west',
             loadMask: false,
             width: 180,
