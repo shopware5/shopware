@@ -175,6 +175,9 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             return;
         }
 
+        var panel = me.mainWindow.contentPanel;
+        panel.setLoading('Loading ' + record.get('label') + '...');
+
         me.formStore.load({
             filters : [{
                 property: 'id',
@@ -253,16 +256,16 @@ Ext.define('Shopware.apps.Config.controller.Main', {
      * @param form
      */
     initForm: function(form) {
-        var me = this;
+        var me = this,
+            win = me.mainWindow,
+            panel = win.contentPanel;
 
         if(me.shopStore.isLoading()) {
             Ext.defer(me.initForm, 100, me, [ form ]);
             return false;
         }
 
-        var win = me.mainWindow,
-            panel = win.contentPanel,
-            formPanel,
+        var formPanel,
             formType = 'widget.config-form-' + form.get('name').toLowerCase();
 
         panel.removeAll(true);
@@ -281,6 +284,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             });
         }
         panel.add(formPanel);
+        panel.setLoading(false);
     }
 });
 //{/block}

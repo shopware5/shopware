@@ -66,6 +66,14 @@ Ext.define('Shopware.apps.Index.view.Menu', {
 
         me.callParent(arguments);
         me.items.add(Ext.create('Shopware.Search'));
+    },
+
+    afterRender: function() {
+        var me = this;
+
+        Shopware.app.Application.baseComponentIsReady(me);
+
+        me.callParent(arguments);
     }
 });
 //{/block}

@@ -38,6 +38,8 @@ Ext.define('Shopware.apps.Config', {
 
     extend: 'Enlight.app.SubApplication',
 
+    controllers: [ 'Main', 'Plugin', 'Template', 'Document' ],
+
     bulkLoad: true,
     loadPath: '{url action=load}',
 
@@ -49,15 +51,10 @@ Ext.define('Shopware.apps.Config', {
      * all member controllers, models, views and stores are initialized.
      */
     launch: function() {
-        var me = this;
+        var me = this,
+            controller = me.getController(me.defaultController);
 
-        me.controller = me.addController({
-            name: me.defaultController,
-            action: me.action || me.params.action,
-            params: me.params
-        });
-
-        return me.controller.mainWindow;
+        return controller.mainWindow;
     }
 });
 //{/block}

@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
         ean: '{s name=detail/settings/ean}EAN{/s}',
         width: '{s name=detail/settings/width}Width{/s}',
         height: '{s name=detail/settings/height}Height{/s}',
-        len: '{s name=detail/settings/length}Length{/s}',
+        len: '{s name=detail/settings/length}Length{/s}'
     },
 
     /**
@@ -118,7 +118,11 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
+
         me.title = me.snippets.title;
         me.items = me.createElements();
         me.callParent(arguments);
@@ -183,15 +187,14 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             width: '100%',
             anchor: '100%',
             fieldLabel: me.snippets.avoidCustomerGroups.label,
-            supportText: me.snippets.avoidCustomerGroups.support,
-            store: me.customerGroupStore
+            supportText: me.snippets.avoidCustomerGroups.support
         });
         return [ me.avoidCustomerGroupsCombo ]
     },
 
     /**
      * Creates the field set items which displayed in the left column of the settings field set
-     * @return array
+     * @return Array
      */
     createLeftElements: function() {
         var me =this;
@@ -253,7 +256,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
 
     /**
      * Creates the field set items which displayed in the right column of the settings field set
-     * @return array
+     * @return Array
      */
     createRightElements: function() {
         var me = this;
@@ -315,6 +318,13 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }
 
         ];
+    },
+
+    onStoresLoaded: function(article, stores) {
+        var me = this;
+
+        me.customerGroupStore = stores['customerGroups'];
+        me.avoidCustomerGroupsCombo.bindStore(me.customerGroupStore);
     }
 });
 //{/block}
