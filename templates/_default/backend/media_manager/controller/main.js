@@ -44,11 +44,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
      */
 	extend: 'Ext.app.Controller',
 
-    requires: [
-        'Shopware.apps.MediaManager.controller.Album',
-        'Shopware.apps.MediaManager.controller.Media'
-    ],
-
 	/**
 	 * Creates the necessary event listener for this
 	 * specific controller and opens a new Ext.window.Window

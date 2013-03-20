@@ -78,10 +78,6 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         anchor: '100%'
     },
 
-    requires: [
-        'Shopware.apps.Article.controller.Detail'
-    ],
-
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -93,7 +89,10 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
         me.title = me.snippets.title;
         me.items = me.createElements();
         me.callParent(arguments);
@@ -115,7 +114,6 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
 
         me.propertyCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'filterGroupId',
-            store: me.propertyStore,
             labelWidth: 155,
             forceSelection: false,
             queryMode: 'local',
@@ -135,11 +133,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
     createPropertyGrid: function() {
         var me = this, store = null;
 
-        me.valueStore = Ext.data.StoreManager.lookup('PropertyValue');
-        me.store = Ext.data.StoreManager.lookup('Property');
-
-        return Ext.create('Ext.grid.Panel', {
-            store: me.store,
+        return me.propertyGrid = Ext.create('Ext.grid.Panel', {
             height: 255,
             name: 'property-grid',
             cls: Ext.baseCSSPrefix + 'free-standing-grid ' + Ext.baseCSSPrefix + 'article-properties-grid',
@@ -172,7 +166,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
 
     getValueEditor: function() {
         var me = this;
-        return Ext.create('Ext.ux.form.field.BoxSelect', {
+        return me.valueEditor =  Ext.create('Ext.ux.form.field.BoxSelect', {
             store: me.valueStore,
             multiSelect: true,
             forceSelection: false,
@@ -207,6 +201,17 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         });
 
         return result.join(', ');
+    },
+
+    onStoresLoaded: function(article, stores) {
+        var me = this, propertyStore = stores['properties'];
+        me.article = article;
+        me.store = Ext.data.StoreManager.lookup('Property');
+        me.valueStore = Ext.data.StoreManager.lookup('PropertyValue');
+
+        me.propertyCombo.bindStore(propertyStore);
+        me.propertyGrid.reconfigure(me.store);
+        me.valueEditor.bindStore(me.valueStore);
     }
 });
 //{/block}

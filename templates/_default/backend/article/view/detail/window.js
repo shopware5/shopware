@@ -114,6 +114,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @object
      */
     snippets: {
+        titleGeneral: '{s name=window_title_general}Product details{/s}',
         titleNew: '{s name=window_title}Article details: new article{/s}',
         titleEdit:'{s name=window_title_edit}Article details : [0]{/s}',
         formTab:'{s name=base_data}Base data{/s}',
@@ -131,6 +132,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         cancel:'{s name=cancel_button}Cancel{/s}',
         categoryNotice:'{s name=category/category_notice}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
         categoryNoticeTitle:'{s name=category/category_assignment}Assign categories{/s}',
+        invalidPlugin: '{s name=window_invalid_plugin}The plugin [0] is not compatible with Shopware 4.1. Please uninstall the plugin or contact the provider regarding for a compatible version.{/s}',
         descriptions: {
             title:'{s name=detail/description/title}Description{/s}',
             description: {
@@ -190,6 +192,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.registerEvents();
         me.callParent(arguments);
         me.changeTitle();
+
+        // A incompatible plugin was found, throw a alert to inform the user.
+        if(me._invalidPlugin) {
+            Ext.MessageBox.alert(me.snippets.titleGeneral, Ext.String.format(me.snippets.invalidPlugin, '"' + me['_invalidClassName'] + '"'));
+        }
+
+        me.on('storesLoaded', me.onStoresLoaded, me);
     },
 
     /**
@@ -211,7 +220,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
              * @event
              * @param [object] The detail window
              */
-            'cancel'
+            'cancel',
+
+            'storesLoaded'
         );
     },
 
@@ -224,15 +235,60 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createMainTabPanel: function() {
         var me = this;
 
+        me.categoryTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.categoryTab,
+            disabled: true,
+            layout: 'border',
+            name: 'category'
+        });
+
+        me.imageTab = Ext.create('Ext.container.Container', {
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            title: me.snippets.imageTab,
+            name: 'image',
+            disabled: true,
+            cls: Ext.baseCSSPrefix + 'image-tab-container'
+        });
+
+        me.variantTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.variantTab,
+            disabled: true,
+            layout: 'fit',
+            name: 'variant-tab',
+            disabled: true
+        });
+
+        me.esdTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.esdTab,
+            disabled: true,
+            name: 'esd-tab',
+            layout: 'card',
+            deferredRender: true,
+            disabled: true
+        });
+
+        me.statisticTab = Ext.create('Ext.container.Container', {
+            title: me.snippets.statisticTab,
+            disabled: true,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            }
+        });
+
         return me.mainTab = Ext.create('Ext.tab.Panel', {
             name: 'main-tab-panel',
             items: [
                 me.createBaseTab(),
-                me.createCategoryTab(),
-                me.createImageTab(),
-                me.createVariantTab(),
-                me.createEsdTab(),
-                me.createStatisticTab()
+                me.categoryTab,
+                me.imageTab,
+                me.variantTab,
+                me.esdTab,
+                me.statisticTab
             ]
         });
     },
@@ -286,12 +342,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createDescriptionFieldSet(),
                 me.createBasePriceFieldSet(),
                 me.createSettingsFieldSet(),
-                me.createPropertiesFieldSet(),
-                me.attributeFieldSet
+                me.createPropertiesFieldSet()
             ]
         });
-
-        me.detailForm.loadRecord(me.article);
 
         return me.detailContainer = Ext.create('Ext.container.Container', {
             layout: 'border',
@@ -313,23 +366,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Creates the field set for the article property configuration.
      */
     createPropertiesFieldSet: function() {
-        var me = this;
-
-        return Ext.create('Shopware.apps.Article.view.detail.Properties', {
-            propertyStore: me.propertyStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Properties');
     },
 
     /**
      * Creates the field set for the article setting configuration.
      */
     createSettingsFieldSet: function() {
-        var me = this;
-        return Ext.create('Shopware.apps.Article.view.detail.Settings', {
-            customerGroupStore: me.customerGroupStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Settings');
     },
 
     /**
@@ -337,14 +381,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return Shopware.apps.Article.view.detail.Base
      */
     createBaseFieldSet: function() {
-        var me = this;
-        return Ext.create('Shopware.apps.Article.view.detail.Base', {
-            article: me.article,
-            supplierStore: me.supplierStore,
-            taxStore: me.taxStore,
-            templateStore: me.templateStore,
-            priceGroupStore: me.priceGroupStore
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Base');
     },
 
     /**
@@ -353,10 +390,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createPriceFieldSet: function() {
         var me = this;
 
-        return Ext.create('Shopware.apps.Article.view.detail.Prices', {
-            customerGroupStore: me.customerGroupStore,
-            article: me.article
-        });
+        return Ext.create('Shopware.apps.Article.view.detail.Prices');
     },
 
 
@@ -366,6 +400,19 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      */
     createBasePriceFieldSet: function() {
         var me = this;
+
+        me.unitComboBox = Ext.create('Ext.form.field.ComboBox', {
+            name: 'mainDetail[unitId]',
+            queryMode: 'local',
+            fieldLabel: me.snippets.basePrice.unit,
+            emptyText: me.snippets.basePrice.empty,
+            displayField: 'name',
+            editable:false,
+            valueField: 'id',
+            labelWidth: 155,
+            anchor: '100%',
+            xtype: 'textfield'
+        });
 
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
@@ -377,17 +424,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             },
             title: me.snippets.basePrice.title,
             items: [
-                {
-                    xtype: 'combobox',
-                    name: 'mainDetail[unitId]',
-                    queryMode: 'local',
-                    fieldLabel: me.snippets.basePrice.unit,
-                    emptyText: me.snippets.basePrice.empty,
-                    store: me.unitStore,
-                    displayField: 'name',
-                    editable:false,
-                    valueField: 'id'
-                }, {
+                me.unitComboBox, {
                     xtype: 'numberfield',
                     submitLocaleSeparator: false,
                     decimalPrecision: 4,
@@ -451,7 +488,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
     /**
      * Creates the tab panel tab for the category selection.
-     * @return Ext.container.Container
+     * @return Array
      */
     createCategoryTab: function() {
         var me = this, rightContainer;
@@ -504,20 +541,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             ]
         });
 
-        return Ext.create('Ext.container.Container', {
-            layout: 'border',
-            name: 'category',
-            title: me.snippets.categoryTab,
-            items: [
-                me.categoryTree,
-                rightContainer
-            ]
-        });
+        return [ me.categoryTree, rightContainer ];
     },
 
     /**
      * Creates the image tab panel.
-     * @return Ext.container.Container
+     * @return Array
      */
     createImageTab: function() {
         var me = this, leftContainer;
@@ -551,19 +580,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             ]
         });
 
-        return Ext.create('Ext.container.Container', {
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            title: me.snippets.imageTab,
-            name: 'image',
-            cls: Ext.baseCSSPrefix + 'image-tab-container',
-            items: [
-                leftContainer,
-                me.imageInfo
-            ]
-        });
+        return [ leftContainer, me.imageInfo ];
     },
 
     /**
@@ -660,13 +677,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             margin: 10
         });
 
-        return Ext.create('Ext.panel.Panel', {
-            title: me.snippets.variantTab,
-            name: 'variant-tab',
-            disabled: (me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null),
-            layout: 'fit',
-            items: [ me.configuratorTab ]
-        });
+        return me.configuratorTab;
     },
 
 
@@ -685,11 +696,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.variantListing = Ext.create('Shopware.apps.Article.view.variant.List', {
             border: false,
-            article: me.article,
-            store: me.variantStore,
-            unitStore: me.unitStore,
-            configuratorGroupStore: me.configuratorGroupStore,
-            customerGroupStore: me.customerGroupStore
+            store: me.variantStore
         });
 
         return Ext.create('Ext.container.Container', {
@@ -743,29 +750,15 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             article: me.article
         });
 
-        return Ext.create('Ext.panel.Panel', {
-            name: 'esd-tab',
-            layout: 'card',
-            disabled: (me.article.get('id') === null),
-            deferredRender: true,
-            items: [ me.esdListing ],
-            title: me.snippets.esdTab
-        });
+        return me.esdListing;
     },
 
     /**
      * Creates the statistic tab which contains a graph for the article sales.
-     * @return Ext.container.Container
+     * @return Array
      */
     createStatisticTab: function() {
         var me = this;
-
-        if (me.article.get('id') === null) {
-            return Ext.create('Ext.container.Container', {
-                title: me.snippets.statisticTab,
-                disabled: true
-            });
-        }
 
         var statisticStore = Ext.create('Shopware.apps.Article.store.Statistic');
         var chartStore = Ext.create('Shopware.apps.Article.store.Statistic');
@@ -773,7 +766,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         statisticStore.getProxy().extraParams.articleId = me.article.get('id');
         chartStore.getProxy().extraParams.articleId = me.article.get('id');
         chartStore.getProxy().extraParams.chart = true;
-
 
         var list = Ext.create('Shopware.apps.Article.view.statistics.List', {
             flex: 1,
@@ -788,16 +780,39 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             store: chartStore
         });
 
-        return Ext.create('Ext.container.Container', {
-            title: me.snippets.statisticTab,
-            layout: {
-                align: 'stretch',
-                padding: 10,
-                type: 'vbox'
-            },
-            items: [ chart, list ],
-            disabled: false
-        });
+        return [ chart, list ];
+    },
+
+    onStoresLoaded: function(article, stores) {
+        var me = this;
+        me.article = article;
+        me.detailForm.add(me.attributeFieldSet);
+
+        me.unitComboBox.bindStore(stores['unit']);
+
+        window.setTimeout(function() {
+            me.detailForm.loadRecord(me.article);
+        }, 10);
+
+        me.categoryTab.add(me.createCategoryTab());
+        me.categoryTab.setDisabled(false);
+
+        me.imageTab.add(me.createImageTab());
+        me.imageTab.setDisabled(false);
+
+        me.variantTab.add(me.createVariantTab());
+        me.variantTab.setDisabled((me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null))
+
+        me.esdTab.add(me.createEsdTab());
+        me.esdTab.setDisabled((me.article.get('id') === null));
+
+        me.statisticTab.add(me.createStatisticTab());
+        me.statisticTab.setDisabled(me.article.get('id') === null);
+
+        me.variantListing.unitStore = stores['unit'];
+        me.variantListing.configuratorGroupStore = stores['configuratorGroups'];
+        me.variantListing.customerGroupStore = stores['customerGroups'];
+        me.variantListing.article = article;
     },
 
     /**

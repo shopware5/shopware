@@ -55,12 +55,17 @@ Ext.define('Shopware.apps.Site', {
      * @string
      */
     bulkLoad: true,
+
+    /**
+     * Sets the path which will be used to request the dependencies.
+     * @string
+     */
     loadPath: '{url action=load}',
     /**
      * Required controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Tree', 'Form' ],
+    controllers: [ 'Tree', 'Form', 'Main' ],
     /**
      * Required views for controller
      * @array
@@ -75,7 +80,7 @@ Ext.define('Shopware.apps.Site', {
      * Required models for sub-application
      * @array
      */
-    models: [ 'Nodes', 'Groups' ],
+    models: [ 'Nodes', 'Groups', 'Selected' ],
 
     /**
      * Returns the main application window for this is expected

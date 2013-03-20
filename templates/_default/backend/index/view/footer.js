@@ -65,6 +65,14 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         }
 	},
 
+    afterRender: function() {
+        var me = this;
+
+        Shopware.app.Application.baseComponentIsReady(me);
+
+        me.callParent(arguments);
+    },
+
 	/**
 	 * Creates the default buttons for the footer taskbar
      *

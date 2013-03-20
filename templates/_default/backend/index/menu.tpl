@@ -10,7 +10,8 @@
                         text: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}{if $category->shortcut}&nbsp;<span class='shortcut'>({$category->shortcut})</span>{/if}",
                         {if $category->controller && $category->action}handler: function() {
                             Shopware.app.Application.addSubApplication({
-                                name: 'Shopware.apps.{$category->controller}'
+                                name: 'Shopware.apps.{$category->controller}',
+                                localizedName: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}"
                                 {if $category->action && $category->action != 'Index'}, action: '{$category->action}'{/if}
                             });
                         },

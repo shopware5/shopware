@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	 */
 	init: function() {
         var me = this,
-            viewport = Shopware.app.Application.viewport = Ext.create('Shopware.container.Viewport');
+            mainApp = Shopware.app.Application,
+            viewport = mainApp.viewport = Ext.create('Shopware.container.Viewport');
 
         /** Create our menu and footer */
         me.menu =  me.getView('Menu').create();
@@ -300,13 +301,13 @@ createKeyNavOverlay = function() {
 
                     // Ctrl key
                     '<tpl if="ctrl === true">',
-                        '<span class="sprite-key_ctrl">ctrl</span>',
+                        '<span class="sprite-key_ctrl_alternative">ctrl</span>',
                     '</tpl>',
 
                     // Alt key
                     '<tpl if="alt === true">',
                         '<span class="key_sep">+</span>',
-                        '<span class="sprite-key_alt">alt</span>',
+                        '<span class="sprite-key_alt_alternative">alt</span>',
                     '</tpl>',
 
                     // Output the actual key

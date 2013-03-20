@@ -75,4 +75,13 @@
         width: 38px;
         font-weight: bold;
     }
+
+    .desktop-pnl {
+        @include single-transition(all, 0.35s, linear);
+        @include translate3d(0, 0, 0);
+    }
+
+    .#{$prefix}body {
+        @include perspective(600);
+    }
 }

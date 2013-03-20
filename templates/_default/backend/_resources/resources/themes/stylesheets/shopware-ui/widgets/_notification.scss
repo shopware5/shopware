@@ -34,7 +34,7 @@ $default-index: 10000;
     @include single-box-shadow;
 
     position: fixed;
-    top: 60px; right: 5px;
+    top: 60px;
     z-index: $default-index;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -162,12 +162,10 @@ $default-index: 10000;
 	@include opacity(0);
 	position: fixed;
 	top: 50px;
-	right: 10px;
 	z-index: 99999;
 	border: 1px solid #000;
 	background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
-	min-width: 300px;
-	max-width: 400px;
+	width: 300px;
 	
 	.alert {
 		@include border-radius(3px);

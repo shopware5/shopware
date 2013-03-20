@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         { ref: 'configuratorTypeCombo', selector: 'article-detail-window article-variant-configurator combobox[name=type]' },
         { ref: 'configuratorOptionListing', selector: 'article-detail-window article-variant-configurator grid[name=configurator-option-listing]' },
         { ref: 'configurator', selector: 'article-detail-window article-variant-configurator' },
-        { ref: 'configuratorTabPanel', selector: 'article-detail-window panel[name=variant-tab] tabpanel[name=configurator-tab]' },
+        { ref: 'configuratorTabPanel', selector: 'article-detail-window container[name=variant-tab] tabpanel[name=configurator-tab]' },
         { ref: 'dependencyWindow', selector: 'article-configurator-dependency-window' },
         { ref: 'dependencyFieldSet', selector: 'article-configurator-dependency-window fieldset[name=row-field-set]' }
     ],
@@ -1780,9 +1780,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      */
     onEditVariant: function(record) {
         var me = this,
-            listing = me.getVariantListing();
+            listing = me.getVariantListing(),
+            attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
 
-        var attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
         me.getView('variant.Detail').create({
             record: record,
             article: me.subApplication.article,

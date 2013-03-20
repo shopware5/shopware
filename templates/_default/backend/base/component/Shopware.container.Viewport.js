@@ -171,6 +171,15 @@ Ext.define('Shopware.container.Viewport',
 		]
 	}),
 
+    afterRender: function() {
+        var me = this;
+
+        var appCls = Ext.ClassManager.get('Shopware.app.Application');
+        appCls.baseComponentIsReady(me);
+
+        me.callParent(arguments);
+    },
+
 	/**
 	 * Initializes the special SW 4 Viewport component which
 	 * supports multiple desktops and additional events compared
@@ -358,6 +367,7 @@ Ext.define('Shopware.container.Viewport',
 			width = Ext.Element.getViewportWidth() * (me.getDesktopCount() || 1),
 			height = Ext.Element.getViewportHeight();
 
+
 		me.el.setSize(width, height);
 		me.fireEvent('resizeviewport', me, width, height);
 
@@ -382,12 +392,11 @@ Ext.define('Shopware.container.Viewport',
 		var me = this,
 			desktopSwitcher;
 
-        var task;
 		desktopSwitcher = Ext.create('Ext.view.View', {
 			renderTo: Ext.getBody(),
 			store: me.desktopSwitcherStore,
 			style: 'position: fixed; bottom: 18px; left: 0; text-align: center; z-index: 10',
-            width: '100%',
+            width: Ext.Element.getViewportWidth(),
             cls: Ext.baseCSSPrefix + 'desktop-switcher-outer-container',
 			itemSelector: '.x-desktop-switcher-control',
 			tpl: [
@@ -536,8 +545,6 @@ Ext.define('Shopware.container.Viewport',
         }
 
 		me.desktops.add(desktop);
-        me.on('afterrender', me.initializeDropZone, desktop);
-
 		me.fireEvent('createdesktop', me, desktop);
 		me.resizeViewport();
         me.updateDesktopSwitcher();
@@ -648,6 +655,7 @@ Ext.define('Shopware.container.Viewport',
 			},
 			to: { left: -(width * pos) }
 		});
+
 		return true;
 	},
 
@@ -669,23 +677,56 @@ Ext.define('Shopware.container.Viewport',
 			return false;
 		}
 
-		html.animate({
-			duration: me.scrollDuration,
-			easing: me.scrollEasing,
-			listeners: {
-				beforeanimate: function() {
-					Ext.suspendLayouts();
-					me.fireEvent('beforescroll', me, this, index);
-				},
-				afteranimate: function() {
-					Ext.resumeLayouts(true);
-					me.activeDesktop = index;
-					me.fireEvent('afterscroll', me, this, index);
-					me.updateDesktopSwitcher();
-				}
-			},
-			to: { left: -(width * index) }
-		});
+        // Retrieve all active Windows
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+
+        if(Ext.supports.CSS3DTransform) {
+            me.desktops.each(function(desktop) {
+                var el = desktop.getEl().dom,
+                    prefix = me._getVendorPrefix('transform', 'style');
+
+                el.style[prefix] = 'translate3d(-' + width * index +'px, 0, 0)';
+            });
+
+            var timeout = window.setTimeout(function() {
+                window.clearTimeout(timeout);
+                timeout = null;
+
+                me.activeDesktop = index;
+                me.fireEvent('afterscroll', me, this, index);
+
+                window.setTimeout(function() {
+                    me.updateDesktopSwitcher();
+                }, 10);
+            }, 375);
+        } else {
+            html.animate({
+                duration: me.scrollDuration,
+                easing: me.scrollEasing,
+                listeners: {
+                    beforeanimate: function() {
+                        Ext.suspendLayouts();
+                        me.fireEvent('beforescroll', me, this, index);
+
+                        Ext.each(activeWindows, function(window) {
+                            window.getEl().shadow.hide();
+                        });
+
+                    },
+                    afteranimate: function() {
+                        Ext.resumeLayouts(true);
+                        me.activeDesktop = index;
+                        me.fireEvent('afterscroll', me, this, index);
+                        me.updateDesktopSwitcher();
+
+                        Ext.each(activeWindows, function(window) {
+                            window.el.shadow.show(window.el);
+                        });
+                    }
+                },
+                to: { left: -(width * index) }
+            });
+        }
 
 		return true;
 	},
@@ -711,85 +752,39 @@ Ext.define('Shopware.container.Viewport',
 	},
 
     /**
-     * Creates a drop zone for the desktop.
+     * Tests if a property has a vendor prefix and returns the properly
+     * property.
      *
+     * @param { String } prop - Property to test
+     * @param { String } propGroup - Group where the test property is located
+     * @returns { * } If the property was found, it will be returned. Otherwise false
      * @private
-     * @param [object] view - Ext.container.Container
-     * @return void
      */
-    initializeDropZone: function(view) {
-        view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
-            ddGroup: 'desktop-article-dd',
+    _getVendorPrefix: function(prop, propGroup) {
+        var testEl = document.createElement('fakeElement'),
+            prefixes = ['', 'webkit', 'moz', 'ms', 'o'],
+            i, prefix, testProp;
 
-            /**
-             * Returns the target element from the event.
-             *
-             * @private
-             * @param [object] event - Ext.EventImplObj
-             * @return [object] target element
-             */
-            getTargetFromEvent: function(event) {
-                return event.getTarget(view.itemSelector);
-            },
+        // Modify the testEl
+        propGroup = propGroup || '';
+        if(propGroup.length) {
+            testEl = testEl[propGroup];
+        }
 
-            /**
-             * Changes the drop indicator.
-             *
-             * @privaate
-             * @return [string] dropAllowed css class
-             */
-            onNodeOver: function() {
-                return Ext.dd.DropZone.prototype.dropAllowed;
-            },
+        // Loop through the vendor prefixes
+        for(i in prefixes) {
+            prefix = prefixes[i];
 
-            /**
-             * Creates the desktop association and bind all
-             * necessary event listeners to the newly created
-             * element.
-             *
-             * @param [object] target - HTML element
-             * @param [object] dd - drag and drop element object
-             * @param [object] e - Ext.EventImplObj
-             * @param [object] data - drag and drop data
-             */
-            onNodeDrop: function(target, dd, e, data) {
-                var viewport = Shopware.app.Application.viewport,
-                    element = new Ext.dom.Element(data.ddel.cloneNode(true)).getHTML(),
-                    activeDesktop = viewport.getActiveDesktop(),
-                    id = Ext.id(),
-                    position = e.getPoint(),
-                    container = Ext.create('Ext.Component', {
-                        renderTo: activeDesktop.getEl(),
-                        shadow: false,
-                        constrainTo: activeDesktop.getEl(),
-                        constrain: true,
-                        cls: Ext.baseCSSPrefix + 'article-dd',
-                        html: '<div id="'+ id +'">' + element + '</div>',
-                        floating: true,
-                        draggable: {
-                            delegate: '#' + id
-                        }
-                    });
-
-
-                container.getEl().on({
-                    'dblclick': function() {
-
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: ~~(1 * data.record.articleId)
-                            }
-                        });
-                    },
-                    scope: container
-                });
-                container.getEl().on('click', function(event) {
-                    container.destroy();
-                }, container, { delegate: '.icon-close' });
-                container.setPosition(position.x, position.y, false);
+            // Vendor prefix property
+            if(prefix.length) {
+                prop = prop.charAt(0).toUpperCase() + prop.slice(1);
             }
-        });
+            testProp = prefix + prop;
+
+            if(testEl[testProp] !== undefined) {
+                return testProp;
+            }
+        }
+        return false;
     }
 });
