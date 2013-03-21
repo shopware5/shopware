@@ -605,7 +605,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $builder->select(array('grids'))
                 ->from('Shopware\Models\Emotion\Grid', 'grids');
 
-        if ($offset && $limit) {
+        if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
@@ -956,7 +956,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $builder->select(array('templates'))
                 ->from('Shopware\Models\Emotion\Template', 'templates');
 
-        if ($offset && $limit) {
+        if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }

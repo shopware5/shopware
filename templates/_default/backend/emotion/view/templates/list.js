@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
         var me = this,
             toolbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
-            pageSize: 30
+            pageSize: 20
         });
 
         return toolbar;

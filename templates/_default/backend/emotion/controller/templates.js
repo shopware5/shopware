@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             }
 
             Ext.each(selected, function(item) {
-                if(!item.data.id < 2) {
+                if(item.data.id > 1) {
                     item.destroy();
                 }
             });
@@ -321,9 +321,17 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
     onSelectionChange: function(selection) {
         var me = this,
             toolbar = me.getToolbar(),
-            btn = toolbar.deleteBtn;
+            btn = toolbar.deleteBtn,
+            defaultSelected;
 
-        btn.setDisabled(!selection.length);
+        Ext.each(selection, function(item) {
+            if(item.data.id < 2) {
+                defaultSelected = true;
+                return false;
+            }
+        });
+
+        btn.setDisabled(!(selection.length && !defaultSelected));
     },
 
     /**

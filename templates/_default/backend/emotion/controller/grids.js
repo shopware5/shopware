@@ -152,9 +152,17 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
     onSelectionChange: function(selection) {
         var me = this,
             toolbar = me.getToolbar(),
-            btn = toolbar.deleteBtn;
+            btn = toolbar.deleteBtn,
+            defaultSelected = false;
 
-        btn.setDisabled(!selection.length);
+        Ext.each(selection, function(item) {
+            if(item.data.id < 3) {
+                defaultSelected = true;
+                return false;
+            }
+        });
+
+        btn.setDisabled(!(selection.length && !defaultSelected));
     },
 
     /**
@@ -204,6 +212,7 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
                 values.data.name += ' ' + me.snippets.copie;
                 duplicateRecord = Ext.create('Shopware.apps.Emotion.model.Grid', values.data);
                 grid.getStore().add(duplicateRecord);
+                duplicateRecord.save();
                 grid.setLoading(false);
                 Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.duplicated, rec.get('name')));
             }
@@ -263,7 +272,7 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
             }
 
             Ext.each(selected, function(item) {
-                if(!item.data.id < 3) {
+                if(item.data.id > 2) {
                     item.destroy();
                 }
             });
