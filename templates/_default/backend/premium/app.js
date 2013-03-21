@@ -52,12 +52,16 @@ Ext.define('Shopware.apps.Premium', {
      * @string
      */
     loadPath:'{url controller="premium" action=load}',
+    /**
+     * Enable bulk loading
+     * @boolean
+     */
     bulkLoad:true,
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Main', 'Premium'],
+    controllers:['Premium', 'Main'],
 
     /**
      * Required views for controller

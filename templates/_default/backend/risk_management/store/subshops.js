@@ -41,18 +41,26 @@ Ext.define('Shopware.apps.RiskManagement.store.Subshops', {
     * @string
     */
     extend: 'Ext.data.Store',
+
     /**
     * Auto load the store after the component
     * is initialized
     * @boolean
     */
-    autoLoad: true,
+    autoLoad: false,
+
     /**
     * Amount of data loaded at once
     * @integer
     */
     pageSize: 20,
+
+    /**
+     * True to defer any filtering operation to the server
+     * @boolean
+     */
     remoteFilter: true,
+
     /**
     * Define the used model for this store
     * @string
