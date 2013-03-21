@@ -214,8 +214,10 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
         var me = this,
             toolbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
-            pageSize: 30
+            pageSize: 20
         });
+
+        console.log(me.store);
 
         return toolbar;
     },

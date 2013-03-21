@@ -53,6 +53,8 @@ Ext.define('Shopware.apps.Emotion.store.Grids', {
      * @boolean
      */
     batch:true,
+
+
     /**
      * Configure the data communication
      * @object

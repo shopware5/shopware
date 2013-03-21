@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Emotion.store.Templates', {
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:30,
+    pageSize:20,
     /**
      * to upload all selected items in one request
      * @boolean
