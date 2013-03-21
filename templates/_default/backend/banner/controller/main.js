@@ -38,14 +38,6 @@
 //{block name="backend/banner/controller/main"}
 Ext.define('Shopware.apps.Banner.controller.Main', {
     extend : 'Ext.app.Controller',
-    views : [ 
-        'Main', 
-        'main.Panel', 
-        'main.BannerFormAdd', 
-        'main.BannerForm' 
-    ],
-    stores : [ 'Category', 'Banner' ],
-    models : [ 'BannerDetail', 'Attribute' ],
     refs: [
         { ref:'addBannerButton', selector:'banner-view-main-panel button[action=addBanner]' },
         { ref:'deleteBannerButton', selector:'banner-view-main-panel button[action=deleteBanner]' },
@@ -108,11 +100,17 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
         });
         // create and save the new view so we can access that view easily later
 
+        me.subApplication.bannerStore = me.subApplication.getStore('Banner');
+        me.subApplication.categoryStore = me.subApplication.getStore('Category');
+
         Ext.suspendLayouts();
-        me.panel = this.getView('main.Panel').create();
+        me.panel = this.subApplication.getView('main.Panel').create({
+            categoryStore: me.subApplication.categoryStore,
+            bannerStore: me.subApplication.bannerStore
+        });
 
         // Create an show the applications main view.
-        me.main = this.getView('Main').create({
+        me.main = this.subApplication.getView('Main').create({
             items: [ me.panel ]
         }).show();
         Ext.resumeLayouts(true);
@@ -125,8 +123,8 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
      */
     onEditClick : function() {
         var me = this,
-            bannerStore = me.getStore('Banner'),
-            categoryStore   = me.getStore('Category'),
+            bannerStore = me.subApplication.bannerStore,
+            categoryStore   = me.subApplication.categoryStore,
             dataView        = me.getMainPanel().dataView,
             selection       = dataView.getSelectionModel().getLastSelected(),
             categoryId      = selection.get('categoryId'),
@@ -156,7 +154,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             form    = win.down('form'),
             formBasis = form.getForm(),
             me      = this,
-            store   = me.getStore('Banner'),
+            store   = me.subApplication.bannerStore,
             record  = form.getRecord();
 
         form.getForm().updateRecord(record);
@@ -187,8 +185,8 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
      */
     onAddBanner : function() {
         var me              = this,
-            bannerStore     = me.getStore('Banner'),
-            categoryStore   = me.getStore('Category'),
+            bannerStore     = me.subApplication.bannerStore,
+            categoryStore   = me.subApplication.categoryStore,
             catTree         = me.getCategoryTree(),
             record          = catTree.getSelectionModel().getLastSelected(),
             categoryId      = record.data.id,
@@ -216,7 +214,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
         var me              = this,
             dataView        = me.getMainPanel().dataView,
             selection       = dataView.getSelectionModel().getSelection(),
-            store           = me.getStore('Banner'),
+            store           = me.subApplication.bannerStore,
             noOfElements    = selection.length;
         
         Ext.MessageBox.confirm('{s name=delete_dialog_title}Delete selected banners.{/s}',
@@ -251,8 +249,8 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
      */
     onBannerClick : function(node, record) {
         var me              = this,
-            bannerStore     = me.getStore('Banner'),
-            categoryStore   = me.getStore('Category'),
+            bannerStore     = me.subApplication.bannerStore,
+            categoryStore   = me.subApplication.categoryStore,
             categoryId      = record.get('categoryId'),
             currentCategory = categoryStore.getNodeById(categoryId);
 
@@ -279,7 +277,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
      */
     onTreeClick : function(node, record) {
         var me          = this,
-            bannerStore = me.getStore('Banner'),
+            bannerStore = me.subApplication.bannerStore,
             categoryId  = record.get('id'),
             bannerBtn   =  me.getAddBannerButton();
 
