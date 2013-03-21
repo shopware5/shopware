@@ -86,6 +86,14 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
         me.columns = me.createColumns();
         me.store = me.mediaStore;
 
+        me.viewConfig = {
+            plugins: {
+                ptype: 'gridviewdragdrop',
+                ddGroup: 'media-tree-dd',
+                enableDrop: false
+            }
+        };
+
         // Set a checkbox model as the selection model for the grid
         me.selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {

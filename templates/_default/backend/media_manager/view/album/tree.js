@@ -381,8 +381,13 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
             onNodeDrop : function(target, dd, e, data) {
                 var node = treeView.getRecord(target),
-                    models = data.mediaModels,
-                    store = models[0].store;
+                    models = data.mediaModels, store;
+
+                // The event was fired from the list view
+                if(!models) {
+                    models = data.records;
+                }
+                store = models[0].store;
 
                 Ext.each(models, function(model) {
                     model.set('newAlbumID', node.get('id'));
