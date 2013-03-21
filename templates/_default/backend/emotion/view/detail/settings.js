@@ -82,13 +82,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 scope: me,
                 change: function(field, value) {
                     if(value) {
-                        me.emotion.set('containerWidth', 1008);
                         me.containerWidthField.setValue(1008);
                         me.categoryNameField.hide().setDisabled(true);
                         me.listingCheckbox.hide();
                         me.landingPageFieldSet.show();
                     } else {
-                        me.emotion.set('containerWidth', 808);
                         me.containerWidthField.setValue(808);
                         me.categoryNameField.show().setDisabled(false);
                         me.landingPageFieldSet.hide();
@@ -130,6 +128,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
         });
 
+        me.containerWidthField = Ext.create('Ext.form.field.Number', {
+            fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
+            name: 'containerWidth',
+            supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}'
+        });
+
         me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: '{s name=settings/active}Active{/s}',
             boxLabel: '{s name=settings/active_box_label}Emotion will be visible in the store front{/s}',
@@ -149,7 +153,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.timingFieldSet =  me.createTimingFieldSet();
         me.landingPageFieldSet = me.createLandingpageFieldset();
 
-        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
+        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.containerWidthField, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
         me.callParent(arguments);
 
         me.loadRecord(me.emotion);
