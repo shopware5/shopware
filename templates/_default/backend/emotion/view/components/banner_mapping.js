@@ -111,7 +111,15 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         });
 
         me.rowEdit = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 2
+            clicksToEdit: 2,
+            listeners: {
+                scope: me,
+                beforeedit: function(editor, eOpts) {
+                    if(eOpts.field === 'link') {
+                        me.articleSearch.getSearchField().focus(true, true);
+                    }
+                }
+            }
         });
 
         me.mappingGrid = Ext.create('Ext.grid.Panel', {
