@@ -436,7 +436,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             width: config.width,
             resizerIndex: id,
             link: config.link,
-            linkLocation: config.linkLocation
+            linkLocation: config.linkLocation || 'internal'
         });
         record = record[0];
 
