@@ -371,25 +371,25 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function moveTreeItemAction()
     {
-        $repository = $this->getRepository();
-        $itemId = (int)$this->Request()->getParam('id');
+        $itemId     = (int) $this->Request()->getParam('id');
+        $parentId   = (int) $this->Request()->getParam('parentId', 1);
+        $position   = (int) $this->Request()->getParam('position');
+        $previousId = $this->Request()->getParam('previousId', null);
+
         /** @var $item \Shopware\Models\Category\Category */
         $item = $this->getRepository()->find($itemId);
-        $parentId = (int)$this->Request()->getParam('parentId', 1);
-        $previousId = $this->Request()->getParam('previousId');
-        $position = (int)$this->Request()->getParam('position');
-
         $item->setPosition($position);
 
-        if($previousId !== null){
+        if ($previousId !== null){
             /** @var $previous \Shopware\Models\Category\Category */
             $previous = $this->getRepository()->find($previousId);
-            $repository->persistAsNextSiblingOf($item, $previous);
+            $item->setParent($previous->getParent());
         } else {
             /** @var $parent \Shopware\Models\Category\Category */
             $parent = $this->getRepository()->find($parentId);
-            $repository->persistAsFirstChildOf($item, $parent);
+            $item->setParent($parent);
         }
+
         Shopware()->Models()->flush();
 
         $this->View()->assign(array(
@@ -487,6 +487,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     protected function moveCategoryItem($moveItemId, $newPosition, $categoryChildArray)
     {
+        // todo@performacne method is not used anymore?!
+
         $movedChildKey = 0;
         foreach ($categoryChildArray as $key => $child) {
             if ($child["id"] == $moveItemId) {
