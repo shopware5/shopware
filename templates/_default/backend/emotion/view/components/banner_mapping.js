@@ -282,10 +282,11 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             flex: 1,
             editor: me.linkComboBox,
             renderer: function(value) {
-                if(value === 'internal') {
-                    return '{s name=banner_mapping/column/location/interal}Internal link{/s}';
+
+                if(value === 'external') {
+                    return '{s name=banner_mapping/column/location/external}External link{/s}';
                 }
-                return '{s name=banner_mapping/column/location/external}External link{/s}'
+                return '{s name=banner_mapping/column/location/interal}Internal link{/s}';
             }
         }, {
             dataIndex: 'x',
