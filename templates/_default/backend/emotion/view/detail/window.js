@@ -39,7 +39,6 @@
 //{block name="backend/emotion/view/detail/window"}
 Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 	extend: 'Enlight.app.Window',
-    title: '{s name=window/title}New emotion{/s}',
     alias: 'widget.emotion-detail-window',
     border: false,
     resizable: false,
@@ -85,6 +84,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             elements = elements.data.items;
         } else {
             elements = [];
+        }
+
+        // Set the title
+        if(elements.length) {
+            me.title = '{s name=window/title_edit}Edit emotion{/s}';
+        } else {
+            me.title = '{s name=window/title}New emotion{/s}';
         }
 
         me.dataviewStore = Ext.create('Ext.data.Store',{
