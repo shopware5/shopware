@@ -1847,6 +1847,14 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 .html-text-inner-element .text {padding:0 20px 20px;}
 .emotion-inner-element .headline {margin: 0 0 15px;color: #000; font-weight: bold; font-size: 21px;}
 .emotion-inner-element .text {font-size: 13px;line-height: 21px;color: #777;}
+.emotion-inner-element .text ul li,
+.emotion-inner-element .text ol li {
+    list-style: disc;
+    margin: 0 0 0 15px;
+}
+.emotion-inner-element .text ol li { list-style: decimal }
+.emotion-inner-element .text a { color: #e1540f }
+.emotion-inner-element .text a:hover { text-decoration: underline !important }
 
 /** BANNER ELEMENT **/
 .banner-element {overflow: hidden;}
