@@ -475,7 +475,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         $this->Application()->Loader()
             ->registerNamespace('Doctrine', 'Doctrine/')
-            ->registerNamespace('DoctrineExtensions', 'DoctrineExtensions/')
             ->registerNamespace('Symfony', 'Symfony/');
 
         return true;
