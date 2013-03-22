@@ -20,7 +20,7 @@
                 {$listingTpl = "listing-{$emotion.grid.cols}col"}
 
 				{$style = "{$style}.emotion-element-{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth}px;height:{$elementHeight}px;left:{$left}px;top:{$top}px{rdelim}"}
-				{$style = "{$style}.emotion-inner-element{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth-$emotion.grid.gutter}px;height:{$elementHeight-$emotion.grid.gutter}px{rdelim}"}
+				{$style = "{$style}.emotion-inner-element-{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth-$emotion.grid.gutter}px;height:{$elementHeight-$emotion.grid.gutter}px{rdelim}"}
                 <div class="emotion-element emotion-element-{$emotion@index}-{$element@index} box{$colWidth}x{$colHeight} col{$colWidth} row{$colHeight}">
                     <div class="emotion-inner-element emotion-inner-element-{$emotion@index}-{$element@index} {$element.component.cls}">
                     {if "widgets/emotion/components/{$element.component.template}.tpl"|template_exists}
