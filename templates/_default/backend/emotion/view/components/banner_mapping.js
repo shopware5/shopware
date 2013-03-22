@@ -37,8 +37,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     autoShow: true,
     layout: 'border',
     alias: 'widget.emotion-components-banner-mapping',
-    width: 700,
-    height: 600,
+    width:'80%',
+    height:'90%',
     basePath: '{link file=""}',
     resizeCollection: Ext.create('Ext.util.MixedCollection'),
 
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     createMappingGrid: function() {
         var me = this;
         me.mappingStore = Ext.create('Ext.data.Store', {
-            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex' ]
+            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'title', { name: 'as_tooltip', type: 'int' } ]
         });
 
         me.rowEdit = Ext.create('Ext.grid.plugin.RowEditing', {
@@ -264,7 +264,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             dataIndex: 'x',
             header: '{s name=banner_mapping/column/x_position}X-Position{/s}',
-            flex: 1,
+            width: 80,
+            renderer: me.pixelRenderer,
             editor: {
                 xtype: 'numberfield',
                 minValue: 0
@@ -272,7 +273,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             dataIndex: 'y',
             header: '{s name=banner_mapping/column/y_position}Y-Position{/s}',
-            flex: 1,
+            width: 80,
+            renderer: me.pixelRenderer,
             editor: {
                 xtype: 'numberfield',
                 minValue: 0
@@ -280,7 +282,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         },  {
             dataIndex: 'width',
             header: '{s name=banner_mapping/column/width}Width{/s}',
-            flex: 1,
+            width: 80,
+            renderer: me.pixelRenderer,
             editor: {
                 xtype: 'numberfield',
                 minValue: 1
@@ -288,10 +291,31 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             dataIndex: 'height',
             header: '{s name=banner_mapping/column/height}Height{/s}',
-            flex: 1,
+            width: 80,
+            renderer: me.pixelRenderer,
             editor: {
                 xtype: 'numberfield',
                 minValue: 1
+            }
+        }, {
+            dataIndex: 'title',
+            header: '{s name=banner_mapping/column/title}Title{/s}',
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: true
+            }
+        }, {
+            dataIndex: 'as_tooltip',
+            align: 'center',
+            header: '{s name=banner_mapping/column/as_tooltip}Show title as tooltip{/s}',
+            flex: 1,
+            renderer: me.checkboxRenderer,
+            editor: {
+                xtype: 'checkboxfield',
+                inputValue: 1,
+                uncheckedValue: 0
+
             }
         }, {
             xtype: 'actioncolumn',
@@ -311,6 +335,38 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }];
 
         return me.columns;
+    },
+
+    /**
+     * Column renderer which appends an `px` to the incoming value.
+     *
+     * @param { String } value - The column content
+     * @returns { String } formatted output
+     */
+    pixelRenderer: function(value) {
+        // Cast value to a string
+        value += '';
+        if(!value.length) {
+            return '-';
+        }
+        return Ext.String.format('[0]px', value);
+    },
+
+    /**
+     * Column renderer which renders an icon which represents the `checked` state
+     * based on the incoming value.
+     *
+     * @param { Integer } value - The column content
+     * @returns { String } formatted output
+     */
+    checkboxRenderer: function(value) {
+        var cls;
+        if(value === 1) {
+            cls = 'sprite-tick-small';
+        } else {
+            cls = 'sprite-cross-small';
+        }
+        return Ext.String.format('<div class="[0]" style="display: inline-block; width: 16px; height: 16px;"></div>', cls);
     },
 
     createMappingToolbar: function() {
@@ -406,7 +462,9 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             height: config.height,
             width: config.width,
             resizerIndex: id,
-            link: config.link
+            link: config.link,
+            title: config.title || '',
+            as_tooltip: config.as_tooltip || 0
         });
         record = record[0];
 

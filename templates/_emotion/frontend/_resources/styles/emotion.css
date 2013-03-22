@@ -2727,6 +2727,41 @@ div#notes .table_row .title {width: 450px;}
     -khtml-opacity: 0;
     opacity: 0;
 }
+.emotion-element .banner-element .banner-mapping-tooltip {
+    text-align: center;
+    position: absolute;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+
+    -webkit-transition: opacity 0.3s ease-out;
+       -moz-transition: opacity 0.3s ease-out;
+         -o-transition: opacity 0.3s ease-out;
+            transition: opacity 0.3s ease-out;
+
+}
+.emotion-element .banner-element .banner-mapping-tooltip span {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #000;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-shadow: 0 1px 0 #000;
+    font-size: 11px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+.emotion-element .banner-element .hover  {
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=1);
+    filter: alpha(opacity=1);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
 
 /** ERROR MESSAGES **/
 input.instyle_success[type="text"], input.instyle_success[type="password"],
