@@ -1,12 +1,11 @@
 {if $sEmotions|@count > 0}
-
+{$style = ''}
 {foreach $sEmotions as $emotion}
 
     {* Calculate the cell width and get the cell height from the emotion settings *}
     {$cellWidth = $emotion.containerWidth / $emotion.grid.cols}
     {$cellHeight = $emotion.grid.cellHeight}
     {$finalEndRow = 1}
-
     <div class="emotion-listing emotion-col{$emotion.grid.cols} emotion-{$emotion@index}" style="width:{$emotion.containerWidth}px">
         {if $emotion.elements.0}
             {foreach $emotion.elements as $element}
@@ -20,8 +19,10 @@
                 {$top = ($element.startRow - 1) * $cellHeight}
                 {$listingTpl = "listing-{$emotion.grid.cols}col"}
 
-                <div class="emotion-element box{$colWidth}x{$colHeight} col{$colWidth} row{$colHeight}" style="width:{$elementWidth}px; height:{$elementHeight}px;left:{$left}px;top:{$top}px">
-                    <div class="emotion-inner-element {$element.component.cls}" style="width:{$elementWidth-$emotion.grid.gutter}px;height:{$elementHeight-$emotion.grid.gutter}px">
+				{$style = "{$style}.emotion-element-{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth}px;height:{$elementHeight}px;left:{$left}px;top:{$top}px{rdelim}"}
+				{$style = "{$style}.emotion-inner-element{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth-$emotion.grid.gutter}px;height:{$elementHeight-$emotion.grid.gutter}px{rdelim}"}
+                <div class="emotion-element emotion-element-{$emotion@index}-{$element@index} box{$colWidth}x{$colHeight} col{$colWidth} row{$colHeight}">
+                    <div class="emotion-inner-element emotion-inner-element-{$emotion@index}-{$element@index} {$element.component.cls}">
                     {if "widgets/emotion/components/{$element.component.template}.tpl"|template_exists}
                         {include file="widgets/emotion/components/{$element.component.template}.tpl"
                             Data=$element.data
@@ -51,4 +52,5 @@
         {$finalEndRow=1}
     </div>
 {/foreach}
+<style type="text/css">{$style}</style>
 {/if}
