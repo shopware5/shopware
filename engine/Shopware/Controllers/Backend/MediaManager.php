@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,26 +20,22 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage MediaManager
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
-use DoctrineExtensions\Paginate\Paginate,
-    Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile,
-    Shopware\Models\Media\Album as Album,
-    Shopware\Models\Media\Settings as Settings,
-    Shopware\Models\Media\Media as Media;
+use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
+use Shopware\Models\Media\Album as Album;
+use Shopware\Models\Media\Settings as Settings;
+use Shopware\Models\Media\Media as Media;
+
 /**
  * Shopware MediaManager Controller
  *
  * The media manager backend controller handles all actions around the media manager backend module
-  * and the quick selection in other modules.
+ * and the quick selection in other modules.
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs
 {
@@ -224,7 +220,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit,$validTypes);
 
         //returns the total count of the query
-        $totalResult = \DoctrineExtensions\Paginate\Paginate::count($query);
+        $totalResult = $paginator->count();
 
         //returns the customer data
         $media = $query->getResult();
@@ -375,13 +371,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->View()->assign(array('success' => false, 'message' => 'System albums can not be deleted'));
             return false;
         }
-        
-        
+
+
         /**@var $album \Shopware\Models\Media\Album*/
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
         $repo = Shopware()->Models()->getRepository('Shopware\Models\Media\Settings');
         $settings = $repo->findOneBy(array('albumId' => $albumId));
-        
+
         //album can't be founded
         if ($album === null || empty($album)) {
             $this->View()->assign(array('success' => false, 'message' => 'Album not found'));
@@ -394,7 +390,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->remove($album);
             Shopware()->Models()->remove($settings);
             Shopware()->Models()->flush();
-            
+
             $this->View()->assign(array('success' => true));
         }
         catch (\Doctrine\ORM\ORMException $e) {
@@ -603,7 +599,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         try {
             Shopware()->Models()->persist($album);
             Shopware()->Models()->flush();
-            
+
             //after the album is saved, set the album id to the settings model and save the settings
             $settings->setAlbumId($album->getId());
             $settings->setAlbum($album);
@@ -739,12 +735,14 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
     {
-
         /** @var $repository \Shopware\Models\Media\Repository */
         $repository = Shopware()->Models()->Media();
         $query = $repository->getAlbumMediaQuery($album->getId());
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
         //returns the total count of the query
-        $totalResult = \DoctrineExtensions\Paginate\Paginate::count($query);
+        $totalResult = $paginator->count();
 
         $node = array(
             'id' => $album->getId(),
@@ -852,23 +850,5 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $sql = "UPDATE s_media_album SET position = position + ? WHERE parentID = ? AND position > ? AND position < ?";
             Shopware()->Db()->query($sql, array($step, $parentId, $fromPosition, $toPosition));
         }
-    }
-
-	/**
-     * Helper method to prefix properties
-     *
-     * @param array $properties
-     * @param string $prefix
-     * @return array
-     */
-    protected function prefixProperties($properties = array(), $prefix = '')
-    {
-        foreach ($properties as $key => $property) {
-            if (isset($property['property'])) {
-                $properties[$key]['property'] = $prefix . '.' . $property['property'];
-            }
-        }
-
-        return $properties;
     }
 }
