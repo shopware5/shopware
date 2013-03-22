@@ -24,21 +24,20 @@
 
 namespace Shopware\Models\Category;
 
-use Shopware\Components\Model\ModelEntity,
-Shopware\Models\Article\Article,
-Doctrine\Common\Collections\ArrayCollection;
-
+use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Article;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Categories
  *
- * @ORM\Table(name="s_categories")
- * @ORM\Entity(repositoryClass="Repository")
- *
  * @category  Shopware
  * @package   Shopware\Models
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ *
+ * @ORM\Table(name="s_categories")
+ * @ORM\Entity(repositoryClass="Repository")
  */
 class Category extends ModelEntity
 {
@@ -340,6 +339,21 @@ class Category extends ModelEntity
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * @param int $level
+     * @return int
+     */
+    public function getLevel($level = 0)
+    {
+        $parent = $this->getParent();
+
+        if ($parent) {
+            $level = $parent->getLevel($level + 1);
+        }
+
+        return $level;
     }
 
     /**
