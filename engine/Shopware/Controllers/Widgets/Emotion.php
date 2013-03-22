@@ -196,16 +196,29 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
+	/**
+	 * Gets a random blog entry from the database
+	 *
+	 * @param $category
+	 * @return array {Array} $result
+	 */
+	private function getRandomBlogEntry($category)
+	{
+		$data = array('entry_amount' => 50);
+		$result = $this->getBlogEntry($data, $category);
+
+		return $result['entries'][array_rand($result['entries'])];
+	}
+
     /**
      * Gets the specific blog entry from the database.
      *
      * @param $data
      * @param $category
-     * @param $element
      * @internal param $ {Array} $data
      * @return array {Array} $data
      */
-    private function getBlogEntry($data, $category, $element)
+    private function getBlogEntry($data, $category)
     {
         $entryAmount = (int)$data['entry_amount'];
 
@@ -272,15 +285,26 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->setParameter(1, $data["category_selection"]);
 
         $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
+	    
         $data["categoryName"] = $categoryName["name"];
 
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
-            // Get random article from selected $category
-            $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
 
-            $data["image"] = $temp["image"]["src"][2];
+	        if($data['blog_category']) {
+				$result = $this->getRandomBlogEntry($data["category_selection"]);
+		        if(!empty( $result['media']['thumbnails'])) {
+			        $data['image'] = $result['media']['thumbnails'][2];
+		        } else {
+			        $data['image'] = $result['media']['path'];
+		        }
+
+	        } else {
+		        // Get random article from selected $category
+                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
+
+                $data["image"] = $temp["image"]["src"][2];
+	        }
         }
         return $data;
     }
