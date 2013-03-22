@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage ImportExport
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
- * @author     Benjamin Cremer
  */
 
 /**
  * Backend Controller for the Import/Export backend module
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
 {
@@ -261,7 +257,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $convert = new Shopware_Components_Convert_Csv();
         $first   = true;
         $keys    = array();
-        
+
         foreach ($paginator as $row) {
             if ($first) {
                 $first = false;
@@ -657,7 +653,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             LIMIT {$offset},{$limit}
         ";
-        
+
         $stmt = Shopware()->Db()->query($sql);
 
         if ($format === 'csv') {
@@ -1602,7 +1598,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $errors[] = sprintf("Could not load image {$imageData['image']}: %s", $e->getMessage());
                 continue;
             }
-            
+
             $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
             $media = new \Shopware\Models\Media\Media();
@@ -1696,7 +1692,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'success' => true,
             'message' => sprintf("Successfully uploaded %s of %s Images", $total, $counter)
         ));
-        
+
         return;
     }
 
