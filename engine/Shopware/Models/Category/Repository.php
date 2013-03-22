@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Category
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Models\Category;
-use \Shopware\Components\Model\ModelRepository,
-        Doctrine\ORM\Query\Expr;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -48,9 +41,19 @@ use \Shopware\Components\Model\ModelRepository,
  *  - s_categories
  *  - s_articles
  *  - s_articles_categories
+ *
+ * @category  Shopware
+ * @package   Shopware\Models\Category
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
+    /**
+     * @param integer $id
+     * @param string $field
+     * @param null|string $separator
+     * @return array|mixed|string
+     */
     public function getPathById($id, $field = 'name', $separator = null)
     {
         /**@var $category Category */
@@ -106,6 +109,11 @@ class Repository extends ModelRepository
         }
     }
 
+    /**
+     * @param $id
+     * @param $fields
+     * @return mixed
+     */
     protected function getCategoryPathQuery($id, $fields)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -456,13 +464,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param Category|int $category
+     * Returns first active articleId for given category
      *
+     * @param Category|int $category
      * @return int
      */
     public function getActiveArticleIdByCategoryId($category)
     {
-        //todo@performance: Prüfen was das ding machen soll.
         if ($category !== null && !$category instanceof Category) {
             $category = $this->find($category);
         }
@@ -473,10 +481,10 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from($this->getEntityName(), 'c');
         $builder->select('MIN(a.id)')
-                ->join('c.articles', 'a', Expr\Join::WITH, 'a.active=1');
+                ->innerJoin('c.articles', 'a', Expr\Join::WITH, 'a.active=1')
+                ->where('c.active=1')
+                ->andWhere('c.id = :id');
 
-        $builder->where('c.active=1');
-        $builder->andWhere('c.id = :id');
         $builder->setParameter('id', $category->getId());
 
         return $builder->getQuery()->getResult(

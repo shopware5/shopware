@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Deprecated Shopware Class that handle url rewrites
+ * Deprecated Shopware Class that handles url rewrites
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class sRewriteTable
 {
@@ -336,7 +330,6 @@ class sRewriteTable
 
         /** @var $repository \Shopware\Models\Blog\Repository */
         $blogArticlesQuery = $this->blogRepository->getListQuery($blogCategoryIds);
-
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $blogArticles = $blogArticlesQuery->getArrayResult();
 
@@ -449,8 +442,9 @@ class sRewriteTable
     public function sCategoryPath($category)
     {
         $parts = $this->repository->getPathById($category, 'name');
-        $level = $this->baseCategory->getLevel() + 1;
+        $level = $this->baseCategory->getLevel();
         $parts = array_slice($parts, $level);
+
         return $parts;
     }
 
@@ -461,16 +455,11 @@ class sRewriteTable
      */
     public function sCategoryPathByArticleId($articleId, $parentId = null)
     {
-        //if (empty($parentId)) {
-        //    $parentId = $this->baseCategory->getId();
-        //}
-        //$categoryId = $this->repository
-        //    ->getActiveByArticleIdQuery($articleId, $categoryId)
-        //    ->setMaxResults(1)
-        //    ->getOneOrNullResult();
         $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $articleId, $parentId
+            $articleId,
+            $parentId
         );
+
         return $categoryId !== null ? $this->sCategoryPath($categoryId) : null;
     }
 }
