@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     M.Schmaeing
- * @author     $Author$
  */
 
 /**
@@ -36,6 +28,10 @@
  * Frontend Controller for the blog article listing and the detail page.
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 {
@@ -150,7 +146,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
-        } 
+        }
 
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
@@ -248,7 +244,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         if(empty($blogArticleData) || empty($blogArticleData["active"])) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
         }
-        
+
         // Redirect if category is not available, inactive or external
         /** @var $category \Shopware\Models\Category\Category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);

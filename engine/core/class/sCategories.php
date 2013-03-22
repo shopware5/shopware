@@ -23,7 +23,7 @@
  */
 
 /**
- * Deprecated Shopware Class that handle categories
+ * Deprecated Shopware Class that handles categories
  *
  * @category  Shopware
  * @package   Shopware\Core
