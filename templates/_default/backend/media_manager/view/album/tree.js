@@ -115,6 +115,29 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             'reload'
         );
 
+        // Select the correct node if we're in the media selection
+        me.store.on('load', function() {
+            var treeView = me.getView(),
+                store = me.getStore(),
+                selModel = me.getSelectionModel(),
+                albumId = store.getProxy().extraParams.albumId,
+                rootNode = store.tree.getRootNode(), i = 0,
+                foundedNode;
+
+            if(!albumId || Ext.isArray(albumId)) {
+                return;
+            }
+
+            for( ; i < rootNode.childNodes.length; i++) {
+                var node = rootNode.childNodes[i];
+                if(node.data.id === albumId) {
+                    foundedNode = node;
+                    break;
+                }
+            }
+            selModel.select(foundedNode);
+        }, me, { single: true });
+
         me.callParent(arguments);
     },
 
@@ -371,8 +394,6 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
      * @return void
      */
     initializeTreeDropZone: function(view) {
-        var treeView = view.getView();
-
         view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
             ddGroup: 'media-tree-dd',
             getTargetFromEvent: function(event) {
