@@ -1839,6 +1839,7 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 .emotion-listing { position: relative }
 .emotion-element { position: absolute }
 .emotion-inner-element {margin: 0 10px 10px 0;}
+.emotion-spacer { position: relative; width: 0; z-index: -1 }
 
 /** HTML ELEMENT */
 .html-text-inner-element {border: 1px solid #dfdfdf; height: 100%;}
@@ -1858,6 +1859,9 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 
 /** BANNER ELEMENT **/
 .banner-element {overflow: hidden;}
+
+/** BANNER SLIDER ELEMENT */
+.banner-slider-emotion { overflow: hidden }
 
 /** ARTICLE */
 .emotion-inner-element .artbox {

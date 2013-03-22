@@ -47,10 +47,7 @@
                 {/if}
             {/foreach}
         {/if}
-        <script type="text/javascript">
-            var emotionHeight{$emotion@index} = '{$finalEndRow * $cellHeight}';
-            jQuery('.emotion-{$emotion@index}').css('height', emotionHeight{$emotion@index});
-        </script>
+		<div class="emotion-spacer" style="height:{$finalEndRow * $cellHeight}px"></div>
         {$finalEndRow=1}
     </div>
 {/foreach}
