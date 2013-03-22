@@ -37,6 +37,7 @@ Ext.define('Shopware.apps.MediaManager.store.Media', {
 	model: 'Shopware.apps.MediaManager.model.Media',
     pageSize: 20,
     remoteFilter: true,
+    remoteSort: true,
     batch: true
 });
 //{/block}

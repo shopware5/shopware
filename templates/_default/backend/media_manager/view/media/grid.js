@@ -127,7 +127,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             header: me.snippets.column.preview,
             width: 50,
             align: 'center',
-            renderer: me.previewRenderer
+            renderer: me.previewRenderer,
+            sortable: false
         }, {
             dataIndex: 'created',
             header: me.snippets.column.created,
