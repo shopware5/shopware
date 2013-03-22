@@ -222,6 +222,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $entryAmount = (int)$data['entry_amount'];
 
+	    // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
+	    if(!isset($data['thumbnail_size'])) {
+		    $data['thumbnail_size'] = 3;
+	    }
+
         // Get the category model for the given category ID
         /** @var $category \Shopware\Models\Category\Category */
         $category = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
