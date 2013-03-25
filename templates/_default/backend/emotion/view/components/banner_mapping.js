@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     createMappingGrid: function() {
         var me = this;
         me.mappingStore = Ext.create('Ext.data.Store', {
-            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'linkLocation'. 'title', { name: 'as_tooltip', type: 'int' } ]
+            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'linkLocation', 'title', { name: 'as_tooltip', type: 'int' } ]
         });
 
         me.rowEdit = Ext.create('Ext.grid.plugin.RowEditing', {
