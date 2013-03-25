@@ -359,7 +359,6 @@ class
 
         LEFT JOIN s_articles_attributes at
         ON at.articledetailsID=d.id
-
         WHERE od.orderID=?
         ORDER BY od.id ASC
         ",array($this->_id)), ArrayObject::ARRAY_AS_PROPS);
