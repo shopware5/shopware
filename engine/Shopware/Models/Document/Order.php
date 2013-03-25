@@ -361,7 +361,7 @@ class
         ON at.articledetailsID=d.id
 
         WHERE od.orderID=?
-        ORDER BY od.modus ASC
+        ORDER BY od.id ASC
         ",array($this->_id)), ArrayObject::ARRAY_AS_PROPS);
         foreach ($this->_positions as &$position) {
             $position["attributes"] = Shopware()->Db()->fetchRow("
