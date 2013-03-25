@@ -50,6 +50,9 @@
         @include single-box-shadow(lighten($font-color, 25%), 0, 4px);
         overflow: visible;
 
+		// Forces the live search to be on front of all desktops
+		position: fixed !important;
+
         .header {
             @include border-radius(4px 4px 0 0);
             border: 1px solid #1672d5;

@@ -52,6 +52,12 @@ div[id^=emotion-components-banner-mapping] {
     }
 }
 
+div[id^=emotion-main-window] {
+	.#{$prefix}grid-header-ct {
+		border-top: 0 none
+	}
+}
+
 
 .#{$prefix}hub-library {
     @include border-radius(0 4px 4px 0);
@@ -204,10 +210,49 @@ div[id^=emotion-components-banner-mapping] {
         -ms-user-select: none;
         user-select: none;
         cursor: move;
+		overflow: hidden;
+
+		.#{$prefix}emotion-banner-preview {
+			width: 100%;
+			height: 100%;
+
+			.#{$prefix}emotion-banner-image {
+				@include opacity(0.2);
+				max-width: 100%;
+				display: block;
+			}
+
+			.#{$prefix}emotion-banner-preview-inner {
+				@include filter-gradient(#e7f5ff, #e7f5ff, horizontal); // IE6-9
+				@include background-image(linear-gradient(left, rgba(231,245,255,1) 0%,rgba(231,245,255,0.6) 20%,rgba(255,255,255,0.01) 50%,rgba(231,245,255,0.6) 80%,rgba(231,245,255,1) 100%));
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0; left: 0;
+			}
+		}
 
         .#{$prefix}emotion-element-inner {
             padding: 0 0 0 18px;
+			position: absolute;
+			left: 0; top: 0;
+			width: 65%;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
         }
+
+		.#{$prefix}emotion-element-info {
+			font-size: 11px;
+			color: #667178;
+			position: absolute;
+			left: 16px;
+			top: 15px;
+			width: 65%;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
         .#{$prefix}emotion-element-handle {
             position: absolute;
@@ -226,6 +271,21 @@ div[id^=emotion-components-banner-mapping] {
             margin-top: -7px;
             cursor: pointer;
         }
+		.#{$prefix}emotion-element-pencil {
+			height: 16px; width: 16px;
+			display: none;
+			cursor: pointer;
+			position: absolute;
+			top: 50%; right: 25px;
+			margin-top: -8px;
+			background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABvklEQVR42qWTXUhTYRjHvfUoIZ7IbbCdc7rz7u3e8mOKGF4IUyPtYhC1remaQjLmx2b7ML/YIlQQUgZFn2tEEKSw7aJmRFOaOCYOairkhSC+0FUX/14Ej+5iW2MXv7v393seHnjLAJTEfz/ktPdJ5fXhSGWbPVTe2C8WFeCaBwjfM0dr+j7g0r0Qqrv9x1yTtUoO5J9sJfytBaqyxSA+2mVkoBgMQ9Hrmy8YqNBaCN/7hKqGPkOc2sdl3yEkhsaVgu5xeD1vgGs0E/6mn6oeRNnUn5BmfkOaPYA0vQ/DuwwA+HIGKhpMpPrGLFUOrkLwpCBNZiBN7Z6E7gZ/AcByziNy1+4QvmuSKq0fITzchOjdgTiRhuBOwfAmLcunZMtXbzPZS5WW99A44hDdWxA9SQiuTSZvy/J5zuQ6PeF1Lqowv4V6ZA3C+Do04xss9B3GV0lZzhmo1XueLUW3/ng/7UAz+gWC4xsLxWB48UOW8waumPx7gXBiDIBzKJiA2haB8fmGLBcM8J1uXOx00ap2W0e943XaFFiT5YKBC00GIhoX0eoN/W2xP325tBL/mi0X3oAwjhgRhpPRUcxvLIl/Uam9SdzUTgIAAAAASUVORK5CYII=) no-repeat;
+		}
+
+		// State - Hover
+		&:hover .#{$prefix}emotion-element-pencil {
+			display: block;
+		}
+
     }
 
     .listing-4col {
