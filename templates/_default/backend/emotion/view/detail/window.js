@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
      * @return void
      */
     initComponent: function() {
-        var me = this;
+        var me = this, settings, elements;
 
         var shopwareComponents = me.getShopwareComponents();
         var pluginComponents = me.getPluginComponents();
@@ -75,9 +75,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             }]
         });
 
-        var me = this, settings, elements;
-
         settings = me.emotion.data;
+        if (me.emotion.getGrid() instanceof Ext.data.Store && me.emotion.getGrid().first() instanceof Ext.data.Model) {
+            var gridModel = me.emotion.getGrid().first();
+            settings.rows = gridModel.get('rows');
+            settings.cols = gridModel.get('cols');
+            settings.cellHeight = gridModel.get('cellHeight');
+            settings.articleHeight = gridModel.get('articleHeight');
+        }
+
         elements = me.emotion.getElements();
 
         if (elements instanceof Ext.data.Store && elements.data.length > 0) {

@@ -3,8 +3,22 @@
 	$.fn.CloudZoom.defaults.zoomWidth = 585;
 	$.fn.CloudZoom.defaults.zoomHeight = 320;
 
+})(jQuery);
 
+(function($) {
+    $(document).ready(function() {
+        $('.emotion-banner-mapping').hover(function() {
+            var $this = $(this),
+                $next = $this.next('.banner-mapping-tooltip');
 
+            $next.addClass('hover');
+        }, function() {
+            var $this = $(this),
+                $next = $this.next('.banner-mapping-tooltip');
+
+            $next.removeClass('hover');
+        });
+    });
 })(jQuery);
 
 /* Add class to the searchfield */

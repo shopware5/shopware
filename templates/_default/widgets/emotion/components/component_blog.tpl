@@ -1,16 +1,17 @@
 {if $Data}
     <div class="blog-outer-container">
         {foreach $Data.entries as $entry}
+			{$image = $entry.media.thumbnails.{$Data.thumbnail_size}}
             <div class="blog-entry" style="width:{"100" / $Data.entries|count}%">
             	<div class="blog-entry-inner{if $entry@last} last{/if}">
                     <div class="blog_img">
-                       {if $entry.media.thumbnails.3}
-                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({link file=$entry.media.thumbnails.3}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
-                        {else}
+                       {if $image}
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({link file=$image}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
+                       {else}
                             <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">
                                 {se name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/se}
                             </a>
-                        {/if}
+                       {/if}
                     </div>
 	                
 	                <h2>
