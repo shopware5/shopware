@@ -1961,17 +1961,36 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             if ($group && !empty($newsletterData['firstname'])) {
-                $sql = "INSERT INTO s_campaigns_maildata (groupID, email, firstname, lastname) VALUES (?, ?, ?, ?)
-                      ON DUPLICATE KEY UPDATE groupId = ?, email = ?, firstname = ?, lastname = ?";
-
-                $values = array(
-                    $group->getId(),
-                    $newsletterData['email'],
-                    $newsletterData['firstname'],
-                    $newsletterData['lastname'],
-                );
-
-                Shopware()->Db()->query($sql, array_merge(array_values($values), array_values($values)));
+	            $sql = "
+					INSERT INTO s_campaigns_maildata (
+						groupID, email, firstname, lastname, salutation, street, streetnumber, zipcode, title, city
+					) VALUES (
+						:groupId, :eMail, :firstName, :lastName, :salutation, :street, :streetNumber, :zipCode, :title, :city
+					)
+                    ON DUPLICATE KEY UPDATE
+	                    groupId = :groupId,
+	                    email = :eMail,
+	                    firstname = :firstName,
+	                    lastname = :lastName,
+	                    salutation = :salutation,
+	                    street = :street,
+	                    streetnumber = :streetNumber,
+	                    zipcode = :zipCode,
+	                    title = :title,
+	                    city = :city
+				";
+                Shopware()->Db()->query($sql, array(
+	                "groupId" => $group->getId(),
+	                "eMail" => $newsletterData['email'],
+	                "firstName" => $newsletterData['firstname'],
+	                "lastName" => $newsletterData['lastname'],
+	                "salutation" => $newsletterData['salutation'],
+	                "street" => $newsletterData['street'],
+	                "streetNumber" => $newsletterData['streetnumber'],
+	                "zipCode" => $newsletterData['zipcode'],
+	                "title" => $newsletterData['title'],
+	                "city" => $newsletterData['city']
+                ));
 
                 if ($existingRecipient) {
                     $updated = true;
