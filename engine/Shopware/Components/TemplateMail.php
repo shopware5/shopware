@@ -187,7 +187,7 @@ class Shopware_Components_TemplateMail
 
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
-        $mail = Shopware()->Mail();
+        $mail = clone Shopware()->Mail();
 
         return $this->loadValues($mail, $mailModel, $overrideConfig);
     }
