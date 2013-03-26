@@ -63,96 +63,16 @@ class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
         $fullPath = !empty($_attr['fullPath']);
 
         if (preg_match('/^([\'"]?)[a-zA-Z0-9\/\.\-\_]+(\\1)$/', $_attr['file'], $match)) {
-            return self::link(array(
+            $compiler->smarty->loadPlugin('smarty_function_flink');
+            return smarty_function_flink(array(
                 'file' => $file,
                 'fullPath' => $fullPath
             ), $compiler);
         }
 
-        // could not optimize |link call, so fallback to regular plugin
-        if ($compiler->tag_nocache | $compiler->nocache) {
-            $compiler->template->required_plugins['nocache']['link']['function']['file'] = __FILE__;
-            $compiler->template->required_plugins['nocache']['link']['function']['function'] = 'Smarty_Compiler_Link::link';
-        } else {
-            $compiler->template->required_plugins['compiled']['link']['function']['file'] = __FILE__;
-            $compiler->template->required_plugins['compiled']['link']['function']['function'] = 'Smarty_Compiler_Link::link';
-        }
-        return '<?php echo Smarty_Compiler_Link::link(array(' .
+        return '<?php $_smarty_tpl->smarty->loadPlugin("smarty_function_flink"); echo smarty_function_flink(array(' .
             '"file" => ' . $_attr['file'] . ', ' .
             '"fullPath" => ' . var_export($fullPath, true) .
             '), $_smarty_tpl); ?>';
-    }
-
-    /**
-     * @param $params
-     * @param $template
-     * @return mixed|string
-     */
-    public static function link($params, $template)
-    {
-        $file = $params['file'];
-
-        /** @var $front Enlight_Controller_Front */
-        $front = Enlight_Application::Instance()->Front();
-        $request = $front->Request();
-
-        // check if we got an URI or a local link
-        if (!empty($file) && strpos($file, '/') !== 0 && strpos($file, '://') === false) {
-
-            $useIncludePath = $template->smarty->getUseIncludePath();
-
-            // try to find the file on the filesystem
-            foreach ($template->smarty->getTemplateDir() as $dir) {
-                if (file_exists($dir . $file)) {
-                    $file = realpath($dir) . DS . str_replace('/', DS, $file);
-                    break;
-                }
-                if($useIncludePath) {
-                    if($dir === '.' . DS) {
-                        $dir = '';
-                    }
-                    if(($result = Enlight_Loader::isReadable($dir . $file)) !== false) {
-                        $file = $result;
-                        break;
-                    }
-                }
-            }
-
-            if (method_exists(Enlight_Application::Instance(), 'DocPath')) {
-                $docPath = Enlight_Application::Instance()->DocPath();
-            } else {
-                $docPath = getcwd() . DIRECTORY_SEPARATOR;
-            }
-
-            // some clean up code
-            if (strpos($file, $docPath) === 0) {
-                $file = substr($file, strlen($docPath));
-            }
-
-            // make sure we have the right separator for the web context
-            if (DIRECTORY_SEPARATOR !== '/') {
-                $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
-            }
-            if (strpos($file, './') === 0) {
-                $file = substr($file, 2);
-            }
-            // if we did not find the file, we are returning a false
-            if (strpos($file, '/') !== 0) {
-                if (!file_exists($docPath . $file)) {
-                    //return false;
-                }
-                $file = $request->getBasePath() . '/' . $file;
-            }
-        }
-
-        if(empty($file)) {
-            $file = $request->getBasePath() . '/';
-        }
-
-        if (strpos($file, '/') === 0 && !empty($params['fullPath'])) {
-            $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
-        }
-
-        return $file;
     }
 }
