@@ -412,7 +412,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             case "selected_article":
                 foreach ($data["selected_articles"] as &$article) {
                     $articleId = $article["articleId"];
-                    $values[] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
+                    $entry = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
+	                if (!empty($entry["articleID"])) $values[] = $entry;
                 }
                 break;
             case "topseller":
