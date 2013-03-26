@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             title: '{s name=done_title}Document creation{/s}'
         },
         cancel: {
+            brokenOrderMessage: '{s name=broken_order_message}Document creation cancelled. The Order [0] contains inconsistent data{/s}',
             message: '{s name=cancel_message}Document creation cancelled{/s}',
             title: '{s name=cancel_title}Cancelled{/s}'
         },
@@ -262,6 +263,9 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      *
      * @param orders
      * @param index
+     * @param progressBar
+     * @param store
+     * @param resultStore
      */
     queueProcess: function(store, progressBar, orders, index, resultStore) {
         var me = this,
@@ -313,6 +317,14 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             store.add(orders[index]);
             store.sync({
                 callback: function(batch) {
+                    if(batch.operations[0].resultSet === Ext.undefined || batch.operations[0].resultSet.records === Ext.undefined) {
+                        //update progress bar and display finish message
+                        var brokenOrderMessage = Ext.String.format(me.snippets.cancel.brokenOrderMessage, orders[index].data.number);
+                        progressBar.updateProgress(1, brokenOrderMessage, true);
+                        me.refreshProgressWindow(orders);
+
+                        return false;
+                    }
                     // add the resulting record to our result store
                     var resultSet = batch.operations[0].resultSet.records;
                     resultStore.add(resultSet);
