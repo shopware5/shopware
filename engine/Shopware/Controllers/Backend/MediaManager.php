@@ -181,10 +181,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $validTypes = array();
         }
 
-//        if ($albumID === null || $albumID === 0) {
-//            $this->View()->assign(array('success' => true, 'message' => 'No valid album id passed'));
-//            return;
-//        }
+        if ($albumID === null || $albumID === 0) {
+            //if no albumId is given load the unsorted album
+            $albumID = -10;
+        }
         /** @var $repository \Shopware\Models\Media\Repository */
         $repository = Shopware()->Models()->Media();
         $query = $repository->getAlbumMediaQuery($albumID, $filter, array(), $offset, $limit,$validTypes);
