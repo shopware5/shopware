@@ -117,9 +117,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         // Select the correct node if we're in the media selection
         me.store.on('load', function() {
-            var treeView = me.getView(),
-                store = me.getStore(),
-                selModel = me.getSelectionModel(),
+            var store = me.getStore(),
                 albumId = store.getProxy().extraParams.albumId,
                 rootNode = store.tree.getRootNode(), i = 0,
                 foundedNode;
@@ -135,7 +133,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                     break;
                 }
             }
-            selModel.select(foundedNode);
+            me.fireEvent('reload', foundedNode);
         }, me, { single: true });
 
         me.callParent(arguments);
