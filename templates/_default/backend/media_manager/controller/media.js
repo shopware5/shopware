@@ -167,16 +167,31 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Event listener method which will be fired when the tree
      * on the left hand of the module loads, to reset
      * the request url of the html 5 upload component.
+     *
+     * @param { Shopware.apps.MediaManager.model.Album } treeNode
      */
-    onTreeLoad: function(store, records, success, operation, eOpts) {
+    onTreeLoad: function(treeNode) {
         var me = this,
-            mediaView = me.getMediaView();
+            mediaView = me.getMediaView(),
+            tree = me.getAlbumTree();
 
         var url = mediaView.mediaDropZone.requestURL;
         if (url.indexOf('?albumID=') !== -1) {
             url = url.substr(0, url.indexOf('?albumID='));
         }
         mediaView.mediaDropZone.requestURL = url;
+
+        if(treeNode) {
+            mediaView.mediaStore.getProxy().extraParams.albumID = treeNode.get('id');
+
+            if (url.indexOf('?albumID=') !== -1) {
+                url = url.substr(0, url.indexOf('?albumID='));
+            }
+            url += '?albumID=' + treeNode.get('id');
+            mediaView.mediaDropZone.requestURL = url;
+
+            mediaView.mediaStore.load();
+        }
     },
 
     /**
