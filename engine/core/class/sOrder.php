@@ -785,11 +785,6 @@ class sOrder
 			$variables['sBookingID'] = $this->bookingId;
 		}
 
-		$this->sendMail($variables);
-
-		// Check if voucher is affected
-		$this->sTellFriend();
-
 		// Save Billing and Shipping-Address to retrace in future
 		$this->sSaveBillingAddress($this->sUserData["billingaddress"],$orderID);
 		$this->sSaveShippingAddress($this->sUserData["shippingaddress"],$orderID);
@@ -802,6 +797,11 @@ class sOrder
 		DELETE FROM s_order_basket WHERE sessionID=?
 		",array($this->sSYSTEM->sSESSION_ID));
 
+
+        $this->sendMail($variables);
+
+        // Check if voucher is affected
+        $this->sTellFriend();
 
 		if (isset(Shopware()->Session()->sOrderVariables)) {
 			$variables = Shopware()->Session()->sOrderVariables;
