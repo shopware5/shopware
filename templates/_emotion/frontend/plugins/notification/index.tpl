@@ -14,7 +14,7 @@
         <div class="error">
             {se name='DetailNotifyInfoErrorMail'}{/se}
         </div>
-    {else if $NotifyAlreadyRegistered == true}
+    {elseif $NotifyAlreadyRegistered == true}
         <div class="notice">
             <div class="center">
                 <strong>
