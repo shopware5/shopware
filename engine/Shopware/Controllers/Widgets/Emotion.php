@@ -159,6 +159,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getArticle($data, $categoryId, $element)
     {
+	    $categoryId = (Shopware()->Shop()->get('parentID') == $categoryId) ? 0 : $categoryId;
         if ($data["article_type"] == "newcomer") {
             // new product
             $data = array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false));
