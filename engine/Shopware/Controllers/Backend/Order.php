@@ -1271,6 +1271,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             ));
             return;
         }
+
+	    //removes the global PostDispatch Event to prevent assignments to the view that destroyed the pdf
+	    Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch',''));
     }
 
     /**
