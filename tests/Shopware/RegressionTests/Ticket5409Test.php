@@ -59,7 +59,7 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
         $this->dispatch('/account/login');
 	    $this->assertEmpty(Shopware()->Session()->sUserId);
 
-	    //test the internal call of the method without the $ignoreAccountMode parameter
+	    //test the internal call of the method with the $ignoreAccountMode parameter
 	    $this->logoutUser();
 	    $this->Request()
 			    ->setMethod('POST')
@@ -73,7 +73,7 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
 	    $this->assertEmpty($result["sErrorMessages"]);
 
 
-		//test the internal call of the method with the $ignoreAccountMode parameter
+		//test the internal call of the method without the $ignoreAccountMode parameter
 	    $this->logoutUser();
 	    $this->Request()
 				->setMethod('POST')
