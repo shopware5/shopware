@@ -98,13 +98,12 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
-
-//        $request = $args->getRequest();
-//        if ($request->getClientIp(false)
-//          && !empty($this->Config()->allowIp)
-//          && strpos($this->Config()->allowIp, $request->getClientIp(false))===false){
-//            return;
-//        }
+	    // Check for ip-address
+        if (!empty($_SERVER["REMOTE_ADDR"])
+          && !empty($this->Config()->AllowIP)
+          && strpos($this->Config()->AllowIP, $_SERVER["REMOTE_ADDR"])===false){
+            return;
+        }
 
         if($this->Log() === null){
             return;
