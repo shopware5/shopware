@@ -2302,6 +2302,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $errormessage = $e->getMessage();
                 }
 
+	            if(!empty($article["name"]) && !empty($article["id"])) {
+		            $errors[] = "Error with article: ". $article["name"]. " and articleID: ".$article["id"];
+	            }
                 $errors[] = "Error in line {$counter}: $errormessage";
             }
         }
