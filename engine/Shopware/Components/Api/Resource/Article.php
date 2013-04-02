@@ -925,7 +925,9 @@ class Article extends Resource
             $data['mainDetail']['attribute'] = $data['attribute'];
         }
         unset($data['attribute']);
-        unset ($data['mainDetail']['attribute']['articleDetailId']);
+	    if(isset($data['mainDetail']['attribute']['articleDetailId'])) {
+		    unset($data['mainDetail']['attribute']['articleDetailId']);
+	    }
         $data['mainDetail']['attribute']['article'] = $article;
 
         return $data;
