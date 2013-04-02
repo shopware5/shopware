@@ -48,6 +48,7 @@ class Shopware_RegressionTests_Ticket5566 extends Enlight_Components_Test_Contro
      */
     public function testArticleXMLExport()
     {
+	    @ini_set('memory_limit', '768M');
 	    $this->Front()->setParam('noViewRenderer', false);
 
         $this->dispatch('/backend/ImportExport/exportArticles?format=xml&exportVariants=1');
