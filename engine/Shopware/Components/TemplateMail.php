@@ -187,7 +187,7 @@ class Shopware_Components_TemplateMail
 
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
-        $mail = new Enlight_Components_Mail('UTF-8');
+        $mail = clone Shopware()->Mail();
 
         return $this->loadValues($mail, $mailModel, $overrideConfig);
     }
