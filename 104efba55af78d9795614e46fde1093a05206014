@@ -1,0 +1,6 @@
+From: improvement/translation
+To: next
+Conflict: (content) Merge conflict in snippets/backend/user_manager/view/main.ini
+	MODIFY|snippets/backend/user_manager/view/main.ini
+Conflict: (content) Merge conflict in snippets/backend/article/view/main.ini
+	MODIFY|snippets/backend/article/view/main.ini
