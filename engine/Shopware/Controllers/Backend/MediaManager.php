@@ -158,6 +158,39 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return $founded;
     }
 
+	/**
+	 * Provides a way to download the original resource in the media manager. The
+	 * method sets the correct HTTP-Header to trigger the save dialog of the browser
+	 * and disables all available renderer's.
+	 *
+	 * @return void
+	 */
+	public function downloadAction()
+	{
+		Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+		$this->Front()->Plugins()->Json()->setRenderer(false);
+
+		$mediaId = $this->Request()->getParam('mediaId');
+		$media = $this->getMedia($mediaId)->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+		if(!$media) {
+			echo 'file not found';
+			return;
+		}
+
+		$file = Shopware()->DocPath() . $media['path'];
+		$tmpFileName = $media['name'] . '.' . $media['extension'];
+
+		@set_time_limit(0);
+		$response = $this->Response();
+		$response->setHeader('Cache-Control', 'public');
+		$response->setHeader('Content-Description', 'File Transfer');
+		$response->setHeader('Content-disposition', 'attachment; filename='.$tmpFileName);
+		$response->setHeader('Content-Transfer-Encoding', 'binary');
+		$response->setHeader('Content-Length', filesize($file));
+		readfile($file);
+	}
+
     /**
      * The getAlbumMediaAction returns the associated media for the passed album id.
      * Is used for the listing of the media.
@@ -168,6 +201,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function getAlbumMediaAction()
     {
+	    $order = $this->prefixProperties($this->Request()->getParam('sort', array()), 'media');
         $limit = $this->Request()->getParam('limit');
         $offset = $this->Request()->getParam('start');
         $filter = $this->Request()->filter;
@@ -187,7 +221,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 //        }
         /** @var $repository \Shopware\Models\Media\Repository */
         $repository = Shopware()->Models()->Media();
-        $query = $repository->getAlbumMediaQuery($albumID, $filter, array(), $offset, $limit,$validTypes);
+        $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit,$validTypes);
 
         //returns the total count of the query
         $totalResult = \DoctrineExtensions\Paginate\Paginate::count($query);
@@ -818,5 +852,23 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $sql = "UPDATE s_media_album SET position = position + ? WHERE parentID = ? AND position > ? AND position < ?";
             Shopware()->Db()->query($sql, array($step, $parentId, $fromPosition, $toPosition));
         }
+    }
+
+	/**
+     * Helper method to prefix properties
+     *
+     * @param array $properties
+     * @param string $prefix
+     * @return array
+     */
+    protected function prefixProperties($properties = array(), $prefix = '')
+    {
+        foreach ($properties as $key => $property) {
+            if (isset($property['property'])) {
+                $properties[$key]['property'] = $prefix . '.' . $property['property'];
+            }
+        }
+
+        return $properties;
     }
 }
