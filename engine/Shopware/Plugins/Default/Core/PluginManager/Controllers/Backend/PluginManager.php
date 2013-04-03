@@ -250,6 +250,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
             
             $plugins = $builder->getQuery()->getArrayResult();
+
+	        //if the plugin has an invalid version number use a fallback to 1.0.0
+	        foreach ($plugins as &$plugin) {
+				if(preg_match('/\d{1,2}\.\d{1,2}\.\d{1,2}/',$plugin["version"]) !== 1) {
+					$plugin['version'] = '1.0.0';
+				}
+	        }
+
             $plugins = $this->getCommunityStore()->getUpdateablePlugins($plugins);
 
             $this->View()->assign($plugins);
