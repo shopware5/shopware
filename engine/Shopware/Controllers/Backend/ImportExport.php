@@ -355,8 +355,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                  'detailsPrices',
             ));
             $builder->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
-                    ->leftJoin('details.prices', 'detailsPrices')
-                    ->leftJoin('details.attribute', 'detailsAttribute');
+		            ->leftJoin('details.attribute', 'detailsAttribute')
+                    ->leftJoin('details.prices', 'detailsPrices');
         }
 
         $builder->setFirstResult($offset);
@@ -2244,9 +2244,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $updateData['similar'] = $this->prepareImportXmlData($article['related']['similar']);
                 }
 
-                if (isset($article['propertyValues'])) {
+                if (isset($article['propertyValues']) && !empty($article['propertyValues'])) {
                     $updateData['propertyValues'] = $this->prepareImportXmlData($article['propertyValues']['propertyValue']);
                 }
+	            else {
+		            unset($updateData['propertyValues']);
+	            }
 
                 if (isset($article['related'])) {
                     $updateData['related'] = $this->prepareImportXmlData($article['related']['related']);
@@ -2299,6 +2302,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $errormessage = $e->getMessage();
                 }
 
+	            if(!empty($article["name"]) && !empty($article["id"])) {
+		            $errors[] = "Error with article: ". $article["name"]. " and articleID: ".$article["id"];
+	            }
                 $errors[] = "Error in line {$counter}: $errormessage";
             }
         }
