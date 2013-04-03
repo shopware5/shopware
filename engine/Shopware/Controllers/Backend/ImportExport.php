@@ -1839,9 +1839,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'ac_attr6'   => 'attribute_attribute6',
         );
 
-
         $updateData = $this->mapFields($category, $mapping);
-//        $updateData['parent'] = $parent;
+        $updateData['parent'] = $parent;
 
         $attribute = $this->prefixToArray($updateData, 'attribute_');
         if (!empty($attribute)) {
@@ -1853,33 +1852,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (!$categoryModel) {
             $categoryModel = new \Shopware\Models\Category\Category();
             $categoryModel->setPrimaryIdentifier($category['categoryID']);
-//            $this->getManager()->persist($categoryModel);
-            $categoryModel->fromArray($updateData);
-        }else{
-            $categoryModel->fromArray($updateData);
-            return $categoryModel;
+            $this->getManager()->persist($categoryModel);
         }
 
-
-
-        // find a neighbour with less/equal position value
-        if($categoryModel->getPosition() > 0) {
-            $sql = "SELECT id FROM s_categories c WHERE parent=? AND `position` <=? ORDER BY `position` DESC LIMIT 1";
-            $previousId = (int) Shopware()->Db()->fetchOne($sql, array($parent->getId(), $categoryModel->getPosition()));
-        }
-
-        // Use special persister in order to force position to be stored
-        if(!empty($previousId)){
-            /** @var $previous \Shopware\Models\Category\Category */
-            $previous = $categoryRepository->find($previousId);
-            $categoryRepository->persistAsNextSiblingOf($categoryModel, $previous);
-        // Else set current model as first child of its parent
-        } else {
-
-            /** @var $parent \Shopware\Models\Category\Category */
-            $categoryRepository->persistAsFirstChildOf($categoryModel, $parent);
-        }
-
+        $categoryModel->fromArray($updateData);
         return $categoryModel;
     }
 
@@ -3347,8 +3323,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         Shopware()->Db()->exec("TRUNCATE s_articles_categories");
-        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
-        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
+//        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
+//        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
 
         return $result;
     }
