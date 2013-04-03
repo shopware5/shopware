@@ -107,10 +107,8 @@
 			{/if}
 			
 			{* Compare article *}
-			<a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="compare_add_article" title="{s name='NoteLinkCompare'}{/s}" rel="nofollow">
-				{se name='NoteLinkCompare'}{/se}
-			</a>
-			
+			{block name="frontend_note_item_actions_compare"}{/block}
+
 			{* Article Details *}
 			<a href="{$sBasketItem.linkDetails}" class="detail" title="{$sBasketItem.articlename}">
 				{se name='NoteLinkDetails'}{/se}
