@@ -225,11 +225,14 @@ Ext.define('Shopware.form.plugin.Translation',
                 style = 'top: 3px; right: 3px';
                 break;
             case 'textarea':
-                style = 'top: 3px; right: 3px';
+                style = 'top: 6px; right: 6px';
+                break;
+            case 'trigger':
+                style = 'top: 6px; right: 26px';
                 break;
             case 'textfield':
             default:
-                style = 'top: 3px; right: 3px; z-index:1;';
+                style = 'top: 6px; right: 6px; z-index:1;';
                 break;
         }
 
@@ -320,6 +323,15 @@ Ext.define('Shopware.form.plugin.Translation',
 
             if(className === 'Ext.form.TextArea') {
                 type = 'textarea';
+            }
+
+            if(className === 'Ext.form.TriggerField'
+                || className === 'Ext.form.ComboBox'
+                || className === 'Ext.form.DateField'
+                || className === 'Ext.form.Picker'
+                || className === 'Ext.form.Spinner'
+                || className === 'Ext.form.TimeField') {
+                type = 'trigger';
             }
         });
 
