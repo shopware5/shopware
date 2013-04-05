@@ -3386,7 +3386,7 @@ and (min-device-width : 768px)
 and (max-device-width : 1024px) {
 
 	/** General */
-	body #wrapper, #header, .shopware_footer { width: 1020px }
+	body #wrapper, #header, .shopware_footer, #footer_wrapper { width: 1020px }
 	
 	/** Service menu */
 	.my_options a, .my_options span.service { font-size: 14px }
@@ -3480,6 +3480,7 @@ and (orientation : portrait) {
 	
 	/** Footer */
 	#footer .footer_menu a { font-size: 14px }
+    #footer_wrapper { width: 1020px }
 }
 
 /** iPHONE MEDIA QUERY */
