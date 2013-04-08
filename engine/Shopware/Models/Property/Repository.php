@@ -242,6 +242,7 @@ class Repository extends ModelRepository
         $builder->select(array('value'))
                 ->from('Shopware\Models\Property\Value', 'value')
                 ->where('value.optionId = ?0')
+                ->orderBy('value.position')
                 ->setParameter(0, $optionId);
 
         return $builder;
