@@ -1923,6 +1923,9 @@ class sAdmin
      */
     public function sGetOpenOrderData ()
     {
+        $shop = Shopware()->Shop();
+        $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
+
         $sql = "
 			SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
 			FROM s_order o
@@ -1932,7 +1935,7 @@ class sAdmin
 			AND subshopID = ?
 			ORDER BY ordertime DESC LIMIT 10
 		";
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql,array($this->sSYSTEM->_SESSION["sUserId"],$this->sSYSTEM->sSubShop["id"]));
+        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId()));
 
         foreach ($getOrders as $orderKey => $orderValue){
 
