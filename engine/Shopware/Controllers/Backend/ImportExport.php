@@ -2235,7 +2235,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
-                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup'));
+                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup', 'configuratorSet'));
                 $detailData = $this->mapFields($article, $articleDetailMapping, array('mainDetail'));
 
                 $updateData['mainDetail'] = $detailData['mainDetail'];
@@ -2262,11 +2262,22 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (isset($article['variants']) && !empty($article['variants'])) {
                     $updateData['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
                     foreach ($article['variants'] as $key => $variant) {
-                        if (isset($variant['prices'])) {
+	                    if (isset($variant['prices'])) {
                             $updateData['variants'][$key]['prices'] = $this->prepareImportXmlData($variant['prices']['price']);
                         }
                     }
                 }
+
+	            if (isset($article['configuratorSet']) && !empty($article['configuratorSet'])) {
+                    foreach ($article['configuratorSet']['groups'] as $groupKey =>$group) {
+	                    $updateData['configuratorSet']['groups'][$groupKey] = $group;
+	                    foreach ($group['options'] as $optionKey => $option) {
+		                    $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
+
+	                    }
+                    }
+                }
+
 
                 if (isset($article['prices'])) {
                     $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['prices']['price']);
