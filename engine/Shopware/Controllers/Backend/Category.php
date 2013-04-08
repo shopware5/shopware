@@ -388,8 +388,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         Shopware()->Models()->flush();
 
         $this->View()->assign(array(
-            'success' => true
-        ));
+                'success' => true
+            ));
     }
 
     /**
@@ -404,12 +404,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         try {
             $params = $this->Request()->getParams();
             $categoryId = $params['id'];
+
             if (empty($categoryId)) {
                 $categoryModel = new \Shopware\Models\Category\Category();
+                Shopware()->Models()->persist($categoryModel);
             } else {
                 $categoryModel = $this->getRepository()->find($categoryId);
-                $categoryModel->getArticles()->clear();
-                Shopware()->Models()->flush();
             }
 
             $this->prepareArticleAssociatedData($params, $categoryModel);
@@ -422,22 +422,21 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $categoryModel->fromArray($params);
 
-            $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
+            $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
+
             $parent = $this->getRepository()->find($params['parentId']);
             $categoryModel->setParent($parent);
 
-            Shopware()->Models()->persist($categoryModel);
             Shopware()->Models()->flush();
 
-            $params['id'] = $categoryModel->getId();
+            $categoryId = $categoryModel->getId();
 
-            $query = $this->getRepository()->getDetailQuery($params['id']);
+            $query = $this->getRepository()->getDetailQuery($categoryId);
             $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             $data["imagePath"] = $data["media"]["path"];
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -453,51 +452,26 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 return;
             }
             $result = $this->getRepository()->find($id);
-            if (!$result || !is_object($result)) {
+            if (!$result) {
                 $this->View()->assign(array('success' => false, 'message' => 'Category not found'));
                 return;
             }
 
-            $children = $this->getRepository()->children($result, false, 'left', 'DESC');
-            foreach($children as $node) {
-                $this->getRepository()->removeFromTree($node);
-            }
+
             Shopware()->Models()->remove($result);
+            $children = $this->getRepository()->getChildrenList($id);
+
+            foreach ($children as $node) {
+                $node = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $node['id']);
+                Shopware()->Models()->remove($node);
+            }
+
             Shopware()->Models()->flush();
 
             $this->View()->assign(array('success' => true));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
-    }
-
-    /**
-     * helper method to move the category item to the right position
-     *
-     * @param $moveItemId int
-     * @param $newPosition int
-     * @param $categoryChildArray Array
-     * @return Array | sorted category array
-     */
-    protected function moveCategoryItem($moveItemId, $newPosition, $categoryChildArray)
-    {
-        // todo@performacne method is not used anymore?!
-
-        $movedChildKey = 0;
-        foreach ($categoryChildArray as $key => $child) {
-            if ($child["id"] == $moveItemId) {
-                $movedChildKey = $key;
-            }
-        }
-
-        if ($newPosition != 0) {
-            //set the right position based on the array index
-            $newPosition--;
-        }
-        $temporaryCategoryArray = array_splice($categoryChildArray, $movedChildKey, 1);
-        array_splice($categoryChildArray, $newPosition, 0, $temporaryCategoryArray);
-        return $categoryChildArray;
     }
 
     /**
@@ -509,11 +483,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     protected function prepareArticleAssociatedData($data, $categoryModel)
     {
+        $categoryModel->getArticles()->clear();
         foreach ($data['articles'] as $articleData) {
             if (!empty($articleData['id'])) {
                 /** @var $articleModel \Shopware\Models\Article\Article */
-                $articleModel = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleData['id']);
-                $articleModel->getCategories()->add($categoryModel);
+                $articleModel = Shopware()->Models()->getReference('Shopware\Models\Article\Article', $articleData['id']);
+
+                if (!$articleModel->getCategories()->contains($categoryModel)) {
+                    $articleModel->getCategories()->add($categoryModel);
+                }
             }
         }
     }

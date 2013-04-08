@@ -49,10 +49,10 @@ use Doctrine\ORM\Query\Expr;
 class Repository extends ModelRepository
 {
     /**
-     * @param integer $id
-     * @param string $field
-     * @param null|string $separator
-     * @return array|mixed|string
+     * @param integer $id identifier of category
+     * @param string $field string or array of selectable fields
+     * @param null|string $separator if separator is given string will be returned
+     * @return array|string
      */
     public function getPathById($id, $field = 'name', $separator = null)
     {
@@ -60,6 +60,7 @@ class Repository extends ModelRepository
         $category = $this->find($id);
 
         $before = $this->getCategoryPathBefore($category, $field, $separator);
+
         $self = $this->getCategoryPathQuery($id, $field);
 
         if (!$before) {
@@ -111,7 +112,7 @@ class Repository extends ModelRepository
 
     /**
      * @param $id
-     * @param $fields
+     * @param string|array $fields
      * @return mixed
      */
     protected function getCategoryPathQuery($id, $fields)
@@ -130,9 +131,7 @@ class Repository extends ModelRepository
         $builder->select($selection)
                 ->from('Shopware\Models\Category\Category', 'category')
                 ->where('category.id = :id')
-                ->setParameter('id', $id)
-                ->setFirstResult(0)
-                ->setMaxResults(1);
+                ->setParameter('id', $id);
 
         $result = $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
@@ -237,6 +236,7 @@ class Repository extends ModelRepository
             $builder->leftJoin('c.articles', 'articles');
         }
         $builder->addGroupBy('c.id');
+
         return $builder;
     }
 
@@ -251,6 +251,7 @@ class Repository extends ModelRepository
     public function getDetailQuery($categoryId)
     {
         $builder = $this->getDetailQueryBuilder($categoryId);
+
         return $builder->getQuery();
     }
 
@@ -281,7 +282,7 @@ class Repository extends ModelRepository
             ->leftJoin('category.emotions', 'emotions')
             ->leftJoin('category.media', 'media')
             ->leftJoin('category.customerGroups', 'customerGroups')
-            ->where("category.id = ?1")
+            ->where('category.id = ?1')
             ->setParameter(1, $categoryId);
 
         return $builder;
@@ -387,14 +388,16 @@ class Repository extends ModelRepository
 
     /**
      * Returns a tree structure result of all active category children of the passed category id.
+     *
      * If the customer group id parameter is passed the function returns only this child categories
      * which are allowed to displayed for the passed customer group id.
+     *
      * The depth parameter can be used to shrink the sql result. If the parameters is set to false,
      * all sub categories returned.
      *
-     * @param      $id
-     * @param null $customerGroupId
-     * @param null $depth
+     * @param integer $id
+     * @param integer $customerGroupId
+     * @param integer $depth
      *
      * @return array
      */
@@ -419,6 +422,33 @@ class Repository extends ModelRepository
                 $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth);
             }
             $categories[] = $category;
+        }
+
+        return $categories;
+    }
+
+    /**
+     * @param integer $id
+     * @return array
+     */
+    public function getChildrenList($id)
+    {
+        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->from($this->getEntityName(), 'c')
+                ->select('c as category')
+                ->andWhere('c.parentId = :parent')
+                ->setParameter('parent', $id)
+                ->addOrderBy('c.position', 'ASC');
+
+        $children = $builder->getQuery()->getArrayResult();
+
+        $categories = array();
+        foreach ($children as $child) {
+            $categories[] = $child['category'];
+
+            $subCategories = $this->getActiveChildrenList($child['category']['id']);
+            $categories = array_merge($categories, $subCategories);
         }
 
         return $categories;
