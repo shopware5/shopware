@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
         store.filters.clear();
 		//Only one album available, so the search will only work in this album
-		if(childNodes.length == 1){
+		if(childNodes.length == 1 && !store.getProxy().extraParams.albumID){
 			store.getProxy().extraParams.albumID = childNodes[0].getId();
 		}
         store.currentPage = 1;
