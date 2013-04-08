@@ -681,7 +681,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
               `fallback`
             )
             SELECT
-              s.id, s.id as isocode, s.locale_id, s.currency_id, s.default as skipbackend, s.name,
+              s.id, s.id as isocode, s.locale_id, s.category_id, s.default as skipbackend, s.name,
               (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
               (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
               (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
