@@ -172,7 +172,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
             labelWidth  : 130,
-            anchor      : '100%'
+            anchor      : '100%',
+            albumId: -12 // Default supplier albumId
         });
     }
 });
