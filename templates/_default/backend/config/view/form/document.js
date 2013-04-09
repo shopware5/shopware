@@ -195,13 +195,22 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
 						values = detailPanel.getValues(),
 						id = values['id'];
 
-					Ext.Ajax.request({
-						url: '{url controller="Document" action="duplicateProperties"}',
-						params: {
-							id: id
-						},
-						scope:this
-					});
+                    Ext.MessageBox.confirm(
+                        '{s name=document/detail/applyconfig_label}Use the element-config for all forms{/s}',
+                        '{s name=document/detail/applyconfig_config_confirm_message}Are you sure you want to take over the properties for all types of documents?{/s}',
+                        function (response) {
+                            if (response !== 'yes') {
+                                return false;
+                            }
+                            Ext.Ajax.request({
+                                url: '{url controller="Document" action="duplicateProperties"}',
+                                params: {
+                                    id: id
+                                },
+                                scope: this
+                            });
+                        }
+                    );
 				}
 			},{
 				xtype: 'combo',
