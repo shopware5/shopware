@@ -199,7 +199,7 @@ Ext.define('Shopware.form.field.CodeMirror',
         }
 
         // Check if the passed mode is available
-        var availableModes = CodeMirror.listModes(),
+        var availableModes = CodeMirror.modes,
             modeActive = false;
 
         Ext.Array.each(availableModes, function(value) {
