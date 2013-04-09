@@ -55,11 +55,7 @@
     <script src="{link file='frontend/_resources/javascript/jquery-1.7.2.min.js'}"></script>
 {/block}
 
-{block name="frontend_index_header_javascript_hammerjs_lib"}
-
-    {* Include hammer.js for touch events in jQuery *}
-    <script src="{link file='frontend/_resources/javascript/plugins/touchy/jquery.touchy.min.js'}"></script>
-{/block}
+{block name="frontend_index_header_javascript_hammerjs_lib"}{/block}
 
 {block name="frontend_index_header_javascript"}
 	<script type="text/javascript">
