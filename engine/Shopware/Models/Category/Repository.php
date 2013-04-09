@@ -428,33 +428,6 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param integer $id
-     * @return array
-     */
-    public function getChildrenList($id)
-    {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from($this->getEntityName(), 'c')
-                ->select('c as category')
-                ->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id)
-                ->addOrderBy('c.position', 'ASC');
-
-        $children = $builder->getQuery()->getArrayResult();
-
-        $categories = array();
-        foreach ($children as $child) {
-            $categories[] = $child['category'];
-
-            $subCategories = $this->getActiveChildrenList($child['category']['id']);
-            $categories = array_merge($categories, $subCategories);
-        }
-
-        return $categories;
-    }
-
-    /**
      * Returns a flat list of all active category children of the passed category id.
      * If the customer group id parameter is passed the function returns only this child categories
      * which are allowed to displayed for the passed customer group id.

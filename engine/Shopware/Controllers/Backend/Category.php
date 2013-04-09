@@ -497,16 +497,31 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 return;
             }
 
-
             Shopware()->Models()->remove($result);
-            $children = $this->getRepository()->getChildrenList($id);
-
-            foreach ($children as $node) {
-                $node = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $node['id']);
-                Shopware()->Models()->remove($node);
-            }
-
             Shopware()->Models()->flush();
+
+            $sql = '
+                DELETE FROM s_articles_categories WHERE id IN (
+                    SELECT id FROM (
+                    SELECT ac1.id
+                FROM s_articles_categories ac1
+
+                INNER JOIN s_categories c1
+                    ON c1.parent = ac1.categoryID
+
+                LEFT JOIN s_articles_categories ac2
+                    ON c1.id = ac2.categoryID
+                            AND ac2.articleID = ac1.articleID
+
+                GROUP BY ac1.categoryID, ac1.articleID
+                HAVING COUNT(ac2.id) = 0
+                    ) t
+                );
+            ';
+
+            do {
+                $resultCount = Shopware()->Db()->exec($sql);
+            } while ($resultCount > 0);
 
             $this->View()->assign(array('success' => true));
         } catch (Exception $e) {
