@@ -24,7 +24,7 @@
 
 /**
  * Shopware Categories
- *
+ * 
  * Backend Controller for the category backend module.
  * Displays all data in an Ext JS TreePanel and allows to delete,
  * add and edit items. On the detail page the category data is displayed and can be edited
@@ -376,6 +376,23 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $item->setPosition($position);
 
         if ($previousId !== null){
+            //category parent changed
+            $articles = $item->getArticles();
+
+            //delete all existing associations in the s_articles_categories
+            $sql = "DELETE FROM s_articles_categories
+                    WHERE categoryID = ?";
+            Shopware()->Db()->query($sql, $itemId);
+
+            /**@var $article \Shopware\Models\Article\Article */
+            foreach($articles as $article) {
+                $this->createAssignment($item, $article);
+            }
+
+//todo@performance: Hier muss die Prüfung eingebaut werden, um zu prüfen ob die Parent Kategorie auch gelöscht werden muss
+//oder ob für die Parent Kategorie noch andere Einträge vorhanden sind.
+//                $this->cleanAssignment($category);
+
             /** @var $previous \Shopware\Models\Category\Category */
             $previous = $this->getRepository()->find($previousId);
             $item->setParent($previous->getParent());
@@ -388,8 +405,23 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         Shopware()->Models()->flush();
 
         $this->View()->assign(array(
-                'success' => true
-            ));
+            'success' => true
+        ));
+    }
+
+
+    /**
+     * @param $category \Shopware\Models\Category\Category
+     * @param $article \Shopware\Models\Article\Article
+     */
+    protected function createAssignment($category, $article) {
+        $sql = "INSERT IGNORE INTO s_articles_categories (id, categoryID, articleID)
+                VALUES (NULL, ?, ?)";
+
+        Shopware()->Db()->query($sql, array($category->getId(), $article->getId()));
+        if ($category->getParent() instanceof \Shopware\Models\Category\Category) {
+            $this->createAssignment($category->getParent(), $article);
+        }
     }
 
     /**
@@ -427,6 +459,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $parent = $this->getRepository()->find($params['parentId']);
             $categoryModel->setParent($parent);
 
+            if ($parent->getChildren()->count() === 0 && $parent->getArticles()->count() > 0) {
+                /** @var $article \Shopware\Models\Article\Article **/
+                foreach($parent->getArticles() as $article) {
+                    $article->getCategories()->add($categoryModel);
+                }
+            }
+
+            Shopware()->Models()->persist($categoryModel);
             Shopware()->Models()->flush();
 
             $categoryId = $categoryModel->getId();
