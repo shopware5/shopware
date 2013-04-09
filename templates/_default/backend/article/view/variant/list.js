@@ -373,7 +373,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         var me = this, columns = [], column;
 
         me.configuratorGroupStore.each(function(group) {
-            console.log(group);
             if (group.get('active')) {
                 columns.push(
                     {
