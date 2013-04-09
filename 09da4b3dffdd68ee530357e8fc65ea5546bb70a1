@@ -1,0 +1,4 @@
+From: next
+To: master
+Conflict: (content) Merge conflict in templates/_default/widgets/emotion/index.tpl
+	MODIFY|templates/_default/widgets/emotion/index.tpl
