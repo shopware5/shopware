@@ -283,10 +283,10 @@ td.head  {
 				{/if}
 			{/block}
 			{block name="document_index_info_ordercomment"}
-				{if $Order._order.comment}
+				{if $Order._order.customercomment}
 					<div style="font-size:11px;color:#333;">
 						{s name="DocumentIndexComment"}Kommentar:{/s}
-						{$Order._order.comment|replace:"€":"&euro;"}
+						{$Order._order.customercomment|replace:"€":"&euro;"}
 					</div>
 				{/if}
 			{/block}
