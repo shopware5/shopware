@@ -359,7 +359,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         });
 
         if(dynamic) {
-            console.log('create the dynamic columns');
             columns = columns.concat(me.createDynamicColumns());
         }
         columns = columns.concat(standardColumns);
