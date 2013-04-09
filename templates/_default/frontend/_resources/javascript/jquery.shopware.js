@@ -68,8 +68,6 @@
  */
 jQuery(document).ready(function ($) {
 
-    $.touchyOptions.useDelegation = false;
-
     // Removes hiding class for all script related elements
     $('.hide_script').removeClass('hide_script');
 
@@ -708,8 +706,9 @@ jQuery(document).ready(function ($) {
             'debug': false,
             'maxPages': 0,
             'extraParams': {},
-            'swipeRunning': false,
             'showArrows': true,
+            'minSwipeDistance': 300,
+            'swipeRunning': false,
 
             // Private
             '_this': null,
@@ -1130,6 +1129,11 @@ jQuery(document).ready(function ($) {
                                 } else {
                                     $.ajaxSlider.verticalSlider(config);
                                 }
+                                
+                                // Create our own swipe gesturce
+                                if($.ajaxSlider.isiPad) {
+                                    $.ajaxSlider.initializeSwipeEvent(config);
+                                }
 
                             }, 800);
                         }
@@ -1171,6 +1175,11 @@ jQuery(document).ready(function ($) {
             } else {
                 $.ajaxSlider.verticalSlider(config);
             }
+            
+            // Create our own swipe gesturce
+            if($.ajaxSlider.isiPad) {
+                $.ajaxSlider.initializeSwipeEvent(config);
+            }
 
             // Create slider navigation
             if (config.showNumbers === true) {
@@ -1180,6 +1189,147 @@ jQuery(document).ready(function ($) {
                     clearTimeout(timeout);
                     timeout = null;
                 }, 80);
+            }
+        },
+        
+        /**
+         * Custom swipe gesturcture implementation
+         * which only handles horizontal swipes.
+         *
+         * The method contains an custom implementation
+         * of the swipe gesture to provide the best possible
+         * extensibility and control over the fired event(s)
+         * and scrolling.
+         *
+         * @param {Object} plugin configuration
+         * @returns {void}
+         */
+        initializeSwipeEvent: function(config) {
+            var me = this, initialLeft = 0, containerLeft = 0,
+                moveLeft = 0;
+                
+            // Bind the event listener for the custom event to handle
+            // the slide change.
+            config._this.bind('swipe.ajaxSlider', me.onHandleSwipeEvent);
+            
+            // Starting the gesture
+            config._this.bind('touchstart', function(event) {
+                containerLeft = config._slideContainer.css('left');
+                containerLeft = ~~(1 * containerLeft.slice(0, -2));
+                
+                // Check if we're swiping right now
+                if(!config.swipeRunning) {
+                    //... if not, reset the control variables
+                    if(moveLeft !== 0) {
+                        moveLeft = 0; 
+                    }
+                    
+                    if(initialLeft !== 0) {
+                        initialLeft = 0;
+                    }
+                    initialLeft = event.originalEvent.touches[0].pageX;
+                    
+                    config.swipeRunning = true;
+                    config._slideContainer.css({
+                        WebkitTransition: 'left 0s ease-out',
+                        transition: 'left 0s ease-out'
+                    });
+                }
+            });
+            
+            // Slide the sliding container
+            config._this.bind('touchmove', function(event) {
+                moveLeft = event.originalEvent.touches[0].pageX;
+                var diffLeft = initialLeft - moveLeft;
+                
+                if(config.swipeRunning) {
+                    if(diffLeft < -40 || diffLeft > 40) {
+                        event.preventDefault();
+                        config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide + diffLeft));
+                    }
+                }
+            });
+
+            config._this.bind('touchend', function(event) {
+                var diffLeft = initialLeft - moveLeft,
+                    isRight = false, fireEvent;
+                    
+                if(config.swipeRunning) {
+                    config.swipeRunning = false;
+                }
+                
+                if(diffLeft < 0) {
+                    // Swipe to the right
+                    diffLeft *= -1;
+                    isRight = true;
+                }
+                
+                if(diffLeft >= config.minSwipeDistance) {
+                    fireEvent = (isRight) ? 'swipeRight' : 'swipeLeft';
+                } else {
+                    fireEvent = '';
+                }
+                
+                if(fireEvent.length > 0) {
+                    event.preventDefault();
+                    config._this.trigger({ type: 'swipe.ajaxSlider', distance: diffLeft, direction: fireEvent, config: config, scope: me });
+                } else {
+                    config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
+                }
+                
+                config._this.unbind('ajaxSlider.click');
+            });
+        },
+        
+        /**
+         * Event listener method which will be called when the user
+         * swipes his finger at least the configured minimum swipe
+         * distance ({@link config.minSwipeDistance}).
+         *
+         * The method changes the currently active slide and
+         * cares that the slider changes to the correct slide (page).
+         *
+         * @event swipe.ajaxSlider
+         * @param {Object} event - jQuery event object
+         * @returns {Void}
+         */
+        onHandleSwipeEvent: function(event) {
+            var me = event.scope, config = event.config;
+            
+            config._slideContainer.css({
+                WebkitTransition: 'left 0.25s ease-out',
+                transition: 'left 0.25s ease-out'
+            });
+            
+            if(event.direction === 'swipeRight') {
+                if((config._activeSlide - 1) >= 0) {
+                    me.leftArrow(event, config);   
+                } else {
+                    config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
+                }
+            } 
+            
+            if(event.direction === 'swipeLeft') {
+                if((config._activeSlide + 1) < config._slidesCount) {
+                    me.rightArrow(event, config);
+                } else {
+                    config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
+                }
+            }
+            
+            if(config.layout === 'horizontal') {
+                me.handleArrowsHorizontalSlider(config);
+            } else if(config.layout === 'vertical') {
+                me.handleArrowsVerticalSlider(config);  
+            }
+            
+            // Set navigation point to active
+            if (config.navigation || config.showNumbers) {
+                // Set this navigation point as active
+                if(config._activeNavigation) {
+                    config._activeNavigation.removeClass('active');
+                }
+                config._activeNavigation = config._this.find('#slideNavigation' + (slideNumber + 1)).addClass('active');
             }
         },
 
@@ -1192,7 +1342,7 @@ jQuery(document).ready(function ($) {
          * @param:  (obj) config - the plugin config
          */
         horizontalSlider: function (config) {
-            var height, me = this;
+            var height, me = this, moveUp = 0, moveLeft = 0;
             if (!config.headline) {
                 height = config.height;
             } else {
@@ -1233,16 +1383,11 @@ jQuery(document).ready(function ($) {
                         $.ajaxSlider.leftArrow(event, config);
                     });
 
-                    // Swipe gestures
-                    config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
-                        me.handleSwipeGestures(data, event, config);
-                    });
-
                     config._this.find('a').bind('touchstart', function(event) {
                         var link = $(this), touchTimeout;
                         event.preventDefault();
 
-                        if(!link.attr('href') && !config.swipeRunning) {
+                        if(!link.attr('href') && config.swipeRunning) {
                             return false;
                         }
 
@@ -1341,11 +1486,6 @@ jQuery(document).ready(function ($) {
                     $.ajaxSlider.leftArrow(event, config);
                 });
 
-                // Swipe gestures
-                config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
-                    me.handleSwipeGestures(data, event, config);
-                });
-
                 config._this.find('a').bind('touchstart', function(event) {
                     var link = $(this), touchTimeout;
                     event.preventDefault();
@@ -1368,33 +1508,6 @@ jQuery(document).ready(function ($) {
 
                 });
             }
-        },
-
-        /***
-         * Handles the swipe event on the container element
-         *
-         * @public
-         * @param [object] event - EventImpl
-         * @return void
-         */
-        handleSwipeGestures: function(data, event, config) {
-            if(!config.swipeRunning) {
-                config.swipeRunning = true;
-                if(data.direction === 'left') {
-                    if(config._slidesCount < (config._activeSlide + 2)) {
-                        return false;
-                    }
-                    $.ajaxSlider.rightArrow(event, config);
-                } else {
-                    if(config._activeSlide <= 0) {
-                        return false;
-                    }
-                    $.ajaxSlider.leftArrow(event, config);
-                }
-            }
-            window.setTimeout(function() {
-                config.swipeRunning = false;
-            }, 200);
         },
 
         rightArrow: function (event, config) {
@@ -1546,11 +1659,6 @@ jQuery(document).ready(function ($) {
             config._rightArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.rightArrow(event, config);
             });
-
-            // Swipe gestures
-            config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
-                me.handleSwipeGestures(data, event, config);
-            });
         },
 
         handleArrowsHorizontalSlider: function(config) {
@@ -1578,11 +1686,6 @@ jQuery(document).ready(function ($) {
             });
             config._rightArrow.bind('click touchstart', function (event) {
                 $.ajaxSlider.rightArrow(event, config);
-            });
-
-            // Swipe gestures
-            config._this.find('*').bind('touchy-swipe', function(event, $target, data) {
-                me.handleSwipeGestures(data, event, config);
             });
         },
 
