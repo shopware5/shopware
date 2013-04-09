@@ -141,9 +141,6 @@ Ext.define('Shopware.apps.Cache.controller.Main', {
                 me.getStartButton().enable();
             }
         });
-
-
-
     },
 
     /**
