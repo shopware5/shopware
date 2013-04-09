@@ -178,7 +178,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 			return;
 		}
 
-		$file = Shopware()->DocPath() . $media['path'];
+		$file = $media['path'];
 		$tmpFileName = $media['name'] . '.' . $media['extension'];
 
 		@set_time_limit(0);
@@ -375,13 +375,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->View()->assign(array('success' => false, 'message' => 'System albums can not be deleted'));
             return false;
         }
-        
-        
+
+
         /**@var $album \Shopware\Models\Media\Album*/
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
         $repo = Shopware()->Models()->getRepository('Shopware\Models\Media\Settings');
         $settings = $repo->findOneBy(array('albumId' => $albumId));
-        
+
         //album can't be founded
         if ($album === null || empty($album)) {
             $this->View()->assign(array('success' => false, 'message' => 'Album not found'));
@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->remove($album);
             Shopware()->Models()->remove($settings);
             Shopware()->Models()->flush();
-            
+
             $this->View()->assign(array('success' => true));
         }
         catch (\Doctrine\ORM\ORMException $e) {
@@ -603,7 +603,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         try {
             Shopware()->Models()->persist($album);
             Shopware()->Models()->flush();
-            
+
             //after the album is saved, set the album id to the settings model and save the settings
             $settings->setAlbumId($album->getId());
             $settings->setAlbum($album);
@@ -670,14 +670,17 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return;
         }
 
+        $path = 'media/' . strtolower($media->getType()) . '/' .   $params['name'] . '.' . $media->getExtension();
+
         //check if the name passed and is valid
-        if (isset($params['name']) && $params['name'] !== null && $params['name'] !== '' && $media->getName() !== $params['name']) {
-            $media->setName($params['name']);
-            $path = Shopware()->DocPath('media_'. strtolower($media->getType())) . $media->getName() . '.' . $media->getExtension();
-            if (file_exists($path)) {
+        if (!empty($params['name'])) {
+            $tmppath = Shopware()->DocPath() . $path;
+
+            if (file_exists($tmppath) && $params['name'] !== $media->getName()) {
                 $this->View()->assign(array('success' => false, 'message' => 'Name already exist'));
                 return;
             }
+            $media->setName($params['name']);
         }
         $media->setAttribute($params['attribute'][0]);
         //check if the album id passed and is valid
@@ -697,6 +700,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         try {
             Shopware()->Models()->persist($media);
             Shopware()->Models()->flush();
+
+            // Additional flush to save changes in postUpdate-Event
+            Shopware()->Models()->flush();
+
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
         }
