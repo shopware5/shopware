@@ -369,40 +369,28 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $itemId     = (int) $this->Request()->getParam('id');
         $parentId   = (int) $this->Request()->getParam('parentId', 1);
         $position   = (int) $this->Request()->getParam('position');
-        $previousId = $this->Request()->getParam('previousId', null);
 
         /** @var $item \Shopware\Models\Category\Category */
         $item = $this->getRepository()->find($itemId);
         $item->setPosition($position);
 
-        if ($previousId !== null){
-            //category parent changed
-            $articles = $item->getArticles();
+        /** @var $parent \Shopware\Models\Category\Category */
+        $parent = $this->getRepository()->find($parentId);
 
-            //delete all existing associations in the s_articles_categories
-            $sql = "DELETE FROM s_articles_categories
-                    WHERE categoryID = ?";
-            Shopware()->Db()->query($sql, $itemId);
+        if ($item->getParent()->getId() !== $parent->getId()) {
+            $item->setParent($parent);
+            Shopware()->Models()->flush();
 
             /**@var $article \Shopware\Models\Article\Article */
-            foreach($articles as $article) {
+            foreach($item->getArticles() as $article) {
                 $this->createAssignment($item, $article);
             }
 
-//todo@performance: Hier muss die Prüfung eingebaut werden, um zu prüfen ob die Parent Kategorie auch gelöscht werden muss
-//oder ob für die Parent Kategorie noch andere Einträge vorhanden sind.
-//                $this->cleanAssignment($category);
-
-            /** @var $previous \Shopware\Models\Category\Category */
-            $previous = $this->getRepository()->find($previousId);
-            $item->setParent($previous->getParent());
+            $this->cleanUpAssignments();
         } else {
-            /** @var $parent \Shopware\Models\Category\Category */
-            $parent = $this->getRepository()->find($parentId);
             $item->setParent($parent);
+            Shopware()->Models()->flush();
         }
-
-        Shopware()->Models()->flush();
 
         $this->View()->assign(array(
             'success' => true
@@ -415,6 +403,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      * @param $article \Shopware\Models\Article\Article
      */
     protected function createAssignment($category, $article) {
+        if ($category->getId() === 1) {
+            return;
+        }
         $sql = "INSERT IGNORE INTO s_articles_categories (id, categoryID, articleID)
                 VALUES (NULL, ?, ?)";
 
@@ -500,7 +491,17 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             Shopware()->Models()->remove($result);
             Shopware()->Models()->flush();
 
-            $sql = '
+            $this->cleanUpAssignments();
+
+            $this->View()->assign(array('success' => true));
+        } catch (Exception $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
+    protected function cleanUpAssignments()
+    {
+        $sql = '
                 DELETE FROM s_articles_categories WHERE id IN (
                     SELECT id FROM (
                     SELECT ac1.id
@@ -519,14 +520,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 );
             ';
 
-            do {
-                $resultCount = Shopware()->Db()->exec($sql);
-            } while ($resultCount > 0);
-
-            $this->View()->assign(array('success' => true));
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-        }
+        do {
+            $resultCount = Shopware()->Db()->exec($sql);
+        } while ($resultCount > 0);
     }
 
     /**
