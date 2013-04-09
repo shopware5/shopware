@@ -480,15 +480,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $perPage = "$offset,$limit";
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
-            FROM s_articles a, s_articles_categories ac,s_categories c,s_categories c2
+            FROM s_articles a
+              INNER JOIN s_articles_categories ac
+                 ON ac.articleID = a.id
+              INNER JOIN s_categories c
+                 ON c.id = ac.categoryID
+                 AND c.active = 1
+
             WHERE a.active=1
-            AND a.id=ac.articleID
             AND c.id=?
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
             ORDER BY a.datum DESC
             LIMIT {$perPage}
         ";
@@ -520,7 +520,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $sql = "
         SELECT SQL_CALC_FOUND_ROWS a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-        FROM s_articles_categories ac, s_categories c, s_categories c2, s_articles a
+        FROM s_articles a
+          INNER JOIN s_articles_categories ac
+            ON ac.articleID = a.id
+            AND a.active = 1
+          INNER JOIN s_categories c
+            ON c.id = ac.categoryID
+            AND c.active = 1
 
         LEFT JOIN s_order_details od
         ON a.id = od.articleID
@@ -531,13 +537,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         AND o.status >= 0
         AND o.id = od.orderID
 
-        WHERE a.active = 1
-        AND c.id=?
-        AND c2.active=1
-        AND c2.left >= c.left
-        AND c2.right <= c.right
-        AND ac.articleID=a.id
-        AND ac.categoryID=c2.id
+        WHERE c.id=?
 
         GROUP BY a.id
         ORDER BY quantity DESC, topseller DESC

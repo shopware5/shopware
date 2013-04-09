@@ -1301,7 +1301,11 @@ class sArticles
 				fv.value AS optionValue,
 				fv.id AS valueID
 				$addTranslationSelect
-			FROM s_categories c, s_categories c2, s_articles_categories ac
+			FROM s_categories c
+
+			INNER JOIN s_articles_categories ac
+			  ON ac.categoryID = c.id
+			  AND c.active = 1
 
 			JOIN s_filter_articles fa
 			ON fa.articleID=ac.articleID
@@ -1332,11 +1336,6 @@ class sArticles
 			$addFilterJoin
 
 			WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
 	        AND ag.articleID IS NULL
 
 			GROUP BY fv.id
