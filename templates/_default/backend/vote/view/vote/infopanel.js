@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Vote.view.vote.Infopanel', {
     cls: 'detail-view',
     bodyPadding: 10,
     title: '{s name=infopanel/title}More information{/s}',
-    width: 190,
+    width: 250,
     collapsible: true,
     dockedItems: {
         dock: 'bottom',
