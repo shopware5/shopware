@@ -40,8 +40,6 @@ Ext.define('Shopware.apps.Cache', {
     bulkLoad: true,
     loadPath: '{url action=load}',
 
-    defaultController: 'Main',
-
     /**
      * This method will be called when all dependencies are solved and
      * all member controllers, models, views and stores are initialized.
@@ -52,14 +50,8 @@ Ext.define('Shopware.apps.Cache', {
         if (me.action) {
             me.controllerName = 'Direct';
         } else {
-            me.controllerName =  me.defaultController;
+            me.controllerName =  'Main';
         }
-
-        me.controller = me.addController({
-            name: me.controllerName,
-            action: me.action,
-            params: me.params
-        });
 
         var mainController = me.getController(me.controllerName);
 
