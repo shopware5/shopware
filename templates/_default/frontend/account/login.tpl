@@ -20,14 +20,18 @@
 	<div class="grid_10">
 		<h2 class="headingbox_dark largesize">{se name="LoginHeaderNew"}{/se} {$sShopname}</h2>
 		<div class="inner_container">
-			
 			<p>{se name="LoginInfoNew"}{/se}</p>
-			{if !{config name=NoAccountDisable}}
-				<input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" /> <strong>{se name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/se}</strong>
-			{/if}<br /><br />
-			<a href="{url controller=register}" title="{s name='LoginLinkRegister'}{/s}" class="button-right large register_now">
-				{se name="LoginLinkRegister"}{/se}
-			</a>
+			<form method="post" name="new_customer" class="new_customer_form" action="{url controller='register'}">
+				{if !{config name=NoAccountDisable}}
+					<div class="checkbox">
+						<p>
+							<input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" />
+							<strong>{s name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/s}</strong>
+						</p>
+					</div>
+				{/if}
+				<input type="submit" class="button-right large register_now" value="{s name='LoginLinkRegister'}{/s}" />
+			</form>
 		</div>
 	</div>
 	{/block}
