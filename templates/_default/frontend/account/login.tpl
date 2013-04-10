@@ -25,7 +25,7 @@
 				{if !{config name=NoAccountDisable}}
 					<div class="checkbox">
 						<p>
-							<input type="checkbox" class="chk_noaccount" id="skipLogin" name="skipLogin" value="1" />
+							<input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" />
 							<strong>{s name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/s}</strong>
 						</p>
 					</div>
