@@ -154,6 +154,7 @@ class sCategories
                     ON  ac.articleID = ?
                     AND ac.categoryID = c.id
             WHERE c.id = ?
+            AND c.active = 1
             ORDER BY ac.id
         ';
 
