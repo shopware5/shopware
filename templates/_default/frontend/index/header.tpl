@@ -55,8 +55,6 @@
     <script src="{link file='frontend/_resources/javascript/jquery-1.7.2.min.js'}"></script>
 {/block}
 
-{block name="frontend_index_header_javascript_hammerjs_lib"}{/block}
-
 {block name="frontend_index_header_javascript"}
 	<script type="text/javascript">
 	//<![CDATA[

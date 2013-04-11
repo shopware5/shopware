@@ -804,8 +804,9 @@ jQuery(document).ready(function ($) {
                 'title': 'Slide right',
                 'href': '#slideRight'
             }).appendTo(config._container).hide();
-
-            if(!config.showArrows) {
+                
+            if($.ajaxSlider.isiPad || !config.showArrows) {
+                config.showArrows = false;
                 config._leftArrow.hide();
                 config._rightArrow.hide();
             }
@@ -1329,7 +1330,7 @@ jQuery(document).ready(function ($) {
                 if(config._activeNavigation) {
                     config._activeNavigation.removeClass('active');
                 }
-                config._activeNavigation = config._this.find('#slideNavigation' + (slideNumber + 1)).addClass('active');
+                config._activeNavigation = config._this.find('#slideNavigation' + (config._activeSlide + 1)).addClass('active');
             }
         },
 
@@ -1477,7 +1478,7 @@ jQuery(document).ready(function ($) {
                 }
 
                 // Right arrow
-                config._rightArrow.bind('click touchstart', function (event) {
+                config._rightArrow.bind('click ', function (event) {
                     $.ajaxSlider.rightArrow(event, config);
                 });
 
@@ -1584,7 +1585,6 @@ jQuery(document).ready(function ($) {
             // Unbind the event listeners to prevent a unexcepted scrolling behaviors
             config._leftArrow.unbind('click');
             config._rightArrow.unbind('click');
-            config._container.unbind('swipe');
 
             if (config.layout === 'horizontal') {
 
