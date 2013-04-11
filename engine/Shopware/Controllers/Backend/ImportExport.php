@@ -355,8 +355,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                  'detailsPrices',
             ));
             $builder->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
-                    ->leftJoin('details.prices', 'detailsPrices')
-                    ->leftJoin('details.attribute', 'detailsAttribute');
+		            ->leftJoin('details.attribute', 'detailsAttribute')
+                    ->leftJoin('details.prices', 'detailsPrices');
         }
 
         $builder->setFirstResult($offset);
@@ -1961,17 +1961,36 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             if ($group && !empty($newsletterData['firstname'])) {
-                $sql = "INSERT INTO s_campaigns_maildata (groupID, email, firstname, lastname) VALUES (?, ?, ?, ?)
-                      ON DUPLICATE KEY UPDATE groupId = ?, email = ?, firstname = ?, lastname = ?";
-
-                $values = array(
-                    $group->getId(),
-                    $newsletterData['email'],
-                    $newsletterData['firstname'],
-                    $newsletterData['lastname'],
-                );
-
-                Shopware()->Db()->query($sql, array_merge(array_values($values), array_values($values)));
+	            $sql = "
+					INSERT INTO s_campaigns_maildata (
+						groupID, email, firstname, lastname, salutation, street, streetnumber, zipcode, title, city
+					) VALUES (
+						:groupId, :eMail, :firstName, :lastName, :salutation, :street, :streetNumber, :zipCode, :title, :city
+					)
+                    ON DUPLICATE KEY UPDATE
+	                    groupId = :groupId,
+	                    email = :eMail,
+	                    firstname = :firstName,
+	                    lastname = :lastName,
+	                    salutation = :salutation,
+	                    street = :street,
+	                    streetnumber = :streetNumber,
+	                    zipcode = :zipCode,
+	                    title = :title,
+	                    city = :city
+				";
+                Shopware()->Db()->query($sql, array(
+	                "groupId" => $group->getId(),
+	                "eMail" => $newsletterData['email'],
+	                "firstName" => $newsletterData['firstname'],
+	                "lastName" => $newsletterData['lastname'],
+	                "salutation" => $newsletterData['salutation'],
+	                "street" => $newsletterData['street'],
+	                "streetNumber" => $newsletterData['streetnumber'],
+	                "zipCode" => $newsletterData['zipcode'],
+	                "title" => $newsletterData['title'],
+	                "city" => $newsletterData['city']
+                ));
 
                 if ($existingRecipient) {
                     $updated = true;
@@ -2216,7 +2235,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     }
                 }
 
-                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup'));
+                $updateData = $this->mapFields($article, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'propertyValues', 'propertyGroup', 'configuratorSet'));
                 $detailData = $this->mapFields($article, $articleDetailMapping, array('mainDetail'));
 
                 $updateData['mainDetail'] = $detailData['mainDetail'];
@@ -2225,9 +2244,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $updateData['similar'] = $this->prepareImportXmlData($article['related']['similar']);
                 }
 
-                if (isset($article['propertyValues'])) {
+                if (isset($article['propertyValues']) && !empty($article['propertyValues'])) {
                     $updateData['propertyValues'] = $this->prepareImportXmlData($article['propertyValues']['propertyValue']);
                 }
+	            else {
+		            unset($updateData['propertyValues']);
+	            }
 
                 if (isset($article['related'])) {
                     $updateData['related'] = $this->prepareImportXmlData($article['related']['related']);
@@ -2240,11 +2262,22 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (isset($article['variants']) && !empty($article['variants'])) {
                     $updateData['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
                     foreach ($article['variants'] as $key => $variant) {
-                        if (isset($variant['prices'])) {
+	                    if (isset($variant['prices'])) {
                             $updateData['variants'][$key]['prices'] = $this->prepareImportXmlData($variant['prices']['price']);
                         }
                     }
                 }
+
+	            if (isset($article['configuratorSet']) && !empty($article['configuratorSet'])) {
+                    foreach ($article['configuratorSet']['groups'] as $groupKey =>$group) {
+	                    $updateData['configuratorSet']['groups'][$groupKey] = $group;
+	                    foreach ($group['options'] as $optionKey => $option) {
+		                    $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
+
+	                    }
+                    }
+                }
+
 
                 if (isset($article['prices'])) {
                     $updateData['mainDetail']['prices'] = $this->prepareImportXmlData($article['prices']['price']);
@@ -2280,6 +2313,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $errormessage = $e->getMessage();
                 }
 
+	            if(!empty($article["name"]) && !empty($article["id"])) {
+		            $errors[] = "Error with article: ". $article["name"]. " and articleID: ".$article["id"];
+	            }
                 $errors[] = "Error in line {$counter}: $errormessage";
             }
         }

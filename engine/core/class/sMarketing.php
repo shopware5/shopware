@@ -613,6 +613,12 @@ class sMarketing
 			WHERE promotionID=$id
 			ORDER BY position
 			";
+            $sql = Enlight()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
+                array(
+                    'subject' => $this,
+                    'id' => $id
+                )
+            );
 
             $getCampaignContainers = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 

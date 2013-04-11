@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Order.view.batch.Progress', {
      * Define window width
      * @integer
      */
-    width:360,
+    width:560,
 
     /**
      * Define window height

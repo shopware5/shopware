@@ -1,21 +1,27 @@
 <div id="article_notification">
 	<input type="hidden" value="{$NotifyHideBasket}" name="notifyHideBasket" id="notifyHideBasket" />
-	{if $NotifyValid == true || $NotifyInvalid == true}
-		<div class="notice">
-			{if $NotifyValid == true}
-				{se name='DetailNotifyInfoValid'}{/se}
-			{else}
-				{se name='DetailNotifyInfoInvalid'}{/se}
-			{/if}
+
+
+	{if $NotifyValid == true}
+		<div class="success">
+			{se name='DetailNotifyInfoValid'}{/se}
 		</div>
-	{/if}
-	
-	{if $NotifyEmailError == true}
+	{elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
+				<div class="notice">
+					{se name='DetailNotifyInfoInvalid'}{/se}
+				</div>
+    {elseif $NotifyEmailError == true}
 		<div class="error">
 			{se name='DetailNotifyInfoErrorMail'}{/se}
 		</div>
-	{else if $NotifyAlreadyRegistered == true}
-		<div class="notice">
+	{elseif $WaitingForOptInApprovement}
+		<div id="articleNotificationWasSend" class="displaynone">
+			<div class="success">
+				{se name='DetailNotifyInfoSuccess'}{/se}
+			</div>
+		</div>
+	{elseif $NotifyAlreadyRegistered == true}
+		<div class="success">
 			<div class="center">
 				<strong>
 					{se name='DetailNotifyAlreadyRegistered'}{/se}
@@ -50,14 +56,6 @@
 		</fieldset>
 		<div class="doublespace">&nbsp;</div>
 	</form>
-	
-	<div id="articleNotificationWasSend" class="displaynone">
-	{if $NotifyAlreadyRegistered != true && $NotifyValid != true && $NotifyInvalid != true}
-		<div class="success">	
-			{se name='DetailNotifyInfoSuccess'}{/se}
-		</div>
-	{/if}
-	</div>
 </div>
 
 

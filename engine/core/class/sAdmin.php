@@ -1100,8 +1100,22 @@ class sAdmin
                 $addScopeSql = "
                 AND subshopID = ".$this->subshopId;
             }
-            // If password is already md5-decrypted, use these one
-            $password = $this->sSYSTEM->_POST["passwordMD5"] ? $this->sSYSTEM->_POST["passwordMD5"] : md5($this->sSYSTEM->_POST["password"]);
+
+            // If password is already md5-decrypted and the parameter $ignoreAccountMode is not set, use it directly
+	        if($ignoreAccountMode == true) {
+				// Allow login from registration
+		        $password = $this->sSYSTEM->_POST["passwordMD5"] ? $this->sSYSTEM->_POST["passwordMD5"] : md5($this->sSYSTEM->_POST["password"]);
+	        } else {
+		        if(empty($this->sSYSTEM->_POST["password"])) {
+			        $sErrorFlag["password"] = true;
+			        $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
+			        unset($this->sSYSTEM->_SESSION["sUserMail"]);
+			        unset($this->sSYSTEM->_SESSION["sUserPassword"]);
+			        unset($this->sSYSTEM->_SESSION["sUserId"]);
+		        } else {
+			        $password = md5($this->sSYSTEM->_POST["password"]);
+		        }
+	        }
             $email = strtolower($this->sSYSTEM->_POST["email"]);
 
             if ($ignoreAccountMode){
@@ -1909,6 +1923,9 @@ class sAdmin
      */
     public function sGetOpenOrderData ()
     {
+        $shop = Shopware()->Shop();
+        $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
+
         $sql = "
 			SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
 			FROM s_order o
@@ -1918,7 +1935,7 @@ class sAdmin
 			AND subshopID = ?
 			ORDER BY ordertime DESC LIMIT 10
 		";
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql,array($this->sSYSTEM->_SESSION["sUserId"],$this->sSYSTEM->sSubShop["id"]));
+        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId()));
 
         foreach ($getOrders as $orderKey => $orderValue){
 

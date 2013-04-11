@@ -534,7 +534,7 @@ class sShopwareImport
             "changetime",
             "pricegroupID",
             "filtergroupID",
-            "lastlock",
+            "laststock",
             "crossbundlelook",
             "notification",
             "template",
