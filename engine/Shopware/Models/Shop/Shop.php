@@ -652,6 +652,8 @@ class Shop extends ModelEntity
                 return $this->getCustomerGroup()->getKey();
             case 'defaultcurrency':
                 return $this->getCurrency()->getId();
+	        case 'fallback':
+		        return $this->getFallback()->getId();
         }
         return null;
     }

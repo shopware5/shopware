@@ -3139,6 +3139,7 @@ class sArticles
                     pricegroupID, pricegroupActive, filtergroupID,
                     d.purchaseunit, d.referenceunit,
                     d.unitID, laststock, additionaltext,
+                    d.shippingtime,
                     (a.configurator_set_id IS NOT NULL) as sConfigurator,
                     IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
                     IFNULL((SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes FROM s_articles_vote WHERE active=1 AND articleID=a.id),'0.00|00') as sVoteAverange,
@@ -3896,13 +3897,13 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
 		";
-        $object = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
+        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
-        if (!empty($object)) {
-            $object = unserialize($object);
+        if (!empty($objectData)) {
+	        $objectData = unserialize($objectData);
         } else {
-            $object = array();
+	        $objectData = array();
         }
         if (!empty($fallback)) {
             $sql = "
@@ -3916,11 +3917,11 @@ class sArticles
             );
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
-                $object = array_merge($objectFallback, $object);
+	            $objectData = array_merge($objectFallback, $objectData);
             }
         }
-        if (!empty($object)) {
-            foreach ($object as $translateKey => $value) {
+        if (!empty($objectData)) {
+            foreach ($objectData as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
                 } else {
