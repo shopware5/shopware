@@ -1008,7 +1008,12 @@ class sArticles
                 IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
                 IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
 
-                '0.00|00' as sVoteAverange
+                (
+                    SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
+                    FROM s_articles_vote
+                    WHERE active=1
+                    AND articleID = a.id
+                ) AS sVoteAverange
 
             $sqlFromPath
 
@@ -1057,30 +1062,11 @@ class sArticles
             LIMIT $sLimitStart, $sLimitEnd
 ";
 
-//        //todo@performance
-//        echo $orderBy;
-//        echo '<br><br>';
-//        echo $sql;
-
-
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
         $articles = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articles)) {
             return array();
-        }
-
-        foreach($articles as &$article) {
-            $sql = "
-				   SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
-				   FROM s_articles_vote
-				   WHERE active=1
-				   AND articleID = ?
-            ";
-            $sVoteAverage = Shopware()->Db()->fetchOne($sql, array($article['articleID']));
-            if (!empty($sVoteAverage)) {
-                $article['sVoteAverange'] = $sVoteAverage;
-            }
         }
 
         $sql = "
@@ -1227,6 +1213,11 @@ class sArticles
             // Read unit if set
             if ($articles[$articleKey]["unitID"]) {
                 $articles[$articleKey]["sUnit"] = $this->sGetUnit($articles[$articleKey]["unitID"]);
+            }
+
+            //todo@performance
+            if (empty($articles[$articleKey]['sVoteAverange'])) {
+                $articles[$articleKey]['sVoteAverange'] = '0.00|00';
             }
 
             $articles[$articleKey]['sVoteAverange'] = explode('|', $articles[$articleKey]['sVoteAverange']);
@@ -2279,7 +2270,6 @@ class sArticles
             $fetchGroup = $this->sSYSTEM->sUSERGROUP;
         }
 
-
         if (empty($usepricegroups)) {
             $sql = "
 			SELECT price FROM s_articles_prices, s_articles_details WHERE
@@ -2314,11 +2304,12 @@ class sArticles
                 // No Price for this customer-group fetch defaultprice
                 $sql = "
 				SELECT price FROM s_articles_details
-				LEFT JOIN
-				s_articles_prices ON s_articles_details.id=s_articles_prices.articledetailsID AND
-				pricegroup='EK' AND s_articles_prices.from = '1'
+				LEFT JOIN s_articles_prices
+				  ON s_articles_details.id=s_articles_prices.articledetailsID
+				  AND pricegroup='EK'
+				  AND s_articles_prices.from = '1'
 				WHERE
-				s_articles_details.articleID=$article
+				  s_articles_details.articleID=$article
 				GROUP BY ROUND(price,2)
 				ORDER BY price ASC
 				LIMIT 2
