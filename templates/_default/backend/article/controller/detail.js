@@ -304,7 +304,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             articleList.getStore('List').load({
                 scope: me,
                 callback: function() {
-                    selModel.select(selection.index, false, true);
+                    if (selection) {
+                        selModel.select(selection.index, false, true);
+                    }
                 }
             });
         }
