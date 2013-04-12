@@ -20,14 +20,21 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Modules
+ * @subpackage Articles
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     Stefan Hamann
+ * @author     Heiner Lohaus
+ * @author     $Author$
  */
 
 /**
  * Deprecated Shopware Class that handle categories
  *
- * @category  Shopware
- * @package   Shopware\Core
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * todo@all: Documentation
  */
 class sArticles
 {
@@ -801,12 +808,28 @@ class sArticles
         $sLimitEnd = $sPerPage;
 
         $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
+
+        //todo@performance:
+        //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
+        $sqlFromPath = "
+            FROM s_articles AS a
+            INNER JOIN s_articles_details AS aDetails
+                ON aDetails.id = a.main_detail_id
+        ";
+
         switch ($sSort) {
             case 1:
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
+
                 break;
             case 2:
                 $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
+                //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
+                $sqlFromPath = "
+                    FROM s_articles_details aDetails FORCE INDEX (articles_by_category_sort_popularity)
+                    INNER JOIN s_articles a
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
@@ -822,7 +845,13 @@ class sArticles
                 break;
             default:
                 $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
+                $sqlFromPath = "
+                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)
+                    INNER JOIN s_articles_details AS aDetails
+                        ON aDetails.id = a.main_detail_id
+                ";
         }
+
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
@@ -844,22 +873,22 @@ class sArticles
 
                     ORDER BY min_price
                     LIMIT 1
-                ) * ((100 - IFNULL(cd.discount, 0)) / 100)
+                ) * ( (100 - IFNULL(cd.discount, 0) ) / 100)
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
-				ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
+		    		ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
 
 				LEFT JOIN s_core_pricegroups_discounts cd
-				ON a.pricegroupActive=1
-				AND cd.groupID=a.pricegroupID
-				AND cd.customergroupID=cg.id
-				AND cd.discountstart=(
-					SELECT MAX(discountstart)
-					FROM s_core_pricegroups_discounts
-					WHERE groupID=a.pricegroupID
-					AND customergroupID=cg.id
-                )
+				    ON a.pricegroupActive=1
+				    AND cd.groupID=a.pricegroupID
+				    AND cd.customergroupID=cg.id
+				    AND cd.discountstart=(
+                        SELECT MAX(discountstart)
+                        FROM s_core_pricegroups_discounts
+                        WHERE groupID=a.pricegroupID
+                        AND customergroupID=cg.id
+                    )
 			";
         } else {
             $select_price = 'IFNULL(p.price, p2.price)';
@@ -886,8 +915,8 @@ class sArticles
                 if ($filter > 0) {
                     $addFilterSQL .= "
                         INNER JOIN s_filter_articles fv$filter
-                        ON fv$filter.articleID = a.id
-                        AND fv$filter.valueID = $filter
+                            ON fv$filter.articleID = a.id
+                            AND fv$filter.valueID = $filter
                     ";
                 }
             }
@@ -897,94 +926,161 @@ class sArticles
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         $now = Shopware()->Db()->quote(date('Y-m-d'));
 
-        $priceForBasePrice = "(SELECT price FROM s_articles_prices WHERE articledetailsID=aDetails.id AND pricegroup=IF(p.id IS NULL, 'EK', p.pricegroup) AND `from`=1 LIMIT 1 ) as priceForBasePrice";
+        $priceForBasePrice = "
+        (
+            SELECT price
+            FROM s_articles_prices
+            WHERE articledetailsID = aDetails.id
+            AND pricegroup= IF(p.id IS NULL, 'EK', p.pricegroup)
+            AND `from` = 1 LIMIT 1
+        ) as priceForBasePrice";
 
         $sql = "
-			SELECT
-				a.id as articleID, aDetails.id AS articleDetailsID, a.notification as notification, weight, aDetails.ordernumber, a.datum, aDetails.releasedate,
-				additionaltext, aDetails.shippingfree,aDetails.shippingtime,instock, a.description AS description, description_long,
-				aSupplier.name AS supplierName, aSupplier.img AS supplierImg, a.name AS articleName, topseller as highlight,
-				$select_price as price, laststock, $priceForBasePrice,
-				sales, IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice, aTax.tax, taxID,
-				aDetails.minpurchase,
-				aDetails.purchasesteps,
-				aDetails.maxpurchase,
-				aDetails.purchaseunit,
-				aDetails.referenceunit,
-				aDetails.unitID,
-				pricegroupID,
-				pricegroupActive,
-				IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
-				attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
-				attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-				IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
-				(a.configurator_set_id IS NOT NULL) as sConfigurator,
-				IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
-				IFNULL((
-				   SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
-				   FROM s_articles_vote WHERE active=1
-				   AND articleID=a.id),
-				'0.00|00') as sVoteAverange,
-				IF(DATEDIFF($now, a.datum)<=$markNew,1,0) as newArticle,
-				IF(aDetails.sales>=$topSeller,1,0) as topseller,
-				IF(aDetails.releasedate>$now,1,0) as sUpcoming,
-				IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate
+            SELECT
+                STRAIGHT_JOIN
 
-			FROM s_articles AS a
-                INNER JOIN s_articles_categories ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = $categoryId
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
+                a.id as articleID,
+                a.laststock,
+                a.taxID,
+                a.pricegroupID,
+                a.pricegroupActive,
+                a.notification as notification,
+                a.datum,
+                a.description AS description,
+                a.description_long,
+                a.name AS articleName,
+                a.topseller as highlight,
+                (a.configurator_set_id IS NOT NULL) as sConfigurator,
 
-			JOIN s_articles_details AS aDetails
-			ON aDetails.id=a.main_detail_id
 
-			JOIN s_articles_attributes AS aAttributes
-			ON aAttributes.articledetailsID=aDetails.id
+                aDetails.id AS articleDetailsID,
+                aDetails.ordernumber,
+                aDetails.releasedate,
+                aDetails.shippingfree,
+                aDetails.shippingtime,
+                aDetails.minpurchase,
+                aDetails.purchasesteps,
+                aDetails.maxpurchase,
+                aDetails.purchaseunit,
+                aDetails.referenceunit,
+                aDetails.unitID,
+                aDetails.weight,
+                aDetails.additionaltext,
+                aDetails.instock,
+                aDetails.sales,
+                IF(aDetails.sales>=$topSeller,1,0) as topseller,
+                IF(aDetails.releasedate>$now,1,0) as sUpcoming,
+                IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate,
 
-			JOIN s_core_tax AS aTax
-			ON aTax.id=a.taxID
+                aSupplier.name AS supplierName,
+                aSupplier.img AS supplierImg,
+
+                aTax.tax,
+
+                aAttributes.attr1,
+                aAttributes.attr2,
+                aAttributes.attr3,
+                aAttributes.attr4,
+                aAttributes.attr5,
+                aAttributes.attr6,
+                aAttributes.attr7,
+                aAttributes.attr8,
+                aAttributes.attr9,
+                aAttributes.attr10,
+                aAttributes.attr11,
+                aAttributes.attr12,
+                aAttributes.attr13,
+                aAttributes.attr14,
+                aAttributes.attr15,
+                aAttributes.attr16,
+                aAttributes.attr17,
+                aAttributes.attr18,
+                aAttributes.attr19,
+                aAttributes.attr20,
+
+                $priceForBasePrice,
+
+                $select_price as price,
+
+                IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice,
+                IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
+                IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
+                IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
+                IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
+
+                '0.00|00' as sVoteAverange
+
+            $sqlFromPath
+
+            INNER JOIN s_articles_categories ac
+              ON  ac.articleID = a.id
+              AND ac.categoryID = $categoryId
+
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
+
+            JOIN s_articles_attributes AS aAttributes
+              ON aAttributes.articledetailsID = aDetails.id
+
+            JOIN s_core_tax AS aTax
+              ON aTax.id = a.taxID
 
             LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+              ON ag.articleID = a.id
+              AND ag.customergroupID = {$this->customerGroupId}
 
-			LEFT JOIN s_articles_supplier AS aSupplier
-			ON aSupplier.id=a.supplierID
+            LEFT JOIN s_articles_supplier AS aSupplier
+              ON aSupplier.id = a.supplierID
 
-			$addFilterSQL
+            $addFilterSQL
 
-			LEFT JOIN s_articles_prices p
-			ON p.articleDetailsID=aDetails.id
-			AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
-			AND p.to='beliebig'
+            LEFT JOIN s_articles_prices p
+              ON p.articleDetailsID = aDetails.id
+              AND p.pricegroup = '{$this->sSYSTEM->sUSERGROUP}'
+              AND p.to = 'beliebig'
 
-			LEFT JOIN s_articles_prices p2
-			ON p2.articledetailsID=aDetails.id
-			AND p2.pricegroup='EK'
-			AND p2.to='beliebig'
+            LEFT JOIN s_articles_prices p2
+              ON p2.articledetailsID = aDetails.id
+              AND p2.pricegroup = 'EK'
+              AND p2.to = 'beliebig'
 
-			$join_price
+            $join_price
 
             WHERE ag.articleID IS NULL
-            AND a.mode = 0
-			AND a.active=1
+            AND a.active=1
 
-			$addFilterWhere
-			$supplierSQL
+            $addFilterWhere
+            $supplierSQL
 
-            GROUP BY a.id
-			ORDER BY $orderBy
-			LIMIT $sLimitStart, $sLimitEnd
-		";
+            ORDER BY $orderBy
+            LIMIT $sLimitStart, $sLimitEnd
+";
+
+//        //todo@performance
+//        echo $orderBy;
+//        echo '<br><br>';
+//        echo $sql;
+
 
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
         $articles = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articles)) {
             return array();
+        }
+
+        foreach($articles as &$article) {
+            $sql = "
+				   SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
+				   FROM s_articles_vote
+				   WHERE active=1
+				   AND articleID = ?
+            ";
+            $sVoteAverage = Shopware()->Db()->fetchOne($sql, array($article['articleID']));
+            if (!empty($sVoteAverage)) {
+                $article['sVoteAverange'] = $sVoteAverage;
+            }
         }
 
         $sql = "
@@ -1008,7 +1104,6 @@ class sArticles
             $addFilterSQL
 
             WHERE ag.articleID IS NULL
-            AND a.mode = 0
             AND a.active=1
 
             $addFilterWhere
@@ -1191,6 +1286,7 @@ class sArticles
 
         return $result;
     }
+
 
     /**
      * Get supplier by id
@@ -2301,7 +2397,7 @@ class sArticles
      * @access public
      * @return array
      */
-    public function sGetArticleById($id = 0, $sCategoryID = NULL)
+    public function sGetArticleById($id = 0, $sCategoryID = null)
     {
 
         if(empty($sCategoryID)) {
@@ -3118,7 +3214,6 @@ class sArticles
                     pricegroupID, pricegroupActive, filtergroupID,
                     d.purchaseunit, d.referenceunit,
                     d.unitID, laststock, additionaltext,
-                    d.shippingtime,
                     (a.configurator_set_id IS NOT NULL) as sConfigurator,
                     IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
                     IFNULL((SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes FROM s_articles_vote WHERE active=1 AND articleID=a.id),'0.00|00') as sVoteAverange,
@@ -3877,13 +3972,13 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
 		";
-        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
+        $object = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
-        if (!empty($objectData)) {
-	        $objectData = unserialize($objectData);
+        if (!empty($object)) {
+            $object = unserialize($object);
         } else {
-	        $objectData = array();
+            $object = array();
         }
         if (!empty($fallback)) {
             $sql = "
@@ -3897,11 +3992,11 @@ class sArticles
             );
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
-	            $objectData = array_merge($objectFallback, $objectData);
+                $object = array_merge($objectFallback, $object);
             }
         }
-        if (!empty($objectData)) {
-            foreach ($objectData as $translateKey => $value) {
+        if (!empty($object)) {
+            foreach ($object as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
                 } else {
