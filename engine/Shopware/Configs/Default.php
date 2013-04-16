@@ -108,13 +108,14 @@ return array_merge($customConfig, array(
         ), $customConfig['cache']['backendOptions']),
     ),
     'hook' => array_merge(array(
-        'proxyDir' => $this->AppPath('Proxies'),
+        'proxyDir' => $this->DocPath('cache_proxies'),
         'proxyNamespace' => $this->App() . '_Proxies'
     ), $customConfig['hook']),
     'model' => array_merge(array(
         'autoGenerateProxyClasses' => false,
-        'attributeDir' => $this->AppPath('Models_Attribute'),
-        'proxyDir' => $this->AppPath('Proxies'),
+        'fileCacheDir'     => $this->DocPath('cache_doctrine_filecache'),
+        'attributeDir' => $this->DocPath('cache_doctrine_attributes'),
+        'proxyDir' => $this->DocPath('cache_doctrine_proxies'),
         'proxyNamespace' => $this->App() . '\Proxies',
         'cacheProvider' => null // supports Apc, Array, Wincache and Xcache
     ), $customConfig['model']),

@@ -28,10 +28,8 @@ engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
 tests/Shopware/TempFiles/
-engine/Shopware/Models/Attribute/
-engine/Shopware/Proxies/
-cache/database/
-cache/templates/
+cache/
+
 
 # User provided content
 media/archive/

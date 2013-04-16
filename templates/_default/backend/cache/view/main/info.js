@@ -35,10 +35,10 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
     initComponent: function() {
         var me = this;
 
-         Ext.applyIf(me, {
-             store: 'main.Info',
-             columns: me.getColumns()
-         });
+        Ext.applyIf(me, {
+            store: 'main.Info',
+            columns: me.getColumns()
+        });
 
         me.callParent(arguments);
         me.store.load();
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
         return [{
             header: '{s name=info/columns/name}Name{/s}',
             dataIndex: 'name',
-            flex: 2
+            flex: 5
         }, {
             header: '{s name=info/columns/backend}Backend{/s}',
             dataIndex: 'backend',
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Cache.view.main.Info', {
         }, {
             header: '{s name=info/columns/directory}Directory{/s}',
             dataIndex: 'dir',
-            flex: 5
+            flex: 4
         }, {
             header: '{s name=info/columns/files}Files{/s}',
             dataIndex: 'files',
