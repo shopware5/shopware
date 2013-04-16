@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS `s_core_sessions_backend` (
 
 
 -- //@UNDO
-  DROP TABLE IF EXISTS s_core_sessions_backend;
+
 -- //
