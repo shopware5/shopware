@@ -259,13 +259,11 @@ class ModelManager extends EntityManager
      */
     public function generateAttributeModels($tableNames = array())
     {
-        $path = realpath($this->getConfiguration()->getAttributeDir()) . DIRECTORY_SEPARATOR;
-
-        /**@var $generator \Shopware\Components\Model\Generator*/
+        /** @var $generator \Shopware\Components\Model\Generator*/
         $generator = new \Shopware\Components\Model\Generator();
 
         $generator->setPath(
-            $path
+            $this->getConfiguration()->getAttributeDir()
         );
 
         $generator->setModelPath(

@@ -28,8 +28,8 @@ Ext.define('Shopware.apps.Cache.view.main.Window', {
     alias: 'widget.cache-window',
     cls: Ext.baseCSSPrefix + 'cache',
 
-    width: 600,
-    height: 490,
+    width: 750,
+    height: 590,
     layout: 'border',
 
     title: '{s name=window/title}Cache{/s}',
