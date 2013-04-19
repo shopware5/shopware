@@ -319,7 +319,8 @@ class Enlight_Components_Mail extends Zend_Mail
      * @return Zend_Mail                    Provides fluent interface
      * @events  Enlight_Components_Mail_Send
      */
-    public function send($transport = null) {
+    public function send($transport = null)
+    {
         Enlight()->Events()->notify(
             'Enlight_Components_Mail_Send',
             array(
@@ -327,6 +328,7 @@ class Enlight_Components_Mail extends Zend_Mail
                 'transport' => $transport
             )
         );
-        parent::send($transport);
+
+        return parent::send($transport);
     }
 }

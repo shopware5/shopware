@@ -51,10 +51,10 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Returns all event listeners of the Enlight_Event_EventManager
      * @return array
      */
-    public function getAllListeners() {
+    public function getAllListeners()
+    {
         return $this->listeners;
     }
-
 
     /**
      * Registers the given event handler and adds it to the internal listeners array.
