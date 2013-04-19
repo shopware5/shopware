@@ -319,10 +319,11 @@ class Enlight_Application
      * The passed manager has to be an instance of the Enlight_Event_EventManager,
      * otherwise the function throws an exception.
      *
-     * @param $manager
+     * @param Enlight_Event_EventManager $manager
      * @throws Exception
      */
-    public function setEventManager($manager) {
+    public function setEventManager(Enlight_Event_EventManager $manager)
+    {
         if (!$manager instanceof Enlight_Event_EventManager) {
             throw new Exception("The passed event manager isn't an instance of Enlight_Event_EventManager");
         }
