@@ -144,12 +144,10 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
 					width: 150,
 					iconCls: 'sprite-document-pdf',
 					handler: function(){
-						var id = me.down('grid').getSelectionModel().getSelection()[0].get('id');
-
 						var detailPanel = me.down('config-base-detail'),
 							values = detailPanel.getValues();
 						var previewPageBreak = values['booleanPageBreak'] ? '&pagebreak=on' : '';
-						window.open('{url controller=document}?typ=' + id + '&preview=1&sampleData=1' + previewPageBreak);
+						window.open('{url controller=document}?typ=' + values.id + '&preview=1&sampleData=1' + previewPageBreak);
 					}
 				},{
 					xtype: 'config-element-button',
