@@ -8,8 +8,6 @@ function GetLangOpts($llcc, $adobeCJK) {
 	}
 	else { $lang = strtolower($llcc); $country = ''; }
 	$unifonts = "";
-	$dir = "ltr";
-	$spacing = "";
 	$coreSuitable = false;
 
 	switch($lang){
@@ -36,55 +34,56 @@ function GetLangOpts($llcc, $adobeCJK) {
 
 
 	  // RTL Languages
-	  CASE "he":  $dir = "rtl";  $spacing = "W";  
+	  CASE "he":
+	  CASE "yi":
 		$unifonts = "dejavusans,dejavusansB,dejavusansI,dejavusansBI";  break;
 
 	  // Arabic
-	  CASE "ar":  $dir = "rtl";  $spacing = "W";  
+	  CASE "ar":  
 		$unifonts = "xbriyaz,xbriyazB,xbriyazI,xbriyazBI,xbzar,xbzarB,xbzarI,xbzarBI";  break;
-	  CASE "fa":  $dir = "rtl";  $spacing = "W";  
+	  CASE "fa":  
 		$unifonts = "xbriyaz,xbriyazB,xbriyazI,xbriyazBI,xbzar,xbzarB,xbzarI,xbzarBI";  break;
-	  CASE "ps":  $dir = "rtl"; $spacing = "W";  
+	  CASE "ps": 
 		$unifonts = "xbriyaz,xbriyazB,xbriyazI,xbriyazBI,xbzar,xbzarB,xbzarI,xbzarBI"; break;
-	  CASE "ur":  $dir = "rtl"; $spacing = "W";  
+	  CASE "ur":  
 		$unifonts = "xbriyaz,xbriyazB,xbriyazI,xbriyazBI,xbzar,xbzarB,xbzarI,xbzarBI"; break;
 
-	  // Sindhi (Arabic or Devanagari)
+	  // Sindhi (can be Arabic or Devanagari)
 	  CASE "sd":
-		if ($country == "IN") { $spacing = "W"; $unifonts = "ind_hi_1_001"; }
-	//	else if ($country == "PK") { $dir = "rtl"; $spacing = "W"; $unifonts = ""; }
-	//	else { $dir = "rtl"; $spacing = "W"; $unifonts = ""; }
+		if ($country == "IN") { $unifonts = "ind_hi_1_001"; }
+	//	else if ($country == "PK") { $unifonts = ""; }
+	//	else { $unifonts = ""; }
 		break;
 
 
 	  // INDIC 
 	  // Assamese
-	  CASE "as":  $spacing = "W";  $unifonts = "ind_bn_1_001"; break;
+	  CASE "as":  $unifonts = "ind_bn_1_001"; break;
 	  // Bengali
-	  CASE "bn":  $spacing = "W";  $unifonts = "ind_bn_1_001"; break;
+	  CASE "bn":  $unifonts = "ind_bn_1_001"; break;
 	  // Gujarati
-	  CASE "gu":  $spacing = "W";  $unifonts = "ind_gu_1_001"; break;
+	  CASE "gu":  $unifonts = "ind_gu_1_001"; break;
 	  // Hindi (Devanagari)
-	  CASE "hi":  $spacing = "W";  $unifonts = "ind_hi_1_001"; break;
+	  CASE "hi":  $unifonts = "ind_hi_1_001"; break;
 	  // Kannada
-	  CASE "kn":  $spacing = "W";  $unifonts = "ind_kn_1_001"; break;
+	  CASE "kn":  $unifonts = "ind_kn_1_001"; break;
 	  // Kashmiri
-	  CASE "ks":  $spacing = "W";  $unifonts = "ind_hi_1_001"; break;
+	  CASE "ks":  $unifonts = "ind_hi_1_001"; break;
 	  // Malayalam
-	  CASE "ml":  $spacing = "W";  $unifonts = "ind_ml_1_001"; break;
+	  CASE "ml":  $unifonts = "ind_ml_1_001"; break;
 	  // Nepali (Devanagari)
-	  CASE "ne":  $spacing = "W";  $unifonts = "ind_hi_1_001"; break;
+	  CASE "ne":  $unifonts = "ind_hi_1_001"; break;
 	  // Oriya
-	  CASE "or":  $spacing = "W";  $unifonts = "ind_or_1_001"; break;
+	  CASE "or":  $unifonts = "ind_or_1_001"; break;
 	  // Punjabi (Gurmukhi)
-	  CASE "pa":  $spacing = "W";  $unifonts = "ind_pa_1_001"; break;
+	  CASE "pa":  $unifonts = "ind_pa_1_001"; break;
 	  // Tamil
-	  CASE "ta":  $spacing = "W";  $unifonts = "ind_ta_1_001"; break;
+	  CASE "ta":  $unifonts = "ind_ta_1_001"; break;
 	  // Telegu
-	  CASE "te":  $spacing = "W";  $unifonts = "ind_te_1_001"; break;
+	  CASE "te":  $unifonts = "ind_te_1_001"; break;
 
 	  // THAI
-	  CASE "th":  $spacing = "C";  $unifonts = "garuda,garudaB,garudaI,garudaBI,norasi,norasiB,norasiI,norasiBI";  break;
+	  CASE "th":  $unifonts = "garuda,garudaB,garudaI,garudaBI,norasi,norasiB,norasiI,norasiBI";  break;
 
 	  // VIETNAMESE
 	  CASE "vi":  
@@ -99,7 +98,6 @@ function GetLangOpts($llcc, $adobeCJK) {
 //		else {
 //			$unifonts = "sun-exta,sun-extb,hannoma,hannomb";
 //		}
-		$spacing = "C"; 
 		break;
 
 	  CASE "ko":  
@@ -110,7 +108,6 @@ function GetLangOpts($llcc, $adobeCJK) {
 //		else {
 //			$unifonts = "unbatang_0613"; 
 //		}
-		$spacing = "C"; 
 		break;
 
 	  CASE "zh":
@@ -141,7 +138,6 @@ function GetLangOpts($llcc, $adobeCJK) {
 //				$unifonts = "sun-exta,sun-extb,hannoma,hannomb";
 //			}
 		}
-		$spacing = "C"; 
 		break;
 
 	}
@@ -151,7 +147,7 @@ function GetLangOpts($llcc, $adobeCJK) {
 	if ($unifonts) {
 		$unifonts_arr = preg_split('/\s*,\s*/',$unifonts);
 	}
-	return array($coreSuitable ,$unifonts_arr,$dir,$spacing);
+	return array($coreSuitable ,$unifonts_arr);
 }
 
 ?>
