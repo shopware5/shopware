@@ -88,6 +88,7 @@
 {include file='backend/base/model/value.js'}
 {include file='backend/base/model/position_status.js'}
 {include file='backend/base/model/doc_type.js'}
+{include file='backend/base/model/password_encoder.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -111,6 +112,8 @@
 {include file='backend/base/store/country_state.js'}
 {include file='backend/base/store/form.js'}
 {include file='backend/base/store/position_status.js'}
+{include file='backend/base/store/password_encoder.js'}
+
 
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}
