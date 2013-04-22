@@ -6,8 +6,8 @@
 		<div>
 		    <label for="salutation2">{se name='RegisterShippingLabelSalutation'}{/se}</label>
 		    <select name="register[shipping][salutation]" id="salutation2" class="normal {if $error_flags.salutation}instyle_error{/if}">
-		    <option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>Herr</option>
-		    <option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>Frau</option>
+				<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterShippingLabelMr'}{/s}</option>
+				<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterShippingLabelMrs'}{/s}</option>
 		    </select>
 		</div>
 	{/block}
