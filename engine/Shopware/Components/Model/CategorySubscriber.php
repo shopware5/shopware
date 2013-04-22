@@ -69,7 +69,12 @@ class CategorySubscriber implements BaseEventSubscriber
             $parentId = $parent->getId();
 
             $parents = $em->getParentCategories($parentId);
-            $path = '|' . implode('|', $parents);
+            $path = implode('|', $parents);
+            if (empty($path)) {
+                $path = null;
+            } else {
+                $path = '|' . $path . '|';
+            }
 
             $entity->internalSetPath($path);
 
