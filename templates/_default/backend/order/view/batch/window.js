@@ -61,7 +61,8 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
      * Define window height
      * @integer
      */
-    height:600,
+    height:'90%',
+    autoScroll: true,
     /**
      * Display no footer button for the detail window
      * @boolean
@@ -124,7 +125,7 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
 			);
         } else {
             me.width = 400;
-            me.height = 600;
+            me.height = '90%';
 
         }
         items.push(me.createMailPanel());
