@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      */
     cls:Ext.baseCSSPrefix + 'order-batch-grid',
 
+    minHeight: 150,
     /**
      * This configuration option is to be applied to child items of the container managed by this layout.
      * Each child item with a flex property will be flexed horizontally according to each item's relative
