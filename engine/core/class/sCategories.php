@@ -150,17 +150,20 @@ class sCategories
         $sql = '
             SELECT c.id
             FROM s_categories c
-                INNER JOIN s_articles_categories ac
-                    ON  ac.articleID = ?
-                    AND ac.categoryID = c.id
-            WHERE c.id = ?
-            AND c.active = 1
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = ?
+                AND ac.categoryID = c.id
+            LEFT JOIN  s_categories c2
+                ON c2.parent = c.id
+            WHERE  c.active = 1
+            AND c2.id IS  NULL
+            AND c.path LIKE ?
             ORDER BY ac.id
         ';
 
         return (int) Shopware()->Db()->fetchOne($sql, array(
             $articleId,
-            $parentId
+            '%|' . $parentId . '%'
         ));
     }
 

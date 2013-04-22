@@ -155,6 +155,13 @@ class Category extends ModelEntity
     private $blog = false;
 
     /**
+     * @var string $path
+     *
+     * @ORM\Column(name="path", type="string", nullable=false)
+     */
+    private $path = '';
+
+    /**
      * Flag shows if the category filterable
      *
      * @var integer $showFilterGroups
@@ -871,6 +878,28 @@ class Category extends ModelEntity
         $this->emotions = $emotions;
 
         return $this;
+    }
+
+
+    /**
+     * The path is set via Event Listener in \Shopware\Components\Model\CategorySubscriber
+     *
+     * @param string $path
+     * @return Category
+     */
+    public function internalSetPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**
