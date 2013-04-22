@@ -33,8 +33,6 @@
 /**
  * Shopware default auth adapter
  *
- * todo@all: Class-description
- *
  * <code>
  * $authComponent = new Shopware_Components_Auth_Adapter_Default
  * $authComponent->authenticate();
@@ -57,11 +55,6 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      * @var string
      */
     protected $_credentialColumn = 'password';
-    /**
-     * Rule set to salt the password
-     * @var string
-     */
-    protected $_credentialTreatment = "MD5(CONCAT('A9ASD:_AD!_=%a8nx0asssblPlasS$',MD5(?)))";
     /**
      * Array with conditions that have to be true in auth request
      * @var array
@@ -98,6 +91,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         foreach ($this->conditions as $condition) {
             $this->addCondition($condition);
         }
+
         $this->setSessionId(Enlight_Components_Session::getId());
     }
 
@@ -167,8 +161,6 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
        );
     }
 
-
-
     /**
      * Set the property failed logins to a new value
      * @param $number
@@ -184,5 +176,108 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             )
         );
         return $this;
+    }
+
+    /**
+     * _authenticateCreateSelect() - This method creates a Zend_Db_Select object that
+     * is completely configured to be queried against the database.
+     *
+     * @return Zend_Db_Select
+     */
+    protected function _authenticateCreateSelect()
+    {
+        // get select
+        $dbSelect = clone $this->getDbSelect();
+        $dbSelect->from($this->_tableName, array('*'))
+                ->where($this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity);
+
+        return $dbSelect;
+    }
+
+    /**
+     * _authenticateValidateResult() - This method attempts to validate that
+     * the record in the resultset is indeed a record that matched the
+     * identity provided to this adapter.
+     *
+     * @param array $resultIdentity
+     * @return Zend_Auth_Result
+     */
+    protected function _authenticateValidateResult($resultIdentity)
+    {
+        if ($this->_credentialColumn == $this->expiryColumn) {
+            if ($this->_credential->toString('YYYY-MM-dd HH:mm:ss') >= $resultIdentity[$this->_credentialColumn]) {
+                $passwordValid = false;
+            } else  {
+                $passwordValid = true;
+            }
+        } else {
+            $encoderName  = $resultIdentity['encoder'];
+            $plaintext    = $this->_credential;
+            $hash         = $resultIdentity[$this->_credentialColumn];
+
+            $passwordValid = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
+            if ($passwordValid) {
+                $defaultEncoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+
+                if ($encoderName !== $defaultEncoderName) {
+                    $this->updateHash($plaintext, $defaultEncoderName);
+                } else {
+                    $this->rehash($plaintext, $hash, $encoderName);
+                }
+            }
+        }
+
+        if (!$passwordValid) {
+            $this->_authenticateResultInfo['code'] = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
+            $this->_authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
+
+            return $this->_authenticateCreateAuthResult();
+        }
+
+        $this->_resultRow = $resultIdentity;
+
+        $this->_authenticateResultInfo['code'] = Zend_Auth_Result::SUCCESS;
+        $this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
+
+        return $this->_authenticateCreateAuthResult();
+    }
+
+    /**
+     * @param $plaintext
+     * @param $hash
+     * @param $encoderName
+     */
+    public function rehash($plaintext, $hash, $encoderName)
+    {
+        $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
+
+         if ($newHash === $hash) {
+             return;
+         }
+
+        $this->_zendDb->update(
+            $this->_tableName,
+            array($this->_credentialColumn => $newHash),
+            $this->_zendDb->quoteInto(
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+            )
+        );
+    }
+
+    /**
+     * @param string $plaintext
+     * @param string $defaultEncoderName
+     */
+    public function updateHash($plaintext, $defaultEncoderName)
+    {
+        $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
+
+        $this->_zendDb->update(
+            $this->_tableName,
+            array('encoder' => $defaultEncoderName, $this->_credentialColumn => $newHash),
+            $this->_zendDb->quoteInto(
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+            )
+        );
     }
 }
