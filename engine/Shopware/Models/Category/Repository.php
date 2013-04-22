@@ -506,6 +506,7 @@ class Repository extends ModelRepository
     public function getBlogCategoriesByParentQuery($parentId)
     {
         $builder = $this->getBlogCategoriesByParentBuilder($parentId);
+
         return $builder->getQuery();
     }
 
@@ -519,11 +520,14 @@ class Repository extends ModelRepository
      */
     public function getBlogCategoriesByParentBuilder($parentId)
     {
-        //todo@performance: Hier muss ein Rekursiver call eingebunden werden.
         $builder = $this->createQueryBuilder('categories')
                 ->select(array('categories'))
-                ->andWhere('categories.parentId = :parentId AND categories.blog = 1')
-                ->setParameter("parentId", $parentId);
+                ->andWhere('categories.blog = 1');
+
+        if ($parentId > 1) {
+            $builder->andWhere('categories.path LIKE :path')
+                    ->setParameter("path", "%|" . $parentId . '|%');
+        }
 
         return $builder;
     }
