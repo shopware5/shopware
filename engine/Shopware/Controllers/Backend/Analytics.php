@@ -319,13 +319,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 ) as `node`, ';
 
                 $sqlJoin = "
+                    INNER JOIN s_articles_categories ac
+                        ON  ac.articleID  = a.id
+
                     INNER JOIN s_categories c
                         ON  c.id = ac.categoryID
                         AND c.active = 1
                         AND c.parent=$node
-
-                    INNER JOIN s_articles_categories ac
-                        ON  ac.articleID  = a.id
                 ";
                 break;
             case 'article':
