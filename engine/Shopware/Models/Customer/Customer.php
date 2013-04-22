@@ -115,6 +115,13 @@ class Customer extends ModelEntity
     private $password = '';
 
     /**
+     * Tells which hash was used for password encryption
+     * @var string
+     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
+     */
+    private $encoderName = 'md5';
+
+    /**
      * If this property is set, the password will not be encoded on save.
      * @var string $rawPassword
      */
@@ -377,7 +384,9 @@ class Customer extends ModelEntity
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        // Force hashPassword to change with the password
+        $this->hashPassword = null;
+        $this->password     = $password;
         return $this;
     }
 
@@ -399,7 +408,9 @@ class Customer extends ModelEntity
      */
     public function setRawPassword($rawPassword)
     {
-        $this->rawPassword = $rawPassword;
+        // Force hashPassword to change with the rawPassword
+        $this->hashPassword = null;
+        $this->rawPassword  = $rawPassword;
     }
 
     /**
@@ -799,7 +810,8 @@ class Customer extends ModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->hashPassword = md5($this->password);
+            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
@@ -812,7 +824,8 @@ class Customer extends ModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->hashPassword = md5($this->password);
+            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
