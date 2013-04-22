@@ -53,6 +53,30 @@ class CategorySubscriber implements BaseEventSubscriber
         $em  = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
+        // Update/Set Path for
+        $entities = array_merge(
+            $uow->getScheduledEntityInsertions(),
+            $uow->getScheduledEntityUpdates()
+        );
+
+        foreach ($entities as $entity) {
+            /* @var $entity Category */
+            if (!($entity instanceof Category)) {
+                continue;
+            }
+
+            $parent = $entity->getParent();
+            $parentId = $parent->getId();
+
+            $parents = $em->getParentCategories($parentId);
+            $path = '|' . implode('|', $parents);
+
+            $entity->internalSetPath($path);
+
+            $md = $em->getClassMetadata(get_class($entity));
+            $uow->recomputeSingleEntityChangeSet($md, $entity);
+        }
+
         /* @var $col \Doctrine\ORM\PersistentCollection */
         foreach ($uow->getScheduledCollectionUpdates() AS $col) {
 

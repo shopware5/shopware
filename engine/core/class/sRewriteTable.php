@@ -460,6 +460,6 @@ class sRewriteTable
             $parentId
         );
 
-        return $categoryId !== null ? $this->sCategoryPath($categoryId) : null;
+        return empty($categoryId) ? null : $this->sCategoryPath($categoryId);
     }
 }
