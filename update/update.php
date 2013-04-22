@@ -94,11 +94,18 @@ class update
 
         $tmp = $result;
         array_shift($tmp);
-        $string = '|' . implode('|', $tmp);
+
+        $path = implode('|', $tmp);
+        if (empty($path)) {
+            $path = null;
+        } else {
+            $path = '|' . $path . '|';
+        }
+
 
         $updateStmt->execute(array(
             ':id'   => $parentId,
-            ':path' => $string
+            ':path' => $path
         ));
 
         $cache[$parentId] = $result;
