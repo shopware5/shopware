@@ -48,6 +48,8 @@ Ext.define('Shopware.apps.ProductFeed.store.Supplier', {
      * @boolean
      */
     autoLoad : false,
+
+    pageSize: 2000,
     /**
      * Define the used model for this store
      * @string
