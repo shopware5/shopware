@@ -55,6 +55,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      */
     cls: Ext.baseCSSPrefix + 'batch-settings-panel',
 
+    autoScroll: true,
+
     layout: {
         align: 'stretch',
         type: 'vbox'
