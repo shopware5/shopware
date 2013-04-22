@@ -424,6 +424,7 @@ class sShopwareImport
 			$article['articleID'] = $row['articleID'];
 
 		}
+
 		// Wir �berpr�fen ob Artikel vorhanden ist, wenn ja holen wir die ArtikelDetailsID
 		if(!empty($article['articledetailsID']))
 			$where = "d.id={$article['articledetailsID']}";
@@ -803,6 +804,8 @@ class sShopwareImport
 			$customer["md5_password"] = md5($customer['password']);
 		if(isset($customer["md5_password"]))
 			$customer["md5_password"] = $this->sDB->qstr($customer['md5_password']);
+		if(isset($customer["encoder"]))
+			$customer["encoder"] = $this->sDB->qstr($customer['encoder']);
 		if(isset($customer["email"]))
 			$customer["email"] = $this->sDB->qstr(trim($customer["email"]));
 		if(isset($customer["customergroup"]))
@@ -860,7 +863,8 @@ class sShopwareImport
 			"paymentpreset",
 			"language",
 			"subshopID",
-			"referer"
+			"referer",
+			"encoder"
 		);
 		if(empty($customer["userID"]))
 		{
@@ -1405,7 +1409,7 @@ class sShopwareImport
 
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-            
+
         }
 
         // set category attributes
@@ -1487,12 +1491,15 @@ class sShopwareImport
 			$price['pseudoprice'] = $price['pseudoprice']/(100+$price['tax'])*100;
 
 		$article = $this->sGetArticleNumbers($price);
-		if(empty($article))
+		if(empty($article)) {
 			return false;
-		if(empty($price['price'])&&empty($price['percent']))
+        }
+		if(empty($price['price'])&&empty($price['percent'])) {
 			return false;
-		if($price['from']<=1 && empty($price['price']))
+        }
+		if($price['from']<=1 && empty($price['price'])) {
 			return false;
+        }
 
         // Delete old price, if pricegroup, articleDetailId and 'from' matches
 		$sql = "
@@ -1523,8 +1530,9 @@ class sShopwareImport
 					articledetailsID = {$article['articledetailsID']}
 			";
 			$price['price'] = $this->sDB->GetOne($sql);
-			if(empty($price['price']))
+			if(empty($price['price'])) {
 				return false;
+			}
 			$price['price'] = $price['price']*(100-$price['percent'])/100;
 		}
 
@@ -1543,8 +1551,9 @@ class sShopwareImport
 				LIMIT 1
 			";
 			$result = $this->sDB->Execute($sql);
-			if(empty($result)||!$this->sDB->Affected_Rows())
+			if(empty($result)||!$this->sDB->Affected_Rows()) {
 				return false;
+			}
 		}
 
 		$sql = "
@@ -1552,10 +1561,12 @@ class sShopwareImport
 			VALUES ({$price['pricegroup']}, {$price['from']}, 'beliebig', {$article['articleID']}, {$article['articledetailsID']}, {$price['price']}, {$price['pseudoprice']}, {$price['baseprice']}, {$price['percent']})
 		";
 		$result = $this->sDB->Execute($sql);
-		if(empty($result))
+		if(empty($result)) {
 			return false;
-		else
+        } else {
 			return $this->sDB->Insert_ID();
+        }
+
 	}
 
 	/**
@@ -2129,8 +2140,8 @@ class sShopwareImport
         if(empty($articleIDs)) {
             return false;
         }
-        
-        
+
+
 		foreach ($relatedarticleIDs as $relatedarticleID)
 		{
 			if(empty($relatedarticleID)) continue;
@@ -2139,7 +2150,7 @@ class sShopwareImport
 				INSERT IGNORE INTO s_articles_relationships (articleID, relatedarticle)
 				VALUES ($articleID, {$articleIDs[$relatedarticleID]['articleID']})
 			";
-            
+
 			$this->sDB->Execute($sql);
 		}
 		return true;
@@ -3291,7 +3302,7 @@ class sShopwareImport
 			return false;
 		if(empty($data))
 			return $this->sDeleteTranslation($type, $objectkey, $language);
-        
+
 		switch ($type)
 		{
 			case "article":
@@ -3557,7 +3568,7 @@ class sShopwareImport
 
         //set the upload file into the model. The model saves the file to the directory
         $media->setFile($file);
-        
+
         $pathInfo = pathinfo($article_download["new_link"]);
         if($media->getExtension() === null && $pathInfo['extension'] === null) {
             $this->sAPI->sSetError("In SW4 files must have an extension", 10409);
@@ -3746,15 +3757,15 @@ class sShopwareImport
             Shopware()->Models()->persist($model);
         }
         Shopware()->Models()->flush();
-        
-        
+
+
 		foreach ($languages as $languageArray)
 		{
             $language = $languageArray['isocode'];
             $localeID = $languageArray['id'];
 
 			if(!isset($article['values_'.$language])) continue;
-            
+
 			foreach($article['values_'.$language] as $key=>$value){
                 $valueModel = $valueRepository->findOneBy(array(
                     'value' => $article['values'][$key],
