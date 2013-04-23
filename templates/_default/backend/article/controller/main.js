@@ -160,12 +160,15 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             articleData = storeData.raw.article;
 
         var article = Ext.create('Shopware.apps.Article.model.Article', articleData),
+            attribute = Ext.create('Shopware.apps.Article.model.Attribute', articleData.attribute),
             detail = Ext.create('Shopware.apps.Article.model.Detail', articleData );
+
 
         article.set('taxId', firstTax.get('id'));
         detail.set('kind', 1);
 
         article.getMainDetail().add(detail);
+        article.getAttribute().add(attribute);
         return article;
     },
 

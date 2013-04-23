@@ -2987,16 +2987,26 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $sql = "SELECT number FROM s_order_number WHERE name = 'articleordernumber'";
         $number = Shopware()->Db()->fetchOne($sql);
 
-        do {
-            $number++;
+        if (!empty($number)) {
+            do {
+                $number++;
 
-            $sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
-            $hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
-        } while ($hit);
+                $sql = "SELECT id FROM s_articles_details WHERE ordernumber LIKE ?";
+                $hit = Shopware()->Db()->fetchOne($sql, $prefix . $number);
+            } while ($hit);
+        }
 
+        $sql = "SELECT `name`, `default` FROM s_core_engine_elements";
+        $data = Shopware()->Db()->fetchAll($sql);
+        $prepared = array();
+        foreach($data as $item) {
+            $prepared[$item['name']] = $item['default'];
+        }
+        
         return array(
             'number'     => $prefix . $number,
-            'autoNumber' => $number
+            'autoNumber' => $number,
+            'attribute'  => $prepared
         );
     }
 
@@ -3922,6 +3932,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //now we convert the property names to the getter functions.
         foreach($paths as $path) {
             $commands[] = 'get' . ucfirst($path);
+        }
+
+        $sql = "
+            SELECT name, `default`
+            FROM s_core_engine_elements
+        ";
+        $attributes = Shopware()->Db()->fetchAssoc($sql);
+        $prepared = array();
+        foreach($attributes as $name => $attr) {
+            $prepared[$name] = $attr['default'];
         }
 
         return array(
