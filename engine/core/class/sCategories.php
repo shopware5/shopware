@@ -163,7 +163,7 @@ class sCategories
 
         return (int) Shopware()->Db()->fetchOne($sql, array(
             $articleId,
-            '%|' . $parentId . '%'
+            '%|' . $parentId . '|%'
         ));
     }
 
