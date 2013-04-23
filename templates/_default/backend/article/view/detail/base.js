@@ -79,6 +79,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         priceGroupActive: '{s name=detail/base/price_group_active}Active price group{/s}',
         priceGroup: '{s name=detail/base/price_group_select}Select price group{/s}',
         numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
+        mainDetailAdditionalText: '{s name=detail/base/main_detail_additional_text}Varianten-Zusatztext{/s}',
         regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
     },
 
@@ -162,11 +163,12 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * @return Array
      */
     createLeftElements: function() {
-        var me =this, articleId = null;
+        var me =this, articleId = null, additionalText = null;
 
 
         if (me.article instanceof Ext.data.Model && me.article.getMainDetail().first() instanceof Ext.data.Model) {
             articleId = me.article.getMainDetail().first().get('id');
+            additionalText = me.article.getMainDetail().first().get('additionalText');
         }
 
         me.numberField = Ext.create('Ext.form.field.Text', {
@@ -184,6 +186,17 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             validationUrl: '{url action="validateNumber"}',
             validationRequestParam: articleId,
             validationErrorMsg: me.snippets.numberValidation
+        });
+
+        var hideVariantTab = (me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null);
+        var showAdditionalText = (hideVariantTab) ? !Ext.isEmpty(additionalText, false) : false;
+        me.mainDetailAdditionalText = Ext.create('Ext.form.field.Text', {
+            name: 'mainDetail[additionalText]',
+            translatable: false,
+            labelWidth: 155,
+            anchor: '100%',
+            hidden: !showAdditionalText,
+            fieldLabel: me.snippets.mainDetailAdditionalText
         });
 
         me.supplierCombo = Ext.create('Ext.form.field.ComboBox', {
@@ -209,6 +222,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
                 allowBlank: false,
                 fieldLabel: me.snippets.name
             },
+            me.mainDetailAdditionalText,
             me.numberField,
             {
                 xtype: 'checkbox',

@@ -357,6 +357,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         esdListing.article = article;
 
         variantTab.setDisabled(article.get('id') === null || article.get('isConfigurator') === false || article.get('configuratorSetId') === null);
+        var showAdditionalText = (variantTab.isDisabled()) ? !Ext.isEmpty(baseField.mainDetailAdditionalText.getValue(), false) : false;
+        baseField.mainDetailAdditionalText.setVisible(showAdditionalText);
         variantListing.getStore().getProxy().extraParams.articleId = article.get('id');
 
         configurator.articleConfiguratorSet = article.getConfiguratorSet().first();
