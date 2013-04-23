@@ -844,6 +844,7 @@ class sArticles
                 $orderBy = "articleName DESC, a.id DESC";
                 break;
             default:
+                //todo@performance: default can be changed, so let the user change the index too.
                 $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
                 $sqlFromPath = "
                     FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)

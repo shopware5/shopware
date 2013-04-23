@@ -26,6 +26,8 @@ namespace Shopware\Models\Category;
 
 use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query;
+use Shopware\Components\Model\Query\SqlWalker;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -302,7 +304,7 @@ class Repository extends ModelRepository
                 ->andWhere('c.parentId = :parentId')
                 ->setParameter('parentId', $parentId);
 
-        return $builder->getQuery();
+        return $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
     }
 
     /**
@@ -327,8 +329,6 @@ class Repository extends ModelRepository
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
                 ->andWhere('c.active=1')
-                ->addOrderBy('c.parentId')
-                ->addOrderBy('c.position')
                 ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
 
         $builder = $this->addArticleCountSelect($builder, true);
@@ -337,9 +337,17 @@ class Repository extends ModelRepository
         if (isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
                     ->setParameter('cgId', $customerGroupId)
-                    ->andHaving('COUNT(cg.id) = 0')
-                    ->groupBy('c.id');
+                    ->andHaving('COUNT(cg.id) = 0');
         }
+
+        //to prevent a temporary table and file sort we have to set the same sort and group by condition
+        $builder->groupBy('c.parentId')
+            ->addGroupBy('c.position')
+            ->addGroupBy('c.id');
+
+        $builder->orderBy('c.parentId', 'ASC')
+            ->addOrderBy('c.position', 'ASC')
+            ->addOrderBy('c.id', 'ASC');
 
         return $builder;
     }
@@ -383,8 +391,24 @@ class Repository extends ModelRepository
                 ->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $id);
 
-        return $builder->getQuery();
+        return $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
     }
+
+
+    /**
+     * Helper function to set the FORCE INDEX path.
+     * @param $query Query
+     * @param $index String
+     * @return Query
+     */
+    private function getForceIndexQuery($query, $index)
+    {
+        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        $query->setHint(SqlWalker\StraightJoinWalker::HINT_STRAIGHT_JOIN, true);
+        return $query;
+    }
+
 
     /**
      * Returns a tree structure result of all active category children of the passed category id.
@@ -403,12 +427,13 @@ class Repository extends ModelRepository
      */
     public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null)
     {
+
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id)
-                ->addOrderBy('c.position', 'ASC');
+                ->setParameter('parent', $id);
 
-        $children = $builder->getQuery()->getArrayResult();
+        $query = $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
+        $children = $query->getArrayResult();
         $categories = array();
         $depth--;
 
@@ -444,10 +469,10 @@ class Repository extends ModelRepository
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id)
-                ->addOrderBy('c.position', 'ASC');
+                ->setParameter('parent', $id);
 
-        $children = $builder->getQuery()->getArrayResult();
+        $query = $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
+        $children = $query->getArrayResult();
         $categories = array();
         $depth--;
 
