@@ -1,0 +1,4 @@
+From: feature/sw-5416-denormalize-category-queries
+To: feature/sw-5416-denormalize-category-queries
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Backend/MediaManager.php
+	MODIFY|engine/Shopware/Controllers/Backend/MediaManager.php
