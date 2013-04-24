@@ -670,18 +670,23 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return;
         }
 
-        $path = 'media/' . strtolower($media->getType()) . '/' .   $params['name'] . '.' . $media->getExtension();
+        $oldName = $media->getName();
+        $media->setName($params['name']);
+        $name = $media->getName();
 
         //check if the name passed and is valid
-        if (!empty($params['name'])) {
-            $tmppath = Shopware()->DocPath() . $path;
+        if (!empty($name)) {
+            $path = 'media/' . strtolower($media->getType()) . '/' .   $name . '.' . $media->getExtension();
+            $path = Shopware()->DocPath() . $path;
 
-            if (file_exists($tmppath) && $params['name'] !== $media->getName()) {
+            if (file_exists($path) && $name !== $oldName) {
                 $this->View()->assign(array('success' => false, 'message' => 'Name already exist'));
                 return;
             }
-            $media->setName($params['name']);
+        } else {
+            $media->setName($oldName);
         }
+
         $media->setAttribute($params['attribute'][0]);
         //check if the album id passed and is valid
         if (isset($params['newAlbumID'])
