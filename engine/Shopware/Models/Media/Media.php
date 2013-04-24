@@ -518,8 +518,11 @@ class Media extends ModelEntity
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
+        $isNameChanged  = $changeSet['name'][0] !== $changeSet['name'][1];
+        $isAlbumChanged = $changeSet['albumId'][0] !== $changeSet['albumId'][1];
+
         //name changed || album changed?
-        if ($changeSet['name'][0] !== $changeSet['name'][1] || $changeSet['albumId'][0] !== $changeSet['albumId'][1]) {
+        if ($isNameChanged || $isAlbumChanged) {
 
             //to remove the old thumbnails, use the old name.
             $name = (isset($changeSet['name'])) ? $changeSet['name'][0] : $this->name;
@@ -529,7 +532,7 @@ class Media extends ModelEntity
             //to remove the old album thumbnails, use the old album
             $album = (isset($changeSet['album'])) ? $changeSet['album'][0] : $this->album;
 
-            if ($changeSet['name'][0] !== $changeSet['name'][1]) {
+            if ($isNameChanged) {
                 //remove default thumbnails
                 $this->removeDefaultThumbnails($name);
 
@@ -539,7 +542,6 @@ class Media extends ModelEntity
 
             //remove the configured album thumbnail files
             $settings = $album->getSettings();
-            /**@var $settings Settings*/
             if ($settings !== null) {
                 $this->removeAlbumThumbnails($settings->getThumbnailSize(), $name);
             }
@@ -551,11 +553,15 @@ class Media extends ModelEntity
         }
 
         //name changed? Then rename the file and set the new path
-        if ($changeSet['name'][0] !== $changeSet['name'][1]) {
-            //create new path
-            $newPath = str_replace(DS . $changeSet['name'][0] . '.', DS . $changeSet['name'][1] . '.', $this->path);
+        if ($isNameChanged) {
+            $newName = $this->getFileName();
+            $newPath = $this->getUploadDir() . $newName;
+
             //rename the file
             rename($this->path, $newPath);
+
+            $newPath = str_replace(Shopware()->OldPath(), '', $newPath);
+
             //set the new path to save it.
             $this->path = $newPath;
         }
@@ -568,7 +574,7 @@ class Media extends ModelEntity
      */
     private function updateAssociations()
     {
-        /**@var $article \Shopware\Models\Article\Image*/
+        /** @var $article \Shopware\Models\Article\Image*/
         foreach($this->articles as $article) {
             $article->setPath($this->getName());
             Shopware()->Models()->persist($article);
@@ -641,7 +647,7 @@ class Media extends ModelEntity
         }
 
         //load the configured album thumbnail sizes
-        $sizes = $album->getSettings()->getThumbnailSize();       
+        $sizes = $album->getSettings()->getThumbnailSize();
 
         //iterate the sizes and create the thumbnails
         foreach ($sizes as $size) {
