@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Cache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Shopware Application
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_ExtJs
 {
@@ -67,6 +59,55 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             'total' => count($data)
         ));
     }
+
+    /**
+     * Fixes categorie tree
+     */
+    public function fixCategoriesAction()
+    {
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit  = $this->Request()->getParam('limit', 5000);
+
+        $stats = array();
+        Shopware()->Models()->fixCategoryTree($offset, $limit, $stats);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data'    => $stats,
+            'total'   => 1,
+        ));
+    }
+
+    public function prepareTreeAction()
+    {
+        $deleteOrphanedSql = "
+            DELETE ac.*
+            FROM s_articles_categories ac
+            LEFT JOIN s_categories c ON ac.categoryID = c.id
+            LEFT JOIN s_articles a ON ac.articleID = a.id
+            WHERE
+            c.id IS NULL
+            OR a.id IS NULL;
+        ";
+        Shopware()->Db()->exec($deleteOrphanedSql);
+
+        $allAssignsSql = "
+            SELECT DISTINCT ac.id, ac.articleID, ac.categoryId, c.parent
+            FROM  s_articles_categories ac
+            INNER JOIN s_categories c
+            ON ac.categoryID = c.id
+        ";
+
+        $assignments = Shopware()->Db()->query($allAssignsSql);
+        $count = $assignments->rowCount();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'total'   => $count,
+        ));
+    }
+
+
 
     /**
      * Clear config cache action

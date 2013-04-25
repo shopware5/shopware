@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Deprecated Shopware Class that handle url rewrites
+ * Deprecated Shopware Class that handles url rewrites
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class sRewriteTable
 {
@@ -230,18 +224,7 @@ class sRewriteTable
         }
 
         $parentId = $this->baseCategory->getId();
-        $result = $this->repository
-            ->getActiveChildrenByIdQuery($parentId)
-            ->getArrayResult();
-
-        $categories = array();
-        foreach($result as $category){
-            $categories[$category['category']['id']] = array_merge($category['category'], array(
-                'description' => $category['category']['name'],
-                'childrenCount' => $category['childrenCount'],
-                'articleCount' => $category['articleCount']
-            ));
-        }
+        $categories = $this->repository->getActiveChildrenList($parentId);
 
         $template = 'string:' . Shopware()->Config()->routerCategoryTemplate;
         $template = $this->template->createTemplate($template, $this->data);
@@ -279,32 +262,37 @@ class sRewriteTable
 			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed,
 				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
-			JOIN s_articles_details d
-			ON d.id = a.main_detail_id
-			LEFT JOIN s_articles_attributes at
-			ON at.articledetailsID=d.id
-			LEFT JOIN s_articles_translations atr
-			ON atr.articleID=a.id
-			AND atr.languageID=?
-			LEFT JOIN s_articles_supplier s
-			ON s.id=a.supplierID
-			WHERE c.id=?
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
+			FROM s_articles a
 
-            AND a.active=1
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = ?
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
+
+			JOIN s_articles_details d
+			    ON d.id = a.main_detail_id
+
+			LEFT JOIN s_articles_attributes at
+			    ON at.articledetailsID=d.id
+
+			LEFT JOIN s_articles_translations atr
+			    ON atr.articleID=a.id
+			    AND atr.languageID=?
+
+			LEFT JOIN s_articles_supplier s
+			    ON s.id=a.supplierID
+
+			WHERE a.active=1
 			AND a.changetime > ?
 			GROUP BY a.id
 			ORDER BY a.changetime, a.id
 			LIMIT 1000
 		";
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
-            Shopware()->Shop()->getId(),
             Shopware()->Shop()->get('parentID'),
+            Shopware()->Shop()->getId(),
             $last_update
         ));
 
@@ -342,7 +330,6 @@ class sRewriteTable
 
         /** @var $repository \Shopware\Models\Blog\Repository */
         $blogArticlesQuery = $this->blogRepository->getListQuery($blogCategoryIds);
-
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $blogArticles = $blogArticlesQuery->getArrayResult();
 
@@ -455,8 +442,9 @@ class sRewriteTable
     public function sCategoryPath($category)
     {
         $parts = $this->repository->getPathById($category, 'name');
-        $level = $this->baseCategory->getLevel() + 1;
+        $level = $this->baseCategory->getLevel();
         $parts = array_slice($parts, $level);
+
         return $parts;
     }
 
@@ -467,16 +455,11 @@ class sRewriteTable
      */
     public function sCategoryPathByArticleId($articleId, $parentId = null)
     {
-        //if (empty($parentId)) {
-        //    $parentId = $this->baseCategory->getId();
-        //}
-        //$categoryId = $this->repository
-        //    ->getActiveByArticleIdQuery($articleId, $categoryId)
-        //    ->setMaxResults(1)
-        //    ->getOneOrNullResult();
         $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $articleId, $parentId
+            $articleId,
+            $parentId
         );
-        return $categoryId !== null ? $this->sCategoryPath($categoryId) : null;
+
+        return empty($categoryId) ? null : $this->sCategoryPath($categoryId);
     }
 }

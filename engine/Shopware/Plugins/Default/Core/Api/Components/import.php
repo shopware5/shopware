@@ -3169,19 +3169,11 @@ class sShopwareImport
 
         $sql = "
                 SELECT
-                c.id,
-                (
-                    SELECT COUNT(ac.id)
-                    FROM s_categories c2
-
-                    INNER JOIN s_articles_categories ac
-                    ON ac.categoryID = c2.id
-
-                    WHERE c2.left >= c.left
-                    AND c2.right <= c.right
-                ) as articleCount
-
+                c.id, COUNT(ac.id) as articleCount
                 FROM s_categories c
+                    LEFT JOIN s_articles_categories ac
+                        ON ac.categoryID = c.id
+                GROUP BY c.id
                 HAVING articleCount = 0
                 AND c.id <> 1
                 AND c.id NOT IN (SELECT category_id FROM s_core_shops)

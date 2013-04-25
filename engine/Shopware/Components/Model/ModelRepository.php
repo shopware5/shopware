@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,13 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
-use Doctrine\ORM\EntityRepository,
-    Doctrine\ORM\Query\Expr,
-    Doctrine\DBAL\LockMode;
+
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Interface for the various standard models.
@@ -45,6 +38,10 @@ use Doctrine\ORM\EntityRepository,
  * $modelRepository = new Shopware\Components\Models\ModelRepository;
  * $modelRepository->createQueryBuilder();
  * </code>
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Model
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class ModelRepository extends EntityRepository
 {
@@ -52,13 +49,14 @@ class ModelRepository extends EntityRepository
      * Create a new QueryBuilder instance that is pre populated for this entity name
      *
      * @param   string $alias
-     * @return  \Doctrine\ORM\QueryBuilder $qb
-     * @access  protected
+     * @return \Doctrine\ORM\QueryBuilder
+     * @return  \Doctrine\ORM\QueryBuilder
      */
     public function createQueryBuilder($alias)
     {
         $builder = parent::createQueryBuilder($alias);
         $builder->setAlias($alias);
+
         return $builder;
     }
 
@@ -114,6 +112,7 @@ class ModelRepository extends EntityRepository
      *
      * @param QueryBuilder $builder
      * @param array $filter
+     * @return QueryBuilder
      */
     public function addFilter(QueryBuilder $builder, array $filter)
     {
@@ -132,35 +131,10 @@ class ModelRepository extends EntityRepository
      *
      * @param QueryBuilder $builder
      * @param array $orderBy
-     * @return array
+     * @return QueryBuilder
      */
     public function addOrderBy(QueryBuilder $builder, array $orderBy)
     {
         return $builder->addOrderBy($orderBy);
-    }
-
-    /**
-     * The findAll() function returns an array of model objects.
-     * All associated entities are also selected and placed into the
-     * corresponding entity properties.
-     *
-     * @return array[ModelEntity] Contains all founded models.
-     */
-    public function findAll()
-    {
-        return parent::findAll();
-    }
-
-    /**
-     * Finds an entity by its primary key / identifier and returns an instance of the entity.
-     *
-     * @param   int $id The identifier.
-     * @param   int $lockMode
-     * @param   int $lockVersion
-     * @return  ModelEntity
-     */
-    public function find($id, $lockMode = LockMode::NONE, $lockVersion = null)
-    {
-        return parent::find($id, $lockMode, $lockVersion);
     }
 }

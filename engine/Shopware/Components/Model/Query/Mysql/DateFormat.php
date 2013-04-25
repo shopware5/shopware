@@ -22,20 +22,46 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Model\Query\Mysql;
+
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Lexer;
+
 /**
+ *
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ * @package   Shopware\Components\Model\Query\Mysql
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
+*/
+class DateFormat extends FunctionNode
 {
+    public $firstDateExpression;
+    public $secondDateExpression;
+
     /**
-     * Shows a category tree
+     * @override
      */
-    public function indexAction()
+    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        if (!$this->view->isCached()) {
-            $this->View()->sCategoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
-        }
+        return 'DATE_FORMAT(' .
+            $this->firstDateExpression->dispatch($sqlWalker) .
+            ', ' .
+            $this->secondDateExpression->dispatch($sqlWalker) .
+            ')';
+    }
+
+    /**
+     * @override
+     */
+    public function parse(\Doctrine\ORM\Query\Parser $parser)
+    {
+        $parser->match(Lexer::T_IDENTIFIER);
+        $parser->match(Lexer::T_OPEN_PARENTHESIS);
+
+        $this->firstDateExpression = $parser->ArithmeticPrimary();
+        $parser->match(Lexer::T_COMMA);
+        $this->secondDateExpression = $parser->ArithmeticPrimary();
+
+        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 }

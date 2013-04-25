@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Modules
- * @subpackage Articles
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Deprecated Shopware Class that handle categories
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class sArticles
 {
@@ -618,9 +611,12 @@ class sArticles
 			     s_articles_categories ac
 
             JOIN s_articles AS a
-			ON a.id=ac.articleID
-			AND a.mode = 0
-			AND a.active=1
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $sCategory
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_details AS d
 			ON d.id=a.main_detail_id
@@ -634,13 +630,9 @@ class sArticles
 
 			$sql_add_join
 
-			WHERE c.id=$sCategory
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-            AND ag.articleID IS NULL
+			WHERE a.mode = 0
+			AND a.active=1
+			AND ag.articleID IS NULL
 	        AND (
 				0
 				$sql_search_fields
@@ -811,25 +803,25 @@ class sArticles
         $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
         switch ($sSort) {
             case 1:
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id";
+                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, a.id";
+                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
                 break;
             case 4:
-                $orderBy = "price DESC, a.id";
+                $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
                 $orderBy = "articleName ASC, a.id";
                 break;
             case 6:
-                $orderBy = "articleName DESC, a.id";
+                $orderBy = "articleName DESC, a.id DESC";
                 break;
             default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id';
+                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
         }
 
         if (strpos($orderBy, 'price') !== false) {
@@ -907,7 +899,6 @@ class sArticles
 
         $priceForBasePrice = "(SELECT price FROM s_articles_prices WHERE articledetailsID=aDetails.id AND pricegroup=IF(p.id IS NULL, 'EK', p.pricegroup) AND `from`=1 LIMIT 1 ) as priceForBasePrice";
 
-
         $sql = "
 			SELECT
 				a.id as articleID, aDetails.id AS articleDetailsID, a.notification as notification, weight, aDetails.ordernumber, a.datum, aDetails.releasedate,
@@ -938,12 +929,14 @@ class sArticles
 				IF(aDetails.sales>=$topSeller,1,0) as topseller,
 				IF(aDetails.releasedate>$now,1,0) as sUpcoming,
 				IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate
-			FROM s_categories c, s_categories c2, s_articles_categories ac
 
-            JOIN s_articles AS a
-			ON a.id=ac.articleID
-			AND a.mode = 0
-			AND a.active=1
+			FROM s_articles AS a
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $categoryId
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_details AS aDetails
 			ON aDetails.id=a.main_detail_id
@@ -975,13 +968,9 @@ class sArticles
 
 			$join_price
 
-            WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
+            WHERE ag.articleID IS NULL
+            AND a.mode = 0
+			AND a.active=1
 
 			$addFilterWhere
 			$supplierSQL
@@ -992,7 +981,6 @@ class sArticles
 		";
 
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
-
         $articles = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articles)) {
@@ -1002,29 +990,26 @@ class sArticles
         $sql = "
             SELECT COUNT(DISTINCT a.id) count
 
-            FROM s_categories c, s_categories c2, s_articles_categories ac
-
-            JOIN s_articles AS a
-            ON a.id=ac.articleID
-            AND a.mode = 0
-            AND a.active=1
+            FROM s_articles AS a
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $categoryId
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
             JOIN s_articles_details AS aDetails
-            ON aDetails.id=a.main_detail_id
+                ON aDetails.id=a.main_detail_id
 
             LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+                ON ag.articleID=a.id
+                AND ag.customergroupID={$this->customerGroupId}
 
             $addFilterSQL
 
-            WHERE c.id=$categoryId
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
-            AND ag.articleID IS NULL
+            WHERE ag.articleID IS NULL
+            AND a.mode = 0
+            AND a.active=1
 
             $addFilterWhere
             $supplierSQL
@@ -1258,6 +1243,7 @@ class sArticles
         }
 
         $db = Shopware()->Db();
+
         $categoryId = (int)$categoryId;
         $activeFilters = (array)$activeFilters;
 
@@ -1291,12 +1277,12 @@ class sArticles
 				ON st.objecttype='propertyoption'
 				AND st.objectkey=fv.optionID
 				AND st.objectlanguage='$this->translationId'
-	
+
 				LEFT JOIN s_core_translations AS st2
 				ON st2.objecttype='propertygroup'
 				AND st2.objectkey=f.id
 				AND st2.objectlanguage='$this->translationId'
-	
+
 				LEFT JOIN s_core_translations AS st3
 	            ON st3.objecttype='propertyvalue'
 	            AND st3.objectkey=fv.id
@@ -1315,7 +1301,11 @@ class sArticles
 				fv.value AS optionValue,
 				fv.id AS valueID
 				$addTranslationSelect
-			FROM s_categories c, s_categories c2, s_articles_categories ac
+			FROM s_categories c
+
+			INNER JOIN s_articles_categories ac
+			  ON ac.categoryID = c.id
+			  AND c.active = 1
 
 			JOIN s_filter_articles fa
 			ON fa.articleID=ac.articleID
@@ -1346,11 +1336,6 @@ class sArticles
 			$addFilterJoin
 
 			WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
 	        AND ag.articleID IS NULL
 
 			GROUP BY fv.id
@@ -1460,19 +1445,13 @@ class sArticles
 
         $sql = "
 			SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
-			FROM s_categories c
-
-			JOIN s_categories c2
-			ON c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-
-			JOIN s_articles_categories ac
-			ON ac.categoryID=c2.id
-
-		    JOIN s_articles a
-		    ON  ac.articleID=a.id
-		    AND a.active = 1
+			FROM s_articles a
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = ?
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_supplier s
 			ON s.id=a.supplierID
@@ -1481,8 +1460,8 @@ class sArticles
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE c.id=?
-	        AND ag.articleID IS NULL
+			WHERE ag.articleID IS NULL
+			AND a.active = 1
 
 			GROUP BY s.id
 			ORDER BY s.name ASC
@@ -1666,7 +1645,14 @@ class sArticles
 
         $sql = "
 			SELECT a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-	        FROM s_articles_categories ac, s_categories c, s_categories c2, s_articles a
+
+	        FROM s_articles a
+                INNER JOIN s_articles_categories ac
+                    ON ac.articleID=a.id
+                    AND ac.categoryID = $category
+                INNER JOIN s_categories c
+                    ON c.id = ac.categoryID
+                    AND c.active = 1
 
 	        LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
@@ -1682,13 +1668,7 @@ class sArticles
 	        AND o.id = od.orderID
 
 	        WHERE a.active = 1
-	        AND c.id=$category
-	        AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
+            AND ag.articleID IS NULL
 
 	        GROUP BY a.id
 	        ORDER BY quantity DESC, topseller DESC
@@ -1768,25 +1748,25 @@ class sArticles
 
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id";
+                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, a.id";
+                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
                 break;
             case 4:
-                $orderBy = "price DESC, a.id";
+                $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
                 $orderBy = "articleName ASC, a.id";
                 break;
             case 6:
-                $orderBy = "articleName DESC, a.id";
+                $orderBy = "articleName DESC, a.id DESC";
                 break;
             default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id';
+                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
         }
 
         if (strpos($orderBy, 'price') !== false) {
@@ -1835,11 +1815,13 @@ class sArticles
 			SELECT a.id, name AS articleName,
 				$select_price as price
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac
-
-			JOIN s_articles a
-			ON a.active=1
-			AND a.id=ac.articleID
+			FROM s_articles a
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $categoryId
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_details AS aDetails
 			ON aDetails.articleID=a.id AND aDetails.kind=1
@@ -1853,11 +1835,7 @@ class sArticles
 
 			$join_price
 
-			WHERE c.id=$categoryId
-	        AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.categoryID=c2.id
+			WHERE a.active=1
 	        AND ag.articleID IS NULL
 
             GROUP BY a.id
@@ -2333,19 +2311,18 @@ class sArticles
             $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($id);
             $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
         }
+        $subShopJoin = "";
+
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
-            $subShopLimitationFrom = "s_categories c, s_categories c2, s_articles_categories ac,";
-            $subShopLimitationCategoryClause = "
-                AND c.id={$this->categoryId}
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=a.id
-                AND ac.categoryID=c2.id";
-        }else{
-            $subShopLimitationFrom = "";
-            $subShopLimitationCategoryClause = "";
+            $subShopJoin = "
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = {$this->categoryId}
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+            ";
         }
 
         $sql = "
@@ -2395,26 +2372,28 @@ class sArticles
                 IF(aDetails.releasedate > CURDATE(), 1, 0) as sUpcoming,
 			    IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
 
-			FROM $subShopLimitationFrom s_articles a
+			FROM s_articles a
+
+            $subShopJoin
 
 			JOIN s_articles_details aDetails
-			ON aDetails.id=a.main_detail_id
+			    ON aDetails.id=a.main_detail_id
 
 			JOIN s_core_tax AS aTax
-            ON a.taxID=aTax.id
+                ON a.taxID=aTax.id
 
             JOIN s_articles_attributes AS aAttributes
-            ON aAttributes.articledetailsID=aDetails.id
+                ON aAttributes.articledetailsID=aDetails.id
 
 			LEFT JOIN s_articles_prices AS p
-			ON p.articledetailsID=aDetails.id
-			AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
-			AND p.from='1'
+                ON p.articledetailsID=aDetails.id
+                AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
+                AND p.from='1'
 
 			LEFT JOIN s_articles_prices AS p2
-			ON p2.articledetailsID=aDetails.id
-			AND p2.pricegroup='EK'
-			AND p2.from='1'
+                ON p2.articledetailsID=aDetails.id
+                AND p2.pricegroup='EK'
+                AND p2.from='1'
 
             LEFT JOIN s_articles_supplier AS aSupplier
 			ON aSupplier.id=a.supplierID
@@ -2425,8 +2404,6 @@ class sArticles
 
 			WHERE a.id=" . $id . "
 			AND ag.articleID IS NULL
-
-            $subShopLimitationCategoryClause
 		";
 
         if (empty(Shopware()->Session()->Admin)) {
@@ -2994,19 +2971,17 @@ class sArticles
         }
 
         $category = (int) $category;
+        $categoryJoin = "";
+
         if (!empty($category)) {
-            $categoryWhere = "
-                AND c.id=$category
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=a.id
-                AND ac.categoryID=c2.id
+            $categoryJoin = "
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID  = a.id
+                    AND ac.categoryID = $category
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
             ";
-            $categoryFrom = "s_categories c, s_categories c2, s_articles_categories ac, ";
-        } else {
-            $categoryWhere = "";
-            $categoryFrom = "";
         }
 
         if (empty($this->sCachePromotions)) {
@@ -3031,14 +3006,17 @@ class sArticles
                     $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
                     $sql = "
                         SELECT od.articleID
-                        FROM s_order as o, s_order_details od, $categoryFrom s_articles a $withImageJoin
+                        FROM s_order as o, s_order_details od, s_articles a $withImageJoin
+
+                        $categoryJoin
+
                         LEFT JOIN s_articles_avoid_customergroups ag
                         ON ag.articleID=a.id
                         AND ag.customergroupID={$this->customerGroupId}
                         WHERE o.ordertime > DATE_SUB($now, INTERVAL $promotionTime DAY)
                         AND o.id=od.orderID
                         AND od.modus=0 AND od.articleID=a.id
-                        AND a.active=1 $categoryWhere
+                        AND a.active=1
                         AND ag.articleID IS NULL
                         GROUP BY od.articleID
                         ORDER BY COUNT(od.articleID) DESC
@@ -3047,11 +3025,12 @@ class sArticles
                 } else {
                     $sql = "
                         SELECT a.id as articleID
-                        FROM  $categoryFrom s_articles a $withImageJoin
+                        FROM  s_articles a $withImageJoin
+                        $categoryJoin
                         LEFT JOIN s_articles_avoid_customergroups ag
                         ON ag.articleID=a.id
                         AND ag.customergroupID={$this->customerGroupId}
-                        WHERE a.active=1 AND a.mode=0 $categoryWhere
+                        WHERE a.active=1 AND a.mode=0
                         AND ag.articleID IS NULL
                         ORDER BY a.datum DESC
                         LIMIT 100
@@ -3646,26 +3625,27 @@ class sArticles
 
         $numberOfArticles = (int)$this->sSYSTEM->sCONFIG['sLASTARTICLESTOSHOW'];
 
-        $categoryWhere = "
-            AND c.id=sc.category_id
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=l.articleID
-            AND ac.categoryID=c2.id
+
+        $categoryJoin = "
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID = l.articleID
+                AND ac.categoryID = sc.category_id
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
         ";
-        $categoryFrom = "s_categories c, s_categories c2, s_articles_categories ac, ";
 
         $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
 			SELECT img, l.name, l.articleID
-			FROM {$categoryFrom} s_emarketing_lastarticles l
+			FROM s_emarketing_lastarticles l
 
 			LEFT JOIN s_core_shops sc ON sc.id=l.shopID
+
+			$categoryJoin
 
 			WHERE l.sessionID=?
 			AND l.articleID!=?
 			AND l.shopID=?
-			{$categoryWhere}
 
             GROUP BY l.articleID
 			ORDER BY time DESC

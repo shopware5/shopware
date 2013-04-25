@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,17 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage ArticleList
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
  * Backend Controller for the article list backend module
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Backend_ExtJs
 {
@@ -253,13 +250,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 		$sqlParams = array();
 		if (!empty($categoryId) && $categoryId !== 'NaN') {
 			$categorySql =  "
-				LEFT JOIN s_categories c
-					ON c.id = ?
-				LEFT JOIN s_categories c2
-					ON c2.left >= c.left
-					AND c2.right <= c.right
-				JOIN s_articles_categories ac
-					ON ac.articleID = articles.id AND ac.categoryID = c2.id
+                LEFT JOIN s_categories c
+                    ON  c.id = ?
+                    AND c.active = 1
+
+                INNER JOIN s_articles_categories ac
+                    ON  ac.articleID  = articles.id
+                    AND ac.categoryID = c.id
 			";
 			$sqlParams[] = $categoryId;
 		}
