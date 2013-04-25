@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
     refreshColumns: function() {
         var me = this;
         me.getSelectionModel().deselectAll();
-        me.reconfigure(me.getStore(), me.getColumns());
+        me.reconfigure(me.getStore(), me.getColumns(true));
     },
 
     /**
