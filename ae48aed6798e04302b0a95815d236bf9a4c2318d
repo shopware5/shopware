@@ -1,0 +1,4 @@
+From: feature/sw-5762-encrypt-session-data
+To: feature/sw-5762-encrypt-session-data
+Conflict: (content) Merge conflict in engine/Shopware/Bootstrap.php
+	MODIFY|engine/Shopware/Bootstrap.php
