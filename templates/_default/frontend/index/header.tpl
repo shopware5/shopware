@@ -63,6 +63,7 @@
 
 		jQuery.controller =  {ldelim}
             'vat_check_enabled': '{config name='vatcheckendabled'}',
+            'vat_check_required': '{config name='vatcheckrequired'}',
 			'ajax_cart': '{url controller="checkout"}',
 			'ajax_search': '{url controller="ajax_search"}',
 			'ajax_login': '{url controller="account" action="ajax_login"}',
