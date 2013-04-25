@@ -63,8 +63,8 @@ class Configuration extends BaseConfiguration
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
-        $this->addCustomStringFunction('DATE_FORMAT', 'DoctrineExtensions\Query\Mysql\DateFormat');
-        $this->addCustomStringFunction('IFNULL', 'DoctrineExtensions\Query\Mysql\IfNull');
+        $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
+        $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
         if(isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);

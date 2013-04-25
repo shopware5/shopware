@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Search
- * @subpackage Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware standard search adapter
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Components\Search\Adapter
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Search_Adapter_Abstract
 {
@@ -664,17 +657,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         ' . $sqlFromStatement . '
 
-        JOIN s_categories c
-        ON c.id=?
-
-        JOIN s_categories c2
-        ON c2.active=1
-        AND c2.left >= c.left
-        AND c2.right <= c.right
-
-        JOIN s_articles_categories ac
-        ON ac.articleID=a.id
-        AND ac.categoryID=c2.id
+        INNER JOIN s_articles_categories ac
+            ON  ac.articleID  = a.id
+            AND ac.categoryID = ?
+        INNER JOIN s_categories c
+            ON  c.id = ac.categoryID
+            AND c.active = 1
 
         WHERE a.active=1
         ';
@@ -796,17 +784,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             ON a.id=d.articleID
             AND d.kind=1
 
-            JOIN s_categories c
-            ON c.id=' . $sqlCategoryFilter . '
-
-            JOIN s_categories c2
-            ON c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-
-            JOIN s_articles_categories ac
-            ON ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+            INNER JOIN s_articles_categories ac
+                ON  ac.articleID  = a.id
+                AND ac.categoryID = ' .$sqlCategoryFilter. '
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
             JOIN s_core_tax t
             ON a.taxID = t.id
@@ -1018,13 +1001,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     {
         $sql = '
             SELECT c.*, COUNT(DISTINCT ac.articleID) as count
-            FROM s_categories c, s_categories c2, s_articles_categories ac
+
+            FROM s_categories c
+                INNER JOIN s_articles_categories ac
+                    ON ac.categoryID = c.id
             WHERE c.parent=' . $this->getResult()->getCurrentCategoryFilter() . '
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID IN (' . implode(',', array_keys($searchResults)) . ')
-	        AND ac.categoryID=c2.id
+            AND c.active = 1
+            AND ac.articleID  IN (' . implode(',', array_keys($searchResults)) . ')
             GROUP BY c.id
             ORDER BY count DESC, c.description
         ';

@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,12 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
-
 //{namespace name=backend/cache/view/main}
-
 //{block name="backend/cache/view/main/form"}
 Ext.define('Shopware.apps.Cache.view.main.Form', {
 
@@ -73,7 +68,7 @@ Ext.define('Shopware.apps.Cache.view.main.Form', {
      * @param options
      */
     submit: function(options) {
-        var me = this
+        var me = this;
             options = options || {};
         Ext.applyIf(options, {
             url: me.url,
@@ -83,7 +78,7 @@ Ext.define('Shopware.apps.Cache.view.main.Form', {
     },
 
     /**
-     * @return array
+     * @return Array
      */
     getItems: function() {
         var me = this;
@@ -105,11 +100,18 @@ Ext.define('Shopware.apps.Cache.view.main.Form', {
         }, {
             name: 'cache[proxy]',
             boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}'
+        }, {
+            xtype: 'button',
+            name: 'fixCategories',
+            text: '{s name=form/items/categorie}Fix category tree{/s}',
+            handler: function() {
+                me.fireEvent('fixCategories', me);
+            }
         }];
     },
 
     /**
-     * @return array
+     * @return Array
      */
     getButtons: function() {
         var me = this;

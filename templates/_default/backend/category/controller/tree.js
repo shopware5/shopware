@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 'addSubCategory'    : me.onOpenNameDialog,
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
-                // 
+                //
                 'beforeDropCategory': me.onBeforeDrop
             },
              // Add Category from a dialog window, route event to the tree controller
@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**
      * Deletes one category tree node and its children
-     * 
+     *
      * @event deleteSubCategory
      * @return void
      */
@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**
      * Loads a record into the settings area and fires an 'recordloaded' event.
-     * 
+     *
      * @param view [Ext.tree.View]
      * @param record [Ext.data.Model]
      * @event editSettings
@@ -262,15 +262,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param [array] option The options object passed to Ext.util.Observable.addListener.
      */
     onBeforeDrop: function(options) {
-        var dropHandlers = options[4], 
+        var dropHandlers = options[4],
             me = this;
         // we are processing the drop later asynchronously
         // so we just set the dropHandlers.wait property to true to delay the processing
         // instead of returning true/false from this handler
         dropHandlers.wait = true;
         Ext.MessageBox.confirm(
-            me.snippets.confirmMoveCategory, 
-            me.snippets.confirmMoveCategory, 
+            me.snippets.confirmMoveCategory,
+            me.snippets.confirmMoveCategory,
             function(button) {
                 if (button == 'yes') {
                     dropHandlers.processDrop();
@@ -293,10 +293,10 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param [object] newParent - updated Ext.data.Model
      * @return void
      */
-    onCategoryMove : function(node, oldParent, newParent, postion) {
+    onCategoryMove : function(node, oldParent, newParent, position) {
         var me = this;
 
-        node.data.postion = postion;
+        node.data.position = position;
         node.data.parentId = !newParent.isRoot() ? newParent.data.id : null;
         node.data.previousId = node.previousSibling ? node.previousSibling.data.id : null;
 
@@ -319,12 +319,12 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**
      * Toggles the delete button in the tree view based on whether there is a selection or not.
-     * 
+     *
      * @event selectionchange
      * @param tree [Shopware.apps.Category.view.main.CategoryTree]
      * @param selection [array]
      */
-    onSelectionChange : function(tree, selection) 
+    onSelectionChange : function(tree, selection)
     {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
@@ -341,7 +341,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**
      *  Refreshes the tree and select the last selected node.
-     *  
+     *
      *  @event reload
      *  @return void
      */
@@ -476,7 +476,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
     /**
      * Disables the form which is disabled by default
-     * 
+     *
      * @return void
      */
     disableForm : function() {

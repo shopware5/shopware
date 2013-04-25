@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,20 +19,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Cache
- * @subpackage Cache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/cache/view/main}
-
-/**
- * todo@all: Documentation
- */
 //{block name="backend/cache/view/main/window"}
 Ext.define('Shopware.apps.Cache.view.main.Window', {
     extend: 'Enlight.app.Window',
@@ -40,7 +29,7 @@ Ext.define('Shopware.apps.Cache.view.main.Window', {
     cls: Ext.baseCSSPrefix + 'cache',
 
     width: 600,
-    height: 470,
+    height: 490,
     layout: 'border',
 
     title: '{s name=window/title}Cache{/s}',
@@ -60,7 +49,7 @@ Ext.define('Shopware.apps.Cache.view.main.Window', {
 
     /**
      * Creates the fields sets and the sidebar for the detail page.
-     * @return array
+     * @return Array
      */
     getItems: function() {
         var me = this;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers_Widgets
- * @subpackage Widgets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 /**
- * Shopware Application
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Widgets
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
@@ -243,15 +235,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->leftJoin('blog.category', 'category')
             ->where('blog.active = 1')
             ->andWhere('blog.displayDate <= ?1')
-            ->andWhere('category.left >= ?2')
-            ->andWhere('category.right <= ?3')
+            ->andWhere('category.id = ?2')
             ->orderBy('blog.displayDate', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults($entryAmount)
             ->setParameter(1, date('Y-m-d H:i:s'))
-            ->setParameter(2, $category->getLeft())
-            ->setParameter(3, $category->getRight());
-
+            ->setParameter(2, $category->getId());
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -491,15 +480,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $perPage = "$offset,$limit";
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
-            FROM s_articles a, s_articles_categories ac,s_categories c,s_categories c2
+            FROM s_articles a
+              INNER JOIN s_articles_categories ac
+                 ON ac.articleID = a.id
+              INNER JOIN s_categories c
+                 ON c.id = ac.categoryID
+                 AND c.active = 1
+
             WHERE a.active=1
-            AND a.id=ac.articleID
             AND c.id=?
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
             ORDER BY a.datum DESC
             LIMIT {$perPage}
         ";
@@ -531,7 +520,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $sql = "
         SELECT SQL_CALC_FOUND_ROWS a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-        FROM s_articles_categories ac, s_categories c, s_categories c2, s_articles a
+        FROM s_articles a
+          INNER JOIN s_articles_categories ac
+            ON ac.articleID = a.id
+            AND a.active = 1
+          INNER JOIN s_categories c
+            ON c.id = ac.categoryID
+            AND c.active = 1
 
         LEFT JOIN s_order_details od
         ON a.id = od.articleID
@@ -542,13 +537,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         AND o.status >= 0
         AND o.id = od.orderID
 
-        WHERE a.active = 1
-        AND c.id=?
-        AND c2.active=1
-        AND c2.left >= c.left
-        AND c2.right <= c.right
-        AND ac.articleID=a.id
-        AND ac.categoryID=c2.id
+        WHERE c.id=?
 
         GROUP BY a.id
         ORDER BY quantity DESC, topseller DESC
