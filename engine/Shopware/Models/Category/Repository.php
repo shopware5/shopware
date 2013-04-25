@@ -304,7 +304,8 @@ class Repository extends ModelRepository
                 ->andWhere('c.parentId = :parentId')
                 ->setParameter('parentId', $parentId);
 
-        return $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
+        return $builder->getQuery();
+//        return $this->addCustomHints($builder->getQuery(), null, true);
     }
 
     /**
@@ -391,23 +392,29 @@ class Repository extends ModelRepository
                 ->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $id);
 
-        return $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
+        return $builder->getQuery();
+//        return $this->addCustomHints($builder->getQuery(), null, true);
     }
-
 
     /**
-     * Helper function to set the FORCE INDEX path.
-     * @param $query Query
-     * @param $index String
+     * Helper function to add mysql specified command to increase the sql performance.
+     * @param Query $query
+     * @param null $index Name of the forced index
+     * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
      * @return Query
      */
-    private function getForceIndexQuery($query, $index)
-    {
+    private function addCustomHints(Query $query, $index = null, $straightJoin = false) {
         $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
-        $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
-        $query->setHint(SqlWalker\StraightJoinWalker::HINT_STRAIGHT_JOIN, true);
+
+        if ($straightJoin === true) {
+            $query->setHint(SqlWalker\StraightJoinWalker::HINT_STRAIGHT_JOIN, true);
+        }
+        if ($index !== null) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        }
         return $query;
     }
+
 
 
     /**
@@ -427,12 +434,12 @@ class Repository extends ModelRepository
      */
     public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null)
     {
-
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id);
 
-        $query = $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
+//        $query = $this->addCustomHints($builder->getQuery(), null, true);
+        $query = $builder->getQuery();
         $children = $query->getArrayResult();
         $categories = array();
         $depth--;
@@ -468,27 +475,13 @@ class Repository extends ModelRepository
     public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
-        $builder->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id);
+        $builder->andWhere('c.path LIKE :path')
+                ->setParameter("path", "%|" . $id . '|%');
 
-        $query = $this->getForceIndexQuery($builder->getQuery(), 'active_query_builder');
-        $children = $query->getArrayResult();
-        $categories = array();
-        $depth--;
+        return $builder->getQuery()->getArrayResult();
 
-        foreach($children as &$child) {
-            $category = $child['category'];
-            $category['childrenCount'] = $child['childrenCount'];
-            $category['articleCount'] = $child['articleCount'];
-
-            $categories[] = $category;
-            //check if no depth passed or the current depth is lower than the passed depth
-            if ($depth === null|| $depth > 0) {
-                $subCategories = $this->getActiveChildrenList($child['category']['id'], $customerGroupId, $depth);
-                $categories = array_merge($categories, $subCategories);
-            }
-        }
-        return $categories;
+//        $query = $this->addCustomHints($builder->getQuery(), null, true);
+//        return $query->getArrayResult();
     }
 
     /**
