@@ -15,8 +15,6 @@ ALTER TABLE  `s_core_tax_rules` ADD INDEX  `tax_rate_by_conditions`
 ALTER TABLE  `s_categories` ADD INDEX  `active_query_builder` 
 (  `parent` ,  `position` ,  `id` );
 
-ALTER TABLE  `s_categories` ADD INDEX (  `parent` );
-
 ALTER TABLE  `s_articles_img` ADD INDEX  `variant_images_by_article_number` 
 (  `articleID` ,  `main` ,  `position` );
 
