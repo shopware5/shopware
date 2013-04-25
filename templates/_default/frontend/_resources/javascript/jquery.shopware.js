@@ -395,11 +395,12 @@ jQuery(document).ready(function ($) {
             $('.register .alternative_shipping select'+ id ).removeAttr('disabled').parents('div.selection').removeClass('hidden');
         });
 
-        if($.controller.vat_check_enabled){
-            var element = $('label[for=register_billing_ustid] span.frontend_register_billing_fieldset');
-            var text = element.text();
-            element.css('font-weight', 'bold');
-            element.text(text + '*');
+        if($.controller.vat_check_required){
+            var snippetElement = $('label[for=register_billing_ustid] span.frontend_register_billing_fieldset');
+            var labelElement = $('label[for=register_billing_ustid]');
+            var text = snippetElement.text();
+            snippetElement.text(text + '*');
+            labelElement.removeClass('normal');
         }
     });
 })(jQuery);
