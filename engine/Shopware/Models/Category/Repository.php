@@ -344,9 +344,8 @@ class Repository extends ModelRepository
         //to prevent a temporary table and file sort we have to set the same sort and group by condition
         $builder->groupBy('c.parentId')
             ->addGroupBy('c.position')
-            ->addGroupBy('c.id');
-
-        $builder->orderBy('c.parentId', 'ASC')
+            ->addGroupBy('c.id')
+            ->orderBy('c.parentId', 'ASC')
             ->addOrderBy('c.position', 'ASC')
             ->addOrderBy('c.id', 'ASC');
 
