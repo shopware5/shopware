@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * The width of this component in pixels.
      * @integer 
      */
-    width: 250,
+    width: 220,
     /**
      * Plugins and plugin configurations
      * @object
