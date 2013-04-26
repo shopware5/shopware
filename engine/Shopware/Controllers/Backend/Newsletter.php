@@ -132,17 +132,18 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 
 	/**
 	 * Mail action method
-	 * 
+	 *
 	 * Sends one or more newsletter emails.
 	 */
 	public function mailAction()
 	{
 		$mailingID = (int) $this->Request()->getParam('id');
-		
-		if(!empty($mailingID)&&!Shopware()->Auth()->hasIdentity()) {
+
+		if(!empty($mailingID) && !Shopware()->Auth()->hasIdentity()) {
 			return;
 		}
-		
+
+        // Default cron operation - will automatically get a newsletter which needs to be send
 		if(empty($mailingID)) {
 			$mailing = $this->initMailing();
 			if(empty($mailing)) {
@@ -152,12 +153,30 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 
             $subjectCurrentMailing = $mailing['subject'];
 
-			if(!empty($mailing['locked'])&&strtotime($mailing['locked'])>time()-30) {
+            // Check lock time. Add a buffer of 30 seconds to the lock time (default request time)
+			if (!empty($mailing['locked']) && strtotime($mailing['locked']) > time()-30) {
                 echo "Current mail: '" . $subjectCurrentMailing . "'\n";
-				echo "Wait ".(strtotime($mailing['locked'])+120-time())." seconds ...\n";
+				echo "Wait ".(strtotime($mailing['locked'])+30-time())." seconds ...\n";
 				return;
 			}
-			
+
+
+            // When entering the mail dispatch, set lock time to 15 minutes in the future *if* the
+            // last lock time is in the past
+            $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=? AND locked < ?';
+            $result = Shopware()->Db()->query($sql, array(
+                date('Y-m-d H:i:s', time() + 15 * 60),
+                $mailing['id'],
+                date('Y-m-d H:i:s')
+            ));
+
+            // If no rows were affected, exit
+            if(!$result->rowCount()) {
+                echo "Lock condition detected ...\n";
+                return;
+            }
+
+            // Get mails for the current newsletter. If no mails are returned, set status=2 (completed)
 			$emails = $this->getMailingEmails($mailing['id']);
 			if(empty($emails)) {
 				$sql = 'UPDATE s_campaigns_mailings SET status=2 WHERE id=?';
@@ -166,21 +185,30 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 				echo "Mailing completed\n";
 				return;
 			}
-				
-			$sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
-			Shopware()->Db()->query($sql, array(date('Y-m-d H:i:s'), $mailing['id']));
+
+
+            // Set lock time to 15 minutes in the future
+            $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
+            Shopware()->Db()->query(
+                $sql,
+                array(
+                    date('Y-m-d H:i:s', time() + 15 * 60),
+                    $mailing['id']
+                )
+            );
+
             echo "Current mail: '" . $subjectCurrentMailing . "'\n";
 			echo count($emails)." Recipients fetched\n";
 		} else {
 			$mailing = $this->initMailing($mailingID);
 			$emails = array($this->Request()->getParam('testmail'));
 		}
-		
+
 		$template = $this->initTemplate($mailing);
-		
+
 		$from = $template->fetch('string:'.$mailing['sendermail'], $template);
 		$fromName = $template->fetch('string:'.$mailing['sendername'], $template);
-		
+
 		$mail = clone Shopware()->Mail();
 		$mail->setFrom($from, $fromName);
 
@@ -191,18 +219,18 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$hash = $this->createHash((int) $user['mailaddressID'], (int) $mailing['id']);
 			$template->assign('sCampaignHash', $hash, true);
 			$template->assign('sRecommendations', $this->getMailingSuggest($mailing['id'], $user['userID']), true);
-			
+
 			$voucher = $template->getTemplateVars('sVoucher');
 			if(!empty($voucher['id'])) {
 				$voucher['code'] = $this->getVoucherCode($voucher['id']);
 				$template->assign('sVoucher', $voucher, true);
 			}
-			
+
             if(empty($mailing['plaintext'])) {
                 $body = $template->fetch('newsletter/index/'.$mailing['template'], $template);
             }
             $bodyText = $template->fetch('newsletter/alt/'.$mailing['template'], $template);
-			
+
 			if(!empty($body)) {
 				$body = $this->trackFilter($body, $mailing['id']);
 				$mail->setBodyHtml($body);
@@ -211,7 +239,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 				$bodyText = $this->altFilter($bodyText);
 				$mail->setBodyText($bodyText);
 			}
-			
+
 			$subject = $template->fetch('string:'.$mailing['subject'], $template);
 
 			$mail->clearSubject();
@@ -244,6 +272,17 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			}
 		}
         echo $counter . ' out of ' . count($emails) . ' Mails sent successfully';
+
+        if(empty($mailingID)) {
+            $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
+            Shopware()->Db()->query(
+                $sql,
+                array(
+                    date('Y-m-d H:i:s', time() + 15),
+                    $mailing['id']
+                )
+            );
+        }
 	}
 	
 	/**
