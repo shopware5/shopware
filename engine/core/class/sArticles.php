@@ -841,10 +841,20 @@ class sArticles
                 $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
-                $orderBy = "articleName ASC, a.id";
+                $orderBy = "a.name ASC, a.id";
+                $sqlFromPath = "
+                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
+                    INNER JOIN s_articles_details AS aDetails
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             case 6:
-                $orderBy = "articleName DESC, a.id DESC";
+                $orderBy = "a.name DESC, a.id DESC";
+                $sqlFromPath = "
+                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
+                    INNER JOIN s_articles_details AS aDetails
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             default:
                 //todo@performance: default can be changed, so let the user change the index too.
@@ -941,7 +951,6 @@ class sArticles
 
         $sql = "
             SELECT
-                STRAIGHT_JOIN
 
                 a.id as articleID,
                 a.laststock,
@@ -2389,6 +2398,7 @@ class sArticles
     /**
      * Get one article with all available data
      * @param int $id article id
+     * @param null $sCategoryID
      * @access public
      * @return array
      */
