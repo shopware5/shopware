@@ -256,9 +256,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             } else {
                 try {
                     $mail->send();
-                    $sql = "INSERT INTO s_campaigns_logs (`datum`, `mailingID`, `email`) VALUES(NOW(), ?, ?)";
-                    Shopware()->Db()->query($sql, array($mailing['id'], $user['email']));
-
                     $counter++;
                 } catch(Exception $e) {
                     echo $e->getMessage() . "\n";
