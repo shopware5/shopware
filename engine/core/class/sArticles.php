@@ -388,6 +388,7 @@ class sArticles
             GROUP BY articleID
 		";
 
+        $article = (int) $article;
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($article), "article_$article");
 
         if (empty($getArticles["averange"])){
@@ -479,6 +480,8 @@ class sArticles
      */
     public function sGetArticlesVotes($article)
     {
+        $article = (int) $article;
+
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
 		SELECT
 		  *
@@ -2415,7 +2418,7 @@ class sArticles
 
         $sql = "
             SELECT
-                DISTINCT a.id as articleID,
+                a.id as articleID,
                 aDetails.id as articleDetailsID,
                 TRIM(ordernumber) as ordernumber,
                 datum,
