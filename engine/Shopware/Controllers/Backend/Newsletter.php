@@ -187,6 +187,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             }
 
             // Set lock time to 15 minutes in the future
+            // As the above getMailingEmails query might be quite slow, we need to lock the
+            // dispatch of newsletters before and after this query
             $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
             Shopware()->Db()->query($sql, array(
                     date('Y-m-d H:i:s', time() + 15 * 60),
