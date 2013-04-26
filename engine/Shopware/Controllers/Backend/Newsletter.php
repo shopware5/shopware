@@ -491,17 +491,21 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		if(empty($mailing)) return false;
 		
 		$mailing['groups'] = unserialize($mailing['groups']);
-			
+
+        // The first element holds the selected customer groups for the current newsletter
 		foreach ($mailing['groups'][0] as $customerGroupKey => $customerGroupValue){
 			$customerGroups[] = Shopware()->Db()->quoteInto('su.customergroup=?', $customerGroupKey);
 		}
 		$customerGroups = implode(' OR ', $customerGroups);
-		
+
+
+        // The second element holds the selected *newsletter* groups for the current newletter
 		foreach ($mailing['groups'][1] as $customerGroupKey => $customerGroupValue){
 			$recipientGroups[] = Shopware()->Db()->quoteInto('sc.groupID=?', $customerGroupKey);
 		}
 		$recipientGroups = implode(' OR ', $recipientGroups);
-		
+
+        // If no customer-/recipientgroup was selected, force the condition to be false
 		if (empty($recipientGroups)) {
 			$recipientGroups = '1=2';
 		}
@@ -512,18 +516,30 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;
         $limit = max(1, $limit);
 
-		$sql = "
+        /**
+         * Get mails belonging to selected customergroups of the selected subshop
+         * -OR- belonging to the selected newsletter groups
+         */
+        $sql = "
             SELECT sc.email
+
             FROM s_campaigns_mailaddresses sc
-            LEFT JOIN s_user su  ON sc.email=su.email AND accountmode=0
+
+            LEFT JOIN s_user su
+            ON sc.email=su.email
+
             WHERE sc.lastmailing != ?
-            AND    ((
+            AND
+            (
+                (
                 su.subshopID = ?
                 AND ($customerGroups)
-            )
-            OR (
+                )
+            OR
+                (
                 ($recipientGroups)
-            ))
+                )
+            )
             GROUP BY sc.email
         ";
 		$sql = Shopware()->Db()->limit($sql, $limit);

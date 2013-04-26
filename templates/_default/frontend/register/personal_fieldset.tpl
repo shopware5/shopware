@@ -67,7 +67,7 @@
 		
 			{if {config name=DOUBLEEMAILVALIDATION}}
 			    <div>
-			        <label title="{s name='RegisterPersonalRequiredText'}{/s}">
+			        <label for="register_personal_emailConfirmation">
 			        	{se name='RegisterLabelMailConfirmation'}{/se}
 			        </label>
 			        <input name="register[personal][emailConfirmation]" type="text" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="text emailConfirmation required {if $error_flags.emailConfirmation}instyle_error{/if}" />
