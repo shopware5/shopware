@@ -1280,6 +1280,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'customer.newsletter as newsletter',
                 'customer.affiliate as affiliate',
             );
+            $builder->addGroupBy('orderdetailsID');
         }
 
         $builder->select($selectFields);
