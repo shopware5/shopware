@@ -267,9 +267,11 @@ class Repository extends ModelRepository
     {
 
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions', 'elements', 'component'))
+        $builder->select(array('emotions', 'elements', 'component', 'grid', 'template'))
                 ->leftJoin('emotions.elements', 'elements')
                 ->leftJoin('elements.component', 'component')
+                ->leftJoin('emotions.grid', 'grid')
+                ->leftJoin('emotions.template', 'template')
                 ->where('emotions.id = ?1')
                 ->andWhere('(emotions.validFrom <= CURRENT_TIMESTAMP() OR emotions.validFrom IS NULL)')
                 ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
