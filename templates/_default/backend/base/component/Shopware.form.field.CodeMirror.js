@@ -245,7 +245,9 @@ Ext.define('Shopware.form.field.CodeMirror',
             scroller,
             height, width;
 
-        if (me.editor) {
+
+        if (me.editor && me.el) {
+
             // Set the editor height
             if (me.height) {
                 height = me.height;
@@ -257,7 +259,7 @@ Ext.define('Shopware.form.field.CodeMirror',
             if (me.width) {
                 width = me.width - 10;
             } else {
-                width = me.editorWidth;
+                width = me.el.getWidth();
             }
 
             scroller = Ext.get(me.editor.getScrollerElement());
