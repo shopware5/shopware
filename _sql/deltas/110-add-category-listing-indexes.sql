@@ -46,3 +46,6 @@ ALTER TABLE  `s_order_notes` ADD INDEX  `basket_count_notes`
 
 ALTER TABLE  `s_articles_img` ADD INDEX  `article_cover_image_query` 
 (  `articleID` ,  `main` ,  `position` );
+
+ALTER TABLE  `s_order_basket` ADD INDEX  `get_basket` 
+(  `sessionID` ,  `id` ,  `datum` );
