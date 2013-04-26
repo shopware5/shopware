@@ -466,7 +466,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     name : 'cmsHeadline'
                 } , {
                     xtype : 'tinymce',
-                    fieldLabel : me.snippets.cmsTextLabel,
+                    labelAlign: 'top',
+                    emptyText : me.snippets.cmsTextLabel,
                     height: 100,
                     name : 'cmsText'
                 } 

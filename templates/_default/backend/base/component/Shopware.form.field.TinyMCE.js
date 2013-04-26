@@ -175,6 +175,13 @@ Ext.define('Shopware.form.field.TinyMCE',
     },
 
     /**
+     * Truthy if the component has an `emptyText`, otherwise falsy.
+     * @default false
+     * @boolean
+     */
+    hasPlaceholder: false,
+
+    /**
      * List of configuration options with their default values, for which automatically accessor methods are generated
      * @object
      */
@@ -301,7 +308,7 @@ Ext.define('Shopware.form.field.TinyMCE',
      * @retrun void
      */
     initEditor: function() {
-        var me = this, input = me.inputEl, height, width;
+        var me = this, input = me.inputEl, height, placeholder = false;
 
         // Check if the TinyMCE editor files are included
         if(!window.tinyMCE) {
@@ -344,10 +351,32 @@ Ext.define('Shopware.form.field.TinyMCE',
         // This solution still as some drawbacks as it image-resize-actions won't trigger a undo-step usually.
         me.tinymce.onInit.add(function(ed, evt) {
             var dom = ed.dom,
-                doc = ed.getDoc();
+                doc = ed.getDoc(),
+                el = doc.content_editable ? ed.getBody() : (tinymce.isGecko ? doc : ed.getWin());
 
-            tinymce.dom.Event.add(doc, 'blur', function(e) {
-                me.setRawValue(me.tinymce.getContent());
+            // Support for the `emptyText` property
+            if((!me.value || !me.value.length) && me.emptyText && me.emptyText.length) {
+                me.tinymce.setContent(me.emptyText);
+                me.hasPlaceholder = true;
+
+                tinymce.dom.Event.add(el, 'focus', function() {
+                    var value = me.tinymce.getContent();
+                    value = Ext.util.Format.stripTags(value);
+
+                    if(value === me.emptyText) {
+                        me.tinymce.setContent('');
+                    }
+                });
+            }
+
+            tinymce.dom.Event.add(el, 'blur', function() {
+                var value = me.tinymce.getContent();
+                me.setRawValue(value);
+
+                value = Ext.util.Format.stripTags(value);
+                if(me.hasPlaceholder && !value.length || (value == me.emptyText)) {
+                    me.tinymce.setContent(me.emptyText);
+                }
             });
         });
 
@@ -461,6 +490,11 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         if(!editorChange) {
             me.setEditorValue(value, me);
+
+            // Support for the `emptyText` property
+            if((!value || !value.length) && me.hasPlaceholder) {
+                me.setEditorValue(me.emptyText, me);
+            }
         }
 
         return me;
