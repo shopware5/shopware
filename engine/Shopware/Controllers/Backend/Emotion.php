@@ -150,8 +150,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion = $emotion[0];
         $emotion['grid'] = array($emotion['grid']);
 
-        if (!empty($emotion["isLandingPage"])){
-            $emotion["link"] = "shopware.php?controller=campaign&emotionId=".$emotion["id"];
+        if (!empty($emotion["isLandingPage"])) {
+            $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
         }else {
             $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
