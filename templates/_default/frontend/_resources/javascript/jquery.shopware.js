@@ -3467,8 +3467,11 @@ jQuery.fn.liveSearch = function (conf) {
     $.checkout.loginUser = function (form) {
         config.register = $.controller.register;
         var location = window.location.protocol + '//' + window.location.host;
+
         // Fix same origin miss match
-        if(config.viewport.indexOf(location) !== 0 && $.browser.msie) {
+        if (config.viewport.indexOf(location) !== 0
+            && $.browser.msie &&
+            (parseInt($.browser.version, 10) === 6 || parseInt($.browser.version, 10) === 7)) {
             return;
         }
         $.ajax({
