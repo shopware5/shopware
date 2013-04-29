@@ -12,6 +12,27 @@ class ForceIndexWalker extends SqlWalker
 
     const HINT_STRAIGHT_JOIN = 'StraightJoinWalker.StraightJoin';
 
+    const HINT_SQL_NO_CACHE = 'SqlNoCacheWalker.SqlNoCache';
+
+    public function walkSelectClause($selectClause)
+    {
+        $sql = parent::walkSelectClause($selectClause);
+
+        if ($this->getQuery()->getHint(self::HINT_SQL_NO_CACHE) === true) {
+            if ($selectClause->isDistinct) {
+                $sql = str_replace('SELECT DISTINCT', 'SELECT DISTINCT SQL_NO_CACHE', $sql);
+            } else {
+                $sql = str_replace('SELECT', 'SELECT SQL_NO_CACHE ', $sql);
+            }
+        }
+
+        if ($this->getQuery()->getHint(self::HINT_STRAIGHT_JOIN) === true) {
+            $sql = str_replace('SELECT', 'SELECT STRAIGHT_JOIN ', $sql);
+        }
+
+        return $sql;
+    }
+
     public function walkFromClause($fromClause)
     {
         $result = parent::walkFromClause($fromClause);
@@ -21,17 +42,6 @@ class ForceIndexWalker extends SqlWalker
         }
 
         return $result;
-    }
-
-    public function walkSelectClause($selectClause)
-    {
-        $sql = parent::walkSelectClause($selectClause);
-
-        if ($this->getQuery()->getHint(self::HINT_STRAIGHT_JOIN) === true) {
-            $sql = str_replace('SELECT', 'SELECT STRAIGHT_JOIN ', $sql);
-        }
-
-        return $sql;
     }
 
 }
