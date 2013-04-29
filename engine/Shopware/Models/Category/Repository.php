@@ -305,7 +305,6 @@ class Repository extends ModelRepository
                 ->setParameter('parentId', $parentId);
 
         return $builder->getQuery();
-//        return $this->addCustomHints($builder->getQuery(), null, true);
     }
 
     /**
@@ -392,29 +391,7 @@ class Repository extends ModelRepository
                 ->setParameter('categoryId', $id);
 
         return $builder->getQuery();
-//        return $this->addCustomHints($builder->getQuery(), null, true);
     }
-
-    /**
-     * Helper function to add mysql specified command to increase the sql performance.
-     * @param Query $query
-     * @param null $index Name of the forced index
-     * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
-     * @return Query
-     */
-    private function addCustomHints(Query $query, $index = null, $straightJoin = false) {
-        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
-
-        if ($straightJoin === true) {
-            $query->setHint(SqlWalker\StraightJoinWalker::HINT_STRAIGHT_JOIN, true);
-        }
-        if ($index !== null) {
-            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
-        }
-        return $query;
-    }
-
-
 
     /**
      * Returns a tree structure result of all active category children of the passed category id.
@@ -437,7 +414,6 @@ class Repository extends ModelRepository
         $builder->andWhere('c.parentId = :parent')
                 ->setParameter('parent', $id);
 
-//        $query = $this->addCustomHints($builder->getQuery(), null, true);
         $query = $builder->getQuery();
         $children = $query->getArrayResult();
         $categories = array();
@@ -478,9 +454,6 @@ class Repository extends ModelRepository
                 ->setParameter("path", "%|" . $id . '|%');
 
         return $builder->getQuery()->getArrayResult();
-
-//        $query = $this->addCustomHints($builder->getQuery(), null, true);
-//        return $query->getArrayResult();
     }
 
     /**
