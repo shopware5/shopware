@@ -39,12 +39,22 @@ use \Doctrine\ORM\Configuration as BaseConfiguration;
 class Configuration extends BaseConfiguration
 {
     /**
+     * Directory for generated attribute models
+     *
      * @var string
      */
     protected $attributeDir;
 
     /**
+     * Directory for cached anotations
+     *
+     * @var string
+     */
+    protected $fileCacheDir;
+
+    /**
      * @param $options
+     * @throws \Exception
      */
     public function __construct($options)
     {
@@ -52,13 +62,13 @@ class Configuration extends BaseConfiguration
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
 
-        // set the proxy dir and set some options
-        $proxyDir = Shopware()->Loader()->isReadable($options['proxyDir']);
-        $proxyDir = realpath($proxyDir);
-        $this->setProxyDir($proxyDir);
+
+        $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
         $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
+
         $this->setAttributeDir($options['attributeDir']);
+        $this->setFileCacheDir($options['fileCacheDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
@@ -105,12 +115,13 @@ class Configuration extends BaseConfiguration
      */
     public function getAnnotationsReader()
     {
-        $reader = new \Doctrine\Common\Annotations\AnnotationReader;
+        $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+
         $cache = $this->getMetadataCacheImpl();
         if ($this->getMetadataCacheImpl() instanceof Cache) {
             $reader = new \Doctrine\Common\Annotations\FileCacheReader(
                 $reader,
-                $this->getProxyDir()
+                $this->getFileCacheDir()
             );
         } else {
             $reader = new \Doctrine\Common\Annotations\CachedReader(
@@ -118,6 +129,7 @@ class Configuration extends BaseConfiguration
                 $cache
             );
         }
+
         return $reader;
     }
 
@@ -139,11 +151,25 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param string $attributeDir
+     * @param string $dir
+     * @throws \InvalidArgumentException
+     * @return Configuration
      */
-    public function setAttributeDir($attributeDir)
+    public function setAttributeDir($dir)
     {
-        $this->attributeDir = $attributeDir;
+        if (!is_dir($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
+
+        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+
+        $this->attributeDir = $dir;
+
+        return $this;
     }
 
     /**
@@ -152,5 +178,56 @@ class Configuration extends BaseConfiguration
     public function getAttributeDir()
     {
         return $this->attributeDir;
+    }
+
+    /**
+     * @param string $dir
+     * @throws \InvalidArgumentException
+     * @return Configuration
+     */
+    public function setFileCacheDir($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
+
+        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+
+        $this->fileCacheDir = $dir;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileCacheDir()
+    {
+        return $this->fileCacheDir;
+    }
+
+    /**
+     * Sets the directory where Doctrine generates any necessary proxy class files.
+     *
+     * @param string $dir
+     * @throws \InvalidArgumentException
+     */
+    public function setProxyDir($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
+
+        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+
+        parent::setProxyDir($dir);
     }
 }

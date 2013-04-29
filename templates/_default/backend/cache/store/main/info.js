@@ -25,7 +25,7 @@
 Ext.define('Shopware.apps.Cache.store.main.Info', {
     extend: 'Ext.data.Store',
 
-    fields: [ 'name', 'backend', 'dir', 'size', 'files', 'freeSpace' ],
+    fields: [ 'name', 'backend', 'dir', 'size', 'files', 'freeSpace', 'message' ],
 
     proxy: {
         type: 'ajax',
