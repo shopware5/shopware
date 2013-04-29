@@ -450,12 +450,28 @@ class Repository extends ModelRepository
     public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
-        $builder->andWhere('c.path LIKE :path')
-                ->setParameter("path", "%|" . $id . '|%');
+        $builder->andWhere('c.parentId = :parent')
+            ->setParameter('parent', $id)
+            ->addOrderBy('c.position', 'ASC');
 
-        return $builder->getQuery()->getArrayResult();
+        $children = $builder->getQuery()->getArrayResult();
+        $categories = array();
+        $depth--;
+
+        foreach($children as &$child) {
+            $category = $child['category'];
+            $category['childrenCount'] = $child['childrenCount'];
+            $category['articleCount'] = $child['articleCount'];
+
+            $categories[] = $category;
+            //check if no depth passed or the current depth is lower than the passed depth
+            if ($depth === null|| $depth > 0) {
+                $subCategories = $this->getActiveChildrenList($child['category']['id'], $customerGroupId, $depth);
+                $categories = array_merge($categories, $subCategories);
+            }
+        }
+        return $categories;
     }
-
     /**
      * Returns first active articleId for given category
      *
