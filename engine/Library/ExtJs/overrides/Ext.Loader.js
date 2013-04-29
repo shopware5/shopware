@@ -96,7 +96,8 @@
                 cacheKey,
                 disableCachingValue = this.getConfig('disableCachingValue'),
                 requestMethod = "post",
-                tmpPath;
+                tmpPath,
+                files = [];
 
             // Get request of main subapplication app.js
             if (namespace.files.length <= 1 && namespace.files[0].indexOf('?file') !== -1) {
@@ -107,8 +108,7 @@
                 tmpPath = path;
                 tmpPath += "?f=";
 
-                var files = [];
-
+                files = [];
                 Ext.each(namespace.files, function (file) {
                     // shrink filenames, will be expanded in ScriptRenderer-Plugin
                     file = file.replace('/^model\//', 'm/');
@@ -191,8 +191,8 @@
      */
     Ext.Loader.getPath = function(className, prefix) {
         var path = '',
-                paths = this.config.paths,
-                suffix = this.config.suffixes[prefix] !== undefined ? this.config.suffixes[prefix] : '.js';
+            paths = this.config.paths,
+            suffix = this.config.suffixes[prefix] !== undefined ? this.config.suffixes[prefix] : '.js';
 
         if (prefix.length > 0) {
             if (prefix === className) {
@@ -218,11 +218,11 @@
     Ext.Loader.require = function(expressions, fn, scope, excludes) {
         var Manager = Ext.ClassManager;
         var filePath, expression, exclude, className, excluded = {},
-                excludedClassNames = [],
-                possibleClassNames = [],
-                possibleClassName, classNames = [],
-                namespaces = {}, separatedPath, prefix,
-                i, j, ln, subLn;
+            excludedClassNames = [],
+            possibleClassNames = [],
+            possibleClassName, classNames = [],
+            namespaces = {}, separatedPath, prefix,
+            i, j, ln, subLn;
 
         if(!this.getConfig('disableCachingValue')) {
             this.setConfig('disableCachingValue', Ext.Date.now());
