@@ -250,27 +250,19 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
 
 		$categorySql = '';
+        $imageSQL = '';
 		$sqlParams = array();
-		if (!empty($categoryId) && $categoryId !== 'NaN') {
-			$categorySql =  "
-				LEFT JOIN s_categories c
-					ON c.id = ?
-				LEFT JOIN s_categories c2
-					ON c2.left >= c.left
-					AND c2.right <= c.right
-				JOIN s_articles_categories ac
-					ON ac.articleID = articles.id AND ac.categoryID = c2.id
-			";
-			$sqlParams[] = $categoryId;
-		}
+
 
 		$filterSql = 'WHERE 1 = 1';
 		if (isset($filters['search'])) {
-			$filterSql .= " AND (details.ordernumber LIKE ? OR articles.name LIKE ? OR suppliers.name LIKE ? OR articles.description_long LIKE ?)";
-			$sqlParams[] = '%' . $filters['search'] . '%';
-			$sqlParams[] = '%' . $filters['search'] . '%';
-            $sqlParams[] = '%' . $filters['search'] . '%';
-            $sqlParams[] = '%' . $filters['search'] . '%';
+			$filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR articles.description_long LIKE :descriptionLong)";
+            $searchFilter =  '%' . $filters['search'] . '%';
+
+			$sqlParams["orderNumber"] = $searchFilter;
+			$sqlParams["articleName"] = $searchFilter;
+			$sqlParams["supplierName"] = $searchFilter;
+			$sqlParams["descriptionLong"] = $searchFilter;
 		}
 
         if ($filterBy == 'notInStock') {
@@ -285,9 +277,22 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
             $filterSql .= " AND ac.id IS NULL ";
         }
+        else if (!empty($categoryId) && $categoryId !== 'NaN') {
+            $categorySql =  "
+				LEFT JOIN s_categories c
+					ON c.id = :categoryId
+				LEFT JOIN s_categories c2
+					ON c2.left >= c.left
+					AND c2.right <= c.right
+				JOIN s_articles_categories ac
+					ON ac.articleID = articles.id AND ac.categoryID = c2.id
+			";
+            $sqlParams["categoryId"] = $categoryId;
+        }
+
 
         if ($filterBy == 'noImage') {
-            $categorySql = "
+            $imageSQL = "
                 LEFT JOIN s_articles_img as mainImages
                 ON mainImages.articleID = articles.id
             ";
@@ -338,6 +343,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 			        ON tax.id = articles.taxID
 
 				$categorySql
+				$imageSQL
 
 				$filterSql
 				AND details.kind <> 3
@@ -377,6 +383,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 			        ON tax.id = articles.taxID
 
 				$categorySql
+				$imageSQL
 				$filterSql
 
 				ORDER BY $order, details.ordernumber ASC
