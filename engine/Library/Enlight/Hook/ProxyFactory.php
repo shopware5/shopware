@@ -105,6 +105,17 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
     {
         $this->hookManager = $hookManager;
         $this->proxyNamespace = $proxyNamespace;
+
+        if (!is_dir($proxyDir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $proxyDir));
+        }
+
+        if (!is_writable($proxyDir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $proxyDir));
+        }
+
+        $proxyDir = rtrim(realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
+
         $this->proxyDir = $proxyDir;
     }
 
@@ -124,7 +135,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
 
         if (!is_readable($proxyFile)) {
             if (!is_writable($this->proxyDir)) {
-                return $class;
+                throw new \Exception(sprintf('The directory "%s" is not writable.', $this->proxyDir));
             }
             $content = $this->generateProxyClass($class);
             $this->writeProxyClass($proxyFile, $content);
@@ -303,9 +314,17 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             $this->proxyDir . '*Proxy.php',
             FilesystemIterator::CURRENT_AS_PATHNAME
         );
-        /** @var $proxy  */
+
         foreach($proxies as $proxyPath) {
             @unlink($proxyPath);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyDir()
+    {
+        return $this->proxyDir;
     }
 }

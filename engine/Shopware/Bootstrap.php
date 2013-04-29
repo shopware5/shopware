@@ -27,6 +27,7 @@ use Shopware\Components\HttpCache\HttpKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ *
  * Shopware Application
  *
  * @category  Shopware
@@ -55,7 +56,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $app = $this->Application();
         $loader = $app->Loader();
 
-        $classMap = $this->Application()->AppPath('Proxies') . 'ClassMap.php';
+        $classMap = $this->Application()->DocPath('cache') . 'ClassMap_' . \Shopware::REVISION . '.php';
         $loader->readClassMap($classMap);
 
         if (($config = $app->getOption('httpCache')) !== null && !empty($config['enabled'])) {
@@ -540,7 +541,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
         $annotationDriver = new Doctrine\ORM\Mapping\Driver\AnnotationDriver(
             $cachedAnnotationReader,
-            array($this->Application()->AppPath('Models'))
+            array(
+                $this->Application()->AppPath('Models'),
+                $config->getAttributeDir(),
+            )
+        );
+
+        $this->Application()->Loader()->registerNamespace(
+            'Shopware\Models\Attribute',
+            $config->getAttributeDir()
         );
 
         // create a driver chain for metadata reading

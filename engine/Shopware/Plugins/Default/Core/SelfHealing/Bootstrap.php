@@ -101,7 +101,9 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $this->response = new Enlight_Controller_Response_ResponseHttp();
 
         if ($this->isModelException($exception)) {
-            $result = $this->generateModels();
+            $path = Shopware()->Models()->getConfiguration()->getAttributeDir();
+
+            $result = $this->generateModels($path);
             if ($result['success'] === true) {
                 $this->response->setRedirect(
                     $this->request->getRequestUri()
@@ -111,7 +113,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
                 $this->response->sendResponse();
                 exit();
             } else {
-                die("Failed to create the attribute models, please check the permissions of the engine/Shopware/Models/Attribute directory");
+                die(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $path));
             }
         }
     }
@@ -163,13 +165,13 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     /**
      * Internal helper function which regenerates all shopware attribute model.
      */
-    private function generateModels()
+    private function generateModels($path)
     {
         /**@var $generator \Shopware\Components\Model\Generator*/
         $generator = new \Shopware\Components\Model\Generator();
 
         $generator->setPath(
-            Shopware()->AppPath('Models_Attribute')
+            $path
         );
 
         $generator->setModelPath(
@@ -201,4 +203,3 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         return $connection->getSchemaManager();
     }
 }
-
