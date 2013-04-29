@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
         if (this.isHtml) {
             me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
                 flex: 1,
-                height: 150,
+                height: 120,
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 name: 'contentHtml',
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
         } else {
             me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
                 flex: 1,
-                height: 150,
+                height: 120,
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 name: 'content',

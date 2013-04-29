@@ -245,21 +245,20 @@ Ext.define('Shopware.form.field.CodeMirror',
             scroller,
             height, width;
 
-
         if (me.editor && me.el) {
 
             // Set the editor height
             if (me.height) {
                 height = me.height;
             } else {
-                height = me.editorHeight;
+                height = me.el.getHeight();
             }
 
             // Set the editor width
             if (me.width) {
                 width = me.width - 10;
             } else {
-                width = me.el.getWidth();
+                width = '100%';
             }
 
             scroller = Ext.get(me.editor.getScrollerElement());
