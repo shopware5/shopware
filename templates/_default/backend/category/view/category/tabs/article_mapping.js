@@ -64,67 +64,134 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @boolean
      */
     autoShow : true,
+
     /**
      * used layout column
      * 
-     * @string
+     * @object
      */
-    layout: 'fit',
+    layout: {
+        type: 'hbox',
+        pack: 'start',
+        align: 'stretch'
+    },
+
     /**
      * Body padding
      * @integer
      */
     bodyPadding: 10,
+
     /**
-     * article mapping record
+     * Available action buttons
+     * @array
      */
-    record: null,
+    actionButtons: ['add', 'remove' ],
+
+    /**
+     * Default text which are used for the tooltip on the button.
+     * @object
+     */
+    buttonsText: {
+        add: "{s name=tabs/article_mapping/button_add}Add{/s}",
+        remove: "{s name=tabs/article_mapping/button_remove}Remove{/s}"
+    },
+
 
     /**
      * Initialize the Shopware.apps.Category.view.category.tabs.ArticleMapping and defines the necessary
      * default configuration
+     *
+     * @returns { Void }
      */
-    initComponent:function () 
-    {
+    initComponent:function () {
         var me = this;
-        me.items = me.getItems();
+
+        me.items = [ me.createFromGrid(), me.createActionButtons(), me.createToGrid() ];
 
         me.callParent(arguments);
     },
 
     /**
-     * creates all fields for the tab
+     * Creates the `from` grid
+     * @returns { Ext.grid.Panel }
      */
-    getItems:function () {
-        var me = this;
+    createFromGrid: function() {
+        var me = this, localFromStore;
 
-        me.ddSelector = Ext.create('Shopware.DragAndDropSelector',{
-            fromTitle: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
-            toTitle: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
-            fromStore: me.articleStore,
-            fromColumns: me.getColumns(),
-            toColumns: me.getColumns(),
-            hideHeaders: false,
-            buttons:[ 'add','remove' ],
-            selectedItems: me.record.getArticles(),
-            fromFieldDockedItems: [ me.getFromToolbar(), me.getFromPagingToolbar() ],
-            toFieldDockedItems: [ me.getToToolbar() ],
-            buttonsText: {
-                add: "{s name=tabs/article_mapping/button_add}Add{/s}",
-                remove: "{s name=tabs/article_mapping/button_remove}Remove{/s}"
-            }
+        localFromStore = Ext.create('Ext.data.Store', {
+            fields: [ 'ordernumber', 'name', 'supplier' ],
+            data: [
+                { ordernumber: 'SW1000', name: 'Super Ingo', supplier: 'Shopware' }
+            ]
         });
-        return [me.ddSelector];
+
+        return Ext.create('Ext.grid.Panel', {
+            title: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
+            flex: 1,
+            store: localFromStore,
+            columns: me.getColumns()
+        });
     },
 
-    getFromPagingToolbar: function() {
-        var me = this;
-        return {
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: me.articleStore,
-            dock: 'bottom'
-        };
+    /**
+     * Creates the `to` grid
+     * @returns { Ext.grid.Panel }
+     */
+    createToGrid: function() {
+        var me = this, localToStore;
+
+        localToStore = Ext.create('Ext.data.Store', {
+            fields: [ 'ordernumber', 'name', 'supplier' ],
+            data: [
+                { ordernumber: 'SW1000', name: 'Super Ingo', supplier: 'Shopware' }
+            ]
+        });
+
+        return Ext.create('Ext.grid.Panel', {
+            title: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
+            flex: 1,
+            store: localToStore,
+            columns: me.getColumns()
+        });
+    },
+
+    /**
+     * Creates the action buttons which are located between the `fromGrid` (on the left side)
+     * and the `toGrid` (on the right side).
+     *
+     * The buttons are placed in an `Ext.container.Container` to apply the necessary layout
+     * on it.
+     *
+     * @returns { Ext.container.Container }
+     */
+    createActionButtons: function() {
+        var me = this,
+            buttons = [];
+
+        Ext.Array.forEach(me.actionButtons, function(name) {
+
+            var button = Ext.create('Ext.Button', {
+                tooltip: me.buttonsText[name],
+                cls: Ext.baseCSSPrefix + 'form-itemselector-btn',
+                iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name,
+                navBtn: true,
+                margin: '4 0 0 0'
+            });
+            button.addListener('click',  me['on' + Ext.String.capitalize(name) + 'BtnClick'], me);
+            buttons.push(button);
+        });
+
+
+        return Ext.create('Ext.container.Container', {
+            margins: '0 4',
+            items: buttons,
+            width: 22,
+            layout: {
+                type: 'vbox',
+                pack: 'center'
+            }
+        });
     },
 
     /**
@@ -137,7 +204,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             {
                 header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
                 flex: 1,
-                renderer: me.articleNumberRenderer
+                dataIndex: 'ordernumber'
             },
             {
                 header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
@@ -147,7 +214,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             {
                 header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
                 flex: 1,
-                renderer: me.supplierRenderer
+                dataIndex: 'supplier'
             }
         ];
     },
@@ -182,58 +249,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         } else {
             return 'undefined';
         }
-    },
-
-    /**
-     * Creates the Toolbar for the ddselector to add an searchfield to the left grid
-     *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
-     */
-    getFromToolbar:function () {
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui:'shopware-ui',
-            items:[
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    action:'searchArticle',
-                    width:170,
-                    cls:'searchfield',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    emptyText:'{s name=tabs/article_mapping/search}Search...{/s}'
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
-        });
-    },
-
-    /**
-     * Creates the Toolbar for the ddselector to add an searchfield to the right grid
-     *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
-     */
-    getToToolbar:function () {
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui:'shopware-ui',
-            items:[
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    action:'searchSelectedArticle',
-                    width:170,
-                    cls:'searchfield',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    emptyText:'{s name=tabs/article_mapping/search}Search...{/s}'
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
-        });
     }
 });
 //{/block}

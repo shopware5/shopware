@@ -243,7 +243,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 var disableTab = !record.data.leaf;
                 me.updateTab(articleMappingContainer, selectorView, disableTab);
                 me.updateTab(categoryRestrictionContainer, restrictionView, me.detailRecord.get('parentId') == 0);
-                me.getArticleMappingForm().ddSelector.toField.reconfigure(me.detailRecord.getArticles());
+
                 /*{if {acl_is_allowed privilege=update}}*/
                 // enable save button
                 saveButton.enable();
