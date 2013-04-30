@@ -223,7 +223,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         /** @var $category \Shopware\Models\Category\Category */
         $category = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
 
-        if(!$category) {
+        if (!$category) {
             return $data;
         }
 
@@ -234,13 +234,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->leftJoin('mappingMedia.media', 'media')
             ->leftJoin('blog.category', 'category')
             ->where('blog.active = 1')
-            ->andWhere('blog.displayDate <= ?1')
-            ->andWhere('category.id = ?2')
+            ->andWhere('blog.displayDate <= :displayDate')
+            ->andWhere('category.path LIKE :path')
             ->orderBy('blog.displayDate', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults($entryAmount)
-            ->setParameter(1, date('Y-m-d H:i:s'))
-            ->setParameter(2, $category->getId());
+            ->setParameter('displayDate', date('Y-m-d H:i:s'))
+            ->setParameter('path', '%|' . $category->getId() . '|%');
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -279,7 +279,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->setParameter(1, $data["category_selection"]);
 
         $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-	    
+
         $data["categoryName"] = $categoryName["name"];
 
         // Second get category image per random, if configured
