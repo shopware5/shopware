@@ -54,7 +54,7 @@ class Repository extends ModelRepository
      * @param null|string $separator if separator is given string will be returned
      * @return array|string
      */
-    public function getPathById(int $id, $field = 'name', $separator = null)
+    public function getPathById($id, $field = 'name', $separator = null)
     {
         if (empty($id)) {
             return '';
