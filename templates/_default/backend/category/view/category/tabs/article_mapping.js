@@ -37,17 +37,23 @@
  */
 //{block name="backend/category/view/tabs/article_mapping"}
 Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
+
    /**
     * Parent Element Ext.container.Container
     * @string
     */
     extend:'Ext.form.Panel',
+
     /**
      * Register the alias for this class.
      * @string 
      */
     alias:'widget.category-category-tabs-article_mapping',
 
+    /**
+     * Base class of the component
+     * @string
+     */
     cls: 'shopware-form',
 
     /**
@@ -59,6 +65,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @integer
      */
     border: 0,
+
     /**
      * Display the the contents of this tab immediately
      * @boolean
@@ -66,8 +73,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     autoShow : true,
 
     /**
-     * used layout column
-     * 
+     * Layout configuration
      * @object
      */
     layout: {
@@ -86,7 +92,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * Available action buttons
      * @array
      */
-    actionButtons: ['add', 'remove' ],
+    actionButtons: [ 'add', 'remove' ],
 
     /**
      * Default text which are used for the tooltip on the button.
@@ -130,6 +136,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             title: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
             flex: 1,
             store: localFromStore,
+            tbar: me.createSearchToolbar(),
+            bbar: me.createPagingToolbar(localFromStore),
             columns: me.getColumns()
         });
     },
@@ -152,6 +160,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             title: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
             flex: 1,
             store: localToStore,
+            tbar: me.createSearchToolbar(),
+            bbar: me.createPagingToolbar(localToStore),
             columns: me.getColumns()
         });
     },
@@ -195,60 +205,82 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     },
 
     /**
-     * Columns of the left and right grid
+     * Creates a paging toolbar based of the incoming store
+     *
+     * @param { Ext.data.Store } store
+     * @returns { Ext.toolbar.Paging }
+     */
+    createPagingToolbar: function(store) {
+
+        return Ext.create('Ext.toolbar.Paging', {
+            store: store
+        });
+    },
+
+    /**
+     * Creates a toolbar which could be docked to the top of
+     * a grid panel and contains a searchfield to filter
+     * the associated grid panel.
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createSearchToolbar: function() {
+        var me = this, searchField;
+
+        searchField = Ext.create('Ext.form.field.Text', {
+            name: 'searchfield',
+            cls: 'searchfield',
+            width: 270,
+            emptyText: 'Search...',
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
+            listeners: {
+                change: function(field, value) {
+                    me.fireEvent('searchOrders', value);
+                }
+            }
+        });
+
+        return Ext.create('Ext.toolbar.Toolbar', {
+            ui: 'shopware-ui',
+            padding: '2 0',
+            items: [ '->', searchField, ' ' ]
+        });
+    },
+
+    /**
+     * Creates the necessary columns for both grids. Please
+     * note that the `name` column has a specific renderer.
+     *
+     * @returns { Array }
      */
     getColumns: function() {
         var me = this;
 
-        return [
-            {
-                header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
-                flex: 1,
-                dataIndex: 'ordernumber'
-            },
-            {
-                header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
-                flex: 1,
-                dataIndex: 'name'
-            },
-            {
-                header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
-                flex: 1,
-                dataIndex: 'supplier'
-            }
-        ];
+        return [{
+            header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
+            flex: 1,
+            dataIndex: 'ordernumber'
+        }, {
+            header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
+            flex: 2,
+            dataIndex: 'name',
+            renderer: me.nameColumnRenderer
+        }, {
+            header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
+            flex: 1,
+            dataIndex: 'supplier'
+        }];
     },
 
-
     /**
-     * Renderer function of the articleNumber column of the grid
+     * Renders the incoming column value into `strong` tags.
      *
-     * @param value
-     * @param record
+     * @param { String } value
+     * @returns { String } formatted string
      */
-    articleNumberRenderer: function(value, metaData, record) {
-        var detailData = record.getDetail().first();
-        if (detailData) {
-            return detailData.get('number');
-        } else {
-            return 'undefined';
-        }
-    },
-
-
-    /**
-     * Renderer function of the supplier column of the grid
-     *
-     * @param value
-     * @param record
-     */
-    supplierRenderer: function(value, metaData, record) {
-        var supplier = record.getSupplier().first();
-        if (supplier) {
-            return supplier.get('name');
-        } else {
-            return 'undefined';
-        }
+    nameColumnRenderer: function(value) {
+        return Ext.String.format('<strong>[0]</strong>', value);
     }
 });
 //{/block}
