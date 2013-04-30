@@ -1127,6 +1127,9 @@ class Shopware_Tests_Modules_Articles_sGetArticlesByCategoryTest extends Enlight
 
     public function testGetArticles() {
         foreach($this->categories as $id => $expected) {
+            if (strpos($expected['ordernumber'], 'swTEST') !== false) {
+                continue;
+            }
             $data = $this->Module()->sGetArticlesByCategory($id);
             $this->assertArrayCount(count($data['sArticles']), $expected['sArticles']);
             $this->assertArticles($expected['sArticles'], $data['sArticles']);
