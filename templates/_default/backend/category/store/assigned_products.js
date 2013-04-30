@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,58 +19,61 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Category
- * @subpackage Store
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * Shopware Store - for the Category backend module.
+ * Shopware Category Module - Assigned products store
  *
- * The article store loads and stores the article model
+ * @category  Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-//{block name="backend/category/store/article"}
-Ext.define('Shopware.apps.Category.store.Article', {
+//{block name="backend/category/store/assigned_products"}
+Ext.define('Shopware.apps.Category.store.AssignedProducts', {
+
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
     extend: 'Ext.data.Store',
 
+    /**
+     * Truthy to filter on the server side, otherwise falsy to filter on the client side.
+     * @boolean
+     */
     remoteFilter: true,
+
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
     autoLoad : false,
+
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Category.model.Article',
+    model : 'Shopware.apps.Category.model.ProductAssignment',
 
+    /**
+     * Batch size
+     * @integer
+     */
     pageSize: 20,
+
     /**
      * Configure the data communication
      * @object
      */
     proxy: {
         type: 'ajax',
-        actionMethods: [
-            { create: 'POST', read: 'POST', update: 'POST', destroy: 'POST'}
-        ] ,
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url: '{url controller="Category" action="getArticles"}',
+        url: '{url controller="Category" action="getCategoryArticles"}',
 
         /**
          * Configure the data reader

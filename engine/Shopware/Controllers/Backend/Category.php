@@ -342,6 +342,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS
+                s_articles.id as articleId,
                 s_articles.name,
                 s_articles_details.ordernumber as number,
                 s_articles_supplier.name as supplierName
@@ -383,6 +384,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array(
+	        'articles.id as articleId',
             'articles.name',
             'details.number',
             'suppliers.name as supplierName'

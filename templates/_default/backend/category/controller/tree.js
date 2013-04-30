@@ -79,6 +79,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 		growlMessage			: '{s name=window/main_title}{/s}'
     },
 
+    productMappingRendered: false,
+
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
@@ -211,13 +213,16 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         me.subApplication.treeStore.getProxy().extraParams = { node:record.get("id") };
         var detailStore = me.subApplication.getStore('Detail');
         detailStore.getProxy().extraParams = { node:record.get("id") };
+
+        me.subApplication.availableProductsStore.getProxy().extraParams = { categoryId: record.get("id") },
+        me.subApplication.assignedProductsStore.getProxy().extraParams = { categoryId: record.get("id") },
+
         detailStore.load({
             scope:this,
             callback:function (records) {
                 var mainWindow = me.subApplication.mainWindow,
                     articleMappingContainer = mainWindow.articleMappingContainer,
                     categoryRestrictionContainer = mainWindow.categoryRestrictionContainer,
-                    selectorView,
                     restrictionView;
 
                 me.detailRecord = records[0];
@@ -228,20 +233,29 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // load record into forms
                 settingForm.loadRecord(me.detailRecord);
 
+                var disableTab = !record.data.leaf;
 
-                selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
-                    articleStore: me.subApplication.articleStore,
-                    record: me.detailRecord
-                });
+                if(!me.productMappingRendered) {
+                    me.selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
+                        availableProductsStore: me.subApplication.availableProductsStore,
+                        assignedProductsStore: me.subApplication.assignedProductsStore,
+                        record: me.detailRecord
+                    });
+                    me.updateTab(articleMappingContainer, me.selectorView, disableTab);
+                    me.productMappingRendered = true;
+                } else {
+                    me.selectorView.availableProductsStore = me.subApplication.availableProductsStore;
+                    me.selectorView.assignedProductsStore = me.subApplication.assignedProductsStore;
+                    me.selectorView.record = me.detailRecord
+                    me.selectorView.fireEvent('storeschanged');
+                    articleMappingContainer.setDisabled(disableTab);
+                }
 
                 restrictionView = Ext.create('Shopware.apps.Category.view.category.tabs.restriction', {
                     customerGroupsStore: me.subApplication.custeromGroupsStore,
                     record: me.detailRecord
                 });
 
-
-                var disableTab = !record.data.leaf;
-                me.updateTab(articleMappingContainer, selectorView, disableTab);
                 me.updateTab(categoryRestrictionContainer, restrictionView, me.detailRecord.get('parentId') == 0);
 
                 /*{if {acl_is_allowed privilege=update}}*/
@@ -469,6 +483,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param disabled
      */
     updateTab: function(tabContainer, view, disabled) {
+
         tabContainer.setDisabled(disabled);
         tabContainer.removeAll(false);
         tabContainer.add(view);

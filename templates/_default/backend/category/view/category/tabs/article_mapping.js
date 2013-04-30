@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * Available action buttons
      * @array
      */
-    actionButtons: [ 'add', 'remove' ],
+    defaultButtons: [ 'add', 'remove' ],
 
     /**
      * Default text which are used for the tooltip on the button.
@@ -112,8 +112,12 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      */
     initComponent:function () {
         var me = this;
-
-        me.items = [ me.createFromGrid(), me.createActionButtons(), me.createToGrid() ];
+        me.fromGrid = me.createFromGrid();
+        me.buttonContainer = me.createActionButtons();
+        me.toGrid = me.createToGrid();
+        me.items = [ me.fromGrid, me.buttonContainer, me.toGrid ];
+        me.addEvents('storeschanged', 'add', 'remove');
+        me.on('storeschanged', me.onStoresChanged, me);
 
         me.callParent(arguments);
     },
@@ -123,23 +127,22 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @returns { Ext.grid.Panel }
      */
     createFromGrid: function() {
-        var me = this, localFromStore;
+        var me = this, grid, toolbar;
 
-        localFromStore = Ext.create('Ext.data.Store', {
-            fields: [ 'ordernumber', 'name', 'supplier' ],
-            data: [
-                { ordernumber: 'SW1000', name: 'Super Ingo', supplier: 'Shopware' }
-            ]
-        });
-
-        return Ext.create('Ext.grid.Panel', {
+        grid = Ext.create('Ext.grid.Panel', {
+            internalTitle: 'from',
             title: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
             flex: 1,
-            store: localFromStore,
-            tbar: me.createSearchToolbar(),
-            bbar: me.createPagingToolbar(localFromStore),
+            store: me.availableProductsStore.load(),
+            selModel: me.createSelectionModel(),
+            bbar: me.createPagingToolbar(me.availableProductsStore),
             columns: me.getColumns()
         });
+
+        toolbar = me.createSearchToolbar(grid);
+        grid.addDocked(toolbar);
+
+        return grid;
     },
 
     /**
@@ -147,23 +150,22 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @returns { Ext.grid.Panel }
      */
     createToGrid: function() {
-        var me = this, localToStore;
+        var me = this, grid, toolbar;
 
-        localToStore = Ext.create('Ext.data.Store', {
-            fields: [ 'ordernumber', 'name', 'supplier' ],
-            data: [
-                { ordernumber: 'SW1000', name: 'Super Ingo', supplier: 'Shopware' }
-            ]
-        });
-
-        return Ext.create('Ext.grid.Panel', {
+        grid =  Ext.create('Ext.grid.Panel', {
+            internalTitle: 'to',
             title: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
             flex: 1,
-            store: localToStore,
-            tbar: me.createSearchToolbar(),
-            bbar: me.createPagingToolbar(localToStore),
+            store: me.assignedProductsStore.load(),
+            selModel: me.createSelectionModel(),
+            bbar: me.createPagingToolbar(me.assignedProductsStore),
             columns: me.getColumns()
         });
+
+        toolbar = me.createSearchToolbar(grid);
+        grid.addDocked(toolbar);
+
+        return grid;
     },
 
     /**
@@ -176,26 +178,33 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @returns { Ext.container.Container }
      */
     createActionButtons: function() {
-        var me = this,
-            buttons = [];
+        var me = this;
 
-        Ext.Array.forEach(me.actionButtons, function(name) {
+        me.actionButtons = [];
+        Ext.Array.forEach(me.defaultButtons, function(name) {
 
             var button = Ext.create('Ext.Button', {
                 tooltip: me.buttonsText[name],
                 cls: Ext.baseCSSPrefix + 'form-itemselector-btn',
                 iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name,
+                action: name,
+                disabled: true,
                 navBtn: true,
-                margin: '4 0 0 0'
+                margin: '4 0 0 0',
+                listeners: {
+                    scope: me,
+                    click: function() {
+                        me.fireEvent(name, me);
+                    }
+                }
             });
-            button.addListener('click',  me['on' + Ext.String.capitalize(name) + 'BtnClick'], me);
-            buttons.push(button);
+            me.actionButtons.push(button);
         });
 
 
         return Ext.create('Ext.container.Container', {
             margins: '0 4',
-            items: buttons,
+            items:  me.actionButtons,
             width: 22,
             layout: {
                 type: 'vbox',
@@ -224,11 +233,12 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      *
      * @returns { Ext.toolbar.Toolbar }
      */
-    createSearchToolbar: function() {
+    createSearchToolbar: function(cmp) {
         var me = this, searchField;
 
         searchField = Ext.create('Ext.form.field.Text', {
             name: 'searchfield',
+            dock: 'top',
             cls: 'searchfield',
             width: 270,
             emptyText: 'Search...',
@@ -236,7 +246,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             checkChangeBuffer: 500,
             listeners: {
                 change: function(field, value) {
-                    me.fireEvent('searchOrders', value);
+                    me.fireEvent('search', value, cmp);
                 }
             }
         });
@@ -246,6 +256,15 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             padding: '2 0',
             items: [ '->', searchField, ' ' ]
         });
+    },
+
+    /**
+     * Creates the selection model which is used by both grids.
+     *
+     * @returns { Ext.selection.CheckboxModel }
+     */
+    createSelectionModel: function() {
+        return Ext.create('Ext.selection.CheckboxModel');
     },
 
     /**
@@ -260,7 +279,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         return [{
             header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
             flex: 1,
-            dataIndex: 'ordernumber'
+            dataIndex: 'number'
         }, {
             header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
             flex: 2,
@@ -269,7 +288,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         }, {
             header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
             flex: 1,
-            dataIndex: 'supplier'
+            dataIndex: 'supplierName'
         }];
     },
 
@@ -281,6 +300,28 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      */
     nameColumnRenderer: function(value) {
         return Ext.String.format('<strong>[0]</strong>', value);
+    },
+
+    /**
+     * Event listener which will be fired when the user selects
+     * an another category in the tree.
+     *
+     * The method reconfigures the stores and reloads them.
+     *
+     * @return { Void }
+     */
+    onStoresChanged: function() {
+        var me = this,
+            fromStore = me.availableProductsStore,
+            toStore = me.assignedProductsStore;
+
+        // Set the new stores
+        me.fromGrid.reconfigure(fromStore);
+        me.toGrid.reconfigure(toStore);
+
+        // Reload the stores
+        me.fromGrid.getStore().load();
+        me.toGrid.getStore().load();
     }
 });
 //{/block}
