@@ -108,7 +108,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             $this->assertLinks($expected, $data);
             $this->assertSimilar($expected, $data);
             $this->assertRelated($expected, $data);
-            $this->assertImgSrc($expected, $data);
             $this->assertConfiguratorSelection($expected['sConfiguratorSelection'], $data['sConfiguratorSelection']);
         }
     }
@@ -147,9 +146,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         }
     }
 
-    private function assertImgSrc($expected, $data) {
-        $this->assertEquals($expected['image']['src'], $data['image']['src']);
-    }
 
     private function assertConfiguratorSelection($expected, $data) {
         foreach($this->configuratorSelectionProperties as $property) {
