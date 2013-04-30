@@ -1094,6 +1094,7 @@ class Shopware_Tests_Modules_Articles_sGetArticlesByCategoryTest extends Enlight
         'releasedate',
         'price',
         'articleName',
+        'ordernumber',
         'shippingfree',
         'supplierName',
         'shippingtime',
