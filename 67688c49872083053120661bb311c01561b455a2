@@ -1,0 +1,4 @@
+From: feature/sw-5691-autodetect-doctrine-cache-provider
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Components/Model/Configuration.php
+	MODIFY|engine/Shopware/Components/Model/Configuration.php
