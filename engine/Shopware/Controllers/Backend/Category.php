@@ -323,19 +323,53 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getArticlesAction()
     {
-        $usedIds = $this->Request()->usedIds;
-
-        $offset = $this->Request()->getParam('start', null);
+        $categoryId = $this->Request()->getParam('categoryId', 0);
+        $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 20);
+        $search = $this->Request()->getParam('search', '');
+        $conditions = '';
 
-        $dataQuery = $this->getArticleRepository()
-            ->getArticlesWithExcludedIdsQuery($usedIds, $this->Request()->getParam('filter', array()), $offset, $limit);
+        if (!empty($search)) {
+            $search = '%' . $search . '%';
+            $conditions = "
+            AND (
+                   s_articles.name LIKE '".$search."'
+                OR s_articles_details.ordernumber LIKE '".$search."'
+                OR s_articles_supplier.name LIKE '".$search."'
+            )
+            ";
+        }
 
-        $total = Shopware()->Models()->getQueryCount($dataQuery);
-        $data = $dataQuery->getArrayResult();
+        $sql = "
+            SELECT SQL_CALC_FOUND_ROWS
+                s_articles.name,
+                s_articles_details.ordernumber as number,
+                s_articles_supplier.name as supplierName
+            FROM s_articles
+               INNER JOIN s_articles_details
+                 ON s_articles_details.id = s_articles.main_detail_id
+               INNER JOIN s_articles_supplier
+                 ON s_articles.supplierID = s_articles_supplier.id
+               LEFT JOIN s_articles_categories
+                 ON s_articles.id = s_articles_categories.articleID
+                 AND s_articles_categories.categoryID = :categoryId
+            WHERE s_articles_categories.id IS NULL
+            ".$conditions."
+            LIMIT $offset , $limit
+        ";
 
-        //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+        $result = Shopware()->Db()->fetchAll($sql, array(
+            'categoryId' => (int) $categoryId
+        ));
+
+        $sql= "SELECT FOUND_ROWS() as count";
+        $count = Shopware()->Db()->fetchOne($sql);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $result,
+            'total' => $count
+        ));
     }
 
     /**
