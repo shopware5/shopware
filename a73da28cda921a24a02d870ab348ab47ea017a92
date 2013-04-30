@@ -1,0 +1,4 @@
+From: feature/sw-5498-add-translations
+To: next
+Conflict: (content) Merge conflict in snippets/backend/cache/view/main.ini
+	MODIFY|snippets/backend/cache/view/main.ini
