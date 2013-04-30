@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 4.0
+ * Copyright © 2013 shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Extensions
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -48,20 +49,20 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
      * @var array Filter rules for the Zend_Filter_Inflector
      */
     protected $filterRules = array(
-        ':module' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
+        ':module'     => array('Word_CamelCaseToUnderscore', 'StringToLower'),
         ':controller' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-        ':file' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-        'suffix' => '.js'
+        ':file'       => array('Word_CamelCaseToUnderscore', 'StringToLower'),
+        'suffix'      => '.js'
     );
 
     /**
      * @var array Will be set in the response instance on pre dispatch.
      */
     protected $headers = array(
-        'Content-Type' => null,
+        'Content-Type'  => null,
         'Cache-Control' => 'private, proxy-revalidate, max-age=2592000, s-maxage=0',
-        'Pragma' => 'private',
-        'Expires' => null,
+        'Pragma'        => 'private',
+        'Expires'       => null,
         'Last-Modified' => null
     );
 
@@ -104,24 +105,31 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $this->render = false;
 
         if ($this->viewRenderer->Action()->View()->hasTemplate()
-                || !$this->viewRenderer->shouldRender()) {
+            || !$this->viewRenderer->shouldRender()
+        ) {
+
             return;
         }
 
-        if (($template = $this->getTemplateName()) !== null) {
-            $this->viewRenderer->Action()->View()->loadTemplate($template);
-            foreach ($this->headers as $name => $value) {
-                if($name === 'Expires' && $value === null) {
-                    $value = Zend_Date::now()->addMonth(1)->get(Zend_Date::RFC_1123);
-                } elseif($name === 'Last-Modified' && $value === null) {
-                    $value = Zend_Date::now();
-                    $value = $value->get(Zend_Date::RFC_1123);
-                } elseif($name === 'Content-Type' && $value === null) {
-                    $front = $args->getSubject()->Front();
-                    $value = 'application/javascript; charset=' . $front->getParam('charset');
-                }
-                $this->viewRenderer->Action()->Response()->setHeader($name, $value, true);
+        $template = $this->getTemplateName();
+        if ($template === null) {
+            return;
+        }
+
+        $this->viewRenderer->Action()->View()->loadTemplate($template);
+
+        foreach ($this->headers as $name => $value) {
+            if ($name === 'Expires' && $value === null) {
+                $value = Zend_Date::now()->addMonth(1)->get(Zend_Date::RFC_1123);
+            } elseif ($name === 'Last-Modified' && $value === null) {
+                $value = Zend_Date::now();
+                $value = $value->get(Zend_Date::RFC_1123);
+            } elseif ($name === 'Content-Type' && $value === null) {
+                $front = $args->getSubject()->Front();
+                $value = 'application/javascript; charset=' . $front->getParam('charset');
             }
+
+            $this->viewRenderer->Action()->Response()->setHeader($name, $value, true);
         }
     }
 
@@ -157,9 +165,19 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
         $fileNames = (array) $request->getParam('file', $this->defaultFile);
 
+        if (empty($fileNames)) {
+            $fileNames = $request->getParam('f');
+            $fileNames = explode('|', $fileNames);
+        }
+
         $templateNames = array();
 
-        foreach($fileNames as $fileName) {
+        foreach ($fileNames as $fileName) {
+            // if string starts with "m/" replace with "model/"
+            $fileName = preg_replace('/^m\//', 'model/', $fileName);
+            $fileName = preg_replace('/^c\//', 'controller/', $fileName);
+            $fileName = preg_replace('/^v\//', 'view/', $fileName);
+
             $fileName = ltrim(dirname($fileName) . '/' . basename($fileName, '.js'), '/.');
 
             if (empty($fileName)) {
@@ -167,15 +185,15 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
             }
 
             $templateNames[] = $inflector->filter(array(
-                'module' => $moduleName,
+                'module'     => $moduleName,
                 'controller' => $controllerName,
-                'file' => $fileName)
+                'file'       => $fileName)
             );
         }
 
         $count = count($templateNames);
 
-        if($count === 0) {
+        if ($count === 0) {
             return null;
         } elseif($count === 1) {
             return $templateNames[0];
@@ -195,7 +213,9 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         if ($viewRenderer === null) {
             $viewRenderer = $this->Collection()->get('ViewRenderer');
         }
+
         $this->viewRenderer = $viewRenderer;
+
         return $this;
     }
 }

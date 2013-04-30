@@ -33,7 +33,7 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
-(function(classCache) {
+(function() {
     /**
      * Currently open loader requests
      *
@@ -64,7 +64,7 @@
             case 'xhr':
                 Ext.Ajax.abort(requestInfo.identifier);
                 this.numPendingFiles -= requestInfo.fileCount;
-            break;
+                break;
             default:
                 Ext.Error.raise("Unknown requestInfo type. Can not abort");
         }
@@ -88,42 +88,52 @@
      * @param { array } namespaces
      */
     var loadNamespacedClasses = Ext.bind(function(namespaces) {
+
+        var host = window.location.protocol + "//" + window.location.hostname;
+
         Ext.iterate(namespaces, function(key, namespace){
             var path = namespace.path,
-                cacheKey, disableCachingValue = this.getConfig('disableCachingValue'),
-                requestMethod = "post", cacheId = classCache.get('cacheId');
+                cacheKey,
+                disableCachingValue = this.getConfig('disableCachingValue'),
+                requestMethod = "post",
+                tmpPath,
+                files = [];
 
             // Get request of main subapplication app.js
             if (namespace.files.length <= 1 && namespace.files[0].indexOf('?file') !== -1) {
                 path += namespace.files[0];
                 requestMethod = "get";
+            } else {
+                // If BulkRequest check if GET-Request is possible, if not POST-Fallback is used
+                tmpPath = path;
+                tmpPath += "?f=";
+
+                files = [];
+                Ext.each(namespace.files, function (file) {
+                    // shrink filenames, will be expanded in ScriptRenderer-Plugin
+                    file = file.replace('/^model\//', 'm/');
+                    file = file.replace('/^controller\//', 'c/');
+                    file = file.replace('/^view\//', 'f/');
+
+                    files.push(file);
+                });
+
+                tmpPath += files.join('|');
+
+                // see: http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
+                // 2000 - 50 Chars Buffer for disableCachingParam etc.
+                if (tmpPath.length + host.length < 1950) {
+                    requestMethod = "get";
+                    path = tmpPath;
+                }
             }
 
-            if(!this.getConfig('caching')) {
-               path += (requestMethod === 'get') ? '&' : '?';
-               path += this.getConfig('disableCachingParam') + '=' + disableCachingValue;
+            if (!this.getConfig('caching')) {
+                path += (requestMethod === 'get') ? '&' : '?';
+                path += this.getConfig('disableCachingParam') + '=' + disableCachingValue;
             }
 
-            // Support for localStorage
             cacheKey = getRequestKey(path, namespace.files);
-            if(classCache.hasStorageSupport()) {
-
-                if(cacheId && cacheId != disableCachingValue) {
-                    classCache.clear();
-
-                    // Re-new the cacheId
-                    classCache.add('cacheId', disableCachingValue);
-                }
-
-                // Is the class already cached...
-                var data = classCache.get(cacheKey);
-                if(data) {
-                    Ext.globalEval(data + "\n//@ sourceURL=" + path);
-                    this.onFilesLoaded(namespace.classNames);
-                    return;
-                }
-            }
-
 
             if (this.syncModeEnabled) {
                 cleanIfAsyncRequestExists(cacheKey);
@@ -148,11 +158,6 @@
                     Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
 
                     this.onFilesLoaded(namespace.classNames);
-
-                    // Add class to the class cache
-                    if(cacheKey && classCache.hasStorageSupport()) {
-                        classCache.add(cacheKey, response.responseText);
-                    }
 
                     // Remove handled request from requestMap
                     if (requestMap.hasOwnProperty(cacheKey)) {
@@ -185,24 +190,24 @@
      * @return { array }
      */
     Ext.Loader.getPath = function(className, prefix) {
-    	var path = '',
-    		paths = this.config.paths,
-    		suffix = this.config.suffixes[prefix] !== undefined ? this.config.suffixes[prefix] : '.js';
+        var path = '',
+            paths = this.config.paths,
+            suffix = this.config.suffixes[prefix] !== undefined ? this.config.suffixes[prefix] : '.js';
 
-    	if (prefix.length > 0) {
-    		if (prefix === className) {
-    			return paths[prefix];
-    		}
+        if (prefix.length > 0) {
+            if (prefix === className) {
+                return paths[prefix];
+            }
 
-    		path = paths[prefix];
-    		className = className.substring(prefix.length + 1);
-    	}
+            path = paths[prefix];
+            className = className.substring(prefix.length + 1);
+        }
 
-    	if (path.length > 0) {
+        if (path.length > 0) {
             path = path.replace(/\/+$/, '') + '/';
-    	}
+        }
 
-    	return [path.replace(/\/\.\//g, '/'), className.replace(/\./g, "/") + suffix];
+        return [path.replace(/\/\.\//g, '/'), className.replace(/\./g, "/") + suffix];
     };
 
     Ext.Loader.config.disableCaching = false;
@@ -228,7 +233,7 @@
         }
 
         var disableCachingValue = this.getConfig('disableCachingValue'),
-            disableCaching = !this.getConfig('caching');
+                disableCaching = !this.getConfig('caching');
 
 
         expressions = Ext.Array.from(expressions);
@@ -274,7 +279,7 @@
                     sourceClass: "Ext.Loader",
                     sourceMethod: "require",
                     msg: "Ext.Loader is not enabled, so dependencies cannot be resolved dynamically. " +
-                         "Missing required class" + ((classNames.length > 1) ? "es" : "") + ": " + classNames.join(', ')
+                            "Missing required class" + ((classNames.length > 1) ? "es" : "") + ": " + classNames.join(', ')
                 });
             }
         }
@@ -310,7 +315,7 @@
 
                 // Collect and sort bulk loaded files by prefix
                 if(!namespaces[prefix]) {
-                   namespaces[prefix] = { 'prefix': prefix, 'path': separatedPath[0], 'files': [], 'classNames': [] };
+                    namespaces[prefix] = { 'prefix': prefix, 'path': separatedPath[0], 'files': [], 'classNames': [] };
                 }
                 namespaces[prefix]['files'].push(separatedPath[1]);
                 namespaces[prefix]['classNames'].push(className);
@@ -372,5 +377,4 @@
         }
         return this;
     };
-
-})(Shopware.data.ClassCache);
+})();
