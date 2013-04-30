@@ -1,0 +1,4 @@
+From: next
+To: master
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Backend/ArticleList.php
+	MODIFY|engine/Shopware/Controllers/Backend/ArticleList.php
