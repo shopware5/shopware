@@ -1,6 +1,6 @@
+-- //
 
-
-ALTER TABLE  `s_categories` ADD INDEX  `active_query_builder` 
+ALTER TABLE  `s_categories` ADD INDEX  `active_query_builder`
 (  `parent` ,  `position` ,  `id` );
 
 
@@ -16,7 +16,7 @@ ALTER TABLE  `s_articles_vote` ADD INDEX  `get_articles_votes`
 (  `articleID` ,  `active` ,  `datum` );
 
 
-ALTER TABLE  `s_articles_img` ADD INDEX  `article_images_query` 
+ALTER TABLE  `s_articles_img` ADD INDEX  `article_images_query`
 (  `articleID` ,  `position` );
 
 
@@ -32,7 +32,7 @@ ALTER TABLE  `s_core_tax_rules` ADD INDEX  `tax_rate_by_conditions`
 ( `customer_groupID` ,  `areaID` ,  `countryID` ,  `stateID` );
 
 
-ALTER TABLE  `s_cms_static` ADD INDEX  `get_menu` 
+ALTER TABLE  `s_cms_static` ADD INDEX  `get_menu`
 (  `position` ,  `description` );
 
 
@@ -44,8 +44,14 @@ ALTER TABLE  `s_order_notes` ADD INDEX  `basket_count_notes`
 (  `sUniqueID` ,  `userID` );
 
 
-ALTER TABLE  `s_articles_img` ADD INDEX  `article_cover_image_query` 
+ALTER TABLE  `s_articles_img` ADD INDEX  `article_cover_image_query`
 (  `articleID` ,  `main` ,  `position` );
 
-ALTER TABLE  `s_order_basket` ADD INDEX  `get_basket` 
+ALTER TABLE  `s_order_basket` ADD INDEX  `get_basket`
 (  `sessionID` ,  `id` ,  `datum` );
+
+-- //@UNDO
+
+-- //
+
+
