@@ -1097,7 +1097,6 @@ class Shopware_Tests_Modules_Articles_sGetArticlesByCategoryTest extends Enlight
         'shippingfree',
         'supplierName',
         'shippingtime',
-        'ordernumber',
         'taxID',
         'referenceunit',
         'unitID',
