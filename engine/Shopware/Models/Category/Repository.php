@@ -56,6 +56,10 @@ class Repository extends ModelRepository
      */
     public function getPathById($id, $field = 'name', $separator = null)
     {
+        if (empty($id)) {
+            return '';
+        }
+
         /**@var $category Category */
         $category = $this->find($id);
 
