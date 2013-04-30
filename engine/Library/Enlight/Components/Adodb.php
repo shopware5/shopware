@@ -452,7 +452,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetCol($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        $this->GetCol($sql, $bind);
+        return $this->GetCol($sql, $bind);
     }
 
     /**
@@ -467,6 +467,6 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetAssoc($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        $this->GetAssoc($sql, $bind);
+        return $this->GetAssoc($sql, $bind);
     }
 }
