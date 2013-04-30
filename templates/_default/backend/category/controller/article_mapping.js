@@ -49,83 +49,115 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
      * @array
      */
     refs: [
-        { ref: 'articleMappingView', selector: 'category-category-tabs-article_mapping' }
+        { ref: 'articleMappingView', selector: 'category-category-tabs-article_mapping' },
+        { ref: 'addButton', selector: 'category-category-tabs-article_mapping button[action=add]' },
+        { ref: 'removeButton', selector: 'category-category-tabs-article_mapping button[action=remove]' }
     ],
 
     /**
-     * Creates the necessary event listener for this
-     * specific controller and opens a new Ext.window.Window
-     * to display the sub-application
+     * Initializies the necessary event listener for the controller.
      *
-     * @return void
+     * @returns { Void }
      */
     init: function() {
         var me = this;
+
         me.control({
-            'category-category-tabs-article_mapping textfield[action=searchArticle]':{
-                change : me.onSearchArticle
+            'category-category-tabs-article_mapping': {
+                'search': me.onSearch,
+                'add': me.onAddProducts,
+                'remove': me.onRemoveProducts
             },
-            'category-category-tabs-article_mapping textfield[action=searchSelectedArticle]':{
-                change : me.onSearchSelectedArticle
+            'category-category-tabs-article_mapping grid': {
+                'selectionchange': me.onSelectionChange
             }
         });
     },
+
     /**
-     * Event listener method which will be fired when the user
-     * enters a search term
+     * Event listener method which will be fired when the user selects an entry
+     * in either the `toGrid` or the `fromGrid`.
      *
-     * @param field
-     * @param value
-     * @return void
+     * The method handles the enables / disables the buttons in the middle column
+     * of the view and deselects all entries in the inactive grid.
+     *
+     * @param { Ext.selection.CheckboxModel } selModel
+     * @param { Array } selection
+     * @returns { boolean }
      */
-    onSearchArticle: function (field, value) {
+    onSelectionChange: function(selModel, selection) {
         var me = this,
-            searchString = Ext.String.trim(value),
-            store = me.subApplication.articleStore;
-        store.filters.clear();
-        store.filter('filter', searchString);
+            view = me.getArticleMappingView(),
+            activeGrid = selModel.view.panel, inactiveGrid,
+            activeBtn, inactiveBtn;
+
+        // Prevent the grid to get a little sluggish
+        if(!selection.length) {
+            return false;
+        }
+        
+        inactiveGrid = (activeGrid.internalTitle === 'from') ? view.toGrid : view.fromGrid;
+
+        if(activeGrid.internalTitle === 'from') {
+            activeBtn = me.getAddButton();
+            inactiveBtn = me.getRemoveButton();
+        } else {
+            activeBtn = me.getRemoveButton();
+            inactiveBtn = me.getAddButton();
+        }
+
+        // Enable / disable buttons
+        activeBtn.setDisabled(false);
+        inactiveBtn.setDisabled(true);
+
+        inactiveGrid.getSelectionModel().deselectAll(true);
+
+        return true;
     },
-    
+
     /**
-     * Event listener method which will be fired when the user
-     * enters a search term.
-     * Searches locally the Selected Records
+     * Triggers a search by using an `extraParam` on the
+     * associated store of the active grid.
      *
-     * @param field
-     * @param value
-     * @return void
+     * @param { String } value
+     * @param { Ext.grid.Panel } activeGrid
      */
-    onSearchSelectedArticle: function (field, value) {
-        var me = this,
-            searchString = Ext.String.trim(value),
-            articleMappingView = me.getArticleMappingView(),
-            store = articleMappingView.ddSelector.toField.getStore();
+    onSearch: function(value, activeGrid) {
+        var store = activeGrid.getStore();
 
-        store.clearFilter();
-        var searchFilter = new Ext.util.Filter({
-            filterFn: function(item){
-                var searchTest ,articleNameTestResult, articleDetailNumberTestResult, supplierNameTestResult;
-                var escapeRegex = Ext.String.escapeRegex;
-                searchTest = new RegExp(escapeRegex(searchString), 'i');
+        value = Ext.String.trim(value);
+        store.currentPage = 1;
 
-                // check match on articleName
-                articleNameTestResult = searchTest.test(item.data.name);
+        store.getProxy().extraParams.search = (!value.length) ? '' : value;
+        store.load();
+    },
 
-                var detailData = item.getDetail().first();
-                if (detailData) {
-                    // check match on article detail number
-                    articleDetailNumberTestResult = searchTest.test(detailData.get('number'));
-                }
+    onAddProducts: function(scope) {
+        var me = this, activeGrid = scope.fromGrid,
+            inactiveGrid = scope.toGrid,
+            store = activeGrid.getStore(),
+            inactiveStore = inactiveGrid.getStore(),
+            selection = activeGrid.getSelectionModel().getSelection(),
+            ids = [];
 
-                var supplierData = item.getSupplier().first();
-                if (supplierData) {
-                    // check match on suplierName
-                    supplierNameTestResult = searchTest.test(supplierData.get('name'));
-                }
-                return articleNameTestResult || articleDetailNumberTestResult || supplierNameTestResult;
-            }
+        if(!selection.length) {
+            return false;
+        }
+
+        Ext.each(selection, function(sel) {
+            ids.push(sel.data.id);
         });
-        store.filter(searchFilter);
+
+        store.remove(selection);
+        inactiveStore.add(selection);
+    },
+
+    onRemoveProducts: function(scope) {
+        var activeGrid = scope.toGrid;
+        console.log(arguments);
+    },
+
+    _sendRequest: function(action, ids) {
     }
 });
 //{/block}

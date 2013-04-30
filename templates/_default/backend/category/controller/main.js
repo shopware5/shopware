@@ -89,10 +89,13 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         me.subApplication.defaultRootNodeId = me.defaultRootNodeId;
 
         me.subApplication.treeStore =  me.subApplication.getStore('Tree');
-        me.subApplication.articleStore =  me.subApplication.getStore('Article');
         me.subApplication.custeromGroupsStore =  me.subApplication.getStore('CustomerGroups');
         me.subApplication.DetailStore =  me.subApplication.getStore('Detail');
         me.subApplication.templateStore =  me.subApplication.getStore('Template');
+
+        // Stores for the product assignment
+        me.subApplication.availableProductsStore = me.subApplication.getStore('AvailableProducts');
+        me.subApplication.assignedProductsStore = me.subApplication.getStore('AssignedProducts');
 
         me.subApplication.treeStore.getProxy().extraParams = {
             node:me.defaultRootNodeId
