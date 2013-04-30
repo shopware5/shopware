@@ -373,6 +373,47 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
+     * Controller action which is used to get a paginated
+     * list of all assigned category articles.
+     */
+    public function getCategoryArticlesAction() {
+        $categoryId = $this->Request()->getParam('categoryId', null);
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 20);
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+            'articles.name',
+            'details.number',
+            'suppliers.name as supplierName'
+        ));
+        $builder->from('Shopware\Models\Article\Article', 'articles')
+                ->innerJoin('articles.categories', 'categories')
+                ->innerJoin('articles.supplier', 'suppliers')
+                ->innerJoin('articles.mainDetail', 'details')
+                ->where('categories.id = :categoryId')
+                ->setParameters(array('categoryId' => $categoryId));
+
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        $data = $paginator->getIterator()->getArrayCopy();
+        $count = $paginator->count();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data,
+            'total' => $count
+        ));
+    }
+
+    /**
      * returns a JSON string to the view the customers for the customer group mapping
      *
      * @return void
