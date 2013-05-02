@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             store = activeGrid.getStore(),
             inactiveStore = inactiveGrid.getStore(),
             selection = activeGrid.getSelectionModel().getSelection(),
-            ids = [];
+            ids = [], categoryId;
 
         if(!selection.length) {
             return false;
@@ -165,7 +165,9 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         store.remove(selection);
         inactiveStore.add(selection);
 
-        me._sendRequest('add', ids);
+        categoryId = store.getProxy().extraParams.categoryId;
+
+        me._sendRequest('add', ids, categoryId);
         return true;
     },
 
@@ -186,7 +188,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             store = activeGrid.getStore(),
             inactiveStore = inactiveGrid.getStore(),
             selection = activeGrid.getSelectionModel().getSelection(),
-            ids = [];
+            ids = [], categoryId;
 
         if(!selection.length) {
             return false;
@@ -199,7 +201,9 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         store.remove(selection);
         inactiveStore.add(selection);
 
-        me._sendRequest('remove', ids);
+        categoryId = store.getProxy().extraParams.categoryId;
+
+        me._sendRequest('remove', ids, categoryId);
         return true;
     },
 
@@ -217,7 +221,8 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         var me = this,
             activeView = data.view,
             activeGrid = activeView.panel,
-            records = data.records, action, ids = [];
+            store = activeGrid.getStore(),
+            records = data.records, action, categoryId, ids = [];
 
         action = (activeGrid.internalTitle === 'from') ? 'add' : 'remove';
 
@@ -225,7 +230,9 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             ids.push(record.data.articleId);
         });
 
-        me._sendRequest(action, ids);
+        categoryId = store.getProxy().extraParams.categoryId;
+
+        me._sendRequest(action, ids, categoryId);
     },
 
     /**
@@ -234,9 +241,10 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
      *
      * @param { String } action - Action which will be used for the request: add (default), remove
      * @param { Array } ids - Array of record id's
+     * @param { Integer } categoryId - Id of the selected category
      * @private
      */
-    _sendRequest: function(action, ids) {
+    _sendRequest: function(action, ids, categoryId) {
         var url = '{url controller=Category action=addCategoryArticles}';
 
         if(action === 'remove') {
@@ -245,7 +253,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
 
         Ext.Ajax.request({
             url: url,
-            params: { ids: Ext.JSON.encode(ids) },
+            params: { ids: Ext.JSON.encode(ids), categoryId: ~~(1 * categoryId) },
             success: function(response) {
                 // TODO@DR - Please implement the callback handler
                 console.warn(response);
