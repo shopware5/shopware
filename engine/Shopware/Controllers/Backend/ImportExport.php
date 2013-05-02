@@ -928,7 +928,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $sql = "
             SELECT
             d.ordernumber as ordernumber,
-            REPLACE(ROUND(p.price*(100+t.tax)/100,2),'.',',') as price,
+            IF(cg.taxinput = 0,REPLACE(ROUND(p.price,2),'.',','),REPLACE(ROUND(p.price*(100+t.tax)/100,2),'.',',')) as price,
             p.pricegroup as pricegroup,
             IF(p.`from`=1,NULL,p.`from`) as `from`,
             REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
