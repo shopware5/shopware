@@ -70,6 +70,9 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             },
             'category-category-tabs-article_mapping grid': {
                 'selectionchange': me.onSelectionChange
+            },
+            'category-category-tabs-article_mapping gridview': {
+                'drop': me.onDragAndDropAssignment
             }
         });
     },
@@ -132,6 +135,17 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         store.load();
     },
 
+    /**
+     * Event listener method which will be fired when the user presses
+     * the upper button in the middle of the component, if the user
+     * has a selection.
+     *
+     * The method collects the id's of the selected records and adds
+     * them to the correct grid.
+     *
+     * @param { Shopware.apps.Category.view.category.tabs.ArticleMapping} scope
+     * @returns { Boolean }
+     */
     onAddProducts: function(scope) {
         var me = this, activeGrid = scope.fromGrid,
             inactiveGrid = scope.toGrid,
@@ -145,19 +159,98 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         }
 
         Ext.each(selection, function(sel) {
-            ids.push(sel.data.id);
+            ids.push(sel.data.articleId);
         });
 
         store.remove(selection);
         inactiveStore.add(selection);
+
+        me._sendRequest('add', ids);
+        return true;
     },
 
+    /**
+     * Event listener method which will be fired when the user presses
+     * the lower button in the middle of the component, if the user
+     * has a selection.
+     *
+     * The method collects the id's of the selected records and adds
+     * them to the correct grid.
+     *
+     * @param { Shopware.apps.Category.view.category.tabs.ArticleMapping } scope
+     * @returns { Boolean }
+     */
     onRemoveProducts: function(scope) {
-        var activeGrid = scope.toGrid;
-        console.log(arguments);
+        var me = this, activeGrid = scope.toGrid,
+            inactiveGrid = scope.fromGrid,
+            store = activeGrid.getStore(),
+            inactiveStore = inactiveGrid.getStore(),
+            selection = activeGrid.getSelectionModel().getSelection(),
+            ids = [];
+
+        if(!selection.length) {
+            return false;
+        }
+
+        Ext.each(selection, function(sel) {
+            ids.push(sel.data.articleId);
+        });
+
+        store.remove(selection);
+        inactiveStore.add(selection);
+
+        me._sendRequest('remove', ids);
+        return true;
     },
 
+    /**
+     * Event listener method which will be fired when the user drags
+     * records from one grid to the other one.
+     *
+     * The method collects the id's of the dropped records.
+     *
+     * @param { HTMLElement } node
+     * @param { Object } data
+     * @returns { Void }
+     */
+    onDragAndDropAssignment: function(node, data) {
+        var me = this,
+            activeView = data.view,
+            activeGrid = activeView.panel,
+            records = data.records, action, ids = [];
+
+        action = (activeGrid.internalTitle === 'from') ? 'add' : 'remove';
+
+        Ext.each(records, function(record) {
+            ids.push(record.data.articleId);
+        });
+
+        me._sendRequest(action, ids);
+    },
+
+    /**
+     * Helper method which sents the AJAX request to add / remove
+     * the records, which are associated with the incoming id's.
+     *
+     * @param { String } action - Action which will be used for the request: add (default), remove
+     * @param { Array } ids - Array of record id's
+     * @private
+     */
     _sendRequest: function(action, ids) {
+        var url = '{url controller=Category action=addCategoryArticles}';
+
+        if(action === 'remove') {
+            url = '{url controller=Category action=removeCategoryArticles}';
+        }
+
+        Ext.Ajax.request({
+            url: url,
+            params: { ids: Ext.JSON.encode(ids) },
+            success: function(response) {
+                // TODO@DR - Please implement the callback handler
+                console.warn(response);
+            }
+        });
     }
 });
 //{/block}
