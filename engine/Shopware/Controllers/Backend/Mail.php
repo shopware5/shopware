@@ -423,7 +423,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(array('success' => false, 'message' => 'Value not found'));
         }
 
-        $recipient = Shopware()->Auth()->getIdentity()->email;
+        $recipient = Shopware()->Config()->get('mail');
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
