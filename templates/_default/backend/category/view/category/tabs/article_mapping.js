@@ -115,6 +115,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         me.fromGrid = me.createFromGrid();
         me.buttonContainer = me.createActionButtons();
         me.toGrid = me.createToGrid();
+
         me.items = [ me.fromGrid, me.buttonContainer, me.toGrid ];
         me.addEvents('storeschanged', 'add', 'remove');
         me.on('storeschanged', me.onStoresChanged, me);
@@ -135,6 +136,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             flex: 1,
             store: me.availableProductsStore.load(),
             selModel: me.createSelectionModel(),
+            viewConfig: { plugins: me.createGridDragAndDrop() },
             bbar: me.createPagingToolbar(me.availableProductsStore),
             columns: me.getColumns()
         });
@@ -158,6 +160,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             flex: 1,
             store: me.assignedProductsStore.load(),
             selModel: me.createSelectionModel(),
+            viewConfig: { plugins: me.createGridDragAndDrop() },
             bbar: me.createPagingToolbar(me.assignedProductsStore),
             columns: me.getColumns()
         });
@@ -265,6 +268,12 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      */
     createSelectionModel: function() {
         return Ext.create('Ext.selection.CheckboxModel');
+    },
+
+    createGridDragAndDrop: function() {
+        return Ext.create('Ext.grid.plugin.DragDrop', {
+            ddGroup: 'category-product-assignment-grid-dd'
+        });
     },
 
     /**

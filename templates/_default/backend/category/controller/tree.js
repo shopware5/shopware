@@ -235,6 +235,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
                 var disableTab = !record.data.leaf;
 
+                // Just create the selection view once, if created just refresh the stores and the detail record.
                 if(!me.productMappingRendered) {
                     me.selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
                         availableProductsStore: me.subApplication.availableProductsStore,
@@ -262,6 +263,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // enable save button
                 saveButton.enable();
                 /* {/if} */
+
                 // fire event that a new record has been loaded.
                 settingForm.fireEvent('recordloaded', me.detailRecord, record);
 
