@@ -1483,17 +1483,22 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             record.getPriceStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' })
         }
 
-        record.getPrice().removeAll();
         var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
-            from: 1,
-            to: 'beliebig',
-            price: price,
             pseudoPrice: 0,
             basePrice: 0,
             percent: 0,
-            cloned: false,
             customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
         });
+
+        if (record.getPrice().getCount() > 0) {
+            newPrice = record.getPrice().first();
+        }
+        newPrice.set('price', price);
+        newPrice.set('to', 'beliebig');
+        newPrice.set('from', 1);
+        newPrice.set('cloned', false);
+
+        record.getPrice().removeAll();
         record.getPrice().add(newPrice);
         record.save();
     },
