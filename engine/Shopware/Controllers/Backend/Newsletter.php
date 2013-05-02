@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 
             // When entering the mail dispatch, set lock time to 15 minutes in the future *if* the
             // last lock time is in the past
-            $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=? AND locked < ?';
+            $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=? AND (locked < ? OR locked IS NULL)';
             $result = Shopware()->Db()->query($sql, array(
                     date('Y-m-d H:i:s', time() + 15 * 60),
                     $mailing['id'],
