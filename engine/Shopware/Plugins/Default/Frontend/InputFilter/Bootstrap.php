@@ -96,6 +96,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                 $shop->getSecureHost()
             );
             $host = parse_url($referer, PHP_URL_HOST);
+            $port = parse_url($referer, PHP_URL_PORT);
+            if (!is_null($port) && $port != 80 && $port != 443) {
+              $host = $host . ':' . $port;
+            }
             if (!in_array($host, $validHosts)) {
                 $response->setException(
                     new Exception('Referer check for frontend session failed')
