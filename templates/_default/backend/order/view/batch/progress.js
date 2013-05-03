@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Order.view.batch.Progress', {
      * Define window height
      * @integer
      */
-    height:120,
+    height:130,
     /**
      * Display no footer button for the detail window
      * @boolean
@@ -205,8 +205,8 @@ Ext.define('Shopware.apps.Order.view.batch.Progress', {
             text: me.snippets.close,
             flex: 1,
             action: 'closeWindow',
-            margin: '3 0',
             disabled: true,
+            cls:'secondary',
             handler: function() {
                 me.destroy();
             }

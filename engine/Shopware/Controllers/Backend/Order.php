@@ -960,7 +960,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $clearedBefore = $order->getPaymentStatus();
 
             //refresh the status models to return the new status data which will be displayed in the batch list
-            if(!empty($data['status'])) {
+            if(!empty($data['status']) || $data['status'] === 0) {
                 $order->setOrderStatus(Shopware()->Models()->find('Shopware\Models\Order\Status', $data['status']));
             }
             if(!empty($data['cleared'])) {
