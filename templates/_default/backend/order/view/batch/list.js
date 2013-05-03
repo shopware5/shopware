@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
     paymentStatusColumn: function(value, metaData, record) {
         var paymentStatus = null;
 
-        if (record && record.getPaymentStatus() instanceof Ext.data.Store && record.getPaymentStatus().first() instanceof Ext.data.Store) {
+        if (record && record.getPaymentStatus() instanceof Ext.data.Store && record.getPaymentStatus().first() instanceof Ext.data.Model) {
             paymentStatus = record.getPaymentStatus().first();
         }
 
