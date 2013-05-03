@@ -1706,7 +1706,7 @@ jQuery(document).ready(function ($) {
                     if (i > config._slidesCount) {
                         i = 1;
                     }
-                    config._activeSlide = i;
+                    config._activeSlide = i - 1;
                     $.ajaxSlider.animateContainerTo(i - 1, config);
                 }, config.rotateSpeed);
             }
