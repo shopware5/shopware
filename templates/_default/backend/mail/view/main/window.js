@@ -164,8 +164,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
                 text: '{s name=button_save_template}Save template{/s}',
                 action: 'mail-window-save',
                 cls: 'primary',
-                formBind: true,
-                disabled: true
+                formBind: true
             }));
         /*{/if}*/
 
