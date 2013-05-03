@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,22 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
-use \Doctrine\ORM\Configuration as BaseConfiguration;
+
+use Doctrine\ORM\Configuration as BaseConfiguration;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\FileCacheReader;
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\XcacheCache;
 
 /**
- *
+ * @category  Shopware
+ * @package   Shopware\Components\Model
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Configuration extends BaseConfiguration
 {
@@ -54,7 +55,6 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param $options
-     * @throws \Exception
      */
     public function __construct($options)
     {
@@ -66,9 +66,7 @@ class Configuration extends BaseConfiguration
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
         $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
-
         $this->setAttributeDir($options['attributeDir']);
-        $this->setFileCacheDir($options['fileCacheDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
@@ -76,22 +74,67 @@ class Configuration extends BaseConfiguration
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
-        if(isset($options['cacheProvider'])) {
+        if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
         }
     }
 
-    public function setCacheProvider($provider)
+    /**
+     * @param  CacheProvider $cache
+     * @return Configuration
+     */
+    public function setCache(CacheProvider $cache)
     {
-        if(!class_exists($provider, false)) {
-            $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
-        }
-        if(!class_exists($provider)) {
-            throw new \Exception('Doctrine cache provider "' . $provider. "' not found failure.");
-        }
-        $cache = new $provider();
+        $cache->setNamespace("dc2_" . md5($this->getProxyDir() . \Shopware::REVISION) . "_"); // to avoid collisions
+
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
+        $this->setResultCacheImpl($cache);
+
+        return $this;
+    }
+
+    /**
+     * @return null|CacheProvider
+     */
+    public function detectCacheProvider()
+    {
+        $cache = null;
+
+        if (extension_loaded('apc')) {
+            $cache = new ApcCache();
+        } elseif (extension_loaded('xcache')) {
+            $cache = new XcacheCache();
+        }
+
+        return $cache;
+    }
+
+    /**
+     * @param string $provider
+     * @throws \Exception
+     */
+    public function setCacheProvider($provider)
+    {
+        $cache = null;
+
+        if (strtolower($provider) === 'auto') {
+            $cache = $this->detectCacheProvider();
+        } else {
+            if (!class_exists($provider, false)) {
+                $provider = ucfirst($provider);
+                $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
+            }
+            if (!class_exists($provider)) {
+                throw new \Exception('Doctrine cache provider "' . $provider. "' not found failure.");
+            }
+
+            $cache = new $provider();
+        }
+
+        if ($cache instanceof CacheProvider) {
+            $this->setCache($cache);
+        }
     }
 
     /**
@@ -99,32 +142,25 @@ class Configuration extends BaseConfiguration
      */
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
-        // Check if native Doctrine ApcCache may be used
-        if ($cacheResource->getBackend() instanceof \Zend_Cache_Backend_Apc) {
-            $cache = new \Doctrine\Common\Cache\ApcCache();
-        } else {
-            $cache = new Cache($cacheResource);
-        }
+        $cache = new Cache($cacheResource);
 
-        $this->setMetadataCacheImpl($cache);
-        $this->setQueryCacheImpl($cache);
+        $this->setCache($cache);
     }
 
     /**
-     * @return \Doctrine\Common\Annotations\AnnotationReader
+     * @return AnnotationReader
      */
     public function getAnnotationsReader()
     {
-        $reader = new \Doctrine\Common\Annotations\AnnotationReader();
-
+        $reader = new AnnotationReader;
         $cache = $this->getMetadataCacheImpl();
         if ($this->getMetadataCacheImpl() instanceof Cache) {
-            $reader = new \Doctrine\Common\Annotations\FileCacheReader(
+            $reader = new FileCacheReader(
                 $reader,
-                $this->getFileCacheDir()
+                $this->getProxyDir()
             );
         } else {
-            $reader = new \Doctrine\Common\Annotations\CachedReader(
+            $reader = new CachedReader(
                 $reader,
                 $cache
             );

@@ -117,7 +117,7 @@ return array_merge($customConfig, array(
         'attributeDir' => $this->DocPath('cache_doctrine_attributes'),
         'proxyDir' => $this->DocPath('cache_doctrine_proxies'),
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => null // supports Apc, Array, Wincache and Xcache
+        'cacheProvider' => 'auto' // supports null, auto, Apc, Array, Wincache and Xcache
     ), $customConfig['model']),
     'backendSession' => array_merge(array(
         'name' => 'SHOPWAREBACKEND',
