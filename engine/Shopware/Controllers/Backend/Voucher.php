@@ -134,6 +134,10 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $voucherRequestData = empty($multipleVouchers) ? array(array("id" => $this->Request()->id)) : $multipleVouchers;
         try {
             foreach ($voucherRequestData as $voucher) {
+
+                //first delete the voucher codes because this could be to huge for doctrine
+                $this->deleteAllVoucherCodesById($voucher["id"]);
+
                 /**@var $model \Shopware\Models\Voucher\Voucher*/
                 $model = $this->getVoucherRepository()->find($voucher["id"]);
                 $this->getManager()->remove($model);
@@ -263,14 +267,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
         //first delete available codes
         if($deletePreviousVoucherCodes === "true") {
-            $allVouchersDeleted = false;
-            while(!$allVouchersDeleted) {
-                $deleteQuery = $this->getVoucherRepository()->getVoucherCodeDeleteByVoucherIdQuery($voucherId);
-                $deleteQuery->execute();
-                $sql= "SELECT count(id) FROM  s_emarketing_voucher_codes WHERE id = ?";
-                $vouchersToDelete = Shopware()->Db()->fetchOne($sql, array($voucherId));
-                $allVouchersDeleted = empty($vouchersToDelete);
-            }
+            $this->deleteAllVoucherCodesById($voucherId);
 
             $this->View()->assign(array('success' => true,'generatedVoucherCodes' => $createdVoucherCodes));
             return;
@@ -542,5 +539,20 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
     }
 
-
+    /**
+     * helper method to fast delete all voucher codes
+     *
+     * @param $voucherId
+     */
+    private function deleteAllVoucherCodesById($voucherId)
+    {
+        $allVouchersDeleted = false;
+        while (!$allVouchersDeleted) {
+            $deleteQuery = $this->getVoucherRepository()->getVoucherCodeDeleteByVoucherIdQuery($voucherId);
+            $deleteQuery->execute();
+            $sql = "SELECT count(id) FROM  s_emarketing_voucher_codes WHERE voucherId = ?";
+            $vouchersToDelete = Shopware()->Db()->fetchOne($sql, array($voucherId));
+            $allVouchersDeleted = empty($vouchersToDelete);
+        }
+    }
 }
