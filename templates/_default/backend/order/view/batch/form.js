@@ -182,8 +182,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                     valueField: 'value'
                 },
                 {
-                    xtype: 'pagingcombo',
-                    pageSize: 5,
                     name: 'orderStatus',
                     triggerAction: 'all',
                     queryMode: 'local',
