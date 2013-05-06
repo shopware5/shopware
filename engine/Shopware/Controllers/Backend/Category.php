@@ -223,6 +223,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
         $statement = Shopware()->Db()->prepare("DELETE FROM s_articles_categories WHERE categoryID = :categoryId AND articleID = :articleId");
 
+        $counter = 0;
         foreach($articleIds as $articleId) {
             if (empty($articleId)) {
                 continue;
@@ -232,9 +233,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 ':articleId'  => $articleId,
                 ':categoryId' => $categoryId
             ));
+            $counter++;
         }
         $this->cleanUpAssignments();
-        return array('success' => true);
+        return array('success' => true, 'counter' => $counter);
     }
 
 
@@ -256,7 +258,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return array('success' => false, 'error' => 'No category id passed.');
         }
 
-        $category = $this->getRepository()->find($categoryId);
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+
         if (!($category instanceof \Shopware\Models\Category\Category)) {
             return array('success' => false, 'error' => 'Category no more exist!');
         }
@@ -266,7 +269,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if (empty($articleId)) {
                 continue;
             }
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', (int) $articleId);
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
 
             if (!($article instanceof \Shopware\Models\Article\Article)) {
                 continue;
@@ -452,14 +455,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function getArticlesAction()
     {
         $categoryId = $this->Request()->getParam('categoryId', 0);
-        $offset = $this->Request()->getParam('offset', 0);
+        $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
         $conditions = '';
 
         if (!empty($search)) {
             $search = '%' . $search . '%';
-            $conditions = "
+            $conditions = " 
             AND (
                    s_articles.name LIKE '".$search."'
                 OR s_articles_details.ordernumber LIKE '".$search."'
@@ -483,7 +486,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                  ON s_articles.id = s_articles_categories.articleID
                  AND s_articles_categories.categoryID = :categoryId
             WHERE s_articles_categories.id IS NULL
-            ".$conditions."
+            " . $conditions . "
             LIMIT $offset , $limit
         ";
 
@@ -507,8 +510,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getCategoryArticlesAction() {
         $categoryId = $this->Request()->getParam('categoryId', null);
-        $offset = $this->Request()->getParam('offset', 0);
+        $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
+        $search = $this->Request()->getParam('search', '');
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array(
@@ -523,6 +527,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 ->innerJoin('articles.mainDetail', 'details')
                 ->where('categories.id = :categoryId')
                 ->setParameters(array('categoryId' => $categoryId));
+
+        if (!empty($search)) {
+            $builder->andWhere('(articles.name LIKE :search OR suppliers.name LIKE :search OR details.number LIKE :search)');
+            $builder->setParameter('search', '%' . $search . '%');
+        }
 
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
@@ -702,30 +711,36 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
     }
 
+    public function cleanUpAssignmentsAction() {
+        $this->cleanUpAssignments();
+        die("done");
+    }
+
     protected function cleanUpAssignments()
     {
-        $sql = '
-                DELETE FROM s_articles_categories WHERE id IN (
-                    SELECT id FROM (
-                    SELECT ac1.id
-                FROM s_articles_categories ac1
+        $sql = "
+            SELECT STRAIGHT_JOIN ac1.id
+            FROM s_articles_categories ac1
 
-                INNER JOIN s_categories c1
-                    ON c1.parent = ac1.categoryID
+            INNER JOIN s_categories c1
+                ON c1.parent = ac1.categoryID
 
-                LEFT JOIN s_articles_categories ac2
-                    ON c1.id = ac2.categoryID
-                            AND ac2.articleID = ac1.articleID
+            LEFT JOIN s_articles_categories ac2
+                ON c1.id = ac2.categoryID
+                AND ac2.articleID = ac1.articleID
 
-                GROUP BY ac1.categoryID, ac1.articleID
-                HAVING COUNT(ac2.id) = 0
-                    ) t
-                );
-            ';
+            GROUP BY ac1.articleID, ac1.categoryID
+            HAVING COUNT(ac2.id) = 0
+            LIMIT 0, 40"
+        ;
 
+        $deleteStatement = Shopware()->Db()->prepare("DELETE FROM s_articles_categories WHERE id = :id");
         do {
-            $resultCount = Shopware()->Db()->exec($sql);
-        } while ($resultCount > 0);
+            $result = Shopware()->Db()->fetchCol($sql);
+            foreach($result as $id) {
+                $deleteStatement->execute(array('id' => $id));
+            }
+        } while (count($result) > 0);
     }
 
 

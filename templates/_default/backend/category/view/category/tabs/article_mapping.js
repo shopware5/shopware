@@ -225,7 +225,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     createPagingToolbar: function(store) {
 
         return Ext.create('Ext.toolbar.Paging', {
-            store: store
+            store: store,
+            displayInfo: true
         });
     },
 
