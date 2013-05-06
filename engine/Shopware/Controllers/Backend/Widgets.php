@@ -454,12 +454,18 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $content = preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $params['content']);
 
+        $compiler = new Shopware_Components_StringCompiler($this->View());
+        $defaultContext = array(
+            'sConfig'  => Shopware()->Config(),
+        );
+        $compiler->setContext($defaultContext);
+
         // Send eMail to customer
         $mail->IsHTML(false);
-        $mail->From     = $fromMail;
-        $mail->FromName = $fromName;
-        $mail->Subject  = $subject;
-        $mail->Body     = $content;
+        $mail->From     = $compiler->compileString($fromMail);
+        $mail->FromName = $compiler->compileString($fromName);
+        $mail->Subject  = $compiler->compileString($subject);
+        $mail->Body     = $compiler->compileString($content);
         $mail->ClearAddresses();
         $mail->AddAddress($toMail, "");
 
