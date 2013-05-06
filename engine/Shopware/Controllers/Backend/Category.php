@@ -711,11 +711,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
     }
 
-    public function cleanUpAssignmentsAction() {
-        $this->cleanUpAssignments();
-        die("done");
-    }
-
     protected function cleanUpAssignments()
     {
         $sql = "
