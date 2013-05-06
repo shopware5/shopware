@@ -147,13 +147,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
-        $query = $this->getRepository()->getListQuery(
+        $query = $this->getRepository()->getBackendListQuery(
             $filter,
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
-            $this->Request()->getParam('start'),
-            false
-        );
+            $this->Request()->getParam('start')
+        )->getQuery();
 
         $count = Shopware()->Models()->getQueryCount($query);
 
