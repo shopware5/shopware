@@ -167,6 +167,43 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns a query builder object to get all defined categories with an count of sub categories.
+     *
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    public function getBackendListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null) {
+        $builder = $this->createQueryBuilder('c');
+        $builder->select(array(
+            'c.id as id',
+            'c.name as name',
+            'c.position as position',
+            'c.parentId as parentId'
+        ));
+        $builder = $this->addChildrenCountSelect($builder);
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
+
+        $builder->addOrderBy('c.parentId');
+        $builder->addOrderBy('c.position');
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder;
+    }
+
+
+    /**
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
