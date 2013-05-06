@@ -175,7 +175,8 @@ class Repository extends ModelRepository
      * @param null $offset
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getBackendListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null) {
+    public function getBackendListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
         $builder = $this->createQueryBuilder('c');
         $builder->select(array(
             'c.id as id',
