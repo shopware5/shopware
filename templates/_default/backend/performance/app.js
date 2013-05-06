@@ -87,7 +87,6 @@ Ext.define('Shopware.apps.Performance', {
      * all member controllers, models, views and stores are initialized.
      */
     launch: function() {
-        console.log(23423);
         var me = this,
             mainController = me.getController('Main');
 
