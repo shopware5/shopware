@@ -636,7 +636,7 @@ class HttpCache implements HttpKernelInterface
      * @param Request $request A Request instance
      * @param string  $event The event name
      */
-    private function record(Request $request, $event)
+    protected function record(Request $request, $event)
     {
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {

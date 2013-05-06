@@ -48,16 +48,10 @@ class Store extends BaseStore
         }
         $uri = $request->getUri();
 
-        $cookieName = 'controller-options-'
-                    . $request->getBaseUrl()
-                    . $request->getPathInfo();
-
-        if ($request->cookies->has($cookieName)) {
-            $uri .= '&' . $request->cookies->get($cookieName);
-        }
         if ($request->cookies->has('shop')) {
             $uri .= '&__shop=' . $request->cookies->get('shop');
         }
+
         if ($request->cookies->has('currency')) {
             $uri .= '&__currency=' . $request->cookies->get('currency');
         }

@@ -47,6 +47,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->subscribeEvent('Shopware\Models\Category\Category::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Banner\Banner::postUpdate', 'onPostPersist');
 
+        $this->installForm();
+
+        return true;
+    }
+
+    public function installForm()
+    {
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
         $form->setParent($parent);
@@ -54,49 +61,52 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $form->setElement('textarea', 'cacheControllers', array(
             'label' => 'Cache-Controller / Zeiten',
             'value' =>
-                "frontend/listing 3600\r\n" .
-                "frontend/index 3600\r\n" .
-                "frontend/detail 3600\r\n" .
-                "frontend/campaign 14400\r\n" .
-                "widgets/listing 14400\r\n" .
-                "frontend/custom 14400\r\n" .
-                "frontend/sitemap 14400\r\n" .
-                "frontend/blog 14400\r\n" .
-                "widgets/index 3600\r\n" .
-                "widgets/checkout 3600\r\n" .
-                "widgets/compare 3600\r\n" .
-                "widgets/emotion 14400\r\n" .
-                "widgets/recommendation 14400\r\n" .
-                "widgets/lastArticles 3600\n"
+            "frontend/listing 3600\r\n" .
+            "frontend/index 3600\r\n" .
+            "frontend/detail 3600\r\n" .
+            "frontend/campaign 14400\r\n" .
+            "widgets/listing 14400\r\n" .
+            "frontend/custom 14400\r\n" .
+            "frontend/sitemap 14400\r\n" .
+            "frontend/blog 14400\r\n" .
+            "widgets/index 3600\r\n" .
+            "widgets/checkout 3600\r\n" .
+            "widgets/compare 3600\r\n" .
+            "widgets/emotion 14400\r\n" .
+            "widgets/recommendation 14400\r\n" .
+            "widgets/lastArticles 3600\n"
         ));
+
         $form->setElement('textarea', 'noCacheControllers', array(
             'label' => 'NoCache-Controller / Tags',
             'value' =>
-                "frontend/listing price\n" .
-                "frontend/index price\n" .
-                "frontend/detail price\n" .
-                "widgets/lastArticles detail\n" .
-                "widgets/checkout checkout\n" .
-                "widgets/compare compare\n" .
-                "widgets/emotion price\n"
+            "frontend/listing price\n" .
+            "frontend/index price\n" .
+            "frontend/detail price\n" .
+            "widgets/lastArticles detail\n" .
+            "widgets/checkout checkout\n" .
+            "widgets/compare compare\n" .
+            "widgets/emotion price\n"
         ));
-        $form->setElement('boolean', 'proxyBan', array(
-            'label' => 'Proxy-BAN aktivieren',
+
+
+        $form->setElement('boolean', 'proxyPrune', array(
+            'label' => 'Proxy-Prune aktivieren',
             'description' => 'Das automatische Leeren des Caches aktivieren.',
-            'value' => false
+            'value' => true
         ));
+
         $form->setElement('text', 'proxy', array(
             'label' => 'Alternative Proxy-Url',
             'description' => 'Link zum Http-Proxy mit „http://“ am Anfang.',
             'value' => null
         ));
+
         $form->setElement('boolean', 'admin', array(
             'label' => 'Admin-View',
             'description' => 'Cache bei Artikel-Vorschau und Schnellbestellung deaktivieren',
             'value' => false
         ));
-
-        return true;
     }
 
     /**
@@ -112,7 +122,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function getVersion()
     {
-        return '1.0.4';
+        return '1.1.0';
     }
 
     /**
@@ -121,9 +131,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     public function getInfo()
     {
         return array(
-            'version' => $this->getVersion(),
-            'label' => $this->getLabel(),
-            'description' => 'Achtung! Diese Erweiterung ist derzeit noch in der Beta-Phase. Installation und Einsatz ohne Gewährleistung.'
+            'version'     => $this->getVersion(),
+            'label'       => $this->getLabel(),
         );
     }
 
@@ -146,19 +155,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * @var string[]
      */
     protected $allowNoCacheControllers;
-
-    /**
-     * @var string[]
-     */
-    protected $controllerOptions = array(
-        'frontend/listing' => array(
-            'sSort' => true,
-            'sPerPage' => true,
-            'sTemplate' => true,
-            'sSupplier' => true,
-            'sFilterProperties' => true
-       )
-    );
 
     /**
      * @var string
@@ -228,18 +224,17 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function onPreDispatch($args)
     {
-        $this->action   = $action   = $args->getSubject();
-        $this->request  = $request  = $args->getRequest();
-        $this->response = $response = $args->getResponse();
+        $this->action   = $args->getSubject();
+        $this->request  = $args->getRequest();
+        $this->response = $args->getResponse();
 
-        if ($request->getHeader('Surrogate-Capability') === false) {
+        if ($this->request->getHeader('Surrogate-Capability') === false) {
             return;
         }
 
         $this->initConfig();
 
-        if ($request->getModuleName() != 'frontend' && $request->getModuleName() != 'widgets') {
-
+        if ($this->request->getModuleName() != 'frontend' && $this->request->getModuleName() != 'widgets') {
             return;
         }
 
@@ -247,16 +242,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        // Allow esi tags
+        // Allow ESI tags
         $this->response->setHeader('Surrogate-Control', 'content="ESI/1.0"');
 
-        // $this->setControllerOptions();
         $this->setCacheHeaders();
         $this->setNoCacheCookie();
-        // $this->setCacheIdHeader();
     }
-
-
 
     /**
      * Sets the shopware cache headers
@@ -274,12 +265,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->response->setHeader('Cache-Control', 'private, no-cache');
         } elseif (isset($this->allowNoCacheControllers[$controllerName]) && $this->request->getQuery('nocache') !== null) {
             $this->response->setHeader('Cache-Control', 'private, no-cache');
-        } elseif (!$this->request->getParam('rewriteUrl') && isset($this->controllerOptions[$controllerName])) {
-            $this->response->setHeader('Cache-Control', 'private, no-cache');
         } elseif (isset($this->cacheControllers[$controllerName])) {
+            $this->setCacheIdHeader();
+
             $cacheTime = (int) $this->cacheControllers[$controllerName];
             $this->request->setParam('__cache', $cacheTime);
-            $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime);
+            $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime, true);
         }
 
         $shopId = Shopware()->Shop()->getId();
@@ -310,7 +301,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         if (Shopware()->Shop()->get('defaultcustomergroup') != Shopware()->System()->sUSERGROUP) {
-
             $this->setNoCacheTag('price');
         }
 
@@ -444,55 +434,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         return '<esi:include src="' . $url . '" />';
     }
 
-
-    /**
-     * Sets the shopware cache headers
-     */
-    public function setControllerOptions()
-    {
-        $controllerName = $this->request->getModuleName() . '/' . $this->request->getControllerName();
-
-        if (isset($this->controllerOptions[$controllerName]) && $this->request->getParam('rewriteUrl')) {
-            $options = $this->controllerOptions[$controllerName];
-            $query = $this->request->getQuery();
-            $result = array_intersect_key($query, $options);
-            $cookie = 'controller-options-'
-                    . $this->request->getBaseUrl()
-                    . $this->request->getPathInfo();
-
-            if (count($result) > 0) {
-                $options = $this->request->getCookie($cookie);
-
-                if ($options !== null) {
-                    parse_str($options, $options);
-                } else {
-                    $options = array();
-                }
-
-                $options = array_merge($options, $result);
-                ksort($options);
-                $options = http_build_query($options, '', '&');
-                $this->response->setCookie(
-                    $cookie,
-                    $options,
-                    0,
-                    null, //$this->request->getBasePath() . '/',
-                    $this->request->getHttpHost()
-                );
-                $location = array_diff($query, $result);
-                $location = $this->action->Front()->Router()->assemble($location);
-                $this->action->redirect($location);
-            } else {
-                $options = $this->request->getCookie($cookie);
-                if ($options !== null) {
-                    parse_str($options, $options);
-                    $this->request->setQuery($options);
-                }
-            }
-        }
-    }
-
-
     /**
      * Invalidation
      *
@@ -521,6 +462,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 $cacheIds[] = 'a-' . $articleId;
             case 'frontend/listing':
                 $categoryId = $this->request->getParam('sCategory', 0);
+
                 while ($categoryId > 1) {
                     $category = Shopware()->Models()->find(
                         'Shopware\Models\Category\Category', $categoryId
@@ -528,6 +470,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                     if ($category === null) {
                         break;
                     }
+
                     $cacheIds[] = 'c-' . $category->getId();
                     $categoryId = $category->getParentId();
                 }
@@ -535,7 +478,30 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         if (!empty($cacheIds)) {
-            $this->response->setHeader('x-shopware-cache-id', implode(', ', $cacheIds));
+            $request = $this->request;
+
+            $uri = sprintf('%s://%s%s',
+                $request->getScheme(),
+                $request->getHttpHost(),
+                $request->getRequestUri()
+            );
+
+            if ($request->getCookie('shop', false)) {
+                $uri .= '&__shop=' . $request->getCookie('shop');
+            }
+
+            if ($request->getCookie('currency', false)) {
+                $uri .= '&__currency=' . $request->getCookie('currency');
+            }
+
+            $cacheIds = '|' . implode('|', $cacheIds) . '|';
+
+            Shopware()->Db()->query(
+                'INSERT IGNORE INTO s_cache_log (url, cache_keys) VALUES (?, ?)',
+                array($uri, $cacheIds)
+            );
+
+            $this->response->setHeader('x-shopware-cache-id', $cacheIds);
         }
     }
 
@@ -546,7 +512,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function onPostPersist(Enlight_Event_EventArgs $eventArgs)
     {
-        if (empty($this->Config()->proxyBan)) {
+        if (empty($this->Config()->proxyPrune)) {
             return;
         }
 
@@ -561,21 +527,17 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $entityName = get_class($eventArgs->getEntity());
         }
 
-        $categoryIds = array();
-        $articleIds = array();
+        $cacheIds = array();
 
         switch ($entityName) {
             case 'Shopware\Models\Article\Article':
-                $articleIds[] = $entity->getId();
-                foreach ($entity->getCategories() as $category) {
-                    $categoryIds[] = $category->getId();
-                }
+                $cacheIds[] = 'a-' . $entity->getId();
                 break;
             case 'Shopware\Models\Category\Category':
-                $categoryIds[] = $entity->getId();
+                $cacheIds[] = 'c-' . $entity->getId();
                 break;
             case 'Shopware\Models\Banner\Banner':
-                $categoryIds[] = $entity->getCategoryId();
+                $cacheIds[] = 'c-' . $entity->getCategoryId();
                 break;
         }
 
@@ -585,15 +547,16 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         ));
 
         try {
-            foreach ($categoryIds as $categoryId) {
-                $client->setUri(
-                    $this->proxyUrl . urlencode('c-' . $categoryId)
-                )->request('BAN');
-            }
-            foreach ($articleIds as $articleId) {
-                $client->setUri(
-                    $this->proxyUrl . urlencode('a-' . $articleId)
-                )->request('BAN');
+            foreach ($cacheIds as $cacheId) {
+                $cacheId = '%|' . $cacheId . '|%';
+
+                $urls = Shopware()->Db()->fetchAll('SELECT url FROM s_cache_log WHERE cache_keys LIKE ?', $cacheId);
+                foreach ($urls as $url) {
+                    $purgeUrl = $url['url'];
+                    $client->setUri($purgeUrl)->request('PURGE');
+                }
+
+                Shopware()->Db()->query('DELETE FROM s_cache_log WHERE cache_keys LIKE ?', $cacheId);
             }
         } catch (Exception $e) { }
     }
