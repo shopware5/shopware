@@ -28,7 +28,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/view/main}
+/**
+ * The cache controller takes care of cache related events and also
+ * handles the category fixing
+ */
+
+//{namespace name=backend/performance/main}
 //{block name="backend/performance/controller/cache"}
 Ext.define('Shopware.apps.Performance.controller.Cache', {
 
@@ -39,11 +44,11 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         { ref: 'info', selector: 'performance-tabs-cache-info dataview' },
         { ref: 'form', selector: 'performance-tabs-cache-form' },
 
-        { ref: 'progressBar',    selector: 'performance-tabs-cache-categories progressbar' },
-        { ref: 'progressWindow', selector: 'performance-tabs-cache-categories' },
-        { ref: 'startButton',    selector: 'performance-tabs-cache-categories button[action=start]' },
-        { ref: 'closeButton',    selector: 'performance-tabs-cache-categories button[action=closeWindow]' },
-        { ref: 'cancelButton',   selector: 'performance-tabs-cache-categories button[action=cancel]' }
+        { ref: 'progressBar',    selector: 'performance-main-categories progressbar' },
+        { ref: 'progressWindow', selector: 'performance-main-categories' },
+        { ref: 'startButton',    selector: 'performance-main-categories button[action=start]' },
+        { ref: 'closeButton',    selector: 'performance-main-categories button[action=closeWindow]' },
+        { ref: 'cancelButton',   selector: 'performance-main-categories button[action=cancel]' }
     ],
 
     infoTitle: '{s name=form/message_title}Shop cache{/s}',
@@ -79,12 +84,12 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         var me = this;
 
         me.control({
-            'performance-tabs-cache-form button[action=clear]': {
+            'performance-tabs-cache-main button[action=clear]': {
                 click: function(button, event) {
                     me.getForm().submit();
                 }
             },
-            'performance-tabs-cache-form button[action=select-all]': {
+            'performance-tabs-cache-main button[action=select-all]': {
                 click: function(button, event) {
                     me.getForm().getForm().getFields().each(function(item) {
                         item.setValue(true);
@@ -94,7 +99,7 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
             'performance-tabs-cache-form': {
                 fixCategories: me.onFixCategories,
                 actioncomplete: function(form, action) {
-                    me.getStore('main.Info').load({
+                    me.getStore('Info').load({
                         callback: function(records, operation) {
                             Shopware.Notification.createGrowlMessage(
                                 me.infoTitle,
@@ -106,7 +111,7 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
                 }
             },
 
-            'performance-tabs-cache-categories': {
+            'performance-main-categories': {
                 startProcess:  me.onStartProcess,
                 cancelProcess: me.onCancelProcess,
                 closeWindow:   me.onCloseProcessWindow
@@ -125,7 +130,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
             url: '{url action=prepareTree}',
             success: function(response) {
                 var json = Ext.decode(response.responseText);
-
                 me.totalCount = json.total;
 
                 var progressBar = me.getProgressBar();
@@ -142,7 +146,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
     onStartProcess: function(selection) {
         var me = this;
         var progressBar = me.getProgressBar();
-
         me.executeSingleOrder(0, progressBar);
     },
 

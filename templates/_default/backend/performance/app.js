@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.cache.Main',
         'tabs.cache.Form',
         'tabs.cache.Info',
-        'tabs.cache.Categories',
+        'main.Categories',
         'tabs.Settings'
     ],
 
