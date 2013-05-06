@@ -203,6 +203,36 @@ class Repository extends ModelRepository
         return $builder;
     }
 
+    /**
+     * Helper function to create the query builder for the "getDetailQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $categoryId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getBackendDetailQuery($categoryId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+                'category',
+                'attribute',
+                'emotions', 'customerGroups', 'media'
+            ))
+            ->from($this->getEntityName(), 'category')
+            ->leftJoin('category.attribute', 'attribute')
+            ->leftJoin('category.emotions', 'emotions')
+            ->leftJoin('category.media', 'media')
+            ->leftJoin('category.customerGroups', 'customerGroups')
+            ->where('category.id = ?1')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->setParameter(1, $categoryId);
+
+        return $builder;
+    }
+
+
 
     /**
      * Helper method to create the query builder for the "getListQuery" function.

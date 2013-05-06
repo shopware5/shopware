@@ -294,12 +294,31 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $node = is_numeric($node) ? (int)$node : 1;
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
-        $query = $this->getRepository()->getDetailQuery($node);
-        $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
+
+        $data = $this->getOneOrNullResult($query);
+
         $data["imagePath"] = $data["media"]["path"];
 
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
+
+
+    /**
+     * Helper function to get a one or null result over the pagination extension
+     * @param $query \Doctrine\ORM\Query
+     *
+     * @return array
+     */
+    private function getOneOrNullResult($query)
+    {
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        return $paginator->getIterator()->getArrayCopy();
+    }
+
 
     /**
      * Returns the whole category path by an category id
@@ -645,8 +664,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             Shopware()->Models()->flush();
 
             $categoryId = $categoryModel->getId();
-            $query = $this->getRepository()->getDetailQuery($categoryId);
-            $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
+
+            $data = $this->getOneOrNullResult($query);
             $data["imagePath"] = $data["media"]["path"];
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
@@ -750,7 +770,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         if (!empty($data["imagePath"])) {
             $mediaQuery = $this->getMediaRepository()->getMediaByPathQuery($data["imagePath"]);
-            $mediaModel = $mediaQuery->getOneOrNullResult();
+            $mediaModel = $this->getOneOrNullResult($mediaQuery);
             $data["media"] = $mediaModel;
         } else {
             $data["media"] = null;
