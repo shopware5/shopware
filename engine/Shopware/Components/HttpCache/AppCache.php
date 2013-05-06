@@ -122,6 +122,10 @@ class AppCache extends HttpCache
      */
     protected function invalidate(Request $request, $catch = false)
     {
+        if ($_SERVER['SERVER_ADDR'] !== $request->getClientIp()) {
+            return parent::invalidate($request);
+        }
+
         if ($request->getMethod() === 'BAN') {
             $response = new Response();
             $this->getStore()->purgeAll();
@@ -153,7 +157,9 @@ class AppCache extends HttpCache
     {
         $response = parent::lookup($request, $catch);
 
+        // If Response is not fresh age > 0 AND contains a mathing no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
+            $this->record($request, 'no-cache-tag');
             $response = $this->fetch($request);
         }
 
