@@ -174,6 +174,116 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         ));
     }
 
+
+    /**
+     * Controller action which can be accessed over an request.
+     * This function adds the passed article ids which have to be in the "ids" parameter
+     * to the passed category.
+     */
+    public function addCategoryArticlesAction()
+    {
+        $this->View()->assign(
+            $this->addCategoryArticles(
+                $this->Request()->getParam('categoryId'),
+                json_decode($this->Request()->getParam('ids'))
+            )
+        );
+    }
+
+    /**
+     * Controller action which can be accessed over an request.
+     * This function adds the passed article ids which have to be in the "ids" parameter
+     * to the passed category.
+     */
+    public function removeCategoryArticlesAction()
+    {
+        $this->View()->assign(
+            $this->removeCategoryArticles(
+                $this->Request()->getParam('categoryId'),
+                json_decode($this->Request()->getParam('ids'))
+            )
+        );
+    }
+
+    /**
+     * Internal function which is used to remove the passed article ids
+     * from the assigned category.
+     * @param $categoryId
+     * @param $articleIds
+     * @return array
+     */
+    protected function removeCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return array('success' => false, 'error' => 'No articles selected');
+        }
+
+        if (empty($categoryId)) {
+            return array('success' => false, 'error' => 'No category id passed.');
+        }
+        $statement = Shopware()->Db()->prepare("DELETE FROM s_articles_categories WHERE categoryID = :categoryId AND articleID = :articleId");
+
+        foreach($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+
+            $statement->execute(array(
+                ':articleId'  => $articleId,
+                ':categoryId' => $categoryId
+            ));
+        }
+        $this->cleanUpAssignments();
+        return array('success' => true);
+    }
+
+
+
+    /**
+     * Helper function to add multiple articles to an category.
+     *
+     * @param $categoryId
+     * @param $articleIds
+     * @return array
+     */
+    protected function addCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return array('success' => false, 'error' => 'No articles selected');
+        }
+
+        if (empty($categoryId)) {
+            return array('success' => false, 'error' => 'No category id passed.');
+        }
+
+        $category = $this->getRepository()->find($categoryId);
+        if (!($category instanceof \Shopware\Models\Category\Category)) {
+            return array('success' => false, 'error' => 'Category no more exist!');
+        }
+
+        $counter = 0;
+        foreach($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', (int) $articleId);
+
+            if (!($article instanceof \Shopware\Models\Article\Article)) {
+                continue;
+            }
+
+            if ($category->getArticles()->contains($article)) {
+                continue;
+            }
+            $category->getArticles()->add($article);
+            $counter++;
+        }
+
+        Shopware()->Models()->persist($category);
+        Shopware()->Models()->flush();
+        return array('success' => true, 'counter' => $counter);
+    }
+
     /**
      * Gets all category detail information by the category node
      */
@@ -511,7 +621,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 $categoryModel = $this->getRepository()->find($categoryId);
             }
 
-            $this->prepareArticleAssociatedData($params, $categoryModel);
             $params = $this->prepareAttributeAssociatedData($params);
             $params = $this->prepareCustomerGroupsAssociatedData($params);
             $params = $this->prepareMediaAssociatedData($params);
@@ -533,11 +642,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 }
             }
 
-            Shopware()->Models()->persist($categoryModel);
             Shopware()->Models()->flush();
 
             $categoryId = $categoryModel->getId();
-
             $query = $this->getRepository()->getDetailQuery($categoryId);
             $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             $data["imagePath"] = $data["media"]["path"];
@@ -601,27 +708,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         } while ($resultCount > 0);
     }
 
-    /**
-     * This method loads the article models for the passed ids in the "articles" parameter.
-     *
-     * @param $data
-     * @param $categoryModel
-     * @return array
-     */
-    protected function prepareArticleAssociatedData($data, $categoryModel)
-    {
-        $categoryModel->getArticles()->clear();
-        foreach ($data['articles'] as $articleData) {
-            if (!empty($articleData['id'])) {
-                /** @var $articleModel \Shopware\Models\Article\Article */
-                $articleModel = Shopware()->Models()->getReference('Shopware\Models\Article\Article', $articleData['id']);
-
-                if (!$articleModel->getCategories()->contains($categoryModel)) {
-                    $articleModel->getCategories()->add($categoryModel);
-                }
-            }
-        }
-    }
 
     /**
      * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
