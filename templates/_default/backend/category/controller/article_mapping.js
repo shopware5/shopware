@@ -16,7 +16,7 @@
  * GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
+ * The licensing of the program under the AGPLv3 does +not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
@@ -245,18 +245,35 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
      * @private
      */
     _sendRequest: function(action, ids, categoryId) {
+        var mapping = this.getArticleMappingView();
         var url = '{url controller=Category action=addCategoryArticles}';
+        var message = '{s name="category/action/add/success"}[0]x articles assigned{/s}';
+        var failure = '{s name="category/action/add/failure"}The following error occurred while adding the articles:{/s}';
 
         if(action === 'remove') {
+            message = '{s name="category/action/remove/success"}[0]x articles assignments removed{/s}';
+            failure = '{s name="category/action/remove/failure"}The following error occurred while removing the articles:{/s}';
+
             url = '{url controller=Category action=removeCategoryArticles}';
         }
+        mapping.setLoading(true);
 
         Ext.Ajax.request({
             url: url,
             params: { ids: Ext.JSON.encode(ids), categoryId: ~~(1 * categoryId) },
             success: function(response) {
-                // TODO@DR - Please implement the callback handler
-                console.warn(response);
+                mapping.setLoading(false);
+
+                var result = Ext.decode(response.responseText);
+                message = Ext.String.format(message, result.counter);
+                Shopware.Notification.createGrowlMessage('',message);
+            },
+            failure: function(response) {
+                mapping.setLoading(false);
+
+                var result = Ext.decode(response.responseText);
+                failure = failure + '<br>' + result.error;
+                Shopware.Notification.createGrowlMessage('',message);
             }
         });
     }
