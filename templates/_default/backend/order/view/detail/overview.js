@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         me.paymentPanel = me.createPaymentContainer();
 
         me.customerContainer = Ext.create('Ext.container.Container', {
-            height: 110,
+            height: 130,
             minWidth:250,
             layout: {
                 type: 'hbox',
@@ -336,6 +336,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
                     '<div class="base-info">',
+                        '<p>',
+                            '<span>{company}</span>',
+                        '</p>',
                         '<p>',
                             '<span>{firstName}</span>&nbsp;',
                             '<span>{lastName}</span>',
@@ -445,6 +448,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
                     '<div class="base-info">',
+                        '<p>',
+                            '<span>{company}</span>',
+                        '</p>',
                         '<p>',
                             '<span>{firstName}</span>&nbsp;',
                             '<span>{lastName}</span>',

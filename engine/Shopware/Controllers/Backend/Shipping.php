@@ -245,8 +245,13 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $shippingCosts       = $query->getArrayResult();
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+
         $shippingCostsResult = array();
         foreach ($shippingCosts as $shippingCost) {
 
@@ -268,8 +273,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $shippingCostsResult[]  = $shippingCost;
         }
 
-        //returns the total count of the query
-        $totalResult = $this->getManager()->getQueryCount($query);
         $this->View()->assign(array('success' => true, 'data' => $shippingCostsResult, 'total' => $totalResult));
     }
 

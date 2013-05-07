@@ -151,6 +151,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.changeStatus.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
                 }
+                grid.getSelectionModel().deselectAll(false);
             }
         });
     },

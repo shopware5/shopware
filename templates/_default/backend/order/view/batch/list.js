@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      */
     cls:Ext.baseCSSPrefix + 'order-batch-grid',
 
+    minHeight: 150,
     /**
      * This configuration option is to be applied to child items of the container managed by this layout.
      * Each child item with a flex property will be flexed horizontally according to each item's relative
@@ -212,7 +213,7 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
     paymentStatusColumn: function(value, metaData, record) {
         var paymentStatus = null;
 
-        if (record && record.getPaymentStatus() instanceof Ext.data.Store && record.getPaymentStatus().first() instanceof Ext.data.Store) {
+        if (record && record.getPaymentStatus() instanceof Ext.data.Store && record.getPaymentStatus().first() instanceof Ext.data.Model) {
             paymentStatus = record.getPaymentStatus().first();
         }
 
