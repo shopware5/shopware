@@ -37,74 +37,26 @@
 Ext.define('Shopware.apps.Performance.controller.Main', {
     extend: 'Enlight.app.Controller',
 
-
-    /**
-     * Requires controllers for sub-application
-     * @array
-     */
-    controllers: [
-        'Main',
-        'Cache'
-    ],
-
-    /**
-     * The detail controller knows all form field sets and the detail window component
-     * @array
-     */
-    views:[
-        'main.Window',
-
-        'tabs.cache.Main',
-        'tabs.cache.Form',
-        'tabs.cache.Info',
-
-        'main.Categories',
-
-        'tabs.settings.Main',
-        'tabs.settings.Base',
-        'tabs.settings.Seo',
-        'tabs.settings.Topseller',
-        'tabs.settings.CrossSelling',
-        'tabs.settings.HttpCache'
-    ],
-
-    /**
-     * All required stores are defined here. The detail store contains all data around the customer.
-     * The other shops are global stores which used for combo boxes.
-     * @array
-     */
-    stores:[ 'Info' ],
-
-    /**
-     * All store's required models. The detail store handles the base, billing, shipping and debit model.
-     * @array
-     */
-    models:[ ],
-
     /**
      * The main window instance
      * @object
      */
     mainWindow: null,
 
-    /**
-     * @return void
-     */
-    init:function () {
+    run: function() {
         var me = this;
+
         me.getStores();
-
-        me.mainWindow = me.subApplication.getView('main.Window').create().show();
-
-
-        me.callParent(arguments);
+        me.mainWindow = me.subApplication.getView('main.Window').create({
+            'configStore': me.configStore
+        }).show();
     },
-
 
     getStores: function() {
         var me = this;
 
-        me.getStore('Info').load();
+        me.infoStore = me.getStore('Info').load();
+        me.configStore = me.getStore('Config').load();
     }
 
 });

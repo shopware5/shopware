@@ -21,61 +21,42 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Customer
- * @subpackage Detail
+ * @package    Performance
+ * @subpackage Model
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
-
 /**
- * SEO fieldSet for
+ * Base config model which holds references to the config items
  */
-//{block name="backend/performance/view/tabs/settings/http_cache"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
+//{block name="backend/performance/model/config"}
+Ext.define('Shopware.apps.Performance.model.Config', {
+
     /**
-     * Define that the base field set is an extension of the "Base" fieldSet
+     * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.Base',
+    extend:'Ext.data.Model',
 
     /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
+     * Contains the model fields
+     * @array
      */
-    alias:'widget.performance-tabs-settings-http-cache',
+    fields:[
+		//{block name="backend/performance/model/config/fields"}{/block}
+        { name:'id', type:'int' },
+    ],
 
     /**
-     * Description of the fieldSet
+     * Define the associations of the customer model.
+     * One customer has a billing, shipping address and a debit information.
+     * @array
      */
-    title: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
-
-    /**
-     * Component event method which is fired when the component
-     * is initials. The component is initials when the user
-     * want to create a new customer or edit an existing customer
-     * @return void
-     */
-    initComponent:function () {
-        var me = this;
-
-        me.items = me.getItems();
-
-        me.callParent(arguments);
-    },
-
-    getItems: function() {
-        var me = this;
-
-        return [{
-            xtype: ''
-        }];
-
-    }
-
-
+    associations:[
+        { type:'hasMany', model:'Shopware.apps.Performance.model.KeyValue', name:'getCacheControllers', associationKey:'cacheControllers' }
+    ]
 
 });
 //{/block}

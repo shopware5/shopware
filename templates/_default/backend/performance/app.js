@@ -45,10 +45,48 @@ Ext.define('Shopware.apps.Performance', {
     name:'Shopware.apps.Performance',
 
     /**
-     * In order to have slim 'clear cache directly' functions,
-     * the controllers, views, stores and models are managed
-     * within the main controller.
+     * Requires controllers for sub-application
+     * @array
      */
+    controllers: [
+        'Main',
+        'Cache'
+    ],
+
+
+    /**
+     * The detail controller knows all form field sets and the detail window component
+     * @array
+     */
+    views:[
+        'main.Window',
+
+        'tabs.cache.Main',
+        'tabs.cache.Form',
+        'tabs.cache.Info',
+
+        'main.Categories',
+
+        'tabs.settings.Main',
+        'tabs.settings.Base',
+        'tabs.settings.Seo',
+        'tabs.settings.Topseller',
+        'tabs.settings.CrossSelling',
+        'tabs.settings.HttpCache'
+    ],
+
+    /**
+     * All required stores are defined here. The detail store contains all data around the customer.
+     * The other shops are global stores which used for combo boxes.
+     * @array
+     */
+    stores:[ 'Info', 'Config' ],
+
+    /**
+     * All store's required models. The detail store handles the base, billing, shipping and debit model.
+     * @array
+     */
+    models:[ 'Config', 'KeyValue' ],
 
     bulkLoad: true,
     loadPath: '{url action=load}',
@@ -67,6 +105,7 @@ Ext.define('Shopware.apps.Performance', {
             me.getController('Direct');
         } else {
             mainController = me.getController('Main');
+            mainController.run();
             return mainController.mainWindow;
         }
 
