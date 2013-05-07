@@ -439,7 +439,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                     params['cache[' + cacheKey + ']'] = 'on';
                 });
                 Ext.Ajax.request({
-                    url:'{url controller="Cache" action="clearCache"}',
+                    url:'{url controller="Performance" action="clearCache"}',
                     method: 'POST',
                     params: params,
                     callback: function(records, operation) {

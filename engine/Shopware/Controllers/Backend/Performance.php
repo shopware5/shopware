@@ -51,7 +51,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function init()
     {
-//        $this->configData = $this->prepareConfigData();
+        $this->configData = $this->prepareConfigData();
+
+        parent::init();
     }
 
     protected function prepareConfigData()
@@ -171,6 +173,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Helpers to clear various caches
      *
      */
+
+    /**
+     * Clear config cache action
+     */
+    public function configAction()
+    {
+        $this->clearTemplateCache();
+        $this->clearCompilerCache();
+
+        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
+            'Shopware_Config',
+            'Shopware_Plugin'
+        ));
+    }
 
     /**
      * Clear cache action
