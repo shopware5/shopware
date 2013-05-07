@@ -111,9 +111,9 @@
                 files = [];
                 Ext.each(namespace.files, function (file) {
                     // shrink filenames, will be expanded in ScriptRenderer-Plugin
-                    file = file.replace('/^model\//', 'm/');
-                    file = file.replace('/^controller\//', 'c/');
-                    file = file.replace('/^view\//', 'f/');
+                    file = file.replace(/^model\//, 'm/');
+                    file = file.replace(/^controller\//, 'c/');
+                    file = file.replace(/^view\//, 'v/');
 
                     files.push(file);
                 });
