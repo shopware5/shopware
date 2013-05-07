@@ -42,15 +42,15 @@ INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, la
 
 SET @formID = (SELECT id FROM s_core_config_forms WHERE label='InputFilter');
 SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formID AND `name`='own_filter');
-INSERT INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Own filter');
+INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Own filter');
 
 SET @formID = (SELECT id FROM s_core_config_forms WHERE label='Anmeldung / Registrierung');
 SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formID AND `name`='accountPasswordCheck');
-INSERT INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Check current password at password-change requests');
+INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Check current password at password-change requests');
 
 SET @formID = (SELECT id FROM s_core_config_forms WHERE label='Newsletter');
 SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formID AND `name`='MailCampaignsPerCall');
-INSERT INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Number of mails sent per call');
+INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label) VALUES(@elementID, @localeID, 'Number of mails sent per call');
 
 UPDATE s_core_config_element_translations SET description = 'Remind the customer about the review after purchase' WHERE label='Automatically reminder customer to submit reviews';
 
