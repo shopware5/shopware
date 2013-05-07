@@ -52,6 +52,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
      */
     title: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
 
+    layout: 'anchor',
+
+    /**
+     * Expand this fieldSet
+     */
+    collapsed: false,
+
     /**
      * Component event method which is fired when the component
      * is initials. The component is initials when the user
@@ -62,15 +69,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
         var me = this;
 
         me.items = me.getItems();
-
         me.callParent(arguments);
+
     },
 
     getItems: function() {
         var me = this;
 
         return [{
-            xtype: ''
+            xtype: 'performance-tabs-settings-elements-cache-time',
+            height: 300
+        }, {
+            fieldLabel: 'haskdokjshd ajso joas',
+            xtype: 'textfield'
         }];
 
     }

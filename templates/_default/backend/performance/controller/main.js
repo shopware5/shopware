@@ -37,27 +37,51 @@
 Ext.define('Shopware.apps.Performance.controller.Main', {
     extend: 'Enlight.app.Controller',
 
+    refs: [
+        { ref: 'info', selector: 'performance-tabs-cache-info' },
+        { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' }
+
+
+    ],
+
     /**
      * The main window instance
      * @object
      */
     mainWindow: null,
 
+    init: function() {
+        var me = this;
+
+        me.callParent(arguments);
+    },
+
+
     run: function() {
         var me = this;
 
+        me.mainWindow = me.subApplication.getView('main.Window').create().show();
+
         me.getStores();
-        me.mainWindow = me.subApplication.getView('main.Window').create({
-            'configStore': me.configStore
-        }).show();
     },
 
     getStores: function() {
         var me = this;
 
-        me.infoStore = me.getStore('Info').load();
-        me.configStore = me.getStore('Config').load();
+        me.infoStore = me.getStore('Info').load(function() {
+            me.getInfo().bindStore(me.infoStore);
+        });
+
+        me.getStore('Config').load(function (records) {
+            var storeData = records[0];
+
+            me.configStore = storeData;
+            console.log(me.configStore.getCacheControllers());
+            me.getCacheTime().bindStore(me.configStore.getCacheControllers());
+        });
+
     }
+
 
 });
 //{/block}

@@ -54,17 +54,25 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Base', {
     layout: 'column',
 
     /**
-     * Default settings for the child elements
+     * Make the fieldSets collapsible
      */
-    defaults: {
-        labelWidth: 155,
-        labelStyle: 'font-weight: 700;'
-    },
+    collapsible: true,
+    collapsed: true,
 
     /**
      * Layout
      */
     layout: 'anchor',
+
+    /**
+     * Default settings for the child elements
+     */
+    defaults: {
+        labelWidth: 155,
+        labelStyle: 'font-weight: 700;',
+        anchor: '100%'
+    },
+
 
     /**
      * Required minimum width of the fieldSet
