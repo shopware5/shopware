@@ -653,7 +653,7 @@ class Shop extends ModelEntity
             case 'defaultcurrency':
                 return $this->getCurrency()->getId();
 	        case 'fallback':
-		        return $this->getFallback()->getId();
+                return $this->getFallback() !== null ? $this->getFallback()->getId() : null;
         }
         return null;
     }

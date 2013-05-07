@@ -395,11 +395,12 @@ jQuery(document).ready(function ($) {
             $('.register .alternative_shipping select'+ id ).removeAttr('disabled').parents('div.selection').removeClass('hidden');
         });
 
-        if($.controller.vat_check_enabled){
-            var element = $('label[for=register_billing_ustid] span.frontend_register_billing_fieldset');
-            var text = element.text();
-            element.css('font-weight', 'bold');
-            element.text(text + '*');
+        if($.controller.vat_check_required){
+            var snippetElement = $('label[for=register_billing_ustid] span.frontend_register_billing_fieldset');
+            var labelElement = $('label[for=register_billing_ustid]');
+            var text = snippetElement.text();
+            snippetElement.text(text + '*');
+            labelElement.removeClass('normal');
         }
     });
 })(jQuery);
@@ -804,8 +805,9 @@ jQuery(document).ready(function ($) {
                 'title': 'Slide right',
                 'href': '#slideRight'
             }).appendTo(config._container).hide();
-
-            if(!config.showArrows) {
+                
+            if($.ajaxSlider.isiPad || !config.showArrows) {
+                config.showArrows = false;
                 config._leftArrow.hide();
                 config._rightArrow.hide();
             }
@@ -1329,7 +1331,7 @@ jQuery(document).ready(function ($) {
                 if(config._activeNavigation) {
                     config._activeNavigation.removeClass('active');
                 }
-                config._activeNavigation = config._this.find('#slideNavigation' + (slideNumber + 1)).addClass('active');
+                config._activeNavigation = config._this.find('#slideNavigation' + (config._activeSlide + 1)).addClass('active');
             }
         },
 
@@ -1477,7 +1479,7 @@ jQuery(document).ready(function ($) {
                 }
 
                 // Right arrow
-                config._rightArrow.bind('click touchstart', function (event) {
+                config._rightArrow.bind('click ', function (event) {
                     $.ajaxSlider.rightArrow(event, config);
                 });
 
@@ -1584,7 +1586,6 @@ jQuery(document).ready(function ($) {
             // Unbind the event listeners to prevent a unexcepted scrolling behaviors
             config._leftArrow.unbind('click');
             config._rightArrow.unbind('click');
-            config._container.unbind('swipe');
 
             if (config.layout === 'horizontal') {
 
@@ -1705,7 +1706,7 @@ jQuery(document).ready(function ($) {
                     if (i > config._slidesCount) {
                         i = 1;
                     }
-                    config._activeSlide = i;
+                    config._activeSlide = i - 1;
                     $.ajaxSlider.animateContainerTo(i - 1, config);
                 }, config.rotateSpeed);
             }
@@ -3466,8 +3467,11 @@ jQuery.fn.liveSearch = function (conf) {
     $.checkout.loginUser = function (form) {
         config.register = $.controller.register;
         var location = window.location.protocol + '//' + window.location.host;
+
         // Fix same origin miss match
-        if(config.viewport.indexOf(location) !== 0 && $.browser.msie) {
+        if (config.viewport.indexOf(location) !== 0
+            && $.browser.msie &&
+            (parseInt($.browser.version, 10) === 6 || parseInt($.browser.version, 10) === 7)) {
             return;
         }
         $.ajax({

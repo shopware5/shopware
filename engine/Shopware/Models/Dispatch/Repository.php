@@ -100,6 +100,12 @@ class Repository extends ModelRepository
     public function getShippingCostsQuery($dispatchId = null, $filter = null, $order = array(), $limit = null, $offset = null)
     {
         $builder = $this->getShippingCostsQueryBuilder($dispatchId, $filter, $order);
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
         return $builder->getQuery();
     }
 

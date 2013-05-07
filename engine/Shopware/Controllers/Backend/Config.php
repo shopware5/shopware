@@ -189,8 +189,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     continue;
                 }
                 // Do not save default value
-                $testValue = isset($values[1]) ? $values[1]->getValue() : $elementData['value'];
-                if ($valueData['value'] === $testValue) {
+                if ($valueData['value'] === $elementData['value']) {
                     continue;
                 }
                 $value = new Shopware\Models\Config\Value();

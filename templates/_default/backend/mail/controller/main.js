@@ -152,8 +152,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             },
 
             'mail-main-form': {
-                dirtychange:    me.onDirtyChange,
-                validitychange: me.onValidityChange
+                dirtychange:    me.onDirtyChange
             },
 
             'mail-main-form tabpanel': {
@@ -568,35 +567,10 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         /*{/if}*/
 
         var me           = this,
-            checkedItems = me.getNavigationTree().getChecked(),
-            saveBtn      = me.getSaveBtn(),
             resetBtn     = me.getResetBtn();
 
         // Reset button should be only enabled if form is dirty
         resetBtn.setDisabled(!dirty);
-
-        // Save button should be only enabled if form is valid and is dirty
-        saveBtn.setDisabled(!dirty || !form.isValid());
-    },
-
-    /**
-     * Fires when the validity of the entire form changes.
-     *
-     * @event validitychange
-     * @param [Ext.form.Basicl] form - the form firing the event
-     * @param [boolean] valid - true if the form is now valid, false if it is now invalid.
-     * @return void
-     */
-    onValidityChange: function(form, valid) {
-        /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
-        /*{/if}*/
-
-        var me       = this,
-            saveBtn  = me.getSaveBtn();
-
-        // Save button should be only enabled if form is valid and is dirty
-        saveBtn.setDisabled(!valid || !form.isDirty());
     },
 
     /**
@@ -608,7 +582,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         /*{/if}*/
 
         var me        = this,
-            window    = me.getMainWindow(),
             deleteBtn = me.getDeleteBtn(),
             copyBtn   = me.getCopyBtn();
 

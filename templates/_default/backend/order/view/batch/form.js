@@ -55,6 +55,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      */
     cls: Ext.baseCSSPrefix + 'batch-settings-panel',
 
+    autoScroll: true,
+
     layout: {
         align: 'stretch',
         type: 'vbox'
@@ -180,8 +182,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                     valueField: 'value'
                 },
                 {
-                    xtype: 'pagingcombo',
-                    pageSize: 5,
                     name: 'orderStatus',
                     triggerAction: 'all',
                     queryMode: 'local',

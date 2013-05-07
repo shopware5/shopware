@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     * all references to get the elements by the applicable selector
     */
     refs:[
+        { ref:'orderListGrid', selector:'order-list-main-window order-list' },
         { ref:'batchWindow', selector:'order-batch-window' },
         { ref:'batchList', selector:'order-batch-window batch-list' },
         { ref:'mailPanel', selector:'order-batch-window batch-mail-panel' },
@@ -168,13 +169,13 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             grid = window.down('batch-list');
 
         if (activeItem.layout === 'easy') {
-            window.setSize(530, 460);
+            window.setSize(530, '90%');
             formPanel.removeCls('layout-expert');
             formPanel.addCls('layout-easy');
             grid.hide();
             mailPanel.hide();
         } else {
-            window.setSize(970, 600);
+            window.setSize(970, '90%');
             formPanel.removeCls('layout-easy');
             formPanel.addCls('layout-expert');
             grid.show();
@@ -245,11 +246,16 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             store.add(orders);
             store.sync({
                 callback: function(batch) {
-                    var resultSet = batch.operations[0].resultSet.records;
+                    var orderListGrid = me.getOrderListGrid(),
+                        gridStore = orderListGrid.getStore(),
+                        resultSet = batch.operations[0].resultSet.records;
+
                     store.removeAll();
                     store.add(resultSet);
                     grid.setLoading(false);
                     grid.reconfigure(store);
+
+                    gridStore.load();
                 }
             });
         }
