@@ -30,9 +30,6 @@
 
 //{namespace name=backend/performance/main}
 
-/**
-
- */
 //{block name="backend/performance/view/tabs/cache"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
     extend: 'Ext.form.Panel',

@@ -22,6 +22,7 @@
  */
 
 //{namespace name=backend/performance/main}
+
 //{block name="backend/performance/view/tabs/cache/info"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
     extend: 'Ext.grid.Panel',

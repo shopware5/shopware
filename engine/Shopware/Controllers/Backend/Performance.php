@@ -38,9 +38,56 @@
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
 
+    /**
+     * Stores a list of all needed config data
+     * @var array
+     */
+    protected $configData = array();
+
 	protected function initAcl()
 	{
 	}
+
+
+    public function init()
+    {
+//        $this->configData = $this->prepareConfigData();
+    }
+
+    protected function prepareConfigData()
+    {
+        $controllers = Shopware()->Config()->cacheControllers;
+        $cacheControllers = array();
+        if(!empty($controllers)) {
+            $controllers = str_replace(array("\r\n", "\r"), "\n", $controllers);
+            $controllers = explode("\n", trim($controllers));
+            foreach($controllers as $controller) {
+                list($controller, $cacheTime) = explode(" ", $controller);
+                $cacheControllers[$controller] = $cacheTime;
+            }
+        }
+
+        return array(
+            'cacheControllers' => $cacheControllers
+        );
+    }
+
+    /**
+     *
+     */
+    public function getConfigAction()
+    {
+        $cacheControllers = $this->configData['cacheControllers'];
+
+        $data = array(
+            'cacheControllers' => $cacheControllers
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
+    }
 
     /**
      * Cache info action

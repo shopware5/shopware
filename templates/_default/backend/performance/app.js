@@ -59,11 +59,19 @@ Ext.define('Shopware.apps.Performance', {
      */
     views:[
         'main.Window',
+
         'tabs.cache.Main',
         'tabs.cache.Form',
         'tabs.cache.Info',
+
         'main.Categories',
-        'tabs.Settings'
+
+        'tabs.settings.Main',
+        'tabs.settings.Base',
+        'tabs.settings.Seo',
+        'tabs.settings.Topseller',
+        'tabs.settings.CrossSelling',
+        'tabs.settings.HttpCache'
     ],
 
     /**
