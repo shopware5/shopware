@@ -79,9 +79,17 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
             },{
                 xtype: 'performance-tabs-settings-seo'
         }];
+
+        me.dockedItems = [{
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            cls: 'shopware-toolbar',
+            items: me.getButtons()
+        }];
+
         me.callParent(arguments);
     },
-
 
     /**
      * Creates the container for the internal communication fields
@@ -202,6 +210,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
         });
 
         return [me.externalDescriptionContainer, me.customerTextArea, me.externalTextArea, me.externalButton];
+    },
+
+    /**
+     * @return Array
+     */
+    getButtons: function() {
+        var me = this;
+
+        return ['->', {
+            text: '{s name=settings/buttons/save}Save{/s}',
+            action: 'save-settings',
+            cls: 'primary'
+        }];
     }
 
 });
