@@ -56,7 +56,18 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         parent::init();
     }
 
+    /**
+     * Reads all config data and prepares it for our models
+     * @return array
+     */
     protected function prepareConfigData()
+    {
+        return array(
+            'httpCache' => $this->prepareHttpCacheConfig()
+        );
+    }
+
+    protected function prepareHttpCacheConfig()
     {
         $controllers = Shopware()->Config()->cacheControllers;
         $cacheControllers = array();
@@ -69,8 +80,23 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
+        $controllers = Shopware()->Config()->noCacheControllers;
+        $noCacheControllers = array();
+        if(!empty($controllers)) {
+            $controllers = str_replace(array("\r\n", "\r"), "\n", $controllers);
+            $controllers = explode("\n", trim($controllers));
+            foreach($controllers as $controller) {
+                list($controller, $cacheTime) = explode(" ", $controller);
+                $noCacheControllers[] = array('key' => $controller, 'value' => $cacheTime);
+            }
+        }
+
         return array(
-            'cacheControllers' => $cacheControllers
+            'cacheControllers' => $cacheControllers,
+            'noCacheControllers' => $noCacheControllers,
+            'proxyBan' => Shopware()->Config()->proxyBan,
+            'admin' => Shopware()->Config()->admin,
+            'proxy' => Shopware()->Config()->proxy
         );
     }
 
@@ -79,18 +105,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
-        $cacheControllers = $this->configData['cacheControllers'];
-
-        $data = array(
-            'httpCache' => array(
-                'cacheControllers' => $cacheControllers,
-                'name' => 'hallo'
-            )
-        );
-
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data
+            'data' => $this->configData
         ));
     }
 

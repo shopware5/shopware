@@ -21,53 +21,53 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Performance
- * @subpackage Model
+ * @package    Shopware_Config
+ * @subpackage Config
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
 /**
- * Base config model which holds references to the config items
+ * Shopware Controller - Performance backend module
+ *
+ * The settings controller handles the 'settings' tab
  */
-//{block name="backend/performance/model/http_cache"}
-Ext.define('Shopware.apps.Performance.model.HttpCache', {
+//{block name="backend/performance/controller/settings"}
+Ext.define('Shopware.apps.Performance.controller.Settings', {
+    extend: 'Enlight.app.Controller',
 
-    /**
-     * Extends the standard Ext Model
-     * @string
-     */
-    extend:'Ext.data.Model',
-
-    /**
-     * Contains the model fields
-     * @array
-     */
-    fields:[
-		//{block name="backend/performance/model/http_cache/fields"}{/block}
-        { name:'id', type:'int' },
-        { name: 'proxyBan', type: 'bool'},
-        { name: 'proxy', type: 'string'},
-        { name: 'admin', type: 'bool'}
+    refs: [
+        { ref: 'settings', selector: 'performance-tabs-settings-main' },
     ],
 
     /**
-     * Define the associations of the customer model.
-     * One customer has a billing, shipping address and a debit information.
-     * @array
+     *
      */
-    associations: [{
-        type: 'hasMany',
-        model: 'Shopware.apps.Performance.model.KeyValue',
-        name: 'getCacheControllers',
-        associationKey: 'cacheControllers'
-    },{
-        type: 'hasMany',
-        model: 'Shopware.apps.Performance.model.KeyValue',
-        name: 'getNoCacheControllers',
-        associationKey: 'noCacheControllers'
-    }]
+    init: function () {
+        var me = this;
+
+        me.control({
+            'performance-tabs-settings-main button[action=save-settings]': {
+                click: function(button, event) {
+                    me.onSave();
+                }
+            }
+        });
+
+        me.callParent(arguments);
+    },
+
+    /**
+     * Callback function called when the users clicks the 'save' button on the settings form
+     */
+    onSave: function() {
+        var me = this,
+            settings = me.getSettings();
+
+
+    }
+
 
 });
 //{/block}

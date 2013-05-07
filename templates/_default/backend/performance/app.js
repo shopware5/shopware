@@ -74,7 +74,8 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.CrossSelling',
         'tabs.settings.HttpCache',
 
-        'tabs.settings.elements.CacheTime'
+        'tabs.settings.elements.CacheTime',
+        'tabs.settings.elements.NoCache'
     ],
 
     /**

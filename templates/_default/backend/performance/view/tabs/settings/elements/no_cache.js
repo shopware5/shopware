@@ -35,8 +35,8 @@
  *
  * todo@all: Documentation
  */
-//{block name="backend/performance/view/tabs/settings/elements/cache_time"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
+//{block name="backend/performance/view/tabs/settings/elements/no_cache"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
     /**
      * Extend from the standard ExtJS 4
      * @string
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-elements-cache-time',
+    alias:'widget.performance-tabs-settings-elements-no-cache',
 
     /**
      * The view needs to be scrollable
@@ -58,8 +58,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
     /**
      * Desciptive title for the grid
      */
-    title: 'Define cache times for controller (-actions) here',
-
+    title: 'Controller tags not to be cached',
 
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
@@ -101,7 +100,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                 flex: 2
             },
             {
-                header: 'time',
+                header: 'tag',
                 dataIndex: 'value',
                 flex: 1
             },

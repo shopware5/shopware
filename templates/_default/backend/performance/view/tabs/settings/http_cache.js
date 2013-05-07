@@ -76,13 +76,30 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
     getItems: function() {
         var me = this;
 
-        return [{
+        return [
+            me.createDecriptionContainer("Allgemeine Beschreibung für das HTTPCache-Modul <br>" +
+            "<br>" +
+            "<b>Wichtig: </b> Informationen"),
+        {
             xtype: 'performance-tabs-settings-elements-cache-time',
-            height: 300
+            height: 250,
+            margin: '0 0 20 0'
         }, {
-            fieldLabel: 'haskdokjshd ajso joas',
-            name: 'httpCache[name]',
+            xtype: 'performance-tabs-settings-elements-no-cache',
+            height: 250,
+            margin: '0 0 20 0'
+        }, {
+            fieldLabel: 'Proxy-BAN aktivieren',
+            name: 'httpCache[proxyBan]',
+            xtype: 'checkbox'
+        }, {
+            fieldLabel: 'Alternative Proxy-Url',
+            name: 'httpCache[proxy]',
             xtype: 'textfield'
+        }, {
+            fieldLabel: 'Admin-View',
+            name: 'httpCache[admin]',
+            xtype: 'checkbox'
         }];
 
     }
