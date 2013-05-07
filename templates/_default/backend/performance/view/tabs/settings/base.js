@@ -77,7 +77,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Base', {
     /**
      * Required minimum width of the fieldSet
      */
-    minWidth:250
+    minWidth:250,
+
+    /**
+     * Helper method to create a descriptive text
+     * @param html
+     * @returns Ext.container.Container
+     */
+    createDecriptionContainer: function(html) {
+        return  Ext.create('Ext.container.Container', {
+            style: 'color: #999; font-style: italic; margin: 0 0 15px 0;',
+            html: html
+        });
+    }
 
 });
 //{/block}

@@ -40,7 +40,8 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
     refs: [
         { ref: 'info', selector: 'performance-tabs-cache-info' },
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
-        { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' }
+        { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
+        { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' }
 
 
     ],
@@ -51,22 +52,21 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
      */
     mainWindow: null,
 
-    init: function() {
-        var me = this;
-
-        me.callParent(arguments);
-    },
-
-
+    /**
+     * Called by the SubApplication to create and show the window
+     */
     run: function() {
         var me = this;
 
         me.mainWindow = me.subApplication.getView('main.Window').create().show();
 
-        me.getStores();
+        me.loadStores();
     },
 
-    getStores: function() {
+    /**
+     * Helper method to load the stores and bind them to the corresponding fields when ready
+     */
+    loadStores: function() {
         var me = this;
 
         me.infoStore = me.getStore('Info').load(function() {
@@ -77,19 +77,20 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
             var storeData = records[0];
 
             me.configStore = storeData;
-            me.injectConfigStores();
+            me.injectSettingStores();
         });
 
     },
 
     /**
-     * Helper method to inject the config stores
+     * Helper method to inject the config stores into the settings tab
      */
-    injectConfigStores: function() {
+    injectSettingStores: function() {
         var me = this;
 
         me.getSettings().loadRecord(me.configStore);
         me.getCacheTime().bindStore(me.configStore.getHttpCache().first().getCacheControllers());
+        me.getNoCache().bindStore(me.configStore.getHttpCache().first().getNoCacheControllers());
     }
 
 
