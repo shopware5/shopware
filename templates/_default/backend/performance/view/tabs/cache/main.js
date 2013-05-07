@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      */
     initComponent: function() {
         var me = this;
+
         // Create the items of the container
         me.items = me.getItems();
 
@@ -59,7 +60,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
             cls: 'shopware-toolbar',
             items: me.getButtons()
         }];
+
         me.callParent(arguments);
+
     },
 
     /**
@@ -70,6 +73,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
 
         return [{
             xtype: 'performance-tabs-cache-info',
+            store: me.infoStore,
             flex: 1
         }, {
             xtype: 'performance-tabs-cache-form',
@@ -82,6 +86,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      */
     getButtons: function() {
         var me = this;
+        
         return ['->', {
             text: '{s name=form/buttons/select_all}Select all{/s}',
             action: 'select-all',

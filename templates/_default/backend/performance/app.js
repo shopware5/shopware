@@ -72,7 +72,9 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.Seo',
         'tabs.settings.Topseller',
         'tabs.settings.CrossSelling',
-        'tabs.settings.HttpCache'
+        'tabs.settings.HttpCache',
+
+        'tabs.settings.elements.CacheTime'
     ],
 
     /**
@@ -105,7 +107,9 @@ Ext.define('Shopware.apps.Performance', {
             me.getController('Direct');
         } else {
             mainController = me.getController('Main');
-            mainController.run();
+            if (!mainController.mainWindow) {
+                mainController.run();
+            }
             return mainController.mainWindow;
         }
 

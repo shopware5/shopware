@@ -65,7 +65,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $controllers = explode("\n", trim($controllers));
             foreach($controllers as $controller) {
                 list($controller, $cacheTime) = explode(" ", $controller);
-                $cacheControllers[$controller] = $cacheTime;
+                $cacheControllers[] = array('key' => $controller, 'value' => $cacheTime);
             }
         }
 

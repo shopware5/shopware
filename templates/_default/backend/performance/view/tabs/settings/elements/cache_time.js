@@ -42,6 +42,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * @string
      */
     extend:'Ext.grid.Panel',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -52,7 +53,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
+
+    /**
+     * Desciptive title for the grid
+     */
+    title: 'Define cache times for controller (-actions) here',
 
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
@@ -64,8 +70,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
 
         me.columns = me.getColumns();
         me.toolbar = me.getToolbar();
-        me.pagingbar = me.getPagingBar();
-        me.dockedItems = [ me.toolbar, me.pagingbar ];
+        me.dockedItems = [ me.toolbar];
         me.callParent(arguments);
     },
 
@@ -81,22 +86,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
     },
 
     /**
-     * Creates the paging toolbar for the customer grid to allow
-     * and store paging. The paging toolbar uses the same store as the Grid
-     *
-     * @return [Ext.toolbar.Paging] - The paging toolbar for the customer grid
-     */
-    getPagingBar:function () {
-        var me = this;
-
-        return Ext.create('Ext.toolbar.Paging', {
-            store:me.store,
-            dock:'bottom',
-            displayInfo:true
-        });
-    },
-
-    /**
      * Creates the grid columns
      *
      * @return [array] grid columns
@@ -107,12 +96,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
         return [
             {
                 header: 'controller',
-                dataIndex: 'controller',
+                dataIndex: 'key',
                 flex: 2
             },
             {
                 header: 'time',
-                dataIndex: 'time',
+                dataIndex: 'value',
                 flex: 1
             },
             {
@@ -155,24 +144,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
             ui: 'shopware-ui',
-            cls: Ext.baseCSSPrefix + 'order-list-toolbar',
             items:[
-                '->',
                 {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    cls:'searchfield',
-                    width:170,
-                    emptyText:me.snippets.search,
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    listeners: {
-                        change: function(field, value) {
-                            me.fireEvent('searchOrder', value, me.gridStore);
-                        }
-                    }
-                },
-                { xtype:'tbspacer', width:6 }
+                    iconCls: 'sprite-plus-circle-frame',
+                    text: 'Add new line',
+                    action: 'add-cache-controller'
+                }
             ]
         });
     }

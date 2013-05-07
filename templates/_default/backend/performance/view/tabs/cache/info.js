@@ -39,7 +39,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
         var me = this;
 
         Ext.applyIf(me, {
-            store: 'Info',
             columns: me.getColumns()
         });
 
