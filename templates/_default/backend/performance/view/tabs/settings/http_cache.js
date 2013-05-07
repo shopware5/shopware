@@ -81,6 +81,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
             height: 300
         }, {
             fieldLabel: 'haskdokjshd ajso joas',
+            name: 'httpCache[name]',
             xtype: 'textfield'
         }];
 

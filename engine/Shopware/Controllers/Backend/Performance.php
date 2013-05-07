@@ -82,7 +82,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $cacheControllers = $this->configData['cacheControllers'];
 
         $data = array(
-            'cacheControllers' => $cacheControllers
+            'httpCache' => array(
+                'cacheControllers' => $cacheControllers,
+                'name' => 'hallo'
+            )
         );
 
         $this->View()->assign(array(

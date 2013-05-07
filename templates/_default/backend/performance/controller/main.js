@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
 
     refs: [
         { ref: 'info', selector: 'performance-tabs-cache-info' },
+        { ref: 'settings', selector: 'performance-tabs-settings-main' },
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' }
 
 
@@ -76,10 +77,19 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
             var storeData = records[0];
 
             me.configStore = storeData;
-            console.log(me.configStore.getCacheControllers());
-            me.getCacheTime().bindStore(me.configStore.getCacheControllers());
+            me.injectConfigStores();
         });
 
+    },
+
+    /**
+     * Helper method to inject the config stores
+     */
+    injectConfigStores: function() {
+        var me = this;
+
+        me.getSettings().loadRecord(me.configStore);
+        me.getCacheTime().bindStore(me.configStore.getHttpCache().first().getCacheControllers());
     }
 
 

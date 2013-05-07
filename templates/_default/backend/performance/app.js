@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance', {
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models:[ 'Config', 'KeyValue' ],
+    models:[ 'Config', 'KeyValue', 'HttpCache' ],
 
     bulkLoad: true,
     loadPath: '{url action=load}',

@@ -31,8 +31,8 @@
 /**
  * Base config model which holds references to the config items
  */
-//{block name="backend/performance/model/config"}
-Ext.define('Shopware.apps.Performance.model.Config', {
+//{block name="backend/performance/model/http_cache"}
+Ext.define('Shopware.apps.Performance.model.HttpCache', {
 
     /**
      * Extends the standard Ext Model
@@ -45,8 +45,9 @@ Ext.define('Shopware.apps.Performance.model.Config', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/config/fields"}{/block}
-        { name:'id', type:'int' }
+		//{block name="backend/performance/model/http_cache/fields"}{/block}
+        { name:'id', type:'int' },
+        { name: 'name', type: 'string'}
     ],
 
     /**
@@ -55,7 +56,7 @@ Ext.define('Shopware.apps.Performance.model.Config', {
      * @array
      */
     associations:[
-        { type:'hasMany', model:'Shopware.apps.Performance.model.HttpCache', name:'getHttpCache', associationKey:'httpCache' }
+        { type:'hasMany', model:'Shopware.apps.Performance.model.KeyValue', name:'getCacheControllers', associationKey:'cacheControllers' }
     ]
 
 });
