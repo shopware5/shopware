@@ -56,10 +56,10 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
     border:false,
 
     /**
-     * True to automatically show the component upon creation.
+     * Do not show the window automatically
      * @boolean
      */
-    autoShow:true,
+    autoShow:false,
 
     /**
      * Set border layout for the window
