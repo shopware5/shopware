@@ -22,6 +22,7 @@
  */
 
 //{namespace name=backend/performance/main}
+
 //{block name="backend/performance/view/tabs/cache/form"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
 

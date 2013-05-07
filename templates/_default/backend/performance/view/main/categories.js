@@ -22,6 +22,7 @@
  */
 
 //{namespace name=backend/performance/main}
+
 //{block name="backend/performance/view/main/categories"}
 Ext.define('Shopware.apps.Performance.view.main.Categories', {
 
