@@ -21,61 +21,35 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Customer
- * @subpackage Detail
+ * @package    Performance
+ * @subpackage Model
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
-
 /**
- * SEO fieldSet for
+ * Basic key value model
  */
-//{block name="backend/performance/view/tabs/settings/http_cache"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
+//{block name="backend/performance/model/key_value"}
+Ext.define('Shopware.apps.Performance.model.KeyValue', {
+
     /**
-     * Define that the base field set is an extension of the "Base" fieldSet
+     * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.Base',
+    extend:'Ext.data.Model',
 
     /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
+     * Contains the model fields
+     * @array
      */
-    alias:'widget.performance-tabs-settings-http-cache',
-
-    /**
-     * Description of the fieldSet
-     */
-    title: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
-
-    /**
-     * Component event method which is fired when the component
-     * is initials. The component is initials when the user
-     * want to create a new customer or edit an existing customer
-     * @return void
-     */
-    initComponent:function () {
-        var me = this;
-
-        me.items = me.getItems();
-
-        me.callParent(arguments);
-    },
-
-    getItems: function() {
-        var me = this;
-
-        return [{
-            xtype: ''
-        }];
-
-    }
-
-
+    fields:[
+		//{block name="backend/performance/model/key_value/fields"}{/block}
+        { name:'id', type:'int' },
+        { name:'key', type:'string' },
+        { name:'value', type:'string' }
+    ]
 
 });
 //{/block}
