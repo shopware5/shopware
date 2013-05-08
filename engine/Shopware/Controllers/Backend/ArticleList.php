@@ -276,7 +276,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         } elseif (!empty($categoryId) && $categoryId !== 'NaN') {
 			$categorySql =  "
                 LEFT JOIN s_categories c
-                    ON  c.id = ?
+                    ON  c.id = :categoryId
                     AND c.active = 1
 
                 INNER JOIN s_articles_categories ac
