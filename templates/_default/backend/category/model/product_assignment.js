@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,43 +19,25 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
-
-/**
- * Shopware Model
- *
- * This Model is extended from the Shopware.apps.Base.model.Article to add the article association
- *
- */
-//{block name="backend/category/model/article"}
-Ext.define('Shopware.apps.Category.model.Article', {
+//{block name="backend/category/model/product_assignment"}
+Ext.define('Shopware.apps.Category.model.ProductAssignment', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Article',
-
-    associations: [
-        {
-            type:'hasMany',
-            model:'Shopware.apps.Category.model.ArticleDetail',
-            name:'getDetail',
-            associationKey:'mainDetail'
-        },
-        {
-            type:'hasMany',
-            model:'Shopware.apps.Base.model.Supplier',
-            name:'getSupplier',
-            associationKey:'supplier'
-        }
+    extend:'Ext.data.Model',
+    /**
+     * Configure the data communication
+     * @object
+     */
+    fields:[
+		//{block name="backend/category/model/product_assignment/fields"}{/block}
+        { name: 'articleId', type: 'integer' },
+        { name: 'name', type: 'string' },
+        { name: 'number', type: 'string' },
+        { name: 'supplierName', type: 'string' }
     ]
 });
 //{/block}

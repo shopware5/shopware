@@ -79,6 +79,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 		growlMessage			: '{s name=window/main_title}{/s}'
     },
 
+    productMappingRendered: false,
+
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
@@ -211,13 +213,16 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         me.subApplication.treeStore.getProxy().extraParams = { node:record.get("id") };
         var detailStore = me.subApplication.getStore('Detail');
         detailStore.getProxy().extraParams = { node:record.get("id") };
+
+        me.subApplication.availableProductsStore.getProxy().extraParams = { categoryId: record.get("id") };
+        me.subApplication.assignedProductsStore.getProxy().extraParams = { categoryId: record.get("id") };
+
         detailStore.load({
             scope:this,
             callback:function (records) {
                 var mainWindow = me.subApplication.mainWindow,
                     articleMappingContainer = mainWindow.articleMappingContainer,
                     categoryRestrictionContainer = mainWindow.categoryRestrictionContainer,
-                    selectorView,
                     restrictionView;
 
                 me.detailRecord = records[0];
@@ -228,26 +233,37 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // load record into forms
                 settingForm.loadRecord(me.detailRecord);
 
+                var disableTab = !record.data.leaf;
 
-                selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
-                    articleStore: me.subApplication.articleStore,
-                    record: me.detailRecord
-                });
+                // Just create the selection view once, if created just refresh the stores and the detail record.
+                if(!me.productMappingRendered) {
+                    me.selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
+                        availableProductsStore: me.subApplication.availableProductsStore,
+                        assignedProductsStore: me.subApplication.assignedProductsStore,
+                        record: me.detailRecord
+                    });
+                    me.updateTab(articleMappingContainer, me.selectorView, disableTab);
+                    me.productMappingRendered = true;
+                } else {
+                    me.selectorView.availableProductsStore = me.subApplication.availableProductsStore;
+                    me.selectorView.assignedProductsStore = me.subApplication.assignedProductsStore;
+                    me.selectorView.record = me.detailRecord;
+                    me.selectorView.fireEvent('storeschanged');
+                    articleMappingContainer.setDisabled(disableTab);
+                }
 
                 restrictionView = Ext.create('Shopware.apps.Category.view.category.tabs.restriction', {
                     customerGroupsStore: me.subApplication.custeromGroupsStore,
                     record: me.detailRecord
                 });
 
-
-                var disableTab = !record.data.leaf;
-                me.updateTab(articleMappingContainer, selectorView, disableTab);
                 me.updateTab(categoryRestrictionContainer, restrictionView, me.detailRecord.get('parentId') == 0);
-                me.getArticleMappingForm().ddSelector.toField.reconfigure(me.detailRecord.getArticles());
+
                 /*{if {acl_is_allowed privilege=update}}*/
                 // enable save button
                 saveButton.enable();
                 /* {/if} */
+
                 // fire event that a new record has been loaded.
                 settingForm.fireEvent('recordloaded', me.detailRecord, record);
 
@@ -288,13 +304,16 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * Moves an category to a different position.
      *
      * @event itemmove
-     * @param [object] node - actual Ext.data.Model
-     * @param [object] oldParent - old Ext.data.Model
-     * @param [object] newParent - updated Ext.data.Model
      * @return void
+     * @param position
+     * @param node
+     * @param newParent
+     * @param oldParent
      */
-    onCategoryMove : function(node, oldParent, newParent, position) {
-        var me = this;
+    onCategoryMove: function (node, oldParent, newParent, position) {
+        var me = this,
+            childNodeIds = [],
+            url = '{url controller=Category action=saveNewChildPositions}';
 
         node.data.position = position;
         node.data.parentId = !newParent.isRoot() ? newParent.data.id : null;
@@ -303,16 +322,25 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         var mainWindow = me.getMainWindow();
         mainWindow.setLoading(true);
         node.save({
-            callback:function (self, operation) {
-                if (!operation.success) {
-                    var rawData = self.proxy.reader.rawData;
-                    if (rawData.message) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure + '<br>' +  rawData.message, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure, me.snippets.growlMessage);
+            callback: function (self, operation) {
+                //save the new position for all child categories in the parent category
+                newParent.eachChild(function (node) {
+                    childNodeIds.push(node.getId());
+                });
+                Ext.Ajax.request({
+                    url: url,
+                    params: { ids: Ext.JSON.encode(childNodeIds) },
+                    success: function (response) {
+                        var rawData = self.proxy.reader.rawData;
+                        if (rawData.success) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategorySuccess, me.snippets.growlMessage);
+                        }
+                        else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategoryFailure + '<br>' + rawData.message, me.snippets.growlMessage);
+                        }
+                        mainWindow.setLoading(false);
                     }
-                }
-                mainWindow.setLoading(false);
+                });
             }
         });
     },
@@ -469,6 +497,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param disabled
      */
     updateTab: function(tabContainer, view, disabled) {
+
         tabContainer.setDisabled(disabled);
         tabContainer.removeAll(false);
         tabContainer.add(view);

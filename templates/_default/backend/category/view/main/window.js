@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Default: 925 px
      * @integer
      */
-    width: 900,
+    width: 1150,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
