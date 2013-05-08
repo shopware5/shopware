@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
      * @object
      */
     snippets: {
-        title: '{s name=image/mapping/title}Image mapping{/s}',
+        title: '{s name=image/mapping/title}Image mapping{/s}'
     },
 
     /**
@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
 
         me.addButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-plus-circle-frame',
-            text: 'Add mapping',
+            text: '{s name=image/mapping/add_button}Add mapping{/s}',
             handler: function() {
                 me.fireEvent('displayNewRuleWindow', me);
             }
@@ -255,7 +255,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
 
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
-            text: 'Delete all selected',
+            text: '{s name=image/mapping/delete_button}Delete all selected{/s}',
             disabled: true,
             handler: function() {
                 var selectionModel = me.mappingGrid.getSelectionModel(),

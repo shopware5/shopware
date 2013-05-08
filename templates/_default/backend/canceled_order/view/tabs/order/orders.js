@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
 
 
         me.deleteSelectedOrdersButton =Ext.create('Ext.button.Button', {
-            text: 'Delete selected orders',
+            text: '{s name=order_delete_button}Delete selected orders{/s}',
             iconCls : 'sprite-minus-circle-frame',
             disabled: true,
             handler: function(){
