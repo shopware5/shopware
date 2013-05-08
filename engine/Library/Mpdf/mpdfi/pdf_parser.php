@@ -94,8 +94,8 @@ class pdf_parser {
             $this->errormsg = sprintf("Cannot open %s !", $filename);
 		return false;
 	  }
-
-        $this->c =& new pdf_context($this->f);
+	// mPDF 5.0 Removed pass by reference =&
+        $this->c = new pdf_context($this->f);
         // Read xref-Data
 	  $offset = $this->pdf_find_xref();
         if ($offset===false) {
@@ -279,7 +279,8 @@ class pdf_parser {
             	fseek($this->f, $o_pos+strlen($m[1]));
     		}
 
-			$c =&  new pdf_context($this->f);
+			// mPDF 5.0 Removed pass by reference =&
+			$c = new pdf_context($this->f);
     	    $trailer = $this->pdf_read_value($c);
     	    
     	    if (isset($trailer[1]['/Prev'])) {
@@ -448,7 +449,8 @@ class pdf_parser {
 		        	$e++;
 		        
 		        if ($this->actual_obj[1][1]['/Length'][0] == PDF_TYPE_OBJREF) {
-		        	$tmp_c =& new pdf_context($this->f);
+				// mPDF 5.0 Removed pass by reference =&
+		        	$tmp_c = new pdf_context($this->f);
 		        	$tmp_length = $this->pdf_resolve_object($tmp_c,$this->actual_obj[1][1]['/Length']);
 		        	$length = $tmp_length[1][1];
 		        } else {
