@@ -37,17 +37,23 @@
  */
 //{block name="backend/category/view/tabs/article_mapping"}
 Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
+
    /**
     * Parent Element Ext.container.Container
     * @string
     */
     extend:'Ext.form.Panel',
+
     /**
      * Register the alias for this class.
      * @string 
      */
     alias:'widget.category-category-tabs-article_mapping',
 
+    /**
+     * Base class of the component
+     * @string
+     */
     cls: 'shopware-form',
 
     /**
@@ -59,181 +65,273 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @integer
      */
     border: 0,
+
     /**
      * Display the the contents of this tab immediately
      * @boolean
      */
     autoShow : true,
+
     /**
-     * used layout column
-     * 
-     * @string
+     * Layout configuration
+     * @object
      */
-    layout: 'fit',
+    layout: {
+        type: 'hbox',
+        pack: 'start',
+        align: 'stretch'
+    },
+
     /**
      * Body padding
      * @integer
      */
     bodyPadding: 10,
+
     /**
-     * article mapping record
+     * Available action buttons
+     * @array
      */
-    record: null,
+    defaultButtons: [ 'add', 'remove' ],
+
+    /**
+     * Default text which are used for the tooltip on the button.
+     * @object
+     */
+    buttonsText: {
+        add: "{s name=tabs/article_mapping/button_add}Add{/s}",
+        remove: "{s name=tabs/article_mapping/button_remove}Remove{/s}"
+    },
+
 
     /**
      * Initialize the Shopware.apps.Category.view.category.tabs.ArticleMapping and defines the necessary
      * default configuration
+     *
+     * @returns { Void }
      */
-    initComponent:function () 
-    {
+    initComponent:function () {
         var me = this;
-        me.items = me.getItems();
+        me.fromGrid = me.createFromGrid();
+        me.buttonContainer = me.createActionButtons();
+        me.toGrid = me.createToGrid();
+
+        me.items = [ me.fromGrid, me.buttonContainer, me.toGrid ];
+        me.addEvents('storeschanged', 'add', 'remove');
+        me.on('storeschanged', me.onStoresChanged, me);
 
         me.callParent(arguments);
     },
 
     /**
-     * creates all fields for the tab
+     * Creates the `from` grid
+     * @returns { Ext.grid.Panel }
      */
-    getItems:function () {
-        var me = this;
+    createFromGrid: function() {
+        var me = this, grid, toolbar;
 
-        me.ddSelector = Ext.create('Shopware.DragAndDropSelector',{
-            fromTitle: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
-            toTitle: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
-            fromStore: me.articleStore,
-            fromColumns: me.getColumns(),
-            toColumns: me.getColumns(),
-            hideHeaders: false,
-            buttons:[ 'add','remove' ],
-            selectedItems: me.record.getArticles(),
-            fromFieldDockedItems: [ me.getFromToolbar(), me.getFromPagingToolbar() ],
-            toFieldDockedItems: [ me.getToToolbar() ],
-            buttonsText: {
-                add: "{s name=tabs/article_mapping/button_add}Add{/s}",
-                remove: "{s name=tabs/article_mapping/button_remove}Remove{/s}"
-            }
+        grid = Ext.create('Ext.grid.Panel', {
+            internalTitle: 'from',
+            title: '{s name=tabs/article_mapping/available_articles}Available Articles{/s}',
+            flex: 1,
+            store: me.availableProductsStore.load(),
+            selModel: me.createSelectionModel(),
+            viewConfig: { loadMask: false, plugins: me.createGridDragAndDrop() },
+            bbar: me.createPagingToolbar(me.availableProductsStore),
+            columns: me.getColumns()
         });
-        return [me.ddSelector];
-    },
 
-    getFromPagingToolbar: function() {
-        var me = this;
-        return {
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: me.articleStore,
-            dock: 'bottom'
-        };
+        toolbar = me.createSearchToolbar(grid);
+        grid.addDocked(toolbar);
+
+        return grid;
     },
 
     /**
-     * Columns of the left and right grid
+     * Creates the `to` grid
+     * @returns { Ext.grid.Panel }
+     */
+    createToGrid: function() {
+        var me = this, grid, toolbar;
+
+        grid =  Ext.create('Ext.grid.Panel', {
+            internalTitle: 'to',
+            title: '{s name=tabs/article_mapping/mapped_articles}Mapped Articles{/s}',
+            flex: 1,
+            store: me.assignedProductsStore.load(),
+            selModel: me.createSelectionModel(),
+            viewConfig: { loadMask: false, plugins: me.createGridDragAndDrop() },
+            bbar: me.createPagingToolbar(me.assignedProductsStore),
+            columns: me.getColumns()
+        });
+
+        toolbar = me.createSearchToolbar(grid);
+        grid.addDocked(toolbar);
+
+        return grid;
+    },
+
+    /**
+     * Creates the action buttons which are located between the `fromGrid` (on the left side)
+     * and the `toGrid` (on the right side).
+     *
+     * The buttons are placed in an `Ext.container.Container` to apply the necessary layout
+     * on it.
+     *
+     * @returns { Ext.container.Container }
+     */
+    createActionButtons: function() {
+        var me = this;
+
+        me.actionButtons = [];
+        Ext.Array.forEach(me.defaultButtons, function(name) {
+
+            var button = Ext.create('Ext.Button', {
+                tooltip: me.buttonsText[name],
+                cls: Ext.baseCSSPrefix + 'form-itemselector-btn',
+                iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name,
+                action: name,
+                disabled: true,
+                navBtn: true,
+                margin: '4 0 0 0',
+                listeners: {
+                    scope: me,
+                    click: function() {
+                        me.fireEvent(name, me);
+                    }
+                }
+            });
+            me.actionButtons.push(button);
+        });
+
+
+        return Ext.create('Ext.container.Container', {
+            margins: '0 4',
+            items:  me.actionButtons,
+            width: 22,
+            layout: {
+                type: 'vbox',
+                pack: 'center'
+            }
+        });
+    },
+
+    /**
+     * Creates a paging toolbar based of the incoming store
+     *
+     * @param { Ext.data.Store } store
+     * @returns { Ext.toolbar.Paging }
+     */
+    createPagingToolbar: function(store) {
+
+        return Ext.create('Ext.toolbar.Paging', {
+            store: store,
+            displayInfo: true
+        });
+    },
+
+    /**
+     * Creates a toolbar which could be docked to the top of
+     * a grid panel and contains a searchfield to filter
+     * the associated grid panel.
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createSearchToolbar: function(cmp) {
+        var me = this, searchField;
+
+        searchField = Ext.create('Ext.form.field.Text', {
+            name: 'searchfield',
+            dock: 'top',
+            cls: 'searchfield',
+            width: 270,
+            emptyText: 'Search...',
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
+            listeners: {
+                change: function(field, value) {
+                    me.fireEvent('search', value, cmp);
+                }
+            }
+        });
+
+        return Ext.create('Ext.toolbar.Toolbar', {
+            ui: 'shopware-ui',
+            padding: '2 0',
+            items: [ '->', searchField, ' ' ]
+        });
+    },
+
+    /**
+     * Creates the selection model which is used by both grids.
+     *
+     * @returns { Ext.selection.CheckboxModel }
+     */
+    createSelectionModel: function() {
+        return Ext.create('Ext.selection.CheckboxModel');
+    },
+
+    createGridDragAndDrop: function() {
+        return Ext.create('Ext.grid.plugin.DragDrop', {
+            ddGroup: 'category-product-assignment-grid-dd'
+        });
+    },
+
+    /**
+     * Creates the necessary columns for both grids. Please
+     * note that the `name` column has a specific renderer.
+     *
+     * @returns { Array }
      */
     getColumns: function() {
         var me = this;
 
-        return [
-            {
-                header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
-                flex: 1,
-                renderer: me.articleNumberRenderer
-            },
-            {
-                header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
-                flex: 1,
-                dataIndex: 'name'
-            },
-            {
-                header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
-                flex: 1,
-                renderer: me.supplierRenderer
-            }
-        ];
-    },
-
-
-    /**
-     * Renderer function of the articleNumber column of the grid
-     *
-     * @param value
-     * @param record
-     */
-    articleNumberRenderer: function(value, metaData, record) {
-        var detailData = record.getDetail().first();
-        if (detailData) {
-            return detailData.get('number');
-        } else {
-            return 'undefined';
-        }
-    },
-
-
-    /**
-     * Renderer function of the supplier column of the grid
-     *
-     * @param value
-     * @param record
-     */
-    supplierRenderer: function(value, metaData, record) {
-        var supplier = record.getSupplier().first();
-        if (supplier) {
-            return supplier.get('name');
-        } else {
-            return 'undefined';
-        }
+        return [{
+            header: '{s name=tabs/article_mapping/columns/article_number}Article Number{/s}',
+            flex: 1,
+            dataIndex: 'number'
+        }, {
+            header: '{s name=tabs/article_mapping/columns/article_name}Article Name{/s}',
+            flex: 2,
+            dataIndex: 'name',
+            renderer: me.nameColumnRenderer
+        }, {
+            header: '{s name=tabs/article_mapping/columns/supplier_name}Supplier Name{/s}',
+            flex: 1,
+            dataIndex: 'supplierName'
+        }];
     },
 
     /**
-     * Creates the Toolbar for the ddselector to add an searchfield to the left grid
+     * Renders the incoming column value into `strong` tags.
      *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
+     * @param { String } value
+     * @returns { String } formatted string
      */
-    getFromToolbar:function () {
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui:'shopware-ui',
-            items:[
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    action:'searchArticle',
-                    width:170,
-                    cls:'searchfield',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    emptyText:'{s name=tabs/article_mapping/search}Search...{/s}'
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
-        });
+    nameColumnRenderer: function(value) {
+        return Ext.String.format('<strong>[0]</strong>', value);
     },
 
     /**
-     * Creates the Toolbar for the ddselector to add an searchfield to the right grid
+     * Event listener which will be fired when the user selects
+     * an another category in the tree.
      *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
+     * The method reconfigures the stores and reloads them.
+     *
+     * @return { Void }
      */
-    getToToolbar:function () {
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui:'shopware-ui',
-            items:[
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    action:'searchSelectedArticle',
-                    width:170,
-                    cls:'searchfield',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    emptyText:'{s name=tabs/article_mapping/search}Search...{/s}'
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
-        });
+    onStoresChanged: function() {
+        var me = this,
+            fromStore = me.availableProductsStore,
+            toStore = me.assignedProductsStore;
+
+        // Set the new stores
+        me.fromGrid.reconfigure(fromStore);
+        me.toGrid.reconfigure(toStore);
+
+        // Reload the stores
+        me.fromGrid.getStore().load();
+        me.toGrid.getStore().load();
     }
 });
 //{/block}
