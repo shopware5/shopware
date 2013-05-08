@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
 
     collapsed: true,
 
-    title: 'Artikel-Optionen',
+    title: '{s name=accordion-title}Article-Options{/s}',
 
     /**
      * Defines the component region

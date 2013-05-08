@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.canceled-order-main-window',
     layout: 'fit',
-    width: 860,
+    width: 940,
     height: '90%',
     stateful: true,
     stateId: 'shopware-canceledOrders-main-window',
