@@ -82,31 +82,49 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             "<b>Wichtig: </b> Informationen"),
         {
             fieldLabel: 'Aktivieren',
-            name: 'topseller[active]',
+            name: 'topseller[topSellerActive]',
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true
         }, {
             fieldLabel: 'Gültigkeit (in Tagen)',
-            name: 'topseller[days]',
+            name: 'topSeller[topSellerValidationTime]',
             xtype: 'numberfield',
             minValue: 1,
             maxValue: 365
         }, {
-            fieldLabel: 'Berücksichtigte Bestellungen',
-            helpText: 'Anzahl der Bestellungen, die für die Auswertung berücksichtigt werden.',
-            name: 'topseller[orders]',
+            fieldLabel: 'Bestellungen (in Tagen)',
+            helpText: 'Wie viele Tage sollen bei der TopSeller-Berechnung berücksichtigt werden.',
+            name: 'topSeller[chartinterval]', // existing value
             xtype: 'numberfield',
             minValue: 10
         },{
             fieldLabel: 'Strategie',
-            helpText: 'Wie sollen die TopSeller berechnet werden?.<br>' +
-                    'Manuell: Berechnung wird manuell über dieses Modul angestoßen<br>' +
+            helpText: 'Wie sollen die TopSeller berechnet werden?.<br><br>' +
+                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     'CronJob: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
                     'Live: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'topseller[strategy]',
-            xtype: 'combo'
-
+            name: 'topseller[topSellerRefreshStrategy]',
+            xtype: 'combo',
+            valueField: 'id',
+            displayField: 'name',
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'id',    type: 'int' },
+                    { name: 'name',  type: 'string' }
+                ],
+                data : [
+                    { id: 1, name: 'Manuell' },
+                    { id: 2, name: 'CronJob' },
+                    { id: 3, name: 'Live' }
+                ]
+            })
+        },{
+            fieldLabel: 'Pseudosales berücksichtigen',
+            name: 'topseller[topSellerPseudoSales]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
         }];
     }
 

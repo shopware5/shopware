@@ -42,8 +42,6 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
         { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' }
-
-
     ],
 
     /**
