@@ -147,12 +147,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
-        $query = $this->getRepository()->getBackendListQuery(
+        $query = $this->getRepository()->getListQuery(
             $filter,
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
-        )->getQuery();
+        );
 
         $count = Shopware()->Models()->getQueryCount($query);
 
@@ -298,30 +298,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
-
-        $data = $this->getOneOrNullResult($query);
-
+        $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $data["imagePath"] = $data["media"]["path"];
 
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
-
-
-    /**
-     * Helper function to get a one or null result over the pagination extension
-     * @param $query \Doctrine\ORM\Query
-     *
-     * @return array
-     */
-    private function getOneOrNullResult($query)
-    {
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
-
-        return $paginator->getIterator()->getArrayCopy();
-    }
-
 
     /**
      * Returns the whole category path by an category id
@@ -611,6 +592,21 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         ));
     }
 
+    /**
+     * saves the positions of all children of this parent category
+     */
+    public function saveNewChildPositionsAction()
+    {
+        $ids = json_decode($this->Request()->getParam('ids'));
+        foreach ($ids as $key => $categoryId) {
+            /** @var $item \Shopware\Models\Category\Category */
+            $item = $this->getRepository()->find($categoryId);
+            $item->setPosition($key);
+        }
+        Shopware()->Models()->flush();
+
+        $this->View()->assign(array( 'success' => true));
+    }
 
     /**
      * @param $category \Shopware\Models\Category\Category
@@ -674,8 +670,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $categoryId = $categoryModel->getId();
             $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
-
-            $data = $this->getOneOrNullResult($query);
+            $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             $data["imagePath"] = $data["media"]["path"];
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
@@ -780,7 +775,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         if (!empty($data["imagePath"])) {
             $mediaQuery = $this->getMediaRepository()->getMediaByPathQuery($data["imagePath"]);
-            $mediaModel = $this->getOneOrNullResult($mediaQuery);
+            $mediaModel = $mediaQuery->getOneOrNullResult();
             $data["media"] = $mediaModel;
         } else {
             $data["media"] = null;

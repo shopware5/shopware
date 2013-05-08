@@ -252,6 +252,7 @@ class Repository extends ModelRepository
         $builder = $this->createQueryBuilder('c');
         $builder->select(array(
             'c.id as id',
+            'c.active as active',
             'c.name as name',
             'c.position as position',
             'c.parentId as parentId',

@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * The width of this component in pixels.
      * @integer 
      */
-    width: 220,
+    width: 250,
     /**
      * Plugins and plugin configurations
      * @object
@@ -284,8 +284,9 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             columns = [{
                 xtype: 'treecolumn',
                 text: me.snippets.columnCategoryHeader,
-                flex: 2,
+                flex: 3,
                 sortable: false,
+                renderer: me.categoryFolderRenderer,
                 dataIndex: 'text'
             }, {
                 xtype: 'numbercolumn',
@@ -399,6 +400,20 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
 
         );
         return true;
+    },
+
+    /**
+     * category folder renderer
+     *
+     * @param value
+     * @param record
+     * @param metaData
+     */
+    categoryFolderRenderer: function (value, metaData, record) {
+        if(!record.data.active && !record.data.root) {
+            metaData.tdAttr = 'style="opacity:0.4"';
+        }
+        return value;
     }
 });
 //{/block}
