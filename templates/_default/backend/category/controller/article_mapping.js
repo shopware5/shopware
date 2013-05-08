@@ -270,13 +270,10 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
                 //reload the stores for the paging bar information
                 mapping.toGrid.getStore().load({
                     callback:function () {
-                        mapping.fromGrid.getStore().load({
-                             callback: function() {
-                                 mapping.setLoading(false);
-                             }
-                        });
+                        mapping.setLoading(false);
                     }
                 });
+                mapping.fromGrid.getStore().load();
             },
             failure: function(response) {
                 mapping.setLoading(false);

@@ -284,17 +284,10 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             columns = [{
                 xtype: 'treecolumn',
                 text: me.snippets.columnCategoryHeader,
-                flex: 3,
                 sortable: false,
+                flex:1,
                 renderer: me.categoryFolderRenderer,
                 dataIndex: 'text'
-            }, {
-                xtype: 'numbercolumn',
-                text: me.snippets.columnArticleHeader,
-                flex: 1,
-                format: '0',
-                sortable: false,
-                dataIndex: 'articleCount'
             }];
 
         return columns;
