@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Performance', {
     controllers: [
         'Main',
         'Settings',
-        'Cache'
+        'Cache',
+        'MultiRequest'
     ],
 
 
@@ -61,12 +62,12 @@ Ext.define('Shopware.apps.Performance', {
      */
     views:[
         'main.Window',
+        'main.Categories',
+        'main.MultiRequestDialog',
 
         'tabs.cache.Main',
         'tabs.cache.Form',
         'tabs.cache.Info',
-
-        'main.Categories',
 
         'tabs.settings.Main',
         'tabs.settings.fields.Base',

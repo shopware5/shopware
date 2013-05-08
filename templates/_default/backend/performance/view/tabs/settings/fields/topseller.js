@@ -66,23 +66,25 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
 
     },
 
-//        - Init Button
-//    - Aktivieren / Deaktivieren
-//    - Anzahl Tage bis Invalide
-
-//    - Anzahl Tage von Bestellungen die berücksichtigt werden sollen
-//    - Drop Down welche Strategy  (Manuell, CronJob, Live)
-//    - Pseudo Sales berücksichtigen (ja / nein)
     getItems: function() {
         var me = this;
 
         return [
             me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
-            "<br>" +
-            "<b>Wichtig: </b> Informationen"),
+                "<br>" +
+                "<b>Wichtig: </b> Informationen"),
+
         {
+            xtype: 'button',
+            cls: 'small primary',
+            margin: '0 0 10 0',
+            text: 'Init TopSeller',
+            handler: function() {
+                me.fireEvent('showMultiRequestDialog', 'topseller', me);
+            }
+        },{
             fieldLabel: 'Aktivieren',
-            name: 'topseller[topSellerActive]',
+            name: 'topSeller[topSellerActive]',
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true
@@ -104,9 +106,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     'CronJob: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
                     'Live: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'topseller[topSellerRefreshStrategy]',
+            name: 'topSeller[topSellerRefreshStrategy]',
             xtype: 'combo',
             valueField: 'id',
+            editable: false,
             displayField: 'name',
             store: Ext.create('Ext.data.Store', {
                 fields: [
@@ -121,7 +124,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             })
         },{
             fieldLabel: 'Pseudosales berücksichtigen',
-            name: 'topseller[topSellerPseudoSales]',
+            name: 'topSeller[topSellerPseudoSales]',
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true

@@ -72,6 +72,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         ));
     }
 
+    /**
+     * Iterates the given data array and persists all config variables
+     * @param $data
+     */
     public function saveConfigData($data)
     {
         foreach ($data as $values) {
@@ -81,14 +85,38 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
     }
 
+    /**
+     * General helper method which triggers the prepare...ConfigForSaving methods
+     *
+     * @param $data
+     * @return array
+     */
     public function prepareDataForSaving($data)
     {
         $output = array();
         $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
+        $output['topSeller'] = $this->prepareTopSellerConfigForSaving($data['topSeller'][0]);
 
         return $output;
     }
 
+    /**
+     * Prepare the TopSeller config array for storage
+     * @param $data
+     * @return mixed
+     */
+    public function prepareTopSellerConfigForSaving($data)
+    {
+        unset($data['id']);
+
+        return $data;
+    }
+
+    /**
+     * Prepare the http config array so that it can easily be saved
+     * @param $data
+     * @return mixed
+     */
     public function prepareHttpCacheConfigForSaving($data)
     {
         $lines = array();
@@ -128,9 +156,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $values = array();
         // Do not save default value
         if ($value !== $element->getValue()) {
-            error_log($element->getName() . "=>".$value);
-            error_log($shop->getName());
-
             $valueModel = new Shopware\Models\Config\Value();
             $valueModel->setElement($element);
             $valueModel->setShop($shop);
