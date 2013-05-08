@@ -37,7 +37,6 @@
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Stores a list of all needed config data
      * @var array
@@ -54,6 +53,93 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $this->configData = $this->prepareConfigData();
 
         parent::init();
+    }
+
+    /**
+     * This action creates/updates the configuration
+     */
+    public function saveConfigAction()
+    {
+        
+        $data = $this->Request()->getParams();
+
+        $data = $this->prepareDataForSaving($data);
+        $this->saveConfigData($data);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
+    }
+
+    public function saveConfigData($data)
+    {
+        foreach ($data as $values) {
+            foreach ($values as $configKey => $value) {
+                $this->saveConfig($configKey, $value);
+            }
+        }
+    }
+
+    public function prepareDataForSaving($data)
+    {
+        $output = array();
+        $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
+
+        return $output;
+    }
+
+    public function prepareHttpCacheConfigForSaving($data)
+    {
+        $lines = array();
+        foreach ($data['cacheControllers'] as $entry) {
+            $lines[] = $entry['key'] . ' ' . $entry['value'];
+        }
+        $data['cacheControllers'] = implode("\n", $lines);
+
+        $lines = array();
+        foreach ($data['noCacheControllers'] as $entry) {
+            $lines[] = $entry['key'] . ' ' . $entry['value'];
+        }
+        $data['noCacheControllers'] = implode("\n", $lines);
+
+        unset($data['id']);
+
+        return $data;
+
+    }
+
+    /**
+     * Helper method to persist a given config value
+     */
+    public function saveConfig($name, $value)
+    {
+        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
+
+        $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+
+        /** @var $element Shopware\Models\Config\Element */
+        $element = $elementRepository->findOneBy(array('name' => $name));
+        foreach ($element->getValues() as $valueModel) {
+            Shopware()->Models()->remove($valueModel);
+        }
+
+        $values = array();
+        // Do not save default value
+        if ($value !== $element->getValue()) {
+            error_log($element->getName() . "=>".$value);
+            error_log($shop->getName());
+
+            $valueModel = new Shopware\Models\Config\Value();
+            $valueModel->setElement($element);
+            $valueModel->setShop($shop);
+            $valueModel->setValue($value);
+            $values[$shop->getId()] = $valueModel;
+        }
+
+        $element->setValues($values);
+        Shopware()->Models()->flush($element);
     }
 
     /**

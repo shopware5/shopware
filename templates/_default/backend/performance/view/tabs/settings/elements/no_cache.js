@@ -38,22 +38,16 @@
 //{block name="backend/performance/view/tabs/settings/elements/no_cache"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
     /**
-     * Extend from the standard ExtJS 4
+     * Extend from our base grid
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend:'Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
     alias:'widget.performance-tabs-settings-elements-no-cache',
-
-    /**
-     * The view needs to be scrollable
-     * @string
-     */
-    autoScroll: true,
 
     /**
      * Desciptive title for the grid
@@ -69,10 +63,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
         var me = this;
 
         me.columns = me.getColumns();
-        me.toolbar = me.getToolbar();
-        me.dockedItems = [ me.toolbar];
+
         me.callParent(arguments);
     },
+
 
     /**
      * Registers the "openOrder" event which is fired when
@@ -95,14 +89,22 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
 
         return [
             {
-                header: 'controller',
+                header: 'Controller',
                 dataIndex: 'key',
-                flex: 2
+                flex: 2,
+                editor: {
+                    allowBlank: false,
+                    enableKeyEvents:true
+                }
             },
             {
-                header: 'tag',
+                header: 'Tag',
                 dataIndex: 'value',
-                flex: 1
+                flex: 1,
+                editor: {
+                    allowBlank: false,
+                    enableKeyEvents:true
+                }
             },
             {
                 /**
@@ -123,35 +125,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                          */
                         handler:function (view, rowIndex, colIndex, item) {
                             var store = view.getStore(),
-                                    record = store.getAt(rowIndex);
+                                record = store.getAt(rowIndex);
 
-                            me.fireEvent('deleteRow', record);
+                            store.remove(record);
                         }
                     }
                 ]
             }
         ];
 
-    },
-
-    /**
-     * Creates the grid toolbar with the add and delete button
-     *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
-     */
-    getToolbar:function () {
-        var me = this;
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui: 'shopware-ui',
-            items:[
-                {
-                    iconCls: 'sprite-plus-circle-frame',
-                    text: 'Add new line',
-                    action: 'add-cache-controller'
-                }
-            ]
-        });
     }
 
 });

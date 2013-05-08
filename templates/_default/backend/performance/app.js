@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Performance', {
      */
     controllers: [
         'Main',
+        'Settings',
         'Cache'
     ],
 
@@ -74,6 +75,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.CrossSelling',
         'tabs.settings.HttpCache',
 
+        'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
         'tabs.settings.elements.NoCache'
     ],
