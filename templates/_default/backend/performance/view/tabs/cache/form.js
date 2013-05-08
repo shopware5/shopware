@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     autoScroll: true,
     bodyPadding: 10,
 
-    url: '{url action=clearCache}',
+    url: '{url controller=Cache action=clearCache}',
     waitMsg: '{s name=form/wait_message}Cache is cleared ...{/s}',
     waitMsgTarget: true,
     submitEmptyText: false,

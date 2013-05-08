@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.Base',
         'tabs.settings.Seo',
         'tabs.settings.Topseller',
-        'tabs.settings.CrossSelling',
+        'tabs.settings.Search',
         'tabs.settings.HttpCache',
 
         'tabs.settings.elements.BaseGrid',

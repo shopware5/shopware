@@ -33,8 +33,8 @@
 /**
  * SEO fieldSet for
  */
-//{block name="backend/performance/view/tabs/settings/cross_selling"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.CrossSelling', {
+//{block name="backend/performance/view/tabs/settings/search"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.Search', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
@@ -45,12 +45,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.CrossSelling', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-cross-selling',
+    alias:'widget.performance-tabs-settings-search',
 
     /**
      * Description of the fieldSet
      */
-    title: '{s name=tabs/settings/cross_selling/title}Cross-Selling{/s}',
+    title: '{s name=tabs/settings/search/title}Search{/s}',
 
     /**
      * Component event method which is fired when the component
