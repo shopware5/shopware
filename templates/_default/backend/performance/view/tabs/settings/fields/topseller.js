@@ -61,7 +61,53 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
     initComponent:function () {
         var me = this;
 
+        me.items = me.getItems();
         me.callParent(arguments);
+
+    },
+
+//        - Init Button
+//    - Aktivieren / Deaktivieren
+//    - Anzahl Tage bis Invalide
+
+//    - Anzahl Tage von Bestellungen die berücksichtigt werden sollen
+//    - Drop Down welche Strategy  (Manuell, CronJob, Live)
+//    - Pseudo Sales berücksichtigen (ja / nein)
+    getItems: function() {
+        var me = this;
+
+        return [
+            me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
+            "<br>" +
+            "<b>Wichtig: </b> Informationen"),
+        {
+            fieldLabel: 'Aktivieren',
+            name: 'topseller[active]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
+        }, {
+            fieldLabel: 'Gültigkeit (in Tagen)',
+            name: 'topseller[days]',
+            xtype: 'numberfield',
+            minValue: 1,
+            maxValue: 365
+        }, {
+            fieldLabel: 'Berücksichtigte Bestellungen',
+            helpText: 'Anzahl der Bestellungen, die für die Auswertung berücksichtigt werden.',
+            name: 'topseller[orders]',
+            xtype: 'numberfield',
+            minValue: 10
+        },{
+            fieldLabel: 'Strategie',
+            helpText: 'Wie sollen die TopSeller berechnet werden?.<br>' +
+                    'Manuell: Berechnung wird manuell über dieses Modul angestoßen<br>' +
+                    'CronJob: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
+                    'Live: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+            name: 'topseller[strategy]',
+            xtype: 'combo'
+
+        }];
     }
 
 
