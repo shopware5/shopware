@@ -496,6 +496,15 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                         uncheckedValue: 0,
                                         inputValue: 1,
                                         supportText: '{s name=create_user/checkbox_extended_editor_info}Enable or disable extended editor{/s}'
+                                    },
+                                    {
+                                        xtype: 'checkbox',
+                                        name: 'disabledCache',
+                                        boxLabel: '{s name=create_user/checkbox_disabled_cache}Disabled cache{/s}',
+                                        anchor: '100%',
+                                        uncheckedValue: 0,
+                                        inputValue: 1,
+                                        supportText: '{s name=create_user/checkbox_disabled_cache_info}Enable or disable backend-cache{/s}'
                                     }
                                  ]
                             },
