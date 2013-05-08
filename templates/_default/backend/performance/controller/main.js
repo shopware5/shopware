@@ -76,21 +76,23 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
         me.getStore('Config').load(function (records) {
             var storeData = records[0];
 
-            me.configStore = storeData;
-            me.injectSettingStores();
+            me.injectSettingStores(storeData);
         });
 
     },
 
     /**
      * Helper method to inject the config stores into the settings tab
+     * @param Ext.data.Store
      */
-    injectSettingStores: function() {
+    injectSettingStores: function(storeData) {
         var me = this;
 
+        me.configStore = storeData;
+
         me.getSettings().loadRecord(me.configStore);
-        me.getCacheTime().bindStore(me.configStore.getHttpCache().first().getCacheControllers());
-        me.getNoCache().bindStore(me.configStore.getHttpCache().first().getNoCacheControllers());
+        me.getCacheTime().reconfigure(me.configStore.getHttpCache().first().getCacheControllers());
+        me.getNoCache().reconfigure(me.configStore.getHttpCache().first().getNoCacheControllers());
     }
 
 

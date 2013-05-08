@@ -91,7 +91,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
         }, {
             fieldLabel: 'Proxy-BAN aktivieren',
             name: 'httpCache[proxyBan]',
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
         }, {
             fieldLabel: 'Alternative Proxy-Url',
             name: 'httpCache[proxy]',
@@ -99,7 +101,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
         }, {
             fieldLabel: 'Admin-View',
             name: 'httpCache[admin]',
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
         }];
 
     }

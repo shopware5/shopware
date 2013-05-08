@@ -49,6 +49,40 @@ Ext.define('Shopware.apps.Performance.model.Config', {
         { name:'id', type:'int' }
     ],
 
+
+    /**
+     * Configure the data communication
+     * @object
+     */
+    proxy:{
+        /**
+         * Set proxy type to ajax
+         * @string
+         */
+        type:'ajax',
+
+        /**
+         * Configure the url mapping for the different
+         * store operations based on
+         * @object
+         */
+        api:{
+            update:'{url action="saveConfig"}',
+            create:'{url action="saveConfig"}'
+        },
+
+        /**
+         * Configure the data reader
+         * @object
+         */
+        reader:{
+            type:'json',
+            root:'data',
+            totalProperty:'total'
+        }
+
+    },
+
     /**
      * Define the associations of the customer model.
      * One customer has a billing, shipping address and a debit information.
