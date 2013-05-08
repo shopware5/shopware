@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.controller.Direct', {
             action = me.subApplication.action;
 
         Ext.Ajax.request({
-            url: '{url action=clearDirect}?cache=' + action,
+            url: '{url controller=Cache action=clearDirect}?cache=' + action,
             success: function() {
                 Shopware.Notification.createGrowlMessage(
                     me.infoTitle,

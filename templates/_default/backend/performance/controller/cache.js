@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         me.getView('main.Categories').create().show();
 
         Ext.Ajax.request({
-            url: '{url action=prepareTree}',
+            url: '{url controller=Cache action=prepareTree}',
             success: function(response) {
                 var json = Ext.decode(response.responseText);
                 me.totalCount = json.total;
@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         progressBar.updateProgress((index+batchSize)/count, Ext.String.format(me.snippets.process, (index+batchSize), count), true);
 
         Ext.Ajax.request({
-            url: '{url action=fixCategories}',
+            url: '{url controller=Cache action=fixCategories}',
             method: 'POST',
             params: {
                 offset: index,

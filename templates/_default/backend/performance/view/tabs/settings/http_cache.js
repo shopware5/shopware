@@ -54,10 +54,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
 
     layout: 'anchor',
 
-    /**
-     * Expand this fieldSet
-     */
-    collapsed: false,
 
     /**
      * Component event method which is fired when the component
