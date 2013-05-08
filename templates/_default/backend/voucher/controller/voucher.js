@@ -246,6 +246,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
     onDeleteSingleVoucher:function (grid, rowIndex) {
         var me = this,
                 store = grid.getStore(),
+                voucherGrid = me.getGrid(),
                 record = store.getAt(rowIndex);
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(
@@ -254,14 +255,25 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
             if (response !== 'yes') {
                 return false;
             }
+
+            voucherGrid.setLoading(true);
             store.remove(record);
             try {
-                store.save();
-                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleVoucherSuccess, me.snippets.growlMessage);
+                store.save({
+                    callback: function (batch) {
+                        var rawData = batch.proxy.getReader().rawData;
+                        if (rawData.success === true) {
+                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleVoucherSuccess, me.snippets.growlMessage);
+                        }
+                        voucherGrid.setLoading(false);
+                        store.load();
+
+                    }
+                });
             } catch (e) {
                 Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleVoucherError + e.message, me.snippets.growlMessage);
             }
-            store.load();
+
         });
 
     },
@@ -286,19 +298,21 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
             if (response !== 'yes') {
                 return false;
             }
-            if (selection.length > 0) {
+            if (selection.length > 0)
+                grid.setLoading(true);{
                 store.remove(selection);
-                try {
-                    store.save();
-                    store.load({
-                        scope:this,
-                        callback:function () {
+                store.save({
+                    callback: function(batch) {
+                        var rawData = batch.proxy.getReader().rawData;
+                        if (rawData.success === true) {
                             Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleVoucherSuccess, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleVoucherError + rawData.errorMsg, me.snippets.growlMessage);
                         }
-                    });
-                } catch (e) {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleVoucherError + e.message, me.snippets.growlMessage);
-                }
+                        grid.setLoading(false);
+                        store.load();
+                    }
+                });
             }
         })
     },
