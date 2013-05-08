@@ -46,7 +46,6 @@ Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
     height: '90%',
     autoScroll:true,
     width: 905,
-    modal: true,
     /**
      * Display no footer button for the detail window
      * @boolean

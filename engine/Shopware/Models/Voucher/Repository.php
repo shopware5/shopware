@@ -152,6 +152,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->delete('Shopware\Models\Voucher\Code', 'code')
                 ->where('code.voucherId = ?1')
+                ->setMaxResults(10000)
                 ->setParameter(1, $voucherId);
         return $builder;
     }
