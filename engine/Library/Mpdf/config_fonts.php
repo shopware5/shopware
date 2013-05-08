@@ -44,17 +44,16 @@ To aid backwards compatability some are included:
 */
 $this->fonttrans = array(
 	'helvetica' => 'arial',
+	'verdana' => 'arial',
 	'times' => 'timesnewroman',
 	'courier' => 'couriernew',
-	'trebuchet' => 'trebuchetms',
-	'comic' => 'comicsansms',
-	'franklin' => 'franklingothicbook',
-	'albertus' => 'albertusmedium',
-	'arialuni' => 'arialunicodems',
-	'zn_hannom_a' => 'hannoma',
+	'trebuchet' => 'arial',
+	'comic' => 'arial',
+	'franklin' => 'arial',
+	'albertus' => 'arial',
+	'arialuni' => 'arial',
+	'zn_hannom_a' => 'arial',
 	'ocr-b' => 'ocrb',
-	'ocr-b10bt' => 'ocrb',
-
 
 );
 
@@ -92,178 +91,36 @@ starting at 1, as they appear in the .ttc file e.g.
 */
 
 $this->fontdata = array(
-	"dejavusanscondensed" => array(
-		'R' => "DejaVuSansCondensed.ttf",
-		'B' => "DejaVuSansCondensed-Bold.ttf",
-		'I' => "DejaVuSansCondensed-Oblique.ttf",
-		'BI' => "DejaVuSansCondensed-BoldOblique.ttf",
+	"arial" => array(
+		'R' => "arial.ttf",
+		'B' => "arialbd.ttf",
+		'I' => "ariali.ttf",
+		'BI' => "arialbi.ttf",
 		),
-	"dejavusans" => array(
-		'R' => "DejaVuSans.ttf",
-		'B' => "DejaVuSans-Bold.ttf",
-		'I' => "DejaVuSans-Oblique.ttf",
-		'BI' => "DejaVuSans-BoldOblique.ttf",
+	"couriernew" => array(
+		'R' => "cour.ttf",
+		'B' => "courbd.ttf",
+		'I' => "couri.ttf",
+		'BI' => "courbi.ttf",
 		),
-	"dejavuserif" => array(
-		'R' => "DejaVuSerif.ttf",
-		'B' => "DejaVuSerif-Bold.ttf",
-		'I' => "DejaVuSerif-Italic.ttf",
-		'BI' => "DejaVuSerif-BoldItalic.ttf",
+	"georgia" => array(
+		'R' => "georgia.ttf",
+		'B' => "georgiab.ttf",
+		'I' => "georgiai.ttf",
+		'BI' => "georgiaz.ttf",
 		),
-	"dejavuserifcondensed" => array(
-		'R' => "DejaVuSerifCondensed.ttf",
-		'B' => "DejaVuSerifCondensed-Bold.ttf",
-		'I' => "DejaVuSerifCondensed-Italic.ttf",
-		'BI' => "DejaVuSerifCondensed-BoldItalic.ttf",
+	"timesnewroman" => array(
+		'R' => "times.ttf",
+		'B' => "timesbd.ttf",
+		'I' => "timesi.ttf",
+		'BI' => "timesbi.ttf",
 		),
-	"dejavusansmono" => array(
-		'R' => "DejaVuSansMono.ttf",
-		'B' => "DejaVuSansMono-Bold.ttf",
-		'I' => "DejaVuSansMono-Oblique.ttf",
-		'BI' => "DejaVuSansMono-BoldOblique.ttf",
-		),
-
-
-/* OCR-B font for Barcodes */
-	"ocrb" => array(
-		'R' => "ocrb10.ttf",
-		),
-
-/* Thai fonts */
-	"garuda" => array(
-		'R' => "Garuda.ttf",
-		'B' => "Garuda-Bold.ttf",
-		'I' => "Garuda-Oblique.ttf",
-		'BI' => "Garuda-BoldOblique.ttf",
-		),
-	"norasi" => array(
-		'R' => "Norasi.ttf",
-		'B' => "Norasi-Bold.ttf",
-		'I' => "Norasi-Oblique.ttf",
-		'BI' => "Norasi-BoldOblique.ttf",
-		),
-
-
-/* Indic fonts */
-	"ind_bn_1_001" => array(
-		'R' => "ind_bn_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_hi_1_001" => array(
-		'R' => "ind_hi_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_ml_1_001" => array(
-		'R' => "ind_ml_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_kn_1_001" => array(
-		'R' => "ind_kn_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_gu_1_001" => array(
-		'R' => "ind_gu_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_or_1_001" => array(
-		'R' => "ind_or_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_ta_1_001" => array(
-		'R' => "ind_ta_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_te_1_001" => array(
-		'R' => "ind_te_1_001.ttf",
-		'indic' => true,
-		),
-	"ind_pa_1_001" => array(
-		'R' => "ind_pa_1_001.ttf",
-		'indic' => true,
-		),
-
-
-/* XW Zar Arabic fonts */
-	"xbriyaz" => array(
-		'R' => "XB Riyaz.ttf",
-		'B' => "XB RiyazBd.ttf",
-		'I' => "XB RiyazIt.ttf",
-		'BI' => "XB RiyazBdIt.ttf",
-		'unAGlyphs' => true,
-		),
-	"xbzar" => array(
-		'R' => "XB Zar.ttf",
-		'B' => "XB Zar Bd.ttf",
-		'I' => "XB Zar It.ttf",
-		'BI' => "XB Zar BdIt.ttf",
-		'unAGlyphs' => true,
-		),
-
-
-
-
-/* Examples of some CJK fonts */
-/*
-	"unbatang_0613" => array(
-		'R' => "UnBatang_0613.ttf",
-		),
-	"sun-exta" => array(
-		'R' => "Sun-ExtA.ttf",
-		'sip-ext' => 'sun-extb',
-		),
-	"sun-extb" => array(
-		'R' => "Sun-ExtB.ttf",
-		),
-	"hannoma" => array(
-		'R' => "HAN NOM A.ttf",
-		'sip-ext' => 'hannomb',	
-		),
-	"hannomb" => array(
-		'R' => "HAN NOM B.ttf",
-		),
-
-
-	'mingliu' => array (
-		'R' => 'mingliu.ttc',
-		'TTCfontID' => array (
-			'R' => 1,
-		),
-		'sip-ext' => 'mingliu-extb',
-	),
-	'pmingliu' => array (
-		'R' => 'mingliu.ttc',
-		'TTCfontID' => array (
-			'R' => 2,
-		),
-		'sip-ext' => 'pmingliu-extb',
-	),
-	'mingliu_hkscs' => array (
-		'R' => 'mingliu.ttc',
-		'TTCfontID' => array (
-			'R' => 3,
-		),
-		'sip-ext' => 'mingliu_hkscs-extb',
-	),
-	'mingliu-extb' => array (
-		'R' => 'mingliub.ttc',
-		'TTCfontID' => array (
-			'R' => 1,
-		),
-	),
-	'pmingliu-extb' => array (
-		'R' => 'mingliub.ttc',
-		'TTCfontID' => array (
-			'R' => 2,
-		),
-	),
-	'mingliu_hkscs-extb' => array (
-		'R' => 'mingliub.ttc',
-		'TTCfontID' => array (
-			'R' => 3,
-		),
-	),
-*/
-
+	"verdana" => array(
+		'R' => "verdana.ttf",
+		'B' => "verdanab.ttf",
+		'I' => "verdanai.ttf",
+		'BI' => "verdanaz.ttf",
+		)
 );
 
 
@@ -287,14 +144,14 @@ $this->BMPonly = array(
 $this->sans_fonts = array('dejavusanscondensed','dejavusans','freesans','liberationsans','sans','sans-serif','cursive','fantasy', 
 				'arial','helvetica','verdana','geneva','lucida','arialnarrow','arialblack','arialunicodems',
 				'franklin','franklingothicbook','tahoma','garuda','calibri','trebuchet','lucidagrande','microsoftsansserif',
-				'trebuchetms','lucidasansunicode','franklingothicmedium','albertusmedium','xbriyaz','albasuper','quillscript'
+				'trebuchetms','lucidasansunicode','franklingothicmedium','albertusmedium','xbriyaz'
 
 );
 
 $this->serif_fonts = array('dejavuserifcondensed','dejavuserif','freeserif','liberationserif','serif',
-				'timesnewroman','times','centuryschoolbookl','palatinolinotype','centurygothic',
+				'times','timesnewroman','centuryschoolbookl','palatinolinotype','centurygothic',
 				'bookmanoldstyle','bookantiqua','cyberbit','cambria',
-				'norasi','charis','palatino','constantia','georgia','albertus','xbzar','algerian','garamond',
+				'norasi','charis','palatino','constantia','georgia','albertus','xbzar'
 );
 
 $this->mono_fonts = array('dejavusansmono','freemono','liberationmono','courier', 'mono','monospace','ocrb','ocr-b','lucidaconsole',
