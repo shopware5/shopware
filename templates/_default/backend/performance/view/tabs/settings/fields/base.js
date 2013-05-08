@@ -31,39 +31,65 @@
 //{namespace name=backend/performance/main}
 
 /**
- * SEO fieldSet for
+ * Default fieldSet which is extended by all other fieldSets in this module
+ *
  */
-//{block name="backend/performance/view/tabs/settings/seo"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.Seo', {
+//{block name="backend/performance/view/tabs/settings/fields/base"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
     /**
-     * Define that the base field set is an extension of the "Base" fieldSet
+     * Define that the base field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.Base',
-
+    extend:'Ext.form.FieldSet',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-seo',
+    alias:'widget.performance-tabs-settings-base',
 
     /**
-     * Description of the fieldSet
+     * Layout type for the component.
+     * @string
      */
-    title: '{s name=tabs/settings/seo/title}SEO{/s}',
+    layout: 'column',
 
     /**
-     * Component event method which is fired when the component
-     * is initials. The component is initials when the user
-     * want to create a new customer or edit an existing customer
-     * @return void
+     * Make the fieldSets collapsible
      */
-    initComponent:function () {
-        var me = this;
+    collapsible: true,
+    collapsed: true,
 
-        me.callParent(arguments);
+    /**
+     * Layout
+     */
+    layout: 'anchor',
+
+    /**
+     * Default settings for the child elements
+     */
+    defaults: {
+        labelWidth: 155,
+        labelStyle: 'font-weight: 700;',
+        anchor: '100%'
+    },
+
+
+    /**
+     * Required minimum width of the fieldSet
+     */
+    minWidth:250,
+
+    /**
+     * Helper method to create a descriptive text
+     * @param html
+     * @returns Ext.container.Container
+     */
+    createDecriptionContainer: function(html) {
+        return  Ext.create('Ext.container.Container', {
+            style: 'color: #999; font-style: italic; margin: 0 0 15px 0;',
+            html: html
+        });
     }
-
 
 });
 //{/block}
