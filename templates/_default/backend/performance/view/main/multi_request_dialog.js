@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                 this.hide();
                 me.cancelButton.show();
                 me.closeButton.disable();
-                me.fireEvent('multiRequestDialogStartProcess');
+                me.fireEvent('multiRequestDialogStartProcess', me);
             }
         });
     },
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             hidden: true,
             handler: function() {
                 this.disable();
-                me.fireEvent('multiRequestDialogCancelProcess');
+                me.fireEvent('multiRequestDialogCancelProcess', me);
             }
         });
     },
