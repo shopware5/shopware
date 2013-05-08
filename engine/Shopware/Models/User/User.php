@@ -170,6 +170,13 @@ class User extends ModelEntity
     private $extendedEditor = false;
 
     /**
+     * @var boolean $disabledCache
+     *
+     * @ORM\Column(name="disabled_cache", type="boolean", nullable=false)
+     */
+    private $disabledCache = false;
+
+    /**
      * The role property is the owning side of the association between user and role.
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
@@ -505,6 +512,25 @@ class User extends ModelEntity
     public function getExtendedEditor()
     {
         return $this->extendedEditor;
+    }
+
+    /**
+     * @param boolean $disabledCache
+     * @return User
+     */
+    public function setDisabledCache($disabledCache)
+    {
+        $this->disabledCache = (bool) $disabledCache;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDisabledCache()
+    {
+        return $this->disabledCache;
     }
 
     /**
