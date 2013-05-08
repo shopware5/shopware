@@ -31,65 +31,39 @@
 //{namespace name=backend/performance/main}
 
 /**
- * Default fieldSet which is extended by all other fieldSets in this module
- *
+ * SEO fieldSet for
  */
-//{block name="backend/performance/view/tabs/settings/base"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.Base', {
+//{block name="backend/performance/view/tabs/settings/fields/topseller"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
     /**
-     * Define that the base field set is an extension of the Ext.form.FieldSet
+     * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-base',
+    alias:'widget.performance-tabs-settings-topseller',
 
     /**
-     * Layout type for the component.
-     * @string
+     * Description of the fieldSet
      */
-    layout: 'column',
+    title: '{s name=tabs/settings/topseller/title}Topseller{/s}',
 
     /**
-     * Make the fieldSets collapsible
+     * Component event method which is fired when the component
+     * is initials. The component is initials when the user
+     * want to create a new customer or edit an existing customer
+     * @return void
      */
-    collapsible: true,
-    collapsed: true,
+    initComponent:function () {
+        var me = this;
 
-    /**
-     * Layout
-     */
-    layout: 'anchor',
-
-    /**
-     * Default settings for the child elements
-     */
-    defaults: {
-        labelWidth: 155,
-        labelStyle: 'font-weight: 700;',
-        anchor: '100%'
-    },
-
-
-    /**
-     * Required minimum width of the fieldSet
-     */
-    minWidth:250,
-
-    /**
-     * Helper method to create a descriptive text
-     * @param html
-     * @returns Ext.container.Container
-     */
-    createDecriptionContainer: function(html) {
-        return  Ext.create('Ext.container.Container', {
-            style: 'color: #999; font-style: italic; margin: 0 0 15px 0;',
-            html: html
-        });
+        me.callParent(arguments);
     }
+
 
 });
 //{/block}

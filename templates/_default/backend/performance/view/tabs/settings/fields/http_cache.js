@@ -33,13 +33,13 @@
 /**
  * SEO fieldSet for
  */
-//{block name="backend/performance/view/tabs/settings/http_cache"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.HttpCache', {
+//{block name="backend/performance/view/tabs/settings/fields/http_cache"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.Base',
+    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
