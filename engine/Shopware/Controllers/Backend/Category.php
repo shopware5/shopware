@@ -147,12 +147,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
-        $query = $this->getRepository()->getListQuery(
+        $query = $this->getRepository()->getBackendListQuery(
             $filter,
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
-        );
+        )->getQuery();
 
         $count = Shopware()->Models()->getQueryCount($query);
 
@@ -274,16 +274,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if (!($article instanceof \Shopware\Models\Article\Article)) {
                 continue;
             }
-
-            if ($category->getArticles()->contains($article)) {
-                continue;
-            }
-            $category->getArticles()->add($article);
+            $this->createAssignment($category, $article);
             $counter++;
         }
 
-        Shopware()->Models()->persist($category);
-        Shopware()->Models()->flush();
         return array('success' => true, 'counter' => $counter);
     }
 

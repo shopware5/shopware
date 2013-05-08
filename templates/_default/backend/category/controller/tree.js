@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         moveCategorySuccess : '{s name=tree/move_success}Category has been moved.{/s}',
         moveCategoryFailure : '{s name=tree/move_failure}Category could not be moved.{/s}',
         confirmDeleteCategoryTitle   : '{s name=tree/delete_confirmation_title}Are you sure you want to delete the category?{/s}',
-        confirmDeleteCategory   : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?. There are [1] article(s) assigned to this category.{/s}',
+        confirmDeleteCategory   : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
         confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
         deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         mainWindow.setLoading(true);
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteCategoryHeadline,
-            Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text'), selection[0].get('articleCount') ),
+            Ext.String.format(me.snippets.confirmDeleteCategory, selection[0].get('text')),
             function (response) {
                 if (response !== 'yes') {
                     mainWindow.setLoading(false);
