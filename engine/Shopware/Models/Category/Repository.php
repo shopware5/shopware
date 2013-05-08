@@ -26,6 +26,8 @@ namespace Shopware\Models\Category;
 
 use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query;
+use Shopware\Components\Model\Query\SqlWalker;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -331,8 +333,6 @@ class Repository extends ModelRepository
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
                 ->andWhere('c.active=1')
-                ->addOrderBy('c.parentId')
-                ->addOrderBy('c.position')
                 ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
 
         $builder = $this->addArticleCountSelect($builder, true);
@@ -341,9 +341,16 @@ class Repository extends ModelRepository
         if (isset($customerGroupId)) {
             $builder->leftJoin('c.customerGroups', 'cg', 'with', 'cg.id = :cgId')
                     ->setParameter('cgId', $customerGroupId)
-                    ->andHaving('COUNT(cg.id) = 0')
-                    ->groupBy('c.id');
+                    ->andHaving('COUNT(cg.id) = 0');
         }
+
+        //to prevent a temporary table and file sort we have to set the same sort and group by condition
+        $builder->groupBy('c.parentId')
+            ->addGroupBy('c.position')
+            ->addGroupBy('c.id')
+            ->orderBy('c.parentId', 'ASC')
+            ->addOrderBy('c.position', 'ASC')
+            ->addOrderBy('c.id', 'ASC');
 
         return $builder;
     }
@@ -409,10 +416,10 @@ class Repository extends ModelRepository
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id)
-                ->addOrderBy('c.position', 'ASC');
+                ->setParameter('parent', $id);
 
-        $children = $builder->getQuery()->getArrayResult();
+        $query = $builder->getQuery();
+        $children = $query->getArrayResult();
         $categories = array();
         $depth--;
 
@@ -448,8 +455,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-                ->setParameter('parent', $id)
-                ->addOrderBy('c.position', 'ASC');
+            ->setParameter('parent', $id)
+            ->addOrderBy('c.position', 'ASC');
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();
@@ -469,7 +476,6 @@ class Repository extends ModelRepository
         }
         return $categories;
     }
-
     /**
      * Returns first active articleId for given category
      *
