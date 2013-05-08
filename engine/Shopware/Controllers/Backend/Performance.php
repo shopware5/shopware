@@ -149,7 +149,19 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     protected function prepareConfigData()
     {
         return array(
-            'httpCache' => $this->prepareHttpCacheConfig()
+            'httpCache' => $this->prepareHttpCacheConfig(),
+            'topSeller' => $this->prepareTopSellerConfig(),
+        );
+    }
+
+    protected function prepareTopSellerConfig()
+    {
+        return array(
+            'topSellerActive'           => (int) Shopware()->Config()->topSellerActive,
+            'topSellerValidationTime'   => (int) Shopware()->Config()->topSellerValidationTime,
+            'chartinterval'             => (int) Shopware()->Config()->chartinterval,
+            'topSellerRefreshStrategy'  => Shopware()->Config()->topSellerRefreshStrategy,
+            'topSellerPseudoSales'      => (int) Shopware()->Config()->topSellerPseudoSales
         );
     }
 
