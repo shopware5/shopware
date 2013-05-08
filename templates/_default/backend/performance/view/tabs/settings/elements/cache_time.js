@@ -31,9 +31,7 @@
 //{namespace name=backend/performance/main}
 
 /**
- * Shopware UI - Customer list backend module
- *
- * todo@all: Documentation
+ * The cache time grid which allows the user to define cache times for each controller action
  */
 //{block name="backend/performance/view/tabs/settings/elements/cache_time"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {

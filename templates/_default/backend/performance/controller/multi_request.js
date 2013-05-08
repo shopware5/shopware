@@ -39,6 +39,18 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     extend: 'Enlight.app.Controller',
 
     /**
+     * Contains all snippets for the component
+     * @object
+     */
+    snippets: {
+        process: '{s name=request/process}[0] out of [1] items processed{/s}',
+        done: {
+            message: '{s name=request/done_message}Operation finished{/s}',
+            title: '{s name=request/done_title}Successful{/s}'
+        }
+    },
+
+    /**
      * Indicates if the operations should be canceled after the next request
      */
     cancelOperation: false,
@@ -47,7 +59,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         topseller:  {
             title: 'Initialisiere TopSeller',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
-            requestUrl: '{url controller="TopSeller" action="initTopSeller"}'
+            requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
+            batchSize: 5000
         }
     },
 
@@ -59,7 +72,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 'showMultiRequestDialog': me.onShowMultiRequestDialog
             },
             'performance-main-multi-request-dialog': {
-                'multiRequestDialogCancelProcess': me.onCancelMultiRequestDialog
+                'multiRequestDialogCancelProcess': me.onCancelMultiRequest,
+                'multiRequestDialogStartProcess': me.onStartMultiRequest
             }
        });
 
@@ -67,9 +81,71 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     },
 
     /**
-     * Cancel the current process
+     * Runs the actual request
+     * Method is called recursively until all data was processed
      */
-    onCancelMultiRequestDialog: function() {
+    runRequest: function(offset, dialog) {
+        var me = this,
+            type = dialog.currentType,
+            config = me.requestConfig[type],
+            batchSize = config.batchSize,
+            count = config.totalCount;
+
+        if (offset >= count) {
+            // Enable close button, set progressBar to 'finish'
+            dialog.progressBar.updateProgress(1, me.snippets.done.message, true);
+
+            dialog.cancelButton.disable();
+            dialog.closeButton.enable();
+
+            // Show 'finished' message
+            Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
+
+            return;
+        }
+
+         if (me.cancelOperation) {
+            dialog.closeButton.enable();
+            return;
+        }
+
+        // updates the progress bar value and text, the last parameter is the animation flag
+        dialog.progressBar.updateProgress((offset+batchSize)/count, Ext.String.format(me.snippets.process, (offset+batchSize), count), true);
+
+        Ext.Ajax.request({
+            url: config.requestUrl,
+            method: 'POST',
+            params: {
+                offset: offset,
+                limit: batchSize
+            },
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+
+                // start recusive call here
+                me.executeSingleOrder(offset + batchSize, dialog);
+            },
+
+            failure: function(response) {
+                me.shouldCancel = true;
+                me.executeSingleOrder(offset + batchSize, dialog);
+            }
+        });
+    },
+
+    /**
+     * Called after the user hits the 'start' button of the multiRequestDialog
+     */
+    onStartMultiRequest: function(dialog) {
+        var me = this;
+
+        me.runRequest(0, dialog);
+    },
+
+    /**
+     * Called after the user clicks the 'cancel' button of the multiRequestDialog
+     */
+    onCancelMultiRequest: function() {
         var me = this;
 
         me.cancelOperation = true;
@@ -85,7 +161,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             config = me.requestConfig[type];
 
         var window = me.getView('main.MultiRequestDialog').create({
-            title: config.title
+            title: config.title,
+            currentType: type
         }).show();
 
 
