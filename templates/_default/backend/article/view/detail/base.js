@@ -193,7 +193,12 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             validationErrorMsg: me.snippets.numberValidation
         });
 
-        var hideVariantTab = (me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null);
+
+        var hideVariantTab = true;
+        if(me.article !== Ext.undefined) {
+            hideVariantTab = (me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null);
+        }
+
         var showAdditionalText = (hideVariantTab) ? !Ext.isEmpty(additionalText, false) : false;
         me.mainDetailAdditionalText = Ext.create('Ext.form.field.Text', {
             name: 'mainDetail[additionalText]',
