@@ -262,11 +262,21 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             url: url,
             params: { ids: Ext.JSON.encode(ids), categoryId: ~~(1 * categoryId) },
             success: function(response) {
-                mapping.setLoading(false);
 
                 var result = Ext.decode(response.responseText);
                 message = Ext.String.format(message, result.counter);
                 Shopware.Notification.createGrowlMessage('',message);
+
+                //reload the stores for the paging bar information
+                mapping.toGrid.getStore().load({
+                    callback:function () {
+                        mapping.fromGrid.getStore().load({
+                             callback: function() {
+                                 mapping.setLoading(false);
+                             }
+                        });
+                    }
+                });
             },
             failure: function(response) {
                 mapping.setLoading(false);

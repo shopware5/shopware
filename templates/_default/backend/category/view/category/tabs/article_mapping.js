@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             flex: 1,
             store: me.availableProductsStore.load(),
             selModel: me.createSelectionModel(),
-            viewConfig: { plugins: me.createGridDragAndDrop() },
+            viewConfig: { loadMask: false, plugins: me.createGridDragAndDrop() },
             bbar: me.createPagingToolbar(me.availableProductsStore),
             columns: me.getColumns()
         });
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             flex: 1,
             store: me.assignedProductsStore.load(),
             selModel: me.createSelectionModel(),
-            viewConfig: { plugins: me.createGridDragAndDrop() },
+            viewConfig: { loadMask: false, plugins: me.createGridDragAndDrop() },
             bbar: me.createPagingToolbar(me.assignedProductsStore),
             columns: me.getColumns()
         });

@@ -214,8 +214,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         var detailStore = me.subApplication.getStore('Detail');
         detailStore.getProxy().extraParams = { node:record.get("id") };
 
-        me.subApplication.availableProductsStore.getProxy().extraParams = { categoryId: record.get("id") },
-        me.subApplication.assignedProductsStore.getProxy().extraParams = { categoryId: record.get("id") },
+        me.subApplication.availableProductsStore.getProxy().extraParams = { categoryId: record.get("id") };
+        me.subApplication.assignedProductsStore.getProxy().extraParams = { categoryId: record.get("id") };
 
         detailStore.load({
             scope:this,
@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 } else {
                     me.selectorView.availableProductsStore = me.subApplication.availableProductsStore;
                     me.selectorView.assignedProductsStore = me.subApplication.assignedProductsStore;
-                    me.selectorView.record = me.detailRecord
+                    me.selectorView.record = me.detailRecord;
                     me.selectorView.fireEvent('storeschanged');
                     articleMappingContainer.setDisabled(disableTab);
                 }
@@ -304,13 +304,16 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * Moves an category to a different position.
      *
      * @event itemmove
-     * @param [object] node - actual Ext.data.Model
-     * @param [object] oldParent - old Ext.data.Model
-     * @param [object] newParent - updated Ext.data.Model
      * @return void
+     * @param position
+     * @param node
+     * @param newParent
+     * @param oldParent
      */
-    onCategoryMove : function(node, oldParent, newParent, position) {
-        var me = this;
+    onCategoryMove: function (node, oldParent, newParent, position) {
+        var me = this,
+            childNodeIds = [],
+            url = '{url controller=Category action=saveNewChildPositions}';
 
         node.data.position = position;
         node.data.parentId = !newParent.isRoot() ? newParent.data.id : null;
@@ -319,16 +322,25 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         var mainWindow = me.getMainWindow();
         mainWindow.setLoading(true);
         node.save({
-            callback:function (self, operation) {
-                if (!operation.success) {
-                    var rawData = self.proxy.reader.rawData;
-                    if (rawData.message) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure + '<br>' +  rawData.message, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.moveCategoryFailure, me.snippets.growlMessage);
+            callback: function (self, operation) {
+                //save the new position for all child categories in the parent category
+                newParent.eachChild(function (node) {
+                    childNodeIds.push(node.getId());
+                });
+                Ext.Ajax.request({
+                    url: url,
+                    params: { ids: Ext.JSON.encode(childNodeIds) },
+                    success: function (response) {
+                        var rawData = self.proxy.reader.rawData;
+                        if (rawData.success) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategorySuccess, me.snippets.growlMessage);
+                        }
+                        else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategoryFailure + '<br>' + rawData.message, me.snippets.growlMessage);
+                        }
+                        mainWindow.setLoading(false);
                     }
-                }
-                mainWindow.setLoading(false);
+                });
             }
         });
     },
