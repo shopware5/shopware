@@ -83,6 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             }
         },{
             fieldLabel: 'Aktivieren',
+            helpText: 'Sollen TopSeller im Frontend angezeigt werden?',
             name: 'topSeller[topSellerActive]',
             xtype: 'checkbox',
             uncheckedValue: false,
@@ -101,10 +102,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             minValue: 10
         },{
             fieldLabel: 'Aktualisierungs-Strategie',
-            helpText: 'Wie sollen die TopSeller berechnet werden?.<br><br>' +
+            helpText: 'Wie soll aktualisiert werden?<br><br>' +
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    'CronJob: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    'Live: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
+                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
             name: 'topSeller[topSellerRefreshStrategy]',
             xtype: 'combo',
             valueField: 'id',

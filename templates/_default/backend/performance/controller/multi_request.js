@@ -61,6 +61,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
             batchSize: 5000
+        },
+        seo:  {
+            title: 'Initialisiere Seo',
+            totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
+            requestUrl: '{url controller="Performance" action="initTopSeller"}',
+            batchSize: 5000
         }
     },
 

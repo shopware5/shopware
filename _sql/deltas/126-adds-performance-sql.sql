@@ -7,7 +7,8 @@ VALUES
 ('topSellerActive', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('topSellerValidationTime', 'i:100;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('topSellerRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('topSellerPseudoSales', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
+('topSellerPseudoSales', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('seoRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
 
 -- //@UNDO
 

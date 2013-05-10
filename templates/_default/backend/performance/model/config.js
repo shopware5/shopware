@@ -90,7 +90,8 @@ Ext.define('Shopware.apps.Performance.model.Config', {
      */
     associations:[
         { type:'hasMany', model:'Shopware.apps.Performance.model.HttpCache', name:'getHttpCache', associationKey:'httpCache' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.TopSeller', name:'getTopSeller', associationKey:'topSeller' }
+        { type:'hasMany', model:'Shopware.apps.Performance.model.TopSeller', name:'getTopSeller', associationKey:'topSeller' },
+        { type:'hasMany', model:'Shopware.apps.Performance.model.Seo', name:'getSeo', associationKey:'seo' }
     ]
 
 });

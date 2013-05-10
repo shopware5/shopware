@@ -182,6 +182,17 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         return array(
             'httpCache' => $this->prepareHttpCacheConfig(),
             'topSeller' => $this->prepareTopSellerConfig(),
+            'seo'       => $this->prepareSeoConfig(),
+        );
+    }
+
+    protected function prepareSeoConfig()
+    {
+        return array(
+            'routerurlcache'     => (int) Shopware()->Config()->routerurlcache,
+            'routercache'        => (int) Shopware()->Config()->routercache,
+            'routerlastupdate'   => (int) Shopware()->Config()->routerlastupdate,
+            'seoRefreshStrategy' => Shopware()->Config()->seoRefreshStrategy
         );
     }
 
