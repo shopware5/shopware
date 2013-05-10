@@ -95,7 +95,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
 		));
 
 		$form->setElement('boolean', 'liveMigration', array(
-			'description' => 'Soll das vorhandene Passwort eines Benutzers beim nächsten Einloggen erneut verschlüsselt werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter so sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
+			'description' => 'Sollen vorhandene Benutzer-Passwörter mit anderen Passwort-Algorithmen beim nächsten Einloggen erneut gehasht werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
 			'label' => 'Live Migration',
 			'value' => true,
 		));
