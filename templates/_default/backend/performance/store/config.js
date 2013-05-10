@@ -71,7 +71,6 @@ Ext.define('Shopware.apps.Performance.store.Config', {
             root:'data',
             totalProperty:'total'
         }
-
-    },
+    }
 });
 //{/block}

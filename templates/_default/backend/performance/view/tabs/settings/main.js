@@ -71,13 +71,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
         var me = this;
 
         me.items = [{
-                xtype: 'performance-tabs-settings-topseller'
+                xtype: 'performance-tabs-settings-seo'
             },{
                 xtype: 'performance-tabs-settings-http-cache'
             },{
                 xtype: 'performance-tabs-settings-search'
             },{
-                xtype: 'performance-tabs-settings-seo'
+                xtype: 'performance-tabs-settings-topseller'
         }];
 
         // Expand the first item
