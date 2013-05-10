@@ -118,7 +118,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
             ,{
             fieldLabel: 'Letztes Update',
             name: 'seo[routerlastupdate]',
-            xtype: 'base-element-datetime'
+            xtype: 'base-element-datetime',
+            allowBlank: false
         }
         ];
     }
