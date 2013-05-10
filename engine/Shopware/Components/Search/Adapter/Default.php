@@ -363,9 +363,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $result = $this->database->fetchRow($sql);
         $last = !empty($result['last']) ? unserialize($result['last']) : null;
 
-        if (empty($last) || empty($result['not_force'])
-                || strtotime($last) < strtotime($result['current']) - $interval
-        ) {
+        if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->buildSearchIndex();
         }
     }
@@ -613,12 +611,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
             if (!empty($table['referenz_table'])) {
                 $sqlTable = 'JOIN ' . $table['referenz_table'] . ' st' . $table['tableID'] . "\n"
-                        . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
+                    . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.articleID';
             }
             elseif (!empty($table['foreign_key'])) {
                 $sqlTable = 'JOIN s_articles st' . $table['tableID'] . "\n"
-                        . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
+                    . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.id';
             }
             else {
@@ -940,9 +938,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 VALUES (NOW(), ?, ?)
             ';
             Shopware()->Db()->query($sql, array(
-                    $term,
-                    empty($searchResultsFinal) ? 0 : count($searchResultsFinal)
-                ));
+                $term,
+                empty($searchResultsFinal) ? 0 : count($searchResultsFinal)
+            ));
         }
 
         // If no results return false
@@ -970,7 +968,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         }
         $searchResultsFinal = array_splice(
             $searchResultsFinal,
-                ($this->requestCurrentPage -1) * $searchConfiguration['resultsPerPage'],
+            ($this->requestCurrentPage -1) * $searchConfiguration['resultsPerPage'],
             $searchConfiguration['resultsPerPage']
         );
 
@@ -1219,8 +1217,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
                         // SQL-queries to fill s_search_index
                         $sql_index[] = 'SELECT sk.id as keywordID, ' . $row['id'] . ' as elementID, ' . $fieldID . ' as fieldID '
-                                . 'FROM s_search_keywords sk '
-                                . 'WHERE sk.keyword IN (' . implode(', ', $field_keywords) . ')';
+                            . 'FROM s_search_keywords sk '
+                            . 'WHERE sk.keyword IN (' . implode(', ', $field_keywords) . ')';
                     }
 
                     // If no new keywords were found, proceed with next table
