@@ -1152,7 +1152,7 @@ class sAdmin
                 $encoderName = 'Prehashed';
             } else {
                 $encoderName = $getUser['encoder'];
-                $encoderName = ucfirst($encoderName);
+                $encoderName = strtolower($encoderName);
             }
 
             if (empty($encoderName)) {
