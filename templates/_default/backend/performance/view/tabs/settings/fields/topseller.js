@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             xtype: 'numberfield',
             minValue: 10
         },{
-            fieldLabel: 'Strategie',
+            fieldLabel: 'Aktualisierungs-Strategie',
             helpText: 'Wie sollen die TopSeller berechnet werden?.<br><br>' +
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     'CronJob: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +

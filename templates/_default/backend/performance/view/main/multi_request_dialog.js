@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * Define window height
      * @integer
      */
-    height: 130,
+    height: 160,
 
     /**
      * Display no footer button for the detail window
@@ -102,6 +102,16 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
     minimizable: false,
 
     /**
+     * Contains all snippets for the component
+     * @object
+     */
+    snippets: {
+        cancel:'{s name=progress/cancel}Cancel process{/s}',
+        start:'{s name=progress/start}Start process{/s}',
+        close:'{s name=progress/close}Close window{/s}'
+    },
+
+    /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
@@ -117,6 +127,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         me.registerEvents();
         me.items = [
             me.createProgressBar(),
+            me.createBatchSizeCombo(),
             me.createButtons()
         ];
         me.callParent(arguments);
@@ -131,6 +142,36 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             'multiRequestDialogCancelProcess',
             'multiRequestDialogStartProcess'
         );
+    },
+
+    createBatchSizeCombo: function() {
+        var me = this;
+
+        me.combo = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: 'Batch',
+            helpText: 'help',
+            name: 'batchSize',
+            margin: '0 0 10 0',
+            allowBlank: false,
+            maskRe: /\d/,
+            editable: true,
+            displayField: 'batchSize',
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'batchSize',  type: 'int' }
+                ],
+                data : [
+                    { batchSize: '1000' },
+                    { batchSize: '2000' },
+                    { batchSize: '4000' },
+                    { batchSize: '8000' },
+                    { batchSize: '16000' },
+                    { batchSize: '32000' }
+                ]
+            })
+        });
+
+        return me.combo;
     },
 
     /**
@@ -157,7 +198,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'start',
+            text: me.snippets.start,
             cls: 'primary',
             action: 'start',
             disabled: true,
@@ -178,7 +219,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'cancel',
+            text: me.snippets.cancel,
             cls: 'primary',
             action: 'cancel',
             disabled: false,
@@ -201,7 +242,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'close',
+            text: me.snippets.close,
             flex: 1,
             action: 'closeWindow',
             cls: 'secondary',
