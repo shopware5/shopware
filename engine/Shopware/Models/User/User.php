@@ -87,10 +87,17 @@ class User extends ModelEntity
     /**
      * @var string $password
      *
-     * @ORM\Column(name="password", type="string", length=60, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var string $encoder
+     *
+     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
      */
 
-    private $password;
+    private $encoder;
 
     /**
      * @var string $apiKey
@@ -617,5 +624,23 @@ class User extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\User', 'attribute', 'user');
     }
+
+    /**
+     * @param string $encoder
+     */
+    public function setEncoder($encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoder()
+    {
+        return $this->encoder;
+    }
+
+
 
 }
