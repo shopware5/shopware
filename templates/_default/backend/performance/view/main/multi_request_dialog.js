@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * Define window height
      * @integer
      */
-    height: 160,
+    height: 170,
 
     /**
      * Display no footer button for the detail window
@@ -148,12 +148,21 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         var me = this;
 
         me.combo = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: 'Batch',
-            helpText: 'help',
+            fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
+            helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
             name: 'batchSize',
             margin: '0 0 10 0',
             allowBlank: false,
-            maskRe: /\d/,
+            value: 5000,
+            validateOnChange: true,
+            validator: function(value) {
+                if (!value.match(/\d+/)) {
+                    me.startButton.disable();
+                    return false;
+                }
+                me.startButton.enable();
+                return true;
+            },
             editable: true,
             displayField: 'batchSize',
             store: Ext.create('Ext.data.Store', {
