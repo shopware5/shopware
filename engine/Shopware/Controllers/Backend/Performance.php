@@ -56,6 +56,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * Some methods for testing purpose
+     */
+    public function getTopSellerCountAction() { $this->View()->assign(array('success' => true, 'total' => 100000)); }
+    public function initTopSellerAction() { sleep(1); $this->View()->assign(array('success' => true, 'total' => 100000)); }
+
+    /**
      * This action creates/updates the configuration
      */
     public function saveConfigAction()

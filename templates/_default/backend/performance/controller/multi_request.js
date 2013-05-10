@@ -58,8 +58,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     requestConfig: {
         topseller:  {
             title: 'Initialisiere TopSeller',
-            totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
-            requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
+            totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
+            requestUrl: '{url controller="Performance" action="initTopSeller"}',
             batchSize: 5000
         }
     },
@@ -91,6 +91,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             batchSize = config.batchSize,
             count = config.totalCount;
 
+        
         if (offset >= count) {
             // Enable close button, set progressBar to 'finish'
             dialog.progressBar.updateProgress(1, me.snippets.done.message, true);
@@ -123,12 +124,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 var json = Ext.decode(response.responseText);
 
                 // start recusive call here
-                me.executeSingleOrder(offset + batchSize, dialog);
+                me.runRequest(offset + batchSize, dialog);
             },
 
             failure: function(response) {
                 me.shouldCancel = true;
-                me.executeSingleOrder(offset + batchSize, dialog);
+                me.runRequest(offset + batchSize, dialog);
             }
         });
     },
@@ -137,7 +138,11 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
      * Called after the user hits the 'start' button of the multiRequestDialog
      */
     onStartMultiRequest: function(dialog) {
-        var me = this;
+        var me = this,
+            type = dialog.currentType;
+
+        me.requestConfig[type].batchSize = dialog.combo.getValue();
+        dialog.combo.disable();
 
         me.runRequest(0, dialog);
     },
@@ -165,6 +170,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             currentType: type
         }).show();
 
+        me.cancelOperation = false;
 
         Ext.Ajax.request({
             url: config.totalCountUrl,
@@ -178,9 +184,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             }
         });
     }
-
-
-
 
 });
 //{/block}
