@@ -36,6 +36,7 @@
 //{block name="backend/performance/controller/multi_request"}
 Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
+
     extend: 'Enlight.app.Controller',
 
     /**
@@ -55,6 +56,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
      */
     cancelOperation: false,
 
+    /**
+     * todo@DN Remove dummy controllers, link to actual PHP backend controllers
+     */
     requestConfig: {
         topseller:  {
             title: 'Initialisiere TopSeller',
@@ -69,6 +73,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             batchSize: 5000
         }
     },
+
 
     init: function () {
         var me = this;

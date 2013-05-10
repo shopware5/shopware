@@ -102,8 +102,22 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output = array();
         $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
         $output['topSeller'] = $this->prepareTopSellerConfigForSaving($data['topSeller'][0]);
+        $output['seo']       = $this->prepareSeoConfigForSaving($data['seo'][0]);
 
         return $output;
+    }
+
+    /**
+     * Prepare the SEO config array for storage
+     * @param $data
+     * @return mixed
+     */
+    public function prepareSeoConfigForSaving($data)
+    {
+        unset($data['id']);
+
+        $data['routerlastupdate'] = date('Y-m-d H:i:s', strtotime($data['routerlastupdate']));
+        return $data;
     }
 
     /**
@@ -188,10 +202,15 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     protected function prepareSeoConfig()
     {
+        $lastUpdate = Shopware()->Config()->routerlastupdate;
+        if (empty($lastUpdate)) {
+            $lastUpdate = NULL;
+        }
+
         return array(
             'routerurlcache'     => (int) Shopware()->Config()->routerurlcache,
             'routercache'        => (int) Shopware()->Config()->routercache,
-            'routerlastupdate'   => (int) Shopware()->Config()->routerlastupdate,
+            'routerlastupdate'   => date('Y-m-d H:i:s', strtotime(Shopware()->Config()->routerlastupdate)),
             'seoRefreshStrategy' => Shopware()->Config()->seoRefreshStrategy
         );
     }
