@@ -257,6 +257,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
                 'orders',
+                'details',
+                'customer',
                 'payment',
                 'billing',
                 'billingCountry',
@@ -273,6 +275,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.billing', 'billing')
+                ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.details', 'details')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
