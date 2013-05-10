@@ -718,7 +718,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
         $hash     = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
 
-		$sql = "UPDATE s_user SET password=?, encoderName=?, failedlogins=4, lockeduntil='lockeduntil' WHERE id=?";
+		$sql = "UPDATE s_user SET password=?, encoder=?, failedlogins=4, lockeduntil='lockeduntil' WHERE id=?";
 		Shopware()->Db()->query($sql, array($hash, $encoderName, $userID));
 
         $context = array(
