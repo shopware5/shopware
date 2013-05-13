@@ -44,7 +44,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     public function incrementTopSeller(int $articleId, int $quantity)
     {
         $sql = "
-            INSERT INTO s_articles_top_seller (article_id, sales, last_cleared)
+            INSERT INTO s_articles_top_seller_ro (article_id, sales, last_cleared)
             VALUES (:article_id, :quantity, now())
             ON DUPLICATE KEY UPDATE sales = sales + :quantity, last_cleared=now();
             ";
@@ -65,7 +65,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         if (empty($articleId)) {
             throw new Exception('No valid article id passed.');
         }
-        Shopware()->Db()->query('DELETE FROM s_articles_top_seller WHERE article_id = :articleId', array(
+        Shopware()->Db()->query('DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId', array(
             'articleId' => (int) $articleId
         ));
 
@@ -73,7 +73,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         $orderTime = $this->getTopSellerOrderTime();
 
         $sql = "
-            INSERT IGNORE INTO s_articles_top_seller (article_id, last_cleared, sales)
+            INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
             SELECT 	articles.id as article_id,
                     NOW() as last_cleared,
             " . $select . "
@@ -110,7 +110,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         }
 
         $sql = "
-            INSERT IGNORE INTO s_articles_top_seller (article_id, last_cleared, sales)
+            INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
             SELECT 	articles.id as article_id,
                     DATE_SUB(NOW(), INTERVAL articles.id MOD 4 DAY) as last_cleared,
             " . $select . "
@@ -149,11 +149,11 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         $timeSelect = ' now(), ';
         if ($timeShuffle === true) {
-            $timeSelect = ' DATE_SUB(NOW(), INTERVAL s_articles_top_seller.id MOD 4 DAY), ';
+            $timeSelect = ' DATE_SUB(NOW(), INTERVAL s_articles_top_seller_ro.id MOD 4 DAY), ';
         }
 
         $sql = "
-            UPDATE s_articles_top_seller
+            UPDATE s_articles_top_seller_ro
             SET last_cleared = $timeSelect
                 sales = (
                     SELECT
@@ -166,7 +166,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
                             ON  s_order.status >= 0
                             AND s_order.id = details.orderID
                             AND s_order.ordertime >= :orderTime
-                    WHERE articles.id = s_articles_top_seller.article_id
+                    WHERE articles.id = s_articles_top_seller_ro.article_id
                 )
             WHERE last_cleared <= :validationTime
             $limitSelect

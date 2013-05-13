@@ -1737,7 +1737,7 @@ class sArticles
             SELECT STRAIGHT_JOIN
               a.id AS articleID,
               s.sales AS quantity
-            FROM s_articles_top_seller s
+            FROM s_articles_top_seller_ro s
             INNER JOIN s_articles_categories ac
               ON ac.articleID = s.article_id
               AND ac.categoryID = :categoryId

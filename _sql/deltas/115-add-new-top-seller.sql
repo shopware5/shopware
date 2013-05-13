@@ -9,7 +9,7 @@ SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'MarketingAggregate'
 
 
 
-CREATE TABLE IF NOT EXISTS `s_articles_top_seller` (
+CREATE TABLE IF NOT EXISTS `s_articles_top_seller_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,
   `sales` int(11) unsigned NOT NULL DEFAULT '0',
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_top_seller` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `s_articles_also_bought` (
+CREATE TABLE IF NOT EXISTS `s_articles_also_bought_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,
   `related_article_id` int(11) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_also_bought` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `s_articles_similar_shown` (
+CREATE TABLE IF NOT EXISTS `s_articles_similar_shown_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,
   `related_article_id` int(11) NOT NULL,

@@ -26,7 +26,7 @@
  * Also bought component which contains all logic about the shopware
  * Also bought functions.
  * This components refresh and initials the Also bought data
- * in the s_articles_also_bought
+ * in the s_articles_also_bought_ro
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate\Components
@@ -45,7 +45,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
         }
 
         $sql = "
-            INSERT INTO s_articles_also_bought (article_id, related_article_id, sales)
+            INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
             SELECT
                 detail1.articleID as article_id,
                 detail2.articleID as related_article_id,
@@ -74,7 +74,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
     public function refreshBoughtArticles($articleId, $relatedArticleId)
     {
         $sql = "
-            INSERT INTO s_articles_also_bought (article_id, related_article_id, sales)
+            INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
             VALUES (:articleId, :relatedArticleId, 1)
             ON DUPLICATE KEY UPDATE sales = sales + 1;
         ";

@@ -83,7 +83,7 @@ class sMarketing
             SELECT STRAIGHT_JOIN
                  lastArticles.articleID as id,
                  similarShown.viewed as hits
-            FROM s_articles_similar_shown as similarShown
+            FROM s_articles_similar_shown_ro as similarShown
 
               INNER JOIN s_emarketing_lastarticles as lastArticles
                 ON  lastArticles.articleID = similarShown.related_article_id
@@ -144,7 +144,7 @@ class sMarketing
                 alsoBought.sales as sales,
                 alsoBought.related_article_id as id
 
-            FROM   s_articles_also_bought alsoBought
+            FROM   s_articles_also_bought_ro alsoBought
                 INNER JOIN s_articles articles
                     ON  alsoBought.related_article_id = articles.id
                     AND articles.active = 1

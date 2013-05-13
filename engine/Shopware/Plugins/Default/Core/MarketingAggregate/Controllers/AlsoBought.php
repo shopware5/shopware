@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
     }
 
     /**
-     * Helper function to initials the s_articles_also_bought table.
+     * Helper function to initials the s_articles_also_bought_ro table.
      * This table is used for the new shopware also bought articles function.
      */
     public function initAlsoBoughtAction()
@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
         $limit = $this->Request()->get('limit');
 
         if ($offset === 0) {
-            $sql = "DELETE FROM s_articles_also_bought";
+            $sql = "DELETE FROM s_articles_also_bought_ro";
             Shopware()->Db()->query($sql);
         }
 
