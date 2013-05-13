@@ -66,15 +66,23 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function saveConfigAction()
     {
-        
         $data = $this->Request()->getParams();
 
+		// Save the config
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
+    	// Clear the config cache
+        Shopware()->Cache()->clean();
+
+		// Reload config, so that the actual config from the
+		// db is returned
+        $this->configData = $this->prepareConfigData();
+
+
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data
+            'data' => $this->configData
         ));
     }
 
@@ -103,20 +111,51 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
         $output['topSeller'] = $this->prepareTopSellerConfigForSaving($data['topSeller'][0]);
         $output['seo']       = $this->prepareSeoConfigForSaving($data['seo'][0]);
+        $output['search']    = $this->prepareSearchConfigForSaving($data['search'][0]);
+        $output['categories']    = $this->prepareCategoriesConfigForSaving($data['categories'][0]);
 
         return $output;
     }
 
+	public function prepareSeoConfigForSaving($data)
+	{
+        unset($data['id']);
+
+        $date = date_create($data['routerlastupdateDate'])->format('Y-d-m');
+        $time = $data['routerlastupdateTime'];
+
+        $datetime = $date . ' ' . $time;
+
+		$data['routerlastupdate'] = $datetime;
+
+        unset($data['routerlastupdateDate']);
+        unset($data['routerlastupdateTime']);
+
+        return $data;		
+	}
+
+
     /**
-     * Prepare the SEO config array for storage
+     * Prepare the Search config array for storage
      * @param $data
      * @return mixed
      */
-    public function prepareSeoConfigForSaving($data)
+    public function prepareCategoriesConfigForSaving($data)
     {
         unset($data['id']);
 
-        $data['routerlastupdate'] = date('Y-m-d H:i:s', strtotime($data['routerlastupdate']));
+        return $data;
+    }
+
+    /**
+     * Prepare the Search config array for storage
+     * @param $data
+     * @return mixed
+     */
+    public function prepareSearchConfigForSaving($data)
+    {
+        unset($data['id']);
+
         return $data;
     }
 
@@ -176,6 +215,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $values = array();
         // Do not save default value
         if ($value !== $element->getValue()) {
+        	error_log("saving: ". $value . ": " . $name);
             $valueModel = new Shopware\Models\Config\Value();
             $valueModel->setElement($element);
             $valueModel->setShop($shop);
@@ -197,20 +237,43 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'httpCache' => $this->prepareHttpCacheConfig(),
             'topSeller' => $this->prepareTopSellerConfig(),
             'seo'       => $this->prepareSeoConfig(),
+            'search'    => $this->prepareSearchConfig(),
+            'categories'=> $this->prepareCategoriesConfig(),
+        );
+    }
+
+    protected function prepareCategoriesConfig()
+    {
+        return array(
+            'articlesperpage'           => Shopware()->Config()->articlesperpage,
+            'orderbydefault'            => Shopware()->Config()->orderbydefault,
+            'showSupplierInCategories'  => Shopware()->Config()->showSupplierInCategories,
+        );
+    }
+
+    protected function prepareSearchConfig()
+    {
+        return array(
+            'searchRefreshStrategy'  => Shopware()->Config()->searchRefreshStrategy
         );
     }
 
     protected function prepareSeoConfig()
     {
-        $lastUpdate = Shopware()->Config()->routerlastupdate;
-        if (empty($lastUpdate)) {
-            $lastUpdate = NULL;
+        $datetime = date_create(Shopware()->Config()->routerlastupdate);
+        if ($datetime) {
+            $date = $datetime ->format('Y-m-d');
+            $time = $datetime ->format('H:i');
+        } else {
+            $date = null;
+            $time = null;
         }
 
         return array(
             'routerurlcache'     => (int) Shopware()->Config()->routerurlcache,
             'routercache'        => (int) Shopware()->Config()->routercache,
-            'routerlastupdate'   => date('Y-m-d H:i:s', strtotime(Shopware()->Config()->routerlastupdate)),
+            'routerlastupdateDate'   => $date,
+            'routerlastupdateTime'   => $time,
             'seoRefreshStrategy' => Shopware()->Config()->seoRefreshStrategy
         );
     }

@@ -21,53 +21,36 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Shopware_Config
- * @subpackage Config
+ * @package    Performance
+ * @subpackage Model
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
 /**
- * Shopware Controller - Performance backend module
- *
- * todo@all: Documentation
+ * Search config model
  */
-//{block name="backend/performance/controller/main"}
-Ext.define('Shopware.apps.Performance.controller.Main', {
-    extend: 'Enlight.app.Controller',
-
-    refs: [
-        { ref: 'info', selector: 'performance-tabs-cache-info' },
-        { ref: 'settings', selector: 'performance-tabs-settings-main' },
-        { ref: 'navigation', selector: 'performance-tabs-settings-navigation' }
-    ],
+//{block name="backend/performance/model/categories"}
+Ext.define('Shopware.apps.Performance.model.Categories', {
 
     /**
-     * The main window instance
-     * @object
+     * Extends the standard Ext Model
+     * @string
      */
-    mainWindow: null,
+    extend:'Ext.data.Model',
 
     /**
-     * Called by the SubApplication to create and show the window
-     * 
+     * Contains the model fields
+     * @array
      */
-    run: function() {
-        var me = this;
-
-        me.mainWindow = me.subApplication.getView('main.Window').create({
-				treeStore: me.getStore('Tree')
-		}).show();
-
-        me.infoStore = me.getStore('Info').load(function() {
-            me.getInfo().bindStore(me.infoStore);
-        });
-
-		// Loads the main settings store and injects it into the settings form
-        me.getController('Settings').loadConfigStore();
-    }
-
+    fields:[
+		//{block name="backend/performance/model/categories/fields"}{/block}
+        { name:'id', type:'int' },
+        { name: 'articlesperpage', type: 'int'},
+        { name: 'orderbydefault', type: 'string'},
+        { name: 'showSupplierInCategories', type: 'bool'},
+    ]
 
 });
 //{/block}

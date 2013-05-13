@@ -37,8 +37,14 @@
 Ext.define('Shopware.apps.Performance.controller.Settings', {
     extend: 'Enlight.app.Controller',
 
+	/*
+	 * Selector for easy access to the settings panel
+	 */
     refs: [
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
+        { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
+        { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' }
+     
     ],
 
     snippets: {
@@ -49,8 +55,13 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         errorMessage: 'Error saving the configuration'
     },
 
+	/*
+	 * A reference to the current fieldSet being shown
+	 */
+	currentItem: null,
+
     /**
-     *
+     * Init the controller, registert to some events
      */
     init: function () {
         var me = this;
@@ -60,6 +71,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
                 click: function(button, event) {
                     me.onSave();
                 }
+            },
+            'performance-tabs-settings-navigation': {
+            	'itemClicked': me.onNavigationItemClicked
             }
         });
 
@@ -67,15 +81,78 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     },
 
     /**
+     * Helper method to load the stores
+     */
+    loadConfigStore: function(callback) {
+        var me = this;
+        
+        me.getStore('Config').load(function (records) {
+            var storeData = records[0];
+
+			me.injectConfig(storeData);
+			me.configData = storeData;			
+			
+	        if (callback) {
+	        	callback();
+	        }
+        });
+
+    },
+    
+    /*
+     * Takes a config record, loads it into the settings form and also sets
+     * some stores
+     */
+    injectConfig: function(config) {
+    	var me = this;
+    	
+        me.getSettings().panel.loadRecord(config);
+        
+        // reconfigure grids and inject the stores
+        me.getCacheTime().reconfigure(config.getHttpCache().first().getCacheControllers());
+        me.getNoCache().reconfigure(config.getHttpCache().first().getNoCacheControllers());
+    },
+
+	/*
+	 * Called after the user clicked on an item in the navigation tree 
+	 */
+	onNavigationItemClicked: function(itemName) {
+		var me = this,
+			settings = me.getSettings(),
+			itemToShow;
+		
+		// First of all: Hide all items:
+		settings.panel.items.each(function(item) {
+			item.hide();
+			if (item.xtype == itemName) {
+				itemToShow = item;
+			}
+		});
+		
+		// If no fieldSet is defined for the clicked item, return
+		if (!itemToShow) {			
+			me.currentItem = null;			
+			return;
+		}
+		
+		// Load the last saved configData into the form
+        me.injectConfig(me.configData);
+		itemToShow.show();
+		me.currentItem = itemName;
+	},
+	
+	
+	
+    /**
      * Callback function called when the users clicks the 'save' button on the settings form
      */
     onSave: function() {
         var me = this,
-            settings = me.getSettings(),
+            settings = me.getSettings().panel,
             configRecord = settings.getRecord();
 
         settings.getForm().updateRecord(configRecord);
-
+        
         //save the model and check in the callback function if the operation was successfully
         configRecord.save({
             callback:function (data, operation) {
@@ -84,7 +161,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if ( operation.success === true ) {
-                    me.getController('Main').loadStores();
+                	// Load the returned data
+                    me.injectConfig(record);
+        			me.configData = record;			
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.successMessage, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
@@ -92,8 +171,6 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             }
         });
 
-    }
-
-
-});
+    },
+    });
 //{/block}

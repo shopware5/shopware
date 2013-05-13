@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
     /**
      * Description of the fieldSet
      */
-    title: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
+    caption: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
 
     layout: 'anchor',
 

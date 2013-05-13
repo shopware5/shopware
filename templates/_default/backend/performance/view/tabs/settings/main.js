@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend:'Ext.panel.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
@@ -45,18 +45,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      */
     alias:'widget.performance-tabs-settings-main',
 
-    /**
-     * A shortcut for setting a padding style on the body element. The value can either be a number to be applied to all sides, or a normal css string describing padding.
-     */
-    bodyPadding: 10,
-
-    /**
-     * True to use overflow:'auto' on the components layout element and show scroll bars automatically when necessary, false to clip any overflowing content.
-     */
-    autoScroll: true,
-
+	// Title of the panel shown in the tab
     title: '{s name=tabs/settings/title}Settings{/s}',
-
+    
+	// Define the layout of the panel to be a border layut
+	layout: 'border',
+	
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -70,19 +64,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
     initComponent:function () {
         var me = this;
 
-        me.items = [{
-                xtype: 'performance-tabs-settings-seo'
-            },{
-                xtype: 'performance-tabs-settings-http-cache'
-            },{
-                xtype: 'performance-tabs-settings-search'
-            },{
-                xtype: 'performance-tabs-settings-topseller'
-        }];
-
-        // Expand the first item
-        me.items[0].collapsed = false;
-
+		me.items = me.createItems();
+    	
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
@@ -93,6 +76,39 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
 
         me.callParent(arguments);
     },
+
+	/*
+	 * Helper method which creates the items of the panel
+	 * @return Array
+	 */
+	createItems: function() {
+		var me = this;
+		
+		me.panel = Ext.create('Ext.form.Panel', {
+			region: 'center',
+			trackResetOnLoad: true,
+		    autoScroll: true,
+		    bodyPadding: 10,
+			items: [{
+                	xtype: 'performance-tabs-settings-seo'
+           	 	},{
+                	xtype: 'performance-tabs-settings-http-cache'
+            	},{
+                	xtype: 'performance-tabs-settings-search'
+            	},{
+                	xtype: 'performance-tabs-settings-topseller'
+                },{
+                	xtype: 'performance-tabs-settings-categories'
+        	}]
+		});
+		
+		return [{
+        	xtype: 'performance-tabs-settings-navigation',
+        	store: me.treeStore,
+        	region: 'west'
+		},
+		me.panel];
+	},
 
     /**
      * @return Array

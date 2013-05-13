@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
     /**
      * Description of the fieldSet
      */
-    title: '{s name=tabs/settings/seo/title}SEO{/s}',
+    caption: '{s name=tabs/settings/seo/title}SEO{/s}',
 
 
     /**
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
                     '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'topSeller[topSellerRefreshStrategy]',
+            name: 'seo[seoRefreshStrategy]',
             xtype: 'combo',
             valueField: 'id',
             editable: false,
@@ -117,9 +117,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
         }
             ,{
             fieldLabel: 'Letztes Update',
-            name: 'seo[routerlastupdate]',
-            xtype: 'base-element-datetime',
-            allowBlank: false
+            name: 'seo[routerlastupdateDate]',
+            format: 'd.m.Y',
+            xtype: 'datefield'
+        }
+            ,{
+            fieldLabel: ' ',
+            labelSeparator: '',
+            name: 'seo[routerlastupdateTime]',
+            xtype: 'timefield'
         }
         ];
     }

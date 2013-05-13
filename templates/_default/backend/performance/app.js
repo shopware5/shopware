@@ -70,11 +70,13 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.cache.Info',
 
         'tabs.settings.Main',
+        'tabs.settings.Navigation',
         'tabs.settings.fields.Base',
         'tabs.settings.fields.Seo',
         'tabs.settings.fields.Topseller',
         'tabs.settings.fields.Search',
         'tabs.settings.fields.HttpCache',
+        'tabs.settings.fields.Categories',
 
         'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
@@ -86,7 +88,7 @@ Ext.define('Shopware.apps.Performance', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Info', 'Config' ],
+    stores:[ 'Info', 'Config', 'Tree' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
@@ -97,7 +99,10 @@ Ext.define('Shopware.apps.Performance', {
         'KeyValue',
         'HttpCache',
         'TopSeller',
-        'Seo'
+        'Seo',
+        'Search',
+        'Categories',
+        'Tree'
     ],
 
     bulkLoad: true,

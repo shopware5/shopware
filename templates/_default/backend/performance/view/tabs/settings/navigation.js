@@ -22,39 +22,52 @@
  *
  * @category   Shopware
  * @package    Performance
- * @subpackage Model
+ * @subpackage View
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Topseller config model
- */
-//{block name="backend/performance/model/seo"}
-Ext.define('Shopware.apps.Performance.model.Seo', {
+//{namespace name=backend/performance/main}
 
-    /**
-     * Extends the standard Ext Model
-     * @string
+//{block name="backend/performance/view/tabs/settings/navigation"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
+	extend: 'Ext.tree.Panel',
+    alias: 'widget.performance-tabs-settings-navigation',
+    rootVisible: false,
+    title: 'Settings',
+    
+    collapsed: false,
+    collapsible: true,
+    
+    width: 200,
+    expanded: true,
+    useArrows: true,
+    displayField: 'text',
+    
+	/*
+	 * The internalName of each item is the xtype of the corresponding fieldset
+	 * 
+	 * If internalName is empty or has no fieldSet associated, all fieldSets will be hidden
+	 */
+    listeners: {
+    	itemclick: function(tree, record, item, index, e, eOpts) {
+    		var internalName = record.get('internalName');
+    		
+    		this.fireEvent('itemClicked', internalName)
+    	}
+    },
+    
+    /*
+     * Initialize the component and define the event fired
      */
-    extend:'Ext.data.Model',
-
-    /**
-     * Contains the model fields
-     * @array
-     */
-    fields:[
-		//{block name="backend/performance/model/top_seller/fields"}{/block}
-        { name:'id', type:'int' },
-        { name: 'routerurlcache', type: 'int'},
-        { name: 'routercache', type: 'int'},
-        { name: 'routerlastupdateDate', type: 'date'},
-        { name: 'routerlastupdateTime', type: 'time'},
-        { name: 'seoRefreshStrategy', type: 'int'},
-
-
-    ]
-
+    initComponent: function() {
+    	var me = this;
+    	
+    	me.addEvents('itemClicked');
+    	
+    	me.callParent(arguments);
+    }
+    
 });
 //{/block}
