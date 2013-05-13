@@ -70,67 +70,73 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'button',
-            cls: 'primary',
-            margin: '0 0 10 0',
-            text: 'Init TopSeller',
-            handler: function() {
-                me.fireEvent('showMultiRequestDialog', 'topseller', me);
+            {
+                xtype: 'fieldset',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen"),
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'topseller',
+                        title: 'Index aufbauen für "TopSeller"',
+                    }],
+            },
+            {
+                fieldLabel: 'Aktivieren',
+                helpText: 'Sollen TopSeller im Frontend angezeigt werden?',
+                name: 'topSeller[topSellerActive]',
+                xtype: 'checkbox',
+                uncheckedValue: false,
+                inputValue: true
+            },
+            {
+                fieldLabel: 'Gültigkeit',
+                supportText: '(in Tagen)',
+                name: 'topSeller[topSellerValidationTime]',
+                xtype: 'numberfield',
+                minValue: 1,
+                maxValue: 365
+            },
+            {
+                fieldLabel: 'Bestellungen',
+                supportText: '(in Tagen)',
+                helpText: 'Wie viele Tage sollen bei der TopSeller-Berechnung berücksichtigt werden.',
+                name: 'topSeller[chartinterval]', // existing value
+                xtype: 'numberfield',
+                minValue: 10
+            },
+            {
+                fieldLabel: 'Aktualisierungs-Strategie',
+                helpText: 'Wie soll aktualisiert werden?<br><br>' +
+                        '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
+                        '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
+                        '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+                name: 'topSeller[topSellerRefreshStrategy]',
+                xtype: 'combo',
+                valueField: 'id',
+                editable: false,
+                displayField: 'name',
+                store: Ext.create('Ext.data.Store', {
+                    fields: [
+                        { name: 'id', type: 'int' },
+                        { name: 'name', type: 'string' }
+                    ],
+                    data: [
+                        { id: 1, name: 'Manuell' },
+                        { id: 2, name: 'CronJob' },
+                        { id: 3, name: 'Live' }
+                    ]
+                })
+            },
+            {
+                fieldLabel: 'Pseudosales berücksichtigen',
+                name: 'topSeller[topSellerPseudoSales]',
+                xtype: 'checkbox',
+                uncheckedValue: false,
+                inputValue: true
             }
-        },{
-            fieldLabel: 'Aktivieren',
-            helpText: 'Sollen TopSeller im Frontend angezeigt werden?',
-            name: 'topSeller[topSellerActive]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }, {
-            fieldLabel: 'Gültigkeit',
-            supportText: '(in Tagen)',
-            name: 'topSeller[topSellerValidationTime]',
-            xtype: 'numberfield',
-            minValue: 1,
-            maxValue: 365
-        }, {
-            fieldLabel: 'Bestellungen',
-            supportText: '(in Tagen)',
-            helpText: 'Wie viele Tage sollen bei der TopSeller-Berechnung berücksichtigt werden.',
-            name: 'topSeller[chartinterval]', // existing value
-            xtype: 'numberfield',
-            minValue: 10
-        },{
-            fieldLabel: 'Aktualisierungs-Strategie',
-            helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'topSeller[topSellerRefreshStrategy]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Manuell' },
-                    { id: 2, name: 'CronJob' },
-                    { id: 3, name: 'Live' }
-                ]
-            })
-        },{
-            fieldLabel: 'Pseudosales berücksichtigen',
-            name: 'topSeller[topSellerPseudoSales]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }];
+        ];
     }
 
 

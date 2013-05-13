@@ -50,6 +50,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function init()
     {
+        echo "<pre>";
+        print_r(Shopware()->Config()->get('LastArticles::show'));
+        echo "</pre>";
+        exit();
+        
         $this->configData = $this->prepareConfigData();
 
         parent::init();
@@ -204,6 +209,14 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         /** @var $element Shopware\Models\Config\Element */
         $element = $elementRepository->findOneBy($findBy);
+
+
+        // If the element is empty, the given setting does not exists. This might be the case
+        // for some plugins
+        if (empty($element)) {
+            return;
+        }
+
         foreach ($element->getValues() as $valueModel) {
             Shopware()->Models()->remove($valueModel);
         }
@@ -290,7 +303,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 )
             ),
             'customer' => $this->genericConfigLoader(
-                array('alsoBoughtShow', 'similarViewedShow', 'customerValidationTime', 'customerRefreshStrategy')
+                array('alsoBoughtShow', 'similarViewedShow', 'similarRefreshStrategy', 'similarRefreshStrategy')
             ),
         );
     }

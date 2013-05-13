@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Customer
- * @subpackage Detail
+ * @subpackage Order
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,57 +31,53 @@
 //{namespace name=backend/performance/main}
 
 /**
- * Default fieldSet which is extended by all other fieldSets in this module
- *
+ * Button which triggers the multi request dialog
  */
-//{block name="backend/performance/view/tabs/settings/fields/base"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
+//{block name="backend/performance/view/tabs/settings/elements/multi_request_button"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestButton', {
     /**
-     * Define that the base field set is an extension of the Ext.form.FieldSet
+     * Extend from our base grid
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend:'Ext.container.Container',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-base',
+    alias:'widget.performance-multi-request-button',
 
     /**
-     * Layout
+     * Event and title needs to be passed as config params
      */
-    layout: 'anchor',
+    event: '',
+    title: '',
 
     /**
-     * Default settings for the child elements
+     * Initialize the button
+     * @return void
      */
-    defaults: {
-        labelWidth: 155,
-        labelStyle: 'font-weight: 700;',
-        anchor: '100%'
+    initComponent:function () {
+        var me = this;
+
+        me.items = [ me.createButton() ];
+
+        me.callParent(arguments);
     },
 
-    /**
-     * Hide elements by default, they will be shown once the users selects them in the navigation tree
-     */
-    hidden: true,
-    border: false,
+    createButton: function() {
+        var me = this;
 
-    /**
-     * Required minimum width of the fieldSet
-     */
-    minWidth:155,
+        return {
+            xtype: 'button',
+            cls: 'primary',
+            margin: '0 0 10 0',
+            text: me.title,
+            handler: function() {
+                me.fireEvent('showMultiRequestDialog', me.event, me.up('fieldset'));
+            }
+        };
 
-    /**
-     * Helper method to create a descriptive text
-     * @param html
-     * @returns Ext.container.Container
-     */
-    createDecriptionContainer: function(html) {
-        return  Ext.create('Ext.container.Container', {
-            style: 'color: #999; font-style: italic; margin: 0 0 15px 0;',
-            html: html
-        });
     }
 
 });

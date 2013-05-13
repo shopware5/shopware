@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
     expanded: true,
     useArrows: true,
     displayField: 'text',
-    
+
 	/*
 	 * The internalName of each item is the xtype of the corresponding fieldset
 	 * 

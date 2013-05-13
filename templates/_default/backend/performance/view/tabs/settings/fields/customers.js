@@ -74,13 +74,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
-            xtype: 'button',
-            cls: 'small primary',
-            margin: '0 0 10 0',
-            text: 'Index aufbauen für "Kunden kauften auch"',
-            handler: function() {
-                me.fireEvent('showMultiRequestDialog', 'alsoBought', me);
-            }
+            xtype: 'performance-multi-request-button',
+            event: 'alsoBought',
+            title: 'Index aufbauen für "Auch gekauft"'
         },{
             fieldLabel: '"Kunden kauften auch" anzeigen',
             name: 'customer[alsoBoughtShow]',
@@ -88,13 +84,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             uncheckedValue: false,
             inputValue:true
         }, {
-            xtype: 'button',
-            cls: 'small primary',
-            margin: '0 0 10 0',
-            text: 'Index aufbauen für "Kunden haben auch gesehen"',
-            handler: function() {
-                me.fireEvent('showMultiRequestDialog', 'similarShown', me);
-            }
+            xtype: 'performance-multi-request-button',
+            event: 'similarShown',
+            title: 'Index aufbauen für "Auch gesehen"'
         }, {
             fieldLabel: '"Kunden haben auch gesehen" anzeigen',
             name: 'customer[similarViewedShow]',
@@ -104,7 +96,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
         },{
             fieldLabel: 'Gültigkeit',
             supportText: '(in Tagen)',
-            name: 'customer[customerValidationTime]',
+            name: 'customer[similarRefreshStrategy]',
             xtype: 'numberfield',
             minValue: 1,
             maxValue: 365
@@ -114,7 +106,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
                     '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'customer[customerRefreshStrategy]',
+            name: 'customer[similarRefreshStrategy]',
             xtype: 'combo',
             valueField: 'id',
             editable: false,

@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         me.control({
-            'performance-tabs-settings-base': {
+            'performance-multi-request-button': {
                 'showMultiRequestDialog': me.onShowMultiRequestDialog
             },
             'performance-main-multi-request-dialog': {
