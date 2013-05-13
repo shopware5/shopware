@@ -228,6 +228,9 @@ Ext.define('Shopware.form.field.CodeMirror',
             el = me.inputEl;
 
         me.editor = CodeMirror.fromTextArea(document.getElementById(el.id), me.config);
+        me.editor.on('change', function() {
+            me.editor.save();
+        })
 
         me.resizeEditor();
 
