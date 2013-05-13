@@ -48,19 +48,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
     alias:'widget.performance-tabs-settings-base',
 
     /**
-     * Layout type for the component.
-     * @string
-     */
-    layout: 'column',
-
-    /**
-     * Make the fieldSets collapsible
-     */
-    collapsible: false,
-    collapsed: false,
-    border: false,
-    hidden: true,
-    /**
      * Layout
      */
     layout: 'anchor',

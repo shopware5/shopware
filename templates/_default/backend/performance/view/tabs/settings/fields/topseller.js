@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                 "<b>Wichtig: </b> Informationen"),
         {
             xtype: 'button',
-            cls: 'small primary',
+            cls: 'primary',
             margin: '0 0 10 0',
             text: 'Init TopSeller',
             handler: function() {
