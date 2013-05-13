@@ -106,6 +106,7 @@ Ext.define('Shopware.form.field.CodeMirror',
      */
     editorWidth: 0,
 
+
     /**
      * Property which holds the path to the mode directory of
      * the CodeMirror editor.
@@ -118,13 +119,6 @@ Ext.define('Shopware.form.field.CodeMirror',
      * the javascript files after loading
      */
     loadedModes: Ext.create('Ext.util.MixedCollection'),
-
-    /**
-     * Truthy, if the editor is already rendered, otherwise falsy.
-     * @default false
-     * @boolean
-     */
-    isEditorRendered: false,
 
     /**
      * Init the component
@@ -217,9 +211,7 @@ Ext.define('Shopware.form.field.CodeMirror',
         if(!modeActive) {
             me.loadJSFile(me.modePath + '/' + me.config.mode + '/' + me.config.mode + '.js');
         } else {
-            if(!me.isEditorRendered) {
-                me.initEditor();
-            }
+            me.initEditor();
         }
     },
 
@@ -236,9 +228,12 @@ Ext.define('Shopware.form.field.CodeMirror',
             el = me.inputEl;
 
         me.editor = CodeMirror.fromTextArea(document.getElementById(el.id), me.config);
-        me.isEditorRendered = true;
+        me.editor.on('change', function() {
+            me.editor.save();
+        })
 
         me.resizeEditor();
+
         me.editor.setValue(me.rawValue);
 
         return me.editor;
@@ -378,9 +373,7 @@ Ext.define('Shopware.form.field.CodeMirror',
 
         loadedModes.add(Ext.get(script));
 
-        if(!me.isEditorRendered) {
-            me.initEditor();
-        }
+        me.initEditor();
     },
 
     /**
