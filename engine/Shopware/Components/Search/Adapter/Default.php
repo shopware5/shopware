@@ -363,9 +363,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $result = $this->database->fetchRow($sql);
         $last = !empty($result['last']) ? unserialize($result['last']) : null;
 
-        if (empty($last) || empty($result['not_force'])
-            || strtotime($last) < strtotime($result['current']) - $interval
-        ) {
+        if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->buildSearchIndex();
         }
     }
@@ -961,6 +959,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Set count of results to result object
         $this->getResult()->setResultCount(count($searchResultsFinal));
 
+
+        if (!empty($this->requestSortSearchResultsBy)) {
+            $sortedResult = $this->sortResults($searchResultsFinal, $this->requestSortSearchResultsBy);
+            if($sortedResult !== false) {
+                $searchResultsFinal = $sortedResult;
+            }
+        }
         $searchResultsFinal = array_splice(
             $searchResultsFinal,
             ($this->requestCurrentPage -1) * $searchConfiguration['resultsPerPage'],
@@ -972,10 +977,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         } else {
             // Set results to class property
             $this->getResult()->setResult($searchResultsFinal);
-        }
-
-        if (!empty($this->requestSortSearchResultsBy)) {
-            $this->sortResults($this->requestSortSearchResultsBy);
         }
 
         return $this->getResult();
@@ -1079,15 +1080,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
     /**
      * Sort search results locally
+     * @param $searchResult
      * @param $sortBy
      *          1 = datum
      *          2 = sales
      *          3 = price
      *          4 = name
      *          7 = vote
-     * @return bool
+     * @return array|bool
      */
-    public function sortResults($sortBy)
+    public function sortResults($searchResult, $sortBy)
     {
         switch ($sortBy) {
             case 1:
@@ -1106,12 +1108,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             case 7:
                 $field = "vote";
                 break;
-            case 2:
             default:
                 return false;
         }
 
-        $result = $this->getResult()->getResult();
+        $result = $searchResult;
 
         $orderValues = array();
         foreach ($result as $articleID => $article) {
@@ -1141,9 +1142,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         foreach (array_keys($orderValues) as $articleID) {
             $temporaryArticles[$articleID] = $result[$articleID];
         }
-        $this->getResult()->setResult($temporaryArticles);
-        unset($tmp);
-        return true;
+        return $temporaryArticles;
     }
 
     /**
