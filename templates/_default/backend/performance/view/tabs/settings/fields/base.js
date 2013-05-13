@@ -61,6 +61,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
         anchor: '100%'
     },
 
+    hidden: true,
+
 
     /**
      * Required minimum width of the fieldSet
