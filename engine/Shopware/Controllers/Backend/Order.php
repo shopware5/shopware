@@ -355,7 +355,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $sort[0]['property'] = 'orders.' . $sort[0]['property'];
             }
 
-            $query = $this->getRepository()->getOrdersQuery($filter, $sort, $offset, $limit);
+            $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);
 
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
@@ -367,7 +367,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             //returns the customer data
             $orders = $paginator->getIterator()->getArrayCopy();
 
-            foreach($orders as $key => $order) {
+            foreach($orders as $key => &$order) {
+
+                $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
+                $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+                $order = array_merge($order, $additionalOrderData);
                 //we need to set the billing and shipping attributes to the first array level to load the data into a form panel
                 //same for locale
                 $order['billingAttribute'] = $order['billing']['attribute'];
