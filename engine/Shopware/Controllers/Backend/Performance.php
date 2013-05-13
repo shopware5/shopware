@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['topSeller'] = $this->prepareTopSellerConfigForSaving($data['topSeller'][0]);
         $output['seo']       = $this->prepareSeoConfigForSaving($data['seo'][0]);
         $output['search']    = $this->prepareSearchConfigForSaving($data['search'][0]);
-        $output['categories']    = $this->prepareCategoriesConfigForSaving($data['categories'][0]);
+        $output['categories']= $this->prepareCategoriesConfigForSaving($data['categories'][0]);
 
         return $output;
     }
@@ -248,6 +248,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'articlesperpage'           => Shopware()->Config()->articlesperpage,
             'orderbydefault'            => Shopware()->Config()->orderbydefault,
             'showSupplierInCategories'  => Shopware()->Config()->showSupplierInCategories,
+            'propertySorting'           => Shopware()->Config()->propertySorting,
         );
     }
 

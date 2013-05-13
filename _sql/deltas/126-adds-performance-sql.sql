@@ -10,7 +10,9 @@ VALUES
 ('topSellerPseudoSales', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('seoRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('searchRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('showSupplierInCategories', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
+('showSupplierInCategories', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('propertySorting', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
+
 
 -- //@UNDO
 
