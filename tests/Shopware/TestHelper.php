@@ -70,10 +70,7 @@ class TestHelper extends Shopware
         $this->Bootstrap()->loadResource('Plugins');
 
         // generate attribute models
-        $attributeDir = $this->Bootstrap()->Models()->getConfiguration()->getAttributeDir();
-        $this->Bootstrap()->Models()->getConfiguration()->setAttributeDir($this->oldPath . $attributeDir);
         $this->Bootstrap()->Models()->generateAttributeModels();
-
 
         $this->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
