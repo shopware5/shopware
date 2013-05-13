@@ -153,13 +153,10 @@
     </target>
 
     <target name="static-lint" description="Perform syntax check of sourcecode files">
-        <apply executable="php" failonerror="true">
-            <arg value="-l" />
-
-            <fileset dir="${basedir}/engine/Shopware/">
-                <include name="**/*.php" />
-            </fileset>
-        </apply>
+        <exec executable="bash" failonerror="true">
+            <arg value="-c" />
+            <arg value="find -L ${basedir}/engine/Shopware/ -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l" />
+        </exec>
     </target>
 
     <target name="static-phpcs" description="PHP CodeSniffer">
