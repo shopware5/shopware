@@ -70,43 +70,60 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für verschiedene kleinere Einstellungen <br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            fieldLabel: 'Shopware Statistiken deaktivieren',
-            helpText: 'Keine Statistiken erheben',
-            name: 'various[disableShopwareStatistics]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        },{
-            fieldLabel: 'Tag-Cloud aktivieren',
-            helpText: 'Soll eine TagCloud angezeigt werden?',
-            name: 'various[TagCloud:show]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        },{
-            fieldLabel: 'Artikelverlauf anzeigen',
-            name: 'various[LastArticles:show]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }, {
-            fieldLabel: 'Anzahl Artikel im Verlauf',
-            helpText: 'Anzahl der Artikel im Widget "zuletzt angesehene Artikel"',
-            name: 'various[LastArticles:lastarticlestoshow]',
-            xtype: 'numberfield',
-            minValue: 1
-        },{
-            fieldLabel: 'Artikelnavigation auf Detailseite deaktivieren',
-            helpText: 'Deaktiviert die links/rechts-Pfeile auf der Artikel-Detailseite',
-            name: 'various[disableArticleNavigation]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }];
+            {
+                xtype: 'fieldset',
+                title: 'Information',
+                defaults: me.defaults,
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für verschiedene kleinere Einstellungen <br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen")]
+            },
+            {
+                xtype: 'fieldset',
+                title: 'Konfiguration',
+                defaults: me.defaults,
+                items: [
+                    {
+                        fieldLabel: 'Shopware Statistiken deaktivieren',
+                        helpText: 'Keine Statistiken erheben',
+                        name: 'various[disableShopwareStatistics]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: 'Tag-Cloud aktivieren',
+                        helpText: 'Soll eine TagCloud angezeigt werden?',
+                        name: 'various[TagCloud:show]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: 'Artikelverlauf anzeigen',
+                        name: 'various[LastArticles:show]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: 'Anzahl Artikel im Verlauf',
+                        helpText: 'Anzahl der Artikel im Widget "zuletzt angesehene Artikel"',
+                        name: 'various[LastArticles:lastarticlestoshow]',
+                        xtype: 'numberfield',
+                        minValue: 1
+                    },
+                    {
+                        fieldLabel: 'Artikelnavigation auf Detailseite deaktivieren',
+                        helpText: 'Deaktiviert die links/rechts-Pfeile auf der Artikel-Detailseite',
+                        name: 'various[disableArticleNavigation]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    }
+                ]}
+        ];
     }
 
 

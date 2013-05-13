@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Performance.model.Customer', {
         { name:'similarRefreshStrategy', type:'int' },
         { name:'alsoBoughtShow', type:'bool' },
         { name:'similarViewedShow', type:'bool' },
-        { name:'similarValidationTime', type:'int' }
+        { name:'similarValidationTime', type:'int' },
+        { name:'similarActive', type:'bool' }
     ]
 
 });

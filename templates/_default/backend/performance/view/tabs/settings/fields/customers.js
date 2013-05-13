@@ -70,59 +70,92 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für Crossselling<br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'performance-multi-request-button',
-            event: 'alsoBought',
-            title: 'Index aufbauen für "Auch gekauft"'
-        },{
-            fieldLabel: '"Kunden kauften auch" anzeigen',
-            name: 'customer[alsoBoughtShow]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }, {
-            xtype: 'performance-multi-request-button',
-            event: 'similarShown',
-            title: 'Index aufbauen für "Auch gesehen"'
-        }, {
-            fieldLabel: '"Kunden haben auch gesehen" anzeigen',
-            name: 'customer[similarViewedShow]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        },{
-            fieldLabel: 'Gültigkeit',
-            supportText: '(in Tagen)',
-            name: 'customer[similarValidationTime]',
-            xtype: 'numberfield',
-            minValue: 1,
-            maxValue: 365
-        },{
-            fieldLabel: 'Aktualisierungs-Strategie',
-            helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'customer[similarRefreshStrategy]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Manuell' },
-                    { id: 2, name: 'CronJob' },
-                    { id: 3, name: 'Live' }
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: 'Information',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für Crossselling<br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen"), ]
+            },
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: 'Konfiguration "Kunden haben auch gekauft"',
+                items: [
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'alsoBought',
+                        title: 'Index aufbauen'
+                    },
+                    {
+                        fieldLabel: 'Anzeigen',
+                        name: 'customer[alsoBoughtShow]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    }
+                ]},
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: 'Konfiguration "Kunden haben auch gesehen"',
+                items: [
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'similarShown',
+                        title: 'Index aufbauen'
+                    },
+                    {
+                        fieldLabel: 'Aktivieren',
+                        name: 'customer[similarActive]',
+                        helpText: 'Soll diese Information erhoben werden?',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },                    {
+                        fieldLabel: 'Anzeigen',
+                        helpText: 'Das Anzeigen vermindert die Wirkung des HTTPCaches auf der Artikel-Detailseite',
+                        name: 'customer[similarViewedShow]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: 'Gültigkeit',
+                        supportText: '(in Tagen)',
+                        name: 'customer[similarValidationTime]',
+                        xtype: 'numberfield',
+                        minValue: 1,
+                        maxValue: 365
+                    },
+                    {
+                        fieldLabel: 'Aktualisierungs-Strategie',
+                        helpText: 'Wie soll aktualisiert werden?<br><br>' +
+                                '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
+                                '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
+                                '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+                        name: 'customer[similarRefreshStrategy]',
+                        xtype: 'combo',
+                        valueField: 'id',
+                        editable: false,
+                        displayField: 'name',
+                        store: Ext.create('Ext.data.Store', {
+                            fields: [
+                                { name: 'id', type: 'int' },
+                                { name: 'name', type: 'string' }
+                            ],
+                            data: [
+                                { id: 1, name: 'Manuell' },
+                                { id: 2, name: 'CronJob' },
+                                { id: 3, name: 'Live' }
+                            ]
+                        })
+                    }
                 ]
-            })
-        }];
+            }
+        ];
     }
 
 
