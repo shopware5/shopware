@@ -379,6 +379,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         configurator.articleConfiguratorSet = article.getConfiguratorSet().first();
 
         priceFieldSet.priceStore = article.getPrice();
+        priceFieldSet.preparePriceStore();
         Ext.each(priceFieldSet.priceGrids, function(grid) {
             grid.reconfigure(article.getPrice());
         });
