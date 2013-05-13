@@ -43,7 +43,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('default');
+    public $optional_attributes = array('default', 'form');
 
     /**
      * @param $args
@@ -52,6 +52,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
      */
     public function compile($args, $compiler)
     {
+        $form = '';
         $_attr = $this->getAttributes($compiler, $args);
 
         if(!Enlight_Application::Instance()->Bootstrap()->hasResource('Config')) {
@@ -61,15 +62,19 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
             return '<?php echo ' . $_attr['default'] . '; ?>';
         }
 
+        if (isset($_attr['form'])) {
+            $form = str_replace("'", '', $_attr['form']) . '::';
+        }
+
         if(!preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $_attr['name'], $match)) {
-            $return = $_attr['name'];
+            $return = $form . $_attr['name'];
             if(isset($_attr['default'])) {
                 $return .= ', ' . $_attr['default'];
             }
             return '<?php echo Enlight_Application::Instance()->Config()->get(' . $return . '); ?>';
         }
 
-        $name = substr($_attr['name'], 1, -1);
+        $name = $form . substr($_attr['name'], 1, -1);
         $value = Enlight_Application::Instance()->Config()->get($name);
         if($value !== null) {
             return '<?php echo ' .  var_export($value, true) . ';?>';
