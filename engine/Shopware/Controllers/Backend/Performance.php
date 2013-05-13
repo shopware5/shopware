@@ -50,11 +50,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function init()
     {
-        echo "<pre>";
-        print_r(Shopware()->Config()->get('LastArticles::show'));
-        echo "</pre>";
-        exit();
-        
         $this->configData = $this->prepareConfigData();
 
         parent::init();
