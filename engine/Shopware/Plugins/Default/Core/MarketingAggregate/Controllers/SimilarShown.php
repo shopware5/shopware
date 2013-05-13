@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
 
     /**
      * Controller action which can be access over an ajax request.
-     * This function is used to get the also bought count.
+     * This function is used to get the similar shown count.
      */
     public function getSimilarShownCountAction()
     {
@@ -67,8 +67,8 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
     }
 
     /**
-     * Helper function to initials the s_articles_also_bought table.
-     * This table is used for the new shopware also bought articles function.
+     * Helper function to initials the s_articles_similar_shown_ro table.
+     * This table is used for the new shopware similar shown articles function.
      */
     public function initSimilarShownAction()
     {
@@ -76,7 +76,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
         $limit = $this->Request()->get('limit');
 
         if ($offset === 0) {
-            $sql = "DELETE FROM s_articles_similar_shown";
+            $sql = "DELETE FROM s_articles_similar_shown_ro";
             Shopware()->Db()->query($sql);
         }
 

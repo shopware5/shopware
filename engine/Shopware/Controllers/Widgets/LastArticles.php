@@ -35,7 +35,6 @@
  *
  * todo@all: Documentation
  */
-
 class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Action
 {
     /**

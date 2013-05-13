@@ -287,7 +287,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Shopware_Modules_Articles_SetLastArticle event.
      * This event is fired after a user visit an article detail page.
      * This listener function is used to increment the counter value of
-     * the s_articles_similar_shown table.
+     * the s_articles_similar_shown_ro table.
      *
      * @param Enlight_Event_EventArgs $arguments
      * @return mixed

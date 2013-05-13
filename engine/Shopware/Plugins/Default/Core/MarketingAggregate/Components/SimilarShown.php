@@ -39,7 +39,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      */
     public function resetSimilarShown()
     {
-        $sql = "DELETE FROM s_articles_similar_shown";
+        $sql = "DELETE FROM s_articles_similar_shown_ro";
         Shopware()->Db()->query($sql);
     }
 
@@ -56,7 +56,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         }
 
         $sql = "
-            INSERT IGNORE INTO s_articles_similar_shown (article_id, related_article_id, viewed, init_date)
+            INSERT IGNORE INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
             SELECT
                 article1.articleID as article_id,
                 article2.articleID as related_article_id,
@@ -88,7 +88,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         $validationTime = $this->getSimilarShownValidationTime();
 
         $sql = "
-              UPDATE s_articles_similar_shown shown
+              UPDATE s_articles_similar_shown shown_ro
               SET init_date = now(),
                   viewed = (
                       SELECT COUNT(article2.articleID) as viewed
@@ -136,7 +136,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     public function refreshSimilarShown($articleId, $relatedArticleId)
     {
         $sql = "
-            INSERT INTO s_articles_similar_shown (article_id, related_article_id, viewed, init_date)
+            INSERT INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
             VALUES (:articleId, :relatedArticleId, 1, now())
             ON DUPLICATE KEY UPDATE viewed = viewed + 1;
         ";

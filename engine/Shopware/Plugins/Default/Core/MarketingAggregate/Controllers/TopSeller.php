@@ -48,7 +48,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
         $offset = $this->Request()->get('offset');
         $limit = $this->Request()->get('limit');
         if ($offset === 0) {
-            $sql = "DELETE FROM s_articles_top_seller";
+            $sql = "DELETE FROM s_articles_top_seller_ro";
             Shopware()->Db()->query($sql);
         }
 
