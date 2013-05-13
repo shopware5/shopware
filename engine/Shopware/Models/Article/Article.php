@@ -430,7 +430,7 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Article\Configurator\Template\Template
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
      */
     protected $configuratorTemplate;
 
