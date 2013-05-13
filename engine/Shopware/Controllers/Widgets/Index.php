@@ -50,18 +50,6 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     }
 
     /**
-     * Sets a template variable with the last views articles.
-     *
-     * @return void
-     */
-    public function lastArticlesAction()
-    {
-        $articleId = (int) $this->Request()->getParam('sArticle');
-        $articles = Shopware()->Modules()->Articles()->sGetLastArticles($articleId);
-        $this->View()->assign('sLastArticles', $articles, true);
-    }
-
-    /**
      * Refresh shop statistic
      */
     public function refreshStatisticAction()
