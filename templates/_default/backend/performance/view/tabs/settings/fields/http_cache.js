@@ -73,34 +73,51 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das HTTPCache-Modul <br>" +
-            "<br>" +
-            "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'performance-tabs-settings-elements-cache-time',
-            height: 250,
-            margin: '0 0 20 0'
-        }, {
-            xtype: 'performance-tabs-settings-elements-no-cache',
-            height: 250,
-            margin: '0 0 20 0'
-        }, {
-            fieldLabel: 'Proxy-BAN aktivieren',
-            name: 'httpCache[HttpCache:proxyBan]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }, {
-            fieldLabel: 'Alternative Proxy-Url',
-            name: 'httpCache[HttpCache:proxy]',
-            xtype: 'textfield'
-        }, {
-            fieldLabel: 'Admin-View',
-            name: 'httpCache[HttpCache:admin]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        }];
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: 'Information',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für das HTTPCache-Modul <br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen")
+                ]},
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: 'Konfiguration',
+                items: [
+                    {
+                        fieldLabel: 'Proxy-BAN aktivieren',
+                        name: 'httpCache[HttpCache:proxyBan]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: 'Alternative Proxy-Url',
+                        name: 'httpCache[HttpCache:proxy]',
+                        xtype: 'textfield'
+                    },
+                    {
+                        fieldLabel: 'Admin-View',
+                        name: 'httpCache[HttpCache:admin]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true,
+                        margin: '0 0 20 0'
+                    },
+                    {
+                        xtype: 'performance-tabs-settings-elements-cache-time',
+                        height: 250,
+                        margin: '0 0 20 0'
+                    },
+                    {
+                        xtype: 'performance-tabs-settings-elements-no-cache',
+                        height: 250
+                    }
+                ]}
+        ];
 
     }
 
