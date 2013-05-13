@@ -15,7 +15,7 @@ VALUES
 ('disableShopwareStatistics', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('disableArticleNavigation', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('similarRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('similarRefreshStrategy', 'i:100;', '', '', '', 1, 0, 0, NULL, NULL, '');
+('similarValidationTime', 'i:100;', '', '', '', 1, 0, 0, NULL, NULL, '');
 
 
 -- //@UNDO
