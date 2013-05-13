@@ -74,6 +74,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
+            xtype: 'performance-multi-request-button',
+            event: 'category',
+            title: 'Kategorien reparieren'
+        }, {
             fieldLabel: 'Artikel pro Seite',
             helpText: 'Wie viele Artikel sollen auf jeder Seite angezeigt werden?',
             name: 'categories[articlesperpage]',

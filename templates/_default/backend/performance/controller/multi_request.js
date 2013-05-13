@@ -85,6 +85,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 200
+        },
+        category:  {
+            title: 'Repariere Kategorien',
+            totalCountUrl: '{url controller="Cache" action="prepareTree"}',
+            requestUrl: '{url controller="Cache" action="fixCategories"}',
+            batchSize: 5000
         }
     },
 
@@ -115,7 +121,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             batchSize = config.batchSize,
             count = config.totalCount;
 
-        
+
         if (offset >= count) {
             // Enable close button, set progressBar to 'finish'
             dialog.progressBar.updateProgress(1, me.snippets.done.message, true);
@@ -191,7 +197,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         var window = me.getView('main.MultiRequestDialog').create({
             title: config.title,
-            currentType: type
+            currentType: type,
+            batchSize: config.batchSize
         }).show();
 
         me.cancelOperation = false;
