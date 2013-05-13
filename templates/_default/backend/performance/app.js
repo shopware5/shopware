@@ -82,7 +82,8 @@ Ext.define('Shopware.apps.Performance', {
 
         'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
-        'tabs.settings.elements.NoCache'
+        'tabs.settings.elements.NoCache',
+        'tabs.settings.elements.MultiRequestButton',
     ],
 
     /**

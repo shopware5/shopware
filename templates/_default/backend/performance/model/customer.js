@@ -48,10 +48,10 @@ Ext.define('Shopware.apps.Performance.model.Customer', {
 		//{block name="backend/performance/model/customer/fields"}{/block}
         { name:'id', type:'int' },
 
-        { name:'customerRefreshStrategy', type:'int' },
+        { name:'similarRefreshStrategy', type:'int' },
         { name:'alsoBoughtShow', type:'bool' },
         { name:'similarViewedShow', type:'bool' },
-        { name:'customerValidationTime', type:'int' }
+        { name:'similarRefreshStrategy', type:'int' }
     ]
 
 });

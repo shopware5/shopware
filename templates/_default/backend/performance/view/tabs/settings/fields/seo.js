@@ -75,13 +75,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
-            xtype: 'button',
-            cls: 'small primary',
-            margin: '0 0 10 0',
-            text: 'Init SEO',
-            handler: function() {
-                me.fireEvent('showMultiRequestDialog', 'seo', me);
-            }
+            xtype: 'performance-multi-request-button',
+            event: 'seo',
+            title: 'SEO-Index aufbauen',
         },{
             fieldLabel: 'Aktualisierungs-Strategie',
             helpText: 'Wie soll aktualisiert werden?<br><br>' +

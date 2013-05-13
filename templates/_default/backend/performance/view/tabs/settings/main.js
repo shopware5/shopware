@@ -88,7 +88,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
 			region: 'center',
 			trackResetOnLoad: true,
 		    autoScroll: true,
-		    bodyPadding: 10,
 			items: [{
                 	xtype: 'performance-tabs-settings-seo'
            	 	},{
@@ -109,7 +108,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
 		return [{
         	xtype: 'performance-tabs-settings-navigation',
         	store: me.treeStore,
-        	region: 'west'
+        	region: 'west',
+            bodyStyle: 'background: #ffffff;'
 		},
 		me.panel];
 	},

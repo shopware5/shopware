@@ -75,13 +75,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
-            xtype: 'button',
-            cls: 'small primary',
-            margin: '0 0 10 0',
-            text: 'Init SEO',
-            handler: function() {
-                me.fireEvent('showMultiRequestDialog', 'search', me);
-            }
+            xtype: 'performance-multi-request-button',
+            event: 'search',
+            title: 'Suchindex aufbauen',
         },{
             fieldLabel: 'Aktualisierungs-Strategie',
             helpText: 'Wie soll aktualisiert werden?<br><br>' +
