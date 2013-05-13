@@ -26,6 +26,12 @@ VALUES
 (@parent, 'bcryptCost', 'i:10;', 'Bcrypt-Rechenaufwand', 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Anfreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.', 'number', 1, 0, 0, NULL, NULL, 'a:2:{s:8:"minValue";s:1:"4";s:8:"maxValue";s:2:"31";}'),
 (@parent, 'sha256iterations', 'i:100000;', 'Sha256-Iterationen', 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Anfreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.', 'number', 1, 0, 0, NULL, NULL, 'a:2:{s:8:"minValue";s:1:"1";s:8:"maxValue";s:7:"1000000";}');
 
+ALTER TABLE  `s_core_auth` ADD  `encoder` VARCHAR( 255 ) NOT NULL DEFAULT  'LegacyBackendMd5' AFTER  `password`;
+ALTER TABLE  `s_core_auth` CHANGE  `password`  `password` VARCHAR( 255 ) NOT NULL;
+
+ALTER TABLE  `s_user` ADD  `encoder` VARCHAR( 255 ) NOT NULL DEFAULT  'md5' AFTER  `password`;
+ALTER TABLE  `s_user` CHANGE  `password`  `password` VARCHAR( 255 ) NOT NULL;
+
 -- //@UNDO
 
 -- //
