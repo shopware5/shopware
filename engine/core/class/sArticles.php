@@ -1017,8 +1017,8 @@ class sArticles
                 (
                     SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
                     FROM s_articles_vote
-                    WHERE active=1
-                    AND articleID = a.id
+                    WHERE s_articles_vote.active=1
+                    AND s_articles_vote.articleID = a.id
                 ) AS sVoteAverange
 
             $sqlFromPath

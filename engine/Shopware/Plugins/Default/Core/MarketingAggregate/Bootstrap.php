@@ -35,9 +35,9 @@
 class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * Marketing function is deactivated
+     * Refresh the marketing data only manuel.
      */
-    const AGGREGATE_STRATEGY_DEACTIVATE = 1;
+    const AGGREGATE_STRATEGY_MANUAL = 1;
 
     /**
      * Refresh the marketing data over a cron job.
@@ -48,11 +48,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Refresh the marketing data after access the specified core function
      */
     const AGGREGATE_STRATEGY_LIVE = 3;
-
-    /**
-     * Refresh the marketing data only manuel.
-     */
-    const AGGREGATE_STRATEGY_MANUEL = 4;
 
     /**
      * Returns the capabilities for this plugin.
@@ -130,8 +125,17 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     }
 
 
-
-
+    /**
+     * Helper function to check if the top seller
+     * function is activated.
+     */
+    protected function isTopSellerActivated()
+    {
+        return $this->Application()->Config()->get(
+            'topSellerActive',
+            true
+        );
+    }
 
     /**
      * The install function creates the plugin configuration
@@ -460,17 +464,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function incrementTopSeller(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
-            return $arguments->getReturn();
-        }
-
-        $strategy = $this->Application()->Config()->get(
-            'topSellerRefreshStrategy',
-            self::AGGREGATE_STRATEGY_LIVE
-        );
-
-        //top seller function deactivated?
-        if ($strategy === self::AGGREGATE_STRATEGY_DEACTIVATE) {
+        if (Shopware()->Session()->Bot || !($this->isTopSellerActivated())) {
             return $arguments->getReturn();
         }
 
@@ -495,6 +489,15 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function refreshTopSeller()
     {
+        $strategy = $this->Application()->Config()->get(
+            'topSellerRefreshStrategy',
+            self::AGGREGATE_STRATEGY_LIVE
+        );
+
+        if (!($this->isTopSellerActivated()) || $strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
+            return true;
+        }
+
         $this->TopSeller()->initTopSeller();
         return true;
     }
@@ -521,7 +524,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE || !($this->isTopSellerActivated())) {
             return $arguments->getReturn();
         }
 
@@ -540,7 +543,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function refreshArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
+        if (Shopware()->Session()->Bot || !($this->isTopSellerActivated())) {
             return;
         }
 
