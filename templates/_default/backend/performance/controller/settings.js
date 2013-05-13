@@ -90,8 +90,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             var storeData = records[0];
 
 			me.injectConfig(storeData);
-			me.configData = storeData;			
-			
+
 	        if (callback) {
 	        	callback();
 	        }
@@ -107,10 +106,12 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     	var me = this;
     	
         me.getSettings().panel.loadRecord(config);
-        
+
         // reconfigure grids and inject the stores
-        me.getCacheTime().reconfigure(config.getHttpCache().first().getCacheControllers());
-        me.getNoCache().reconfigure(config.getHttpCache().first().getNoCacheControllers());
+        me.getCacheTime().reconfigure(me.deepCloneStore(config.getHttpCache().first().getCacheControllers()));
+        me.getNoCache().reconfigure(me.deepCloneStore(config.getHttpCache().first().getNoCacheControllers()));
+
+        me.configData = Ext.clone(config);
     },
 
 	/*
@@ -163,7 +164,6 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
                 if ( operation.success === true ) {
                 	// Load the returned data
                     me.injectConfig(record);
-        			me.configData = record;			
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.successMessage, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
@@ -172,5 +172,21 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         });
 
     },
+
+    deepCloneStore: function (source) {
+        var target = Ext.create ('Ext.data.Store', {
+            model: source.model
+        });
+
+        Ext.each (source.getRange (), function (record) {
+            var newRecordData = Ext.clone (record.copy().data);
+            var model = new source.model (newRecordData, newRecordData.id);
+
+            target.add (model);
+        });
+
+        return target;
+    }
+
     });
 //{/block}

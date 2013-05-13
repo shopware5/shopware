@@ -11,7 +11,11 @@ VALUES
 ('seoRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('searchRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('showSupplierInCategories', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('propertySorting', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
+('propertySorting', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('disableShopwareStatistics', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('disableArticleNavigation', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('customerRefreshStrategy', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('customerValidationTime', 'i:100;', '', '', '', 1, 0, 0, NULL, NULL, '');
 
 
 -- //@UNDO

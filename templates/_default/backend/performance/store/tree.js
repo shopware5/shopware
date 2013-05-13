@@ -42,9 +42,9 @@ Ext.define('Shopware.apps.Performance.store.Tree', {
     root: {
     expanded: true,
     children: [{
-    	text: "Verschiedenes",
+    	text: "Allgemein",
     	expanded: true,
-    	children: [{ 
+    	children: [{
         	text: "HTTP Cache",
         	leaf: true,
         	internalName: 'performance-tabs-settings-http-cache'
@@ -60,7 +60,11 @@ Ext.define('Shopware.apps.Performance.store.Tree', {
         	text: "Kategorien", 
         	leaf: true, 
         	internalName: 'performance-tabs-settings-categories'
-    	}]
+    	},{
+            text: "Verschiedenes",
+            leaf: true,
+            internalName: 'performance-tabs-settings-various'
+        }]
 	}, {
     	text: "Crossselling",
     	expanded: true, 
@@ -70,13 +74,9 @@ Ext.define('Shopware.apps.Performance.store.Tree', {
     		leaf: true, 
     		internalName: 'performance-tabs-settings-topseller'
 		}, {
-			text: "Auch gekauft",
+			text: "Andere Kunden",
 			leaf: true,
-			internalName: 'alsobought'
-		}, {
-			text: "Auch gesehen",
-			leaf: true,
-			internalName: 'alsoseen'
+			internalName: 'performance-tabs-settings-customers'
 		}]
 	}]
 	},

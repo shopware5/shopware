@@ -33,8 +33,8 @@
 /**
  * Categories fieldSet
  */
-//{block name="backend/performance/view/tabs/settings/fields/categories"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
+//{block name="backend/performance/view/tabs/settings/fields/customers"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-categories',
+    alias:'widget.performance-tabs-settings-customers',
 
     /**
      * Description of the fieldSet
@@ -70,34 +70,51 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das Kategorien-Modul <br>" +
+            me.createDecriptionContainer("Allgemeine Beschreibung für Crossselling<br>" +
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
-            fieldLabel: 'Artikel pro Seite',
-            helpText: 'Wie viele Artikel sollen auf jeder Seite angezeigt werden?',
-            name: 'categories[articlesperpage]',
-            xtype: 'numberfield',
-            minValue: 1
+            xtype: 'button',
+            cls: 'small primary',
+            margin: '0 0 10 0',
+            text: 'Index aufbauen für "Kunden kauften auch"',
+            handler: function() {
+                me.fireEvent('showMultiRequestDialog', 'alsoBought', me);
+            }
+        },{
+            fieldLabel: '"Kunden kauften auch" anzeigen',
+            name: 'customer[alsoBoughtShow]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
         }, {
-            fieldLabel: 'Standardsortierung in den Listings',
-            helpText: 'Wie sollen die Artikel im Listing sortiert werden?',
-            name: 'categories[orderbydefault]',
-            xtype: 'textfield'
+            xtype: 'button',
+            cls: 'small primary',
+            margin: '0 0 10 0',
+            text: 'Index aufbauen für "Kunden haben auch gesehen"',
+            handler: function() {
+                me.fireEvent('showMultiRequestDialog', 'similarShown', me);
+            }
         }, {
-            fieldLabel: 'Kategorie-Hersteller anzeigen',
-            helpText: '?',
-            name: 'categories[showSupplierInCategories]',
+            fieldLabel: '"Kunden haben auch gesehen" anzeigen',
+            name: 'customer[similarViewedShow]',
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true
         },{
-            fieldLabel: 'Sortierung der Eigenschaften',
-            helpText: 'Wie soll en die Eigenschaften sortiert werden?<br><br>' +
+            fieldLabel: 'Gültigkeit',
+            supportText: '(in Tagen)',
+            name: 'customer[customerValidationTime]',
+            xtype: 'numberfield',
+            minValue: 1,
+            maxValue: 365
+        },{
+            fieldLabel: 'Aktualisierungs-Strategie',
+            helpText: 'Wie soll aktualisiert werden?<br><br>' +
                     '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
                     '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
                     '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'categories[propertySorting]',
+            name: 'customer[customerRefreshStrategy]',
             xtype: 'combo',
             valueField: 'id',
             editable: false,
@@ -108,12 +125,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                     { name: 'name',  type: 'string' }
                 ],
                 data : [
-                    { id: 1, name: 'Alle Funktionen berücksichtigen' },
-                    { id: 2, name: 'Immer nach Name sortieren' },
-                    { id: 3, name: 'Immer nach Position sortieren' }
+                    { id: 1, name: 'Manuell' },
+                    { id: 2, name: 'CronJob' },
+                    { id: 3, name: 'Live' }
                 ]
             })
-        },];
+        }];
     }
 
 

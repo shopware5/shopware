@@ -109,15 +109,35 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $output = array();
         $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
-        $output['topSeller'] = $this->prepareTopSellerConfigForSaving($data['topSeller'][0]);
+        $output['topSeller'] = $this->prepareForSavingDefault($data['topSeller'][0]);
         $output['seo']       = $this->prepareSeoConfigForSaving($data['seo'][0]);
-        $output['search']    = $this->prepareSearchConfigForSaving($data['search'][0]);
-        $output['categories']= $this->prepareCategoriesConfigForSaving($data['categories'][0]);
+        $output['search']    = $this->prepareForSavingDefault($data['search'][0]);
+        $output['categories']= $this->prepareForSavingDefault($data['categories'][0]);
+        $output['various']   = $this->prepareForSavingDefault($data['various'][0]);
+        $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
 
         return $output;
     }
 
-	public function prepareSeoConfigForSaving($data)
+    /**
+     * Generic helper method which prepares a given array for saving
+     * @param $data
+     * @return Array
+     */
+    public function prepareForSavingDefault($data)
+   	{
+        unset($data['id']);
+
+        return $data;
+   	}
+
+    /**
+     * Prepare seo array for saving
+     *
+     * @param $data
+     * @return Array
+     */
+    public function prepareSeoConfigForSaving($data)
 	{
         unset($data['id']);
 
@@ -134,47 +154,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         return $data;		
 	}
 
-
-    /**
-     * Prepare the Search config array for storage
-     * @param $data
-     * @return mixed
-     */
-    public function prepareCategoriesConfigForSaving($data)
-    {
-        unset($data['id']);
-
-        return $data;
-    }
-
-    /**
-     * Prepare the Search config array for storage
-     * @param $data
-     * @return mixed
-     */
-    public function prepareSearchConfigForSaving($data)
-    {
-        unset($data['id']);
-
-        return $data;
-    }
-
-    /**
-     * Prepare the TopSeller config array for storage
-     * @param $data
-     * @return mixed
-     */
-    public function prepareTopSellerConfigForSaving($data)
-    {
-        unset($data['id']);
-
-        return $data;
-    }
-
     /**
      * Prepare the http config array so that it can easily be saved
+     *
      * @param $data
-     * @return mixed
+     * @return Array
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
@@ -203,11 +187,23 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
+        $formRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
+        if (strpos($name, ':') !== false) {
+            list($formName, $name) = explode(':', $name, 2);
+        }
+
+        $findBy = array('name' => $name);
+        if (isset($formName)) {
+            $form = $formRepository->findOneBy(array('name' => $formName));
+            $findBy['form'] = $form;
+        }
+
+
         /** @var $element Shopware\Models\Config\Element */
-        $element = $elementRepository->findOneBy(array('name' => $name));
+        $element = $elementRepository->findOneBy($findBy);
         foreach ($element->getValues() as $valueModel) {
             Shopware()->Models()->remove($valueModel);
         }
@@ -227,6 +223,41 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         Shopware()->Models()->flush($element);
     }
 
+    public function readConfig($configName, $defaultValue='')
+    {
+        // Simple getter for config items without scope
+        if (strpos($configName, ':') === false) {
+            return Shopware()->Config()->get($configName);
+        }
+
+        list($scope, $config) = explode(':', $configName, 2);
+
+        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
+        $formRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+
+        $form = $formRepository->findOneBy(array('name' => $scope));
+
+        if(!$form) {
+            return $defaultValue;
+        }
+
+        $element = $elementRepository->findOneBy(array('name' => $config, 'form' => $form));
+
+        if(!$element) {
+            return $defaultValue;
+        }
+
+        $values = $element->getValues();
+        if (empty($values) || empty($values[0])) {
+            return $element->getValue();
+        }
+
+        $firstValue = $values[0];
+        return $firstValue->getValue();
+
+
+    }
+
     /**
      * Reads all config data and prepares it for our models
      * @return array
@@ -235,30 +266,56 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         return array(
             'httpCache' => $this->prepareHttpCacheConfig(),
-            'topSeller' => $this->prepareTopSellerConfig(),
+            'topSeller' => $this->genericConfigLoader(
+                array(
+                    'topSellerActive',
+                    'topSellerValidationTime',
+                    'chartinterval',
+                    'topSellerRefreshStrategy',
+                    'topSellerPseudoSales'
+                )
+            ),
             'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->prepareSearchConfig(),
-            'categories'=> $this->prepareCategoriesConfig(),
+            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy')),
+            'categories' => $this->genericConfigLoader(
+                array('articlesperpage', 'orderbydefault', 'showSupplierInCategories', 'propertySorting')
+            ),
+            'various' => $this->genericConfigLoader(
+                array(
+                    'disableShopwareStatistics',
+                    'TagCloud:show',
+                    'LastArticles:show',
+                    'LastArticles:lastarticlestoshow',
+                    'disableArticleNavigation'
+                )
+            ),
+            'customer' => $this->genericConfigLoader(
+                array('alsoBoughtShow', 'similarViewedShow', 'customerValidationTime', 'customerRefreshStrategy')
+            ),
         );
     }
 
-    protected function prepareCategoriesConfig()
+    /**
+     * Generic helper method to build an array of config which needs to be loaded
+     * @param $config
+     * @return array
+     */
+    protected function genericConfigLoader($config)
     {
-        return array(
-            'articlesperpage'           => Shopware()->Config()->articlesperpage,
-            'orderbydefault'            => Shopware()->Config()->orderbydefault,
-            'showSupplierInCategories'  => Shopware()->Config()->showSupplierInCategories,
-            'propertySorting'           => Shopware()->Config()->propertySorting,
-        );
+        $data = array();
+
+        foreach ($config as $configName) {
+            $data[$configName] = $this->readConfig($configName);
+        }
+
+        return $data;
     }
 
-    protected function prepareSearchConfig()
-    {
-        return array(
-            'searchRefreshStrategy'  => Shopware()->Config()->searchRefreshStrategy
-        );
-    }
-
+    /**
+     * Special treatment for SEO config needed
+     *
+     * @return array
+     */
     protected function prepareSeoConfig()
     {
         $datetime = date_create(Shopware()->Config()->routerlastupdate);
@@ -279,17 +336,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         );
     }
 
-    protected function prepareTopSellerConfig()
-    {
-        return array(
-            'topSellerActive'           => (int) Shopware()->Config()->topSellerActive,
-            'topSellerValidationTime'   => (int) Shopware()->Config()->topSellerValidationTime,
-            'chartinterval'             => (int) Shopware()->Config()->chartinterval,
-            'topSellerRefreshStrategy'  => Shopware()->Config()->topSellerRefreshStrategy,
-            'topSellerPseudoSales'      => (int) Shopware()->Config()->topSellerPseudoSales
-        );
-    }
-
+    /**
+     * Special treatment for HTTPCache config needed
+     *
+     * @return array
+     */
     protected function prepareHttpCacheConfig()
     {
         $controllers = Shopware()->Config()->cacheControllers;

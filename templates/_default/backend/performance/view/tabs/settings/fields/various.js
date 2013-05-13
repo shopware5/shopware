@@ -33,8 +33,8 @@
 /**
  * Categories fieldSet
  */
-//{block name="backend/performance/view/tabs/settings/fields/categories"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
+//{block name="backend/performance/view/tabs/settings/fields/various"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
@@ -45,12 +45,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-categories',
+    alias:'widget.performance-tabs-settings-various',
 
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/categories/title}Categories{/s}',
+    caption: '{s name=tabs/settings/various/title}Various{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -70,50 +70,43 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das Kategorien-Modul <br>" +
+            me.createDecriptionContainer("Allgemeine Beschreibung für verschiedene kleinere Einstellungen <br>" +
                 "<br>" +
                 "<b>Wichtig: </b> Informationen"),
         {
-            fieldLabel: 'Artikel pro Seite',
-            helpText: 'Wie viele Artikel sollen auf jeder Seite angezeigt werden?',
-            name: 'categories[articlesperpage]',
-            xtype: 'numberfield',
-            minValue: 1
-        }, {
-            fieldLabel: 'Standardsortierung in den Listings',
-            helpText: 'Wie sollen die Artikel im Listing sortiert werden?',
-            name: 'categories[orderbydefault]',
-            xtype: 'textfield'
-        }, {
-            fieldLabel: 'Kategorie-Hersteller anzeigen',
-            helpText: '?',
-            name: 'categories[showSupplierInCategories]',
+            fieldLabel: 'Shopware Statistiken deaktivieren',
+            helpText: 'Keine Statistiken erheben',
+            name: 'various[disableShopwareStatistics]',
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true
         },{
-            fieldLabel: 'Sortierung der Eigenschaften',
-            helpText: 'Wie soll en die Eigenschaften sortiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'categories[propertySorting]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Alle Funktionen berücksichtigen' },
-                    { id: 2, name: 'Immer nach Name sortieren' },
-                    { id: 3, name: 'Immer nach Position sortieren' }
-                ]
-            })
-        },];
+            fieldLabel: 'Tag-Cloud aktivieren',
+            helpText: 'Soll eine TagCloud angezeigt werden?',
+            name: 'various[TagCloud:show]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
+        },{
+            fieldLabel: 'Artikelverlauf anzeigen',
+            name: 'various[LastArticles:show]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
+        }, {
+            fieldLabel: 'Anzahl Artikel im Verlauf',
+            helpText: 'Anzahl der Artikel im Widget "zuletzt angesehene Artikel"',
+            name: 'various[LastArticles:lastarticlestoshow]',
+            xtype: 'numberfield',
+            minValue: 1
+        },{
+            fieldLabel: 'Artikelnavigation auf Detailseite deaktivieren',
+            helpText: 'Deaktiviert die links/rechts-Pfeile auf der Artikel-Detailseite',
+            name: 'various[disableArticleNavigation]',
+            xtype: 'checkbox',
+            uncheckedValue: false,
+            inputValue:true
+        }];
     }
 
 
