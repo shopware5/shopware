@@ -47,6 +47,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
      */
     autoScroll: true,
 
+    viewConfig: {
+        markDirty: false
+    },
 
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
@@ -99,7 +102,29 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
                 {
                     name: 'value',
                     flex: 1,
-                    xtype: 'textfield'
+                    xtype: 'textfield',
+		             listeners: {
+		              specialkey: function(field, event){
+		                if (event.getKey() == event.ENTER) {
+							var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
+	                        	key = field.getValue(),
+	                        	split = key.split(' '),
+	                        	value = '';
+	                        	           
+							if (split[1]) {
+								key = split[0];
+            	           		value = split[1];
+            	           	}
+	                        	                        
+                            record.set('key', key);
+                        	record.set('value', value);	
+	                        me.store.add(record);
+	                        field.setValue('');
+	                        me.cellEditingPlugin.startEdit(record, 1);
+
+		                }
+		              }
+		            },               
                 },
                 {
                     iconCls:'sprite-plus-circle-frame',
@@ -108,11 +133,20 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
                     action:'add-entry',
                     handler: function(button, event) {
                         var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
-                        text = me.up().down('textfield');
+                        	field = me.up().down('textfield'),
+                        	key = field.getValue(),
+                        	split = key.split(' '),
+                        	value = '';
 
-                        record.set('key', text.getValue());
+						if (split[1]) {
+        	           		key = split[0];
+        	           		value = split[1];
+        	           	}
+
+                        record.set('key', key);
+                        record.set('value', value);
                         me.store.add(record);
-                        text.setValue('');
+                        field.setValue('');
                         me.cellEditingPlugin.startEdit(record, 1);
                     }
                 }

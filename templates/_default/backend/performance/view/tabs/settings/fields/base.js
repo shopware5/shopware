@@ -56,9 +56,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
     /**
      * Make the fieldSets collapsible
      */
-    collapsible: true,
-    collapsed: true,
-
+    collapsible: false,
+    collapsed: false,
+    border: false,
+    hidden: true,
     /**
      * Layout
      */

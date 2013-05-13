@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
     /**
      * Description of the fieldSet
      */
-    title: '{s name=tabs/settings/topseller/title}Topseller{/s}',
+    caption: '{s name=tabs/settings/topseller/title}Topseller{/s}',
 
     /**
      * Component event method which is fired when the component
