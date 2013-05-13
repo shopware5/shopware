@@ -111,6 +111,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         close:'{s name=progress/close}Close window{/s}'
     },
 
+    batchSize: 200,
+
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -153,7 +155,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             name: 'batchSize',
             margin: '0 0 10 0',
             allowBlank: false,
-            value: 200,
+            value: me.batchSize,
             validateOnChange: true,
             validator: function(value) {
                 if (!value.match(/\d+/)) {

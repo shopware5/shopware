@@ -206,8 +206,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $element = $elementRepository->findOneBy($findBy);
 
 
-        // If the element is empty, the given setting does not exists. This might be the case
-        // for some plugins
+        // If the element is empty, the given setting does not exists. This might be the case for some plugins
+        // Skip those values
         if (empty($element)) {
             return;
         }
@@ -219,7 +219,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $values = array();
         // Do not save default value
         if ($value !== $element->getValue()) {
-        	error_log("saving: ". $value . ": " . $name);
             $valueModel = new Shopware\Models\Config\Value();
             $valueModel->setElement($element);
             $valueModel->setShop($shop);
@@ -231,13 +230,21 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         Shopware()->Models()->flush($element);
     }
 
+    /**
+     * Read a given config by name
+     *
+     * @param $configName
+     * @param string $defaultValue
+     * @return null|string
+     */
     public function readConfig($configName, $defaultValue='')
     {
-        // Simple getter for config items without scope
+        // If we have a simple config item, we can return it by using Shopware()->Config()
         if (strpos($configName, ':') === false) {
             return Shopware()->Config()->get($configName);
         }
 
+        // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
         $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');

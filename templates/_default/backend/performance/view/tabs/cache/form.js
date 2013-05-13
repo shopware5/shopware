@@ -39,10 +39,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     waitMsgTarget: true,
     submitEmptyText: false,
 
-    defaults: {
-        xtype: 'checkbox',
-        hideLabel:true
-    },
+    layout: 'column',
 
     /**
      *
@@ -76,32 +73,56 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
      */
     getItems: function() {
         var me = this;
-        return [{
-            name: 'cache[config]',
-            boxLabel: '{s name=form/items/config}Templates, settings, snippets, etc.{/s}'
-        }, {
-            name: 'cache[frontend]',
-            boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}'
-        }, {
-            name: 'cache[backend]',
-            boxLabel: '{s name=form/items/backend}Backend cache{/s}'
-        }, {
-            name: 'cache[router]',
-            boxLabel: '{s name=form/items/router}SEO URL cache{/s}'
-        }, {
-            name: 'cache[search]',
-            boxLabel: '{s name=form/items/search}Intelligent search (index / keywords){/s}'
-        }, {
-            name: 'cache[proxy]',
-            boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}'
-        }, {
-            xtype: 'button',
-            name: 'fixCategories',
-            text: '{s name=form/items/categorie}Fix category tree{/s}',
-            handler: function() {
-                me.fireEvent('fixCategories', me);
-            }
-        }];
+        return [
+            { xtype: 'container',
+                columnWidth: '0.5',
+                defaults: {
+                    labelWidth: 155,
+                    anchor: '100%',
+                    xtype: 'checkbox',
+                    hideLabel: true
+                },
+                padding: '0 20 0 0',
+                layout: 'anchor',
+                items: [
+                    {
+                        name: 'cache[config]',
+                        boxLabel: '{s name=form/items/config}Templates, settings, snippets, etc.{/s}'
+                    },
+                    {
+                        name: 'cache[frontend]',
+                        boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}'
+                    },
+                    {
+                        name: 'cache[backend]',
+                        boxLabel: '{s name=form/items/backend}Backend cache{/s}'
+                    }
+                ] },
+            { xtype: 'container',
+                columnWidth: '0.5',
+                defaults: {
+                    labelWidth: 155,
+                    anchor: '100%',
+                    xtype: 'checkbox',
+                    hideLabel: true
+                },
+                padding: '0 20 0 0',
+                layout: 'anchor',
+                items: [
+                    {
+                        name: 'cache[router]',
+                        boxLabel: '{s name=form/items/router}SEO URL cache{/s}'
+                    },
+                    {
+                        name: 'cache[search]',
+                        boxLabel: '{s name=form/items/search}Intelligent search (index / keywords){/s}'
+                    },
+                    {
+                        name: 'cache[proxy]',
+                        boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}'
+                    }
+                ]}
+        ];
     }
 });
 //{/block}

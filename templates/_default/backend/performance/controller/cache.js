@@ -74,9 +74,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
      */
     mainWindow: null,
 
-    shouldCancel: false,
-    totalCount: 0,
-
     /**
      *
      */
@@ -96,20 +93,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
                     });
                 }
             },
-            'performance-tabs-cache-form': {
-                fixCategories: me.onFixCategories,
-                actioncomplete: function(form, action) {
-                    me.getStore('Info').load({
-                        callback: function(records, operation) {
-                            Shopware.Notification.createGrowlMessage(
-                                me.infoTitle,
-                                me.infoMessageSuccess,
-                                me.infoTitle
-                            );
-                        }
-                    });
-                }
-            },
 
             'performance-main-categories': {
                 startProcess:  me.onStartProcess,
@@ -119,103 +102,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         });
 
         me.callParent(arguments);
-    },
-
-    onFixCategories: function(view) {
-        var me = this;
-
-        me.getView('main.Categories').create().show();
-
-        Ext.Ajax.request({
-            url: '{url controller=Cache action=prepareTree}',
-            success: function(response) {
-                var json = Ext.decode(response.responseText);
-                me.totalCount = json.total;
-
-                var progressBar = me.getProgressBar();
-                progressBar.updateProgress(0);
-
-                me.getStartButton().enable();
-            }
-        });
-    },
-
-    /**
-     * @param { Array } selection
-     */
-    onStartProcess: function(selection) {
-        var me = this;
-        var progressBar = me.getProgressBar();
-        me.executeSingleOrder(0, progressBar);
-    },
-
-    /**
-     * @param { Integer } index
-     * @param { Ext.ProgressBar } progressBar
-     */
-    executeSingleOrder: function(index, progressBar) {
-        var me = this;
-        var batchSize = 5000;
-        var count = me.totalCount;
-
-        if (index >= count) {
-            //display finish update progress bar and display finish message
-            progressBar.updateProgress(1, me.snippets.done.message, true);
-
-            me.getCancelButton().disable();
-            me.getCloseButton().enable();
-
-            //display shopware notification message that the batch process finished
-            Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
-
-            return;
-        }
-
-         if (me.shouldCancel) {
-            me.getCloseButton().enable();
-            return;
-        }
-
-        //updates the progress bar value and text, the last parameter is the animation flag
-        progressBar.updateProgress((index+batchSize)/count, Ext.String.format(me.snippets.process, (index+batchSize), count), true);
-
-        Ext.Ajax.request({
-            url: '{url controller=Cache action=fixCategories}',
-            method: 'POST',
-            params: {
-                offset: index,
-                limit: batchSize
-            },
-            success: function(response) {
-                var json = Ext.decode(response.responseText);
-
-                // start recusive call here
-                me.executeSingleOrder(index + batchSize, progressBar);
-            },
-
-            failure: function(response) {
-                me.shouldCancel = true;
-                me.executeSingleOrder(index + batchSize, progressBar);
-            }
-        });
-    },
-
-
-    /**
-     * Cancel the order creation.
-     */
-    onCancelProcess: function() {
-        var me = this;
-        me.shouldCancel = true;
-    },
-
-    /**
-     * Cancel the document creation.
-     * @param { Enlight.app.Window } window
-     */
-    onCloseProcessWindow: function(window) {
-        var me = this;
-        window.destroy();
     }
 });
 //{/block}
