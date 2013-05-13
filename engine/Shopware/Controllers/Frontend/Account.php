@@ -714,10 +714,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 		}
 
 		$password = substr(md5(uniqid(rand())), 0, 6);
-		$md5_password = md5($password);
 
-		$sql = "UPDATE s_user SET password=?, failedlogins=4, lockeduntil='lockeduntil' WHERE id=?";
-		Shopware()->Db()->query($sql, array($md5_password, $userID));
+        $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+        $hash     = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
+
+		$sql = "UPDATE s_user SET password=?, encoder=?, failedlogins=4, lockeduntil='lockeduntil' WHERE id=?";
+		Shopware()->Db()->query($sql, array($hash, $encoderName, $userID));
 
         $context = array(
             'sMail'     => $email,

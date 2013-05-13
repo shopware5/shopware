@@ -322,7 +322,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         try {
             $params = $this->Request()->getParams();
             if (!empty($params["password"])) {
-                $params["password"] = $this->saltPassword($params["password"]);
+                $params["encoder"] = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+                $params["password"] = Shopware()->PasswordEncoder()->encodePassword($params["password"], $params["encoder"]);
             } else {
                 unset($params["password"]);
             }
@@ -417,17 +418,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
     }
 
-
-    /**
-     * Helper method which salts the password
-     *
-     * @param string $password
-     * @return string
-     */
-    private function saltPassword($password)
-    {
-        return md5("A9ASD:_AD!_=%a8nx0asssblPlasS$" . md5($password));
-    }
 
     /**
      * Event listener method which is used from the rules store to load first time the
