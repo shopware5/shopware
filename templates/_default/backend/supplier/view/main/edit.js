@@ -208,9 +208,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
-            fieldLabel : '{s name=description}Description{/s}',
-            anchor : '100%',
-            height: 300
+            emptyText : '{s name=description}Description{/s}',
+            anchor : '100%'
         });
     },
     /**
