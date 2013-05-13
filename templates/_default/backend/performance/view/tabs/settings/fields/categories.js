@@ -91,7 +91,30 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
             xtype: 'checkbox',
             uncheckedValue: false,
             inputValue:true
-        }];
+        },{
+            fieldLabel: 'Sortierung der Eigenschaften',
+            helpText: 'Wie soll en die Eigenschaften sortiert werden?<br><br>' +
+                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
+                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
+                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+            name: 'categories[propertySorting]',
+            xtype: 'combo',
+            valueField: 'id',
+            editable: false,
+            displayField: 'name',
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'id',    type: 'int' },
+                    { name: 'name',  type: 'string' }
+                ],
+                data : [
+                    { id: 1, name: 'Alle Funktionen berücksichtigen' },
+                    { id: 2, name: 'Immer nach Name sortieren' },
+                    { id: 3, name: 'Immer nach Position sortieren' },
+                    { id: 4, name: 'Immer nach Anzahl sortieren' }
+                ]
+            })
+        },];
     }
 
 

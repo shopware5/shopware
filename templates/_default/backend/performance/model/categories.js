@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
 		//{block name="backend/performance/model/categories/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'articlesperpage', type: 'int'},
+        { name: 'propertySorting', type: 'int'},
         { name: 'orderbydefault', type: 'string'},
         { name: 'showSupplierInCategories', type: 'bool'},
     ]
