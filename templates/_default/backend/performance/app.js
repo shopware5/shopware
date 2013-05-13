@@ -77,6 +77,8 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.fields.Search',
         'tabs.settings.fields.HttpCache',
         'tabs.settings.fields.Categories',
+        'tabs.settings.fields.Various',
+        'tabs.settings.fields.Customers',
 
         'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
@@ -102,6 +104,8 @@ Ext.define('Shopware.apps.Performance', {
         'Seo',
         'Search',
         'Categories',
+        'Various',
+        'Customer',
         'Tree'
     ],
 

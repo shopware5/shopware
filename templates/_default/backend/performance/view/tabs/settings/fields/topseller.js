@@ -89,13 +89,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             uncheckedValue: false,
             inputValue:true
         }, {
-            fieldLabel: 'Gültigkeit (in Tagen)',
+            fieldLabel: 'Gültigkeit',
+            supportText: '(in Tagen)',
             name: 'topSeller[topSellerValidationTime]',
             xtype: 'numberfield',
             minValue: 1,
             maxValue: 365
         }, {
-            fieldLabel: 'Bestellungen (in Tagen)',
+            fieldLabel: 'Bestellungen',
+            supportText: '(in Tagen)',
             helpText: 'Wie viele Tage sollen bei der TopSeller-Berechnung berücksichtigt werden.',
             name: 'topSeller[chartinterval]', // existing value
             xtype: 'numberfield',

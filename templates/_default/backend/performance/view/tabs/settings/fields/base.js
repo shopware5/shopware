@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
      * Default settings for the child elements
      */
     defaults: {
-        labelWidth: 255,
+        labelWidth: 155,
         labelStyle: 'font-weight: 700;',
         anchor: '100%'
     },
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
     /**
      * Required minimum width of the fieldSet
      */
-    minWidth:250,
+    minWidth:155,
 
     /**
      * Helper method to create a descriptive text

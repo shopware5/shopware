@@ -58,8 +58,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     requestConfig: {
         topseller:  {
             title: 'Initialisiere TopSeller',
-            totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
-            requestUrl: '{url controller="Performance" action="initTopSeller"}',
+            totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
+            requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
             batchSize: 5000
         },
         seo:  {
@@ -72,6 +72,18 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             title: 'Initialisiere Suche',
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
+            batchSize: 5000
+        },
+        similarShown:  {
+            title: 'Initialisiere "Kunden haben sich auch angesehen"',
+            totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
+            requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
+            batchSize: 5000
+        },
+        alsoBought:  {
+            title: 'Initialisiere "Kunden haben auch gekauft"',
+            totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
+            requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 5000
         }
     },
