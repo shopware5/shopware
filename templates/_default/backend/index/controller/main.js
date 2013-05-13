@@ -254,7 +254,7 @@ loadSkeleton = function(module, forceNewWindow, requestConfig) {
  * @return void
  */
 openAction = function(controller, action) {
-    var options =  {}; 
+    var options =  {};
     options.name = 'Shopware.apps.Deprecated';
     options.controllerName = controller;
     options.actionName = action;
@@ -450,6 +450,7 @@ createShopwareVersionMessage = function() {
                     'If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.' +
                     '<p><strong>Doctrine 2.2.0</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
                     '<p><strong>Gedmo 2.3.1-DEV</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
+                    '<p><strong>password_compat 1.0.0</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ircmaxell/password_compat/</span></p>' +
                     '<p><strong>TinyMCE 3.5.0</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
                     '<p><strong>Symfony 2</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3.1.8</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
