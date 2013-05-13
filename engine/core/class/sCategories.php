@@ -148,22 +148,26 @@ class sCategories
         }
 
         $sql = '
-            SELECT c.id
-            FROM s_categories c
-            INNER JOIN s_articles_categories_ro ac
-                ON  ac.articleID = ?
-                AND ac.categoryID = c.id
-            LEFT JOIN  s_categories c2
-                ON c2.parent = c.id
-            WHERE  c.active = 1
-            AND c2.id IS  NULL
-            AND c.path LIKE ?
+            SELECT
+              STRAIGHT_JOIN
+              ac.categoryID as id
+            FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
+                INNER JOIN s_categories c
+                    ON  ac.categoryID = c.id
+                    AND c.active = 1
+                    AND c.path LIKE ?
+
+                LEFT JOIN s_categories c2
+                    ON c2.parent = c.id
+
+            WHERE ac.articleID = ?
+            AND c2.id IS NULL
             ORDER BY ac.id
         ';
 
         return (int) Shopware()->Db()->fetchOne($sql, array(
-            $articleId,
-            '%|' . $parentId . '|%'
+            '%|' . $parentId . '|%',
+            $articleId
         ));
     }
 
