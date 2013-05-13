@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Shopware" basedir="../" default="build">
+
+    <property name="build.dir" location="${basedir}/build"/>
+
+    <property file="${build.dir}/build.properties"/>
+    <property file="${build.dir}/build.properties.dist"/>
+
+    <target name="build" depends="build-daily"/>
+
+    <target name="build-daily" depends="build-log-dir">
+        <parallel>
+            <antcall target="test-unit"/>
+            <antcall target="test-static"/>
+        </parallel>
+        <parallel>
+            <antcall target="build-phpdoc"/>
+            <antcall target="build-phpcb"/>
+        </parallel>
+    </target>
+
+    <target name="build-continuous">
+        <antcall target="test-unit-continuous"/>
+    </target>
+
+    <target name="build-unit" depends="build-database, build-config, build-cache-dir" />
+
+    <target name="test-unit" depends="unit-library, unit-shopware"/>
+
+    <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
+
+    <target name="build-truncate-changelog">
+        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/dbdeploy.truncate.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="${db.name}"/>
+        </exec>
+    </target>
+
+    <target name="build-database">
+        <concat destfile="${build.dir}/scripts/deploy.template.sql">
+            <fileset file="${build.dir}/scripts/deploy.create.sql"/>
+            <fileset file="${build.dir}/scripts/dbdeploy.install.sql"/>
+            <fileset file="${sql.dir}/demo/latest.sql"/>
+            <fileset file="${build.dir}/scripts/deploy.demo.sql"/>
+            <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
+        </concat>
+
+        <copy file="${build.dir}/scripts/deploy.template.sql" toFile="${build.dir}/scripts/deploy.sql">
+            <filterset>
+                <filter token="database" value="${db.name}"/>
+                <filter token="host" value="${app.host}"/>
+                <filter token="path" value="${app.path}"/>
+            </filterset>
+        </copy>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/deploy.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+        </exec>
+
+        <delete file="${build.dir}/scripts/deploy.template.sql"/>
+        <delete file="${build.dir}/scripts/deploy.sql"/>
+
+        <antcall target="build-database-deploy"/>
+    </target>
+
+    <target name="build-database-deploy">
+        <exec dir="${build.dir}" executable="${script.phing}">
+            <arg line="-f build-db.xml" />
+            <arg line="-Ddb.user=${db.user}" />
+            <arg line="-Ddb.password=${db.password}" />
+            <arg line="-Ddb.name=${db.name}" />
+            <arg line="-Ddb.host=${db.host}" />
+            <arg line="-Ddelta.dir=${delta.dir}" />
+            <arg line="-Ddb.deploy.file=${db.deploy.file}" />
+            <arg line="-Ddb.undo.file=${db.undo.file}" />
+            <arg line="build-deltas" />
+        </exec>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${db.deploy.file}">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="${db.name}"/>
+        </exec>
+    </target>
+
+    <target name="build-cache-dir">
+        <exec executable="chmod" os="Linux">
+            <arg value="-R"/>
+            <arg value="0777"/>
+            <arg value="${cache.dir}/templates/"/>
+            <arg value="${cache.dir}/database/"/>
+            <arg value="${proxy.dir}"/>
+        </exec>
+
+        <delete includeEmptyDirs="true">
+            <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
+            <fileset dir="${cache.dir}/database/" includes="**/*"/>
+            <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
+            <fileset dir="${proxy.dir}" includes="**/*.*"/>
+        </delete>
+    </target>
+
+    <target name="build-config">
+        <copy file="${app.dir}/Configs/Custom.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
+            <filterset begintoken="%" endtoken="%">
+                <filter token="db.name" value="${db.name}"/>
+                <filter token="db.host" value="${db.host}"/>
+                <filter token="db.user" value="${db.user}"/>
+                <filter token="db.password" value="${db.password}"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <target name="build-log-dir">
+        <delete includeemptydirs="true">
+            <fileset dir="${log.dir}" includes="**/*.*"/>
+        </delete>
+        <mkdir dir="${log.dir}/"/>
+    </target>
+
+    <target name="unit-library"/>
+
+    <target name="unit-shopware" depends="build-unit">
+        <exec executable="${script.phpunit}" failonerror="false" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+            <arg value="--coverage-clover=${log.dir}/clover.xml"/>
+            <arg value="--coverage-html=${log.dir}/coverage"/>
+        </exec>
+    </target>
+
+    <target name="unit-shopware-continuous" depends="build-unit">
+        <exec executable="${script.phpunit}" dir="${build.dir}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="test-static" depends="build-log-dir">
+        <parallel>
+            <antcall target="static-lint"/>
+            <antcall target="static-phpcs"/>
+            <antcall target="static-phpmd"/>
+            <antcall target="static-phpcpd"/>
+            <antcall target="static-phploc"/>
+            <antcall target="static-pdepend"/>
+        </parallel>
+    </target>
+
+    <target name="static-lint" description="Perform syntax check of sourcecode files">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/engine/Shopware/">
+                <include name="**/*.php" />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="static-phpcs" description="PHP CodeSniffer">
+        <exec executable="phpcs" output="/dev/null" failonerror="false">
+            <arg value="--standard=${build.dir}"/>
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${log.dir}/checkstyle.xml"/>
+            <arg value="--extensions=php" />
+            <arg value="-n" />
+            <arg value="${app.dir}/"/>
+        </exec>
+    </target>
+
+    <target name="static-phpmd" description="PHP Mess Detector">
+        <exec executable="phpmd" failonerror="false" error="${log.dir}/error.log" append="true">
+            <arg value="${app.dir}/"/>
+            <arg value="xml"/>
+            <arg value="codesize,design,unusedcode"/>
+            <arg value="--reportfile"/>
+            <arg value="${log.dir}/pmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="${proxy.dir}"/>
+        </exec>
+    </target>
+
+    <target name="static-phpcpd" description="PHP Copy/Paste Detector">
+        <exec executable="phpcpd" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+            <arg value="--exclude"/>
+            <arg value="${proxy.dir}"/>
+            <arg value="--log-pmd"/>
+            <arg value="${log.dir}/cpd.xml"/>
+            <arg value="${app.dir}/"/>
+        </exec>
+    </target>
+
+    <target name="static-phploc" description="PHP Lines of Code">
+        <exec executable="phploc" failonerror="false" output="${log.dir}/loc.txt" error="${log.dir}/error.log" append="true">
+            <arg value="--log-xml"/>
+            <arg value="${log.dir}/loc.xml"/>
+            <arg value="--log-csv"/>
+            <arg value="${log.dir}/loc.csv"/>
+            <arg value="--exclude"/>
+            <arg value="${proxy.dir}"/>
+            <arg value="--count-tests"/>
+            <arg value="${app.dir}/"/>
+        </exec>
+    </target>
+
+    <target name="static-phpstyle" description="PHP CheckStyle">
+        <exec executable="phpdoc" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+            <arg value="project:run"/>
+            <arg value="--template"/>
+            <arg value="checkstyle"/>
+            <arg value="-t"/>
+            <arg value="${log.dir}/checkstyle/"/>
+            <arg value="-d"/>
+            <arg value="${app.dir}"/>
+            <arg value="-i"/>
+            <arg value="${proxy.dir}"/>
+            <arg value="-q"/>
+        </exec>
+        <replaceregexp file="${log.dir}/checkstyle/checkstyle.xml"
+                       match="name=&quot;([^/][^&quot;]*)&quot;"
+                       replace="name=&quot;${app.dir}/\1&quot;"
+                       byline="true"
+                />
+    </target>
+
+    <target name="static-pdepend">
+        <mkdir dir="${log.dir}/depend"/>
+        <exec executable="pdepend" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
+            <arg value="--summary-xml=${log.dir}/depend/summary.xml"/>
+            <arg value="--jdepend-chart=${log.dir}/depend/jdepend.svg"/>
+            <arg value="--overview-pyramid=${log.dir}/depend/pyramid.svg"/>
+            <arg value="--ignore=${proxy.dir}"/>
+            <arg value="${app.dir}"/>
+        </exec>
+    </target>
+
+    <target name="build-phpcb" description="Build CodeBrowser">
+        <exec executable="phpcb" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+            <arg value="-l${log.dir}"/>
+            <arg value="-o${log.dir}/code-browser"/>
+            <arg value="-s${app.dir}"/>
+            <arg value="-i${proxy.dir}"/>
+        </exec>
+    </target>
+
+    <target name="build-phpdoc">
+        <exec executable="phpdoc" failonerror="false" error="${log.dir}/error.log" append="true">
+            <arg value="project:run"/>
+            <arg value="-d${app.dir}"/>
+            <arg value="-t${log.dir}/api"/>
+            <arg value="-i${proxy.dir},${app.dir}/Plugins/Default/*Payment*"/>
+            <arg value="--template"/>
+            <arg value="shopware"/>
+            <arg value="--title"/>
+            <arg value="Shopware"/>
+            <arg value="--defaultpackagename"/>
+            <arg value="Shopware"/>
+            <arg value="--encoding"/>
+            <arg value="utf-8"/>
+            <arg value="--sourcecode"/>
+            <arg value="--quiet"/>
+        </exec>
+    </target>
+
+    <!--
+        Installation of sass/compass on Debian/Ubuntu
+
+        sudo aptitude install rubygems
+        sudo gem update
+        sudo gem install sass
+        sudo gem install compass
+    -->
+    <target name="compile-extjs">
+        <exec executable="compass" dir="${basedir}/templates/_default/backend/_resources">
+            <arg value="compile"/>
+            <arg value="--force"/>
+            <arg value="resources/sass/"/>
+        </exec>
+    </target>
+
+    <target name="watch-extjs">
+        <exec executable="compass" dir="${basedir}/templates/_default/backend/_resources">
+            <arg value="watch"/>
+            <arg value="resources/sass/"/>
+        </exec>
+    </target>
+
+    <target name="compile-tinymce" description="Builds a TinyMce package with default used plugins">
+        <!-- Combine all files -->
+        <concat destfile="${basedir}/engine/Library/TinyMce/tiny_mce_full.js">
+            <fileset dir="${basedir}/engine/Library/TinyMce/" includes="tiny_mce.js" />
+            <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/en.js" />
+            <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/de.js" />
+
+            <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/media_selection/editor_plugin.js" />
+            <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
+        </concat>
+    </target>
+</project>
