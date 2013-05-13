@@ -189,7 +189,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     protected function getTopSellerOrderTime()
     {
         //get top seller order time interval
-        $interval = Shopware()->Config()->get('topSellerOrderTime', 10);
+        $interval = Shopware()->Config()->get('chartInterval', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
@@ -230,7 +230,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     protected function getTopSellerSelect()
     {
         //check the pseudo sales configuration value
-        $usePseudoSales = Shopware()->Config()->get('topSellerPseudoSales', 1);
+        $usePseudoSales = Shopware()->Config()->get('topSellerPseudoSales', true);
         $sumSelect = " SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ";
         if ($usePseudoSales) {
             //if this value is set to true, the articles.pseudosales column has to be added to the sales value.
