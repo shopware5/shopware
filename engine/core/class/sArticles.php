@@ -376,7 +376,10 @@ class sArticles
     public function sGetArticlesAverangeVote($article)
     {
         $sql = "
-            SELECT AVG(points) AS averange, COUNT(articleID) as number FROM s_articles_vote WHERE articleID=?
+            SELECT AVG(points) AS averange,
+                   COUNT(articleID) as number
+            FROM s_articles_vote
+            WHERE articleID=?
             AND active=1
             GROUP BY articleID
 		";
@@ -476,10 +479,10 @@ class sArticles
         $article = (int) $article;
 
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-		SELECT
-		  *
-		  FROM s_articles_vote WHERE articleID=?
-		AND active=1
+		SELECT *
+        FROM s_articles_vote FORCE INDEX (get_articles_votes)
+	    WHERE articleID = ?
+		AND active = 1
 		ORDER BY datum DESC
 		", array($article));
         foreach ($getArticles as $articleKey => $articleValue) {
