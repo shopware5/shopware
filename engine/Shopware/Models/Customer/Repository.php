@@ -131,7 +131,7 @@ class Repository extends ModelRepository
      * @param null $customerGroup
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getBackendListCountedQuery($filter = null, $customerGroup = null)
+    public function getBackendListCountedBuilder($filter = null, $customerGroup = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
@@ -164,7 +164,7 @@ class Repository extends ModelRepository
             $builder->andWhere('customergroups.id = ?4')
                     ->setParameter(4, $customerGroup);
         }
-        return $builder->getQuery();
+        return $builder;
     }
 
     /**
