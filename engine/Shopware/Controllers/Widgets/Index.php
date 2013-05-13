@@ -59,11 +59,6 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $articleId = (int) $this->Request()->getParam('sArticle');
         $articles = Shopware()->Modules()->Articles()->sGetLastArticles($articleId);
         $this->View()->assign('sLastArticles', $articles, true);
-
-        $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
-        if(!empty($articleId)) {
-            $plugin->setLastArticleById($articleId);
-        }
     }
 
     /**

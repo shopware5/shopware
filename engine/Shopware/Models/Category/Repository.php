@@ -73,7 +73,7 @@ class Repository extends ModelRepository
             if ($separator) {
                 return $self;
             } else {
-                return array($category->getId() => $self);
+                return array($id => $self);
             }
         }
 
