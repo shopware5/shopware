@@ -278,13 +278,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             //get access on the customer repository
             $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
 
-            //returns the total count of the query
-            $totalResult = $this->getManager()->getQueryCount($query);
-
             //returns the customer data
             $customers = $query->getArrayResult();
 
-            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $totalResult));
+            //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
+            $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
+            $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
         }
         catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
