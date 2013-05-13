@@ -1,0 +1,31 @@
+# Hostname e.g. example.com
+app.host =
+# Path e.g. /shopware. Leave blank if installed in document root
+app.path =
+
+# Database credentials
+db.name =
+db.host =
+db.user =
+db.password =
+
+test.dir = ${basedir}/tests
+test.dir.shopware = ${test.dir}/Shopware
+
+build.dir = ${basedir}/build
+log.dir = ${build.dir}/logs
+doc.dir = ${basedir}/_doc
+sql.dir = ${basedir}/_sql
+delta.dir = ${basedir}/_sql/deltas
+cache.dir = ${basedir}/cache
+app.dir = ${basedir}/engine/Shopware
+proxy.dir = ${app.dir}/Proxies/
+library.dir = ${basedir}/engine/Enlight
+library.dir.enlight = ${library.dir}/Enlight
+
+script.mysql = mysql
+script.phing = phing
+script.phpunit = phpunit
+
+db.deploy.file = ${build.dir}/scripts/dbdeploy.all-deltas.sql
+db.undo.file = ${build.dir}/scripts/dbdeploy.undo-all-deltas.sql

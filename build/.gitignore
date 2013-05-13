@@ -1,0 +1,6 @@
+logs/
+scripts/deploy.sql
+scripts/deploy.template.sql
+scripts/dbdeploy.all-deltas.sql
+scripts/dbdeploy.undo-all-deltas.sql
+build.properties

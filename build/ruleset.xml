@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ruleset name="Shopware">
+    <description>Shopware Code Style Rules</description>
+
+    <exclude-pattern>Models/Attribute</exclude-pattern>
+    <exclude-pattern>Proxies</exclude-pattern>
+
+    <exclude-pattern>Plugins/Default/Frontend/BuiswPaymentPayone</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/PaymentSofort</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/PaymentSkrill</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/PigmbhKlarnaPayment</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/PigmbhRatePAYPayment</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/PiPaymorrowPayment</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/SwagPaymentBillsafe</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/SwagPaymentPaypal</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Frontend/HeidelPayment</exclude-pattern>
+    <exclude-pattern>Plugins/Default/Backend/HeidelActions</exclude-pattern>
+
+    <rule ref="PSR2">
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+
+        <exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
+    </rule>
+</ruleset>
