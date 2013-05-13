@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
         },{
             fieldLabel: 'Gültigkeit',
             supportText: '(in Tagen)',
-            name: 'customer[similarRefreshStrategy]',
+            name: 'customer[similarValidationTime]',
             xtype: 'numberfield',
             minValue: 1,
             maxValue: 365
