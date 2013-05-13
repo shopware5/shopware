@@ -36,9 +36,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
     alias: 'widget.performance-tabs-settings-navigation',
     rootVisible: false,
     title: 'Settings',
-    
+
+    /**
+     * Mark the navigation bar as not collapsible
+     */
     collapsed: false,
-    collapsible: true,
+    collapsible: false,
     
     width: 200,
     expanded: true,
@@ -53,9 +56,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
     listeners: {
     	itemclick: function(tree, record, item, index, e, eOpts) {
     		var internalName = record.get('internalName');
-    		
     		this.fireEvent('itemClicked', internalName)
-    	}
+    	},
+        beforeitemclick: function(tree, record, item, index, e, eOpts) {
+            if (record.childNodes.length > 0) {
+                return false;
+            }
+            return true;
+        }
+
     },
     
     /*
