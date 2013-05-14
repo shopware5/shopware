@@ -46,22 +46,8 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
      */
     public function getSimilarShownCountAction()
     {
-        $sql = "
-            SELECT SQL_CALC_FOUND_ROWS
-                article1.articleID as article_id,
-                article2.articleID as related_article_id,
-                COUNT(article2.articleID) as viewed,
-                now() as init_date
-            FROM s_emarketing_lastarticles article1
-               INNER JOIN s_emarketing_lastarticles article2
-                  ON  article1.sessionID  = article2.sessionID
-                  AND article1.articleID != article2.articleID
-            GROUP BY article1.articleID, article2.articleID
-            LIMIT 0, 1
-        ";
-
-        $data = Shopware()->Db()->fetchRow($sql);
-        $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
+        $sql = "SELECT COUNT(id) FROM s_articles";
+        $count = Shopware()->Db()->fetchOne($sql);
 
         $this->View()->assign(array('success' => true, 'data' => array('count' => $count)));
     }

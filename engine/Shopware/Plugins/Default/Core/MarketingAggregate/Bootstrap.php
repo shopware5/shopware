@@ -2,7 +2,7 @@
 
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -373,7 +373,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB || !($this->isSimilarShownActivated())) {
             return $arguments->getReturn();
         }
 

@@ -45,18 +45,16 @@ class Shopware_Components_SimilarShown extends Enlight_Class
 
     /**
      * This function initials the similar shown marketing data.
+     * The passed offset and limit is used to select a data set
+     * of articles.
+     * The articles are used for the aggregate query which is
+     * faster if an constant where condition is used.
      */
     public function initSimilarShown($offset = null, $limit = null)
     {
-        $limitSql = '';
-        if ($limit !== null && $offset !== null) {
-            $limitSql = ' LIMIT ' . $offset . ' , ' . $limit;
-        } else if ($limit !== null) {
-            $limitSql = " LIMIT " . $limit;
-        }
+        $articles = $this->getArticles($offset, $limit);
 
-        $sql = "
-            INSERT IGNORE INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
+        $preparedSelect = Shopware()->Db()->prepare("
             SELECT
                 article1.articleID as article_id,
                 article2.articleID as related_article_id,
@@ -66,11 +64,42 @@ class Shopware_Components_SimilarShown extends Enlight_Class
                INNER JOIN s_emarketing_lastarticles article2
                   ON  article1.sessionID  = article2.sessionID
                   AND article1.articleID != article2.articleID
-            GROUP BY article1.articleID, article2.articleID
-            $limitSql
-        ";
+            WHERE article1.articleID = :articleId
+            GROUP BY article2.articleID
+        ");
 
-        Shopware()->Db()->query($sql);
+        $preparedInsert = Shopware()->Db()->prepare("
+            INSERT IGNORE INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
+            VALUES (:article_id, :related_article_id, :viewed, :init_date)
+        ");
+
+        //iterate all selected articles which has to be initialed
+        foreach($articles as $articleId) {
+            //now we select all similar articles of the s_emarketing_lastarticles table
+            $preparedSelect->execute(array('articleId' => $articleId));
+            $combinations = $preparedSelect->fetchAll();
+
+            //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
+            foreach($combinations as $combination) {
+                $preparedInsert->execute($combination);
+            }
+        }
+    }
+
+    /**
+     * Helper function to get an data set of article ids.
+     * @param null $offset
+     * @param null $limit
+     * @return array
+     */
+    protected function getArticles($offset = null, $limit = null)
+    {
+        $limitSql = '';
+        if ($limit !== null && $offset !== null) {
+            $limitSql = ' LIMIT ' . $offset . ' , ' . $limit;
+        }
+        $sql = "SELECT id FROM s_articles " . $limitSql;
+        return Shopware()->Db()->fetchCol($sql);
     }
 
     /**
@@ -95,7 +124,6 @@ class Shopware_Components_SimilarShown extends Enlight_Class
                       FROM s_emarketing_lastarticles article1
                          INNER JOIN s_emarketing_lastarticles article2
                             ON  article1.sessionID  = article2.sessionID
-
                             AND article1.articleID != article2.articleID
                       WHERE article1.id = shown.article_id
                       GROUP BY article2.articleID
