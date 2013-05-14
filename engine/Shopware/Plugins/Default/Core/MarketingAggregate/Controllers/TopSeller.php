@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
             Shopware()->Db()->query($sql);
         }
 
-        $this->TopSeller()->initTopSeller($offset, $limit);
+        $this->TopSeller()->initTopSeller($limit);
 
         $this->View()->assign(array('success' => true));
     }

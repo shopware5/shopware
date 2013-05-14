@@ -36,16 +36,16 @@ class Shopware_Components_AlsoBought extends Enlight_Class
 {
     /**
      * This function initials the also bought marketing data.
+     * The passed offset and limit is used to select a data set
+     * of articles.
+     * The articles are used for the aggregate query which is
+     * faster if an constant where condition is used.
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
-        $limitSql = "";
-        if ($limit !== null && $offset !== null) {
-            $limitSql = " LIMIT " . $offset . " , " . $limit;
-        }
+        $articles = $this->getArticles($offset, $limit);
 
-        $sql = "
-            INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
+        $preparedSelect = Shopware()->Db()->prepare("
             SELECT
                 detail1.articleID as article_id,
                 detail2.articleID as related_article_id,
@@ -56,12 +56,43 @@ class Shopware_Components_AlsoBought extends Enlight_Class
                   AND detail1.articleID != detail2.articleID
                   AND detail1.modus = 0
                   AND detail2.modus = 0
-                  AND detail1.articleID > 0
                   AND detail2.articleID > 0
-            GROUP BY detail1.articleID, detail2.articleID
-            $limitSql
-        ";
-        Shopware()->Db()->query($sql);
+                  AND detail1.articleID = :articleId
+            GROUP BY detail2.articleID
+        ");
+
+        $preparedInsert = Shopware()->Db()->prepare("
+            INSERT IGNORE INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
+            VALUES (:article_id, :related_article_id, :sales);
+        ");
+
+        //iterate all selected articles which has to be initialed
+        foreach($articles as $articleId) {
+            //now we select all bought articles for the current article id
+            $preparedSelect->execute(array('articleId' => $articleId));
+            $combinations = $preparedSelect->fetchAll();
+
+            //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
+            foreach($combinations as $combination) {
+                $preparedInsert->execute($combination);
+            }
+        }
+    }
+
+    /**
+     * Helper function to get an data set of article ids.
+     * @param null $offset
+     * @param null $limit
+     * @return array
+     */
+    protected function getArticles($offset = null, $limit = null)
+    {
+        $limitSql = '';
+        if ($limit !== null && $offset !== null) {
+            $limitSql = ' LIMIT ' . $offset . ' , ' . $limit;
+        }
+        $sql = "SELECT id FROM s_articles " . $limitSql;
+        return Shopware()->Db()->fetchCol($sql);
     }
 
     /**
@@ -83,5 +114,17 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             'articleId' => $articleId,
             'relatedArticleId' => $relatedArticleId
         ));
+    }
+
+
+    /**
+     * Helper function to get the date of one year ago.
+     * @param int $interval
+     * @return DateTime
+     */
+    public function getOrderTime($interval = 365) {
+        $orderTime = new DateTime();
+        $orderTime->sub(new DateInterval('P'. (int) $interval .'D'));
+        return $orderTime;
     }
 }

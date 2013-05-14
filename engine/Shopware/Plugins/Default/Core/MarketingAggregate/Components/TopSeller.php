@@ -99,21 +99,20 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * This function is used from the backend controller when the user
      * want to refresh the top seller data manuel.
      */
-    public function initTopSeller($offset = null, $limit = null)
+    public function initTopSeller($limit = null)
     {
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
 
         $limitSelect = '';
-        if ($offset !== null && $limit !== null) {
-            $limitSelect = 'LIMIT ' . $offset . ',' . $limit;
+        if ($limit !== null) {
+            $limitSelect = 'LIMIT ' . $limit;
         }
 
         $sql = "
-            INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
             SELECT 	articles.id as article_id,
-                    DATE_SUB(NOW(), INTERVAL articles.id MOD 4 DAY) as last_cleared,
-            " . $select . "
+                    NOW() as last_cleared,
+                    " . $select . "
             FROM s_articles articles
                 LEFT JOIN s_order_details details
                     ON  articles.id = details.articleID
@@ -122,12 +121,24 @@ class Shopware_Components_TopSeller extends Enlight_Class
                     ON  s_order.status >= 0
                     AND s_order.id = details.orderID
                     AND s_order.ordertime >= :orderTime
-            GROUP BY articles.id
-            " . $limitSelect;
+            WHERE articles.id NOT IN (
+                SELECT s_articles_top_seller_ro.article_id FROM s_articles_top_seller_ro
+            )
+            GROUP BY articles.id " .
+            $limitSelect;
 
-        Shopware()->Db()->query($sql, array(
+        $articles = Shopware()->Db()->fetchAll($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00')
         ));
+
+        $prepared = Shopware()->Db()->prepare(
+            'INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
+            VALUES (:article_id, :last_cleared, :sales)'
+        );
+
+        foreach($articles as $article) {
+            $prepared->execute($article);
+        }
     }
 
     /**

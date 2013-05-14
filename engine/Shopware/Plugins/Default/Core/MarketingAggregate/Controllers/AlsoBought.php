@@ -46,27 +46,8 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
      */
     public function getAlsoBoughtCountAction()
     {
-        $sql = "
-            SELECT SQL_CALC_FOUND_ROWS
-                detail1.articleID as article_id,
-                detail2.articleID as related_article_id,
-                COUNT(detail2.articleID) as sales
-            FROM s_order_details detail1
-               INNER JOIN s_order_details detail2
-                  ON detail1.orderID = detail2.orderID
-                  AND detail1.articleID != detail2.articleID
-                  AND detail1.modus = 0
-                  AND detail2.modus = 0
-                  AND detail1.articleID > 0
-                  AND detail2.articleID > 0
-            GROUP BY detail1.articleID, detail2.articleID
-            LIMIT 0, 1
-        ";
-
-        $data = Shopware()->Db()->fetchRow($sql);
-
-        $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
-
+        $sql = "SELECT COUNT(id) FROM s_articles";
+        $count = Shopware()->Db()->fetchOne($sql);
         $this->View()->assign(array('success' => true, 'data' => array('count' => $count)));
     }
 
