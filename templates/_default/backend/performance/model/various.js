@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Copyright © 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,47 +19,40 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Performance
+ * @subpackage Model
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author shopware AG
  */
 
-//{namespace name=backend/cache/view/main}
-//{block name="backend/cache/view/main/window"}
-Ext.define('Shopware.apps.Cache.view.main.Window', {
-    extend: 'Enlight.app.Window',
-    alias: 'widget.cache-window',
-    cls: Ext.baseCSSPrefix + 'cache',
-
-    width: 750,
-    height: 590,
-    layout: 'border',
-
-    title: '{s name=window/title}Cache{/s}',
+/**
+ * Base config model which holds references to the config items
+ */
+//{block name="backend/performance/model/various"}
+Ext.define('Shopware.apps.Performance.model.Various', {
 
     /**
-     *
+     * Extends the standard Ext Model
+     * @string
      */
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            items: me.getItems()
-        });
-
-        me.callParent(arguments);
-    },
+    extend:'Ext.data.Model',
 
     /**
-     * Creates the fields sets and the sidebar for the detail page.
-     * @return Array
+     * Contains the model fields
+     * @array
      */
-    getItems: function() {
-        var me = this;
-        return [{
-            region: 'north',
-            xtype: 'cache-info'
-        }, {
-            region: 'center',
-            xtype: 'cache-form'
-        }];
-    }
+    fields:[
+		//{block name="backend/performance/model/various/fields"}{/block}
+        { name:'id', type:'int' },
+        { name: 'disableShopwareStatistics', type: 'bool'},
+        { name: 'TagCloud:show', type: 'string'},
+        { name: 'LastArticles:show', type: 'bool'},
+        { name: 'LastArticles:lastarticlestoshow', type: 'int'},
+        { name: 'disableArticleNavigation', type: 'bool'},
+    ]
+
 });
 //{/block}

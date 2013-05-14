@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Copyright © 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,21 +19,36 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Performance
+ * @subpackage Model
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author shopware AG
  */
 
-//{block name="backend/article/store/main/info"}
-Ext.define('Shopware.apps.Cache.store.main.Info', {
-    extend: 'Ext.data.Store',
+/**
+ * Search config model
+ */
+//{block name="backend/performance/model/search"}
+Ext.define('Shopware.apps.Performance.model.Search', {
 
-    fields: [ 'name', 'backend', 'dir', 'size', 'files', 'freeSpace', 'message' ],
+    /**
+     * Extends the standard Ext Model
+     * @string
+     */
+    extend:'Ext.data.Model',
 
-    proxy: {
-        type: 'ajax',
-        url: '{url action=getInfo}',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    }
+    /**
+     * Contains the model fields
+     * @array
+     */
+    fields:[
+		//{block name="backend/performance/model/search/fields"}{/block}
+        { name:'id', type:'int' },
+        { name: 'searchRefreshStrategy', type: 'int'},
+    ]
+
 });
 //{/block}

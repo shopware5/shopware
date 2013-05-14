@@ -28,9 +28,10 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/cache/view/main}
-//{block name="backend/article/controller/main"}
-Ext.define('Shopware.apps.Cache.controller.Direct', {
+//{namespace name=backend/performance/main}
+
+//{block name="backend/performance/controller/main"}
+Ext.define('Shopware.apps.Performance.controller.Direct', {
 
     extend: 'Enlight.app.Controller',
 
@@ -44,14 +45,15 @@ Ext.define('Shopware.apps.Cache.controller.Direct', {
     },
 
     init: function () {
-        var me = this;
+        var me = this,
+            action = me.subApplication.action;
 
         Ext.Ajax.request({
-            url: '{url action=clearDirect}?cache=' + me.action,
+            url: '{url controller=Cache action=clearDirect}?cache=' + action,
             success: function() {
                 Shopware.Notification.createGrowlMessage(
                     me.infoTitle,
-                    me.infoMessages[me.action],
+                    me.infoMessages[action],
 					me.infoTitle
                 );
             }

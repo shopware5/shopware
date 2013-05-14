@@ -21,42 +21,19 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Application - Cache module
- */
-//{block name="backend/cache/application"}
-Ext.define('Shopware.apps.Cache', {
+//{block name="backend/performance/store/info"}
+Ext.define('Shopware.apps.Performance.store.Info', {
+    extend: 'Ext.data.Store',
 
-    extend: 'Enlight.app.SubApplication',
+    fields: [ 'name', 'backend', 'dir', 'size', 'files', 'freeSpace', 'message' ],
 
-    /**
-     * Array of views to require from AppName.view namespace.
-     * @array
-     */
-    views: [
-        'main.Categories'
-    ],
-
-    bulkLoad: true,
-    loadPath: '{url action=load}',
-
-    /**
-     * This method will be called when all dependencies are solved and
-     * all member controllers, models, views and stores are initialized.
-     */
-    launch: function() {
-        var me = this;
-
-        if (me.action) {
-            me.controllerName = 'Direct';
-        } else {
-            me.controllerName =  'Main';
+    proxy: {
+        type: 'ajax',
+        url: '{url controller=Cache action=getInfo}',
+        reader: {
+            type: 'json',
+            root: 'data'
         }
-
-        var mainController = me.getController(me.controllerName);
-
-        return mainController.mainWindow;
     }
 });
 //{/block}
-
