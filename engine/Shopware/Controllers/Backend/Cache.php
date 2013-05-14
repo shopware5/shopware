@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $this->View()->assign(array(
             'success' => true,
-            'total'   => $count,
+            'data' => array('count' => $count)
         ));
     }
 
