@@ -64,6 +64,13 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     *
+     * Helpers to fix categories
+     *
+     */
+
+
+    /**
      * Fixes categorie tree
      */
     public function fixCategoriesAction()
@@ -106,11 +113,15 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $this->View()->assign(array(
             'success' => true,
-            'total'   => $count,
+            'data' => array('count' => $count)
         ));
     }
 
-
+    /**
+     *
+     * Helpers to clear various caches
+     *
+     */
 
     /**
      * Clear config cache action
@@ -358,6 +369,13 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
     }
 
+
+    /*
+     *
+     * Some helper methods to get the relevant caches
+     *
+     */
+
     /**
      * Returns cache information
      *
@@ -484,9 +502,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $info['name'] = 'Shopware Proxy';
         return $info;
     }
-
-
-
 
     /**
      * Returns cache information

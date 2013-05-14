@@ -21,9 +21,10 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/cache/view/main}
-//{block name="backend/cache/view/main/categories"}
-Ext.define('Shopware.apps.Cache.view.main.Categories', {
+//{namespace name=backend/performance/main}
+
+//{block name="backend/performance/view/main/multi_request_dialog"}
+Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
 
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -35,7 +36,7 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.cache-categories',
+    alias: 'widget.performance-main-multi-request-dialog',
 
     /**
      * Define window width
@@ -47,7 +48,7 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
      * Define window height
      * @integer
      */
-    height: 120,
+    height: 170,
 
     /**
      * Display no footer button for the detail window
@@ -105,11 +106,12 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
      * @object
      */
     snippets: {
-        title:'{s name=progress/title}Fix category tree{/s}',
         cancel:'{s name=progress/cancel}Cancel process{/s}',
         start:'{s name=progress/start}Start process{/s}',
         close:'{s name=progress/close}Close window{/s}'
     },
+
+    batchSize: 200,
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -125,9 +127,9 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
         var me = this;
 
         me.registerEvents();
-        me.title = me.snippets.title;
         me.items = [
             me.createProgressBar(),
+            me.createBatchSizeCombo(),
             me.createButtons()
         ];
         me.callParent(arguments);
@@ -139,21 +141,65 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
      */
     registerEvents: function() {
         this.addEvents(
-            'cancelProcess',
-            'startProcess'
+            'multiRequestDialogCancelProcess',
+            'multiRequestDialogStartProcess'
         );
+    },
+
+    createBatchSizeCombo: function() {
+        var me = this;
+
+        me.combo = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
+            helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
+            name: 'batchSize',
+            margin: '0 0 10 0',
+            allowBlank: false,
+            value: me.batchSize,
+            validateOnChange: true,
+            validator: function(value) {
+                if (!value.match(/\d+/)) {
+                    me.startButton.disable();
+                    return false;
+                }
+                me.startButton.enable();
+                return true;
+            },
+            editable: true,
+            displayField: 'batchSize',
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'batchSize',  type: 'int' }
+                ],
+                data : [
+                    { batchSize: '10' },
+                    { batchSize: '20' },
+                    { batchSize: '30' },
+                    { batchSize: '50' },
+                    { batchSize: '75' },
+                    { batchSize: '100' },
+                    { batchSize: '150' }
+                ]
+            })
+        });
+
+        return me.combo;
     },
 
     /**
      * Creates the progress which displays the progress status for the document creation.
      */
     createProgressBar: function() {
-        return Ext.create('Ext.ProgressBar', {
+        var me = this;
+
+        me.progressBar = Ext.create('Ext.ProgressBar', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
             cls:'left-align'
         });
+
+        return me.progressBar;
     },
 
     /**
@@ -172,7 +218,7 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
                 this.hide();
                 me.cancelButton.show();
                 me.closeButton.disable();
-                me.fireEvent('startProcess');
+                me.fireEvent('multiRequestDialogStartProcess', me);
             }
         });
     },
@@ -192,7 +238,7 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
             hidden: true,
             handler: function() {
                 this.disable();
-                me.fireEvent('cancelProcess');
+                me.fireEvent('multiRequestDialogCancelProcess', me);
             }
         });
     },
@@ -213,7 +259,7 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
             action: 'closeWindow',
             cls: 'secondary',
             handler: function() {
-                me.fireEvent('closeWindow', me);
+                me.destroy();
             }
         });
     },
@@ -226,13 +272,14 @@ Ext.define('Shopware.apps.Cache.view.main.Categories', {
     createButtons: function() {
         var me = this;
 
+        me.startButton  = me.createStartButton();
         me.closeButton  = me.createCloseButton();
         me.cancelButton = me.createCancelButton();
 
         return Ext.create('Ext.container.Container', {
             layout: 'hbox',
             items: [
-                me.createStartButton(),
+                me.startButton,
                 me.cancelButton,
                 me.closeButton
             ]

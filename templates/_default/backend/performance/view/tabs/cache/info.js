@@ -21,24 +21,27 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/cache/view/main}
-//{block name="backend/cache/view/main/info"}
-Ext.define('Shopware.apps.Cache.view.main.Info', {
+//{namespace name=backend/performance/main}
+
+//{block name="backend/performance/view/tabs/cache/info"}
+Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.cache-info',
+    alias: 'widget.performance-tabs-cache-info',
 
     title: '{s name=info/title}Cache-Directory information{/s}',
 
     layout: 'fit',
     autoScroll: true,
 
+
+
     initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
-            store: 'main.Info',
             columns: me.getColumns()
         });
+
 
         me.callParent(arguments);
         me.store.load();
