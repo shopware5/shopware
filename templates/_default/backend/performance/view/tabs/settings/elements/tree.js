@@ -80,7 +80,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
     initComponent : function() {
         var me = this;
 
-//        me.columns = me.createColumns();
         me.selModel = Ext.create('Ext.selection.RowModel', {
         });
 
@@ -94,9 +93,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
          }];
 
 
-
-
-//        me.dockedItems = me.createMenu();
         me.callParent(arguments);
 
     }

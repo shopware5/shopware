@@ -30,8 +30,6 @@
 
 /**
  * Shopware Application - Performance module
- *
- * todo@all: Documentation
  */
 //{block name="backend/performance/application"}
 Ext.define('Shopware.apps.Performance', {

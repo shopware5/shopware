@@ -32,8 +32,6 @@
 
 /**
  * Shopware UI - Performance list main window.
- *
- * todo@all: Documentation
  */
 //{block name="backend/performance/view/main/window"}
 Ext.define('Shopware.apps.Performance.view.main.Window', {

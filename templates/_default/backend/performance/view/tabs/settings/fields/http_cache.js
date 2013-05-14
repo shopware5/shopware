@@ -78,9 +78,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("Allgemeine Beschreibung für das HTTPCache-Modul <br>" +
-                            "<br>" +
-                            "<b>Wichtig: </b> Informationen")
+                    me.createDecriptionContainer("{s name=fieldset/cache/info}{/s}")
                 ]},
             {
                 xtype: 'fieldset',

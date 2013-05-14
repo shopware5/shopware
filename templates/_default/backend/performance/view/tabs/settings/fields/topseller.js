@@ -75,9 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
-                            "<br>" +
-                            "<b>Wichtig: </b> Informationen"),
+                    me.createDecriptionContainer("{s name=fieldset/topseller/info}{/s}"),
                 ]
             },
             {

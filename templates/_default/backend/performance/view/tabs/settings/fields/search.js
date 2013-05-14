@@ -76,9 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("Allgemeine Beschreibung für die Suche<br>" +
-                            "<br>" +
-                            "<b>Wichtig: </b> Informationen")
+                    me.createDecriptionContainer("{s name=fieldset/search/info}{/s}")
                 ]},
             {
                 xtype: 'fieldset',

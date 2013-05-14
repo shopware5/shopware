@@ -75,9 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 title: '{s name=fieldset/information}Information{/s}',
                 defaults: me.defaults,
                 items: [
-                    me.createDecriptionContainer("Allgemeine Beschreibung für verschiedene kleinere Einstellungen <br>" +
-                            "<br>" +
-                            "<b>Wichtig: </b> Informationen")]
+                    me.createDecriptionContainer("{s name=fieldset/categories/info}{/s}")]
             },
             {
                 xtype: 'fieldset',

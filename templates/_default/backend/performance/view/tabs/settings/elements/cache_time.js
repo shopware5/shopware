@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
 
         return [
             {
-                header: 'Controller',
+                header: '{s name=grid/column/controller}Controller{/s}',
                 dataIndex: 'key',
                 flex: 2,
                 editor: {
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                 }
             },
             {
-                header: 'Time',
+                header: '{s name=grid/column/time}Time{/s}',
                 dataIndex: 'value',
                 flex: 1,
                 editable: true,
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                         cls:'delteBtn',
                         iconCls:'sprite-minus-circle-frame',
                         action:'http-cache-delete-controller-time',
-                        tooltip:'Delete row',
+                        tooltip:'{s name=grid/actionButton/delete}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field
