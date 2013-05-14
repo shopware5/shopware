@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
     /**
      * Desciptive title for the grid
      */
-    title: 'Define cache times for controller (-actions) here',
+    title: '{s name=grid/cacheTime}Define cache times for controller (-actions) here{/s}',
 
 
     /**

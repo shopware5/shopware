@@ -48,11 +48,11 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     ],
 
     snippets: {
-        growlMessage: '{s name=growMessage}Performance Module{s}',
-        successTitle: '{s name=successTitle}Success{s}',
-        successMessage: '{s name=successMessage/configSaved}Configuration saved{s}',
-        errorTitle: '{s name=errorTitle}Error{s}',
-        errorMessage: '{s name=successMessage}Error saving the configuration{s}'
+        growlMessage: '{s name=growMessage}Performance Module{/s}',
+        successTitle: '{s name=successTitle}Success{/s}',
+        successMessage: '{s name=successMessage/configSaved}Configuration saved{/s}',
+        errorTitle: '{s name=errorTitle}Error{/s}',
+        errorMessage: '{s name=successMessage}Error saving the configuration{/s}'
     },
 
 	/*
