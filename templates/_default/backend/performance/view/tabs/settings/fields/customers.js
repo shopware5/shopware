@@ -148,8 +148,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                             ],
                             data: [
                                 { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
-                                { id: 2, name: '{s name=fieldset/refreshStrategy/manual}CronJob{/s}' },
-                                { id: 3, name: '{s name=fieldset/refreshStrategy/manual}CronLive{/s}' }
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/cronJob}CronJob{/s}' },
+                                { id: 3, name: '{s name=fieldset/refreshStrategy/live}Live{/s}' }
                             ]
                         })
                     }

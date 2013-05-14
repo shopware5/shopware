@@ -60,31 +60,31 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
-            batchSize: 200
+            batchSize: 100
         },
         seo:  {
             title: '{s name=multi_request/sei}Build index for SEO{/s}',
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
-            batchSize: 200
+            batchSize: 100
         },
         search:  {
             title: '{s name=multi_request/search}Build index for search{/s}',
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
-            batchSize: 200
+            batchSize: 100
         },
         similarShown:  {
             title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
-            batchSize: 200
+            batchSize: 100
         },
         alsoBought:  {
             title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
-            batchSize: 200
+            batchSize: 100
         },
         category:  {
             title: '{s name=multi_request/categories}Repair categories{/s}',
