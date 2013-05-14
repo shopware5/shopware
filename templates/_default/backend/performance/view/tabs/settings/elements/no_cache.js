@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
     /**
      * Desciptive title for the grid
      */
-    title: 'Controller tags not to be cached',
+    title: '{s name=grid/noCache}Controller tags not to be cached{/s}',
 
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
