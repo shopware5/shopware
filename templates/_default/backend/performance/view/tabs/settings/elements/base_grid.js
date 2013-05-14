@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
                 },
                 {
                     iconCls:'sprite-plus-circle-frame',
-                    text:'Add entry',
+                    text:'{s name=grid/addEntry}Add entry{/s}',
                     cls: 'secondary small',
                     action:'add-entry',
                     handler: function(button, event) {

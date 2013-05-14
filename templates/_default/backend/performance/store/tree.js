@@ -31,7 +31,7 @@
 //{namespace name=backend/performance/main}
 
 /**
- * todo@all: Documentation
+ * The tree store for the navigation tree in the settings tab
  */
 //{block name="backend/performance/store/tree"}
 Ext.define('Shopware.apps.Performance.store.Tree', {

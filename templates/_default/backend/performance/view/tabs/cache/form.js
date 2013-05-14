@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     layout: 'column',
 
     /**
-     *
+     * Init the component, load items
      */
     initComponent:function () {
         var me = this;

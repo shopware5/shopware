@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
 
         return [
             {
-                header: 'Controller',
+                header: '{s name=grid/column/controller}Controller{/s}',
                 dataIndex: 'key',
                 flex: 2,
                 editor: {
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                 }
             },
             {
-                header: 'Tag',
+                header: '{s name=grid/column/controllerTag}Tag{/s}',
                 dataIndex: 'value',
                 flex: 1,
                 editor: {
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                         cls:'delteBtn',
                         iconCls:'sprite-minus-circle-frame',
                         action:'http-cache-delete-controller-time',
-                        tooltip:'Delete row',
+                        tooltip:'{s name=grid/actionButton/delete}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field
