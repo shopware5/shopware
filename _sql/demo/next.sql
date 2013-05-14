@@ -7843,61 +7843,6 @@ INSERT INTO `s_core_log` (`id`, `type`, `key`, `text`, `date`, `user`, `ip_addre
 (1678, 'backend', 'Einkaufswelt', 'Die Einkaufswelt English wurde gespeichert.', '2012-08-31 12:35:55', 'Lucas', '217.86.205.141', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0', ''),
 (1679, 'backend', 'Einkaufswelt', 'Die Einkaufswelt Sommerwelten wurde gespeichert.', '2012-08-31 12:36:20', 'Dennis', '217.86.247.178', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.163 Safari/535.19', '');
 
-TRUNCATE TABLE `s_core_menu`;
-INSERT INTO `s_core_menu` (`id`, `parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`) VALUES
-(1, NULL, '', 'Artikel', NULL, NULL, 'ico package_green', 0, 1, NULL, NULL, 'Article', NULL, NULL),
-(2, 1, '', 'Anlegen', '', NULL, 'sprite-inbox--plus', -3, 1, NULL, NULL, 'Article', 'STRG + ALT + N', 'Detail'),
-(4, 1, '', 'Kategorien', '', NULL, 'sprite-blue-folders-stack', 0, 1, NULL, 23, 'Category', NULL, 'Index'),
-(6, 1, '', 'Hersteller', NULL, NULL, 'sprite-truck', 2, 1, NULL, NULL, 'Supplier', NULL, 'Index'),
-(7, NULL, '', 'Inhalte', NULL, NULL, 'ico2 note03', 0, 1, NULL, NULL, 'Content', NULL, NULL),
-(8, 30, '', 'Banner', NULL, NULL, 'sprite-image-medium', 0, 1, NULL, 2, 'Banner', NULL, 'Index'),
-(9, 30, '', 'Einkaufswelten', '', NULL, 'sprite-pin', 1, 1, NULL, NULL, 'Emotion', NULL, 'Index'),
-(10, 30, '', 'Gutscheine', NULL, NULL, 'sprite-mail-open-image', 3, 1, NULL, 8, 'Voucher', NULL, 'Index'),
-(11, 30, '', 'Pr&auml;mienartikel', NULL, NULL, 'sprite-star', 2, 1, NULL, 7, 'Premium', NULL, 'Index'),
-(12, 30, '', 'Produktexporte', NULL, NULL, 'sprite-folder-export', 5, 1, NULL, 11, 'ProductFeed', NULL, 'Index'),
-(15, 7, '', 'Shopseiten', NULL, NULL, 'sprite-documents', 0, 1, NULL, NULL, 'Site', NULL, 'Index'),
-(20, NULL, '', 'Kunden', NULL, NULL, 'ico customer', 0, 1, NULL, NULL, 'Customer', NULL, NULL),
-(21, 20, '', 'Kundenliste', NULL, NULL, 'sprite-ui-scroll-pane-detail', 0, 1, NULL, NULL, 'Customer', 'STRG + ALT + K', 'Index'),
-(22, 20, '', 'Bestellungen', NULL, NULL, 'sprite-sticky-notes-pin', 0, 1, NULL, NULL, 'Order', 'STRG + ALT + B', 'Index'),
-(23, NULL, '', 'Einstellungen', NULL, NULL, 'ico2 wrench_screwdriver', 0, 1, NULL, NULL, 'ConfigurationMenu', NULL, NULL),
-(25, 23, '', 'Benutzerverwaltung', NULL, NULL, 'sprite-user-silhouette', -2, 1, NULL, 35, 'UserManager', NULL, 'Index'),
-(26, 23, '', 'Versandkosten', NULL, NULL, 'sprite-envelope--arrow', 0, 1, NULL, 16, 'Shipping', NULL, 'Index'),
-(27, 23, '', 'Zahlungsarten', NULL, NULL, 'sprite-credit-cards', 0, 1, NULL, NULL, 'Payment', NULL, 'Index'),
-(28, 23, '', 'eMail-Vorlagen', NULL, NULL, 'sprite-mail--pencil', 0, 1, NULL, 10, 'Mail', NULL, 'Index'),
-(29, 23, '', 'Shopcache leeren', NULL, NULL, 'sprite-bin-full', -5, 1, NULL, NULL, 'Cache', NULL, 'Index'),
-(30, NULL, '', 'Marketing', NULL, NULL, 'ico2 chart_bar01', 0, 1, NULL, NULL, 'Marketing', NULL, NULL),
-(31, 69, '', 'Übersicht', NULL, NULL, 'sprite-report-paper', -5, 1, NULL, 13, 'Overview', NULL, 'Index'),
-(32, 69, '', 'Statistiken / Diagramme', NULL, NULL, 'sprite-chart', -4, 1, NULL, 26, 'Analytics', NULL, 'Index'),
-(40, NULL, '', '', NULL, NULL, 'ico question_frame', 0, 1, NULL, NULL, NULL, NULL, NULL),
-(41, 114, '', 'Onlinehilfe aufrufen', 'window.open(''http://www.shopware.de/wiki'',''Shopware'',''width=800,height=550,scrollbars=yes'')', NULL, 'sprite-lifebuoy', 0, 1, NULL, NULL, 'Onlinehelp', NULL, NULL),
-(44, 40, '', 'Über Shopware', 'createShopwareVersionMessage()', NULL, 'sprite-shopware-logo', 2, 1, NULL, NULL, 'AboutShopware', NULL, 'Index'),
-(46, 7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index'),
-(50, 1, '', 'Bewertungen', NULL, NULL, 'sprite-balloon', 3, 1, NULL, 9, 'Vote', NULL, 'Index'),
-(56, 30, '', 'Partnerprogramm', '', NULL, 'sprite-xfn-colleague', 6, 1, NULL, 22, 'Partner', NULL, 'Index'),
-(57, 7, '', 'Formulare', NULL, NULL, 'sprite-application-form', 2, 1, NULL, NULL, 'Form', NULL, 'Index'),
-(58, 30, '', 'Newsletter', '', NULL, 'sprite-paper-plane', 7, 1, NULL, 32, 'NewsletterManager', NULL, 'Index'),
-(59, 69, '', 'Abbruch-Analyse', '', NULL, 'sprite-chart-down-color', 0, 1, NULL, 25, 'CanceledOrder', NULL, 'Index'),
-(62, 23, '', 'Riskmanagement', '', NULL, 'sprite-funnel--exclamation', 0, 1, NULL, NULL, 'RiskManagement', NULL, 'Index'),
-(63, 23, '', 'Systeminfo', NULL, NULL, 'sprite-blueprint', -3, 1, 40, 19, 'Systeminfo', NULL, 'Index'),
-(64, 7, '', 'Medienverwaltung', NULL, NULL, 'sprite-inbox-image', 4, 1, NULL, 27, 'MediaManager', NULL, 'Index'),
-(65, 20, '', 'Zahlungen', NULL, NULL, 'sprite-money-coin', 0, 1, NULL, NULL, 'Payments', NULL, NULL),
-(66, 1, '', 'Übersicht', '', NULL, 'sprite-ui-scroll-pane-list', -2, 1, NULL, 13, 'ArticleList', 'STRG + ALT + O', 'Index'),
-(68, 23, '', 'Logfile', '', NULL, 'sprite-cards-stack', -2, 1, NULL, NULL, 'Log', NULL, 'Index'),
-(69, 30, '', 'Auswertungen', NULL, NULL, 'sprite-chart', -1, 1, NULL, NULL, 'AnalysisMenu', NULL, NULL),
-(72, 1, '', 'Eigenschaften', '', NULL, 'sprite-property-blue', 0, 1, NULL, NULL, 'Property', NULL, 'Index'),
-(75, 20, '', 'Anlegen', '', NULL, 'sprite-user--plus', -1, 1, NULL, NULL, 'Customer', NULL, 'Detail'),
-(84, 69, '', 'E-Mail Benachrichtigung', '', NULL, 'sprite-mail-forward', 4, 1, NULL, 24, 'Notification', NULL, 'Index'),
-(85, 7, '', 'Blog', '', NULL, 'sprite-application-blog', 1, 1, NULL, 28, 'Blog', NULL, 'Index'),
-(88, 114, '', 'Zum Forum', 'window.open(''http://www.shopware-community.de'',''Shopware'',''width=800,height=550,scrollbars=yes'')', NULL, 'sprite-balloons-box', -1, 1, NULL, NULL, 'Forum', NULL, NULL),
-(91, 29, '', 'Konfiguration + Template', NULL, NULL, 'sprite-edit-shade', 1, 1, NULL, NULL, 'Cache', 'STRG + ALT + X', 'Config'),
-(97, 29, '', 'Artikel + Kategorien', NULL, NULL, 'sprite-gear', 1, 1, NULL, NULL, 'Cache', 'STRG + ALT + F', 'Frontend'),
-(107, 23, '', 'Textbausteine', NULL, NULL, 'sprite-edit-shade', 0, 1, NULL, NULL, 'Snippet', NULL, 'Index'),
-(109, 40, '', 'Tastaturk&uuml;rzel', 'createKeyNavOverlay()', NULL, 'sprite-keyboard-command', 1, 1, NULL, NULL, 'ShortCutMenu', NULL, 'Index'),
-(110, 23, '', 'Grundeinstellungen', NULL, NULL, 'sprite-wrench-screwdriver', -5, 1, NULL, NULL, 'Config', NULL, 'Index'),
-(114, 40, '', 'Hilfe', NULL, NULL, 'sprite-lifebuoy', 0, 1, NULL, NULL, 'HelpMenu', NULL, NULL),
-(115, 40, '', 'Feedback senden', NULL, NULL, 'sprite-briefcase--arrow', 0, 1, NULL, NULL, 'BetaFeedback', NULL, 'Index'),
-(116, 23, '', 'Plugin Manager', NULL, NULL, 'sprite-application-block', 0, 1, 46, 36, 'PluginManager', NULL, 'Index');
-
 TRUNCATE TABLE `s_core_multilanguage`;
 INSERT INTO `s_core_multilanguage` (`id`, `mainID`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `scoped_registration`, `fallback`, `navigation`) VALUES
 (1, NULL, '1', 1, 3, '', '', 1, 'Deutsch', 'EK', 'templates/emotion_orange', 'templates/orange', 0, 'qa.de.server678-han.de-nserver.de\nqa.de.server678-han.de-nserver.de', 1, 1, '1|2', '1|2', NULL, NULL, ''),
@@ -7918,8 +7863,9 @@ INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `template`, `cla
 TRUNCATE TABLE `s_core_paymentmeans_attributes`;
 TRUNCATE TABLE `s_core_paymentmeans_countries`;
 TRUNCATE TABLE `s_core_paymentmeans_subshops`;
-TRUNCATE TABLE `s_core_plugins`;
-INSERT INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
+
+-- TRUNCATE TABLE `s_core_plugins`;
+INSERT IGNORE INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
 (1, 'Core', 'Log', 'Log', 'Default', '', '', 1, '2012-08-28 00:00:00', '2010-10-18 00:00:00', '2010-10-18 00:00:00', '2012-08-31 11:36:14', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1', NULL, '', NULL, NULL, NULL, 1, 1, 1, NULL, NULL),
 (2, 'Core', 'ErrorHandler', 'ErrorHandler', 'Default', '', '', 1, '2012-08-28 00:00:00', '2010-10-18 00:00:00', '2010-10-18 00:00:00', '2012-08-31 11:36:14', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1', NULL, '', NULL, NULL, NULL, 1, 0, 0, NULL, NULL),
 (3, 'Core', 'Debug', 'Debug', 'Default', '', '', 0, '2012-08-28 00:00:00', NULL, NULL, '2012-08-31 11:36:14', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1', NULL, '', NULL, NULL, NULL, 1, 1, 1, NULL, NULL),
@@ -10414,8 +10360,8 @@ INSERT INTO `s_core_states` (`id`, `description`, `position`, `group`, `mail`) V
 (34, 'Es wurde eine Zeitverlaengerung eingetragen.', 34, 'payment', 1),
 (35, 'Vorgang wurde abgebrochen.', 35, 'payment', 1);
 
-TRUNCATE TABLE `s_core_subscribes`;
-INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
+-- TRUNCATE TABLE `s_core_subscribes`;
+INSERT IGNORE INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
 (1, 'Enlight_Bootstrap_InitResource_Auth', 0, 'Shopware_Plugins_Backend_Auth_Bootstrap::onInitResourceAuth', 36, 0),
 (2, 'Enlight_Controller_Action_PreDispatch', 0, 'Shopware_Plugins_Backend_Auth_Bootstrap::onPreDispatchBackend', 36, 0),
 (3, 'Enlight_Bootstrap_InitResource_Menu', 0, 'Shopware_Plugins_Backend_Menu_Bootstrap::onInitResourceMenu', 37, 0),
