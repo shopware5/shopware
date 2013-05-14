@@ -1227,7 +1227,7 @@ class sArticles
 
             $articles[$articleKey]['sVoteAverange'] = explode('|', $articles[$articleKey]['sVoteAverange']);
             $articles[$articleKey]['sVoteAverange'] = array(
-                'averange' => round($articles[$articleKey]['sVoteAverange'][0]),
+                'averange' => round($articles[$articleKey]['sVoteAverange'][0], 2),
                 'count' => round($articles[$articleKey]['sVoteAverange'][1]),
             );
 
