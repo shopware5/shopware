@@ -139,7 +139,8 @@ class Shopware_Components_Config implements ArrayAccess
         $sql = "
             SELECT
               LOWER(REPLACE(e.name, '_', '')) as name,
-              IFNULL(IFNULL(v2.value, v1.value), e.value) as value
+              IFNULL(IFNULL(v2.value, v1.value), e.value) as value,
+              LOWER(REPLACE(forms.name, '_', '')) as form
             FROM s_core_config_elements e
             LEFT JOIN s_core_config_values v1
             ON v1.element_id = e.id
@@ -147,15 +148,19 @@ class Shopware_Components_Config implements ArrayAccess
             LEFT JOIN s_core_config_values v2
             ON v2.element_id = e.id
             AND v2.shop_id = ?
+            LEFT JOIN s_core_config_forms forms
+            ON forms.id = e.form_id
         ";
-        $data = $this->_db->fetchPairs($sql, array(
+        $data = $this->_db->fetchAll($sql, array(
             1, //Shop parent id
             isset($this->_shop) ? $this->_shop->getId() : null
         ));
 
         $result = array();
-        foreach ($data as $key => $value) {
-            $result[$key] = unserialize($value);
+        foreach ($data as $row) {
+            $result[$row['name']] = unserialize($row['value']);
+			// Take namespaces (form names) into account
+            $result[$row['form'] . '::' . $row['name']] = unserialize($row['value']);
         }
 
         $result['version'] = Shopware::VERSION;
@@ -179,6 +184,14 @@ class Shopware_Components_Config implements ArrayAccess
         return str_replace('_', '', strtolower($name));
     }
 
+    /**
+	 * Get config by namespace (form). Each config name is unique by namespace + name
+	 */
+    public function getByNamespace($namespace, $name, $default = null)
+    {
+    	return $this->get($namespace . '::' . $name, $default);
+    }
+    
     /**
      * @param $name
      * @param null $default

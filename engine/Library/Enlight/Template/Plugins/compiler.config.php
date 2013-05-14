@@ -43,7 +43,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('default');
+    public $optional_attributes = array('default', 'namespace');
 
     /**
      * @param $args
@@ -66,11 +66,20 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
             if(isset($_attr['default'])) {
                 $return .= ', ' . $_attr['default'];
             }
+			if(isset($_attr['namespace'])) {
+            	return '<?php echo Enlight_Application::Instance()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';                
+            }			
             return '<?php echo Enlight_Application::Instance()->Config()->get(' . $return . '); ?>';
         }
 
         $name = substr($_attr['name'], 1, -1);
-        $value = Enlight_Application::Instance()->Config()->get($name);
+		if(isset($_attr['namespace'])) {
+			$namespace = substr($_attr['namespace'], 1, -1);
+			$value = Enlight_Application::Instance()->Config()->getByNamespace($namespace, $name);
+		} else {
+	        $value = Enlight_Application::Instance()->Config()->get($name);			
+		}
+		
         if($value !== null) {
             return '<?php echo ' .  var_export($value, true) . ';?>';
         }
