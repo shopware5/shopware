@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             url: config.totalCountUrl,
             success: function(response) {
                 var json = Ext.decode(response.responseText);
-                config.totalCount = json.total;
+                config.totalCount = json.data.count;
 
                 window.progressBar.updateProgress(0);
 
