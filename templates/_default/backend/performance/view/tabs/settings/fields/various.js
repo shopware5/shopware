@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
         return [
             {
                 xtype: 'fieldset',
-                title: 'Information',
+                title: '{s name=fieldset/information}Information{/s}',
                 defaults: me.defaults,
                 items: [
                     me.createDecriptionContainer("Allgemeine Beschreibung für verschiedene kleinere Einstellungen <br>" +
@@ -81,42 +81,41 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
             },
             {
                 xtype: 'fieldset',
-                title: 'Konfiguration',
+                title: '{s name=fieldset/configuration}Configuration{/s}',
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: 'Shopware Statistiken deaktivieren',
-                        helpText: 'Keine Statistiken erheben',
+                        fieldLabel: '{s name=fieldset/various/disableStats}Disable Shopware statistics{/s}',
+                        helpText: '{s name=fieldset/various/disableStats/help}Do not collect data for statistics{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Tag-Cloud aktivieren',
-                        helpText: 'Soll eine TagCloud angezeigt werden?',
+                        fieldLabel: '{s name=fieldset/various/enableTagCloud}Enable tag cloud{/s}',
+                        helpText: '{s name=fieldset/various/enableTagCloud/help}Do you want to show a tag cloud{/s}',
                         name: 'various[TagCloud:show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Artikelverlauf anzeigen',
+                        fieldLabel: '{s name=fieldset/various/lastArticles}Show last articles{/s}',
                         name: 'various[LastArticles:show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Anzahl Artikel im Verlauf',
-                        helpText: 'Anzahl der Artikel im Widget "zuletzt angesehene Artikel"',
+                        fieldLabel: '{s name=fieldset/various/numLastArticles}Number of last articles{/s}',
                         name: 'various[LastArticles:lastarticlestoshow]',
                         xtype: 'numberfield',
                         minValue: 1
                     },
                     {
-                        fieldLabel: 'Artikelnavigation auf Detailseite deaktivieren',
-                        helpText: 'Deaktiviert die links/rechts-Pfeile auf der Artikel-Detailseite',
+                        fieldLabel: '{s name=fieldset/various/disableArticleNavigation}Disable article navigation of article detail page{/s}',
+                        helpText: '{s name=fieldset/various/disableArticleNavigation/help}Disables the left/right arrows on the articles detail page{/s}',
                         name: 'various[disableArticleNavigation]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

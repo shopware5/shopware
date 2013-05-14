@@ -15,7 +15,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * "Shopware" is a registered trademark of shopware AG.
+ * ""Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -73,52 +73,53 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Information',
+                title: '{s name=fieldset/information}Information{/s}',
                 items: [
                     me.createDecriptionContainer("Allgemeine Beschreibung für das Topseller-Modul <br>" +
                             "<br>" +
                             "<b>Wichtig: </b> Informationen"),
-                    {
-                        xtype: 'performance-multi-request-button',
-                        event: 'topseller',
-                        title: 'Index aufbauen für "TopSeller"'
-                    }]
+                ]
             },
             {
                 xtype: 'fieldset',
-                title: 'Konfiguration',
+                title: '{s name=fieldset/topseller/config}Configuration \'Topseller\'{/s}',
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: 'Aktivieren',
-                        helpText: 'Sollen TopSeller im Frontend angezeigt werden?',
+                        xtype: 'performance-multi-request-button',
+                        event: 'topseller',
+                        title: '{s name=fieldset/buildIndex}BuildIndex{/s}'
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/topseller/enable}Enable{/s}',
+                        helpText: '{s name=fieldset/topseller/enable/help}Do you want to show TopSellers in your shop?{/s}',
                         name: 'topSeller[topSellerActive]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Gültigkeit',
-                        supportText: '(in Tagen)',
+                        fieldLabel: '{s name=fieldset/topseller/valid}Valid for...{/s}',
+                        supportText: '{s name=fieldset/topseller/valid/support}(in days){/s}',
                         name: 'topSeller[topSellerValidationTime]',
                         xtype: 'numberfield',
                         minValue: 1,
                         maxValue: 365
                     },
                     {
-                        fieldLabel: 'Bestellungen',
-                        supportText: '(in Tagen)',
-                        helpText: 'Wie viele Tage sollen bei der TopSeller-Berechnung berücksichtigt werden.',
+                        fieldLabel: '{s name=fieldset/topseller/orders}Orders{/s}',
+                        supportText: '{s name=fieldset/topseller/orders/support}(in days){/s}',
+                        helpText: '{s name=fieldset/topseller/orders/help}How many days of orders should be calculated?{/s}',
                         name: 'topSeller[chartinterval]', // existing value
                         xtype: 'numberfield',
                         minValue: 10
                     },
                     {
-                        fieldLabel: 'Aktualisierungs-Strategie',
-                        helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                                '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                                '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                                '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+                        fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
+                        helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+                                '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
+                                '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
+                                '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
                         name: 'topSeller[topSellerRefreshStrategy]',
                         xtype: 'combo',
                         valueField: 'id',
@@ -130,14 +131,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                                 { name: 'name', type: 'string' }
                             ],
                             data: [
-                                { id: 1, name: 'Manuell' },
-                                { id: 2, name: 'CronJob' },
-                                { id: 3, name: 'Live' }
+                                { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/manual}CronJob{/s}' },
+                                { id: 3, name: '{s name=fieldset/refreshStrategy/manual}CronLive{/s}' }
                             ]
                         })
                     },
                     {
-                        fieldLabel: 'Pseudosales berücksichtigen',
+                        fieldLabel: '{s name=fieldset/topseller/pseudoSales}Take pseudo sales into account{/s}',
                         name: 'topSeller[topSellerPseudoSales]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

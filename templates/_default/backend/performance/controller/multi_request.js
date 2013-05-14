@@ -57,37 +57,37 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
     requestConfig: {
         topseller:  {
-            title: 'Initialisiere TopSeller',
+            title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
             batchSize: 200
         },
         seo:  {
-            title: 'Initialisiere Seo',
+            title: '{s name=multi_request/sei}Build index for SEO{/s}',
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
             batchSize: 200
         },
         search:  {
-            title: 'Initialisiere Suche',
+            title: '{s name=multi_request/search}Build index for search{/s}',
             totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
             requestUrl: '{url controller="Performance" action="initTopSeller"}',
             batchSize: 200
         },
         similarShown:  {
-            title: 'Initialisiere "Kunden haben sich auch angesehen"',
+            title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
             batchSize: 200
         },
         alsoBought:  {
-            title: 'Initialisiere "Kunden haben auch gekauft"',
+            title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 200
         },
         category:  {
-            title: 'Repariere Kategorien',
+            title: '{s name=multi_request/categories}Repair categories{/s}',
             totalCountUrl: '{url controller="Cache" action="prepareTree"}',
             requestUrl: '{url controller="Cache" action="fixCategories"}',
             batchSize: 5000

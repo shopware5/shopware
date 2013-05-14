@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Information',
+                title: '{s name=fieldset/information}Information{/s}',
                 items: [
                     me.createDecriptionContainer("Allgemeine Beschreibung für das HTTPCache-Modul <br>" +
                             "<br>" +
@@ -85,22 +85,22 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Konfiguration',
+                title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
                     {
-                        fieldLabel: 'Proxy-BAN aktivieren',
+                        fieldLabel: '{s name=fieldset/http/ban}Enable Proxy BAN{/s}',
                         name: 'httpCache[HttpCache:proxyBan]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Alternative Proxy-Url',
+                        fieldLabel: '{s name=fieldset/http/url}Alternate proxy URL{/s}',
                         name: 'httpCache[HttpCache:proxy]',
                         xtype: 'textfield'
                     },
                     {
-                        fieldLabel: 'Admin-View',
+                        fieldLabel: '{s name=fieldset/http/admin}Admin view{/s}',
                         name: 'httpCache[HttpCache:admin]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

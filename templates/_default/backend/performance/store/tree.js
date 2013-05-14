@@ -28,6 +28,8 @@
  * @author shopware AG
  */
 
+//{namespace name=backend/performance/main}
+
 /**
  * todo@all: Documentation
  */
@@ -42,39 +44,39 @@ Ext.define('Shopware.apps.Performance.store.Tree', {
     root: {
     expanded: true,
     children: [{
-    	text: "Allgemein",
+    	text: "{s name=navigation/general}General{/s}",
     	expanded: true,
     	children: [{
-        	text: "HTTP Cache",
+        	text: "{s name=navigation/cache}HTTP Cache{/s}",
         	leaf: true,
         	internalName: 'performance-tabs-settings-http-cache'
     	}, {
-        	text: "SEO",
+        	text: "{s name=navigation/seo}SEO{/s}",
         	leaf: true,
         	internalName: 'performance-tabs-settings-seo'
     	}, {
-        	text: "Suche", 
+        	text: "{s name=navigation/search}Search{/s}",
         	leaf: true, 
         	internalName: 'performance-tabs-settings-search'
     	}, {
-        	text: "Kategorien", 
+        	text: "{s name=navigation/categories}Categories{/s}",
         	leaf: true, 
         	internalName: 'performance-tabs-settings-categories'
     	},{
-            text: "Verschiedenes",
+            text: "{s name=navigation/various}Various{/s}",
             leaf: true,
             internalName: 'performance-tabs-settings-various'
         }]
 	}, {
-    	text: "Crossselling",
+    	text: "{s name=navigation/crossselling}CrossSelling{/s}",
     	expanded: true, 
     	children: [{ 
-    		text: "TopSeller",
+    		text: "{s name=navigation/topseller}TopSeller{/s}",
     		name: '21',
     		leaf: true, 
     		internalName: 'performance-tabs-settings-topseller'
 		}, {
-			text: "Andere Kunden",
+			text: "{s name=navigation/otherCustomers}Other customers{/s}",
 			leaf: true,
 			internalName: 'performance-tabs-settings-customers'
 		}]
