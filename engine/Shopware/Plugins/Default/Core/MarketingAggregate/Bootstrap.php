@@ -124,6 +124,17 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         return Shopware()->SimilarShown();
     }
 
+    /**
+     * Helper function to check if the similar shown
+     * function is activated.
+     */
+    protected function isSimilarShownActivated()
+    {
+        return $this->Application()->Config()->get(
+            'similarActive',
+            true
+        );
+    }
 
     /**
      * Helper function to check if the top seller
@@ -204,11 +215,11 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function afterSimilarShownArticlesSelected(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
+        if (Shopware()->Session()->Bot || !($this->isSimilarShownActivated())) {
             return $arguments->getReturn();
         }
         $strategy = $this->Application()->Config()->get(
-            'similarShownRefreshStrategy',
+            'similarRefreshStrategy',
             self::AGGREGATE_STRATEGY_LIVE
         );
 
@@ -280,6 +291,9 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function afterSimilarShownArticlesReset(Enlight_Event_EventArgs $arguments)
     {
+        if (!($this->isSimilarShownActivated())) {
+            return;
+        }
         $this->SimilarShown()->updateElapsedSimilarShownArticles(50);
     }
 
@@ -294,7 +308,16 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function beforeSetLastArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
+        if (Shopware()->Session()->Bot || !($this->isSimilarShownActivated())) {
+            return $arguments->getReturn();
+        }
+
+        $strategy = $this->Application()->Config()->get(
+            'similarRefreshStrategy',
+            self::AGGREGATE_STRATEGY_LIVE
+        );
+
+        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE) {
             return $arguments->getReturn();
         }
 
@@ -345,6 +368,15 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function refreshSimilarShown(Enlight_Event_EventArgs $arguments)
     {
+        $strategy = $this->Application()->Config()->get(
+            'similarRefreshStrategy',
+            self::AGGREGATE_STRATEGY_LIVE
+        );
+
+        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
+            return $arguments->getReturn();
+        }
+
         $this->SimilarShown()->updateElapsedSimilarShownArticles();
         return true;
     }
@@ -418,9 +450,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
         return $arguments->getReturn();
     }
-
-
-
 
 
     /**
