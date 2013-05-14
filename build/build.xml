@@ -43,7 +43,7 @@
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${build.dir}/scripts/dbdeploy.install.sql"/>
-            <fileset file="${sql.dir}/demo/latest.sql"/>
+            <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.demo.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
@@ -66,6 +66,33 @@
         <delete file="${build.dir}/scripts/deploy.sql"/>
 
         <antcall target="build-database-deploy"/>
+        <antcall target="build-demodata-deploy"/>
+    </target>
+
+    <target name="build-demodata-deploy">
+        <concat destfile="${build.dir}/scripts/demo.template.sql">
+            <fileset file="${sql.dir}/demo/next.sql"/>
+            <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
+        </concat>
+
+        <copy file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
+            <filterset>
+                <filter token="database" value="${db.name}"/>
+                <filter token="host" value="${app.host}"/>
+                <filter token="path" value="${app.path}"/>
+            </filterset>
+        </copy>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/demo.deploy.sql">
+            <arg value="-u${db.user}"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--default-character-set=utf8"/>
+            <arg value="${db.name}"/>
+        </exec>
+
+        <delete file="${build.dir}/scripts/demo.template.sql"/>
+        <delete file="${build.dir}/scripts/demo.deploy.sql"/>
     </target>
 
     <target name="build-database-deploy">
