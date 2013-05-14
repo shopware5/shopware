@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.model.Seo', {
         { name:'id', type:'int' },
         { name: 'routerurlcache', type: 'int'},
         { name: 'routercache', type: 'int'},
-        { name: 'routerlastupdateDate', type: 'date'},
+        { name: 'routerlastupdateDate', type: 'date', dateFormat: 'd.m.Y'},
         { name: 'routerlastupdateTime', type: 'time'},
         { name: 'seoRefreshStrategy', type: 'int'},
 

@@ -141,7 +141,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 	{
         unset($data['id']);
 
-        $date = date_create($data['routerlastupdateDate'])->format('Y-d-m');
+        $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');
+
         $time = $data['routerlastupdateTime'];
 
         $datetime = $date . ' ' . $time;
@@ -333,9 +334,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareSeoConfig()
     {
-        $datetime = date_create(Shopware()->Config()->routerlastupdate);
+        $datetime = date_create_from_format('Y-m-d H:i', Shopware()->Config()->routerlastupdate);
         if ($datetime) {
-            $date = $datetime ->format('Y-m-d');
+            $date = $datetime ->format('d.m.Y');
             $time = $datetime ->format('H:i');
         } else {
             $date = null;
