@@ -1015,10 +1015,10 @@ class sArticles
                 IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
 
                 (
-                    SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
-                    FROM s_articles_vote
-                    WHERE s_articles_vote.active=1
-                    AND s_articles_vote.articleID = a.id
+                    SELECT CONCAT(AVG(points), '|',COUNT(*)) as votes
+                    FROM   s_articles_vote
+                    WHERE  s_articles_vote.active=1
+                    AND    s_articles_vote.articleID = a.id
                 ) AS sVoteAverange
 
             $sqlFromPath
@@ -1227,7 +1227,7 @@ class sArticles
 
             $articles[$articleKey]['sVoteAverange'] = explode('|', $articles[$articleKey]['sVoteAverange']);
             $articles[$articleKey]['sVoteAverange'] = array(
-                'averange' => round($articles[$articleKey]['sVoteAverange'][0], 2),
+                'averange' => round($articles[$articleKey]['sVoteAverange'][0]),
                 'count' => round($articles[$articleKey]['sVoteAverange'][1]),
             );
 

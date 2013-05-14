@@ -117,7 +117,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     protected function getSimilarShownValidationTime()
     {
         //get top seller order time interval
-        $interval = Shopware()->Config()->get('similarShownValidationTime', 10);
+        $interval = Shopware()->Config()->get('similarValidationTime', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
