@@ -105,16 +105,17 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
         me.availableCategoriesTree.getProxy().extraParams = {
             'preselected[]' : ids
         };
-        var tree = me.getTreeSelect(ids, me.availableCategoriesTree);
 
-        me.items = [ tree ];
+        me.items = [ me.getTreeSelect(ids, me.availableCategoriesTree) ];
         me.callParent(arguments);
     },
+
     /**
      * Returns the selection box
      *
-     * @param ids array of integers
-     * @return Ext.ux.form.field.BoxSelect
+     * @param { Array } ids array of integers
+     * @param { Ext.data.Store } store
+     * @return { Ext.tree.Panel }
      */
     getTreeSelect : function(ids, store) {
         var me = this;
@@ -128,10 +129,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
             height: 200,
             queryMode: 'remote',
             expanded: true,
-            flex: 1,
-            root: {
-                id: 1
-            }
+            flex: 1
         });
 
         return me.treeSelect;

@@ -55,8 +55,8 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
     fields : [
         //{block name="backend/shipping/model/category_tree/fields"}{/block}
         { name : 'text',     type: 'string' },
-        { name : 'id',       type: 'integer' },
-        { name : 'parentId', type: 'integer' },
+        { name : 'id',       type: 'int' },
+        { name : 'parentId', type: 'int' },
         { name : 'cls',      type: 'string' },
         { name : 'checked',  type: 'string' }
     ]
