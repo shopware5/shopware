@@ -224,6 +224,9 @@ Ext.define('Shopware.form.plugin.Translation',
             case 'tinymce':
                 style = 'top: 3px; right: 3px';
                 break;
+            case 'codemirror':
+                style = 'top: 6px; right: 26px;z-index:999999';
+                break;
             case 'textarea':
                 style = 'top: 6px; right: 6px';
                 break;
@@ -319,6 +322,10 @@ Ext.define('Shopware.form.plugin.Translation',
 
             if(className === 'Shopware.form.TinyMCE') {
                 type = 'tinymce';
+            }
+
+            if(className === 'Shopware.form.CodeMirror') {
+                type = 'codemirror';
             }
 
             if(className === 'Ext.form.TextArea') {
