@@ -23,7 +23,7 @@
  *
  * @category   Shopware
  * @package    Shopware_Controllers
- * @subpackage Article
+ * @subpackage Performance
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     $Author$
