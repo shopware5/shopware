@@ -507,9 +507,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         record = record[0];
 
         Ext.defer(function() {
-
             cmp.doComponentLayout();
-            size = imageEl.getSize()
+            size = imageEl.getSize();
             cmp.dd.on('dragend', function() {
                 var y = cmp.getEl().getTop() - imageEl.getTop(),
                     x = cmp.getEl().getLeft() - imageEl.getLeft();
@@ -518,11 +517,16 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                     y: y
                 });
             });
-            cmp.resizer.on('resize', function(resizer, width, height) {
+            
+            cmp.resizer.on('resize', function (resizer, width, height) {
+                var y = cmp.getEl().getTop() - imageEl.getTop(),
+                    x = cmp.getEl().getLeft() - imageEl.getLeft();
                 record.set({
-                     width: width + 10,
-                     height: height + 10
-                 });
+                    width: width + 10,
+                    height: height + 10,
+                    x: x,
+                    y: y
+                });
             });
         }, 1000);
     }
