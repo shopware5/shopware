@@ -26,14 +26,11 @@
  * @subpackage Article
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
- * @author     Heiner Lohaus
  * @author     $Author$
  */
 
 /**
  * Shopware Performance Controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
