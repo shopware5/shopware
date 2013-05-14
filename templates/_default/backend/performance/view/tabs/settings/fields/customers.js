@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Information',
+                title: '{s name=fieldset/information}Information{/s}',
                 items: [
                     me.createDecriptionContainer("Allgemeine Beschreibung für Crossselling<br>" +
                             "<br>" +
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Konfiguration "Kunden haben auch gekauft"',
+                title: '{s name=fieldset/customers/fieldset/also_bought}Configuration \'Customers also bought\'{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         title: 'Index aufbauen'
                     },
                     {
-                        fieldLabel: 'Anzeigen',
+                        fieldLabel: '{s name=fieldset/customers/show_also_bought}Show{/s}',
                         name: 'customer[alsoBoughtShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
@@ -100,42 +100,42 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: 'Konfiguration "Kunden haben auch gesehen"',
+                title: '{s name=fieldset/customers/fieldset/also_seen}Configuration \'Customers also viewed\'{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'similarShown',
-                        title: 'Index aufbauen'
+                        title: '{s name=fieldset/buildIndex}Build Index{/s}'
                     },
                     {
-                        fieldLabel: 'Aktivieren',
+                        fieldLabel: '{s name=fieldset/customers/fieldset/also_seen}Enable{/s}',
                         name: 'customer[similarActive]',
-                        helpText: 'Soll diese Information erhoben werden?',
+                        helpText: '{s name=fieldset/customers/fieldset/help/also_seen/enable}Do you want to collect this information?{/s}',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },                    {
-                        fieldLabel: 'Anzeigen',
-                        helpText: 'Das Anzeigen vermindert die Wirkung des HTTPCaches auf der Artikel-Detailseite',
+                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/show}Show{/s}',
+                        helpText: '{s name=fieldset/customers/fieldset/alsobought/help/show}Showing this information might bypass the HTTP-Cache{/s}',
                         name: 'customer[similarViewedShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: 'Gültigkeit',
-                        supportText: '(in Tagen)',
+                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/valid}Valid for...{/s}',
+                        supportText: '{s name=fieldset/customers/fieldset/alsobought/support/valid}(in days){/s}',
                         name: 'customer[similarValidationTime]',
                         xtype: 'numberfield',
                         minValue: 1,
                         maxValue: 365
                     },
                     {
-                        fieldLabel: 'Aktualisierungs-Strategie',
-                        helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                                '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                                '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                                '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
+                        fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
+                        helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+                                '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
+                                '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
+                                '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
                         name: 'customer[similarRefreshStrategy]',
                         xtype: 'combo',
                         valueField: 'id',
@@ -147,9 +147,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                                 { name: 'name', type: 'string' }
                             ],
                             data: [
-                                { id: 1, name: 'Manuell' },
-                                { id: 2, name: 'CronJob' },
-                                { id: 3, name: 'Live' }
+                                { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/manual}CronJob{/s}' },
+                                { id: 3, name: '{s name=fieldset/refreshStrategy/manual}CronLive{/s}' }
                             ]
                         })
                     }

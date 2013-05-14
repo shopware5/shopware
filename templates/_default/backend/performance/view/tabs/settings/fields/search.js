@@ -71,36 +71,51 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für die Suche<br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'performance-multi-request-button',
-            event: 'search',
-            title: 'Suchindex aufbauen',
-        },{
-            fieldLabel: 'Aktualisierungs-Strategie',
-            helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'search[searchRefreshStrategy]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Manuell' },
-                    { id: 2, name: 'CronJob' },
-                    { id: 3, name: 'Live' }
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/information}Information{/s}',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für die Suche<br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen")
+                ]},
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/configuration}Configuration{/s}',
+                items: [
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'search',
+                        title: '{s name=fieldset/buildIndex}Build Index{/s}',
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
+                        helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+                                '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
+                                '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
+                                '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
+                        name: 'search[searchRefreshStrategy]',
+                        xtype: 'combo',
+                        valueField: 'id',
+                        editable: false,
+                        displayField: 'name',
+                        store: Ext.create('Ext.data.Store', {
+                            fields: [
+                                { name: 'id', type: 'int' },
+                                { name: 'name', type: 'string' }
+                            ],
+                            data: [
+                                { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/manual}CronJob{/s}' },
+                                { id: 3, name: '{s name=fieldset/refreshStrategy/manual}CronLive{/s}' }
+                            ]
+                        })
+                    }
                 ]
-            })
-        }];
+            }
+        ];
     }
 
 });

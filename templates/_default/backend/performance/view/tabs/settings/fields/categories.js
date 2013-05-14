@@ -70,54 +70,68 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das Kategorien-Modul <br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'performance-multi-request-button',
-            event: 'category',
-            title: 'Kategorien reparieren'
-        }, {
-            fieldLabel: 'Artikel pro Seite',
-            helpText: 'Wie viele Artikel sollen auf jeder Seite angezeigt werden?',
-            name: 'categories[articlesperpage]',
-            xtype: 'numberfield',
-            minValue: 1
-        }, {
-            fieldLabel: 'Standardsortierung in den Listings',
-            helpText: 'Wie sollen die Artikel im Listing sortiert werden?',
-            name: 'categories[orderbydefault]',
-            xtype: 'textfield'
-        }, {
-            fieldLabel: 'Kategorie-Hersteller anzeigen',
-            helpText: '?',
-            name: 'categories[showSupplierInCategories]',
-            xtype: 'checkbox',
-            uncheckedValue: false,
-            inputValue:true
-        },{
-            fieldLabel: 'Sortierung der Eigenschaften',
-            helpText: 'Wie soll en die Eigenschaften sortiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'categories[propertySorting]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Alle Funktionen berücksichtigen' },
-                    { id: 2, name: 'Immer nach Name sortieren' },
-                    { id: 3, name: 'Immer nach Position sortieren' }
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/information}Information{/s}',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für das Kategorien-Modul <br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen")]
+            },
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/configuration}Configuration{/s}',
+                items: [
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'category',
+                        title: '{s name=fieldset/categories/repair}Repair Categories{/s}'
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
+                        helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
+                        name: 'categories[articlesperpage]',
+                        xtype: 'numberfield',
+                        minValue: 1
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/categories/text/sort}Default sort order for listing{/s}',
+                        helpText: '{s name=fieldset/categories/help/sort}In which order do you want to sort articles in category listing?{/s}',
+                        name: 'categories[orderbydefault]',
+                        xtype: 'textfield'
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/categories/text/showSupplier}Show category supplier{/s}',
+                        helpText: '',
+                        name: 'categories[showSupplierInCategories]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/categories/text/sortProperties}Property sort order{/s}',
+                        name: 'categories[propertySorting]',
+                        xtype: 'combo',
+                        valueField: 'id',
+                        editable: false,
+                        displayField: 'name',
+                        store: Ext.create('Ext.data.Store', {
+                            fields: [
+                                { name: 'id', type: 'int' },
+                                { name: 'name', type: 'string' }
+                            ],
+                            data: [
+                                { id: 1, name: '{s name=fieldset/categories/sort/all}Use all functions{/s}' },
+                                { id: 2, name: '{s name=fieldset/categories/sort/name}Sort by name{/s}' },
+                                { id: 3, name: '{s name=fieldset/categories/sort/position}Sort by position{/s}' }
+                            ]
+                        })
+                    }
                 ]
-            })
-        },];
+            }
+        ];
     }
 
 

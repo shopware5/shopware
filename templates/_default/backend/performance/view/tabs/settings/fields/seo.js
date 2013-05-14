@@ -71,58 +71,77 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
         var me = this;
 
         return [
-            me.createDecriptionContainer("Allgemeine Beschreibung für das SEO-Modul <br>" +
-                "<br>" +
-                "<b>Wichtig: </b> Informationen"),
-        {
-            xtype: 'performance-multi-request-button',
-            event: 'seo',
-            title: 'SEO-Index aufbauen',
-        },{
-            fieldLabel: 'Aktualisierungs-Strategie',
-            helpText: 'Wie soll aktualisiert werden?<br><br>' +
-                    '<b>Manuell</b>: Berechnung wird manuell über dieses Modul angestoßen<br>' +
-                    '<b>CronJob</b>: Berechnung wir düber einen CronJob angestoßen (optimal)<br>' +
-                    '<b>Live</b>: Berechnung erfolgt im LiveBetrieb (schlecht für große Jobs)',
-            name: 'seo[seoRefreshStrategy]',
-            xtype: 'combo',
-            valueField: 'id',
-            editable: false,
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [
-                    { name: 'id',    type: 'int' },
-                    { name: 'name',  type: 'string' }
-                ],
-                data : [
-                    { id: 1, name: 'Manuell' },
-                    { id: 2, name: 'CronJob' },
-                    { id: 3, name: 'Live' }
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/information}Information{/s}',
+                items: [
+                    me.createDecriptionContainer("Allgemeine Beschreibung für das SEO-Modul <br>" +
+                            "<br>" +
+                            "<b>Wichtig: </b> Informationen")
                 ]
-            })
-        },{
-            fieldLabel: 'Cachezeit URLs',
-            name: 'seo[routerurlcache]',
-            xtype: 'numberfield',
-            minValue: 3600
-        },{
-            fieldLabel: 'Cachezeit Tabelle',
-            name: 'seo[routercache]',
-            xtype: 'numberfield',
-            minValue: 3600
-        }
-            ,{
-            fieldLabel: 'Letztes Update',
-            name: 'seo[routerlastupdateDate]',
-            format: 'd.m.Y',
-            xtype: 'datefield'
-        }
-            ,{
-            fieldLabel: ' ',
-            labelSeparator: '',
-            name: 'seo[routerlastupdateTime]',
-            xtype: 'timefield'
-        }
+            },
+            {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/configuration}Configuration{/s}',
+                items: [
+                    {
+                        xtype: 'performance-multi-request-button',
+                        event: 'seo',
+                        title: '{s name=fieldset/seo/buildIndex}Build SEO-Index{/s}'
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
+                        helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+                                '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
+                                '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
+                                '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
+                        name: 'seo[seoRefreshStrategy]',
+                        xtype: 'combo',
+                        valueField: 'id',
+                        editable: false,
+                        displayField: 'name',
+                        store: Ext.create('Ext.data.Store', {
+                            fields: [
+                                { name: 'id', type: 'int' },
+                                { name: 'name', type: 'string' }
+                            ],
+                            data: [
+                                { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/manual}CronJob{/s}' },
+                                { id: 3, name: '{s name=fieldset/refreshStrategy/manual}CronLive{/s}' }
+                            ]
+                        })
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/seo/cacheTimeURL}URL cache time{/s}',
+                        name: 'seo[routerurlcache]',
+                        xtype: 'numberfield',
+                        minValue: 3600
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/seo/routerCache}Router cache{/s}',
+                        name: 'seo[routercache]',
+                        xtype: 'numberfield',
+                        minValue: 3600
+                    }
+                    ,
+                    {
+                        fieldLabel: '{s name=fieldset/seo/lastUpdate}Last update{/s}',
+                        name: 'seo[routerlastupdateDate]',
+                        format: 'd.m.Y',
+                        xtype: 'datefield'
+                    }
+                    ,
+                    {
+                        fieldLabel: ' ',
+                        labelSeparator: '',
+                        name: 'seo[routerlastupdateTime]',
+                        xtype: 'timefield'
+                    }
+                ]
+            }
         ];
     }
 
