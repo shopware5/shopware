@@ -261,15 +261,20 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\QueryBuilder
+     * @param $offset
+     * @param $limit
      */
-    public function getCampaigns()
+    public function getCampaigns($offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions','categories.id AS categoryId'))
                 ->innerJoin('emotions.categories','categories')
                 ->where('emotions.isLandingPage = 1 ')
-                ->andWhere('emotions.active = 1 ');
+                ->andWhere('emotions.active = 1');
+
+        $builder->setFirstResult($offset)
+            ->setMaxResults($limit);
 
         return $builder;
     }
