@@ -63,7 +63,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     public function refreshTopSellerForArticleId($articleId)
     {
         if (empty($articleId)) {
-            throw new Exception('No valid article id passed.');
+            return;
         }
         Shopware()->Db()->query('DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId', array(
             'articleId' => (int) $articleId
@@ -145,9 +145,8 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * Refresh the elapsed top seller data of the s_articles_top_seller table.
      * This function is used
      * @param $limit int Limit the update count.
-     * @param bool $timeShuffle
      */
-    public function updateElapsedTopSeller($limit = null, $timeShuffle = false) {
+    public function updateElapsedTopSeller($limit = null) {
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
         $validationTime = $this->getTopSellerValidationTime();
@@ -158,14 +157,9 @@ class Shopware_Components_TopSeller extends Enlight_Class
             $limitSelect = 'LIMIT ' . (int) $limit;
         }
 
-        $timeSelect = ' now(), ';
-        if ($timeShuffle === true) {
-            $timeSelect = ' DATE_SUB(NOW(), INTERVAL s_articles_top_seller_ro.id MOD 4 DAY), ';
-        }
-
         $sql = "
             UPDATE s_articles_top_seller_ro
-            SET last_cleared = $timeSelect
+            SET last_cleared = NOW(),
                 sales = (
                     SELECT
                        ". $select . "
