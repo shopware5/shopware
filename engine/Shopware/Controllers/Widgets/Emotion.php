@@ -519,32 +519,32 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $perPage = "$offset,$limit";
 
         $sql = "
-        SELECT SQL_CALC_FOUND_ROWS a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-        FROM s_articles a
-          INNER JOIN s_articles_categories ac
-            ON ac.articleID = a.id
-            AND a.active = 1
-          INNER JOIN s_categories c
-            ON c.id = ac.categoryID
-            AND c.active = 1
+            SELECT
+              STRAIGHT_JOIN
+              SQL_CALC_FOUND_ROWS
 
-        LEFT JOIN s_order_details od
-        ON a.id = od.articleID
-        AND od.modus = 0
+              a.id AS articleID,
+              s.sales AS quantity
+            FROM s_articles_top_seller_ro s
 
-        LEFT JOIN s_order o
-        ON o.ordertime>=DATE_SUB(NOW(),INTERVAL 30 DAY)
-        AND o.status >= 0
-        AND o.id = od.orderID
+            INNER JOIN s_articles_categories ac
+              ON ac.articleID = s.article_id
+              AND ac.categoryID = :categoryId
 
-        WHERE c.id=?
+            INNER JOIN s_categories c
+              ON ac.categoryID = c.id
+              AND c.active = 1
 
-        GROUP BY a.id
-        ORDER BY quantity DESC, topseller DESC
-        LIMIT {$perPage}
+            INNER JOIN s_articles a
+              ON a.id = s.article_id
+              AND a.active = 1
+
+            ORDER BY quantity DESC
+            LIMIT {$perPage}
         ";
 
-        $articles = Shopware()->Db()->fetchAll($sql, array($category));
+
+        $articles = Shopware()->Db()->fetchAll($sql, array('categoryId' => $category));
 
         $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
         $pages = round($count / $limit);

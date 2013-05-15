@@ -26,7 +26,7 @@
  * Similar shown component which contains all logic about the shopware
  * similar shown articles functions.
  * This components refresh and initials the similar shown data
- * in the s_articles_similar_shown
+ * in the s_articles_similar_shown_ro
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate\Components
@@ -117,7 +117,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         $validationTime = $this->getSimilarShownValidationTime();
 
         $sql = "
-              UPDATE s_articles_similar_shown shown_ro
+              UPDATE s_articles_similar_shown_ro shown
               SET init_date = now(),
                   viewed = (
                       SELECT COUNT(article2.articleID) as viewed

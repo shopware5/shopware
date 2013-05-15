@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_similar_shown_ro` (
 
 
 ALTER TABLE  `s_emarketing_lastarticles` ADD INDEX  `get_last_articles` (  `sessionID` ,  `time` );
+ALTER TABLE  `s_articles` ADD INDEX  `product_newcomer` (  `active` ,  `datum` );
 
 
 -- //@UNDO
