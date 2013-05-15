@@ -29,50 +29,6 @@
  */
 class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJs
 {
-    /**
-    * @var Shopware\Components\Model\ModelManager
-    */
-    protected $manager;
-
-    /**
-    * @var Shopware\Models\Category\Repository
-    */
-    protected $categoryRepository;
-
-    /**
-    * @var Shopware\Models\Blog\Repository
-    */
-    protected $blogRepository;
-
-    /**
-    * @var Shopware\Models\Category\Category
-    */
-    protected $baseCategory;
-
-    /**
-    * Class constructor.
-    */
-    public function init()
-    {
-        $this->manager = Shopware()->Models();
-        $this->categoryRepository = $this->manager->getRepository('Shopware\Models\Category\Category');
-        $this->blogRepository = $this->manager->getRepository('Shopware\Models\Blog\Blog');
-    }
-
-    public function getCategoryRepository()
-    {
-        return $this->categoryRepository;
-    }
-
-    public function getBlogRepository()
-    {
-        return $this->blogRepository;
-    }
-
-    public function getManager()
-    {
-        return $this->manager;
-    }
 
     /**
      * Clean up seo links. remove links of non-existing categories, articles...
