@@ -29,22 +29,6 @@
  */
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
-
-    protected $categoryRepository = null;
-
-    protected $template = null;
-
-    protected $data = null;
-
-
-    public function getCategoryRepository()
-    {
-        if (!$this->categoryRepository) {
-            $this->categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-        }
-        return $this->categoryRepository;
-    }
-
     /**
      * Clear the routerRewrite cache.
      * Needed after the cache was recreated
@@ -84,6 +68,14 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
     }
 
+    /**
+     * Read the exact time of the last SEO url update. Will also return elementId and shopId
+     * in order to be able to update that option later
+     *
+     * todo@dn: Taken from RouterRewrite plugin - clean up
+     *
+     * @return array
+     */
     public function getCachedTime()
     {
         // Get elementId in order to read/write config later
@@ -110,6 +102,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     /**
      * Helper function to reset the cached time. Moved here from the router engine
+     *
+     * todo@dn: Taken from RouterRewrite plugin - clean up
+
+     *
      * @param $resultTime
      * @param $elementId
      * @param $shopId
@@ -147,12 +143,22 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     }
 
     /**
-     * Count categories
+     * The following count methods will return the number of items for each resource.
+     *
+     * They are used by the backend controllers and allow us to calculate, how often the seo link generation
+     * needs to be triggered until it is done
+     */
+
+    /**
+     * Count categories for the current shop
+     *
+     * @param $shopId
+     * @return mixed
      */
     public function countCategories($shopId)
     {
         if (empty(Shopware()->Config()->routerCategoryTemplate)) {
-            return;
+            return 0 ;
         }
 
         $shop = $this->registerShop($shopId);
@@ -173,7 +179,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countBlogs($shopId, $offset, $limit)
     {
-        $shop = $this->registerShop($shopId);
+        $this->registerShop($shopId);
 
         // Get blog categories
         /** @var \Doctrine\ORM\Query $query */
@@ -186,7 +192,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             $blogCategoryIds[] = $blogCategory["id"];
         }
 
-        // Count number of associated blog articles
+        // Count total number of associated blog articles
         $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder($blogCategoryIds);
         $numResults = $builder->select('COUNT(blog)')
             ->getQuery()
@@ -204,11 +210,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countArticles($shopId)
     {
-        $shop = $this->registerShop($shopId);
+        $this->registerShop($shopId);
 
         // Get last update time
         list($cachedTime, $elementId, $shopId) = $this->getCachedTime();
 
+        // Calculate the number of articles which have been update since the last update time
         $sql = "
 			SELECT SQL_CALC_FOUND_ROWS a.id
 			FROM s_articles a
@@ -265,6 +272,11 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     /**
      * Count CMS/ticket system
+     *
+     * These four items are all created in sCreateRewriteTableContent. As the queries are quite simple,
+     * we just return the number of items for the resource with the most items.
+     * When setting the batchSize/limit for this resource, keep in mind, the the actual number of links generated
+     * might be four times higher than the batchSize (as four resources are handled).
      */
     public function countContent()
     {
@@ -272,11 +284,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_emarketing_promotion_main`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_groups`'),
-            1
+            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_groups`')
         );
 
         return max($counts);
-
     }
 }
