@@ -104,14 +104,16 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
                 	xtype: 'performance-tabs-settings-categories'
         	}]
 		});
-		
-		return [{
-        	xtype: 'performance-tabs-settings-navigation',
-        	store: me.treeStore,
-        	region: 'west',
+
+        me.navigation = Ext.create('Shopware.apps.Performance.view.tabs.settings.Navigation', {
+            region: 'west',
             bodyStyle: 'background: #ffffff;'
-		},
-		me.panel];
+        });
+
+        return [
+            me.navigation,
+            me.panel
+        ];
 	},
 
     /**
