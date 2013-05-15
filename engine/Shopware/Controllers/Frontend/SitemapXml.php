@@ -188,6 +188,10 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 		}
 		$blogIds = Shopware()->Db()->quote($blogIds);
 
+		if( empty($blogIds) ) {
+			return;
+		}
+
 		$sql = "
 			SELECT id, category_id, DATE(display_date) as changed
 			FROM s_blog
