@@ -56,8 +56,8 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     public function getCapabilities()
     {
         return array(
-            'install' => true,
-            'enable' => true,
+            'install' => false,
+            'enable' => false,
             'update' => true
         );
     }
@@ -523,8 +523,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        error_log("cron trigger, strategy : " . $strategy . "\n", 3, '/var/log/test.log');
-
         if (!($this->isTopSellerActivated()) || $strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
             return true;
         }
@@ -586,7 +584,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         if (!($article->getId()) > 0) {
             return;
         }
-        error_log("article update " . $article->getId() . "\n", 3, '/var/log/test.log');
         $this->TopSeller()->refreshTopSellerForArticleId(
             $article->getId()
         );
@@ -605,7 +602,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function afterSendResponseOnTopSeller(Enlight_Event_EventArgs $arguments)
     {
-        error_log("top seller after response update" . "\n", 3, '/var/log/test.log');
         $this->TopSeller()->updateElapsedTopSeller();
     }
 
