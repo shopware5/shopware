@@ -481,7 +481,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
             FROM s_articles a
-              INNER JOIN s_articles_categories ac
+              INNER JOIN s_articles_categories_ro ac
                  ON ac.articleID = a.id
               INNER JOIN s_categories c
                  ON c.id = ac.categoryID
@@ -527,7 +527,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
               ON ac.articleID = s.article_id
               AND ac.categoryID = :categoryId
 

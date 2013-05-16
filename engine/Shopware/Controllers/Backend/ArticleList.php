@@ -268,7 +268,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         if ($filterBy == 'noCategory') {
             $categorySql = "
-                    LEFT JOIN s_articles_categories ac
+                    LEFT JOIN s_articles_categories_ro ac
 					ON ac.articleID = articles.id
             ";
 
@@ -279,7 +279,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                     ON  c.id = :categoryId
                     AND c.active = 1
 
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = articles.id
                     AND ac.categoryID = c.id
 			";
@@ -408,7 +408,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
 			// Check for Categories
 			$hasCategories = Shopware()->Db()->fetchOne(
-				'SELECT id FROM s_articles_categories WHERE articleID = ?',
+				'SELECT id FROM s_articles_categories_ro WHERE articleID = ?',
 				$article['articleId']
 			);
 			$articles[$key]['hasCategories'] = ($hasCategories !== false);
