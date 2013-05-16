@@ -167,26 +167,83 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property sets
      *
+     * @param $offset
+     * @param $limit
+     * @param $filter
      * @return \Doctrine\ORM\Query
      */
-    public function getSetsQuery()
+    public function getSetsQuery($offset, $limit, $filter)
     {
-        $builder = $this->getSetsQueryBuilder();
+        $builder = $this->getSetsQueryBuilder($filter);
+
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getSetsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSetsQueryBuilder()
+    public function getSetsQueryBuilder($filter)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('groups', 'attribute'))
                 ->from('Shopware\Models\Property\Group', 'groups')
                 ->leftJoin('groups.attribute', 'attribute')
                 ->orderBy('groups.position');
+
+        if(!empty($filter[0]["value"])) {
+            $builder->andWhere('groups.name LIKE :filter')
+                    ->setParameter('filter', '%' . $filter[0]["value"] . '%');
+        }
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property options
+     *
+     * @param $offset
+     * @param $limit
+     * @param $filter
+     * @return \Doctrine\ORM\Query
+     */
+    public function getOptionsQuery($offset, $limit, $filter)
+    {
+        $builder = $this->getOptionsQueryBuilder($filter);
+
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getOptionsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getOptionsQueryBuilder($filter)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('options'))
+                ->from('Shopware\Models\Property\Option', 'options')
+                ->orderBy('options.name');
+
+        if(!empty($filter[0]["value"])) {
+            $builder->where('options.name LIKE :filter')
+                    ->setParameter('filter', '%' . $filter[0]["value"] . '%');
+        }
 
         return $builder;
     }

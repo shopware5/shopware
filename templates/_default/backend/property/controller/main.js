@@ -127,10 +127,17 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 selectionchange: me.onGroupChange
             },
 
+            'property-main-groupGrid textfield[action=searchGroups]':{
+                change:me.onSearchGroups
+            },
+
             'property-main-setGrid': {
                 selectionchange: me.onSetChange,
                 deleteSet: me.onDeleteSet,
                 edit: me.onEditSet
+            },
+            'property-main-setGrid textfield[action=searchSets]':{
+                change:me.onSearchSets
             },
 
             'property-main-setAssignGrid': {
@@ -169,22 +176,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         me.callParent(arguments);
     },
 
-//    /**
-//     * Saves current positions in the grid to the backend
-//     *
-//     * @event drop
-//     * @param [HTMLElement ] The GridView node if any over which the mouse was positioned.
-//     * @param [Object] The data object gathered at mousedown time
-//     * @param [Ext.data.Model]
-//     * @param [String] "before" or "after" depending on whether the mouse is above or below the midline of the node.
-//     * @return void
-//     */
-//    onDropGroupOption: function (node, data, overModel, dropPosition) {
-//        var me    = this,
-//            group = data.records[0].parentNode;
-//
-//        return me.saveGroupPosition(group);
-//    },
 
     /**
      * Saves current positions in the grid to the backend
@@ -668,6 +659,41 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 }
             }
         });
+    },
+
+    /**
+     * Filters the grid with the passed search value to find the right item
+     *
+     * @param field
+     * @param value
+     * @return void
+     */
+    onSearchGroups:function (field, value) {
+        var me = this,
+            searchString = Ext.String.trim(value),
+            store = me.subApplication.groupStore;
+        store.filters.clear();
+        store.currentPage = 1;
+        store.filter('filter',searchString);
+    },
+
+
+    /**
+     * Filters the grid with the passed search value to find the right item
+     *
+     * @param field
+     * @param value
+     * @return void
+     */
+    onSearchSets:function (field, value) {
+        var me = this,
+            searchString = Ext.String.trim(value),
+            store = me.subApplication.setStore;
+        store.filters.clear();
+        store.currentPage = 1;
+        store.filter('filter',searchString);
     }
+
+
 });
 //{/block}

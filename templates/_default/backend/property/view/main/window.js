@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                         groupStore: me.groupStore,
                         split: true,
                         region:'west',
-                        flex: 2
+                        flex: 3
                     },
                     {
                         xtype: 'property-main-optionGrid',

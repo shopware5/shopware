@@ -43,20 +43,21 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      * @object
      */
     snippets: {
-        columnGroup:      '{s name=group/column_group}Group{/s}',
-        columnComparable: '{s name=group/column_comparable}Comparable{/s}',
-        columnSort:       '{s name=group/column_sort}Sort{/s}',
-        columnPosition:   '{s name=group/column_position}Position{/s}',
+        columnGroup:      '{s name=set/column_set}Group{/s}',
+        columnComparable: '{s name=set/column_comparable}Comparable{/s}',
+        columnSort:       '{s name=set/column_sort}Sort{/s}',
+        columnPosition:   '{s name=set/column_position}Position{/s}',
 
-        buttonAddSet: '{s name=group/button_add_set}Add set{/s}',
+        buttonAddSet: '{s name=set/button_add_set}Add set{/s}',
 
-        tooltipDeleteGroup:           '{s name=group/tooltip_delete_group}Delete group{/s}',
-        tooltipRemoveOptionFromGroup: '{s name=group/tooltip_remove_option_from_group}Remove option from group{/s}',
+        tooltipDeleteGroup:           '{s name=set/tooltip_delete_set}Delete set{/s}',
+        tooltipRemoveOptionFromGroup: '{s name=set/tooltip_remove_option_from_set}Remove option from set{/s}',
 
-        comboSortModeAlphabetical: '{s name=group/cobo_sort_mode_alphabetical}Alphabetical{/s}',
-        comboSortModeNumeric:      '{s name=group/cobo_sort_mode_numeric}Numeric{/s}',
-        comboSortModeNumber:       '{s name=group/cobo_sort_mode_number}Number{/s}',
-        comboSortModePosition:     '{s name=group/cobo_sort_mode_postition}Position{/s}'
+        comboSortModeAlphabetical:  '{s name=set/cobo_sort_mode_alphabetical}Alphabetical{/s}',
+        comboSortModeNumeric:       '{s name=set/cobo_sort_mode_numeric}Numeric{/s}',
+        comboSortModeNumber:        '{s name=set/cobo_sort_mode_number}Number{/s}',
+        comboSortModePosition:      '{s name=set/cobo_sort_mode_postition}Position{/s}',
+        search:                     '{s name=set/empty_text_search}Search...{/s}'
     },
 
     /**
@@ -193,7 +194,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
         return [{
             text: me.snippets.columnGroup,
             flex: 2,
-            sortable: true,
+            sortable: false,
             dataIndex: 'name',
             translationEditor: {
                 xtype: 'textfield',
@@ -330,7 +331,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      */
     getToolbar: function () {
         var me = this,
-                buttons = [];
+                items = [];
 
         me.addBtn = Ext.create('Ext.button.Button', {
             xtype: 'button',
@@ -346,11 +347,24 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             }
         });
 
-        buttons.push(me.addBtn);
+        items.push(me.addBtn);
+        items.push(
+                '->',
+                {
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    action: 'searchSets',
+                    width: 100,
+                    cls: 'searchfield',
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
+                    emptyText: me.snippets.search
+                }
+        );
 
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
-            items: buttons
+            items: items
         });
     }
 });

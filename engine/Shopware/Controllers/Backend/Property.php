@@ -73,20 +73,24 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     }
 
 
-    //todo@ms: pager einbauen
     /**
      * returns the groups for the sets grids
      */
     public function getSetsAction()
     {
-        $query = $this->getPropertyRepository()->getSetsQuery();
+
+        $limit = intval($this->Request()->limit);
+        $offset = intval($this->Request()->start);
+        $filter = $this->Request()->getParam('filter', array());
+        $query = $this->getPropertyRepository()->getSetsQuery($offset, $limit, $filter);
+        $totalCount = $this->getManager()->getQueryCount($query);
         $sets = $query->getArrayResult();
 
         $this->View()->assign(
             array(
                 'success' => true,
                 'data' => $sets,
-                'total' => count($sets),
+                'total' => $totalCount,
             )
         );
     }
@@ -298,16 +302,22 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true));
     }
 
+    /**
+     * returns all groups(options) for the backend module
+     */
     public function getGroupsAction()
     {
-        /** @var $repository \Shopware\Components\Model\ModelRepository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Property\Option');
-        $options = $repository->createQueryBuilder('option')->getQuery()->getArrayResult();
+        $limit = intval($this->Request()->limit);
+        $offset = intval($this->Request()->start);
+        $filter = $this->Request()->getParam('filter', array());
+        $query = $this->getPropertyRepository()->getOptionsQuery($offset, $limit, $filter);
+        $totalCount = $this->getManager()->getQueryCount($query);
+        $options = $query->getArrayResult();
 
         $this->View()->assign(array(
            'success' => true,
            'data'    => $options,
-           'total'   => count($options),
+           'total'   => $totalCount,
         ));
     }
 
