@@ -354,10 +354,20 @@ class CategorySubscriber implements BaseEventSubscriber
     }
 
     /**
-     * @param $categoryIds
+     * Fix path for child-categories
+     *
+     * @param int $categoryId
      */
-    public function fixPathForCategories($categoryIds)
+    public function rebuildCategoryPath($categoryId)
     {
+        $sql = "
+            SELECT c.id
+            FROM  `s_categories` c
+            WHERE c.path LIKE :categoryId
+        ";
+
+        $categoryIds = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
+
         Shopware()->Db()->beginTransaction();
         foreach ($categoryIds as $categoryId) {
             $parents = $this->em->getParentCategories($categoryId);
@@ -373,35 +383,38 @@ class CategorySubscriber implements BaseEventSubscriber
         Shopware()->Db()->commit();
     }
 
+
+    /**
+     * @param int $categoryId
+     */
+    public function removeOldAssigments($categoryId)
+    {
+        $deleteQuery = "
+            SELECT parentCategoryId
+            FROM s_articles_categories_ro
+            WHERE categoryID = :categoryId
+            AND parentCategoryId <> categoryID
+            GROUP BY parentCategoryId;
+       ";
+
+        $parentsToDelete = Shopware()->Db()->fetchCol($deleteQuery, array('categoryId' => $categoryId));
+        foreach ($parentsToDelete as $parentCategoryId) {
+            // delete assignments
+            $deleteQuery = "DELETE FROM s_articles_categories_ro WHERE parentCategoryID = :categoryId";
+
+            Shopware()->Db()
+                    ->query($deleteQuery, array('categoryId' => $parentCategoryId))
+                    ->execute();
+        }
+    }
+
     /**
      * @param int $categoryId
      */
     public function backlogMoveCategory($categoryId)
     {
-        // Fix path for child-categories
-        $sql = "
-            SELECT c.id
-            FROM  `s_categories` c
-            WHERE c.path LIKE :categoryId
-        ";
-
-        $childCategories = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-        $this->fixPathForCategories($childCategories);
-
-        // delete assignments
-        $deleteQuery = "
-            DELETE ac1
-            FROM s_articles_categories_ro ac0
-            INNER JOIN s_articles_categories_ro ac1
-                ON ac0.parentCategoryID = ac1.parentCategoryID
-                AND ac0.id != ac1.id
-            WHERE ac0.categoryID = :categoryId
-                AND ac1.categoryID <> ac1.parentCategoryID
-        ";
-
-        Shopware()->Db()
-                  ->query($deleteQuery, array('categoryId' => $categoryId))
-                  ->execute();
+        $this->rebuildCategoryPath($categoryId);
+        $this->removeOldAssigments($categoryId);
 
         // Fetch affected categories
         $sql = "
@@ -414,7 +427,7 @@ class CategorySubscriber implements BaseEventSubscriber
 
         $affectedCategories = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
 
-        //case that a leave category moved.
+        // in case that a leaf category is moved
         if (count($affectedCategories) === 0) {
             $affectedCategories = array($categoryId);
         }
