@@ -27,7 +27,7 @@ namespace Shopware\Models\Article;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Category as ArticleCategory;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -810,10 +810,10 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Category $category
+     * @param ArticleCategory $category
      * @return Article
      */
-    public function addCategory(Category $category)
+    public function addCategory(ArticleCategory $category)
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
@@ -823,10 +823,10 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Category $category
+     * @param ArticleCategory $category
      * @return Article
      */
-    public function removeCategory(Category $category)
+    public function removeCategory(ArticleCategory $category)
     {
         $this->categories->removeElement($category);
 

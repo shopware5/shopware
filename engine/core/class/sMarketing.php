@@ -88,7 +88,7 @@ class sMarketing
               INNER JOIN s_emarketing_lastarticles as lastArticles
                 ON  lastArticles.articleID = similarShown.related_article_id
 
-              INNER JOIN s_articles_categories ac
+              INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = similarShown.related_article_id
                 AND ac.categoryID = :categoryId
 
@@ -339,7 +339,7 @@ class sMarketing
 			  COUNT(r.articleID) as relevance
 
 			FROM s_articles a
-			INNER JOIN s_articles_categories ac
+			INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
                 AND ac.categoryID = $categoryId
             INNER JOIN s_categories c
@@ -411,7 +411,7 @@ class sMarketing
 
 			FROM s_articles a
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON ac.articleID=a.id
                 AND ac.categoryID = {$this->categoryId}
             INNER JOIN s_categories c
@@ -429,10 +429,10 @@ class sMarketing
             ON s.articleID=o.id
             AND s.relatedarticle=a.id
 
-            LEFT JOIN s_articles_categories s1
+            LEFT JOIN s_articles_categories_ro s1
             ON s1.articleID=o.id
 
-            LEFT JOIN s_articles_categories s2
+            LEFT JOIN s_articles_categories_ro s2
             ON s2.categoryID=s1.categoryID
             AND s2.articleID=a.id
 

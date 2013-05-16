@@ -611,10 +611,10 @@ class sArticles
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT
 					a.id as id
 			FROM s_categories c, s_categories c2,
-			     s_articles_categories ac
+			     s_articles_categories_ro ac
 
             JOIN s_articles AS a
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = $sCategory
                 INNER JOIN s_categories c
@@ -1023,7 +1023,7 @@ class sArticles
 
             $sqlFromPath
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
               ON  ac.articleID = a.id
               AND ac.categoryID = $categoryId
 
@@ -1079,7 +1079,7 @@ class sArticles
             SELECT COUNT(DISTINCT a.id) count
 
             FROM s_articles AS a
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = $categoryId
                 INNER JOIN s_categories c
@@ -1395,7 +1395,7 @@ class sArticles
 				$addTranslationSelect
 			FROM s_categories c
 
-			INNER JOIN s_articles_categories ac
+			INNER JOIN s_articles_categories_ro ac
 			  ON ac.categoryID = c.id
 			  AND c.active = 1
 
@@ -1538,7 +1538,7 @@ class sArticles
         $sql = "
 			SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
 			FROM s_articles a
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = ?
                 INNER JOIN s_categories c
@@ -1740,7 +1740,7 @@ class sArticles
               a.id AS articleID,
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
               ON  ac.articleID = s.article_id
               AND ac.categoryID = :categoryId
             INNER JOIN s_categories c
@@ -1919,7 +1919,7 @@ class sArticles
 				$select_price as price
 
 			FROM s_articles a
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = $categoryId
                 INNER JOIN s_categories c
@@ -2420,7 +2420,7 @@ class sArticles
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
             $subShopJoin = "
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = {$this->categoryId}
                 INNER JOIN s_categories c
@@ -2615,9 +2615,9 @@ class sArticles
                 if (!empty( $sCategoryID )){
                     $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
                     $sqlGetCategory = "
-					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories, s_articles, s_articles_details
-					WHERE s_articles_categories.categoryID=" . $sCategoryID . "
-					AND s_articles.id=s_articles_categories.articleID AND s_articles.id=s_articles_details.articleID
+					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
+					WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
+					AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
 					AND s_articles_details.kind=1
 					AND s_articles.id!={$getArticle["articleID"]}
 					AND s_articles.active=1
@@ -3079,7 +3079,7 @@ class sArticles
 
         if (!empty($category)) {
             $categoryJoin = "
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = a.id
                     AND ac.categoryID = $category
                 INNER JOIN s_categories c
@@ -3739,7 +3739,7 @@ class sArticles
 
 
         $categoryJoin = "
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = l.articleID
                 AND ac.categoryID = sc.category_id
             INNER JOIN s_categories c

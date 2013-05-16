@@ -609,9 +609,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleCategories($articleId, $newArticleId)
     {
-        $sql= "INSERT INTO s_articles_categories
+        $sql = "INSERT INTO s_articles_categories
                SELECT NULL, ?, categoryID
                FROM s_articles_categories as source
+               WHERE source.articleID = ?
+        ";
+        Shopware()->Db()->query($sql, array($newArticleId, $articleId));
+
+        $sql = "INSERT INTO s_articles_categories_ro
+               SELECT NULL, ?, categoryID, parentCategoryID
+               FROM s_articles_categories_ro as source
                WHERE source.articleID = ?
         ";
         Shopware()->Db()->query($sql, array($newArticleId, $articleId));
@@ -1650,11 +1657,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder->select(array('categories.id'))
                 ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
                 ->andWhere(':articleId MEMBER OF categories.articles')
-                ->andWhere('categories.children IS EMPTY')
                 ->setParameters(array('articleId' => $articleId));
 
         $result = $builder->getQuery()->getArrayResult();
-
         if (empty($result)) {
             return array();
         }
@@ -3066,7 +3071,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach($data as $item) {
             $prepared[$item['name']] = $item['default'];
         }
-        
+
         return array(
             'number'     => $prefix . $number,
             'autoNumber' => $number,

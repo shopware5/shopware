@@ -25,12 +25,12 @@ class sShopwareExport
 	public $sDB;
 	public $sPath;
 	public $sSettings = array();
-	
+
 	/**
 	 * Export aller gespeicherten Artikel
 	 * Inkl. Bilderzuordnungen/Kategorien/Preisen
 	 * Beispiel zur Anwendung unter /sample/xml/export.articles.php
-	 * 
+	 *
 	 * @access public
 	 * @return array Array mit allen Artikeln
 	 */
@@ -49,12 +49,12 @@ class sShopwareExport
 		}
 		$articleIDs = array_unique($articleIDs);
 		$articleprices = $this->sArticlePrices(array("articledetailsIDs"=>$articledetailIDs));
-		
+
 		$articledetails = $this->sArticlesDetails(array("articleIDs"=>$articleIDs));
 		$articlecategories = $this->sArticleCategories(array("articleIDs"=>$articleIDs));
 		$articleimages = $this->sArticleImages(array("articleIDs"=>$articleIDs));
 		$tmp = array();
-		
+
 		foreach ($articles as $articledetailID=>$article)
 		{
 			$articleID = $article["articleID"];
@@ -70,13 +70,13 @@ class sShopwareExport
 			$article["prices"] = $articleprices[$articledetailID];
 			$tmp[$articledetailID] = $article;
 		}
-		
+
 		return $tmp;
 	}
-	
+
 	/**
 	 * Export aller gespeicherten Artikel (Nur Stammdaten)
-	 * 
+	 *
 	 * @access public
 	 * @return array Array mit allen Artikeln
 	 */
@@ -125,7 +125,7 @@ class sShopwareExport
                 d.width,
                 d.height,
                 d.length,
-				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10, 
+				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
 				s.name as supplier,
 				u.unit,
@@ -133,7 +133,7 @@ class sShopwareExport
 				a.filtergroupID as attributegroupID,
                 acs.type as configuratortype,
             	IF(acs.id,1,NULL) as configurator
-				
+
 			FROM s_articles a
 
 			INNER JOIN s_articles_details d
@@ -166,7 +166,7 @@ class sShopwareExport
 			a.mode = 0
 			ORDER BY a.id, d.kind
 		";
-		
+
 		$result = $this->sDB->Execute($sql);
 		if(!$result)
     		return false;
@@ -184,18 +184,18 @@ class sShopwareExport
         }
 		return $rows;
 	}
-	
+
 	/**
 	 * Abfrage von Artikel-Detail-Informationen
 	 * Zugeordnete Downloads, Links, Verkn�pfungen, Cross-Selling
 	 * Beispiel zur Anwendung sFullArticles()
-	 * 
+	 *
 	 * @param array $article_details
-	 * 
+	 *
 	 * articleID = ID des abzufragenden Artikels (s_articles.id) oder
-	 * 
+	 *
 	 * articleIDs = IDs der abzufragenden Artikel in Array-Form
-	 *  
+	 *
 	 * @access public
 	 * @return array Array mit Ergebnisdatens�tzen
 	 */
@@ -253,16 +253,16 @@ class sShopwareExport
         }
         return $rows;
 	}
-	
+
 	/**
 	 * Abfrage von Artikel Preisen
-	 * 
+	 *
 	 * @param array $article_prices
 	 *
 	 * articledetailsID = Artikel-Detail-Id (s_articles_details.id) oder
-	 * 
-	 * articledetailsIDs = Mehrere Artikel-Detail-Ids in Array-Form 
-	 *  
+	 *
+	 * articledetailsIDs = Mehrere Artikel-Detail-Ids in Array-Form
+	 *
 	 * @access public
 	 * @return array Array mit Ergebnisdatens�tzen
 	 */
@@ -294,17 +294,17 @@ class sShopwareExport
 			FROM `s_articles_prices` p
 			INNER JOIN `s_articles` a
 			INNER JOIN `s_core_tax` t
-			
+
 			LEFT JOIN s_core_customergroups cg
 			ON cg.groupkey = p.pricegroup
-			
+
 			WHERE {$article_prices['where']}
 			AND a.id = p.articleID
 			AND a.taxID = t.id
-			
+
 			ORDER BY `pricegroup`, `from`
 		";
-		
+
 		$result = $this->sDB->Execute($sql);
 		if(!$result)
     		return false;
@@ -312,19 +312,19 @@ class sShopwareExport
         while ($row = $result->FetchRow())
         {
 			$rows[$row["articledetailsID"]][] = $row;
-        } 
+        }
 		return $rows;
 	}
-	
+
 	/**
 	 * Abfrage der Bilder die einem Artikel zugeordnet sind
-	 * 
+	 *
 	 * @param array $article_images
 	 *
 	 * articleID = ID des abzufragenden Artikels (s_articles.id) oder
-	 * 
+	 *
 	 * articleIDs = IDs der abzufragenden Artikel in Array-Form
-	 *  
+	 *
 	 * @access public
 	 * @return array Array mit Ergebnisdatens�tzen
 	 */
@@ -356,16 +356,16 @@ class sShopwareExport
         }
 		return $rows;
 	}
-	
+
 	/**
 	 * Abfrage der Kategorien die ein Artikel zugeordnet ist
-	 * 
+	 *
 	 * @param array $article_categories
 	 *
 	 * articleID = ID des abzufragenden Artikels (s_articles.id) oder
-	 * 
+	 *
 	 * articleIDs = IDs der abzufragenden Artikel in Array-Form
-	 *  
+	 *
 	 * @access public
 	 * @return array Array mit Ergebnisdatens�tzen
 	 */
@@ -378,7 +378,7 @@ class sShopwareExport
 			$article_categories['articleIDs'] = array_map("intval",$article_categories['articleIDs']);
 			$article_categories['where'] = "(`articleID`=".implode(" OR `articleID`=",$article_categories['articleIDs']).")";
 		}
-		$sql = "SELECT DISTINCT `articleID`, `categoryID` FROM `s_articles_categories` WHERE {$article_categories['where']}";
+		$sql = "SELECT DISTINCT `articleID`, `categoryID` FROM `s_articles_categories_ro` WHERE {$article_categories['where']}";
 
 		if(!$result = $this->sDB->Execute($sql))
     		return false;
@@ -387,10 +387,10 @@ class sShopwareExport
         }
         return $rows;
 	}
-	
+
 	/**
 	 * Abfrage / Export der Kategorien / Warengruppen
-	 * 
+	 *
 	 * @param array $categories
 	 * @param int $parentID ID der Elternkategorie, bei der der Export starten soll (1 = alle Kategorien)
 	 * @access public
@@ -465,7 +465,7 @@ class sShopwareExport
 	{
 		if(isset($order['status']))
 			$order['status'] = intval($order['status']);
-		else 
+		else
 			$order['status'] = 1;
 		if(!empty($order['where'])&&!is_array($order['where']))	{
 			$order['where'] = array($order['where']);
@@ -480,14 +480,14 @@ class sShopwareExport
 			foreach ($order['orderIDs'] as &$orderID) $orderID = (int) $orderID;
 			$order['where'] = "`id` IN (".implode(",",$order['orderIDs']).")\n";
 		}
-		
+
 		if(isset($order['comment']))
 			$upset = ", comment=".$this->sDB->qstr((string)$order['comment']);
-		else 
+		else
 			$upset = "";
 		$sql = "
-			UPDATE s_order 
-			SET 
+			UPDATE s_order
+			SET
 				`status` = {$order['status']} $upset
 			WHERE {$order['where']} AND status!=-1
 		";
@@ -496,7 +496,7 @@ class sShopwareExport
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Auslesen von Bestellungen (ein oder mehrere)
 	 * @param array $order
@@ -514,11 +514,11 @@ class sShopwareExport
 		{
 			$order['where'] = '`o`.`id` IN ('.implode(',',$order['orderIDs']).')';
 		}
-		if(empty($order['where'])) 
+		if(empty($order['where']))
 		{
 			$sql_where = '';
 		}
-		else 
+		else
 		{
 			$sql_where = 'WHERE '.$order['where'];
 		}
@@ -528,27 +528,27 @@ class sShopwareExport
 				`o`.`id`,
 				`o`.`id` as `orderID`,
 				`o`.`ordernumber`,
-				`o`.`ordernumber` as `order_number`, 
+				`o`.`ordernumber` as `order_number`,
 				`o`.`userID`,
 				`o`.`userID` as `customerID`,
-				`o`.`invoice_amount`, 
-				`o`.`invoice_amount_net`, 
-				`o`.`invoice_shipping`, 
-				`o`.`invoice_shipping_net`, 
-				`o`.`ordertime` as `ordertime`, 
+				`o`.`invoice_amount`,
+				`o`.`invoice_amount_net`,
+				`o`.`invoice_shipping`,
+				`o`.`invoice_shipping_net`,
+				`o`.`ordertime` as `ordertime`,
 				`o`.`status`,
 				`o`.`status` as `statusID`,
 				`o`.`cleared` as `cleared`,
 				`o`.`cleared` as `clearedID`,
-				`o`.`paymentID` as `paymentID`, 
-				`o`.`transactionID` as `transactionID`, 
-				`o`.`comment`, 
-				`o`.`customercomment`, 
+				`o`.`paymentID` as `paymentID`,
+				`o`.`transactionID` as `transactionID`,
+				`o`.`comment`,
+				`o`.`customercomment`,
 				`o`.`net`,
 				`o`.`net` as `netto`,
-				`o`.`partnerID`, 
+				`o`.`partnerID`,
 				`o`.`temporaryID`,
-				`o`.`referer`, 
+				`o`.`referer`,
 				o.cleareddate,
 				o.cleareddate as cleared_date,
 				o.trackingcode,
@@ -558,12 +558,12 @@ class sShopwareExport
 				o.subshopID,
 				o.dispatchID,
 				cu.id as currencyID,
-				`c`.`description` as `cleared_description`, 
+				`c`.`description` as `cleared_description`,
 				`s`.`description` as `status_description`,
 				`p`.`description` as `payment_description`,
 				`d`.`name` 		  as `dispatch_description`,
 				`cu`.`name` 	  as `currency_description`
-			FROM 
+			FROM
 				`s_order` as `o`
 			LEFT JOIN `s_core_states` as `s`
 			ON	(`o`.`status` = `s`.`id`)
@@ -577,7 +577,7 @@ class sShopwareExport
 			ON	(`o`.`currency` = `cu`.`currency`)
 			$sql_where
 		";
-		
+
 		$rows = $this->sDB->GetAssoc($sql);
 		if(empty($rows)||!is_array($rows)||!count($rows))
 			return false;
@@ -609,7 +609,7 @@ class sShopwareExport
 		}
 
 		$sql = "
-			SELECT 
+			SELECT
 				`d`.`id` as `orderdetailsID`,
 				`d`.`orderID` as `orderID`,
 				`d`.`ordernumber`,
@@ -631,7 +631,7 @@ class sShopwareExport
 				`d`.`esdarticle` as `esd`
 			FROM
 				`s_order_details` as `d`
-			LEFT JOIN 
+			LEFT JOIN
 				`s_core_tax` as `t`
 			ON
 				`t`.`id` = `d`.`taxID`
@@ -672,7 +672,7 @@ class sShopwareExport
 
 		if(!count($order['orderIDs']))
 			return false;
-			
+
 		$where = "`b`.`orderID`=".implode(" OR `b`.`orderID`=",$order['orderIDs'])."\n";
 		$sql = "
 			SELECT
@@ -688,9 +688,9 @@ class sShopwareExport
 				`b`.`city` AS `billing_city`,
 				`b`.`phone` AS `phone`,
 				`b`.`phone` AS `billing_phone`,
-				`b`.`fax` AS `fax`, 
-				`b`.`fax` AS `billing_fax`, 
-				`b`.`countryID` AS `billing_countryID`, 
+				`b`.`fax` AS `fax`,
+				`b`.`fax` AS `billing_fax`,
+				`b`.`countryID` AS `billing_countryID`,
                 `b`.`stateID` AS `billing_stateID`,
 				`bc`.`countryname` AS `billing_country`,
 				`bc`.`countryiso` AS `billing_countryiso`,
@@ -754,14 +754,14 @@ class sShopwareExport
 			WHERE
 				$where
 		";  // Fix #5830 backported from github
-		
+
 		$rows = $this->sDB->GetAll($sql);
 		if(empty($rows)||!is_array($rows)||!count($rows))
 			return false;
 		$customers = array();
 		foreach ($rows as $row)
 			$customers[intval($row['orderID'])] = $row;
-		return 	$customers;	
+		return 	$customers;
 	}
 	/**
 	 * Vergabe von Kundennummern
@@ -785,7 +785,7 @@ class sShopwareExport
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Setzt die Tracking-ID / URL des Logistikdienstleisters zur Anzeige in der Storefront
 	 * @param int/string/array $order (int) s_order.id ODER (string) s_order.ordernumber ODER (array) s_order => array ("ordernumber"=>"101B","orderID"=>12)
@@ -805,7 +805,7 @@ class sShopwareExport
 			$where = "id=".$this->sDB->qstr((int)$order['orderID']);
 		elseif(!empty($order['ordernumber']))
 			$where = "ordernumber=".$this->sDB->qstr((string)$order['ordernumber']);
-		else 
+		else
 			return false;
 		$trackingcode = $this->sDB->qstr((string)$trackingcode);
 		$sql = "UPDATE s_order SET trackingcode=$trackingcode WHERE $where";
@@ -830,7 +830,7 @@ class sShopwareExport
 				"parent"=>"parent",
 				"description" => "description"
 			);
-		
+
 		$sql = "
 			SELECT id as categoryID, parent as parentID, s_categories.*
 			FROM s_categories
@@ -861,21 +861,21 @@ class sShopwareExport
 		$sql = "SELECT MAX( id ) AS lastID, COUNT( id ) AS count FROM s_order";
 		return $this->sDB->GetRow($sql);
 	}
-	
+
 	/**
 	 * Export aller Shopware Einstellungen f�r den Import / Abgleich in die Warenwirtschaft
 	 * Exportiert:
-	 * 
+	 *
 	 * [result][tax] = Shopware MwSt. - S�tze (aus s_core_tax)
-	 * 
+	 *
 	 * [result][order_states] = Shopware Bestell-Stati (aus s_core_states)
-	 * 
+	 *
 	 * [result][payment_states] = Shopware Zahl-Stati (aus s_core_states)
-	 * 
+	 *
 	 * [result][units] = Shopware Preiseinheiten (St�ck/Liter etc.) (aus s_core_units)
-	 * 
+	 *
 	 * [result][customer_groups] = Shopware Kundengruppen (aus s_core_customergroups)
-	 * 
+	 *
 	 * @access public
 	 * @return array [result]
 	 */
@@ -890,7 +890,7 @@ class sShopwareExport
 		$ret["payment_states"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
 		$sql = "
 			SELECT `id`, `name`, `description`, `debit_percent`, `surcharge`, `position`, `active`, `esdactive` as `esd`
-			FROM `s_core_paymentmeans` 
+			FROM `s_core_paymentmeans`
 			ORDER BY `position`
 		";
 		$ret["payment_means"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
@@ -909,10 +909,10 @@ class sShopwareExport
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Runden von Preisen
-	 * 
+	 *
 	 * @param double $price
 	 * @access public
 	 * @return double gerundeter Preis
@@ -925,7 +925,7 @@ class sShopwareExport
 			$money_str[1] = substr($money_str[1],0, 3);
 	   		$money_str = $money_str[0].".".$money_str[1];
 		}
-		else 
+		else
 		{
 			$money_str = $money_str[0];
 		}
@@ -948,7 +948,7 @@ class sShopwareExport
 			$user['userIDs'] = array_map("intval",$user['userIDs']);
 			$where = "WHERE `u`.`id`=".implode(" OR `u`.`id`=",$user['userIDs'])."\n";
 		} else {
-			$where = "";		
+			$where = "";
 		}
 
 		$sql = "
@@ -965,9 +965,9 @@ class sShopwareExport
 					`b`.`streetnumber` AS `billing_streetnumber`,
 					`b`.`zipcode` AS `billing_zipcode`,
 					`b`.`city` AS `billing_city`,
-					`b`.`phone` AS `billing_phoney`, 
-					`b`.`fax` AS `billing_fax`, 
-					`b`.`countryID` AS `billing_countryID`, 
+					`b`.`phone` AS `billing_phoney`,
+					`b`.`fax` AS `billing_fax`,
+					`b`.`countryID` AS `billing_countryID`,
 					`b`.`ustid`,
 					`b`.`stateID` AS `billing_stateID`,
 					`ba`.`text1` AS `billing_text1`,
@@ -1007,9 +1007,9 @@ class sShopwareExport
 					sc.countryiso as shipping_country_iso,
 					sca.name as shipping_country_area,
 					sc.countryen as shipping_country_en
-				FROM 
+				FROM
 					`s_user` as `u`
-				LEFT JOIN `s_user_billingaddress` as `b` ON (`b`.`userID`=`u`.`id`) 
+				LEFT JOIN `s_user_billingaddress` as `b` ON (`b`.`userID`=`u`.`id`)
 				LEFT JOIN `s_user_shippingaddress` as `s` ON (`s`.`userID`=`u`.`id`)
 				LEFT JOIN s_core_countries bc ON bc.id = b.countryID
 				LEFT JOIN s_core_countries sc ON sc.id = s.countryID
@@ -1027,7 +1027,7 @@ class sShopwareExport
 		{
 			return $this->sDB->GetRow($sql);
 		}
-		else 
+		else
 		{
 			return $this->sDB->GetAssoc($sql,false,$force_array=true);
 		}

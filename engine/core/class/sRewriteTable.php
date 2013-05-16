@@ -264,7 +264,7 @@ class sRewriteTable
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
 			FROM s_articles a
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
                 AND ac.categoryID = ?
             INNER JOIN s_categories c

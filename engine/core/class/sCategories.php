@@ -150,7 +150,7 @@ class sCategories
         $sql = '
             SELECT c.id
             FROM s_categories c
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = ?
                 AND ac.categoryID = c.id
             LEFT JOIN  s_categories c2
