@@ -27,17 +27,6 @@ INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginI
 (NULL, 'Shopware_CronJob_RefreshSimilarShown', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshSimilarShown', @pluginId, 0);
 
 
-
-CREATE TABLE IF NOT EXISTS `s_articles_top_seller_ro` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) unsigned NOT NULL,
-  `sales` int(11) unsigned NOT NULL DEFAULT '0',
-  `last_cleared` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `article_id` (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
-
 CREATE TABLE IF NOT EXISTS `s_articles_also_bought_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,
@@ -45,25 +34,39 @@ CREATE TABLE IF NOT EXISTS `s_articles_also_bought_ro` (
   `sales` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `bought_combination` (`article_id`,`related_article_id`),
-  KEY `get_also_bought_articles` (  `article_id` ,  `sales` ,  `related_article_id` ),
   KEY `related_article_id` (`related_article_id`),
-  KEY `article_id` (`article_id`)
+  KEY `article_id` (`article_id`),
+  KEY `get_also_bought_articles` (`article_id`,`sales`,`related_article_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
 
 CREATE TABLE IF NOT EXISTS `s_articles_similar_shown_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,
   `related_article_id` int(11) NOT NULL,
   `viewed` int(11) unsigned NOT NULL DEFAULT '0',
-  `init_date` DATETIME NOT NULL,
+  `init_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE  `viewed_combination` (  `article_id` ,  `related_article_id` ),
   KEY `viewed` (`viewed`,`related_article_id`,`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `s_articles_top_seller_ro` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) unsigned NOT NULL,
+  `sales` int(11) unsigned NOT NULL DEFAULT '0',
+  `last_cleared` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_id` (`article_id`),
+  KEY `sales` (`sales`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
 ALTER TABLE  `s_emarketing_lastarticles` ADD INDEX  `get_last_articles` (  `sessionID` ,  `time` );
 ALTER TABLE  `s_articles` ADD INDEX  `product_newcomer` (  `active` ,  `datum` );
+ALTER TABLE  `s_articles_categories` ADD INDEX  `category_id_by_article_id` (  `articleID` ,  `id` );
+ALTER TABLE  `s_articles_details` ADD INDEX  `get_similar_articles` (  `kind` ,  `sales` );
+
+
 
 
 -- //@UNDO
