@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
         columnFilterable:    '{s name=group/column_filterable}Filterable{/s}',
         tooltipDeleteGroup: '{s name=group/tooltip_delete_value}Delete group{/s}',
         buttonAddGroup:     '{s name=group/button_add_group}Add group{/s}',
+        search:             '{s name=group/empty_text_search}Search...{/s}',
         dragText:            '{s name=group/drag_text}Drag and drop to reorganize{/s}'
     },
 
@@ -237,7 +238,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
      */
     getToolbar: function() {
         var me      = this,
-            buttons = [];
+            items = [];
 
         me.addBtn = Ext.create('Ext.button.Button', {
             xtype: 'button',
@@ -253,11 +254,24 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
             }
         });
 
-        buttons.push(me.addBtn);
+        items.push(me.addBtn);
+        items.push(
+            '->',
+            {
+                xtype: 'textfield',
+                name: 'searchfield',
+                action: 'searchGroups',
+                width: 100,
+                cls: 'searchfield',
+                enableKeyEvents: true,
+                checkChangeBuffer: 500,
+                emptyText: me.snippets.search
+            }
+        );
 
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
-            items: buttons
+            items: items
         });
     }
 });
