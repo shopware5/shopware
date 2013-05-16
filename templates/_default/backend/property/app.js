@@ -72,19 +72,19 @@ Ext.define('Shopware.apps.Property', {
      * Required stores
      * @array
      */
-    stores: [ 'Value', 'FilterOption', 'Group' ],
+    stores: [ 'Option', 'Group','SetAssign', 'Set' ],
 
     /**
      * Required models
      * @array
      */
-    models: [ 'Value', 'FilterOption', 'Group', 'Attribute' ],
+    models: [ 'Option', 'Group','SetAssign', 'Set', 'Attribute' ],
 
     /**
      * Required views
      * @array
      */
-    views: [ 'main.Window', 'main.ValueGrid', 'main.FilterOptionGrid', 'main.GroupTree' ],
+    views: [ 'main.Window', 'main.OptionGrid', 'main.GroupGrid', 'main.SetGrid', 'main.SetAssignGrid'],
 
     /**
      * Returns the main application window for this is expected

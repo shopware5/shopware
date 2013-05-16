@@ -31,12 +31,12 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/store/group"}
-Ext.define('Shopware.apps.Property.store.Group', {
+//{block name="backend/property/store/option"}
+Ext.define('Shopware.apps.Property.store.Option', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Property.model.Group',
-    remoteSort: true,
-    remoteFilter: true
+    model : 'Shopware.apps.Property.model.Option',
+    remoteSort: false,
+    remoteFilter: false
 });
 //{/block}
