@@ -147,15 +147,20 @@ class CategorySubscriber implements BaseEventSubscriber
             $category = $entity;
 
             $changeSet = $uow->getEntityChangeSet($category);
-            if (isset($changeSet['parent'])) {
-                $oldParentCategory = $changeSet['parent'][0];
-                $newParentCategory = $changeSet['parent'][1];
 
-                if (($oldParentCategory instanceof Category && $newParentCategory instanceof Category)
-                    && ($oldParentCategory->getId() != $newParentCategory->getId())
-                ) {
-                    $this->addPendingMove($category);
-                }
+            if (!isset($changeSet['parent'])) {
+                continue;
+            }
+
+            $oldParentCategory = $changeSet['parent'][0];
+            $newParentCategory = $changeSet['parent'][1];
+
+            if ((!$oldParentCategory instanceof Category) || (!($newParentCategory instanceof Category))) {
+                continue;
+            }
+
+            if ($oldParentCategory->getId() == $newParentCategory->getId()) {
+                continue;
             }
 
             $parent = $category->getParent();
@@ -173,6 +178,8 @@ class CategorySubscriber implements BaseEventSubscriber
 
             $md = $em->getClassMetadata(get_class($category));
             $uow->recomputeSingleEntityChangeSet($md, $category);
+
+            $this->addPendingMove($category);
         }
 
         /* @var $col \Doctrine\ORM\PersistentCollection */
@@ -359,7 +366,7 @@ class CategorySubscriber implements BaseEventSubscriber
             $path = '|' . implode('|', $parents) . '|';
 
             Shopware()->Db()
-                      ->query('UPDATE s_categories set path = :path WHERE id = :categoryId',array('path' => $path, 'categoryId' => $categoryId)                      )
+                      ->query('UPDATE s_categories set path = :path WHERE id = :categoryId',array('path' => $path, 'categoryId' => $categoryId))
                       ->execute();
 
         }
@@ -376,7 +383,6 @@ class CategorySubscriber implements BaseEventSubscriber
             SELECT c.id
             FROM  `s_categories` c
             WHERE c.path LIKE :categoryId
-            GROUP BY c.id
         ";
 
         $childCategories = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
@@ -412,6 +418,9 @@ class CategorySubscriber implements BaseEventSubscriber
         $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleId AND c.parentCategoryID = :parentCategoryId";
         $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
 
+        $insertSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
+        $insertStmt = Shopware()->Db()->prepare($insertSql);
+
         Shopware()->Db()->beginTransaction();
         foreach ($affectedCategories as $categoryId) {
             $assignments = Shopware()->Db()->query($selectQuery, array('categoryId' => $categoryId));
@@ -419,7 +428,6 @@ class CategorySubscriber implements BaseEventSubscriber
                 $parents = $this->em->getParentCategories($assignment['categoryID']);
 
                 foreach ($parents as $parent) {
-
                     $assignmentStmt->execute(array(
                         'categoryId'       => $parent,
                         'articleId'        => $assignment['articleID'],
@@ -427,10 +435,10 @@ class CategorySubscriber implements BaseEventSubscriber
                     ));
 
                     if ($assignmentStmt->fetchColumn() === false) {
-                        Shopware()->Db()->insert('s_articles_categories_ro', array(
-                            'articleID'        => $assignment['articleID'],
-                            'categoryID'       => $parent,
-                            'parentCategoryID' => $assignment['categoryID'],
+                        $insertStmt->execute(array(
+                            ':categoryId'       => $parent,
+                            ':articleId'        => $assignment['articleID'],
+                            ':parentCategoryId' => $assignment['categoryID']
                         ));
                     }
                 }
