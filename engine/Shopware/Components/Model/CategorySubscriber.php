@@ -155,7 +155,7 @@ class CategorySubscriber implements BaseEventSubscriber
             $oldParentCategory = $changeSet['parent'][0];
             $newParentCategory = $changeSet['parent'][1];
 
-            if ((!$oldParentCategory instanceof Category) || (!($newParentCategory instanceof Category))) {
+            if (!($oldParentCategory instanceof Category) || (!($newParentCategory instanceof Category))) {
                 continue;
             }
 
@@ -413,6 +413,11 @@ class CategorySubscriber implements BaseEventSubscriber
         ";
 
         $affectedCategories = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
+
+        //case that a leave category moved.
+        if (count($affectedCategories) === 0) {
+            $affectedCategories = array($categoryId);
+        }
 
         $selectQuery = "SELECT articleID, categoryID FROM `s_articles_categories` WHERE categoryID = :categoryId";
         $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleId AND c.parentCategoryID = :parentCategoryId";
