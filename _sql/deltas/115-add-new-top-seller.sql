@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS `s_articles_also_bought_ro` (
   `related_article_id` int(11) NOT NULL,
   `sales` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `article_id_2` (`article_id`,`related_article_id`),
+  UNIQUE KEY `bought_combination` (`article_id`,`related_article_id`),
+  KEY `get_also_bought_articles` (  `article_id` ,  `sales` ,  `related_article_id` ),
   KEY `related_article_id` (`related_article_id`),
   KEY `article_id` (`article_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
