@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `s_articles_categories_ro` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `articleID` (`articleID`,`categoryID`,`parentCategoryID`),
   KEY `categoryID` (`categoryID`),
-  KEY `articleID_2` (`articleID`)
+  KEY `articleID_2` (`articleID`),
+  KEY `categoryID_2` (`categoryID`,`parentCategoryID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- //@UNDO
