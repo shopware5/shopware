@@ -148,9 +148,8 @@ class sCategories
         }
 
         $sql = '
-            SELECT
-              STRAIGHT_JOIN
-              ac.categoryID as id
+            SELECT STRAIGHT_JOIN
+                   ac.categoryID as id
             FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
                 INNER JOIN s_categories c
                     ON  ac.categoryID = c.id
