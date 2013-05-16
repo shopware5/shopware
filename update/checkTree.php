@@ -19,25 +19,32 @@ try {
     exit(1);
 }
 
-$update = new update($conn);
+$update = new check($conn);
 $stats = array();
 
-$update->fixTreePath($stats);
-var_dump($stats);
+$update->checkTreePath($stats);
 
-$update->fixCategoryTree($stats);
-var_dump($stats);
+if ($stats) {
+    echo implode("\n", $stats) . "\n";
+} else {
+    echo "Tree Path is OK\n";
+}
 
 $stats = array();
-$update->fixCategoryPosition($stats);
-var_dump($stats);
+$update->checkCategoryTree($stats);
 
+if (!empty($stats['errors'])) {
+    echo "Rows missing: " . $stats['newRows'] . "\n";
+    echo implode("\n", $stats['errors']) . "\n";
+} else {
+    echo "Entries OK\n";
+}
 
 
 /**
  * Class update
  */
-class update
+class check
 {
     /**
      * @var PDO
@@ -55,20 +62,11 @@ class update
     /**
      * @param $stats
      */
-    public function fixTreePath(&$stats)
+    public function checkTreePath(&$stats)
     {
-        $baseMemory = memory_get_usage();
-        $startTime  = microtime(true);
-        $errors     = array();
-
-        $updateSql = "UPDATE s_categories SET `path` = :path WHERE id = :id";
-        $updateStmt = $this->conn->prepare($updateSql);
-
         $stmt = 'SELECT c1.id, c1.parent, c1.path FROM `s_categories` c1';
+
         $stmt = $this->conn->query($stmt);
-
-        $this->conn->beginTransaction();
-
         while ($row = $stmt->fetch()) {
             $path = $this->getParentCategories($row['parent']);
 
@@ -80,38 +78,23 @@ class update
             }
 
             if ($path !== $row['path']) {
-                $errors[] = sprintf("Path mismatch for categoryId: %d, path in db: %s, new path; %s", $row['id'], $row['path'], $path);
-                $updateStmt->execute(array(
-                        ':id'   => $row['id'],
-                        ':path' => $path
-                    ));
+                $stats[] = sprintf("Path mismatch for categoryId: %d, path in db: %s, new path; %s", $row['id'], $row['path'], $path);
             }
         }
-
-        $this->conn->commit();
-
-        $stats = array(
-            'errors'     => $errors,
-            'runtime'    => number_format((microtime(true) - $startTime), 2) . " seconds",
-            'memory'     => number_format(((memory_get_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-            'peakMemory' => number_format(((memory_get_peak_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-        );
     }
 
     /**
      * @param array $stats
      */
-    public function fixCategoryTree(&$stats = array())
+    public function checkCategoryTree(&$stats = array())
     {
         $baseMemory = memory_get_usage();
-        $startTime  = microtime(true);
-        $errors     = array();
+        $startTime = microtime(true);
+
+        $errors = array();
 
         $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleID AND c.articleID = :articleID AND parentCategoryID = :parentCategoryId";
         $assignmentStmt = $this->conn->prepare($assignmentSql);
-
-        $insertSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertStmt = $this->conn->prepare($insertSql);
 
         $allAssignsSql = "
             SELECT DISTINCT ac.id, ac.articleID, ac.categoryID, c.parent
@@ -148,12 +131,6 @@ class update
                 if ($assignmentStmt->fetchColumn() === false) {
                     $newRows++;
                     $errors[] = sprintf("Missing entry: categoryId: %d, articleId: %d, parentCategoryId: %d", $parentId, $assignment['articleID'], $assignment['categoryID']);
-
-                    $insertStmt->execute(array(
-                        ':categoryId'       => $parentId,
-                        ':articleId'        => $assignment['articleID'],
-                        ':parentCategoryId' => $assignment['categoryID']
-                    ));
                 }
             }
         }
@@ -163,60 +140,6 @@ class update
         $stats = array(
             'newRows'        => $newRows,
             'errors'         => $errors,
-            'runtime'        => number_format((microtime(true) - $startTime), 2) . " seconds",
-            'memory'         => number_format(((memory_get_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-            'peakMemory'     => number_format(((memory_get_peak_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-        );
-    }
-
-    /**
-     * @param array $stats
-     */
-    public function fixCategoryPosition(&$stats = array())
-    {
-        $baseMemory = memory_get_usage();
-        $startTime = microtime(true);
-
-        $preConditionSql = 'SELECT MAX(`left`) FROM s_categories';
-        $result = $this->conn->query($preConditionSql)->fetchColumn();
-
-        if ($result == 0) {
-            return;
-        }
-
-        $sql = "SELECT id, parent, description, position FROM s_categories ORDER BY parent, s_categories.left";
-
-        $stmt = $this->conn->query($sql);
-
-        $oldParent = -1;
-        $counter = 0;
-
-        $newRows = 0;
-
-        $updateSql = "UPDATE s_categories SET `position` = :position WHERE id = :id";
-        $updateStmt = $this->conn->prepare($updateSql);
-
-        while ($row = $stmt->fetch()) {
-            if ($row['parent'] != $oldParent) {
-                $counter = 0;
-                $oldParent = $row['parent'];
-            }
-
-            if ($row['position'] === null || $row['position'] != $counter) {
-                $newRows++;
-                $updateStmt->execute(array(
-                        ':id'       => $row['id'],
-                        ':position' => $counter
-                    ));
-            }
-
-            $counter++;
-        }
-
-        $this->conn->exec("UPDATE s_categories SET `left` =  '0', `right` =  '0', `level` =  '0'");
-
-        $stats = array(
-            'fixedPositions' => $newRows,
             'runtime'        => number_format((microtime(true) - $startTime), 2) . " seconds",
             'memory'         => number_format(((memory_get_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
             'peakMemory'     => number_format(((memory_get_peak_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
