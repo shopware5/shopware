@@ -86,6 +86,8 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                 flex: 3,
                 items: [
                     {
+                        bodyStyle: 'border-left: 0 none',
+                        style: 'border-left: 0 none',
                         xtype: 'property-main-groupGrid',
                         groupStore: me.groupStore,
                         split: true,
