@@ -1724,7 +1724,9 @@ class sArticles
     public function sGetArticleCharts($category = null)
     {
         $sLimitChart = $this->sSYSTEM->sCONFIG['sCHARTRANGE'];
-
+        if (empty($sLimitChart)) {
+            $sLimitChart = 20;
+        }
         if (!empty($category)) {
             $category = (int)$category;
         } elseif (!empty($this->sSYSTEM->_GET['sCategory'])) {
@@ -1739,19 +1741,31 @@ class sArticles
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
             INNER JOIN s_articles_categories ac
-              ON ac.articleID = s.article_id
+              ON  ac.articleID = s.article_id
               AND ac.categoryID = :categoryId
             INNER JOIN s_categories c
-              ON ac.categoryID = c.id
+              ON  ac.categoryID = c.id
               AND c.active = 1
             INNER JOIN s_articles a
-              ON a.id = s.article_id
+              ON  a.id = s.article_id
               AND a.active = 1
+
             LEFT JOIN s_articles_avoid_customergroups ag
               ON ag.articleID=a.id
               AND ag.customergroupID = :customerGroupId
+
+            INNER JOIN s_articles_details d
+              ON d.id = a.main_detail_id
+              AND d.active = 1
+
+            INNER JOIN s_articles_attributes at
+              ON at.articleID=a.id
+
+            INNER JOIN s_core_tax t
+              ON t.id = a.taxID
+
             WHERE ag.articleID IS NULL
-            ORDER BY quantity DESC
+            ORDER BY s.sales DESC
             LIMIT $sLimitChart
 		";
 
@@ -1759,7 +1773,6 @@ class sArticles
             'categoryId'      => $category,
             'customerGroupId' => $this->customerGroupId
         ));
-
 
         $articles = array();
         if (!empty($queryChart))
@@ -1770,7 +1783,6 @@ class sArticles
                     $articles[] = $article;
                 }
             }
-
 
         Enlight()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
