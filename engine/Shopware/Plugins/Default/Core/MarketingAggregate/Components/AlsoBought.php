@@ -43,7 +43,9 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
-        $articles = $this->getArticles($offset, $limit);
+        $articles = Shopware()->Db()->fetchCol(
+            Shopware()->Db()->limit("SELECT id FROM s_articles ", $limit, $offset)
+        );
 
         $preparedSelect = Shopware()->Db()->prepare("
             SELECT
@@ -79,21 +81,6 @@ class Shopware_Components_AlsoBought extends Enlight_Class
         }
     }
 
-    /**
-     * Helper function to get an data set of article ids.
-     * @param null $offset
-     * @param null $limit
-     * @return array
-     */
-    protected function getArticles($offset = null, $limit = null)
-    {
-        $limitSql = '';
-        if ($limit !== null && $offset !== null) {
-            $limitSql = ' LIMIT ' . $offset . ' , ' . $limit;
-        }
-        $sql = "SELECT id FROM s_articles " . $limitSql;
-        return Shopware()->Db()->fetchCol($sql);
-    }
 
     /**
      * This function is used to insert or update the bought articles table

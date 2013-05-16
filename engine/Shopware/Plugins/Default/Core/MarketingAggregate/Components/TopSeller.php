@@ -51,7 +51,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         Shopware()->Db()->query($sql, array(
             'article_id' => $articleId,
-            'quantity'   => $quantity,
+            'quantity' => $quantity,
         ));
     }
 
@@ -65,9 +65,12 @@ class Shopware_Components_TopSeller extends Enlight_Class
         if (empty($articleId)) {
             return;
         }
-        Shopware()->Db()->query('DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId', array(
-            'articleId' => (int) $articleId
-        ));
+        Shopware()->Db()->query(
+            'DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId',
+            array(
+                'articleId' => (int)$articleId
+            )
+        );
 
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
@@ -90,7 +93,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         Shopware()->Db()->query($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
-            'articleId' => (int) $articleId
+            'articleId' => (int)$articleId
         ));
     }
 
@@ -103,11 +106,6 @@ class Shopware_Components_TopSeller extends Enlight_Class
     {
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
-
-        $limitSelect = '';
-        if ($limit !== null) {
-            $limitSelect = 'LIMIT ' . $limit;
-        }
 
         $sql = "
             SELECT 	articles.id as article_id,
@@ -124,8 +122,9 @@ class Shopware_Components_TopSeller extends Enlight_Class
             WHERE articles.id NOT IN (
                 SELECT s_articles_top_seller_ro.article_id FROM s_articles_top_seller_ro
             )
-            GROUP BY articles.id " .
-            $limitSelect;
+            GROUP BY articles.id ";
+
+        $sql = Shopware()->Db()->limit($sql, $limit);
 
         $articles = Shopware()->Db()->fetchAll($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00')
@@ -136,7 +135,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             VALUES (:article_id, :last_cleared, :sales)'
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $prepared->execute($article);
         }
     }
@@ -146,23 +145,18 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * This function is used
      * @param $limit int Limit the update count.
      */
-    public function updateElapsedTopSeller($limit = null) {
+    public function updateElapsedTopSeller($limit = null)
+    {
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
         $validationTime = $this->getTopSellerValidationTime();
-
-        $limitSelect = '';
-        //if a limit value passed, we only want to update the passed limit count.
-        if ($limit !== null) {
-            $limitSelect = 'LIMIT ' . (int) $limit;
-        }
 
         $sql = "
             UPDATE s_articles_top_seller_ro
             SET last_cleared = NOW(),
                 sales = (
                     SELECT
-                       ". $select . "
+                       " . $select . "
                     FROM s_articles articles
                         LEFT JOIN s_order_details details
                             ON  articles.id = details.articleID
@@ -174,11 +168,12 @@ class Shopware_Components_TopSeller extends Enlight_Class
                     WHERE articles.id = s_articles_top_seller_ro.article_id
                 )
             WHERE last_cleared <= :validationTime
-            $limitSelect
         ";
 
+        $sql = Shopware()->Db()->limit($sql, $limit);
+
         Shopware()->Db()->query($sql, array(
-            'orderTime'      => $orderTime->format('Y-m-d 00:00:00'),
+            'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
             'validationTime' => $validationTime->format('Y-m-d 00:00:00')
         ));
     }
@@ -198,7 +193,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
-        $orderTime->sub(new DateInterval('P'. $interval .'D'));
+        $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 
         return $orderTime;
     }
@@ -218,7 +213,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
-        $orderTime->sub(new DateInterval('P'. $interval .'D'));
+        $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 
         return $orderTime;
     }
