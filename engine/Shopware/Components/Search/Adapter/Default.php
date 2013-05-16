@@ -655,7 +655,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         ' . $sqlFromStatement . '
 
-        INNER JOIN s_articles_categories ac
+        INNER JOIN s_articles_categories_ro ac
             ON  ac.articleID  = a.id
             AND ac.categoryID = ?
         INNER JOIN s_categories c
@@ -782,7 +782,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             ON a.id=d.articleID
             AND d.kind=1
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID  = a.id
                 AND ac.categoryID = ' .$sqlCategoryFilter. '
             INNER JOIN s_categories c
@@ -1004,7 +1004,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             SELECT c.*, COUNT(DISTINCT ac.articleID) as count
 
             FROM s_categories c
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON ac.categoryID = c.id
             WHERE c.parent=' . $this->getResult()->getCurrentCategoryFilter() . '
             AND c.active = 1

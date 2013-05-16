@@ -2796,10 +2796,10 @@ class sAdmin
      */
     public function sRiskARTICLESFROM ($user, $order, $value){
         $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-			SELECT s_articles_categories.id as id
-			FROM s_order_basket, s_articles_categories
-			WHERE s_order_basket.articleID = s_articles_categories.articleID
-			AND s_articles_categories.categoryID = ?
+			SELECT s_articles_categories_ro.id as id
+			FROM s_order_basket, s_articles_categories_ro
+			WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
+			AND s_articles_categories_ro.categoryID = ?
 			AND s_order_basket.sessionID=?
 			AND s_order_basket.modus=0
 		", array($value, $this->sSYSTEM->sSESSION_ID));
@@ -3397,7 +3397,7 @@ class sAdmin
 			LEFT JOIN (
 				SELECT dc.dispatchID
 				FROM s_order_basket b
-				JOIN s_articles_categories ac
+				JOIN s_articles_categories_ro ac
 				ON ac.articleID=b.articleID
 				JOIN s_premium_dispatch_categories dc
 				ON dc.categoryID=ac.categoryID
@@ -3541,7 +3541,7 @@ class sAdmin
 			LEFT JOIN (
 				SELECT dc.dispatchID
 				FROM s_order_basket b
-				JOIN s_articles_categories ac
+				JOIN s_articles_categories_ro ac
 				ON ac.articleID=b.articleID
 				JOIN s_premium_dispatch_categories dc
 				ON dc.categoryID=ac.categoryID

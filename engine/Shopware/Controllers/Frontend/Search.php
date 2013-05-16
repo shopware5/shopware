@@ -374,7 +374,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         if (!empty($articles) && count($articles) == 1) {
             $sql = '
                 SELECT ac.articleID
-                FROM  s_articles_categories ac
+                FROM  s_articles_categories_ro ac
                 INNER JOIN s_categories c
                     ON  c.id = ac.categoryID
                     AND c.active = 1
