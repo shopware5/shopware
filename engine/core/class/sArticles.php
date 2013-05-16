@@ -1015,10 +1015,10 @@ class sArticles
                 IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
 
                 (
-                    SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
-                    FROM s_articles_vote
-                    WHERE active=1
-                    AND articleID = a.id
+                    SELECT CONCAT(AVG(points), '|',COUNT(*)) as votes
+                    FROM   s_articles_vote
+                    WHERE  s_articles_vote.active=1
+                    AND    s_articles_vote.articleID = a.id
                 ) AS sVoteAverange
 
             $sqlFromPath
@@ -1066,7 +1066,7 @@ class sArticles
 
             ORDER BY $orderBy
             LIMIT $sLimitStart, $sLimitEnd
-";
+        ";
 
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
         $articles = Shopware()->Db()->fetchAssoc($sql);
@@ -1221,7 +1221,6 @@ class sArticles
                 $articles[$articleKey]["sUnit"] = $this->sGetUnit($articles[$articleKey]["unitID"]);
             }
 
-            //todo@performance
             if (empty($articles[$articleKey]['sVoteAverange'])) {
                 $articles[$articleKey]['sVoteAverange'] = '0.00|00';
             }
@@ -1725,9 +1724,9 @@ class sArticles
     public function sGetArticleCharts($category = null)
     {
         $sLimitChart = $this->sSYSTEM->sCONFIG['sCHARTRANGE'];
-        $sIntervalCharts = $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] ? $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] : 10;
-        $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
-
+        if (empty($sLimitChart)) {
+            $sLimitChart = 20;
+        }
         if (!empty($category)) {
             $category = (int)$category;
         } elseif (!empty($this->sSYSTEM->_GET['sCategory'])) {
@@ -1737,37 +1736,44 @@ class sArticles
         }
 
         $sql = "
-			SELECT a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
+            SELECT STRAIGHT_JOIN
+              a.id AS articleID,
+              s.sales AS quantity
+            FROM s_articles_top_seller_ro s
+            INNER JOIN s_articles_categories ac
+              ON  ac.articleID = s.article_id
+              AND ac.categoryID = :categoryId
+            INNER JOIN s_categories c
+              ON  ac.categoryID = c.id
+              AND c.active = 1
+            INNER JOIN s_articles a
+              ON  a.id = s.article_id
+              AND a.active = 1
 
-	        FROM s_articles a
-                INNER JOIN s_articles_categories ac
-                    ON ac.articleID=a.id
-                    AND ac.categoryID = $category
-                INNER JOIN s_categories c
-                    ON c.id = ac.categoryID
-                    AND c.active = 1
+            LEFT JOIN s_articles_avoid_customergroups ag
+              ON ag.articleID=a.id
+              AND ag.customergroupID = :customerGroupId
 
-	        LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+            INNER JOIN s_articles_details d
+              ON d.id = a.main_detail_id
+              AND d.active = 1
 
-	        LEFT JOIN s_order_details od
-	        ON a.id = od.articleID
-	        AND od.modus = 0
+            INNER JOIN s_articles_attributes at
+              ON at.articleID=a.id
 
-	        LEFT JOIN s_order o
-	        ON o.ordertime>=DATE_SUB($now, INTERVAL $sIntervalCharts DAY)
-	        AND o.status >= 0
-	        AND o.id = od.orderID
+            INNER JOIN s_core_tax t
+              ON t.id = a.taxID
 
-	        WHERE a.active = 1
-            AND ag.articleID IS NULL
-
-	        GROUP BY a.id
-	        ORDER BY quantity DESC, topseller DESC
-	        LIMIT $sLimitChart
+            WHERE ag.articleID IS NULL
+            ORDER BY s.sales DESC
+            LIMIT $sLimitChart
 		";
-        $queryChart = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+
+        $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
+            'categoryId'      => $category,
+            'customerGroupId' => $this->customerGroupId
+        ));
+
         $articles = array();
         if (!empty($queryChart))
             foreach ($queryChart as $articleID => $quantity) {
@@ -1778,6 +1784,10 @@ class sArticles
                 }
             }
 
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Articles_GetArticleCharts',
+            array('subject' => $this, 'category' => $category, 'articles' => $articles)
+        );
         return $articles;
     }
 
@@ -3592,12 +3602,18 @@ class sArticles
      * @param string $name name of the article
      * @param int $id id of the article
      * @access public
+     * @return bool
      */
     public function sSetLastArticle($image, $name, $id)
     {
         if (empty($this->sSYSTEM->sSESSION_ID) || empty($name) || empty($id)) {
             return;
         }
+
+        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
+            'subject'   => $this,
+            'article'   => $id
+        ));
 
         $insertArticle = $this->sSYSTEM->sDB_CONNECTION->Execute('
 			INSERT INTO s_emarketing_lastarticles
@@ -3613,6 +3629,8 @@ class sArticles
             (int)$this->sSYSTEM->_SESSION['sUserId'],
             (int)$this->sSYSTEM->sLanguage
         ));
+
+        return $insertArticle;
     }
 
     /**
@@ -3729,7 +3747,7 @@ class sArticles
                 AND c.active = 1
         ";
 
-        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+        $sql = "
 			SELECT img, l.name, l.articleID
 			FROM s_emarketing_lastarticles l
 
@@ -3744,7 +3762,10 @@ class sArticles
             GROUP BY l.articleID
 			ORDER BY time DESC
 			LIMIT {$numberOfArticles}
-		", array(
+        ";
+
+
+        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array(
             $this->sSYSTEM->sSESSION_ID,
             (int)$currentArticle,
             $this->sSYSTEM->sLanguage

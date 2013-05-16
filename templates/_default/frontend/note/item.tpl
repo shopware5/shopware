@@ -5,7 +5,7 @@
 	
 		{* Reviews *}
 		<div class="rating">
-			<div class="star star{$sBasketItem.sVoteAverange.averange*2|round}"></div>
+			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
 		</div>
 		
 		{* Article picture *}

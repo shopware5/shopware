@@ -72,48 +72,58 @@ class sMarketing
             $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR']) ? 4 : (int)$this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR'];
         }
         $limit = (int) $limit;
-        $articleId = (int) $articleId;
 
+        $where = '';
         if (!empty($this->sBlacklist)) {
             $where = Shopware()->Db()->quote($this->sBlacklist);
-            $where = 'AND e1.articleID NOT IN (' . $where . ')';
-        } else {
-            $where = '';
+            $where = 'AND similarShown.related_article_id NOT IN (' . $where . ')';
         }
 
         $sql = "
-            SELECT e1.articleID as id, COUNT(DISTINCT e1.id) AS hits
-            FROM s_emarketing_lastarticles AS e1,
-                s_emarketing_lastarticles AS e2,
-                s_articles a
+            SELECT STRAIGHT_JOIN
+                 lastArticles.articleID as id,
+                 similarShown.viewed as hits
+            FROM s_articles_similar_shown_ro as similarShown
 
-            INNER JOIN s_articles_categories ac
-                ON  ac.articleID = a.id
-                AND ac.categoryID = {$this->categoryId}
-            INNER JOIN s_categories c
+              INNER JOIN s_emarketing_lastarticles as lastArticles
+                ON  lastArticles.articleID = similarShown.related_article_id
+
+              INNER JOIN s_articles_categories ac
+                ON  ac.articleID = similarShown.related_article_id
+                AND ac.categoryID = :categoryId
+
+              INNER JOIN s_categories c
                 ON  c.id = ac.categoryID
                 AND c.active = 1
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+              INNER JOIN s_articles as a
+                ON  a.id = similarShown.related_article_id
+                AND a.active = 1
 
+              LEFT JOIN s_articles_avoid_customergroups ag
+                ON  ag.articleID = a.id
+                AND ag.customergroupID= :customerGroupId
 
-            WHERE ac.articleID = e1.articleID
-            AND e2.articleID=$articleId
-            AND e1.sessionID=e2.sessionID
-            AND a.id=e1.articleID
+            WHERE similarShown.article_id = :articleId
+            AND   ag.articleID IS NULL
 
-            AND a.active=1
-            AND a.mode=0
             $where
-            AND ag.articleID IS NULL
 
-            GROUP BY e1.articleID
-            ORDER BY hits DESC
-            LIMIT $limit
-        ";
-        return $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            ORDER BY similarShown.viewed DESC
+            LIMIT $limit";
+
+        $similarShownArticles = Shopware()->Db()->fetchAll($sql, array(
+            'articleId'       => (int) $articleId,
+            'categoryId'      => (int) $this->categoryId,
+            'customerGroupId' => (int) $this->customerGroupId
+        ));
+
+        Shopware()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', array(
+            'subject'  => $this,
+            'articles' => $similarShownArticles
+        ));
+
+        return $similarShownArticles;
     }
 
     public function sGetAlsoBoughtArticles($articleID, $limit = 0)
@@ -122,47 +132,57 @@ class sMarketing
             $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT']) ? 4 : (int)$this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT'];
         }
         $limit = (int) $limit;
-        $articleID = (int)$articleID;
+        $where = '';
 
         if (!empty($this->sBlacklist)) {
             $where = Shopware()->Db()->quote($this->sBlacklist);
-            $where = 'AND b1.articleID NOT IN (' . $where . ')';
-        } else {
-            $where = '';
+            $where = ' AND alsoBought.related_article_id NOT IN (' . $where . ')';
         }
 
         $sql = "
-            SELECT b1.articleID AS id, COUNT(DISTINCT b1.id) AS sales
-            FROM
-                s_order_details AS b1,
-                s_order_details AS b2,
-                s_articles a
+            SELECT
+                alsoBought.sales as sales,
+                alsoBought.related_article_id as id
 
-            INNER JOIN s_articles_categories ac
-                ON  ac.articleID = a.id
-                AND ac.categoryID = {$this->categoryId}
-            INNER JOIN s_categories c
-                ON  c.id = ac.categoryID
-                AND c.active = 1
+            FROM   s_articles_also_bought_ro alsoBought
+                INNER JOIN s_articles articles
+                    ON  alsoBought.related_article_id = articles.id
+                    AND articles.active = 1
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+                INNER JOIN s_articles_categories articleCategories
+                    ON  alsoBought.related_article_id = articleCategories.articleID
+                    AND articleCategories.categoryID = :categoryId
 
-            WHERE ac.articleID = b1.articleID
-            AND b2.articleID = $articleID
-            AND a.id = b1.articleID
+                INNER JOIN s_categories categories
+                    ON categories.id = articleCategories.categoryID
 
-            AND a.active = 1
-            AND a.mode = 0
+                LEFT JOIN s_articles_avoid_customergroups customerGroups
+                    ON  customerGroups.articleID = articles.id
+                    AND customerGroups.customergroupID = :customerGroupId
+
+            WHERE alsoBought.article_id = :articleId
+            AND   customerGroups.articleID IS NULL
+
             $where
-            AND b1.orderID = b2.orderID AND b1.modus=0
-            AND ag.articleID IS NULL
 
-            GROUP BY b1.articleID
-            ORDER BY sales DESC LIMIT $limit
+            ORDER BY alsoBought.sales DESC, alsoBought.related_article_id DESC
+
+            LIMIT $limit
         ";
-        return $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+
+        $alsoBought = Shopware()->Db()->fetchAll($sql, array(
+            'articleId' => (int) $articleID,
+            'categoryId' => (int) $this->categoryId,
+            'customerGroupId' => (int) $this->customerGroupId
+        ));
+
+
+        Shopware()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', array(
+            'subject'  => $this,
+            'articles' => $alsoBought
+        ));
+
+        return $alsoBought;
     }
 
     /**
