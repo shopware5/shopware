@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Model\Query\SqlWalker;
+
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Widgets
@@ -44,6 +46,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         foreach ($emotions as &$emotion) {
             $emotion['rows'] = $emotion['grid']['rows'];
             $emotion['cols'] = $emotion['grid']['cols'];
+            $emotion['elements'] = $repository->getEmotionElementsQuery($emotion['id'])->getQuery()->getArrayResult();
+
             $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
             $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
             $emotion['gutter'] = $emotion['grid']['gutter'];
@@ -242,7 +246,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->setParameter('displayDate', date('Y-m-d H:i:s'))
             ->setParameter('path', '%|' . $category->getId() . '|%');
 
-        $result = $builder->getQuery()->getArrayResult();
+        $query = $this->getForceIndexQuery($builder->getQuery(), 'emotion_get_blog_entry');
+        $result = $query->getArrayResult();
 
         foreach ($result as &$entry) {
             foreach ($entry['media'] as $media) {
@@ -262,6 +267,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
         return $data;
     }
+
+
+    /**
+     * Helper function to set the FORCE INDEX path.
+     * @param $query \Doctrine\ORM\Query
+     * @param $index String
+     * @return \Doctrine\ORM\Query
+     */
+    private function getForceIndexQuery($query, $index)
+    {
+        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        return $query;
+    }
+
 
     private function getArticleByNumber($data, $category, $element)
     {
@@ -477,7 +498,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductNewcomer($category, $offset = 0, $limit)
     {
-        $perPage = "$offset,$limit";
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
             FROM s_articles a
@@ -489,9 +509,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             WHERE a.active=1
             AND c.id=?
+
             ORDER BY a.datum DESC
-            LIMIT {$perPage}
         ";
+
+        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
         $articles = Shopware()->Db()->fetchAll($sql, array($category));
 
@@ -516,8 +538,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductTopSeller($category, $offset = 0, $limit)
     {
-        $perPage = "$offset,$limit";
-
         $sql = "
             SELECT
               STRAIGHT_JOIN
@@ -525,6 +545,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
               a.id AS articleID,
               s.sales AS quantity
+
             FROM s_articles_top_seller_ro s
 
             INNER JOIN s_articles_categories_ro ac
@@ -540,9 +561,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
               AND a.active = 1
 
             ORDER BY quantity DESC
-            LIMIT {$perPage}
         ";
 
+        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
         $articles = Shopware()->Db()->fetchAll($sql, array('categoryId' => $category));
 
