@@ -153,6 +153,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
             helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
             name: 'batchSize',
+            forceSelection: true,
             margin: '0 0 10 0',
             allowBlank: false,
             value: me.batchSize,
@@ -178,7 +179,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                     { batchSize: '50' },
                     { batchSize: '75' },
                     { batchSize: '100' },
-                    { batchSize: '150' }
+                    { batchSize: '150' },
+                    { batchSize: '200' },
+                    { batchSize: '250' }
                 ]
             })
         });

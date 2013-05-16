@@ -329,8 +329,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 }
             }
 
-            $this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
-            $this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
+            if (Shopware()->Config()->get('similarViewedShow', true)) {
+                $this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
+            }
+
+            if (Shopware()->Config()->get('alsoBoughtShow', true)) {
+                $this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
+            }
         }
 
         if($this->request->isXmlHttpRequest()||!empty($this->Request()->callback)){

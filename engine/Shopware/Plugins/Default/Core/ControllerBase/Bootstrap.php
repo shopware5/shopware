@@ -82,7 +82,13 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             $view->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
             $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
             $categoryContent = $view->sCategoryContent;
-            if(!empty($categoryContent) && $categoryContent['level'] <= 2) {
+
+            $topSellerActive = $this->Application()->Config()->get(
+                'topSellerActive',
+                true
+            );
+
+            if(!empty($categoryContent) && $categoryContent['level'] <= 2 && $topSellerActive) {
                 $view->sCharts = Shopware()->Modules()->Articles()->sGetArticleCharts(
                     $categoryContent['id']
                 );

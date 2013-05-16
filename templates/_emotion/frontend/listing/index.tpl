@@ -30,7 +30,7 @@
 {/block}
 
 {block name="frontend_listing_index_text" append}
-	{if !$hasEmotion && !$sSupplierInfo}
+	{if !$hasEmotion && !$sSupplierInfo && {config name=topSellerActive}}
 	    {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
 	{/if}
 {/block}
