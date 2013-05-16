@@ -140,10 +140,10 @@ class update
 
             foreach ($parents as $parentId) {
                 $assignmentStmt->execute(array(
-                        'articleID'        => $assignment['articleID'],
-                        'categoryId'       => $parentId,
-                        'parentCategoryId' => $assignment['categoryID']
-                    ));
+                    'articleID'        => $assignment['articleID'],
+                    'categoryId'       => $parentId,
+                    'parentCategoryId' => $assignment['categoryID']
+                ));
 
                 if ($assignmentStmt->fetchColumn() === false) {
                     $newRows++;

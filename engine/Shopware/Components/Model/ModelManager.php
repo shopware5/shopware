@@ -498,16 +498,20 @@ class ModelManager extends EntityManager
         $baseMemory = memory_get_usage();
         $startTime = microtime(true);
 
-        $assignmentSql = "SELECT id FROM s_articles_categories c WHERE c.categoryID = :categoryId AND c.articleID = :articleID";
+        $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleID AND c.articleID = :articleID AND parentCategoryID = :parentCategoryId";
         $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
 
-        $allAssignsSql = "
-            SELECT DISTINCT ac.id, ac.articleID, ac.categoryId, c.parent
-            FROM  s_articles_categories ac
-            INNER JOIN s_categories c
-            ON ac.categoryID = c.id
-        ";
+        $insertSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
+        $insertStmt = Shopware()->Db()->prepare($insertSql);
 
+        $allAssignsSql = "
+            SELECT DISTINCT ac.id, ac.articleID, ac.categoryID, c.parent
+            FROM s_articles_categories ac
+            INNER JOIN s_categories c ON ac.categoryID = c.id
+            LEFT JOIN s_categories c2 ON c.id = c2.parent
+            WHERE c2.id IS NULL
+            ORDER BY articleID
+        ";
         $allAssignsSql = Shopware()->Db()->limit($allAssignsSql, $limit, $offset);
         $assignments = Shopware()->Db()->query($allAssignsSql);
 
@@ -520,18 +524,27 @@ class ModelManager extends EntityManager
             }
 
             $parents = $this->getParentCategories($assignment['parent']);
-
             if (empty($parents)) {
                 continue;
             }
 
+            array_unshift($parents, $assignment['categoryID']);
+
             foreach ($parents as $parentId) {
-                $assignmentStmt->execute(array('categoryId' => $parentId, 'articleID' => $assignment['articleID']));
+                $assignmentStmt->execute(array(
+                    'articleID'        => $assignment['articleID'],
+                    'categoryId'       => $parentId,
+                    'parentCategoryId' => $assignment['categoryID']
+                ));
+
                 if ($assignmentStmt->fetchColumn() === false) {
                     $newRows++;
 
-                    $articleId = (int) $assignment['articleID'];
-                    Shopware()->Db()->exec("INSERT INTO s_articles_categories (categoryId, articleID) VALUES ($parentId, $articleId)");
+                    $insertStmt->execute(array(
+                        ':categoryId'       => $parentId,
+                        ':articleId'        => $assignment['articleID'],
+                        ':parentCategoryId' => $assignment['categoryID']
+                    ));
                 }
             }
         }
