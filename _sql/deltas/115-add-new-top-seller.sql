@@ -7,6 +7,25 @@ INSERT INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `des
 SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'MarketingAggregate');
 
 
+INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
+(NULL, 'Shopware_Modules_Order_SaveOrder_ProcessDetails', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::incrementTopSeller', @pluginId, 0),
+(NULL, 'Shopware_Modules_Articles_GetArticleCharts', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::afterTopSellerSelected', @pluginId, 0),
+(NULL, 'Enlight_Bootstrap_InitResource_TopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSellerResource', @pluginId, 0),
+(NULL, 'Enlight_Controller_Action_Backend_Config_InitTopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSeller', @pluginId, 0),
+(NULL, 'Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::getTopSellerBackendController', 88, 0),
+(NULL, 'Shopware_CronJob_RefreshTopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshTopSeller', @pluginId, 0),
+(NULL, 'Shopware\\Models\\Article\\Article::postUpdate', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshArticle', @pluginId, 0),
+(NULL, 'Shopware\\Models\\Article\\Article::postPersist', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshArticle', @pluginId, 0),
+(NULL, 'Shopware_Modules_Order_SaveOrder_ProcessDetails', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::addNewAlsoBought', @pluginId, 0),
+(NULL, 'Enlight_Controller_Dispatcher_ControllerPath_Backend_AlsoBought', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::getAlsoBoughtBackendController', @pluginId, 0),
+(NULL, 'Enlight_Bootstrap_InitResource_AlsoBought', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initAlsoBoughtResource', @pluginId, 0),
+(NULL, 'Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::getSimilarShownBackendController', @pluginId, 0),
+(NULL, 'Enlight_Bootstrap_InitResource_SimilarShown', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initSimilarShownResource', @pluginId, 0),
+(NULL, 'Shopware_Modules_Marketing_GetSimilarShownArticles', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::afterSimilarShownArticlesSelected', @pluginId, 0),
+(NULL, 'Shopware_Plugins_LastArticles_ResetLastArticles', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::afterSimilarShownArticlesReset', @pluginId, 0),
+(NULL, 'Shopware_Modules_Articles_Before_SetLastArticle', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::beforeSetLastArticle', @pluginId, 0),
+(NULL, 'Shopware_CronJob_RefreshSimilarShown', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshSimilarShown', @pluginId, 0);
+
 
 
 CREATE TABLE IF NOT EXISTS `s_articles_top_seller_ro` (
