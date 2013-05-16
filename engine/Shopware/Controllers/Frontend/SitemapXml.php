@@ -141,7 +141,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 				a.id,
 				DATE(a.changetime) as changed
 			FROM s_articles a
-                INNER JOIN s_articles_categories ac
+                INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = a.id
                     AND ac.categoryID = ?
                 INNER JOIN s_categories c

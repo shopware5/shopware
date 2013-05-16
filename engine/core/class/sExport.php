@@ -548,7 +548,7 @@ class sExport
 		if(!empty($this->sSettings["categoryID"]))
 		{
 			$sql_add_join[] = "
-                INNER JOIN s_articles_categories act
+                INNER JOIN s_articles_categories_ro act
                     ON  act.articleID = a.id
                     AND act.categoryID = {$this->sSettings["categoryID"]}
                 INNER JOIN s_categories c
@@ -780,7 +780,7 @@ class sExport
 				SELECT articleID
 				FROM
 					s_export_categories as ec,
-					s_articles_categories as ac
+					s_articles_categories_ro as ac
 				WHERE feedID={$this->sFeedID}
 				AND ec.categoryID=ac.categoryID
 				GROUP BY articleID
@@ -1105,7 +1105,7 @@ class sExport
 			$sql_add_join
 			LEFT JOIN (
 				SELECT dc.dispatchID
-				FROM s_articles_categories ac,
+				FROM s_articles_categories_ro ac,
 				s_premium_dispatch_categories dc
 				WHERE ac.articleID={$basket['articleID']}
 				AND dc.categoryID=ac.categoryID
@@ -1215,7 +1215,7 @@ class sExport
 
 			LEFT JOIN (
 				SELECT dc.dispatchID
-				FROM s_articles_categories ac,
+				FROM s_articles_categories_ro ac,
 				s_premium_dispatch_categories dc
 				WHERE ac.articleID={$basket['articleID']}
 				AND dc.categoryID=ac.categoryID

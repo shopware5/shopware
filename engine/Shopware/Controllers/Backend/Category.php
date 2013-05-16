@@ -24,7 +24,7 @@
 
 /**
  * Shopware Categories
- * 
+ *
  * Backend Controller for the category backend module.
  * Displays all data in an Ext JS TreePanel and allows to delete,
  * add and edit items. On the detail page the category data is displayed and can be edited
@@ -91,19 +91,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         }
         return $this->repository;
-    }
-
-    /**
-     * Helper Method to get access to the article repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-        return $this->articleRepository;
     }
 
     /**
@@ -208,8 +195,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * Internal function which is used to remove the passed article ids
      * from the assigned category.
-     * @param $categoryId
-     * @param $articleIds
+     *
+     * @param int $categoryId
+     * @param array $articleIds
      * @return array
      */
     protected function removeCategoryArticles($categoryId, $articleIds)
@@ -221,31 +209,33 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         if (empty($categoryId)) {
             return array('success' => false, 'error' => 'No category id passed.');
         }
-        $statement = Shopware()->Db()->prepare("DELETE FROM s_articles_categories WHERE categoryID = :categoryId AND articleID = :articleId");
+
+        /** @var \Shopware\Models\Category\Category $category */
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
 
         $counter = 0;
-        foreach($articleIds as $articleId) {
+        foreach ($articleIds as $articleId) {
             if (empty($articleId)) {
                 continue;
             }
 
-            $statement->execute(array(
-                ':articleId'  => $articleId,
-                ':categoryId' => $categoryId
-            ));
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->removeCategory($category);
+
             $counter++;
         }
-        $this->cleanUpAssignments();
+
+        Shopware()->Models()->flush();
+
         return array('success' => true, 'counter' => $counter);
     }
-
-
 
     /**
      * Helper function to add multiple articles to an category.
      *
-     * @param $categoryId
-     * @param $articleIds
+     * @param int $categoryId
+     * @param array $articleIds
      * @return array
      */
     protected function addCategoryArticles($categoryId, $articleIds)
@@ -258,25 +248,23 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return array('success' => false, 'error' => 'No category id passed.');
         }
 
+        /** @var \Shopware\Models\Category\Category $category */
         $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
 
-        if (!($category instanceof \Shopware\Models\Category\Category)) {
-            return array('success' => false, 'error' => 'Category no more exist!');
-        }
-
         $counter = 0;
-        foreach($articleIds as $articleId) {
+        foreach ($articleIds as $articleId) {
             if (empty($articleId)) {
                 continue;
             }
-            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
 
-            if (!($article instanceof \Shopware\Models\Article\Article)) {
-                continue;
-            }
-            $this->createAssignment($category, $article);
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->addCategory($category);
+
             $counter++;
         }
+
+        Shopware()->Models()->flush();
 
         return array('success' => true, 'counter' => $counter);
     }
@@ -437,7 +425,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         if (!empty($search)) {
             $search = '%' . $search . '%';
-            $conditions = " 
+            $conditions = "
             AND (
                    s_articles.name LIKE '".$search."'
                 OR s_articles_details.ordernumber LIKE '".$search."'
@@ -483,7 +471,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      * Controller action which is used to get a paginated
      * list of all assigned category articles.
      */
-    public function getCategoryArticlesAction() {
+    public function getCategoryArticlesAction()
+    {
         $categoryId = $this->Request()->getParam('categoryId', null);
         $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
@@ -551,35 +540,21 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * moves a category by the categoryId to a new position or under a new parent node
+     * moves a category by the categoryId under a new parent node
      */
     public function moveTreeItemAction()
     {
         $itemId     = (int) $this->Request()->getParam('id');
         $parentId   = (int) $this->Request()->getParam('parentId', 1);
-        $position   = (int) $this->Request()->getParam('position');
 
         /** @var $item \Shopware\Models\Category\Category */
         $item = $this->getRepository()->find($itemId);
-        $item->setPosition($position);
 
         /** @var $parent \Shopware\Models\Category\Category */
         $parent = $this->getRepository()->find($parentId);
 
-        if ($item->getParent()->getId() !== $parent->getId()) {
-            $item->setParent($parent);
-            Shopware()->Models()->flush();
-
-            /**@var $article \Shopware\Models\Article\Article */
-            foreach($item->getArticles() as $article) {
-                $this->createAssignment($item, $article);
-            }
-
-            $this->cleanUpAssignments();
-        } else {
-            $item->setParent($parent);
-            Shopware()->Models()->flush();
-        }
+        $item->setParent($parent);
+        Shopware()->Models()->flush($item);
 
         $this->View()->assign(array(
             'success' => true
@@ -593,30 +568,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
-            /** @var $item \Shopware\Models\Category\Category */
-            $item = $this->getRepository()->find($categoryId);
-            $item->setPosition($key);
+            /** @var $category \Shopware\Models\Category\Category */
+            $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+            $category->setPosition($key);
         }
         Shopware()->Models()->flush();
 
         $this->View()->assign(array( 'success' => true));
-    }
-
-    /**
-     * @param $category \Shopware\Models\Category\Category
-     * @param $article \Shopware\Models\Article\Article
-     */
-    protected function createAssignment($category, $article) {
-        if ($category->getId() === 1) {
-            return;
-        }
-        $sql = "INSERT IGNORE INTO s_articles_categories (id, categoryID, articleID)
-                VALUES (NULL, ?, ?)";
-
-        Shopware()->Db()->query($sql, array($category->getId(), $article->getId()));
-        if ($category->getParent() instanceof \Shopware\Models\Category\Category) {
-            $this->createAssignment($category->getParent(), $article);
-        }
     }
 
     /**
@@ -650,13 +608,16 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
 
-            $parent = $this->getRepository()->find($params['parentId']);
-            $categoryModel->setParent($parent);
+            $parentCategory = $this->getRepository()->find($params['parentId']);
 
-            if ($parent->getChildren()->count() === 0 && $parent->getArticles()->count() > 0) {
+            $categoryModel->setParent($parentCategory);
+
+            // If Leaf-Category gets childcategory move all assignments to new childcategory
+            if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
                 /** @var $article \Shopware\Models\Article\Article **/
-                foreach($parent->getArticles() as $article) {
-                    $article->getCategories()->add($categoryModel);
+                foreach ($parentCategory->getArticles() as $article) {
+                    $article->removeCategory($parentCategory);
+                    $article->addCategory($categoryModel);
                 }
             }
 
@@ -689,44 +650,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 return;
             }
 
+            // Doctrine removes all child-categories and assignments of parent and child categories
             Shopware()->Models()->remove($result);
             Shopware()->Models()->flush();
-
-            $this->cleanUpAssignments();
 
             $this->View()->assign(array('success' => true));
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
-
-    protected function cleanUpAssignments()
-    {
-        $sql = "
-            SELECT STRAIGHT_JOIN ac1.id
-            FROM s_articles_categories ac1
-
-            INNER JOIN s_categories c1
-                ON c1.parent = ac1.categoryID
-
-            LEFT JOIN s_articles_categories ac2
-                ON c1.id = ac2.categoryID
-                AND ac2.articleID = ac1.articleID
-
-            GROUP BY ac1.articleID, ac1.categoryID
-            HAVING COUNT(ac2.id) = 0
-            LIMIT 0, 40"
-        ;
-
-        $deleteStatement = Shopware()->Db()->prepare("DELETE FROM s_articles_categories WHERE id = :id");
-        do {
-            $result = Shopware()->Db()->fetchCol($sql);
-            foreach($result as $id) {
-                $deleteStatement->execute(array('id' => $id));
-            }
-        } while (count($result) > 0);
-    }
-
 
     /**
      * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
@@ -744,6 +676,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         }
         $data['customerGroups'] = $customerGroups;
+
         return $data;
     }
 
