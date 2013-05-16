@@ -31,8 +31,8 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/model/group"}
-Ext.define('Shopware.apps.Property.model.Group', {
+//{block name="backend/property/model/option"}
+Ext.define('Shopware.apps.Property.model.Option', {
 
     /**
      * Extends the standard ExtJS 4
@@ -46,10 +46,9 @@ Ext.define('Shopware.apps.Property.model.Group', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/Group/fields"}{/block}
-        { name: 'id',         type: 'integer' },
-        { name: 'name',       type: 'string' },
-        { name: 'filterable', type: 'boolean' }
+		//{block name="backend/property/model/option/fields"}{/block}
+        { name: 'id',    type: 'integer' },
+        { name: 'value', type: 'string' }
     ],
 
     /**
@@ -65,13 +64,11 @@ Ext.define('Shopware.apps.Property.model.Group', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getGroups"}',
-            create:  '{url controller="property" action="createGroup"}',
-            update:  '{url controller="property" action="updateGroup"}',
-            destroy: '{url controller="property" action="deleteGroup"}'
+            read:    '{url controller="property" action="getOptions"}',
+            create:  '{url controller="property" action="createOption"}',
+            update:  '{url controller="property" action="updateOption"}',
+            destroy: '{url controller="property" action="deleteOption"}'
         },
-
-
 
         /**
          * Configure the data reader

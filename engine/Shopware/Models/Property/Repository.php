@@ -135,6 +135,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property groups
      * with their options and attributes.
+     * @deprecated no longer needed
      * @return \Doctrine\ORM\Query
      */
     public function getGroupsQuery()
@@ -146,6 +147,7 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     * @deprecated no longer needed
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getGroupsQueryBuilder()
@@ -159,6 +161,64 @@ class Repository extends ModelRepository
                 ->orderBy('groups.position')
                 ->orderBy('relations.position');
 
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property sets
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSetsQuery()
+    {
+        $builder = $this->getSetsQueryBuilder();
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSetsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSetsQueryBuilder()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('groups', 'attribute'))
+                ->from('Shopware\Models\Property\Group', 'groups')
+                ->leftJoin('groups.attribute', 'attribute')
+                ->orderBy('groups.position');
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property set assignments
+     *
+     * @param $setId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSetAssignsQuery($setId)
+    {
+        $builder = $this->getSetAssignsQueryBuilder($setId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSetAssignsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $setId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSetAssignsQueryBuilder($setId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('relations.id', 'groups.id as groupId', 'relations.optionId','relations.position', 'option.name'))
+                ->from('Shopware\Models\Property\Relation', 'relations')
+                ->leftJoin('relations.group', 'groups')
+                ->leftJoin('relations.option', 'option')
+                ->where('groups.id = ?1')
+                ->setParameter(1, $setId)
+                ->orderBy('relations.position');
         return $builder;
     }
 
