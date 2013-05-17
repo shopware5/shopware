@@ -302,13 +302,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         stores['priceSurchargeStore'] = priceSurchargeStore;
         stores['articleConfiguratorSet'] = articleConfiguratorSet;
 
-        // Place the category store on the main application to prevent
-        // multiple instances of the store
-        if(!globalApp.hasOwnProperty('articleCategoryTreeStore')) {
-            globalApp.articleCategoryTreeStore = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
-        }
-
-        stores['categories'] = Shopware.app.Application.articleCategoryTreeStore;
+        stores['categories'] = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
 
         return stores;
     },
@@ -514,7 +508,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         if(!me.subApplication.hasOwnProperty('splitViewActive') || !me.subApplication.splitViewActive) {
             return false;
         }
-        
+
         // Cache the last selected row, so the user will not be
 		// interrupted in the split view mode
 		if(options.hasOwnProperty('selection')) {
