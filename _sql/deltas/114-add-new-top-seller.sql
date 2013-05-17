@@ -10,7 +10,7 @@ INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginI
 (NULL, 'Shopware_Modules_Articles_GetArticleCharts', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::afterTopSellerSelected', @pluginId, 0),
 (NULL, 'Enlight_Bootstrap_InitResource_TopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSellerResource', @pluginId, 0),
 (NULL, 'Enlight_Controller_Action_Backend_Config_InitTopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSeller', @pluginId, 0),
-(NULL, 'Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::getTopSellerBackendController', 88, 0),
+(NULL, 'Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::getTopSellerBackendController', @pluginId, 0),
 (NULL, 'Shopware_CronJob_RefreshTopSeller', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshTopSeller', @pluginId, 0),
 (NULL, 'Shopware\\Models\\Article\\Article::postUpdate', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshArticle', @pluginId, 0),
 (NULL, 'Shopware\\Models\\Article\\Article::postPersist', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshArticle', @pluginId, 0),
