@@ -158,6 +158,6 @@ class Manager
             return $hash;
         }
 
-        return $encoder->generate($password);
+        return $encoder->encodePassword($password);
     }
 }
