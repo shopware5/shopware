@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $time = $data['routerlastupdateTime'];
 
-        $datetime = $date . ' ' . $time;
+        $datetime = $date . 'T' . $time;
 
 		$data['routerlastupdate'] = $datetime;
 
@@ -325,10 +325,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareSeoConfig()
     {
-        $datetime = date_create_from_format('Y-m-d H:i', Shopware()->Config()->routerlastupdate);
+        $formatted = trim(str_replace('T', ' ', Shopware()->Config()->routerlastupdate));
+        $datetime = date_create_from_format('Y-m-d H:i:s', $formatted);
+
         if ($datetime) {
             $date = $datetime ->format('d.m.Y');
-            $time = $datetime ->format('H:i');
+            $time = $datetime ->format('H:i:s');
         } else {
             $date = null;
             $time = null;

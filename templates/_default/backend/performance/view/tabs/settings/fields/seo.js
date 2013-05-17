@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                         fieldLabel: ' ',
                         labelSeparator: '',
                         name: 'seo[routerlastupdateTime]',
-                        xtype: 'timefield'
+                        xtype: 'hidden'
                     }
                 ]
             }
