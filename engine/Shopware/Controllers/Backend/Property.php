@@ -246,7 +246,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
+        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(array('success' => false, 'message' => 'Option not found'));
             return;
@@ -429,7 +429,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
+        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(array('success' => false, 'message' => 'Option not found'));
             return;
