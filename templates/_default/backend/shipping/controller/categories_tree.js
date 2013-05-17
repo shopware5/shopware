@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
                 result =  Ext.JSON.decode(result.responseText);
 
                 Ext.each(result.data, function(item) {
-                    tree.expandPath('/root' + item, 'id');
+                    tree.expandPath('/1' + item, 'id');
                 });
             }
         });
