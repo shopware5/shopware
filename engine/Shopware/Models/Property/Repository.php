@@ -225,7 +225,7 @@ class Repository extends ModelRepository
         if (!empty($limit)) {
             $builder->setMaxResults($limit);
         }
-        return $builder->getQuery();
+        return $this->getForceIndexQuery($builder->getQuery(), 'get_options_query', false);
     }
 
     /**
