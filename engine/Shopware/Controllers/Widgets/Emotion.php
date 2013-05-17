@@ -223,6 +223,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 		    $data['thumbnail_size'] = 3;
 	    }
 
+        if($category === null) {
+            return $data;
+        }
+
         // Get the category model for the given category ID
         /** @var $category \Shopware\Models\Category\Category */
         $category = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
