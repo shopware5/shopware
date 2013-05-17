@@ -31,6 +31,7 @@
 
 namespace Shopware\Models\Property;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\Query\SqlWalker;
 
 /**
  * todo@all: Documentation
@@ -257,7 +258,7 @@ class Repository extends ModelRepository
     public function getSetAssignsQuery($setId)
     {
         $builder = $this->getSetAssignsQueryBuilder($setId);
-        return $builder->getQuery();
+        return $this->getForceIndexQuery($builder->getQuery(), null, true);
     }
 
     /**
@@ -273,10 +274,30 @@ class Repository extends ModelRepository
                 ->from('Shopware\Models\Property\Relation', 'relations')
                 ->leftJoin('relations.group', 'groups')
                 ->leftJoin('relations.option', 'option')
-                ->where('groups.id = ?1')
+                ->where('relations.groupId = ?1')
                 ->setParameter(1, $setId)
                 ->orderBy('relations.position');
+
         return $builder;
+    }
+
+    /**
+     * Helper function to set the FORCE INDEX path.
+     * @param $query \Doctrine\ORM\Query
+     * @param $index String
+     * @param bool $straightJoin
+     * @return \Doctrine\ORM\Query
+     */
+    private function getForceIndexQuery($query, $index = null, $straightJoin = false)
+    {
+        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        if ($index !== null) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        }
+        if ($straightJoin) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        }
+        return $query;
     }
 
     /**
