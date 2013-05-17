@@ -60,6 +60,10 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 		}
     },
 
+    refs: [
+        { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
+    ],
+
     /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
@@ -529,6 +533,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getController('Detail').reconfigureAssociationComponents(article);
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
+
+                me.getVariantListing().getStore().load();
             }
         });
     },
