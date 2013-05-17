@@ -1049,7 +1049,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $options = array();
                 foreach ($mappingData['rules'] as $ruleData) {
                     $rule = new \Shopware\Models\Article\Image\Rule();
-                    $option = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $ruleData['optionId']);
+                    $option = Shopware()->Models()->getReference('Shopware\Models\Article\Configurator\Option', $ruleData['optionId']);
                     $rule->setMapping($mapping);
                     $rule->setOption($option);
                     $mapping->getRules()->add($rule);
@@ -1086,9 +1086,22 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $imageData['path'] = null;
         $imageData['parent'] = $parent;
 
-        $details = $this->getRepository()->getDetailsForOptionIdsQuery($articleId, $options)->getResult();
+        $join = '';
+        foreach($options as $option) {
+            $alias = 'alias'. $option->getId();
+            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias'. $option->getId() .
+                    ' ON ' . $alias . '.option_id = ' . $option->getId() .
+                    ' AND ' . $alias . '.article_id = d.id ';
+        }
+        $sql = "SELECT d.id
+                FROM s_articles_details d
+        " . $join . "
+        WHERE d.articleID = " . (int) $articleId;
 
-        foreach ($details as $detail) {
+        $details = Shopware()->Db()->fetchCol($sql);
+
+        foreach ($details as $detailId) {
+            $detail = Shopware()->Models()->getReference('Shopware\Models\Article\Detail', $detailId);
             $image = new \Shopware\Models\Article\Image();
             $image->fromArray($imageData);
             $image->setArticleDetail($detail);
