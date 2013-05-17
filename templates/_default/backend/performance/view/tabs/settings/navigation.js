@@ -48,14 +48,56 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
     useArrows: true,
     displayField: 'text',
 
+    data: {
+        expanded: true,
+        children: [{
+            text: "{s name=navigation/general}General{/s}",
+            expanded: true,
+            children: [{
+                text: "{s name=navigation/cache}HTTP Cache{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-http-cache'
+            }, {
+                text: "{s name=navigation/seo}SEO{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-seo'
+            }, {
+                text: "{s name=navigation/search}Search{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-search'
+            }, {
+                text: "{s name=navigation/categories}Categories{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-categories'
+            },{
+                text: "{s name=navigation/various}Various{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-various'
+            }]
+        }, {
+            text: "{s name=navigation/crossselling}CrossSelling{/s}",
+            expanded: true,
+            children: [{
+                text: "{s name=navigation/topseller}TopSeller{/s}",
+                name: '21',
+                leaf: true,
+                internalName: 'performance-tabs-settings-topseller'
+            }, {
+                text: "{s name=navigation/otherCustomers}Other customers{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-customers'
+            }]
+        }]
+	},
+
 	/*
 	 * The internalName of each item is the xtype of the corresponding fieldset
-	 * 
+	 *
 	 * If internalName is empty or has no fieldSet associated, all fieldSets will be hidden
 	 */
     listeners: {
     	itemclick: function(tree, record, item, index, e, eOpts) {
-    		var internalName = record.get('internalName');
+    		var internalName = record.raw.internalName;
     		this.fireEvent('itemClicked', internalName)
     	},
         beforeitemclick: function(tree, record, item, index, e, eOpts) {
@@ -72,7 +114,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
      */
     initComponent: function() {
     	var me = this;
-    	
+
+    	me.root = Ext.clone(me.data);
     	me.addEvents('itemClicked');
     	
     	me.callParent(arguments);

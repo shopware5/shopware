@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Performance', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Info', 'Config', 'Tree' ],
+    stores:[ 'Info', 'Config' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
@@ -104,8 +104,7 @@ Ext.define('Shopware.apps.Performance', {
         'Search',
         'Categories',
         'Various',
-        'Customer',
-        'Tree'
+        'Customer'
     ],
 
     bulkLoad: true,

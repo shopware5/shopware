@@ -56,9 +56,7 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
     run: function() {
         var me = this;
 
-        me.mainWindow = me.subApplication.getView('main.Window').create({
-				treeStore: me.getStore('Tree')
-		}).show();
+        me.mainWindow = me.subApplication.getView('main.Window').create().show();
 
         me.infoStore = me.getStore('Info').load(function() {
             me.getInfo().bindStore(me.infoStore);
