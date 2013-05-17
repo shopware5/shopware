@@ -28,7 +28,7 @@ engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
 tests/Shopware/TempFiles/
-./cache/
+cache/
 
 
 # User provided content
