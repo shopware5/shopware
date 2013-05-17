@@ -86,6 +86,21 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
                     me.getForm().submit();
                 }
             },
+
+            'performance-tabs-cache-form': {
+                actioncomplete: function(form, action) {
+                    me.getStore('Info').load({
+                        callback: function(records, operation) {
+                            Shopware.Notification.createGrowlMessage(
+                                    me.infoTitle,
+                                    me.infoMessageSuccess,
+                                    me.infoTitle
+                            );
+                        }
+                    });
+                }
+            },
+
             'performance-tabs-cache-main button[action=select-all]': {
                 click: function(button, event) {
                     me.getForm().getForm().getFields().each(function(item) {
