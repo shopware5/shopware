@@ -173,11 +173,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Count blog articles
      *
      * @param $shopId
-     * @param $offset
-     * @param $limit
      * @return int
      */
-    public function countBlogs($shopId, $offset, $limit)
+    public function countBlogs($shopId)
     {
         $this->registerShop($shopId);
 

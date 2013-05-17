@@ -87,6 +87,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'seo',
+                        showEvent: 'showMultiRequestTasks',
                         title: '{s name=fieldset/seo/buildIndex}Build SEO-Index{/s}'
                     },
                     {

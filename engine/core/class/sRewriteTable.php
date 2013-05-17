@@ -336,8 +336,9 @@ class sRewriteTable
 			AND a.changetime > ?
 			GROUP BY a.id
 			ORDER BY a.changetime, a.id
-			LIMIT {$limit}
 		";
+        $sql = Shopware()->Db()->limit($sql, $limit);
+
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
             Shopware()->Shop()->get('parentID'),
             Shopware()->Shop()->getId(),
@@ -423,12 +424,8 @@ class sRewriteTable
      */
     public function sCreateRewriteTableContent($offset=null, $limit=null)
     {
-        $limitSql = '';
-        if (isset($offset) && isset($limit)) {
-            $limitSql = "LIMIT {$offset}, {$limit}";
-        }
+        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_emarketing_promotion_main`", $limit, $offset);
 
-        $sql = "SELECT id, description as name FROM `s_emarketing_promotion_main` {$limitSql}";
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {
@@ -438,7 +435,7 @@ class sRewriteTable
             }
         }
 
-        $sql = "SELECT id, name, ticket_typeID FROM `s_cms_support` {$limitSql}";
+        $sql = Shopware()->Db()->limit("SELECT id, name, ticket_typeID FROM `s_cms_support`", $limit, $offset);
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {
@@ -448,7 +445,7 @@ class sRewriteTable
             }
         }
 
-        $sql = "SELECT id, description as name FROM `s_cms_static` WHERE link='' {$limitSql}";
+        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_cms_static` WHERE link=''", $limit, $offset);
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {
@@ -458,7 +455,7 @@ class sRewriteTable
             }
         }
 
-        $sql = "SELECT id, description as name FROM `s_cms_groups` {$limitSql}";
+        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_cms_groups`", $limit, $offset);
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {

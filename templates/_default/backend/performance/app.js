@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Performance', {
         'main.Window',
         'main.Categories',
         'main.MultiRequestDialog',
+        'main.MultiRequestTasks',
 
         'tabs.cache.Main',
         'tabs.cache.Form',

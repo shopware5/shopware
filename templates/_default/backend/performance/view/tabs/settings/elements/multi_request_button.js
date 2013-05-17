@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestBu
      */
     event: '',
     title: '',
+    showEvent: 'showMultiRequestDialog',
 
     /**
      * Initialize the button
@@ -74,10 +75,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestBu
             margin: '0 0 10 0',
             text: me.title,
             handler: function() {
-                me.fireEvent('showMultiRequestDialog', me.event, me.up('fieldset'));
+                me.fireEvent(me.showEvent, me.event, me.up('fieldset'));
             }
         };
-
     }
 
 });
