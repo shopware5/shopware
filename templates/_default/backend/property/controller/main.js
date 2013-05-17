@@ -200,7 +200,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 var optionId = item.data.optionId;
                 if(record.data.id == item.data.optionId) {
                     //record already assigned
-                    Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle,me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
                     me.subApplication.groupStore.load();
                     assignStore.load();
                     alreadyAssigned = true;
