@@ -1,0 +1,4 @@
+From: feature/next/sw-5423-optimize-article-detail-page
+To: next
+Conflict: (content) Merge conflict in engine/core/class/sCategories.php
+	MODIFY|engine/core/class/sCategories.php
