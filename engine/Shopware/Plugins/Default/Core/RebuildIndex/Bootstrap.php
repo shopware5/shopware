@@ -181,9 +181,9 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
          */
         $refreshStrategy = $this->Application()->Config()->get('seoRefreshStrategy');
 
-        if ($refreshStrategy == self::STRATEGY_LIVE) {
+//        if ($refreshStrategy == self::STRATEGY_LIVE) {
             Shopware()->SeoIndex()->refreshSeoIndex();
-        }
+//        }
 
     }
 
@@ -202,7 +202,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Plugin event listener function which is fired
      * when the similar shown resource has to be initialed.
-     * @return Shopware_Components_SimilarShown
+     * @return Shopware_Components_SearchIndex
      */
     public function initSearchIndexResource()
     {
@@ -231,7 +231,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Plugin event listener function which is fired
      * when the also bought resource has to be initialed.
-     * @return Shopware_Components_AlsoBought
+     * @return Shopware_Components_SeoIndex
      */
     public function initSeoIndexResource()
     {

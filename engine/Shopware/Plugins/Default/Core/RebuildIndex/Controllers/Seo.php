@@ -31,6 +31,26 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 {
 
     /**
+     * Helper function to get the new seo index component with auto completion
+     * @return Shopware_Components_SeoIndex
+     */
+    public function SeoIndex()
+    {
+        return Shopware()->SeoIndex();
+    }
+
+    /**
+     * Helper function to get the sRewriteTable class with auto completion.
+     * @return sRewriteTable
+     */
+    public function RewriteTable()
+    {
+        return Shopware()->Modules()->RewriteTable();
+    }
+
+
+
+    /**
      * Clean up seo links. remove links of non-existing categories, articles...
      */
     public function initSeoAction()
@@ -38,10 +58,10 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        Shopware()->SeoIndex()->registerShop($shopId);
+        $this->SeoIndex()->registerShop($shopId);
 
-        Shopware()->Modules()->RewriteTable()->baseSetup();
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableCleanup();
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableCleanup();
 
 
         $this->View()->assign(array(
@@ -54,17 +74,35 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function finishSeoAction()
     {
-        Shopware()->SeoIndex()->clearRouterRewriteCache();
+        $this->SeoIndex()->clearRouterRewriteCache();
     }
 
-    /**
-     * Static seo links will be create within one request
-     */
-    public function staticCountAction()
+
+    public function getCountAction()
     {
+        $shopId = (int) $this->Request()->getParam('shop', 1);
+
+        $category = $this->SeoIndex()->countCategories($shopId);
+        $article = $this->SeoIndex()->countArticles($shopId);
+        $blog = $this->SeoIndex()->countBlogs($shopId);
+        $emotion = $this->SeoIndex()->countEmotions($shopId);
+
+        $statistic = 1;
+        $content = 0;
+        if ($shopId === 1) {
+            $content = $this->SeoIndex()->countContent();
+        }
+
         $this->View()->assign(array(
             'success' => true,
-            'data' => array('count' => 1)
+            'data' => array('counts' => array(
+                'category' => $category,
+                'article' => $article,
+                'blog' => $blog,
+                'emotion' => $emotion,
+                'statistic' => $statistic,
+                'content' => $content
+            ))
         ));
     }
 
@@ -73,31 +111,18 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoStaticAction()
     {
+
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        Shopware()->SeoIndex()->registerShop($shopId);
+        $this->SeoIndex()->registerShop($shopId);
 
-        Shopware()->Modules()->RewriteTable()->baseSetup();
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableStatic();
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableStatic();
 
         $this->View()->assign(array(
             'success' => true
         ));
-    }
-
-    /**
-     * Returns the number of categories available
-     */
-    public function categoryCountAction()
-    {
-        $count = Shopware()->SeoIndex()->countCategories(1);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
-        ));
-
     }
 
     /**
@@ -105,33 +130,19 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoCategoryAction()
     {
+
         $offset = $this->Request()->getParam('offset');
-        $limit = $this->Request()->getParam('limit');
+        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = Shopware()->SeoIndex()->registerShop($shopId);
+        $shop = $this->SeoIndex()->registerShop($shopId);
 
-        Shopware()->Modules()->RewriteTable()->baseSetup();
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableCategories($offset, $limit);
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableCategories($offset, $limit);
 
         $this->View()->assign(array(
             'success' => true
-        ));
-    }
-
-    /**
-     * Count number of blogCategories to create links for
-     */
-    public function blogCountAction()
-    {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
-
-        $count = Shopware()->SeoIndex()->countBlogs($shopId);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
         ));
     }
 
@@ -140,33 +151,19 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoBlogAction()
     {
-        $offset = $this->Request()->getParam('offset');
-        $limit = $this->Request()->getParam('limit');
+
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = Shopware()->SeoIndex()->registerShop($shopId);
+        $shop = $this->SeoIndex()->registerShop($shopId);
 
-        Shopware()->Modules()->RewriteTable()->baseSetup();
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableBlog($offset, $limit);
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit);
 
         $this->View()->assign(array(
             'success' => true
-        ));
-    }
-
-    /**
-     * Count number of articles which will be updated
-     */
-    public function articleCountAction()
-    {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
-
-        $count = Shopware()->SeoIndex()->countArticles($shopId);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
         ));
     }
 
@@ -175,45 +172,31 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoArticleAction()
     {
-        $offset = $this->Request()->getParam('offset');
-        $limit = $this->Request()->getParam('limit');
+
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = Shopware()->SeoIndex()->registerShop($shopId);
+        $shop = $this->SeoIndex()->registerShop($shopId);
 
-        list($cachedTime, $elementId, $shopId) = Shopware()->SeoIndex()->getCachedTime();
+        list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
 
-        Shopware()->Modules()->RewriteTable()->baseSetup();
+        $this->RewriteTable()->baseSetup();
 
         $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
-        Shopware()->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
+        $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
 
-        $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTableArticles($cachedTime, $limit);
+        $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles($cachedTime, $limit);
         if ($resultTime === $cachedTime) {
             $resultTime = $currentTime;
         }
         if($resultTime !== $currentTime) {
-            Shopware()->SeoIndex()->setCachedTime($resultTime, $elementId, $shopId);
+            $this->SeoIndex()->setCachedTime($resultTime, $elementId, $shopId);
         }
 
         $this->View()->assign(array(
             'success' => true
-        ));
-    }
-
-    /**
-     * Count number of emotions which will be updated
-     */
-    public function emotionCountAction()
-    {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
-
-        $count = Shopware()->SeoIndex()->countEmotions($shopId);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
         ));
     }
 
@@ -222,44 +205,21 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoEmotionAction()
     {
-        $offset = $this->Request()->getParam('offset');
-        $limit = $this->Request()->getParam('limit');
+
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = Shopware()->SeoIndex()->registerShop($shopId);
+        $shop = $this->SeoIndex()->registerShop($shopId);
 
         // Make sure a template is available
-        Shopware()->Modules()->RewriteTable()->baseSetup();
+        $this->RewriteTable()->baseSetup();
 
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableCampaigns($offset, $limit);
+        $this->RewriteTable()->sCreateRewriteTableCampaigns($offset, $limit);
 
         $this->View()->assign(array(
             'success' => true
-        ));
-    }
-
-    /**
-     * Count number of content items
-     */
-    public function contentCountAction()
-    {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
-
-        // SEO link generation is only needed once - so we return 0 for anything but the default shop
-        if ($shopId > 1) {
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => array('count' => 0)
-            ));
-            return;
-        }
-
-        $count = Shopware()->SeoIndex()->countContent();
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
         ));
     }
 
@@ -268,22 +228,22 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoContentAction()
     {
-        $offset = $this->Request()->getParam('offset');
-        $limit = $this->Request()->getParam('limit');
+
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = Shopware()->SeoIndex()->registerShop($shopId);
+        $shop = $this->SeoIndex()->registerShop($shopId);
 
         // Make sure a template is available
-        Shopware()->Modules()->RewriteTable()->baseSetup();
+        $this->RewriteTable()->baseSetup();
 
-        Shopware()->Modules()->RewriteTable()->sCreateRewriteTableContent($offset, $limit);
+        $this->RewriteTable()->sCreateRewriteTableContent($offset, $limit);
 
         $this->View()->assign(array(
             'success' => true
         ));
     }
-
 }
 

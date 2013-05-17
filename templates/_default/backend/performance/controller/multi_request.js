@@ -60,31 +60,36 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
-            batchSize: 100
+            batchSize: 200
         },
+
         seo:  {
             title: '{s name=multi_request/sei}Build index for SEO{/s}',
-            totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
-            requestUrl: '{url controller="Performance" action="initTopSeller"}',
-            batchSize: 100
+            totalCountUrl: '{url controller="Seo" action="getCount"}',
+            requestUrls: {
+                init: '{url controller="Seo" action="initSeo"}',
+                article: '{url controller="Seo" action="seoArticle"}',
+                category: '{url controller="Seo" action="seoCategory"}',
+                emotion: '{url controller="Seo" action="seoEmotion"}',
+                blog: '{url controller="Seo" action="seoBlog"}',
+                statistic: '{url controller="Seo" action="seoStatic"}',
+                content: '{url controller="Seo" action="seoContent"}',
+                finish: '{url controller="Seo" action="finishSeo"}'
+            },
+            batchSize: 200
         },
-        search:  {
-            title: '{s name=multi_request/search}Build index for search{/s}',
-            totalCountUrl: '{url controller="Performance" action="getTopSellerCount"}',
-            requestUrl: '{url controller="Performance" action="initTopSeller"}',
-            batchSize: 100
-        },
+
         similarShown:  {
             title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
-            batchSize: 100
+            batchSize: 200
         },
         alsoBought:  {
             title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
-            batchSize: 100
+            batchSize: 200
         },
         category:  {
             title: '{s name=multi_request/categories}Repair categories{/s}',
@@ -99,67 +104,309 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         me.control({
             'performance-multi-request-button': {
-                'showMultiRequestDialog': me.onShowMultiRequestDialog
+                'showMultiRequestDialog': me.onShowMultiRequestDialog,
+                'showMultiRequestTasks': me.onShowMultiRequestTasks
+            },
+            'performance-main-multi-request-tasks': {
+                'onShopSelected': me.onShopSelected,
+                'startSeoIndex': me.onStartSeoIndex
             },
             'performance-main-multi-request-dialog': {
                 'multiRequestDialogCancelProcess': me.onCancelMultiRequest,
                 'multiRequestDialogStartProcess': me.onStartMultiRequest
             }
-       });
+        });
 
         me.callParent(arguments);
     },
 
+    onShopSelected: function(window, shopId) {
+        var me = this;
+
+        var taskConfig = window.taskConfig;
+
+        Ext.Ajax.request({
+            url: taskConfig.totalCountUrl,
+            params: {
+                shopId: shopId
+            },
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+                taskConfig.totalCounts = json.data.counts;
+
+                window.articleProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.article, 0, taskConfig.totalCounts.article)
+                );
+                window.categoryProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.category, 0, taskConfig.totalCounts.category)
+                );
+                window.emotionProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.emotion, 0, taskConfig.totalCounts.emotion)
+                );
+                window.statisticProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.statistic, 0, taskConfig.totalCounts.statistic)
+                );
+                window.blogProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.blog, 0, taskConfig.totalCounts.blog)
+                );
+                window.contentProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.content, 0, taskConfig.totalCounts.content)
+                );
+
+                window.startButton.enable();
+            }
+        });
+    },
+
+    getSeoArticleRequestConfig: function(window) {
+        var me = this;
+
+        console.log("article size",  window.batchSizeCombo.getValue() );
+        return {
+            name: 'article',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.articleProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.article,
+            totalCount: window.taskConfig.totalCounts.article * 1,
+            snippet: window.snippets.seo.article,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoCategoryRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'category',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.categoryProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.category,
+            totalCount: window.taskConfig.totalCounts.category * 1,
+            snippet: window.snippets.seo.category,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoEmotionRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'emotion',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.emotionProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.emotion,
+            totalCount: window.taskConfig.totalCounts.emotion * 1,
+            snippet: window.snippets.seo.emotion,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoBlogRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'blog',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.blogProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.blog,
+            totalCount: window.taskConfig.totalCounts.blog * 1,
+            snippet: window.snippets.seo.blog,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoStatisticRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'statistic',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.statisticProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.statistic,
+            totalCount: window.taskConfig.totalCounts.statistic * 1,
+            snippet: window.snippets.seo.statistic,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoContentRequestConfig: function(window) {
+        var me = this;
+
+
+        return {
+            name: 'content',
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.contentProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.content,
+            totalCount: window.taskConfig.totalCounts.content * 1,
+            snippet: window.snippets.seo.content,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+
+    getSeoInitRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'init',
+            totalCount: 1,
+            progress: null,
+            requestUrl: me.requestConfig.seo.requestUrls.init,
+            batchSize: 2,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+    getSeoFinishRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            name: 'finish',
+            totalCount: 1,
+            progress: null,
+            requestUrl: me.requestConfig.seo.requestUrls.finish,
+            batchSize: 2,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
+
+    /**
+     * Called after the user hits the 'start' button of the multiRequestDialog
+     */
+    onStartSeoIndex: function(window) {
+        var me = this, configs = [];
+
+        configs.push(me.getSeoInitRequestConfig(window));
+
+        configs.push(me.getSeoArticleRequestConfig(window));
+        configs.push(me.getSeoCategoryRequestConfig(window));
+        configs.push(me.getSeoEmotionRequestConfig(window));
+        configs.push(me.getSeoBlogRequestConfig(window));
+        configs.push(me.getSeoStatisticRequestConfig(window));
+        configs.push(me.getSeoContentRequestConfig(window));
+
+        configs.push(me.getSeoFinishRequestConfig(window));
+
+        me.runRequest(0, window, null, configs);
+    },
+
+
+    /**
+     *
+     */
+    onShowMultiRequestTasks: function(type) {
+        var me = this,
+            config = me.requestConfig[type];
+
+        var window = me.getView('main.MultiRequestTasks').create({
+            title: config.title,
+            currentType: type,
+            taskConfig: config,
+            batchSize: config.batchSize
+        }).show();
+
+        me.cancelOperation = false;
+    },
+    
     /**
      * Runs the actual request
      * Method is called recursively until all data was processed
      */
-    runRequest: function(offset, dialog) {
-        var me = this,
-            type = dialog.currentType,
-            config = me.requestConfig[type],
-            batchSize = config.batchSize,
-            count = config.totalCount;
+    runRequest: function(offset, dialog, currentConfig, configs) {
+        var me = this;
 
+        //support for multiple batch operation.
+        if (currentConfig === null) {
+            //get next request configuration
+            currentConfig = configs.shift();
+        }
 
-        if (offset >= count) {
-            // Enable close button, set progressBar to 'finish'
-            dialog.progressBar.updateProgress(1, me.snippets.done.message, true);
+        var params = currentConfig.params;
+        if (!(Ext.isObject(params))) {
+            params = { };
+        }
 
-            dialog.cancelButton.disable();
-            dialog.closeButton.enable();
+        //last batch size processed?
+        if (offset >= currentConfig.totalCount) {
 
-            // Show 'finished' message
-            Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
+            //is progress bar configured?
+            if (currentConfig.progress) {
+                currentConfig.progress.updateProgress(1, me.snippets.done.message, true);
+            }
 
+            //no more request configurations exists?
+            if (configs.length === 0) {
+                // Enable close button, set progressBar to 'finish'
+                dialog.cancelButton.disable();
+                dialog.closeButton.enable();
+
+                // Show 'finished' message
+                Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
+            } else {
+                //cancel button pushed?
+                if (me.cancelOperation) {
+                    dialog.closeButton.enable();
+                    return;
+                }
+
+                //get next config and call again
+                currentConfig = configs.shift();
+                me.runRequest(0, dialog, currentConfig, configs);
+            }
             return;
         }
 
-         if (me.cancelOperation) {
+        //cancel button pushed?
+        if (me.cancelOperation) {
             dialog.closeButton.enable();
             return;
         }
 
-        // updates the progress bar value and text, the last parameter is the animation flag
-        dialog.progressBar.updateProgress((offset+batchSize)/count, Ext.String.format(me.snippets.process, (offset+batchSize), count), true);
+        //has the current request a progress bar?
+        if (currentConfig.progress) {
+            // updates the progress bar value and text, the last parameter is the animation flag
+            currentConfig.progress.updateProgress(
+                (offset + currentConfig.batchSize) / currentConfig.totalCount,
+                Ext.String.format(currentConfig.snippet, ( offset + currentConfig.batchSize), currentConfig.totalCount),
+                true
+            );
+        }
+
+        //set the params single, to support additional request params
+        params.offset = offset;
+        params.limit  = currentConfig.batchSize;
 
         Ext.Ajax.request({
-            url: config.requestUrl,
+            url: currentConfig.requestUrl,
             method: 'POST',
-            params: {
-                offset: offset,
-                limit: batchSize
-            },
+            params: params,
             success: function(response) {
                 var json = Ext.decode(response.responseText);
 
                 // start recusive call here
-                me.runRequest(offset + batchSize, dialog);
+                me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
             },
-
             failure: function(response) {
                 me.shouldCancel = true;
-                me.runRequest(offset + batchSize, dialog);
+                me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
             }
         });
     },
@@ -169,12 +416,14 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
      */
     onStartMultiRequest: function(dialog) {
         var me = this,
-            type = dialog.currentType;
+            type = dialog.currentType,
+            config = me.requestConfig[type];
 
-        me.requestConfig[type].batchSize = dialog.combo.getValue();
+        config.batchSize = dialog.combo.getValue();
         dialog.combo.disable();
+        config.progress = dialog.progress;
 
-        me.runRequest(0, dialog);
+        me.runRequest(0, dialog, config, []);
     },
 
     /**
