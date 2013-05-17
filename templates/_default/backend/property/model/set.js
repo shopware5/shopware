@@ -31,8 +31,8 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/model/value"}
-Ext.define('Shopware.apps.Property.model.Value', {
+//{block name="backend/property/model/set"}
+Ext.define('Shopware.apps.Property.model.Set', {
 
     /**
      * Extends the standard ExtJS 4
@@ -46,9 +46,13 @@ Ext.define('Shopware.apps.Property.model.Value', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/value/fields"}{/block}
-        { name: 'id',    type: 'integer' },
-        { name: 'value', type: 'string' }
+		//{block name="backend/property/model/set/fields"}{/block}
+        { name: 'id',         type: 'string' }, // id can be 2_4 for child elements
+        { name: 'name',       type: 'string' },
+        { name: 'position',   type: 'integer' },
+        { name: 'comparable', type: 'boolean' },
+        { name: 'isOption',   type: 'boolean' },
+        { name: 'sortMode',   type: 'string' }
     ],
 
     /**
@@ -64,12 +68,11 @@ Ext.define('Shopware.apps.Property.model.Value', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getValues"}',
-            create:  '{url controller="property" action="createValue"}',
-            update:  '{url controller="property" action="updateValue"}',
-            destroy: '{url controller="property" action="deleteValue"}'
+            read:    '{url controller="property" action="getSets"}',
+            create:  '{url controller="property" action="createSet"}',
+            update:  '{url controller="property" action="updateSet"}',
+            destroy: '{url controller="property" action="deleteSet"}'
         },
-
         /**
          * Configure the data reader
          * @object
@@ -78,6 +81,10 @@ Ext.define('Shopware.apps.Property.model.Value', {
             type: 'json',
             root: 'data'
         }
-    }
+    },
+
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Property.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
+    ]
 });
 //{/block}

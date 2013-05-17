@@ -31,6 +31,7 @@
 
 namespace Shopware\Models\Property;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\Query\SqlWalker;
 
 /**
  * todo@all: Documentation
@@ -135,6 +136,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property groups
      * with their options and attributes.
+     * @deprecated no longer needed
      * @return \Doctrine\ORM\Query
      */
     public function getGroupsQuery()
@@ -146,6 +148,7 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     * @deprecated no longer needed
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getGroupsQueryBuilder()
@@ -160,6 +163,141 @@ class Repository extends ModelRepository
                 ->orderBy('relations.position');
 
         return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property sets
+     *
+     * @param $offset
+     * @param $limit
+     * @param $filter
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSetsQuery($offset, $limit, $filter)
+    {
+        $builder = $this->getSetsQueryBuilder($filter);
+
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSetsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSetsQueryBuilder($filter)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('groups', 'attribute'))
+                ->from('Shopware\Models\Property\Group', 'groups')
+                ->leftJoin('groups.attribute', 'attribute')
+                ->orderBy('groups.position');
+
+        if(!empty($filter[0]["value"])) {
+            $builder->andWhere('groups.name LIKE :filter')
+                    ->setParameter('filter', '%' . $filter[0]["value"] . '%');
+        }
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property options
+     *
+     * @param $offset
+     * @param $limit
+     * @param $filter
+     * @return \Doctrine\ORM\Query
+     */
+    public function getOptionsQuery($offset, $limit, $filter)
+    {
+        $builder = $this->getOptionsQueryBuilder($filter);
+
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
+        return $this->getForceIndexQuery($builder->getQuery(), 'get_options_query', false);
+    }
+
+    /**
+     * Helper function to create the query builder for the "getOptionsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $filter
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getOptionsQueryBuilder($filter)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('options'))
+                ->from('Shopware\Models\Property\Option', 'options')
+                ->orderBy('options.name');
+
+        if(!empty($filter[0]["value"])) {
+            $builder->where('options.name LIKE :filter')
+                    ->setParameter('filter', '%' . $filter[0]["value"] . '%');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which selects all property set assignments
+     *
+     * @param $setId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSetAssignsQuery($setId)
+    {
+        $builder = $this->getSetAssignsQueryBuilder($setId);
+        return $this->getForceIndexQuery($builder->getQuery(), null, true);
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSetAssignsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $setId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSetAssignsQueryBuilder($setId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('relations.id', 'groups.id as groupId', 'relations.optionId','relations.position', 'option.name'))
+                ->from('Shopware\Models\Property\Relation', 'relations')
+                ->leftJoin('relations.group', 'groups')
+                ->leftJoin('relations.option', 'option')
+                ->where('relations.groupId = ?1')
+                ->setParameter(1, $setId)
+                ->orderBy('relations.position');
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to set the FORCE INDEX path.
+     * @param $query \Doctrine\ORM\Query
+     * @param $index String
+     * @param bool $straightJoin
+     * @return \Doctrine\ORM\Query
+     */
+    private function getForceIndexQuery($query, $index = null, $straightJoin = false)
+    {
+        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        if ($index !== null) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        }
+        if ($straightJoin) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        }
+        return $query;
     }
 
     /**
@@ -242,6 +380,7 @@ class Repository extends ModelRepository
         $builder->select(array('value'))
                 ->from('Shopware\Models\Property\Value', 'value')
                 ->where('value.optionId = ?0')
+                ->orderBy('value.position', 'ASC')
                 ->setParameter(0, $optionId);
 
         return $builder;

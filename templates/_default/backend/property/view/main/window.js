@@ -34,16 +34,16 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.property-main-window',
     title : '{s name=title}Article properties{/s}',
-    width: 860,
+    width: 1024,
     height: 484, // 16:9 'cause shopware should be HDTV Compatible :P
     stateful: true,
     stateId: 'shopware-property-main-window',
-
     layout: {
         type: 'hbox',
         pack: 'start',
         align: 'stretch'
     },
+
 
     /**
      * Initializes the component and builds up the main interface
@@ -54,20 +54,57 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
     initComponent: function() {
         var me = this;
 
-        me.items = [{
-            xtype: 'property-main-groupTree',
-            groupStore: me.groupStore,
-            flex: 3
-        }, {
-            xtype: 'property-main-filterOptionGrid',
-            filterOptionStore: me.filterOptionStore,
-            flex: 2
-        }, {
-            xtype: 'property-main-valueGrid',
-            valueStore: me.valueStore,
-            flex: 2,
-            disabled: true
-        }];
+        me.items = [
+            {
+                layout: {
+                    type: 'border',
+                    align: 'stretch'
+                },
+                flex: 3,
+                items: [
+                    {
+                        xtype: 'property-main-setGrid',
+                        setStore: me.setStore,
+                        region:'west',
+                        split: true,
+                        flex: 3
+                    },
+                    {
+                        xtype: 'property-main-setAssignGrid',
+                        setAssignStore: me.setAssignStore,
+                        split: true,
+                        region:'center',
+                        flex: 2
+                    }
+                ]
+            },
+            {
+                layout: {
+                    type: 'border',
+                    align: 'stretch'
+                },
+                flex: 3,
+                items: [
+                    {
+                        bodyStyle: 'border-left: 0 none',
+                        style: 'border-left: 0 none',
+                        xtype: 'property-main-groupGrid',
+                        groupStore: me.groupStore,
+                        split: true,
+                        region:'west',
+                        flex: 3
+                    },
+                    {
+                        xtype: 'property-main-optionGrid',
+                        optionStore: me.optionStore,
+                        split: true,
+                        flex: 2,
+                        region:'center',
+                        disabled: true
+                    }
+                ]
+            }
+        ];
 
         me.callParent(arguments);
     }

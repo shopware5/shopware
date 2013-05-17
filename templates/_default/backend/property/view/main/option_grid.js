@@ -29,21 +29,22 @@
  */
 
 //{namespace name=backend/property/view/main}
-//{block name="backend/property/view/main/value_grid"}
-Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
+//{block name="backend/property/view/main/option_grid"}
+Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.property-main-valueGrid',
+    alias: 'widget.property-main-optionGrid',
     addBtn: null,
     sortableColumns: false,
 
+    title: '{s name=option/grid_title}Options{/s}',
     /**
      * Contains all snippets for the controller
      * @object
      */
     snippets: {
-        columnValue:        '{s name=value/column_value}Value{/s}',
-        buttonAddValue:     '{s name=value/button_add_value}Add value{/s}',
-        tooltipDeleteValue: '{s name=value/tooltip_delete_value}Delete this value{/s}'
+        columnOption:        '{s name=option/column_option}Option{/s}',
+        buttonAddOption:     '{s name=option/button_add_option}Add option{/s}',
+        tooltipDeleteOption: '{s name=option/tooltip_delete_option}Delete this option{/s}'
     },
 
     /**
@@ -56,7 +57,7 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
 
         me.registerEvents();
 
-        me.store      = me.valueStore;
+        me.store      = me.optionStore;
         me.editor     = me.getRowEditorPlugin();
         me.viewConfig = me.getViewConfig();
         me.plugins    = [ me.getGridTranslationPlugin(), me.editor ];
@@ -78,11 +79,11 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
              * Event will be fired when the user clicks the delete icon in the
              * action column
              *
-             * @event deleteValue
+             * @event deleteOption
              * @param [object] record
              * @param [object] grid - Associated Ext.view.Table
              */
-            'deleteValue'
+            'deleteOption'
         );
     },
 
@@ -95,7 +96,7 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
         var me = this;
 
         var columns = [{
-            header: me.snippets.columnValue,
+            header: me.snippets.columnOption,
             dataIndex: 'value',
             flex: 1,
             translationEditor: {
@@ -115,10 +116,10 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
                 cls: 'delete',
-                tooltip: me.snippets.tooltipDeleteValue,
+                tooltip: me.snippets.tooltipDeleteOption,
                 handler: function(grid, rowIndex) {
                     var record  = grid.getStore().getAt(rowIndex);
-                    me.fireEvent('deleteValue', record, grid);
+                    me.fireEvent('deleteOption', record, grid);
                 }
             }]
         }];
@@ -135,8 +136,8 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
         var viewConfig = {
             plugins: {
                 ptype: 'gridviewdragdrop',
-                dragGroup: 'valueGridDDGroup',
-                dropGroup: 'valueGridDDGroup'
+                dragGroup: 'optionGridDDGroup',
+                dropGroup: 'optionGridDDGroup'
             }
         };
 
@@ -211,11 +212,11 @@ Ext.define('Shopware.apps.Property.view.main.ValueGrid', {
 
         me.addBtn = Ext.create('Ext.button.Button', {
             xtype: 'button',
-            text: me.snippets.buttonAddValue,
+            text: me.snippets.buttonAddOption,
             iconCls: 'sprite-plus-circle-frame',
             action: 'add',
             handler: function() {
-                var newField = Ext.create('Shopware.apps.Property.model.Value');
+                var newField = Ext.create('Shopware.apps.Property.model.Option');
 
                 this.disable();
                 me.store.add(newField);
