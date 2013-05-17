@@ -129,7 +129,10 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
             height: 200,
             queryMode: 'remote',
             expanded: true,
-            flex: 1
+            flex: 1,
+            root: {
+                id: 1
+            }
         });
 
         return me.treeSelect;
