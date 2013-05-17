@@ -29,12 +29,13 @@
  */
 
 //{namespace name=backend/property/view/main}
-//{block name="backend/Property/view/main/filter_option_grid"}
-Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
+//{block name="backend/Property/view/main/group_grid"}
+Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.property-main-filterOptionGrid',
+    alias: 'widget.property-main-groupGrid',
     addBtn: null,
 
+    title: '{s name=group/grid_title}All Groups{/s}',
     sortableColumns: false,
 
     /**
@@ -42,11 +43,12 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
      * @object
      */
     snippets: {
-        columnName:          '{s name=option/column_name}Name{/s}',
-        columnFilterable:    '{s name=option/column_filterable}Filterable{/s}',
-        tooltipDeleteOption: '{s name=option/tooltip_delete_value}Delete option{/s}',
-        buttonAddOption:     '{s name=option/button_add_option}Add option{/s}',
-        dragText:            '{s name=option/drag_text}Drag and drop to reorganize{/s}'
+        columnName:          '{s name=group/column_name}Name{/s}',
+        columnFilterable:    '{s name=group/column_filterable}Filterable{/s}',
+        tooltipDeleteGroup: '{s name=group/tooltip_delete_value}Delete group{/s}',
+        buttonAddGroup:     '{s name=group/button_add_group}Add group{/s}',
+        search:             '{s name=group/empty_text_search}Search...{/s}',
+        dragText:            '{s name=group/drag_text}Drag and drop to reorganize{/s}'
     },
 
     /**
@@ -62,12 +64,12 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
         me.viewConfig = {
             plugins: {
                 ptype: 'gridviewdragdrop',
-                ddGroup: 'option-group',
+                ddGroup: 'set-assignment-grid-dd',
                 dragText: me.snippets.dragText
             }
         };
 
-        me.store = me.filterOptionStore;
+        me.store = me.groupStore;
 
         me.store.load({
             callback: function() {
@@ -81,6 +83,7 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
         me.plugins    = [ me.getGridTranslationPlugin(), me.editor ];
         me.tbar     = me.getToolbar();
         me.columns  = me.getColumns();
+        me.dockedItems = [ me.getPagingBar() ];
 
         me.callParent(arguments);
     },
@@ -97,11 +100,11 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
              * Event will be fired when the user clicks the delete icon in the
              * action column
              *
-             * @event deleteOption
+             * @event deleteGroup
              * @param [object] record
              * @param [object] grid - Associated Ext.view.Table
              */
-            'deleteOption'
+            'deleteGroup'
         );
     },
 
@@ -199,16 +202,33 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
                 cls: 'delete',
-                tooltip: me.snippets.tooltipDeleteOption,
+                tooltip: me.snippets.tooltipDeleteGroup,
                 handler: function(grid, rowIndex) {
                     var record  = grid.getStore().getAt(rowIndex);
 
-                    me.fireEvent('deleteOption', record, grid);
+                    me.fireEvent('deleteGroup', record, grid);
                 }
             }]
         }];
 
         return columns;
+    },
+
+
+    /**
+     * Creates the paging toolbar for the grid to allow
+     * and store paging. The paging toolbar uses the same store as the Grid
+     *
+     * @return Ext.toolbar.Paging The paging toolbar for the customer grid
+     */
+    getPagingBar: function () {
+        var me = this;
+        return Ext.create('Ext.toolbar.Paging', {
+            store:me.store,
+            dock:'bottom',
+            displayInfo:true
+        });
+
     },
 
     /**
@@ -218,15 +238,15 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
      */
     getToolbar: function() {
         var me      = this,
-            buttons = [];
+            items = [];
 
         me.addBtn = Ext.create('Ext.button.Button', {
             xtype: 'button',
-            text: me.snippets.buttonAddOption,
+            text: me.snippets.buttonAddGroup,
             iconCls: 'sprite-plus-circle-frame',
             action: 'add',
             handler: function() {
-                var newRecord = Ext.create('Shopware.apps.Property.model.FilterOption');
+                var newRecord = Ext.create('Shopware.apps.Property.model.Group');
 
                 this.disable();
                 me.store.add(newRecord);
@@ -234,11 +254,24 @@ Ext.define('Shopware.apps.Property.view.main.FilterOptionGrid', {
             }
         });
 
-        buttons.push(me.addBtn);
+        items.push(me.addBtn);
+        items.push(
+            '->',
+            {
+                xtype: 'textfield',
+                name: 'searchfield',
+                action: 'searchGroups',
+                width: 100,
+                cls: 'searchfield',
+                enableKeyEvents: true,
+                checkChangeBuffer: 500,
+                emptyText: me.snippets.search
+            }
+        );
 
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
-            items: buttons
+            items: items
         });
     }
 });

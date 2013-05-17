@@ -31,8 +31,8 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/model/filter_option"}
-Ext.define('Shopware.apps.Property.model.FilterOption', {
+//{block name="backend/property/model/set_assign"}
+Ext.define('Shopware.apps.Property.model.SetAssign', {
 
     /**
      * Extends the standard ExtJS 4
@@ -46,10 +46,12 @@ Ext.define('Shopware.apps.Property.model.FilterOption', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/filter_option/fields"}{/block}
-        { name: 'id',         type: 'integer' },
-        { name: 'name',       type: 'string' },
-        { name: 'filterable', type: 'boolean' }
+		//{block name="backend/property/model/set_assign/fields"}{/block}
+        { name: 'id', type: 'integer' },
+        { name: 'optionId', type: 'integer' },
+        { name: 'groupId', type: 'integer' },
+        { name: 'position', type: 'integer' },
+        { name: 'name', type: 'string' }
     ],
 
     /**
@@ -65,10 +67,7 @@ Ext.define('Shopware.apps.Property.model.FilterOption', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getOptions"}',
-            create:  '{url controller="property" action="createOption"}',
-            update:  '{url controller="property" action="updateOption"}',
-            destroy: '{url controller="property" action="deleteOption"}'
+            read:    '{url controller="property" action="getSetAssigns"}'
         },
 
 

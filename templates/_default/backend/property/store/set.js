@@ -31,12 +31,13 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/store/value"}
-Ext.define('Shopware.apps.Property.store.Value', {
+//{block name="backend/property/store/set"}
+Ext.define('Shopware.apps.Property.store.Set', {
     extend: 'Ext.data.Store',
-    autoLoad: false,
-    model : 'Shopware.apps.Property.model.Value',
-    remoteSort: false,
-    remoteFilter: false
+    batch: false,
+    clearOnLoad: false,
+    autoLoad: true,
+    remoteFilter: true,
+    model : 'Shopware.apps.Property.model.Set'
 });
 //{/block}

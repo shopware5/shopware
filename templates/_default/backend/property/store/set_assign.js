@@ -31,11 +31,11 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/property/store/filter_option"}
-Ext.define('Shopware.apps.Property.store.FilterOption', {
+//{block name="backend/property/store/set_assign"}
+Ext.define('Shopware.apps.Property.store.SetAssign', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Property.model.FilterOption',
+    model : 'Shopware.apps.Property.model.SetAssign',
     remoteSort: true,
     remoteFilter: true
 });
