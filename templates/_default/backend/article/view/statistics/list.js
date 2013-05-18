@@ -53,12 +53,6 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      */
     cls: Ext.baseCSSPrefix + 'article-statistics-list',
 
-    listeners: {
-        render: function() {
-            this.store.load();
-        }
-    },
-
     sortableColumns: false,
     features: [{
         ftype: 'summary'
