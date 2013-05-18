@@ -525,8 +525,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-            ->setParameter('parent', $id)
-            ->addOrderBy('c.position', 'ASC');
+            ->setParameter('parent', $id);
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();

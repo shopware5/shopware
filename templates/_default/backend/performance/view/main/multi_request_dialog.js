@@ -157,15 +157,6 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             margin: '0 0 10 0',
             allowBlank: false,
             value: me.batchSize,
-            validateOnChange: true,
-            validator: function(value) {
-                if (!value.match(/\d+/)) {
-                    me.startButton.disable();
-                    return false;
-                }
-                me.startButton.enable();
-                return true;
-            },
             editable: true,
             displayField: 'batchSize',
             store: Ext.create('Ext.data.Store', {
@@ -181,7 +172,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                     { batchSize: '100' },
                     { batchSize: '150' },
                     { batchSize: '200' },
-                    { batchSize: '250' }
+                    { batchSize: '250' },
+                    { batchSize: '500' },
+                    { batchSize: '1000' },
+                    { batchSize: '1500' }
                 ]
             })
         });
