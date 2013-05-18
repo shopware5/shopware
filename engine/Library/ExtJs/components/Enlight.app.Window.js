@@ -51,6 +51,12 @@ Ext.define('Enlight.app.Window', {
     focusable: true,
 
     /**
+     * Property which indicates that the window should first just set to hidden before destroying it.
+     * @boolean
+     */
+    hidden: true,
+
+    /**
      * Forces the window to be on front at start up
      * @boolean
      */
