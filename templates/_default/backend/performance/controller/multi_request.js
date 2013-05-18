@@ -167,9 +167,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     getSeoArticleRequestConfig: function(window) {
         var me = this;
 
-        console.log("article size",  window.batchSizeCombo.getValue() );
         return {
-            name: 'article',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.articleProgress,
             requestUrl: me.requestConfig.seo.requestUrls.article,
@@ -185,7 +183,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'category',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.categoryProgress,
             requestUrl: me.requestConfig.seo.requestUrls.category,
@@ -201,7 +198,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'emotion',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.emotionProgress,
             requestUrl: me.requestConfig.seo.requestUrls.emotion,
@@ -217,7 +213,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'blog',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.blogProgress,
             requestUrl: me.requestConfig.seo.requestUrls.blog,
@@ -233,7 +228,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'statistic',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.statisticProgress,
             requestUrl: me.requestConfig.seo.requestUrls.statistic,
@@ -250,7 +244,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
 
         return {
-            name: 'content',
             batchSize: window.batchSizeCombo.getValue(),
             progress: window.contentProgress,
             requestUrl: me.requestConfig.seo.requestUrls.content,
@@ -267,7 +260,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'init',
             totalCount: 1,
             progress: null,
             requestUrl: me.requestConfig.seo.requestUrls.init,
@@ -282,7 +274,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         var me = this;
 
         return {
-            name: 'finish',
             totalCount: 1,
             progress: null,
             requestUrl: me.requestConfig.seo.requestUrls.finish,
