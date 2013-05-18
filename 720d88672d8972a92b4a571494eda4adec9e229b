@@ -1,0 +1,4 @@
+From: feature/next/sw-5398-search-seo-refresh-strategy
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/performance/controller/multi_request.js
+	MODIFY|templates/_default/backend/performance/controller/multi_request.js
