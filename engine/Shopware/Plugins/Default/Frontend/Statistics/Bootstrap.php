@@ -126,7 +126,6 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
         }
 
         if ($this->shouldRefreshLog($request)) {
-            error_log("refresh log" . "\n", 3, '/var/log/test.log');
             $this->cleanupStatistic();
             $this->refreshBasket($request);
             $this->refreshLog($request);
