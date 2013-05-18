@@ -162,11 +162,11 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         $shop = $this->registerShop($shopId);
-
         $parentId = $shop->getCategory()->getId();
-        $categories = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getActiveChildrenList($parentId);
-
-        return count($categories);
+        return Shopware()->Db()->fetchOne(
+            'SELECT COUNT(id) FROM s_categories WHERE path LIKE :path',
+            array('path' => '%|' . $parentId . '|%')
+        );
     }
 
     /**
@@ -215,7 +215,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Calculate the number of articles which have been update since the last update time
         $sql = "
-			SELECT SQL_CALC_FOUND_ROWS a.id
+			SELECT COUNT(a.id)
 			FROM s_articles a
 
             INNER JOIN s_articles_categories ac
@@ -240,16 +240,13 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
 			WHERE a.active=1
 			AND a.changetime > ?
-			GROUP BY a.id
 			ORDER BY a.changetime, a.id
         ";
-        Shopware()->Db()->query($sql, array(
+        return (int) Shopware()->Db()->fetchOne($sql, array(
             Shopware()->Shop()->get('parentID'),
             Shopware()->Shop()->getId(),
             $cachedTime
         ));
-
-        return Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
     }
 
     /**

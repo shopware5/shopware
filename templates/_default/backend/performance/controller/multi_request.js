@@ -419,9 +419,10 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             type = dialog.currentType,
             config = me.requestConfig[type];
 
-        config.batchSize = dialog.combo.getValue();
         dialog.combo.disable();
-        config.progress = dialog.progress;
+        config.batchSize = dialog.combo.getValue();
+        config.progress = dialog.progressBar;
+        config.snippet = me.snippets.process;
 
         me.runRequest(0, dialog, config, []);
     },

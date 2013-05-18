@@ -31,6 +31,7 @@
  */
 class sRewriteTable
 {
+
     public $sSYSTEM;
 
     /**
@@ -62,6 +63,45 @@ class sRewriteTable
      * @var Shopware\Models\Category\Category
      */
     protected $baseCategory;
+
+    /**
+     * Prepared update PDOStatement for the s_core_rewrite_urls table.
+     * @var PDOStatement
+     */
+    protected $preparedUpdate = null;
+
+
+    /**
+     * Prepared insert PDOStatement for the s_core_rewrite_urls table.
+     * @var PDOStatement
+     */
+    protected $preparedInsert = null;
+
+    /**
+     * Getter function of the prepared insert PDOStatement
+     * @return null|PDOStatement
+     */
+    protected function getPreparedInsert() {
+        if ($this->preparedInsert === null) {
+            $this->preparedInsert = Shopware()->Db()->prepare('
+                INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
+                VALUES (?, ?, 1, ?)
+                ON DUPLICATE KEY UPDATE main=1
+            ');
+        }
+        return $this->preparedInsert;
+    }
+
+    /**
+     * Getter function of the prepared update PDOStatement
+     * @return null|PDOStatement
+     */
+    protected function getPreparedUpdate() {
+        if ($this->preparedUpdate === null) {
+            $this->preparedUpdate = Shopware()->Db()->prepare('UPDATE s_core_rewrite_urls SET main=0 WHERE org_path=? AND path!=? AND subshopID=?');
+        }
+        return $this->preparedUpdate;
+    }
 
     /**
      * Class constructor.
@@ -480,14 +520,22 @@ class sRewriteTable
         if (empty($path) || empty($org_path)) {
             return false;
         }
-        $sql_rewrite = 'UPDATE s_core_rewrite_urls SET main=0 WHERE org_path=? AND path!=? AND subshopID=?';
-        $this->sSYSTEM->sDB_CONNECTION->Execute($sql_rewrite, array($org_path, $path, Shopware()->Shop()->getId()));
-        $sql_rewrite = '
-			INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
-			VALUES (?, ?, 1, ?)
-			ON DUPLICATE KEY UPDATE main=1
-		';
-        $this->sSYSTEM->sDB_CONNECTION->Execute($sql_rewrite, array($org_path, $path, Shopware()->Shop()->getId()));
+        $update = $this->getPreparedUpdate();
+
+
+        $update->execute(array(
+            $org_path,
+            $path,
+            Shopware()->Shop()->getId()
+        ));
+
+
+        $insert = $this->getPreparedInsert();
+        $insert->execute(array(
+            $org_path,
+            $path,
+            Shopware()->Shop()->getId()
+        ));
     }
 
 
