@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/categories/info}{/s}")]
+                    me.createDecriptionContainer("{s name=fieldset/categories/info}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}")]
             },
             {
                 xtype: 'fieldset',
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'category',
-                        title: '{s name=fieldset/categories/repair}Repair Categories{/s}'
+                        title: '{s name=fieldset/categories/repair}Rebuild cagtegory tree{/s}'
                     },
                     {
                         fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
@@ -97,11 +97,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                     {
                         fieldLabel: '{s name=fieldset/categories/text/sort}Default sort order for listing{/s}',
                         helpText: '{s name=fieldset/categories/help/sort}In which order do you want to sort articles in category listing?{/s}',
+                        supportText: '{s name=fieldset/categories/support/sort}Warnhinweis:<br>Achten Sie darauf, dass auf die Sortierspalte ein Index in der Datenbank gesetzt ist.{/s}',
                         name: 'categories[orderbydefault]',
                         xtype: 'textfield'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/categories/text/showSupplier}Show category supplier{/s}',
+                        fieldLabel: '{s name=fieldset/categories/text/showSupplier}Hersteller Filter in Kategorien anzeigen{/s}',
                         helpText: '',
                         name: 'categories[showSupplierInCategories]',
                         xtype: 'checkbox',

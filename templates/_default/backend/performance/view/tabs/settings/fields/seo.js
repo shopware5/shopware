@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/seo/info}{/s}")
+                    me.createDecriptionContainer("{s name=fieldset/seo/info force}Die SEO-Urls werden in bestimmten Abständen in Shopware aktualisiert. Sie können die Aktualisierung manuell starten oder aber zwischen der Aktualisierung im Live-Betrieb und der Aktualisierung via Cronjob wählen. <br><br>Sofern Sie viel Traffic haben, empfiehlt sich die Generierung der SEO-Routen über einen Cronjob durchführen zu lassen.{/s}")
                 ]
             },
             {
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                         xtype: 'performance-multi-request-button',
                         event: 'seo',
                         showEvent: 'showMultiRequestTasks',
-                        title: '{s name=fieldset/seo/buildIndex}Build SEO-Index{/s}'
+                        title: '{s name=fieldset/seo/buildIndex}Rebuild seo url index{/s}'
                     },
                     {
                         fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
@@ -108,19 +108,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                             ],
                             data: [
                                 { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
-                                { id: 2, name: '{s name=fieldset/refreshStrategy/cronJob}CronJob{/s}' },
+                                { id: 2, name: '{s name=fieldset/refreshStrategy/cronJob}Over cron job{/s}' },
                                 { id: 3, name: '{s name=fieldset/refreshStrategy/live}Live{/s}' }
                             ]
                         })
                     },
+//                    {
+//                        fieldLabel: '{s name=fieldset/seo/cacheTimeURL}Cache-Zeiten Routen (Sek.){/s}',
+//                        name: 'seo[routerurlcache]',
+//                        xtype: 'numberfield',
+//                        minValue: 3600
+//                    },
                     {
-                        fieldLabel: '{s name=fieldset/seo/cacheTimeURL}URL cache time{/s}',
-                        name: 'seo[routerurlcache]',
-                        xtype: 'numberfield',
-                        minValue: 3600
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/seo/routerCache}Router cache{/s}',
+                        fieldLabel: '{s name=fieldset/seo/routerCache}Cache-Zeiten Routen (Sek.){/s}',
                         name: 'seo[routercache]',
                         xtype: 'numberfield',
                         minValue: 3600

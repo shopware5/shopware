@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/search/info}{/s}")
+                    me.createDecriptionContainer("{s name=fieldset/search/info}Der Such-Index in Shopware wird zeitversetzt aufgebaut. Sie können diesen Prozess an dieser Stelle manuell auslösen und zusätzlich konfigurieren, ob der Such-Index in Echtzeit oder via Cronjob aktualisiert werden soll.{/s}")
                 ]},
             {
                 xtype: 'fieldset',
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'search',
-                        title: '{s name=fieldset/buildIndex}Build Index{/s}',
+                        title: '{s name=fieldset/search/buildIndex}Rebuild search index{/s}',
                     },
                     {
                         fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
