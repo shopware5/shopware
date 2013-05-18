@@ -62,6 +62,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
     refs: [
         { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
+        { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
+
+        { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
+        { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
+
+        { ref: 'statisticList', selector: 'article-detail-window article-statistics-list' },
+        { ref: 'statisticChart', selector: 'article-detail-window article-statistics-chart' },
+        { ref: 'statisticTab', selector: 'article-detail-window container[name=statistic-tab]' }
     ],
 
     /**
@@ -451,7 +459,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         if (operation.success === true) {
 
             //prepare the associated stores to use them in the detail page
-            stores = me.prepareAssociationStores(storeData)
+            stores = me.prepareAssociationStores(storeData);
 
             if(edit) {
                 article = storeData.getArticle().first();
@@ -534,7 +542,31 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
 
-                me.getVariantListing().getStore().load();
+                if (!me.getVariantTab().isDisabled()) {
+                     //you have to do this every time if the tab is a not disabled
+                     //because the variants are not reloaded when the user is changing to the variant tab
+                    me.getVariantListing().getStore().load();
+                }
+
+                if(me.getEsdTab().tab.active) {
+                    //only reload the esd if the tab is activated
+                    me.getEsdListing().getStore().load();
+                }
+
+                if(me.getStatisticTab().tab.active) {
+                    var statisticListStore = me.getStatisticList().getStore(),
+                        statisticChartStore = me.getStatisticChart().getStore();
+
+                    //set the new article id to the extra params
+                    statisticListStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.chart = true;
+
+                    //only reload the statistic if the tab is activated
+                    //reload the list and the chart store
+                    statisticListStore.load();
+                    statisticChartStore.load();
+                }
             }
         });
     },

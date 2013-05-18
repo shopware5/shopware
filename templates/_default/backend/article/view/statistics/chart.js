@@ -53,12 +53,6 @@ Ext.define('Shopware.apps.Article.view.statistics.Chart', {
      */
     cls: Ext.baseCSSPrefix + 'article-statistics-chart',
 
-    listeners: {
-        render: function() {
-            this.store.load();
-        }
-    },
-
     /**
      * Contains all snippets for the view component
      * @object
