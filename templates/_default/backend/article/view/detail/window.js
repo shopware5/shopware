@@ -257,8 +257,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             title: me.snippets.variantTab,
             disabled: true,
             layout: 'fit',
-            name: 'variant-tab',
-            disabled: true
+            name: 'variant-tab'
         });
 
         me.esdTab = Ext.create('Ext.container.Container', {
@@ -266,13 +265,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             disabled: true,
             name: 'esd-tab',
             layout: 'card',
-            deferredRender: true,
-            disabled: true
+            deferredRender: true
         });
 
         me.statisticTab = Ext.create('Ext.container.Container', {
             title: me.snippets.statisticTab,
             disabled: true,
+            name: 'statistic-tab',
             layout: {
                 align: 'stretch',
                 padding: 10,

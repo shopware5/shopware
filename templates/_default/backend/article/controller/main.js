@@ -60,6 +60,18 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 		}
     },
 
+    refs: [
+        { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
+        { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
+
+        { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
+        { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
+
+        { ref: 'statisticList', selector: 'article-detail-window article-statistics-list' },
+        { ref: 'statisticChart', selector: 'article-detail-window article-statistics-chart' },
+        { ref: 'statisticTab', selector: 'article-detail-window container[name=statistic-tab]' }
+    ],
+
     /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
@@ -447,7 +459,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         if (operation.success === true) {
 
             //prepare the associated stores to use them in the detail page
-            stores = me.prepareAssociationStores(storeData)
+            stores = me.prepareAssociationStores(storeData);
 
             if(edit) {
                 article = storeData.getArticle().first();
@@ -529,6 +541,39 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getController('Detail').reconfigureAssociationComponents(article);
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
+
+
+                if(me.getVariantTab().tab.active) {
+                    //if the variant tab is already active reload the store
+                    me.getVariantListing().getStore().load();
+                }
+                else if (!me.getVariantTab().isDisabled()) {
+                    //if the article is a configurator article reconfigure the new store to reload it,
+                    //when the user clicks the variant tab
+                    var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
+                    variantStore.getProxy().extraParams.articleId = options.articleId;
+                    me.getVariantListing().reconfigure(variantStore);
+                }
+
+                if(me.getEsdTab().tab.active) {
+                    //only reload the esd if the tab is activated
+                    me.getEsdListing().getStore().load();
+                }
+
+                if(me.getStatisticTab().tab.active) {
+                    var statisticListStore = me.getStatisticList().getStore(),
+                        statisticChartStore = me.getStatisticChart().getStore();
+
+                    //set the new article id to the extra params
+                    statisticListStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.chart = true;
+
+                    //only reload the statistic if the tab is activated
+                    //reload the list and the chart store
+                    statisticListStore.load();
+                    statisticChartStore.load();
+                }
             }
         });
     },
