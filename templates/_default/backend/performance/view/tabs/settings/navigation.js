@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 leaf: true,
                 internalName: 'performance-tabs-settings-topseller'
             }, {
-                text: "{s name=navigation/otherCustomers}Other customers{/s}",
+                text: "{s name=navigation/otherCustomers}Empfehlungsmarketing{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-customers'
             }]

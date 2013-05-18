@@ -75,7 +75,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/customers/info}{/s}"), ]
+                    me.createDecriptionContainer("{s name=fieldset/customers/info}Konfigurieren Sie hier in welchen Abständen die Daten für die in Shopware integrierten Recommendation-Funktionen neu erzeugt werden sollen.{/s}")
+                ]
             },
             {
                 xtype: 'fieldset',
@@ -85,10 +86,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'alsoBought',
-                        title: 'Index aufbauen'
+                        title: '{s name=fieldset/also/buildIndex}Kunden kauften auch Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/show_also_bought}Show{/s}',
+                        fieldLabel:  '{s name=fieldset/customers/also_bought/show}Kunden kauften auch im Frontend anzeigen{/s}',
                         name: 'customer[alsoBoughtShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
@@ -103,12 +104,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'similarShown',
-                        title: '{s name=fieldset/buildIndex}Build Index{/s}'
+                        title: '{s name=fieldset/simiar/buildIndex}Kunden haben sich ebenfalls angesehen Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/fieldset/also_seen}Enable{/s}',
+                        fieldLabel: '{s name=fieldset/customers/fieldset/also_seen/enable}Kunden haben sich auch angesehen aktivieren{/s}',
                         name: 'customer[similarActive]',
-                        helpText: '{s name=fieldset/customers/fieldset/help/also_seen/enable}Do you want to collect this information?{/s}',
+                        helpText: '{s name=fieldset/customers/fieldset/help/also_seen/enable}Über diese Funktion können Sie das Speichern der Daten beim abschließen einer Bestellung deaktivieren. Dies bietet sich an, wenn Sie die Funktion nicht benötigen und häufig Bestellungen mit sehr vielen Positionen im Shop haben, da jegliche Combinationen aktualisiert werden müssen.{/s}',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
@@ -121,8 +122,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/valid}Valid for...{/s}',
-                        supportText: '{s name=fieldset/customers/fieldset/alsobought/support/valid}(in days){/s}',
+                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/valid}Neu generieren nach [n] Tagen{/s}',
                         name: 'customer[similarValidationTime]',
                         xtype: 'numberfield',
                         minValue: 1,
