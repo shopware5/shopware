@@ -346,9 +346,6 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                 ids.push(element.get('id'));
             });
         }
-        else {
-            ids.push('1');
-        }
         //expand tree
         Ext.Ajax.request({
             url:'{url controller="Category" action="getIdPath"}',
@@ -358,9 +355,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);
-                for(var i = 0; i < result.data.length; i++ ) {
-                    tree.expandPath(result.data[i]);
-                }
+                Ext.each(result.data, function(item) {
+                    tree.expandPath('/1' + item, 'id');
+                });
             }
         });
     },
