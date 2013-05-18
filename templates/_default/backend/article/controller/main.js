@@ -542,10 +542,17 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
 
-                if (!me.getVariantTab().isDisabled()) {
-                     //you have to do this every time if the tab is a not disabled
-                     //because the variants are not reloaded when the user is changing to the variant tab
+
+                if(me.getVariantTab().tab.active) {
+                    //if the variant tab is already active reload the store
                     me.getVariantListing().getStore().load();
+                }
+                else if (!me.getVariantTab().isDisabled()) {
+                    //if the article is a configurator article reconfigure the new store to reload it,
+                    //when the user clicks the variant tab
+                    var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
+                    variantStore.getProxy().extraParams.articleId = options.articleId;
+                    me.getVariantListing().reconfigure(variantStore);
                 }
 
                 if(me.getEsdTab().tab.active) {
