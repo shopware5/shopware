@@ -363,6 +363,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $result = $this->database->fetchRow($sql);
         $last = !empty($result['last']) ? unserialize($result['last']) : null;
 
+        $strategy = Shopware()->Config()->get('searchRefreshStrategy', 3);
+
+        //search index refresh strategy is configured for "live refresh"?
+        if ($strategy !== 3) {
+            return;
+        }
+
         if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->buildSearchIndex();
         }
@@ -583,14 +590,18 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (empty($tables)) {
 
             $tables = $this->database->fetchAll("
-            SELECT
-                st.id as tableID, st.table, st.where, st.referenz_table, st.foreign_key,
-                GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
-                GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
-            FROM s_search_tables st, s_search_fields sf
-            WHERE st.id = sf.tableID
-            AND sf.relevance != 0
-            GROUP BY st.id
+                SELECT STRAIGHT_JOIN
+                    st.id as tableID,
+                    st.table,
+                    st.where,
+                    st.referenz_table, st.foreign_key,
+                    GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
+                    GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
+                FROM s_search_fields sf FORCE INDEX (tableID)
+                    INNER JOIN s_search_tables st
+                        ON st.id = sf.tableID
+                        AND sf.relevance != 0
+                GROUP BY sf.tableID
            ");
         }
         return $tables;
@@ -856,7 +867,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function search($term, array $searchConfiguration)
     {
-
         $this->initSearchConfiguration($searchConfiguration);
 
         // Find keywords matching term
@@ -1062,6 +1072,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             GROUP BY s.id
             ORDER BY count DESC, s.name
         ';
+
         $suppliers = array();
         try {
             $result = $this->database->fetchAll($sql);
@@ -1244,7 +1255,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                         // Update index
                         try {
                             $sql_index = implode("\n\nUNION ALL\n\n", $sql_index);
-                            $sql_index = "INSERT DELAYED IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
+                            $sql_index = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
                             $this->database->query($sql_index);
                             $sql_index = array();
                         } catch (PDOException $e) {
@@ -1346,7 +1357,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         }
 
         $sql = "
-            SELECT keywordID, fieldID, sk.keyword
+            SELECT STRAIGHT_JOIN
+                   keywordID, fieldID, sk.keyword
             FROM `s_search_index` si
 
             INNER JOIN s_search_keywords sk
@@ -1355,8 +1367,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             $sql_join
 
             GROUP BY keywordID, fieldID
-            HAVING COUNT(*)>(SELECT COUNT(*)*0.9 FROM `s_articles`)
+            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles`)
         ";
+
         $collectToDelete = $this->database->fetchAll($sql);
         foreach ($collectToDelete as $delete) {
             $sql = '

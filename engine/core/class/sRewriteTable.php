@@ -170,10 +170,15 @@ class sRewriteTable
         @set_time_limit(0);
 
         $this->template = Shopware()->Template();
-        $this->template->registerPlugin(
-            Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
-            array($this, 'sSmartyCategoryPath')
-        );
+
+        $keys = array_keys($this->template->registered_plugins['function']);
+        if (!(in_array('sCategoryPath', $keys))) {
+            $this->template->registerPlugin(
+                Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
+                array($this, 'sSmartyCategoryPath')
+            );
+        }
+
         $this->data = $this->template->createData();
 
         $this->data->assign('sConfig', $this->sSYSTEM->sCONFIG);
@@ -464,7 +469,10 @@ class sRewriteTable
      */
     public function sCreateRewriteTableContent($offset=null, $limit=null)
     {
-        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_emarketing_promotion_main`", $limit, $offset);
+        $sql = "SELECT id, description as name FROM `s_emarketing_promotion_main`";
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
 
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
@@ -475,7 +483,10 @@ class sRewriteTable
             }
         }
 
-        $sql = Shopware()->Db()->limit("SELECT id, name, ticket_typeID FROM `s_cms_support`", $limit, $offset);
+        $sql = "SELECT id, name, ticket_typeID FROM `s_cms_support`";
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {
@@ -485,7 +496,10 @@ class sRewriteTable
             }
         }
 
-        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_cms_static` WHERE link=''", $limit, $offset);
+        $sql = "SELECT id, description as name FROM `s_cms_static` WHERE link=''";
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {
@@ -495,7 +509,10 @@ class sRewriteTable
             }
         }
 
-        $sql = Shopware()->Db()->limit("SELECT id, description as name FROM `s_cms_groups`", $limit, $offset);
+        $sql = "SELECT id, description as name FROM `s_cms_groups`";
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
         $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
         if ($result !== false) {
             while ($row = $result->FetchRow()) {

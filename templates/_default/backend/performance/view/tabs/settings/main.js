@@ -98,8 +98,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
                     xtype: 'panel',
                     border: false,
                     bodyPadding: 20,
-                    flex: 1,
-                    height: '100%',
                     style: 'font-size: 18px; font-weight: 700; line-height: 20px;',
                     html: '<span style="color: #4d4d4d;">' +  info + '</span><br><br>' + '<p style="color: #ba2323">' + warning + '</p>' },
                 {
