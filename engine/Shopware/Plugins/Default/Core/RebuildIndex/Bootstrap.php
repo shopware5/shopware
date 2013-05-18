@@ -165,14 +165,27 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
         $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops');
 
+
+        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
+
         $this->SeoIndex()->registerShop($shops[0]);
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
         foreach($shops as $shopId) {
             $this->SeoIndex()->registerShop($shopId);
-            
+
+            list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
+            $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
+
             $this->RewriteTable()->baseSetup();
-            $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 100000);
+            $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 100000);
+            if ($resultTime === $cachedTime) {
+                $resultTime = $currentTime;
+            }
+            if($resultTime !== $currentTime) {
+                $this->SeoIndex()->setCachedTime($resultTime, $elementId, $shopId);
+            }
+
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
