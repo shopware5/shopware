@@ -44,7 +44,6 @@
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${build.dir}/scripts/dbdeploy.install.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
-            <fileset file="${build.dir}/scripts/deploy.demo.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 

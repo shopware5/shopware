@@ -29,12 +29,11 @@
  */
 class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin_TestCase
 {
-
-
     /**
      * Set up test case, fix demo data where needed
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         // insert test order
@@ -49,7 +48,6 @@ class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin
         ";
 
         Shopware()->Db()->query($sql);
-
     }
 
     /**
@@ -61,7 +59,6 @@ class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin
 
         $sql = "
             DELETE FROM `s_order` WHERE `id` = 165681;
-
             DELETE FROM `s_order_details` WHERE `orderID` = 165681;
         ";
 
@@ -85,7 +82,7 @@ class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin
 
         //call the method
         $orders = Shopware()->Modules()->Admin()->sGetOpenOrderData();
-        $this->assertCount(2,$orders);
+        $this->assertGreaterThan(0, $orders);
 
         //get the dummyOrder
         $dummyOrder = $this->getDummyOrder($orders);
@@ -97,9 +94,10 @@ class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin
     /**
      * helper to return the dummy order
      */
-    private function getDummyOrder($orders) {
+    private function getDummyOrder($orders)
+    {
         foreach ($orders as $order) {
-            if($order["id"] == 165681) {
+            if ($order["id"] == 165681) {
                 return $order;
             }
         }

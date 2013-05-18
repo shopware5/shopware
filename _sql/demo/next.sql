@@ -5698,6 +5698,12 @@ INSERT INTO `s_core_pricegroups` (`id`, `description`) VALUES
 (1, 'Standard');
 
 TRUNCATE TABLE `s_core_pricegroups_discounts`;
+
+-- Do not recreate rewrite urls on first access
+INSERT IGNORE INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value`) VALUES
+(null, 658, 2, 's:19:"2013-12-01 11:15:53";'),
+(null, 658, 1, 's:19:"2013-12-01 11:42:13";');
+
 TRUNCATE TABLE `s_core_rewrite`;
 TRUNCATE TABLE `s_core_rewrite_urls`;
 INSERT INTO `s_core_rewrite_urls` (`id`, `org_path`, `path`, `main`, `subshopID`) VALUES
@@ -10703,16 +10709,14 @@ INSERT INTO `s_statistics_visitors` (`id`, `shopID`, `datum`, `pageimpressions`,
 
 TRUNCATE TABLE `s_user`;
 INSERT INTO `s_user` (`id`, `password`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`) VALUES
-(1, 'a256a310bc1e5db755fd392c524028a8', 'max.mustermann@mail.com', 1, 0, '', 4, '2012-08-29', '2012-08-31 08:51:56', '66e9b10064a19b1fcf6eb9310c0753866c764836', 0, '0', 0, 'EK', 4, '', 1, '', NULL, '', 0, NULL),
-(2, '352db51c3ff06159d380d3d9935ec814', 'mustermann@b2b.de', 1, 0, '', 4, '2012-08-30', '2012-08-30 11:43:17', '66e9b10064a19b1fcf6eb9310c0753866c764836', 0, '0', 0, 'B2B', 4, '', 1, '', NULL, '', 0, NULL),
-(3, 'a256a310bc1e5db755fd392c524028a8', 'test@example.com', 1, 0, '', 5, '2011-11-23', '2012-01-04 14:12:05', 'uiorqd755gaar8dn89ukp178c7', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, NULL);
+(1, 'a256a310bc1e5db755fd392c524028a8', 'test@example.com', 1, 0, '', 5, '2011-11-23', '2012-01-04 14:12:05', 'uiorqd755gaar8dn89ukp178c7', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, NULL),
+(2, '352db51c3ff06159d380d3d9935ec814', 'mustermann@b2b.de', 1, 0, '', 4, '2012-08-30', '2012-08-30 11:43:17', '66e9b10064a19b1fcf6eb9310c0753866c764836', 0, '0', 0, 'H', 4, '', 1, '', NULL, '', 0, NULL);
 
 TRUNCATE TABLE `s_user_attributes`;
 TRUNCATE TABLE `s_user_billingaddress`;
 INSERT INTO `s_user_billingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `stateID`, `ustid`, `birthday`) VALUES
-(1, 1, 'shopware AG', '', 'mr', '20002', 'Max', 'Mustermann', 'Mustermannstraße', '92', '48624', 'Schöppingen', '', '', 2, 3, '', '1978-08-16'),
-(2, 2, 'B2B', 'Einkauf', 'company', '20003', 'Händler', 'Kundengruppe-Netto', 'Musterweg', '1', '55555', 'Musterstadt', '012345 / 6789', '', 2, 3, '', NULL),
-(3, 3, 'Muster GmbH', '', 'mr', '20001', 'Max', 'Mustermann', 'Musterstr.', '55', '55555', 'Musterhausen', '05555 / 555555', '', 2, 3, '', NULL);
+(1, 1, 'Muster GmbH', '', 'mr', '20001', 'Max', 'Mustermann', 'Musterstr.', '55', '55555', 'Musterhausen', '05555 / 555555', '', 2, 3, '', NULL),
+(2, 2, 'B2B', 'Einkauf', 'company', '20003', 'Händler', 'Kundengruppe-Netto', 'Musterweg', '1', '55555', 'Musterstadt', '012345 / 6789', '', 2, 3, '', NULL);
 
 
 TRUNCATE TABLE `s_user_billingaddress_attributes`;

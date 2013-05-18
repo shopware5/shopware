@@ -32,7 +32,8 @@ class Shopware_RegressionTests_Ticket5226 extends Enlight_Components_Test_Contro
     /**
      * adds and writes a test file
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $loremIpsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
@@ -54,9 +55,10 @@ class Shopware_RegressionTests_Ticket5226 extends Enlight_Components_Test_Contro
     public function testDownloadESDViaPhp()
     {
         $this->Request()
-                ->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('password', 'shopware');
+            ->setMethod('POST')
+            ->setPost('email', 'test@example.com')
+            ->setPost('password', 'shopware');
+
         $this->dispatch('/account/login');
         $this->reset();
 
@@ -65,11 +67,11 @@ class Shopware_RegressionTests_Ticket5226 extends Enlight_Components_Test_Contro
         $this->dispatch('/account/download');
 
         $header = $this->Response()->getHeaders();
-        $this->assertEquals("Content-Disposition",$header[1]["name"]);
-        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"',$header[1]["value"]);
-        $this->assertEquals('Content-Length',$header[2]["name"]);
-        $this->assertGreaterThan(630,intval($header[2]["value"]));
-        $this->assertEquals(strlen($this->Response()->getBody()),intval($header[2]["value"]));
+        $this->assertEquals("Content-Disposition", $header[1]["name"]);
+        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]["value"]);
+        $this->assertEquals('Content-Length', $header[2]["name"]);
+        $this->assertGreaterThan(630, intval($header[2]["value"]));
+        $this->assertEquals(strlen($this->Response()->getBody()), intval($header[2]["value"]));
     }
 
 }
