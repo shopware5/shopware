@@ -90,20 +90,21 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         );
     }
 
+
     /**
-     * Helper function to get access on the SearchIndex component.
+     * Helper function to get access on the sRewriteTable component.
      *
-     * @return Shopware_Components_AlsoBought
+     * @return sRewriteTable
      */
-    public function SearchIndex()
+    public function RewriteTable()
     {
-        return Shopware()->SearchIndex();
+        return Shopware()->Modules()->RewriteTable();
     }
 
     /**
      * Helper function to get access on the SeoIndex component.
      *
-     * @return Shopware_Components_SimilarShown
+     * @return Shopware_Components_SeoIndex
      */
     public function SeoIndex()
     {
@@ -128,11 +129,12 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     protected function subscribeSearchIndexEvents()
     {
-        $this->subscribeEvent('Enlight_Bootstrap_InitResource_SearchIndex', 'initSearchIndexResource');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex','getSearchIndexBackendController');
 
-//        $this->createCronJob('Refresh search index', 'RefreshSearchIndex', 86400, true);
-//        $this->subscribeEvent('Shopware_CronJob_RefreshSimilarShown', 'refreshSimilarShown');
+        $this->createCronJob('Refresh search index', 'RefreshSearchIndex', 86400, true);
+        $this->subscribeEvent('Shopware_CronJob_RefreshSearchIndex', 'refreshSearchIndex');
     }
+
 
     /**
      * Registers all required events for the also bought articles function.
@@ -149,12 +151,62 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     }
 
     /**
-     * In the cronjob callback we just trigger the old update method which generates all SEO urls in one big query
+     * Event listener function of the search index rebuild cron job.
+     * @param Enlight_Event_EventArgs $arguments
+     * @return bool
      */
-    public function onRefreshSeoIndex()
+    public function onRefreshSeoIndex(Enlight_Event_EventArgs $arguments)
     {
-        Shopware()->SeoIndex()->refreshSeoIndex();
+        $strategy = Shopware()->Config()->get('seoRefreshStrategy', self::STRATEGY_LIVE);
+
+        if ($strategy !== self::STRATEGY_CRON_JOB) {
+            return true;
+        }
+
+        $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops');
+
+        $this->SeoIndex()->registerShop($shops[0]);
+        $this->RewriteTable()->sCreateRewriteTableCleanup();
+
+        foreach($shops as $shopId) {
+            $this->SeoIndex()->registerShop($shopId);
+            
+            $this->RewriteTable()->baseSetup();
+            $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 100000);
+            $this->RewriteTable()->sCreateRewriteTableCategories();
+            $this->RewriteTable()->sCreateRewriteTableCampaigns();
+            $this->RewriteTable()->sCreateRewriteTableContent();
+            $this->RewriteTable()->sCreateRewriteTableBlog();
+            $this->RewriteTable()->sCreateRewriteTableStatic();
+        }
+        $this->SeoIndex()->clearRouterRewriteCache();
+        return true;
     }
+
+
+    /**
+     * Event listener function of the search index rebuild cron job.
+     * @param Enlight_Event_EventArgs $arguments
+     * @return bool
+     */
+    public function refreshSearchIndex(Enlight_Event_EventArgs $arguments)
+    {
+        $strategy = Shopware()->Config()->get('searchRefreshStrategy', self::STRATEGY_LIVE);
+
+        if ($strategy !== self::STRATEGY_CRON_JOB) {
+            return true;
+        }
+
+        $adapter = new Shopware_Components_Search_Adapter_Default(
+            Shopware()->Db(),
+            Shopware()->Cache(),
+            new Shopware_Components_Search_Result_Default(),
+            Shopware()->Config()
+        );
+        $adapter->buildSearchIndex();
+        return true;
+    }
+
 
     /**
      * This replaces the old event from the routerRewrite plugin
@@ -181,15 +233,15 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
          */
         $refreshStrategy = $this->Application()->Config()->get('seoRefreshStrategy');
 
-//        if ($refreshStrategy == self::STRATEGY_LIVE) {
-            Shopware()->SeoIndex()->refreshSeoIndex();
-//        }
-
+        if ($refreshStrategy !== self::STRATEGY_LIVE) {
+            return;
+        }
+        $this->SeoIndex()->refreshSeoIndex();
     }
 
     /**
-     * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
-     * event. This event is fired when shopware trying to access the plugin SimilarShown controller.
+     * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo
+     * event. This event is fired when shopware trying to access the plugin SEO controller.
      *
      * @param Enlight_Event_EventArgs $arguments
      * @return string
@@ -199,20 +251,17 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         return $this->Path() . 'Controllers/Seo.php';
     }
 
-    /**
-     * Plugin event listener function which is fired
-     * when the similar shown resource has to be initialed.
-     * @return Shopware_Components_SearchIndex
-     */
-    public function initSearchIndexResource()
-    {
-        $this->Application()->Loader()->registerNamespace(
-            'Shopware_Components',
-            $this->Path() . 'Components/'
-        );
 
-        $searchIndex = Enlight_Class::Instance('Shopware_Components_SearchIndex');
-        return $searchIndex;
+    /**
+     * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex
+     * event. This event is fired when shopware trying to access the plugin SearchIndex controller.
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     * @return string
+     */
+    public function getSearchIndexBackendController(Enlight_Event_EventArgs $arguments)
+    {
+        return $this->Path() . 'Controllers/SearchIndex.php';
     }
 
 

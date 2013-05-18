@@ -24,10 +24,34 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\RebuildIndex\Components
+ * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Components_SearchIndex extends Enlight_Class
+class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * Helper function to get the new seo index component with auto completion
+     * @return Shopware_Components_SeoIndex
+     */
+    public function SearchIndex()
+    {
+        return Shopware()->SearchIndex();
+    }
 
+    /**
+     * This controller action is used to build the search index.
+     */
+    public function buildAction()
+    {
+        $adapter = new Shopware_Components_Search_Adapter_Default(
+            Shopware()->Db(),
+            Shopware()->Cache(),
+            new Shopware_Components_Search_Result_Default(),
+            Shopware()->Config()
+        );
+        $adapter->buildSearchIndex();
+
+        $this->View()->assign(array('success' => true));
+    }
 }
+

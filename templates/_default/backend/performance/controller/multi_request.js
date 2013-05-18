@@ -63,6 +63,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             batchSize: 200
         },
 
+        search:  {
+            title: '{s name=multi_request/search}Build index for frontend search{/s}',
+            requestUrl: '{url controller="SearchIndex" action="build"}',
+            batchSize: 2
+        },
+
         seo:  {
             title: '{s name=multi_request/sei}Build index for SEO{/s}',
             totalCountUrl: '{url controller="Seo" action="getCount"}',
@@ -453,17 +459,26 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         me.cancelOperation = false;
 
-        Ext.Ajax.request({
-            url: config.totalCountUrl,
-            success: function(response) {
-                var json = Ext.decode(response.responseText);
-                config.totalCount = json.data.count;
+        if (config.totalCountUrl) {
+            Ext.Ajax.request({
+                url: config.totalCountUrl,
+                success: function(response) {
+                    var json = Ext.decode(response.responseText);
+                    config.totalCount = json.data.count;
 
-                window.progressBar.updateProgress(0);
+                    window.progressBar.updateProgress(0);
 
-                window.startButton.enable();
+                    window.startButton.enable();
+                }
+            });
+        } else {
+            if (!config.totalCount) {
+                config.totalCount = 1;
             }
-        });
+
+            window.progressBar.updateProgress(0);
+            window.startButton.enable();
+        }
     }
 
 });
