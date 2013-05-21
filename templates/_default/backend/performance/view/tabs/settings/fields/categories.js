@@ -109,6 +109,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                         inputValue: true
                     },
                     {
+                        fieldLabel: '{s name=fieldset/categories/text/moveBatchModeEnabled}Move categories in batch-mode{/s}',
+                        helpText: '',
+                        name: 'categories[moveBatchModeEnabled]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
                         fieldLabel: '{s name=fieldset/categories/text/sortProperties}Property sort order{/s}',
                         name: 'categories[propertySorting]',
                         xtype: 'combo',

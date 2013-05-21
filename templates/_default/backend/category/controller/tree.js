@@ -124,13 +124,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         me.callParent(arguments);
     },
 
+
+
     /**
      * Deletes one category tree node and its children
      *
      * @event deleteSubCategory
      * @return void
      */
-    onDeleteCategory : function() {
+    onDeleteCategory: function() {
         var me          = this,
             tree        = me.getCategoryTree(),
             selection   = tree.getSelectionModel( ).getSelection(),
@@ -311,9 +313,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @param oldParent
      */
     onCategoryMove: function (node, oldParent, newParent, position) {
-        var me = this,
-            childNodeIds = [],
-            url = '{url controller=Category action=saveNewChildPositions}';
+        var me = this;
 
         node.data.position = position;
         node.data.parentId = !newParent.isRoot() ? newParent.data.id : null;
@@ -323,24 +323,45 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         mainWindow.setLoading(true);
         node.save({
             callback: function (self, operation) {
-                //save the new position for all child categories in the parent category
-                newParent.eachChild(function (node) {
-                    childNodeIds.push(node.getId());
-                });
-                Ext.Ajax.request({
-                    url: url,
-                    params: { ids: Ext.JSON.encode(childNodeIds) },
-                    success: function (response) {
-                        var rawData = self.proxy.reader.rawData;
-                        if (rawData.success) {
-                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategorySuccess, me.snippets.growlMessage);
-                        }
-                        else {
-                            Shopware.Notification.createGrowlMessage('', me.snippets.moveCategoryFailure + '<br>' + rawData.message, me.snippets.growlMessage);
-                        }
-                        mainWindow.setLoading(false);
-                    }
-                });
+                mainWindow.setLoading(false);
+                var rawData = self.proxy.reader.rawData;
+                if (!rawData.success) {
+                    Shopware.Notification.createGrowlMessage('', me.snippets.moveCategoryFailure + '<br>' + rawData.message, me.snippets.growlMessage);
+                }
+
+                Shopware.Notification.createGrowlMessage('', me.snippets.moveCategorySuccess, me.snippets.growlMessage);
+
+                me.saveNewChildPositions(newParent);
+
+                var responseObject = Ext.decode(operation.response.responseText);
+
+                if (responseObject.needsRebuild) {
+                    var batch = me.getView('main.MultiRequestTasks').create({
+                        categoryId: node.get('id')
+                    }).show();
+                    batch.run();
+                }
+            }
+        });
+    },
+
+   /**
+    * @param parent
+    */
+    saveNewChildPositions: function(parent) {
+        var me = this,
+            url = '{url controller=Category action=saveNewChildPositions}',
+            childNodeIds = [];
+
+        //save the new position for all child categories in the parent category
+        parent.eachChild(function (node) {
+            childNodeIds.push(node.getId());
+        });
+
+        Ext.Ajax.request({
+            url: url,
+            params: {
+                ids: Ext.JSON.encode(childNodeIds)
             }
         });
     },
