@@ -24,6 +24,11 @@ INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginI
 (NULL, 'Shopware_Modules_Articles_Before_SetLastArticle', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::beforeSetLastArticle', @pluginId, 0),
 (NULL, 'Shopware_CronJob_RefreshSimilarShown', 0, 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::refreshSimilarShown', @pluginId, 0);
 
+INSERT INTO `s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
+(NULL, 'Topseller Refresh', 'RefreshTopSeller', NULL, '', '2013-05-21 14:29:44', NULL, 86400, 1, '2013-05-21 14:29:44', '', '', @pluginId),
+(NULL, 'Similar shown article refresh', 'RefreshSimilarShown', NULL, '', '2013-05-21 14:29:44', NULL, 86400, 1, '2013-05-21 14:29:44', '', '', @pluginId);
+
+
 CREATE TABLE IF NOT EXISTS `s_articles_also_bought_ro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) unsigned NOT NULL,

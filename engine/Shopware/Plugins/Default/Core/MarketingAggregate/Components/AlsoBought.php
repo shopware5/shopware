@@ -43,9 +43,12 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
-        $articles = Shopware()->Db()->fetchCol(
-            Shopware()->Db()->limit("SELECT id FROM s_articles ", $limit, $offset)
-        );
+        $sql = "SELECT id FROM s_articles ";
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
+
+        $articles = Shopware()->Db()->fetchCol($sql);
 
         $preparedSelect = Shopware()->Db()->prepare("
             SELECT
