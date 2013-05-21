@@ -149,7 +149,7 @@ class sMarketing
                     ON  alsoBought.related_article_id = articles.id
                     AND articles.active = 1
 
-                INNER JOIN s_articles_categories articleCategories
+                INNER JOIN s_articles_categories_ro articleCategories
                     ON  alsoBought.related_article_id = articleCategories.articleID
                     AND articleCategories.categoryID = :categoryId
 
