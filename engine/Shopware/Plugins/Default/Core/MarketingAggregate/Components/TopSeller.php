@@ -124,7 +124,9 @@ class Shopware_Components_TopSeller extends Enlight_Class
             )
             GROUP BY articles.id ";
 
-        $sql = Shopware()->Db()->limit($sql, $limit);
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit);
+        }
 
         $articles = Shopware()->Db()->fetchAll($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00')
@@ -170,7 +172,9 @@ class Shopware_Components_TopSeller extends Enlight_Class
             WHERE last_cleared <= :validationTime
         ";
 
-        $sql = Shopware()->Db()->limit($sql, $limit);
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit);
+        }
 
         Shopware()->Db()->query($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),

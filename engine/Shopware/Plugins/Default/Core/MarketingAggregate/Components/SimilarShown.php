@@ -52,9 +52,12 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      */
     public function initSimilarShown($offset = null, $limit = null)
     {
-        $articles = Shopware()->Db()->fetchCol(
-            Shopware()->Db()->limit("SELECT id FROM s_articles ", $limit, $offset)
-        );
+        $sql = "SELECT id FROM s_articles ";
+
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        }
+        $articles = Shopware()->Db()->fetchCol($sql);
 
         $preparedSelect = Shopware()->Db()->prepare("
             SELECT
@@ -112,7 +115,9 @@ class Shopware_Components_SimilarShown extends Enlight_Class
             WHERE init_date <= :validationTime
             ";
 
-        $sql = Shopware()->Db()->limit($sql, $limit);
+        if ($limit !== null) {
+            $sql = Shopware()->Db()->limit($sql, $limit);
+        }
 
         Shopware()->Db()->query($sql, array('validationTime' => $validationTime->format('Y-m-d 00:00:00')));
     }
