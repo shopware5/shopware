@@ -113,12 +113,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                             ]
                         })
                     },
-//                    {
-//                        fieldLabel: '{s name=fieldset/seo/cacheTimeURL}Cache-Zeiten Routen (Sek.){/s}',
-//                        name: 'seo[routerurlcache]',
-//                        xtype: 'numberfield',
-//                        minValue: 3600
-//                    },
                     {
                         fieldLabel: '{s name=fieldset/seo/cacheTimeURL}URL cache time{/s}',
                         name: 'seo[routerurlcache]',

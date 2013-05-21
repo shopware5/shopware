@@ -117,16 +117,23 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
             },
             {
                 header: '{s name=fieldset/check/value}Value{/s}',
-                dataIndex: 'value',
-                flex: 1
-            },
-            {
-                header: '{s name=fieldset/check/description}Description{/s}',
-                dataIndex: 'description',
-                flex: 2
+                dataIndex: 'valid',
+                flex: 1,
+                renderer: me.validRenderer
             }
         ];
+    },
+
+    validRenderer: function(value) {
+        var me = this;
+
+        if (value === true) {
+            return '<div class="sprite-tick" style="width:16px; height:16px;"></div>';
+        } else {
+            return '<div class="sprite-cross" style="width:16px; height:16px;"></div>';
+        }
     }
+
 
 
 });
