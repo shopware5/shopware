@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
                 'backend' => $request->getHeader('Surrogate-Capability')
             );
         }
-        $info['name'] = 'HttpCache';
+        $info['name'] = 'Http-Reverse-Proxy';
         return $info;
     }
 
@@ -418,7 +418,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
             $info = $this->getDirectoryInfo($dir);
         }
-        $info['name'] = 'Config';
+        $info['name'] = 'Shopware configuration';
         $info['backend'] = empty($cache_config['backend']) ? 'File' : $cache_config['backend'];
         return $info;
     }
@@ -433,7 +433,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $dir = $this->View()->Engine()->getCompileDir();
 
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Template';
+        $info['name'] = 'Smarty compiled templates';
         return $info;
     }
 
@@ -446,7 +446,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = $this->View()->Engine()->getCacheDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Smarty Cache';
+        $info['name'] = 'Smarty cached templates';
         return $info;
     }
 
@@ -459,7 +459,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = Shopware()->Models()->getConfiguration()->getProxyDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine Proxy';
+        $info['name'] = 'Doctrine Proxies';
         return $info;
     }
 
@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = Shopware()->Models()->getConfiguration()->getAttributeDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine Attribute Models';
+        $info['name'] = 'Doctrine attribute models';
         return $info;
     }
 
@@ -485,7 +485,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = Shopware()->Models()->getConfiguration()->getFileCacheDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine Anotation file cache';
+        $info['name'] = 'Doctrine annotations';
 
         return $info;
     }
@@ -499,7 +499,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = Shopware()->Hooks()->getProxyFactory()->getProxyDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Shopware Proxy';
+        $info['name'] = 'Shopware Proxies';
         return $info;
     }
 

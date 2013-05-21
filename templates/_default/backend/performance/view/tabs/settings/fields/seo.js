@@ -130,16 +130,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                         name: 'seo[routercache]',
                         xtype: 'numberfield',
                         minValue: 3600
-                    }
-                    ,
-                    {
+                    } , {
                         fieldLabel: '{s name=fieldset/seo/lastUpdate}Last update{/s}',
                         name: 'seo[routerlastupdateDate]',
                         format: 'd.m.Y',
-                        xtype: 'datefield'
-                    }
-                    ,
-                    {
+                        xtype: 'displayfield'
+                    } , {
                         fieldLabel: ' ',
                         labelSeparator: '',
                         name: 'seo[routerlastupdateTime]',

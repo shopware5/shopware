@@ -43,8 +43,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     refs: [
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
-        { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' }
-     
+        { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' },
+        { ref: 'checkGrid', selector: 'performance-tabs-settings-home grid' }
+
     ],
 
     snippets: {
@@ -104,8 +105,11 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
      */
     injectConfig: function(config) {
     	var me = this;
-    	
+        var store = config.getPerformanceCheck();
+        var grid = me.getCheckGrid();
+
         me.getSettings().panel.loadRecord(config);
+        grid.reconfigure(store);
 
         // reconfigure grids and inject the stores
         me.getCacheTime().reconfigure(me.deepCloneStore(config.getHttpCache().first().getCacheControllers()));
@@ -135,7 +139,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
 			me.currentItem = null;			
 			return;
 		}
-		
+
 		// Load the last saved configData into the form
         me.injectConfig(me.configData);
 		itemToShow.show();

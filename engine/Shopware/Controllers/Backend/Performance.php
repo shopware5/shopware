@@ -261,7 +261,33 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $firstValue = $values[0];
         return $firstValue->getValue();
+    }
 
+    /**
+     * Helper function to check some performance configurations.
+     */
+    protected function getPerformanceCheckData()
+    {
+        return array(
+            array(
+                'id' => 1,
+                'name' => 'zend',
+                'value' => extension_loaded('Zend Optimizer'),
+                'description' => ''
+            ),
+            array(
+                'id' => 2,
+                'name' => 'phpversion',
+                'value' => phpversion(),
+                'description' => ''
+            ),
+            array(
+                'id' => 3,
+                'name' => 'apc',
+                'value' => extension_loaded('apc'),
+                'description' => ''
+            )
+        );
 
     }
 
@@ -272,6 +298,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     protected function prepareConfigData()
     {
         return array(
+            'check'     => $this->getPerformanceCheckData(),
             'httpCache' => $this->prepareHttpCacheConfig(),
             'topSeller' => $this->genericConfigLoader(
                 array(
@@ -283,7 +310,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 )
             ),
             'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy')),
+            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate')),
             'categories' => $this->genericConfigLoader(
                 array('articlesperpage', 'orderbydefault', 'showSupplierInCategories', 'propertySorting')
             ),

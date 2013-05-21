@@ -82,40 +82,32 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
 	 * @return Array
 	 */
 	createItems: function() {
-		var me = this,
-            link = '"http://wiki.shopware.de/Performance-Tipps-Shopware-4_detail_1258.html"',
-            warning = '{s name=fieldset/main/warning}Zu jedem Menüpunkt erhalten Sie korrespondierende Informationen in unserem Wiki. Bevor Sie Einstellungen modifizieren, sollten Sie also die Hinweise in unserer Dokumentation beachten!{/s}',
-            info = '{s name=fieldset/main/information}<h2>Performance Einstellungen</h2><br>In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=[0] href=[1]>Performance Tipps Shopware 4</a>{/s}';
-
-        info = Ext.String.format(info, '"_blank"', link);
+		var me = this;
 
         me.panel = Ext.create('Ext.form.Panel', {
-			region: 'center',
-			trackResetOnLoad: true,
-		    autoScroll: true,
-			items: [
+            region: 'center',
+            trackResetOnLoad: true,
+            autoScroll: true,
+            items: [
                 {
-                    xtype: 'panel',
-                    border: false,
-                    bodyPadding: 20,
-                    style: 'font-size: 18px; font-weight: 700; line-height: 20px;',
-                    html: '<span style="color: #4d4d4d;">' +  info + '</span><br><br>' + '<p style="color: #ba2323">' + warning + '</p>' },
+                    xtype: 'performance-tabs-settings-home'
+                },
                 {
-                	xtype: 'performance-tabs-settings-seo'
-           	 	},{
-                	xtype: 'performance-tabs-settings-http-cache'
-            	},{
-                	xtype: 'performance-tabs-settings-search'
-            	},{
-                	xtype: 'performance-tabs-settings-topseller'
+                    xtype: 'performance-tabs-settings-seo'
                 },{
-                	xtype: 'performance-tabs-settings-various'
+                    xtype: 'performance-tabs-settings-http-cache'
+                },{
+                    xtype: 'performance-tabs-settings-search'
+                },{
+                    xtype: 'performance-tabs-settings-topseller'
+                },{
+                    xtype: 'performance-tabs-settings-various'
                 },{
                     xtype: 'performance-tabs-settings-customers'
                 },{
-                	xtype: 'performance-tabs-settings-categories'
-        	}]
-		});
+                    xtype: 'performance-tabs-settings-categories'
+                }]
+        });
 
         me.navigation = Ext.create('Shopware.apps.Performance.view.tabs.settings.Navigation', {
             region: 'west',

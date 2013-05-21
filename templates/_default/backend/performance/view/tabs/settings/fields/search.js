@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'search',
-                        title: '{s name=fieldset/search/buildIndex}Rebuild search index{/s}',
+                        title: '{s name=fieldset/search/buildIndex}Rebuild search index{/s}'
                     },
                     {
                         fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
@@ -110,7 +110,26 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                                 { id: 3, name: '{s name=fieldset/refreshStrategy/live}Live{/s}' }
                             ]
                         })
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/search/cache_time}Cache Suche{/s}',
+                        name: 'search[cachesearch]',
+                        xtype: 'textfield',
+                        minValue: 3600
+                    },
+                    {
+                        fieldLabel:  '{s name=fieldset/search/trace_search}Trace search requests{/s}',
+                        name: 'search[traceSearch]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel:  '{s name=fieldset/search/last_update}Last index update{/s}',
+                        name: 'search[fuzzysearchlastupdate]',
+                        xtype: 'displayfield'
                     }
+
                 ]
             }
         ];
