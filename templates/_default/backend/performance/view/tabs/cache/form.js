@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                     labelWidth: 155,
                     anchor: '100%',
                     xtype: 'checkbox',
+                    margin: '10 0',
                     hideLabel: true
                 },
                 padding: '0 20 0 0',
@@ -87,15 +88,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 items: [
                     {
                         name: 'cache[config]',
-                        boxLabel: '{s name=form/items/config}Templates, settings, snippets, etc.{/s}'
+                        boxLabel: '{s name=form/items/config}Templates, settings, snippets, etc.{/s}',
+                        supportText: '{s name=form/items/config/support}Lorem ipsum dolor sit{/s}'
                     },
                     {
                         name: 'cache[frontend]',
-                        boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}'
+                        boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}',
+                        supportText: '{s name=form/items/frontend/support}Lorem ipsum dolor sit{/s}'
                     },
                     {
                         name: 'cache[backend]',
-                        boxLabel: '{s name=form/items/backend}Backend cache{/s}'
+                        boxLabel: '{s name=form/items/backend}Backend cache{/s}',
+                        supportText: '{s name=form/items/backend/support}Lorem ipsum dolor sit{/s}'
                     }
                 ] },
             { xtype: 'container',
@@ -104,6 +108,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                     labelWidth: 155,
                     anchor: '100%',
                     xtype: 'checkbox',
+                    margin: '10 0',
                     hideLabel: true
                 },
                 padding: '0 20 0 0',
@@ -111,15 +116,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 items: [
                     {
                         name: 'cache[router]',
-                        boxLabel: '{s name=form/items/router}SEO URL cache{/s}'
+                        boxLabel: '{s name=form/items/router}SEO URL cache{/s}',
+                        supportText: '{s name=form/items/router/support}Lorem ipsum dolor sit{/s}'
                     },
                     {
                         name: 'cache[search]',
-                        boxLabel: '{s name=form/items/search}Intelligent search (index / keywords){/s}'
+                        boxLabel: '{s name=form/items/search}Intelligent search (index / keywords){/s}',
+                        supportText: '{s name=form/items/search/support}Lorem ipsum dolor sit{/s}'
                     },
                     {
                         name: 'cache[proxy]',
-                        boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}'
+                        boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}',
+                        supportText: '{s name=form/items/proxy/support}Lorem ipsum dolor sit{/s}'
                     }
                 ]}
         ];

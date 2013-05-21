@@ -942,7 +942,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             $sqlHaving
         );
 
-        if(empty($this->requestSuggestSearch)) {
+        $traceSearch = Shopware()->Config()->get('traceSearch', true);
+        if(empty($this->requestSuggestSearch) && $traceSearch) {
             $sql = '
               INSERT INTO s_statistics_search (datum, searchterm, results)
                 VALUES (NOW(), ?, ?)
