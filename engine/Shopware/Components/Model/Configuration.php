@@ -62,11 +62,12 @@ class Configuration extends BaseConfiguration
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
 
-
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
         $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
+
         $this->setAttributeDir($options['attributeDir']);
+        $this->setFileCacheDir($options['fileCacheDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
@@ -157,7 +158,7 @@ class Configuration extends BaseConfiguration
         if ($this->getMetadataCacheImpl() instanceof Cache) {
             $reader = new FileCacheReader(
                 $reader,
-                $this->getProxyDir()
+                $this->getFileCacheDir()
             );
         } else {
             $reader = new CachedReader(
