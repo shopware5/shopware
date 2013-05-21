@@ -143,7 +143,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         unset($data['routerlastupdateDate']);
         unset($data['routerlastupdateTime']);
 
-        return $data;		
+        return $data;
 	}
 
     /**
@@ -285,7 +285,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'seo'       => $this->prepareSeoConfig(),
             'search'    => $this->genericConfigLoader(array('searchRefreshStrategy')),
             'categories' => $this->genericConfigLoader(
-                array('articlesperpage', 'orderbydefault', 'showSupplierInCategories', 'propertySorting')
+                array(
+                    'articlesperpage',
+                    'orderbydefault',
+                    'showSupplierInCategories',
+                    'propertySorting',
+                    'moveBatchModeEnabled'
+                )
             ),
             'various' => $this->genericConfigLoader(
                 array(

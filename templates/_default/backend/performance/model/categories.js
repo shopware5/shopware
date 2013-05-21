@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
         { name: 'propertySorting', type: 'int'},
         { name: 'orderbydefault', type: 'string'},
         { name: 'showSupplierInCategories', type: 'bool'},
+        { name: 'moveBatchModeEnabled', type: 'bool'}
     ]
-
 });
 //{/block}

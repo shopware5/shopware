@@ -194,7 +194,7 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
      */
-    private $template= '';
+    private $template = '';
 
     /**
      * @var integer $mode
@@ -244,6 +244,21 @@ class Article extends ModelEntity
      * )
      */
     protected $categories;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
+     * @ORM\JoinTable(name="s_articles_categories_ro",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $allCategories;
 
     /**
      * @var ArrayCollection
@@ -450,6 +465,7 @@ class Article extends ModelEntity
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->allCategories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
         $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
@@ -796,6 +812,14 @@ class Article extends ModelEntity
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllCategories()
+    {
+        return $this->allCategories->toArray();
     }
 
     /**
