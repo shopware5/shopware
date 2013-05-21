@@ -410,19 +410,26 @@ Ext.define('Enlight.app.WindowManagement', {
      * @private
      * @return [array] active windows
      */
-    getActiveWindows: function() {
+    getActiveWindows: function () {
         var activeWindows = [];
-        Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
-               Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                   if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                       activeWindows.push(item);
-                   }
 
-                   if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                       activeWindows.push(item);
-                   }
-               });
-           });
+        Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
+
+            // Check if the subapplication is complete, so we can iterate over the z-index stack manager
+            if(!subApp.windowManager || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
+                return;
+            }
+
+            Ext.each(subApp.windowManager.zIndexStack, function (item) {
+                if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
+                    activeWindows.push(item);
+                }
+
+                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
+                    activeWindows.push(item);
+                }
+            });
+        });
 
         return activeWindows;
     }
