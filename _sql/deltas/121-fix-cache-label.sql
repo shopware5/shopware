@@ -26,7 +26,7 @@ INSERT INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginI
 
 INSERT INTO `s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
 (NULL, 'Refresh seo index', 'RefreshSeoIndex', NULL, '', '2013-05-21 13:28:04', NULL, 86400, 1, '2013-05-21 13:28:04', '', '', @pluginId),
-(NULL, 'Refresh search index', 'RefreshSearchIndex', NULL, '', '2013-05-21 13:28:04', NULL, 86400, 1, '2013-05-21 13:28:04', '', '', @pluginId),
+(NULL, 'Refresh search index', 'RefreshSearchIndex', NULL, '', '2013-05-21 13:28:04', NULL, 86400, 1, '2013-05-21 13:28:04', '', '', @pluginId);
 
 -- //@UNDO
 
