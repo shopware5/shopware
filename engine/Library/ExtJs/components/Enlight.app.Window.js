@@ -121,6 +121,13 @@ Ext.define('Enlight.app.Window', {
         var me = this,
             subApp = me.subApplication || me.subApp, windowManager, windowCount;
 
+        Ext.EventManager.onWindowResize(function(width, height) {
+            var offset = 150;
+
+            me.setHeight(height - offset);
+
+        }, me);
+
         if(!subApp) {
             return;
         }
