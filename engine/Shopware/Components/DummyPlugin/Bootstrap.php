@@ -23,24 +23,35 @@
  */
 
 /**
+ * Shopware DummyPlugin Bootstrap
+ *
  * @category  Shopware
- * @package   Shopware\Plugins\Frontend\PaymentSofort
+ * @package   Shopware\Components\DummyPlugin\Bootstrap
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
+abstract class Shopware_Components_DummyPlugin_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+
     /**
-     * @return array
+     * Returns the version of plugin as string.
+     *
+     * @return string
      */
-    public function getInfo()
+    public function getVersion()
+    {
+        return '0.0.1';
+    }
+
+    /**
+     * Returns capabilities
+     */
+    public function getCapabilities()
     {
         return array(
-            'version'   => $this->getVersion(),
-            'autor'     => 'SOFORT AG',
-            'copyright' => 'SOFORT AG, 2012',
-            'label'     => 'SOFORT Gateway',
-            'support'   => 'https://www.payment-network.com/sue_de/integration/list/88',
-            'link'      => 'http://www.sofort.com',
+            'install' => true,
+            'update'  => true,
+            'enable'  => true,
+            'dummy'   => true
         );
     }
 }
