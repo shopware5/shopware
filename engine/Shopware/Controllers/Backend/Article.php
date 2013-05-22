@@ -1750,6 +1750,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->leftJoin('mappingRule.option', 'ruleOption')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
+                ->orderBy('images.position')
                 ->setParameters(array('articleId' => $articleId));
 
         return $builder->getQuery()->getArrayResult();
