@@ -91,6 +91,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     me.onDoLogin(win, form, targetParams);
                 }
             },
+
+            'plugin-manager-manager-grid': {
+                updateDummyPlugin: me.onUpdateDummyPlugin
+            },
+
             'plugin-manager-manager-navigation': {
                 'openAccount': me.onOpenAccount,
                 'openLicense': me.onOpenLicense,
@@ -116,11 +121,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
         if (!record || record.get('download').length === 0) {
             return;
         }
-		
+
 		if(grid) {
 			grid.setLoading(true);
 		}
-		
+
         Ext.Ajax.request({
             url:'{url controller="Store" action="download"}',
             method: 'POST',
@@ -130,11 +135,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText),
                     message;
-								
+
 				if(grid) {
 					grid.setLoading(false);
 				}
-					
+
                 if (response.success) {
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.downloadsuccessful);
                 } else {
@@ -143,6 +148,43 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                         message = Ext.String.format(message, ':<br>' + response.message + '<br>')
                     } else {
                         message = Ext.String.format(message, ' ');
+                    }
+                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                }
+            }
+        });
+    },
+
+    onUpdateDummyPlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
+        var me = this;
+        var window = me.getMainWindow();
+
+        if (window) {
+            window.setLoading(true);
+        }
+
+        Ext.Ajax.request({
+            url:'{url controller="PluginManager" action="downloadDummy"}',
+            method: 'POST',
+            params: {
+                name: record.get('name')
+            },
+            callback: function(request, opts, operation) {
+                var response = Ext.decode(operation.responseText);
+
+                if (window) {
+                    window.setLoading(false);
+                }
+
+                if (response.success === true) {
+                    record.set('wasActivated', 0);
+                    record.set('wasInstalled', 0);
+
+                    me.refreshPluginList(record);
+                } else {
+                    var message = response.message + '';
+                    if (message.length === 0) {
+                        message = me.snippets.account.downloadfailedlicense;
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
                 }
@@ -227,8 +269,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText);
 
-                if (response.success) {
-                    var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
+               if (response.success) {
+                   if (record.get('capabilityDummy')) {
+                       var pluginStore = me.subApplication.pluginStore;
+                       pluginStore.load();
+                   }
+
+                   var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
                     if (response.configRequired) {
                         var plugin = me.subApplication.pluginStore.getById(record.get('pluginId'));

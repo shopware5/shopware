@@ -24,23 +24,13 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\Frontend\PaymentSofort
+ * @package   Shopware\Plugins\Core\CouchCommerce
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
+class Shopware_Plugins_Core_CouchCommerce_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
 {
-    /**
-     * @return array
-     */
-    public function getInfo()
+    public function getLabel()
     {
-        return array(
-            'version'   => $this->getVersion(),
-            'autor'     => 'SOFORT AG',
-            'copyright' => 'SOFORT AG, 2012',
-            'label'     => 'SOFORT Gateway',
-            'support'   => 'https://www.payment-network.com/sue_de/integration/list/88',
-            'link'      => 'http://www.sofort.com',
-        );
+        return 'CouchCommerce';
     }
 }
