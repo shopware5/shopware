@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         default: return;
                     }
                     Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.Cache',
+                        name: 'Shopware.apps.Performance',
                         action: action
                     });
                 }
