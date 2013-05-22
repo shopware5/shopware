@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
         Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
 
-            if (!subApp || !subApp.hasOwnProperty('windowManager') || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
+            if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
                 return;
             }
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
