@@ -99,25 +99,25 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // event when ever the category tree store should be reloaded
                 'reload'        : me.onReload,
                 // delete event
-                'deleteSubCategory' : me.onDeleteCategory,
+                'deleteSubCategory' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) },
                 // event when ever someone tries to  add a new category into the category tree
                 'addSubCategory'    : me.onOpenNameDialog,
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
                 //
-                'beforeDropCategory': me.onBeforeDrop
+                'beforeDropCategory': function() { me._destroyOtherModuleInstances(me.onBeforeDrop, arguments) }
             },
              // Add Category from a dialog window, route event to the tree controller
             'category-category-tree button[action=addCategory]' : {
-                'click' : me.onOpenNameDialog
+                'click' : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) }
             },
              // Add Category in settings tab
             'category-category-tabs-settings [action=addCategory]':{
-                'click' : me.onAddCategory
+                'click' : function() { me._destroyOtherModuleInstances(me.onAddCategory, arguments) }
             },
             // Add dialog box
             'category-category-tree button[action=deleteCategory]' : {
-                'click' : me.onDeleteCategory
+                'click' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) }
             }
         });
         // need to call parent
@@ -337,12 +337,49 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
                 if (responseObject.needsRebuild) {
                     var batch = me.getView('main.MultiRequestTasks').create({
-                        categoryId: node.get('id')
+                        categoryId: node
                     }).show();
                     batch.run();
                 }
             }
         });
+    },
+
+    _destroyOtherModuleInstances: function (cb, cbArgs) {
+        var me = this, activeWindows = [], subAppId = me.subApplication.$subAppId;
+        cbArgs = cbArgs || [];
+
+        Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
+
+            if (!subApp || !subApp.hasOwnProperty('windowManager') || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
+                return;
+            }
+            Ext.each(subApp.windowManager.zIndexStack, function (item) {
+                if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window') {
+                    activeWindows.push(item);
+                }
+
+                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window') {
+                    activeWindows.push(item);
+                }
+            });
+        });
+
+        if (activeWindows && activeWindows.length) {
+            Ext.each(activeWindows, function (win) {
+                win.destroy();
+            });
+
+            if (Ext.isFunction(cb)) {
+                cb.apply(me, cbArgs);
+            }
+        } else {
+            if (Ext.isFunction(cb)) {
+                cb.apply(me, cbArgs);
+            }
+        }
+
+
     },
 
    /**
