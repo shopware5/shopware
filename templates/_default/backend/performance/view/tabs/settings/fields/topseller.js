@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/topseller/info}{/s}"),
+                    me.createDecriptionContainer("{s name=fieldset/topseller/info}Das Anzeigen der Topseller ist besonders performancelastig, da hierzu eine Vielzahl von Daten ausgewertet werden müssen. Sie sollten in großen Shop-Umngebungen daher den Topseller-Index via Cronjob aktualisieren lassen.{/s}")
                 ]
             },
             {
@@ -86,10 +86,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'topseller',
-                        title: '{s name=fieldset/buildIndex}BuildIndex{/s}'
+                        title: '{s name=fieldset/topseller/buildIndex}Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/topseller/enable}Enable{/s}',
+                        fieldLabel: '{s name=fieldset/topseller/enable}Topseller im Shop anzeigen{/s}',
                         helpText: '{s name=fieldset/topseller/enable/help}Do you want to show TopSellers in your shop?{/s}',
                         name: 'topSeller[topSellerActive]',
                         xtype: 'checkbox',
@@ -97,16 +97,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/topseller/valid}Valid for...{/s}',
-                        supportText: '{s name=fieldset/topseller/valid/support}(in days){/s}',
+                        fieldLabel: '{s name=fieldset/topseller/valid}Topseller gültig für [n] Tage{/s}',
                         name: 'topSeller[topSellerValidationTime]',
                         xtype: 'numberfield',
                         minValue: 1,
                         maxValue: 365
                     },
                     {
-                        fieldLabel: '{s name=fieldset/topseller/orders}Orders{/s}',
-                        supportText: '{s name=fieldset/topseller/orders/support}(in days){/s}',
+                        fieldLabel: '{s name=fieldset/topseller/orders}Bestellungen der letzten [n] Tage berücksichtigen{/s}',
                         helpText: '{s name=fieldset/topseller/orders/help}How many days of orders should be calculated?{/s}',
                         name: 'topSeller[chartinterval]', // existing value
                         xtype: 'numberfield',

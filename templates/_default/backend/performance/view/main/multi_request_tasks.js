@@ -23,8 +23,8 @@
 
 //{namespace name=backend/performance/main}
 
-//{block name="backend/performance/view/main/multi_request_dialog"}
-Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
+//{block name="backend/performance/view/main/multi_request_tasks"}
+Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.performance-main-multi-request-dialog',
+    alias: 'widget.performance-main-multi-request-tasks',
 
     /**
      * Define window width
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * Define window height
      * @integer
      */
-    height: 170,
+    height: 450,
 
     /**
      * Display no footer button for the detail window
@@ -108,10 +108,21 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
     snippets: {
         cancel:'{s name=progress/cancel}Cancel process{/s}',
         start:'{s name=progress/start}Start process{/s}',
-        close:'{s name=progress/close}Close window{/s}'
+        close:'{s name=progress/close}Close window{/s}',
+        seo: {
+            article: '{s name=progress/articles}[0] of [1] article urls{/s}',
+            category: '{s name=progress/category}[0] of [1] category urls{/s}',
+            emotion: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
+            blog: '{s name=progress/blog}[0] of [1] blog urls{/s}',
+            statistic: '{s name=progress/statistic}[0] of [1] statistic urls{/s}',
+            content: '{s name=progress/content}[0] of [1] content urls{/s}'
+        }
     },
 
-    batchSize: 200,
+    batchSize: 50,
+
+    taskType: 'seo',
+
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -125,14 +136,92 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      */
     initComponent: function () {
         var me = this;
-
         me.registerEvents();
-        me.items = [
-            me.createProgressBar(),
+        me.items = me.createItems();
+        me.callParent(arguments);
+    },
+
+
+    /**
+     * Helper function to create the window items.
+     */
+    createItems: function() {
+        var me = this;
+
+        if (me.taskType === 'seo') {
+            return me.createSeoItems();
+        } else {
+            return me.createSearchIndexItems();
+        }
+    },
+
+
+    /**
+     * Helper function to create the window items for the seo index
+     * @returns Array
+     */
+    createSeoItems: function() {
+        var me = this;
+
+        me.articleProgress = me.createProgressBar('article', 'Articles ...');
+        me.categoryProgress = me.createProgressBar('category', 'Categories ...');
+        me.emotionProgress = me.createProgressBar('emotion', 'Emotions ...');
+        me.statisticProgress = me.createProgressBar('statistic', 'Statistics ...');
+        me.blogProgress = me.createProgressBar('blog', 'Blogs ...');
+        me.contentProgress = me.createProgressBar('content', 'Contents ...');
+
+        return [
+            me.createShopCombo(),
+            {
+                xtype: 'container',
+                padding: '20 0',
+                items: [
+                    me.articleProgress,
+                    me.categoryProgress,
+                    me.emotionProgress,
+                    me.blogProgress,
+                    me.statisticProgress,
+                    me.contentProgress
+                ]
+            },
             me.createBatchSizeCombo(),
             me.createButtons()
         ];
-        me.callParent(arguments);
+    },
+
+
+    /**
+     * Creates the shop combo box for the multi request window
+     * for the seo and search index generation.
+     */
+    createShopCombo: function() {
+        var me = this;
+
+        me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
+            forceSelection: true,
+            store: Ext.create('Shopware.store.Shop').load(),
+            valueField: 'id',
+            displayField: 'name',
+            queryMode: 'remote',
+            fieldLabel: 'Shop',
+            editable: false,
+            listeners: {
+                select: function() {
+                    me.fireEvent('onShopSelected', me, this.getValue());
+                }
+            }
+        });
+
+        return me.shopCombo;
+    },
+
+
+
+    /**
+     * Helper function to create the window items for the search index
+     */
+    createSearchIndexItems: function() {
+
     },
 
 
@@ -141,22 +230,31 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      */
     registerEvents: function() {
         this.addEvents(
-            'multiRequestDialogCancelProcess',
-            'multiRequestDialogStartProcess'
+            'onShopSelected',
+            'multiRequestTasksCancelProcess',
+            'startSeoIndex'
         );
     },
 
     createBatchSizeCombo: function() {
         var me = this;
 
-        me.combo = Ext.create('Ext.form.ComboBox', {
+        me.batchSizeCombo = Ext.create('Ext.form.ComboBox', {
             fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
             helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
             name: 'batchSize',
-            forceSelection: true,
             margin: '0 0 10 0',
             allowBlank: false,
             value: me.batchSize,
+            validateOnChange: true,
+            validator: function(value) {
+                if (!value.match(/\d+/)) {
+                    me.startButton.disable();
+                    return false;
+                }
+                me.startButton.enable();
+                return true;
+            },
             editable: true,
             displayField: 'batchSize',
             store: Ext.create('Ext.data.Store', {
@@ -164,39 +262,34 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                     { name: 'batchSize',  type: 'int' }
                 ],
                 data : [
-                    { batchSize: '10' },
-                    { batchSize: '20' },
-                    { batchSize: '30' },
                     { batchSize: '50' },
-                    { batchSize: '75' },
                     { batchSize: '100' },
                     { batchSize: '150' },
                     { batchSize: '200' },
                     { batchSize: '250' },
                     { batchSize: '500' },
                     { batchSize: '1000' },
-                    { batchSize: '1500' }
                 ]
             })
         });
 
-        return me.combo;
+        return me.batchSizeCombo;
     },
 
     /**
      * Creates the progress which displays the progress status for the document creation.
      */
-    createProgressBar: function() {
+    createProgressBar: function(name, text) {
         var me = this;
 
-        me.progressBar = Ext.create('Ext.ProgressBar', {
+        return Ext.create('Ext.ProgressBar', {
             animate: true,
+            name: name,
+            text: text,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
             cls:'left-align'
         });
-
-        return me.progressBar;
     },
 
     /**
@@ -215,7 +308,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                 this.hide();
                 me.cancelButton.show();
                 me.closeButton.disable();
-                me.fireEvent('multiRequestDialogStartProcess', me);
+                if (me.taskType === 'seo') {
+                    me.fireEvent('startSeoIndex', me);
+                }
             }
         });
     },
@@ -235,7 +330,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             hidden: true,
             handler: function() {
                 this.disable();
-                me.fireEvent('multiRequestDialogCancelProcess', me);
+                me.fireEvent('multiRequestTasksCancelProcess', me);
             }
         });
     },

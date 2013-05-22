@@ -264,7 +264,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * Internal helper function to save current postion of values
      */
     saveGroupPosition: function(group) {
-        console.log("funktioniert das?");
         var me = this,
             orderedItems = [],
             groupId = group.get('id');

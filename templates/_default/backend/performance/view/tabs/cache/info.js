@@ -42,7 +42,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
             columns: me.getColumns()
         });
 
-
         me.callParent(arguments);
         me.store.load();
     },
@@ -53,6 +52,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
      * @return [array] grid columns
      */
     getColumns: function() {
+        var me = this;
+
         return [{
             header: '{s name=info/columns/name}Name{/s}',
             dataIndex: 'name',
@@ -83,8 +84,22 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
         }, {
             header: '{s name=info/columns/message}Message{/s}',
             dataIndex: 'message',
-            flex: 3
+            width: 60,
+            renderer: me.messageRenderer
         }];
+    },
+
+    messageRenderer: function(value, metaData, record, colIndex, store, view) {
+        var tpl = new Ext.XTemplate(
+            '<div class="sprite-balloon"></div>'
+        );
+
+        if (value.length == 0) {
+            return '<center><div style="width: 16px; height: 16px;" class="sprite-tick-circle"></div></center>';
+        } else {
+            metaData.tdAttr = 'data-qtip="' + value + '"';
+            return '<center><div style="width: 16px; height: 16px;" class="sprite-exclamation"></div></center>';
+        }
     }
 });
 //{/block}

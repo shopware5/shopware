@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -19,39 +20,38 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Performance
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * Search config model
+ * @category  Shopware
+ * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-//{block name="backend/performance/model/search"}
-Ext.define('Shopware.apps.Performance.model.Search', {
+class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
+{
+    /**
+     * Helper function to get the new seo index component with auto completion
+     * @return Shopware_Components_SeoIndex
+     */
+    public function SearchIndex()
+    {
+        return Shopware()->SearchIndex();
+    }
 
     /**
-     * Extends the standard Ext Model
-     * @string
+     * This controller action is used to build the search index.
      */
-    extend:'Ext.data.Model',
+    public function buildAction()
+    {
+        $adapter = new Shopware_Components_Search_Adapter_Default(
+            Shopware()->Db(),
+            Shopware()->Cache(),
+            new Shopware_Components_Search_Result_Default(),
+            Shopware()->Config()
+        );
+        $adapter->buildSearchIndex();
 
-    /**
-     * Contains the model fields
-     * @array
-     */
-    fields:[
-		//{block name="backend/performance/model/search/fields"}{/block}
-        { name:'id', type:'int' },
-        { name: 'searchRefreshStrategy', type: 'int'},
-        { name: 'cachesearch', type: 'int'},
-        { name: 'traceSearch', type: 'boolean'},
-        { name: 'fuzzysearchlastupdate', type: 'date'},
-    ]
+        $this->View()->assign(array('success' => true));
+    }
+}
 
-});
-//{/block}
