@@ -45,9 +45,11 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
      */
     public function initTopSellerAction()
     {
-        $offset = $this->Request()->get('offset');
-        $limit = $this->Request()->get('limit');
-        if ($offset === 0) {
+        $offset = $this->Request()->get('offset', 0);
+        $limit = $this->Request()->get('limit', 100);
+
+        if ($offset == 0) {
+            error_log("reset top seller" . "\n", 3, '/var/log/test.log');
             $sql = "DELETE FROM s_articles_top_seller_ro";
             Shopware()->Db()->query($sql);
         }
