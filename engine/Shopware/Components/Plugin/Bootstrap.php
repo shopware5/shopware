@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,23 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Plugin
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Plugin Bootstrap
  *
- * todo@all: Documentation
- *
- * @method Shopware Application()
- * @method Shopware_Components_Plugin_Namespace Collection()
+ * @category  Shopware
+ * @package   Shopware\Components\Plugin\Bootstrap
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Bootstrap_Config
 {
@@ -429,8 +420,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return array(
             'install' => true,
-            'update' => true,
-            'enable' => true
+            'update'  => true,
+            'enable'  => true,
+            'dummy'   => false
         );
     }
 
