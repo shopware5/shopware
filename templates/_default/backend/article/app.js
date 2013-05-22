@@ -97,7 +97,8 @@ Ext.define('Shopware.apps.Article', {
         'esd.List',
         'esd.Detail',
         'esd.Serials',
-        'statistics.List'
+        'statistics.List',
+        'statistics.Chart'
     ],
 
     /**
