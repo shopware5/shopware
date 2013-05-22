@@ -412,6 +412,14 @@ class Category extends ModelEntity
     }
 
     /**
+     * @return bool
+     */
+    public function isLeaf()
+    {
+        return ($this->getChildren()->count() == 0);
+    }
+
+    /**
      * Sets the string representation of the category
      *
      * @param string $name

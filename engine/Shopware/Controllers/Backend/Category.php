@@ -549,15 +549,56 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         /** @var $item \Shopware\Models\Category\Category */
         $item = $this->getRepository()->find($itemId);
+        if ($item === null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => "Category by id $itemId not found"
+            ));
+
+            return;
+        }
 
         /** @var $parent \Shopware\Models\Category\Category */
         $parent = $this->getRepository()->find($parentId);
+        if ($parent === null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => "Parent by id $parentId not found"
+            ));
 
-        $item->setParent($parent);
-        Shopware()->Models()->flush($item);
+            return;
+        }
+
+        $needsRebuild = false;
+
+        if ($item->getParent()->getId() != $parent->getId()) {
+            $item->setParent($parent);
+
+            $parents = Shopware()->Models()->getParentCategories($parentId);
+            $path = implode('|', $parents);
+            if (empty($path)) {
+                $path = null;
+            } else {
+                $path = '|' . $path . '|';
+            }
+
+            $item->internalSetPath($path);
+
+            $batchModeEnabled = Shopware()->Config()->get('moveBatchModeEnabled');
+
+            if ($item->isLeaf() || !$batchModeEnabled) {
+                $needsRebuild = false;
+            } else {
+                Shopware()->CategorySubscriber()->disableForNextFlush();
+                $needsRebuild = true;
+            }
+
+            Shopware()->Models()->flush($item);
+        }
 
         $this->View()->assign(array(
-            'success' => true
+            'success'      => true,
+            'needsRebuild' => $needsRebuild,
         ));
     }
 
@@ -709,5 +750,99 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         return $data;
+    }
+
+
+    public function getRebuildCategoryPathCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $repo = $this->getRepository();
+        $count = $repo->rebuildCategoryPathCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 20
+            )
+        ));
+    }
+
+    public function rebuildCategoryPathAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+        $repo = $this->getRepository();
+
+        $offset = $this->Request()->getParam('offset');
+        $count  = $this->Request()->getParam('limit');
+
+        $repo->rebuildCategoryPath($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
+    }
+
+    public function getRemoveOldAssignmentsCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $repo = $this->getRepository();
+        $count = $repo->removeOldAssignmentsCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 1
+            )
+        ));
+    }
+
+    public function removeOldAssignmentsAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+        $repo = $this->getRepository();
+
+        $offset = $this->Request()->getParam('offset');
+        $count  = $this->Request()->getParam('limit');
+
+        $repo->removeOldAssignments($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
+    }
+
+    public function getRebuildAssignmentsCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $repo = $this->getRepository();
+        $count = $repo->rebuildAssignmentsCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 1
+            )
+        ));
+    }
+
+    public function rebuildAssignmentsAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+        $repo = $this->getRepository();
+
+        $offset = $this->Request()->getParam('offset');
+        $count  = $this->Request()->getParam('limit');
+
+        $repo->rebuildAssignments($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
     }
 }
