@@ -54,7 +54,7 @@ Ext.define('Enlight.app.Window', {
      * Property which indicates that the window should first just set to hidden before destroying it.
      * @boolean
      */
-    hidden: true,
+    hideOnClose: true,
 
     /**
      * Forces the window to be on front at start up
@@ -332,6 +332,11 @@ Ext.define('Enlight.app.Window', {
     // private
     doClose: function() {
         var me = this;
+
+        if(me.hideOnClose) {
+            me.hideOnClose = false;
+            me.hide(me.animateTarget, me.doClose, me);
+        }
 
         // Being called as callback after going through the hide call below
         if (me.hidden) {
