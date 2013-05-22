@@ -83,7 +83,7 @@ class sMarketing
             SELECT STRAIGHT_JOIN
                  lastArticles.articleID as id,
                  similarShown.viewed as hits
-            FROM s_articles_similar_shown_ro as similarShown
+            FROM s_articles_similar_shown_ro as similarShown FORCE INDEX (viewed)
 
               INNER JOIN s_emarketing_lastarticles as lastArticles
                 ON  lastArticles.articleID = similarShown.related_article_id
@@ -109,8 +109,10 @@ class sMarketing
 
             $where
 
-            ORDER BY similarShown.viewed DESC
+            GROUP BY similarShown.viewed, similarShown.related_article_id
+            ORDER BY similarShown.viewed DESC, similarShown.related_article_id DESC
             LIMIT $limit";
+
 
         $similarShownArticles = Shopware()->Db()->fetchAll($sql, array(
             'articleId'       => (int) $articleId,
