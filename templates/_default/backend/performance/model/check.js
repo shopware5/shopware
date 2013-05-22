@@ -29,10 +29,10 @@
  */
 
 /**
- * Search config model
+ * Check model for performance configuration
  */
-//{block name="backend/performance/model/search"}
-Ext.define('Shopware.apps.Performance.model.Search', {
+//{block name="backend/performance/model/description"}
+Ext.define('Shopware.apps.Performance.model.Check', {
 
     /**
      * Extends the standard Ext Model
@@ -45,12 +45,12 @@ Ext.define('Shopware.apps.Performance.model.Search', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/search/fields"}{/block}
+		//{block name="backend/performance/model/description/fields"}{/block}
         { name:'id', type:'int' },
-        { name: 'searchRefreshStrategy', type: 'int'},
-        { name: 'cachesearch', type: 'int'},
-        { name: 'traceSearch', type: 'boolean'},
-        { name: 'fuzzysearchlastupdate', type: 'date'},
+        { name:'name', type:'string' },
+        { name:'value', type:'string' },
+        { name:'valid', type:'boolean' },
+        { name:'description', type:'string' }
     ]
 
 });

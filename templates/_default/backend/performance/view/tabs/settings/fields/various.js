@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 title: '{s name=fieldset/information}Information{/s}',
                 defaults: me.defaults,
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/categories/info}{/s}")]
+                    me.createDecriptionContainer("{s name=fieldset/categories/info}In diesem Bereich können Sie verschiedene Funktionen von Shopware deaktivieren, die sich auf die Frontend-Performance auswirken können{/s}")]
             },
             {
                 xtype: 'fieldset',
@@ -83,8 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/various/disableStats}Disable Shopware statistics{/s}',
-                        helpText: '{s name=fieldset/various/disableStats/help}Do not collect data for statistics{/s}',
+                        fieldLabel: '{s name=fieldset/various/disableStats}Deaktiviert die Shopware eigenen Statistiken{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
@@ -92,14 +91,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                     },
                     {
                         fieldLabel: '{s name=fieldset/various/enableTagCloud}Enable tag cloud{/s}',
-                        helpText: '{s name=fieldset/various/enableTagCloud/help}Do you want to show a tag cloud{/s}',
                         name: 'various[TagCloud:show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/lastArticles}Show last articles{/s}',
+                        fieldLabel: '{s name=fieldset/various/lastArticles}Zuletzt angesehene Artikel anzeigen{/s}',
                         name: 'various[LastArticles:show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

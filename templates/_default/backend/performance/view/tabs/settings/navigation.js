@@ -53,7 +53,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
         children: [{
             text: "{s name=navigation/general}General{/s}",
             expanded: true,
-            children: [{
+            children: [
+            {
+                text: "{s name=navigation/home}Performance checks{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-home'
+            },
+            {
                 text: "{s name=navigation/cache}HTTP Cache{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-http-cache'
@@ -75,7 +81,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 internalName: 'performance-tabs-settings-various'
             }]
         }, {
-            text: "{s name=navigation/crossselling}CrossSelling{/s}",
+            text: "{s name=navigation/crossselling}Marketing{/s}",
             expanded: true,
             children: [{
                 text: "{s name=navigation/topseller}TopSeller{/s}",
@@ -83,7 +89,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 leaf: true,
                 internalName: 'performance-tabs-settings-topseller'
             }, {
-                text: "{s name=navigation/otherCustomers}Other customers{/s}",
+                text: "{s name=navigation/otherCustomers}Empfehlungsmarketing{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-customers'
             }]

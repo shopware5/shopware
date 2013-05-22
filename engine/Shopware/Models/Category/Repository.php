@@ -525,8 +525,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getActiveQueryBuilder($customerGroupId);
         $builder->andWhere('c.parentId = :parent')
-            ->setParameter('parent', $id)
-            ->addOrderBy('c.position', 'ASC');
+            ->setParameter('parent', $id);
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = array();
@@ -579,13 +578,15 @@ class Repository extends ModelRepository
      * Returns the \Doctrine\ORM\Query to select all blog categories for example for the blog backend list
      *
      * @param $parentId
+     * @param $offset
+     * @param $limit
      *
      * @internal param $filterBy
      * @return \Doctrine\ORM\Query
      */
-    public function getBlogCategoriesByParentQuery($parentId)
+    public function getBlogCategoriesByParentQuery($parentId, $offset=null, $limit=null)
     {
-        $builder = $this->getBlogCategoriesByParentBuilder($parentId);
+        $builder = $this->getBlogCategoriesByParentBuilder($parentId, $offset=null, $limit=null);
 
         return $builder->getQuery();
     }
@@ -595,10 +596,12 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param $parentId
+     * @param $offset
+     * @param $limit
      *
      * @return  \Shopware\Components\Model\QueryBuilder
      */
-    public function getBlogCategoriesByParentBuilder($parentId)
+    public function getBlogCategoriesByParentBuilder($parentId, $offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('categories')
                 ->select(array('categories'))
@@ -608,6 +611,10 @@ class Repository extends ModelRepository
             $builder->andWhere('categories.path LIKE :path')
                     ->setParameter("path", "%|" . $parentId . '|%');
         }
+
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+
 
         return $builder;
     }

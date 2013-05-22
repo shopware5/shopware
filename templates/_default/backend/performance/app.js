@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Performance', {
         'main.Window',
         'main.Categories',
         'main.MultiRequestDialog',
+        'main.MultiRequestTasks',
 
         'tabs.cache.Main',
         'tabs.cache.Form',
@@ -70,6 +71,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.Main',
         'tabs.settings.Navigation',
         'tabs.settings.fields.Base',
+        'tabs.settings.fields.Home',
         'tabs.settings.fields.Seo',
         'tabs.settings.fields.Topseller',
         'tabs.settings.fields.Search',
@@ -97,6 +99,7 @@ Ext.define('Shopware.apps.Performance', {
      */
     models: [
         'Config',
+        'Check',
         'KeyValue',
         'HttpCache',
         'TopSeller',

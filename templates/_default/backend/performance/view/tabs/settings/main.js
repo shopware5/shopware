@@ -83,27 +83,31 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
 	 */
 	createItems: function() {
 		var me = this;
-		
-		me.panel = Ext.create('Ext.form.Panel', {
-			region: 'center',
-			trackResetOnLoad: true,
-		    autoScroll: true,
-			items: [{
-                	xtype: 'performance-tabs-settings-seo'
-           	 	},{
-                	xtype: 'performance-tabs-settings-http-cache'
-            	},{
-                	xtype: 'performance-tabs-settings-search'
-            	},{
-                	xtype: 'performance-tabs-settings-topseller'
+
+        me.panel = Ext.create('Ext.form.Panel', {
+            region: 'center',
+            trackResetOnLoad: true,
+            autoScroll: true,
+            items: [
+                {
+                    xtype: 'performance-tabs-settings-home'
+                },
+                {
+                    xtype: 'performance-tabs-settings-seo'
                 },{
-                	xtype: 'performance-tabs-settings-various'
+                    xtype: 'performance-tabs-settings-http-cache'
+                },{
+                    xtype: 'performance-tabs-settings-search'
+                },{
+                    xtype: 'performance-tabs-settings-topseller'
+                },{
+                    xtype: 'performance-tabs-settings-various'
                 },{
                     xtype: 'performance-tabs-settings-customers'
                 },{
-                	xtype: 'performance-tabs-settings-categories'
-        	}]
-		});
+                    xtype: 'performance-tabs-settings-categories'
+                }]
+        });
 
         me.navigation = Ext.create('Shopware.apps.Performance.view.tabs.settings.Navigation', {
             region: 'west',

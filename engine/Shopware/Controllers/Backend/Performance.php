@@ -261,7 +261,33 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $firstValue = $values[0];
         return $firstValue->getValue();
+    }
 
+    /**
+     * Helper function to check some performance configurations.
+     */
+    protected function getPerformanceCheckData()
+    {
+        return array(
+            array(
+                'id' => 1,
+                'name' => 'APCu aktiviert',
+                'value' => extension_loaded('apcu'),
+                'valid' => extension_loaded('apcu') === true
+            ),
+            array(
+                'id' => 3,
+                'name' => 'Optimizer aktiviert',
+                'value' => extension_loaded('Optimizer'),
+                'valid' => extension_loaded('Optimizer') === true
+            ),
+            array(
+                'id' => 4,
+                'name' => 'PHP Version',
+                'value' => phpversion(),
+                'valid' => version_compare(phpversion(), '5.4.0', '>=')
+            )
+        );
 
     }
 
@@ -272,6 +298,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     protected function prepareConfigData()
     {
         return array(
+            'check'     => $this->getPerformanceCheckData(),
             'httpCache' => $this->prepareHttpCacheConfig(),
             'topSeller' => $this->genericConfigLoader(
                 array(
@@ -283,7 +310,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 )
             ),
             'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy')),
+            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate')),
             'categories' => $this->genericConfigLoader(
                 array(
                     'articlesperpage',

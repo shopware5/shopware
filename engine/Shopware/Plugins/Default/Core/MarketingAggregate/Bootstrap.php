@@ -374,7 +374,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB || !($this->isSimilarShownActivated())) {
-            return $arguments->getReturn();
+            return true;
         }
 
         $this->SimilarShown()->updateElapsedSimilarShownArticles();

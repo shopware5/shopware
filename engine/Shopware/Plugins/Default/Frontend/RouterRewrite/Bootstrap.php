@@ -137,70 +137,14 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     protected $shopId, $elementId;
 
     /**
-     * Tests the rewrite cache, and may be re-created them.
+     * @deprecated
+     * This method was moved to the RebuildIndex plugin
      *
-     * @param Enlight_Controller_EventArgs $args
+     * As the subscribed event might have been cached, the callback should not be removed right now
      */
     public function onAfterSendResponse(Enlight_Controller_EventArgs $args)
     {
-        $request = $args->getRequest();
-
-        if ($request->getModuleName() != 'frontend') {
-            return;
-        }
-
-        if (!Shopware()->Bootstrap()->issetResource('Shop')) {
-            return;
-        }
-
-        $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
-        $this->elementId = Shopware()->Db()->fetchOne($sql);
-        $this->shopId = Shopware()->Shop()->getId();
-        $sql = "
-            SELECT v.value
-            FROM s_core_config_elements e, s_core_config_values v
-            WHERE v.element_id=e.id AND e.id=? AND v.shop_id=?
-        ";
-        $cachedTime = Shopware()->Db()->fetchOne($sql, array($this->elementId, $this->shopId));
-        if(!empty($cachedTime)) {
-            $cachedTime = unserialize($cachedTime);
-        }
-        if(empty($cachedTime)) {
-            $cachedTime = '0000-00-00 00:00:00';
-        }
-
-        $cache = (int) Shopware()->Config()->routerCache;
-        $cache = $cache < 360 ? 86400 : $cache;
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
-
-        if (strtotime($cachedTime) < strtotime($currentTime) - $cache) {
-
-            $this->setCachedTime($currentTime);
-
-            $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
-            if ($resultTime === $cachedTime) {
-                $resultTime = $currentTime;
-            }
-            if($resultTime !== $currentTime) {
-                $this->setCachedTime($resultTime);
-            }
-
-            Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Shopware_RouterRewrite'));
-        }
-    }
-
-    public function setCachedTime($resultTime)
-    {
-        $sql = '
-            DELETE FROM s_core_config_values
-            WHERE element_id=? AND shop_id=?
-        ';
-        Shopware()->Db()->query($sql, array($this->elementId, $this->shopId));
-        $sql = '
-            INSERT INTO s_core_config_values (element_id, shop_id, value)
-            VALUES (?, ?, ?)
-        ';
-        Shopware()->Db()->query($sql, array($this->elementId, $this->shopId, serialize($resultTime)));
+        return;
     }
 
     /**
