@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,46 +20,55 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_HttpCache
- * @subpackage HttpCache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\HttpCache;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface,
-    Symfony\Component\HttpKernel\HttpCache\HttpCache,
-    Symfony\Component\HttpKernel\HttpCache\Esi,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Shopware Application
  *
- * todo@all: Documentation
  * <code>
  * $httpCacheApp = new Shopware\Components\HttpCache\AppCache($kernel);
  * $httpCacheApp->invalidate($request);
  * </code>
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\HttpCache
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class AppCache extends HttpCache
 {
+    /**
+     * @var
+     */
     protected $cacheDir;
+
+    /**
+     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
+     */
     protected $kernel;
 
+    /**
+     * @var \Symfony\Component\HttpKernel\HttpCache\Store
+     */
     private $store;
+
+    /**
+     * @var \Symfony\Component\HttpKernel\HttpCache\Esi
+     */
     private $esi;
 
     /**
      * Constructor.
      *
-     * @param HttpKernelInterface $kernel An HttpKernelInterface instance
-     * @param array $options
+     * @param HttpKernelInterface $kernel  An HttpKernelInterface instance
+     * @param array               $options
      */
     public function __construct(HttpKernelInterface $kernel, $options)
     {
@@ -78,6 +87,8 @@ class AppCache extends HttpCache
     }
 
     /**
+     * Short circuit some URLs to early pass
+     *
      * {@inheritdoc}
      *
      * @api
@@ -87,29 +98,39 @@ class AppCache extends HttpCache
         if (strpos($request->getPathInfo(), '/backend/') === 0) {
             return $this->pass($request, $catch);
         }
+
+        if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') === 0) {
+            return $this->pass($request, $catch);
+        }
+
+        if (strpos($request->getPathInfo(), '/captcha/index/rand/') === 0) {
+            return $this->pass($request, $catch);
+        }
+
         return parent::handle($request, $type, $catch);
     }
 
     /**
      * Invalidates non-safe methods (like POST, PUT, and DELETE).
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      * @param Boolean $catch   Whether to process exceptions
      *
-     * @return \Symfony\Component\HttpFoundation\Response A Response instance
+     * @return Response A Response instance
      *
      * @see RFC2616 13.10
      */
     protected function invalidate(Request $request, $catch = false)
     {
+        if ($_SERVER['SERVER_ADDR'] !== $request->getClientIp()) {
+            return parent::invalidate($request);
+        }
+
         if ($request->getMethod() === 'BAN') {
             $response = new Response();
-            $this->getStore()->purgeByHeader(
-                'x-shopware-cache-id',
-                $request->getPathInfo() === '/' ? null : ltrim($request->getPathInfo(), '/')
-            );
+            $this->getStore()->purgeAll();
             $response->setStatusCode(200, 'Banned');
-        } elseif($request->getMethod() === 'PURGE') {
+        } elseif ($request->getMethod() === 'PURGE') {
             $response = new Response();
             if ($this->getStore()->purge($request->getUri())) {
                 $response->setStatusCode(200, 'Purged');
@@ -119,6 +140,7 @@ class AppCache extends HttpCache
         } else {
             $response = parent::invalidate($request);
         }
+
         return $response;
     }
 
@@ -127,28 +149,22 @@ class AppCache extends HttpCache
      *
      * {@inheritDoc}
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param bool $catch
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  Request  $request
+     * @param  bool     $catch
+     * @return Response
      */
     protected function lookup(Request $request, $catch = false)
     {
         $response = parent::lookup($request, $catch);
 
-        if ($response->getAge() > 0
-          && $response->headers->has('x-shopware-allow-nocache')
-          && $request->cookies->has('nocache')) {
-            $cacheTag = $response->headers->get('x-shopware-allow-nocache');
-            $cacheTag = explode(', ', $cacheTag);
-            foreach($cacheTag as $cacheTagValue) {
-                if(strpos($request->cookies->get('nocache'), $cacheTagValue) !== false) {
-                    $response = $this->fetch($request);
-                    break;
-                }
-            }
+        // If Response is not fresh age > 0 AND contains a mathing no cache tag
+        if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
+            $this->record($request, 'no-cache-tag');
+            $response = $this->fetch($request);
         }
 
         if (!$this->options['debug']) {
+            // Hide headers from client
             $response->headers->remove('x-shopware-allow-nocache');
             $response->headers->remove('x-shopware-cache-id');
         }
@@ -157,32 +173,53 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param  Request  $request
+     * @param  Response $response
      * @throws \Exception
      */
     protected function store(Request $request, Response $response)
     {
-        //Not cache sites with nocache header
-        if ($response->headers->has('x-shopware-allow-nocache')
-            && $request->cookies->has('nocache')) {
-            $cacheTag = $response->headers->get('x-shopware-allow-nocache');
-            $cacheTag = explode(', ', $cacheTag);
-            foreach($cacheTag as $cacheTagValue) {
-                if(strpos($request->cookies->get('nocache'), $cacheTagValue) !== false) {
-                    return;
-                }
-            }
+        // Not cache sites with nocache header
+        if ($this->containsNoCacheTag($request, $response)) {
+            return;
         }
+
         return parent::store($request, $response);
     }
 
     /**
+     * Checks whether or not the response header contains
+     * a no-cache header that matches one in the request cookie
+     *
+     * @param Request  $request
+     * @param Response $response
+     * @return bool
+     */
+    protected function containsNoCacheTag(Request $request, Response $response)
+    {
+        // Not cache sites with nocache header
+        if ($response->headers->has('x-shopware-allow-nocache')
+            && $request->cookies->has('nocache')
+        ) {
+            $cacheTag = $response->headers->get('x-shopware-allow-nocache');
+            $cacheTag = explode(', ', $cacheTag);
+            foreach ($cacheTag as $cacheTagValue) {
+                if (strpos($request->cookies->get('nocache'), $cacheTagValue) !== false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * Forwards the Request to the backend and returns the Response.
      *
-     * @param Request $request A Request instance
-     * @param Boolean $raw Whether to catch exceptions or not
-     * @param Response $entry A Response instance (the stale entry if present, null otherwise)
+     * @param Request  $request A Request instance
+     * @param Boolean  $raw     Whether to catch exceptions or not
+     * @param Response $entry   A Response instance (the stale entry if present, null otherwise)
      *
      * @return Response A Response instance
      */
