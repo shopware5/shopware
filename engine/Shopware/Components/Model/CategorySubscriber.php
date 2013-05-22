@@ -61,6 +61,19 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $pendingMoves = array();
 
     /**
+     * @var bool
+     */
+    protected $disabledForNextFlush = false;
+
+    /**
+     * Disable events for next flush event
+     */
+    public function disableForNextFlush()
+    {
+        $this->disabledForNextFlush = true;
+    }
+
+    /**
      * @param Article  $article
      * @param Category $category
      */
@@ -109,6 +122,10 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
+        if ($this->disabledForNextFlush) {
+            return;
+        }
+
         /** @var $em ModelManager */
         $em  = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
@@ -183,7 +200,7 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         /* @var $col \Doctrine\ORM\PersistentCollection */
-        foreach ($uow->getScheduledCollectionDeletions() AS $col) {
+        foreach ($uow->getScheduledCollectionDeletions() as $col) {
             if (!$col->getOwner() instanceof Article) {
                 continue;
             }
@@ -251,6 +268,11 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function postFlush(/** @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
     {
+        if ($this->disabledForNextFlush) {
+            $this->disabledForNextFlush = false;
+            return;
+        }
+
         // Remove assignments that noutralize each other
         foreach ($this->pendingRemoveAssignments as $key => $pendingRemove) {
             if (isset($this->pendingAddAssignments[$key])) {
@@ -309,13 +331,18 @@ class CategorySubscriber implements BaseEventSubscriber
     {
         $parents = $this->em->getParentCategories($categoryId);
 
+        $insertAssignmentSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
+        $insertAssignmentStmt = Shopware()->Db()->prepare($insertAssignmentSql);
+
+        Shopware()->Db()->beginTransaction();
         foreach ($parents as $parent) {
-            Shopware()->Db()->insert('s_articles_categories_ro', array(
-                'articleID'        => $articleId,
-                'categoryID'       => $parent,
-                'parentCategoryID' => $categoryId,
+            $insertAssignmentStmt->execute(array(
+                ':categoryId'       => $parent,
+                ':articleId'        => $articleId,
+                ':parentCategoryId' => $categoryId
             ));
         }
+        Shopware()->Db()->commit();
     }
 
     /**
@@ -354,114 +381,14 @@ class CategorySubscriber implements BaseEventSubscriber
     }
 
     /**
-     * Fix path for child-categories
-     *
-     * @param int $categoryId
-     */
-    public function rebuildCategoryPath($categoryId)
-    {
-        $sql = "
-            SELECT c.id
-            FROM  `s_categories` c
-            WHERE c.path LIKE :categoryId
-        ";
-
-        $categoryIds = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-
-        Shopware()->Db()->beginTransaction();
-        foreach ($categoryIds as $categoryId) {
-            $parents = $this->em->getParentCategories($categoryId);
-
-            array_shift($parents);
-            $path = '|' . implode('|', $parents) . '|';
-
-            Shopware()->Db()
-                      ->query('UPDATE s_categories set path = :path WHERE id = :categoryId',array('path' => $path, 'categoryId' => $categoryId))
-                      ->execute();
-
-        }
-        Shopware()->Db()->commit();
-    }
-
-
-    /**
-     * @param int $categoryId
-     */
-    public function removeOldAssigments($categoryId)
-    {
-        $deleteQuery = "
-            SELECT parentCategoryId
-            FROM s_articles_categories_ro
-            WHERE categoryID = :categoryId
-            AND parentCategoryId <> categoryID
-            GROUP BY parentCategoryId;
-       ";
-
-        $parentsToDelete = Shopware()->Db()->fetchCol($deleteQuery, array('categoryId' => $categoryId));
-        foreach ($parentsToDelete as $parentCategoryId) {
-            // delete assignments
-            $deleteQuery = "DELETE FROM s_articles_categories_ro WHERE parentCategoryID = :categoryId";
-
-            Shopware()->Db()
-                    ->query($deleteQuery, array('categoryId' => $parentCategoryId))
-                    ->execute();
-        }
-    }
-
-    /**
      * @param int $categoryId
      */
     public function backlogMoveCategory($categoryId)
     {
-        $this->rebuildCategoryPath($categoryId);
-        $this->removeOldAssigments($categoryId);
+        $repo = $this->em->getRepository('Shopware\Models\Category\Category');
 
-        // Fetch affected categories
-        $sql = "
-            SELECT c.id
-            FROM  `s_categories` c
-            INNER JOIN s_articles_categories ac ON ac.categoryID = c.id
-            WHERE c.path LIKE :categoryId
-            GROUP BY c.id
-        ";
-
-        $affectedCategories = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-
-        // in case that a leaf category is moved
-        if (count($affectedCategories) === 0) {
-            $affectedCategories = array($categoryId);
-        }
-
-        $selectQuery = "SELECT articleID, categoryID FROM `s_articles_categories` WHERE categoryID = :categoryId";
-        $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleId AND c.parentCategoryID = :parentCategoryId";
-        $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
-
-        $insertSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertStmt = Shopware()->Db()->prepare($insertSql);
-
-        Shopware()->Db()->beginTransaction();
-        foreach ($affectedCategories as $categoryId) {
-            $assignments = Shopware()->Db()->query($selectQuery, array('categoryId' => $categoryId));
-            while ($assignment = $assignments->fetch()) {
-                $parents = $this->em->getParentCategories($assignment['categoryID']);
-
-                foreach ($parents as $parent) {
-                    $assignmentStmt->execute(array(
-                        'categoryId'       => $parent,
-                        'articleId'        => $assignment['articleID'],
-                        'parentCategoryId' => $assignment['categoryID'],
-                    ));
-
-                    if ($assignmentStmt->fetchColumn() === false) {
-                        $insertStmt->execute(array(
-                            ':categoryId'       => $parent,
-                            ':articleId'        => $assignment['articleID'],
-                            ':parentCategoryId' => $assignment['categoryID']
-                        ));
-                    }
-                }
-            }
-        }
-        Shopware()->Db()->commit();
+        $repo->rebuildCategoryPath($categoryId);
+        $repo->removeOldAssignments($categoryId);
+        $repo->rebuildAssignments($categoryId);
     }
 }

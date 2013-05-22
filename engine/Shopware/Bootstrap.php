@@ -571,7 +571,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             $this->Application()->Events()
         );
         $eventManager->addEventSubscriber($lifeCycleSubscriber);
-        $eventManager->addEventSubscriber(new \Shopware\Components\Model\CategorySubscriber());
+
+        $categorySubscriber = new \Shopware\Components\Model\CategorySubscriber();
+        $this->registerResource('CategorySubscriber', $categorySubscriber);
+        $eventManager->addEventSubscriber($categorySubscriber);
 
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
