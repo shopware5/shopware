@@ -241,9 +241,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($request->getHeader('Surrogate-Capability') === false) {
             return true;
         }
+
         $proxyUrl = $request->getScheme() . '://'
             . $request->getHttpHost()
             . $request->getBaseUrl() . '/';
+
         try {
             $client = new Zend_Http_Client(null, array(
                 'useragent' => 'Shopware/' . Shopware()->Config()->version,
@@ -253,6 +255,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         } catch (Exception $e) {
             return false;
         }
+
+        Shopware()->Db()->exec("TRUNCATE s_cache_log");
+
         return true;
     }
 
