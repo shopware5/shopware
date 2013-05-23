@@ -65,60 +65,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     /**
      *
-     * Helpers to fix categories
-     *
-     */
-
-
-    /**
-     * Fixes categorie tree
-     */
-    public function fixCategoriesAction()
-    {
-        $offset = $this->Request()->getParam('offset', 0);
-        $limit  = $this->Request()->getParam('limit', 5000);
-
-        $stats = array();
-        Shopware()->Models()->fixCategoryTree($offset, $limit, $stats);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data'    => $stats,
-            'total'   => 1,
-        ));
-    }
-
-    public function prepareTreeAction()
-    {
-        $deleteOrphanedSql = "
-            DELETE ac.*
-            FROM s_articles_categories ac
-            LEFT JOIN s_categories c ON ac.categoryID = c.id
-            LEFT JOIN s_articles a ON ac.articleID = a.id
-            WHERE
-            c.id IS NULL
-            OR a.id IS NULL;
-        ";
-        Shopware()->Db()->exec($deleteOrphanedSql);
-
-        $allAssignsSql = "
-            SELECT DISTINCT ac.id, ac.articleID, ac.categoryId, c.parent
-            FROM  s_articles_categories ac
-            INNER JOIN s_categories c
-            ON ac.categoryID = c.id
-        ";
-
-        $assignments = Shopware()->Db()->query($allAssignsSql);
-        $count = $assignments->rowCount();
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array('count' => $count)
-        ));
-    }
-
-    /**
-     *
      * Helpers to clear various caches
      *
      */

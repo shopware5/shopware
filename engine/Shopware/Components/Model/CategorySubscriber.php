@@ -66,6 +66,14 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $disabledForNextFlush = false;
 
     /**
+     * @return \Shopware\Components\Model\CategoryDenormalization
+     */
+    public function getCategoryComponent()
+    {
+        return Shopware()->CategoryDenormalization();
+    }
+
+    /**
      * Disable events for next flush event
      */
     public function disableForNextFlush()
@@ -183,7 +191,7 @@ class CategorySubscriber implements BaseEventSubscriber
             $parent = $category->getParent();
             $parentId = $parent->getId();
 
-            $parents = $em->getParentCategories($parentId);
+            $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
             $path = implode('|', $parents);
             if (empty($path)) {
                 $path = null;
@@ -312,15 +320,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogRemoveAssignment($articleId, $categoryId)
     {
-        $deleteQuery = "
-            DELETE FROM s_articles_categories_ro
-            WHERE parentCategoryID = :categoryId
-            AND articleId = :articleId
-        ";
-
-        Shopware()->Db()
-                  ->query($deleteQuery, array('categoryId' => $categoryId, 'articleId' => $articleId))
-                  ->execute();
+        $this->getCategoryComponent()->removeAssignment($articleId, $categoryId);
     }
 
     /**
@@ -329,20 +329,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogAddAssignment($articleId, $categoryId)
     {
-        $parents = $this->em->getParentCategories($categoryId);
-
-        $insertAssignmentSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertAssignmentStmt = Shopware()->Db()->prepare($insertAssignmentSql);
-
-        Shopware()->Db()->beginTransaction();
-        foreach ($parents as $parent) {
-            $insertAssignmentStmt->execute(array(
-                ':categoryId'       => $parent,
-                ':articleId'        => $articleId,
-                ':parentCategoryId' => $categoryId
-            ));
-        }
-        Shopware()->Db()->commit();
+        $this->getCategoryComponent()->addAssignment($articleId, $categoryId);
     }
 
     /**
@@ -350,15 +337,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogRemoveArticle($articleId)
     {
-        $deleteQuery = "
-            DELETE
-            FROM s_articles_categories_ro
-            WHERE articleID = :articleId
-        ";
-
-        Shopware()->Db()
-                  ->query($deleteQuery, array('articleId' => $articleId))
-                  ->execute();
+        $this->getCategoryComponent()->removeArticleAssignmentments($articleId);
     }
 
     /**
@@ -366,18 +345,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogRemoveCategory($categoryId)
     {
-        $deleteQuery = "
-            DELETE ac1
-            FROM s_articles_categories_ro ac0
-            INNER JOIN s_articles_categories_ro ac1
-                ON ac0.parentCategoryID = ac1.parentCategoryID
-                AND ac0.id != ac1.id
-            WHERE ac0.categoryID = :categoryId
-        ";
-
-        Shopware()->Db()
-                  ->query($deleteQuery, array('categoryId' => $categoryId))
-                  ->execute();
+        $repo = $this->getCategoryComponent()->removeCategoryAssignmentments($categoryId);
     }
 
     /**
@@ -385,10 +353,10 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogMoveCategory($categoryId)
     {
-        $repo = $this->em->getRepository('Shopware\Models\Category\Category');
+        $component = $this->getCategoryComponent();
 
-        $repo->rebuildCategoryPath($categoryId);
-        $repo->removeOldAssignments($categoryId);
-        $repo->rebuildAssignments($categoryId);
+        $component->rebuildCategoryPath($categoryId);
+        $component->removeOldAssignments($categoryId);
+        $component->rebuildAssignments($categoryId);
     }
 }
