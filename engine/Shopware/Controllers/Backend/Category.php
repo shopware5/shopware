@@ -771,6 +771,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function rebuildCategoryPathAction()
     {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
         $categoryId = $this->Request()->getParam('categoryId');
         $repo = $this->getRepository();
 
@@ -802,6 +805,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function removeOldAssignmentsAction()
     {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
         $categoryId = $this->Request()->getParam('categoryId');
         $repo = $this->getRepository();
 
@@ -833,6 +839,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function rebuildAssignmentsAction()
     {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
         $categoryId = $this->Request()->getParam('categoryId');
         $repo = $this->getRepository();
 

@@ -205,6 +205,7 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
 
         Ext.Ajax.request({
             url: currentConfig.requestUrl,
+            timeout: 400000, // increase timeout to 400 seconds
             method: 'POST',
             params: params,
             success: function(response) {
