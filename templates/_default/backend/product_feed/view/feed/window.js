@@ -159,6 +159,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
             {
                 text:'{s name=detail_general/button/save}Save{/s}',
                 action:'save',
+                disabled:true,
                 cls:'primary'
             }
         ];
