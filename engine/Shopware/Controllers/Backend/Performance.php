@@ -40,10 +40,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected $configData = array();
 
-	protected function initAcl()
-	{
-	}
-
+    protected function initAcl()
+    {
+    }
 
     public function init()
     {
@@ -59,17 +58,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $data = $this->Request()->getParams();
 
-		// Save the config
+        // Save the config
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-    	// Clear the config cache
+        // Clear the config cache
         Shopware()->Cache()->clean();
 
-		// Reload config, so that the actual config from the
-		// db is returned
+        // Reload config, so that the actual config from the
+        // db is returned
         $this->configData = $this->prepareConfigData();
-
 
         $this->View()->assign(array(
             'success' => true,
@@ -99,12 +97,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     public function prepareDataForSaving($data)
     {
         $output = array();
-        $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
-        $output['topSeller'] = $this->prepareForSavingDefault($data['topSeller'][0]);
-        $output['seo']       = $this->prepareSeoConfigForSaving($data['seo'][0]);
-        $output['search']    = $this->prepareForSavingDefault($data['search'][0]);
-        $output['categories']= $this->prepareForSavingDefault($data['categories'][0]);
-        $output['various']   = $this->prepareForSavingDefault($data['various'][0]);
+        $output['httpCache']  = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
+        $output['topSeller']  = $this->prepareForSavingDefault($data['topSeller'][0]);
+        $output['seo']        = $this->prepareSeoConfigForSaving($data['seo'][0]);
+        $output['search']     = $this->prepareForSavingDefault($data['search'][0]);
+        $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
+        $output['various']    = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
 
         return $output;
@@ -116,11 +114,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareForSavingDefault($data)
-   	{
+       {
         unset($data['id']);
 
         return $data;
-   	}
+       }
 
     /**
      * Prepare seo array for saving
@@ -129,7 +127,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareSeoConfigForSaving($data)
-	{
+    {
         unset($data['id']);
 
         $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');
@@ -138,13 +136,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $datetime = $date . 'T' . $time;
 
-		$data['routerlastupdate'] = $datetime;
+        $data['routerlastupdate'] = $datetime;
 
         unset($data['routerlastupdateDate']);
         unset($data['routerlastupdateTime']);
 
         return $data;
-	}
+    }
 
     /**
      * Prepare the http config array so that it can easily be saved
@@ -193,10 +191,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $findBy['form'] = $form;
         }
 
-
         /** @var $element Shopware\Models\Config\Element */
         $element = $elementRepository->findOneBy($findBy);
-
 
         // If the element is empty, the given setting does not exists. This might be the case for some plugins
         // Skip those values
@@ -226,10 +222,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Read a given config by name
      *
      * @param $configName
-     * @param string $defaultValue
+     * @param  string      $defaultValue
      * @return null|string
      */
-    public function readConfig($configName, $defaultValue='')
+    public function readConfig($configName, $defaultValue = '')
     {
         // If we have a simple config item, we can return it by using Shopware()->Config()
         if (strpos($configName, ':') === false) {
@@ -244,13 +240,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $form = $formRepository->findOneBy(array('name' => $scope));
 
-        if(!$form) {
+        if (!$form) {
             return $defaultValue;
         }
 
         $element = $elementRepository->findOneBy(array('name' => $config, 'form' => $form));
 
-        if(!$element) {
+        if (!$element) {
             return $defaultValue;
         }
 
@@ -260,6 +256,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         $firstValue = $values[0];
+
         return $firstValue->getValue();
     }
 
@@ -277,9 +274,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             ),
             array(
                 'id' => 3,
-                'name' => 'Optimizer aktiviert',
-                'value' => extension_loaded('Optimizer'),
-                'valid' => extension_loaded('Optimizer') === true
+                'name' => 'Zend OPcache aktiviert',
+                'value' => extension_loaded('Zend OPcache'),
+                'valid' => extension_loaded('Zend OPcache') === true
             ),
             array(
                 'id' => 4,
@@ -387,10 +384,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $controllers = Shopware()->Config()->cacheControllers;
         $cacheControllers = array();
-        if(!empty($controllers)) {
+        if (!empty($controllers)) {
             $controllers = str_replace(array("\r\n", "\r"), "\n", $controllers);
             $controllers = explode("\n", trim($controllers));
-            foreach($controllers as $controller) {
+            foreach ($controllers as $controller) {
                 list($controller, $cacheTime) = explode(" ", $controller);
                 $cacheControllers[] = array('key' => $controller, 'value' => $cacheTime);
             }
@@ -398,10 +395,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $controllers = Shopware()->Config()->noCacheControllers;
         $noCacheControllers = array();
-        if(!empty($controllers)) {
+        if (!empty($controllers)) {
             $controllers = str_replace(array("\r\n", "\r"), "\n", $controllers);
             $controllers = explode("\n", trim($controllers));
-            foreach($controllers as $controller) {
+            foreach ($controllers as $controller) {
                 list($controller, $cacheTime) = explode(" ", $controller);
                 $noCacheControllers[] = array('key' => $controller, 'value' => $cacheTime);
             }
@@ -424,6 +421,49 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $this->View()->assign(array(
             'success' => true,
             'data' => $this->configData
+        ));
+    }
+
+    /**
+     *
+     * Helpers to fix categories
+     *
+     */
+
+    /**
+     * Fixes categorie tree
+     */
+    public function fixCategoriesAction()
+    {
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit  = $this->Request()->getParam('limit', null);
+
+        $component = Shopware()->CategoryDenormalization();
+
+        if ($offset == 0) {
+            $component->rebuildCategoryPath();
+            $component->removeAllAssignments();
+        }
+
+        $count = $component->rebuildAllAssignments($limit, $offset);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'total'   => $count,
+        ));
+    }
+
+    public function prepareTreeAction()
+    {
+        $component = Shopware()->CategoryDenormalization();
+
+        $component->removeOrphanedAssignments();
+
+        $count = $component->rebuildAllAssignmentsCount();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => array('count' => $count)
         ));
     }
 }

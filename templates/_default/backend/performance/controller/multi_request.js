@@ -60,13 +60,13 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
-            batchSize: 200
+            batchSize: 100
         },
 
         search:  {
             title: '{s name=multi_request/search}Build index for frontend search{/s}',
             requestUrl: '{url controller="SearchIndex" action="build"}',
-            batchSize: 2
+            batchSize: 100
         },
 
         seo:  {
@@ -82,26 +82,26 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 content: '{url controller="Seo" action="seoContent"}',
                 finish: '{url controller="Seo" action="finishSeo"}'
             },
-            batchSize: 200
+            batchSize: 100
         },
 
         similarShown:  {
             title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
-            batchSize: 200
+            batchSize: 100
         },
         alsoBought:  {
             title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
-            batchSize: 200
+            batchSize: 100
         },
         category:  {
             title: '{s name=multi_request/categories}Repair categories{/s}',
-            totalCountUrl: '{url controller="Cache" action="prepareTree"}',
-            requestUrl: '{url controller="Cache" action="fixCategories"}',
-            batchSize: 5000
+            totalCountUrl: '{url controller="Performance" action="prepareTree"}',
+            requestUrl: '{url controller="Performance" action="fixCategories"}',
+            batchSize: 100
         }
     },
 
@@ -323,7 +323,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         me.cancelOperation = false;
     },
-    
+
     /**
      * Runs the actual request
      * Method is called recursively until all data was processed

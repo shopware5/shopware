@@ -120,6 +120,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
+     * @return \Shopware\Components\Model\CategoryDenormalization
+     */
+    public function getCategoryComponent()
+    {
+        return Shopware()->CategoryDenormalization();
+    }
+
+    /**
      * Reads all known categories into an array to show it in the category treepanel
      */
     public function getListAction()
@@ -574,7 +582,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         if ($item->getParent()->getId() != $parent->getId()) {
             $item->setParent($parent);
 
-            $parents = Shopware()->Models()->getParentCategories($parentId);
+            $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
+
             $path = implode('|', $parents);
             if (empty($path)) {
                 $path = null;
@@ -757,8 +766,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $categoryId = $this->Request()->getParam('categoryId');
 
-        $repo = $this->getRepository();
-        $count = $repo->rebuildCategoryPathCount($categoryId);
+        $count = $this->getCategoryComponent()->rebuildCategoryPathCount($categoryId);
 
         $this->view->assign(array(
             'success' => true,
@@ -775,12 +783,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
-        $repo = $this->getRepository();
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
 
-        $offset = $this->Request()->getParam('offset');
-        $count  = $this->Request()->getParam('limit');
-
-        $repo->rebuildCategoryPath($categoryId, $count, $offset);
+        $this->getCategoryComponent()->rebuildCategoryPath($categoryId, $count, $offset);
 
         $this->view->assign(array(
             'success' => true,
@@ -791,8 +797,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $categoryId = $this->Request()->getParam('categoryId');
 
-        $repo = $this->getRepository();
-        $count = $repo->removeOldAssignmentsCount($categoryId);
+        $count = $this->getCategoryComponent()->removeOldAssignmentsCount($categoryId);
 
         $this->view->assign(array(
             'success' => true,
@@ -809,12 +814,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
-        $repo = $this->getRepository();
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
 
-        $offset = $this->Request()->getParam('offset');
-        $count  = $this->Request()->getParam('limit');
-
-        $repo->removeOldAssignments($categoryId, $count, $offset);
+        $this->getCategoryComponent()->removeOldAssignments($categoryId, $count, $offset);
 
         $this->view->assign(array(
             'success' => true,
@@ -825,8 +828,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $categoryId = $this->Request()->getParam('categoryId');
 
-        $repo = $this->getRepository();
-        $count = $repo->rebuildAssignmentsCount($categoryId);
+        $count = $this->getCategoryComponent()->rebuildAssignmentsCount($categoryId);
 
         $this->view->assign(array(
             'success' => true,
@@ -843,12 +845,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
-        $repo = $this->getRepository();
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
 
-        $offset = $this->Request()->getParam('offset');
-        $count  = $this->Request()->getParam('limit');
-
-        $repo->rebuildAssignments($categoryId, $count, $offset);
+        $this->getCategoryComponent()->rebuildAssignments($categoryId, $count, $offset);
 
         $this->view->assign(array(
             'success' => true,
