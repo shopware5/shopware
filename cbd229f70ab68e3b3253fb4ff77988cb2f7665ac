@@ -1,0 +1,10 @@
+From: feature/next/sw-6058-refacotr-category-denormalization
+To: master
+Conflict: (add/add) Merge conflict in build/phpunit.xml.dist
+	ADD|build/phpunit.xml.dist
+Conflict: (add/add) Merge conflict in build/build.xml
+	ADD|build/build.xml
+Conflict: (add/add) Merge conflict in build/build.properties.dist
+	ADD|build/build.properties.dist
+Conflict: (add/add) Merge conflict in build/.gitignore
+	ADD|build/.gitignore
