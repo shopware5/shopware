@@ -61,6 +61,8 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
         $offset = $this->Request()->get('offset');
         $limit = $this->Request()->get('limit');
 
+        @set_time_limit(1200);
+
         if ($offset == 0) {
             $sql = "DELETE FROM s_articles_similar_shown_ro";
             Shopware()->Db()->query($sql);

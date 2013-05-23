@@ -43,6 +43,8 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
      */
     public function buildAction()
     {
+        @set_time_limit(1200);
+
         $adapter = new Shopware_Components_Search_Adapter_Default(
             Shopware()->Db(),
             Shopware()->Cache(),
