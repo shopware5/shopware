@@ -262,13 +262,20 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     { name: 'batchSize',  type: 'int' }
                 ],
                 data : [
+                    { batchSize: '1' },
+                    { batchSize: '5' },
+                    { batchSize: '10' },
+                    { batchSize: '20' },
+                    { batchSize: '30' },
                     { batchSize: '50' },
+                    { batchSize: '75' },
                     { batchSize: '100' },
                     { batchSize: '150' },
                     { batchSize: '200' },
                     { batchSize: '250' },
                     { batchSize: '500' },
                     { batchSize: '1000' },
+                    { batchSize: '1500' }
                 ]
             })
         });

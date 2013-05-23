@@ -133,6 +133,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         Ext.Ajax.request({
             url: taskConfig.totalCountUrl,
+            timeout: 4000000,
             params: {
                 shopId: shopId
             },
@@ -395,6 +396,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             url: currentConfig.requestUrl,
             method: 'POST',
             params: params,
+            timeout: 4000000,
             success: function(response) {
                 var json = Ext.decode(response.responseText);
 

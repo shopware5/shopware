@@ -164,6 +164,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                     { name: 'batchSize',  type: 'int' }
                 ],
                 data : [
+                    { batchSize: '1' },
+                    { batchSize: '5' },
                     { batchSize: '10' },
                     { batchSize: '20' },
                     { batchSize: '30' },

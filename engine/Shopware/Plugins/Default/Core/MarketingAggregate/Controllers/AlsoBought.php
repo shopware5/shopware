@@ -60,6 +60,8 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
         $offset = $this->Request()->get('offset');
         $limit = $this->Request()->get('limit');
 
+        @set_time_limit(1200);
+
         if ($offset == 0) {
             $sql = "DELETE FROM s_articles_also_bought_ro";
             Shopware()->Db()->query($sql);

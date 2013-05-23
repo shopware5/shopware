@@ -57,6 +57,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     {
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
+        @set_time_limit(1200);
+
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
 
@@ -74,6 +76,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function finishSeoAction()
     {
+        @set_time_limit(1200);
         $this->SeoIndex()->clearRouterRewriteCache();
     }
 
@@ -81,7 +84,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function getCountAction()
     {
         $shopId = (int) $this->Request()->getParam('shop', 1);
-
+        @set_time_limit(1200);
         $category = $this->SeoIndex()->countCategories($shopId);
         $article = $this->SeoIndex()->countArticles($shopId);
         $blog = $this->SeoIndex()->countBlogs($shopId);
@@ -113,6 +116,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     {
 
         $shopId = (int) $this->Request()->getParam('shop', 1);
+        @set_time_limit(1200);
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
@@ -131,6 +135,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoCategoryAction()
     {
 
+        @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset');
         $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
@@ -151,6 +156,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoBlogAction()
     {
+        @set_time_limit(1200);
 
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
@@ -172,8 +178,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoArticleAction()
     {
-
-        $offset = $this->Request()->getParam('offset', 0);
+        @set_time_limit(1200);
         $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
@@ -205,7 +210,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoEmotionAction()
     {
-
+        @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
@@ -228,7 +233,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoContentAction()
     {
-
+        @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shop', 1);
