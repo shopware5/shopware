@@ -367,11 +367,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         return array(
-            'routerurlcache'     => (int) Shopware()->Config()->routerurlcache,
-            'routercache'        => (int) Shopware()->Config()->routercache,
-            'routerlastupdateDate'   => $date,
-            'routerlastupdateTime'   => $time,
-            'seoRefreshStrategy' => Shopware()->Config()->seoRefreshStrategy
+            'routercache'          => (int) Shopware()->Config()->routercache,
+            'routerlastupdateDate' => $date,
+            'routerlastupdateTime' => $time,
+            'seoRefreshStrategy'   => Shopware()->Config()->seoRefreshStrategy
         );
     }
 
