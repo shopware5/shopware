@@ -75,7 +75,7 @@ return array_merge($customConfig, array(
         'allow_revalidate' => false,
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_templates_html')
+        'cache_dir' => $this->DocPath('cache_html')
     ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
@@ -103,7 +103,7 @@ return array_merge($customConfig, array(
             'hashed_directory_umask' => 0771,
             'cache_file_umask' => 0644,
             'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
-            'cache_dir' => $this->DocPath('cache_database'),
+            'cache_dir' => $this->DocPath('cache_general'),
             'file_name_prefix' => 'shopware'
         ), $customConfig['cache']['backendOptions']),
     ),
@@ -137,7 +137,7 @@ return array_merge($customConfig, array(
 				'hashed_directory_umask' => 0771,
 				'cache_file_umask' => 0644,
 				'hashed_directory_level' => 2,
-				'cache_dir' => $this->DocPath('cache_database'),
+				'cache_dir' => $this->DocPath('cache_general'),
 				'file_name_prefix' => 'shopware'
 	    	),
 			'fast_backend'  => 'Memcached',
