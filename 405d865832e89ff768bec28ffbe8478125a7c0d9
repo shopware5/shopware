@@ -1,0 +1,4 @@
+From: feature/next/sw-6031-add-missing-snippets
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Backend/Cache.php
+	MODIFY|engine/Shopware/Controllers/Backend/Cache.php
