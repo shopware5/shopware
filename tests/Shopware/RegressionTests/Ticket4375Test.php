@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)

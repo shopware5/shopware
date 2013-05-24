@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @todo take new password encoder into account
  *
  * @category  Shopware
@@ -45,7 +44,7 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
 
         $this->dispatch('/account/login');
         $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(3, Shopware()->Session()->sUserId);
+        $this->assertEquals(1, Shopware()->Session()->sUserId);
 
         $this->logoutUser();
     }
@@ -58,10 +57,7 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
     {
         //test with md5 password and without the ignoreAccountMode parameter
         $this->assertEmpty(Shopware()->Session()->sUserId);
-        $this->Request()->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
-
+        $this->setUserDataToPost();
         $this->dispatch('/account/login');
         $this->assertEmpty(Shopware()->Session()->sUserId);
 
@@ -76,23 +72,18 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
     {
         //test the internal call of the method with the $ignoreAccountMode parameter
 
-        $this->Request()->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
-
+        $this->setUserDataToPost();
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin(true);
         $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(3, Shopware()->Session()->sUserId);
+        $this->assertEquals(1, Shopware()->Session()->sUserId);
         $this->assertEmpty($result["sErrorFlag"]);
         $this->assertEmpty($result["sErrorMessages"]);
 
         $this->logoutUser();
         //test the internal call of the method without the $ignoreAccountMode parameter
 
-        $this->Request()->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
+        $this->setUserDataToPost();
 
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin();
@@ -108,9 +99,7 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
     public function testWithIgnoreLogin()
     {
         //test the internal call of the method without the $ignoreAccountMode parameter
-        $this->Request()->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
+        $this->setUserDataToPost();
 
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin();
@@ -132,5 +121,17 @@ class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin
         $this->dispatch('/account/logout');
         //reset the request
         $this->reset();
+    }
+
+    /**
+     * set user data to post
+     * @return void
+     */
+    private function setUserDataToPost() {
+        $sql = 'SELECT email, password FROM s_user WHERE id = 1';
+        $userData = Shopware()->Db()->fetchRow($sql);
+        $this->Request()->setMethod('POST')
+                ->setPost('email', $userData['email'])
+                ->setPost('passwordMD5', $userData['password']);
     }
 }

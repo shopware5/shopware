@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -36,8 +35,8 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
         202 => array(
             'id' => 202,
             'categories' => array(
-                array('id' => 65, 'name' => 'Root>English>Examples>Configurator articles'),
-                array('id' => 22, 'name' => 'Root>Deutsch>Beispiele>Konfiguratorartikel')
+                array('id' => 22, 'name' => 'Deutsch>Beispiele>Konfiguratorartikel'),
+                array('id' => 65, 'name' => 'English>Examples>Configurator articles')
             ),
             'configuratorSet' => array(
                 'id' => 25,
@@ -57,8 +56,8 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
             'id' => 243,
             'configuratorSet' => array(),
             'categories' => array(
-                array('id' => 20, 'name' => 'Root>Deutsch>Beispiele>Darstellung'),
-                array('id' => 68, 'name' => 'Root>English>Examples>Presentation'),
+                array('id' => 20, 'name' => 'Deutsch>Beispiele>Darstellung'),
+                array('id' => 68, 'name' => 'English>Examples>Presentation'),
             ),
             'images' => array(
                 array('id' => 593, 'path' => 'Koffer-rot-gruen-gelb-blau503f1b16660bd')
@@ -70,8 +69,8 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
             'id' => 209,
             'configuratorSet' => array(),
             'categories' => array(
-                array('id' => 23, 'name' => 'Root>Deutsch>Beispiele>Preisgestaltung'),
-                array('id' => 73, 'name' => 'Root>English>Examples>Price strategies'),
+                array('id' => 23, 'name' => 'Deutsch>Beispiele>Preisgestaltung'),
+                array('id' => 73, 'name' => 'English>Examples>Price strategies'),
             ),
             'images' => array(
                 array('id' => 523, 'path' => 'Glas_Muensterlaender_Aperitif_Imagefoto5034e02761d58')
@@ -83,10 +82,9 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
             'id' => 6,
             'configuratorSet' => array(),
             'categories' => array(
-                array('id' => 5, 'name' => 'Root>Deutsch>Genusswelten'),
-                array('id' => 14, 'name' => 'Root>Deutsch>Genusswelten>Edelbrände'),
-                array('id' => 21, 'name' => 'Root>Deutsch>Beispiele>Produktvergleiche & Filter'),
-                array('id' => 50, 'name' => 'Root>English>Worlds of indulgence>Brandies'),
+                array('id' => 14, 'name' => 'Deutsch>Genusswelten>Edelbrände'),
+                array('id' => 21, 'name' => 'Deutsch>Beispiele>Produktvergleiche & Filter'),
+                array('id' => 50, 'name' => 'English>Worlds of indulgence>Brandies'),
             ),
             'images' => array(
                 array('id' => 14, 'path' => 'Cigar_Special')
