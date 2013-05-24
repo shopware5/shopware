@@ -217,38 +217,38 @@ Ext.define('Enlight.app.Window', {
      * @privaate
      * @return [boolean]
      */
-    onBeforeDestroyMainWindow: function() {
+    onBeforeDestroyMainWindow: function () {
         var me = this,
-            subApp = me.subApplication;
-            if(subApp.hasOwnProperty('windowManager') && subApp.windowManager) {
-                var windowManager = subApp.windowManager,
-                count = windowManager.subWindows.getCount(), subWindows,
-                subWindowConfirmationBlackList = ['Shopware.apps.Category','Shopware.apps.Voucher'];
+                subApp = me.subApplication;
+        if (subApp.hasOwnProperty('windowManager') && subApp.windowManager) {
+            var windowManager = subApp.windowManager,
+                    count = windowManager.subWindows.getCount(), subWindows,
+                    subWindowConfirmationBlackList = ['Shopware.apps.Category', 'Shopware.apps.Voucher'];
 
-                if(!count) {
-                    // Hide the window before destroy to increase the visual closing of the window
-                    // only when the window has no subWindows
-                    if(Ext.isFunction(me.hide)) {
-                        me.hide();
-                        return true;
-                    }
-                }
-                subWindows = windowManager.subWindows.items;
-
-                if(Ext.Array.contains(subWindowConfirmationBlackList, me.subApplication.$className)){
-                    //if the subApp is in the black list don't ask just close the sub windows
-                    me.closeSubWindows(subWindows, windowManager);
+            if (!count) {
+                // Hide the window before destroy to increase the visual closing of the window
+                // only when the window has no subWindows
+                if (Ext.isFunction(me.hide)) {
+                    me.hide();
                     return true;
                 }
-
-                Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function(button) {
-                    if (button == 'yes') {
-                        me.closeSubWindows(subWindows, windowManager);
-                        me.destroy();
-                    }
-                });
-                return false;
             }
+            subWindows = windowManager.subWindows.items;
+
+            if (Ext.Array.contains(subWindowConfirmationBlackList, me.subApplication.$className)) {
+                //if the subApp is in the black list don't ask just close the sub windows
+                me.closeSubWindows(subWindows, windowManager);
+                return true;
+            }
+
+            Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function (button) {
+                if (button == 'yes') {
+                    me.closeSubWindows(subWindows, windowManager);
+                    me.destroy();
+                }
+            });
+            return false;
+        }
     },
 
 	/**
