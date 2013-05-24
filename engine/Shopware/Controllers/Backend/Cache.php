@@ -102,9 +102,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
                 $tags[] = 'Shopware_Config';
                 $tags[] = 'Shopware_Plugin';
             }
-            if ($cache['router'] == 'on') {
-                $tags[] = 'Shopware_RouterRewrite';
-            }
             if ($cache['search'] == 'on') {
                 $tags[] = 'Shopware_Modules_Search';
             }
@@ -171,9 +168,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected function clearQueryCache()
     {
-        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_RouterRewrite'
-        ));
         $this->clearRewriteCache();
     }
 

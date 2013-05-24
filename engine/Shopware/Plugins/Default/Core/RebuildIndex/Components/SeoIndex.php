@@ -30,22 +30,12 @@
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
     /**
-     * Clear the routerRewrite cache.
-     * Needed after the cache was recreated
-     */
-    public function clearRouterRewriteCache()
-    {
-        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Shopware_RouterRewrite'));
-    }
-
-    /**
      * The old 'refreshIndex' method from the RouterRewrite Plugin
      *
      * This method ist used, if the SEO index needs to be build in *one* request - e.g. CronJob or Live
      */
     public function refreshSeoIndex()
     {
-
         list($cachedTime, $elementId, $shopId) = $this->getCachedTime();
 
         $cache = (int) Shopware()->Config()->routerCache;
@@ -63,8 +53,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             if($resultTime !== $currentTime) {
                 $this->setCachedTime($resultTime, $elementId, $shopId);
             }
-
-            $this->clearRouterRewriteCache();
         }
     }
 

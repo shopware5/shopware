@@ -79,8 +79,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 emotion: '{url controller="Seo" action="seoEmotion"}',
                 blog: '{url controller="Seo" action="seoBlog"}',
                 statistic: '{url controller="Seo" action="seoStatic"}',
-                content: '{url controller="Seo" action="seoContent"}',
-                finish: '{url controller="Seo" action="finishSeo"}'
+                content: '{url controller="Seo" action="seoContent"}'
             },
             batchSize: 100
         },
@@ -271,21 +270,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         };
     },
 
-    getSeoFinishRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            totalCount: 1,
-            progress: null,
-            requestUrl: me.requestConfig.seo.requestUrls.finish,
-            batchSize: 2,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-
     /**
      * Called after the user hits the 'start' button of the multiRequestDialog
      */
@@ -300,8 +284,6 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getSeoBlogRequestConfig(window));
         configs.push(me.getSeoStatisticRequestConfig(window));
         configs.push(me.getSeoContentRequestConfig(window));
-
-        configs.push(me.getSeoFinishRequestConfig(window));
 
         me.runRequest(0, window, null, configs);
     },
