@@ -221,26 +221,29 @@ Ext.define('Enlight.app.Window', {
         var me = this,
             subApp = me.subApplication,
             windowManager = subApp.windowManager,
-            count = windowManager.subWindows.getCount(), subWindows;
+            count = windowManager.subWindows.getCount(), subWindows,
+            subWindowConfirmationBlackList = ['Shopware.apps.Category','Shopware.apps.Voucher'];
 
-        if(!count || !me.isMainWindow) {
+
+        if(!count) {
+            // Hide the window before destroy to increase the visual closing of the window
+            // only when the window has no subWindows
+            if(Ext.isFunction(me.hide)) {
+                me.hide();
+                return true;
+            }
+        }
+        subWindows = windowManager.subWindows.items;
+
+        if(Ext.Array.contains(subWindowConfirmationBlackList, me.subApplication.$className)){
+            //if the subApp is in the black list don't ask just close the sub windows
+            me.closeSubWindows(subWindows, windowManager);
             return true;
         }
 
-        // Hide the window before destroy to increase the visual closing of the window
-        if(me.hasOwnProperty('hide') && Ext.isFunction(me.hide)) {
-            me.hide();
-        }
-
-        subWindows = windowManager.subWindows.items;
         Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function(button) {
             if (button == 'yes') {
-                Ext.each(subWindows, function(subWindow) {
-                    if(subWindow) {
-                        windowManager.subWindows.removeAtKey(subWindow.$subWindowId);
-                        subWindow.destroy();
-                    }
-                });
+                me.closeSubWindows(subWindows, windowManager);
                 me.destroy();
             }
         });
@@ -509,5 +512,17 @@ Ext.define('Enlight.app.Window', {
             me.fireEvent('maximize', me);
         }
         return me;
+    },
+
+    /**
+     * helper function to close all subwindows
+     */
+    closeSubWindows: function(subWindows, windowManager) {
+        Ext.each(subWindows, function(subWindow) {
+            if(subWindow) {
+                windowManager.subWindows.removeAtKey(subWindow.$subWindowId);
+                subWindow.destroy();
+            }
+        });
     }
 });

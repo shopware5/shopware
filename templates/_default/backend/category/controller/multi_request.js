@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
 
                 // Enable close button, set progressBar to 'finish'
                 dialog.closeButton.enable();
-                dialog.destroy();
+                dialog.hide();
             } else {
 
                 //cancel button pushed?
