@@ -1,9 +1,8 @@
 #!/bin/bash
 echo "Clearing all caches"
 
-rm -f ClassMap_*.php
-
-rm -rf database/*
+rm -rf html/*
+rm -rf general/*
 rm -rf templates/cache/*
 rm -rf templates/compile/*
 

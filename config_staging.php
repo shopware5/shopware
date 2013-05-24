@@ -8,13 +8,13 @@ if (file_exists($this->DocPath()."/config.php")){
 
 $stagingConfig = array(
     'db' => array_merge($defaultConfig["db"],array(
-        'dbname' => $defaultConfig["custom"]["staging_database"]
+        'dbname' => $defaultConfig["custom"]["staging_cache_general"]
     )),
     'custom' => array_merge($defaultConfig["custom"],array(
         'is_staging' => true,
     )),
     'cache' => array(
-        'backendOptions' => array("cache_dir" => $this->DocPath('staging_cache_database')),
+        'backendOptions' => array("cache_dir" => $this->DocPath('staging_cache_general')),
         'frontendOptions' => array()
     ),
     'httpCache' => array(
