@@ -1,0 +1,4 @@
+From: experimentell/optimize-filter-queries
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Components/Model/ModelManager.php
+	MODIFY|engine/Shopware/Components/Model/ModelManager.php
