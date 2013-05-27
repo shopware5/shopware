@@ -110,6 +110,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
                             ON  article1.sessionID  = article2.sessionID
                             AND article1.articleID != article2.articleID
                       WHERE article1.id = shown.article_id
+                      AND   article2.id = shown.related_article_id
                       GROUP BY article2.articleID
                       LIMIT 1
               )
