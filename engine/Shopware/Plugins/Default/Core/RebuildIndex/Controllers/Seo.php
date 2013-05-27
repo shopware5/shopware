@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $shop = $this->SeoIndex()->registerShop($shopId);
+        $this->SeoIndex()->registerShop($shopId);
 
         list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
 
@@ -182,13 +182,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
         $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
 
-        $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01', $limit);
-        if ($resultTime === $cachedTime) {
-            $resultTime = $currentTime;
-        }
-        if($resultTime !== $currentTime) {
-            $this->SeoIndex()->setCachedTime($resultTime, $elementId, $shopId);
-        }
+        $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01', $limit);
+        $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
 
         $this->View()->assign(array(
             'success' => true
