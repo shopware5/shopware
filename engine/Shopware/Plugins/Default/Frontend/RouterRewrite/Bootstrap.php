@@ -32,16 +32,13 @@
 
 /**
  *  Shopware Router Rewrite Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    protected $urlCacheTime = 0,
-        $urlToLower = false,
-        $inquiryId = null,
-        $paths = array(),
-        $urls = array();
+    protected $urlToLower = false;
+    protected $inquiryId = null;
+    protected $paths = array();
+    protected $urls = array();
 
     /**
      * Install plugin method
@@ -67,7 +64,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
         $config = Shopware()->Config();
-        $this->urlCacheTime = $config->routerUrlCache;
         $this->urlToLower = !empty($config->routerToLower);
         $this->inquiryId = $config->inquiryId;
 
@@ -280,18 +276,8 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
 
         $shopId = Shopware()->Shop()->getId();
 
-        if ($this->urlCacheTime > 0) {
-            $id = 'Shopware_RouterRewrite_' . $shopId . '_' . md5($orgPath);
-            $cache = Shopware()->Cache();
-            if (($path = $cache->load($id)) === false) {
-                $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
-                $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
-                $cache->save($path ? : '', $id, array('Shopware_RouterRewrite'), $this->urlCacheTime);
-            }
-        } else {
-            $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
-            $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
-        }
+        $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
+        $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
         if (empty($path)) {
             return null;
         }

@@ -333,13 +333,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
                 me.saveNewChildPositions(newParent);
 
-                var responseObject = Ext.decode(operation.response.responseText);
+                if(!Ext.isEmpty(operation.response)) {
+                    var responseObject = Ext.decode(operation.response.responseText);
 
-                if (responseObject.needsRebuild) {
-                    var batch = me.getView('main.MultiRequestTasks').create({
-                        categoryId: node
-                    }).show();
-                    batch.run();
+                    if (responseObject.needsRebuild) {
+                        var batch = me.getView('main.MultiRequestTasks').create({
+                            categoryId: node
+                        }).show();
+                        batch.run();
+                    }
                 }
             }
         });

@@ -198,7 +198,7 @@ class ModelManager extends EntityManager
     public function toArray($entity)
     {
         if ($entity instanceof \Traversable) {
-           $entity = iterator_to_array($entity);
+            $entity = iterator_to_array($entity);
         }
 
         if (is_array($entity)) {
@@ -288,7 +288,7 @@ class ModelManager extends EntityManager
     {
         $metaDataCache = $this->getConfiguration()->getMetadataCacheImpl();
 
-        if(method_exists($metaDataCache, 'deleteAll')) {
+        if (method_exists($metaDataCache, 'deleteAll')) {
             $metaDataCache->deleteAll();
         }
 
@@ -383,7 +383,7 @@ class ModelManager extends EntityManager
             $defaultValue = "'". $default ."'";
         } elseif (is_null($default)) {
             $defaultValue = " NULL ";
-        }  else {
+        } else {
             $defaultValue = $default;
         }
 
@@ -454,107 +454,5 @@ class ModelManager extends EntityManager
         $sql= "SHOW COLUMNS FROM " . $tableName . " LIKE '" . $columnName . "'";
         $result = Shopware()->Db()->fetchRow($sql);
         return !empty($result);
-    }
-
-    /**
-     * @param integer $parentId
-     * @return array
-     */
-    public function getParentCategories($parentId)
-    {
-        static $cache = array();
-
-        if (isset($cache[$parentId])) {
-            return $cache[$parentId];
-        }
-
-        $parent = Shopware()->Db()->fetchRow("SELECT id, parent FROM  `s_categories` WHERE id = $parentId AND parent IS NOT NULL;");
-        if (!$parent) {
-            return false;
-        }
-
-        $result = array($parent['id']);
-
-        $parent = $this->getParentCategories($parent['parent']);
-        if ($parent) {
-            $result = array_merge($result, $parent);
-        }
-
-        $cache[$parentId] = $result;
-
-        return $result;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param array $stats
-     */
-    public function fixCategoryTree($offset = 0, $limit = 0, &$stats = array())
-    {
-        $offset = (int) $offset;
-        $limit = (int) $limit;
-
-        $baseMemory = memory_get_usage();
-        $startTime = microtime(true);
-
-        $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleID AND c.articleID = :articleID AND parentCategoryID = :parentCategoryId";
-        $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
-
-        $insertSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertStmt = Shopware()->Db()->prepare($insertSql);
-
-        $allAssignsSql = "
-            SELECT DISTINCT ac.id, ac.articleID, ac.categoryID, c.parent
-            FROM s_articles_categories ac
-            INNER JOIN s_categories c ON ac.categoryID = c.id
-            LEFT JOIN s_categories c2 ON c.id = c2.parent
-            WHERE c2.id IS NULL
-            ORDER BY articleID
-        ";
-        $allAssignsSql = Shopware()->Db()->limit($allAssignsSql, $limit, $offset);
-        $assignments = Shopware()->Db()->query($allAssignsSql);
-
-        $newRows = 0;
-        Shopware()->Db()->beginTransaction();
-        while ($assignment = $assignments->fetch()) {
-
-            if (empty($assignment['parent'])) {
-                continue;
-            }
-
-            $parents = $this->getParentCategories($assignment['parent']);
-            if (empty($parents)) {
-                continue;
-            }
-
-            array_unshift($parents, $assignment['categoryID']);
-
-            foreach ($parents as $parentId) {
-                $assignmentStmt->execute(array(
-                    'articleID'        => $assignment['articleID'],
-                    'categoryId'       => $parentId,
-                    'parentCategoryId' => $assignment['categoryID']
-                ));
-
-                if ($assignmentStmt->fetchColumn() === false) {
-                    $newRows++;
-
-                    $insertStmt->execute(array(
-                        ':categoryId'       => $parentId,
-                        ':articleId'        => $assignment['articleID'],
-                        ':parentCategoryId' => $assignment['categoryID']
-                    ));
-                }
-            }
-        }
-        Shopware()->Db()->commit();
-
-        $stats = array(
-            'newRows'        => $newRows,
-            'runtime'        => number_format((microtime(true) - $startTime), 2) . " seconds",
-            'memory'         => number_format(((memory_get_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-            'peakMemory'     => number_format(((memory_get_peak_usage() - $baseMemory) / 1024 / 1024), 2) . " MB",
-        );
     }
 }

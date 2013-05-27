@@ -407,10 +407,10 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetAll($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        return $this->GetAll($sql, $bind);
+        return $this->callCached('GetAll', $timeout, $sql, $bind, $tags);
     }
 
-    /**
+    /***
      * Fetch first row cached
      *
      * @deprecated
@@ -422,7 +422,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetRow($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        return $this->GetRow($sql, $bind);
+        return $this->callCached('GetRow', $timeout, $sql, $bind, $tags);
     }
 
     /**
@@ -437,7 +437,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetOne($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        return $this->GetOne($sql, $bind);
+        return $this->callCached('GetOne', $timeout, $sql, $bind, $tags);
     }
 
     /**
@@ -452,7 +452,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetCol($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        return $this->GetCol($sql, $bind);
+        return $this->callCached('GetCol', $timeout, $sql, $bind, $tags);
     }
 
     /**
@@ -467,6 +467,6 @@ class Enlight_Components_Adodb extends Enlight_Class
      */
     public function CacheGetAssoc($timeout, $sql = null, $bind = array(), $tags = array())
     {
-        return $this->GetAssoc($sql, $bind);
+        return $this->callCached('GetAssoc', $timeout, $sql, $bind, $tags);
     }
 }

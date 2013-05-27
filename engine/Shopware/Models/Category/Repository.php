@@ -127,7 +127,7 @@ class Repository extends ModelRepository
 
         $selection = array();
         if (is_array($fields)) {
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $selection[] = 'category.' . $field;
             }
         } else {
@@ -200,7 +200,7 @@ class Repository extends ModelRepository
 
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+                    ->setMaxResults($limit);
         }
 
         return $builder;
@@ -307,9 +307,9 @@ class Repository extends ModelRepository
     {
         $builder->addSelect('COUNT(articles) as articleCount');
         if ($onlyActive) {
-            $builder->leftJoin('c.articles', 'articles', 'WITH', 'articles.active = true');
+            $builder->leftJoin('c.allArticles', 'articles', 'WITH', 'articles.active = true');
         } else {
-            $builder->leftJoin('c.articles', 'articles');
+            $builder->leftJoin('c.allArticles', 'articles');
         }
         $builder->addGroupBy('c.id');
 
@@ -402,8 +402,7 @@ class Repository extends ModelRepository
                 ))
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
-                ->andWhere('c.active=1')
-                ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
+                ->andWhere('c.active = 1');
 
         $builder = $this->addArticleCountSelect($builder, true);
         $builder = $this->addChildrenCountSelect($builder);
@@ -493,7 +492,7 @@ class Repository extends ModelRepository
         $categories = array();
         $depth--;
 
-        foreach($children as &$child) {
+        foreach ($children as &$child) {
             $category = $child['category'];
             $category['childrenCount'] = $child['childrenCount'];
             $category['articleCount'] = $child['articleCount'];
@@ -601,7 +600,7 @@ class Repository extends ModelRepository
      *
      * @return  \Shopware\Components\Model\QueryBuilder
      */
-    public function getBlogCategoriesByParentBuilder($parentId, $offset=null, $limit=null)
+    public function getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
         $builder = $this->createQueryBuilder('categories')
                 ->select(array('categories'))
@@ -661,203 +660,5 @@ class Repository extends ModelRepository
         $builder->addSelect('(' . $subQuery->getDQL() . ') as childrenCount');
 
         return $builder;
-    }
-
-    /**
-     * @param int $categoryId
-     * @return int
-     */
-    public function rebuildCategoryPathCount($categoryId)
-    {
-        $sql = "
-            SELECT count(c.id)
-            FROM  `s_categories` c
-            WHERE c.path LIKE :categoryId
-        ";
-
-        $count = Shopware()->Db()->fetchOne($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-
-        return (int) $count;
-    }
-
-    /**
-     * Fix path for child-categories
-     *
-     * @param int $categoryId
-     * @param int $count
-     * @param int $offset
-     */
-    public function rebuildCategoryPath($categoryId, $count = null, $offset = 0)
-    {
-        if (empty($categoryId)) {
-            return;
-        }
-
-        $sql = "
-            SELECT c.id
-            FROM  `s_categories` c
-            WHERE c.path LIKE :categoryId
-        ";
-
-        if ($count !== null) {
-            $sql = Shopware()->Db()->limit($sql, $count, $offset);
-        }
-
-        $categoryIds = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-
-        Shopware()->Db()->beginTransaction();
-        foreach ($categoryIds as $categoryId) {
-
-            $parents = $this->getEntityManager()->getParentCategories($categoryId);
-
-            array_shift($parents);
-            $path = '|' . implode('|', $parents) . '|';
-
-            Shopware()->Db()
-                    ->query('UPDATE s_categories set path = :path WHERE id = :categoryId', array('path' => $path, 'categoryId' => $categoryId))
-                    ->execute();
-        }
-        Shopware()->Db()->commit();
-    }
-
-    /**
-     * @param int $categoryId
-     * @return int
-     */
-    public function removeOldAssignmentsCount($categoryId)
-    {
-        $sql = "
-            SELECT parentCategoryId
-            FROM s_articles_categories_ro
-            WHERE categoryID = :categoryId
-            AND parentCategoryId <> categoryID
-            GROUP BY parentCategoryId
-        ";
-
-        $rows = Shopware()->Db()->fetchCol($sql, array('categoryId' => $categoryId));
-
-        return count($rows);
-    }
-
-    /**
-     * @param int $categoryId
-     * @param int $count
-     * @param int $offset
-     */
-    public function removeOldAssignments($categoryId, $count = null, $offset = 0)
-    {
-        if (empty($categoryId)) {
-            return;
-        }
-
-        $sql = "
-            SELECT parentCategoryId
-            FROM s_articles_categories_ro
-            WHERE categoryID = :categoryId
-            AND parentCategoryId <> categoryID
-            GROUP BY parentCategoryId
-       ";
-
-        if ($count !== null) {
-            $sql = Shopware()->Db()->limit($sql, $count, $offset);
-        }
-
-        $parentsToDelete = Shopware()->Db()->fetchCol($sql, array('categoryId' => $categoryId));
-        foreach ($parentsToDelete as $parentCategoryId) {
-            // delete assignments
-            $deleteQuery = "DELETE FROM s_articles_categories_ro WHERE parentCategoryID = :categoryId";
-
-            Shopware()->Db()
-                      ->query($deleteQuery, array('categoryId' => $parentCategoryId))
-                      ->execute();
-        }
-    }
-
-    /**
-     * @param int $categoryId
-     * @return int
-     */
-    public function rebuildAssignmentsCount($categoryId)
-    {
-        $sql = "
-            SELECT c.id
-            FROM  s_categories c
-            INNER JOIN s_articles_categories ac ON ac.categoryID = c.id
-            WHERE c.path LIKE :categoryId
-            GROUP BY c.id
-        ";
-
-        $result = Shopware()->Db()->fetchCol($sql, array('categoryId' => '%|' . $categoryId . '|%'));
-
-        if (empty($result)) {
-            return 1;
-        }
-
-        return count($result);
-    }
-
-    /**
-     * @param int $categoryId
-     * @param int $count
-     * @param int $offset
-     */
-    public function rebuildAssignments($categoryId, $count = null, $offset = 0)
-    {
-        if (empty($categoryId)) {
-            return;
-        }
-
-        // Fetch affected categories
-        $affectedCategoriesSql = "
-            SELECT c.id
-            FROM  s_categories c
-            INNER JOIN s_articles_categories ac ON ac.categoryID = c.id
-            WHERE c.path LIKE :categoryId
-            GROUP BY c.id
-        ";
-
-        if ($count !== null) {
-            $affectedCategoriesSql = Shopware()->Db()->limit($affectedCategoriesSql, $count, $offset);
-        }
-
-        $affectedCategories = Shopware()->Db()->fetchCol($affectedCategoriesSql, array('categoryId' => '%|' . $categoryId . '|%'));
-        // in case that a leaf category is moved
-        if (count($affectedCategories) === 0) {
-            $affectedCategories = array($categoryId);
-        }
-
-        $masterAssignmentsSql = 'SELECT articleID, categoryID FROM `s_articles_categories` WHERE categoryID = :categoryId';
-        $masterAssignmentsStmt = Shopware()->Db()->prepare($masterAssignmentsSql);
-
-        $assignmentSql = "SELECT id FROM s_articles_categories_ro c WHERE c.categoryID = :categoryId AND c.articleID = :articleId AND c.parentCategoryID = :parentCategoryId";
-        $assignmentStmt = Shopware()->Db()->prepare($assignmentSql);
-
-        $insertAssignmentSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertAssignmentStmt = Shopware()->Db()->prepare($insertAssignmentSql);
-
-        Shopware()->Db()->beginTransaction();
-        foreach ($affectedCategories as $categoryId) {
-            $masterAssignmentsStmt->execute(array('categoryId' => $categoryId));
-            while ($assignment = $masterAssignmentsStmt->fetch()) {
-                $parents = $this->getEntityManager()->getParentCategories($assignment['categoryID']);
-
-                foreach ($parents as $parent) {
-                    $assignmentStmt->execute(array(
-                            'categoryId'       => $parent,
-                            'articleId'        => $assignment['articleID'],
-                            'parentCategoryId' => $assignment['categoryID'],
-                        ));
-
-                    if ($assignmentStmt->fetchColumn() === false) {
-                        $insertAssignmentStmt->execute(array(
-                            ':categoryId'       => $parent,
-                            ':articleId'        => $assignment['articleID'],
-                            ':parentCategoryId' => $assignment['categoryID']
-                        ));
-                    }
-                }
-            }
-        }
-        Shopware()->Db()->commit();
     }
 }
