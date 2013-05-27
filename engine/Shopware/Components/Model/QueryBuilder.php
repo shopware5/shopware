@@ -201,7 +201,7 @@ class QueryBuilder extends BaseQueryBuilder
         /**@var $em ModelManager*/
         $em = $this->getEntityManager();
 
-        if (!$em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
+        if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
             $em->addCustomHints($query, null, false, true);
         }
         return $query;
