@@ -198,15 +198,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         $this->registerShop($shopId);
 
-        // Get last update time
-        list($cachedTime, $elementId, $shopId) = $this->getCachedTime();
-
         // Calculate the number of articles which have been update since the last update time
         $sql = "
 			SELECT COUNT(a.id)
 			FROM s_articles a
 
-            INNER JOIN s_articles_categories ac
+            INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
                 AND ac.categoryID = ?
             INNER JOIN s_categories c
@@ -227,13 +224,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 			    ON s.id=a.supplierID
 
 			WHERE a.active=1
-			AND a.changetime > ?
 			ORDER BY a.changetime, a.id
         ";
+
         return (int) Shopware()->Db()->fetchOne($sql, array(
             Shopware()->Shop()->get('parentID'),
-            Shopware()->Shop()->getId(),
-            $cachedTime
+            Shopware()->Shop()->getId()
         ));
     }
 

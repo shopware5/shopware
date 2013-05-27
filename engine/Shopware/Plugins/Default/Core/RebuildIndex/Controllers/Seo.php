@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
         $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
 
-        $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles($cachedTime, $limit);
+        $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01', $limit);
         if ($resultTime === $cachedTime) {
             $resultTime = $currentTime;
         }
