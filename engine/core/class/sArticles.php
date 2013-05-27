@@ -1682,8 +1682,8 @@ class sArticles
             $builder = $this->addFilterTranslation($builder, $this->translationId);
         }
 
-        $builder->setParameter(':customerGroupId', $this->customerGroupId);
-        $builder->setParameter(':categoryId', $categoryId);
+        $builder->setParameter(':customerGroupId', (int) $this->customerGroupId);
+        $builder->setParameter(':categoryId', (int) $categoryId);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $builder->execute();
