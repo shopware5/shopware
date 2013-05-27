@@ -51,6 +51,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
 		inactive: '{s name=manager/grid/inactive}Inactive{/s}',
 		actions: '{s name=manager/grid/actions}Action(s){/s}',
 		edit_plugin: '{s name=manager/grid/edit_plugin}Edit plugin{/s}',
+		install_plugin: '{s name=manager/grid/install_plugin}Install plugin{/s}',
 		install_uninstall_plugin: '{s name=manager/grid/install_uninstall_plugin}Install / uninstall plugin{/s}',
 		delete_plugin: '{s name=manager/grid/delete_plugin}Delete plugin{/s}',
 		update_plugin_info: '{s name=manager/grid/update_plugin_info}Update plugin{/s}',
@@ -162,8 +163,8 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
             items: [
         /*{if {acl_is_allowed privilege=install}}*/
             {
-                iconCls: 'sprite-arrow-circle-135',
-                tooltip: me.snippets.update_plugin_info,
+                iconCls: 'sprite-plus-circle',
+                tooltip: me.snippets.install_plugin,
 
                 handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                     me.fireEvent('updateDummyPlugin', grid, rowIndex, colIndex, item, eOpts, record);
