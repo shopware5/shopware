@@ -114,7 +114,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             },
             'performance-main-multi-request-tasks': {
                 'onShopSelected': me.onShopSelected,
-                'startSeoIndex': me.onStartSeoIndex
+                'startSeoIndex': me.onStartSeoIndex,
+                'multiRequestTasksCancelProcess': me.onCancelMultiRequest
             },
             'performance-main-multi-request-dialog': {
                 'multiRequestDialogCancelProcess': me.onCancelMultiRequest,

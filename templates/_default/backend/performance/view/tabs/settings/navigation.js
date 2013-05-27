@@ -75,7 +75,11 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 text: "{s name=navigation/categories}Categories{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-categories'
-            },{
+            }, {
+                text: "{s name=navigation/filter}Filters{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-filter'
+            }, {
                 text: "{s name=navigation/various}Various{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-various'
