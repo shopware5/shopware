@@ -2834,7 +2834,9 @@ class sArticles
 
             if (!empty($getArticle["filtergroupID"])) $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
 
-            $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
+            if ($this->showArticleNavigation()) {
+                $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
+            }
 
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"])));
@@ -2857,6 +2859,14 @@ class sArticles
         $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
         return $getArticle;
+    }
+
+    /**
+     * Helper function to check the configuration for the article detail page navigation arrows.
+     */
+    private function showArticleNavigation()
+    {
+        return !(Shopware()->Config()->get('disableArticleNavigation'));
     }
 
     /**
