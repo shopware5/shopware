@@ -156,6 +156,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             settings = me.getSettings().panel,
             configRecord = settings.getRecord();
 
+        if (!(settings.getForm().isValid())) {
+            return false;
+        }
         settings.getForm().updateRecord(configRecord);
         
         //save the model and check in the callback function if the operation was successfully
