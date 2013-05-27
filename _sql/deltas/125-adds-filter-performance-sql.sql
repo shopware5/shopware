@@ -7,6 +7,10 @@ ALTER TABLE  `s_articles` ADD INDEX  `get_category_filters` (  `active` ,  `filt
 ALTER TABLE  `s_filter_articles` ADD INDEX (  `valueID` );
 ALTER TABLE  `s_filter_articles` ADD INDEX (  `articleID` );
 
+ALTER TABLE  `s_filter_relations` ADD INDEX (  `groupID` );
+ALTER TABLE  `s_filter_relations` ADD INDEX (  `optionID` );
+ALTER TABLE  `s_filter_values` ADD INDEX (  `optionID` );
+
 ALTER TABLE `s_filter_values` ADD INDEX  `filters_order_by_position` (  `optionID` ,  `position`, `id`  );
 ALTER TABLE `s_filter_values` ADD INDEX  `filters_order_by_numeric` (  `optionID` ,  `value_numeric` ,  `id` );
 ALTER TABLE `s_filter_values` ADD INDEX  `filters_order_by_alphanumeric` (  `optionID` ,  `value` ,  `id` );
