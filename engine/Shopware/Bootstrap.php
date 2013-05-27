@@ -576,6 +576,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $this->registerResource('CategorySubscriber', $categorySubscriber);
         $eventManager->addEventSubscriber($categorySubscriber);
 
+        $categoryDenormalization = new \Shopware\Components\Model\CategoryDenormalization($this->Application()->Db()->getConnection());
+        $this->registerResource('CategoryDenormalization', $categoryDenormalization);
+
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
         $conn = \Doctrine\DBAL\DriverManager::getConnection(

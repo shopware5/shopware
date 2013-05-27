@@ -196,14 +196,14 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     else {
                         me.subApplication.getStore("Code").load({
                             callback: function(records, operation) {
-                                me.getProgressBarWindow().close();
+                                me.getProgressBarWindow().hide();
                                 me.getVoucherCodeGrid().down('button[action=downloadCodes]').enable();
                             }
                         });
                     }
                 }
                 else {
-                    me.getProgressBarWindow().close();
+                    me.getProgressBarWindow().hide();
                     Shopware.Notification.createGrowlMessage('{s name=progress/text/voucher_validation_failure_title}Voucher codes could not be generated.{/s}', '{s name=progress/text/voucher_validation_failure}The Voucher codes could not be generated. Maybe the voucher code pattern is not complex enough{/s}');
                 }
             }

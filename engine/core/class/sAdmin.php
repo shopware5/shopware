@@ -1137,8 +1137,15 @@ class sAdmin
             $addScopeSql = " AND subshopID = " . $this->subshopId;
         }
 
+        // When working with a prehashed password, we need to limit the getUser-SQL by password,
+        // as there might be multiple users with the same mail address (accountmode = 1).
+        $preHashedSql = '';
+        if ($isPreHashed) {
+            $preHashedSql = " AND password = '{$password}'";
+        }
+
         if ($ignoreAccountMode) {
-            $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql;
+            $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql . $preHashedSql;
         } else {
             $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND accountmode!=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql;
         }
@@ -1162,6 +1169,7 @@ class sAdmin
 	        $hash      = $getUser['password'];
             $plaintext = $password;
             $password  = $hash;
+
 
 	        $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
         }

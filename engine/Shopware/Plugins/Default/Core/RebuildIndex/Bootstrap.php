@@ -192,7 +192,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableBlog();
             $this->RewriteTable()->sCreateRewriteTableStatic();
         }
-        $this->SeoIndex()->clearRouterRewriteCache();
+
         return true;
     }
 

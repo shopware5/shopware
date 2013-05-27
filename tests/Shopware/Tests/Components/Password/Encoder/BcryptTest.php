@@ -46,6 +46,13 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components
             // test should run fast, use minimum cost
             'cost' => 4,
         ));
+
+        if (!$this->hasher->isCompatible()) {
+            $this->markTestSkipped(
+                'Brypt Hasher is not compatible with current system.'
+            );
+        }
+
     }
 
     /**

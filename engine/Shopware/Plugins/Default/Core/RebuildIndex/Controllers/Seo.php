@@ -71,16 +71,6 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         ));
     }
 
-    /**
-     * After the SEO links where rewritten, clear the cache
-     */
-    public function finishSeoAction()
-    {
-        @set_time_limit(1200);
-        $this->SeoIndex()->clearRouterRewriteCache();
-    }
-
-
     public function getCountAction()
     {
         $shopId = (int) $this->Request()->getParam('shop', 1);
