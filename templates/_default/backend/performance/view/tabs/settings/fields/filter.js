@@ -33,8 +33,8 @@
 /**
  * Categories fieldSet
  */
-//{block name="backend/performance/view/tabs/settings/fields/categories"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
+//{block name="backend/performance/view/tabs/settings/fields/filter"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
@@ -45,12 +45,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-categories',
+    alias:'widget.performance-tabs-settings-filter',
 
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/categories/title}Categories{/s}',
+    caption: '{s name=tabs/settings/filter/title}Filters{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/categories/info}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}")]
+                    me.createDecriptionContainer("{s name=fieldset/filter/info}Here you can adjust various settings which impact the performance of product filters.{/s}")]
             },
             {
                 xtype: 'fieldset',
@@ -83,39 +83,46 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
                     {
-                        xtype: 'performance-multi-request-button',
-                        event: 'category',
-                        title: '{s name=fieldset/categories/repair}Rebuild cagtegory tree{/s}'
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
-                        helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
-                        name: 'categories[articlesperpage]',
-                        xtype: 'numberfield',
-                        minValue: 1
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/categories/text/sort}Default sort order for listing{/s}',
-                        helpText: '{s name=fieldset/categories/help/sort}In which order do you want to sort articles in category listing?{/s}',
-                        supportText: '{s name=fieldset/categories/support/sort}Warnhinweis:<br>Achten Sie darauf, dass auf die Sortierspalte ein Index in der Datenbank gesetzt ist.{/s}',
-                        name: 'categories[orderbydefault]',
-                        xtype: 'textfield'
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/categories/text/showSupplier}Hersteller Filter in Kategorien anzeigen{/s}',
-                        helpText: '',
-                        name: 'categories[showSupplierInCategories]',
+                        fieldLabel: '{s name=fieldset/filter/text/displayFiltersInListings}Display product filters in category listings{/s}',
+                        name: 'filter[displayFiltersInListings]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/categories/text/moveBatchModeEnabled}Move categories in batch-mode{/s}',
-                        helpText: '',
-                        name: 'categories[moveBatchModeEnabled]',
+                        fieldLabel: '{s name=fieldset/filter/text/displayFilterArticleCount}Display article count of each filter value{/s}',
+                        name: 'filter[displayFilterArticleCount]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/filter/text/displayFiltersOnDetailPage}Display product filters on detail page{/s}',
+                        name: 'filter[displayFiltersOnDetailPage]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/filter/text/sortProperties}Filter sort order{/s}',
+                        name: 'filter[propertySorting]',
+                        supportText: '{s name=fieldset/filter/text/sortProperties/support}In case that more than one filter group is configured in a category listing, this sort condition will be used to sort the filter values.{/s}',
+                        xtype: 'combo',
+                        valueField: 'id',
+                        editable: false,
+                        displayField: 'name',
+                        store: Ext.create('Ext.data.Store', {
+                            fields: [
+                                { name: 'id', type: 'int' },
+                                { name: 'name', type: 'string' }
+                            ],
+                            data: [
+                                { id: 0, name: '{s name=fieldset/filter/sort/alphanumeric}Sort by alphanumeric value{/s}' },
+                                { id: 1, name: '{s name=fieldset/filter/sort/numeric}Sort by numeric value{/s}' },
+                                { id: 2, name: '{s name=fieldset/filter/sort/article_count}Sort by article count{/s}' },
+                                { id: 3, name: '{s name=fieldset/filter/sort/position}Sort by position{/s}' }
+                            ]
+                        })
                     }
                 ]
             }
