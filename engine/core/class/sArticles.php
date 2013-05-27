@@ -1665,7 +1665,7 @@ class sArticles
 
             case self::FILTERS_SORT_ARTICLE_COUNT:
                 if ($this->displayFilterArticleCount()) {
-                    $builder->addOrderBy('articleCount');
+                    $builder->addOrderBy('articleCount', 'DESC');
                 } else {
                     $builder->addOrderBy('filterValues.position');
                 }
