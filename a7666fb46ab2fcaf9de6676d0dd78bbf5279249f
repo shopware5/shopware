@@ -1,0 +1,4 @@
+From: feature/next/sw-5998-optimize-filter-queries
+To: next
+Conflict: (content) Merge conflict in engine/core/class/sArticles.php
+	MODIFY|engine/core/class/sArticles.php
