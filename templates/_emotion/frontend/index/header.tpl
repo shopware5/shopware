@@ -17,7 +17,9 @@
 {block name="frontend_index_header_javascript_jquery"}
     <script type="text/javascript" src="{link file='frontend/_resources/javascript/jquery.shopware.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_resources/javascript/jquery.emotion.js'}"></script>
-    {include file='widgets/index/statistic_include.tpl'}
+    {if !{config name=disableShopwareStatistics} }
+        {include file='widgets/index/statistic_include.tpl'}
+    {/if}
 {/block}
 
 {block name="frontend_index_header_css_ie"}
