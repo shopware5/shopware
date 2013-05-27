@@ -200,7 +200,7 @@ class Repository extends ModelRepository
 
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+                    ->setMaxResults($limit);
         }
 
         return $builder;
@@ -307,9 +307,9 @@ class Repository extends ModelRepository
     {
         $builder->addSelect('COUNT(articles) as articleCount');
         if ($onlyActive) {
-            $builder->leftJoin('c.articles', 'articles', 'WITH', 'articles.active = true');
+            $builder->leftJoin('c.allArticles', 'articles', 'WITH', 'articles.active = true');
         } else {
-            $builder->leftJoin('c.articles', 'articles');
+            $builder->leftJoin('c.allArticles', 'articles');
         }
         $builder->addGroupBy('c.id');
 
@@ -402,8 +402,7 @@ class Repository extends ModelRepository
                 ))
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
-                ->andWhere('c.active=1')
-                ->having('articleCount > 0 OR c.external IS NOT NULL OR c.blog = 1');
+                ->andWhere('c.active = 1');
 
         $builder = $this->addArticleCountSelect($builder, true);
         $builder = $this->addChildrenCountSelect($builder);

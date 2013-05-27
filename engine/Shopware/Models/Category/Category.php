@@ -235,6 +235,21 @@ class Category extends ModelEntity
     /**
      * @var ArrayCollection
      *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
+     * @ORM\JoinTable(name="s_articles_categories_ro",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *      }
+     * )
+     */
+    private $allArticles;
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_categories_avoid_customergroups",
      *      joinColumns={
@@ -300,11 +315,12 @@ class Category extends ModelEntity
      */
     public function __construct()
     {
-        $this->children = new ArrayCollection();
-        $this->articles = new ArrayCollection();
-        $this->emotions = new ArrayCollection();
-        $this->changed  = new \DateTime();
-        $this->added    = new \DateTime();
+        $this->children    = new ArrayCollection();
+        $this->articles    = new ArrayCollection();
+        $this->allArticles = new ArrayCollection();
+        $this->emotions    = new ArrayCollection();
+        $this->changed     = new \DateTime();
+        $this->added       = new \DateTime();
     }
 
     /**
@@ -787,6 +803,14 @@ class Category extends ModelEntity
     public function getArticles()
     {
         return $this->articles;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllArticles()
+    {
+        return $this->allArticles->toArray();
     }
 
     /**
