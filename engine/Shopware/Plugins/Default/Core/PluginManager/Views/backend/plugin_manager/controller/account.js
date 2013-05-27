@@ -248,7 +248,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 if (record) {
                     var response = Ext.decode(operation.responseText);
-                    me.updatePlugin(record)
+                    me.updatePlugin(record);
                 }
             }
         });
@@ -272,7 +272,22 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                if (response.success) {
                    if (record.get('capabilityDummy')) {
                        var pluginStore = me.subApplication.pluginStore;
-                       pluginStore.load();
+                       pluginStore.load({
+                           callback: function(records, operation, success) {
+                               Ext.Array.each(records, function(localRecord) {
+                                   if (record.get('id') == localRecord.get('id')) {
+                                       var controller = me.getController('Manager');
+
+                                       localRecord.set('installed', new Date());
+                                       localRecord.set('capabilityDummy', false);
+
+                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
+                                   }
+                               });
+                               // do something after the load finishes
+                           }
+                       });
+
                    }
 
                    var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
