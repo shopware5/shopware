@@ -28,6 +28,8 @@
  * @author shopware AG
  */
 
+//{namespace name=backend/performance/main}
+
 /**
  * Shopware Controller - Performance backend module
  *

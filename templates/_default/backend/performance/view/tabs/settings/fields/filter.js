@@ -84,28 +84,28 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                 items: [
                     {
                         fieldLabel: '{s name=fieldset/filter/text/displayFiltersInListings}Display product filters in category listings{/s}',
-                        name: 'filter[displayFiltersInListings]',
+                        name: 'filters[displayFiltersInListings]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
                         fieldLabel: '{s name=fieldset/filter/text/displayFilterArticleCount}Display article count of each filter value{/s}',
-                        name: 'filter[displayFilterArticleCount]',
+                        name: 'filters[displayFilterArticleCount]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
                         fieldLabel: '{s name=fieldset/filter/text/displayFiltersOnDetailPage}Display product filters on detail page{/s}',
-                        name: 'filter[displayFiltersOnDetailPage]',
+                        name: 'filters[displayFiltersOnDetailPage]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
                         fieldLabel: '{s name=fieldset/filter/text/sortProperties}Filter sort order{/s}',
-                        name: 'filter[propertySorting]',
+                        name: 'filters[propertySorting]',
                         supportText: '{s name=fieldset/filter/text/sortProperties/support}In case that more than one filter group is configured in a category listing, this sort condition will be used to sort the filter values.{/s}',
                         xtype: 'combo',
                         valueField: 'id',
