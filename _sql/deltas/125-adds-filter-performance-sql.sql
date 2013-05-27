@@ -14,9 +14,9 @@ ALTER TABLE `s_filter_values` ADD INDEX  `filters_order_by_alphanumeric` (  `opt
 INSERT IGNORE INTO `s_core_config_elements`
   (`name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
 VALUES
-('displayFiltersInListings', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('displayFilterArticleCount', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('displayFiltersOnDetailPage', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, '');
+('displayFiltersInListings', 'i:1;', '', '', 'boolean', 1, 0, 0, NULL, NULL, ''),
+('displayFilterArticleCount', 'i:1;', '', '', 'boolean', 1, 0, 0, NULL, NULL, ''),
+('displayFiltersOnDetailPage', 'i:1;', '', '', 'boolean', 1, 0, 0, NULL, NULL, '');
 
 -- //@UNDO
 

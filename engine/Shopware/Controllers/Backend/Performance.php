@@ -101,7 +101,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['topSeller']  = $this->prepareForSavingDefault($data['topSeller'][0]);
         $output['seo']        = $this->prepareSeoConfigForSaving($data['seo'][0]);
         $output['search']     = $this->prepareForSavingDefault($data['search'][0]);
-		$output['filter']    = $this->prepareForSavingDefault($data['filter'][0]);        
+		$output['filters']    = $this->prepareForSavingDefault($data['filters'][0]);
 		$output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
         $output['various']    = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
@@ -317,7 +317,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                     'moveBatchModeEnabled'
                 )
             ),
-            'filter' => $this->genericConfigLoader(array(
+            'filters' => $this->genericConfigLoader(array(
                 'propertySorting',
                 'displayFiltersInListings',
                 'displayFilterArticleCount',
