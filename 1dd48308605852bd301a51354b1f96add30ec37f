@@ -1,0 +1,8 @@
+From: experimentell/optimize-filter-queries
+To: next
+Conflict: (content) Merge conflict in snippets/backend/performance/main.ini
+	MODIFY|snippets/backend/performance/main.ini
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Backend/Performance.php
+	MODIFY|engine/Shopware/Controllers/Backend/Performance.php
+Conflict: (content) Merge conflict in engine/Shopware/Components/Model/ModelManager.php
+	MODIFY|engine/Shopware/Components/Model/ModelManager.php
