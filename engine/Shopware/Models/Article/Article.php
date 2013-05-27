@@ -260,6 +260,7 @@ class Article extends ModelEntity
      */
     protected $allCategories;
 
+
     /**
      * @var ArrayCollection
      *

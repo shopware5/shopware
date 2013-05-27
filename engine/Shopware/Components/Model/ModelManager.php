@@ -30,6 +30,9 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Shopware\Components\Model\Query\SqlWalker;
+use Doctrine\ORM\Query;
+use Shopware\Components\Model\DBAL\QueryBuilder as DBALQueryBuilder;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -44,6 +47,12 @@ class ModelManager extends EntityManager
      * @var \Symfony\Component\Validator\Validator
      */
     protected $validator;
+
+    /**
+     * Debug mode flag for the query builders.
+     * @var bool
+     */
+    protected $debugMode = false;
 
     /**
      * Creates a new EntityManager that operates on the given database connection
@@ -63,6 +72,16 @@ class ModelManager extends EntityManager
             $config->getAutoGenerateProxyClasses()
         );
     }
+
+
+    /**
+     * @return DBALQueryBuilder
+     */
+    public function getDBALQueryBuilder()
+    {
+        return new DBALQueryBuilder($this->getConnection());
+    }
+
 
     /**
      * Factory method to create EntityManager instances.
@@ -454,5 +473,58 @@ class ModelManager extends EntityManager
         $sql= "SHOW COLUMNS FROM " . $tableName . " LIKE '" . $columnName . "'";
         $result = Shopware()->Db()->fetchRow($sql);
         return !empty($result);
+    }
+
+    /**
+     * Helper function to add mysql specified command to increase the sql performance.
+     * @param \Doctrine\ORM\Query $query
+     * @param null $index Name of the forced index
+     * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool $sqlNoCache
+     * @return Query
+     */
+    public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
+    {
+        $query->setHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker'
+        );
+
+        if ($straightJoin === true) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        }
+        if ($index !== null) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        }
+        if ($sqlNoCache === true) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_SQL_NO_CACHE, true);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Checks if the debug mode for doctrine orm queries is enabled.
+     * @return bool
+     */
+    public function isDebugModeEnabled()
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * Disables the query builder debug mode.
+     */
+    public function disableDebugMode()
+    {
+        $this->debugMode = false;
+    }
+
+    /**
+     * Enables or disables the debug mode of the query builders.
+     */
+    public function enableDebugMode()
+    {
+        $this->debugMode = true;
     }
 }

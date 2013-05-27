@@ -187,4 +187,25 @@ class QueryBuilder extends BaseQueryBuilder
 
         return $this;
     }
+
+
+    /**
+     * Overrides the original function to add the SQL_NO_CACHE parameter
+     * for each doctrine orm query if the global shopware debug mode is activated.
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQuery()
+    {
+        $query = parent::getQuery();
+
+        /**@var $em ModelManager*/
+        $em = $this->getEntityManager();
+
+        if (!$em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
+            $em->addCustomHints($query, null, false, true);
+        }
+        return $query;
+    }
+
+
 }
