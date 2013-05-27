@@ -337,7 +337,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'articleId' => $articleId
         ));
 
-        if ($alreadyViewed > 0) {
+        if (count($alreadyViewed) <= 0) {
             return $arguments->getReturn();
         }
 
