@@ -1,0 +1,6 @@
+From: feature/next/sw-6031-add-missing-snippets
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/performance/view/tabs/settings/fields/home.js
+	MODIFY|templates/_default/backend/performance/view/tabs/settings/fields/home.js
+Conflict: (content) Merge conflict in snippets/backend/performance/main.ini
+	MODIFY|snippets/backend/performance/main.ini
