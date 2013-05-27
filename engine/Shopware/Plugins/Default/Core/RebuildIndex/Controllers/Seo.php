@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shopId = (int) $this->Request()->getParam('shop', 1);
 
         // Create shop
-        $$this->SeoIndex()->registerShop($shopId);
+        $this->SeoIndex()->registerShop($shopId);
 
         list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
 
