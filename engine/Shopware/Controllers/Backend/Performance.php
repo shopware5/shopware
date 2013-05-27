@@ -101,7 +101,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['topSeller']  = $this->prepareForSavingDefault($data['topSeller'][0]);
         $output['seo']        = $this->prepareSeoConfigForSaving($data['seo'][0]);
         $output['search']     = $this->prepareForSavingDefault($data['search'][0]);
-        $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
+		$output['filter']    = $this->prepareForSavingDefault($data['filter'][0]);        
+		$output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
         $output['various']    = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
 
@@ -114,11 +115,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareForSavingDefault($data)
-       {
+   	{
         unset($data['id']);
 
         return $data;
-       }
+   	}
 
     /**
      * Prepare seo array for saving
@@ -127,7 +128,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareSeoConfigForSaving($data)
-    {
+	{
         unset($data['id']);
 
         $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');
@@ -313,10 +314,15 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                     'articlesperpage',
                     'orderbydefault',
                     'showSupplierInCategories',
-                    'propertySorting',
                     'moveBatchModeEnabled'
                 )
             ),
+            'filter' => $this->genericConfigLoader(array(
+                'propertySorting',
+                'displayFiltersInListings',
+                'displayFilterArticleCount',
+                'displayFiltersOnDetailPage'
+            )),
             'various' => $this->genericConfigLoader(
                 array(
                     'disableShopwareStatistics',

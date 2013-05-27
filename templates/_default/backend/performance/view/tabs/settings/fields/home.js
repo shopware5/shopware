@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
     getItems: function() {
         var me = this,
             warning = '{s name=fieldset/main/warning}Zu jedem Menüpunkt erhalten Sie korrespondierende Informationen in unserem Wiki. Bevor Sie Einstellungen modifizieren, sollten Sie also die Hinweise in unserer Dokumentation beachten!{/s}',
-            info = '{s name=fieldset/main/information force}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=link href=_blank>Performance Tipps Shopware 4</a>{/s}';
+            info = '{s name=fieldset/main/information force}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=http://wiki.shopware.de/Performance-Tipps-Shopware-4_detail_1258.html href=_blank>Performance Tipps Shopware 4</a>{/s}';
 
         return [
             {
