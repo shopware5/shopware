@@ -1431,8 +1431,6 @@ class sArticles
         /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
         $builder = Shopware()->Models()->getDBALQueryBuilder();
 
-        $builder = $this->addArticleCountSelect($builder, $activeFilters);
-
         $builder->select(array(
             'filterValues.optionID    as id',
             'filterValues.optionID    as optionID',
@@ -1444,6 +1442,8 @@ class sArticles
             'filterRelations.groupID  as groupID',
             'filters.name             as groupName'
         ));
+
+        $builder = $this->addArticleCountSelect($builder, $activeFilters);
 
         //use as base table the s_filter_values
         $builder->from('s_filter_values', 'filterValues');
@@ -1544,8 +1544,8 @@ class sArticles
 
         //use as default a sub select query to select the article count for each filter value
         if (empty($activeFilters)) {
-            $builder->addSelect('
-                SELECT COUNT(DISTINCT filter2.articleID)
+            $builder->addSelect('(
+            SELECT COUNT(DISTINCT filter2.articleID)
                 FROM   s_filter_articles filter2
                 INNER JOIN s_articles_categories_ro articleCategories2
                     ON  articleCategories2.articleID = filter2.articleID
