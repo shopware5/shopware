@@ -103,7 +103,7 @@ class Value extends ModelEntity
      * @var float $len
      * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
      */
-    private $valueNumeric = null;
+    private $valueNumeric = 0;
 
 
     /**
