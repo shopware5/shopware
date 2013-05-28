@@ -57,8 +57,7 @@ Ext.define('Shopware.component.Preloader', {
         'Shopware.apps.Article': false,
         'Shopware.apps.ArticleList': false,
         'Shopware.apps.Order': false,
-        'Shopware.apps.Customer': false,
-        'Shopware.apps.Category': false
+        'Shopware.apps.Customer': false
     }, {
         'Shopware.apps.Emotion': false,
         'Shopware.apps.MediaManager': false
