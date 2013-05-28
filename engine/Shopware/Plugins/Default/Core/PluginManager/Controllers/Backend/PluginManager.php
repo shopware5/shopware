@@ -644,11 +644,34 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $repository = $this->getRepository();
             /** @var $plugin Shopware\Models\Plugin\Plugin */
             $plugin = $repository->find($id);
+
+            // Special handling for dummy plugins
+            if ($data['capabilityDummy']) {
+                $plugin->setVersion($data['updateVersion']);
+                $plugin->setUpdateVersion(null);
+                $plugin->setActive(false);
+                $plugin->disableDummy();
+
+                Shopware()->Models()->flush();
+
+                $bootstrap = $this->getPluginBootstrap($plugin);
+
+                /** @var $namespace Shopware_Components_Plugin_Namespace */
+                $namespace = $bootstrap->Collection();
+                $result    = $namespace->installPlugin($bootstrap);
+
+                Shopware()->Models()->flush();
+
+                return array(
+                    'success' => $result
+                );
+            }
+
             $bootstrap = $this->getPluginBootstrap($plugin);
             /** @var $namespace Shopware_Components_Plugin_Namespace */
             $namespace = $bootstrap->Collection();
 
-            if($plugin->getVersion() != $data['version']) {
+            if ($plugin->getVersion() != $data['version']) {
                 $result = $namespace->updatePlugin($bootstrap);
             } elseif(!$plugin->getInstalled() !== empty($data['installed'])) {
                 if (!empty($data['installed'])) {

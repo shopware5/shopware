@@ -377,10 +377,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             listing.setLoading(true);
         }
 
+        var isDummy = record.get('capabilityDummy');
+
         record.save({
            callback: function(record, operation) {
                var rawData = null,
                    result = operation.records[0];
+
+               if (isDummy) {
+                   // update version on-the-fly
+                   record.set('version', record.get('updateVersion'));
+                   record.set('updateVersion', null);
+                   record.set('capabilityDummy', false);
+               }
 
                if (listing) {
                    listing.setLoading(false);
