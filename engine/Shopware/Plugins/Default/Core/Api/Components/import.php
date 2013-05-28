@@ -33,6 +33,17 @@ class sShopwareImport
     protected $categoryRepository = null;
 
     /**
+     * @return \Shopware\Components\Model\CategoryDenormalization
+     */
+    public function getCategoryComponent()
+    {
+        $component = Shopware()->CategoryDenormalization();
+        $component->disableTransactions();
+
+        return $component;
+    }
+
+    /**
      * Internal helper function to get access to the article repository.
      *
      * @return Shopware\Models\Article\Repository
@@ -359,7 +370,7 @@ class sShopwareImport
         if(!empty($article["releasedate"]))
             $article['releasedate'] = $this->sDB->DBDate($article['releasedate']);
         elseif(isset($article['releasedate']))
-            $article['releasedate'] = NULL;
+            $article['releasedate'] = null;
         if(isset($article['shippingfree']))
             $article['shippingfree'] = empty($article['shippingfree']) ? 0 : 1;
 
@@ -2023,67 +2034,46 @@ class sShopwareImport
 	}
 
 	/**
-	 * Einf�gen einer Artikel-Kategorie-Zuordnung
+	 * Einfügen einer Artikel-Kategorie-Zuordnung
 	 *
 	 * @param int $articleID ID des Artikels (s_articles.id)
 	 * @param int $categoryID ID der Kategorie (s_categories.id)
 	 * @access public
 	 * @return array  $inserts Array mit allen eingef�gten IDs aus s_articles_categories
 	 */
-	function sArticleCategory  ($articleID, $categoryID, $setParentCategories=false)
-	{
-		$inserts = array();
-		$categoryID = intval($categoryID);
-		$articleID = intval($articleID);
+    function sArticleCategory($articleID, $categoryID, $setParentCategories = false)
+    {
+        $categoryID = intval($categoryID);
+        $articleID  = intval($articleID);
 
-		if(empty($categoryID)||empty($articleID))
-			return false;
-
-		$categoryparentID = $categoryID;
-		$parentID = $categoryID;
-		$categories = array();
-
-        // Setting all parent categories for a given category is legacy behaviour of the API
-        // it is not recommended for shopware4 and therefore was removed from default behaviour
-        if($setParentCategories) {
-            while ($categoryID!=1 && !empty($categoryID)) {
-                $categories[] = $categoryID;
-                $sql = "SELECT parent FROM s_categories WHERE id=$categoryID";
-                $tmp = $this->sDB->GetOne($sql);
-                $parentID = $categoryID;
-                if (!empty($tmp)){
-                    $categoryID = (int) $tmp;
-                } else {
-                    $categoryID = 1;
-                }
-            }
-            $categories = implode(',', $categories);
-        } else {
-            $categories = $categoryID;
+        if (empty($categoryID) || empty($articleID)) {
+            return false;
         }
 
-
-		$sql = "
+        $sql = "
 			INSERT IGNORE INTO s_articles_categories (articleID, categoryID)
 
 			SELECT $articleID as articleID, c.id as categoryID
 			FROM `s_categories` c
-			WHERE c.id IN ($categories)
+			WHERE c.id IN ($categoryID)
 		";
 
-		if($this->sDB->Execute($sql)===false)
-			return false;
+        if ($this->sDB->Execute($sql) === false) {
+            return false;
+        }
 
-		$sql = "
+        $this->getCategoryComponent()->addAssignment($articleID, $categoryID);
+
+        $sql = "
 			SELECT ac.id
 			FROM `s_articles_categories` ac
-			WHERE ac.categoryID IN ($categories)
+			WHERE ac.categoryID IN ($categoryID)
 			AND ac.articleID=$articleID
 		";
-		$inserts = $this->sDB->GetCol($sql);
+        $inserts = $this->sDB->GetCol($sql);
 
-		return $inserts;
-	}
+        return $inserts;
+    }
 
 	/**
 	 * Einf�gen von Artikel-Kategorie-Zuordnungen f�r mehrere Kategorien gleichzeitig
@@ -2344,28 +2334,45 @@ class sShopwareImport
 	 * @param array $categoryIDs
 	 * @return
 	 */
-	function sDeleteOtherArticlesCategories ($articleID, $categoryIDs)
-	{
-		$articleID = intval($articleID);
-		if (empty($articleID))
-			return false;
-		if(!empty($categoryIDs)&&is_array($categoryIDs))
-		{
-			$where =  "AND id!=".implode(" AND id!=",$categoryIDs)."";
-		} elseif (!empty($categoryIDs))	{
-			$where =  "AND id!=".intval($categoryIDs);
-		} else {
-			$where = "";
-		}
-		$sql = "
+    function sDeleteOtherArticlesCategories($articleID, $categoryIDs)
+    {
+        var_dump($categoriesToDelete);
+
+        $articleID = intval($articleID);
+
+        if (empty($articleID)) {
+            return false;
+        }
+
+        if (!empty($categoryIDs) && is_array($categoryIDs)) {
+            $where = "AND id !=" . implode(" AND id!=", $categoryIDs) . "";
+        } elseif (!empty($categoryIDs)) {
+            $where = "AND id !=" . intval($categoryIDs);
+        } else {
+            $where = "";
+        }
+
+        $categoriesToDeleteSql = "SELECT categoryID FROM
+			s_articles_categories
+			WHERE articleID=$articleID $where";
+
+        $categoriesToDelete = $this->sDB->GetCol($categoriesToDeleteSql);
+
+        var_dump($categoriesToDelete);
+
+        $sql = "
 			DELETE FROM
 				s_articles_categories
 			WHERE articleID=$articleID $where
 		";
-		$this->sDB->Execute($sql);
+        $this->sDB->Execute($sql);
+
+        foreach ($categoriesToDelete as $categoryId) {
+            $this->getCategoryComponent()->removeAssignment($articleID, $categoryId);
+        }
 
         return true;
-	}
+    }
 
 	/**
 	 * Deletes not specified categories
@@ -2399,6 +2406,9 @@ class sShopwareImport
 		";
 		$this->sDB->Execute($sql);
 
+        foreach ($categoryIDs as $categoryId) {
+            $this->getCategoryComponent()->removeCategoryAssignmentments($categoryId);
+        }
 
         return true;
 	}
