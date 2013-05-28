@@ -48,6 +48,11 @@ class CategoryDenormalization
     protected $connection;
 
     /**
+     * @var bool
+     */
+    protected $enableTransactions = true;
+
+    /**
      * @param \PDO $connection
      */
     public function __construct(\PDO $connection)
@@ -72,6 +77,38 @@ class CategoryDenormalization
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function transactionsEnabled()
+    {
+        return $this->enableTransactions;
+    }
+
+    /**
+     * @return CategoryDenormalization
+     */
+    public function enableTransactions()
+    {
+        $this->enableTransactions = true;
+    }
+
+    /**
+     * @return CategoryDenormalization
+     */
+    public function disableTransactions()
+    {
+        $this->enableTransactions = true;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getEnableTransactions()
+    {
+        return $this->enableTransactions;
     }
 
     /**
@@ -186,7 +223,8 @@ class CategoryDenormalization
 
         $count = 0;
 
-        $this->getConnection()->beginTransaction();
+        $this->beginTransaction();
+
         while ($category = $stmt->fetch(\PDO::FETCH_ASSOC)) {
 
             $parents = $this->getParentCategoryIds($category['id']);
@@ -204,7 +242,8 @@ class CategoryDenormalization
                 $count++;
             }
         }
-        $this->getConnection()->commit();
+
+        $this->commit();
 
         return $count;
     }
@@ -331,15 +370,15 @@ class CategoryDenormalization
 
         $count = 0;
 
-        $this->getConnection()->beginTransaction();
+        $this->beginTransaction();
         foreach ($affectedCategories as $categoryId) {
             $assignmentsStmt->execute(array('categoryId' => $categoryId));
 
             while ($assignment = $assignmentsStmt->fetch()) {
-                $count += $this->insertAssignment($assignment['categoryID'], $assignment['articleID']);
+                $count += $this->insertAssignment($assignment['articleID'], $assignment['categoryID']);
             }
         }
-        $this->getConnection()->commit();
+        $this->commit();
 
         return $count;
     }
@@ -391,11 +430,11 @@ class CategoryDenormalization
         $assignments = $this->getConnection()->query($allAssignsSql);
 
         $newRows = 0;
-        $this->getConnection()->beginTransaction();
+        $this->beginTransaction();
         while ($assignment = $assignments->fetch()) {
-            $newRows += $this->insertAssignment($assignment['categoryID'], $assignment['articleID']);
+            $newRows += $this->insertAssignment($assignment['articleID'], $assignment['categoryID']);
         }
-        $this->getConnection()->commit();
+        $this->commit();
 
         return $newRows;
     }
@@ -403,11 +442,11 @@ class CategoryDenormalization
     /**
      * Inserts missing assignments in s_articles_categories_ro
      *
-     * @param  int $categoryId
      * @param  int $articleId
+     * @param  int $categoryId
      * @return int
      */
-    private function insertAssignment($categoryId, $articleId)
+    private function insertAssignment($articleId, $categoryId)
     {
         $count = 0;
 
@@ -477,20 +516,9 @@ class CategoryDenormalization
      */
     public function addAssignment($articleId, $categoryId)
     {
-        $parents = $this->getParentCategoryIds($categoryId);
-
-        $insertAssignmentSql = 'INSERT INTO s_articles_categories_ro (articleID, categoryID, parentCategoryID) VALUES (:articleId, :categoryId, :parentCategoryId)';
-        $insertAssignmentStmt = $this->getConnection()->prepare($insertAssignmentSql);
-
-        $this->getConnection()->beginTransaction();
-        foreach ($parents as $parent) {
-            $insertAssignmentStmt->execute(array(
-                ':categoryId'       => $parent,
-                ':articleId'        => $articleId,
-                ':parentCategoryId' => $categoryId
-            ));
-        }
-        $this->getConnection()->commit();
+        $this->beginTransaction();
+        $this->insertAssignment($articleId, $categoryId);
+        $this->commit();
     }
 
     /**
@@ -596,5 +624,25 @@ class CategoryDenormalization
         }
 
         return $sql;
+    }
+
+    /**
+     * Wrapper around pdo::commit()
+     */
+    public function beginTransaction()
+    {
+        if ($this->transactionsEnabled()) {
+            $this->getConnection()->beginTransaction();
+        }
+    }
+
+    /**
+     * Wrapper around pdo::commit()
+     */
+    public function commit()
+    {
+        if ($this->transactionsEnabled()) {
+            $this->getConnection()->commit();
+        }
     }
 }
