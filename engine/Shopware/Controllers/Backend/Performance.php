@@ -51,6 +51,15 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         parent::init();
     }
 
+    public function getShopsAction()
+    {
+        $shops = Shopware()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $shops
+        ));
+    }
+
     /**
      * This action creates/updates the configuration
      */

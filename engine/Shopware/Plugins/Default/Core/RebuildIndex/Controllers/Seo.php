@@ -55,7 +55,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function initSeoAction()
     {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         @set_time_limit(1200);
 
@@ -73,7 +73,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
     public function getCountAction()
     {
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
         @set_time_limit(1200);
         $category = $this->SeoIndex()->countCategories($shopId);
         $article = $this->SeoIndex()->countArticles($shopId);
@@ -105,7 +105,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoStaticAction()
     {
 
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
         @set_time_limit(1200);
 
         // Create shop
@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset');
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $shop = $this->SeoIndex()->registerShop($shopId);
@@ -150,7 +150,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $shop = $this->SeoIndex()->registerShop($shopId);
@@ -170,7 +170,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     {
         @set_time_limit(1200);
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
@@ -198,7 +198,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $shop = $this->SeoIndex()->registerShop($shopId);
@@ -221,7 +221,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int) $this->Request()->getParam('shop', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $shop = $this->SeoIndex()->registerShop($shopId);

@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
         me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
             forceSelection: true,
-            store: Ext.create('Shopware.store.Shop').load(),
+            store: Ext.create('Shopware.apps.Performance.store.Shop').load(),
             valueField: 'id',
             displayField: 'name',
             queryMode: 'remote',
@@ -246,15 +246,6 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             margin: '0 0 10 0',
             allowBlank: false,
             value: me.batchSize,
-            validateOnChange: true,
-            validator: function(value) {
-                if (!value.match(/\d+/)) {
-                    me.startButton.disable();
-                    return false;
-                }
-                me.startButton.enable();
-                return true;
-            },
             editable: true,
             displayField: 'batchSize',
             store: Ext.create('Ext.data.Store', {
