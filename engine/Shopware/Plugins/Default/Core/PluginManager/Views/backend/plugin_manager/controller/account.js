@@ -177,10 +177,24 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                 }
 
                 if (response.success === true) {
-                    record.set('wasActivated', 0);
-                    record.set('wasInstalled', 0);
+                       var pluginStore = me.subApplication.pluginStore;
+                       pluginStore.load({
+                           callback: function(records, operation, success) {
+                               Ext.Array.each(records, function(localRecord) {
+                                   if (record.get('id') == localRecord.get('id')) {
+                                       var controller = me.getController('Manager');
 
-                    me.refreshPluginList(record);
+                                       localRecord.set('wasActivated', 0);
+                                       localRecord.set('wasInstalled', 0);
+                                       localRecord.set('installed', new Date());
+                                       localRecord.set('capabilityDummy', true);
+
+                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
+                                   }
+                               });
+                               // do something after the load finishes
+                           }
+                       });
                 } else {
                     var message = response.message + '';
                     if (message.length === 0) {
@@ -271,23 +285,25 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
 
                if (response.success) {
                    if (record.get('capabilityDummy')) {
-                       var pluginStore = me.subApplication.pluginStore;
-                       pluginStore.load({
-                           callback: function(records, operation, success) {
-                               Ext.Array.each(records, function(localRecord) {
-                                   if (record.get('id') == localRecord.get('id')) {
-                                       var controller = me.getController('Manager');
-
-                                       localRecord.set('installed', new Date());
-                                       localRecord.set('capabilityDummy', false);
-
-                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
-                                   }
-                               });
-                               // do something after the load finishes
-                           }
-                       });
-
+//                       var pluginStore = me.subApplication.pluginStore;
+//                       pluginStore.load({
+//                           callback: function(records, operation, success) {
+//                               Ext.Array.each(records, function(localRecord) {
+//                                   if (record.get('id') == localRecord.get('id')) {
+//                                       var controller = me.getController('Manager');
+//
+//                                       console.log("Updated record", localRecord.data);
+//
+//
+//                                       localRecord.set('installed', new Date());
+//                                       localRecord.set('capabilityDummy', false);
+//
+//                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
+//                                   }
+//                               });
+//                               // do something after the load finishes
+//                           }
+//                       });
                    }
 
                    var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
