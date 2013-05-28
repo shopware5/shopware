@@ -951,10 +951,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         };
 
         // Trigger the `contentFn` which sets the content of the tab container
-        cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
+        me.on('storesLoaded', function() {
+            cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
+        });
+
+        var articleChangeFn = cfg['articleChangeFn'] || Ext.emptyFn;
 
         // Bind event listener which triggers when the article store was changed
-        me._batchStore.on('datachanged', cfg['articleChangeFn'], cfg.scope, {
+        me.subApplication.on('ProductModule:storesChanged', articleChangeFn, cfg.scope, {
             tab: tabContainer,
             config: cfg
         });
