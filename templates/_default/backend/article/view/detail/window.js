@@ -872,7 +872,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return { Boolean } - Truthy if the tab was sucessfully created, otherwise falsy.
      */
     registerAdditionalTab: function(opts, containerType) {
-        var me = this, tabPanel = me.mainTab, tabContainer, cfg = {},
+        var me = this, tabPanel = me.mainTab, tabContainer, cfg = {}, articleChangeFn,
             defaultOpts = {
                 'title': 'Tab',
                 'articleChangeFn': Ext.emptyFn,
@@ -918,6 +918,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         // Merge the passed user configuration with our default configuration
         cfg = Ext.merge(cfg, defaultOpts, opts);
+        articleChangeFn = cfg['articleChangeFn'];
 
         // Create the tab container
         tabContainer = Ext.create(containerType, Ext.apply(cfg.tabConfig, {
@@ -954,8 +955,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.on('storesLoaded', function() {
             cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
         });
-
-        var articleChangeFn = cfg['articleChangeFn'] || Ext.emptyFn;
 
         // Bind event listener which triggers when the article store was changed
         me.subApplication.on('ProductModule:storesChanged', articleChangeFn, cfg.scope, {
