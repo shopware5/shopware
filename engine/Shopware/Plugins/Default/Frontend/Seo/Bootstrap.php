@@ -55,6 +55,18 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
+     * Returns capabilities so the plugin is default not installable and hidden in the plugin manager
+     */
+    public function getCapabilities()
+    {
+        return array(
+            'install' => false,
+            'enable' => false,
+            'update' => true
+        );
+    }
+
+    /**
      * Optimize Sourcecode / Apply seo rules
      *
      * @param Enlight_Event_EventArgs $args

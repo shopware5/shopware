@@ -115,7 +115,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         inputValue: true
                     },                    {
                         fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/show}Show{/s}',
-                        helpText: '{s name=fieldset/customers/fieldset/alsobought/help/show}Showing this information might bypass the HTTP-Cache{/s}',
                         name: 'customer[similarViewedShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

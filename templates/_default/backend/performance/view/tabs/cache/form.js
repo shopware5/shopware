@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     bodyPadding: 10,
 
     url: '{url controller=Cache action=clearCache}',
-    waitMsg: '{s name=form/wait_message}Cache is cleared ...{/s}',
+    waitMsg: '{s name=form/wait_message}Cache is clearing ...{/s}',
     waitMsgTarget: true,
     submitEmptyText: false,
 
@@ -88,18 +88,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 items: [
                     {
                         name: 'cache[config]',
-                        boxLabel: '{s name=form/items/config}Templates, settings, snippets, etc.{/s}',
-                        supportText: '{s name=form/items/config/support}Lorem ipsum dolor sit{/s}'
+                        boxLabel: '{s name=form/items/config}Shopware configuration{/s}',
+                        supportText: '{s name=form/items/config/support}Cache for settings and snippets etc.{/s}'
                     },
                     {
-                        name: 'cache[frontend]',
-                        boxLabel: '{s name=form/items/frontend}HttpProxy + Query-Cache (products, categories){/s}',
-                        supportText: '{s name=form/items/frontend/support}Lorem ipsum dolor sit{/s}'
+                        name: 'cache[template]',
+                        boxLabel: '{s name=form/items/frontend}Smarty-Template-Cache{/s}',
+                        supportText: '{s name=form/items/frontend/support}Cache for compiled smarty templates{/s}'
                     },
                     {
-                        name: 'cache[backend]',
-                        boxLabel: '{s name=form/items/backend}Backend cache{/s}',
-                        supportText: '{s name=form/items/backend/support}Lorem ipsum dolor sit{/s}'
+                        name: 'cache[http]',
+                        boxLabel: '{s name=form/items/backend}Http-Proxy-Cache{/s}',
+                        supportText: '{s name=form/items/backend/support}Cache for the Http-Reverse-Proxy, if active{/s}'
                     }
                 ] },
             { xtype: 'container',
@@ -115,19 +115,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 layout: 'anchor',
                 items: [
                     {
-                        name: 'cache[router]',
-                        boxLabel: '{s name=form/items/router}SEO URL cache{/s}',
-                        supportText: '{s name=form/items/router/support}Lorem ipsum dolor sit{/s}'
+                        name: 'cache[proxy]',
+                        boxLabel: '{s name=form/items/proxy}Doctrine Annotations and Proxies{/s}',
+                        supportText: '{s name=form/items/proxy/support}Cache for proxy objects{/s}'
                     },
                     {
                         name: 'cache[search]',
-                        boxLabel: '{s name=form/items/search}Intelligent search (index / keywords){/s}',
-                        supportText: '{s name=form/items/search/support}Lorem ipsum dolor sit{/s}'
+                        boxLabel: '{s name=form/items/search}Cache search function{/s}',
+                        supportText: '{s name=form/items/search/support}Cache for search results and index{/s}'
                     },
                     {
-                        name: 'cache[proxy]',
-                        boxLabel: '{s name=form/items/proxy}Proxy cache (For development purposes){/s}',
-                        supportText: '{s name=form/items/proxy/support}Lorem ipsum dolor sit{/s}'
+                        name: 'cache[router]',
+                        boxLabel: '{s name=form/items/router}Index SEO-URLs{/s}',
+                        supportText: '{s name=form/items/router/support}Cache for SEO-Routes and index{/s}'
                     }
                 ]}
         ];

@@ -56,7 +56,11 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $app = $this->Application();
         $loader = $app->Loader();
 
-        $classMap = $this->Application()->DocPath('cache') . 'ClassMap_' . \Shopware::REVISION . '.php';
+
+        $hookOptions = $app->getOption('hook');
+        $proxyDir = rtrim(realpath($hookOptions['proxyDir']), '\\/') . DIRECTORY_SEPARATOR;
+        $classMap = $proxyDir . 'ClassMap_' . \Shopware::REVISION . '.php';
+
         $loader->readClassMap($classMap);
 
         if (($config = $app->getOption('httpCache')) !== null && !empty($config['enabled'])) {
