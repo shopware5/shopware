@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                         })
                     },
                     {
-                        fieldLabel: '{s name=fieldset/search/cache_time}Cache Suche{/s}',
+                        fieldLabel: '{s name=fieldset/search/cache_time}Cache time{/s}',
                         name: 'search[cachesearch]',
                         xtype: 'textfield',
                         minValue: 3600

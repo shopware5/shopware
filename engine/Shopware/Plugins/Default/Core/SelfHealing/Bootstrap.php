@@ -73,6 +73,18 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     }
 
     /**
+     * Returns capabilities so the plugin is default not installable and hidden in the plugin manager
+     */
+    public function getCapabilities()
+    {
+        return array(
+            'install' => false,
+            'enable' => false,
+            'update' => true
+        );
+    }
+
+    /**
      * Listener method for the Enlight_Controller_Front_PostDispatch event.
      *
      * @param   Enlight_Event_EventArgs $args
