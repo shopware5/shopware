@@ -574,6 +574,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     statisticListStore.load();
                     statisticChartStore.load();
                 }
+
+                /**
+                 * Fire the event within the subApplication in order to prevent problems when
+                 * applying the scope on callback functions
+                 */
+                me.subApplication.fireEvent('ProductModule:storesChanged', me.mainWindow.article);
+
+
             }
         });
     },
