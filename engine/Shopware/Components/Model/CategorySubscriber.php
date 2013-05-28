@@ -70,7 +70,10 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
-        return Shopware()->CategoryDenormalization();
+        $component = Shopware()->CategoryDenormalization();
+        $component->disableTransactions();
+
+        return $component;
     }
 
     /**
@@ -225,8 +228,7 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         /* @var $col \Doctrine\ORM\PersistentCollection */
-        foreach ($uow->getScheduledCollectionUpdates() AS $col) {
-
+        foreach ($uow->getScheduledCollectionUpdates() as $col) {
             if ($col->getOwner() instanceof Article) {
                 /** @var $article Article */
                 $article = $col->getOwner();
@@ -291,18 +293,18 @@ class CategorySubscriber implements BaseEventSubscriber
 
         foreach ($this->pendingRemoveAssignments as $pendingRemove) {
             /** @var $category Category */
-            $category =  $pendingRemove['category'];
+            $category = $pendingRemove['category'];
             /** @var $article Article */
-            $article  =  $pendingRemove['article'];
+            $article  = $pendingRemove['article'];
 
             $this->backlogRemoveAssignment($article->getId(), $category->getId());
         }
 
         foreach ($this->pendingAddAssignments as $pendingAdd) {
             /** @var $category Category */
-            $category =  $pendingAdd['category'];
+            $category = $pendingAdd['category'];
             /** @var $article Article */
-            $article  =  $pendingAdd['article'];
+            $article  = $pendingAdd['article'];
 
             $this->backlogAddAssignment($article->getId(), $category->getId());
         }
@@ -345,7 +347,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function backlogRemoveCategory($categoryId)
     {
-        $repo = $this->getCategoryComponent()->removeCategoryAssignmentments($categoryId);
+        $this->getCategoryComponent()->removeCategoryAssignmentments($categoryId);
     }
 
     /**
