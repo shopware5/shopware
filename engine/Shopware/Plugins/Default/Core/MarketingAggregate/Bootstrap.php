@@ -382,6 +382,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
 
         $this->SimilarShown()->updateElapsedSimilarShownArticles();
+        $this->SimilarShown()->initSimilarShown();
         return true;
     }
 
