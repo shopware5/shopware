@@ -121,13 +121,13 @@
             <arg value="-R"/>
             <arg value="0777"/>
             <arg value="${cache.dir}/templates/"/>
-            <arg value="${cache.dir}/database/"/>
+            <arg value="${cache.dir}/general/"/>
             <arg value="${proxy.dir}"/>
         </exec>
 
         <delete includeEmptyDirs="true">
             <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
-            <fileset dir="${cache.dir}/database/" includes="**/*"/>
+            <fileset dir="${cache.dir}/general/" includes="**/*"/>
             <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
             <fileset dir="${proxy.dir}" includes="**/*.*"/>
         </delete>

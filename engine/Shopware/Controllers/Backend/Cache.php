@@ -51,15 +51,14 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->getBackendCacheInfo(),
             $this->getTemplateCacheInfo(),
             $this->getShopwareProxyCacheInfo(),
-            $this->getDoctrineAttributeCacheInfo(),
             $this->getDoctrineFileCacheInfo(),
             $this->getDoctrineProxyCacheInfo(),
         );
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data,
-            'total' => count($data)
+            'data'    => $data,
+            'total'   => count($data)
         ));
     }
 
@@ -68,20 +67,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      * Helpers to clear various caches
      *
      */
-
-    /**
-     * Clear config cache action
-     */
-    public function configAction()
-    {
-        $this->clearTemplateCache();
-        $this->clearCompilerCache();
-
-        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_Config',
-            'Shopware_Plugin'
-        ));
-    }
 
     /**
      * Clear cache action
@@ -93,7 +78,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $capabilities = Shopware()->Cache()->getBackend()->getCapabilities();
 
         if (empty($capabilities['tags'])) {
-            if ($cache['config'] == 'on' || $cache['frontend'] == 'on') {
+            if ($cache['config'] == 'on' || $cache['template'] == 'on') {
                 Shopware()->Cache()->clean();
             }
         } else {
@@ -127,7 +112,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['router'] == 'on') {
             $this->clearRewriteCache();
         }
-        if ($cache['frontend'] == 'on') {
+        if ($cache['template'] == 'on') {
+            $this->clearCompilerCache();
+        }
+        if ($cache['http'] == 'on') {
             $this->clearFrontendCache();
         }
         if ($cache['backend'] == 'on') {
@@ -149,26 +137,17 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $cache = $this->Request()->getQuery('cache');
         switch ($cache) {
-            case 'Template':
             case 'Config':
+                $this->clearFrontendCache();
                 $this->clearBackendCache();
                 $this->clearConfigCache();
-                break;
-            case 'Frontend':
-                $this->clearFrontendCache();
-                $this->clearQueryCache();
+                $this->clearCompilerCache();
+                $this->clearSearchCache();
+                $this->clearProxyCache();
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * Clear query cache
-     */
-    protected function clearQueryCache()
-    {
-        $this->clearRewriteCache();
     }
 
     /**
@@ -196,7 +175,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             return false;
         }
 
-        Shopware()->Db()->exec("TRUNCATE s_cache_log");
+        try {
+            Shopware()->Db()->exec('TRUNCATE s_cache_log');
+        } catch (\Exeption $e) {
+            Shopware()->Db()->exec('DELETE FROM s_cache_log');
+        }
 
         return true;
     }
@@ -281,6 +264,13 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     /**
      * Clear proxy cache
+     *
+     * Clears:
+     * - Shopware Proxies
+     * - Classmap
+     * - Doctrine-Proxies
+     * - Doctrine-Anotations
+     * - Doctrine-Metadata
      */
     protected function clearProxyCache()
     {
@@ -292,6 +282,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         // Clear Shopware Proxies
         Shopware()->Hooks()->getProxyFactory()->clearCache();
+
+        // Clear classmap
+        $classMap = Shopware()->Hooks()->getProxyFactory()->getProxyDir() . 'ClassMap_' . \Shopware::REVISION . '.php';
+        @unlink($classMap);
 
         // Clear Doctrine Proxies
         $files = new GlobIterator(
@@ -313,7 +307,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             @unlink($filePath);
         }
     }
-
 
     /*
      *
@@ -405,19 +398,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $dir = Shopware()->Models()->getConfiguration()->getProxyDir();
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Doctrine Proxies';
-        return $info;
-    }
-
-    /**
-     * Returns cache information
-     *
-     * @return array
-     */
-    public function getDoctrineAttributeCacheInfo()
-    {
-        $dir = Shopware()->Models()->getConfiguration()->getAttributeDir();
-        $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine attribute models';
         return $info;
     }
 
