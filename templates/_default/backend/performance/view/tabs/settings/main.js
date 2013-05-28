@@ -106,6 +106,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
                     xtype: 'performance-tabs-settings-customers'
                 },{
                     xtype: 'performance-tabs-settings-categories'
+                },{
+                    xtype: 'performance-tabs-settings-filter'
                 }]
         });
 

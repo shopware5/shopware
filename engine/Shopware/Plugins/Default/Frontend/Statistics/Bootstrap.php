@@ -89,7 +89,8 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
             return;
         }
 
-        if (!Shopware()->Shop()->get('esi')) {
+        $statisticDisabled = Shopware()->Config()->get('disableShopwareStatistics', false);
+        if (!Shopware()->Shop()->get('esi') && !$statisticDisabled) {
             $this->updateLog($request, $response);
         }
     }

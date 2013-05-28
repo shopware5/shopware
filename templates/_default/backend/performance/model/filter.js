@@ -31,8 +31,8 @@
 /**
  * Base config model which holds references to the config items
  */
-//{block name="backend/performance/model/various"}
-Ext.define('Shopware.apps.Performance.model.Various', {
+//{block name="backend/performance/model/filter"}
+Ext.define('Shopware.apps.Performance.model.Filter', {
 
     /**
      * Extends the standard Ext Model
@@ -45,13 +45,13 @@ Ext.define('Shopware.apps.Performance.model.Various', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/various/fields"}{/block}
+		//{block name="backend/performance/model/filter/fields"}{/block}
         { name:'id', type:'int' },
-        { name: 'disableShopwareStatistics', type: 'bool'},
-        { name: 'TagCloud:show', type: 'bool'},
-        { name: 'LastArticles:show', type: 'bool'},
-        { name: 'LastArticles:lastarticlestoshow', type: 'int'},
-        { name: 'disableArticleNavigation', type: 'bool'},
+
+        { name:'displayFiltersInListings', type:'bool' },
+        { name:'displayFilterArticleCount', type:'bool' },
+        { name:'displayFiltersOnDetailPage', type:'bool' },
+        { name:'propertySorting', type:'int' }
     ]
 
 });
