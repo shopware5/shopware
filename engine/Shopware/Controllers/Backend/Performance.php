@@ -110,8 +110,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['topSeller']  = $this->prepareForSavingDefault($data['topSeller'][0]);
         $output['seo']        = $this->prepareSeoConfigForSaving($data['seo'][0]);
         $output['search']     = $this->prepareForSavingDefault($data['search'][0]);
-		$output['filters']    = $this->prepareForSavingDefault($data['filters'][0]);
-		$output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
+        $output['filters']    = $this->prepareForSavingDefault($data['filters'][0]);
+        $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
         $output['various']    = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
 
@@ -162,6 +162,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
+        $repo = Shopware()->Models()->getRepository(
+            'Shopware\Models\Plugin\Plugin'
+        );
+
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
+        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
+        $plugin->setActive($data['enabled']);
+
+        Shopware()->Models()->flush($plugin);
+
         $lines = array();
         foreach ($data['cacheControllers'] as $entry) {
             $lines[] = $entry['key'] . ' ' . $entry['value'];
@@ -177,7 +187,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         unset($data['id']);
 
         return $data;
-
     }
 
     /**
@@ -185,9 +194,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function saveConfig($name, $value)
     {
-        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepository    = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
-        $formRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+        $formRepository    = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -418,12 +427,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
+        $repo = Shopware()->Models()->getRepository(
+            'Shopware\Models\Plugin\Plugin'
+        );
+
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
+        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
+
         return array(
-            'cacheControllers' => $cacheControllers,
+            'enabled'            => $plugin->getActive(),
+            'cacheControllers'   => $cacheControllers,
             'noCacheControllers' => $noCacheControllers,
             'HttpCache:proxyBan' => $this->readConfig('HttpCache:proxyBan'),
-            'HttpCache:admin' => $this->readConfig('HttpCache:admin'),
-            'HttpCache:proxy' => $this->readConfig('HttpCache:proxy')
+            'HttpCache:admin'    => $this->readConfig('HttpCache:admin'),
+            'HttpCache:proxy'    => $this->readConfig('HttpCache:proxy')
         );
     }
 
