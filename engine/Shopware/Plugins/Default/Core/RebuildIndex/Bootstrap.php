@@ -46,14 +46,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     const STRATEGY_LIVE = 3;
 
     /**
-     * Returns the capabilities for this plugin.
-     * The top seller plugin can't be uninstalled or disabled.
+     * Returns capabilities so the plugin is default not installable and hidden in the plugin manager
      */
     public function getCapabilities()
     {
         return array(
-            'install' => true,
-            'enable' => true,
+            'install' => false,
+            'enable' => false,
             'update' => true
         );
     }

@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Performance.controller.Direct', {
 
     infoMessages: {
         'Template': '{s name=direct/messages/template}Template cache has been cleared{/s}',
-        'Config': '{s name=direct/messages/config}Configuration cache has been cleared{/s}',
+        'Config': '{s name=direct/messages/config}Shop cache has been cleared{/s}',
         'Frontend': '{s name=direct/messages/frontend}Article+category cache has been cleared{/s}',
         'Proxy': '{s name=direct/messages/proxy}Proxy/Model cache has been cleared{/s}'
     },

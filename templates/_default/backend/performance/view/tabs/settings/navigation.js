@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
 	extend: 'Ext.tree.Panel',
     alias: 'widget.performance-tabs-settings-navigation',
     rootVisible: false,
-    title: 'Settings',
+    title: '{s name=tabs/settings/title}Settings{/s}',
 
     /**
      * Mark the navigation bar as not collapsible

@@ -78,7 +78,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $capabilities = Shopware()->Cache()->getBackend()->getCapabilities();
 
         if (empty($capabilities['tags'])) {
-            if ($cache['config'] == 'on' || $cache['frontend'] == 'on') {
+            if ($cache['config'] == 'on' || $cache['template'] == 'on') {
                 Shopware()->Cache()->clean();
             }
         } else {
@@ -112,7 +112,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['router'] == 'on') {
             $this->clearRewriteCache();
         }
-        if ($cache['frontend'] == 'on') {
+        if ($cache['template'] == 'on') {
+            $this->clearCompilerCache();
+        }
+        if ($cache['http'] == 'on') {
             $this->clearFrontendCache();
         }
         if ($cache['backend'] == 'on') {
@@ -135,13 +138,12 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $cache = $this->Request()->getQuery('cache');
         switch ($cache) {
             case 'Config':
+                $this->clearFrontendCache();
                 $this->clearBackendCache();
                 $this->clearConfigCache();
-                break;
-            case 'Frontend':
-                $this->clearFrontendCache();
-                $this->clearRewriteCache();
                 $this->clearCompilerCache();
+                $this->clearSearchCache();
+                $this->clearProxyCache();
                 break;
             default:
                 break;
