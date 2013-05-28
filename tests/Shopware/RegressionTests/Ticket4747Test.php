@@ -65,8 +65,8 @@ class Shopware_RegressionTests_Ticket4747 extends Enlight_Components_Test_Contro
 
         //check position of "Farbe" value positions
         $this->assertArrayKeys($options['Farbe'], array(
-            array('index' => 0, 'value' => 'goldig',      'message' => 'Option "Farbe > goldig" has wrong position'),
-            array('index' => 1, 'value' => 'klar',        'message' => 'Option "Farbe > klar" has wrong position'),
+            array('index' => 0, 'value' => 'klar',        'message' => 'Option "Farbe > klar" has wrong position'),
+            array('index' => 1, 'value' => 'goldig',      'message' => 'Option "Farbe > goldig" has wrong position'),
             array('index' => 2, 'value' => 'rot',         'message' => 'Option "Farbe > rot" has wrong position'),
             array('index' => 3, 'value' => 'schokobraun', 'message' => 'Option "Farbe > schokobraun" has wrong position')
         ));
@@ -148,8 +148,8 @@ class Shopware_RegressionTests_Ticket4747 extends Enlight_Components_Test_Contro
 
         //check position of "Farbe" value positions
         $this->assertArrayKeys($options['Farbe'], array(
-            array('index' => 0, 'value' => 'klar',        'message' => 'Option "Farbe > klar" has wrong position'),
-            array('index' => 1, 'value' => 'rot',         'message' => 'Option "Farbe > rot" has wrong position'),
+            array('index' => 0, 'value' => 'rot',         'message' => 'Option "Farbe > rot" has wrong position'),
+            array('index' => 1, 'value' => 'klar',        'message' => 'Option "Farbe > klar" has wrong position'),
             array('index' => 2, 'value' => 'schokobraun', 'message' => 'Option "Farbe > schokobraun" has wrong position')
         ));
 

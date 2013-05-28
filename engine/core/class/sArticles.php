@@ -75,6 +75,26 @@ class sArticles
     protected $mediaRepository = null;
 
     /**
+     * Constant for the alphanumeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_ALPHANUMERIC = 0;
+
+    /**
+     * Constant for the numeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_NUMERIC = 1;
+
+    /**
+     * Constant for the article count sort configuration of the category filters
+     */
+    const FILTERS_SORT_ARTICLE_COUNT = 2;
+
+    /**
+     * Constant for the positon sort configuration of the category filters
+     */
+    const FILTERS_SORT_POSITION = 3;
+
+    /**
      * Helper function to get access to the media repository.
      * @return \Shopware\Models\Media\Repository
      */
@@ -816,12 +836,15 @@ class sArticles
                 ON aDetails.id = a.main_detail_id
         ";
 
+        $groupBy = 'a.id';
         switch ($sSort) {
             case 1:
+                $groupBy = "a.datum, a.changetime, a.id";
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
 
                 break;
             case 2:
+                $groupBy = "aDetails.sales, aDetails.impressions, aDetails.articleID";
                 $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
                 //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
                 $sqlFromPath = "
@@ -837,6 +860,7 @@ class sArticles
                 $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
+                $groupBy = "a.name, a.id";
                 $orderBy = "a.name ASC, a.id";
                 $sqlFromPath = "
                     FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
@@ -845,6 +869,7 @@ class sArticles
                 ";
                 break;
             case 6:
+                $groupBy = "a.name, a.id";
                 $orderBy = "a.name DESC, a.id DESC";
                 $sqlFromPath = "
                     FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
@@ -855,11 +880,14 @@ class sArticles
             default:
                 //todo@performance: default can be changed, so let the user change the index too.
                 $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
-                $sqlFromPath = "
-                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)
-                    INNER JOIN s_articles_details AS aDetails
-                        ON aDetails.id = a.main_detail_id
-                ";
+                if ($this->sSYSTEM->sCONFIG['sORDERBYDEFAULT']  == 'a.datum DESC') {
+                    $groupBy = 'a.datum, a.id';
+                    $sqlFromPath = "
+                        FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)
+                        INNER JOIN s_articles_details AS aDetails
+                            ON aDetails.id = a.main_detail_id
+                    ";
+                }
         }
 
 
@@ -1067,6 +1095,7 @@ class sArticles
             $addFilterWhere
             $supplierSQL
 
+            GROUP BY $groupBy
             ORDER BY $orderBy
             LIMIT $sLimitStart, $sLimitEnd
         ";
@@ -1318,12 +1347,445 @@ class sArticles
     }
 
     /**
-     * Get all available article properties from a specific category
+     * Helper function which checks the configuration if the article count
+     * should be displayed for each filter value.
      *
-     * @param int $categoryId - category id
-     * @param array $activeFilters
+     * @return bool
+     */
+    protected function displayFilterArticleCount()
+    {
+        return Shopware()->Config()->get('displayFilterArticleCount', true);
+    }
+
+    /**
+     * Helper function to add the already activated filter values.
+     * This function adds an inner join condition for each passed value.
+     * The join will be set on the s_filter_articles table. The table alias
+     * for each passed value is "filterArticles" + ValueID.
+     * The function expects the s_articles table with the alias "articles" to
+     * join the s_filter_articles over the articleID column.
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $activeFilters
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addActiveFilterCondition($builder, $activeFilters)
+    {
+        foreach($activeFilters as $valueId) {
+            if ($valueId <= 0) {
+                continue;
+            }
+            $alias = 'filterArticles' . $valueId;
+            $builder->innerJoin('articles', 's_filter_articles', $alias, $alias . '.articleID = articles.id AND ' . $alias . '.valueID = ' . (int) $valueId);
+        }
+        return $builder;
+    }
+
+    /**
+     * Helper function which creates a sql statement
+     * to select all filters with their associated options and values.
+     * This query is used to select all category filters.
+     *
+     * The query contains the following joins/aliases:
+     *  - s_filter_values           => filterValues (FROM Table)
+     *  - s_filter_articles         => filterArticles
+     *  - s_articles_categories_ro  => articleCategories
+     *  - s_articles                => articles
+     *  - s_filter_options          => filterOptions
+     *  - s_filter_relations        => filterRelations
+     *  - s_filter                  => filters
+     *  - s_articles_attributes     => attributes
+     *  - s_articles_avoid_customergroups     => avoidGroups
+     *
+     * If the parameter $activeFilters isn't empty, the query builder
+     * use a group by condition for the filterValues.id (s_filter_values.id).
+     * This condition is required to select the assigned article count
+     * faster.
+     *
+     * In case that the parameter $activeFilters is empty, the query builder
+     * use a sub query to select the article count for each filter value.
+     * Additional the query builder use a DISTINCT condition to prevent duplicate
+     * items, which creates over the different N:M Associations like
+     * s_filter_values : s_filter_articles or s_filter_articles : s_articles_categories_ro
+     *
+     * The query builder contains two parameters which has to be set from outside:
+     *  -   :categoryId         => ID of the current category to select the category articles
+     *  -   :customerGroupId    => ID of the current customer group to prevent avoided customer groups of an article.
+     *
+     * To set this parameter you can use the "$builder->setParameters" or "$builder->setParameter" function:
+     * <php>
+     * $builder->setParameters(array(
+     *      ':categoryId'       => $categoryId
+     *      ':customerGroupId'  => $customerGroupId
+     * ));
+     * </php>
+     *
+     * Shopware Events:
+     *  -   Shopware_Modules_Articles_GetFilterQuery
+     *
+     * @param null $activeFilters
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function getFilterQuery($activeFilters = null)
+    {
+        /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+
+        $builder->select(array(
+            'filterValues.optionID    as id',
+            'filterValues.optionID    as optionID',
+            'filterOptions.name       as optionName',
+            'filterRelations.position as optionPosition',
+            'filterValues.id          as valueID',
+            'filterValues.value       as optionValue',
+            'filterValues.position    as valuePosition',
+            'filterRelations.groupID  as groupID',
+            'filters.name             as groupName'
+        ));
+
+        $builder = $this->addArticleCountSelect($builder, $activeFilters);
+
+        //use as base table the s_filter_values
+        $builder->from('s_filter_values', 'filterValues');
+
+        //join the s_filter_articles to get add an additional join condition for the category articles.
+        $builder->innerJoin(
+            'filterValues',
+            's_filter_articles',
+            'filterArticles',
+            'filterArticles.valueID = filterValues.id'
+        );
+
+        //join the s_articles_categories_ro to get only the filter configuration for the current category articles
+        $builder->innerJoin(
+            'filterArticles',
+            's_articles_categories_ro',
+            'articleCategories',
+            "articleCategories.articleID = filterArticles.articleID AND articleCategories.categoryID = :categoryId"
+        );
+
+        //at least we add the condition to select only the active articles
+        $builder->innerJoin(
+            'filterArticles',
+            's_articles',
+            'articles',
+            'articles.id = filterArticles.articleID AND articles.active = 1 AND articles.id = articleCategories.articleID'
+        );
+
+        //to get the filter option name, it is required to join the s_filter_options. The options can be configured with
+        //an filterable flag.
+        $builder->innerJoin(
+            'filterValues',
+            's_filter_options',
+            'filterOptions',
+            'filterValues.optionID = filterOptions.id AND filterOptions.filterable = 1'
+        );
+
+        //the filter relations table contains the data which filter options is assigned to which filter group.
+        $builder->innerJoin(
+            'filterOptions',
+            's_filter_relations',
+            'filterRelations',
+            'filterRelations.groupID = articles.filtergroupID AND filterRelations.optionID = filterOptions.id'
+        );
+
+        //now we can select the s_filter to get the group name.
+        $builder->innerJoin(
+            'filterRelations',
+            's_filter',
+            'filters',
+            'filters.id = filterRelations.groupID'
+        );
+
+        //at least we add the s_articles_avoid_customergroups and s_articles_attributes to prevent
+        //inconsistent article selections.
+        $builder->leftJoin(
+            'articles',
+            's_articles_avoid_customergroups',
+            'avoidGroups',
+            "avoidGroups.articleID = articles.id AND avoidGroups.customergroupID = :customerGroupId"
+        );
+
+        $builder->innerJoin(
+            'articles',
+            's_articles_attributes',
+            'attributes',
+            'articles.id = attributes.articleID'
+        );
+
+        $builder->andWhere('avoidGroups.articleID IS NULL');
+
+        $builder = Shopware()->Events()->filter(
+            'Shopware_Modules_Articles_GetFilterQuery',
+            $builder,
+            array(
+                'subject' => $this,
+                'activeFilters' => $activeFilters
+            )
+        );
+
+        return $builder;
+    }
+
+
+    /**
+     * Helper function to add the article count select for the filter queries.
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param null $activeFilters
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addArticleCountSelect($builder, $activeFilters = null)
+    {
+        if (!$this->displayFilterArticleCount()) {
+            $builder->distinct();
+            return $builder;
+        }
+
+        //use as default a sub select query to select the article count for each filter value
+        if (empty($activeFilters)) {
+            $builder->addSelect('(
+            SELECT COUNT(DISTINCT filter2.articleID)
+                FROM   s_filter_articles filter2
+                INNER JOIN s_articles_categories_ro articleCategories2
+                    ON  articleCategories2.articleID = filter2.articleID
+                    AND articleCategories2.categoryID = :categoryId
+                INNER JOIN s_articles articles2
+                    ON articles2.id = filter2.articleID
+                    AND articleCategories2.articleID = articles2.id
+                    AND articles2.active = 1
+                WHERE  filter2.valueID = filterValues.id
+            ) as articleCount');
+
+            $builder->distinct();
+        } else {
+            //in case that the user already activated some filters, it is faster to
+            //select the article count over an group by condition. In the other case the duplicate items will be removed over
+            //the DISTINCT condition in the SELECT path.
+            $builder->groupBy('filterValues.id');
+            $builder->addSelect('COUNT(DISTINCT articles.id) as articleCount');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to add the translation join and select condition
+     * for the article filters. This function expects the following aliases:
+     *  - s_filter         = filters
+     *  - s_filter_values  = filterValues
+     *  - s_filter_options = filterOptions
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $translationId
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addFilterTranslation($builder, $translationId)
+    {
+        $builder->addSelect(array(
+            'valueTranslation.objectdata AS valueTranslation',
+            'optionTranslation.objectdata AS optionNameTranslation',
+            'groupTranslation.objectdata AS groupNameTranslation'
+        ));
+
+        $builder->leftJoin(
+            'filterValues',
+            's_core_translations',
+            'valueTranslation',
+            "valueTranslation.objecttype = :valueType
+             AND valueTranslation.objectkey = filterValues.id
+             AND valueTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->leftJoin(
+            'filterOptions',
+            's_core_translations',
+            'optionTranslation',
+            "optionTranslation.objecttype = :optionType
+             AND optionTranslation.objectkey = filterOptions.id
+             AND optionTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->leftJoin(
+            'filters',
+            's_core_translations',
+            'groupTranslation',
+            "groupTranslation.objecttype = :groupType
+             AND groupTranslation.objectkey = filters.id
+             AND groupTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->setParameter(':translationId', $translationId);
+        $builder->setParameter(':groupType', 'propertygroup');
+        $builder->setParameter(':optionType', 'propertyoption');
+        $builder->setParameter(':valueType', 'propertyvalue');
+
+        return $builder;
+    }
+
+    /**
+     * This function returns all category filters in the correct sort order.
+     * The returned array contains all filter groups, filter options and filter values
+     * which configured for the category articles of the passed category id.
+     *
+     * The $activeFilters parameter can contains the already activated filter value
+     * ids as flat array.
+     * The already activated filter values will be added as join condition from the s_articles
+     * on the s_filter_articles with the corresponding value id.
+     *
+     * Notice: If the system contains many filter values, it is required to increase the
+     * max join configuration parameter of the sql server.
+     *
+     * The absolute max join limit of a 5.* mysql server is set to 61 join tables!
+     *
+     * Shopware Events:
+     *  - Shopware_Modules_Article_GetCategoryFilters
+     *
+     * @param $categoryId
+     * @param null $activeFilters
      * @return array
      */
+    public function getCategoryFilters($categoryId, $activeFilters = null)
+    {
+        $builder = $this->getFilterQuery($activeFilters);
+        $builder = $this->addActiveFilterCondition($builder, $activeFilters);
+        $sortMode = $this->getFilterSortMode($categoryId, $this->customerGroupId, $activeFilters);
+
+        $builder->addOrderBy('filterRelations.position');
+        $builder->addOrderBy('filterOptions.name');
+
+        switch($sortMode) {
+            case self::FILTERS_SORT_ALPHANUMERIC:
+                $builder->addOrderBy('filterValues.value');
+                break;
+
+            case self::FILTERS_SORT_NUMERIC:
+                $builder->addOrderBy('filterValues.value_numeric');
+                break;
+
+            case self::FILTERS_SORT_ARTICLE_COUNT:
+                if ($this->displayFilterArticleCount()) {
+                    $builder->addOrderBy('articleCount', 'DESC');
+                } else {
+                    $builder->addOrderBy('filterValues.position');
+                }
+                break;
+
+            case self::FILTERS_SORT_POSITION:
+            default:
+                $builder->addOrderBy('filterValues.position');
+                break;
+        }
+        $builder->addOrderBy('filterValues.id');
+
+        if ($this->translationId !== null) {
+            $builder = $this->addFilterTranslation($builder, $this->translationId);
+        }
+
+        $builder->setParameter(':customerGroupId', (int) $this->customerGroupId);
+        $builder->setParameter(':categoryId', (int) $categoryId);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+
+        $filters = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $filters = Shopware()->Events()->filter(
+            'Shopware_Modules_Article_GetCategoryFilters',
+            $filters,
+            array(
+                'subject' => $this,
+                'category' => $categoryId,
+                'activeFilters' => $activeFilters
+            )
+        );
+
+        return $filters;
+    }
+
+
+    /**
+     * Helper function to get the sort mode condition for the passed category id.
+     * This function selects all filter group ids of the assigned category articles for the
+     * passed category id.
+     * In case that more than one filter group is assigned, the function returns
+     * the config sort mode for filters.
+     * If only one filter group id founded, the function returns the sort mode for this
+     * filter group.
+     *
+     * Shopware Events:
+     *  -   Shopware_Modules_Article_GetFilterSortMode
+     *
+     * @param $categoryId
+     * @param $customerGroupId
+     * @param null $activeFilters
+     * @return int|null
+     */
+    protected function getFilterSortMode($categoryId, $customerGroupId, $activeFilters = null)
+    {
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array('DISTINCT articles.filtergroupID', 'filters.sortmode'));
+
+        $builder->from('s_articles', 'articles');
+        $builder->innerJoin(
+            'articles',
+            's_articles_categories_ro',
+            'articleCategories',
+            "articleCategories.articleID = articles.id AND articleCategories.categoryID = :categoryId"
+        );
+        $builder->leftJoin(
+            'articles',
+            's_articles_avoid_customergroups',
+            'avoidGroups',
+            "avoidGroups.articleID = articles.id AND avoidGroups.customergroupID = :customerGroupId"
+        );
+        $builder->innerJoin(
+            'articles',
+            's_articles_attributes',
+            'attributes',
+            'articles.id = attributes.articleID'
+        );
+        $builder->innerJoin(
+            'articles',
+            's_filter',
+            'filters',
+            'filters.id = articles.filtergroupID'
+        );
+
+        $builder->where('articles.active = 1');
+        $builder->andWhere('articles.filtergroupID IS NOT NULL');
+        $builder->andWhere('avoidGroups.articleID IS NULL');
+
+        $builder = $this->addActiveFilterCondition($builder, $activeFilters);
+
+        $builder->setParameter('customerGroupId', $customerGroupId);
+        $builder->setParameter('categoryId', $categoryId);
+
+        /**@var $statement Doctrine\DBAL\Driver\Statement*/
+        $statement = $builder->execute();
+
+        $filterIds = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($filterIds) > 1) {
+            $sortMode = Shopware()->Config()->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
+        } else if (count($filterIds) === 1) {
+            $sortMode = $filterIds[0]['sortmode'];
+        } else {
+            $sortMode = self::FILTERS_SORT_POSITION;
+        }
+
+        $sortMode = Shopware()->Events()->filter(
+            'Shopware_Modules_Article_GetFilterSortMode',
+            $sortMode,
+            array(
+                'subject' => $this,
+                'category' => $categoryId,
+                'activeFilters' => $activeFilters
+            )
+        );
+        return $sortMode;
+    }
+
     public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
     {
         if ($categoryId === null
@@ -1337,112 +1799,10 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        $db = Shopware()->Db();
-
         $categoryId = (int)$categoryId;
         $activeFilters = (array)$activeFilters;
 
-        $addFilterJoin = "";
-        if (!empty($activeFilters)) {
-            foreach ($activeFilters as $key => $filter) {
-                $filter = (int)$filter;
-                if ($filter > 0) {
-                    $addFilterJoin .= "
-                        INNER JOIN s_filter_articles fv$filter
-                        ON fv$filter.articleID = a.id
-                        AND fv$filter.valueID = $filter
-                    ";
-                } else {
-                    unset($activeFilters[$key]);
-                }
-            }
-        }
-
-        $addTranslationJoin = '';
-        $addTranslationSelect = '';
-        if($this->translationId !== null) {
-            $addTranslationSelect = '
-        		,
-				st.objectdata AS optionNameTranslation,
-				st2.objectdata AS groupNameTranslation,
-				st3.objectdata AS valueTranslation
-        	';
-            $addTranslationJoin = "
-        		LEFT JOIN s_core_translations AS st
-				ON st.objecttype='propertyoption'
-				AND st.objectkey=fv.optionID
-				AND st.objectlanguage='$this->translationId'
-
-				LEFT JOIN s_core_translations AS st2
-				ON st2.objecttype='propertygroup'
-				AND st2.objectkey=f.id
-				AND st2.objectlanguage='$this->translationId'
-
-				LEFT JOIN s_core_translations AS st3
-	            ON st3.objecttype='propertyvalue'
-	            AND st3.objectkey=fv.id
-	            AND st3.objectlanguage='$this->translationId'
-        	";
-        }
-
-        $sql = "
-			SELECT STRAIGHT_JOIN
-				fv.optionID AS id,
-				COUNT(DISTINCT a.id) AS count,
-				fo.id AS optionID,
-				fo.name AS optionName,
-				f.id AS groupID,
-				f.name AS groupName,
-				fv.value AS optionValue,
-				fv.id AS valueID
-				$addTranslationSelect
-			FROM s_categories c
-
-			INNER JOIN s_articles_categories_ro ac
-			  ON ac.categoryID = c.id
-			  AND c.active = 1
-
-			JOIN s_filter_articles fa
-			ON fa.articleID=ac.articleID
-
-		    JOIN s_filter_values fv
-		    ON fv.id=fa.valueID
-
-		    JOIN s_filter_options fo
-		    ON fo.id=fv.optionID
-		    AND fo.filterable = 1
-
-		    JOIN s_articles a
-		    ON a.id=ac.articleID
-		    AND a.active =1
-
-			JOIN s_filter f
-			ON f.id=a.filtergroupID
-
-			LEFT JOIN s_filter_relations fr
-			ON f.id = fr.groupId AND fo.id = fr.optionId
-
-			LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=fa.articleID
-            AND ag.customergroupID={$this->customerGroupId}
-
-			$addTranslationJoin
-
-			$addFilterJoin
-
-			WHERE c.id=$categoryId
-	        AND ag.articleID IS NULL
-
-			GROUP BY fv.id
-			ORDER BY
-			  fr.position,
-			  fo.name ASC,
-			  IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
-			  IF(f.sortmode=2, COUNT(*) , 0) DESC,
-			  IF(f.sortmode=3, fv.position, 0),
-			  fv.value
-		";
-        $getProperties = $db->fetchAll($sql);
+        $getProperties = $this->getCategoryFilters($categoryId, $activeFilters);
 
         $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
             . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
@@ -1502,7 +1862,7 @@ class sArticles
                 'name' => $property['optionName'],
                 'value' => $property['optionValue'],
                 'valueTranslation' => null,
-                'count' => $property['count'],
+                'count' => $property['articleCount'],
                 'group' => $property['groupName'],
                 'optionID' => $property['id'],
                 'link' => $link,
@@ -1516,7 +1876,7 @@ class sArticles
             [$property['optionValue']] = array(
                 'name' => $property['optionName'],
                 'value' => $property['optionValue'],
-                'count' => $property['count'],
+                'count' => $property['articleCount'],
                 'group' => $property['groupName'],
                 'optionID' => $property['id']
             );
@@ -2832,10 +3192,13 @@ class sArticles
                 }
             }
 
-            if (!empty($getArticle["filtergroupID"])) $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
+            if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
+                $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
+            }
 
-            $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
-
+            if ($this->showArticleNavigation()) {
+                $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
+            }
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"])));
             $string = preg_replace("/[^a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½\-]/", " ", $string);
@@ -2857,6 +3220,27 @@ class sArticles
         $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
         return $getArticle;
+    }
+
+    /**
+     * Helper function to check the configuration for the article detail page navigation arrows.
+     */
+    private function showArticleNavigation()
+    {
+        return !(Shopware()->Config()->get('disableArticleNavigation'));
+    }
+
+    /**
+     * Helper function to check the filter configuration for article detail pages.
+     * Checks the configuration parameter displayFiltersOnDetailPage.
+     * This config can be set over the performance module.
+     *
+     *
+     * @return boolean
+     */
+    protected function displayFiltersOnArticleDetailPage()
+    {
+        return Shopware()->Config()->get('displayFiltersOnDetailPage', true);
     }
 
     /**

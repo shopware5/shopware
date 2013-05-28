@@ -36,6 +36,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+
         $categoryId = $this->Request()->getParam('sCategory');
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
@@ -158,8 +159,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
             'sCategoryContent' => $categoryContent
         ));
-        if (empty($categoryContent["hideFilter"])) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId);
+
+        if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
+            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, null);
         }
 
         if(!empty($articleProperties['filterOptions'])) {
@@ -169,6 +171,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
             ));
         }
+    }
+
+    /**
+     * Helper function which checks the configuration for listing filters.
+     * @return boolean
+     */
+    protected function displayFiltersInListing()
+    {
+        return Shopware()->Config()->get('displayFiltersInListings', true);
     }
 
     /**

@@ -6437,15 +6437,6 @@ INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `label`, `colum
 (11, 4, 50, 'Neuste Bestellungen', 2, 1),
 (12, 5, 50, 'Notizbuch', 2, 2);
 
-TRUNCATE TABLE `s_crontab`;
-INSERT INTO `s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
-(1, 'Geburtstagsgruß', 'birthday', NULL, '', '2010-10-16 23:42:58', '2010-10-16 12:26:44', 86400, 1, '2010-10-16 12:26:44', '', '', NULL),
-(2, 'Aufräumen', 'clearing', NULL, '', '2010-10-16 12:34:38', '2010-10-16 12:34:32', 86400, 1, '2010-10-16 12:34:32', '', '', NULL),
-(3, 'Lagerbestand Warnung', 'article_stock', NULL, '', '2010-10-16 12:34:33', '2010-10-16 12:34:31', 86400, 1, '2010-10-16 12:34:32', 'sARTICLESTOCK', '{$sConfig.sMAIL}', NULL),
-(5, 'Suche', 'search', NULL, '', '2010-10-16 12:34:38', '2010-10-16 12:34:32', 86400, 1, '2010-10-16 12:34:32', '', '', NULL),
-(6, 'eMail-Benachrichtigung', 'notification', NULL, '', '2010-10-17 00:20:28', '2010-10-16 12:26:44', 86400, 1, '2010-10-16 12:26:44', '', '', NULL),
-(7, 'Artikelbewertung per eMail', 'article_comment', NULL, '', '2010-10-16 12:35:18', '2010-10-16 12:34:32', 86400, 1, '2010-10-16 12:34:32', '', '', NULL);
-
 TRUNCATE TABLE `s_emarketing_banners`;
 TRUNCATE TABLE `s_emarketing_banners_attributes`;
 TRUNCATE TABLE `s_emarketing_banners_statistics`;
