@@ -872,7 +872,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return { Boolean } - Truthy if the tab was sucessfully created, otherwise falsy.
      */
     registerAdditionalTab: function(opts, containerType) {
-        var me = this, tabPanel = me.mainTab, tabContainer, cfg = {},
+        var me = this, tabPanel = me.mainTab, tabContainer, cfg = {}, articleChangeFn,
             defaultOpts = {
                 'title': 'Tab',
                 'articleChangeFn': Ext.emptyFn,
@@ -918,6 +918,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         // Merge the passed user configuration with our default configuration
         cfg = Ext.merge(cfg, defaultOpts, opts);
+        articleChangeFn = cfg['articleChangeFn'];
 
         // Create the tab container
         tabContainer = Ext.create(containerType, Ext.apply(cfg.tabConfig, {
@@ -951,10 +952,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         };
 
         // Trigger the `contentFn` which sets the content of the tab container
-        cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
+        me.on('storesLoaded', function() {
+            cfg['contentFn'].apply(cfg.scope, [ me.article, availableStores, { tab: tabContainer, config: cfg } ]);
+        });
 
         // Bind event listener which triggers when the article store was changed
-        me._batchStore.on('datachanged', cfg['articleChangeFn'], cfg.scope, {
+        me.subApplication.on('ProductModule:storesChanged', articleChangeFn, cfg.scope, {
             tab: tabContainer,
             config: cfg
         });
