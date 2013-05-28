@@ -4,11 +4,12 @@
 	{block name='frontend_detail_menu_top'}
 	
 	{* Back to listing *}
-	<div class="article_overview">
-		{$sArticle.sNavigation.sCurrent.position} {s name='DetailNavCount'}{/s} {$sArticle.sNavigation.sCurrent.count} 
-		(<a href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">{s name='DetailNavIndex'}{/s}</a>)
-	</div>
-	
+	{if !{config name=disableArticleNavigation}}
+		<div class="article_overview">
+			{$sArticle.sNavigation.sCurrent.position} {s name='DetailNavCount'}{/s} {$sArticle.sNavigation.sCurrent.count}
+			(<a href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">{s name='DetailNavIndex'}{/s}</a>)
+		</div>
+	{/if}
 	<div class="article_navi">
 		{* Previous article *}
 		<div class="article_back">
