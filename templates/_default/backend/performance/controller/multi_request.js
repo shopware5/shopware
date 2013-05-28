@@ -287,6 +287,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getSeoContentRequestConfig(window));
 
         me.runRequest(0, window, null, configs);
+
+        window.startButton.show();
+        window.cancelButton.hide();
     },
 
 
