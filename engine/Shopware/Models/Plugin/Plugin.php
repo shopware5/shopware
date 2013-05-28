@@ -242,6 +242,22 @@ class Plugin extends ModelEntity
     }
 
     /**
+     * @return bool
+     */
+    public function isDummy()
+    {
+        return (bool) $this->capabilityDummy;
+    }
+
+    /**
+     * Disables dummy capability
+     */
+    public function disableDummy()
+    {
+        $this->capabilityDummy = false;
+    }
+
+    /**
      * @return int
      */
     public function getId()
