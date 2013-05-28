@@ -13,7 +13,7 @@ VALUES
 ('showSupplierInCategories', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('propertySorting', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('disableShopwareStatistics', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
-('disableArticleNavigation', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
+('disableArticleNavigation', 'i:0;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('similarRefreshStrategy', 'i:3;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('similarActive', 'i:1;', '', '', '', 1, 0, 0, NULL, NULL, ''),
 ('similarValidationTime', 'i:100;', '', '', '', 1, 0, 0, NULL, NULL, '');
