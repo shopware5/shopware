@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.Performance', {
         'Main',
         'Settings',
         'Cache',
-        'MultiRequest'
+        'MultiRequest',
+        'Direct'
     ],
 
 
@@ -84,7 +85,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
         'tabs.settings.elements.NoCache',
-        'tabs.settings.elements.MultiRequestButton',
+        'tabs.settings.elements.MultiRequestButton'
     ],
 
     /**
@@ -126,7 +127,7 @@ Ext.define('Shopware.apps.Performance', {
         // In order to support clearing the cache directly, we might
         // have to load the 'direct' controller
         if (me.action) {
-            me.getController('Direct');
+            me.getController('Direct').directClearCache();
         } else {
             mainController = me.getController('Main');
             if (!mainController.mainWindow) {
