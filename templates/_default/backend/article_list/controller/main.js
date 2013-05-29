@@ -270,7 +270,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         }
 
         // Add inidicator to the class that the split view mode is up and running...
-        if(!me.hasOwnProperty('splitViewMode')) {
+        if(!me.hasOwnProperty('splitViewMode') || !me.splitViewMode) {
             me.splitViewMode = true;
         }
 

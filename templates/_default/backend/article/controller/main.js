@@ -594,6 +594,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      */
     onCloseSplitViewMode: function() {
         this.subApplication.splitViewActive = false;
+        Shopware.app.Application.un('moduleConnector:splitView', this.onSplitViewStoreChange, this);
         Shopware.app.Application.fireEvent('moduleConnector:splitViewClose', this);
     }
 });
