@@ -2493,20 +2493,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      * @param $results CSV Iterator
      */
     protected function insertPrices($results) {
-        // create pricegroup array
-        $customerPriceGroups = array();
-        foreach($results as $articleData) {
-            foreach($articleData as $key => $value) {
-                if(strpos($key, 'price_') !== false) {
-                    $customerPriceGroups[str_replace('price_', '', $key)] = $value;
-                }
-            }
-        }
-
         $sql = "SELECT `groupkey` as `key`, `id`, `groupkey`, `taxinput` FROM s_core_customergroups WHERE mode=0 ORDER BY id ASC";
         $localCustomerGroups = Shopware()->Db()->fetchAssoc($sql);
 
-        // Iter all given articles
         foreach($results as $articleData) {
             // get articleId and detailId by ordernumber
             $sql = '
@@ -2521,6 +2510,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $stmt = Shopware()->Db()->query($sql, $articleData['ordernumber']);
             $result = $stmt->fetch();
             $tax = $result['tax'];
+
+            // create pricegroup array
+            $customerPriceGroups = array();
+            foreach($articleData as $key => $value) {
+                if(strpos($key, 'price_') !== false) {
+                    $customerPriceGroups[str_replace('price_', '', $key)] = $value;
+                }
+            }
 
             // delete old and save new prices
             foreach($customerPriceGroups as $customerGroup => $price) {
@@ -2551,9 +2548,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     'percent'          => 0
                 ));
             }
-
         }
-
     }
 
     /**
