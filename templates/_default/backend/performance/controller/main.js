@@ -51,16 +51,21 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
 
     /**
      * Called by the SubApplication to create and show the window
-     * 
+     *
+     * @returns { Void }
      */
     run: function() {
         var me = this;
 
-        me.mainWindow = me.subApplication.getView('main.Window').create().show();
+        if(!me.subApplication.infoStore) {
+            me.subApplication.infoStore = me.getStore('Info');
+            me.subApplication.infoStore.load();
+        }
 
-        me.infoStore = me.getStore('Info').load(function() {
-            me.getInfo().bindStore(me.infoStore);
-        });
+        me.mainWindow = me.subApplication.getView('main.Window').create({
+            infoStore: me.subApplication.infoStore
+        }).show();
+
 
 		// Loads the main settings store and injects it into the settings form
         me.getController('Settings').loadConfigStore();
