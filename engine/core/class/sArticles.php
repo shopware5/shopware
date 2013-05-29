@@ -828,7 +828,6 @@ class sArticles
 
         $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
 
-        //todo@performance:
         //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
         $sqlFromPath = "
             FROM s_articles AS a
@@ -878,7 +877,6 @@ class sArticles
                 ";
                 break;
             default:
-                //todo@performance: default can be changed, so let the user change the index too.
                 $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
                 if ($this->sSYSTEM->sCONFIG['sORDERBYDEFAULT']  == 'a.datum DESC') {
                     $groupBy = 'a.datum, a.id';

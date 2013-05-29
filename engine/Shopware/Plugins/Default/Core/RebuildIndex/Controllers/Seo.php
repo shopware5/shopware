@@ -179,11 +179,10 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         $this->RewriteTable()->baseSetup();
 
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
-        $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
+        $currentTime = new DateTime();
 
         $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01', $limit);
-        $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
+        $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
         $this->View()->assign(array(
             'success' => true
