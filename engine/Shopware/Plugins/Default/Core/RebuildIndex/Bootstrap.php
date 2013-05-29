@@ -164,8 +164,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
         $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops');
 
-
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
+        $currentTime = new DateTime();
 
         $this->SeoIndex()->registerShop($shops[0]);
         $this->RewriteTable()->sCreateRewriteTableCleanup();
@@ -174,16 +173,11 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->SeoIndex()->registerShop($shopId);
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
-            $this->SeoIndex()->setCachedTime($currentTime, $elementId, $shopId);
+            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
             $this->RewriteTable()->baseSetup();
-            $resultTime = $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 100000);
-            if ($resultTime === $cachedTime) {
-                $resultTime = $currentTime;
-            }
-            if($resultTime !== $currentTime) {
-                $this->SeoIndex()->setCachedTime($resultTime, $elementId, $shopId);
-            }
+            $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 900000);
+            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
