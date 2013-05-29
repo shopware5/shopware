@@ -100,15 +100,13 @@ class HttpKernel implements HttpKernelInterface
      */
     public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
     {
+        // Overwrite superglobals with state of the SymfonyRequest
         $request->overrideGlobals();
 
-        $request = new EnlightRequest(
-            str_replace(" ", "+", $request->getUri())
-        );
+        // Create englight request from global state
+        $enlightRequest = new EnlightRequest();
 
-        $request->setQuery($request->getQuery());
-
-        return $request;
+        return $enlightRequest;
     }
 
     /**
