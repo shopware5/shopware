@@ -44,7 +44,14 @@ Ext.define('Shopware.apps.Performance.controller.Direct', {
         'Proxy': '{s name=direct/messages/proxy}Proxy/Model cache has been cleared{/s}'
     },
 
-    init: function () {
+    /**
+     * Method which will be used for the quick buttons. The method should be called
+     * directly.
+     *
+     * After the request is done, the subApplication will be destroyed.
+     * @returns { Void }
+     */
+    directClearCache: function() {
         var me = this,
             action = me.subApplication.action;
 
@@ -54,12 +61,12 @@ Ext.define('Shopware.apps.Performance.controller.Direct', {
                 Shopware.Notification.createGrowlMessage(
                     me.infoTitle,
                     me.infoMessages[action],
-					me.infoTitle
+                    me.infoTitle
                 );
+
+                me.subApplication.handleSubAppDestroy(null);
             }
         });
-
-        me.callParent(arguments);
     }
 });
 //{/block}
