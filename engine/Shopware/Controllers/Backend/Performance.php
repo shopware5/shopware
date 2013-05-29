@@ -44,13 +44,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
     }
 
-    public function init()
-    {
-        $this->configData = $this->prepareConfigData();
-
-        parent::init();
-    }
-
     public function getShopsAction()
     {
         $shops = Shopware()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
@@ -71,8 +64,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        // Clear the config cache
-        Shopware()->Cache()->clean();
+        Shopware()->Cache()->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -449,9 +441,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
+        Shopware()->Cache()->remove('Shopware_Config');
         $this->View()->assign(array(
             'success' => true,
-            'data' => $this->configData
+            'data' => $this->prepareConfigData()
         ));
     }
 
