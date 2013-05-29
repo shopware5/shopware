@@ -85,9 +85,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Helper function to reset the cached time. Moved here from the router engine
      *
-     * todo@dn: Taken from RouterRewrite plugin - clean up
-
-     *
      * @param $resultTime
      * @param $elementId
      * @param $shopId
