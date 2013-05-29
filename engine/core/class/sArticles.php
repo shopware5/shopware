@@ -1441,7 +1441,7 @@ class sArticles
             'filters.name             as groupName'
         ));
 
-        $builder = $this->addArticleCountSelect($builder, $activeFilters);
+        $builder = $this->addArticleCountSelect($builder);
 
         //use as base table the s_filter_values
         $builder->from('s_filter_values', 'filterValues');
@@ -1530,39 +1530,18 @@ class sArticles
      * Helper function to add the article count select for the filter queries.
      *
      * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
-     * @param null $activeFilters
+     *
      * @return \Shopware\Components\Model\DBAL\QueryBuilder
      */
-    protected function addArticleCountSelect($builder, $activeFilters = null)
+    protected function addArticleCountSelect($builder)
     {
+        $builder->groupBy('filterValues.id');
+
         if (!$this->displayFilterArticleCount()) {
-            $builder->distinct();
             return $builder;
         }
 
-        //use as default a sub select query to select the article count for each filter value
-        if (empty($activeFilters)) {
-            $builder->addSelect('(
-            SELECT COUNT(DISTINCT filter2.articleID)
-                FROM   s_filter_articles filter2
-                INNER JOIN s_articles_categories_ro articleCategories2
-                    ON  articleCategories2.articleID = filter2.articleID
-                    AND articleCategories2.categoryID = :categoryId
-                INNER JOIN s_articles articles2
-                    ON articles2.id = filter2.articleID
-                    AND articleCategories2.articleID = articles2.id
-                    AND articles2.active = 1
-                WHERE  filter2.valueID = filterValues.id
-            ) as articleCount');
-
-            $builder->distinct();
-        } else {
-            //in case that the user already activated some filters, it is faster to
-            //select the article count over an group by condition. In the other case the duplicate items will be removed over
-            //the DISTINCT condition in the SELECT path.
-            $builder->groupBy('filterValues.id');
-            $builder->addSelect('COUNT(DISTINCT articles.id) as articleCount');
-        }
+        $builder->addSelect('COUNT(DISTINCT articles.id) as articleCount');
 
         return $builder;
     }
