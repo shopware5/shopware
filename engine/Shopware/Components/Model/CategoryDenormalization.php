@@ -100,7 +100,7 @@ class CategoryDenormalization
      */
     public function disableTransactions()
     {
-        $this->enableTransactions = true;
+        $this->enableTransactions = false;
     }
 
     /**
