@@ -102,7 +102,7 @@ class Configuration extends BaseConfiguration
     {
         $cache = null;
 
-        if (extension_loaded('apc')) {
+        if (extension_loaded('apc') && version_compare(phpversion('apc'), '3.1.13', '>=')) {
             $cache = new ApcCache();
         } elseif (extension_loaded('xcache')) {
             $cache = new XcacheCache();
