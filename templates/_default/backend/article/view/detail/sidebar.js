@@ -141,9 +141,10 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
         ];
     },
 
-    onStoresLoaded: function(article) {
+    onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
+        me.shopStore = stores['shops'];
         me.add(me.createElements());
     }
 });
