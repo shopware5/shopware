@@ -507,7 +507,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * @return void
      */
     onDuplicateArticle: function(article) {
-        if (!article || !article.get('id')) {
+        var me = this,
+            detailRecord = me.getDetailForm().getRecord();
+
+        //use the detailRecord for the id because article in split view mode can be outdated
+        if (!detailRecord || !detailRecord.get('id')) {
             return;
         }
 
@@ -515,7 +519,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             url: '{url controller="article" action="duplicateArticle"}',
             method: 'POST',
             params: {
-                articleId: article.get('id')
+                articleId: detailRecord.get('id')
             },
             success: function(response, opts) {
                 var operation = Ext.decode(response.responseText);
@@ -552,14 +556,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * @param article
      */
     onDeleteArticle: function(article) {
-        var me = this, win = me.getMainWindow();
+        var me = this,
+            win = me.getMainWindow(),
+            articleModel = me.getDetailForm().getRecord();
 
-        if (article instanceof Ext.data.Model && article.get('id') > 0) {
+        //use the model from the record because article in split view mode can be outdated
+        if (articleModel instanceof Ext.data.Model && articleModel.get('id') > 0) {
             Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle , function (response) {
                 if ( response !== 'yes' ) {
                     return;
                 }
-                article.destroy({
+                articleModel.destroy({
                     callback: function(operation) {
                         Shopware.Notification.createGrowlMessage(me.snippets.saved.title, me.snippets.saved.removeMessage, me.snippets.growlMessage);
                         win.destroy();
