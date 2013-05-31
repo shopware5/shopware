@@ -788,7 +788,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.detailForm.add(me.attributeFieldSet);
 
         me.unitComboBox.bindStore(stores['unit']);
-
+        me.supplierStore = stores['suppliers'];
         window.setTimeout(function() {
             me.detailForm.loadRecord(me.article);
         }, 10);
