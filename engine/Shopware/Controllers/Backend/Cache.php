@@ -113,13 +113,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->clearRewriteCache();
         }
         if ($cache['template'] == 'on') {
+            $this->clearTemplateCache();
             $this->clearCompilerCache();
         }
         if ($cache['http'] == 'on') {
             $this->clearFrontendCache();
-        }
-        if ($cache['backend'] == 'on') {
-            $this->clearBackendCache();
         }
         if ($cache['proxy'] == 'on') {
             $this->clearProxyCache();
