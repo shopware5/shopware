@@ -7,7 +7,7 @@
 <head>
 {* Http-Tags *}
 {block name="backend_index_meta_http_tags"}
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 {/block}
 
 {* Meta-Tags *}
