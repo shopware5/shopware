@@ -449,4 +449,40 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     {
         $this->resource->delete('');
     }
+
+
+    /**
+     * Test case to add a new article image over a media id.
+     */
+    public function testAddArticleMediaOverMediaId()
+    {
+        $this->resource->update(2, array(
+            "images" => array(
+                array(
+                    "articleId" => 2,
+                    "mediaId" => 25,
+                    "main" => 0,
+                    "position" => 10000,
+                ),
+            ),
+        ));
+        $article = $this->resource->getOne(2);
+        $image = array_pop($article['images']);
+        $this->assertEquals($image['mediaId'], 25);
+
+
+        $this->resource->update(2, array(
+            "images" => array(
+                array(
+                    "articleId" => 2,
+                    "mediaId" => 40,
+                    "main" => 0,
+                    "position" => 10001,
+                ),
+            ),3
+        ));
+        $article = $this->resource->getOne(2);
+        $image = array_pop($article['images']);
+        $this->assertEquals($image['mediaId'], 40);
+    }
 }
