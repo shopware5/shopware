@@ -127,7 +127,6 @@ Ext.define('Enlight.app.SubApplication', {
             windowManager  : me.windowManager
         });
         me.callParent(arguments);
-        me.init();
     },
 
     /**
