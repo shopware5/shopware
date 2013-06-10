@@ -1329,14 +1329,15 @@ class Article extends Resource
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
             } else if (!empty($imageData['mediaId'])) {
-                $media = $this->getManager()->getReference('Shopware\Models\Media\Media', (int) $imageData['mediaId']);
-                if ($media instanceof Media) {
-                    $image->setPath($media->getName());
-                    $image->setExtension($media->getExtension());
-                    $image->setDescription($media->getDescription());
-                    $image->setArticle($article);
-                    $image->setMedia($media);
+                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int) $imageData['mediaId']);
+                if (!($media instanceof Media)) {
+                    throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
                 }
+                $image->setPath($media->getName());
+                $image->setExtension($media->getExtension());
+                $image->setDescription($media->getDescription());
+                $image->setArticle($article);
+                $image->setMedia($media);
             }
 
             $image->fromArray($imageData);
