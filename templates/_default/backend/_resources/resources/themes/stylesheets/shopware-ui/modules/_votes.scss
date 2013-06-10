@@ -2,6 +2,11 @@
     .#{$prefix}grid-with-row-lines {
         border: 0 none;
     }
+
+	.#{$prefix}window-body {
+		overflow: hidden !important;
+	}
+
 }
 
 div[id^=vote-main-infopanel], div[id^=vote-main-edit] .info-view {
