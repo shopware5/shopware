@@ -1,0 +1,4 @@
+From: bugfix/next/sw-6159-prevent-superfluous-scrollbars
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/_resources/resources/css/ext-all.css
+	MODIFY|templates/_default/backend/_resources/resources/css/ext-all.css
