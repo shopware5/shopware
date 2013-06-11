@@ -2181,14 +2181,22 @@ class sArticles
             return;
         }
 
-        if (!empty($this->sSYSTEM->_POST['sSort'])) {
-            $this->sSYSTEM->_SESSION['sSort'] = $this->sSYSTEM->_POST['sSort'];
+        if (isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
+            $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
+        } else {
+            $sCategoryConfig = array();
         }
 
-        if (!empty($this->sSYSTEM->_SESSION['sSort'])) {
-            $this->sSYSTEM->_POST['sSort'] = $this->sSYSTEM->_SESSION['sSort'];
+        // Order List by
+        if (isset($this->sSYSTEM->_POST['sSort'])) {
+            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
+        } elseif(!empty($this->sSYSTEM->_GET['sSort'])) {
+            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
         }
-
+        if (!empty($sCategoryConfig['sSort'])) {
+            $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
+        }
+        
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
