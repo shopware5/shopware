@@ -206,7 +206,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             'article-configurator-template-window': {
                 saveTemplate: me.onSaveTemplate,
                 cancelEdit: me.onCancelEdit
-//                applyData: me.onApplyDataOnDetailPage
             },
             'article-number-progress-window': {
                 startNumberProcess: me.onStartNumberProcess,
