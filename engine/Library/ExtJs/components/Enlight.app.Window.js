@@ -429,10 +429,9 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 25;
-        size.width = size.width  - 50;
+        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [25, 25]);
+        me.setPosition.apply(me, [0, 0]);
     },
 
     maximize: function() {
@@ -457,6 +456,7 @@ Ext.define('Enlight.app.Window', {
             }
             me.maximized = true;
             me.el.disableShadow();
+
 
             if (me.dd) {
                 me.dd.disable();
