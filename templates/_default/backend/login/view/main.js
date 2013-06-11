@@ -46,5 +46,19 @@ Ext.define('Shopware.apps.Login.view.Main', {
     resizable: false,
     maximizable: false,
     plain: true,
-    header: false
+    header: false,
+
+    /**
+     * Initialize the component and bind an event listener to
+     * the `onWindowResize` to center the window.
+     *
+     * @returns { Void }
+     */
+    initComponent: function() {
+        var me = this;
+
+        me.callParent();
+
+        Ext.EventManager.onWindowResize(function() { me.center(); })
+    }
 });
