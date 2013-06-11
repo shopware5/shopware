@@ -352,9 +352,39 @@ Ext.define('Shopware.container.Viewport',
 		me.setSize(w * (me.getDesktopCount() || 1), h);
 
 		Ext.each(this.desktops.items, function(desktop) {
+            // Create the spacing of the main toolbar using the "-40"
 			desktop.setSize(w, h - 40);
 		});
+
+        Ext.defer(me._rearrangeVisibleWindows, 5, this);
 	},
+
+    /**
+     * Rearranges the position of the windows and handles
+     * the resizing of the windows when they're in full screen
+     * mode (= maximized).
+     *
+     * @private
+     */
+    _rearrangeVisibleWindows: function() {
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+        Ext.each(activeWindows, function(win) {
+            if(win.hidden) {
+                return;
+            }
+
+            var position = win.getPosition(),
+                size = win.getSize();
+
+            win.center();
+            win.setPosition(position[0], (win.maximized) ? 0 : 15, false);
+
+            if(win.maximized) {
+                size.height -= 50;
+                win.setSize(size);
+            }
+        });
+    },
 
 	/**
 	 * Resizes the Viewport to match the containing number of desktops.
