@@ -500,6 +500,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             emptyText: me.snippets.toolbar.orderNumber.empty,
             fieldLabel: me.snippets.toolbar.orderNumber.label,
             flex: 1,
+            allowBlank: false,
             name: 'numberSyntax'
         });
 
