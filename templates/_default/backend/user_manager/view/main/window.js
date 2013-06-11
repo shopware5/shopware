@@ -65,6 +65,15 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
             border: false,
             layout: 'border',
             autoScroll: true,
+            listeners: {
+                afterrender: function(con) {
+                    con.getEl().setStyle('overflow', 'hidden');
+
+                    window.setTimeout(function() {
+                        con.getEl().setStyle('overflow', 'auto');
+                    }, 10);
+                }
+            },
             items: [{
                 xtype: 'usermanager-user-list',
                 userStore: me.userStore
