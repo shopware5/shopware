@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.Article', {
         'variant.List',
         'variant.Configurator',
         'variant.Detail',
+        'variant.NumberProgress',
         'variant.Progress',
         'variant.configurator.Dependency',
         'variant.configurator.Sets',
