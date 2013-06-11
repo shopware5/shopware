@@ -3907,6 +3907,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
+    /**
+     * Helper function which creates a query builder object to select all article variants
+     * with their configuration options. This builder is used for the order number
+     * generation in the backend module.
+     *
+     * @param $articleId
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
     protected function getVariantsWithOptionsBuilder($articleId, $offset = null, $limit = null)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
