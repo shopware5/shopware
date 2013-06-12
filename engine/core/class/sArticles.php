@@ -273,7 +273,7 @@ class sArticles
     /**
      * Returns all filterable properties depending on the given articles
      *
-     * @param $articles
+     * @param array $articles
      * @return array
      */
     public function sGetComparisonProperties($articles)
@@ -303,9 +303,9 @@ class sArticles
     /**
      * fills the article properties with the values and fills up empty values
      *
-     * @param $properties
-     * @param $articles
-     * @return mixed
+     * @param array $properties
+     * @param array $articles
+     * @return array
      */
     public function sFillUpComparisonArticles($properties, $articles)
     {
