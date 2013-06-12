@@ -62,7 +62,7 @@ Ext.define('Shopware.Notification', {
      *
      * @integer
      */
-    hideDelay: 2500,
+    hideDelay: 1800,
 
     /**
      * Used easing type for the fade in and fade out animation
@@ -505,7 +505,7 @@ Ext.define('Shopware.Notification', {
             me.closeGrowlMessage(growlMsg, me, task);
         });
 
-        task.delay(this.hideDelay + (text.length * 12));
+        task.delay(this.hideDelay + (text.length * 35));
 
         me.growlMsgCollection.add(id, { el: growlMsg, height: growlMsg.getHeight(), sticky: false });
         return growlMsg;
@@ -529,7 +529,7 @@ Ext.define('Shopware.Notification', {
      * @param { Object }  opts - Configuration object (required)
      *           { String }   opts.title - Title of the message (required)
      *           { String }   opts.text - Text of the message (required)
-     *           { Integer }  opts.width - Widt12h of the message in pixel
+     *           { Integer }  opts.width - Width of the message in pixel
      *           { Boolean }  opts.log - Log message to display it in the log module (default: "false")
      *           { Object }   opts.scope - Scope in which the callback will be fired (default: this)
      *           { Function } opts.callback - Callback method which should be called after the message was closed.
