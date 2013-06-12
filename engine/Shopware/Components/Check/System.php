@@ -105,8 +105,20 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return null;
 		}
 	}
-	
-	/**
+
+    public function checkSuhosinGetMaxValueLength()
+    {
+        $length = (int) ini_get('suhosin.get.max_value_length');
+        if ($length === 0) {
+            return 2000;
+        } else {
+            return $length;
+        }
+    }
+
+
+
+    /**
 	 * Compares the requirement with the version
 	 *
 	 * @param string $name

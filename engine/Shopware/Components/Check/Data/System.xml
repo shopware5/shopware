@@ -103,6 +103,10 @@
 	<requirement>
 	 	<name>suhosin.session.cryptua</name><group>config</group><required>0</required>
 	</requirement>
+    <requirement>
+        <name>suhosin.get.max_value_length</name><group>config</group><required>2000</required>
+        <notice>If the suhosin extension is loaded and the get.max_value_length is lesser than 2000, the shopware backend can't load the Ext JS files over an GET request. That means that the backend can't be cached.</notice>
+    </requirement>
 	<requirement>
 	 	<name>safe_mode</name><group>config</group><required>0</required>
 	</requirement>
