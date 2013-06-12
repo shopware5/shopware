@@ -1,0 +1,4 @@
+From: experimental/apc-detection
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Components/Model/Configuration.php
+	MODIFY|engine/Shopware/Components/Model/Configuration.php
