@@ -114,6 +114,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $this->View()->assign('controller', $controller, true);
 
         $this->View()->assign('product', '', true);
+        $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
+
         if (Shopware()->Bootstrap()->issetResource('License')) {
             $l = Shopware()->License();
             $m = 'SwagCommercial';
