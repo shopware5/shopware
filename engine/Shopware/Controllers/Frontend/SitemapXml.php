@@ -177,6 +177,9 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 		foreach($blogCategories as $blogCategory) {
 			$blogIds[] = $blogCategory["id"];
 		}
+        if (empty($blogIds)) {
+            return;
+        }
 		$blogIds = Shopware()->Db()->quote($blogIds);
 
 		$sql = "
