@@ -200,6 +200,7 @@ abstract class Resource
         if ($this->getAutoFlush()) {
             try {
                 $this->getManager()->flush($entity);
+                $this->getManager()->clear();
             } catch (\Exception $e) {
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }

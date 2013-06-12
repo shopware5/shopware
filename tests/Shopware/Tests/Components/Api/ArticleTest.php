@@ -30,6 +30,11 @@
 class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
+     * @var \Shopware\Components\Api\Resource\Article
+     */
+    protected $resource;
+
+    /**
      * @return \Shopware\Components\Api\Resource\Article
      */
     public function createResource()
@@ -163,25 +168,20 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                 )
             ),
-
-            'taxId'        => 1,
-            'supplierId'   => 2,
-
+            'taxId' => 1,
+            'supplierId' => 2,
             'similar' => array(
                 array('id' => 5),
                 array('id' => 6),
             ),
-
             'categories' => array(
                 array('id' => 15),
                 array('id' => 10),
             ),
-
             'related' => array(
                 array('id' => 3, 'cross' => true),
                 array('id' => 4),
             ),
-
             'links' => array(
                 array('name' => 'foobar', 'link' => 'http://example.org'),
                 array('name' => 'Video', 'link' => 'http://example.org'),
@@ -197,8 +197,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals($article->getDescription(), $testData['description']);
 
         $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
-        $this->assertEquals($article->getMainDetail()->getAttribute()->getAttr1(), $testData['mainDetail']['attribute']['attr1']);
-        $this->assertEquals($article->getMainDetail()->getAttribute()->getAttr2(), $testData['mainDetail']['attribute']['attr2']);
+        $this->assertEquals(
+            $article->getMainDetail()->getAttribute()->getAttr1(),
+            $testData['mainDetail']['attribute']['attr1']
+        );
+        $this->assertEquals(
+            $article->getMainDetail()->getAttribute()->getAttr2(),
+            $testData['mainDetail']['attribute']['attr2']
+        );
 
 
         $propertyValues = $article->getPropertyValues()->getValues();
@@ -274,7 +280,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     {
         // required field name is missing
         $testData = array(
-            'description'     => 'Update description',
+            'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
         );
 
@@ -293,21 +299,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $testData = array(
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
-
             // update supplier id
-            'supplierId'   => 3,
-
+            'supplierId' => 3,
             // categories should be replaced
             'categories' => array(
                 array('id' => 16),
             ),
-
             'filterGroupId' => 1,
-
             // values should be replaced
-            'propertyValues' => array(
-            ),
-
+            'propertyValues' => array(),
             // related is not included, therefore it stays untouched
 
             // similar is set to empty array, therefore it should be cleared
@@ -346,21 +346,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $testData = array(
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
-
             // update supplier id
-            'supplierId'   => 3,
-
+            'supplierId' => 3,
             // categories should be replaced
             'categories' => array(
                 array('id' => 16),
             ),
-
             'filterGroupId' => 1,
-
             // values should be replaced
-            'propertyValues' => array(
-            ),
-
+            'propertyValues' => array(),
             // related is not included, therefore it stays untouched
 
             // similar is set to empty array, therefore it should be cleared
@@ -456,33 +450,172 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      */
     public function testAddArticleMediaOverMediaId()
     {
-        $this->resource->update(2, array(
-            "images" => array(
-                array(
-                    "articleId" => 2,
-                    "mediaId" => 25,
-                    "main" => 0,
-                    "position" => 10000,
+        $this->resource->update(
+            2,
+            array(
+                "images" => array(
+                    array(
+                        "articleId" => 2,
+                        "mediaId" => 25,
+                        "main" => 0,
+                        "position" => 10000,
+                    ),
                 ),
-            ),
-        ));
+            )
+        );
         $article = $this->resource->getOne(2);
+
         $image = array_pop($article['images']);
         $this->assertEquals($image['mediaId'], 25);
-
-
-        $this->resource->update(2, array(
-            "images" => array(
-                array(
-                    "articleId" => 2,
-                    "mediaId" => 40,
-                    "main" => 0,
-                    "position" => 10001,
-                ),
-            ),3
-        ));
-        $article = $this->resource->getOne(2);
-        $image = array_pop($article['images']);
-        $this->assertEquals($image['mediaId'], 40);
     }
+
+
+    public function testUpdateToVariantArticle()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (Exception $e) {
+
+        }
+
+        $article = $this->resource->create(
+            array(
+                'name' => 'Turnschuhe',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Turnschuhe Inc.',
+                'categories' => array(
+                    array('id' => 15),
+                ),
+                'mainDetail' => array(
+                    'number' => 'turn',
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+            )
+        );
+
+
+        $updateArticle = array(
+            'configuratorSet' => array(
+                'groups' => array(
+                    array(
+                        'name' => 'Größe',
+                        'options' => array(
+                            array('name' => 'S'),
+                            array('name' => 'M')
+                        )
+                    ),
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'Grün'),
+                            array('name' => 'Blau')
+                        )
+                    ),
+                )
+            ),
+            'taxId'      => 1,
+
+
+            'variants' => array(
+                array(
+                    'isMain' => true,
+                    'number' => 'turn',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / Grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'Grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 1999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.1',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / Blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'Blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.2',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / Grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'Grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.3',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / Blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'Blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                )
+            )
+        );
+        /**@var $article \Shopware\Models\Article\Article*/
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name don't match");
+
+        /**@var $variant \Shopware\Models\Article\Detail*/
+        foreach($updated->getDetails() as $variant) {
+            $this->assertTrue(in_array($variant->getNumber(), array('turn', 'turn.1', 'turn.2', 'turn.3'), 'Variant number dont match'));
+
+            $this->assertArrayCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
+
+            /**@var $option \Shopware\Models\Article\Configurator\Option*/
+            foreach($variant->getConfiguratorOptions() as $option) {
+                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'Blau', 'Grün')));
+            }
+        }
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (Exception $e) {
+
+        }
+
+    }
+
 }
