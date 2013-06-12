@@ -106,6 +106,11 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 	}
 
+    /**
+     * Checks the suhosin.get.max_value_length which limits the max get parameter length.
+     *
+     * @return int
+     */
     public function checkSuhosinGetMaxValueLength()
     {
         $length = (int) ini_get('suhosin.get.max_value_length');
