@@ -24,20 +24,16 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\Frontend\BuiswPaymentPayone
+ * @package   Shopware\Plugins\Frontend\MoptPaymentPayone
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_Plugins_Frontend_BuiswPaymentPayone_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
+class Shopware_Plugins_Frontend_MoptPaymentPayone_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
 {
     public function getInfo()
     {
         return array(
-            'version'   => $this->getVersion(),
-            'autor'     => 'BuI Hinsche GmbH',
-            'copyright' => 'Copyright (c) 2012, BuI Hinsche GmbH',
-            'label'     => 'PAYONE',
-            'support'   => 'http://bui-hinsche.de',
-            'link'      => 'http://bui-hinsche.de'
+            'version' => $this->getVersion(),
+            'label'   => 'PAYONE'
         );
     }
 }

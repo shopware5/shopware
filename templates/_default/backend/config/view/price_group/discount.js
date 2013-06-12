@@ -44,10 +44,14 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
     getTopBar: function () {
         var me = this,
             topBar = me.callParent();
+
+        me.addButton = Ext.apply(topBar[0],{ disabled:true });
+
         topBar.push({
             xtype: 'config-element-select',
             flex: 1,
             isPropertyFilter: true,
+            editable: false,
             name: 'customerGroupId',
             store: 'base.CustomerGroup',
             emptyText: '{s name=price_group/table/customer_group_empty_text}Please select...{/s}'
