@@ -315,6 +315,18 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         }
     }
 
+
+    public function checkSuhosinGetMaxValueLength()
+    {
+        $length = (int) ini_get('suhosin.get.max_value_length');
+        if ($length === 0) {
+            return 2000;
+        } else {
+            return $length;
+        }
+    }
+
+
     /**
      * Checks the include path config
      *
