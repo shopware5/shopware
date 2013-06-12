@@ -1117,7 +1117,7 @@ div.searchdescription{height:3.75em; overflow:hidden; z-index:-1; line-height:12
 .compare_desc div {padding-left: 15px;font-weight: 700;}
 .compare_desc div.picture, .compare_article div.picture {height: 128px;padding-top:20px;}
 .compare_article div.picture a {display: block; width: 105px; height: 105px;}
-.compare_desc div.name, .compare_article div.name {height: 70px; overflow: hidden;}
+.compare_desc div.name, .compare_article div.name {height: 95px; overflow: hidden;}
 .compare_desc div.votes, .compare_article div.votes {height: 25px;}
 .compare_desc div.desc, .compare_article div.desc {height: 125px;}
 .compare_desc div.price, .compare_article div.price {height: 105px;padding-top: 10px;}
