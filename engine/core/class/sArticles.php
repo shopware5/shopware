@@ -246,7 +246,7 @@ class sArticles
      */
     public function sGetComparisonList()
     {
-
+        $articles = array();
         if (!$this->sSYSTEM->sSESSION_ID) return array();
 
         // Get all comparisons for this user
@@ -261,28 +261,60 @@ class sArticles
                     $articles[] = $data;
                 }
             }
-
-            foreach ($articles as $key => $article) {
-                $sql = "SELECT comparable FROM s_filter WHERE id = ?";
-                $comparable = Shopware()->Db()->fetchOne($sql, array($article["filtergroupID"]));
-                if (!empty($comparable)) {
-                    // Building global property-list
-                    if (!empty($article["sProperties"])) {
-                        foreach ($article["sProperties"] as $property) {
-                            $properties[$property["id"]] = $property["name"];
-                            $articles[$key]["sPropertiesData"][$property["id"]] = $property["value"];
-                        }
-                    }
-                }
-                else {
-                    unset($articles[$key]["sProperties"]);
-                }
-            }
+            $properties = $this->sGetComparisonProperties($articles);
+            $articles = $this->sFillUpComparisonArticles($properties, $articles);
 
             return array("articles" => $articles, "properties" => $properties);
         } else {
             return array();
         }
+    }
+
+    /**
+     * Returns all filterable properties depending on the given articles
+     */
+    public function sGetComparisonProperties($articles)
+    {
+        $properties = array();
+        foreach ($articles as $article) {
+            //get all properties in the right order
+            $sql = "SELECT options.id, options.name
+                    FROM s_filter_options as options
+                    LEFT JOIN s_filter_relations as relations ON relations.optionId = options.id
+                    LEFT JOIN s_filter as filter ON filter.id = relations.groupID
+                    WHERE relations.groupID = ?
+                    AND filter.comparable = 1
+                    ORDER BY relations.position ASC";
+            $articleProperties = Shopware()->Db()->fetchPairs($sql, array($article["filtergroupID"]));
+
+            foreach ($articleProperties as $articlePropertyKey => $articleProperty) {
+                if (!in_array($articlePropertyKey, array_keys($properties))) {
+                    //the key is not part of the array so add it to the end
+                    $properties[$articlePropertyKey] = $articleProperty;
+                }
+            }
+        }
+        return $properties;
+    }
+
+    /**
+     * fills the article properties with the values and fills up empty values
+     */
+    public function sFillUpComparisonArticles($properties, $articles)
+    {
+        foreach ($articles as $articleKey => $article) {
+            $articleProperties = array();
+            foreach ($properties as $propertyKey => $property) {
+                if (in_array($propertyKey, array_keys($article["sProperties"]))) {
+                    $articleProperties[$propertyKey] = $article["sProperties"][$propertyKey];
+                } else {
+                    $articleProperties[$propertyKey] = null;
+                }
+            }
+            $articles[$articleKey]["sProperties"] = $articleProperties;
+        }
+
+        return $articles;
     }
 
     /**
