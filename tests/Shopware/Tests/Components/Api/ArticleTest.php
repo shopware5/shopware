@@ -107,7 +107,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'name' => 'Farbe',
                         'options' => array(
                             array( 'name' => 'Gelb'),
-                            array( 'name' => 'Grün')
+                            array( 'name' => 'grün')
                         )
                     ),
                     array(
@@ -516,8 +516,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     array(
                         'name' => 'Farbe',
                         'options' => array(
-                            array('name' => 'Grün'),
-                            array('name' => 'Blau')
+                            array('name' => 'grün'),
+                            array('name' => 'blau')
                         )
                     ),
                 )
@@ -530,10 +530,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'isMain' => true,
                     'number' => 'turn',
                     'inStock' => 15,
-                    'addtionnaltext' => 'S / Grün',
+                    'addtionnaltext' => 'S / grün',
                     'configuratorOptions' => array(
                         array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'Grün'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
                     ),
                     'prices' => array(
                         array(
@@ -546,10 +546,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'isMain' => false,
                     'number' => 'turn.1',
                     'inStock' => 15,
-                    'addtionnaltext' => 'S / Blau',
+                    'addtionnaltext' => 'S / blau',
                     'configuratorOptions' => array(
                         array('group' => 'Größe', 'option' => 'S'),
-                        array('group' => 'Farbe', 'option' => 'Blau'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
                     ),
                     'prices' => array(
                         array(
@@ -562,10 +562,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'isMain' => false,
                     'number' => 'turn.2',
                     'inStock' => 15,
-                    'addtionnaltext' => 'M / Grün',
+                    'addtionnaltext' => 'M / grün',
                     'configuratorOptions' => array(
                         array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'Grün'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
                     ),
                     'prices' => array(
                         array(
@@ -578,10 +578,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'isMain' => false,
                     'number' => 'turn.3',
                     'inStock' => 15,
-                    'addtionnaltext' => 'M / Blau',
+                    'addtionnaltext' => 'M / blau',
                     'configuratorOptions' => array(
                         array('group' => 'Größe', 'option' => 'M'),
-                        array('group' => 'Farbe', 'option' => 'Blau'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
                     ),
                     'prices' => array(
                         array(
@@ -604,7 +604,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
             /**@var $option \Shopware\Models\Article\Configurator\Option*/
             foreach($variant->getConfiguratorOptions() as $option) {
-                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'Blau', 'Grün')));
+                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'blau', 'grün')));
             }
         }
 
