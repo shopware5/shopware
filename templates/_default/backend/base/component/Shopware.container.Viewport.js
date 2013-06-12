@@ -352,9 +352,39 @@ Ext.define('Shopware.container.Viewport',
 		me.setSize(w * (me.getDesktopCount() || 1), h);
 
 		Ext.each(this.desktops.items, function(desktop) {
-			desktop.setSize(w, h - 80);
+            // Create the spacing of the main toolbar using the "-40"
+			desktop.setSize(w, h - 40);
 		});
+
+        Ext.defer(me._rearrangeVisibleWindows, 5, this);
 	},
+
+    /**
+     * Rearranges the position of the windows and handles
+     * the resizing of the windows when they're in full screen
+     * mode (= maximized).
+     *
+     * @private
+     */
+    _rearrangeVisibleWindows: function() {
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+        Ext.each(activeWindows, function(win) {
+            if(win.hidden) {
+                return;
+            }
+
+            var position = win.getPosition(),
+                size = win.getSize();
+
+            win.center();
+            win.setPosition(position[0], (win.maximized) ? 0 : 15, false);
+
+            if(win.maximized) {
+                size.height -= 50;
+                win.setSize(size);
+            }
+        });
+    },
 
 	/**
 	 * Resizes the Viewport to match the containing number of desktops.
@@ -366,7 +396,6 @@ Ext.define('Shopware.container.Viewport',
 		var me = this,
 			width = Ext.Element.getViewportWidth() * (me.getDesktopCount() || 1),
 			height = Ext.Element.getViewportHeight();
-
 
 		me.el.setSize(width, height);
 		me.fireEvent('resizeviewport', me, width, height);
@@ -392,11 +421,12 @@ Ext.define('Shopware.container.Viewport',
 		var me = this,
 			desktopSwitcher;
 
+        var task;
 		desktopSwitcher = Ext.create('Ext.view.View', {
 			renderTo: Ext.getBody(),
 			store: me.desktopSwitcherStore,
 			style: 'position: fixed; bottom: 18px; left: 0; text-align: center; z-index: 10',
-            width: Ext.Element.getViewportWidth(),
+            width: '100%',
             cls: Ext.baseCSSPrefix + 'desktop-switcher-outer-container',
 			itemSelector: '.x-desktop-switcher-control',
 			tpl: [
@@ -545,6 +575,7 @@ Ext.define('Shopware.container.Viewport',
         }
 
 		me.desktops.add(desktop);
+
 		me.fireEvent('createdesktop', me, desktop);
 		me.resizeViewport();
         me.updateDesktopSwitcher();
@@ -680,53 +711,32 @@ Ext.define('Shopware.container.Viewport',
         // Retrieve all active Windows
         var activeWindows = Shopware.app.Application.getActiveWindows();
 
-        if(Ext.supports.CSS3DTransform) {
-            me.desktops.each(function(desktop) {
-                var el = desktop.getEl().dom,
-                    prefix = me._getVendorPrefix('transform', 'style');
+		html.animate({
+			duration: me.scrollDuration,
+			easing: me.scrollEasing,
+			listeners: {
+				beforeanimate: function() {
+					Ext.suspendLayouts();
+					me.fireEvent('beforescroll', me, this, index);
 
-                el.style[prefix] = 'translate3d(-' + width * index +'px, 0, 0)';
-            });
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.hide();
+                    });
 
-            var timeout = window.setTimeout(function() {
-                window.clearTimeout(timeout);
-                timeout = null;
+				},
+				afteranimate: function() {
+					Ext.resumeLayouts(true);
+					me.activeDesktop = index;
+					me.fireEvent('afterscroll', me, this, index);
+					me.updateDesktopSwitcher();
 
-                me.activeDesktop = index;
-                me.fireEvent('afterscroll', me, this, index);
-
-                window.setTimeout(function() {
-                    me.updateDesktopSwitcher();
-                }, 10);
-            }, 375);
-        } else {
-            html.animate({
-                duration: me.scrollDuration,
-                easing: me.scrollEasing,
-                listeners: {
-                    beforeanimate: function() {
-                        Ext.suspendLayouts();
-                        me.fireEvent('beforescroll', me, this, index);
-
-                        Ext.each(activeWindows, function(window) {
-                            window.getEl().shadow.hide();
-                        });
-
-                    },
-                    afteranimate: function() {
-                        Ext.resumeLayouts(true);
-                        me.activeDesktop = index;
-                        me.fireEvent('afterscroll', me, this, index);
-                        me.updateDesktopSwitcher();
-
-                        Ext.each(activeWindows, function(window) {
-                            window.el.shadow.show(window.el);
-                        });
-                    }
-                },
-                to: { left: -(width * index) }
-            });
-        }
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.show(window.el);
+                    });
+				}
+			},
+			to: { left: -(width * index) }
+		});
 
 		return true;
 	},
@@ -749,42 +759,5 @@ Ext.define('Shopware.container.Viewport',
 	 */
 	scrollRight: function() {
 		return this.scroll('right');
-	},
-
-    /**
-     * Tests if a property has a vendor prefix and returns the properly
-     * property.
-     *
-     * @param { String } prop - Property to test
-     * @param { String } propGroup - Group where the test property is located
-     * @returns { * } If the property was found, it will be returned. Otherwise false
-     * @private
-     */
-    _getVendorPrefix: function(prop, propGroup) {
-        var testEl = document.createElement('fakeElement'),
-            prefixes = ['', 'webkit', 'moz', 'ms', 'o'],
-            i, prefix, testProp;
-
-        // Modify the testEl
-        propGroup = propGroup || '';
-        if(propGroup.length) {
-            testEl = testEl[propGroup];
-        }
-
-        // Loop through the vendor prefixes
-        for(i in prefixes) {
-            prefix = prefixes[i];
-
-            // Vendor prefix property
-            if(prefix.length) {
-                prop = prop.charAt(0).toUpperCase() + prop.slice(1);
-            }
-            testProp = prefix + prop;
-
-            if(testEl[testProp] !== undefined) {
-                return testProp;
-            }
-        }
-        return false;
-    }
+	}
 });

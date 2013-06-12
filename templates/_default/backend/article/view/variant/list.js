@@ -148,18 +148,31 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 }
 
             } else {
-                var oldNumber = e.record.get('number'),
-                    newNumber = e.record.get('details.number') || e.record.get('number');
+                var oldValue = e.originalValue,
+                    newValue = e.value;
 
-                if(!newNumber || !newNumber.match(/^[a-zA-Z0-9-_. ]+$/)) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
-                    e.record.set('number', oldNumber);
-                    e.record.set('details.number', oldNumber);
-                } else {
-                     // Map the ordernumber and save the model to the server side
-                    e.record.set('number', newNumber);
-                    me.fireEvent('saveVariant', e.record);
+                //the number field is a mapping field of the variant. so we have to map this field
+                if (e.field === 'details.number') {
+                    oldValue = e.record.get('number');
+                    newValue = e.record.get('details.number') || e.record.get('number')
                 }
+
+                if(e.field === 'details.number' &&  (!newValue || !newValue.match(/^[a-zA-Z0-9-_. ]+$/))) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
+                    e.record.set('number', oldValue);
+                    e.record.set('details.number', oldValue);
+                    return;
+                }
+
+                if (oldValue === newValue) {
+                    return;
+                }
+
+                if (e.field === 'details.number') {
+                    e.record.set('number', newValue);
+                }
+
+                me.fireEvent('saveVariant', e.record);
             }
         });
 
@@ -500,6 +513,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             emptyText: me.snippets.toolbar.orderNumber.empty,
             fieldLabel: me.snippets.toolbar.orderNumber.label,
             flex: 1,
+            allowBlank: false,
             name: 'numberSyntax'
         });
 

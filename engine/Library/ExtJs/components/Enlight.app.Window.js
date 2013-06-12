@@ -119,32 +119,11 @@ Ext.define('Enlight.app.Window', {
      */
     onAfterRenderComponent: function() {
         var me = this,
-            subApp = me.subApplication || me.subApp, windowManager, windowCount,
-            defaultState = {
-                width: me.getWidth(),
-                height: me.getHeight()
-            };
+            subApp = me.subApplication || me.subApp, windowManager, windowCount;
 
         if(!subApp) {
             return;
         }
-
-        Ext.EventManager.onWindowResize(function(width, height) {
-            var offset = 150, setWidth, setHeight;
-
-            if(width + offset < defaultState.width) {
-                setWidth = width - offset;
-            } else {
-                setWidth = defaultState.width;
-            }
-
-            if(height + offset < defaultState.height) {
-                setHeight = height - offset;
-            } else {
-                setHeight = defaultState.height;
-            }
-            me.setSize({ width: setWidth, height: setHeight });
-        }, me);
 
         windowManager = subApp.windowManager;
         windowCount = windowManager.subWindows.getCount();
@@ -155,34 +134,10 @@ Ext.define('Enlight.app.Window', {
             mainWindow.isMainWindow = true;
             windowManager.mainWindow = mainWindow;
 
-            defaultState = {
-                width: mainWindow.getWidth(),
-                height: mainWindow.getHeight()
-            };
-
             mainWindow.on({
                 beforeclose: me.onBeforeDestroyMainWindow,
                 scope: me
             });
-
-            Ext.EventManager.onWindowResize(function(width, height) {
-                var offset = 150, setWidth, setHeight;
-
-                if(width + offset < defaultState.width) {
-                    setWidth = width - offset;
-                } else {
-                    setWidth = defaultState.width;
-                }
-
-                if(height + offset < defaultState.height) {
-                    setHeight = height - offset;
-                } else {
-                    setHeight = defaultState.height;
-                }
-                mainWindow.setSize({ width: setWidth, height: setHeight });
-            }, me);
-
-
         } else {
             if(!windowManager.multipleSubWindows && windowCount == 1) {
 
@@ -474,10 +429,9 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 25;
-        size.width = size.width  - 50;
+        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [25, 25]);
+        me.setPosition.apply(me, [0, 0]);
     },
 
     maximize: function() {
@@ -502,6 +456,7 @@ Ext.define('Enlight.app.Window', {
             }
             me.maximized = true;
             me.el.disableShadow();
+
 
             if (me.dd) {
                 me.dd.disable();

@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Media\Media;
 
 /**
  * Article API Resource
@@ -1327,6 +1328,16 @@ class Article extends Resource
                 $position++;
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
+            } else if (!empty($imageData['mediaId'])) {
+                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int) $imageData['mediaId']);
+                if (!($media instanceof Media)) {
+                    throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
+                }
+                $image->setPath($media->getName());
+                $image->setExtension($media->getExtension());
+                $image->setDescription($media->getDescription());
+                $image->setArticle($article);
+                $image->setMedia($media);
             }
 
             $image->fromArray($imageData);

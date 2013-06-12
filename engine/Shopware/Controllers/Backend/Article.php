@@ -3853,19 +3853,35 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $data = $this->Request()->getParams();
             $articleId = $data['articleId'];
             $syntax = $data['syntax'];
+            $offset = $this->Request()->getParam('offset', null);
+            $limit = $this->Request()->getParam('limit', null);
+
             if (!$articleId > 0 || strlen($syntax) === 0) {
                 return;
             }
 
-            $article = $this->getRepository()
-                            ->getArticleWithVariantsAndOptionsQuery($articleId)
-                            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+            $builder = $this->getRepository()->createQueryBuilder('article');
+            $builder->where('article.id = :id')
+                    ->setParameter('id', $articleId);
+
+            $article = $builder->getQuery()->getOneOrNullResult(
+                \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+            );
 
             $abortId = $article->getMainDetail()->getId();
             $commands = $this->prepareNumberSyntax($syntax);
-            $details = $article->getDetails();
 
-            $counter = 1;
+            $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
+            $query = $builder->getQuery();
+            $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $details = $paginator->getIterator()->getArrayCopy();
+
+            $counter = $offset;
+            if ($offset == 0) {
+                $counter = 1;
+            }
+
             /** @var $detail \Shopware\Models\Article\Detail */
             foreach ($details as $detail) {
                 if ($detail->getId() === $abortId) {
@@ -3889,6 +3905,32 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'message' => $e->getMessage()
             ));
         }
+    }
+
+    /**
+     * Helper function which creates a query builder object to select all article variants
+     * with their configuration options. This builder is used for the order number
+     * generation in the backend module.
+     *
+     * @param $articleId
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    protected function getVariantsWithOptionsBuilder($articleId, $offset = null, $limit = null)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('details', 'options'));
+        $builder->from('Shopware\Models\Article\Detail', 'details')
+                ->leftJoin('details.configuratorOptions', 'options')
+                ->where('details.articleId = :articleId')
+                ->setParameter('articleId', $articleId);
+
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+        return $builder;
     }
 
     /**
@@ -3940,8 +3982,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return '';
         }
 
+        if (!method_exists($cursor, $commands[$index]['command'])) {
+            return $commands[$index]['origin'];
+        }
+
         //first we execute the current command on the cursor object
-        $result = $cursor->$commands[$index]();
+        $result = $cursor->$commands[$index]['command']();
         //now we increment the command index
         $index++;
 
@@ -4015,7 +4061,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         //now we convert the property names to the getter functions.
         foreach ($paths as $path) {
-            $commands[] = 'get' . ucfirst($path);
+            $commands[] = array('origin' => $path, 'command' => 'get' . ucfirst($path));
         }
 
         $sql = "
