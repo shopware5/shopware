@@ -224,7 +224,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
                     accountCtl.onOpenConfirm(price, record, detail);
                 } else if (response.noId) {
                     //no valid product id passed
-                    Shopware.Notification.createGrowlMessage(me.snippets.store.title, me.snippets.store.failed_tax);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.store.title,
+                       text: me.snippets.store.failed_tax,
+                       log: true
+                    });
                 } else if (response.loginRequired) {
                     //user isn't logged in or token is invalid
                     accountCtl.onOpenLogin({
