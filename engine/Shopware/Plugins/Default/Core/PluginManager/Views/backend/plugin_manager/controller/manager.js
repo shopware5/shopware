@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @return void
+     * @returns { Void }
      */
     init: function () {
         var me = this;
@@ -110,6 +110,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         });
     },
 
+    /**
+     * Event listener method which sets the plugin active.
+     *
+     * @param { Ext.window.Window } optionWindow
+     * @returns { Void }
+     */
     onActivatePlugin: function(optionWindow) {
         var me = this,
             record = optionWindow.record,
@@ -121,6 +127,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         optionWindow.destroy();
     },
 
+    /**
+     * Event listener method which will be fired when the user wants to edit
+     * the plugins configuration.
+     *
+     * @param { Ext.window.Window } optionWindow
+     * @returns { Boolean|Void } Falsy if the plugin isn't installed, otherwise void.
+     */
     onConfigurePlugin: function(optionWindow) {
         var record = optionWindow.record;
 
@@ -131,6 +144,18 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         this.onEditPlugin(null, null, null, null, null, record);
     },
 
+    /**
+     * Event listener method which will be fired when the user clicks the delete
+     * icon in the plugin list.
+     *
+     * @param { Ext.grid.Panel } grid
+     * @param { Integer } rowIndex
+     * @param { Integer } colIndex
+     * @param { HTMLDOMNode } item
+     * @param { Ext.EventImpl } eOpts
+     * @param { Ext.data.Record } record
+     * @returns { Void }
+     */
     onDeletePlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
         var me = this, confirmMessage;
 
@@ -148,7 +173,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                                if (rawData.message) {
                                    message = '<br>' + rawData.message;
                                }
-                               Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_delete + message);
+
+                               Shopware.Notification.createStickyGrowlMessage({
+                                   title: me.snippets.manager.title,
+                                   text: me.snippets.manager.failed_delete + message,
+                                   log: true
+                               });
                            }
                         }
                     });
@@ -313,7 +343,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                         flag: 'local'
                     });
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, Ext.String.format(me.snippets.manager.failed_edit, record.get('label')));
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: me.snippets.manager.title,
+                        text: Ext.String.format(me.snippets.manager.failed_edit, record.get('label'))
+                    });
                 }
             }
         });
@@ -430,7 +463,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    if (rawData.message) {
                        message = message + '<br>' + rawData.message;
                    }
-                   Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                   Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: message,
+                       log: true
+                   });
                    store.sort();
                }
            }
@@ -455,7 +493,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                         if(operation) {
                             Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_successful);
                         } else {
-                            Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_failed);
+                            Shopware.Notification.createStickyGrowlMessage({
+                               title: me.snippets.manager.title,
+                               text: me.snippets.manager.clear_cache_failed,
+                               log: true
+                            });
                         }
                     }
                 });
@@ -487,7 +529,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    if (rawData.message) {
                        message = message + '<br>' + rawData.message;
                    }
-                   Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                   Shopware.Notification.createStickyGrowlMessage({
+                      title: me.snippets.manager.title,
+                      text: message,
+                      log: true
+                   });
                }
                store.sort();
            }
@@ -565,13 +612,22 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             failure: function(form, action) {
                 var response = Ext.decode(action.response.responseText);
                 if (response.noNamespace) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_upload_namespace);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: me.snippets.manager.failed_upload_namespace,
+                       log: true
+                    });
                 } else {
                     var message = me.snippets.manager.failed_upload;
                     if (response.message) {
                         message = message + ':<br>' + response.message;
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
