@@ -256,11 +256,11 @@ class Shopware_RegressionTests_Ticket5394 extends Enlight_Components_Test_Contro
                         36 => array(
                             'optionID' => 36,
                             'groupID' => 6,
-                            'optionnameOrig' => 'grün',
-                            'optionname' => 'grün',
-                            'optionposition' => 0,
+                            'optionnameOrig' => 'Grün',
+                            'optionname' => 'Grün',
+                            'optionposition' => 1,
                             'optionactive' => 1,
-                            'user_selected' => 0,
+                            'user_selected' => 0, 
                             'selected' => 0,
                         ),
                         15 => array(
@@ -465,9 +465,9 @@ class Shopware_RegressionTests_Ticket5394 extends Enlight_Components_Test_Contro
                         36 => array(
                             'optionID' => 36,
                             'groupID' => 6,
-                            'optionnameOrig' => 'grün',
-                            'optionname' => 'grün',
-                            'optionposition' => 0,
+                            'optionnameOrig' => 'Grün',
+                            'optionname' => 'Grün',
+                            'optionposition' => 1,
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
