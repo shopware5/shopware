@@ -692,12 +692,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function performOrderAction()
     {
         $userId = $this->Request()->getParam('id');
-        $sql = 'SELECT id, email, password, subshopID FROM s_user WHERE id = ?';
+        $sql = 'SELECT id, email, password, subshopID, language FROM s_user WHERE id = ?';
         $user = Shopware()->Db()->fetchRow($sql, array($userId));
 
         if (!empty($user['email'])) {
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $repository->getActiveById($user['subshopID']);
+            $shop = $repository->getActiveById($user['language']);
             $shop->registerResources(Shopware()->Bootstrap());
             Shopware()->Session()->Admin = true;
 
@@ -714,6 +714,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'appendSession' => true
         ));
 
+        $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
         $this->redirect($url);
     }
 }
