@@ -49,6 +49,20 @@ Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
     displayErrors: true,
 
     /**
+     * Controls if the default javascript error handlers should be overrides
+     * with custom handler.
+     *
+     * Truthy to use the default error handlers, falsy to define your custom error
+     * handlers.
+     *
+     * To provide custom error handlers, please override the method `bindCustomErrorHandler`
+     *
+     * @type { Boolean }
+     * @default true
+     */
+    useDefaultErrorHandler: true,
+
+    /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
      * to display the subapplication.
@@ -58,6 +72,19 @@ Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
      * @return void
      */
     init: function() {
+        var me = this;
+
+        if(!me.useDefaultErrorHandler) {
+            me.bindCustomErrorHandler();
+        }
+    },
+
+    /**
+     * Binds the custom error reporter.
+     *
+     * @returns { Void }
+     */
+    bindCustomErrorHandler: function() {
         var me = this;
 
         // Override the default error reporter
