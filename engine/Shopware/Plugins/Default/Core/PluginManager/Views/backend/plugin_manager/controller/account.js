@@ -149,7 +149,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     } else {
                         message = Ext.String.format(message, ' ');
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
@@ -200,7 +204,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     if (message.length === 0) {
                         message = me.snippets.account.downloadfailedlicense;
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
@@ -247,7 +255,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     if (message.length === 0) {
                         message = me.snippets.account.downloadfailedlicense
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
@@ -349,7 +361,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     if (response.message) {
                         Shopware.Notification.createGrowlMessage(me.snippets.account.title, response.message);
                     } else {
-                        Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.backupfailed);
+                        Shopware.Notification.createStickyGrowlMessage({
+                           title: me.snippets.account.title,
+                           text: me.snippets.account.backupfailed,
+                           log: true
+                        });
                     }
                 }
             }
@@ -395,7 +411,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                 if (rawData.message) {
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, rawData.message);
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.loginfailed);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: me.snippets.account.loginfailed,
+                       log: true
+                    });
                 }
             }
         });
