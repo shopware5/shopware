@@ -532,6 +532,7 @@ class Detail extends ModelEntity
             $article->setInStock($article->getInStock() + $this->quantity);
             Shopware()->Models()->persist($article);
         }
+        $this->calculateOrderAmount();
     }
 
     /**
@@ -540,7 +541,7 @@ class Detail extends ModelEntity
      */
     public function beforeInsert()
     {
-        $this->calculateOrderAmount();
+
     }
 
     /**
@@ -560,6 +561,7 @@ class Detail extends ModelEntity
             Shopware()->Models()->persist($article);
             Shopware()->Models()->flush();
         }
+        $this->calculateOrderAmount();
     }
 
     /**
@@ -625,7 +627,14 @@ class Detail extends ModelEntity
             Shopware()->Models()->persist($article);
         }
 
-        $this->calculateOrderAmount();
+        $articleChange = (bool) ($changeSet['articleNumber'][0] != $changeSet['articleNumber'][1]);
+        $quantityChange = (bool) ($changeSet['quantity'][0] != $changeSet['quantity'][1]);
+        $priceChanged = (bool) ($changeSet['price'][0] != $changeSet['price'][1]);
+        $taxChanged = (bool) ($changeSet['taxRate'][0] != $changeSet['taxRate'][1]);
+
+        if ($quantityChange || $articleChange || $priceChanged || $taxChanged) {
+            $this->calculateOrderAmount();
+        }
     }
 
     /**
@@ -635,7 +644,7 @@ class Detail extends ModelEntity
      */
     private function calculateOrderAmount()
     {
-        if (!empty($this->orderId) && $this->getOrder() instanceof Order) {
+        if ($this->getOrder() instanceof Order) {
             //recalculates the new amount
             $this->getOrder()->calculateInvoiceAmount();
             Shopware()->Models()->persist($this->getOrder());
