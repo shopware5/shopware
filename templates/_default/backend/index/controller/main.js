@@ -395,6 +395,7 @@ openSearchResult = function(module, id) {
  * available.
  *
  * @public
+ * @deprecated deprecated since version 4.1
  * @return void
  */
 createBetaMessage = function() {
