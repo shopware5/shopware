@@ -126,6 +126,7 @@
                 tmpPath += files.join('|');
 
                 // see: http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
+                // see: http://www.hardened-php.net/suhosin/configuration.html#suhosin.get.max_value_length
                 // 2000 - 50 Chars Buffer for disableCachingParam etc.
                 if (tmpPath.length + host.length < maxLength) {
                     requestMethod = "get";
