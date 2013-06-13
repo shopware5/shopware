@@ -606,7 +606,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         } else {
             unset($params['shop']);
         }
- 
+
+        if (!empty($params['languageId'])) {
+            $params['languageSubShop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['languageId']);
+        } else {
+            unset($params['languageSubShop']);
+        }
+
 
         if (!empty($params['priceGroupId'])) {
             $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);

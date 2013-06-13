@@ -214,15 +214,12 @@ class Customer extends ModelEntity
     private $paymentPreset = 0;
 
     /**
-     * @deprecated
-     * Iso code of the customer language.
-     * Used for the language association property
-     * @var string $languageIso
+     * Id of the language sub shop
+     *
+     * @var string $languageId
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
-    private $languageIso = '';
-
-    /**
+    private $languageId = 1;
 
     /**
      * OWNING SIDE
@@ -680,27 +677,6 @@ class Customer extends ModelEntity
         return $this->paymentPreset;
     }
 
-    /**
-     * Setter function for the languageIso column property, which contains the language iso code for the customer language
-     *
-     * @param string $languageIso
-     * @return Customer
-     */
-    public function setLanguageIso($languageIso)
-    {
-        $this->languageIso = $languageIso;
-        return $this;
-    }
-
-    /**
-     * Getter function for the languageIso column property, which contains the language iso code for the customer language
-     *
-     * @return string
-     */
-    public function getLanguageIso()
-    {
-        return $this->languageIso;
-    }
 
     /**
      * Setter function for the referer column property.
@@ -1055,5 +1031,13 @@ class Customer extends ModelEntity
     public function getLanguageSubShop()
     {
         return $this->languageSubShop;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguageId()
+    {
+        return $this->languageId;
     }
 }
