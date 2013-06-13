@@ -161,7 +161,11 @@
                         : ({ 'file[]': namespace.files }),
                 scope: this,
                 success: function(response) {
-                    Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    try {
+                        Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    } catch(err) {
+                        Shopware.app.Application.fireEvent('Ext.Loader:evalFailed', err, response, namespace, requestMethod);
+                    }
 
                     this.onFilesLoaded(namespace.classNames);
 
