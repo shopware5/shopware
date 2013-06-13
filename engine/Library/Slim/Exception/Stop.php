@@ -6,7 +6,7 @@
  * @copyright   2011 Josh Lockhart
  * @link        http://www.slimframework.com
  * @license     http://www.slimframework.com/license
- * @version     1.6.5
+ * @version     2.2.0
  * @package     Slim
  *
  * MIT LICENSE
@@ -30,18 +30,19 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+namespace Slim\Exception;
 
 /**
- * Request Slash Exception
+ * Stop Exception
  *
- * This Exception is thrown when Slim detects a matching route
- * (defined with a trailing slash) and the HTTP request
- * matches the route but does not have a trailing slash. This
- * exception will be caught in `Slim::run` and trigger a 301 redirect
- * to the same resource URI with a trailing slash.
+ * This Exception is thrown when the Slim application needs to abort
+ * processing and return control flow to the outer PHP script.
  *
  * @package Slim
  * @author  Josh Lockhart
  * @since   1.0.0
  */
-class Slim_Exception_RequestSlash extends Exception {}
+class Stop extends \Exception
+{
+
+}
