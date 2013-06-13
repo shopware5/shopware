@@ -615,10 +615,12 @@ class sExport
 			";
 		}
 
+        $sql_add_article_detail_join_condition ='';
 		if(empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1)
 		{
 			$sql_add_group_by = "a.id";
             $configurator_settings_sql = ", NULL as configurator_settings";
+            $sql_add_article_detail_join_condition = "AND d.kind=1";
 		}
 		elseif($this->sSettings["variant_export"]==2)
 		{
@@ -758,6 +760,7 @@ class sExport
 			FROM s_articles a
 			INNER JOIN s_articles_details d
 			ON d.articleID = a.id
+			$sql_add_article_detail_join_condition
 			LEFT JOIN s_articles_attributes at
 			ON d.id = at.articledetailsID
 
