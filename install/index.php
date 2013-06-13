@@ -32,6 +32,9 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+//the execution time will be increased, because the import can take a while
+ini_set("max_execution_time", 120);
+
 define("installer", true);
 define('SW_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
