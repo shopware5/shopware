@@ -430,7 +430,7 @@ createShopwareVersionMessage = function() {
             xtype: 'container',
             region: 'south',
             cls: Ext.baseCSSPrefix + 'about-shopware-footer',
-            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; 2012 shopware AG. All rights reserved.{/s}</a>'
+            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; 2013 shopware AG. All rights reserved.{/s}</a>'
         }, {
             xtype: 'container',
             region: 'center',
