@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         me.shopStoreCombo = Ext.create('Ext.form.field.ComboBox', {
             triggerAction:'all',
-            name:'shopId',
+            name:'languageId',
             queryMode: 'local',
             fieldLabel:me.snippets.shop,
             valueField:'id',
