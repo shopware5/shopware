@@ -290,6 +290,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $builder->addOrderBy('plugins.' . $order['property'], $order['direction']);
             }
         }
+        $builder->addOrderBy('plugins.added', 'DESC');
 
         if (!empty($category)) {
             $builder->andWhere('plugins.source = :source')
