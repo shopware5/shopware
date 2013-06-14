@@ -175,5 +175,7 @@
                 }
             }
         }
+
+        return match;
     };
 })(Ext.ClassManager, Ext.global);
