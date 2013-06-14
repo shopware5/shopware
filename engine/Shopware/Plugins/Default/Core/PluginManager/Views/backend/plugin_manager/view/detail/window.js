@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
      * True to display the 'close' tool button and allow the user to close the window, false to hide the button and disallow closing the window.
      * @boolean
      */
-    closable: false,
+    closable: true,
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
