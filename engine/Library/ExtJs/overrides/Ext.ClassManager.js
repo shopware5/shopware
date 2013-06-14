@@ -154,16 +154,26 @@
      * @returns { Boolean } Truthy if the override provides the new way, falsy if not.
      */
     Manager.checkOverride =  function(cls, data) {
-        var match = false;
+        var match = true, fnName, fn;
 
-        for(var fnName in data) {
-            var fn = data[fnName].toString();
-            if(fn.match(/registerAdditionalTab/i)) {
-                match = true;
+        for(fnName in data) {
+            fn = data[fnName].toString();
+            if(fn.match(/createMainTabPanel/i)) {
+                match = false;
                 break;
             }
         }
 
-        return match;
+        // ..alright, we found the old method to extend the product module,
+        // now check if the developer supports the new way as well.
+        if(!match) {
+            for(fnName in data) {
+                fn = data[fnName].toString();
+                if(fn.match(/registerAdditionalTab/i)) {
+                    match = true;
+                    break;
+                }
+            }
+        }
     };
 })(Ext.ClassManager, Ext.global);
