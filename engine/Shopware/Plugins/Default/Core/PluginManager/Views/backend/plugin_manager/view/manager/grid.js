@@ -141,7 +141,8 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         }, {
             dataIndex: 'version',
             header: me.snippets.version,
-            width: 50
+            width: 50,
+            renderer: me.versionRenderer
         }, {
             dataIndex: 'added',
             xtype: 'datecolumn',
@@ -460,6 +461,26 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         } else {
             return '';
         }
+    },
+
+    /**
+     * Renderer function for the version column.
+     * @param value
+     * @param meta
+     * @param record
+     */
+    versionRenderer: function(value, meta, record) {
+        var me = this, fragments, i;
+        value += '';
+
+        fragments = value.split('.');
+        for(i = 0; i < 3; i++) {
+            if (fragments.length < 3) {
+                fragments.push('0');
+            }
+        }
+        return fragments.join('.');
     }
+
 });
 //{/block}
