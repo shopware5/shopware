@@ -97,7 +97,12 @@
                 disableCachingValue = this.getConfig('disableCachingValue'),
                 requestMethod = "post",
                 tmpPath,
+                maxLength = maxParameterLength - 50,
                 files = [];
+
+            if (maxLength <= 0) {
+                maxLength = 1950;
+            }
 
             // Get request of main subapplication app.js
             if (namespace.files.length <= 1 && namespace.files[0].indexOf('?file') !== -1) {
@@ -121,8 +126,9 @@
                 tmpPath += files.join('|');
 
                 // see: http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
+                // see: http://www.hardened-php.net/suhosin/configuration.html#suhosin.get.max_value_length
                 // 2000 - 50 Chars Buffer for disableCachingParam etc.
-                if (tmpPath.length + host.length < 1950) {
+                if (tmpPath.length + host.length < maxLength) {
                     requestMethod = "get";
                     path = tmpPath;
                 }
@@ -155,7 +161,11 @@
                         : ({ 'file[]': namespace.files }),
                 scope: this,
                 success: function(response) {
-                    Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    try {
+                        Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    } catch(err) {
+                        Shopware.app.Application.fireEvent('Ext.Loader:evalFailed', err, response, namespace, requestMethod);
+                    }
 
                     this.onFilesLoaded(namespace.classNames);
 
@@ -165,10 +175,9 @@
                     }
                 },
                 failure: function(xhr) {
+                    Shopware.app.Application.fireEvent('Ext.Loader:xhrFailed', xhr, namespace, requestMethod);
+
                     cleanIfAsyncRequestExists(cacheKey);
-                    // Re-request classes. The old callbacks stays inside the
-                    // queue and will be triggered when loading is ready.
-                    Ext.require(namespace.classNames);
                 }
             });
 
