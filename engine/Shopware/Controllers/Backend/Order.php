@@ -610,10 +610,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             Shopware()->Models()->clear();
             $order = $this->getRepository()->find($id);
 
-            //recalculate the invoice amount to refresh the view.
-            $order->calculateInvoiceAmount();
-            Shopware()->Models()->flush();
-
             //if the status has been changed an status mail is created.
             $mail = null;
             if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
@@ -781,7 +777,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
             $order = $this->getRepository()->find($order->getId());
 
-            $order->calculateInvoiceAmount();
             Shopware()->Models()->persist($order);
             Shopware()->Models()->flush();
 
@@ -892,10 +887,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 }
             }
             //after each model has been removed to executes the doctrine flush.
-            Shopware()->Models()->flush();
-
-            $order->calculateInvoiceAmount();
-            Shopware()->Models()->persist($order);
             Shopware()->Models()->flush();
 
             $data = $this->getOrder($order->getId());
@@ -1310,7 +1301,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         //checks if the tax id for the position is passed and search for the assigned tax model
         if (!empty($data['taxId'])) {
-            $data['tax'] = Shopware()->Models()->find('Shopware\Models\Tax\Tax', $data['taxId']);
+            $tax = Shopware()->Models()->find('Shopware\Models\Tax\Tax', $data['taxId']);
+            if ($tax instanceof \Shopware\Models\Tax\Tax) {
+                $data['tax'] = $tax;
+                $data['taxRate'] = $tax->getTax();
+            }
         } else {
             unset($data['tax']);
         }

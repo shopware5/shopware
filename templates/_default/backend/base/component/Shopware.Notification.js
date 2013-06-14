@@ -554,11 +554,11 @@ Ext.define('Shopware.Notification', {
             target = '_blank', width = 300, id = Ext.id(), compTop = me.offsetTop;
 
         log = log || false;
-        target = opts.btnDetail.target || target;
+        target = (opts.btnDetail && opts.btnDetail.target) ? opts.btnDetail.target : target;
         width = opts.width || width;
         closeCB = opts.callback || Ext.emptyFn;
-        detailCB = opts.btnDetail.callback || Ext.emptyFn;
-        autoClose = opts.btnDetail.autoClose || true;
+        detailCB = (opts.btnDetail && opts.btnDetail.callback) ? opts.btnDetail.callback : Ext.emptyFn;
+        autoClose = (opts.btnDetail && opts.btnDetail.autoClose !== undefined) ? opts.btnDetail.autoClose : true;
 
         if(log !== false || opts.log !== false) {
             Ext.Ajax.request({

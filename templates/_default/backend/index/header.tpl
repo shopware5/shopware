@@ -15,7 +15,8 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 
 {block name="backend/base/header/javascript" append}
 <script type="text/javascript">
-    var userName = '{$user->name}';
+    var userName = '{$user->name}',
+        maxParameterLength = '{$maxParameterLength}';
 
     Ext.define('Shopware.app.Application', {
     	extend: 'Ext.app.Application',
@@ -31,7 +32,8 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
         viewport: null,
         launch: function() {
             var me = this,
-                preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application);
+                preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application),
+				errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application)
 
             /**
              * Activates the Ext.fx.Anim class globally and
