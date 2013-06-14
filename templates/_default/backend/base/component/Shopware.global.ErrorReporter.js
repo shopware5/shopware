@@ -194,7 +194,6 @@ Ext.define('Shopware.global.ErrorReporter', {
             title: me.snippets.general.title,
             dockedItems: [ me.createActionToolbar(namespace, false) ] ,
             renderTo: Ext.getBody(),
-            bodyPadding: 15,
             items: [{
                 xtype: 'tabpanel',
                 defaults: { bodyPadding: 15 },
