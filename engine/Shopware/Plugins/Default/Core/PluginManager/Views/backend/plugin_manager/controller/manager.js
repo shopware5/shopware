@@ -420,7 +420,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
     onReinstallPlugin: function(record, grid) {
         var me = this, active = record.get('active');
 
-
         record.set('installed', null);
         me.onInstallPlugin(record, me.subApplication.pluginStore, {
             callback: function() {
