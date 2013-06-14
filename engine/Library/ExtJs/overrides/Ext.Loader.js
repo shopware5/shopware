@@ -178,9 +178,6 @@
                     Shopware.app.Application.fireEvent('Ext.Loader:xhrFailed', xhr, namespace, requestMethod);
 
                     cleanIfAsyncRequestExists(cacheKey);
-                    // Re-request classes. The old callbacks stays inside the
-                    // queue and will be triggered when loading is ready.
-                    //Ext.require(namespace.classNames);
                 }
             });
 
