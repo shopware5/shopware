@@ -201,14 +201,42 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             ));
             return;
         }
-        if($this->isStoreApiAvailable()) {
-            $data['product'] = $this->getCommunityStore()->getPluginCommunityData($plugin);
-        }
-
 
         $this->View()->assign(array(
            'success' => true,
            'data' => $data
+        ));
+    }
+
+    /**
+     * Controller action which can be used to get the store plugin data
+     * for a single plugin.
+     * Function expects the plugin id as parameter "pluginId".
+     */
+    public function getPluginStoreDataAction()
+    {
+        if(!$this->isStoreApiAvailable()) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => 'Store api not available'
+            ));
+            return;
+        }
+
+        $id = $this->Request()->getParam('pluginId', null);
+        if (empty($id)) {
+            $this->View()->assign(array(
+                'success' => false,
+                'noId' => true
+            ));
+            return;
+        }
+        $plugin = $this->getPlugin($id, \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+        $data = $this->getCommunityStore()->getPluginCommunityData($plugin);
+        $this->View()->assign(array(
+            'success' => empty($data['code']),
+            'data' => array($data)
         ));
     }
 
