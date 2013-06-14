@@ -596,6 +596,8 @@ Ext.define('Shopware.Notification', {
             data: msgData,
             cls: me.growlMsgCls + '-sticky-content',
             tpl: me.growlMsgTpl,
+            maxHeight: 120,
+            autoScroll: true,
             flex: 3
         });
         growlContent.update(msgData);
