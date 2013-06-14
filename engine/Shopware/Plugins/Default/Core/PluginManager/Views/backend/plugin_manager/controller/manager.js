@@ -316,6 +316,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
      * @param [object] record - Shopware.apps.PluginManager.model.Plugin
      */
     onEditPlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
+        this.editPlugin(record);
+    },
+
+
+    /**
+     * Helper function to open the plugin detail page with the whole
+     * community store product data.
+     * If you want to set the active flag of the passsed plugin, set the
+     * active parameter to true or false.
+     * @param record
+     * @param active
+     */
+    editPlugin: function(record, active) {
         var me = this;
 
         if (!record) {
@@ -334,6 +347,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                         voteStore = me.getStore('Votes');
                         voteStore.getProxy().extraParams.productId = article.get('id');
                         voteStore.load();
+                    }
+
+                    if (active === false || active === true) {
+                        plugin.set('active', true);
                     }
 
                     me.getView('detail.Window').create({
@@ -453,9 +470,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    }
 
                    if (record.get('installed') !== null) {
-                       var optionWindow = me.getView('manager.Options').create({
-                           record: record
-                       }).show();
+                       me.editPlugin(record, true);
                    }
                } else {
                    var message = Ext.String.format(me.snippets.manager.failed_install, record.get('label'));
