@@ -232,8 +232,15 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
         $plugin = $this->getPlugin($id, \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-
         $data = $this->getCommunityStore()->getPluginCommunityData($plugin);
+
+        $details = array();
+        foreach($data['details'] as $key => $detail) {
+            $detail['rent_version'] = (bool) ($key === 'rent');
+            $details[] = $detail;
+        }
+        $data['details'] = $details;
+
         $this->View()->assign(array(
             'success' => empty($data['code']),
             'data' => array($data)
