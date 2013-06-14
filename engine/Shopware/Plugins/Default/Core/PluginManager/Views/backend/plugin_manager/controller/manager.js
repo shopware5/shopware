@@ -96,6 +96,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                 'editPlugin': me.onEditPlugin,
                 'edit': me.onAfterCellEditing,
                 'uninstallInstall': me.onInstallUninstallPlugin,
+                'reinstallPlugin': me.onReinstallPlugin,
                 'manualInstall': me.onOpenManualInstallWindow,
                 'itemdblclick': me.onDblClick,
                 'beforeedit': me.onBeforeEdit,
@@ -412,14 +413,34 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
     },
 
     /**
+     * Helper function to reinstall a plugin with one click
+     * @param record
+     * @param grid
+     */
+    onReinstallPlugin: function(record, grid) {
+        var me = this, active = record.get('active');
+
+
+        record.set('installed', null);
+        me.onInstallPlugin(record, me.subApplication.pluginStore, {
+            callback: function() {
+                record.set('active', active);
+                record.set('installed', new Date());
+                me.onInstallPlugin(record, me.subApplication.pluginStore);
+            }
+        });
+    },
+
+    /**
      * Installs a plugin based on the passed record and the associated store.
      *
      * @public
      * @param [object] record - Shopware.apps.PluginManager.model.Plugin
      * @param [object] store - Shopware.apps.PluginManager.store.Plugin
+     * @param [object] options - Helper parameter for callback functions.
      * @return void
      */
-    onInstallPlugin: function(record, store) {
+    onInstallPlugin: function(record, store, options) {
         var me = this;
 
         var listing = me.getPluginGrid();
@@ -472,6 +493,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    if (record.get('installed') !== null) {
                        me.editPlugin(record, true);
                    }
+
+                   if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
+                       options.callback(record);
+                   }
+
                } else {
                    var message = Ext.String.format(me.snippets.manager.failed_install, record.get('label'));
 
