@@ -4153,24 +4153,28 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-           $shopId = (int) $this->Request()->getParam('shopId');
-           $articleId = (int) $this->Request()->getParam('articleId');
+        $shopId = (int)$this->Request()->getParam('shopId');
+        $articleId = (int)$this->Request()->getParam('articleId');
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);
         $shop->registerResources(Shopware()->Bootstrap());
 
-           Shopware()->Session()->Admin = true;
+        Shopware()->Session()->Admin = true;
 
-           $url = $this->Front()->Router()->assemble(array(
-           'module' => 'frontend',
-           'controller' => 'detail',
-           'sArticle' => $articleId,
-           'appendSession' => true
-        ));
+        $url = $this->Front()->Router()->assemble(
+            array(
+                'module' => 'frontend',
+                'controller' => 'detail',
+                'sArticle' => $articleId,
+                'appendSession' => true
+            )
+        );
 
-           $this->redirect($url);
-       }
+        /**@var $shop \Shopware\Models\Shop\Shop*/
+        $this->Response()->setCookie('shop', $shopId, 0, $shop->getBasePath());
+        $this->redirect($url);
+    }
 
     /**
      * Internal helper function to get the field names of the passed violation array.
