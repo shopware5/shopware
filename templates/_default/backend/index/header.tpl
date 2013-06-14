@@ -32,7 +32,8 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
         viewport: null,
         launch: function() {
             var me = this,
-                preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application);
+                preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application),
+				errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application)
 
             /**
              * Activates the Ext.fx.Anim class globally and

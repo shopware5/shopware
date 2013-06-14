@@ -161,7 +161,11 @@
                         : ({ 'file[]': namespace.files }),
                 scope: this,
                 success: function(response) {
-                    Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    try {
+                        Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                    } catch(err) {
+                        Shopware.app.Application.fireEvent('Ext.Loader:evalFailed', err, response, namespace, requestMethod);
+                    }
 
                     this.onFilesLoaded(namespace.classNames);
 
@@ -171,10 +175,9 @@
                     }
                 },
                 failure: function(xhr) {
+                    Shopware.app.Application.fireEvent('Ext.Loader:xhrFailed', xhr, namespace, requestMethod);
+
                     cleanIfAsyncRequestExists(cacheKey);
-                    // Re-request classes. The old callbacks stays inside the
-                    // queue and will be triggered when loading is ready.
-                    Ext.require(namespace.classNames);
                 }
             });
 
