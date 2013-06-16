@@ -32,7 +32,8 @@
 
 namespace   Shopware\Models\Customer;
 use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+            Doctrine\ORM\Mapping AS ORM,
+            Shopware\Models\Country\Country;
 
 /**
  * Shopware customer billing model represents a single billing address of a customer.
@@ -81,6 +82,14 @@ class Billing extends ModelEntity
      * @ORM\Column(name="countryID", type="integer", nullable=false)
      */
     protected $countryId = 0;
+        
+    /**
+     * @var Country
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Country\Country")
+     * @ORM\JoinColumn(name="countryId", referencedColumnName="id")
+     */
+    protected $country;
 
     /**
      * Contains the id of the state. Used for billing - state association.
@@ -499,6 +508,28 @@ class Billing extends ModelEntity
     public function getCountryId()
     {
         return $this->countryId;
+    }
+    
+    /**
+     * Getter function for the country instance.
+     * 
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Setter function for the country instance. 
+     * 
+     * @param Country $country
+     * @return Billing
+     */
+    public function setCountry(Country $country)
+    {
+        $this->country = $country;
+        return $this;
     }
 
     /**
