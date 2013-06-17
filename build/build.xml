@@ -29,20 +29,9 @@
 
     <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
 
-    <target name="build-truncate-changelog">
-        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/dbdeploy.truncate.sql">
-            <arg value="-u${db.user}"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
-            <arg value="--default-character-set=utf8"/>
-            <arg value="${db.name}"/>
-        </exec>
-    </target>
-
     <target name="build-database">
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
-            <fileset file="${build.dir}/scripts/dbdeploy.install.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
@@ -95,24 +84,12 @@
     </target>
 
     <target name="build-database-deploy">
-        <exec dir="${build.dir}" executable="${script.phing}">
-            <arg line="-f build-db.xml" />
-            <arg line="-Ddb.user=${db.user}" />
-            <arg line="-Ddb.password=${db.password}" />
-            <arg line="-Ddb.name=${db.name}" />
-            <arg line="-Ddb.host=${db.host}" />
-            <arg line="-Ddelta.dir=${delta.dir}" />
-            <arg line="-Ddb.deploy.file=${db.deploy.file}" />
-            <arg line="-Ddb.undo.file=${db.undo.file}" />
-            <arg line="build-deltas" />
-        </exec>
-
-        <exec executable="${script.mysql}" failonerror="true" input="${db.deploy.file}">
-            <arg value="-u${db.user}"/>
+        <exec executable="php" failonerror="true">
+            <arg value="${build.dir}/ApplyDeltas.php"/>
             <arg value="--password=${db.password}"/>
             <arg value="--host=${db.host}"/>
-            <arg value="--default-character-set=utf8"/>
-            <arg value="${db.name}"/>
+            <arg value="--username=${db.user}"/>
+            <arg value="--dbname=${db.name}"/>
         </exec>
     </target>
 
