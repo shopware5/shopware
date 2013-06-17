@@ -114,8 +114,8 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         grid.reconfigure(store);
 
         // reconfigure grids and inject the stores
-        me.getCacheTime().reconfigure(me.deepCloneStore(config.getHttpCache().first().getCacheControllers()));
-        me.getNoCache().reconfigure(me.deepCloneStore(config.getHttpCache().first().getNoCacheControllers()));
+        me.getCacheTime().reconfigure(config.getHttpCache().first().getCacheControllers());
+        me.getNoCache().reconfigure(config.getHttpCache().first().getNoCacheControllers());
 
         me.configData = Ext.clone(config);
     },
