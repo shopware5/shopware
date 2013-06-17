@@ -393,7 +393,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                     var plugin = records[0];
 
                     if (active === false || active === true) {
-                        plugin.set('active', true);
+                        plugin.set('active', active);
                     }
 
                     me.getView('detail.Window').create({
