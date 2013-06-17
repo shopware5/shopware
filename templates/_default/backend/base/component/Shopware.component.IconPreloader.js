@@ -130,7 +130,7 @@ Ext.define('Shopware.component.IconPreloader', {
             };
 
         basicOpts = Ext.apply(basicOpts, {
-            'href': me.loadPath + '/' + sheet + me.extension
+            'href': me.loadPath + '/' + sheet + me.extension + "?" + Ext.shopwareRevision
         });
 
         for(var key in basicOpts) {
