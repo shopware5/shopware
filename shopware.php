@@ -54,6 +54,17 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
     return;
 }
 
+// Check for update-script
+if (is_dir('update')) {
+    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+    $baseUrl .= $_SERVER['HTTP_HOST'];
+    $baseUrl .= dirname($_SERVER['SCRIPT_NAME']);
+
+    $updateUrl = $baseUrl . '/update/';
+    header('Location: ' . $updateUrl, true, 302);
+    return;
+}
+
 set_include_path(
     '.' . PATH_SEPARATOR .
     dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
