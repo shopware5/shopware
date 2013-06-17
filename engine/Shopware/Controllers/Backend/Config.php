@@ -992,8 +992,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         if (!$this->Request()->isXmlHttpRequest()) {
             $url = $this->Front()->Router()->assemble(array(
                 'module' => 'frontend',
-                'controller' => 'index'
-            )) . '?__template=' . urlencode($template);
+                'controller' => 'index',
+                'appendSession' => true,
+            ));
             $this->redirect($url);
         }
     }
