@@ -262,7 +262,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 }
             },
             {
-                iconCls: 'sprite-slide',
+                iconCls: 'sprite-arrow-continue',
                 tooltip: me.snippets.reinstall_info,
                 handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                     me.fireEvent('reinstallPlugin', record, me);
