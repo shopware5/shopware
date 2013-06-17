@@ -188,7 +188,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->cacheControllers = array();
             foreach ($controllers as $controller) {
                 list($controller, $cacheTime) = explode(" ", $controller);
-                $this->cacheControllers[$controller] = $cacheTime;
+                $this->cacheControllers[strtolower($controller)] = $cacheTime;
             }
         }
 
@@ -199,7 +199,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->allowNoCacheControllers = array();
             foreach ($controllers as $controller) {
                 list($controller, $cacheTime) = explode(" ", $controller);
-                $this->allowNoCacheControllers[$controller] = $cacheTime;
+                $this->allowNoCacheControllers[strtolower($controller)] = $cacheTime;
             }
         }
 
@@ -254,7 +254,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setCacheHeaders()
     {
-        $controllerName = $this->request->getModuleName() . '/' . $this->request->getControllerName();
+        $controllerName = strtolower($this->request->getModuleName()) . '/' . strtolower($this->request->getControllerName());
 
         if (isset($this->cacheControllers[$controllerName])) {
             // Enable esi tag output
@@ -293,7 +293,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setNoCacheCookie()
     {
-        $controllerName = $this->request->getModuleName() . '/' . $this->request->getControllerName();
+        $controllerName = strtolower($this->request->getModuleName()) . '/' . strtolower($this->request->getControllerName());
 
         if (isset($this->autoNoCacheControllers[$controllerName])) {
             $noCacheTag = $this->autoNoCacheControllers[$controllerName];
@@ -415,7 +415,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         $targetName = $params['module'] . '/' . $params['controller'];
-        $controllerName = $request->getModuleName() . '/' . $request->getControllerName();
+        $controllerName = strtolower($request->getModuleName()) . '/' . strtolower($request->getControllerName());
 
         if (isset($this->autoNoCacheControllers[$controllerName])
             && isset($this->allowNoCacheControllers[$targetName])
@@ -441,7 +441,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setCacheIdHeader()
     {
-        $controllerName = $this->request->getModuleName() . '/' . $this->request->getControllerName();
+        $controllerName = strtolower($this->request->getModuleName()) . '/' . strtolower($this->request->getControllerName());
 
         $cacheIds = array();
 
@@ -477,6 +477,16 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
         }
 
+    }
+
+    /**
+     * Helper function to flag the request with affected article or category ids
+     * to invalidate the caching.
+     *
+     * @param array $cacheIds
+     */
+    public function setCacheIds($cacheIds = array())
+    {
         if (!empty($cacheIds)) {
             $request = $this->request;
 
@@ -560,4 +570,27 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             }
         } catch (Exception $e) { }
     }
+
+
+    /**
+     * Helper function to enable the http cache for a single shopware controller.
+     * @param int $cacheTime
+     * @param array $cacheIds
+     */
+    public function enableControllerCache($cacheTime = 3600, $cacheIds = array())
+    {
+        $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime, true);
+        $this->registerEsiRenderer();
+        $this->setCacheIds($cacheIds);
+    }
+
+
+    /**
+     * Helper function to disable the http cache for a single shopware controller
+     */
+    public function disableControllerCache()
+    {
+        $this->response->setHeader('Cache-Control', 'private', true);
+    }
+
 }
