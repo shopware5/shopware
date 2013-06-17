@@ -477,6 +477,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
         }
 
+        $this->setCacheIds($cacheIds);
     }
 
     /**
@@ -487,32 +488,34 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function setCacheIds($cacheIds = array())
     {
-        if (!empty($cacheIds)) {
-            $request = $this->request;
-
-            $uri = sprintf('%s://%s%s',
-                $request->getScheme(),
-                $request->getHttpHost(),
-                $request->getRequestUri()
-            );
-
-            if ($request->getCookie('shop', false)) {
-                $uri .= '&__shop=' . $request->getCookie('shop');
-            }
-
-            if ($request->getCookie('currency', false)) {
-                $uri .= '&__currency=' . $request->getCookie('currency');
-            }
-
-            $cacheIds = '|' . implode('|', $cacheIds) . '|';
-
-            Shopware()->Db()->query(
-                'INSERT IGNORE INTO s_cache_log (url, cache_keys) VALUES (?, ?)',
-                array($uri, $cacheIds)
-            );
-
-            $this->response->setHeader('x-shopware-cache-id', $cacheIds);
+        if (empty($cacheIds)) {
+            return;
         }
+
+        $request = $this->request;
+
+        $uri = sprintf('%s://%s%s',
+            $request->getScheme(),
+            $request->getHttpHost(),
+            $request->getRequestUri()
+        );
+
+        if ($request->getCookie('shop', false)) {
+            $uri .= '&__shop=' . $request->getCookie('shop');
+        }
+
+        if ($request->getCookie('currency', false)) {
+            $uri .= '&__currency=' . $request->getCookie('currency');
+        }
+
+        $cacheIds = '|' . implode('|', $cacheIds) . '|';
+
+        Shopware()->Db()->query(
+            'INSERT IGNORE INTO s_cache_log (url, cache_keys) VALUES (?, ?)',
+            array($uri, $cacheIds)
+        );
+
+        $this->response->setHeader('x-shopware-cache-id', $cacheIds);
     }
 
     /**
