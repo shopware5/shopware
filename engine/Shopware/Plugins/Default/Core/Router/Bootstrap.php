@@ -289,11 +289,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey !== null && $cookieKey != 'template') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->setCookie($cookieKey, $cookieValue, 0, $path);
-            if($cookieKey != 'shop' || $request->getQuery('__template') !== null) {
+            if($request->isPost()) {
                 $url = sprintf('%s://%s%s',
                     $request->getScheme(),
                     $request->getHttpHost(),
-                    $cookieKey == 'shop' ? $request->getBaseUrl() . '/' : $request->getRequestUri()
+                    $request->getRequestUri()
                 );
                 $response->setRedirect($url);
                 return;
@@ -325,18 +325,18 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Upgrade template
-        if(isset($session->Template) && !empty($session->Admin)) {
+        if(isset($session->template) && !empty($session->Admin)) {
             $repository = 'Shopware\Models\Shop\Template';
             $repository = Shopware()->Models()->getRepository($repository);
-            $template = $session->Template;
+            $template = $session->template;
             $template = $repository->findOneBy(array('template' => $template));
             if($template !== null) {
                 $shop->setTemplate($template);
             } else {
-                unset($session->Template);
+                unset($session->template);
             }
         } else {
-            unset($session->Template);
+            unset($session->template);
         }
 
         // Save upgrades
