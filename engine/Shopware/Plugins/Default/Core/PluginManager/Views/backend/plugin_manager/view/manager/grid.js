@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
 		install_uninstall_plugin: '{s name=manager/grid/install_uninstall_plugin}Install / uninstall plugin{/s}',
 		delete_plugin: '{s name=manager/grid/delete_plugin}Delete plugin{/s}',
 		update_plugin_info: '{s name=manager/grid/update_plugin_info}Update plugin{/s}',
+		reinstall_info: '{s name=manager/grid/reinstall_info}Reinstall plugin (Uninstall -> Install){/s}',
 		manual_add_plugin: '{s name=manager/grid/manual_add}Add plugin manually{/s}',
 		search: '{s name=manager/grid/search}Search...{/s}',
 		bought: '{s name=manager/grid/bought}Bought{/s}',
@@ -103,6 +104,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         me.addEvents(
             'search',
             'uninstallInstall',
+            'reinstallPlugin',
             'editPlugin',
             'manualInstall',
             'selectionChange',
@@ -139,7 +141,8 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         }, {
             dataIndex: 'version',
             header: me.snippets.version,
-            width: 50
+            width: 50,
+            renderer: me.versionRenderer
         }, {
             dataIndex: 'added',
             xtype: 'datecolumn',
@@ -257,8 +260,29 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                         return Ext.baseCSSPrefix + 'hidden';
                     }
                 }
-            }
-        /*{/if}*/]
+            },
+            {
+                iconCls: 'sprite-slide',
+                tooltip: me.snippets.reinstall_info,
+                handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                    me.fireEvent('reinstallPlugin', record, me);
+                },
+                getClass: function(value, metadata, record, rowIdx) {
+                    if (record.get('capabilityDummy')) {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
+
+                    if (!record.get('capabilityInstall')) {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
+
+                    if (!record.get('installed'))  {
+                        return Ext.baseCSSPrefix + 'hidden';
+                    }
+                }
+            },
+        /*{/if}*/
+        ]
         }];
     },
 
@@ -437,6 +461,26 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
         } else {
             return '';
         }
+    },
+
+    /**
+     * Renderer function for the version column.
+     * @param value
+     * @param meta
+     * @param record
+     */
+    versionRenderer: function(value, meta, record) {
+        var me = this, fragments, i;
+        value += '';
+
+        fragments = value.split('.');
+        for(i = 0; i < 3; i++) {
+            if (fragments.length < 3) {
+                fragments.push('0');
+            }
+        }
+        return fragments.join('.');
     }
+
 });
 //{/block}
