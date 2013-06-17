@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
      * True to display the 'close' tool button and allow the user to close the window, false to hide the button and disallow closing the window.
      * @boolean
      */
-    closable: false,
+    closable: true,
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
     initComponent: function() {
         var me = this, buttonText = me.snippets.buy_install_plugin;
 
-        me.addEvents('installPlugin', 'saveConfiguration');
+        me.addEvents('installPlugin', 'saveConfiguration', 'pluginTabChanged');
 
         if(me.record && me.record.data && me.record.get('name')) {
             me.title = me.snippets.detail_site+' - ' + me.record.get('name');
@@ -165,17 +165,27 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
         var me = this;
         var tabs = [];
 
+        me.productWrapper = null;
+
         /** {if $storeApiAvailable} */
-        if(me.record.get('name')) {
+        if(me.record && me.record.get('name')) {
             tabs.push({
                 title: me.snippets.description,
                 xtype: 'plugin-manager-detail-description',
                 article: me.record,
                 voteStore: me.voteStore
             });
+        } else {
+           me.productWrapper = Ext.create('Ext.container.Container', {
+               title: me.snippets.description,
+               plugin: me.plugin,
+               name: 'product-wrapper',
+               voteStore: me.voteStore,
+               layout: 'fit'
+           });
+           tabs.push(me.productWrapper);
         }
         /** {/if} */
-
         tabs.push({
             title: me.snippets.settings,
             xtype: 'plugin-manager-detail-settings',
@@ -194,12 +204,17 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
         return Ext.create('Ext.tab.Panel', {
             xtype: 'tabpanel',
             /** {if $storeApiAvailable} */
-            activeTab: (me.flag === 'community' || !me.record.get('name') ? 0 : 1),
+            activeTab: (me.flag === 'community' || (me.record && !me.record.get('name')) ? 0 : 1),
             /** {else} */
             activeTab: 0,
             /** {/if} */
             plain: true,
-            items: tabs
+            items: tabs,
+            listeners: {
+                beforetabchange: function(tabPanel, newCard, oldCard, eOpts ) {
+                    me.fireEvent('pluginTabChanged', me, tabPanel, newCard, oldCard);
+                }
+            }
         });
     }
 });
