@@ -128,20 +128,23 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
             Ext.get(scroller).setSize(size);
         });
 
-        me.on('resize', function() {
+        me.on('resize', function(cmp, width, height) {
             var editorField = me.editorField,
                 editor = editorField.editor,
-                size, scroller;
+                scroller;
 
             if(!editor || !editor.hasOwnProperty('display')) {
                 return false;
             }
 
             scroller = editor.display.scroller;
-            size = editorField.getSize();
 
-            editor.setSize(size.width, size.height);
-            Ext.get(scroller).setSize(size);
+            width -= me.bodyPadding * 2;
+            // We need to remove the bodyPadding, the padding on the field itself and the scrollbars
+            height -= me.bodyPadding * 5;
+
+            editor.setSize(width, height);
+            Ext.get(scroller).setSize({ width: width, height: height });
         });
 
         return me.editorField;
