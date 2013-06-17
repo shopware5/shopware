@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.Deprecated.view.main.Window', {
         if(!this.tabs) {
             container = Ext.create('Ext.panel.Panel', {
                 // We need to hack the iframe to inject it into the Ext.window.Window
-                html: '<ifr' + 'ame id="iframe-' + Ext.id() + '" border="0" src="'+ url +'"></ifr' + 'ame>'
+                html: '<ifr' + 'ame id="iframe-' + Ext.id() + '" border="0" src="'+ url +'" style="min-width: 100%; min-height: 100%"></ifr' + 'ame>'
             });
             me.add(container);
         } else {
