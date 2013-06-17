@@ -392,6 +392,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
      * @return void
      */
     initializeTreeDropZone: function(view) {
+        var treeView = this.view;
+
         view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
             ddGroup: 'media-tree-dd',
             getTargetFromEvent: function(event) {
