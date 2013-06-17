@@ -306,6 +306,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId);
         $blogArticleData["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
+        //count the views of this blog item
+        $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
+        if(!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
+            //update the views count
+            /* @var $blogModel Shopware\Models\Blog\Blog */
+            $blogModel = $this->getRepository()->find($blogArticleId);
+            $blogModel->setViews($blogModel->getViews() + 1);
+            Shopware()->Models()->flush();
+            //save it to the session
+            $visitedBlogItems[] = $blogArticleId;
+            Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+        }
+
         //generate breadcrumb
         $breadcrumb = $this->getCategoryBreadcrumb($blogArticleData["categoryId"]);
         $blogDetailLink = $this->Front()->Router()->assemble(array(
