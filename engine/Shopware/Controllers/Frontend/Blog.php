@@ -312,11 +312,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             //update the views count
             /* @var $blogModel Shopware\Models\Blog\Blog */
             $blogModel = $this->getRepository()->find($blogArticleId);
-            $blogModel->setViews($blogModel->getViews() + 1);
-            Shopware()->Models()->flush();
-            //save it to the session
-            $visitedBlogItems[] = $blogArticleId;
-            Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+            if($blogModel) {
+                $blogModel->setViews($blogModel->getViews() + 1);
+                Shopware()->Models()->flush($blogModel);
+
+                //save it to the session
+                $visitedBlogItems[] = $blogArticleId;
+                Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+            }
         }
 
         //generate breadcrumb
