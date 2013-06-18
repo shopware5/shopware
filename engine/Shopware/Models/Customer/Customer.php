@@ -394,7 +394,7 @@ class Customer extends ModelEntity
      */
     public function getPassword()
     {
-        return $this->password;
+        return $this->hashPassword;
     }
 
     /**
