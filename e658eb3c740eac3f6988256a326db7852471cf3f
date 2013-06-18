@@ -1,0 +1,6 @@
+From: feature/sw-5768-confirm-password-reset
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Models/Customer/Customer.php
+	MODIFY|engine/Shopware/Models/Customer/Customer.php
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Frontend/Account.php
+	MODIFY|engine/Shopware/Controllers/Frontend/Account.php
