@@ -110,7 +110,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         try {
             /** @var $repository Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            if (($shop = $request->getCookie('shop')) !== null) {
+            if (($shop = $request->getQuery('__shop')) !== null) {
+                $shop = $repository->getActiveById($shop);
+            } elseif (($shop = $request->getCookie('shop')) !== null) {
                 $shop = $repository->getActiveById($shop);
             } if($shop === null) {
                 $shop = $repository->getActiveByRequest($request);
@@ -248,6 +250,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $cookieKey = 'shop';
                 $cookieValue = $request->getPost('__shop');
                 break;
+            case $request->getQuery('__shop') !== null:
+                $cookieKey = 'shop';
+                $cookieValue = $request->getQuery('__shop');
+                break;
             case $request->getPost('__currency') !== null:
                 $cookieKey = 'currency';
                 $cookieValue = $request->getPost('__currency');
@@ -283,13 +289,15 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey !== null && $cookieKey != 'template') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->setCookie($cookieKey, $cookieValue, 0, $path);
-            $url = sprintf('%s://%s%s',
-                $request->getScheme(),
-                $request->getHttpHost(),
-                $request->getRequestUri()
-            );
-            $response->setRedirect($url);
-            return;
+            if($request->isPost()) {
+                $url = sprintf('%s://%s%s',
+                    $request->getScheme(),
+                    $request->getHttpHost(),
+                    $request->getRequestUri()
+                );
+                $response->setRedirect($url);
+                return;
+            }
         }
 
         // Upgrade currency
@@ -499,6 +507,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!empty($userParams['appendSession'])) {
             $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= session_name() . '=' . session_id();
+            $url .= '&__shop=' . $this->shop->getId();
         }
 
         return $url;
