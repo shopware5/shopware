@@ -125,4 +125,30 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
         $this->assertEquals($initialValue + 10, $topSeller['sales']);
     }
 
+    public function testRefreshTopSellerForArticleId()
+    {
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $topSeller = $this->getAllTopSeller(" LIMIT 1 ");
+        $topSeller = $topSeller[0];
+
+        $this->resetTopSeller();
+        $this->TopSeller()->refreshTopSellerForArticleId($topSeller['article_id']);
+
+        $allTopSeller = $this->getAllTopSeller();
+        $this->assertArrayCount(1, $allTopSeller);
+
+        $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
+    }
+
+    public function assertArrayEquals(array $expected, array $result, array $properties)
+    {
+        foreach($expected as $key => $currentExpected) {
+            $currentResult = $result[$key];
+            foreach($properties as $property) {
+                $this->assertEquals($currentExpected[$property], $currentResult[$property]);
+            }
+        }
+    }
 }
