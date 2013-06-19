@@ -1,0 +1,4 @@
+From: feature/next/sw-5852-implement-update-script
+To: next
+Conflict: (content) Merge conflict in build/build.xml
+	MODIFY|build/build.xml
