@@ -142,7 +142,29 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
         $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
     }
 
-    public function assertArrayEquals(array $expected, array $result, array $properties)
+
+
+    public function testTopSellerLiveRefresh()
+    {
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $this->saveConfig('topSellerRefreshStrategy', 3);
+        Shopware()->Cache()->remove('Shopware_Config');
+
+        $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
+
+        $result = $this->dispatch('/genusswelten/?p=1');
+        $this->assertEquals(200, $result->getHttpResponseCode());
+
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(50, $topSeller);
+    }
+
+
+
+
+    private function assertArrayEquals(array $expected, array $result, array $properties)
     {
         foreach($expected as $key => $currentExpected) {
             $currentResult = $result[$key];
@@ -151,4 +173,54 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
             }
         }
     }
+
+
+    /**
+     * Helper method to persist a given config value
+     */
+    private function saveConfig($name, $value)
+    {
+        $shopRepository    = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
+        $formRepository    = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+
+        $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+
+        if (strpos($name, ':') !== false) {
+            list($formName, $name) = explode(':', $name, 2);
+        }
+
+        $findBy = array('name' => $name);
+        if (isset($formName)) {
+            $form = $formRepository->findOneBy(array('name' => $formName));
+            $findBy['form'] = $form;
+        }
+
+        /** @var $element Shopware\Models\Config\Element */
+        $element = $elementRepository->findOneBy($findBy);
+
+        // If the element is empty, the given setting does not exists. This might be the case for some plugins
+        // Skip those values
+        if (empty($element)) {
+            return;
+        }
+
+        foreach ($element->getValues() as $valueModel) {
+            Shopware()->Models()->remove($valueModel);
+        }
+
+        $values = array();
+        // Do not save default value
+        if ($value !== $element->getValue()) {
+            $valueModel = new Shopware\Models\Config\Value();
+            $valueModel->setElement($element);
+            $valueModel->setShop($shop);
+            $valueModel->setValue($value);
+            $values[$shop->getId()] = $valueModel;
+        }
+
+        $element->setValues($values);
+        Shopware()->Models()->flush($element);
+    }
+
 }
