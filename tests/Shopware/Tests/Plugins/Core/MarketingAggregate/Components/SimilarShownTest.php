@@ -33,6 +33,13 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         $this->Db()->query("DELETE FROM s_articles_similar_shown_ro " . $condition);
     }
 
+    protected function setSimilarShownInvalid($date = '2010-01-01', $condition = '') {
+        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = :date " . $condition, array(
+            'date' => $date
+        ));
+    }
+
+
     public function testResetSimilarShown()
     {
         $this->SimilarShown()->resetSimilarShown();
@@ -54,7 +61,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
     {
         $this->insertDemoData();
 
-        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = '2010-01-01' ");
+        $this->setSimilarShownInvalid();
 
         $this->SimilarShown()->updateElapsedSimilarShownArticles(10);
 
@@ -89,5 +96,24 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
             $this->assertEquals($combination['viewed'] + 1, $updated['viewed']);
         }
     }
+
+    public function testSimilarShownLiveRefresh()
+    {
+        $this->insertDemoData();
+        $this->SimilarShown()->initSimilarShown();
+
+        $this->saveConfig('similarRefreshStrategy', 3);
+        Shopware()->Cache()->clean();
+
+        $this->setSimilarShownInvalid();
+
+        $result = $this->dispatch('/sommerwelten/accessoires/170/sonnenbrille-red');
+        $this->assertEquals(200, $result->getHttpResponseCode());
+
+        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
+        $this->assertCount(50, $articles);
+    }
+
+
 
 }
