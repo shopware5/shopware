@@ -269,19 +269,21 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             /** @var $repository Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $newShop = $repository->getActiveById($cookieValue);
-            if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
-                || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
-            ) {
-                $url = sprintf('%s://%s%s%s',
-                    $request::SCHEME_HTTP,
-                    $newShop->getHost(),
-                    $newShop->getBaseUrl(),
-                    '/'
-                );
-
-                $response->setCookie($cookieKey, $cookieValue);
-                $response->setRedirect($url);
-                return;
+            if ($newShop !== null) {
+                if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
+                    || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
+                ) {
+                    $url = sprintf('%s://%s%s%s',
+                        $request::SCHEME_HTTP,
+                        $newShop->getHost(),
+                        $newShop->getBaseUrl(),
+                        '/'
+                    );
+                    $path = rtrim($newShop->getBasePath(), '/') . '/';
+                    $response->setCookie($cookieKey, $cookieValue, 0, $path);
+                    $response->setRedirect($url);
+                    return;
+                }
             }
         }
 
