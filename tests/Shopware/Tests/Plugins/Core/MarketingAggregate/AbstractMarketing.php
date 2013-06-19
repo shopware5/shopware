@@ -44,6 +44,9 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_AbstractMarketing extends E
         return Shopware()->Plugins()->Core()->MarketingAggregate();
     }
 
+    protected function getAllArticles($condition = '') {
+        return $this->Db()->fetchAll("SELECT * FROM s_articles " . $condition);
+    }
 
     public function setUp() {
         parent::setUp();

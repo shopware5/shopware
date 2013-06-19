@@ -11,9 +11,6 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         return $this->Db()->fetchAll("SELECT * FROM s_articles_top_seller_ro " . $condition);
     }
 
-    protected function getAllArticles($condition = '') {
-        return $this->Db()->fetchAll("SELECT * FROM s_articles " . $condition);
-    }
 
 
     public function testInitTopSeller()

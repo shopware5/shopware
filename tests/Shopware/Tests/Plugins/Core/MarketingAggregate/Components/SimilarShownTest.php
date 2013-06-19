@@ -1,0 +1,10 @@
+<?php
+
+class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest extends Shopware_Tests_Plugins_Core_MarketingAggregate_AbstractMarketing
+{
+
+
+
+
+
+}
