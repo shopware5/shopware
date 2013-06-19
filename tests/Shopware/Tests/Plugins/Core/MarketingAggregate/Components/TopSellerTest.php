@@ -17,13 +17,11 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
     {
         $this->resetTopSeller();
 
-        $this->assertArrayCount(0, $this->getAllTopSeller());
-
-        $this->TopSeller()->initTopSeller();
+        $this->assertCount(0, $this->getAllTopSeller());
 
         $this->TopSeller()->initTopSeller(50);
 
-        $this->assertArrayCount(50, $this->getAllTopSeller());
+        $this->assertCount(50, $this->getAllTopSeller());
 
         $this->TopSeller()->initTopSeller();
 
@@ -44,21 +42,21 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
 
         //check if the update script was successfully
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(0, $topSeller);
+        $this->assertCount(0, $topSeller);
 
         //update only 50 top seller articles to test the limit function
         $this->TopSeller()->updateElapsedTopSeller(50);
 
         //check if only 50 top seller was updated.
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(
-            count($this->getAllTopSeller()) - 50,
+        $this->assertCount(
+            50,
             $topSeller
         );
 
         //now we can update the all other top seller data
         $this->TopSeller()->updateElapsedTopSeller();
-        $this->assertArrayCount(
+        $this->assertCount(
             count($this->getAllTopSeller()),
             $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ")
         );
@@ -77,7 +75,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->incrementTopSeller($topSeller['article_id'], 10);
 
         $topSeller = $this->getAllTopSeller(" WHERE article_id = " . $topSeller['article_id']);
-        $this->assertArrayCount(1, $topSeller);
+        $this->assertCount(1, $topSeller);
         $topSeller = $topSeller[0];
 
         $this->assertEquals($initialValue + 10, $topSeller['sales']);
@@ -95,7 +93,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->refreshTopSellerForArticleId($topSeller['article_id']);
 
         $allTopSeller = $this->getAllTopSeller();
-        $this->assertArrayCount(1, $allTopSeller);
+        $this->assertCount(1, $allTopSeller);
 
         $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
     }
@@ -107,7 +105,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 3);
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Cache()->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -115,7 +113,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->assertEquals(200, $result->getHttpResponseCode());
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(50, $topSeller);
+        $this->assertCount(50, $topSeller);
     }
 
 
@@ -125,7 +123,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 2);
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Cache()->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -133,7 +131,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->assertEquals(200, $result->getHttpResponseCode());
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(0, $topSeller);
+        $this->assertCount(0, $topSeller, 'Topseller wurde durch dispatch aktualisiert');
 
         $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
         $this->assertNotEmpty($cron);
@@ -142,7 +140,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(
+        $this->assertCount(
             count($this->getAllTopSeller()),
             $topSeller
         );
@@ -154,7 +152,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 1);
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Cache()->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -162,13 +160,13 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->assertEquals(200, $result->getHttpResponseCode());
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(0, $topSeller);
+        $this->assertCount(0, $topSeller);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertArrayCount(0, $topSeller);
+        $this->assertCount(0, $topSeller);
     }
 
 
