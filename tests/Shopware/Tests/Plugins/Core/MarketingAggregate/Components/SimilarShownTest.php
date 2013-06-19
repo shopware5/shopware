@@ -50,6 +50,27 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         $this->assertCount(144, $data);
     }
 
+    public function testUpdateElapsedSimilarShownArticles()
+    {
+        $this->insertDemoData();
+
+        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = '2010-01-01' ");
+
+        $this->SimilarShown()->updateElapsedSimilarShownArticles(10);
+
+        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
+
+        $this->assertCount(10, $articles);
+
+        $this->SimilarShown()->updateElapsedSimilarShownArticles();
+
+        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
+
+        $this->assertCount(
+            count($this->getAllSimilarShown()),
+            $articles
+        );
+    }
 
 
 }
