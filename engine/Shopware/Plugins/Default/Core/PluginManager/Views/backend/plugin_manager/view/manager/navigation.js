@@ -184,11 +184,11 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Navigation', {
         var me = this, updateCount = 0;
 
         me.accountCategoryStore = Ext.create('Ext.data.Store', {
-            fields: [ 'name', 'badge', 'selected', 'action' ],
+            fields: [ 'name', 'badge', 'selected', 'requestParam' ],
             data: [
-                { name: '{s name=navigation/open_account}Open account{/s}', badge: 0, selected: false, action: 'openAccount' },
-                { name: '{s name=navigation/purchases_licenses}My purchases / licenses{/s}', badge: 0, selected: false, action: 'openLicense' },
-                { name: '{s name=navigation/updates}Updates{/s}', badge: updateCount, selected: false, action: 'openUpdates' }
+                { name: '{s name=navigation/open_account}Open account{/s}', badge: 0, selected: false, requestParam: 'openAccount' },
+                { name: '{s name=navigation/purchases_licenses}My purchases / licenses{/s}', badge: 0, selected: false, requestParam: 'openLicense' },
+                { name: '{s name=navigation/updates}Updates{/s}', badge: updateCount, selected: false, requestParam: 'openUpdates' }
             ]
         });
 
@@ -200,8 +200,20 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Navigation', {
             listeners: {
                 scope: me,
                 itemclick: function(view, record, element, index, eOpts) {
-                    var element = Ext.get(element),
-                        event = element.getAttribute('data-action');
+                    var event, i, attr;
+
+                    for(i in element.attributes) {
+                        attr = element.attributes[i];
+
+                        if(attr.name === 'data-action') {
+                            event = attr.value;
+                            break;
+                        }
+                    }
+
+                    if(!event || !event.length) {
+                        return false;
+                    }
 
                     me.fireEvent(event, view, record);
                 }
@@ -226,11 +238,11 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Navigation', {
                     '<tpl for=".">',
                         '<li>',
                             '<tpl if="selected == true">',
-                                '<span data-action="{action}" class="active clickable">{name}</span>',
+                                '<span data-action="{requestParam}" class="active clickable">{name}</span>',
                             '</tpl>',
 
                             '<tpl if="selected != true">',
-                                '<span data-action="{action}" class="clickable">{name}</span>',
+                                '<span data-action="{requestParam}" class="clickable">{name}</span>',
                             '</tpl>',
 
                             '<tpl if="badge &gt; 0">',
