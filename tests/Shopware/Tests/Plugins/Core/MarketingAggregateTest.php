@@ -106,4 +106,23 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
         );
     }
 
+
+    public function testIncrementTopSeller()
+    {
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $topSeller = $this->getAllTopSeller(" LIMIT 1 ");
+        $topSeller = $topSeller[0];
+        $initialValue = $topSeller['sales'];
+
+        $this->TopSeller()->incrementTopSeller($topSeller['article_id'], 10);
+
+        $topSeller = $this->getAllTopSeller(" WHERE article_id = " . $topSeller['article_id']);
+        $this->assertArrayCount(1, $topSeller);
+        $topSeller = $topSeller[0];
+
+        $this->assertEquals($initialValue + 10, $topSeller['sales']);
+    }
+
 }
