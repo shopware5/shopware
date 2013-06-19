@@ -58,9 +58,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
    			downloadfailedlicense: '{s name=account/downloadfailedlicense}An error occurred while downloading the plugin. Please check your directory-rights and license for this plugin.{/s}',
    			updatesuccessful: '{s name=account/updatesuccessful}Plugin [0] have been updated successfully{/s}',
    			updatefailed: '{s name=account/updatefailed}An error occurred while updating the plugin. Do you want to load the backup?{/s}',
-   			backupsuccessful: '{s name=account/backupsuccessful}Backup loaded successfully{/s}',
-   			backupfailed: '{s name=account/backupfailed}Backup could not be loaded!{/s}',
-   			loginfailed: '{s name=account/loginfailed}Login failed{/s}'
+            wantToStartUpdate: '{s name=update/wantToStartUpdate}You are about to update the plugin [0]. Do you want to proceed?{/s}'
    		}
    	},
 
@@ -73,32 +71,49 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
      */
     init: function () {
         var me = this,
-            updatePlugin,
-            accountController = me.subApplication.getController('Account');
-
-        /**
-         * Check if the plugin manager was invoked in order to update a given plugin
-         */
-        /** {if $storeApiAvailable} */
-        if (me.subApplication.params && me.subApplication.params.updatePlugin) {
-            updatePlugin = me.subApplication.params.updatePlugin;
-
-            if(!accountController.checkLogin()) {
-                accountController.onOpenLogin({
-                   controller: 'Update',
-                   action: 'doAutoUpdateFirstStep',
-                   params: updatePlugin
-               });
-            } else {
-                me.doUpdatePlugin(updatePlugin);
-            }
-        }
-        /** {/if} */
+            updatePlugin;
 
         me.callParent(arguments);
 
+        /**
+         * Check if the plugin manager was invoked in order to update a given plugin
+         *
+         * {if $storeApiAvailable}
+         */
+        if (me.subApplication.params && me.subApplication.params.updatePlugin) {
+            updatePlugin = me.subApplication.params.updatePlugin;
+
+            Ext.MessageBox.confirm(me.snippets.update.title, Ext.String.format(me.snippets.update.wantToStartUpdate, updatePlugin), function(btn) {
+                if(btn == 'yes') {
+                    me.startPluginUpdate(updatePlugin);
+                } else {
+                    return false;
+                }
+            });
+        }
+        /** {/if} */
     },
 
+    /**
+     * Inits an update for a given plugin.
+     *
+     * @param updatePlugin
+     */
+    startPluginUpdate: function(updatePlugin) {
+        var me = this,
+            accountController = me.subApplication.getController('Account');
+
+        // Check if user is logged in into the store and then triggers the first update step
+        if(!accountController.checkLogin()) {
+            accountController.onOpenLogin({
+               controller: 'Update',
+               action: 'doAutoUpdateFirstStep',
+               params: updatePlugin
+           });
+        } else {
+            me.doUpdatePlugin(updatePlugin);
+        }
+    },
 
     /**
      * Performs the actual plugin download
