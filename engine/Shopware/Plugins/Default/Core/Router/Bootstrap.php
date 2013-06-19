@@ -291,7 +291,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey !== null && $cookieKey != 'template') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->setCookie($cookieKey, $cookieValue, 0, $path);
-            if($request->isPost()) {
+            if($request->isPost() && $request->getQuery('__shop') === null) {
                 $url = sprintf('%s://%s%s',
                     $request->getScheme(),
                     $request->getHttpHost(),
