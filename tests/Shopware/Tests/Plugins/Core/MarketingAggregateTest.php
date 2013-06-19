@@ -76,4 +76,34 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
     }
 
 
+    public function testUpdateElapsedTopSeller()
+    {
+        //init top seller to be sure that all articles has a row
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
+
+        //check if the update script was successfully
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(0, $topSeller);
+
+        //update only 50 top seller articles to test the limit function
+        $this->TopSeller()->updateElapsedTopSeller(50);
+
+        //check if only 50 top seller was updated.
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(
+            count($this->getAllTopSeller()) - 50,
+            $topSeller
+        );
+
+        //now we can update the all other top seller data
+        $this->TopSeller()->updateElapsedTopSeller();
+        $this->assertArrayCount(
+            count($this->getAllTopSeller()),
+            $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ")
+        );
+    }
+
 }
