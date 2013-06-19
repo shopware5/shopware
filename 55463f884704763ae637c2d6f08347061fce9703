@@ -1,0 +1,8 @@
+From: feature/next/sw-6290-extend-plugin-manager
+To: next
+Conflict: (content) Merge conflict in snippets/backend/plugin_manager/main.ini
+	MODIFY|snippets/backend/plugin_manager/main.ini
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/PluginManager/Controllers/Backend/PluginManager.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/PluginManager/Controllers/Backend/PluginManager.php
+Conflict: (content) Merge conflict in engine/Shopware/Application.php
+	MODIFY|engine/Shopware/Application.php
