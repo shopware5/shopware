@@ -114,6 +114,33 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         $this->assertCount(50, $articles);
     }
 
+    public function testSimilarCronJobRefresh()
+    {
+        $this->insertDemoData();
+        $this->SimilarShown()->initSimilarShown();
 
+        $this->saveConfig('similarRefreshStrategy', 2);
+        Shopware()->Cache()->clean();
+
+        $this->setSimilarShownInvalid();
+
+        $result = $this->dispatch('/sommerwelten/accessoires/170/sonnenbrille-red');
+        $this->assertEquals(200, $result->getHttpResponseCode());
+
+        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
+        $this->assertCount(0, $articles);
+
+        $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshSimilarShown'");
+        $this->assertNotEmpty($cron);
+
+        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        $this->Plugin()->refreshSimilarShown(new Enlight_Event_EventArgs(array('subject' => $this)));
+
+        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
+        $this->assertCount(
+            count($this->getAllSimilarShown()),
+            $articles
+        );
+    }
 
 }
