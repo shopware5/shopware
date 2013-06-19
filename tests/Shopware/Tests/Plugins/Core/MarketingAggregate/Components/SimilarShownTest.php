@@ -72,5 +72,22 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         );
     }
 
+    public function testRefreshSimilarShown()
+    {
+        $this->insertDemoData();
+        $this->SimilarShown()->initSimilarShown();
+
+        $similarShown = $this->getAllSimilarShown();
+
+        foreach($similarShown as $combination) {
+            $this->SimilarShown()->refreshSimilarShown($combination['article_id'], $combination['related_article_id']);
+            $updated = $this->getAllSimilarShown(
+                " WHERE article_id = " . $combination['article_id'] .
+                " AND related_article_id = " . $combination['related_article_id']
+            );
+            $updated = $updated[0];
+            $this->assertEquals($combination['viewed'] + 1, $updated['viewed']);
+        }
+    }
 
 }
