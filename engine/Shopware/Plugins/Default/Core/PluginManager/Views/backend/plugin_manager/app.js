@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.PluginManager', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Manager' /** {if $storeApiAvailable} */ ,'Store', 'Account'/** {/if} */ ],
+    controllers: [ 'Main', 'Manager' /** {if $storeApiAvailable} */ ,'Store', 'Account', 'Update' /** {/if} */ ],
 
     /**
      * Returns the main application window for this is expected

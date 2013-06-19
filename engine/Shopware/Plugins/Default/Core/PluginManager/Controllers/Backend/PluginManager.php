@@ -213,27 +213,13 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * Internal helper function to get the current shopware version as a numeric value with four positions.
-     * @return string
-     */
-    private function getNumericShopwareVersion()
-    {
-        $version = Shopware()->Config()->get('version');
-        $paths = explode('.', $version);
-        if (count($paths) === 3) {
-            $paths[] = 0;
-        }
-        return (int) implode('', $paths);
-    }
-
-    /**
      * The updateablePluginsAction function is a controller action which is used in the plugin manager backend module
      * to check all available plugin updates.
      */
     public function updateablePluginsAction()
     {
         try {
-            $version = $this->getNumericShopwareVersion();
+            $version = $this->getCommunityStore()->getNumericShopwareVersion();
 
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->select(array('plugin.name', 'plugin.version', $version . ' as shopwareVersion', 'plugin.id as pluginId'))
@@ -364,7 +350,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $url = Shopware()->Plugins()->Backend()->StoreApi()->Config()->DummyPluginUrl;
 
-        $version = $this->getNumericShopwareVersion();
+        $version = $this->getCommunityStore()->getNumericShopwareVersion();
 
         $url = str_replace('%version%', $version, $url);
         $url = str_replace('%name%', $name, $url);
@@ -375,6 +361,46 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $this->View()->assign($result);
      }
+
+
+    public function downloadPluginByNameAction()
+    {
+        $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
+
+        $name = $this->Request()->getParam('name', null);
+        if (!$name) {
+            $this->View()->assign(array(
+                 'success' => false,
+                 'message' => $namespace->get('no_valid_parameter', "Not all parameters are valid!")
+             ));
+             return;
+        }
+        $pluginModel = $this->getPluginByName($name);
+        $oldActive = $pluginModel->getActive();
+        $oldInstalled = $pluginModel->getInstalled();
+        $oldInstalled = !empty($oldInstalled);
+
+        $response = $this->getCommunityStore()->getPluginInfos(array($name));
+        if ($response['success'] && $response['data'] && !empty($response['data'])) {
+            $plugin = $response['data'][0];
+        } else {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => $namespace->get('store_plugin_not_found', "The store plugin can't be found!") . '<br>' . $response['message']
+            ));
+            return;
+        }
+
+
+        $downloadResult = $this->downloadUpdate($plugin->getId(), $name);
+        $downloadResult['articleId'] = $plugin->getId();
+        $downloadResult['activated'] = $oldActive;
+        $downloadResult['installed'] = $oldInstalled;
+        $downloadResult['availableVersion'] = $plugin->getVersion();
+
+        $this->View()->assign($downloadResult);
+    }
+
 
     public function downloadUpdateAction()
     {
@@ -390,6 +416,20 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
              return;
         }
 
+        $result = $this->downloadUpdate($articleId,  $name);
+
+        $this->View()->assign($result);
+    }
+
+    /**
+     * @param $articleId
+     * @param $name
+     * @return Array
+     */
+    public function downloadUpdate($articleId, $name)
+    {
+        $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
+
         //after the product founded, we have to get the domain object for the current host and shopware account
         $domain = $this->getCommunityStore()->getAccountService()->getDomain(
             $this->getCommunityStore()->getIdentity(),
@@ -401,28 +441,29 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             if ($domain->getCode() === 200) {
                 $message = $this->getCommunityStore()->getDomainMessage();
             }
-            $this->View()->assign(array(
+            return array(
                 'success' => false,
                 'code' => $domain->getCode(),
-                'message' =>$message
-            ));
-            return;
+                'message' => $message
+            );
         }
 
-        /** @var $product Shopware_StoreApi_Models_Licence*/
+        /** @var $product Shopware_StoreApi_Models_Licence */
         $product = $this->getCommunityStore()->getAccountService()->getLicencedProductById(
             $this->getCommunityStore()->getIdentity(),
             $domain,
             $articleId,
-            $this->getNumericShopwareVersion()
+            $this->getCommunityStore()->getNumericShopwareVersion()
         );
 
         if ($product instanceof Shopware_StoreApi_Exception_Response) {
-            $this->View()->assign(array(
+            return array(
                 'success' => false,
-                'message' => $namespace->get('store_plugin_not_found', "The store plugin can't be found!") . '<br>' . $product->getMessage()
-            ));
-            return;
+                'message' => $namespace->get(
+                    'store_plugin_not_found',
+                    "The store plugin can't be found!"
+                ) . '<br>' . $product->getMessage()
+            );
         }
 
         try {
@@ -431,14 +472,13 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
             $plugin = $this->getPluginByName($name);
             if (!$plugin instanceof \Shopware\Models\Plugin\Plugin) {
-                $this->View()->assign(array(
+                return array(
                     'success' => false,
                     'message' => $namespace->get('locale_plugin_not_found', "The locale plugin can't be found!")
-                ));
-                return;
+                );
             }
 
-            /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+            /**@var $plugin \Shopware\Models\Plugin\Plugin */
             $bootstrap = $this->getPluginBootstrap($plugin);
             $activated = $plugin->getActive();
             $installed = $plugin->getInstalled();
@@ -459,18 +499,19 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $result = $this->getCommunityStore()->downloadPlugin($url, $source);
             $result['activated'] = $activated;
             $result['installed'] = $installed;
-            $this->View()->assign($result);
-            return;
-        }
-        catch (Exception $e) {
-            $this->View()->assign(array(
+            return $result;
+        } catch(Exception $e) {
+            return array(
                 'success' => false,
                 'message' => $e->getMessage()
-            ));
-            return;
+            );
         }
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     private function getPluginByName($name)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -588,6 +629,22 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $activated = $this->Request()->getParam('activated', null);
         $installed = $this->Request()->getParam('installed', null);
 
+        $result = $this->updatePlugin($name, $availableVersion, $installed, $activated);
+
+        $this->View()->assign($result);
+    }
+
+    /**
+     * Updates a given plugin
+     *
+     * @param $name
+     * @param $availableVersion
+     * @param $installed
+     * @param $activated
+     * @return array|bool
+     */
+    public function updatePlugin($name, $availableVersion, $installed, $activated)
+    {
         $plugin = $this->getPluginByName($name);
 
         $bootstrap = $this->getPluginBootstrap($plugin);
@@ -600,9 +657,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $result = $this->savePlugin(
             $plugin->getId(),
             array(
-                 'version'   => $availableVersion,
-                 'installed' => $installed,
-                 'active'    => $activated
+                'version' => $availableVersion,
+                'installed' => $installed,
+                'active' => $activated
             )
         );
 
@@ -610,17 +667,16 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $result = array('success' => true);
         }
 
-        if ($activated && ($result['success'] || $result === true) ) {
+        if ($activated && ($result['success'] || $result === true)) {
             Shopware()->Models()->clear();
             $plugin = $this->getPluginByName($name);
-            /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+            /**@var $plugin \Shopware\Models\Plugin\Plugin */
             $plugin->setActive(true);
         }
         $plugin->setUpdateVersion($plugin->getVersion());
 
         Shopware()->Models()->flush();
-
-        $this->View()->assign($result);
+        return $result;
     }
 
     /**
