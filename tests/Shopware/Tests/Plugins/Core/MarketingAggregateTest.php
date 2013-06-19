@@ -198,6 +198,36 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
     }
 
 
+    public function testTopSellerManualRefresh()
+    {
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $this->saveConfig('topSellerRefreshStrategy', 1);
+        Shopware()->Cache()->remove('Shopware_Config');
+
+        $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
+
+        $result = $this->dispatch('/genusswelten/?p=1');
+        $this->assertEquals(200, $result->getHttpResponseCode());
+
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(0, $topSeller);
+
+        $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
+        $this->assertNotEmpty($cron);
+
+        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        $this->Plugin()->refreshTopSeller();
+
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(
+            0,
+            $topSeller
+        );
+    }
+
+
     private function assertArrayEquals(array $expected, array $result, array $properties)
     {
         foreach($properties as $property) {
