@@ -214,9 +214,6 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         $this->assertArrayCount(0, $topSeller);
 
-        $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
-        $this->assertNotEmpty($cron);
-
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
