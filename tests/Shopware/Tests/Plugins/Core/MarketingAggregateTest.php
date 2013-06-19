@@ -37,6 +37,13 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
         return Shopware()->Modules()->Articles();
     }
 
+    /**
+     * @return Shopware_Plugins_Core_MarketingAggregate_Bootstrap
+     */
+    protected function Plugin() {
+        return Shopware()->Plugins()->Core()->MarketingAggregate();
+    }
+
 
     public function setUp() {
         parent::setUp();
@@ -135,13 +142,12 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
 
         $this->resetTopSeller();
         $this->TopSeller()->refreshTopSellerForArticleId($topSeller['article_id']);
-
+        
         $allTopSeller = $this->getAllTopSeller();
         $this->assertArrayCount(1, $allTopSeller);
 
         $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
     }
-
 
 
     public function testTopSellerLiveRefresh()
@@ -162,15 +168,40 @@ class Shopware_Tests_Plugins_Frontend_MarketingAggregateTest extends Enlight_Com
     }
 
 
+    public function testTopSellerCronJobRefresh()
+    {
+        $this->resetTopSeller();
+        $this->TopSeller()->initTopSeller();
+
+        $this->saveConfig('topSellerRefreshStrategy', 2);
+        Shopware()->Cache()->remove('Shopware_Config');
+
+        $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
+
+        $result = $this->dispatch('/genusswelten/?p=1');
+        $this->assertEquals(200, $result->getHttpResponseCode());
+
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(0, $topSeller);
+
+        $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
+        $this->assertNotEmpty($cron);
+
+        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        $this->Plugin()->refreshTopSeller();
+
+        $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
+        $this->assertArrayCount(
+            count($this->getAllTopSeller()),
+            $topSeller
+        );
+    }
 
 
     private function assertArrayEquals(array $expected, array $result, array $properties)
     {
-        foreach($expected as $key => $currentExpected) {
-            $currentResult = $result[$key];
-            foreach($properties as $property) {
-                $this->assertEquals($currentExpected[$property], $currentResult[$property]);
-            }
+        foreach($properties as $property) {
+            $this->assertEquals($expected[$property], $result[$property]);
         }
     }
 
