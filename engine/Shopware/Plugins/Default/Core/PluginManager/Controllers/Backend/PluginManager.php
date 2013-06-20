@@ -31,7 +31,7 @@
  */
 class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Backend_ExtJs
 {
-	protected function initAcl()
+    protected function initAcl()
 	{
 		$this->addAclPermission('index', 'read', 'Insufficient Permissions');
 		$this->addAclPermission('load', 'read', 'Insufficient Permissions');
@@ -427,6 +427,20 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
              ));
              return;
         }
+
+        $downloadResult = $this->downloadPluginByName($name);
+
+        $this->View()->assign($downloadResult);
+    }
+
+    /**
+     * @param string $name
+     * @return Array
+     */
+    public function downloadPluginByName($name)
+    {
+        $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
+
         $pluginModel = $this->getPluginByName($name);
         $oldActive = $pluginModel->getActive();
         $oldInstalled = $pluginModel->getInstalled();
@@ -436,13 +450,17 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($response['success'] && $response['data'] && !empty($response['data'])) {
             $plugin = $response['data'][0];
         } else {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $namespace->get('store_plugin_not_found', "The store plugin can't be found!") . '<br>' . $response['message']
-            ));
+            $this->View()->assign(
+                array(
+                    'success' => false,
+                    'message' => $namespace->get(
+                        'store_plugin_not_found',
+                        "The store plugin can't be found!"
+                    ) . '<br>' . $response['message']
+                )
+            );
             return;
         }
-
 
         $downloadResult = $this->downloadUpdate($plugin->getId(), $name);
         $downloadResult['articleId'] = $plugin->getId();
@@ -450,7 +468,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $downloadResult['installed'] = $oldInstalled;
         $downloadResult['availableVersion'] = $plugin->getVersion();
 
-        $this->View()->assign($downloadResult);
+        return $downloadResult;
     }
 
     /**
@@ -478,8 +496,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * Downloads a store plugin by its store-articleId
      *
-     * @param $articleId
-     * @param $name
+     * @param int $articleId
+     * @param string $name
      * @return Array
      */
     public function downloadUpdate($articleId, $name)
@@ -565,7 +583,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed
      */
     private function getPluginByName($name)
@@ -694,10 +712,10 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * Updates a given plugin
      *
-     * @param $name
-     * @param $availableVersion
-     * @param $installed
-     * @param $activated
+     * @param string $name
+     * @param string $availableVersion
+     * @param bool $installed
+     * @param bool $activated
      * @return array|bool
      */
     public function updatePlugin($name, $availableVersion, $installed, $activated)
@@ -751,6 +769,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign($result);
     }
 
+    /**
+     * @param int $id
+     * @param array $data
+     * @return array|bool
+     */
     private function savePlugin($id, $data)
     {
         try {

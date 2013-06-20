@@ -224,7 +224,7 @@ class CommunityStore
      *
      * Will return false if no update is available or the available update version if an update is available
      *
-     * @param $name             Name of the plugin to check for an update
+     * @param string $name      Name of the plugin to check for an update
      * @return bool|string      Returns false, if not update was found or the new available plugin version
      * @throws Exception        If plugin was not found or the store returns an error
      */
@@ -237,16 +237,14 @@ class CommunityStore
 
         $version = $pluginModel->getVersion();
 
-        $result = $this->getUpdateablePlugins(
-            array(
-                $name => array(
+        $result = $this->getUpdateablePlugins(array(
+            $name => array(
                 'name' => $name,
                 'version' => $version,
                 'shopwareVersion' => $this->getNumericShopwareVersion(),
                 '1'
-                )
             )
-        );
+        ));
 
         if ($result['success'] != true) {
             throw new \Exception($result['message']);
@@ -744,7 +742,7 @@ class CommunityStore
     /**
      * The getUpdateablePlugins function checks if for the passed plugins updates available and returns
      * the updateable plugins.
-     * @param $plugins
+     * @param array $plugins
      * @return Shopware_StoreApi_Core_Response_SearchResult
      */
     public function getUpdateablePlugins($plugins)
@@ -785,8 +783,8 @@ class CommunityStore
      * The getPluginsAvailableFor method checks if a list of given plugins
      * is available for a given version of shopware
      *
-     * @param $plugins
-     * @param $version
+     * @param array $plugins
+     * @param string $version
      * @return Array
      */
     public function getPluginsAvailableFor($plugins, $version)
@@ -846,7 +844,7 @@ class CommunityStore
     /**
      * Get plugin infos for a list of plugin names
      *
-     * @param $plugins
+     * @param array $plugins
      * @return array
      */
     public function getPluginInfos($plugins)
