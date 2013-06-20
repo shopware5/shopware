@@ -237,6 +237,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
 
 
     /**
+     * Activates the "installed plugin" tab and searches for the updated plugin
      *
      * @param plugin
      */

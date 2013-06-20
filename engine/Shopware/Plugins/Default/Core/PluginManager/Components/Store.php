@@ -224,9 +224,9 @@ class CommunityStore
      *
      * Will return false if no update is available or the available update version if an update is available
      *
-     * @param $name
-     * @return bool|string
-     * @throws Exception
+     * @param $name             Name of the plugin to check for an update
+     * @return bool|string      Returns false, if not update was found or the new available plugin version
+     * @throws Exception        If plugin was not found or the store returns an error
      */
     public function checkForPluginUpdate($name)
     {
@@ -782,12 +782,12 @@ class CommunityStore
 
 
     /**
-     * The getUpdateablePlugins function checks if for the passed plugins updates available and returns
-     * the updateable plugins.
+     * The getPluginsAvailableFor method checks if a list of given plugins
+     * is available for a given version of shopware
      *
      * @param $plugins
      * @param $version
-     * @return Shopware_StoreApi_Core_Response_SearchResult
+     * @return Array
      */
     public function getPluginsAvailableFor($plugins, $version)
     {
