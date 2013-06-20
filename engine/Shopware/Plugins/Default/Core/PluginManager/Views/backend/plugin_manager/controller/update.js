@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
                params: updatePlugin
            });
         } else {
-            me.doUpdatePlugin(updatePlugin);
+            me.doAutoUpdateFirstStep(updatePlugin);
         }
     },
 
@@ -151,8 +151,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
 
                 if (response.success === true) {
                     Shopware.Notification.createGrowlMessage(
-                       'Succes',
-                       'Successfully dowenloaded the new plugin'
+                       me.snippets.update.title,
+                       me.snippets.update.downloadsuccessful
                     );
 
                     me.onAutoUpdateSecondStep(updatePlugin, response.articleId, response.activated, response.installed, response.availableVersion);
@@ -216,8 +216,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
 
                 if (response.success === true) {
                     Shopware.Notification.createGrowlMessage(
-                       'Success',
-                       'The Plugin was updated'
+                       me.snippets.update.title,
+                       me.snippets.update.updatesuccessful
                     );
                     me.filterForPlugin(updatePlugin);
                 } else {
