@@ -37,7 +37,7 @@ class Shopware_Plugins_Core_CouchCommerce_Bootstrap extends Shopware_Components_
     public function getInfo()
     {
         return array(
-            'version'     => $this->getVersion(),
+            'version' => $this->getVersion(),
             "autor" => "CouchCommerce",
             "copyright" => "Copyright © 2013, CouchCommerce",
             "label" => $this->getLabel(),
