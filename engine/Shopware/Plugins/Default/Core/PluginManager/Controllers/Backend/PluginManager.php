@@ -412,7 +412,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign($result);
      }
 
-
+    /**
+     * Controller Action to trigger the download of a plugin by a given name
+     */
     public function downloadPluginByNameAction()
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
@@ -451,47 +453,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign($downloadResult);
     }
 
-
-
-    public function downloadPluginByNameAction()
-    {
-        $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
-
-        $name = $this->Request()->getParam('name', null);
-        if (!$name) {
-            $this->View()->assign(array(
-                 'success' => false,
-                 'message' => $namespace->get('no_valid_parameter', "Not all parameters are valid!")
-             ));
-             return;
-        }
-        $pluginModel = $this->getPluginByName($name);
-        $oldActive = $pluginModel->getActive();
-        $oldInstalled = $pluginModel->getInstalled();
-        $oldInstalled = !empty($oldInstalled);
-
-        $response = $this->getCommunityStore()->getPluginInfos(array($name));
-        if ($response['success'] && $response['data'] && !empty($response['data'])) {
-            $plugin = $response['data'][0];
-        } else {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $namespace->get('store_plugin_not_found', "The store plugin can't be found!") . '<br>' . $response['message']
-            ));
-            return;
-        }
-
-
-        $downloadResult = $this->downloadUpdate($plugin->getId(), $name);
-        $downloadResult['articleId'] = $plugin->getId();
-        $downloadResult['activated'] = $oldActive;
-        $downloadResult['installed'] = $oldInstalled;
-        $downloadResult['availableVersion'] = $plugin->getVersion();
-
-        $this->View()->assign($downloadResult);
-    }
-
-
+    /**
+     * Controller action to trigger the download of an update for a given store id
+     */
     public function downloadUpdateAction()
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
@@ -512,6 +476,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
+     * Downloads a store plugin by its store-articleId
+     *
      * @param $articleId
      * @param $name
      * @return Array
@@ -724,21 +690,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign($result);
     }
 
-    /**
-     * Updates a given plugin
-     *
-     * @param $name
-     * @param $availableVersion
-     * @param $installed
-     * @param $activated
-     * @return array|bool
-     */
-    public function updatePlugin($name, $availableVersion, $installed, $activated)
-    {
-        $result = $this->updatePlugin($name, $availableVersion, $installed, $activated);
-
-        $this->View()->assign($result);
-    }
 
     /**
      * Updates a given plugin
