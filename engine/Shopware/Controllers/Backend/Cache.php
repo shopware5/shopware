@@ -103,7 +103,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        if ($cache['config'] == 'on') {
+        if ($cache['config'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearCompilerCache();
         }
         if ($cache['search'] == 'on') {
@@ -112,11 +112,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['router'] == 'on') {
             $this->clearRewriteCache();
         }
-        if ($cache['template'] == 'on') {
+        if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearTemplateCache();
             $this->clearCompilerCache();
         }
-        if ($cache['http'] == 'on') {
+        if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearFrontendCache();
         }
         if ($cache['proxy'] == 'on') {
