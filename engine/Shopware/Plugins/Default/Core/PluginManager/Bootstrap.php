@@ -61,6 +61,11 @@ class Shopware_Plugins_Core_PluginManager_Bootstrap extends Shopware_Components_
         );
 
         $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_CommunityStore',
+            'onInitCommunityStore'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Store',
             'onGetStoreController'
         );
@@ -74,6 +79,21 @@ class Shopware_Plugins_Core_PluginManager_Bootstrap extends Shopware_Components_
             'parent' => $this->Menu()->findOneBy('label', 'Einstellungen')
         ));
         return true;
+    }
+
+
+    /**
+     * Returns an instance of out CommunityStore component
+     *
+     * @return CommunityStore
+     */
+    public function onInitCommunityStore()
+    {
+        $this->Application()->Loader()->registerNamespace(
+            'Shopware_Components',
+            $this->Path() . 'Components/'
+        );
+        return new CommunityStore();
     }
 
     /**

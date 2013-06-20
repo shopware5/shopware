@@ -400,6 +400,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     ctl.onOpenLicense(targetParams.view, targetParams.record);
                 } else if(targetParams.action == 'onOpenUpdates') {
                     ctl.onOpenUpdates(targetParams.view, targetParams.record);
+                // At last allow more dynamic callbacks
+                } else if(targetParams.action) {
+                    ctl[targetParams.action](targetParams.params);
                 }
                 me.subApplication.licencedProductStore.load();
                 me.subApplication.updatesStore.load();
