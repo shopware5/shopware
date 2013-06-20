@@ -804,18 +804,23 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             me.detailForm.loadRecord(me.article);
         }, 10);
 
+        me.categoryTab.removeAll();
         me.categoryTab.add(me.createCategoryTab());
         me.categoryTab.setDisabled(false);
 
+        me.imageTab.removeAll();
         me.imageTab.add(me.createImageTab());
         me.imageTab.setDisabled(false);
 
+        me.variantTab.removeAll();
         me.variantTab.add(me.createVariantTab());
         me.variantTab.setDisabled((me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null))
 
+        me.esdTab.removeAll();
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));
 
+        me.statisticTab.removeAll();
         me.statisticTab.add(me.createStatisticTab());
         me.statisticTab.setDisabled(me.article.get('id') === null);
 
