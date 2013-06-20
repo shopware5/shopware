@@ -55,7 +55,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         successTitle: '{s name=successTitle}Success{/s}',
         successMessage: '{s name=successMessage/configSaved}Configuration saved{/s}',
         errorTitle: '{s name=errorTitle}Error{/s}',
-        errorMessage: '{s name=successMessage}Error saving the configuration{/s}'
+        errorMessage: '{s name=successMessage}Error saving the configuration{/s}',
+        noticeTitle: '{s name=noticeTitle}Invalid data{/s}',
+        noticeMessage: '{s name=noticeMessage}There are still invalid data entered in the forms, please check all forms before saving{/s}'
     },
 
 	/*
@@ -159,6 +161,10 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             configRecord = settings.getRecord();
 
         if (!(settings.getForm().isValid())) {
+            Shopware.Notification.createStickyGrowlMessage({
+                title: me.snippets.noticeTitle,
+                text: me.snippets.noticeMessage
+            });
             return false;
         }
         settings.getForm().updateRecord(configRecord);
