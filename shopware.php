@@ -56,12 +56,10 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
 
 // Check for update-script
 if (is_dir('update')) {
-    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
-    $baseUrl .= $_SERVER['HTTP_HOST'];
-    $baseUrl .= dirname($_SERVER['SCRIPT_NAME']);
-
-    $updateUrl = $baseUrl . '/update/';
-    header('Location: ' . $updateUrl, true, 302);
+    header('Content-type: text/html; charset=utf-8', true, 503);
+    header('Status: 503 Service Temporarily Unavailable');
+    header('Retry-After: 1200');
+    echo file_get_contents(__DIR__ . '/update/maintenance.html');
     return;
 }
 
