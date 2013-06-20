@@ -450,16 +450,13 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($response['success'] && $response['data'] && !empty($response['data'])) {
             $plugin = $response['data'][0];
         } else {
-            $this->View()->assign(
-                array(
-                    'success' => false,
-                    'message' => $namespace->get(
-                        'store_plugin_not_found',
-                        "The store plugin can't be found!"
-                    ) . '<br>' . $response['message']
-                )
+            return array(
+                'success' => false,
+                'message' => $namespace->get(
+                    'store_plugin_not_found',
+                    "The store plugin can't be found!"
+                ) . '<br>' . $response['message']
             );
-            return;
         }
 
         $downloadResult = $this->downloadUpdate($plugin->getId(), $name);
