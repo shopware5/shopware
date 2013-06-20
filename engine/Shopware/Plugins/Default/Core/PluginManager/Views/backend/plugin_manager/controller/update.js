@@ -217,7 +217,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Update', {
                 if (response.success === true) {
                     Shopware.Notification.createGrowlMessage(
                        me.snippets.update.title,
-                       me.snippets.update.updatesuccessful
+                       Ext.String.format(me.snippets.update.updatesuccessful, updatePlugin)
                     );
                     me.filterForPlugin(updatePlugin);
                 } else {
