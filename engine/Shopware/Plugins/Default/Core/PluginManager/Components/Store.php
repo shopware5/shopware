@@ -346,7 +346,7 @@ class CommunityStore
         $product = $this->getProductService()->getProductById($productId);
         $feedback = $this->getProductService()->getProductFeedback($product);
         if ($feedback instanceof Shopware_StoreApi_Exception_Response) {
-            return array('success' => false, 'message' => $feedback->getMessage(), 'code' => $feedback->getCode());
+            return array('success' => false, 'data' => array(), 'message' => $feedback->getMessage(), 'code' => $feedback->getCode());
         }
         /**@var $feedback Shopware_StoreApi_Core_Response_SearchResult*/
         $iterator = $feedback->getIterator();

@@ -80,6 +80,31 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         parent::__construct($name);
     }
 
+
+    /**
+     * Helper function to get access on the http cache plugin.
+     * Notice if the Http Cache plugin isn't installed, this function
+     * returns null.
+     * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
+     */
+    protected function HttpCache()
+    {
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+
+        if (!$httpCache instanceof Shopware_Components_Plugin_Bootstrap) {
+            return null;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $httpCache->getId());
+
+        if (!$plugin->getActive() || !$plugin->getInstalled()) {
+            return null;
+        }
+        return $httpCache;
+    }
+
+
     /**
      * Returnswhether or not $updatePluginInfo contains a newer version than $currentPluginInfo
      *
@@ -605,4 +630,30 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $this->Path() . 'Models/'
         ));
     }
+
+
+    /**
+     * Helper function to enable the http cache for a single shopware controller.
+     * @param int $cacheTime
+     * @param array $cacheIds
+     */
+    public function enableControllerCache($cacheTime = 3600, $cacheIds = array())
+    {
+        $httpCache = $this->HttpCache();
+        if ($httpCache) {
+            $httpCache->enableControllerCache($cacheTime, $cacheIds);
+        }
+    }
+
+    /**
+     * Helper function to disable the http cache for a single shopware controller
+     */
+    public function disableControllerCache()
+    {
+        $httpCache = $this->HttpCache();
+        if ($httpCache) {
+            $httpCache->disableControllerCache();
+        }
+    }
+
 }

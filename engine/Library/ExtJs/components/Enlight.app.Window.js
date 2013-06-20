@@ -444,15 +444,8 @@ Ext.define('Enlight.app.Window', {
                 me.restorePos = me.getPosition(true);
             }
             if (me.maximizable) {
-                if(!me.tools.maximize) {
-                    me.tools.maximize = me.header.tools.maximize.cloneConfig();
-                }
-                me.tools.maximize.hide();
-
-                if(!me.tools.restore) {
-                    me.tools.restore = me.header.tools.restore.cloneConfig();
-                }
-                me.tools.restore.show();
+                me.header.tools.maximize.hide();
+                me.header.tools.restore.show();
             }
             me.maximized = true;
             me.el.disableShadow();
@@ -473,6 +466,59 @@ Ext.define('Enlight.app.Window', {
             me.syncMonitorWindowResize();
             me.fitContainer();
             me.fireEvent('maximize', me);
+        }
+        return me;
+    },
+
+    restore: function() {
+        var me = this,
+            header = me.header,
+            tools = header.tools;
+
+        if (me.maximized) {
+            delete me.hasSavedRestore;
+            me.removeCls(Ext.baseCSSPrefix + 'window-maximized');
+
+            // Toggle tool visibility
+            if (tools.restore) {
+                tools.restore.hide();
+            }
+            if (tools.maximize) {
+                tools.maximize.show();
+            }
+            if (me.collapseTool) {
+                me.collapseTool.show();
+            }
+
+            me.maximized = false;
+
+            // Restore the position/sizing
+            me.setPosition(me.restorePos);
+            me.setSize(me.restoreSize);
+
+            // Unset old position/sizing
+            delete me.restorePos;
+            delete me.restoreSize;
+
+            me.el.enableShadow(true);
+
+            // Allow users to drag and drop again
+            if (me.dd) {
+                me.dd.enable();
+                if (header) {
+                    header.addCls(header.indicateDragCls)
+                }
+            }
+
+            if (me.resizer) {
+                me.resizer.enable();
+            }
+
+            me.container.removeCls(Ext.baseCSSPrefix + 'window-maximized-ct');
+
+            me.syncMonitorWindowResize();
+            me.doConstrain();
+            me.fireEvent('restore', me);
         }
         return me;
     },

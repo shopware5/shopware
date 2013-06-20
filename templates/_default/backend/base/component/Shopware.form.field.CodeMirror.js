@@ -133,6 +133,8 @@ Ext.define('Shopware.form.field.CodeMirror',
         var me = this;
         me.on({ resize: me.onResize });
 
+        me.addEvents('editorready');
+
         me.callParent(arguments);
     },
 
@@ -247,6 +249,8 @@ Ext.define('Shopware.form.field.CodeMirror',
 
         me.editor.setValue(me.rawValue);
 
+
+        me.fireEvent('editorready', me, me.editor);
         return me.editor;
     },
 

@@ -209,7 +209,6 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Description', {
      */
     createPriceContainer: function() {
         var me = this, container, price,
-            attributes = me.article.getAttributeStore.first().data,
             detail = me.article.getDetailStore,
             store, data = [], priceContainer
 

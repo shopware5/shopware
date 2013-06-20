@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'Community',
         'Plugin',
         'TopSeller',
+        'Product',
         'Updates',
         'LicencedProduct',
         'Detail',
