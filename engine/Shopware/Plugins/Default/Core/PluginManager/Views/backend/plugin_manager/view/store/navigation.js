@@ -188,9 +188,20 @@ Ext.define('Shopware.apps.PluginManager.view.store.Navigation', {
             itemSelector: '.clickable',
             listeners: {
                 scope: me,
-                itemclick: function(view, record, element, index, eOpts) {
-                    var element = Ext.get(element),
-                        event = element.getAttribute('data-action');
+                itemclick: function(view, record, element) {
+                    var event, i, attr;
+
+                    for(i in element.attributes) {
+                        attr = element.attributes[i];
+
+                        if(attr.name === 'data-action') {
+                            event = attr.value;
+                            break;
+                        }
+                    }
+                    if(!event || !event.length) {
+                        return false;
+                    }
 
                     me.fireEvent(event, view, record);
                 }

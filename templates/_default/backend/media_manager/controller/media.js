@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         }
         mediaView.mediaDropZone.requestURL = url;
 
-        if(treeNode) {
+        if(treeNode.hasOwnProperty('get')) {
             mediaView.mediaStore.getProxy().extraParams.albumID = treeNode.get('id');
 
             if (url.indexOf('?albumID=') !== -1) {

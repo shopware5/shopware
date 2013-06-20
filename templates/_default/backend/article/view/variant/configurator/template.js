@@ -351,10 +351,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
     createPriceFieldSet: function() {
         var me = this;
 
-        return Ext.create('Shopware.apps.Article.view.detail.Prices', {
+        me.priceGrid =  Ext.create('Shopware.apps.Article.view.detail.Prices', {
             customerGroupStore: me.customerGroupStore,
             article: me.record
         });
+
+        me.priceGrid.onStoresLoaded(me.record, { customerGroups: me.customerGroupStore });
+        return me.priceGrid;
     },
 
     /**

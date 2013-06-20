@@ -133,6 +133,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         categoryNotice:'{s name=category/category_notice}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
         categoryNoticeTitle:'{s name=category/category_assignment}Assign categories{/s}',
         invalidPlugin: '{s name=window_invalid_plugin}The plugin [0] is not compatible with Shopware 4.1. Please uninstall the plugin or contact the provider regarding for a compatible version.{/s}',
+        another_article: '{s name=window/create_another_article}Create an additional product{/s}',
         descriptions: {
             title:'{s name=detail/description/title}Description{/s}',
             description: {
@@ -599,6 +600,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             }
         });
 
+        me.createNewProduct = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: me.snippets.another_article,
+            labelWidth: 270,
+            labelStyle: ' text-align: right; margin-top: 3px',
+            labelSeparator: ''
+        });
+
         //creates the cancel button which fire the cancel event, the cancel event is handled in the detail controller.
         me.cancelButton = Ext.create('Ext.button.Button', {
             text: me.snippets.cancel,
@@ -646,6 +654,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
                 { xtype: 'tbfill' },
+                /*{if {acl_is_allowed privilege=save}}*/
+                me.createNewProduct,
+                /*{/if}*/
                 me.cancelButton,
 				/*{if {acl_is_allowed privilege=save}}*/
                 me.saveButton,

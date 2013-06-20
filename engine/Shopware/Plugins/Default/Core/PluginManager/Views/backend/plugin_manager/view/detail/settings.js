@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Settings', {
 		added: '{s name=detail/settings/added}Added on{/s}',
 		installed: '{s name=detail/settings/installed}Installed on{/s}',
 		updated: '{s name=detail/settings/updated}Last update on{/s}',
-		activate_plugin: '{s name=detail/settings/activate_plugin}Activates the plugin an its hooks and subscribes{/s}'
+		activate_plugin: '{s name=detail/settings/activate_plugin}Active plugin{/s}'
 	},
 
     /**
