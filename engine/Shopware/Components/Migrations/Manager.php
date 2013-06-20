@@ -227,7 +227,7 @@ class Manager
      */
     public function apply(AbstractMigration $migration)
     {
-        $sql = 'INSERT INTO s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
+        $sql = 'REPLACE s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute(array(
             ':version' => $migration->getVersion(),
