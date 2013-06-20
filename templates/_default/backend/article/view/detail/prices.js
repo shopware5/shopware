@@ -325,10 +325,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         me.article = article;
         me.customerGroupStore = stores['customerGroups'];
         me.priceStore = me.priceStore = me.article.getPrice();
-
-        if(me.items.length > 0) {
-            me.removeAll();
-        }
         me.add(me.createElements());
     }
 
