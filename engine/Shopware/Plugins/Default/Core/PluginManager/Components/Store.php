@@ -228,7 +228,7 @@ class CommunityStore
      * @return bool|string      Returns false, if not update was found or the new available plugin version
      * @throws Exception        If plugin was not found or the store returns an error
      */
-    public function checkForPluginUpdate($name)
+    public function isPluginUpdateAvailable($name)
     {
         $pluginModel = Shopware()->Models()->getRepository('Shopware\Models\Plugin\Plugin')->findOneBy(array('name' => $name));
         if (!$pluginModel) {
