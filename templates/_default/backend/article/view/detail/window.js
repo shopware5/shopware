@@ -282,6 +282,16 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         return me.mainTab = Ext.create('Ext.tab.Panel', {
             name: 'main-tab-panel',
+            listeners: {
+                scope: me,
+                tabchange: function(cmp, newCard) {
+                    if(!newCard.hasOwnProperty('name') || !newCard.name.length) {
+                        me.createNewProduct.setDisabled(true);
+                        return;
+                    }
+                    me.createNewProduct.setDisabled(newCard.name !== 'main');
+                }
+            },
             items: [
                 me.createBaseTab(),
                 me.categoryTab,
