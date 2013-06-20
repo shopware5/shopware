@@ -581,7 +581,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param string $name
-     * @return mixed
+     * @return \Shopware\Models\Plugin\Plugin
      */
     private function getPluginByName($name)
     {
