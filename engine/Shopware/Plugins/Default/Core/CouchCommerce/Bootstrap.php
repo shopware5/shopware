@@ -33,4 +33,16 @@ class Shopware_Plugins_Core_CouchCommerce_Bootstrap extends Shopware_Components_
     {
         return 'CouchCommerce';
     }
+
+    public function getInfo()
+    {
+        return array(
+            'version' => $this->getVersion(),
+            "autor" => "CouchCommerce",
+            "copyright" => "Copyright © 2013, CouchCommerce",
+            "label" => $this->getLabel(),
+            "support" => "http://www.couchcommerce.com",
+            "link" => "http://www.couchcommerce.com"
+        );
+    }
 }

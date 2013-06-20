@@ -32,8 +32,12 @@ class Shopware_Plugins_Frontend_MoptPaymentPayone_Bootstrap extends Shopware_Com
     public function getInfo()
     {
         return array(
-            'version' => $this->getVersion(),
-            'label'   => 'PAYONE'
+            'version'     => $this->getVersion(),
+            'author'      => 'derksen mediaopt GmbH',
+            'label'       => 'PAYONE',
+            'copyright'   => 'Copyright © 2012, mediaopt',
+            'support'     => 'shopware@mediaopt.de',
+            'link'        => 'http://www.mediaopt.de/'
         );
     }
 }
