@@ -145,11 +145,6 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
         var me = this;
         me.article = article;
         me.shopStore = stores['shops'];
-
-        if(me.items.length) {
-            me.removeAll();
-        }
-
         me.add(me.createElements());
     }
 });

@@ -67,8 +67,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
         existTitle: '{s name=sidebar/accessory/already_assigned_title}Already exists{/s}',
-        open_article: '{s name=growl_message/open_article}Open product{/s}',
-        new_article: '{s name=growl_message/new_article}A new product has been created{/s}',
         similar: {
             exist: '{s name=sidebar/similar/already_assigned_message}The article [0] has been assigned as similar article!{/s}'
         },
@@ -235,8 +233,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         article.save({
             success: function(record, operation) {
                 var newArticle = operation.getResultSet().records[0],
-                    message = Ext.String.format(me.snippets.saved.message, article.get('name')),
-                    articleWindow = me.subApplication.articleWindow, detailCtl;
+                    message = Ext.String.format(me.snippets.saved.message, article.get('name'));
 
                 if (supplierNeedsReload) {
                     mainWindow.supplierStore.filters.clear();
@@ -247,42 +244,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
                 newArticle.getPrice().filter(lastFilter);
                 me.reconfigureAssociationComponents(newArticle);
-
-                if(articleWindow.createNewProduct.value) {
-                    Shopware.Notification.createStickyGrowlMessage({
-                        title: me.snippets.saved.title,
-                        text: message,
-                        btnDetail: {
-                            link: '#open-created-product',
-                            target: '_parent',
-                            text: me.snippets.open_article,
-                            callback: function() {
-                                Shopware.app.Application.addSubApplication({
-                                    name: 'Shopware.apps.Article',
-                                    action: 'detail',
-                                    params: {
-                                        articleId: record.get('id')
-                                    }
-                                });
-                            }
-                        }
-                    });
-
-                    detailCtl = me.getController('Main');
-                    detailCtl.batchStore = me.getStore('Batch');
-                    detailCtl.batchStore.getProxy().extraParams.articleId = null;
-                    detailCtl.batchStore.load({
-                       callback: function(records, operation) {
-                           var storeData = records[0];
-
-                           me.subApplication.fireEvent('batchStoreLoaded', storeData, operation, false);
-                           Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.new_article, me.snippets.growlMessage);
-                       }
-                    });
-                } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.saved.title, message, me.snippets.growlMessage);
-                }
-
+                Shopware.Notification.createGrowlMessage(me.snippets.saved.title, message, me.snippets.growlMessage);
                 me.refreshArticleList();
                 if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
                     options.callback(newArticle, true);
