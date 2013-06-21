@@ -807,8 +807,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.imageTab.setDisabled(false);
 
         me.variantTab.add(me.createVariantTab());
-        /*
-        me.variantTab.setDisabled((me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null))  */
 
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));
@@ -817,11 +815,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.statisticTab.setDisabled(me.article.get('id') === null);
 
         me.variantListing.customerGroupStore = stores['customerGroups'];
-
-        /* me.variantListing.unitStore = stores['unit'];
-        me.variantListing.configuratorGroupStore = stores['configuratorGroups'];
-        me.variantListing.customerGroupStore = stores['customerGroups'];
-        me.variantListing.article = article; */
 
         if(me.subApp.splitViewActive) {
             me.variantTab.setDisabled(true);
