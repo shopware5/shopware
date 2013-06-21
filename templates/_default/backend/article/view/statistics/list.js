@@ -156,14 +156,14 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
 
         theFirst.setDate(1);
 
-        var fromDate = Ext.create('Ext.form.field.Date', {
+        me.fromDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: me.snippets.toolbar.from,
             name: 'from_date',
             maxValue: today,
             value: theFirst
         });
 
-        var toDate = Ext.create('Ext.form.field.Date', {
+        me.toDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: me.snippets.toolbar.to,
             name: 'to_date',
             maxValue: today,
@@ -175,12 +175,12 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
             cls: 'small secondary',
             scope : this,
             handler: function() {
-                me.fireEvent('dateChange', fromDate.getValue(), toDate.getValue());
+                me.fireEvent('dateChange', me.fromDate.getValue(), me.toDate.getValue());
             }
         });
 
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            items: [ fromDate, toDate, filterButton]
+            items: [ me.fromDate, me.toDate, filterButton]
         });
 
         return toolbar;
