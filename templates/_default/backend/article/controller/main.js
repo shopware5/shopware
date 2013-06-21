@@ -543,7 +543,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 mainWindow.saveButton.setDisabled(false);
 
 
-                if(me.getVariantTab().tab.active) {
+                var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
+                variantStore.getProxy().extraParams.articleId = options.articleId;
+                me.getVariantListing().reconfigure(variantStore);
+                me.getVariantTab().setDisabled(true);
+
+
+
+                /* if(me.getVariantTab().tab.active) {
                     //if the variant tab is already active reload the store
                     me.getVariantListing().getStore().load();
                 }
@@ -553,15 +560,17 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
                     variantStore.getProxy().extraParams.articleId = options.articleId;
                     me.getVariantListing().reconfigure(variantStore);
-                }
+                } */
 
                 if(me.getEsdTab().tab.active) {
                     //only reload the esd if the tab is activated
                     me.getEsdListing().getStore().load();
                 }
+                me.getController('Esd').resetToList();
 
+                var statisticList = me.getStatisticList();
                 if(me.getStatisticTab().tab.active) {
-                    var statisticListStore = me.getStatisticList().getStore(),
+                    var statisticListStore = statisticList.getStore(),
                         statisticChartStore = me.getStatisticChart().getStore();
 
                     //set the new article id to the extra params
@@ -574,6 +583,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     statisticListStore.load();
                     statisticChartStore.load();
                 }
+                statisticList.fromDate.setValue(statisticList.fromDate.initialConfig.value);
+                statisticList.toDate.setValue(statisticList.toDate.initialConfig.value);
 
                 /**
                  * Fire the event within the subApplication in order to prevent problems when

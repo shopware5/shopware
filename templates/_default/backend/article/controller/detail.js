@@ -161,7 +161,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             article = me.subApplication.article,
             variantTab = mainWindow.variantTab;
 
-        variantTab.setDisabled((article.get('id') === null || newValue === false || article.get('configuratorSetId') === null));
+        if (me.subApplication.splitViewActive) {
+            variantTab.setDisabled(true)
+        } else {
+            variantTab.setDisabled((article.get('id') === null || newValue === false || article.get('configuratorSetId') === null));
+        }
     },
 
     /**
@@ -371,7 +375,12 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         esdListing.filteredStore.getProxy().extraParams.articleId = article.get('id');
         esdListing.article = article;
 
-        variantTab.setDisabled(article.get('id') === null || article.get('isConfigurator') === false || article.get('configuratorSetId') === null);
+        if (me.subApplication.splitViewActive) {
+            variantTab.setDisabled(true);
+        } else {
+            variantTab.setDisabled(article.get('id') === null || article.get('isConfigurator') === false || article.get('configuratorSetId') === null);
+        }
+
         var showAdditionalText = (variantTab.isDisabled()) ? !Ext.isEmpty(baseField.mainDetailAdditionalText.getValue(), false) : false;
         baseField.mainDetailAdditionalText.setVisible(showAdditionalText);
         variantListing.getStore().getProxy().extraParams.articleId = article.get('id');
@@ -383,6 +392,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         Ext.each(priceFieldSet.priceGrids, function(grid) {
             grid.reconfigure(article.getPrice());
         });
+        priceFieldSet.tabPanel.setActiveTab(0);
 
         //reconfigure the category grid in the option panel of the sidebar.
         mainWindow.down('article-sidebar article-sidebar-option article-category-list').reconfigure(article.getCategory());
@@ -417,20 +427,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             valueStore = me.getStore('PropertyValue');
 
         var filterGroupId = article.get('filterGroupId');
-        if(filterGroupId) {
-            propertyStore.getProxy().extraParams.propertyGroupId
-                = valueStore.getProxy().extraParams.propertyGroupId
-                = article.get('filterGroupId');
-            valueStore.load({
-                callback: function() {
-                    propertyStore.load({
-                        params: {
-                            articleId: article.getId()
-                        }
-                    });
-                }
-            });
-        }
+        me.loadPropertyGrid(filterGroupId);
+
+
     },
 
     /**
@@ -570,6 +569,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     callback: function(operation) {
                         Shopware.Notification.createGrowlMessage(me.snippets.saved.title, me.snippets.saved.removeMessage, me.snippets.growlMessage);
                         win.destroy();
+                        me.refreshArticleList();
                     }
                 });
             });
@@ -582,6 +582,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     onArticlePreview: function(article, combo) {
         var me = this,
             shopId = combo.getValue();
+
+        article = me.subApplication.article;
 
         if (!(article instanceof Ext.data.Model) || !Ext.isNumeric(shopId)) {
             return;
@@ -774,17 +776,31 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      */
     onSelectPropertyGroup: function (combo, records) {
         var me = this,
+            propertyGroupId = records.length > 0 ? records[0].getId() : null;
+
+        me.loadPropertyGrid(propertyGroupId);
+
+    },
+
+    loadPropertyGrid: function(propertyGroupId) {
+        var me = this,
             grid = me.getPropertyGrid(),
             propertyStore = me.getStore('Property'),
-            valueStore = me.getStore('PropertyValue'),
-            propertyGroupId = records.length > 0 ? records[0].getId() : null;
+            valueStore = me.getStore('PropertyValue');
 
         if (propertyGroupId) {
             propertyStore.getProxy().extraParams.propertyGroupId = propertyGroupId;
-            propertyStore.load();
-
             valueStore.getProxy().extraParams.propertyGroupId = propertyGroupId;
-            valueStore.load();
+
+            valueStore.load({
+                callback: function() {
+                    propertyStore.load({
+                        params: {
+                            articleId: me.subApplication.article.get('id')
+                        }
+                    });
+                }
+            });
             grid.show();
         } else {
             grid.hide();

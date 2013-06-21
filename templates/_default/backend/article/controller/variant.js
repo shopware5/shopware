@@ -1286,6 +1286,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             configuratorTabPanel = me.getConfiguratorTabPanel();
 
+
+
         //if the user want to change to the variant tab, load the store of the variant listing.
         if (newTab.name === 'variant-tab') {
             if (variantListing.getStore().getCount() > 0) {

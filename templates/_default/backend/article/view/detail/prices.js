@@ -142,7 +142,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         });
         me.priceGrids = tabs;
 
-        var tabPanel = Ext.create('Ext.tab.Panel', {
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
             height: 150,
             activeTab: 0,
             plain: true,
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             }
         });
 
-        return tabPanel;
+        return me.tabPanel;
     },
 
     /**
@@ -323,6 +323,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
     onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
+
         me.customerGroupStore = stores['customerGroups'];
         me.priceStore = me.priceStore = me.article.getPrice();
         me.add(me.createElements());
