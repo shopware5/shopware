@@ -578,6 +578,8 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
     onStoresLoaded: function(article, stores) {
         var me = this;
+
+        me.customerGroupStore = stores['customerGroups'];
         me.configuratorGroupStore = stores['configuratorGroups'];
         me.reconfigure(me.getStore(), me.getColumns(true));
     }

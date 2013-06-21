@@ -259,6 +259,22 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         saveButton.show();
     },
 
+    resetToList: function() {
+        var me = this,
+            esdTab = me.getEsdTab(),
+            saveButton = me.getSaveButton(),
+            cardToRemove = esdTab.getLayout().getActiveItem();
+
+        if(cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
+            return false;
+        }
+        esdTab.getLayout().setActiveItem(0);
+        esdTab.remove(cardToRemove);
+        me.getEsdListing().getStore().load();
+
+        saveButton.show();
+    },
+
     /**
      * @param [string] value
      */

@@ -570,8 +570,10 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
         removeButton.setDisabled(disabled);
         previewButton.setDisabled(disabled);
-        if (!selected || !selected.get('id') > 0) {
-             configButton.setDisabled(true);
+
+
+        if (!selected || !selected.get('id') > 0 || me.subApplication.splitViewActive) {
+            configButton.setDisabled(true);
         } else {
             configButton.setDisabled(disabled);
         }
