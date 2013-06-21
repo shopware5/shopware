@@ -548,20 +548,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getVariantListing().reconfigure(variantStore);
                 me.getVariantTab().setDisabled(true);
 
-
-
-                /* if(me.getVariantTab().tab.active) {
-                    //if the variant tab is already active reload the store
-                    me.getVariantListing().getStore().load();
-                }
-                else if (!me.getVariantTab().isDisabled()) {
-                    //if the article is a configurator article reconfigure the new store to reload it,
-                    //when the user clicks the variant tab
-                    var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
-                    variantStore.getProxy().extraParams.articleId = options.articleId;
-                    me.getVariantListing().reconfigure(variantStore);
-                } */
-
                 if(me.getEsdTab().tab.active) {
                     //only reload the esd if the tab is activated
                     me.getEsdListing().getStore().load();
