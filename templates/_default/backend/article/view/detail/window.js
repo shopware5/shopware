@@ -173,7 +173,8 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 save: '{s name=esd/save_button}Save ESD{/s}',
                 back: '{s name=esd/back_button}Back to overview{/s}'
             }
-        }
+        },
+        variantTabTooltip: "{s name=variant_tab/tooltip}Functionality isn't available in the split view mode.{/s}"
     },
 
     /**
@@ -233,7 +234,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return Ext.tab.Panel
      */
     createMainTabPanel: function() {
-        var me = this;
+        var me = this, tooltip = '';
+
+
+        if (me.subApp.splitViewActive) {
+            tooltip = me.snippets.variantTabTooltip;
+        }
 
         me.categoryTab = Ext.create('Ext.container.Container', {
             title: me.snippets.categoryTab,
@@ -256,6 +262,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.variantTab = Ext.create('Ext.container.Container', {
             title: me.snippets.variantTab,
             disabled: true,
+            tooltip: tooltip,
             layout: 'fit',
             name: 'variant-tab'
         });
@@ -663,7 +670,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return Ext.container.Container
      */
     createVariantTab: function() {
-        var me = this, listing, configurator, settings, toolbar;
+        var me = this, listing, configurator;
         listing = me.createVariantListingTab();
         configurator = me.createVariantConfiguratorTab();
 
@@ -800,7 +807,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.imageTab.setDisabled(false);
 
         me.variantTab.add(me.createVariantTab());
-        me.variantTab.setDisabled((me.article.get('id') === null || me.article.get('isConfigurator') === false || me.article.get('configuratorSetId') === null))
 
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));
@@ -808,10 +814,11 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.statisticTab.add(me.createStatisticTab());
         me.statisticTab.setDisabled(me.article.get('id') === null);
 
-        me.variantListing.unitStore = stores['unit'];
-        me.variantListing.configuratorGroupStore = stores['configuratorGroups'];
         me.variantListing.customerGroupStore = stores['customerGroups'];
-        me.variantListing.article = article;
+
+        if(me.subApp.splitViewActive) {
+            me.variantTab.setDisabled(true);
+        }
     },
 
     /**
