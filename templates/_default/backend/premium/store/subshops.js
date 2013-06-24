@@ -46,12 +46,16 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
     * is initialized
     * @boolean
     */
-    autoLoad: true,
+    autoLoad: false,
     /**
     * Amount of data loaded at once
     * @integer
     */
     pageSize: 20,
+    /**
+     * True to defer any filtering operation to the server
+     * @boolean
+     */
     remoteFilter: true,
     /**
     * Define the used model for this store

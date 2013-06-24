@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         columnPrice:   '{s name=list/column_price}Price{/s}',
         columnTax:   '{s name=list/column_tax}Tax{/s}',
         columnStock:    '{s name=list/column_stock}Stock{/s}',
-        columnInfo:    '{s name=list/column_info}Info{/s}',
+        columnInfo:     '{s name=list/column_info}Info{/s}',
+        splitViewBtn:   '{s name=list/split_view_btn}Activate split view{/s}',
 
         tooltipEdit:   '{s name=list/tooltip_edit}Edit{/s}',
         emptytextSearch:  '{s name=list/emptytext_search}Search ...{/s}',
@@ -90,7 +91,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
              * Will be fired when the user clicks the delete articles button in the toolbar
              * @param records
              */
-            'deleteMultipleArticles'
+            'deleteMultipleArticles',
+
+            'triggerSplitView',
+
+            'productchange'
         );
 
         me.callParent(arguments);
@@ -122,6 +127,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 // Unlocks the delete button if the user has checked at least one checkbox
                 selectionchange: function (sm, selections) {
                     me.deleteButton.setDisabled(selections.length === 0);
+                    me.splitViewModeBtn.setDisabled(selections.length === 0);
+                    me.fireEvent('productchange', selections);
                 }
             }
         });
@@ -249,6 +256,36 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getToolbar: function() {
         var me = this, buttons = [];
 
+        me.splitViewModeBtn = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-ui-split-panel',
+            text: me.snippets.splitViewBtn,
+            disabled: true,
+            enableToggle: true,
+            handler: function() {
+                var selectionModel = me.getSelectionModel(),
+                    record = selectionModel.getSelection()[0];
+
+                me.fireEvent('triggerSplitView', this, record);
+            }
+        });
+
+        buttons.push(me.splitViewModeBtn);
+
+        /*{if {acl_is_allowed resource=article privilege=save}}*/
+        buttons.push(
+            Ext.create('Ext.button.Button', {
+                text: me.snippets.addArticle,
+                iconCls:'sprite-plus-circle-frame',
+                handler: function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Article',
+                        action: 'detail'
+                    });
+                }
+            })
+        );
+        /*{/if}*/
+
         //creates the delete button to remove all selected esds in one request.
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
@@ -256,7 +293,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             disabled: true,
             handler: function() {
                 var selectionModel = me.getSelectionModel(),
-                           records = selectionModel.getSelection();
+                    records = selectionModel.getSelection();
 
                 if (records.length > 0) {
                     me.fireEvent('deleteMultipleArticles', records);
@@ -266,21 +303,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         /*{if {acl_is_allowed resource=article privilege=delete}}*/
         buttons.push(me.deleteButton);
-        /*{/if}*/
-
-        /*{if {acl_is_allowed resource=article privilege=save}}*/
-        buttons.push(
-                Ext.create('Ext.button.Button', {
-                    text: me.snippets.addArticle,
-                    iconCls:'sprite-plus-circle-frame',
-                    handler: function() {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail'
-                        });
-                    }
-                })
-        );
         /*{/if}*/
 
         buttons.push({
@@ -441,7 +463,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                     { value: '60' },
                     { value: '80' },
                     { value: '100' },
-                    { value: '250' },
+                    { value: '250' }
                 ]
             }),
             displayField: 'value',
@@ -473,81 +495,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         me.articleStore.pageSize = record.get('value');
         me.articleStore.loadPage(1);
-    },
-    /**
-     * Special ExtJS 4 method which will be fired
-     * when the component is rendered.
-     *
-     * Enables the drag zone and collects the neccessary
-     * data for the drop item.
-     *
-     * @private
-     * @returm void
-     */
-    afterRender: function() {
-        var me = this, view = me.getView();
-        me.callParent(arguments);
-
-        view.dragZone = Ext.create('Ext.dd.DragZone', view.getEl(), {
-            ddGroup: 'desktop-article-dd',
-
-            /**
-             * Called when a mousedown occurs in this container.
-             * Looks in Ext.dd.Registry for a valid target to drag based on the mouse down. Override this method to
-             * provide your own lookup logic (e.g. finding a child by class name). Make sure your returned object has
-             * a "ddel" attribute (with an HTML Element) for other functions to work.
-             *
-             * @private
-             * @param [object] event - Ext.EventImplObj
-             * @return [object] the drag data
-             */
-            getDragData: function(event) {
-                var sourceEl = event.getTarget(view.itemSelector);
-
-                if(sourceEl) {
-                    var record = view.getRecord(sourceEl).data,
-                        dh = new Ext.dom.Helper(), specs, d, imagePath;
-
-                    if(record.imageSrc) {
-                        imagePath = '{link file=""}media/image/thumbnail/' + record.imageSrc;
-                    } else {
-                        imagePath = '{link file="frontend/_resources/images/no_picture.jpg"}'
-                    }
-                    // Create a special dd element
-                    specs = {
-                        tag: 'div',
-                        cls: Ext.baseCSSPrefix + 'article-dd',
-                        children: [{
-                            tag: 'div', cls: 'outer-icon', children: [
-                                { tag: 'div', cls: 'inner-icon', children: [{
-                                    tag: 'div', cls: 'icon-close'
-                                }, {
-                                    tag: 'div', cls: 'icon', style: 'background-image: url(' + imagePath + ')'
-                                }] }
-                            ]
-                        }, {
-                            tag: 'span', cls: 'desc', html: Ext.String.ellipsis(record.name, 25)
-                        }]
-                    };
-                    d = dh.createDom(specs);
-
-                    view.dragData = {
-                        sourceEl: sourceEl,
-                        repairXY: Ext.fly(sourceEl).getXY(),
-                        ddel: d,
-                        record: view.getRecord(sourceEl).data
-                    };
-
-                    // return dragData
-                    return view.dragData;
-
-                }
-            },
-
-            getRepairXY: function() {
-                return this.dragData.repairXY;
-            }
-        });
     }
 });
 //{/block}

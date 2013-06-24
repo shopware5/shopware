@@ -38,7 +38,20 @@ Ext.define('Shopware.apps.UserManager.model.UserDetail', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/user_manager/model/detail/fields"}{/block}
-		'id', 'username', 'localeId','roleId', 'lastlogin', 'name', 'email', 'active', 'apiKey', 'failedlogins', 'password' ],
+		'id',
+        'username',
+        'localeId',
+        'roleId',
+        'lastlogin',
+        'name',
+        'email',
+        'active',
+        'apiKey',
+        'failedlogins',
+        'password',
+        { name: 'extendedEditor', type: 'boolean'},
+        { name: 'disabledCache', type: 'boolean'}
+    ],
 	proxy: {
 		type: 'ajax',
 		api: {

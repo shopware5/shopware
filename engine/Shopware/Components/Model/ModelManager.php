@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,29 +20,26 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
 
-use Doctrine\ORM\EntityManager,
-    Doctrine\ORM\ORMException,
-    Doctrine\Common\EventManager,
-    Doctrine\DBAL\Connection,
-    Doctrine\Common\Util\Inflector,
-    Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Shopware\Components\Model\Query\SqlWalker;
+use Doctrine\ORM\Query;
+use Shopware\Components\Model\DBAL\QueryBuilder as DBALQueryBuilder;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
  *
- * {@inheritdoc}
+ * @category  Shopware
+ * @package   Shopware\Components\Model
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class ModelManager extends EntityManager
 {
@@ -50,6 +47,12 @@ class ModelManager extends EntityManager
      * @var \Symfony\Component\Validator\Validator
      */
     protected $validator;
+
+    /**
+     * Debug mode flag for the query builders.
+     * @var bool
+     */
+    protected $debugMode = false;
 
     /**
      * Creates a new EntityManager that operates on the given database connection
@@ -69,6 +72,16 @@ class ModelManager extends EntityManager
             $config->getAutoGenerateProxyClasses()
         );
     }
+
+
+    /**
+     * @return DBALQueryBuilder
+     */
+    public function getDBALQueryBuilder()
+    {
+        return new DBALQueryBuilder($this->getConnection());
+    }
+
 
     /**
      * Factory method to create EntityManager instances.
@@ -204,7 +217,7 @@ class ModelManager extends EntityManager
     public function toArray($entity)
     {
         if ($entity instanceof \Traversable) {
-           $entity = iterator_to_array($entity);
+            $entity = iterator_to_array($entity);
         }
 
         if (is_array($entity)) {
@@ -265,13 +278,11 @@ class ModelManager extends EntityManager
      */
     public function generateAttributeModels($tableNames = array())
     {
-        $path = realpath($this->getConfiguration()->getAttributeDir()) . DIRECTORY_SEPARATOR;
-
-        /**@var $generator \Shopware\Components\Model\Generator*/
+        /** @var $generator \Shopware\Components\Model\Generator*/
         $generator = new \Shopware\Components\Model\Generator();
 
         $generator->setPath(
-            $path
+            $this->getConfiguration()->getAttributeDir()
         );
 
         $generator->setModelPath(
@@ -296,7 +307,7 @@ class ModelManager extends EntityManager
     {
         $metaDataCache = $this->getConfiguration()->getMetadataCacheImpl();
 
-        if(method_exists($metaDataCache, 'deleteAll')) {
+        if (method_exists($metaDataCache, 'deleteAll')) {
             $metaDataCache->deleteAll();
         }
 
@@ -391,7 +402,7 @@ class ModelManager extends EntityManager
             $defaultValue = "'". $default ."'";
         } elseif (is_null($default)) {
             $defaultValue = " NULL ";
-        }  else {
+        } else {
             $defaultValue = $default;
         }
 
@@ -462,5 +473,58 @@ class ModelManager extends EntityManager
         $sql= "SHOW COLUMNS FROM " . $tableName . " LIKE '" . $columnName . "'";
         $result = Shopware()->Db()->fetchRow($sql);
         return !empty($result);
+    }
+
+    /**
+     * Helper function to add mysql specified command to increase the sql performance.
+     * @param \Doctrine\ORM\Query $query
+     * @param null $index Name of the forced index
+     * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool $sqlNoCache
+     * @return Query
+     */
+    public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
+    {
+        $query->setHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker'
+        );
+
+        if ($straightJoin === true) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        }
+        if ($index !== null) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        }
+        if ($sqlNoCache === true) {
+            $query->setHint(SqlWalker\ForceIndexWalker::HINT_SQL_NO_CACHE, true);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Checks if the debug mode for doctrine orm queries is enabled.
+     * @return bool
+     */
+    public function isDebugModeEnabled()
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * Disables the query builder debug mode.
+     */
+    public function disableDebugMode()
+    {
+        $this->debugMode = false;
+    }
+
+    /**
+     * Enables or disables the debug mode of the query builders.
+     */
+    public function enableDebugMode()
+    {
+        $this->debugMode = true;
     }
 }

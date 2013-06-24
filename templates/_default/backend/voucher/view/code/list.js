@@ -167,6 +167,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
             alias:'voucherCodeToolbar',
             ui:'shopware-ui',
             items:[
+
                 {
                     /*{if {acl_is_allowed privilege=generate}}*/
                     iconCls:'sprite-plus-circle',
@@ -174,6 +175,17 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                     action:'generateCodes'
                     /*{/if}*/
                 },
+                {
+                    /*{if {acl_is_allowed privilege=generate}}*/
+                    xtype:'textfield',
+                    name:'patternField',
+                    width:200,
+                    helpText:'{s name=detail_codes/helptext/voucher_code_pattern}Optional you can enter your desired voucher code format. The Pattern %s generates a word character and the pattern %d a number. Make sure your code pattern is complex enough.{/s}',
+                    stripCharsRe:/\\/,
+                    emptyText:'{s name=detail_codes/emptytext/voucher_code_pattern}Voucher code pattern...{/s}'
+                    /*{/if}*/
+                },
+                '-',
                 {
                     /*{if {acl_is_allowed privilege=export}}*/
                     iconCls:'sprite-drive-download',

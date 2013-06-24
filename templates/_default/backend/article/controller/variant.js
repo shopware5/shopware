@@ -51,13 +51,15 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         { ref: 'configuratorTypeCombo', selector: 'article-detail-window article-variant-configurator combobox[name=type]' },
         { ref: 'configuratorOptionListing', selector: 'article-detail-window article-variant-configurator grid[name=configurator-option-listing]' },
         { ref: 'configurator', selector: 'article-detail-window article-variant-configurator' },
-        { ref: 'configuratorTabPanel', selector: 'article-detail-window panel[name=variant-tab] tabpanel[name=configurator-tab]' },
+        { ref: 'configuratorTabPanel', selector: 'article-detail-window container[name=variant-tab] tabpanel[name=configurator-tab]' },
         { ref: 'dependencyWindow', selector: 'article-configurator-dependency-window' },
         { ref: 'dependencyFieldSet', selector: 'article-configurator-dependency-window fieldset[name=row-field-set]' }
     ],
 
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
+        generateNumberProcess: '{s name=generate_numbers_text}Generate numbers [0] of [1]{/s}',
+        generateNumbersDone: '{s name=generate_numbers_done}Numbers generated{/s}',
 
         success: {
             title: '{s name=variant/success/title}Success{/s}',
@@ -204,7 +206,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             'article-configurator-template-window': {
                 saveTemplate: me.onSaveTemplate,
                 cancelEdit: me.onCancelEdit
-//                applyData: me.onApplyDataOnDetailPage
+            },
+            'article-number-progress-window': {
+                startNumberProcess: me.onStartNumberProcess,
+                cancelNumberProcess: me.onCancelNumberProcess
             }
         });
         me.callParent(arguments);
@@ -1281,6 +1286,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             configuratorTabPanel = me.getConfiguratorTabPanel();
 
+
+
         //if the user want to change to the variant tab, load the store of the variant listing.
         if (newTab.name === 'variant-tab') {
             if (variantListing.getStore().getCount() > 0) {
@@ -1785,9 +1792,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      */
     onEditVariant: function(record) {
         var me = this,
-            listing = me.getVariantListing();
+            listing = me.getVariantListing(),
+            attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
 
-        var attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
         me.getView('variant.Detail').create({
             record: record,
             article: me.subApplication.article,
@@ -1876,7 +1883,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      * in the variant listing.
      */
     onGenerateOrderNumbers: function(syntaxField) {
-        var me = this,
+        var me = this, window, variantListing = me.getVariantListing(),
             syntax = syntaxField.getValue();
 
         if (syntax.length === 0) {
@@ -1884,29 +1891,99 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             return
         }
 
-        Ext.Ajax.request({
-            url:'{url controller="Article" action="regenerateVariantOrderNumbers"}',
-            params:{
-                articleId: me.subApplication.article.get('id'),
-                syntax: syntax
-            },
-            success: function(record, operation) {
-                me.getVariantListing().getSelectionModel().deselectAll();
-                me.getVariantListing().getStore().load();
-            },
-            failure: function(record, operation) {
-                var rawData = record.getProxy().getReader().rawData,
-                    message = rawData.message;
+        window = me.getView('variant.NumberProgress').create({
+            totalCount: variantListing.getStore().getTotalCount(),
+            syntax: syntax
+        }).show();
+    },
 
-                if (Ext.isString(message) && message.length > 0) {
-                    message = me.snippets.failure.generateNumbers + '<br>' + message;
-                } else {
-                    message = me.snippets.failure.generateNumbers + '<br>' + me.snippets.failure.noMoreInformation;
-                }
-                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+
+
+    /**
+     * Called after the user hits the 'start' button of the multiRequestDialog
+     */
+    onStartNumberProcess: function(window) {
+        var me = this;
+
+        totalCount = window.totalCount;
+        window.combo.disable();
+
+        me.generateNumbers(0, window, totalCount, window.combo.getValue(), window.progressBar);
+    },
+
+    onCancelNumberProcess: function(window) {
+        this.cancelOperation = true;
+        window.closeButton.enable();
+        window.startButton.disable();
+        window.cancelButton.disable();
+    },
+
+    /**
+     * Recursive function which is used to generate the order numbers over a progress window.
+     *
+     * @param offset
+     * @param window
+     * @param totalCount
+     * @param batchSize
+     * @param progressbar
+     */
+    generateNumbers: function(offset, window, totalCount, batchSize, progressbar) {
+        var me = this;
+
+        //last batch size processed?
+        if (offset >= totalCount) {
+
+            //is progress bar configured?
+            if (progressbar) {
+                progressbar.updateProgress(1, me.snippets.generateNumbersDone, true);
+            }
+
+            window.cancelButton.disable();
+            window.closeButton.enable();
+            me.getVariantListing().getStore().load();
+            window.destroy();
+            return;
+        }
+
+        //cancel button pushed?
+        if (me.cancelOperation) {
+            window.closeButton.enable();
+            return;
+        }
+
+        //has the current request a progress bar?
+        if (progressbar) {
+            // updates the progress bar value and text, the last parameter is the animation flag
+            progressbar.updateProgress(
+                (offset + batchSize) / totalCount,
+                Ext.String.format(me.snippets.generateNumberProcess, ( offset + batchSize), totalCount),
+                true
+            );
+        }
+
+        Ext.Ajax.request({
+            url: '{url controller="Article" action="regenerateVariantOrderNumbers"}',
+            method: 'POST',
+            params: {
+                articleId: me.subApplication.article.get('id'),
+                offset: offset,
+                limit: batchSize,
+                syntax: window.syntax
+            },
+            timeout: 4000000,
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+
+                // start recusive call here
+                me.generateNumbers((offset + batchSize), window, totalCount, batchSize, progressbar);
+            },
+            failure: function(response) {
+                me.cancelOperation = true;
+                me.generateNumbers((offset + batchSize), window, totalCount, batchSize, progressbar);
             }
         });
     },
+
 
     /**
      * Displays the mapping window to apply data from the

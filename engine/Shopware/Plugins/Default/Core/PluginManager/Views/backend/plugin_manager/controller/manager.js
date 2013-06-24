@@ -68,7 +68,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 			failed_uninstall: '{s name=manager/failed_uninstall}Plugin [0] could not be uninstalled{/s}',
 			successful_upload: '{s name=manager/successful_upload}plugin was uploaded successfully{/s}',
 			failed_upload_namespace: '{s name=manager/failed_upload_namespace}The Plugin is not in the specified format. The namespace could not be determined{/s}',
-			failed_upload: '{s name=manager/failed_upload}An error occurred while uploading the plugin{/s}'
+			failed_upload: '{s name=manager/failed_upload}An error occurred while uploading the plugin{/s}',
+            data_not_available: '{s name=manager/data_not_available}No plugin community store data available{/s}'
 		}
 	},
 
@@ -77,7 +78,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @return void
+     * @returns { Void }
      */
     init: function () {
         var me = this;
@@ -96,6 +97,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                 'editPlugin': me.onEditPlugin,
                 'edit': me.onAfterCellEditing,
                 'uninstallInstall': me.onInstallUninstallPlugin,
+                'reinstallPlugin': me.onReinstallPlugin,
                 'manualInstall': me.onOpenManualInstallWindow,
                 'itemdblclick': me.onDblClick,
                 'beforeedit': me.onBeforeEdit,
@@ -105,11 +107,65 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                 'uploadPlugin': me.onUploadPlugin
             },
             'plugin-manager-detail-window': {
-                'saveConfiguration': me.onSaveConfiguration
+                'saveConfiguration': me.onSaveConfiguration,
+                'pluginTabChanged': me.onPluginTabChanged
             }
         });
     },
 
+    /**
+     * Event listener function which is fired when the user change
+     * the tab of the plugin detail page.
+     *
+     * This function loads the plugin store data for the specify plugin
+     *
+     * @param detailWindow
+     * @param tabPanel
+     * @param newCard
+     * @param oldCard
+     */
+    onPluginTabChanged: function(detailWindow, tabPanel, newCard, oldCard) {
+        var me = this;
+
+        if (newCard.name == 'product-wrapper' && detailWindow.productWrapper) {
+            tabPanel.setLoading(true);
+            var store = me.getStore('Product');
+            store.getProxy().extraParams.pluginId = detailWindow.plugin.get('id');
+            store.load({
+                callback: function(products, operation) {
+                    if (!(operation.wasSuccessful()) || !(products[0] instanceof Ext.data.Model)) {
+                        detailWindow.productWrapper.removeAll();
+                        var container = Ext.create('Ext.container.Container', {
+                            padding: 20,
+                            items: [ Shopware.Notification.createBlockMessage(me.snippets.manager.data_not_available, 'notice') ]
+                        });
+                        detailWindow.productWrapper.add(container);
+                    } else {
+                        var product = products[0];
+                        detailWindow.voteStore.getProxy().extraParams.productId = product.get('id');
+                        detailWindow.voteStore.load();
+
+                        detailWindow.productWrapper.removeAll();
+                        detailWindow.productWrapper.add({
+                            xtype: 'plugin-manager-detail-description',
+                            article: product,
+                            voteStore: detailWindow.voteStore
+                        });
+                    }
+
+                    tabPanel.setLoading(false);
+                }
+            });
+        }
+    },
+
+
+    /**
+     * Event listener method which sets the plugin active.
+     *
+     * @param { Ext.window.Window } optionWindow
+     * @returns { Void }
+     */
     onActivatePlugin: function(optionWindow) {
         var me = this,
             record = optionWindow.record,
@@ -121,6 +177,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         optionWindow.destroy();
     },
 
+    /**
+     * Event listener method which will be fired when the user wants to edit
+     * the plugins configuration.
+     *
+     * @param { Ext.window.Window } optionWindow
+     * @returns { Boolean|Void } Falsy if the plugin isn't installed, otherwise void.
+     */
     onConfigurePlugin: function(optionWindow) {
         var record = optionWindow.record;
 
@@ -128,9 +191,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         if(record.get('installed') == null) {
             return false;
         }
-        this.onEditPlugin(null, null, null, null, null, record);
+        this.editPlugin(record);
     },
 
+    /**
+     * Event listener method which will be fired when the user clicks the delete
+     * icon in the plugin list.
+     *
+     * @param { Ext.grid.Panel } grid
+     * @param { Integer } rowIndex
+     * @param { Integer } colIndex
+     * @param { HTMLDOMNode } item
+     * @param { Ext.EventImpl } eOpts
+     * @param { Ext.data.Record } record
+     * @returns { Void }
+     */
     onDeletePlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
         var me = this, confirmMessage;
 
@@ -148,7 +223,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                                if (rawData.message) {
                                    message = '<br>' + rawData.message;
                                }
-                               Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_delete + message);
+
+                               Shopware.Notification.createStickyGrowlMessage({
+                                   title: me.snippets.manager.title,
+                                   text: me.snippets.manager.failed_delete + message,
+                                   log: true
+                               });
                            }
                         }
                     });
@@ -266,7 +346,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         if(record.get('installed') == null) {
             return false;
         }
-        this.onEditPlugin(grid, 0, 0, item, eOpts, record);
+        this.editPlugin(record);
 
     },
 
@@ -286,6 +366,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
      * @param [object] record - Shopware.apps.PluginManager.model.Plugin
      */
     onEditPlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
+        this.editPlugin(record);
+    },
+
+
+    /**
+     * Helper function to open the plugin detail page with the whole
+     * community store product data.
+     * If you want to set the active flag of the passsed plugin, set the
+     * active parameter to true or false.
+     * @param record
+     * @param active
+     */
+    editPlugin: function(record, active) {
         var me = this;
 
         if (!record) {
@@ -297,23 +390,22 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         store.load({
             callback: function(records, operation) {
                 if (operation.wasSuccessful()) {
-                    var plugin = records[0], article, voteStore = null;
+                    var plugin = records[0];
 
-                    if(plugin && plugin.getProduct() instanceof Ext.data.Store && plugin.getProduct().first() instanceof Ext.data.Model) {
-                        article = plugin.getProduct().first();
-                        voteStore = me.getStore('Votes');
-                        voteStore.getProxy().extraParams.productId = article.get('id');
-                        voteStore.load();
+                    if (active === false || active === true) {
+                        plugin.set('active', active);
                     }
 
                     me.getView('detail.Window').create({
                         plugin: plugin,
-                        record: article,
-                        voteStore: voteStore,
+                        voteStore: me.getStore('Votes'),
                         flag: 'local'
                     });
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, Ext.String.format(me.snippets.manager.failed_edit, record.get('label')));
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: me.snippets.manager.title,
+                        text: Ext.String.format(me.snippets.manager.failed_edit, record.get('label'))
+                    });
                 }
             }
         });
@@ -362,14 +454,33 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
     },
 
     /**
+     * Helper function to reinstall a plugin with one click
+     * @param record
+     * @param grid
+     */
+    onReinstallPlugin: function(record, grid) {
+        var me = this, active = record.get('active');
+
+        record.set('installed', null);
+        me.onInstallPlugin(record, me.subApplication.pluginStore, {
+            callback: function() {
+                record.set('active', active);
+                record.set('installed', new Date());
+                me.onInstallPlugin(record, me.subApplication.pluginStore);
+            }
+        });
+    },
+
+    /**
      * Installs a plugin based on the passed record and the associated store.
      *
      * @public
      * @param [object] record - Shopware.apps.PluginManager.model.Plugin
      * @param [object] store - Shopware.apps.PluginManager.store.Plugin
+     * @param [object] options - Helper parameter for callback functions.
      * @return void
      */
-    onInstallPlugin: function(record, store) {
+    onInstallPlugin: function(record, store, options) {
         var me = this;
 
         var listing = me.getPluginGrid();
@@ -377,10 +488,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             listing.setLoading(true);
         }
 
+        var isDummy = record.get('capabilityDummy');
+
         record.save({
            callback: function(record, operation) {
                var rawData = null,
                    result = operation.records[0];
+
+               if (isDummy) {
+                   // update version on-the-fly
+                   record.set('version', record.get('updateVersion'));
+                   record.set('updateVersion', null);
+                   record.set('capabilityDummy', false);
+               }
 
                if (listing) {
                    listing.setLoading(false);
@@ -411,17 +531,25 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    }
 
                    if (record.get('installed') !== null) {
-                       var optionWindow = me.getView('manager.Options').create({
-                           record: record
-                       }).show();
+                       me.editPlugin(record, true);
                    }
+
+                   if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
+                       options.callback(record);
+                   }
+
                } else {
                    var message = Ext.String.format(me.snippets.manager.failed_install, record.get('label'));
 
                    if (rawData.message) {
                        message = message + '<br>' + rawData.message;
                    }
-                   Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                   Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: message,
+                       log: true
+                   });
                    store.sort();
                }
            }
@@ -446,7 +574,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                         if(operation) {
                             Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_successful);
                         } else {
-                            Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_failed);
+                            Shopware.Notification.createStickyGrowlMessage({
+                               title: me.snippets.manager.title,
+                               text: me.snippets.manager.clear_cache_failed,
+                               log: true
+                            });
                         }
                     }
                 });
@@ -478,7 +610,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                    if (rawData.message) {
                        message = message + '<br>' + rawData.message;
                    }
-                   Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                   Shopware.Notification.createStickyGrowlMessage({
+                      title: me.snippets.manager.title,
+                      text: message,
+                      log: true
+                   });
                }
                store.sort();
            }
@@ -556,13 +693,22 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             failure: function(form, action) {
                 var response = Ext.decode(action.response.responseText);
                 if (response.noNamespace) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.failed_upload_namespace);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: me.snippets.manager.failed_upload_namespace,
+                       log: true
+                    });
                 } else {
                     var message = me.snippets.manager.failed_upload;
                     if (response.message) {
                         message = message + ':<br>' + response.message;
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.manager.title, message);
+
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.manager.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });

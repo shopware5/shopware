@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
- * Deprecated Shopware Class that handle some marketing related functions
+ * Deprecated Shopware Class that handles marketing related functions
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class sMarketing
 {
@@ -78,49 +72,60 @@ class sMarketing
             $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR']) ? 4 : (int)$this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR'];
         }
         $limit = (int) $limit;
-        $articleId = (int) $articleId;
 
+        $where = '';
         if (!empty($this->sBlacklist)) {
             $where = Shopware()->Db()->quote($this->sBlacklist);
-            $where = 'AND e1.articleID NOT IN (' . $where . ')';
-        } else {
-            $where = '';
+            $where = 'AND similarShown.related_article_id NOT IN (' . $where . ')';
         }
 
         $sql = "
-            SELECT e1.articleID as id, COUNT(DISTINCT e1.id) AS hits
-            FROM s_emarketing_lastarticles AS e1,
-                s_emarketing_lastarticles AS e2,
-                s_articles_categories ac,
-                s_categories c, s_categories c2,
-                s_articles a
+            SELECT STRAIGHT_JOIN
+                 lastArticles.articleID as id,
+                 similarShown.viewed as hits
+            FROM s_articles_similar_shown_ro as similarShown FORCE INDEX (viewed)
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+              INNER JOIN s_emarketing_lastarticles as lastArticles
+                ON  lastArticles.articleID = similarShown.related_article_id
 
-            WHERE c.id={$this->categoryId}
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+              INNER JOIN s_articles_categories_ro ac
+                ON  ac.articleID = similarShown.related_article_id
+                AND ac.categoryID = :categoryId
 
-            AND ac.articleID=e1.articleID
-            AND e2.articleID=$articleId
-            AND e1.sessionID=e2.sessionID
-            AND a.id=e1.articleID
+              INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
-            AND a.active=1
-            AND a.mode=0
+              INNER JOIN s_articles as a
+                ON  a.id = similarShown.related_article_id
+                AND a.active = 1
+
+              LEFT JOIN s_articles_avoid_customergroups ag
+                ON  ag.articleID = a.id
+                AND ag.customergroupID= :customerGroupId
+
+            WHERE similarShown.article_id = :articleId
+            AND   ag.articleID IS NULL
+
             $where
-            AND ag.articleID IS NULL
 
-            GROUP BY e1.articleID
-            ORDER BY hits DESC
-            LIMIT $limit
-        ";
-        return $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            GROUP BY similarShown.viewed, similarShown.related_article_id
+            ORDER BY similarShown.viewed DESC, similarShown.related_article_id DESC
+            LIMIT $limit";
+
+
+        $similarShownArticles = Shopware()->Db()->fetchAll($sql, array(
+            'articleId'       => (int) $articleId,
+            'categoryId'      => (int) $this->categoryId,
+            'customerGroupId' => (int) $this->customerGroupId
+        ));
+
+        Shopware()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', array(
+            'subject'  => $this,
+            'articles' => $similarShownArticles
+        ));
+
+        return $similarShownArticles;
     }
 
     public function sGetAlsoBoughtArticles($articleID, $limit = 0)
@@ -129,49 +134,57 @@ class sMarketing
             $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT']) ? 4 : (int)$this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT'];
         }
         $limit = (int) $limit;
-        $articleID = (int)$articleID;
+        $where = '';
 
         if (!empty($this->sBlacklist)) {
             $where = Shopware()->Db()->quote($this->sBlacklist);
-            $where = 'AND b1.articleID NOT IN (' . $where . ')';
-        } else {
-            $where = '';
+            $where = ' AND alsoBought.related_article_id NOT IN (' . $where . ')';
         }
 
         $sql = "
-            SELECT b1.articleID AS id, COUNT(DISTINCT b1.id) AS sales
-            FROM
-                s_order_details AS b1,
-                s_order_details AS b2,
-                s_articles_categories ac,
-                s_categories c, s_categories c2,
-                s_articles a
+            SELECT
+                alsoBought.sales as sales,
+                alsoBought.related_article_id as id
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+            FROM   s_articles_also_bought_ro alsoBought
+                INNER JOIN s_articles articles
+                    ON  alsoBought.related_article_id = articles.id
+                    AND articles.active = 1
 
-            WHERE c.id={$this->categoryId}
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+                INNER JOIN s_articles_categories_ro articleCategories
+                    ON  alsoBought.related_article_id = articleCategories.articleID
+                    AND articleCategories.categoryID = :categoryId
 
-            AND ac.articleID=b1.articleID
-            AND b2.articleID=$articleID
-            AND a.id=b1.articleID
+                INNER JOIN s_categories categories
+                    ON categories.id = articleCategories.categoryID
 
-            AND a.active=1
-            AND a.mode=0
+                LEFT JOIN s_articles_avoid_customergroups customerGroups
+                    ON  customerGroups.articleID = articles.id
+                    AND customerGroups.customergroupID = :customerGroupId
+
+            WHERE alsoBought.article_id = :articleId
+            AND   customerGroups.articleID IS NULL
+
             $where
-            AND b1.orderID = b2.orderID AND b1.modus=0
-            AND ag.articleID IS NULL
 
-            GROUP BY b1.articleID
-            ORDER BY sales DESC LIMIT $limit
+            ORDER BY alsoBought.sales DESC, alsoBought.related_article_id DESC
+
+            LIMIT $limit
         ";
-        return $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+
+        $alsoBought = Shopware()->Db()->fetchAll($sql, array(
+            'articleId' => (int) $articleID,
+            'categoryId' => (int) $this->categoryId,
+            'customerGroupId' => (int) $this->customerGroupId
+        ));
+
+
+        Shopware()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', array(
+            'subject'  => $this,
+            'articles' => $alsoBought
+        ));
+
+        return $alsoBought;
     }
 
     /**
@@ -327,8 +340,13 @@ class sMarketing
 			  a.name as articleName,
 			  COUNT(r.articleID) as relevance
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac,
-                s_articles a
+			FROM s_articles a
+			INNER JOIN s_articles_categories_ro ac
+                ON  ac.articleID = a.id
+                AND ac.categoryID = $categoryId
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
 			LEFT JOIN s_emarketing_lastarticles r
 			ON a.id = r.articleID
@@ -338,14 +356,7 @@ class sMarketing
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE c.id=$categoryId
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active=1
-	        AND ac.categoryID=c2.id
-	        AND ac.articleID=a.id
-
-	        AND a.active = 1
+			WHERE a.active = 1
 	        AND ag.articleID IS NULL
 
 			GROUP BY a.id
@@ -400,7 +411,14 @@ class sMarketing
 			  IF(s2.id, 1, 0)  -- Same category
 			    as relevance
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
+			FROM s_articles a
+
+            INNER JOIN s_articles_categories_ro ac
+                ON ac.articleID=a.id
+                AND ac.categoryID = {$this->categoryId}
+            INNER JOIN s_categories c
+                ON c.id = ac.categoryID
+                AND c.active = 1
 
 			LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
@@ -413,21 +431,14 @@ class sMarketing
             ON s.articleID=o.id
             AND s.relatedarticle=a.id
 
-            LEFT JOIN s_articles_categories s1
+            LEFT JOIN s_articles_categories_ro s1
             ON s1.articleID=o.id
 
-            LEFT JOIN s_articles_categories s2
+            LEFT JOIN s_articles_categories_ro s2
             ON s2.categoryID=s1.categoryID
             AND s2.articleID=a.id
 
-			WHERE c.id={$this->categoryId}
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active=1
-	        AND ac.categoryID=c2.id
-	        AND ac.articleID=a.id
-
-	        AND a.active = 1
+			WHERE a.active = 1
 	        AND ag.articleID IS NULL
 	        AND a.id!=$articleId
 

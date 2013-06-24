@@ -86,9 +86,10 @@ Ext.define('Shopware.apps.Index.view.Search', {
 			margin: '5 0',
 			allowBlank: true,
 			enableKeyEvents: true,
+            checkChangeBuffer: 400,
 			listeners: {
 				scope: me,
-				keyup: me.onKeyUp,
+                change:me.onChange,
                 focus: function() {
                     me.addCls(me.focusCls);
                 },
@@ -142,7 +143,7 @@ Ext.define('Shopware.apps.Index.view.Search', {
 	 *
 	 * @param (object) field
 	 */
-	onKeyUp: function(field) {
+	onChange: function(field) {
 		var value = field.getValue(),
 			me = this;
 

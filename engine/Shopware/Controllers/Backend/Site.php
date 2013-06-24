@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,31 +20,19 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Site
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author    Fabian Engels
- * @author     $Author$
  */
 
-use DoctrineExtensions\Paginate\Paginate;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\EntityGenerator;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Shopware\Models\Site\Site as Site;
 
 /**
  * Shopware Site Controller
  *
  * The site backend controller handles all actions concerning the Site backend module
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-use Shopware\Models\Site\Site as Site,
-    Doctrine\ORM\AbstractQuery;
-
 class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_ExtJs
 {
     /**

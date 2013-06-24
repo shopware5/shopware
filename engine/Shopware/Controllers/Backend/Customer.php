@@ -278,13 +278,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             //get access on the customer repository
             $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
 
-            //returns the total count of the query
-            $totalResult = $this->getManager()->getQueryCount($query);
-
             //returns the customer data
             $customers = $query->getArrayResult();
 
-            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $totalResult));
+            //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
+            $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
+            $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
         }
         catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
@@ -605,7 +606,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         } else {
             unset($params['shop']);
         }
- 
+
+        if (!empty($params['languageId'])) {
+            $params['languageSubShop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['languageId']);
+        } else {
+            unset($params['languageSubShop']);
+        }
+
 
         if (!empty($params['priceGroupId'])) {
             $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
@@ -691,12 +698,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function performOrderAction()
     {
         $userId = $this->Request()->getParam('id');
-        $sql = 'SELECT id, email, password, subshopID FROM s_user WHERE id = ?';
+        $sql = 'SELECT id, email, password, subshopID, language FROM s_user WHERE id = ?';
         $user = Shopware()->Db()->fetchRow($sql, array($userId));
 
         if (!empty($user['email'])) {
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $repository->getActiveById($user['subshopID']);
+            $shop = $repository->getActiveById($user['language']);
             $shop->registerResources(Shopware()->Bootstrap());
             Shopware()->Session()->Admin = true;
 
@@ -713,6 +720,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'appendSession' => true
         ));
 
+        $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
         $this->redirect($url);
     }
 }

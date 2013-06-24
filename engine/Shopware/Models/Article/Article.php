@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,25 +20,22 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
-*/
+ */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Category\Category as ArticleCategory;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Article Model
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Models
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles")
@@ -55,8 +52,9 @@ class Article extends ModelEntity
     private $id;
 
     /**
+     * @var integer
+     *
      * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
-     * @var
      */
     private $mainDetailId = null;
 
@@ -97,13 +95,16 @@ class Article extends ModelEntity
 
     /**
      * @var string $name
+     *
      * @Assert\NotBlank
+     *
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     private $name;
 
     /**
      * @var string $description
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description = null;
@@ -117,7 +118,9 @@ class Article extends ModelEntity
 
     /**
      * @var \DateTime $added
+     *
      * @Assert\DateTime()
+     *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
     private $added = null;
@@ -191,7 +194,7 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
      */
-    private $template= '';
+    private $template = '';
 
     /**
      * @var integer $mode
@@ -228,7 +231,8 @@ class Article extends ModelEntity
     protected $tax;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories",
      *      joinColumns={
@@ -242,7 +246,24 @@ class Article extends ModelEntity
     protected $categories;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
+     * @ORM\JoinTable(name="s_articles_categories_ro",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $allCategories;
+
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_articles_avoid_customergroups",
      *      joinColumns={
@@ -256,38 +277,51 @@ class Article extends ModelEntity
     protected $customerGroups;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * OWNING SIDE
+     *
+     * @var ArrayCollection
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Property\Group", inversedBy="articles")
      * @ORM\JoinColumn(name="filtergroupID", referencedColumnName="id")
      */
     protected $propertyGroup;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_relationships",
-     *      joinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")}
-     *      )
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *      }
+     * )
      */
     protected $related;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_similar",
-     *      joinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")}
-     *      )
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *      }
+     * )
      */
     protected $similar;
 
     /**
      * OWNING SIDE
      *
-     * @Assert\Valid
-     *
      * @var \Shopware\Models\Article\Supplier $supplier
+     *
+     * @Assert\Valid
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist", "update"})
      * @ORM\JoinColumn(name="supplierID", referencedColumnName="id")
@@ -297,49 +331,57 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
+     * @var ArrayCollection
+     *
      * @Assert\Valid
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist", "update"})
      * @ORM\OrderBy({"position" = "ASC"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $details;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Detail
+     *
      * @Assert\NotBlank
      * @Assert\Valid
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "update", "remove"})
      * @ORM\JoinColumn(name="main_detail_id", referencedColumnName="id")
-     * @var \Shopware\Models\Article\Detail
      */
     protected $mainDetail;
 
     /**
      * INVERSE SIDE
      *
+     * @var ArrayCollection
+     *
      * @Assert\Valid
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $links;
 
     /**
      * INVERSE SIDE
+     *
+     * @var ArrayCollection
+     *
      * @Assert\Valid
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $downloads;
 
     /**
      * INVERSE SIDE
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @var ArrayCollection
      *
      * @Assert\Valid
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -347,6 +389,7 @@ class Article extends ModelEntity
 
     /**
      * OWNING SIDE
+     *
      * @var \Shopware\Models\Price\Group $priceGroup
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group")
@@ -356,29 +399,37 @@ class Article extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $votes;
 
     /**
      * INVERSE SIDE
-     * @Assert\Valid
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist", "update"})
+     *
      * @var \Shopware\Models\Attribute\Article
+     *
+     * @Assert\Valid
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist", "update"})
      */
     protected $attribute;
 
     /**
      * OWNING SIDE
+     *
+     * @var \Shopware\Models\Article\Configurator\Set
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist", "update"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
-     * @var \Shopware\Models\Article\Configurator\Set
      */
     protected $configuratorSet;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist", "update"})
      * @ORM\JoinTable(name="s_filter_articles",
      *      joinColumns={
@@ -392,16 +443,20 @@ class Article extends ModelEntity
     protected $propertyValues;
 
     /**
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * INVERSE SIDE
+     *
      * @var \Shopware\Models\Article\Configurator\Template\Template
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
      */
     protected $configuratorTemplate;
 
     /**
      * INVERSE SIDE
      *
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $esds;
 
@@ -411,6 +466,7 @@ class Article extends ModelEntity
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->allCategories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
         $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
@@ -752,7 +808,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getCategories()
     {
@@ -760,17 +816,50 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $categories
+     * @return array
+     */
+    public function getAllCategories()
+    {
+        return $this->allCategories->toArray();
+    }
+
+    /**
+     * @param ArrayCollection $categories
      * @return Article
      */
     public function setCategories($categories)
     {
         $this->categories = $categories;
+
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArticleCategory $category
+     * @return Article
+     */
+    public function addCategory(ArticleCategory $category)
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ArticleCategory $category
+     * @return Article
+     */
+    public function removeCategory(ArticleCategory $category)
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
      */
     public function getCustomerGroups()
     {
@@ -778,7 +867,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $propertyGroups
+     * @param ArrayCollection $propertyGroups
      * @return Article
      */
     public function setCustomerGroups($propertyGroups)
@@ -808,7 +897,7 @@ class Article extends ModelEntity
 
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getRelated()
     {
@@ -816,7 +905,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getSimilar()
     {
@@ -824,8 +913,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param $related \Doctrine\Common\Collections\ArrayCollection
-     * @return \Shopware\Models\Article\Article
+     * @param $related ArrayCollection
+     * @return Article
      */
     public function setRelated($related)
     {
@@ -834,8 +923,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param $similar \Doctrine\Common\Collections\ArrayCollection
-     * @return \Shopware\Models\Article\Article
+     * @param $similar ArrayCollection
+     * @return Article
      */
     public function setSimilar($similar)
     {
@@ -859,7 +948,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getImages()
     {
@@ -867,8 +956,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $images
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection|array|null $images
+     * @return Article
      */
     public function setImages($images)
     {
@@ -876,7 +965,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getDownloads()
     {
@@ -884,8 +973,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $downloads
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection|array|null $downloads
+     * @return Article
      */
     public function setDownloads($downloads)
     {
@@ -893,7 +982,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getLinks()
     {
@@ -901,8 +990,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $links
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection|array|null $links
+     * @return Article
      */
     public function setLinks($links)
     {
@@ -929,7 +1018,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getDetails()
     {
@@ -937,8 +1026,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $details
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection|array|null $details
+     * @return Article
      */
     public function setDetails($details)
     {
@@ -967,8 +1056,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * OWNING SIDE
-     * of the association between articles and priceGroup
      * @return \Shopware\Models\Price\Group
      */
     public function getPriceGroup()
@@ -978,15 +1065,17 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Price\Group|null $priceGroup
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function setPriceGroup($priceGroup)
     {
         $this->priceGroup = $priceGroup;
+
+        return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getVotes()
     {
@@ -994,8 +1083,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $votes
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection|array|null $votes
+     * @return Article
      */
     public function setVotes($votes)
     {
@@ -1012,7 +1101,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Article|array|null $attribute
-     * @return \Shopware\Models\Attribute\Article
+     * @return Article
      */
     public function setAttribute($attribute)
     {
@@ -1029,10 +1118,13 @@ class Article extends ModelEntity
 
     /**
      * @param int $crossBundleLook
+     * @return Article
      */
     public function setCrossBundleLook($crossBundleLook)
     {
         $this->crossBundleLook = $crossBundleLook;
+
+        return $this;
     }
 
     /**
@@ -1045,10 +1137,13 @@ class Article extends ModelEntity
 
     /**
      * @param \DateTime $availableFrom
+     * @return Article
      */
     public function setAvailableFrom($availableFrom)
     {
         $this->availableFrom = $availableFrom;
+
+        return $this;
     }
 
     /**
@@ -1061,10 +1156,13 @@ class Article extends ModelEntity
 
     /**
      * @param \DateTime $availableTo
+     * @return Article
      */
     public function setAvailableTo($availableTo)
     {
         $this->availableTo = $availableTo;
+
+        return $this;
     }
 
     /**
@@ -1077,16 +1175,17 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function setConfiguratorSet($configuratorSet)
     {
         $this->setManyToOne($configuratorSet, '\Shopware\Models\Article\Configurator\Set', 'configuratorSet');
+
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPropertyValues()
     {
@@ -1094,11 +1193,14 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $propertyValues
+     * @param ArrayCollection $propertyValues
+     * @return Article
      */
     public function setPropertyValues($propertyValues)
     {
         $this->propertyValues = $propertyValues;
+
+        return $this;
     }
 
     /**
@@ -1111,11 +1213,12 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Configurator\Template\Template $configuratorTemplate
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function setConfiguratorTemplate($configuratorTemplate)
     {
         $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
+
         return $this;
     }
 }

@@ -124,6 +124,10 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
                 WHERE time < DATE_SUB(CONCAT(CURDATE(), ?), INTERVAL ? DAY)
             ';
             Shopware()->Db()->query($sql, array(' 00:00:00', $time));
+
+            Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', array(
+                'subject' => $this
+            ));
         }
 
         if (empty($config->show)) {

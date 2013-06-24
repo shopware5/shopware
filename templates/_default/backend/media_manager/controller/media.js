@@ -55,7 +55,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      */
 	refs: [
         { ref: 'mediaView', selector: 'mediamanager-media-view' },
-        { ref: 'albumTree', selector: 'mediamanager-album-tree' }
+        { ref: 'albumTree', selector: 'mediamanager-album-tree' },
+        { ref: 'mediaGrid', selector: 'mediamanager-media-grid' }
 	],
 
 	/**
@@ -77,7 +78,11 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         /* {/if} */
             },
             'mediamanager-media-view': {
-                editLabel: me.onEditLabel
+                editLabel: me.onEditLabel,
+                changePreviewSize: me.onChangePreviewSize
+            },
+            'mediamanager-media-view button[action=mediamanager-media-view-layout]': {
+                change: me.onChangeLayout
             },
             'mediamanager-media-view button[action=mediamanager-media-view-delete]': {
                 click: me.onDeleteMedia
@@ -95,7 +100,11 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         /* {/if} */
 			'mediamanager-selection-window textfield[action=mediamanager-selection-window-searchfield]': {
 				change: me.onSearchMedia
-			}
+			},
+            'mediamanager-media-grid': {
+                'showDetail': me.onShowDetails,
+                'edit': me.onGridEditLabel
+            }
         });
 
         me.callParent(arguments);
@@ -158,16 +167,31 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Event listener method which will be fired when the tree
      * on the left hand of the module loads, to reset
      * the request url of the html 5 upload component.
+     *
+     * @param { Shopware.apps.MediaManager.model.Album } treeNode
      */
-    onTreeLoad: function(store, records, success, operation, eOpts) {
+    onTreeLoad: function(treeNode) {
         var me = this,
-            mediaView = me.getMediaView();
+            mediaView = me.getMediaView(),
+            tree = me.getAlbumTree();
 
         var url = mediaView.mediaDropZone.requestURL;
         if (url.indexOf('?albumID=') !== -1) {
             url = url.substr(0, url.indexOf('?albumID='));
         }
         mediaView.mediaDropZone.requestURL = url;
+
+        if(treeNode.hasOwnProperty('get')) {
+            mediaView.mediaStore.getProxy().extraParams.albumID = treeNode.get('id');
+
+            if (url.indexOf('?albumID=') !== -1) {
+                url = url.substr(0, url.indexOf('?albumID='));
+            }
+            url += '?albumID=' + treeNode.get('id');
+            mediaView.mediaDropZone.requestURL = url;
+
+            mediaView.mediaStore.load();
+        }
     },
 
     /**
@@ -256,13 +280,23 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      */
     onDeleteMedia: function() {
         var me = this,
-            view = me.getMediaView().dataView,
-            selModel = view.getSelectionModel(),
-            selected = selModel.getSelection(),
-            store = me.getStore('Media'),
             tree =  me.getAlbumTree(),
             treeStore = tree.getStore(),
-            rootNode = tree.getRootNode();
+            rootNode = tree.getRootNode(),
+            store = me.getStore('Media'),
+            view = me.getMediaView(),
+            cardContainer = view.cardContainer,
+            selModel, selected;
+
+        if(view.selectedLayout === 'grid') {
+            view = view.dataView;
+        } else {
+            view = cardContainer.getLayout().getActiveItem();
+        }
+
+        selModel = view.getSelectionModel();
+        selected = selModel.getSelection();
+
 
         store.remove(selected);
         store.getProxy().batchActions = false;
@@ -301,6 +335,101 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         record.save({
             callback: function() {
                 store.load();
+            }
+        });
+    },
+
+    /**
+     * Event listener method which will be triggered when the user
+     * selects an entry in the list view.
+     *
+     * The method unlocks the `delete` button (if available) and updates
+     * the `info` view on the right hand of the module (if available).
+     *
+     * @param { Ext.grid.Panel } grid - The list view panel
+     * @param { Array } selection - The selected entries in the list view
+     * @returns { Void|Boolean } Falsy, if no entry is selected. Otherwise `void`
+     */
+    onShowDetails: function(grid, selection) {
+        var me = this, view = me.getMediaView(),
+            record;
+
+        if(view.deleteBtn) {
+            view.deleteBtn.setDisabled(!selection.length);
+        }
+
+        if(!selection.length) {
+            return false;
+        }
+        record = selection[0];
+
+        if(view.infoView) {
+            view.infoView.update(record.data);
+        }
+    },
+
+    /**
+     * Event listener method which will be fired when the user clicks
+     * on the `change layout` button.
+     *
+     * The method sets the correct active item and shows / hides the
+     * preview size combobox.
+     *
+     * @param { Ext.button.Button } button - The clicked button
+     * @param { Object } item - The configuration of the active layout
+     * @returns { Void }
+     */
+    onChangeLayout: function(button, item) {
+        var me = this, view = me.getMediaView();
+        view.selectedLayout = item.layout;
+        view.cardContainer.getLayout().setActiveItem((item.layout === 'grid') ? 0 : 1);
+        view.imageSize[(item.layout === 'grid') ? 'hide' : 'show']();
+    },
+
+    /**
+     * Event listener method which will be fired when the user edits the name of an
+     * entry in the list view using the row editor.
+     *
+     * The method is just a wrapper for the `onEditLabel`-method.
+     *
+     * @param { Ext.grid.pluginRowEditing } editor - The used editor
+     * @param { Object } eOpts - Additional event options
+     */
+    onGridEditLabel: function(editor, eOpts) {
+        var me = this;
+        editor.activeRecord = eOpts.record;
+        me.onEditLabel(me, editor, eOpts.newValues.name);
+    },
+
+    /**
+     * Event listener method which will be fired when the user changes
+     * the selected preview size.
+     *
+     * The method reloads the store to triggeer the re-rendering of the list view
+     * and resizes the `preview` column.
+     *
+     * @param { Ext.form.field.ComboBox } field - The field which has fired the event
+     * @param { String|Number } newValue - New field value
+     * @param { String|Number } value - Last value of the field
+     * @returns { Void|Boolean } Falsy, if the old value is empty or the user hasn't changed
+     *          the selected item. Otherwise `void`
+     */
+    onChangePreviewSize: function(field, newValue, value) {
+        var me = this, view = me.getMediaGrid();
+
+        // Prevents the first event to re-render the list view
+        if(!value || newValue === value) {
+            return false;
+        }
+
+        // Cast the passed value to a number
+        view.selectedPreviewSize = ~~(1 * newValue);
+
+        // Reload the store and resize the preview column
+        view.getStore().load({
+            callback: function() {
+                // We need to hard-code the preview column
+                view.columns[1].setWidth((view.selectedPreviewSize < 50) ? 50 : view.selectedPreviewSize + 10);
             }
         });
     }

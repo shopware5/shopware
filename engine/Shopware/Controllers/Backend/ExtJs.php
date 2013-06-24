@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage ExtJs
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
  * Shopware ExtJs Controller
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
@@ -164,6 +159,8 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+	    $identity = Shopware()->Auth()->getIdentity();
+		$this->View()->assign('user', $identity, true);
     }
 
     /**
@@ -189,15 +186,27 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $inflector->setThrowTargetExceptionsOn(false);
 
         $fileNames = (array) $request->getParam('file');
-        if(empty($fileNames)) {
+
+        if (empty($fileNames)) {
+            $fileNames = $request->getParam('f', array());
+            $fileNames = explode('|', $fileNames);
+        }
+
+        if (empty($fileNames)) {
             return;
         }
+
         $this->Response()->setHeader('Content-Type', 'application/javascript; charset=utf-8', true);
         $template = 'snippet:string:';
 
         $this->View()->Engine()->setCompileId($this->View()->Engine()->getCompileId() . '_' . $this->Request()->getControllerName());
 
-        foreach($fileNames as $fileName) {
+        foreach ($fileNames as $fileName) {
+            // if string starts with "m/" replace with "model/"
+            $fileName = preg_replace('/^m\//', 'model/', $fileName);
+            $fileName = preg_replace('/^c\//', 'controller/', $fileName);
+            $fileName = preg_replace('/^v\//', 'view/', $fileName);
+
             $fileName = ltrim(dirname($fileName) . '/' . basename($fileName, '.js'), '/.');
             if (empty($fileName)) {
                 continue;
@@ -220,6 +229,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
                 $template .= '{include file="' . $templateExtend. '"}' . "\n";
             }
         }
+
         $toFind = $this->Request()->getParam('find');
         $toReplace = $this->Request()->getParam('replace');
         $toFind = rtrim($toFind, '.') . '.';

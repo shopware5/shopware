@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Emotion', {
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers: [ 'Main', 'Detail' ],
+    controllers: [ 'Main', 'Detail', 'Grids', 'Templates' ],
 
     /**
      * Required views for module (subapplication)
@@ -79,19 +79,20 @@ Ext.define('Shopware.apps.Emotion', {
         'components.Article', 'components.CategoryTeaser', 'components.fields.Article', 'components.fields.ArticleType',
         'components.fields.CategoryImageType', 'components.fields.CategorySelection', 'components.Blog', 'components.BannerSlider',
         'components.fields.SliderSelect', 'components.fields.ManufacturerType', 'components.ManufacturerSlider',
-        'components.fields.ArticleSliderType', 'components.ArticleSlider' ],
+        'components.fields.ArticleSliderType', 'components.ArticleSlider', 'grids.List', 'grids.Toolbar', 'templates.List',
+        'grids.Settings', 'templates.Toolbar', 'templates.Settings' ],
 
     /**
      * Required views for module (subapplication)
      * @array
      */
-    stores: [ 'CategoryPath', 'List', 'Detail', 'Library' ],
+    stores: [ 'CategoryPath', 'List', 'Detail', 'Library', 'Grids', 'Templates' ],
 
     /**
      * Required models for the module (subapplication)
      * @array
      */
-    models: [ 'Emotion', 'EmotionElement', 'Component', 'Field', 'Attribute', 'BannerSlider', 'ManufacturerSlider', 'ArticleSlider'  ],
+    models: [ 'Emotion', 'EmotionElement', 'Component', 'Field', 'Attribute', 'BannerSlider', 'ManufacturerSlider', 'ArticleSlider', 'Grid' , 'Template'  ],
 
     /**
      * Returns the main application window for this is expected

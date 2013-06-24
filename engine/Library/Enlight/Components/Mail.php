@@ -309,4 +309,26 @@ class Enlight_Components_Mail extends Zend_Mail
                 break;
         }
     }
+
+    /**
+     * Sends this email using the given transport or a previously
+     * set DefaultTransport or the internal mail function if no
+     * default transport had been set.
+     *
+     * @param  Zend_Mail_Transport_Abstract $transport
+     * @return Zend_Mail                    Provides fluent interface
+     * @events  Enlight_Components_Mail_Send
+     */
+    public function send($transport = null)
+    {
+        Enlight()->Events()->notify(
+            'Enlight_Components_Mail_Send',
+            array(
+                'mail'      => $this,
+                'transport' => $transport
+            )
+        );
+
+        return parent::send($transport);
+    }
 }

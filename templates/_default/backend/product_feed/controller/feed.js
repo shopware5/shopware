@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      */
     refs:[
         { ref:'productFeedWindow', selector:'product_feed-feed-window' },
+        { ref:'productFeedSaveButton', selector:'product_feed-feed-window button[action=save]' },
         { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' }
     ],
 
@@ -105,9 +106,6 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             'product_feed-feed-window':{
                 scope:me,
                 beforeclose:me.onBeforeCloseWindow
-            },
-            'product_feed-feed-tab-category treepanel':{
-                afterrender: me.onCategoryTreeAfterRender
             }
         });
     },
@@ -136,6 +134,8 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             availableCategoriesTree: me.subApplication.availableCategoriesTree,
             comboTreeCategoryStore: me.subApplication.comboTreeCategoryStore
         });
+
+        me.expandTree(me.getCategoryTree());
 
     },
     /**
@@ -167,6 +167,8 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     availableCategoriesTree: me.subApplication.availableCategoriesTree,
                     comboTreeCategoryStore: me.subApplication.comboTreeCategoryStore
                 });
+
+                me.expandTree(me.getCategoryTree());
             }
         });
     },
@@ -222,6 +224,8 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     availableCategoriesTree: me.subApplication.availableCategoriesTree,
                     comboTreeCategoryStore: me.subApplication.comboTreeCategoryStore
                 });
+
+                me.expandTree(me.getCategoryTree());
             }
         });
     },
@@ -332,22 +336,19 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         });
     },
     /**
-     * Detects and expand all previous selected categories
+     * expands the tree and refreshes the store for saving
      *
      * @param tree
-     * @return void
      */
-    onCategoryTreeAfterRender : function(tree) {
+    expandTree: function(tree) {
         var me = this,
-            ids = [];
+            ids = [],
+            selectedTreeItemCounter = 0;
         if(me.detailRecord) {
             var lockedCategoriesStore =  me.detailRecord.getCategories();
             lockedCategoriesStore.each(function(element) {
                 ids.push(element.get('id'));
             });
-        }
-        else {
-            ids.push('1');
         }
         //expand tree
         Ext.Ajax.request({
@@ -358,9 +359,17 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);
-                for(var i = 0; i < result.data.length; i++ ) {
-                    tree.expandPath(result.data[i]);
-                }
+                var resultCount = result.data.length;
+                Ext.each(result.data, function(item) {
+                    tree.expandPath('/1' + item, 'id', '/', function (records) {
+                            selectedTreeItemCounter++;
+                            if(selectedTreeItemCounter == resultCount) {
+                                //tree completely expanded
+                                me.getProductFeedSaveButton().enable();
+                            }
+                        }
+                    );
+                });
             }
         });
     },

@@ -23,6 +23,7 @@
 
 {* Include overrides *}
 {include file='ExtJs/overrides/Ext.Base.js'}
+{include file='ExtJs/overrides/Ext.ClassManager.js'}
 {include file='ExtJs/overrides/Ext.data.proxy.Server.js'}
 {include file='ExtJs/overrides/Ext.app.Application.js'}
 {include file='ExtJs/overrides/Ext.app.Controller.js'}
@@ -87,6 +88,7 @@
 {include file='backend/base/model/value.js'}
 {include file='backend/base/model/position_status.js'}
 {include file='backend/base/model/doc_type.js'}
+{include file='backend/base/model/password_encoder.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -110,6 +112,8 @@
 {include file='backend/base/store/country_state.js'}
 {include file='backend/base/store/form.js'}
 {include file='backend/base/store/position_status.js'}
+{include file='backend/base/store/password_encoder.js'}
+
 
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}
@@ -130,6 +134,9 @@
 {include file='backend/base/component/Shopware.window.plugin.Hub.js'}
 {include file='backend/base/component/Shopware.grid.plugin.Translation.js'}
 {include file='backend/base/component/Shopware.form.PluginPanel.js'}
+{include file='backend/base/component/Shopware.component.Preloader.js'}
+{include file='backend/base/component/Shopware.component.IconPreloader.js'}
+{include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/button.js'}

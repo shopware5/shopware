@@ -227,12 +227,14 @@ class fpdi_pdf_parser extends pdf_parser {
 			// mPDF 4.2.003
                 case '/LZWDecode': 
 			include_once(_MPDF_PATH.'mpdfi/filters/FilterLZW.php');
-			$decoder =& new FilterLZW();
+			// mPDF 5.0 Removed pass by reference =&
+			$decoder = new FilterLZW();
 			$stream = $decoder->decode($stream);
 			break;
                 case '/ASCII85Decode':
 			include_once(_MPDF_PATH.'mpdfi/filters/FilterASCII85.php');
-			$decoder =& new FilterASCII85();
+			// mPDF 5.0 Removed pass by reference =&
+			$decoder = new FilterASCII85();
 			$stream = $decoder->decode($stream);
 			break;
                 case null:
@@ -268,10 +270,10 @@ class fpdi_pdf_parser extends pdf_parser {
             
         if (!is_null($box) && $box[0] == PDF_TYPE_ARRAY) {
             $b =& $box[1];
-            return array("x" => $b[0][1]/$this->fpdi->k,
-                         "y" => $b[1][1]/$this->fpdi->k,
-                         "w" => abs($b[0][1]-$b[2][1])/$this->fpdi->k,
-                         "h" => abs($b[1][1]-$b[3][1])/$this->fpdi->k);
+            return array("x" => $b[0][1]/_MPDFK,
+                         "y" => $b[1][1]/_MPDFK,
+                         "w" => abs($b[0][1]-$b[2][1])/_MPDFK,
+                         "h" => abs($b[1][1]-$b[3][1])/_MPDFK);	// mPDF 5.3.90
         } else if (!isset ($page[1][1]['/Parent'])) {
             return false;
         } else {

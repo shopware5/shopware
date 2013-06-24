@@ -91,6 +91,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     me.onDoLogin(win, form, targetParams);
                 }
             },
+
+            'plugin-manager-manager-grid': {
+                updateDummyPlugin: me.onUpdateDummyPlugin
+            },
+
             'plugin-manager-manager-navigation': {
                 'openAccount': me.onOpenAccount,
                 'openLicense': me.onOpenLicense,
@@ -116,11 +121,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
         if (!record || record.get('download').length === 0) {
             return;
         }
-		
+
 		if(grid) {
 			grid.setLoading(true);
 		}
-		
+
         Ext.Ajax.request({
             url:'{url controller="Store" action="download"}',
             method: 'POST',
@@ -130,11 +135,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText),
                     message;
-								
+
 				if(grid) {
 					grid.setLoading(false);
 				}
-					
+
                 if (response.success) {
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.downloadsuccessful);
                 } else {
@@ -144,7 +149,66 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     } else {
                         message = Ext.String.format(message, ' ');
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
+                }
+            }
+        });
+    },
+
+    onUpdateDummyPlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
+        var me = this;
+        var window = me.getMainWindow();
+
+        if (window) {
+            window.setLoading(true);
+        }
+
+        Ext.Ajax.request({
+            url:'{url controller="PluginManager" action="downloadDummy"}',
+            method: 'POST',
+            params: {
+                name: record.get('name')
+            },
+            callback: function(request, opts, operation) {
+                var response = Ext.decode(operation.responseText);
+
+                if (window) {
+                    window.setLoading(false);
+                }
+
+                if (response.success === true) {
+                       var pluginStore = me.subApplication.pluginStore;
+                       pluginStore.load({
+                           callback: function(records, operation, success) {
+                               Ext.Array.each(records, function(localRecord) {
+                                   if (record.get('id') == localRecord.get('id')) {
+                                       var controller = me.getController('Manager');
+
+                                       localRecord.set('wasActivated', 0);
+                                       localRecord.set('wasInstalled', 0);
+                                       localRecord.set('installed', new Date());
+                                       localRecord.set('capabilityDummy', true);
+
+                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
+                                   }
+                               });
+                               // do something after the load finishes
+                           }
+                       });
+                } else {
+                    var message = response.message + '';
+                    if (message.length === 0) {
+                        message = me.snippets.account.downloadfailedlicense;
+                    }
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
@@ -191,7 +255,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     if (message.length === 0) {
                         message = me.snippets.account.downloadfailedlicense
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: message,
+                       log: true
+                    });
                 }
             }
         });
@@ -206,7 +274,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 if (record) {
                     var response = Ext.decode(operation.responseText);
-                    me.updatePlugin(record)
+                    me.updatePlugin(record);
                 }
             }
         });
@@ -227,8 +295,30 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
             callback: function(request, opts, operation) {
                 var response = Ext.decode(operation.responseText);
 
-                if (response.success) {
-                    var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
+               if (response.success) {
+                   if (record.get('capabilityDummy')) {
+//                       var pluginStore = me.subApplication.pluginStore;
+//                       pluginStore.load({
+//                           callback: function(records, operation, success) {
+//                               Ext.Array.each(records, function(localRecord) {
+//                                   if (record.get('id') == localRecord.get('id')) {
+//                                       var controller = me.getController('Manager');
+//
+//                                       console.log("Updated record", localRecord.data);
+//
+//
+//                                       localRecord.set('installed', new Date());
+//                                       localRecord.set('capabilityDummy', false);
+//
+//                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
+//                                   }
+//                               });
+//                               // do something after the load finishes
+//                           }
+//                       });
+                   }
+
+                   var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
                     if (response.configRequired) {
                         var plugin = me.subApplication.pluginStore.getById(record.get('pluginId'));
@@ -271,7 +361,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     if (response.message) {
                         Shopware.Notification.createGrowlMessage(me.snippets.account.title, response.message);
                     } else {
-                        Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.backupfailed);
+                        Shopware.Notification.createStickyGrowlMessage({
+                           title: me.snippets.account.title,
+                           text: me.snippets.account.backupfailed,
+                           log: true
+                        });
                     }
                 }
             }
@@ -306,6 +400,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                     ctl.onOpenLicense(targetParams.view, targetParams.record);
                 } else if(targetParams.action == 'onOpenUpdates') {
                     ctl.onOpenUpdates(targetParams.view, targetParams.record);
+                // At last allow more dynamic callbacks
+                } else if(targetParams.action) {
+                    ctl[targetParams.action](targetParams.params);
                 }
                 me.subApplication.licencedProductStore.load();
                 me.subApplication.updatesStore.load();
@@ -317,7 +414,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                 if (rawData.message) {
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, rawData.message);
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.account.title, me.snippets.account.loginfailed);
+                    Shopware.Notification.createStickyGrowlMessage({
+                       title: me.snippets.account.title,
+                       text: me.snippets.account.loginfailed,
+                       log: true
+                    });
                 }
             }
         });

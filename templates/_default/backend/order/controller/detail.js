@@ -357,6 +357,12 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             taxId: me.subApplication.getStore('Tax').getAt(0).get('id'),
             statusId: 0
         });
+        var attribute = Ext.create('Shopware.apps.Order.model.PositionAttribute');
+        var store = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Order.model.PositionAttribute'
+        });
+        store.add(attribute);
+        position['getAttributesStore'] = store;
 
         grid.getStore().add(position);
         editor.startEdit(position, 0);

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,22 +20,18 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Plugin
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Plugin;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Models\Plugin
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_core_plugins")
  * @ORM\Entity
@@ -166,22 +162,28 @@ class Plugin extends ModelEntity
     private $updateSource;
 
     /**
-     * @var boolean $active
+     * @var boolean $capabilityUpdate
      * @ORM\Column(name="capability_update", type="boolean")
      */
     private $capabilityUpdate = true;
 
     /**
-     * @var boolean $active
+     * @var boolean $capabilityInstall
      * @ORM\Column(name="capability_install", type="boolean")
      */
     private $capabilityInstall = true;
 
     /**
-     * @var boolean $active
+     * @var boolean $capabilityEnable
      * @ORM\Column(name="capability_enable", type="boolean")
      */
     private $capabilityEnable = true;
+
+    /**
+     * @var boolean $capabilityDummy
+     * @ORM\Column(name="capability_dummy", type="boolean")
+     */
+    private $capabilityDummy = false;
 
     /**
      * INVERSE SIDE
@@ -237,6 +239,22 @@ class Plugin extends ModelEntity
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDummy()
+    {
+        return (bool) $this->capabilityDummy;
+    }
+
+    /**
+     * Disables dummy capability
+     */
+    public function disableDummy()
+    {
+        $this->capabilityDummy = false;
     }
 
     /**

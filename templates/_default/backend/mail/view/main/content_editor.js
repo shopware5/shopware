@@ -39,10 +39,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
     alias: 'widget.mail-main-contentEditor',
     bodyPadding: 10,
 
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
+    layout: 'fit',
 
     isHtml: false,
 
@@ -53,23 +50,23 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
      */
     registerEvents:function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the show preview button
-                 *
-                 * @event showPreview
-                 * @param [string] content of the textarea
-                 * @param [boolean]
-                 */
-                'showPreview',
+            /**
+             * Event will be fired when the user clicks the show preview button
+             *
+             * @event showPreview
+             * @param [string] content of the textarea
+             * @param [boolean]
+             */
+            'showPreview',
 
-                /**
-                 * Event will be fired when the user clicks the send testmail button
-                 *
-                 * @event sendTestMail
-                 * @param [string] content of the textarea
-                 * @param [boolean]
-                 */
-                'sendTestMail'
+            /**
+             * Event will be fired when the user clicks the send testmail button
+             *
+             * @event sendTestMail
+             * @param [string] content of the textarea
+             * @param [boolean]
+             */
+            'sendTestMail'
         );
     },
 
@@ -100,7 +97,6 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
 
         if (this.isHtml) {
             me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
-                flex: 1,
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 name: 'contentHtml',
@@ -109,7 +105,6 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
             });
         } else {
             me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
-                flex: 1,
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 name: 'content',
@@ -119,6 +114,38 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
             me.editorField.name = 'content';
             me.editorField.translationLabel = 'content';
         }
+
+        me.editorField.on('editorready', function(editorField, editor) {
+            var scroller, size;
+
+            if(!editor || !editor.hasOwnProperty('display')) {
+                return false;
+            }
+
+            scroller = editor.display.scroller;
+            size = editorField.getSize();
+            editor.setSize('100%', size.height);
+            Ext.get(scroller).setSize(size);
+        });
+
+        me.on('resize', function(cmp, width, height) {
+            var editorField = me.editorField,
+                editor = editorField.editor,
+                scroller;
+
+            if(!editor || !editor.hasOwnProperty('display')) {
+                return false;
+            }
+
+            scroller = editor.display.scroller;
+
+            width -= me.bodyPadding * 2;
+            // We need to remove the bodyPadding, the padding on the field itself and the scrollbars
+            height -= me.bodyPadding * 5;
+
+            editor.setSize(width, height);
+            Ext.get(scroller).setSize({ width: width, height: height });
+        });
 
         return me.editorField;
     },

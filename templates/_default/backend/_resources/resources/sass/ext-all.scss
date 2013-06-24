@@ -50,6 +50,9 @@
 @include shopware-article;
 @include shopware-template;
 
+// Import styles for legacy browsers
+@import 'shopware-ui/legacy';
+
 
 .#{$prefix}dd-drag-proxy, .#{$prefix}boundlist, .#{$prefix}menu, .#{$prefix}datepicker {
     position: fixed !important;
@@ -63,4 +66,8 @@
     .base-info {
         margin: 0;
     }
+}
+
+.#{$prefix}border-region-slide-in {
+	background: #fff;
 }

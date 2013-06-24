@@ -46,13 +46,10 @@ Ext.define('Shopware.apps.Property.model.Group', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/group/fields"}{/block}
-        { name: 'id',         type: 'string' }, // id can be 2_4 for child elements
+		//{block name="backend/property/model/Group/fields"}{/block}
+        { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
-        { name: 'position',   type: 'integer' },
-        { name: 'comparable', type: 'boolean' },
-        { name: 'isOption',   type: 'boolean' },
-        { name: 'sortMode',   type: 'string' }
+        { name: 'filterable', type: 'boolean' }
     ],
 
     /**
@@ -73,6 +70,9 @@ Ext.define('Shopware.apps.Property.model.Group', {
             update:  '{url controller="property" action="updateGroup"}',
             destroy: '{url controller="property" action="deleteGroup"}'
         },
+
+
+
         /**
          * Configure the data reader
          * @object
@@ -81,10 +81,6 @@ Ext.define('Shopware.apps.Property.model.Group', {
             type: 'json',
             root: 'data'
         }
-    },
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Property.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
-    ]
+    }
 });
 //{/block}

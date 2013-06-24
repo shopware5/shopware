@@ -57,9 +57,10 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @array
      */
     refs: [
-        { ref: 'groupTree',        selector: 'property-main-groupTree' },
-        { ref: 'filterOptionGrid', selector: 'property-main-filterOptionGrid' },
-        { ref: 'valueGrid',        selector: 'property-main-valueGrid' }
+        { ref: 'GroupGrid', selector: 'property-main-groupGrid' },
+        { ref: 'optionGrid',        selector: 'property-main-optionGrid' },
+        { ref: 'setGrid',        selector: 'property-main-setGrid' },
+        { ref: 'setAssignGrid',        selector: 'property-main-setAssignGrid' }
     ],
 
     /**
@@ -67,18 +68,8 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @object
      */
     snippets: {
-        // Delete Value
-        deleteValueConfirmTitle:   '{s name=message/delete_value_confirm_title}Delete selected value{/s}',
-        deleteValueConfirmMessage: '{s name=message/delete_value_confirm_message}Are you sure you want to delete the selected value?{/s}',
-
-        deleteValueSuccessTitle: '{s name=message/delete_value_success_message}Successfully{/s}',
-        deleteValueSuccessMessage: '{s name=message/delete_value_success_title}Value has been removed{/s}',
-
-        deleteValueErrorTitle: '{s name=message/delete_value_error_title}Error{/s}',
-        deleteValueErrorMessage: '{s name=message/delete_value_error_message}An error has occurred.{/s}',
-
-        // Delete Option
-        deleteOptionConfirmTitle:   '{s name=message/delete_option_confirm_title}Delete selected Option{/s}',
+        // Delete option
+        deleteOptionConfirmTitle:   '{s name=message/delete_option_confirm_title}Delete selected option{/s}',
         deleteOptionConfirmMessage: '{s name=message/delete_option_confirm_message}Are you sure you want to delete the selected option?{/s}',
 
         deleteOptionSuccessTitle: '{s name=message/delete_option_success_message}Successfully{/s}',
@@ -87,7 +78,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         deleteOptionErrorTitle: '{s name=message/delete_option_error_title}Error{/s}',
         deleteOptionErrorMessage: '{s name=message/delete_option_error_message}An error has occurred.{/s}',
 
-        // Delete Group
+        // Delete group
         deleteGroupConfirmTitle:   '{s name=message/delete_group_confirm_title}Delete selected Group{/s}',
         deleteGroupConfirmMessage: '{s name=message/delete_group_confirm_message}Are you sure you want to delete the selected group?{/s}',
 
@@ -97,6 +88,26 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         deleteGroupErrorTitle: '{s name=message/delete_group_error_title}Error{/s}',
         deleteGroupErrorMessage: '{s name=message/delete_group_error_message}An error has occurred.{/s}',
 
+        // Delete set
+        deleteSetConfirmTitle:   '{s name=message/delete_group_confirm_title}Delete selected Group{/s}',
+        deleteSetConfirmMessage: '{s name=message/delete_group_confirm_message}Are you sure you want to delete the selected group?{/s}',
+
+        deleteSetSuccessTitle: '{s name=message/delete_group_success_message}Successfully{/s}',
+        deleteSetSuccessMessage: '{s name=message/delete_group_success_title}Group has been removed{/s}',
+
+        deleteSetErrorTitle: '{s name=message/delete_group_error_title}Error{/s}',
+        deleteSetErrorMessage: '{s name=message/delete_group_error_message}An error has occurred.{/s}',
+
+
+        // set assigned
+        groupAlreadyAssigned: '{s name=message/group_already_assigned}The group was already assigned.{/s}',
+        groupSuccessfulAssigned: '{s name=message/group_successful_assigned}Group successful assigned.{/s}',
+        groupSuccessfulSorted: '{s name=message/group_successful_sorted}The group position has been successfully saved.{/s}',
+        optionSuccessfulSorted: '{s name=message/option_successful_sorted}The option position has been successfully saved.{/s}',
+        successfulRemovedAssignment: '{s name=message/group_assignment_successful_removed}The group has been successfully removed.{/s}',
+        successfulSavedSet: '{s name=message/set_successful_saved}The set has been successfully saved.{/s}',
+
+        successfulTitle: '{s name=message/successful_title}Successful{/s}',
 		growlMessage: '{s name=title}{/s}'
     },
 
@@ -110,37 +121,54 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         var me = this;
 
         me.control({
-            'property-main-groupTree': {
-                deleteGroup:           me.onDeleteGroup,
-                removeOptionFromGroup: me.onRemoveOptionFromGroup,
-                addOptionToGroup:      me.onAddOptionToGroup,
-                edit:                  me.onEditGroup
+            'property-main-groupGrid': {
+                deleteGroup:    me.onDeleteGroup,
+                edit:            me.onEditGroup,
+                selectionchange: me.onGroupChange
             },
 
-            'property-main-groupTree dataview': {
-                drop: me.onDropGroupOption
+            'property-main-groupGrid textfield[action=searchGroups]':{
+                change:me.onSearchGroups
             },
 
-            'property-main-filterOptionGrid': {
-                deleteOption:    me.onDeleteOption,
-                edit:            me.onEditOption,
-                selectionchange: me.onOptionChange
+            'property-main-setGrid': {
+                selectionchange: me.onSetChange,
+                deleteSet: me.onDeleteSet,
+                edit: me.onEditSet
+            },
+            'property-main-setGrid textfield[action=searchSets]':{
+                change:me.onSearchSets
             },
 
-            'property-main-valueGrid': {
-                deleteValue: me.onDeleteValue,
-                edit:        me.onEditValue
+            'property-main-setAssignGrid': {
+                deleteAssignment: me.onRemoveSetAssignment,
+                addAssignment: me.onAddGroupToSet
             },
 
-            'property-main-valueGrid dataview': {
-                drop: me.onDropValue
+            'property-main-setAssignGrid dataview': {
+                drop: me.onDropSetAssignment
+            },
+
+            'property-main-optionGrid': {
+                deleteOption: me.onDeleteOption,
+                edit:        me.onEditOption
+            },
+
+            'property-main-optionGrid dataview': {
+                drop: me.onDropOption
             }
         });
 
+        me.subApplication.optionStore = me.subApplication.getStore('Option');
+        me.subApplication.groupStore = me.subApplication.getStore('Group');
+        me.subApplication.setStore = me.subApplication.getStore('Set');
+        me.subApplication.setAssignStore = me.subApplication.getStore('SetAssign');
+
         me.mainWindow = me.getView('main.Window').create({
-            valueStore:        me.getStore('Value'),
-            filterOptionStore: me.getStore('FilterOption'),
-            groupStore:        me.getStore('Group')
+            optionStore: me.subApplication.optionStore,
+            groupStore: me.subApplication.groupStore,
+            setStore: me.subApplication.setStore,
+            setAssignStore: me.subApplication.setAssignStore
         });
 
         me.mainWindow.show();
@@ -148,21 +176,88 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         me.callParent(arguments);
     },
 
+
     /**
      * Saves current positions in the grid to the backend
      *
      * @event drop
-     * @param [HTMLElement ] The GridView node if any over which the mouse was positioned.
-     * @param [Object] The data object gathered at mousedown time
-     * @param [Ext.data.Model]
-     * @param [String] "before" or "after" depending on whether the mouse is above or below the midline of the node.
      * @return void
      */
-    onDropGroupOption: function (node, data, overModel, dropPosition) {
-        var me    = this,
-            group = data.records[0].parentNode;
+    onDropSetAssignment: function (dragZone, element) {
+        var me = this,
+            assignStore = me.subApplication.setAssignStore,
+            alreadyAssigned = false;
 
-        return me.saveGroupPosition(group);
+        if(element.records.length == 0){
+            return;
+        }
+        var record = element.records[0],
+            setId = assignStore.getProxy().extraParams.setId;
+
+        if(element.view.ownerCt.alias == "widget.property-main-groupGrid") {
+
+            assignStore.each(function(item) {
+                var optionId = item.data.optionId;
+                if(record.data.id == item.data.optionId) {
+                    //record already assigned
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle,me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
+                    me.subApplication.groupStore.load();
+                    assignStore.load();
+                    alreadyAssigned = true;
+                }
+            });
+            if(!alreadyAssigned) {
+                //save group assignment
+                Ext.Ajax.request({
+                    url: '{url controller="property" action="onAddAssignment"}',
+                    params: {
+                        setId: setId,
+                        optionId: record.get('id')
+                    },
+                    success: function(response, opts) {
+                        me.subApplication.groupStore.load();
+                        assignStore.load();
+                        Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupSuccessfulAssigned, me.snippets.growlMessage);
+                    }
+                });
+            }
+        }
+        else {
+            //save the sorting in the space of the grid
+            me.saveAssignmentPosition(assignStore);
+        }
+    },
+
+
+    /**
+     * Internal helper function to save current postion of values
+     */
+    saveAssignmentPosition: function(store) {
+        var me = this;
+        if(store.getProxy().extraParams.length == 0) {
+            return;
+        }
+        var orderedItems = [],
+            index = 0,
+            setId = store.getProxy().extraParams.setId;
+
+        store.each(function(item) {
+            orderedItems[index] = item.get('optionId');
+            index +=1;
+        });
+
+        // Send current positions to backend
+        Ext.Ajax.request({
+            url: '{url controller="property" action="changeAssignmentPosition"}',
+            method: 'POST',
+            params: {
+                setId: setId,
+                data : Ext.encode(orderedItems)
+            },
+            success: function(response, opts) {
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupSuccessfulSorted, me.snippets.growlMessage);
+            }
+        });
     },
 
     /**
@@ -204,16 +299,17 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param [String] "before" or "after" depending on whether the mouse is above or below the midline of the node.
      * @return void
      */
-    onDropValue: function (node, data, overModel, dropPosition) {
+    onDropOption: function (node, data, overModel, dropPosition) {
         var me = this;
-            me.saveValuePostion();
+            me.saveOptionPosition(true);
     },
 
     /**
      * Internal helper function to save current postion of values
      */
-    saveValuePostion: function() {
-        var store = this.getStore('Value'),
+    saveOptionPosition: function(showSuccessMessage) {
+        var me = this,
+            store = me.subApplication.optionStore,
             orderedItems = [],
             index = 0;
 
@@ -224,10 +320,15 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
         // Send current positions to backend
         Ext.Ajax.request({
-            url: '{url controller="property" action="changeValuePosition"}',
+            url: '{url controller="property" action="changeOptionPosition"}',
             method: 'POST',
             params: {
                 data : Ext.encode(orderedItems)
+            },
+            success: function(response, opts) {
+                if(showSuccessMessage) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.optionSuccessfulSorted, me.snippets.growlMessage);
+                }
             }
         });
     },
@@ -239,7 +340,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param [object] option -  Associated  Ext.tree.ViewView
      * @param [object] child - Shopware.apps.Property.model.Group
      */
-    onAddOptionToGroup: function(tree, group, option, child) {
+    onAddGroupToSet: function(tree, group, option, child) {
         var me = this;
 
         Ext.Ajax.request({
@@ -260,27 +361,22 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * Event will be fired when the user clicks the delete icon in the
      * toolbar
      *
-     * @event removeOptionFromGroup
-     * @param [object] node - Ext.data.NodeInterface
-     * @param [object] tree - Associated  Ext.tree.ViewView
+     * @event deleteAssignment
+     * @param [object] record
+     * @param [object] grid
      */
-    onRemoveOptionFromGroup: function(node, tree) {
-        var me = this,
-            group = node.parentNode,
-            groupId = group.get('id');
-
-        // Option is constructed like this groupId + "_" + optionId eG. "4_3"
-        var optionId = node.get('id').split("_")[1];
+    onRemoveSetAssignment: function(record, grid) {
+        var me = this;
 
         Ext.Ajax.request({
             url: '{url controller="property" action="removeOptionFromGroup"}',
             params: {
-                groupId: groupId,
-                optionId: optionId
+                groupId: record.data.groupId,
+                optionId: record.data.optionId
             },
             success: function(response, opts) {
-                node.remove();
-                me.saveGroupPosition(group);
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.successfulRemovedAssignment, me.snippets.growlMessage);
+                me.subApplication.setAssignStore.load();
             }
         });
     },
@@ -295,7 +391,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      *
      * @return void
      */
-    onEditGroup: function(editor, event) {
+    onEditSet: function(editor, event) {
         var me     = this,
             record = event.record,
             view   = editor.grid.getView();
@@ -304,38 +400,50 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             return;
         }
 
-        if (record.get('isOption')) {
-            // Option is constructed like this groupId + "_" + optionId eG. "4_3"
-            var optionId = record.get('id').split("_")[1];
-            var groupId = record.get('id').split("_")[0];
-            var orderedItems = [];
+        record.save({
+            callback: function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.successfulSavedSet, me.snippets.growlMessage);
+                me.subApplication.setStore.load();
+                me.getSetGrid().addBtn.enable();
 
-            orderedItems.push({
-                position: record.get('position'),
-                groupId: groupId,
-                optionId: optionId
-            });
+            }
+        });
+    },
 
-            // Send current positions to backend
-            Ext.Ajax.request({
-                url: '{url controller="property" action="changeGroupPosition"}',
-                method: 'POST',
-                params: {
-                    data : Ext.encode(orderedItems)
-                }
-            });
-            record.dirty = false;
+
+    /**
+     * Event will be fired when the selected option changes
+     *
+     * @event selectionchange
+     * @param [object] Ext.selection.Model selModel
+     * @param [object] Ext.data.Model[] selected
+     * @return void
+     */
+    onSetChange: function(selModel, selected) {
+        var me    = this,
+            store = me.getStore('SetAssign'),
+            grid  = me.getSetAssignGrid();
+
+        if (selected.length === 0) {
+            grid.store.removeAll();
+            grid.disable();
             return;
         }
 
-        view.setLoading(true);
-        record.save({
-            callback: function() {
-                me.getGroupTree().addBtn.enable();
-                view.setLoading(false);
+        if (selected[0].phantom) {
+            grid.store.removeAll();
+            grid.disable();
+            return;
+        }
+
+        store.getProxy().extraParams.setId = selected[0].get('id');
+        grid.setLoading(true);
+        store.load({
+            'callback': function() {
+                grid.setLoading(false);
+                grid.enable();
             }
         });
-        me.saveGroupPosition(record);
     },
 
     /**
@@ -346,10 +454,10 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param [object] Ext.data.Model[] selected
      * @return void
      */
-    onOptionChange: function(selModel, selected) {
+    onGroupChange: function(selModel, selected) {
         var me    = this,
-            store = me.getStore('Value'),
-            grid  = me.getValueGrid();
+            store = me.subApplication.optionStore,
+            grid  = me.getOptionGrid();
 
         if (selected.length === 0) {
             grid.store.removeAll();
@@ -385,26 +493,23 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param [object] tree - Associated Ext.tree.View
      * @return void
      */
-    onDeleteGroup: function(record, tree) {
+    onDeleteSet: function(record, tree) {
         var me    = this;
 
-        Ext.MessageBox.confirm(me.snippets.deleteGroupConfirmTitle, me.snippets.deleteGroupConfirmMessage, function (response) {
+        Ext.MessageBox.confirm(me.snippets.deleteSetConfirmTitle, me.snippets.deleteSetConfirmMessage, function (response) {
             if (response !== 'yes') {
                 return false;
             }
 
-            record.removeAll();
-
-            tree.setLoading(true);
             record.destroy({
                 success: function() {
-                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupSuccessTitle, me.snippets.deleteGroupSuccessMessage, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteSetSuccessTitle, me.snippets.deleteSetSuccessMessage, me.snippets.growlMessage);
                 },
                 failure: function() {
-                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle, me.snippets.deleteGroupErrorMessage, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteSetErrorTitle, me.snippets.deleteSetErrorMessage, me.snippets.growlMessage);
                 },
                 callback: function() {
-                    tree.setLoading(false);
+                    me.subApplication.setStore.load();
                 }
             });
         });
@@ -414,7 +519,42 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * Event will be fired when the user clicks the delete icon in the
      * action column
      *
-     * @event deleteValue
+     * @event deleteGroup
+     * @param [object] record
+     * @param [object] grid - Associated Ext.view.Table
+     * @return void
+     */
+    onDeleteGroup: function(record, grid) {
+        var me    = this,
+            store = grid.getStore();
+
+        Ext.MessageBox.confirm(me.snippets.deleteGroupConfirmTitle, me.snippets.deleteGroupConfirmMessage, function (response) {
+            if (response !== 'yes') {
+                return false;
+            }
+
+            grid.setLoading(true);
+            record.destroy({
+                success: function() {
+                    store.remove(record);
+                    me.getGroupGrid().getSelectionModel().selectPrevious();
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupSuccessTitle, me.snippets.deleteGroupSuccessMessage, me.snippets.growlMessage);
+                },
+                failure: function() {
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle, me.snippets.deleteGroupErrorMessage, me.snippets.growlMessage);
+                },
+                callback: function() {
+                    grid.setLoading(false);
+                }
+            });
+        });
+    },
+
+    /**
+     * Event will be fired when the user clicks the delete icon in the
+     * action column
+     *
+     * @event deleteOption
      * @param [object] record
      * @param [object] grid - Associated Ext.view.Table
      * @return void
@@ -428,92 +568,21 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 return false;
             }
 
-            grid.setLoading(true);
+            me.getOptionGrid().setLoading(true);
             record.destroy({
                 success: function() {
                     store.remove(record);
-                    me.getFilterOptionGrid().getSelectionModel().selectPrevious();
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteOptionSuccessTitle, me.snippets.deleteOptionSuccessMessage, me.snippets.growlMessage);
                 },
                 failure: function() {
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteOptionErrorTitle, me.snippets.deleteOptionErrorMessage, me.snippets.growlMessage);
                 },
                 callback: function() {
-                    grid.setLoading(false);
+                    me.getOptionGrid().setLoading(false);
                 }
             });
         });
     },
-
-    /**
-     * Event will be fired when the user clicks the delete icon in the
-     * action column
-     *
-     * @event deleteValue
-     * @param [object] record
-     * @param [object] grid - Associated Ext.view.Table
-     * @return void
-     */
-    onDeleteValue: function(record, grid) {
-        var me    = this,
-            store = grid.getStore();
-
-        Ext.MessageBox.confirm(me.snippets.deleteValueConfirmTitle, me.snippets.deleteValueConfirmMessage, function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-
-            me.getValueGrid().setLoading(true);
-            record.destroy({
-                success: function() {
-                    store.remove(record);
-                    Shopware.Notification.createGrowlMessage(me.snippets.deleteValueSuccessTitle, me.snippets.deleteValueSuccessMessage, me.snippets.growlMessage);
-                },
-                failure: function() {
-                    Shopware.Notification.createGrowlMessage(me.snippets.deleteValueErrorTitle, me.snippets.deleteValueErrorMessage, me.snippets.growlMessage);
-                },
-                callback: function() {
-                    me.getValueGrid().setLoading(false);
-                }
-            });
-        });
-    },
-
-    /**
-     * Fired after a row is edited and passes validation. This event is fired
-     * after the store's update event is fired with this edit.
-     *
-     * @event edit
-     * @param [Ext.grid.plugin.Editing]
-     * @param [object] An edit event
-     *
-     * @return void
-     */
-    onEditValue: function(editor, event) {
-        var me     = this,
-            record = event.record,
-            view   = editor.grid.getView(),
-            valueStore = me.getStore('Value');
-
-        if (!record.dirty) {
-            return;
-        }
-
-        me.getValueGrid().setLoading(true);
-        record.save({
-            success: function() {
-                me.saveValuePostion();
-            },
-            failure: function() {
-                valueStore.remove(record);
-            },
-            callback: function() {
-                me.getValueGrid().addBtn.enable();
-                me.getValueGrid().setLoading(false);
-            }
-        });
-    },
-
 
     /**
      * Fired after a row is edited and passes validation. This event is fired
@@ -528,22 +597,60 @@ Ext.define('Shopware.apps.Property.controller.Main', {
     onEditOption: function(editor, event) {
         var me     = this,
             record = event.record,
-            valueStore = me.getStore('Value'),
-            valueGrid  = me.getValueGrid();
+            view   = editor.grid.getView(),
+            optionStore = me.subApplication.optionStore,
+            optionGrid = me.getOptionGrid();
 
         if (!record.dirty) {
             return;
         }
 
-        me.getFilterOptionGrid().setLoading(true);
+        optionGrid.setLoading(true);
+        record.save({
+            success: function() {
+                me.saveOptionPosition();
+            },
+            failure: function() {
+                optionStore.remove(record);
+            },
+            callback: function() {
+                optionGrid.addBtn.enable();
+                optionGrid.setLoading(false);
+            }
+        });
+    },
+
+
+    /**
+     * Fired after a row is edited and passes validation. This event is fired
+     * after the store's update event is fired with this edit.
+     *
+     * @event edit
+     * @param [Ext.grid.plugin.Editing]
+     * @param [object] An edit event
+     *
+     * @return void
+     */
+    onEditGroup: function(editor, event) {
+        var me     = this,
+            record = event.record,
+            groupStore = me.subApplication.groupStore,
+            optionGrid  = me.getOptionGrid(),
+            groupGrid = me.getGroupGrid();
+
+        if (!record.dirty) {
+            return;
+        }
+
+        groupGrid.setLoading(true);
         record.save({
             callback: function(record) {
-                me.getFilterOptionGrid().addBtn.enable();
-                me.getFilterOptionGrid().setLoading(false);
+                groupGrid.addBtn.enable();
+                groupGrid.setLoading(false);
 
-                valueStore.getProxy().extraParams.optionId = record.get('id');
-                me.getFilterOptionGrid().getSelectionModel().select(record);
-                valueGrid.enable();
+                groupStore.getProxy().extraParams.optionId = record.get('id');
+                groupGrid.getSelectionModel().select(record);
+                optionGrid.enable();
             },
             failure: function() {
                 if (record.phantom) {
@@ -551,6 +658,41 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 }
             }
         });
+    },
+
+    /**
+     * Filters the grid with the passed search value to find the right item
+     *
+     * @param field
+     * @param value
+     * @return void
+     */
+    onSearchGroups:function (field, value) {
+        var me = this,
+            searchString = Ext.String.trim(value),
+            store = me.subApplication.groupStore;
+        store.filters.clear();
+        store.currentPage = 1;
+        store.filter('filter',searchString);
+    },
+
+
+    /**
+     * Filters the grid with the passed search value to find the right item
+     *
+     * @param field
+     * @param value
+     * @return void
+     */
+    onSearchSets:function (field, value) {
+        var me = this,
+            searchString = Ext.String.trim(value),
+            store = me.subApplication.setStore;
+        store.filters.clear();
+        store.currentPage = 1;
+        store.filter('filter',searchString);
     }
+
+
 });
 //{/block}

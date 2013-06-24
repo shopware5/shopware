@@ -62,7 +62,7 @@ Ext.define('Shopware.Notification', {
      *
      * @integer
      */
-    hideDelay: 2500,
+    hideDelay: 1800,
 
     /**
      * Used easing type for the fade in and fade out animation
@@ -105,6 +105,20 @@ Ext.define('Shopware.Notification', {
      * @string
      */
     growlMsgCls: 'growl-msg',
+
+    /**
+     * Collects the available growl message to display them among each other.
+     *
+     * @Ext.util.MixedCollection
+     */
+    growlMsgCollection: Ext.create('Ext.util.MixedCollection'),
+
+    /**
+     * Default offset for the growl message, usally set to the height of the menu bar.
+     *
+     * @integer
+     */
+    offsetTop: 50,
 
     /**
      * XTemplate for the alert message
@@ -442,7 +456,7 @@ Ext.define('Shopware.Notification', {
      * @param [boolean] log - If the growlMessage should be logged
      */
     createGrowlMessage: function(title, text, caller, iconCls, log) {
-        var me = this, msgData, growlMsg;
+        var me = this, msgData, growlMsg, id = Ext.id(), compTop = me.offsetTop
 
 		if(log != false){
 			Ext.Ajax.request({
@@ -465,22 +479,188 @@ Ext.define('Shopware.Notification', {
             iconCls: iconCls || 'growl'
         };
 
+        me.growlMsgCollection.each(function(growlEl) {
+            compTop += growlEl.height + 6;
+        });
+
         // Create message box
-        growlMsg = Ext.create('Ext.container.Container', {
+        growlMsg = Ext.create('Ext.panel.Panel', {
             ui: [ 'default', 'shopware-ui' ],
             data: msgData,
+            id: id,
+            unstyled: true,
             cls: me.growlMsgCls,
             tpl: me.growlMsgTpl,
             renderTo: Ext.getBody()
         });
         growlMsg.update(msgData);
-        growlMsg.getEl().setStyle('opacity', 1);
+        growlMsg.getEl().setStyle({
+            'opacity': 1,
+            'left': Ext.Element.getViewportWidth() - 308 + 'px',
+            'top': compTop + 'px'
+        });
 
         // Fade out the growl like message after the given delay
         var task = new Ext.util.DelayedTask(function() {
             me.closeGrowlMessage(growlMsg, me, task);
         });
-        task.delay(this.hideDelay);
+
+        task.delay(this.hideDelay + (text.length * 35));
+
+        me.growlMsgCollection.add(id, { el: growlMsg, height: growlMsg.getHeight(), sticky: false });
+        return growlMsg;
+    },
+
+    /**
+     * Creates a sticky growl like message. The note must be closed by the user. The messages
+     * will be displayed among each other.
+     *
+     * @example
+     * Shopware.Notification.createStickyGrowlMessage({
+     *     title: 'Growl Sticky Test',
+     *     text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
+     *     log: false,
+     *     btnDetail: {
+     *         link: 'http://wiki.shopware.de'
+     *     }
+     * });
+     *
+     * @this Shopware.Notification
+     * @param { Object }  opts - Configuration object (required)
+     *           { String }   opts.title - Title of the message (required)
+     *           { String }   opts.text - Text of the message (required)
+     *           { Integer }  opts.width - Width of the message in pixel
+     *           { Boolean }  opts.log - Log message to display it in the log module (default: "false")
+     *           { Object }   opts.scope - Scope in which the callback will be fired (default: this)
+     *           { Function } opts.callback - Callback method which should be called after the message was closed.
+     *                        (default: Ext.emptyFn)
+     *           { Object }   opts.btnDetail - Configuration object for the detail button
+     *              { String }   opts.btnDetail.text - Button text (default: "Details aufrufen")
+     *              { Boolean }  opts.btnDetail.autoClose - Close the message after the user clicks the detail button
+     *                           (default: true)
+     *              { String }   opts.btnDetail.link - URL which will be opened when the user clicks the link
+     *              { String }   opts.btnDetail.target - Target for the link (default: "_target")
+     *              { Function } opts.btnDetail.callback - Callback method which should be called after the user
+     *                           links on the detail link (default: Ext.emptyFn)
+     *              { Object }   opts.btnDetail.scope - Scope in which the callback will be fired (default: this)
+     *        { Function } caller - Function which calls this method. Only necessary for the logging.
+     *        { String }   iconCls - CSS class for the icon which should be displayed. This options is disabled.
+     *        { Boolean }  log - Compability parameter. Please use `opts.log` instead of the parameter `log`
+     *
+     * @returns { Ext.panel.Panel } Generated container for the growl message
+     */
+    createStickyGrowlMessage: function(opts, caller, iconCls, log) {
+        var me = this, msgData, growlMsg, growlContent, btnContent, closeCB, detailCB, autoClose, closeHandler,
+            target = '_blank', width = 300, id = Ext.id(), compTop = me.offsetTop;
+
+        log = log || false;
+        target = (opts.btnDetail && opts.btnDetail.target) ? opts.btnDetail.target : target;
+        width = opts.width || width;
+        closeCB = opts.callback || Ext.emptyFn;
+        detailCB = (opts.btnDetail && opts.btnDetail.callback) ? opts.btnDetail.callback : Ext.emptyFn;
+        autoClose = (opts.btnDetail && opts.btnDetail.autoClose !== undefined) ? opts.btnDetail.autoClose : true;
+
+        if(log !== false || opts.log !== false) {
+            Ext.Ajax.request({
+                url: '{url controller="Log" action="createLog"}',
+                params: {
+                    type: 'backend',
+                    key: caller,
+                    text: opts.text,
+                    user: userName,
+                    value4: ''
+                },
+                scope: this
+            });
+        }
+
+        // Collect message data
+        msgData = {
+            title: opts.title || false,
+            text: opts.text,
+            iconCls: iconCls || 'growl'
+        };
+
+        btnContent = Ext.create('Ext.container.Container', {
+            cls: me.growlMsgCls + '-btn-content',
+            flex: 2,
+            layout: {
+                type: 'vbox',
+                align: 'stretch',
+                pack:'center'
+            }
+        });
+
+        // Content area
+        growlContent = Ext.create('Ext.container.Container', {
+            data: msgData,
+            cls: me.growlMsgCls + '-sticky-content',
+            tpl: me.growlMsgTpl,
+            maxHeight: 120,
+            autoScroll: true,
+            flex: 3
+        });
+        growlContent.update(msgData);
+
+        // Global container
+        growlMsg = Ext.create('Ext.panel.Panel', {
+            unstyled: true,
+            id: id,
+            width: width,
+            ui: [ 'default', 'shopware-ui' ],
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            cls: me.growlMsgCls + ' ' + me.growlMsgCls +  '-sticky-notification',
+            renderTo: document.body,
+            items: [ growlContent, btnContent ]
+        });
+
+        closeHandler = function() {
+            me.closeGrowlMessage(growlMsg, me);
+            closeCB.apply(opts.scope || me, [ growlMsg, msgData ]);
+        };
+
+        // Add detail button
+        if(opts.btnDetail && opts.btnDetail.link) {
+            btnContent.add({
+                xtype: 'button',
+                height: 22,
+                ui: 'growl-sticky',
+                text: opts.btnDetail.text || 'Details aufrufen',
+                handler: function() {
+                    window.open(opts.btnDetail.link, target);
+                    detailCB.apply(opts.btnDetail.scope || me, [ growlMsg, msgData ]);
+
+                    if(autoClose) {
+                        closeHandler();
+                    }
+                }
+            });
+        }
+
+        // Add close button
+        btnContent.add({
+            xtype: 'button',
+            ui: 'growl-sticky',
+            text: 'Schließen',
+            height: 22,
+            handler: closeHandler
+        });
+
+        me.growlMsgCollection.each(function(growlEl) {
+            compTop += growlEl.height + 6;
+        });
+
+        // Animate it
+        growlMsg.getEl().setStyle({
+            'opacity': 1,
+            'left': Ext.Element.getViewportWidth() - (width + 8) + 'px',
+            'top': compTop + 'px'
+        });
+
+        me.growlMsgCollection.add(id, { el: growlMsg, height: growlContent.getHeight() + 26, sticky: true });
 
         return growlMsg;
     },
@@ -495,6 +675,8 @@ Ext.define('Shopware.Notification', {
      * @return [boolean]
      */
     closeGrowlMessage: function(msg, scope, task) {
+        var pos = -1;
+
         if(task && Ext.isObject(task)) {
             task.cancel();
         }
@@ -502,7 +684,22 @@ Ext.define('Shopware.Notification', {
         msg.getEl().setStyle('opacity', 0);
         Ext.defer(function() {
             msg.destroy();
+            scope.growlMsgCollection.removeAtKey(msg.id);
         }, 210);
+
+        scope.growlMsgCollection.each(function(growlMsg, i) {
+            if(growlMsg.el.id === msg.id) {
+                pos = i;
+            }
+
+            if(pos > -1 && pos !== i) {
+                var top = scope.growlMsgCollection.getAt(pos).height;
+                top = top + ((scope.growlMsgCollection.items.length - 2) * 6);
+                growlMsg.el.animate({
+                    to: { top: growlMsg.el.getPosition()[1] - (top < 50 ? 50 : top) + 'px' }
+                }, 50);
+            }
+        });
 
         return true;
     }

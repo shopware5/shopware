@@ -124,13 +124,18 @@ Ext.define('Shopware.form.field.TinyMCE',
             convert_urls : false,
             media_strict : false,
             relative_urls : true,
-            language: 'en', // German isn't supported in the current release version v3.5b1
+            language: Ext.editorLang.substring(0,2),
             mode: "textareas",
             theme: "advanced",
             skin: "o2k7",
-            skin_variant : 'silver',
             invalid_elements:'script,applet',
+
+            /** {if $user->extended_editor eq 1} */
             plugins: "media_selection,safari,pagebreak,style,layer,table,iespell,inlinepopups,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,visualchars,nonbreaking,xhtmlxtras,template",
+            /** {else} */
+            plugins: "media_selection,fullscreen",
+            /** {/if} */
+
             theme_advanced_toolbar_location: "top",
             theme_advanced_resizing: true,
             theme_advanced_toolbar_align: "left",
@@ -141,10 +146,19 @@ Ext.define('Shopware.form.field.TinyMCE',
             // Content CSS - Styles the tiny mce editor. Please note the append timestamp. It's used to prevent caching the stylesheet
             contentCSS: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
 
+            /** {if $user->extended_editor eq 1} */
+            skin_variant: 'silver',
             theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect",
             theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
             theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,ltr,rtl,|,fullscreen",
             theme_advanced_buttons4 : "styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,|,insertdate,inserttime,preview,|,forecolor,backcolor,|,media_selection"
+            /** {else} */
+            skin_variant: 'shopware',
+            theme_advanced_buttons1: 'undo,redo,|,bold,italic,underline,|,fontsizeselect,forecolor,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,link,unlink,media_selection,|,code,fullscreen,',
+            theme_advanced_buttons2: '',
+            theme_advanced_buttons3: '',
+            theme_advanced_buttons4: ''
+            /** {/if} */
         },
 
         /**
@@ -159,6 +173,13 @@ Ext.define('Shopware.form.field.TinyMCE',
             Ext.apply(this.settings, userSettings);
         }
     },
+
+    /**
+     * Truthy if the component has an `emptyText`, otherwise falsy.
+     * @default false
+     * @boolean
+     */
+    hasPlaceholder: false,
 
     /**
      * List of configuration options with their default values, for which automatically accessor methods are generated
@@ -198,7 +219,6 @@ Ext.define('Shopware.form.field.TinyMCE',
         if(window.tinymce) {
             me.statics.initialized = true;
         }
-
         // Register additional events
         me.registerEvents();
     },
@@ -288,7 +308,7 @@ Ext.define('Shopware.form.field.TinyMCE',
      * @retrun void
      */
     initEditor: function() {
-        var me = this, input = me.inputEl, height, width;
+        var me = this, input = me.inputEl, height, placeholder = false;
 
         // Check if the TinyMCE editor files are included
         if(!window.tinyMCE) {
@@ -331,10 +351,32 @@ Ext.define('Shopware.form.field.TinyMCE',
         // This solution still as some drawbacks as it image-resize-actions won't trigger a undo-step usually.
         me.tinymce.onInit.add(function(ed, evt) {
             var dom = ed.dom,
-                doc = ed.getDoc();
+                doc = ed.getDoc(),
+                el = doc.content_editable ? ed.getBody() : (tinymce.isGecko ? doc : ed.getWin());
 
-            tinymce.dom.Event.add(doc, 'blur', function(e) {
-                me.setRawValue(me.tinymce.getContent());
+            // Support for the `emptyText` property
+            if((!me.value || !me.value.length) && me.emptyText && me.emptyText.length) {
+                me.tinymce.setContent(me.emptyText);
+                me.hasPlaceholder = true;
+
+                tinymce.dom.Event.add(el, 'focus', function() {
+                    var value = me.tinymce.getContent();
+                    value = Ext.util.Format.stripTags(value);
+
+                    if(value === me.emptyText) {
+                        me.tinymce.setContent('');
+                    }
+                });
+            }
+
+            tinymce.dom.Event.add(el, 'blur', function() {
+                var value = me.tinymce.getContent();
+                me.setRawValue(value);
+
+                value = Ext.util.Format.stripTags(value);
+                if(me.hasPlaceholder && !value.length || (value == me.emptyText)) {
+                    me.tinymce.setContent(me.emptyText);
+                }
             });
         });
 
@@ -448,6 +490,11 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         if(!editorChange) {
             me.setEditorValue(value, me);
+
+            // Support for the `emptyText` property
+            if((!value || !value.length) && me.hasPlaceholder) {
+                me.setEditorValue(me.emptyText, me);
+            }
         }
 
         return me;

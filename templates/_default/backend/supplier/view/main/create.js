@@ -118,10 +118,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
     {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
-            fieldLabel : '{s name=description}Description{/s}',
-            defaults : this.getFormDefaults(),
-            labelWidth  : 130,
-            anchor : '95%'
+            emptyText : '{s name=description}Description{/s}',
+            defaults : this.getFormDefaults()
         });
     },
     /**
@@ -172,7 +170,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
             labelWidth  : 130,
-            anchor      : '100%'
+            anchor      : '100%',
+            albumId: -12 // Default supplier albumId
         });
     }
 });

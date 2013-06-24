@@ -25,6 +25,7 @@
 /*	GENERAL
 	------------------------ */
 html, a, a:link, a:active, a:hover, a:visted {color: #333;}
+body { min-width: 1024px }
 html {font: 12px/1.3em Arial,"Helvetica Neue",Helvetica,sans-serif; padding-top: 0px;}
 .container_20 {background-color: #fff; border-color: #fff;margin-top: 0;}
 h2, h3 {color:#000}
@@ -1839,6 +1840,7 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 .emotion-listing { position: relative }
 .emotion-element { position: absolute }
 .emotion-inner-element {margin: 0 10px 10px 0;}
+.emotion-spacer { position: relative; width: 0; z-index: -1 }
 
 /** HTML ELEMENT */
 .html-text-inner-element {border: 1px solid #dfdfdf; height: 100%;}
@@ -1847,9 +1849,20 @@ div.table_foot input.button_tablefoot {background: url(../images/buttons/button_
 .html-text-inner-element .text {padding:0 20px 20px;}
 .emotion-inner-element .headline {margin: 0 0 15px;color: #000; font-weight: bold; font-size: 21px;}
 .emotion-inner-element .text {font-size: 13px;line-height: 21px;color: #777;}
+.emotion-inner-element .text ul li,
+.emotion-inner-element .text ol li {
+    list-style: disc;
+    margin: 0 0 0 15px;
+}
+.emotion-inner-element .text ol li { list-style: decimal }
+.emotion-inner-element .text a { color: #e1540f }
+.emotion-inner-element .text a:hover { text-decoration: underline !important }
 
 /** BANNER ELEMENT **/
 .banner-element {overflow: hidden;}
+
+/** BANNER SLIDER ELEMENT */
+.banner-slider-emotion { overflow: hidden }
 
 /** ARTICLE */
 .emotion-inner-element .artbox {
@@ -2718,6 +2731,41 @@ div#notes .table_row .title {width: 450px;}
     -moz-opacity: 0;
     -khtml-opacity: 0;
     opacity: 0;
+}
+.emotion-element .banner-element .banner-mapping-tooltip {
+    text-align: center;
+    position: absolute;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+
+    -webkit-transition: opacity 0.3s ease-out;
+       -moz-transition: opacity 0.3s ease-out;
+         -o-transition: opacity 0.3s ease-out;
+            transition: opacity 0.3s ease-out;
+
+}
+.emotion-element .banner-element .banner-mapping-tooltip span {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #000;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-shadow: 0 1px 0 #000;
+    font-size: 11px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+.emotion-element .banner-element .hover  {
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=1);
+    filter: alpha(opacity=1);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
 }
 
 /** ERROR MESSAGES **/

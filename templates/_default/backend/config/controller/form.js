@@ -124,7 +124,8 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         { ref: 'detail', selector: 'config-base-detail' },
         { ref: 'table', selector: 'config-base-table' },
         { ref: 'deleteButton', selector: 'config-base-table button[action=delete]' },
-        { ref: 'taxRuleAddButton', selector: 'config-tax-rule toolbar button' }
+        { ref: 'taxRuleAddButton', selector: 'config-tax-rule toolbar button' },
+        { ref: 'discountAddButton', selector: 'config-pricegroup-discount toolbar button' }
     ],
 
     messages: {
@@ -263,6 +264,9 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                         store = view.getStore();
                     store.remove(record);
                 }
+            },
+            'config-pricegroup-discount config-element-select': {
+                change: me.onSelectCustomerGroupOnPriceDiscount
             }
         });
 
@@ -331,10 +335,16 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         }
     },
 
-    //todo@all Wrong place?
     onSelectCustomerGroupOnTax: function(field, newValue, oldValue) {
         var me = this,
         addButton = me.getTaxRuleAddButton();
+        addButton.setDisabled(!newValue);
+    },
+
+    onSelectCustomerGroupOnPriceDiscount: function(field, newValue, oldValue) {
+        var me = this,
+            addButton = me.getDiscountAddButton();
+
         addButton.setDisabled(!newValue);
     },
     

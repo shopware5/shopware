@@ -21,7 +21,7 @@
 				<directory>../engine/Shopware/Plugins/Community</directory>
                 <directory>../engine/Shopware/Components/Xml</directory>
                 <directory>../engine/Shopware/Models/Attribute</directory>
-                <directory suffix="Meta.php">../..engine/Shopware/Plugins/</directory>
+                <directory suffix="Meta.php">../engine/Shopware/Plugins/</directory>
 			</exclude>
 		</whitelist>
 	</filter>

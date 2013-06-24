@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Statistics controller
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
@@ -323,18 +317,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     SELECT parent FROM s_categories
                     WHERE c.id=parent LIMIT 1
                 ) as `node`, ';
+
                 $sqlJoin = "
-                    JOIN s_categories c
-                    ON c.parent=$node
+                    INNER JOIN s_articles_categories_ro ac
+                        ON  ac.articleID  = a.id
 
-                    JOIN s_categories c2
-                    ON c2.active=1
-                    AND c2.left >= c.left
-                    AND c2.right <= c.right
-
-                    JOIN s_articles_categories ac
-                    ON ac.articleID=a.id
-                    AND ac.categoryID=c2.id
+                    INNER JOIN s_categories c
+                        ON  c.id = ac.categoryID
+                        AND c.active = 1
+                        AND c.parent=$node
                 ";
                 break;
             case 'article':

@@ -77,8 +77,9 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
             region: 'center'
         }];
 
-        me.items.push({
-            xtype: 'container',
+        me.sidebarPanel = Ext.create('Ext.panel.Panel', {
+            title: me.snippets.categoryTitle,
+            collapsible: true,
             width: 230,
             layout: {
                 type: 'vbox',
@@ -91,6 +92,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
                 me.createFilterPanel()
             ]
         });
+
+        me.items.push(me.sidebarPanel);
 
         me.callParent(arguments);
     },
@@ -141,8 +144,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
         var tree = Ext.create('Ext.tree.Panel', {
             rootVisible: true,
             flex: 1,
-            title: me.snippets.categoryTitle,
-
             expanded: true,
             useArrows: false,
             store: me.categoryStore,

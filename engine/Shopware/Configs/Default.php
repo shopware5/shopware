@@ -67,7 +67,7 @@ return array_merge($customConfig, array(
         'charset' => 'utf-8'
     ), $customConfig['mail']),
     'httpCache' => array_merge(array(
-        'enabled' => false,
+        'enabled' => true,
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => array('Authorization', 'Cookie'),
@@ -75,7 +75,7 @@ return array_merge($customConfig, array(
         'allow_revalidate' => false,
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_templates_html')
+        'cache_dir' => $this->DocPath('cache_html')
     ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
@@ -103,20 +103,21 @@ return array_merge($customConfig, array(
             'hashed_directory_umask' => 0771,
             'cache_file_umask' => 0644,
             'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
-            'cache_dir' => $this->DocPath('cache_database'),
+            'cache_dir' => $this->DocPath('cache_general'),
             'file_name_prefix' => 'shopware'
         ), $customConfig['cache']['backendOptions']),
     ),
     'hook' => array_merge(array(
-        'proxyDir' => $this->AppPath('Proxies'),
+        'proxyDir' => $this->DocPath('cache_proxies'),
         'proxyNamespace' => $this->App() . '_Proxies'
     ), $customConfig['hook']),
     'model' => array_merge(array(
         'autoGenerateProxyClasses' => false,
-        'attributeDir' => $this->AppPath('Models_Attribute'),
-        'proxyDir' => $this->AppPath('Proxies'),
+        'fileCacheDir'     => $this->DocPath('cache_doctrine_filecache'),
+        'attributeDir' => $this->DocPath('cache_doctrine_attributes'),
+        'proxyDir' => $this->DocPath('cache_doctrine_proxies'),
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => null // supports Apc, Array, Wincache and Xcache
+        'cacheProvider' => 'auto' // supports null, auto, Apc, Array, Wincache and Xcache
     ), $customConfig['model']),
     'backendSession' => array_merge(array(
         'name' => 'SHOPWAREBACKEND',
@@ -136,7 +137,7 @@ return array_merge($customConfig, array(
 				'hashed_directory_umask' => 0771,
 				'cache_file_umask' => 0644,
 				'hashed_directory_level' => 2,
-				'cache_dir' => $this->DocPath('cache_database'),
+				'cache_dir' => $this->DocPath('cache_general'),
 				'file_name_prefix' => 'shopware'
 	    	),
 			'fast_backend'  => 'Memcached',

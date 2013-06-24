@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,27 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
 
 /**
- * Interface for the various standard models.
+ * Abstract class for shopware standard models.
  *
- * This interface defines all standard functions for the various models
- * These standard function must later be implemented in the various models.
- *
- * <code>
- * $model->fromArray($data);
- * </code>
+ * @category  Shopware
+ * @package   Shopware\Components\Model
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 abstract class ModelEntity
 {
@@ -55,7 +44,7 @@ abstract class ModelEntity
      */
     public function fromArray(array $array = array())
     {
-        foreach($array as $key => $value) {
+        foreach ($array as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -171,6 +160,7 @@ abstract class ModelEntity
      * <li>To set the customer we use the "$order->setCustomer()" function.</li>
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
+     *
      * @param array|null $data Model data, example: an array of \Shopware\Models\Order\Order
      * @param string $model Full namespace of the association model, example: '\Shopware\Models\Order\Order'
      * @param string $property Name of the association property, example: 'orders'
@@ -205,7 +195,6 @@ abstract class ModelEntity
                 if (!$attribute instanceof $model) {
                     $attribute = new $model();
                 }
-
                 //if the item is an array without an id, create a new model.
             } elseif (is_array($item)) {
                 $attribute = new $model();
@@ -266,8 +255,8 @@ abstract class ModelEntity
      * <li>In the setSupplier() function of the article model we would expects <b>"supplier"</b>.</li>
      * </ul>
      * @param array|null $data Model data, example: an data array or an instance of the model
-     * @param string     $model Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
-     * @param string     $property Name of the association property, example: 'supplier'
+     * @param string $model Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
+     * @param string $property Name of the association property, example: 'supplier'
      * @throws \InvalidArgumentException
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -309,8 +298,8 @@ abstract class ModelEntity
 
         $instance->fromArray($data);
         $this->$property = $instance;
-        return $this;
 
+        return $this;
     }
 
     /**
@@ -329,6 +318,7 @@ abstract class ModelEntity
                 return $item;
             }
         }
+
         return null;
     }
 }

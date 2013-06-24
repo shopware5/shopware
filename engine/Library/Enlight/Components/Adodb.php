@@ -1,23 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 4.0
+ * Copyright © 2013 shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Adodb
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -26,10 +28,10 @@
  * The Enlight_Components_Adodb is an interface for the zend db adapter
  * to have an easy way to get adodb sql syntax for an sql expression.
  *
- * @category   Enlight
- * @package    Enlight_Adodb
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @deprecated Superseded by Enlight_Components_Db
+ * @category  Shopware
+ * @package   Enlight\Component\Adodb
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Enlight_Components_Adodb extends Enlight_Class
 {
@@ -39,35 +41,34 @@ class Enlight_Components_Adodb extends Enlight_Class
     protected $db;
 
     /**
-     * @var Zend_Cache_Core Used for the statement caching.
-     */
-    protected $cache;
-
-    /**
-     * @var array
-     */
-    protected $cacheTags = array();
-
-    /**
-     * @var string
-     */
-    protected $cacheIdPrefix = 'Adodb_';
-
-    /**
-     * @var int
-     */
-    protected $cacheLifetime = 0;
-
-    /**
      * @var int
      */
     protected $rowCount;
 
     /**
+     * @var string Standard system date expression (default: 'CURDATE()')
+     */
+    public $sysDate = 'CURDATE()';
+
+    /**
+     * @var string Standard system timestamp expression (default: 'NOW()')
+     */
+    public $sysTimeStamp = 'NOW()';
+
+    /**
+     * @var string Standard date format (default: 'Y-m-d')
+     */
+    protected $fmtDate = 'Y-m-d';
+
+    /**
+     * @var string Standard timestamp format (default: 'Y-m-d H:i:s')
+     */
+    protected $fmtTimeStamp = 'Y-m-d H:i:s';
+
+    /**
      * Public constructor
      *
      * @param  array $config
-     * @return void
      */
     public function __construct($config)
     {
@@ -76,15 +77,6 @@ class Enlight_Components_Adodb extends Enlight_Class
         }
         if (isset($config['db'])) {
             $this->db = $config['db'];
-        }
-        if (isset($config['cache'])) {
-            $this->cache = $config['cache'];
-        }
-        if (isset($config['cacheTags'])) {
-            $this->cacheTags = $config['cacheTags'];
-        }
-        if (isset($config['cacheIdPrefix'])) {
-            $this->cacheIdPrefix = (string)$config['cacheIdPrefix'];
         }
     }
 
@@ -102,7 +94,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Execute sql statement
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return bool|Enlight_Components_Adodb_Statement
      */
     public function Execute($sql, $bind = array())
@@ -148,26 +140,6 @@ class Enlight_Components_Adodb extends Enlight_Class
     {
         return '?';
     }
-
-    /**
-     * @var string Standard system date expression (default: 'CURDATE()')
-     */
-    public $sysDate = 'CURDATE()';
-
-    /**
-     * @var string Standard system timestamp expression (default: 'NOW()')
-     */
-    public $sysTimeStamp = 'NOW()';
-
-    /**
-     * @var string Standard date format (default: 'Y-m-d')
-     */
-    protected $fmtDate = 'Y-m-d';
-
-    /**
-     * @var string Standard timestamp format (default: 'Y-m-d H:i:s')
-     */
-    protected $fmtTimeStamp = 'Y-m-d H:i:s';
 
     /**
      * Returns database offset date
@@ -267,7 +239,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Fetch all rows
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return array
      */
     public function GetAll($sql, $bind = array())
@@ -279,7 +251,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Fetch first row
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return array
      */
     public function GetRow($sql, $bind = array())
@@ -292,7 +264,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Fetch first value
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return string
      */
     public function GetOne($sql, $bind = array())
@@ -304,7 +276,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Fetch first column
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return array
      */
     public function GetCol($sql, $bind = array())
@@ -316,7 +288,7 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Fetch all rows named
      *
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return array
      */
     public function GetAssoc($sql, $bind = array())
@@ -340,9 +312,9 @@ class Enlight_Components_Adodb extends Enlight_Class
      * Execute sql statement with limit
      *
      * @param string $sql
-     * @param int    $count
-     * @param int    $offset
-     * @param array  $bind
+     * @param int $count
+     * @param int $offset
+     * @param array $bind
      * @return bool|Enlight_Components_Adodb_Statement
      */
     public function SelectLimit($sql, $count, $offset = 0, $bind = array())
@@ -354,9 +326,9 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Execute sql statement cached
      *
-     * @param int    $timeout
+     * @param int $timeout
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return bool|Enlight_Components_Adodb_Statement
      */
     public function CacheExecute($timeout, $sql, $bind = array())
@@ -377,81 +349,48 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Returns found rows cached
      *
+     * @deprecated
      * @return int all founded rows
      */
     public function CacheGetFoundRows()
     {
-        if ($this->foundRows === null) {
-            $this->foundRows = $this->GetFoundRows();
-        }
-        return $this->foundRows;
+        return $this->GetFoundRows();
     }
-
-    /**
-     * @var null Contains the founded rows.
-     */
-    protected $foundRows = null;
 
     /**
      * Returns statement cache id
      *
+     * @deprecated
      * @param string $name
      * @param string $sql
-     * @param array  $bind
+     * @param array $bind
      * @return string
      */
     public function getCacheId($name, $sql, $bind = array())
     {
-        return $this->cacheIdPrefix . md5($name . $sql . serialize($bind));
+        return md5($name . $sql . serialize($bind));
     }
 
     /**
      * Call statement cached
      *
+     * @deprecated
      * @param   string $name
-     * @param   int    $timeout
+     * @param   int $timeout
      * @param   string $sql
-     * @param   array  $bind
-     * @param   array  $tags
+     * @param   array $bind
+     * @param   array $tags
      * @return  mixed
      */
     protected function callCached($name, $timeout, $sql = null, $bind = array(), $tags = array())
     {
         if ($sql === null) {
             $sql = $timeout;
-            $timeout = null;
         }
-        $timeout = $timeout === null ? $this->cacheLifetime : (int)$timeout;
-        $tags = array_merge((array)$tags, $this->cacheTags);
+
         $bind = (array)$bind;
 
-        $this->foundRows = null;
-
-        if ($timeout > 0 && $this->cache !== null) {
-
-            $id = $this->getCacheId($name, $sql, $bind);
-            $calcFoundRows = strpos($sql, 'SQL_CALC_FOUND_ROWS') !== false;
-
-            if (!$this->cache->test($id)) {
-                $result = $this->$name($sql, $bind);
-                if ($calcFoundRows) {
-                    $result = array(
-                        'rows' => $result,
-                        'foundRows' => $this->GetFoundRows()
-                    );
-                }
-                $this->cache->save($result, $id, $tags, $timeout);
-            } else {
-                $result = $this->cache->load($id);
-            }
-
-            if ($calcFoundRows && isset($result['rows'])) {
-                $this->foundRows = $result['foundRows'];
-                $result = $result['rows'];
-            }
-        } else {
-            $result = $this->$name($sql, $bind);
-        }
+        $result = $this->$name($sql, $bind);
 
         return $result;
     }
@@ -459,10 +398,11 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Fetch all rows cached
      *
-     * @param   int     $timeout
-     * @param   string  $sql
-     * @param   array   $bind
-     * @param   array   $tags
+     * @deprecated
+     * @param   int $timeout
+     * @param   string $sql
+     * @param   array $bind
+     * @param   array $tags
      * @return  mixed
      */
     public function CacheGetAll($timeout, $sql = null, $bind = array(), $tags = array())
@@ -470,13 +410,14 @@ class Enlight_Components_Adodb extends Enlight_Class
         return $this->callCached('GetAll', $timeout, $sql, $bind, $tags);
     }
 
-    /**
+    /***
      * Fetch first row cached
      *
-     * @param  int    $timeout
+     * @deprecated
+     * @param  int $timeout
      * @param  string $sql
-     * @param  array  $bind
-     * @param  array  $tags
+     * @param  array $bind
+     * @param  array $tags
      * @return array
      */
     public function CacheGetRow($timeout, $sql = null, $bind = array(), $tags = array())
@@ -487,10 +428,11 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Fetch first value cached
      *
-     * @param int    $timeout
+     * @deprecated
+     * @param int $timeout
      * @param string $sql
-     * @param array  $bind
-     * @param array  $tags
+     * @param array $bind
+     * @param array $tags
      * @return string
      */
     public function CacheGetOne($timeout, $sql = null, $bind = array(), $tags = array())
@@ -501,10 +443,11 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Fetch first column cached
      *
-     * @param int    $timeout
+     * @deprecated
+     * @param int $timeout
      * @param string $sql
-     * @param array  $bind
-     * @param array  $tags
+     * @param array $bind
+     * @param array $tags
      * @return array
      */
     public function CacheGetCol($timeout, $sql = null, $bind = array(), $tags = array())
@@ -515,10 +458,11 @@ class Enlight_Components_Adodb extends Enlight_Class
     /**
      * Fetch all rows cached
      *
-     * @param int    $timeout
+     * @deprecated
+     * @param int $timeout
      * @param string $sql
-     * @param array  $bind
-     * @param array  $tags
+     * @param array $bind
+     * @param array $tags
      * @return array
      */
     public function CacheGetAssoc($timeout, $sql = null, $bind = array(), $tags = array())

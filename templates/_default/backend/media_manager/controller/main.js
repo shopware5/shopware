@@ -44,11 +44,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
      */
 	extend: 'Ext.app.Controller',
 
-    requires: [
-        'Shopware.apps.MediaManager.controller.Album',
-        'Shopware.apps.MediaManager.controller.Media'
-    ],
-
 	/**
 	 * Creates the necessary event listener for this
 	 * specific controller and opens a new Ext.window.Window
@@ -57,9 +52,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
      * @return void
 	 */
 	init: function() {
-        var me = this;
-
-        var albumStore = me.subApplication.getStore('Album'),
+        var me = this,
+            albumStore = me.subApplication.getStore('Album'),
             mediaStore = me.subApplication.getStore('Media'),
             forceToFront = me.subApplication.forceToFront || false;
 

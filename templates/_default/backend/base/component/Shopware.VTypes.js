@@ -43,11 +43,34 @@ Ext.apply(Ext.form.VTypes, {
 });
 
 Ext.apply(Ext.form.field.VTypes, {
-    remote:function (val, field) {
 
+    /**
+     * Remote validation method which sets an event listener on the blur event of
+     * the field and validates the value with the server-side.
+     *
+     * @example Usage example:
+     * <code>
+     * me.numberField = Ext.create('Ext.form.field.Text', {
+     *    fieldLabel: 'Numberfield',
+     *    allowBlank: false,
+     *    enableKeyEvents:true,
+     *    checkChangeBuffer:700,
+     *    vtype:'remote',
+     *    validationUrl: '{url action="validateNumber"}',
+     *    validationRequestParam: articleId,
+     *    validationErrorMsg: me.snippets.numberValidation
+     * });
+     * </code>
+     *
+     * @param { String } val - Value of the field
+     * @param { Object } field - Ext.form.field.* component.
+     *
+     * @returns { String|Boolean } Returns the string with a ajax validation war triggered,
+     *          Otherwise a boolean value
+     */
+    remote:function (val, field) {
         if (!field.validationUrl) {
-            Ext.Error.raise('The remote vType validation needs a validationUrl property');
-            return false;
+            return true;
         }
 
         if (!field.validationErrorMsg) {
@@ -60,49 +83,14 @@ Ext.apply(Ext.form.field.VTypes, {
             return true;
         }
 
-        if(Ext.isDefined(field.oldValid)) {
-            if(val == field.oldValue) {
-                return field.oldValid;
-            }
-        }
-        field.oldValue = val;
-
-        if (!field.validationRequestParams){
-            parameters = {
-                value:val,
-                param:field.validationRequestParam
-            };
-        }else {
-            parameters = field.validationRequestParams;
-            parameters.value = val;
+        if(!field.hasOwnProperty('hasBlurListener')) {
+            field.on('blur', this.onFireRemoteValidation, this);
+            field.hasBlurListener = true;
         }
 
-        Ext.Ajax.request({
-            async: false,
-            url:field.validationUrl,
-            params: parameters,
-            success:function (response) {
-
-                if (!response.responseText) {
-                    //field is invalid setting the custom error message
-                    field.markInvalid(field.validationErrorMsg);
-                    field.vtypeText = field.validationErrorMsg;
-
-                    field.oldValid = false;
-                }
-                else {
-                    field.clearInvalid();
-
-                    field.oldValid = true;
-                }
-            },
-            failure:function (response) {
-                //todo@all: implement right error handling
-                Shopware.Msg.createGrowlMessage('', field.validationErrorMsg, '', 'growl', false);
-                return false;
-            }
-        });
-        return field.oldValid;
+        // If the valid state is set to the field return the value of it, otherwise
+        // just return true to indicate that the
+        return (field.hasOwnProperty('oldValid')) ? field.oldValid : true;
     },
     /**
      * Date Range Check - Checks if an start date is not after a given end date and vice versa
@@ -155,5 +143,59 @@ Ext.apply(Ext.form.field.VTypes, {
          * min/max allowed values (these are tested for after the vtype test)
          */
         return true; 
+    },
+
+    /**
+     * Event listener method which fires field's `blur` event. The method triggers
+     * an AJAX request to the server side to validate the passed field and it's value.
+     *
+     * @event blur
+     * @param { Object } field - Ext.form.field.* component which triggers the event
+     * @returns { Boolean } Truthy if the validation was sucessful, otherwise falsy.
+     */
+    onFireRemoteValidation: function(field) {
+        var parameters, val = field.getValue();
+
+        if(Ext.isDefined(field.oldValid)) {
+            if(val == field.oldValue) {
+                return field.oldValid;
+            }
+        }
+        field.oldValue = val;
+
+        if (!field.validationRequestParams){
+            parameters = {
+                value:val,
+                param:field.validationRequestParam
+            };
+        } else {
+            parameters = field.validationRequestParams;
+            parameters.value = val;
+        }
+
+        Ext.Ajax.request({
+            async: false,
+            url:field.validationUrl,
+            params: parameters,
+            success:function (response) {
+
+                if (!response.responseText) {
+                    //field is invalid setting the custom error message
+                    field.markInvalid(field.validationErrorMsg);
+                    field.vtypeText = field.validationErrorMsg;
+
+                    field.oldValid = false;
+                }
+                else {
+                    field.clearInvalid();
+
+                    field.oldValid = true;
+                }
+            },
+            failure:function (response) {
+                Shopware.Msg.createGrowlMessage('', field.validationErrorMsg, '', 'growl', false);
+                return false;
+            }
+        });
     }
 });

@@ -117,10 +117,10 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             }
         }, {
-            header: '{s name=grid/column/row_count}Row count{/s}',
-            dataIndex: 'emotions.rows',
+            header: '{s name=grid/column/container_width}Container width{/s}',
+            dataIndex: 'emotions.containerWidth',
             flex: 1,
-            renderer: me.rowsColumn
+            renderer: me.containerWidthColumn
         }, {
             xtype: 'datecolumn',
             header: '{s name=grid/column/date}Last edited{/s}',
@@ -185,8 +185,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] metaData - The model meta data
      * @param [string] record   - The whole data model
      */
-    rowsColumn: function(value, metaData, record) {
-        return record.get('rows');
+    containerWidthColumn: function(value, metaData, record) {
+        return Ext.String.format('[0]px', record.get('containerWidth'));
     },
     /**
      * Column renderer function for the modified column

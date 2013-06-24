@@ -228,6 +228,119 @@ class Repository extends ModelRepository
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * @param null $filters
+     * @param null $orderBy
+     * @param null $offset
+     * @param null $limit
+     * @internal param $ids
+     * @return \Doctrine\ORM\Query
+     */
+    public function getBackendOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getBackendOrdersQueryBuilder($filters, $orderBy);
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getOrdersQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param null $filters
+     * @param      $orderBy
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getBackendOrdersQueryBuilder($filters = null, $orderBy = null)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+                'orders',
+                'details',
+                'customer',
+                'payment',
+                'billing',
+                'billingCountry',
+                'shop',
+                'dispatch',
+                'paymentStatus',
+                'orderStatus',
+                'billingAttribute',
+                'attribute'
+            ));
+
+        $builder->from('Shopware\Models\Order\Order', 'orders');
+        $builder->leftJoin('orders.payment', 'payment')
+                ->leftJoin('orders.paymentStatus', 'paymentStatus')
+                ->leftJoin('orders.orderStatus', 'orderStatus')
+                ->leftJoin('orders.billing', 'billing')
+                ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.details', 'details')
+                ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('orders.shop', 'shop')
+                ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('billing.attribute', 'billingAttribute')
+                ->leftJoin('orders.attribute', 'attribute');
+
+        if (!empty($filters)) {
+            $builder = $this->filterListQuery($builder, $filters);
+        }
+        $builder->andWhere($builder->expr()->notIn('orders.status', array('-1')));
+        $builder->andWhere('orders.number IS NOT NULL');
+
+        if (!empty($orderBy)) {
+            //add order by path
+            $builder->addOrderBy($orderBy);
+        }
+        return $builder;
+    }
+
+    /**
+     * This method returns the additional order data for the backend list
+     *
+     * @param $orderNumber
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getBackendAdditionalOrderDataQuery($orderNumber)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+                'orders',
+                'details',
+                'detailAttribute',
+                'documents',
+                'documentType',
+                'documentAttribute',
+                'customer',
+                'debit',
+                'shipping',
+                'shippingAttribute',
+                'shippingCountry',
+                'subShop',
+                'locale'
+            ));
+        $builder->from('Shopware\Models\Order\Order', 'orders');
+        $builder->leftJoin('orders.documents', 'documents')
+                ->leftJoin('documents.type', 'documentType')
+                ->leftJoin('documents.attribute', 'documentAttribute')
+                ->leftJoin('orders.details', 'details')
+                ->leftJoin('details.attribute', 'detailAttribute')
+                ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('customer.debit', 'debit')
+                ->leftJoin('orders.shipping', 'shipping')
+                ->leftJoin('shipping.attribute', 'shippingAttribute')
+                ->leftJoin('shipping.country', 'shippingCountry')
+                ->leftJoin('orders.languageSubShop', 'subShop')
+                ->leftJoin('subShop.locale', 'locale');
+
+        $builder->where('orders.number = :orderNumber');
+        $builder->setParameter('orderNumber',$orderNumber);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which .....
      * @return \Doctrine\ORM\Query
      */
     public function getDetailStatusQuery()

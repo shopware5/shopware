@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
     cls: 'shopware-menu',
     dock:'top',
     height:40,
+    width: Ext.Element.getViewportWidth(),
 
     /**
      * Creates the menu and sets the component items
@@ -66,6 +67,25 @@ Ext.define('Shopware.apps.Index.view.Menu', {
 
         me.callParent(arguments);
         me.items.add(Ext.create('Shopware.Search'));
+
+        // Add event listener which sets the width of the toolbar to the viewport width
+        Ext.EventManager.onWindowResize(function(width, height) {
+            me.setWidth(width);
+        });
+    },
+
+    afterRender: function() {
+        var me = this;
+
+        Shopware.app.Application.baseComponentIsReady(me);
+
+        me.add({ xtype: 'tbfill' }, {
+            xtype: 'container',
+            cls: 'x-main-logo-container',
+            width: 23, height: 17
+        });
+
+        me.callParent(arguments);
     }
 });
 //{/block}

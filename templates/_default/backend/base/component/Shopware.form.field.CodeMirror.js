@@ -106,6 +106,12 @@ Ext.define('Shopware.form.field.CodeMirror',
      */
     editorWidth: 0,
 
+    /**
+     * Truthy, if the editor is already rendered, otherwise falsy.
+     * @default false
+     * @boolean
+     */
+    isEditorRendered: false,
 
     /**
      * Property which holds the path to the mode directory of
@@ -126,6 +132,8 @@ Ext.define('Shopware.form.field.CodeMirror',
     initComponent : function() {
         var me = this;
         me.on({ resize: me.onResize });
+
+        me.addEvents('editorready');
 
         me.callParent(arguments);
     },
@@ -199,7 +207,7 @@ Ext.define('Shopware.form.field.CodeMirror',
         }
 
         // Check if the passed mode is available
-        var availableModes = CodeMirror.listModes(),
+        var availableModes = CodeMirror.modes,
             modeActive = false;
 
         Ext.Array.each(availableModes, function(value) {
@@ -211,7 +219,9 @@ Ext.define('Shopware.form.field.CodeMirror',
         if(!modeActive) {
             me.loadJSFile(me.modePath + '/' + me.config.mode + '/' + me.config.mode + '.js');
         } else {
-            me.initEditor();
+            if(!me.isEditorRendered) {
+                me.initEditor();
+            }
         }
     },
 
@@ -228,11 +238,19 @@ Ext.define('Shopware.form.field.CodeMirror',
             el = me.inputEl;
 
         me.editor = CodeMirror.fromTextArea(document.getElementById(el.id), me.config);
+        me.isEditorRendered = true;
+
+        // Bind `change` event to the editor to write back the content of the component to the underlying textarea.
+        me.editor.on('change', function() {
+            me.editor.save();
+        });
 
         me.resizeEditor();
 
         me.editor.setValue(me.rawValue);
 
+
+        me.fireEvent('editorready', me, me.editor);
         return me.editor;
     },
 
@@ -245,19 +263,20 @@ Ext.define('Shopware.form.field.CodeMirror',
             scroller,
             height, width;
 
-        if (me.editor) {
+        if (me.editor && me.el) {
+
             // Set the editor height
             if (me.height) {
                 height = me.height;
             } else {
-                height = me.editorHeight;
+                height = me.el.getHeight();
             }
 
             // Set the editor width
             if (me.width) {
                 width = me.width - 10;
             } else {
-                width = me.editorWidth;
+                width = '100%';
             }
 
             scroller = Ext.get(me.editor.getScrollerElement());
@@ -369,7 +388,9 @@ Ext.define('Shopware.form.field.CodeMirror',
 
         loadedModes.add(Ext.get(script));
 
-        me.initEditor();
+        if(!me.isEditorRendered) {
+            me.initEditor();
+        }
     },
 
     /**

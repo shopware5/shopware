@@ -115,6 +115,13 @@ class Customer extends ModelEntity
     private $password = '';
 
     /**
+     * Tells which hash was used for password encryption
+     * @var string
+     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
+     */
+    private $encoderName = 'md5';
+
+    /**
      * If this property is set, the password will not be encoded on save.
      * @var string $rawPassword
      */
@@ -207,15 +214,12 @@ class Customer extends ModelEntity
     private $paymentPreset = 0;
 
     /**
-     * @deprecated
-     * Iso code of the customer language.
-     * Used for the language association property
-     * @var string $languageIso
+     * Id of the language sub shop
+     *
+     * @var string $languageId
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
-    private $languageIso = '';
-
-    /**
+    private $languageId = 1;
 
     /**
      * OWNING SIDE
@@ -377,7 +381,9 @@ class Customer extends ModelEntity
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        // Force hashPassword to change with the password
+        $this->hashPassword = null;
+        $this->password     = $password;
         return $this;
     }
 
@@ -388,7 +394,7 @@ class Customer extends ModelEntity
      */
     public function getPassword()
     {
-        return $this->password;
+        return $this->hashPassword;
     }
 
     /**
@@ -399,7 +405,9 @@ class Customer extends ModelEntity
      */
     public function setRawPassword($rawPassword)
     {
-        $this->rawPassword = $rawPassword;
+        // Force hashPassword to change with the rawPassword
+        $this->hashPassword = null;
+        $this->rawPassword  = $rawPassword;
     }
 
     /**
@@ -669,27 +677,6 @@ class Customer extends ModelEntity
         return $this->paymentPreset;
     }
 
-    /**
-     * Setter function for the languageIso column property, which contains the language iso code for the customer language
-     *
-     * @param string $languageIso
-     * @return Customer
-     */
-    public function setLanguageIso($languageIso)
-    {
-        $this->languageIso = $languageIso;
-        return $this;
-    }
-
-    /**
-     * Getter function for the languageIso column property, which contains the language iso code for the customer language
-     *
-     * @return string
-     */
-    public function getLanguageIso()
-    {
-        return $this->languageIso;
-    }
 
     /**
      * Setter function for the referer column property.
@@ -799,7 +786,8 @@ class Customer extends ModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->hashPassword = md5($this->password);
+            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
@@ -812,7 +800,8 @@ class Customer extends ModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->hashPassword = md5($this->password);
+            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
@@ -1042,5 +1031,13 @@ class Customer extends ModelEntity
     public function getLanguageSubShop()
     {
         return $this->languageSubShop;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguageId()
+    {
+        return $this->languageId;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers_Widgets
- * @subpackage Widgets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
+use Shopware\Components\Model\Query\SqlWalker;
+
 /**
- * Shopware Application
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Widgets
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
@@ -48,6 +42,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $categoryId = (int)$this->Request()->getParam('categoryId');
         $query = $repository->getCategoryEmotionsQuery($categoryId);
         $emotions = $query->getArrayResult();
+
+        foreach ($emotions as &$emotion) {
+            $emotion['rows'] = $emotion['grid']['rows'];
+            $emotion['cols'] = $emotion['grid']['cols'];
+            $emotion['elements'] = $repository->getEmotionElementsQuery($emotion['id'])->getQuery()->getArrayResult();
+
+            $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
+            $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
+            $emotion['gutter'] = $emotion['grid']['gutter'];
+        }
         return $emotions;
     }
 
@@ -152,6 +156,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
+        if (empty($emotions[0]['template'])) {
+            $this->View()->loadTemplate('widgets/emotion/index.tpl');
+        } else {
+            $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
+        }
+
         $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
         $this->View()->assign('sEmotions', $emotions, true);
         $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));
@@ -182,24 +192,46 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
+	/**
+	 * Gets a random blog entry from the database
+	 *
+	 * @param $category
+	 * @return array {Array} $result
+	 */
+	private function getRandomBlogEntry($category)
+	{
+		$data = array('entry_amount' => 50);
+		$result = $this->getBlogEntry($data, $category);
+
+		return $result['entries'][array_rand($result['entries'])];
+	}
+
     /**
      * Gets the specific blog entry from the database.
      *
      * @param $data
      * @param $category
-     * @param $element
      * @internal param $ {Array} $data
      * @return array {Array} $data
      */
-    private function getBlogEntry($data, $category, $element)
+    private function getBlogEntry($data, $category)
     {
         $entryAmount = (int)$data['entry_amount'];
+
+	    // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
+	    if(!isset($data['thumbnail_size'])) {
+		    $data['thumbnail_size'] = 3;
+	    }
+
+        if($category === null) {
+            return $data;
+        }
 
         // Get the category model for the given category ID
         /** @var $category \Shopware\Models\Category\Category */
         $category = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
 
-        if(!$category) {
+        if (!$category) {
             return $data;
         }
 
@@ -210,18 +242,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->leftJoin('mappingMedia.media', 'media')
             ->leftJoin('blog.category', 'category')
             ->where('blog.active = 1')
-            ->andWhere('blog.displayDate <= ?1')
-            ->andWhere('category.left >= ?2')
-            ->andWhere('category.right <= ?3')
+            ->andWhere('blog.displayDate <= :displayDate')
+            ->andWhere('category.path LIKE :path')
             ->orderBy('blog.displayDate', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults($entryAmount)
-            ->setParameter(1, date('Y-m-d H:i:s'))
-            ->setParameter(2, $category->getLeft())
-            ->setParameter(3, $category->getRight());
+            ->setParameter('displayDate', date('Y-m-d H:i:s'))
+            ->setParameter('path', '%|' . $category->getId() . '|%');
 
-
-        $result = $builder->getQuery()->getArrayResult();
+        $query = $this->getForceIndexQuery($builder->getQuery(), 'emotion_get_blog_entry');
+        $result = $query->getArrayResult();
 
         foreach ($result as &$entry) {
             foreach ($entry['media'] as $media) {
@@ -241,6 +271,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
         return $data;
     }
+
+
+    /**
+     * Helper function to set the FORCE INDEX path.
+     * @param $query \Doctrine\ORM\Query
+     * @param $index String
+     * @return \Doctrine\ORM\Query
+     */
+    private function getForceIndexQuery($query, $index)
+    {
+        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+        $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+        return $query;
+    }
+
 
     private function getArticleByNumber($data, $category, $element)
     {
@@ -263,10 +309,21 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
-            // Get random article from selected $category
-            $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
 
-            $data["image"] = $temp["image"]["src"][2];
+	        if($data['blog_category']) {
+				$result = $this->getRandomBlogEntry($data["category_selection"]);
+		        if(!empty( $result['media']['thumbnails'])) {
+			        $data['image'] = $result['media']['thumbnails'][2];
+		        } else {
+			        $data['image'] = $result['media']['path'];
+		        }
+
+	        } else {
+		        // Get random article from selected $category
+                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
+
+                $data["image"] = $temp["image"]["src"][2];
+	        }
         }
         return $data;
     }
@@ -365,7 +422,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data["values"] = $temporaryValues;
 
             foreach ($data["values"] as &$value) {
-                $query = array('sViewport' => 'cat', 'sCategory' => $category, 'sPage' => 1, 'sSupplier' => $value["id"]);
+                if (empty($category)) {
+                    $category = Shopware()->Shop()->getCategory()->getId();
+                }
+                $query = array('sViewport' => 'cat', 'sPage' => 1, 'sCategory' => $category, 'sSupplier' => $value["id"]);
                 $value["link"] = Shopware()->Router()->assemble($query);
             }
         }
@@ -445,21 +505,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductNewcomer($category, $offset = 0, $limit)
     {
-        $perPage = "$offset,$limit";
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
-            FROM s_articles a, s_articles_categories ac,s_categories c,s_categories c2
+            FROM s_articles a
+              INNER JOIN s_articles_categories_ro ac
+                 ON ac.articleID = a.id
+              INNER JOIN s_categories c
+                 ON c.id = ac.categoryID
+                 AND c.active = 1
+
             WHERE a.active=1
-            AND a.id=ac.articleID
             AND c.id=?
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
+
             ORDER BY a.datum DESC
-            LIMIT {$perPage}
         ";
+
+        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
         $articles = Shopware()->Db()->fetchAll($sql, array($category));
 
@@ -484,35 +545,34 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductTopSeller($category, $offset = 0, $limit)
     {
-        $perPage = "$offset,$limit";
-
         $sql = "
-        SELECT SQL_CALC_FOUND_ROWS a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-        FROM s_articles_categories ac, s_categories c, s_categories c2, s_articles a
+            SELECT
+              STRAIGHT_JOIN
+              SQL_CALC_FOUND_ROWS
 
-        LEFT JOIN s_order_details od
-        ON a.id = od.articleID
-        AND od.modus = 0
+              a.id AS articleID,
+              s.sales AS quantity
 
-        LEFT JOIN s_order o
-        ON o.ordertime>=DATE_SUB(NOW(),INTERVAL 30 DAY)
-        AND o.status >= 0
-        AND o.id = od.orderID
+            FROM s_articles_top_seller_ro s
 
-        WHERE a.active = 1
-        AND c.id=?
-        AND c2.active=1
-        AND c2.left >= c.left
-        AND c2.right <= c.right
-        AND ac.articleID=a.id
-        AND ac.categoryID=c2.id
+            INNER JOIN s_articles_categories_ro ac
+              ON ac.articleID = s.article_id
+              AND ac.categoryID = :categoryId
 
-        GROUP BY a.id
-        ORDER BY quantity DESC, topseller DESC
-        LIMIT {$perPage}
+            INNER JOIN s_categories c
+              ON ac.categoryID = c.id
+              AND c.active = 1
+
+            INNER JOIN s_articles a
+              ON a.id = s.article_id
+              AND a.active = 1
+
+            ORDER BY quantity DESC
         ";
 
-        $articles = Shopware()->Db()->fetchAll($sql, array($category));
+        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+
+        $articles = Shopware()->Db()->fetchAll($sql, array('categoryId' => $category));
 
         $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
         $pages = round($count / $limit);

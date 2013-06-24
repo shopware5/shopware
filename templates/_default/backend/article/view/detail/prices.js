@@ -91,10 +91,11 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
         me.title = me.snippets.title;
-        me.priceStore = me.article.getPrice();
-        me.items = me.createElements();
         me.registerEvents();
         me.callParent(arguments);
     },
@@ -141,7 +142,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         });
         me.priceGrids = tabs;
 
-        var tabPanel = Ext.create('Ext.tab.Panel', {
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
             height: 150,
             activeTab: 0,
             plain: true,
@@ -153,7 +154,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             }
         });
 
-        return tabPanel;
+        return me.tabPanel;
     },
 
     /**
@@ -220,7 +221,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
 
     /**
      * Creates the elements for the description field set.
-     * @return array Contains all Ext.form.Fields for the description field set
+     * @return Array -  Contains all Ext.form.Fields for the description field set
      */
     getColumns: function () {
         var me = this;
@@ -317,6 +318,15 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 ]
             }
         ];
+    },
+
+    onStoresLoaded: function(article, stores) {
+        var me = this;
+        me.article = article;
+
+        me.customerGroupStore = stores['customerGroups'];
+        me.priceStore = me.priceStore = me.article.getPrice();
+        me.add(me.createElements());
     }
 
 });

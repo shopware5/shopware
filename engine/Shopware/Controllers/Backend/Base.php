@@ -313,7 +313,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
                     ->setParameter('searchQuery', '%' . $searchQuery . '%');
         }
 
-        
         $builder->addOrderBy($this->Request()->getParam('sort', array()));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
@@ -732,4 +731,34 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
+
+	public function getAvailableHashesAction()
+	{
+		$hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
+
+        $result = array();
+
+        $result[] = array('id' => 'Auto');
+
+        $blacklist = array('prehashed', 'legacybackendmd5');
+
+        foreach ($hashes as $hash) {
+
+            if (in_array(strtolower($hash->getName()), $blacklist)) {
+                continue;
+            }
+
+            $result[] = array(
+                'id' => $hash->getName()
+            );
+        }
+
+		$totalResult = count($hashes);
+
+		$this->View()->assign(array(
+            'success' => true,
+            'data' => $result,
+            'total' => $totalResult,
+        ));
+	}
 }

@@ -82,7 +82,13 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             $view->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
             $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
             $categoryContent = $view->sCategoryContent;
-            if(!empty($categoryContent) && $categoryContent['level'] <= 2) {
+
+            $topSellerActive = $this->Application()->Config()->get(
+                'topSellerActive',
+                true
+            );
+
+            if(!empty($categoryContent) && $categoryContent['level'] <= 2 && $topSellerActive) {
                 $view->sCharts = Shopware()->Modules()->Articles()->sGetArticleCharts(
                     $categoryContent['id']
                 );
@@ -226,12 +232,13 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             $shopId = Shopware()->Shop()->getId();
         }
         $sql = "
-            SELECT
+            SELECT STRAIGHT_JOIN
               p.id, p.description, p.link, p.target,
               g.key as `group`, m.key as mapping,
               (SELECT COUNT(*) FROM s_cms_static WHERE parentID=p.id) as childrenCount
 
-            FROM s_cms_static p, s_cms_static_groups g
+            FROM s_cms_static p FORCE INDEX(get_menu),
+                 s_cms_static_groups g
 
             LEFT JOIN s_cms_static_groups m
             ON m.id=g.mapping_id
@@ -245,7 +252,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             AND (m.id IS NULL OR s.shop_id IS NOT NULL)
             AND (m.id IS NULL OR m.active=1)
 
-            ORDER BY `mapping`, p.position, p.description
+            ORDER BY p.position, p.description
         ";
         $links = Shopware()->Db()->fetchAll($sql, array($shopId));
 

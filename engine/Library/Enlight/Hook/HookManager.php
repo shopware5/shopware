@@ -67,10 +67,16 @@ class Enlight_Hook_HookManager extends Enlight_Class
         if(!isset($options['proxyDir'])) {
             $options['proxyDir'] = $application->AppPath('Proxies');
         }
+
         $this->proxyFactory = new Enlight_Hook_ProxyFactory(
             $this,
             $options['proxyNamespace'],
             $options['proxyDir']
+        );
+
+        $this->application->Loader()->registerNamespace(
+            $options['proxyNamespace'],
+            $this->proxyFactory->getProxyDir()
         );
     }
 
@@ -95,8 +101,8 @@ class Enlight_Hook_HookManager extends Enlight_Class
         $eventManager = $this->application->Events();
 
         return $eventManager->hasListeners($this->getHookEvent($class, $method, 'replace'))
-          || $eventManager->hasListeners($this->getHookEvent($class, $method, 'before'))
-          || $eventManager->hasListeners($this->getHookEvent($class, $method, 'after'));
+            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'before'))
+            || $eventManager->hasListeners($this->getHookEvent($class, $method, 'after'));
     }
 
     /**

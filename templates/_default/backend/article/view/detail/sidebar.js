@@ -58,6 +58,12 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
      */
     animCollapse: Ext.isChrome,
 
+    collapsible: true,
+
+    collapsed: true,
+
+    title: '{s name=accordion-title}Article-Options{/s}',
+
     /**
      * Defines the component region
      */
@@ -91,14 +97,17 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
-        me.items = me.createElements();
+        var me = this,
+            mainWindow = me.subApp.articleWindow;
+
+        mainWindow.on('storesLoaded', me.onStoresLoaded, me);
+
         me.callParent(arguments);
     },
 
     /**
      * Creates the elements for the sidebar container.
-     * @return array
+     * @return object
      */
     createElements: function() {
         var me = this;
@@ -130,6 +139,13 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
                 animate: Ext.isChrome
             }
         ];
+    },
+
+    onStoresLoaded: function(article, stores) {
+        var me = this;
+        me.article = article;
+        me.shopStore = stores['shops'];
+        me.add(me.createElements());
     }
 });
 //{/block}

@@ -148,9 +148,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
+        $emotion['grid'] = array($emotion['grid']);
 
-        if (!empty($emotion["isLandingPage"])){
-            $emotion["link"] = "/Campaign/index/emotionId/".$emotion["id"];
+        if (!empty($emotion["isLandingPage"])) {
+            $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
         }else {
             $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
@@ -250,6 +251,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             } else {
                 $emotion = new \Shopware\Models\Emotion\Emotion();
                 $data["createDate"] = new \DateTime();
+            }
+
+            if (!empty($data['gridId'])) {
+                $data['grid'] = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $data['gridId']);
+            }
+            if (!empty($data['templateId'])) {
+                $data['template'] = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
+            } else {
+                $data['template'] = null;
             }
 
             if (!empty($data['validFrom']) && !empty($data['validFromTime'])) {
@@ -413,6 +423,695 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotionId = (int) $this->Request()->getParam('emotionId');
 
         $this->View()->assign(array('success' => true, 'data' => array()));
+    }
+
+
+    //Grid functions of the "own grids" listing
+
+    /**
+     * Controller action  to create a new grid.
+     * Use the internal "saveGrid" function.
+     * The request parameters are used as grid/model data.
+     */
+    public function createGridAction()
+    {
+        $this->View()->assign(
+            $this->saveGrid(
+                $this->Request()->getParams()
+            )
+        );
+    }
+
+    /**
+     * Controller action to update an existing grid.
+     * Use the internal "saveGrid" function.
+     * The request parameters are used as grid/model data.
+     * The updateGridAction should have a "id" request parameter which
+     * contains the id of the existing grid.
+     */
+    public function updateGridAction()
+    {
+        $this->View()->assign(
+            $this->saveGrid(
+                $this->Request()->getParams()
+            )
+        );
+    }
+
+    /**
+     * Controller action to delete a single grid.
+     * Use the internal "deleteGrid" function.
+     * Expects the grid id as request parameter "id".
+     */
+    public function deleteGridAction()
+    {
+        $this->View()->assign(
+            $this->deleteGrid(
+                $this->Request()->getParam('id', null)
+            )
+        );
+    }
+
+    public function deleteManyGridsAction()
+    {
+        $this->View()->assign(
+            $this->deleteManyGrids(
+                $this->Request()->getParam('records', array())
+            )
+        );
+    }
+
+    /**
+     * The delete many grids function is used from the controller action deleteManyGridsAction
+     * and contains the real deleteMany process. As parameter the function expects
+     * and two dimensional array with model ids:
+     *
+     * Example:
+     * array(
+     *    array('id' => 1),
+     *    array('id' => 2),
+     *    ...
+     * )
+     *
+     * The function iterates the passed records array and calls for each record
+     * the "deleteGrid" function. If the delete action for the item was successfully,
+     * the delete function returns the following array('success' => true).
+     * If the delete function fails, the delete action returns array('success' => false, 'error'),
+     * this errors will be collected.
+     * Notice: The iteration don't stops if an errors occurs. It will be continue with the next record.
+     *
+     * After all records deleted, the function returns array('success' => true) if no errors occurs.
+     * If one or more errors occurred the function return an array like this:
+     *  array(
+     *      'success' => false,
+     *      'error' => array('Error 1', 'Error 2', ...)
+     * )
+     *
+     * @param $records
+     * @return array
+     */
+    protected function deleteManyGrids($records) {
+        if (empty($records)) {
+            return array('success' => false, 'error' => 'No grids passed');
+        }
+        $errors = array();
+        foreach($records as $record) {
+            if (empty($record['id'])) {
+                continue;
+            }
+            $result = $this->deleteGrid($record['id']);
+            if ($result['success'] === false) {
+                $errors[] = array($result['error']);
+            }
+        }
+
+        return array(
+            'success' => empty($errors),
+            'error' => $errors
+        );
+    }
+
+    /**
+     * Controller action to duplicate a single grid.
+     * Use the internal "duplicateGrid" function.
+     * Expects the grid id as request parameter "id".
+     */
+    public function duplicateGridAction()
+    {
+        $this->View()->assign(
+            $this->duplicateGrid(
+                $this->Request()->getParam('id', null)
+            )
+        );
+    }
+
+    /**
+     * Controller action to get a list of all defined grids.
+     * You can paginate the list over the request parameters
+     * "start" and "limit".
+     * Use the internal "getGrids" function.
+     */
+    public function getGridsAction()
+    {
+        $this->View()->assign(
+            $this->getGrids(
+                $this->Request()->getParam('start', null),
+                $this->Request()->getParam('limit', null)
+            )
+        );
+    }
+
+    /**
+     * Returns a list with all defined grids.
+     * The function return value is every time an array.
+     *
+     * Success case:
+     *  array('success' => true, 'total' => Total listing count, 'data' => All defined grids)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => Error message)
+     *
+     * @param null $offset
+     * @param null $limit
+     *
+     * @return array
+     */
+    protected function getGrids($offset = null, $limit = null)
+    {
+        try {
+            $query = $this->getGridsQuery($offset, $limit);
+            $paginator = $this->getQueryPaginator($query->getQuery());
+
+            $result = array(
+                'success' => true,
+                'total' => $paginator->count(),
+                'data' => $paginator->getIterator()->getArrayCopy()
+            );
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param null $offset
+     * @param null $limit
+     *
+     * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
+     */
+    protected function getGridsQuery($offset = null, $limit = null) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('grids'))
+                ->from('Shopware\Models\Emotion\Grid', 'grids');
+
+        if ($offset !== null  && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Deletes a single grid which will be identified over
+     * the passed id parameter. The return value is
+     * every time an array.
+     *
+     * Success case:
+     *  array('success' => true)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function deleteGrid($id = null)
+    {
+        if (empty($id)) {
+            return array('success' => false, 'error' => "The request parameter id don't passed!");
+        }
+
+        try {
+            $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $id);
+            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
+                return array('success' => false, 'error' => "The passed grid id exist no more!");
+            }
+            Shopware()->Models()->remove($grid);
+            Shopware()->Models()->flush();
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true);
+    }
+
+    /**
+     * Duplicates a single grid which will be identified over
+     * the passed id parameter. The return value is
+     * every time an array. The duplicate function used
+     * the php __clone function of the model.
+     *
+     * Success case:
+     *  array('success' => true, 'data' => New Grid data)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function duplicateGrid($id = null)
+    {
+        if (empty($id)) {
+            return array('success' => false, 'error' => "The request parameter gridId don't passed!");
+        }
+        $data = array();
+
+        try {
+            $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $id);
+            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
+                return array('success' => false, 'error' => "The passed grid id exist no more!");
+            }
+
+            $new = clone $grid;
+            Shopware()->Models()->persist($new);
+            Shopware()->Models()->flush();
+
+            $data = $this->getGrid($new->getId());
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true, 'data' => $data);
+    }
+
+    /**
+     * Updates or creates a single grid. If the data parameter contains
+     * an "id" property, this property is used to identify an existing grid.
+     * The return value is every time an array.
+     *
+     * Success case:
+     *  array('success' => true, 'data' => New Grid data)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    protected function saveGrid($data)
+    {
+        $result = array();
+
+        try {
+            //we have to remove the emotions to prevent an assignment from this side!
+            unset($data['emotions']);
+            if (!empty($data['id'])) {
+                $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $data['id']);
+            } else {
+                $grid = new \Shopware\Models\Emotion\Grid();
+            }
+
+            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
+                return array('success' => false, 'error' => "The passed grid id exist no more!");
+            }
+
+            $grid->fromArray($data);
+            Shopware()->Models()->persist($grid);
+            Shopware()->Models()->flush();
+
+            $result = $this->getGrid($grid->getId());
+
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true, 'data' => $result);
+    }
+
+    /**
+     * Helper function to get the array data of a single grid.
+     * The passed $id parameter is used to identify the grid.
+     *
+     * Success case:
+     *  array(Data of the grid)
+     *
+     * Failure case:
+     *  null
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function getGrid($id)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('grid'))
+                ->from('Shopware\Models\Emotion\Grid', 'grid')
+                ->where('grid.id = :id')
+                ->setParameter('id', $id);
+
+        return $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+        );
+    }
+
+    /**
+     * @param     $query \Doctrine\ORM\Query
+     * @param int $hydrationMode
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    private function getQueryPaginator($query, $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY)
+    {
+        $query->setHydrationMode($hydrationMode);
+        return new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+    }
+
+
+
+
+
+    /**
+     * Controller action  to create a new template.
+     * Use the internal "saveTemplate" function.
+     * The request parameters are used as template/model data.
+     */
+    public function createTemplateAction()
+    {
+        $this->View()->assign(
+            $this->saveTemplate(
+                $this->Request()->getParams()
+            )
+        );
+    }
+
+    /**
+     * Controller action to update an existing template.
+     * Use the internal "saveTemplate" function.
+     * The request parameters are used as template/model data.
+     * The updateTemplateAction should have a "id" request parameter which
+     * contains the id of the existing template.
+     */
+    public function updateTemplateAction()
+    {
+        $this->View()->assign(
+            $this->saveTemplate(
+                $this->Request()->getParams()
+            )
+        );
+    }
+
+    /**
+     * Controller action to delete a single template.
+     * Use the internal "deleteTemplate" function.
+     * Expects the template id as request parameter "id".
+     */
+    public function deleteTemplateAction()
+    {
+        $this->View()->assign(
+            $this->deleteTemplate(
+                $this->Request()->getParam('id', null)
+            )
+        );
+    }
+
+    public function deleteManyTemplatesAction()
+    {
+        $this->View()->assign(
+            $this->deleteManyTemplates(
+                $this->Request()->getParam('records', array())
+            )
+        );
+    }
+
+    /**
+     * The delete many templates function is used from the controller action deleteManyTemplatesAction
+     * and contains the real deleteMany process. As parameter the function expects
+     * and two dimensional array with model ids:
+     *
+     * Example:
+     * array(
+     *    array('id' => 1),
+     *    array('id' => 2),
+     *    ...
+     * )
+     *
+     * The function iterates the passed records array and calls for each record
+     * the "deleteTemplate" function. If the delete action for the item was successfully,
+     * the delete function returns the following array('success' => true).
+     * If the delete function fails, the delete action returns array('success' => false, 'error'),
+     * this errors will be collected.
+     * Notice: The iteration don't stops if an errors occurs. It will be continue with the next record.
+     *
+     * After all records deleted, the function returns array('success' => true) if no errors occurs.
+     * If one or more errors occurred the function return an array like this:
+     *  array(
+     *      'success' => false,
+     *      'error' => array('Error 1', 'Error 2', ...)
+     * )
+     *
+     * @param $records
+     * @return array
+     */
+    protected function deleteManyTemplates($records) {
+        if (empty($records)) {
+            return array('success' => false, 'error' => 'No templates passed');
+        }
+        $errors = array();
+        foreach($records as $record) {
+            if (empty($record['id'])) {
+                continue;
+            }
+            $result = $this->deleteTemplate($record['id']);
+            if ($result['success'] === false) {
+                $errors[] = array($result['error']);
+            }
+        }
+
+        return array(
+            'success' => empty($errors),
+            'error' => $errors
+        );
+    }
+
+    /**
+     * Controller action to duplicate a single template.
+     * Use the internal "duplicateTemplate" function.
+     * Expects the template id as request parameter "id".
+     */
+    public function duplicateTemplateAction()
+    {
+        $this->View()->assign(
+            $this->duplicateTemplate(
+                $this->Request()->getParam('id', null)
+            )
+        );
+    }
+
+    /**
+     * Controller action to get a list of all defined templates.
+     * You can paginate the list over the request parameters
+     * "start" and "limit".
+     * Use the internal "getTemplates" function.
+     */
+    public function getTemplatesAction()
+    {
+        $this->View()->assign(
+            $this->getTemplates(
+                $this->Request()->getParam('start', null),
+                $this->Request()->getParam('limit', null)
+            )
+        );
+    }
+
+    /**
+     * Returns a list with all defined templates.
+     * The function return value is every time an array.
+     *
+     * Success case:
+     *  array('success' => true, 'total' => Total listing count, 'data' => All defined templates)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => Error message)
+     *
+     * @param null $offset
+     * @param null $limit
+     *
+     * @return array
+     */
+    protected function getTemplates($offset = null, $limit = null)
+    {
+        try {
+            $query = $this->getTemplatesQuery($offset, $limit);
+            $paginator = $this->getQueryPaginator($query->getQuery());
+
+            $result = array(
+                'success' => true,
+                'total' => $paginator->count(),
+                'data' => $paginator->getIterator()->getArrayCopy()
+            );
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param null $offset
+     * @param null $limit
+     *
+     * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
+     */
+    protected function getTemplatesQuery($offset = null, $limit = null) {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('templates'))
+                ->from('Shopware\Models\Emotion\Template', 'templates');
+
+        if ($offset !== null  && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Deletes a single template which will be identified over
+     * the passed id parameter. The return value is
+     * every time an array.
+     *
+     * Success case:
+     *  array('success' => true)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function deleteTemplate($id = null)
+    {
+        if (empty($id)) {
+            return array('success' => false, 'error' => "The request parameter id don't passed!");
+        }
+
+        try {
+            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $id);
+            if (!$template instanceof \Shopware\Models\Emotion\Template) {
+                return array('success' => false, 'error' => "The passed template id exist no more!");
+            }
+            Shopware()->Models()->remove($template);
+            Shopware()->Models()->flush();
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true);
+    }
+
+    /**
+     * Duplicates a single template which will be identified over
+     * the passed id parameter. The return value is
+     * every time an array. The duplicate function used
+     * the php __clone function of the model.
+     *
+     * Success case:
+     *  array('success' => true, 'data' => New Template data)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function duplicateTemplate($id = null)
+    {
+        if (empty($id)) {
+            return array('success' => false, 'error' => "The request parameter templateId don't passed!");
+        }
+        $data = array();
+
+        try {
+            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $id);
+            if (!$template instanceof \Shopware\Models\Emotion\Template) {
+                return array('success' => false, 'error' => "The passed template id exist no more!");
+            }
+
+            $new = clone $template;
+            Shopware()->Models()->persist($new);
+            Shopware()->Models()->flush();
+
+            $data = $this->getTemplate($new->getId());
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true, 'data' => $data);
+    }
+
+    /**
+     * Updates or creates a single template. If the data parameter contains
+     * an "id" property, this property is used to identify an existing template.
+     * The return value is every time an array.
+     *
+     * Success case:
+     *  array('success' => true, 'data' => New Template data)
+     *
+     * Failure case:
+     *  array('success' => false, 'error' => An error message)
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    protected function saveTemplate($data)
+    {
+        $result = array();
+
+        try {
+            //we have to remove the emotions to prevent an assignment from this side!
+            unset($data['emotions']);
+            if (!empty($data['id'])) {
+                $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['id']);
+            } else {
+                $template = new \Shopware\Models\Emotion\Template();
+            }
+
+            if (!$template instanceof \Shopware\Models\Emotion\Template) {
+                return array('success' => false, 'error' => "The passed template id exist no more!");
+            }
+
+            $template->fromArray($data);
+            Shopware()->Models()->persist($template);
+            Shopware()->Models()->flush();
+
+            $result = $this->getTemplate($template->getId());
+
+        } catch (Exception $e) {
+            return array('success' => false, 'error' => $e->getMessage());
+        }
+
+        return array('success' => true, 'data' => $result);
+    }
+
+    /**
+     * Helper function to get the array data of a single template.
+     * The passed $id parameter is used to identify the template.
+     *
+     * Success case:
+     *  array(Data of the template)
+     *
+     * Failure case:
+     *  null
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    protected function getTemplate($id)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('template'))
+                ->from('Shopware\Models\Emotion\Template', 'template')
+                ->where('template.id = :id')
+                ->setParameter('id', $id);
+
+        return $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+        );
     }
 
 }

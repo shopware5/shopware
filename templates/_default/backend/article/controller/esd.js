@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'mediaDropZone', selector: 'article-detail-window article-esd-detail html5fileupload' },
         { ref: 'esdSerialsListing', selector: 'article-detail-window article-esd-serials' },
-        { ref: 'esdTab', selector: 'article-detail-window panel[name=esd-tab]' }
+        { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' }
     ],
 
     /**
@@ -254,6 +254,22 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         esdTab.getLayout().setActiveItem(0);
         esdTab.remove(cardToRemove);
 
+        me.getEsdListing().getStore().load();
+
+        saveButton.show();
+    },
+
+    resetToList: function() {
+        var me = this,
+            esdTab = me.getEsdTab(),
+            saveButton = me.getSaveButton(),
+            cardToRemove = esdTab.getLayout().getActiveItem();
+
+        if(cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
+            return false;
+        }
+        esdTab.getLayout().setActiveItem(0);
+        esdTab.remove(cardToRemove);
         me.getEsdListing().getStore().load();
 
         saveButton.show();

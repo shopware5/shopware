@@ -5,8 +5,8 @@
 
 {* Tagcloud *}
 {block name="frontend_listing_index_tagcloud"}
-{if $sCloudShow}
-	{action module=widgets controller=listing action=tag_cloud sCategory=$sCategoryContent.id}
+{if {config name=show namespace=TagCloud }}
+    {action module=widgets controller=listing action=tag_cloud sCategory=$sCategoryContent.id}
 {/if}
 {/block}
 
@@ -30,7 +30,7 @@
 {/block}
 
 {block name="frontend_listing_index_text" append}
-	{if !$hasEmotion && !$sSupplierInfo}
+	{if !$hasEmotion && !$sSupplierInfo && {config name=topSellerActive}}
 	    {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
 	{/if}
 {/block}

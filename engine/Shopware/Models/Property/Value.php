@@ -44,6 +44,8 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Value extends ModelEntity
 {
+
+
     /**
      * @var integer $id
      *
@@ -98,6 +100,13 @@ class Value extends ModelEntity
     private $articles;
 
     /**
+     * @var float $len
+     * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
+     */
+    private $valueNumeric = 0;
+
+
+    /**
      * Class constructor.
      *
      * @param \Shopware\Models\Property\Option $option
@@ -130,6 +139,7 @@ class Value extends ModelEntity
     public function setValue($value)
     {
         $this->value = $value;
+        $this->valueNumeric = floatval(str_replace(',', '.', $value));
         return $this;
     }
 

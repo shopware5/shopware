@@ -1,17 +1,21 @@
 <?php
+use Slim\Slim;
+
 if (!defined("installer")){
     exit;
 }
 
-require 'Slim/Slim.php';
+require SW_PATH . '/engine/Library/Slim/Slim.php';
 require 'assets/php/Shopware_Install_Requirements.php';
 require 'assets/php/Shopware_Install_Requirements_Path.php';
 require 'assets/php/Shopware_Install_Database.php';
 require 'assets/php/Shopware_Install_License.php';
 require 'assets/php/Shopware_Install_Configuration.php';
 
+\Slim\Slim::registerAutoloader();
+
 // Initiate slim
-$app = new Slim();
+$app = new \Slim\Slim();
 
 //$app->add(new Slim_Middleware_SessionCookie());
 

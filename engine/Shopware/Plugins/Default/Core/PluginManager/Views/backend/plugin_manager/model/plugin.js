@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
        { name: 'capabilityUpdate', type: 'boolean' },
        { name: 'capabilityEnable', type: 'boolean' },
        { name: 'capabilityInstall', type: 'boolean' },
-
+       { name: 'capabilityDummy', type: 'boolean' },
 
        { name: 'configForms', type: 'array' },
        { name: 'licenses', type: 'array' }

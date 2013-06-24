@@ -68,8 +68,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
      *
-     * @param   Enlight_Controller_Request_Request   $request
-     * @param   Enlight_Controller_Response_Response $response
+     * @param Enlight_Controller_Request_Request   $request
+     * @param Enlight_Controller_Response_Response $response
      */
     public function __construct(Enlight_Controller_Request_Request $request,
                                 Enlight_Controller_Response_Response $response
@@ -114,16 +114,29 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function dispatch($action)
     {
-        $args = array('subject' => $this, 'request' => $this->Request(), 'response' => $this->Response());
+        $args = array(
+            'subject' => $this,
+            'request' => $this->Request(),
+            'response' => $this->Response()
+        );
+
+        $moduleName = ucfirst($this->Request()->getModuleName());
 
         Enlight_Application::Instance()->Events()->notify(
             __CLASS__ . '_PreDispatch',
             $args
         );
+
+        Enlight_Application::Instance()->Events()->notify(
+            __CLASS__ . '_PreDispatch_' . $moduleName,
+            $args
+        );
+
         Enlight_Application::Instance()->Events()->notify(
             __CLASS__ . '_PreDispatch_' . $this->controller_name,
             $args
         );
+
         $this->preDispatch();
 
         if ($this->Request()->isDispatched() && !$this->Response()->isRedirect()) {
@@ -137,10 +150,41 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $this->postDispatch();
         }
 
+        // Fire "Secure"-PostDispatch-Events only if:
+        // - Request is Dispatched
+        // - Response in no Exception
+        // - View has template
+        if ($this->Request()->isDispatched()
+            && !$this->Response()->isException()
+            && $this->View()->hasTemplate()
+        ) {
+            Enlight_Application::Instance()->Events()->notify(
+                __CLASS__ . '_PostDispatchSecure_' . $this->controller_name,
+                $args
+            );
+
+            Enlight_Application::Instance()->Events()->notify(
+                __CLASS__ . '_PostDispatchSecure_' . $moduleName,
+                $args
+            );
+
+            Enlight_Application::Instance()->Events()->notify(
+                __CLASS__ . '_PostDispatchSecure',
+                $args
+            );
+        }
+
+        // fire non-secure/legacy-PostDispatch-Events
         Enlight_Application::Instance()->Events()->notify(
             __CLASS__ . '_PostDispatch_' . $this->controller_name,
             $args
         );
+
+        Enlight_Application::Instance()->Events()->notify(
+            __CLASS__ . '_PostDispatch_' . $moduleName,
+            $args
+        );
+
         Enlight_Application::Instance()->Events()->notify(
             __CLASS__ . '_PostDispatch',
             $args
@@ -190,57 +234,61 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $uri = $this->Request()->getScheme() . '://' . $this->Request()->getHttpHost();
             $url = $uri . $url;
         }
-        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int)$options['code']);
+        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int) $options['code']);
     }
 
     /**
      * Set view instance
      *
-     * @param Enlight_View $view
+     * @param  Enlight_View $view
      * @return Enlight_Controller_Action
      */
     public function setView(Enlight_View $view)
     {
         $this->view = $view;
+
         return $this;
     }
 
     /**
      * Set front instance
      *
-     * @param   Enlight_Controller_Front $front
-     * @return  Enlight_Controller_Action
+     * @param  Enlight_Controller_Front $front
+     * @return Enlight_Controller_Action
      */
     public function setFront(Enlight_Controller_Front $front = null)
     {
-        if($front === null) {
+        if ($front === null) {
             $front = Enlight_Application::Instance()->Bootstrap()->getResource('Front');
         }
         $this->front = $front;
+
         return $this;
     }
 
     /**
      * Set request instance
      *
-     * @param Enlight_Controller_Request_Request $request
+     * @param  Enlight_Controller_Request_Request $request
      * @return Enlight_Controller_Action
      */
     public function setRequest(Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
+
         return $this;
     }
 
     /**
      * Set response instance
      *
-     * @param Enlight_Controller_Response_Response $response
+     * @param  Enlight_Controller_Response_Response $response
      * @return Enlight_Controller_Action
      */
     public function setResponse(Enlight_Controller_Response_Response $response)
     {
         $this->response = $response;
+
         return $this;
     }
 
@@ -264,6 +312,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         if ($this->front === null) {
             $this->setFront();
         }
+
         return $this->front;
     }
 
@@ -290,8 +339,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Magic caller method
      *
-     * @param string $name
-     * @param array  $value
+     * @param  string $name
+     * @param  array  $value
+     * @throws Enlight_Controller_Exception
      * @return mixed
      */
     public function __call($name, $value = null)
@@ -303,6 +353,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
                 Enlight_Controller_Exception::ActionNotFound
             );
         }
+
         return parent::__call($name, $value);
     }
 }

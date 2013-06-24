@@ -67,32 +67,35 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
     /**
      * Detects and expand all previous selected categories
      * 
-     * @param tree
+     * @param { Shopware.apps.Shipping.view.edit.CategoriesTree } categoryPanel
      * @return void
      */
     onAfterRender : function(categoryPanel) {
-            var tree = categoryPanel.treeSelect,
-                win = tree.up('window'),
-                form = win.down('form').getForm(),
-                record = form.getRecord(),
-                lockedCategoriesStore =  record.getCategories(),
-                ids = [];
-            lockedCategoriesStore.each(function(element) {
-                ids.push(element.get('id'));
-            });
-            Ext.Ajax.request({
-                url:'{url controller="Category" action="getIdPath"}',
-                params: { 'categoryIds[]': ids },
-                success: function(result){
-                    if(!result.responseText) {
-                        return ;
-                    }
-                    result =  Ext.JSON.decode(result.responseText);
-                    for(var i = 0; i < result.data.length; i++ ) {
-                        tree.expandPath(result.data[i]);
-                    }
+        var tree = categoryPanel.treeSelect,
+            win = tree.up('window'),
+            form = win.down('form').getForm(),
+            record = form.getRecord(),
+            lockedCategoriesStore =  record.getCategories(),
+            ids = [];
+
+        lockedCategoriesStore.each(function(element) {
+            ids.push(element.get('id'));
+        });
+
+        Ext.Ajax.request({
+            url:'{url controller="Category" action="getIdPath"}',
+            params: { 'categoryIds[]': ids },
+            success: function(result) {
+                if(!result.responseText) {
+                    return ;
                 }
-            });
+                result =  Ext.JSON.decode(result.responseText);
+
+                Ext.each(result.data, function(item) {
+                    tree.expandPath('/1' + item, 'id');
+                });
+            }
+        });
     }
 });
 //{/block}

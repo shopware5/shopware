@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Default: 925 px
      * @integer
      */
-    width: 900,
+    width: 1150,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Masks the viewport when the window is visible.
      * @boolean
      */
-    modal: true,
+    modal: false,
 
     /**
      * Initializes the component and builds up the main interface

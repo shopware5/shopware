@@ -313,6 +313,25 @@ class Enlight_Application
     }
 
     /**
+     * Setter function of the _events property.
+     * Allows to override the default Shopware Event Manager with an
+     * plugin specified event manager.
+     * The passed manager has to be an instance of the Enlight_Event_EventManager,
+     * otherwise the function throws an exception.
+     *
+     * @param Enlight_Event_EventManager $manager
+     * @throws Exception
+     */
+    public function setEventManager(Enlight_Event_EventManager $manager)
+    {
+        if (!$manager instanceof Enlight_Event_EventManager) {
+            throw new Exception("The passed event manager isn't an instance of Enlight_Event_EventManager");
+        }
+
+        $this->_events = $manager;
+    }
+
+    /**
      * Returns the instance of the plugin manager, which is initialed in the class constructor
      *
      * @return Enlight_Plugin_PluginManager

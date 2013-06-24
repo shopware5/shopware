@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Modules
- * @subpackage Categories
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
-use Shopware\Models\Category\Category;
-
 /**
- * Deprecated Shopware Class that handle categories
+ * Deprecated Shopware Class that handles categories
+ *
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class sCategories
 {
@@ -91,23 +85,24 @@ class sCategories
      */
     public function sGetCategories($id)
     {
-        if($id == $this->baseId) {
+        if ($id == $this->baseId) {
             return $this->sGetCategoriesByParentId($this->baseId);
         }
 
         $path = $this->repository->getPathById($id, 'id');
         $path = array_reverse($path);
 
-        $categories = array(); $lastCategoryId = null;
-        foreach($path as $categoryId) {
+        $categories = array();
+        $lastCategoryId = null;
+        foreach ($path as $categoryId) {
             $subCategories = $this->sGetCategoriesByParentId($categoryId);
-            if(isset($lastCategoryId)) {
+            if (isset($lastCategoryId)) {
                 $subCategories[$lastCategoryId]['flag'] = true;
                 $subCategories[$lastCategoryId]['subcategories'] = $categories;
             }
             $categories = $categories[$categoryId]['subcategories'] = $subCategories;
             $lastCategoryId = $categoryId;
-            if($categoryId == $this->baseId) {
+            if ($categoryId == $this->baseId) {
                 break;
             }
         }
@@ -125,7 +120,7 @@ class sCategories
             ->getActiveByParentIdQuery($id, $this->customerGroupId)
             ->getArrayResult();
         $resultCategories = array();
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $url = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
             $resultCategories[$category['category']['id']] = array_merge($category['category'], array(
                 'description' => $category['category']['name'],
@@ -137,6 +132,7 @@ class sCategories
                 'flag' => false
             ));
         }
+
         return $resultCategories;
     }
 
@@ -147,25 +143,30 @@ class sCategories
      */
     public function sGetCategoryIdByArticleId($articleId, $parentId = null)
     {
-        if($parentId === null) {
+        if ($parentId === null) {
             $parentId = $this->baseId;
         }
-        //$query = $this->repository->getActiveByArticleIdQuery($articleId, $parentId);
-        //$result = $query->setMaxResults(1)->getArrayResult();
-        //return isset($result[0]) ? $result[0] : null;
+
         $sql = '
-            SELECT c2.id
-            FROM s_categories c, s_categories c2, s_articles_categories ac
-            WHERE c.id = ?
-            AND c2.left > c.left
-            AND c2.right < c.right
-            AND ac.articleID = ?
-            AND c2.id = ac.categoryID
-            AND c2.active = 1
+            SELECT STRAIGHT_JOIN
+                   ac.categoryID as id
+            FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
+                INNER JOIN s_categories c
+                    ON  ac.categoryID = c.id
+                    AND c.active = 1
+                    AND c.path LIKE ?
+
+                LEFT JOIN s_categories c2
+                    ON c2.parent = c.id
+
+            WHERE ac.articleID = ?
+            AND c2.id IS NULL
             ORDER BY ac.id
         ';
-        return (int)Shopware()->Db()->fetchOne($sql, array(
-            $parentId, $articleId
+
+        return (int) Shopware()->Db()->fetchOne($sql, array(
+            '%|' . $parentId . '|%',
+            $articleId
         ));
     }
 
@@ -185,15 +186,15 @@ class sCategories
      * @param $id
      * @return array
      */
-    public function sGetCategoriesByParent ($id)
+    public function sGetCategoriesByParent($id)
     {
-        $pathCategories = $this->repository
-            ->getPathById($id, array('id', 'name', 'blog'));
+        $pathCategories = $this->repository->getPathById($id, array('id', 'name', 'blog'));
+
         $pathCategories = array_reverse($pathCategories);
 
         $categories = array();
-        foreach($pathCategories as $category){
-            if($category['id'] == $this->baseId) {
+        foreach ($pathCategories as $category) {
+            if ($category['id'] == $this->baseId) {
                 break;
             }
 
@@ -207,51 +208,39 @@ class sCategories
 
     /**
      * Return a whole category tree by id
-     * @param int $parentId
-     * @param null $depth
+     * @param  int   $parentId
+     * @param  null  $depth
      * @return array
      */
     public function sGetWholeCategoryTree($parentId = null, $depth = null)
     {
-        if($parentId === null) {
+        if ($parentId === null) {
             $parentId = $this->baseId;
         }
 
-        $result = $this->repository
-            ->getActiveChildrenByIdQuery($parentId, $this->customerGroupId, $depth)
-            ->getArrayResult();
+        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth);
+        $result = $this->mapCategoryTree($result);
 
-        $categories = array();
-        foreach($result as $category){
-            $url = ($category['category']['blog']) ? $this->blogBaseUrl : $this->baseUrl;
-            $categories[$category['category']['id']] = array_merge($category['category'], array(
-                'description' => $category['category']['name'],
-                'childrenCount' => $category['childrenCount'],
-                'media' => $category['category']['media'],
-                'articleCount' => $category['articleCount'],
-                'hidetop' => $category['category']['hideTop'],
-                'link' => $category['category']['external'] ? : $url . $category['category']['id'],
-            ));
-        }
-
-        $categories = $this->repository->buildTree(
-            $categories,
-            array('childrenField' => 'sub')
-        );
-
-        return $categories;
+        return $result;
     }
 
     /**
-     * Returns category level for the given category id
-     *
-     * @param int $id
-     * @return int|null
+     * @param array $categories
+     * @return array
      */
-    public function sGetCategoryDepth($id)
+    protected function mapCategoryTree($categories)
     {
-        $category = $this->repository->find($id);
-        return $category !== null ? $category->getLevel() - 1 : null;
+        foreach ($categories as &$category) {
+            $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
+            $category['description'] = $category['name'];
+            $category['link'] = $category['external'] ? : $url . $category['id'];
+            $category['hidetop'] = $category['hideTop'];
+            if ($category['sub']) {
+                $category['sub'] = $this->mapCategoryTree($category['sub']);
+            }
+        }
+
+        return $categories;
     }
 
     /**
@@ -265,10 +254,9 @@ class sCategories
         if ($id === null) {
             $id = $this->baseId;
         }
-        $category = $this->repository
-            ->getActiveByIdQuery($id, $this->customerGroupId)
-            ->getArrayResult();
-        if(empty($category[0])) {
+        $category = $this->repository->getActiveByIdQuery($id, $this->customerGroupId)->getArrayResult();
+
+        if (empty($category[0])) {
             return null;
         }
         $category = $category[0];
@@ -283,8 +271,8 @@ class sCategories
             'metakeywords' => $category['category']['metaKeywords'],
             'metadescription' => $category['category']['metaDescription'],
             'noviewselect' => $category['category']['noViewSelect'],
-            'childrenCount' => (int)$category['childrenCount'],
-            'articleCount' => (int)$category['articleCount'],
+            'childrenCount' => (int) $category['childrenCount'],
+            'articleCount' => (int) $category['articleCount'],
             'sSelf' => $detailUrl,
             'rssFeed' => $detailUrl . '&sRss=1',
             'atomFeed' => $detailUrl . '&sAtom=1',
@@ -309,21 +297,22 @@ class sCategories
      * Returns the category path for the given category id
      *
      * @param int|$id
-     * @param int|null $parentId
+     * @param  int|null $parentId
      * @return array
      */
     public function sGetCategoryPath($id, $parentId = null)
     {
-        if($parentId === null) {
+        if ($parentId === null) {
             $parentId = $this->baseId;
         }
         $path = $this->repository->getPathById($id, 'id');
-        foreach($path as $key => $value) {
+        foreach ($path as $key => $value) {
             unset($path[$key]);
-            if($value == $parentId) {
+            if ($value == $parentId) {
                 break;
             }
         }
+
         return $path;
     }
 }

@@ -204,6 +204,62 @@ class CommunityStore
     }
 
     /**
+     * Internal helper function to get the current shopware version as a numeric value with four positions.
+     *
+     * @return string
+     */
+    public function getNumericShopwareVersion()
+    {
+        $version = Shopware()->Config()->get('version');
+        $paths = explode('.', $version);
+        if (count($paths) === 3) {
+            $paths[] = 0;
+        }
+        return (int) implode('', $paths);
+    }
+
+
+    /**
+     * Helper method which checks for an update of a given plugin
+     *
+     * Will return false if no update is available or the available update version if an update is available
+     *
+     * @param string $name      Name of the plugin to check for an update
+     * @return bool|string      Returns false, if not update was found or the new available plugin version
+     * @throws Exception        If plugin was not found or the store returns an error
+     */
+    public function isPluginUpdateAvailable($name)
+    {
+        $pluginModel = Shopware()->Models()->getRepository('Shopware\Models\Plugin\Plugin')->findOneBy(array('name' => $name));
+        if (!$pluginModel) {
+            throw new \Exception("Plugin {$name} was not found");
+        }
+
+        $version = $pluginModel->getVersion();
+
+        $result = $this->getUpdateablePlugins(array(
+            $name => array(
+                'name' => $name,
+                'version' => $version,
+                'shopwareVersion' => $this->getNumericShopwareVersion(),
+                '1'
+            )
+        ));
+
+        if ($result['success'] != true) {
+            throw new \Exception($result['message']);
+        }
+
+        // As we only check for one plugin, we can pop the element
+        $data = array_pop($result['data']);
+        if (!$data) {
+            return false;
+        }
+
+        return $data['availableVersion'];
+    }
+
+    /**
      * Helper function to download the zip file from the passed url.
      *
      * @param        $url
@@ -288,7 +344,7 @@ class CommunityStore
         $product = $this->getProductService()->getProductById($productId);
         $feedback = $this->getProductService()->getProductFeedback($product);
         if ($feedback instanceof Shopware_StoreApi_Exception_Response) {
-            return array('success' => false, 'message' => $feedback->getMessage(), 'code' => $feedback->getCode());
+            return array('success' => false, 'data' => array(), 'message' => $feedback->getMessage(), 'code' => $feedback->getCode());
         }
         /**@var $feedback Shopware_StoreApi_Core_Response_SearchResult*/
         $iterator = $feedback->getIterator();
@@ -686,7 +742,7 @@ class CommunityStore
     /**
      * The getUpdateablePlugins function checks if for the passed plugins updates available and returns
      * the updateable plugins.
-     * @param $plugins
+     * @param array $plugins
      * @return Shopware_StoreApi_Core_Response_SearchResult
      */
     public function getUpdateablePlugins($plugins)
@@ -717,6 +773,112 @@ class CommunityStore
             return array(
                 'success' => true,
                 'data' => array_values($resultSet),
+                'total' => count($resultSet)
+            );
+        }
+    }
+
+
+    /**
+     * The getPluginsAvailableFor method checks if a list of given plugins
+     * is available for a given version of shopware
+     *
+     * @param array $plugins
+     * @param string $version
+     * @return Array
+     */
+    public function getPluginsAvailableFor($plugins, $version)
+    {
+        // Construct API query
+        $productService = $this->getApi()->getProductService();
+        $productQuery = new Shopware_StoreApi_Models_Query_Product();
+
+        $productQuery->addCriterion(
+            new Shopware_StoreApi_Models_Query_Criterion_PluginName($plugins)
+        );
+        $productQuery->addCriterion(
+            new Shopware_StoreApi_Models_Query_Criterion_Version($version)
+        );
+
+        $resultSet = $productService->getProducts($productQuery);
+
+        // First mark all plugins as incompatible
+        $results = array();
+        foreach ($plugins as $name) {
+            $results[$name] = false;
+        }
+
+        if ($resultSet instanceof Shopware_StoreApi_Exception_Response) {
+            // If an empty result is returned, non of the passed plugins was compatible
+            if ($resultSet->getCode() == 200) {
+                return array(
+                    'success' => true,
+                    'data' => $results,
+                    'total' => count($results)
+                );
+            } else {
+                return array(
+                    'success' => false,
+                    'message' => $resultSet->getMessage(),
+                    'code' => $resultSet->getCode()
+                );
+            }
+        } else {
+            // mark returned plugins as compatible
+            foreach($resultSet as  $productModel) {
+                $names  = $productModel->getPluginNames();
+                foreach ($names as $name) {
+                    $results[$name] = true;
+                }
+            }
+
+            return array(
+                'success' => true,
+                'data' => $results,
+                'total' => count($results)
+            );
+        }
+    }
+
+
+    /**
+     * Get plugin infos for a list of plugin names
+     *
+     * @param array $plugins
+     * @return array
+     */
+    public function getPluginInfos($plugins)
+    {
+        // Construct API query
+        $productService = $this->getApi()->getProductService();
+        $productQuery = new Shopware_StoreApi_Models_Query_Product();
+
+        $productQuery->addCriterion(
+            new Shopware_StoreApi_Models_Query_Criterion_PluginName($plugins)
+        );
+
+        $resultSet = $productService->getProducts($productQuery);
+
+        if ($resultSet instanceof Shopware_StoreApi_Exception_Response) {
+            // If an empty result is returned, non of the passed plugins was compatible
+            if ($resultSet->getCode() == 200) {
+                return array(
+                    'success' => true,
+                    'data' => array(),
+                    'total' => 0
+                );
+            } else {
+                return array(
+                    'success' => false,
+                    'message' => $resultSet->getMessage(),
+                    'code' => $resultSet->getCode()
+                );
+            }
+        } else {
+
+            return array(
+                'success' => true,
+                'data' => $resultSet,
                 'total' => count($resultSet)
             );
         }

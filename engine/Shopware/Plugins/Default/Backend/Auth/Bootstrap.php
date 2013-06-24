@@ -407,6 +407,20 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
         unset($options['client_check']);
 
+	    if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
+		    // SW-4819 Add database backend support
+		    $config_save_handler = array(
+	           'name'           => 's_core_sessions_backend',
+	           'primary'        => 'id',
+	           'modifiedColumn' => 'modified',
+	           'dataColumn'     => 'data',
+	           'lifetimeColumn' => 'expiry'
+	        );
+	        Enlight_Components_Session::setSaveHandler(
+	           new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
+	        );
+	    }
+
         Enlight_Components_Session::start($options);
 
         if($refererCheck && ($referer = $this->request->getHeader('referer')) !== null

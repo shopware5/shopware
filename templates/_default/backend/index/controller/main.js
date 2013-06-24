@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	 */
 	init: function() {
         var me = this,
-            viewport = Shopware.app.Application.viewport = Ext.create('Shopware.container.Viewport');
+            mainApp = Shopware.app.Application,
+            viewport = mainApp.viewport = Ext.create('Shopware.container.Viewport');
 
         /** Create our menu and footer */
         me.menu =  me.getView('Menu').create();
@@ -165,7 +166,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         default: return;
                     }
                     Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.Cache',
+                        name: 'Shopware.apps.Performance',
                         action: action
                     });
                 }
@@ -253,7 +254,7 @@ loadSkeleton = function(module, forceNewWindow, requestConfig) {
  * @return void
  */
 openAction = function(controller, action) {
-    var options =  {}; 
+    var options =  {};
     options.name = 'Shopware.apps.Deprecated';
     options.controllerName = controller;
     options.actionName = action;
@@ -300,13 +301,13 @@ createKeyNavOverlay = function() {
 
                     // Ctrl key
                     '<tpl if="ctrl === true">',
-                        '<span class="sprite-key_ctrl">ctrl</span>',
+                        '<span class="sprite-key_ctrl_alternative">ctrl</span>',
                     '</tpl>',
 
                     // Alt key
                     '<tpl if="alt === true">',
                         '<span class="key_sep">+</span>',
-                        '<span class="sprite-key_alt">alt</span>',
+                        '<span class="sprite-key_alt_alternative">alt</span>',
                     '</tpl>',
 
                     // Output the actual key
@@ -394,6 +395,7 @@ openSearchResult = function(module, id) {
  * available.
  *
  * @public
+ * @deprecated deprecated since version 4.1
  * @return void
  */
 createBetaMessage = function() {
@@ -429,7 +431,7 @@ createShopwareVersionMessage = function() {
             xtype: 'container',
             region: 'south',
             cls: Ext.baseCSSPrefix + 'about-shopware-footer',
-            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; 2012 shopware AG. All rights reserved.{/s}</a>'
+            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; 2013 shopware AG. All rights reserved.{/s}</a>'
         }, {
             xtype: 'container',
             region: 'center',
@@ -438,7 +440,7 @@ createShopwareVersionMessage = function() {
             cls: Ext.baseCSSPrefix + 'about-shopware-content',
             html: '<p>' +
                     '<strong>Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT}</strong>' +
-                    '<span>Build Rev {Shopware::REVISION}</span><span>2012-08-28</span></p>' +
+                    '<span>Build Rev {Shopware::REVISION}</span></p>' +
             {if !$product}'<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>' +{else}
             '<p><strong>{if $product == "PE"}Professional Edition {elseif $product == "EB"}Enterprise Business Edition {elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>' +
             {/if}
@@ -449,6 +451,7 @@ createShopwareVersionMessage = function() {
                     'If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.' +
                     '<p><strong>Doctrine 2.2.0</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
                     '<p><strong>Gedmo 2.3.1-DEV</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
+                    '<p><strong>password_compat 1.0.0</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ircmaxell/password_compat/</span></p>' +
                     '<p><strong>TinyMCE 3.5.0</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
                     '<p><strong>Symfony 2</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3.1.8</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +

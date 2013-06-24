@@ -48,6 +48,9 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      */
     refs:[
         { ref:'voucherBaseConfiguration', selector:'window voucher-voucher-base_configuration' },
+        { ref:'codePatternField', selector:'voucher-code-list textfield[name=patternField]' },
+        { ref:'progressBar', selector:'voucher-code-progress-window progressbar' },
+        { ref:'progressBarWindow', selector:'voucher-code-progress-window' },
         { ref:'voucherCodeGrid', selector:'voucher-code-list' }
     ],
     /**
@@ -94,7 +97,10 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      */
     onGenerateCodes:function () {
         var me = this,
-            countCodes = me.getVoucherCodeGrid().getStore().data.items.length;
+            countCodes = me.getVoucherCodeGrid().getStore().data.items.length,
+            codePatternField = me.getCodePatternField(),
+            codePatternFieldValue = codePatternField.getValue();
+
         if(countCodes > 0) {
             Ext.MessageBox.confirm(
                 me.snippets.confirmCreateNewVoucherCodesTitle,
@@ -102,11 +108,11 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     if (response !== 'yes') {
                         return false;
                     }
-                    me.generateCodes();
+                    me.generateCodes(codePatternFieldValue);
                 }
             );
         }else{
-            me.generateCodes();
+            me.generateCodes(codePatternFieldValue);
         }
     },
     /**
@@ -124,32 +130,84 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
     /**
      * helper method to send the request to the controller to generate new voucher codes
      *
+     * @param codePattern | this is the based codePattern to generate the voucher code with
      * @return void
      */
-    generateCodes:function(){
+    generateCodes:function(codePattern){
         var me = this,
             form = me.getVoucherBaseConfiguration().getForm(),
             values = form.getValues(),
-            id = parseInt(values.id),
-            units = parseInt(values.numberOfUnits);
+            voucherId = parseInt(values.id),
+            numberOfUnits = parseInt(values.numberOfUnits);
 
-        //grid.setLoading(true);
+        me.getView('code.Progress').create();
+        if (voucherId != 0) {
 
-        if (id != 0) {
-            Ext.Ajax.request({
-               url:'{url action="createVoucherCodes"}',
-               params:{
-                   voucherId: id,
-                   numberOfUnits: units
-               },
-               success:function (record) {
-                   if (record.length != 0) {
-                       me.subApplication.getStore("Code").load();
-                       me.getVoucherCodeGrid().down('button[action=downloadCodes]').enable();
-                   }
-               }
-            });
+            me.getProgressBar().updateText('{s name=progress/text/delete_old_voucher_codes}Deleting old voucher codes{/s}');
+            me.batchProcessing(voucherId, codePattern, numberOfUnits, numberOfUnits, true, 0);
         }
+    },
+
+    /**
+     * helper method which is executes several times to send the ajax request to generate a bunch of voucher codes
+     *
+     * @param voucherId
+     * @param codePattern
+     * @param numberOfCodesToGenerate
+     * @param numberOfAllCodes
+     * @param deletePreviousVoucherCodes
+     * @param overAllTimeToGenerate
+     */
+    batchProcessing:function(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, deletePreviousVoucherCodes, overAllTimeToGenerate){
+        var me = this,
+            progressBar = me.getProgressBar(),
+            startTime = new Date().getTime(),
+            timeLeft = 0,
+            timeString = "";
+
+        numberOfCodesToGenerate = numberOfCodesToGenerate > 50000 ? 50000 : numberOfCodesToGenerate;
+        Ext.Ajax.request({
+            url:'{url action="createVoucherCodes"}',
+            params:{
+                voucherId: voucherId,
+                numberOfUnits: numberOfCodesToGenerate,
+                deletePreviousVoucherCodes: deletePreviousVoucherCodes,
+                codePattern: codePattern
+            },
+            success:function (record) {
+                var status = Ext.decode(record.responseText);
+                if (status.success) {
+                    var cycleTime =  (new Date().getTime() - startTime) / 1000;
+                    overAllTimeToGenerate = overAllTimeToGenerate + cycleTime;
+                    numberOfCodesToGenerate = numberOfAllCodes - status.generatedVoucherCodes;
+                    timeLeft = (numberOfAllCodes - status.generatedVoucherCodes) * overAllTimeToGenerate / status.generatedVoucherCodes;
+
+                    if(!deletePreviousVoucherCodes) {
+                        var hours   = Math.floor(timeLeft / 3600);
+                        var minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
+                        var seconds = timeLeft - (hours * 3600) - (minutes * 60);
+                        timeString =  + Math.round(minutes) + " {s name=progress/text/time_minutes_and}minute(s) and{/s} "+ Math.round(seconds) +" {s name=progress/text/time_seconds_remaining}second(s) remaining{/s}";
+                    }
+                    progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + " {s name=progress/text/out_of}out of{/s} " + numberOfAllCodes + " {s name=progress/text/voucher_code_created}voucher codes created{/s} " + timeString, true);
+
+                    if(numberOfCodesToGenerate > 0) {
+                        me.batchProcessing(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, false, overAllTimeToGenerate);
+                    }
+                    else {
+                        me.subApplication.getStore("Code").load({
+                            callback: function(records, operation) {
+                                me.getProgressBarWindow().hide();
+                                me.getVoucherCodeGrid().down('button[action=downloadCodes]').enable();
+                            }
+                        });
+                    }
+                }
+                else {
+                    me.getProgressBarWindow().hide();
+                    Shopware.Notification.createGrowlMessage('{s name=progress/text/voucher_validation_failure_title}Voucher codes could not be generated.{/s}', '{s name=progress/text/voucher_validation_failure}The Voucher codes could not be generated. Maybe the voucher code pattern is not complex enough{/s}');
+                }
+            }
+        });
     },
 
     /**

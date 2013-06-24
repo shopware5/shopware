@@ -934,6 +934,7 @@ class sOrder
 		(
 			userID,
 			orderID,
+			customernumber,
 			company,
 			department,
 			salutation,
@@ -965,6 +966,7 @@ class sOrder
 			?,
 			?,
 			?,
+			?,
 			?
 			)
 		";
@@ -972,6 +974,7 @@ class sOrder
 		$array = array(
 			$address["userID"],
 			$id,
+			$address["customernumber"],
 			$address["company"],
 			$address["department"],
 			$address["salutation"],
