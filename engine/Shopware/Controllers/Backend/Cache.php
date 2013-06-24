@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,33 +20,25 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Cache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Shopware Application
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_ExtJs
 {
-	protected function initAcl()
-	{
-		// read
-		$this->addAclPermission('getInfo', 'read', 'Insufficient Permissions');
-		// update
-		$this->addAclPermission('config', 'update', 'Insufficient Permissions');
-		// clear
-		$this->addAclPermission('clearCache', 'clear', 'Insufficient Permissions');
-		$this->addAclPermission('clearDirect', 'clear', 'Insufficient Permissions');
-	}
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('getInfo', 'read', 'Insufficient Permissions');
+        // update
+        $this->addAclPermission('config', 'update', 'Insufficient Permissions');
+        // clear
+        $this->addAclPermission('clearCache', 'clear', 'Insufficient Permissions');
+        $this->addAclPermission('clearDirect', 'clear', 'Insufficient Permissions');
+    }
 
     /**
      * Cache info action
@@ -58,29 +50,23 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->getHttpCacheInfo(),
             $this->getBackendCacheInfo(),
             $this->getTemplateCacheInfo(),
-            $this->getProxyCacheInfo()
+            $this->getShopwareProxyCacheInfo(),
+            $this->getDoctrineFileCacheInfo(),
+            $this->getDoctrineProxyCacheInfo(),
         );
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $data,
-            'total' => count($data)
+            'data'    => $data,
+            'total'   => count($data)
         ));
     }
 
     /**
-     * Clear config cache action
+     *
+     * Helpers to clear various caches
+     *
      */
-    public function configAction()
-    {
-        $this->clearTemplateCache();
-        $this->clearCompilerCache();
-
-        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_Config',
-            'Shopware_Plugin'
-        ));
-    }
 
     /**
      * Clear cache action
@@ -92,7 +78,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $capabilities = Shopware()->Cache()->getBackend()->getCapabilities();
 
         if (empty($capabilities['tags'])) {
-            if ($cache['config'] == 'on' || $cache['frontend'] == 'on') {
+            if ($cache['config'] == 'on' || $cache['template'] == 'on') {
                 Shopware()->Cache()->clean();
             }
         } else {
@@ -100,12 +86,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             if ($cache['config'] == 'on' || $cache['backend'] == 'on') {
                 $tags[] = 'Shopware_Config';
                 $tags[] = 'Shopware_Plugin';
-            }
-            if ($cache['router'] == 'on') {
-                $tags[] = 'Shopware_RouterRewrite';
-            }
-            if ($cache['frontend'] == 'on') {
-                $tags[] = 'Shopware_Adodb';
             }
             if ($cache['search'] == 'on') {
                 $tags[] = 'Shopware_Modules_Search';
@@ -123,7 +103,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        if ($cache['config'] == 'on') {
+        if ($cache['config'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearCompilerCache();
         }
         if ($cache['search'] == 'on') {
@@ -132,11 +112,12 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['router'] == 'on') {
             $this->clearRewriteCache();
         }
-        if ($cache['frontend'] == 'on') {
-            $this->clearFrontendCache();
+        if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
+            $this->clearTemplateCache();
+            $this->clearCompilerCache();
         }
-        if ($cache['backend'] == 'on') {
-            $this->clearBackendCache();
+        if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
+            $this->clearFrontendCache();
         }
         if ($cache['proxy'] == 'on') {
             $this->clearProxyCache();
@@ -154,30 +135,17 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $cache = $this->Request()->getQuery('cache');
         switch ($cache) {
-            case 'Template':
             case 'Config':
+                $this->clearFrontendCache();
                 $this->clearBackendCache();
                 $this->clearConfigCache();
-                break;
-            case 'Frontend':
-                $this->clearFrontendCache();
-                $this->clearQueryCache();
+                $this->clearCompilerCache();
+                $this->clearSearchCache();
+                $this->clearProxyCache();
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * Clear query cache
-     */
-    protected function clearQueryCache()
-    {
-        Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_Adodb',
-            'Shopware_RouterRewrite'
-        ));
-        $this->clearRewriteCache();
     }
 
     /**
@@ -190,9 +158,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($request->getHeader('Surrogate-Capability') === false) {
             return true;
         }
+
         $proxyUrl = $request->getScheme() . '://'
             . $request->getHttpHost()
             . $request->getBaseUrl() . '/';
+
         try {
             $client = new Zend_Http_Client(null, array(
                 'useragent' => 'Shopware/' . Shopware()->Config()->version,
@@ -202,6 +172,13 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         } catch (Exception $e) {
             return false;
         }
+
+        try {
+            Shopware()->Db()->exec('TRUNCATE s_cache_log');
+        } catch (\Exeption $e) {
+            Shopware()->Db()->exec('DELETE FROM s_cache_log');
+        }
+
         return true;
     }
 
@@ -285,23 +262,55 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     /**
      * Clear proxy cache
+     *
+     * Clears:
+     * - Shopware Proxies
+     * - Classmap
+     * - Doctrine-Proxies
+     * - Doctrine-Anotations
+     * - Doctrine-Metadata
      */
     protected function clearProxyCache()
     {
         $configuration = Shopware()->Models()->getConfiguration();
         $metaDataCache = $configuration->getMetadataCacheImpl();
-        if(method_exists($metaDataCache, 'deleteAll')) {
+        if (method_exists($metaDataCache, 'deleteAll')) {
             $metaDataCache->deleteAll();
         }
 
-        $dir = Shopware()->AppPath('Proxies');
-        $files = glob($dir . '*.php');
-        foreach ($files as $file) {
-            if(strpos($file, '__' . Shopware::REVISION . '__') === false) {
-                unlink($file);
-            }
+        // Clear Shopware Proxies
+        Shopware()->Hooks()->getProxyFactory()->clearCache();
+
+        // Clear classmap
+        $classMap = Shopware()->Hooks()->getProxyFactory()->getProxyDir() . 'ClassMap_' . \Shopware::REVISION . '.php';
+        @unlink($classMap);
+
+        // Clear Doctrine Proxies
+        $files = new GlobIterator(
+            $configuration->getProxyDir() . '*.php',
+            FilesystemIterator::CURRENT_AS_PATHNAME
+        );
+
+        foreach ($files as $filePath) {
+            @unlink($filePath);
+        }
+
+        // Clear Anotation file cache
+        $files = new GlobIterator(
+            $configuration->getFileCacheDir() . '*.php',
+            FilesystemIterator::CURRENT_AS_PATHNAME
+        );
+
+        foreach ($files as $filePath) {
+            @unlink($filePath);
         }
     }
+
+    /*
+     *
+     * Some helper methods to get the relevant caches
+     *
+     */
 
     /**
      * Returns cache information
@@ -321,7 +330,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
                 'backend' => $request->getHeader('Surrogate-Capability')
             );
         }
-        $info['name'] = 'HttpCache';
+        $info['name'] = 'Http-Reverse-Proxy';
         return $info;
     }
 
@@ -345,7 +354,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
             $info = $this->getDirectoryInfo($dir);
         }
-        $info['name'] = 'Config';
+        $info['name'] = 'Shopware configuration';
         $info['backend'] = empty($cache_config['backend']) ? 'File' : $cache_config['backend'];
         return $info;
     }
@@ -358,21 +367,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     public function getTemplateCacheInfo()
     {
         $dir = $this->View()->Engine()->getCompileDir();
-        $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Template';
-        return $info;
-    }
 
-    /**
-     * Returns cache information
-     *
-     * @return array
-     */
-    public function getProxyCacheInfo()
-    {
-        $dir = Shopware()->Models()->getConfiguration()->getProxyDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Proxy';
+        $info['name'] = 'Smarty compiled templates';
         return $info;
     }
 
@@ -385,7 +382,47 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $dir = $this->View()->Engine()->getCacheDir();
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Backend';
+        $info['name'] = 'Smarty cached templates';
+        return $info;
+    }
+
+    /**
+     * Returns cache information
+     *
+     * @return array
+     */
+    public function getDoctrineProxyCacheInfo()
+    {
+        $dir = Shopware()->Models()->getConfiguration()->getProxyDir();
+        $info = $this->getDirectoryInfo($dir);
+        $info['name'] = 'Doctrine Proxies';
+        return $info;
+    }
+
+    /**
+     * Returns cache information
+     *
+     * @return array
+     */
+    public function getDoctrineFileCacheInfo()
+    {
+        $dir = Shopware()->Models()->getConfiguration()->getFileCacheDir();
+        $info = $this->getDirectoryInfo($dir);
+        $info['name'] = 'Doctrine annotations';
+
+        return $info;
+    }
+
+    /**
+     * Returns cache information
+     *
+     * @return array
+     */
+    public function getShopwareProxyCacheInfo()
+    {
+        $dir = Shopware()->Hooks()->getProxyFactory()->getProxyDir();
+        $info = $this->getDirectoryInfo($dir);
+        $info['name'] = 'Shopware Proxies';
         return $info;
     }
 
@@ -401,17 +438,21 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $info['dir'] = str_replace(Shopware()->DocPath(), '', $dir);
         $info['dir'] = str_replace(DIRECTORY_SEPARATOR, '/', $info['dir']);
         $info['dir'] = rtrim($info['dir'], '/') . '/';
+
         if (!file_exists($dir) || !is_dir($dir)) {
             $info['message'] = 'Cache dir not exists';
             return $info;
         }
+
         if (!is_readable($dir)) {
             $info['message'] = 'Cache dir is not readable';
             return $info;
         }
+
         if (!is_writable($dir)) {
             $info['message'] = 'Cache dir is not writable';
         }
+
         $info['size'] = (float)0;
         $info['files'] = 0;
         $dir_iterator = new RecursiveDirectoryIterator($dir);

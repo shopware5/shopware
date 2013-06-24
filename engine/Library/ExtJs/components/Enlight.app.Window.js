@@ -51,6 +51,12 @@ Ext.define('Enlight.app.Window', {
     focusable: true,
 
     /**
+     * Property which indicates that the window should first just set to hidden before destroying it.
+     * @boolean
+     */
+    hideOnClose: true,
+
+    /**
      * Forces the window to be on front at start up
      * @boolean
      */
@@ -166,28 +172,44 @@ Ext.define('Enlight.app.Window', {
      * @privaate
      * @return [boolean]
      */
-    onBeforeDestroyMainWindow: function() {
+    onBeforeDestroyMainWindow: function () {
         var me = this,
             subApp = me.subApplication,
-            windowManager = subApp.windowManager,
-            count = windowManager.subWindows.getCount(), subWindows;
+            windowManager, count, subWindows,
+            subWindowConfirmationBlackList = [ 'Shopware.apps.Category', 'Shopware.apps.Voucher' ];
 
-        if(!count || !me.isMainWindow) {
+        // we don't have the window manager, so just return true to resume the `destroy` event
+        if (!subApp.hasOwnProperty('windowManager') || !subApp.windowManager) {
+            return true;
+        }
+        windowManager = subApp.windowManager;
+        count = windowManager.subWindows.getCount();
+
+        if (!count) {
+            // Hide the window before destroy to increase the visual closing of the window
+            // only when the window has no subWindows
+            if (Ext.isFunction(me.hide)) {
+                me.hide();
+                return true;
+            }
+        }
+        subWindows = windowManager.subWindows.items;
+
+        if (Ext.Array.contains(subWindowConfirmationBlackList, me.subApplication.$className)) {
+
+            //if the subApp is in the black list don't ask just close the sub windows
+            me.closeSubWindows(subWindows, windowManager);
             return true;
         }
 
-        subWindows = windowManager.subWindows.items;
-        Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function(button) {
+        Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function (button) {
             if (button == 'yes') {
-                Ext.each(subWindows, function(subWindow) {
-                    if(subWindow) {
-                        windowManager.subWindows.removeAtKey(subWindow.$subWindowId);
-                        subWindow.destroy();
-                    }
-                });
+                me.closeSubWindows(subWindows, windowManager);
                 me.destroy();
             }
         });
+
+        // Prevent the event to continue to the the fact that we're triggering the destroying programmically...
         return false;
     },
 
@@ -315,6 +337,11 @@ Ext.define('Enlight.app.Window', {
     doClose: function() {
         var me = this;
 
+        if(me.hideOnClose) {
+            me.hideOnClose = false;
+            me.hide(me.animateTarget, me.doClose, me);
+        }
+
         // Being called as callback after going through the hide call below
         if (me.hidden) {
             me.fireEvent('close', me);
@@ -333,7 +360,7 @@ Ext.define('Enlight.app.Window', {
 
     // private
     onMoveStart: function() {
-        var me = this, activeWindows = me.getActiveWindows(), viewport = Shopware.app.Application.viewport;
+        var me = this, activeWindows = Shopware.app.Application.getActiveWindows(), viewport = Shopware.app.Application.viewport;
 
         if(viewport) {
             me.hiddenLayer = viewport.getHiddenLayer();
@@ -352,7 +379,7 @@ Ext.define('Enlight.app.Window', {
 
     // private
     onMoveEnd: function() {
-        var me = this, activeWindows = me.getActiveWindows(), viewport = Shopware.app.Application.viewport;
+        var me = this, activeWindows = Shopware.app.Application.getActiveWindows(), viewport = Shopware.app.Application.viewport;
 
         Ext.each(activeWindows, function(window) {
             if(!window.minimized && window != me) {
@@ -368,28 +395,6 @@ Ext.define('Enlight.app.Window', {
             me.hiddenLayer.setStyle('z-index', null);
             Ext.removeNode(me.hiddenLayer.dom);
         }
-    },
-
-    /**
-     * Helper method which returns all open windows.
-     *
-     * @private
-     * @return [array] active windows
-     */
-    getActiveWindows: function() {
-        var activeWindows = [];
-
-        Ext.each(Ext.WindowManager.zIndexStack, function (item) {
-            if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                activeWindows.push(item);
-            }
-
-            if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
-                activeWindows.push(item);
-            }
-        });
-
-        return activeWindows;
     },
 
     /**
@@ -424,10 +429,9 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 25;
-        size.width = size.width  - 50;
+        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [25, 25]);
+        me.setPosition.apply(me, [0, 0]);
     },
 
     maximize: function() {
@@ -440,18 +444,12 @@ Ext.define('Enlight.app.Window', {
                 me.restorePos = me.getPosition(true);
             }
             if (me.maximizable) {
-                if(!me.tools.maximize) {
-                    me.tools.maximize = me.header.tools.maximize.cloneConfig();
-                }
-                me.tools.maximize.hide();
-
-                if(!me.tools.restore) {
-                    me.tools.restore = me.header.tools.restore.cloneConfig();
-                }
-                me.tools.restore.show();
+                me.header.tools.maximize.hide();
+                me.header.tools.restore.show();
             }
             me.maximized = true;
             me.el.disableShadow();
+
 
             if (me.dd) {
                 me.dd.disable();
@@ -470,5 +468,70 @@ Ext.define('Enlight.app.Window', {
             me.fireEvent('maximize', me);
         }
         return me;
+    },
+
+    restore: function() {
+        var me = this,
+            header = me.header,
+            tools = header.tools;
+
+        if (me.maximized) {
+            delete me.hasSavedRestore;
+            me.removeCls(Ext.baseCSSPrefix + 'window-maximized');
+
+            // Toggle tool visibility
+            if (tools.restore) {
+                tools.restore.hide();
+            }
+            if (tools.maximize) {
+                tools.maximize.show();
+            }
+            if (me.collapseTool) {
+                me.collapseTool.show();
+            }
+
+            me.maximized = false;
+
+            // Restore the position/sizing
+            me.setPosition(me.restorePos);
+            me.setSize(me.restoreSize);
+
+            // Unset old position/sizing
+            delete me.restorePos;
+            delete me.restoreSize;
+
+            me.el.enableShadow(true);
+
+            // Allow users to drag and drop again
+            if (me.dd) {
+                me.dd.enable();
+                if (header) {
+                    header.addCls(header.indicateDragCls)
+                }
+            }
+
+            if (me.resizer) {
+                me.resizer.enable();
+            }
+
+            me.container.removeCls(Ext.baseCSSPrefix + 'window-maximized-ct');
+
+            me.syncMonitorWindowResize();
+            me.doConstrain();
+            me.fireEvent('restore', me);
+        }
+        return me;
+    },
+
+    /**
+     * helper function to close all subwindows
+     */
+    closeSubWindows: function(subWindows, windowManager) {
+        Ext.each(subWindows, function(subWindow) {
+            if(subWindow) {
+                windowManager.subWindows.removeAtKey(subWindow.$subWindowId);
+                subWindow.destroy();
+            }
+        });
     }
 });

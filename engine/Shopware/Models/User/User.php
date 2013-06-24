@@ -87,10 +87,17 @@ class User extends ModelEntity
     /**
      * @var string $password
      *
-     * @ORM\Column(name="password", type="string", length=60, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var string $encoder
+     *
+     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
      */
 
-    private $password;
+    private $encoder;
 
     /**
      * @var string $apiKey
@@ -161,6 +168,20 @@ class User extends ModelEntity
      * @ORM\Column(name="lockeduntil", type="datetime", nullable=false)
      */
     private $lockedUntil;
+
+    /**
+     * @var boolean $extendedEditor
+     *
+     * @ORM\Column(name="extended_editor", type="boolean", nullable=false)
+     */
+    private $extendedEditor = false;
+
+    /**
+     * @var boolean $disabledCache
+     *
+     * @ORM\Column(name="disabled_cache", type="boolean", nullable=false)
+     */
+    private $disabledCache = false;
 
     /**
      * The role property is the owning side of the association between user and role.
@@ -482,6 +503,44 @@ class User extends ModelEntity
     }
 
     /**
+     * @param boolean $extendedEditor
+     * @return User
+     */
+    public function setExtendedEditor($extendedEditor)
+    {
+        $this->extendedEditor = (bool) $extendedEditor;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExtendedEditor()
+    {
+        return $this->extendedEditor;
+    }
+
+    /**
+     * @param boolean $disabledCache
+     * @return User
+     */
+    public function setDisabledCache($disabledCache)
+    {
+        $this->disabledCache = (bool) $disabledCache;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDisabledCache()
+    {
+        return $this->disabledCache;
+    }
+
+    /**
      * Getter function for the roleId property
      * @return int
      */
@@ -565,5 +624,23 @@ class User extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\User', 'attribute', 'user');
     }
+
+    /**
+     * @param string $encoder
+     */
+    public function setEncoder($encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoder()
+    {
+        return $this->encoder;
+    }
+
+
 
 }

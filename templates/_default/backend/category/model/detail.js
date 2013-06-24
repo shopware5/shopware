@@ -104,12 +104,6 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         },
         {
             type:'hasMany',
-            model:'Shopware.apps.Category.model.Article',
-            name:'getArticles',
-            associationKey:'articles'
-        },
-        {
-            type:'hasMany',
             model:'Shopware.apps.Category.model.Emotion',
             name:'getEmotion',
             associationKey:'emotion'

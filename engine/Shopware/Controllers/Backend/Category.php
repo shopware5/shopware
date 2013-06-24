@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,15 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Backend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
@@ -37,6 +28,10 @@
  * Backend Controller for the category backend module.
  * Displays all data in an Ext JS TreePanel and allows to delete,
  * add and edit items. On the detail page the category data is displayed and can be edited
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend_ExtJs
 {
@@ -99,19 +94,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * Helper Method to get access to the article repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-        return $this->articleRepository;
-    }
-
-    /**
      * Helper Method to get access to the media repository.
      *
      * @return \Shopware\Models\Media\Repository
@@ -138,66 +120,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * To recover the tree panel
+     * @return \Shopware\Components\Model\CategoryDenormalization
      */
-    public function indexAction()
+    public function getCategoryComponent()
     {
-        if ($this->getRepository()->verify() !== true) {
-            $this->fixTree();
-        }
-        parent::indexAction();
-    }
-
-    /**
-     * Fix category tree
-     */
-    public function fixTree()
-    {
-        set_time_limit(360);
-        $db = Shopware()->Db();
-        $db->beginTransaction();
-
-        $sql = 'UPDATE s_categories c SET c.left = 0, c.right = 0, c.level = 0';
-        $db->exec($sql);
-        $sql = 'UPDATE s_categories c SET c.left = 1, c.right = 2 WHERE c.id = 1';
-        $db->exec($sql);
-
-        $categoryIds = array(1);
-        while(($categoryId = array_shift($categoryIds)) !== null) {
-            $sql = 'SELECT c.right, c.level FROM s_categories c WHERE c.id = :categoryId';
-            $query = $db->prepare($sql);
-            $query->execute(array('categoryId' => $categoryId));
-            list($right, $level) = $query->fetch(Zend_Db::FETCH_NUM);
-            $sql = 'SELECT c.id FROM s_categories c WHERE c.parent = :categoryId ORDER BY position, id';
-            $query = $db->prepare($sql);
-            $query->execute(array('categoryId' => $categoryId));
-            $childrenIds = $query->fetchAll(Zend_Db::FETCH_COLUMN);
-            if(empty($childrenIds)) {
-                continue;
-            }
-            foreach($childrenIds as $childrenId) {
-                $sql = 'UPDATE s_categories c SET c.right = c.right + 2 WHERE c.right >= :right';
-                $db->prepare($sql)->execute(array('right' => $right));
-                $sql = 'UPDATE s_categories c SET c.left = c.left + 2 WHERE c.left > :right';
-                $db->prepare($sql)->execute(array('right' => $right));
-                $sql = '
-                    UPDATE s_categories c
-                    SET c.left = :right, c.right = :right + 1, c.level = :level + 1
-                    WHERE c.id = :childrenId
-                ';
-                $db->prepare($sql)->execute(array(
-                    'right' => $right, 'level' => $level,
-                    'childrenId' => $childrenId
-                ));
-                $right += 2;
-            }
-            $categoryIds = array_merge($childrenIds, $categoryIds);
-        }
-
-        $sql = 'DELETE c FROM s_categories c WHERE c.left = 0';
-        $db->exec($sql);
-
-        $db->commit();
+        return Shopware()->CategoryDenormalization();
     }
 
     /**
@@ -215,13 +142,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
-        $query = $this->getRepository()->getListQuery(
+        $query = $this->getRepository()->getBackendListQuery(
             $filter,
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
-            $this->Request()->getParam('start'),
-            false
-        );
+            $this->Request()->getParam('start')
+        )->getQuery();
 
         $count = Shopware()->Models()->getQueryCount($query);
 
@@ -243,6 +169,114 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         ));
     }
 
+
+    /**
+     * Controller action which can be accessed over an request.
+     * This function adds the passed article ids which have to be in the "ids" parameter
+     * to the passed category.
+     */
+    public function addCategoryArticlesAction()
+    {
+        $this->View()->assign(
+            $this->addCategoryArticles(
+                $this->Request()->getParam('categoryId'),
+                json_decode($this->Request()->getParam('ids'))
+            )
+        );
+    }
+
+    /**
+     * Controller action which can be accessed over an request.
+     * This function adds the passed article ids which have to be in the "ids" parameter
+     * to the passed category.
+     */
+    public function removeCategoryArticlesAction()
+    {
+        $this->View()->assign(
+            $this->removeCategoryArticles(
+                $this->Request()->getParam('categoryId'),
+                json_decode($this->Request()->getParam('ids'))
+            )
+        );
+    }
+
+    /**
+     * Internal function which is used to remove the passed article ids
+     * from the assigned category.
+     *
+     * @param int $categoryId
+     * @param array $articleIds
+     * @return array
+     */
+    protected function removeCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return array('success' => false, 'error' => 'No articles selected');
+        }
+
+        if (empty($categoryId)) {
+            return array('success' => false, 'error' => 'No category id passed.');
+        }
+
+        /** @var \Shopware\Models\Category\Category $category */
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+
+        $counter = 0;
+        foreach ($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->removeCategory($category);
+
+            $counter++;
+        }
+
+        Shopware()->Models()->flush();
+
+        return array('success' => true, 'counter' => $counter);
+    }
+
+    /**
+     * Helper function to add multiple articles to an category.
+     *
+     * @param int $categoryId
+     * @param array $articleIds
+     * @return array
+     */
+    protected function addCategoryArticles($categoryId, $articleIds)
+    {
+        if (empty($articleIds)) {
+            return array('success' => false, 'error' => 'No articles selected');
+        }
+
+        if (empty($categoryId)) {
+            return array('success' => false, 'error' => 'No category id passed.');
+        }
+
+        /** @var \Shopware\Models\Category\Category $category */
+        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+
+        $counter = 0;
+        foreach ($articleIds as $articleId) {
+            if (empty($articleId)) {
+                continue;
+            }
+
+            /** @var \Shopware\Models\Article\Article $article */
+            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article->addCategory($category);
+
+            $counter++;
+        }
+
+        Shopware()->Models()->flush();
+
+        return array('success' => true, 'counter' => $counter);
+    }
+
     /**
      * Gets all category detail information by the category node
      */
@@ -253,7 +287,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $node = is_numeric($node) ? (int)$node : 1;
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
-        $query = $this->getRepository()->getDetailQuery($node);
+        $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
         $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $data["imagePath"] = $data["media"]["path"];
 
@@ -391,19 +425,103 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getArticlesAction()
     {
-        $usedIds = $this->Request()->usedIds;
-
-        $offset = $this->Request()->getParam('start', null);
+        $categoryId = $this->Request()->getParam('categoryId', 0);
+        $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
+        $search = $this->Request()->getParam('search', '');
+        $conditions = '';
 
-        $dataQuery = $this->getArticleRepository()
-            ->getArticlesWithExcludedIdsQuery($usedIds, $this->Request()->getParam('filter', array()), $offset, $limit);
+        if (!empty($search)) {
+            $search = '%' . $search . '%';
+            $conditions = "
+            AND (
+                   s_articles.name LIKE '".$search."'
+                OR s_articles_details.ordernumber LIKE '".$search."'
+                OR s_articles_supplier.name LIKE '".$search."'
+            )
+            ";
+        }
 
-        $total = Shopware()->Models()->getQueryCount($dataQuery);
-        $data = $dataQuery->getArrayResult();
+        $sql = "
+            SELECT SQL_CALC_FOUND_ROWS
+                s_articles.id as articleId,
+                s_articles.name,
+                s_articles_details.ordernumber as number,
+                s_articles_supplier.name as supplierName
+            FROM s_articles
+               INNER JOIN s_articles_details
+                 ON s_articles_details.id = s_articles.main_detail_id
+               INNER JOIN s_articles_supplier
+                 ON s_articles.supplierID = s_articles_supplier.id
+               LEFT JOIN s_articles_categories
+                 ON s_articles.id = s_articles_categories.articleID
+                 AND s_articles_categories.categoryID = :categoryId
+            WHERE s_articles_categories.id IS NULL
+            " . $conditions . "
+            LIMIT $offset , $limit
+        ";
 
-        //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+        $result = Shopware()->Db()->fetchAll($sql, array(
+            'categoryId' => (int) $categoryId
+        ));
+
+        $sql= "SELECT FOUND_ROWS() as count";
+        $count = Shopware()->Db()->fetchOne($sql);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $result,
+            'total' => $count
+        ));
+    }
+
+    /**
+     * Controller action which is used to get a paginated
+     * list of all assigned category articles.
+     */
+    public function getCategoryArticlesAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId', null);
+        $offset = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 20);
+        $search = $this->Request()->getParam('search', '');
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+	        'articles.id as articleId',
+            'articles.name',
+            'details.number',
+            'suppliers.name as supplierName'
+        ));
+        $builder->from('Shopware\Models\Article\Article', 'articles')
+                ->innerJoin('articles.categories', 'categories')
+                ->innerJoin('articles.supplier', 'suppliers')
+                ->innerJoin('articles.mainDetail', 'details')
+                ->where('categories.id = :categoryId')
+                ->setParameters(array('categoryId' => $categoryId));
+
+        if (!empty($search)) {
+            $builder->andWhere('(articles.name LIKE :search OR suppliers.name LIKE :search OR details.number LIKE :search)');
+            $builder->setParameter('search', '%' . $search . '%');
+        }
+
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        $data = $paginator->getIterator()->getArrayCopy();
+        $count = $paginator->count();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data,
+            'total' => $count
+        ));
     }
 
     /**
@@ -430,34 +548,83 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * moves a category by the categoryId to a new position or under a new parent node
+     * moves a category by the categoryId under a new parent node
      */
     public function moveTreeItemAction()
     {
-        $repository = $this->getRepository();
-        $itemId = (int)$this->Request()->getParam('id');
+        $itemId     = (int) $this->Request()->getParam('id');
+        $parentId   = (int) $this->Request()->getParam('parentId', 1);
+
         /** @var $item \Shopware\Models\Category\Category */
         $item = $this->getRepository()->find($itemId);
-        $parentId = (int)$this->Request()->getParam('parentId', 1);
-        $previousId = $this->Request()->getParam('previousId');
-        $position = (int)$this->Request()->getParam('position');
+        if ($item === null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => "Category by id $itemId not found"
+            ));
 
-        $item->setPosition($position);
+            return;
+        }
 
-        if($previousId !== null){
-            /** @var $previous \Shopware\Models\Category\Category */
-            $previous = $this->getRepository()->find($previousId);
-            $repository->persistAsNextSiblingOf($item, $previous);
-        } else {
-            /** @var $parent \Shopware\Models\Category\Category */
-            $parent = $this->getRepository()->find($parentId);
-            $repository->persistAsFirstChildOf($item, $parent);
+        /** @var $parent \Shopware\Models\Category\Category */
+        $parent = $this->getRepository()->find($parentId);
+        if ($parent === null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => "Parent by id $parentId not found"
+            ));
+
+            return;
+        }
+
+        $needsRebuild = false;
+
+        if ($item->getParent()->getId() != $parent->getId()) {
+            $item->setParent($parent);
+
+            $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
+
+            $path = implode('|', $parents);
+            if (empty($path)) {
+                $path = null;
+            } else {
+                $path = '|' . $path . '|';
+            }
+
+            $item->internalSetPath($path);
+
+            $batchModeEnabled = Shopware()->Config()->get('moveBatchModeEnabled');
+
+            if ($item->isLeaf() || !$batchModeEnabled) {
+                $needsRebuild = false;
+            } else {
+                Shopware()->CategorySubscriber()->disableForNextFlush();
+                $needsRebuild = true;
+            }
+
+            Shopware()->Models()->flush($item);
+        }
+
+        $this->View()->assign(array(
+            'success'      => true,
+            'needsRebuild' => $needsRebuild,
+        ));
+    }
+
+    /**
+     * saves the positions of all children of this parent category
+     */
+    public function saveNewChildPositionsAction()
+    {
+        $ids = json_decode($this->Request()->getParam('ids'));
+        foreach ($ids as $key => $categoryId) {
+            /** @var $category \Shopware\Models\Category\Category */
+            $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+            $category->setPosition($key);
         }
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array(
-            'success' => true
-        ));
+        $this->View()->assign(array( 'success' => true));
     }
 
     /**
@@ -472,15 +639,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         try {
             $params = $this->Request()->getParams();
             $categoryId = $params['id'];
+
             if (empty($categoryId)) {
                 $categoryModel = new \Shopware\Models\Category\Category();
+                Shopware()->Models()->persist($categoryModel);
             } else {
                 $categoryModel = $this->getRepository()->find($categoryId);
-                $categoryModel->getArticles()->clear();
-                Shopware()->Models()->flush();
             }
 
-            $this->prepareArticleAssociatedData($params, $categoryModel);
             $params = $this->prepareAttributeAssociatedData($params);
             $params = $this->prepareCustomerGroupsAssociatedData($params);
             $params = $this->prepareMediaAssociatedData($params);
@@ -490,22 +656,30 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $categoryModel->fromArray($params);
 
-            $params['parentId'] = is_numeric($params['parentId']) ? (int)$params['parentId'] : 1;
-            $parent = $this->getRepository()->find($params['parentId']);
-            $categoryModel->setParent($parent);
+            $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
 
-            Shopware()->Models()->persist($categoryModel);
+            $parentCategory = $this->getRepository()->find($params['parentId']);
+
+            $categoryModel->setParent($parentCategory);
+
+            // If Leaf-Category gets childcategory move all assignments to new childcategory
+            if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
+                /** @var $article \Shopware\Models\Article\Article **/
+                foreach ($parentCategory->getArticles() as $article) {
+                    $article->removeCategory($parentCategory);
+                    $article->addCategory($categoryModel);
+                }
+            }
+
             Shopware()->Models()->flush();
 
-            $params['id'] = $categoryModel->getId();
-
-            $query = $this->getRepository()->getDetailQuery($params['id']);
+            $categoryId = $categoryModel->getId();
+            $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
             $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             $data["imagePath"] = $data["media"]["path"];
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -521,66 +695,18 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 return;
             }
             $result = $this->getRepository()->find($id);
-            if (!$result || !is_object($result)) {
+            if (!$result) {
                 $this->View()->assign(array('success' => false, 'message' => 'Category not found'));
                 return;
             }
 
-            $children = $this->getRepository()->children($result, false, 'left', 'DESC');
-            foreach($children as $node) {
-                $this->getRepository()->removeFromTree($node);
-            }
+            // Doctrine removes all child-categories and assignments of parent and child categories
             Shopware()->Models()->remove($result);
             Shopware()->Models()->flush();
 
             $this->View()->assign(array('success' => true));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-        }
-    }
-
-    /**
-     * helper method to move the category item to the right position
-     *
-     * @param $moveItemId int
-     * @param $newPosition int
-     * @param $categoryChildArray Array
-     * @return Array | sorted category array
-     */
-    protected function moveCategoryItem($moveItemId, $newPosition, $categoryChildArray)
-    {
-        $movedChildKey = 0;
-        foreach ($categoryChildArray as $key => $child) {
-            if ($child["id"] == $moveItemId) {
-                $movedChildKey = $key;
-            }
-        }
-
-        if ($newPosition != 0) {
-            //set the right position based on the array index
-            $newPosition--;
-        }
-        $temporaryCategoryArray = array_splice($categoryChildArray, $movedChildKey, 1);
-        array_splice($categoryChildArray, $newPosition, 0, $temporaryCategoryArray);
-        return $categoryChildArray;
-    }
-
-    /**
-     * This method loads the article models for the passed ids in the "articles" parameter.
-     *
-     * @param $data
-     * @param $categoryModel
-     * @return array
-     */
-    protected function prepareArticleAssociatedData($data, $categoryModel)
-    {
-        foreach ($data['articles'] as $articleData) {
-            if (!empty($articleData['id'])) {
-                /** @var $articleModel \Shopware\Models\Article\Article */
-                $articleModel = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleData['id']);
-                $articleModel->getCategories()->add($categoryModel);
-            }
         }
     }
 
@@ -600,6 +726,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         }
         $data['customerGroups'] = $customerGroups;
+
         return $data;
     }
 
@@ -632,5 +759,99 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         return $data;
+    }
+
+
+    public function getRebuildCategoryPathCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $count = $this->getCategoryComponent()->rebuildCategoryPathCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 20
+            )
+        ));
+    }
+
+    public function rebuildCategoryPathAction()
+    {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
+        $categoryId = $this->Request()->getParam('categoryId');
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
+
+        $this->getCategoryComponent()->rebuildCategoryPath($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
+    }
+
+    public function getRemoveOldAssignmentsCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $count = $this->getCategoryComponent()->removeOldAssignmentsCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 1
+            )
+        ));
+    }
+
+    public function removeOldAssignmentsAction()
+    {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
+        $categoryId = $this->Request()->getParam('categoryId');
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
+
+        $this->getCategoryComponent()->removeOldAssignments($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
+    }
+
+    public function getRebuildAssignmentsCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $count = $this->getCategoryComponent()->rebuildAssignmentsCount($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 1
+            )
+        ));
+    }
+
+    public function rebuildAssignmentsAction()
+    {
+        // try to set maximum execution time
+        @set_time_limit(0);
+
+        $categoryId = $this->Request()->getParam('categoryId');
+        $offset     = $this->Request()->getParam('offset');
+        $count      = $this->Request()->getParam('limit');
+
+        $this->getCategoryComponent()->rebuildAssignments($categoryId, $count, $offset);
+
+        $this->view->assign(array(
+            'success' => true,
+        ));
     }
 }

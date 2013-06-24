@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,23 +20,19 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
 
-use Doctrine\ORM\Query\Expr,
-    Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Model
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class QueryBuilder extends BaseQueryBuilder
 {
@@ -80,7 +76,7 @@ class QueryBuilder extends BaseQueryBuilder
      * </code>
      *
      * @param array $filter
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function addFilter(array $filter)
     {
@@ -97,8 +93,8 @@ class QueryBuilder extends BaseQueryBuilder
             if (is_array($where) && isset($where['property'])) {
                 $exprKey = $where['property'];
                 $expression = isset($where['expression']) ? $where['expression'] : null;
-                $operator   = isset($where['operator'])   ? $where['operator']   : null;
-                $where      = $where['value'];
+                $operator = isset($where['operator']) ? $where['operator'] : null;
+                $where = $where['value'];
             }
 
             if (!preg_match('#^[a-z][a-z0-9_.]+$#i', $exprKey)) {
@@ -126,12 +122,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison(
-                $exprKey,
-                $expression,
-                $where !== null ? ('?' . $i) : null
-            );
-
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? ('?' . $i) : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
@@ -139,11 +130,12 @@ class QueryBuilder extends BaseQueryBuilder
                 $this->andWhere($expression);
             }
 
-            if($where !== null) {
+            if ($where !== null) {
                 $this->setParameter($i, $where);
                 ++$i;
             }
         }
+
         return $this;
     }
 
@@ -157,9 +149,9 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param string|array $sort The ordering expression.
+     * @param string|array $orderBy The ordering expression.
      * @param string $order The ordering direction.
-     * @return QueryBuilder This QueryBuilder instance.
+     * @return QueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
@@ -171,8 +163,10 @@ class QueryBuilder extends BaseQueryBuilder
                     continue;
                 }
 
-                if (isset($select[0]) && $select[0]->count() === 1
-                        && isset($this->alias) && strpos($order['property'], '.') === false) {
+                if (isset($select[0])
+                    && $select[0]->count() === 1
+                    && isset($this->alias)
+                    && strpos($order['property'], '.') === false) {
                     $order['property'] = $this->alias . '.' . $order['property'];
                 }
 
@@ -183,12 +177,35 @@ class QueryBuilder extends BaseQueryBuilder
                 }
 
                 parent::addOrderBy(
-                    $order['property'], $order['direction']
+                    $order['property'],
+                    $order['direction']
                 );
             }
         } else {
             parent::addOrderBy($orderBy, $order);
         }
+
         return $this;
     }
+
+
+    /**
+     * Overrides the original function to add the SQL_NO_CACHE parameter
+     * for each doctrine orm query if the global shopware debug mode is activated.
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQuery()
+    {
+        $query = parent::getQuery();
+
+        /**@var $em ModelManager*/
+        $em = $this->getEntityManager();
+
+        if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
+            $em->addCustomHints($query, null, false, true);
+        }
+        return $query;
+    }
+
+
 }

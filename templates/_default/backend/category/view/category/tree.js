@@ -284,16 +284,10 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             columns = [{
                 xtype: 'treecolumn',
                 text: me.snippets.columnCategoryHeader,
-                flex: 2,
                 sortable: false,
+                flex:1,
+                renderer: me.categoryFolderRenderer,
                 dataIndex: 'text'
-            }, {
-                xtype: 'numbercolumn',
-                text: me.snippets.columnArticleHeader,
-                flex: 1,
-                format: '0',
-                sortable: false,
-                dataIndex: 'articleCount'
             }];
 
         return columns;
@@ -399,6 +393,20 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
 
         );
         return true;
+    },
+
+    /**
+     * category folder renderer
+     *
+     * @param value
+     * @param record
+     * @param metaData
+     */
+    categoryFolderRenderer: function (value, metaData, record) {
+        if(!record.data.active && !record.data.root) {
+            metaData.tdAttr = 'style="opacity:0.4"';
+        }
+        return value;
     }
 });
 //{/block}

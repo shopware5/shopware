@@ -209,7 +209,7 @@ class Template extends ModelEntity
 
     /**
      * OWNING SIDE
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="details")
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="configuratorTemplate")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
     protected $article;

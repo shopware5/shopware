@@ -33,10 +33,9 @@
  */
 //{block name="backend/property/store/group"}
 Ext.define('Shopware.apps.Property.store.Group', {
-    extend: 'Ext.data.TreeStore',
-    batch: false,
-    clearOnLoad: false,
-    autoLoad: true,
-    model : 'Shopware.apps.Property.model.Group'
+    extend: 'Ext.data.Store',
+    autoLoad: false,
+    model : 'Shopware.apps.Property.model.Group',
+    remoteFilter: true
 });
 //{/block}

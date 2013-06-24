@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Main', {
         me.subApplication.shopStore = me.getStore('Shop');
         me.subApplication.articleStore = me.getStore('Article');
         me.subApplication.availableCategoriesTree = me.getStore('Category');
-        me.subApplication.comboTreeCategoryStore = me.getStore('CategoryForComboTree').load();
+        me.subApplication.comboTreeCategoryStore = me.getStore('CategoryForComboTree');
 
         me.mainWindow = me.getView('main.Window').create({
             listStore: me.subApplication.listStore

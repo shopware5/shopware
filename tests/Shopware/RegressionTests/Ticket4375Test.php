@@ -47,7 +47,6 @@ class Shopware_RegressionTests_Ticket4375 extends Enlight_Components_Test_Plugin
      */
     public function testPasswordChangeShouldFail()
     {
-
         $this->Request()
             ->setMethod('POST')
             ->setPost('email', 'test@example.com')

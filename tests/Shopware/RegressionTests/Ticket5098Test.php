@@ -92,7 +92,7 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
          */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
 
-        $categoryArray = $repository->getActiveChildrenByIdQuery(3, 1, 3)->getArrayResult();
+        $categoryArray = $repository->getActiveChildrenTree(3, 1, 3);
 
         //This category should always been in this structure because it always active
         $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
@@ -131,7 +131,6 @@ class Shopware_RegressionTests_Ticket5098 extends Enlight_Components_Test_Plugin
      */
     private function isCategoryNameInArray($categoryName, $categoryArray) {
         foreach ($categoryArray as $category) {
-            $category = $category["category"];
             if($category["name"] == $categoryName) {
                 return true;
             }

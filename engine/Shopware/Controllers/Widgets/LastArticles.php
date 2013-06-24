@@ -35,7 +35,6 @@
  *
  * todo@all: Documentation
  */
-
 class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Action
 {
     /**
@@ -48,10 +47,5 @@ class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Actio
         $articleId = (int) $this->Request()->getParam('sArticle');
         $articles = Shopware()->Modules()->Articles()->sGetLastArticles($articleId);
         $this->View()->assign('sLastArticles', $articles, true);
-
-        $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
-        if(!empty($articleId)) {
-            $plugin->setLastArticleById($articleId);
-        }
     }
 }

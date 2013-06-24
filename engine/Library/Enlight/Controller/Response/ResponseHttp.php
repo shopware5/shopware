@@ -76,6 +76,14 @@ class Enlight_Controller_Response_ResponseHttp
     }
 
     /**
+     * @return array
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+
+    /**
      * Sends all cookies
      *
      * @return Enlight_Controller_Response_ResponseHttp

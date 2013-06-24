@@ -1,13 +1,13 @@
 {if $sEmotions|@count > 0}
-
-    {foreach $sEmotions as $emotion}
+{$style = ''}
+{foreach $sEmotions as $emotion}
 
     {* Calculate the cell width and get the cell height from the emotion settings *}
-        {$cellWidth = $emotion.containerWidth / $emotion.cols}
-        {$cellHeight = $emotion.cellHeight}
-        {$finalRowHeight = 1}
+    {$cellWidth = $emotion.containerWidth / $emotion.grid.cols}
+    {$cellHeight = $emotion.grid.cellHeight}
+    {$finalEndRow = 1}
 
-    <div class="emotion-listing emotion-col{$emotion.cols} emotion-{$emotion@index}" style="width:{$emotion.containerWidth}px">
+    <div class="emotion-listing emotion-col{$emotion.grid.cols} emotion-{$emotion@index}" style="width:{$emotion.containerWidth}px">
         {if $emotion.elements.0}
             {foreach $emotion.elements as $element}
 
@@ -18,7 +18,7 @@
                 {$elementHeight = (($element.endRow - $element.startRow) + 1) * $cellHeight}
                 {$left = ($element.startCol - 1) * $cellWidth}
                 {$top = ($element.startRow - 1) * $cellHeight}
-                {$listingTpl = "listing-{$emotion.cols}col"}
+                {$listingTpl = "listing-{$emotion.grid.cols}col"}
                 {$template = $element.component.template}
 
                 {* Inner template vars *}
@@ -27,13 +27,17 @@
                 {$sTemplate=$listingTpl}
                 {$sColWidth=$colWidth}
                 {$sColHeight=$colHeight}
-                {$sElementHeight=$elementHeight-10}
-                {$sElementWidth=$elementWidth-10}
+                {$sElementHeight=$elementHeight-$emotion.grid.gutter}
+                {$sElementWidth=$elementWidth-$emotion.grid.gutter}
                 {$sCategoryId=$categoryId}
-                {$sEmotionCols=$emotion.cols}
+                {$sController=$Controller}
+                {$sEmotionCols=$emotion.grid.cols}
 
-                <div class="emotion-element box{$colWidth}x{$colHeight} col{$colWidth} row{$colHeight}" style="width:{$elementWidth}px; height:{$elementHeight}px;left:{$left}px;top:{$top}px">
-                    <div class="emotion-inner-element {$element.component.cls}" style="width:{$elementWidth-10}px;height:{$elementHeight-10}px">
+                {$style = "{$style}.emotion-element-{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth}px;height:{$elementHeight}px;left:{$left}px;top:{$top}px{rdelim}"}
+                {$style = "{$style}.emotion-inner-element-{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth-$emotion.grid.gutter}px;height:{$elementHeight-$emotion.grid.gutter}px{rdelim}"}
+                
+                <div class="emotion-element emotion-element-{$emotion@index}-{$element@index} box{$colWidth}x{$colHeight} col{$colWidth} row{$colHeight}">
+                    <div class="emotion-inner-element emotion-inner-element-{$emotion@index}-{$element@index} {$element.component.cls}">
                     {block name="widgets/emotion/index/inner-element"}
                         {if $template == 'component_article'}
                             {include file="widgets/emotion/components/component_article.tpl"}
@@ -64,17 +68,15 @@
                     </div>
                 </div>
 
-            {* Get the last row to compute the final height of the emotion world *}
+                {* Get the last row to compute the final height of the emotion world *}
                 {if $finalEndRow < $element.endRow}
                     {$finalEndRow=$element.endRow}
                 {/if}
             {/foreach}
         {/if}
-        <script type="text/javascript">
-            var emotionHeight{$emotion@index} = '{$finalEndRow * $cellHeight}';
-            jQuery('.emotion-{$emotion@index}').css('height', emotionHeight{$emotion@index});
-        </script>
+        <div class="emotion-spacer" style="height:{$finalEndRow * $cellHeight}px"></div>
         {$finalEndRow=1}
     </div>
-    {/foreach}
+{/foreach}
+<style type="text/css">{$style}</style>
 {/if}

@@ -112,31 +112,31 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $nodes = array();
 
         $statusNodes = array(
-            'name' => $snippet->get('mails_status', 'Status eMails'),
+            'name' => $snippet->get('mails_status', 'Status emails'),
             'leaf' => false,
             'data' => array(),
         );
 
         $paymentNodes = array(
-            'name'     => $snippet->get('mails_status_payment', 'Payment state'),
+            'name'     => $snippet->get('mails_status_payment', 'Payment status'),
             'leaf'     => false,
             'data'     => array()
         );
 
         $orderNodes = array(
-            'name' => $snippet->get('mails_status_order', 'Order state'),
+            'name' => $snippet->get('mails_status_order', 'Order status'),
             'leaf' => false,
             'data' => array()
         );
 
         $systemNodes = array(
-            'name' => $snippet->get('mails_system', 'System eMails'),
+            'name' => $snippet->get('mails_system', 'System emails'),
             'leaf' => false,
             'data' => array()
         );
 
         $userNodes = array(
-            'name' => $snippet->get('mails_user', 'User eMails'),
+            'name' => $snippet->get('mails_user', 'User emails'),
             'leaf' => false,
             'data' => array()
         );

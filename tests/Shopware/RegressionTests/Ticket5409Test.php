@@ -23,81 +23,115 @@
  */
 
 /**
+ * @todo take new password encoder into account
+ *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket5409 extends Enlight_Components_Test_Plugin_TestCase
 {
+    /**
+     * Checks that the login don't work with the MD5 encrypted password.
+     * This is only valid if the parameter $ignoreAccountMode is set with the MD5 encrypted password.
+     */
+    public function testNormalLogin()
+    {
+        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->Request()->setMethod('POST')
+                        ->setPost('email', 'test@example.com')
+                        ->setPost('password', 'shopware');
+
+        $this->dispatch('/account/login');
+        $this->assertNotEmpty(Shopware()->Session()->sUserId);
+        $this->assertEquals(1, Shopware()->Session()->sUserId);
+
+        $this->logoutUser();
+    }
 
     /**
      * Checks that the login don't work with the MD5 encrypted password.
      * This is only valid if the parameter $ignoreAccountMode is set with the MD5 encrypted password.
      */
-    public function testLogin()
+    public function testHashPostLogin()
     {
-	    //test the normal login
-	    $this->assertEmpty(Shopware()->Session()->sUserId);
-	    $this->Request()
-			    ->setMethod('POST')
-			    ->setPost('email', 'test@example.com')
-			    ->setPost('password', 'shopware');
-
-	    $this->dispatch('/account/login');
-	    $this->assertNotEmpty(Shopware()->Session()->sUserId);
-	    $this->assertEquals(1,Shopware()->Session()->sUserId);
-
-	    $this->logoutUser();
-
-	    //test with md5 password and without the ignoreAccountMode parameter
-	    $this->assertEmpty(Shopware()->Session()->sUserId);
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost('email', 'test@example.com')
-            ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
-
+        //test with md5 password and without the ignoreAccountMode parameter
+        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->setUserDataToPost();
         $this->dispatch('/account/login');
-	    $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertEmpty(Shopware()->Session()->sUserId);
 
-	    //test the internal call of the method with the $ignoreAccountMode parameter
-	    $this->logoutUser();
-	    $this->Request()
-			    ->setMethod('POST')
-			    ->setPost('email', 'test@example.com')
-			    ->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
-	    $this->dispatch('/');
-	    $result = Shopware()->Modules()->Admin()->sLogin(true);
-	    $this->assertNotEmpty(Shopware()->Session()->sUserId);
-	    $this->assertEquals(1,Shopware()->Session()->sUserId);
-	    $this->assertEmpty($result["sErrorFlag"]);
-	    $this->assertEmpty($result["sErrorMessages"]);
-
-
-		//test the internal call of the method without the $ignoreAccountMode parameter
-	    $this->logoutUser();
-	    $this->Request()
-				->setMethod('POST')
-				->setPost('email', 'test@example.com')
-				->setPost('passwordMD5', 'a256a310bc1e5db755fd392c524028a8');
-	    $this->dispatch('/');
-	    $result = Shopware()->Modules()->Admin()->sLogin();
-	    $this->assertEmpty(Shopware()->Session()->sUserId);
-	    $this->assertNotEmpty($result["sErrorFlag"]);
-	    $this->assertNotEmpty($result["sErrorMessages"]);
-
-
+        $this->logoutUser();
     }
 
-	/**
-	 * helper to logout the user
-	 */
-	private function logoutUser()
-	{
-		//reset the request
-		$this->reset();
-		$this->Request()->setMethod('POST');
-		$this->dispatch('/account/logout');
-		//reset the request
-		$this->reset();
-	}
+    /**
+     * Checks that the login don't work with the MD5 encrypted password.
+     * This is only valid if the parameter $ignoreAccountMode is set with the MD5 encrypted password.
+     */
+    public function testWithoutIgnoreLogin()
+    {
+        //test the internal call of the method with the $ignoreAccountMode parameter
+
+        $this->setUserDataToPost();
+        $this->dispatch('/');
+        $result = Shopware()->Modules()->Admin()->sLogin(true);
+        $this->assertNotEmpty(Shopware()->Session()->sUserId);
+        $this->assertEquals(1, Shopware()->Session()->sUserId);
+        $this->assertEmpty($result["sErrorFlag"]);
+        $this->assertEmpty($result["sErrorMessages"]);
+
+        $this->logoutUser();
+        //test the internal call of the method without the $ignoreAccountMode parameter
+
+        $this->setUserDataToPost();
+
+        $this->dispatch('/');
+        $result = Shopware()->Modules()->Admin()->sLogin();
+        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertNotEmpty($result["sErrorFlag"]);
+        $this->assertNotEmpty($result["sErrorMessages"]);
+    }
+
+    /**
+     * Checks that the login don't work with the MD5 encrypted password.
+     * This is only valid if the parameter $ignoreAccountMode is set with the MD5 encrypted password.
+     */
+    public function testWithIgnoreLogin()
+    {
+        //test the internal call of the method without the $ignoreAccountMode parameter
+        $this->setUserDataToPost();
+
+        $this->dispatch('/');
+        $result = Shopware()->Modules()->Admin()->sLogin();
+        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertNotEmpty($result["sErrorFlag"]);
+        $this->assertNotEmpty($result["sErrorMessages"]);
+
+        $this->logoutUser();
+    }
+
+    /**
+     * helper to logout the user
+     */
+    private function logoutUser()
+    {
+        //reset the request
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->dispatch('/account/logout');
+        //reset the request
+        $this->reset();
+    }
+
+    /**
+     * set user data to post
+     * @return void
+     */
+    private function setUserDataToPost() {
+        $sql = 'SELECT email, password FROM s_user WHERE id = 1';
+        $userData = Shopware()->Db()->fetchRow($sql);
+        $this->Request()->setMethod('POST')
+                ->setPost('email', $userData['email'])
+                ->setPost('passwordMD5', $userData['password']);
+    }
 }

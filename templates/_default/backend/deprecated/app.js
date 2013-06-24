@@ -33,7 +33,7 @@
  */
 Ext.define('Shopware.apps.Deprecated', {
 	extend: 'Enlight.app.SubApplication',
-    loadPath: "{url action=load}?file=",
+    loadPath: "{url action=load}",
 	controllers: [ 'Main' ],
 
     /**

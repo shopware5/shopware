@@ -171,6 +171,15 @@ Ext.define('Shopware.container.Viewport',
 		]
 	}),
 
+    afterRender: function() {
+        var me = this;
+
+        var appCls = Ext.ClassManager.get('Shopware.app.Application');
+        appCls.baseComponentIsReady(me);
+
+        me.callParent(arguments);
+    },
+
 	/**
 	 * Initializes the special SW 4 Viewport component which
 	 * supports multiple desktops and additional events compared
@@ -343,9 +352,39 @@ Ext.define('Shopware.container.Viewport',
 		me.setSize(w * (me.getDesktopCount() || 1), h);
 
 		Ext.each(this.desktops.items, function(desktop) {
-			desktop.setSize(w, h - 80);
+            // Create the spacing of the main toolbar using the "-40"
+			desktop.setSize(w, h - 40);
 		});
+
+        Ext.defer(me._rearrangeVisibleWindows, 5, this);
 	},
+
+    /**
+     * Rearranges the position of the windows and handles
+     * the resizing of the windows when they're in full screen
+     * mode (= maximized).
+     *
+     * @private
+     */
+    _rearrangeVisibleWindows: function() {
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+        Ext.each(activeWindows, function(win) {
+            if(win.hidden) {
+                return;
+            }
+
+            var position = win.getPosition(),
+                size = win.getSize();
+
+            win.center();
+            win.setPosition(position[0], (win.maximized) ? 0 : 15, false);
+
+            if(win.maximized) {
+                size.height -= 50;
+                win.setSize(size);
+            }
+        });
+    },
 
 	/**
 	 * Resizes the Viewport to match the containing number of desktops.
@@ -536,7 +575,6 @@ Ext.define('Shopware.container.Viewport',
         }
 
 		me.desktops.add(desktop);
-        me.on('afterrender', me.initializeDropZone, desktop);
 
 		me.fireEvent('createdesktop', me, desktop);
 		me.resizeViewport();
@@ -648,6 +686,7 @@ Ext.define('Shopware.container.Viewport',
 			},
 			to: { left: -(width * pos) }
 		});
+
 		return true;
 	},
 
@@ -669,6 +708,9 @@ Ext.define('Shopware.container.Viewport',
 			return false;
 		}
 
+        // Retrieve all active Windows
+        var activeWindows = Shopware.app.Application.getActiveWindows();
+
 		html.animate({
 			duration: me.scrollDuration,
 			easing: me.scrollEasing,
@@ -676,12 +718,21 @@ Ext.define('Shopware.container.Viewport',
 				beforeanimate: function() {
 					Ext.suspendLayouts();
 					me.fireEvent('beforescroll', me, this, index);
+
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.hide();
+                    });
+
 				},
 				afteranimate: function() {
 					Ext.resumeLayouts(true);
 					me.activeDesktop = index;
 					me.fireEvent('afterscroll', me, this, index);
 					me.updateDesktopSwitcher();
+
+                    Ext.each(activeWindows, function(window) {
+                        window.el.shadow.show(window.el);
+                    });
 				}
 			},
 			to: { left: -(width * index) }
@@ -708,88 +759,5 @@ Ext.define('Shopware.container.Viewport',
 	 */
 	scrollRight: function() {
 		return this.scroll('right');
-	},
-
-    /**
-     * Creates a drop zone for the desktop.
-     *
-     * @private
-     * @param [object] view - Ext.container.Container
-     * @return void
-     */
-    initializeDropZone: function(view) {
-        view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
-            ddGroup: 'desktop-article-dd',
-
-            /**
-             * Returns the target element from the event.
-             *
-             * @private
-             * @param [object] event - Ext.EventImplObj
-             * @return [object] target element
-             */
-            getTargetFromEvent: function(event) {
-                return event.getTarget(view.itemSelector);
-            },
-
-            /**
-             * Changes the drop indicator.
-             *
-             * @privaate
-             * @return [string] dropAllowed css class
-             */
-            onNodeOver: function() {
-                return Ext.dd.DropZone.prototype.dropAllowed;
-            },
-
-            /**
-             * Creates the desktop association and bind all
-             * necessary event listeners to the newly created
-             * element.
-             *
-             * @param [object] target - HTML element
-             * @param [object] dd - drag and drop element object
-             * @param [object] e - Ext.EventImplObj
-             * @param [object] data - drag and drop data
-             */
-            onNodeDrop: function(target, dd, e, data) {
-                var viewport = Shopware.app.Application.viewport,
-                    element = new Ext.dom.Element(data.ddel.cloneNode(true)).getHTML(),
-                    activeDesktop = viewport.getActiveDesktop(),
-                    id = Ext.id(),
-                    position = e.getPoint(),
-                    container = Ext.create('Ext.Component', {
-                        renderTo: activeDesktop.getEl(),
-                        shadow: false,
-                        constrainTo: activeDesktop.getEl(),
-                        constrain: true,
-                        cls: Ext.baseCSSPrefix + 'article-dd',
-                        html: '<div id="'+ id +'">' + element + '</div>',
-                        floating: true,
-                        draggable: {
-                            delegate: '#' + id
-                        }
-                    });
-
-
-                container.getEl().on({
-                    'dblclick': function() {
-
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: ~~(1 * data.record.articleId)
-                            }
-                        });
-                    },
-                    scope: container
-                });
-                container.getEl().on('click', function(event) {
-                    container.destroy();
-                }, container, { delegate: '.icon-close' });
-                container.setPosition(position.x, position.y, false);
-            }
-        });
-    }
+	}
 });

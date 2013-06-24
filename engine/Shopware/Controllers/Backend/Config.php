@@ -986,14 +986,15 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $shop = $this->getRepository('shop')->getActiveById($shopId);
         $shop->registerResources(Shopware()->Bootstrap());
 
-        Shopware()->Session()->Template = $template;
+        Shopware()->Session()->template = $template;
         Shopware()->Session()->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
             $url = $this->Front()->Router()->assemble(array(
                 'module' => 'frontend',
-                'controller' => 'index'
-            )) . '?__template=' . urlencode($template);
+                'controller' => 'index',
+                'appendSession' => true,
+            ));
             $this->redirect($url);
         }
     }

@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Modules
- * @subpackage Articles
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Deprecated Shopware Class that handle categories
+ * Deprecated Shopware Class that handle articles
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core\Class
+ * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class sArticles
 {
@@ -80,6 +73,26 @@ class sArticles
      * @var \Shopware\Models\Media\Repository
      */
     protected $mediaRepository = null;
+
+    /**
+     * Constant for the alphanumeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_ALPHANUMERIC = 0;
+
+    /**
+     * Constant for the numeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_NUMERIC = 1;
+
+    /**
+     * Constant for the article count sort configuration of the category filters
+     */
+    const FILTERS_SORT_ARTICLE_COUNT = 2;
+
+    /**
+     * Constant for the positon sort configuration of the category filters
+     */
+    const FILTERS_SORT_POSITION = 3;
 
     /**
      * Helper function to get access to the media repository.
@@ -233,7 +246,7 @@ class sArticles
      */
     public function sGetComparisonList()
     {
-
+        $articles = array();
         if (!$this->sSYSTEM->sSESSION_ID) return array();
 
         // Get all comparisons for this user
@@ -248,28 +261,67 @@ class sArticles
                     $articles[] = $data;
                 }
             }
-
-            foreach ($articles as $key => $article) {
-                $sql = "SELECT comparable FROM s_filter WHERE id = ?";
-                $comparable = Shopware()->Db()->fetchOne($sql, array($article["filtergroupID"]));
-                if (!empty($comparable)) {
-                    // Building global property-list
-                    if (!empty($article["sProperties"])) {
-                        foreach ($article["sProperties"] as $property) {
-                            $properties[$property["id"]] = $property["name"];
-                            $articles[$key]["sPropertiesData"][$property["id"]] = $property["value"];
-                        }
-                    }
-                }
-                else {
-                    unset($articles[$key]["sProperties"]);
-                }
-            }
+            $properties = $this->sGetComparisonProperties($articles);
+            $articles = $this->sFillUpComparisonArticles($properties, $articles);
 
             return array("articles" => $articles, "properties" => $properties);
         } else {
             return array();
         }
+    }
+
+    /**
+     * Returns all filterable properties depending on the given articles
+     *
+     * @param array $articles
+     * @return array
+     */
+    public function sGetComparisonProperties($articles)
+    {
+        $properties = array();
+        foreach ($articles as $article) {
+            //get all properties in the right order
+            $sql = "SELECT options.id, options.name
+                    FROM s_filter_options as options
+                    LEFT JOIN s_filter_relations as relations ON relations.optionId = options.id
+                    LEFT JOIN s_filter as filter ON filter.id = relations.groupID
+                    WHERE relations.groupID = ?
+                    AND filter.comparable = 1
+                    ORDER BY relations.position ASC";
+            $articleProperties = Shopware()->Db()->fetchPairs($sql, array($article["filtergroupID"]));
+
+            foreach ($articleProperties as $articlePropertyKey => $articleProperty) {
+                if (!in_array($articlePropertyKey, array_keys($properties))) {
+                    //the key is not part of the array so add it to the end
+                    $properties[$articlePropertyKey] = $articleProperty;
+                }
+            }
+        }
+        return $properties;
+    }
+
+    /**
+     * fills the article properties with the values and fills up empty values
+     *
+     * @param array $properties
+     * @param array $articles
+     * @return array
+     */
+    public function sFillUpComparisonArticles($properties, $articles)
+    {
+        foreach ($articles as $articleKey => $article) {
+            $articleProperties = array();
+            foreach ($properties as $propertyKey => $property) {
+                if (in_array($propertyKey, array_keys($article["sProperties"]))) {
+                    $articleProperties[$propertyKey] = $article["sProperties"][$propertyKey];
+                } else {
+                    $articleProperties[$propertyKey] = null;
+                }
+            }
+            $articles[$articleKey]["sProperties"] = $articleProperties;
+        }
+
+        return $articles;
     }
 
     /**
@@ -383,11 +435,15 @@ class sArticles
     public function sGetArticlesAverangeVote($article)
     {
         $sql = "
-            SELECT AVG(points) AS averange, COUNT(articleID) as number FROM s_articles_vote WHERE articleID=?
+            SELECT AVG(points) AS averange,
+                   COUNT(articleID) as number
+            FROM s_articles_vote
+            WHERE articleID=?
             AND active=1
             GROUP BY articleID
 		";
 
+        $article = (int) $article;
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($article), "article_$article");
 
         if (empty($getArticles["averange"])){
@@ -479,11 +535,13 @@ class sArticles
      */
     public function sGetArticlesVotes($article)
     {
+        $article = (int) $article;
+
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-		SELECT
-		  *
-		  FROM s_articles_vote WHERE articleID=?
-		AND active=1
+		SELECT *
+        FROM s_articles_vote FORCE INDEX (get_articles_votes)
+	    WHERE articleID = ?
+		AND active = 1
 		ORDER BY datum DESC
 		", array($article));
         foreach ($getArticles as $articleKey => $articleValue) {
@@ -615,12 +673,15 @@ class sArticles
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT
 					a.id as id
 			FROM s_categories c, s_categories c2,
-			     s_articles_categories ac
+			     s_articles_categories_ro ac
 
             JOIN s_articles AS a
-			ON a.id=ac.articleID
-			AND a.mode = 0
-			AND a.active=1
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $sCategory
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_details AS d
 			ON d.id=a.main_detail_id
@@ -634,13 +695,9 @@ class sArticles
 
 			$sql_add_join
 
-			WHERE c.id=$sCategory
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-            AND ag.articleID IS NULL
+			WHERE a.mode = 0
+			AND a.active=1
+			AND ag.articleID IS NULL
 	        AND (
 				0
 				$sql_search_fields
@@ -809,28 +866,67 @@ class sArticles
         $sLimitEnd = $sPerPage;
 
         $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
+
+        //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
+        $sqlFromPath = "
+            FROM s_articles AS a
+            INNER JOIN s_articles_details AS aDetails
+                ON aDetails.id = a.main_detail_id
+        ";
+
+        $groupBy = 'a.id';
         switch ($sSort) {
             case 1:
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id";
+                $groupBy = "a.datum, a.changetime, a.id";
+                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
+
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, a.id";
+                $groupBy = "aDetails.sales, aDetails.impressions, aDetails.articleID";
+                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
+                //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
+                $sqlFromPath = "
+                    FROM s_articles_details aDetails FORCE INDEX (articles_by_category_sort_popularity)
+                    INNER JOIN s_articles a
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
                 break;
             case 4:
-                $orderBy = "price DESC, a.id";
+                $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
-                $orderBy = "articleName ASC, a.id";
+                $groupBy = "a.name, a.id";
+                $orderBy = "a.name ASC, a.id";
+                $sqlFromPath = "
+                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
+                    INNER JOIN s_articles_details AS aDetails
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             case 6:
-                $orderBy = "articleName DESC, a.id";
+                $groupBy = "a.name, a.id";
+                $orderBy = "a.name DESC, a.id DESC";
+                $sqlFromPath = "
+                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
+                    INNER JOIN s_articles_details AS aDetails
+                        ON aDetails.id = a.main_detail_id
+                ";
                 break;
             default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id';
+                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
+                if ($this->sSYSTEM->sCONFIG['sORDERBYDEFAULT']  == 'a.datum DESC') {
+                    $groupBy = 'a.datum, a.id';
+                    $sqlFromPath = "
+                        FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)
+                        INNER JOIN s_articles_details AS aDetails
+                            ON aDetails.id = a.main_detail_id
+                    ";
+                }
         }
+
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
@@ -852,22 +948,22 @@ class sArticles
 
                     ORDER BY min_price
                     LIMIT 1
-                ) * ((100 - IFNULL(cd.discount, 0)) / 100)
+                ) * ( (100 - IFNULL(cd.discount, 0) ) / 100)
 			";
             $join_price = "
 				LEFT JOIN s_core_customergroups cg
-				ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
+		    		ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
 
 				LEFT JOIN s_core_pricegroups_discounts cd
-				ON a.pricegroupActive=1
-				AND cd.groupID=a.pricegroupID
-				AND cd.customergroupID=cg.id
-				AND cd.discountstart=(
-					SELECT MAX(discountstart)
-					FROM s_core_pricegroups_discounts
-					WHERE groupID=a.pricegroupID
-					AND customergroupID=cg.id
-                )
+				    ON a.pricegroupActive=1
+				    AND cd.groupID=a.pricegroupID
+				    AND cd.customergroupID=cg.id
+				    AND cd.discountstart=(
+                        SELECT MAX(discountstart)
+                        FROM s_core_pricegroups_discounts
+                        WHERE groupID=a.pricegroupID
+                        AND customergroupID=cg.id
+                    )
 			";
         } else {
             $select_price = 'IFNULL(p.price, p2.price)';
@@ -894,8 +990,8 @@ class sArticles
                 if ($filter > 0) {
                     $addFilterSQL .= "
                         INNER JOIN s_filter_articles fv$filter
-                        ON fv$filter.articleID = a.id
-                        AND fv$filter.valueID = $filter
+                            ON fv$filter.articleID = a.id
+                            AND fv$filter.valueID = $filter
                     ";
                 }
             }
@@ -905,94 +1001,143 @@ class sArticles
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         $now = Shopware()->Db()->quote(date('Y-m-d'));
 
-        $priceForBasePrice = "(SELECT price FROM s_articles_prices WHERE articledetailsID=aDetails.id AND pricegroup=IF(p.id IS NULL, 'EK', p.pricegroup) AND `from`=1 LIMIT 1 ) as priceForBasePrice";
-
+        $priceForBasePrice = "
+        (
+            SELECT price
+            FROM s_articles_prices
+            WHERE articledetailsID = aDetails.id
+            AND pricegroup= IF(p.id IS NULL, 'EK', p.pricegroup)
+            AND `from` = 1 LIMIT 1
+        ) as priceForBasePrice";
 
         $sql = "
-			SELECT
-				a.id as articleID, aDetails.id AS articleDetailsID, a.notification as notification, weight, aDetails.ordernumber, a.datum, aDetails.releasedate,
-				additionaltext, aDetails.shippingfree,aDetails.shippingtime,instock, a.description AS description, description_long,
-				aSupplier.name AS supplierName, aSupplier.img AS supplierImg, a.name AS articleName, topseller as highlight,
-				$select_price as price, laststock, $priceForBasePrice,
-				sales, IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice, aTax.tax, taxID,
-				aDetails.minpurchase,
-				aDetails.purchasesteps,
-				aDetails.maxpurchase,
-				aDetails.purchaseunit,
-				aDetails.referenceunit,
-				aDetails.unitID,
-				pricegroupID,
-				pricegroupActive,
-				IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
-				attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
-				attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-				IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
-				(a.configurator_set_id IS NOT NULL) as sConfigurator,
-				IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
-				IFNULL((
-				   SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes
-				   FROM s_articles_vote WHERE active=1
-				   AND articleID=a.id),
-				'0.00|00') as sVoteAverange,
-				IF(DATEDIFF($now, a.datum)<=$markNew,1,0) as newArticle,
-				IF(aDetails.sales>=$topSeller,1,0) as topseller,
-				IF(aDetails.releasedate>$now,1,0) as sUpcoming,
-				IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate
-			FROM s_categories c, s_categories c2, s_articles_categories ac
+            SELECT
 
-            JOIN s_articles AS a
-			ON a.id=ac.articleID
-			AND a.mode = 0
-			AND a.active=1
+                a.id as articleID,
+                a.laststock,
+                a.taxID,
+                a.pricegroupID,
+                a.pricegroupActive,
+                a.notification as notification,
+                a.datum,
+                a.description AS description,
+                a.description_long,
+                a.name AS articleName,
+                a.topseller as highlight,
+                (a.configurator_set_id IS NOT NULL) as sConfigurator,
 
-			JOIN s_articles_details AS aDetails
-			ON aDetails.id=a.main_detail_id
 
-			JOIN s_articles_attributes AS aAttributes
-			ON aAttributes.articledetailsID=aDetails.id
+                aDetails.id AS articleDetailsID,
+                aDetails.ordernumber,
+                aDetails.releasedate,
+                aDetails.shippingfree,
+                aDetails.shippingtime,
+                aDetails.minpurchase,
+                aDetails.purchasesteps,
+                aDetails.maxpurchase,
+                aDetails.purchaseunit,
+                aDetails.referenceunit,
+                aDetails.unitID,
+                aDetails.weight,
+                aDetails.additionaltext,
+                aDetails.instock,
+                aDetails.sales,
+                IF(aDetails.sales>=$topSeller,1,0) as topseller,
+                IF(aDetails.releasedate>$now,1,0) as sUpcoming,
+                IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate,
 
-			JOIN s_core_tax AS aTax
-			ON aTax.id=a.taxID
+                aSupplier.name AS supplierName,
+                aSupplier.img AS supplierImg,
+
+                aTax.tax,
+
+                aAttributes.attr1,
+                aAttributes.attr2,
+                aAttributes.attr3,
+                aAttributes.attr4,
+                aAttributes.attr5,
+                aAttributes.attr6,
+                aAttributes.attr7,
+                aAttributes.attr8,
+                aAttributes.attr9,
+                aAttributes.attr10,
+                aAttributes.attr11,
+                aAttributes.attr12,
+                aAttributes.attr13,
+                aAttributes.attr14,
+                aAttributes.attr15,
+                aAttributes.attr16,
+                aAttributes.attr17,
+                aAttributes.attr18,
+                aAttributes.attr19,
+                aAttributes.attr20,
+
+                $priceForBasePrice,
+
+                $select_price as price,
+
+                IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice,
+                IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
+                IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
+                IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
+                IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
+
+                (
+                    SELECT CONCAT(AVG(points), '|',COUNT(*)) as votes
+                    FROM   s_articles_vote
+                    WHERE  s_articles_vote.active=1
+                    AND    s_articles_vote.articleID = a.id
+                ) AS sVoteAverange
+
+            $sqlFromPath
+
+            INNER JOIN s_articles_categories_ro ac
+              ON  ac.articleID = a.id
+              AND ac.categoryID = $categoryId
+
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
+
+            JOIN s_articles_attributes AS aAttributes
+              ON aAttributes.articledetailsID = aDetails.id
+
+            JOIN s_core_tax AS aTax
+              ON aTax.id = a.taxID
 
             LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+              ON ag.articleID = a.id
+              AND ag.customergroupID = {$this->customerGroupId}
 
-			LEFT JOIN s_articles_supplier AS aSupplier
-			ON aSupplier.id=a.supplierID
+            LEFT JOIN s_articles_supplier AS aSupplier
+              ON aSupplier.id = a.supplierID
 
-			$addFilterSQL
+            $addFilterSQL
 
-			LEFT JOIN s_articles_prices p
-			ON p.articleDetailsID=aDetails.id
-			AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
-			AND p.to='beliebig'
+            LEFT JOIN s_articles_prices p
+              ON p.articleDetailsID = aDetails.id
+              AND p.pricegroup = '{$this->sSYSTEM->sUSERGROUP}'
+              AND p.to = 'beliebig'
 
-			LEFT JOIN s_articles_prices p2
-			ON p2.articledetailsID=aDetails.id
-			AND p2.pricegroup='EK'
-			AND p2.to='beliebig'
+            LEFT JOIN s_articles_prices p2
+              ON p2.articledetailsID = aDetails.id
+              AND p2.pricegroup = 'EK'
+              AND p2.to = 'beliebig'
 
-			$join_price
+            $join_price
 
-            WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
+            WHERE ag.articleID IS NULL
+            AND a.active=1
 
-			$addFilterWhere
-			$supplierSQL
+            $addFilterWhere
+            $supplierSQL
 
-            GROUP BY a.id
-			ORDER BY $orderBy
-			LIMIT $sLimitStart, $sLimitEnd
-		";
+            GROUP BY $groupBy
+            ORDER BY $orderBy
+            LIMIT $sLimitStart, $sLimitEnd
+        ";
 
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
-
         $articles = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articles)) {
@@ -1002,29 +1147,25 @@ class sArticles
         $sql = "
             SELECT COUNT(DISTINCT a.id) count
 
-            FROM s_categories c, s_categories c2, s_articles_categories ac
-
-            JOIN s_articles AS a
-            ON a.id=ac.articleID
-            AND a.mode = 0
-            AND a.active=1
+            FROM s_articles AS a
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $categoryId
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
             JOIN s_articles_details AS aDetails
-            ON aDetails.id=a.main_detail_id
+                ON aDetails.id=a.main_detail_id
 
             LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+                ON ag.articleID=a.id
+                AND ag.customergroupID={$this->customerGroupId}
 
             $addFilterSQL
 
-            WHERE c.id=$categoryId
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=a.id
-            AND ac.categoryID=c2.id
-            AND ag.articleID IS NULL
+            WHERE ag.articleID IS NULL
+            AND a.active=1
 
             $addFilterWhere
             $supplierSQL
@@ -1149,6 +1290,10 @@ class sArticles
                 $articles[$articleKey]["sUnit"] = $this->sGetUnit($articles[$articleKey]["unitID"]);
             }
 
+            if (empty($articles[$articleKey]['sVoteAverange'])) {
+                $articles[$articleKey]['sVoteAverange'] = '0.00|00';
+            }
+
             $articles[$articleKey]['sVoteAverange'] = explode('|', $articles[$articleKey]['sVoteAverange']);
             $articles[$articleKey]['sVoteAverange'] = array(
                 'averange' => round($articles[$articleKey]['sVoteAverange'][0], 2),
@@ -1207,6 +1352,7 @@ class sArticles
         return $result;
     }
 
+
     /**
      * Get supplier by id
      *
@@ -1238,12 +1384,424 @@ class sArticles
     }
 
     /**
-     * Get all available article properties from a specific category
+     * Helper function which checks the configuration if the article count
+     * should be displayed for each filter value.
      *
-     * @param int $categoryId - category id
-     * @param array $activeFilters
+     * @return bool
+     */
+    protected function displayFilterArticleCount()
+    {
+        return Shopware()->Config()->get('displayFilterArticleCount', true);
+    }
+
+    /**
+     * Helper function to add the already activated filter values.
+     * This function adds an inner join condition for each passed value.
+     * The join will be set on the s_filter_articles table. The table alias
+     * for each passed value is "filterArticles" + ValueID.
+     * The function expects the s_articles table with the alias "articles" to
+     * join the s_filter_articles over the articleID column.
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $activeFilters
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addActiveFilterCondition($builder, $activeFilters)
+    {
+        foreach($activeFilters as $valueId) {
+            if ($valueId <= 0) {
+                continue;
+            }
+            $alias = 'filterArticles' . $valueId;
+            $builder->innerJoin('articles', 's_filter_articles', $alias, $alias . '.articleID = articles.id AND ' . $alias . '.valueID = ' . (int) $valueId);
+        }
+        return $builder;
+    }
+
+    /**
+     * Helper function which creates a sql statement
+     * to select all filters with their associated options and values.
+     * This query is used to select all category filters.
+     *
+     * The query contains the following joins/aliases:
+     *  - s_filter_values           => filterValues (FROM Table)
+     *  - s_filter_articles         => filterArticles
+     *  - s_articles_categories_ro  => articleCategories
+     *  - s_articles                => articles
+     *  - s_filter_options          => filterOptions
+     *  - s_filter_relations        => filterRelations
+     *  - s_filter                  => filters
+     *  - s_articles_attributes     => attributes
+     *  - s_articles_avoid_customergroups     => avoidGroups
+     *
+     * If the parameter $activeFilters isn't empty, the query builder
+     * use a group by condition for the filterValues.id (s_filter_values.id).
+     * This condition is required to select the assigned article count
+     * faster.
+     *
+     * In case that the parameter $activeFilters is empty, the query builder
+     * use a sub query to select the article count for each filter value.
+     * Additional the query builder use a DISTINCT condition to prevent duplicate
+     * items, which creates over the different N:M Associations like
+     * s_filter_values : s_filter_articles or s_filter_articles : s_articles_categories_ro
+     *
+     * The query builder contains two parameters which has to be set from outside:
+     *  -   :categoryId         => ID of the current category to select the category articles
+     *  -   :customerGroupId    => ID of the current customer group to prevent avoided customer groups of an article.
+     *
+     * To set this parameter you can use the "$builder->setParameters" or "$builder->setParameter" function:
+     * <php>
+     * $builder->setParameters(array(
+     *      ':categoryId'       => $categoryId
+     *      ':customerGroupId'  => $customerGroupId
+     * ));
+     * </php>
+     *
+     * Shopware Events:
+     *  -   Shopware_Modules_Articles_GetFilterQuery
+     *
+     * @param null $activeFilters
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function getFilterQuery($activeFilters = null)
+    {
+        /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+
+        $builder->select(array(
+            'filterValues.optionID    as id',
+            'filterValues.optionID    as optionID',
+            'filterOptions.name       as optionName',
+            'filterRelations.position as optionPosition',
+            'filterValues.id          as valueID',
+            'filterValues.value       as optionValue',
+            'filterValues.position    as valuePosition',
+            'filterRelations.groupID  as groupID',
+            'filters.name             as groupName'
+        ));
+
+        $builder = $this->addArticleCountSelect($builder);
+
+        //use as base table the s_filter_values
+        $builder->from('s_filter_values', 'filterValues');
+
+        //join the s_filter_articles to get add an additional join condition for the category articles.
+        $builder->innerJoin(
+            'filterValues',
+            's_filter_articles',
+            'filterArticles',
+            'filterArticles.valueID = filterValues.id'
+        );
+
+        //join the s_articles_categories_ro to get only the filter configuration for the current category articles
+        $builder->innerJoin(
+            'filterArticles',
+            's_articles_categories_ro',
+            'articleCategories',
+            "articleCategories.articleID = filterArticles.articleID AND articleCategories.categoryID = :categoryId"
+        );
+
+        //at least we add the condition to select only the active articles
+        $builder->innerJoin(
+            'filterArticles',
+            's_articles',
+            'articles',
+            'articles.id = filterArticles.articleID AND articles.active = 1 AND articles.id = articleCategories.articleID'
+        );
+
+        //to get the filter option name, it is required to join the s_filter_options. The options can be configured with
+        //an filterable flag.
+        $builder->innerJoin(
+            'filterValues',
+            's_filter_options',
+            'filterOptions',
+            'filterValues.optionID = filterOptions.id AND filterOptions.filterable = 1'
+        );
+
+        //the filter relations table contains the data which filter options is assigned to which filter group.
+        $builder->innerJoin(
+            'filterOptions',
+            's_filter_relations',
+            'filterRelations',
+            'filterRelations.groupID = articles.filtergroupID AND filterRelations.optionID = filterOptions.id'
+        );
+
+        //now we can select the s_filter to get the group name.
+        $builder->innerJoin(
+            'filterRelations',
+            's_filter',
+            'filters',
+            'filters.id = filterRelations.groupID'
+        );
+
+        //at least we add the s_articles_avoid_customergroups and s_articles_attributes to prevent
+        //inconsistent article selections.
+        $builder->leftJoin(
+            'articles',
+            's_articles_avoid_customergroups',
+            'avoidGroups',
+            "avoidGroups.articleID = articles.id AND avoidGroups.customergroupID = :customerGroupId"
+        );
+
+        $builder->innerJoin(
+            'articles',
+            's_articles_attributes',
+            'attributes',
+            'articles.id = attributes.articleID'
+        );
+
+        $builder->andWhere('avoidGroups.articleID IS NULL');
+
+        $builder = Shopware()->Events()->filter(
+            'Shopware_Modules_Articles_GetFilterQuery',
+            $builder,
+            array(
+                'subject' => $this,
+                'activeFilters' => $activeFilters
+            )
+        );
+
+        return $builder;
+    }
+
+
+    /**
+     * Helper function to add the article count select for the filter queries.
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     *
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addArticleCountSelect($builder)
+    {
+        $builder->groupBy('filterValues.id');
+
+        if (!$this->displayFilterArticleCount()) {
+            return $builder;
+        }
+
+        $builder->addSelect('COUNT(DISTINCT articles.id) as articleCount');
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to add the translation join and select condition
+     * for the article filters. This function expects the following aliases:
+     *  - s_filter         = filters
+     *  - s_filter_values  = filterValues
+     *  - s_filter_options = filterOptions
+     *
+     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $translationId
+     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     */
+    protected function addFilterTranslation($builder, $translationId)
+    {
+        $builder->addSelect(array(
+            'valueTranslation.objectdata AS valueTranslation',
+            'optionTranslation.objectdata AS optionNameTranslation',
+            'groupTranslation.objectdata AS groupNameTranslation'
+        ));
+
+        $builder->leftJoin(
+            'filterValues',
+            's_core_translations',
+            'valueTranslation',
+            "valueTranslation.objecttype = :valueType
+             AND valueTranslation.objectkey = filterValues.id
+             AND valueTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->leftJoin(
+            'filterOptions',
+            's_core_translations',
+            'optionTranslation',
+            "optionTranslation.objecttype = :optionType
+             AND optionTranslation.objectkey = filterOptions.id
+             AND optionTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->leftJoin(
+            'filters',
+            's_core_translations',
+            'groupTranslation',
+            "groupTranslation.objecttype = :groupType
+             AND groupTranslation.objectkey = filters.id
+             AND groupTranslation.objectlanguage = :translationId"
+        );
+
+        $builder->setParameter(':translationId', $translationId);
+        $builder->setParameter(':groupType', 'propertygroup');
+        $builder->setParameter(':optionType', 'propertyoption');
+        $builder->setParameter(':valueType', 'propertyvalue');
+
+        return $builder;
+    }
+
+    /**
+     * This function returns all category filters in the correct sort order.
+     * The returned array contains all filter groups, filter options and filter values
+     * which configured for the category articles of the passed category id.
+     *
+     * The $activeFilters parameter can contains the already activated filter value
+     * ids as flat array.
+     * The already activated filter values will be added as join condition from the s_articles
+     * on the s_filter_articles with the corresponding value id.
+     *
+     * Notice: If the system contains many filter values, it is required to increase the
+     * max join configuration parameter of the sql server.
+     *
+     * The absolute max join limit of a 5.* mysql server is set to 61 join tables!
+     *
+     * Shopware Events:
+     *  - Shopware_Modules_Article_GetCategoryFilters
+     *
+     * @param $categoryId
+     * @param null $activeFilters
      * @return array
      */
+    public function getCategoryFilters($categoryId, $activeFilters = null)
+    {
+        $builder = $this->getFilterQuery($activeFilters);
+        $builder = $this->addActiveFilterCondition($builder, $activeFilters);
+        $sortMode = $this->getFilterSortMode($categoryId, $this->customerGroupId, $activeFilters);
+
+        $builder->addOrderBy('filterRelations.position');
+        $builder->addOrderBy('filterOptions.name');
+
+        switch($sortMode) {
+            case self::FILTERS_SORT_ALPHANUMERIC:
+                $builder->addOrderBy('filterValues.value');
+                break;
+
+            case self::FILTERS_SORT_NUMERIC:
+                $builder->addOrderBy('filterValues.value_numeric');
+                break;
+
+            case self::FILTERS_SORT_ARTICLE_COUNT:
+                if ($this->displayFilterArticleCount()) {
+                    $builder->addOrderBy('articleCount', 'DESC');
+                } else {
+                    $builder->addOrderBy('filterValues.position');
+                }
+                break;
+
+            case self::FILTERS_SORT_POSITION:
+            default:
+                $builder->addOrderBy('filterValues.position');
+                break;
+        }
+        $builder->addOrderBy('filterValues.id');
+
+        if ($this->translationId !== null) {
+            $builder = $this->addFilterTranslation($builder, $this->translationId);
+        }
+
+        $builder->setParameter(':customerGroupId', (int) $this->customerGroupId);
+        $builder->setParameter(':categoryId', (int) $categoryId);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+
+        $filters = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $filters = Shopware()->Events()->filter(
+            'Shopware_Modules_Article_GetCategoryFilters',
+            $filters,
+            array(
+                'subject' => $this,
+                'category' => $categoryId,
+                'activeFilters' => $activeFilters
+            )
+        );
+
+        return $filters;
+    }
+
+
+    /**
+     * Helper function to get the sort mode condition for the passed category id.
+     * This function selects all filter group ids of the assigned category articles for the
+     * passed category id.
+     * In case that more than one filter group is assigned, the function returns
+     * the config sort mode for filters.
+     * If only one filter group id founded, the function returns the sort mode for this
+     * filter group.
+     *
+     * Shopware Events:
+     *  -   Shopware_Modules_Article_GetFilterSortMode
+     *
+     * @param $categoryId
+     * @param $customerGroupId
+     * @param null $activeFilters
+     * @return int|null
+     */
+    protected function getFilterSortMode($categoryId, $customerGroupId, $activeFilters = null)
+    {
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array('DISTINCT articles.filtergroupID', 'filters.sortmode'));
+
+        $builder->from('s_articles', 'articles');
+        $builder->innerJoin(
+            'articles',
+            's_articles_categories_ro',
+            'articleCategories',
+            "articleCategories.articleID = articles.id AND articleCategories.categoryID = :categoryId"
+        );
+        $builder->leftJoin(
+            'articles',
+            's_articles_avoid_customergroups',
+            'avoidGroups',
+            "avoidGroups.articleID = articles.id AND avoidGroups.customergroupID = :customerGroupId"
+        );
+        $builder->innerJoin(
+            'articles',
+            's_articles_attributes',
+            'attributes',
+            'articles.id = attributes.articleID'
+        );
+        $builder->innerJoin(
+            'articles',
+            's_filter',
+            'filters',
+            'filters.id = articles.filtergroupID'
+        );
+
+        $builder->where('articles.active = 1');
+        $builder->andWhere('articles.filtergroupID IS NOT NULL');
+        $builder->andWhere('avoidGroups.articleID IS NULL');
+
+        $builder = $this->addActiveFilterCondition($builder, $activeFilters);
+
+        $builder->setParameter('customerGroupId', $customerGroupId);
+        $builder->setParameter('categoryId', $categoryId);
+
+        /**@var $statement Doctrine\DBAL\Driver\Statement*/
+        $statement = $builder->execute();
+
+        $filterIds = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($filterIds) > 1) {
+            $sortMode = Shopware()->Config()->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
+        } else if (count($filterIds) === 1) {
+            $sortMode = $filterIds[0]['sortmode'];
+        } else {
+            $sortMode = self::FILTERS_SORT_POSITION;
+        }
+
+        $sortMode = Shopware()->Events()->filter(
+            'Shopware_Modules_Article_GetFilterSortMode',
+            $sortMode,
+            array(
+                'subject' => $this,
+                'category' => $categoryId,
+                'activeFilters' => $activeFilters
+            )
+        );
+        return $sortMode;
+    }
+
     public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
     {
         if ($categoryId === null
@@ -1257,112 +1815,10 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        $db = Shopware()->Db();
         $categoryId = (int)$categoryId;
         $activeFilters = (array)$activeFilters;
 
-        $addFilterJoin = "";
-        if (!empty($activeFilters)) {
-            foreach ($activeFilters as $key => $filter) {
-                $filter = (int)$filter;
-                if ($filter > 0) {
-                    $addFilterJoin .= "
-                        INNER JOIN s_filter_articles fv$filter
-                        ON fv$filter.articleID = a.id
-                        AND fv$filter.valueID = $filter
-                    ";
-                } else {
-                    unset($activeFilters[$key]);
-                }
-            }
-        }
-
-        $addTranslationJoin = '';
-        $addTranslationSelect = '';
-        if($this->translationId !== null) {
-            $addTranslationSelect = '
-        		,
-				st.objectdata AS optionNameTranslation,
-				st2.objectdata AS groupNameTranslation,
-				st3.objectdata AS valueTranslation
-        	';
-            $addTranslationJoin = "
-        		LEFT JOIN s_core_translations AS st
-				ON st.objecttype='propertyoption'
-				AND st.objectkey=fv.optionID
-				AND st.objectlanguage='$this->translationId'
-	
-				LEFT JOIN s_core_translations AS st2
-				ON st2.objecttype='propertygroup'
-				AND st2.objectkey=f.id
-				AND st2.objectlanguage='$this->translationId'
-	
-				LEFT JOIN s_core_translations AS st3
-	            ON st3.objecttype='propertyvalue'
-	            AND st3.objectkey=fv.id
-	            AND st3.objectlanguage='$this->translationId'
-        	";
-        }
-
-        $sql = "
-			SELECT STRAIGHT_JOIN
-				fv.optionID AS id,
-				COUNT(DISTINCT a.id) AS count,
-				fo.id AS optionID,
-				fo.name AS optionName,
-				f.id AS groupID,
-				f.name AS groupName,
-				fv.value AS optionValue,
-				fv.id AS valueID
-				$addTranslationSelect
-			FROM s_categories c, s_categories c2, s_articles_categories ac
-
-			JOIN s_filter_articles fa
-			ON fa.articleID=ac.articleID
-
-		    JOIN s_filter_values fv
-		    ON fv.id=fa.valueID
-
-		    JOIN s_filter_options fo
-		    ON fo.id=fv.optionID
-		    AND fo.filterable = 1
-
-		    JOIN s_articles a
-		    ON a.id=ac.articleID
-		    AND a.active =1
-
-			JOIN s_filter f
-			ON f.id=a.filtergroupID
-
-			LEFT JOIN s_filter_relations fr
-			ON f.id = fr.groupId AND fo.id = fr.optionId
-
-			LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=fa.articleID
-            AND ag.customergroupID={$this->customerGroupId}
-
-			$addTranslationJoin
-
-			$addFilterJoin
-
-			WHERE c.id=$categoryId
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
-
-			GROUP BY fv.id
-			ORDER BY
-			  fr.position,
-			  fo.name ASC,
-			  IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
-			  IF(f.sortmode=2, COUNT(*) , 0) DESC,
-			  IF(f.sortmode=3, fv.position, 0),
-			  fv.value
-		";
-        $getProperties = $db->fetchAll($sql);
+        $getProperties = $this->getCategoryFilters($categoryId, $activeFilters);
 
         $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
             . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
@@ -1422,7 +1878,7 @@ class sArticles
                 'name' => $property['optionName'],
                 'value' => $property['optionValue'],
                 'valueTranslation' => null,
-                'count' => $property['count'],
+                'count' => $property['articleCount'],
                 'group' => $property['groupName'],
                 'optionID' => $property['id'],
                 'link' => $link,
@@ -1436,7 +1892,7 @@ class sArticles
             [$property['optionValue']] = array(
                 'name' => $property['optionName'],
                 'value' => $property['optionValue'],
-                'count' => $property['count'],
+                'count' => $property['articleCount'],
                 'group' => $property['groupName'],
                 'optionID' => $property['id']
             );
@@ -1460,19 +1916,13 @@ class sArticles
 
         $sql = "
 			SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
-			FROM s_categories c
-
-			JOIN s_categories c2
-			ON c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-
-			JOIN s_articles_categories ac
-			ON ac.categoryID=c2.id
-
-		    JOIN s_articles a
-		    ON  ac.articleID=a.id
-		    AND a.active = 1
+			FROM s_articles a
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = ?
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_supplier s
 			ON s.id=a.supplierID
@@ -1481,8 +1931,8 @@ class sArticles
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE c.id=?
-	        AND ag.articleID IS NULL
+			WHERE ag.articleID IS NULL
+			AND a.active = 1
 
 			GROUP BY s.id
 			ORDER BY s.name ASC
@@ -1653,9 +2103,9 @@ class sArticles
     public function sGetArticleCharts($category = null)
     {
         $sLimitChart = $this->sSYSTEM->sCONFIG['sCHARTRANGE'];
-        $sIntervalCharts = $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] ? $this->sSYSTEM->sCONFIG['sCHARTINTERVAL'] : 10;
-        $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
-
+        if (empty($sLimitChart)) {
+            $sLimitChart = 20;
+        }
         if (!empty($category)) {
             $category = (int)$category;
         } elseif (!empty($this->sSYSTEM->_GET['sCategory'])) {
@@ -1665,36 +2115,44 @@ class sArticles
         }
 
         $sql = "
-			SELECT a.id AS articleID, SUM(IF(o.id, IFNULL(od.quantity, 0), 0))+pseudosales AS quantity
-	        FROM s_articles_categories ac, s_categories c, s_categories c2, s_articles a
+            SELECT STRAIGHT_JOIN
+              a.id AS articleID,
+              s.sales AS quantity
+            FROM s_articles_top_seller_ro s
+            INNER JOIN s_articles_categories_ro ac
+              ON  ac.articleID = s.article_id
+              AND ac.categoryID = :categoryId
+            INNER JOIN s_categories c
+              ON  ac.categoryID = c.id
+              AND c.active = 1
+            INNER JOIN s_articles a
+              ON  a.id = s.article_id
+              AND a.active = 1
 
-	        LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+            LEFT JOIN s_articles_avoid_customergroups ag
+              ON ag.articleID=a.id
+              AND ag.customergroupID = :customerGroupId
 
-	        LEFT JOIN s_order_details od
-	        ON a.id = od.articleID
-	        AND od.modus = 0
+            INNER JOIN s_articles_details d
+              ON d.id = a.main_detail_id
+              AND d.active = 1
 
-	        LEFT JOIN s_order o
-	        ON o.ordertime>=DATE_SUB($now, INTERVAL $sIntervalCharts DAY)
-	        AND o.status >= 0
-	        AND o.id = od.orderID
+            INNER JOIN s_articles_attributes at
+              ON at.articleID=a.id
 
-	        WHERE a.active = 1
-	        AND c.id=$category
-	        AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID=a.id
-	        AND ac.categoryID=c2.id
-	        AND ag.articleID IS NULL
+            INNER JOIN s_core_tax t
+              ON t.id = a.taxID
 
-	        GROUP BY a.id
-	        ORDER BY quantity DESC, topseller DESC
-	        LIMIT $sLimitChart
+            WHERE ag.articleID IS NULL
+            ORDER BY s.sales DESC
+            LIMIT $sLimitChart
 		";
-        $queryChart = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+
+        $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
+            'categoryId'      => $category,
+            'customerGroupId' => $this->customerGroupId
+        ));
+
         $articles = array();
         if (!empty($queryChart))
             foreach ($queryChart as $articleID => $quantity) {
@@ -1705,6 +2163,10 @@ class sArticles
                 }
             }
 
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Articles_GetArticleCharts',
+            array('subject' => $this, 'category' => $category, 'articles' => $articles)
+        );
         return $articles;
     }
 
@@ -1758,35 +2220,43 @@ class sArticles
             return;
         }
 
-        if (!empty($this->sSYSTEM->_POST['sSort'])) {
-            $this->sSYSTEM->_SESSION['sSort'] = $this->sSYSTEM->_POST['sSort'];
+        if (isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
+            $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
+        } else {
+            $sCategoryConfig = array();
         }
 
-        if (!empty($this->sSYSTEM->_SESSION['sSort'])) {
-            $this->sSYSTEM->_POST['sSort'] = $this->sSYSTEM->_SESSION['sSort'];
+        // Order List by
+        if (isset($this->sSYSTEM->_POST['sSort'])) {
+            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
+        } elseif(!empty($this->sSYSTEM->_GET['sSort'])) {
+            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
         }
-
+        if (!empty($sCategoryConfig['sSort'])) {
+            $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
+        }
+        
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id";
+                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, a.id";
+                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
                 break;
             case 4:
-                $orderBy = "price DESC, a.id";
+                $orderBy = "price DESC, a.id DESC";
                 break;
             case 5:
                 $orderBy = "articleName ASC, a.id";
                 break;
             case 6:
-                $orderBy = "articleName DESC, a.id";
+                $orderBy = "articleName DESC, a.id DESC";
                 break;
             default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id';
+                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
         }
 
         if (strpos($orderBy, 'price') !== false) {
@@ -1835,11 +2305,13 @@ class sArticles
 			SELECT a.id, name AS articleName,
 				$select_price as price
 
-			FROM s_categories c, s_categories c2, s_articles_categories ac
-
-			JOIN s_articles a
-			ON a.active=1
-			AND a.id=ac.articleID
+			FROM s_articles a
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = $categoryId
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
 
 			JOIN s_articles_details AS aDetails
 			ON aDetails.articleID=a.id AND aDetails.kind=1
@@ -1853,11 +2325,7 @@ class sArticles
 
 			$join_price
 
-			WHERE c.id=$categoryId
-	        AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.categoryID=c2.id
+			WHERE a.active=1
 	        AND ag.articleID IS NULL
 
             GROUP BY a.id
@@ -2205,7 +2673,6 @@ class sArticles
             $fetchGroup = $this->sSYSTEM->sUSERGROUP;
         }
 
-
         if (empty($usepricegroups)) {
             $sql = "
 			SELECT price FROM s_articles_prices, s_articles_details WHERE
@@ -2240,11 +2707,12 @@ class sArticles
                 // No Price for this customer-group fetch defaultprice
                 $sql = "
 				SELECT price FROM s_articles_details
-				LEFT JOIN
-				s_articles_prices ON s_articles_details.id=s_articles_prices.articledetailsID AND
-				pricegroup='EK' AND s_articles_prices.from = '1'
+				LEFT JOIN s_articles_prices
+				  ON s_articles_details.id=s_articles_prices.articledetailsID
+				  AND pricegroup='EK'
+				  AND s_articles_prices.from = '1'
 				WHERE
-				s_articles_details.articleID=$article
+				  s_articles_details.articleID=$article
 				GROUP BY ROUND(price,2)
 				ORDER BY price ASC
 				LIMIT 2
@@ -2320,10 +2788,11 @@ class sArticles
     /**
      * Get one article with all available data
      * @param int $id article id
+     * @param null $sCategoryID
      * @access public
      * @return array
      */
-    public function sGetArticleById($id = 0, $sCategoryID = NULL)
+    public function sGetArticleById($id = 0, $sCategoryID = null)
     {
 
         if(empty($sCategoryID)) {
@@ -2333,24 +2802,23 @@ class sArticles
             $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($id);
             $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
         }
+        $subShopJoin = "";
+
         // If user is not logged in as admin, add subshop limitation for articles
         if (empty(Shopware()->Session()->Admin)) {
-            $subShopLimitationFrom = "s_categories c, s_categories c2, s_articles_categories ac,";
-            $subShopLimitationCategoryClause = "
-                AND c.id={$this->categoryId}
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=a.id
-                AND ac.categoryID=c2.id";
-        }else{
-            $subShopLimitationFrom = "";
-            $subShopLimitationCategoryClause = "";
+            $subShopJoin = "
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID = a.id
+                    AND ac.categoryID = {$this->categoryId}
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+            ";
         }
 
         $sql = "
             SELECT
-                DISTINCT a.id as articleID,
+                a.id as articleID,
                 aDetails.id as articleDetailsID,
                 TRIM(ordernumber) as ordernumber,
                 datum,
@@ -2395,26 +2863,28 @@ class sArticles
                 IF(aDetails.releasedate > CURDATE(), 1, 0) as sUpcoming,
 			    IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
 
-			FROM $subShopLimitationFrom s_articles a
+			FROM s_articles a
+
+            $subShopJoin
 
 			JOIN s_articles_details aDetails
-			ON aDetails.id=a.main_detail_id
+			    ON aDetails.id=a.main_detail_id
 
 			JOIN s_core_tax AS aTax
-            ON a.taxID=aTax.id
+                ON a.taxID=aTax.id
 
             JOIN s_articles_attributes AS aAttributes
-            ON aAttributes.articledetailsID=aDetails.id
+                ON aAttributes.articledetailsID=aDetails.id
 
 			LEFT JOIN s_articles_prices AS p
-			ON p.articledetailsID=aDetails.id
-			AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
-			AND p.from='1'
+                ON p.articledetailsID=aDetails.id
+                AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
+                AND p.from='1'
 
 			LEFT JOIN s_articles_prices AS p2
-			ON p2.articledetailsID=aDetails.id
-			AND p2.pricegroup='EK'
-			AND p2.from='1'
+                ON p2.articledetailsID=aDetails.id
+                AND p2.pricegroup='EK'
+                AND p2.from='1'
 
             LEFT JOIN s_articles_supplier AS aSupplier
 			ON aSupplier.id=a.supplierID
@@ -2425,8 +2895,6 @@ class sArticles
 
 			WHERE a.id=" . $id . "
 			AND ag.articleID IS NULL
-
-            $subShopLimitationCategoryClause
 		";
 
         if (empty(Shopware()->Session()->Admin)) {
@@ -2534,9 +3002,9 @@ class sArticles
                 if (!empty( $sCategoryID )){
                     $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
                     $sqlGetCategory = "
-					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories, s_articles, s_articles_details
-					WHERE s_articles_categories.categoryID=" . $sCategoryID . "
-					AND s_articles.id=s_articles_categories.articleID AND s_articles.id=s_articles_details.articleID
+					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
+					WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
+					AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
 					AND s_articles_details.kind=1
 					AND s_articles.id!={$getArticle["articleID"]}
 					AND s_articles.active=1
@@ -2748,10 +3216,13 @@ class sArticles
                 }
             }
 
-            if (!empty($getArticle["filtergroupID"])) $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
+            if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
+                $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
+            }
 
-            $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
-
+            if ($this->showArticleNavigation()) {
+                $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
+            }
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"])));
             $string = preg_replace("/[^a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½\-]/", " ", $string);
@@ -2773,6 +3244,27 @@ class sArticles
         $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
         return $getArticle;
+    }
+
+    /**
+     * Helper function to check the configuration for the article detail page navigation arrows.
+     */
+    private function showArticleNavigation()
+    {
+        return !(Shopware()->Config()->get('disableArticleNavigation'));
+    }
+
+    /**
+     * Helper function to check the filter configuration for article detail pages.
+     * Checks the configuration parameter displayFiltersOnDetailPage.
+     * This config can be set over the performance module.
+     *
+     *
+     * @return boolean
+     */
+    protected function displayFiltersOnArticleDetailPage()
+    {
+        return Shopware()->Config()->get('displayFiltersOnDetailPage', true);
     }
 
     /**
@@ -2994,19 +3486,17 @@ class sArticles
         }
 
         $category = (int) $category;
+        $categoryJoin = "";
+
         if (!empty($category)) {
-            $categoryWhere = "
-                AND c.id=$category
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=a.id
-                AND ac.categoryID=c2.id
+            $categoryJoin = "
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID  = a.id
+                    AND ac.categoryID = $category
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
             ";
-            $categoryFrom = "s_categories c, s_categories c2, s_articles_categories ac, ";
-        } else {
-            $categoryWhere = "";
-            $categoryFrom = "";
         }
 
         if (empty($this->sCachePromotions)) {
@@ -3031,14 +3521,17 @@ class sArticles
                     $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
                     $sql = "
                         SELECT od.articleID
-                        FROM s_order as o, s_order_details od, $categoryFrom s_articles a $withImageJoin
+                        FROM s_order as o, s_order_details od, s_articles a $withImageJoin
+
+                        $categoryJoin
+
                         LEFT JOIN s_articles_avoid_customergroups ag
                         ON ag.articleID=a.id
                         AND ag.customergroupID={$this->customerGroupId}
                         WHERE o.ordertime > DATE_SUB($now, INTERVAL $promotionTime DAY)
                         AND o.id=od.orderID
                         AND od.modus=0 AND od.articleID=a.id
-                        AND a.active=1 $categoryWhere
+                        AND a.active=1
                         AND ag.articleID IS NULL
                         GROUP BY od.articleID
                         ORDER BY COUNT(od.articleID) DESC
@@ -3047,11 +3540,12 @@ class sArticles
                 } else {
                     $sql = "
                         SELECT a.id as articleID
-                        FROM  $categoryFrom s_articles a $withImageJoin
+                        FROM  s_articles a $withImageJoin
+                        $categoryJoin
                         LEFT JOIN s_articles_avoid_customergroups ag
                         ON ag.articleID=a.id
                         AND ag.customergroupID={$this->customerGroupId}
-                        WHERE a.active=1 AND a.mode=0 $categoryWhere
+                        WHERE a.active=1 AND a.mode=0
                         AND ag.articleID IS NULL
                         ORDER BY a.datum DESC
                         LIMIT 100
@@ -3519,12 +4013,18 @@ class sArticles
      * @param string $name name of the article
      * @param int $id id of the article
      * @access public
+     * @return bool
      */
     public function sSetLastArticle($image, $name, $id)
     {
         if (empty($this->sSYSTEM->sSESSION_ID) || empty($name) || empty($id)) {
             return;
         }
+
+        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
+            'subject'   => $this,
+            'article'   => $id
+        ));
 
         $insertArticle = $this->sSYSTEM->sDB_CONNECTION->Execute('
 			INSERT INTO s_emarketing_lastarticles
@@ -3540,6 +4040,8 @@ class sArticles
             (int)$this->sSYSTEM->_SESSION['sUserId'],
             (int)$this->sSYSTEM->sLanguage
         ));
+
+        return $insertArticle;
     }
 
     /**
@@ -3646,31 +4148,35 @@ class sArticles
 
         $numberOfArticles = (int)$this->sSYSTEM->sCONFIG['sLASTARTICLESTOSHOW'];
 
-        $categoryWhere = "
-            AND c.id=sc.category_id
-            AND c2.active=1
-            AND c2.left >= c.left
-            AND c2.right <= c.right
-            AND ac.articleID=l.articleID
-            AND ac.categoryID=c2.id
-        ";
-        $categoryFrom = "s_categories c, s_categories c2, s_articles_categories ac, ";
 
-        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+        $categoryJoin = "
+            INNER JOIN s_articles_categories_ro ac
+                ON  ac.articleID = l.articleID
+                AND ac.categoryID = sc.category_id
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
+        ";
+
+        $sql = "
 			SELECT img, l.name, l.articleID
-			FROM {$categoryFrom} s_emarketing_lastarticles l
+			FROM s_emarketing_lastarticles l
 
 			LEFT JOIN s_core_shops sc ON sc.id=l.shopID
+
+			$categoryJoin
 
 			WHERE l.sessionID=?
 			AND l.articleID!=?
 			AND l.shopID=?
-			{$categoryWhere}
 
             GROUP BY l.articleID
 			ORDER BY time DESC
 			LIMIT {$numberOfArticles}
-		", array(
+        ";
+
+
+        $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array(
             $this->sSYSTEM->sSESSION_ID,
             (int)$currentArticle,
             $this->sSYSTEM->sLanguage
@@ -3897,13 +4403,13 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
 		";
-        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
+        $object = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
-        if (!empty($objectData)) {
-	        $objectData = unserialize($objectData);
+        if (!empty($object)) {
+            $object = unserialize($object);
         } else {
-	        $objectData = array();
+            $object = array();
         }
         if (!empty($fallback)) {
             $sql = "
@@ -3917,11 +4423,11 @@ class sArticles
             );
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
-	            $objectData = array_merge($objectFallback, $objectData);
+                $object = array_merge($objectFallback, $object);
             }
         }
-        if (!empty($objectData)) {
-            foreach ($objectData as $translateKey => $value) {
+        if (!empty($object)) {
+            foreach ($object as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
                 } else {

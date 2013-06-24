@@ -822,14 +822,16 @@ class sAdmin
 
 
         if ($password && $passwordConfirmation){
-            $password = md5($password);
+            $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $password = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
+
             $this->sSYSTEM->_SESSION["sUserMail"] = $email;
             $this->sSYSTEM->_SESSION["sUserPassword"] = $password;
             $sqlAccount = "
-			UPDATE s_user SET email=?, password=? WHERE id=?";
-            $sqlAccount = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateAccount_FilterPasswordSql', $sqlAccount, array('email'=>$email,'password'=>$password,'subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
+			UPDATE s_user SET email=?, password=?, encoder=? WHERE id=?";
+            $sqlAccount = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateAccount_FilterPasswordSql', $sqlAccount, array('email'=>$email,'password'=>$password,'encoder'=>$encoderName,'subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
 
-            $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAccount,array($email,$password,$this->sSYSTEM->_SESSION["sUserId"]));
+            $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAccount,array($email,$password,$encoderName,$this->sSYSTEM->_SESSION["sUserId"]));
         }else {
             $this->sSYSTEM->_SESSION["sUserMail"] = $email;
             $sqlAccount = "
@@ -965,6 +967,7 @@ class sAdmin
     public function sValidateStep1 ($edit = false)
     {
         $p = $this->sSYSTEM->_POST;
+	    $encoderName =  Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
 
         if(isset($p["emailConfirmation"]) || isset($p["email"])) {
             $p["email"] = strtolower(trim($p["email"]));
@@ -1013,8 +1016,9 @@ class sAdmin
             }
             $this->sSYSTEM->_SESSION["sRegister"]["auth"]["accountmode"] = "0";	// Setting account-mode to ACCOUNT
         }else {
-            // Assign random password to account
+            // Enforce the creation of an md5-hashed password for anonymous accounts
             $p["password"] = md5(uniqid(rand()));
+	        $encoderName = 'md5';
             $this->sSYSTEM->_SESSION["sRegister"]["auth"]["accountmode"] = "1";	// Setting account-mode to NO_ACCOUNT
         }
 
@@ -1023,7 +1027,7 @@ class sAdmin
             $password = $p["currentPassword"];
             $current = Shopware()->Session()->sUserPassword;
             $snippet = Shopware()->Snippets()->getNamespace("frontend");
-            if(empty($password) || $current != md5($password)) {
+            if(empty($password) || !Shopware()->PasswordEncoder()->isPasswordValid($password, $current, $encoderName)) {
                 $sErrorFlag['currentPassword'] = true;
                 if($p["password"]) {
                     $sErrorFlag['password'] = true;
@@ -1056,13 +1060,16 @@ class sAdmin
                 // Receive Newsletter yes / no
                 $this->sSYSTEM->_SESSION["sRegister"]["auth"]["receiveNewsletter"] = $p["receiveNewsletter"];
                 if ($p["password"]){
-                    $this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"] = md5($p["password"]);
+	                $this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"] = $encoderName;
+                    $this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"] = Shopware()->PasswordEncoder()->encodePassword($p["password"], $encoderName);
                 }else {
                     unset($this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"]);
+                    unset($this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"]);
                 }
             }else {
                 unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["email"]);
                 unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"]);
+                unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"]);
             }
         }
 
@@ -1074,131 +1081,219 @@ class sAdmin
     /**
      * Frontend user login
      * @param boolean $ignoreAccountMode Allows customers who have chosen the fast registration, one-time login after registration
-     * @access public
      * @return array Array with errors that may have occurred
      */
-    public function sLogin ($ignoreAccountMode = false){
-
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_Login_Start', array('subject'=>$this,"ignoreAccountMode"=>$ignoreAccountMode,"post"=>$this->sSYSTEM->_POST))){
+    public function sLogin($ignoreAccountMode = false)
+    {
+        if (Enlight()->Events()->notifyUntil(
+            'Shopware_Modules_Admin_Login_Start',
+            array(
+                'subject'           => $this,
+                'ignoreAccountMode' => $ignoreAccountMode,
+                'post'              => $this->sSYSTEM->_POST
+            )
+        )) {
             return false;
         }
 
         // If fields are not set, markup these fields
-        if (!$this->sSYSTEM->_POST["email"]) $sErrorFlag["email"] = true;
-        if (!$this->sSYSTEM->_POST["password"] && !$this->sSYSTEM->_POST["passwordMD5"]) $sErrorFlag["password"] = true;
+        $email = strtolower($this->sSYSTEM->_POST["email"]);
+        if (empty($email)) {
+            $sErrorFlag['email'] = true;
+        }
 
-        if (!empty($sErrorFlag)){
-            $sErrorMessages[] = $this->snippetObject->get('LoginFailure','Wrong email or password');
+        // If password is already md5-decrypted or the parameter $ignoreAccountMode is set, use it directly
+        if ($ignoreAccountMode && $this->sSYSTEM->_POST['passwordMD5']) {
+            $password = $this->sSYSTEM->_POST["passwordMD5"];
+            $isPreHashed = true;
+        } else {
+            $password = $this->sSYSTEM->_POST["password"];
+            $isPreHashed = false;
+        }
+
+        if (empty($password)) {
+            $sErrorFlag["password"] = true;
+        }
+
+        if (!empty($sErrorFlag)) {
+            $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
             unset($this->sSYSTEM->_SESSION["sUserMail"]);
             unset($this->sSYSTEM->_SESSION["sUserPassword"]);
             unset($this->sSYSTEM->_SESSION["sUserId"]);
         }
 
-        if (!count($sErrorMessages)){
-            $addScopeSql = "";
-            if ($this->scopedRegistration == true){
-                $addScopeSql = "
-                AND subshopID = ".$this->subshopId;
+        if (count($sErrorMessages)) {
+            list($sErrorMessages, $sErrorFlag) = Enlight()->Events()->filter(
+                'Shopware_Modules_Admin_Login_FilterResult',
+                array($sErrorMessages, $sErrorFlag),
+                array('subject' => $this, 'email' => null, 'password' => null, 'error' => $sErrorMessages)
+            );
+
+            return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
+        }
+
+        $addScopeSql = "";
+        if ($this->scopedRegistration == true) {
+            $addScopeSql = " AND subshopID = " . $this->subshopId;
+        }
+
+        // When working with a prehashed password, we need to limit the getUser-SQL by password,
+        // as there might be multiple users with the same mail address (accountmode = 1).
+        $preHashedSql = '';
+        if ($isPreHashed) {
+            $preHashedSql = " AND password = '{$password}'";
+        }
+
+        if ($ignoreAccountMode) {
+            $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql . $preHashedSql;
+        } else {
+            $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND accountmode!=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql;
+        }
+
+        $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($email));
+
+        if (!count($getUser)) {
+            $isValidLogin = false;
+        } else {
+            if ($isPreHashed) {
+                $encoderName = 'Prehashed';
+            } else {
+                $encoderName = $getUser['encoder'];
+                $encoderName = strtolower($encoderName);
             }
 
-            // If password is already md5-decrypted and the parameter $ignoreAccountMode is not set, use it directly
-	        if($ignoreAccountMode == true) {
-				// Allow login from registration
-		        $password = $this->sSYSTEM->_POST["passwordMD5"] ? $this->sSYSTEM->_POST["passwordMD5"] : md5($this->sSYSTEM->_POST["password"]);
-	        } else {
-		        if(empty($this->sSYSTEM->_POST["password"])) {
-			        $sErrorFlag["password"] = true;
-			        $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
-			        unset($this->sSYSTEM->_SESSION["sUserMail"]);
-			        unset($this->sSYSTEM->_SESSION["sUserPassword"]);
-			        unset($this->sSYSTEM->_SESSION["sUserId"]);
-		        } else {
-			        $password = md5($this->sSYSTEM->_POST["password"]);
-		        }
-	        }
-            $email = strtolower($this->sSYSTEM->_POST["email"]);
-
-            if ($ignoreAccountMode){
-                $sql = "SELECT id, customergroup FROM s_user WHERE password=? AND email=? AND active=1 AND (lockeduntil < now() OR lockeduntil IS NULL) ".$addScopeSql;
-            }else {
-                $sql = "SELECT id, customergroup FROM s_user WHERE password=? AND email=? AND active=1 AND accountmode!=1 AND (lockeduntil < now() OR lockeduntil IS NULL) ".$addScopeSql;
+            if (empty($encoderName)) {
+                throw new \Exception('No encoderName given.');
             }
 
-            $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($password,$email));
+	        $hash      = $getUser['password'];
+            $plaintext = $password;
+            $password  = $hash;
 
-            if(count($getUser))
-            {
-                $updateTime = $this->sSYSTEM->sDB_CONNECTION->Execute("UPDATE s_user SET lastlogin=NOW(),failedlogins = 0, lockeduntil = NULL, sessionID=? WHERE id=?",array($this->sSYSTEM->sSESSION_ID,$getUser["id"]));
-                Enlight()->Events()->notify('Shopware_Modules_Admin_Login_Successful', array('subject'=>$this,'email'=>$email,'password'=>$password,'user'=>$getUser));
-                $this->sSYSTEM->_SESSION["sUserMail"] = $email;
-                $this->sSYSTEM->_SESSION["sUserPassword"] = $password;
-                $this->sSYSTEM->_SESSION["sUserId"] = $getUser["id"];
 
-                $this->sCheckUser();
+	        $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
+        }
 
-            }else {
-                // Check if account is disabled
-                $sql = "SELECT id FROM s_user WHERE password=? AND email=? AND active=0 ".$addScopeSql;
-                $getUser = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($password, $email));
-                if ($getUser){
-                    $sErrorMessages[] = $this->snippetObject->get('LoginFailureActive','Your account is disabled. Please contact us.');
+        if ($isValidLogin) {
+            $this->sSYSTEM->sDB_CONNECTION->Execute(
+                "UPDATE s_user SET lastlogin=NOW(),failedlogins = 0, lockeduntil = NULL, sessionID=? WHERE id=?",
+                array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
+            );
+
+            Enlight()->Events()->notify(
+                'Shopware_Modules_Admin_Login_Successful',
+                array('subject' => $this, 'email' => $email, 'password' => $password, 'user' => $getUser)
+            );
+
+            $newHash = '';
+            $liveMigration = Shopware()->Config()->liveMigration;
+            $defaultEncoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+
+	        // Do not allow live migration when the password is prehashed
+            if ($liveMigration && !$isPreHashed && $encoderName !== $defaultEncoderName) {
+                $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
+                $encoderName = $defaultEncoderName;
+            }
+
+            if (empty($newHash)) {
+                $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
+            }
+
+            if (!empty($newHash) && $newHash !== $hash) {
+                $hash = $newHash;
+                $userId = (int) $getUser['id'];
+                Shopware()->Db()->update(
+                    's_user',
+                    array(
+                        'password' => $hash,
+                        'encoder'  => $encoderName,
+                    ),
+                        'id = ' . $userId
+                );
+            }
+
+            $this->sSYSTEM->_SESSION["sUserMail"]     = $email;
+            $this->sSYSTEM->_SESSION["sUserPassword"] = $hash;
+            $this->sSYSTEM->_SESSION["sUserId"]       = $getUser["id"];
+
+            $this->sCheckUser();
+        } else {
+            // Check if account is disabled
+            $sql = "SELECT id FROM s_user WHERE email=? AND active=0 " . $addScopeSql;
+            $getUser = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($email));
+            if ($getUser) {
+                $sErrorMessages[] = $this->snippetObject->get(
+                    'LoginFailureActive',
+                    'Your account is disabled. Please contact us.'
+                );
+            } else {
+                $getLockedUntilTime = Shopware()->Db()->fetchOne(
+                    "SELECT 1 FROM s_user WHERE email = ? AND lockeduntil > NOW()",
+                    array($email)
+                );
+                if (!empty($getLockedUntilTime)) {
+                    $sErrorMessages[] = $this->snippetObject->get(
+                        'LoginFailureLocked',
+                        'Too many failed logins. Your account was temporary deactivated.'
+                    );
                 } else {
-                    $getLockedUntilTime = Shopware()->Db()->fetchOne("
-						SELECT 1 FROM s_user
-						WHERE email = ? AND lockeduntil > NOW()
-					",array($email));
-                    if (!empty($getLockedUntilTime)){
-                        $sErrorMessages[] = $this->snippetObject->get('LoginFailureLocked','Too many failed logins. Your account was temporary deactivated.');
-                    }else {
-                        $sErrorMessages[] = $this->snippetObject->get('LoginFailure','Wrong email or password');
-                    }
+                    $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
                 }
+            }
 
-                // Ticket #5427 - Prevent brute force logins
-                if (!empty($email)){
-                    // Update failed login counter
-                    $sql = "
-						UPDATE s_user SET
-							failedlogins = failedlogins + 1,
-							lockeduntil = IF(
-								failedlogins > 4,
-								DATE_ADD(NOW(), INTERVAL (failedlogins + 1) * 30 SECOND),
-								NULL
-							)
-						WHERE email = ? ".$addScopeSql;
-                    Shopware()->Db()->query($sql, array($email));
-                } // Ticket #5427 - Prevent brute force logins
+            // Ticket #5427 - Prevent brute force logins
+            if (!empty($email)) {
+                // Update failed login counter
+                $sql = "
+                    UPDATE s_user SET
+                        failedlogins = failedlogins + 1,
+                        lockeduntil = IF(
+                            failedlogins > 4,
+                            DATE_ADD(NOW(), INTERVAL (failedlogins + 1) * 30 SECOND),
+                            NULL
+                        )
+                    WHERE email = ? " . $addScopeSql;
+                Shopware()->Db()->query($sql, array($email));
+            } // Ticket #5427 - Prevent brute force logins
 
-                Enlight()->Events()->notify('Shopware_Modules_Admin_Login_Failure', array('subject'=>$this,'email'=>$email,'password'=>$password,'error'=>$sErrorMessages));
+            Enlight()->Events()->notify(
+                'Shopware_Modules_Admin_Login_Failure',
+                array('subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages)
+            );
 
-                unset($this->sSYSTEM->_SESSION["sUserMail"]);
-                unset($this->sSYSTEM->_SESSION["sUserPassword"]);
-                unset($this->sSYSTEM->_SESSION["sUserId"]);
-            } // user was found
-        } // All fields fill
+            unset($this->sSYSTEM->_SESSION["sUserMail"]);
+            unset($this->sSYSTEM->_SESSION["sUserPassword"]);
+            unset($this->sSYSTEM->_SESSION["sUserId"]);
+        }
 
-        list($sErrorMessages,$sErrorFlag) = Enlight()->Events()->filter('Shopware_Modules_Admin_Login_FilterResult', array($sErrorMessages,$sErrorFlag), array('subject'=>$this,'email'=>$email,'password'=>$password,'error'=>$sErrorMessages));
+        list($sErrorMessages, $sErrorFlag) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_Login_FilterResult',
+            array($sErrorMessages, $sErrorFlag),
+            array('subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages)
+        );
 
-        return array("sErrorFlag"=>$sErrorFlag,"sErrorMessages"=>$sErrorMessages);
+        return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
     }
 
-    /**
+
+	/**
      * Verification of user authorization (logged in) on all secured pages (checkout,account)
      * @access public
      * @return boolean
      */
-    public function sCheckUser (){
-
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_CheckUser_Start', array('subject'=>$this))){
+    public function sCheckUser()
+    {
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_CheckUser_Start', array('subject' => $this))) {
             return false;
         }
-        if (empty($this->sSYSTEM->_SESSION["sUserMail"]) || empty($this->sSYSTEM->_SESSION["sUserPassword"]) || empty($this->sSYSTEM->_SESSION["sUserId"])){
+
+        if (empty($this->sSYSTEM->_SESSION["sUserMail"]) || empty($this->sSYSTEM->_SESSION["sUserPassword"]) || empty($this->sSYSTEM->_SESSION["sUserId"])) {
             unset($this->sSYSTEM->_SESSION["sUserMail"]);
             unset($this->sSYSTEM->_SESSION["sUserPassword"]);
             unset($this->sSYSTEM->_SESSION["sUserId"]);
+
             return false;
         }
-
 
         $sql = "
 			SELECT * FROM s_user
@@ -1207,24 +1302,34 @@ class sAdmin
 
         $timeOut = $this->sSYSTEM->sCONFIG['sUSERTIMEOUT'];
         $timeOut = !empty($timeOut) ? $timeOut : 7200;
-        $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array(
-            $this->sSYSTEM->_SESSION["sUserPassword"],
-            $this->sSYSTEM->_SESSION["sUserMail"],
-            $this->sSYSTEM->_SESSION["sUserId"],
-            $timeOut
-        ));
 
-        $getUser = Enlight()->Events()->filter('Shopware_Modules_Admin_CheckUser_FilterGetUser', $getUser, array('subject'=>$this,'sql'=>$sql,'session'=>$this->sSYSTEM->_SESSION));
+        $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $sql,
+            array(
+                $this->sSYSTEM->_SESSION["sUserPassword"],
+                $this->sSYSTEM->_SESSION["sUserMail"],
+                $this->sSYSTEM->_SESSION["sUserId"],
+                $timeOut
+            )
+        );
 
 
-        if(!empty($getUser["id"]))
-        {
-            $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-				SELECT * FROM s_core_customergroups
-				WHERE groupkey=?
-			",array($getUser["customergroup"]));
+        $getUser = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_CheckUser_FilterGetUser',
+            $getUser,
+            array('subject' => $this, 'sql' => $sql, 'session' => $this->sSYSTEM->_SESSION)
+        );
 
-            if ($this->sSYSTEM->sUSERGROUPDATA["mode"]){
+        if (!empty($getUser["id"])) {
+            $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "
+                                SELECT * FROM s_core_customergroups
+                                WHERE groupkey=?
+                            ",
+                array($getUser["customergroup"])
+            );
+
+            if ($this->sSYSTEM->sUSERGROUPDATA["mode"]) {
                 $this->sSYSTEM->sUSERGROUP = "EK";
             } else {
                 $this->sSYSTEM->sUSERGROUP = $getUser["customergroup"];
@@ -1234,15 +1339,24 @@ class sAdmin
             $this->sSYSTEM->_SESSION["sUserGroup"] = $this->sSYSTEM->sUSERGROUP;
             $this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
 
-            $updateTime = $this->sSYSTEM->sDB_CONNECTION->Execute("UPDATE s_user SET lastlogin=NOW(), sessionID=? WHERE id=?",array($this->sSYSTEM->sSESSION_ID,$getUser["id"]));
-            Enlight()->Events()->notify('Shopware_Modules_Admin_CheckUser_Successful', array('subject'=>$this,'session'=>$this->sSYSTEM->_SESSION,'user'=>$getUser));
+            $updateTime = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                "UPDATE s_user SET lastlogin=NOW(), sessionID=? WHERE id=?",
+                array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
+            );
+            Enlight()->Events()->notify(
+                'Shopware_Modules_Admin_CheckUser_Successful',
+                array('subject' => $this, 'session' => $this->sSYSTEM->_SESSION, 'user' => $getUser)
+            );
 
             return true;
         } else {
             unset($this->sSYSTEM->_SESSION["sUserMail"]);
             unset($this->sSYSTEM->_SESSION["sUserPassword"]);
             unset($this->sSYSTEM->_SESSION["sUserId"]);
-            Enlight()->Events()->notify('Shopware_Modules_Admin_CheckUser_Failure', array('subject'=>$this,'session'=>$this->sSYSTEM->_SESSION,'user'=>$getUser));
+            Enlight()->Events()->notify(
+                'Shopware_Modules_Admin_CheckUser_Failure',
+                array('subject' => $this, 'session' => $this->sSYSTEM->_SESSION, 'user' => $getUser)
+            );
 
             return false;
         }
@@ -1477,6 +1591,7 @@ class sAdmin
 
         $data = array(
             $userObject["auth"]["password"],
+	        $userObject["auth"]["encoderName"],
             $userObject["auth"]["email"],
             $userObject["payment"]["object"]["id"],
             $userObject["auth"]["accountmode"],
@@ -1492,11 +1607,11 @@ class sAdmin
         $sql = '
 			INSERT INTO s_user
 			(
-				password, email, paymentID, active, accountmode,
+				password, encoder, email, paymentID, active, accountmode,
 			 	validation, firstlogin,sessionID, affiliate, customergroup,
 			 	language, subshopID, referer
 			)
-			VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?)
+			VALUES (?,?,?,?,1,?,?,NOW(),?,?,?,?,?,?)
 		';
 
         list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainData_FilterSql', array($sql,$data), array('subject'=>$this));
@@ -1550,12 +1665,13 @@ class sAdmin
 
         if (!empty($userObject["billing"]["birthmonth"]) &&
             !empty($userObject["billing"]["birthday"]) &&
-            !empty($userObject["billing"]["birthyear"])){
+            !empty($userObject["billing"]["birthyear"])
+        ) {
             $date = $userObject["billing"]["birthyear"]."-".$userObject["billing"]["birthmonth"]."-".$userObject["billing"]["birthday"];
 
             $date = date("Y-m-d",strtotime($date));
 
-        }else {
+        } else {
             $date = "0000-00-00";
         }
         $userObject = $userObject["billing"];
@@ -1716,6 +1832,7 @@ class sAdmin
      * @return boolean
      */
     public function sSaveRegister ($paymentObject=null){
+
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_Start', array('subject'=>$this))){
             return false;
         }
@@ -2687,10 +2804,10 @@ class sAdmin
      */
     public function sRiskARTICLESFROM ($user, $order, $value){
         $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-			SELECT s_articles_categories.id as id
-			FROM s_order_basket, s_articles_categories
-			WHERE s_order_basket.articleID = s_articles_categories.articleID
-			AND s_articles_categories.categoryID = ?
+			SELECT s_articles_categories_ro.id as id
+			FROM s_order_basket, s_articles_categories_ro
+			WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
+			AND s_articles_categories_ro.categoryID = ?
 			AND s_order_basket.sessionID=?
 			AND s_order_basket.modus=0
 		", array($value, $this->sSYSTEM->sSESSION_ID));
@@ -3288,7 +3405,7 @@ class sAdmin
 			LEFT JOIN (
 				SELECT dc.dispatchID
 				FROM s_order_basket b
-				JOIN s_articles_categories ac
+				JOIN s_articles_categories_ro ac
 				ON ac.articleID=b.articleID
 				JOIN s_premium_dispatch_categories dc
 				ON dc.categoryID=ac.categoryID
@@ -3432,7 +3549,7 @@ class sAdmin
 			LEFT JOIN (
 				SELECT dc.dispatchID
 				FROM s_order_basket b
-				JOIN s_articles_categories ac
+				JOIN s_articles_categories_ro ac
 				ON ac.articleID=b.articleID
 				JOIN s_premium_dispatch_categories dc
 				ON dc.categoryID=ac.categoryID
@@ -3724,8 +3841,7 @@ class sAdmin
         if ((!empty($dispatch['shippingfree'])&&$dispatch['shippingfree']<=$basket['amount_display'])
             ||empty($basket['count_article'])
             ||(!empty($basket['shippingfree'])&&empty($dispatch['bind_shippingfree']))
-        )
-        {
+        ) {
             if(empty($dispatch['surcharge_calculation'])&&!empty($payment['surcharge']))
                 return array(
                     'brutto'=>$payment['surcharge'],

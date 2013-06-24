@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Search
- * @subpackage Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware standard search adapter
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Components\Search\Adapter
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Search_Adapter_Abstract
 {
@@ -370,9 +363,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $result = $this->database->fetchRow($sql);
         $last = !empty($result['last']) ? unserialize($result['last']) : null;
 
-        if (empty($last) || empty($result['not_force'])
-            || strtotime($last) < strtotime($result['current']) - $interval
-        ) {
+        $strategy = Shopware()->Config()->get('searchRefreshStrategy', 3);
+
+        //search index refresh strategy is configured for "live refresh"?
+        if ($strategy !== 3) {
+            return;
+        }
+
+        if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->buildSearchIndex();
         }
     }
@@ -592,14 +590,18 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (empty($tables)) {
 
             $tables = $this->database->fetchAll("
-            SELECT
-                st.id as tableID, st.table, st.where, st.referenz_table, st.foreign_key,
-                GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
-                GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
-            FROM s_search_tables st, s_search_fields sf
-            WHERE st.id = sf.tableID
-            AND sf.relevance != 0
-            GROUP BY st.id
+                SELECT STRAIGHT_JOIN
+                    st.id as tableID,
+                    st.table,
+                    st.where,
+                    st.referenz_table, st.foreign_key,
+                    GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
+                    GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
+                FROM s_search_fields sf FORCE INDEX (tableID)
+                    INNER JOIN s_search_tables st
+                        ON st.id = sf.tableID
+                        AND sf.relevance != 0
+                GROUP BY sf.tableID
            ");
         }
         return $tables;
@@ -664,17 +666,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         ' . $sqlFromStatement . '
 
-        JOIN s_categories c
-        ON c.id=?
-
-        JOIN s_categories c2
-        ON c2.active=1
-        AND c2.left >= c.left
-        AND c2.right <= c.right
-
-        JOIN s_articles_categories ac
-        ON ac.articleID=a.id
-        AND ac.categoryID=c2.id
+        INNER JOIN s_articles_categories_ro ac
+            ON  ac.articleID  = a.id
+            AND ac.categoryID = ?
+        INNER JOIN s_categories c
+            ON  c.id = ac.categoryID
+            AND c.active = 1
 
         WHERE a.active=1
         ';
@@ -796,17 +793,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             ON a.id=d.articleID
             AND d.kind=1
 
-            JOIN s_categories c
-            ON c.id=' . $sqlCategoryFilter . '
-
-            JOIN s_categories c2
-            ON c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-
-            JOIN s_articles_categories ac
-            ON ac.articleID=a.id
-	        AND ac.categoryID=c2.id
+            INNER JOIN s_articles_categories_ro ac
+                ON  ac.articleID  = a.id
+                AND ac.categoryID = ' .$sqlCategoryFilter. '
+            INNER JOIN s_categories c
+                ON  c.id = ac.categoryID
+                AND c.active = 1
 
             JOIN s_core_tax t
             ON a.taxID = t.id
@@ -875,7 +867,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function search($term, array $searchConfiguration)
     {
-
         $this->initSearchConfiguration($searchConfiguration);
 
         // Find keywords matching term
@@ -951,7 +942,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             $sqlHaving
         );
 
-        if(empty($this->requestSuggestSearch)) {
+        $traceSearch = Shopware()->Config()->get('traceSearch', true);
+        if(empty($this->requestSuggestSearch) && $traceSearch) {
             $sql = '
               INSERT INTO s_statistics_search (datum, searchterm, results)
                 VALUES (NOW(), ?, ?)
@@ -978,6 +970,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Set count of results to result object
         $this->getResult()->setResultCount(count($searchResultsFinal));
 
+
+        if (!empty($this->requestSortSearchResultsBy)) {
+            $sortedResult = $this->sortResults($searchResultsFinal, $this->requestSortSearchResultsBy);
+            if($sortedResult !== false) {
+                $searchResultsFinal = $sortedResult;
+            }
+        }
         $searchResultsFinal = array_splice(
             $searchResultsFinal,
             ($this->requestCurrentPage -1) * $searchConfiguration['resultsPerPage'],
@@ -989,10 +988,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         } else {
             // Set results to class property
             $this->getResult()->setResult($searchResultsFinal);
-        }
-
-        if (!empty($this->requestSortSearchResultsBy)) {
-            $this->sortResults($this->requestSortSearchResultsBy);
         }
 
         return $this->getResult();
@@ -1018,13 +1013,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     {
         $sql = '
             SELECT c.*, COUNT(DISTINCT ac.articleID) as count
-            FROM s_categories c, s_categories c2, s_articles_categories ac
+
+            FROM s_categories c
+                INNER JOIN s_articles_categories_ro ac
+                    ON ac.categoryID = c.id
             WHERE c.parent=' . $this->getResult()->getCurrentCategoryFilter() . '
-            AND c2.active=1
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND ac.articleID IN (' . implode(',', array_keys($searchResults)) . ')
-	        AND ac.categoryID=c2.id
+            AND c.active = 1
+            AND ac.articleID  IN (' . implode(',', array_keys($searchResults)) . ')
             GROUP BY c.id
             ORDER BY count DESC, c.description
         ';
@@ -1078,6 +1073,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             GROUP BY s.id
             ORDER BY count DESC, s.name
         ';
+
         $suppliers = array();
         try {
             $result = $this->database->fetchAll($sql);
@@ -1096,15 +1092,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
     /**
      * Sort search results locally
+     * @param $searchResult
      * @param $sortBy
      *          1 = datum
      *          2 = sales
      *          3 = price
      *          4 = name
      *          7 = vote
-     * @return bool
+     * @return array|bool
      */
-    public function sortResults($sortBy)
+    public function sortResults($searchResult, $sortBy)
     {
         switch ($sortBy) {
             case 1:
@@ -1123,12 +1120,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             case 7:
                 $field = "vote";
                 break;
-            case 2:
             default:
                 return false;
         }
 
-        $result = $this->getResult()->getResult();
+        $result = $searchResult;
 
         $orderValues = array();
         foreach ($result as $articleID => $article) {
@@ -1158,9 +1154,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         foreach (array_keys($orderValues) as $articleID) {
             $temporaryArticles[$articleID] = $result[$articleID];
         }
-        $this->getResult()->setResult($temporaryArticles);
-        unset($tmp);
-        return true;
+        return $temporaryArticles;
     }
 
     /**
@@ -1262,7 +1256,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                         // Update index
                         try {
                             $sql_index = implode("\n\nUNION ALL\n\n", $sql_index);
-                            $sql_index = "INSERT DELAYED IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
+                            $sql_index = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
                             $this->database->query($sql_index);
                             $sql_index = array();
                         } catch (PDOException $e) {
@@ -1364,7 +1358,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         }
 
         $sql = "
-            SELECT keywordID, fieldID, sk.keyword
+            SELECT STRAIGHT_JOIN
+                   keywordID, fieldID, sk.keyword
             FROM `s_search_index` si
 
             INNER JOIN s_search_keywords sk
@@ -1373,8 +1368,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             $sql_join
 
             GROUP BY keywordID, fieldID
-            HAVING COUNT(*)>(SELECT COUNT(*)*0.9 FROM `s_articles`)
+            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles`)
         ";
+
         $collectToDelete = $this->database->fetchAll($sql);
         foreach ($collectToDelete as $delete) {
             $sql = '

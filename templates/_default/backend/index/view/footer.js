@@ -28,6 +28,8 @@
  * @author shopware AG
  */
 
+//{namespace name=backend/index/view/detail}
+
 /**
  * Shopware UI - Footer
  *
@@ -38,6 +40,7 @@
  * Note that the component will be streched to
  * the full viewport width.
  */
+//{block name="backend/index/view/footer"}
 Ext.define('Shopware.apps.Index.view.Footer', {
 	extend: 'Ext.toolbar.Toolbar',
 	alias: 'widget.footer',
@@ -47,6 +50,17 @@ Ext.define('Shopware.apps.Index.view.Footer', {
 	height: 40,
 	dock: 'bottom',
     cls: 'shopware-footer',
+
+    /**
+     * Used snippets for this component
+     * @object
+     */
+    snippets: {
+        logged_in_as: '{s name=footer/logged_in_as}Logging as{/s}',
+        logout_now: '{s name=footer/logout_now}Logout now{/s}',
+        minimize_all: '{s name=footer/minimize_all}Minimize all{/s}',
+        close_all: '{s name=footer/close_all}Close all{/s}'
+    },
 
 
     /**
@@ -64,6 +78,14 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             Shopware.app.WindowManagement.init(me);
         }
 	},
+
+    afterRender: function() {
+        var me = this;
+
+        Shopware.app.Application.baseComponentIsReady(me);
+
+        me.callParent(arguments);
+    },
 
 	/**
 	 * Creates the default buttons for the footer taskbar
@@ -96,7 +118,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
      * @return [object] logoutBtn - Ext.button.Button
      */
     createLogoutBtn: function() {
-        var me = this, logoutBtn, tip, logoutUrl = '{url controller="login" action="logout"}';
+        var me = this, logoutBtn, tip;
 
         // Create the button
         logoutBtn = Ext.create('Ext.button.Button', {
@@ -110,7 +132,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             shadow: false,
             ui: 'shopware-ui',
             cls: 'logout-tooltip',
-            html: '<span>Angemeldet als <strong>' + userName + '</strong></span><a href="'+logoutUrl+'">Jetzt abmelden</a><div class="x-clear"></div><div class="arrow"></div>'
+            html: me.getLogoutSnippet()
         });
 
         // Event listener which shows the tooltip
@@ -121,6 +143,19 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         }, this);
 
         return logoutBtn;
+    },
+
+    /**
+     * Returns the string which is used for the logout
+     * tooltip
+     *
+     * @returns { String } - formatted localized string
+     */
+    getLogoutSnippet: function() {
+        var url = '{url controller="login" action="logout"}',
+            s = this.snippets;
+
+        return Ext.String.format('<span>[0] <strong>[1]</strong></span><a href="[2]">[3]</a><div class="x-clear"></div><div class="arrow"></div>', s.logged_in_as, userName, url, s.logout_now);
     },
 
     /**
@@ -139,13 +174,13 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             plain: true,
             showSeparator: false,
             items: [{
-                text: 'Alle minimieren',
+                text: me.snippets.minimize_all,
                 iconCls: 'min-all',
                 handler: function() {
                     Shopware.app.WindowManagement.minimizeAll();
                 }
             }, {
-                text: 'Alle schlie&szlig;en',
+                text: me.snippets.close_all,
                 iconCls: 'close-all',
                 handler: function() {
                     Shopware.app.WindowManagement.closeAll();
@@ -165,3 +200,4 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         return windowBtn;
     }
 });
+//{/block}

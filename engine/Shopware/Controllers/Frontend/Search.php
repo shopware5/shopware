@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 {
@@ -380,14 +374,12 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         if (!empty($articles) && count($articles) == 1) {
             $sql = '
                 SELECT ac.articleID
-                FROM s_categories c, s_categories c2,
-                     s_articles_categories ac
-                WHERE c.id=?
-                AND c2.active=1
-                AND c2.left >= c.left
-                AND c2.right <= c.right
-                AND ac.articleID=?
-                AND ac.categoryID=c2.id
+                FROM  s_articles_categories_ro ac
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+                    AND c.id = ?
+                WHERE ac.articleID = ?
                 LIMIT 1
             ';
             $articles = Shopware()->Db()->fetchCol($sql, array(Shopware()->Shop()->get('parentID'), $articles[0]));

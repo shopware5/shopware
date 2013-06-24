@@ -60,16 +60,38 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 		}
     },
 
+    refs: [
+        { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
+        { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
+
+        { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
+        { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
+
+        { ref: 'statisticList', selector: 'article-detail-window article-statistics-list' },
+        { ref: 'statisticChart', selector: 'article-detail-window article-statistics-chart' },
+        { ref: 'statisticTab', selector: 'article-detail-window container[name=statistic-tab]' }
+    ],
+
     /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      *
-     * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
     init:function () {
         var me = this;
+
+        me.subApplication.addEvents('batchStoreLoaded');
+        me.subApplication.on('batchStoreLoaded', me.onBatchStoreLoaded, me);
+
+        // Check if the module is running in split view mode...
+        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+            me.subApplication.splitViewActive = true;
+            Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
+        } else {
+            me.subApplication.splitViewActive = false;
+        }
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
@@ -88,12 +110,28 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * Opens the article detail page.
      * @return Ext.window.Window
      */
-    openMainWindow: function() {
+    openMainWindow: function(newArticle) {
         var me = this;
 
-        me.mainWindow = me.getView('detail.Window').create();
+        newArticle = newArticle || false;
+
+        me.mainWindow = me.getView('detail.Window').create({
+            newArticle: newArticle
+        });
         me.subApplication.setAppWindow(me.mainWindow);
-        me.mainWindow.setLoading(true);
+        me.subApplication.articleWindow = me.mainWindow;
+
+        var tabPanel = me.mainWindow.createMainTabPanel();
+        me.mainWindow.insert(0, tabPanel);
+
+        // Place the module to the right of the visbile screen real estate...
+        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+            me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
+            me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
+            // set initial destroy event
+            me.mainWindow.on('destroy', me.onCloseSplitViewMode, me, { single: true });
+        }
+
         return me.mainWindow;
     },
 
@@ -113,38 +151,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             callback: function(records, operation) {
                 var storeData = records[0];
 
-                //when store has been loaded use the first record as data array to create the required stores
-                if (operation.success === true) {
-                    //prepare the associated stores to use them in the detail page
-                    var stores = me.prepareAssociationStores(storeData);
-                    var article = me.prepareArticleDefaults(storeData, stores);
-                    me.subApplication.article = article;
-
-                    //create the detail window and pass the prepared stores
-                    Ext.apply(me.mainWindow, {
-                        _batchStore: me.batchStore,
-                        article: article,
-                        customerGroupStore: stores['customerGroups'],
-                        shopStore: stores['shops'],
-                        taxStore: stores['taxes'],
-                        attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
-                        attributeFields: stores['attributeFields'],
-                        supplierStore: stores['suppliers'],
-                        templateStore: stores['templates'],
-                        dependencyStore: stores['dependencyStore'],
-                        priceSurchargeStore: stores['priceSurchargeStore'],
-                        unitStore: stores['unit'],
-                        propertyStore: stores['properties'],
-                        priceGroupStore: stores['priceGroups'],
-                        articleConfiguratorSet: stores['articleConfiguratorSet'],
-                        categoryTreeStore: stores['categories'],
-                        configuratorGroupStore: stores['configuratorGroups']
-                    });
-
-                    var tabPanel = me.mainWindow.createMainTabPanel();
-                    me.mainWindow.insert(0, tabPanel);
-                    me.mainWindow.setLoading(false);
-                }
+                me.subApplication.fireEvent('batchStoreLoaded', storeData, operation, false);
             }
         });
     },
@@ -188,42 +195,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             callback: function(records, operation) {
                 var storeData = records[0];
 
-                //when store has been loaded use the first record as data array to create the required stores
-                if (operation.success === true) {
-
-                    //prepare the associated stores to use them in the detail page
-                    var stores = me.prepareAssociationStores(storeData);
-                    var article = storeData.getArticle().first();
-                    me.subApplication.article = article;
-
-                    //create the detail window and pass the prepared stores
-                    Ext.apply(me.mainWindow, {
-                        _batchStore: me.batchStore,
-                        article: article,
-                        customerGroupStore: stores['customerGroups'],
-                        shopStore: stores['shops'],
-                        taxStore: stores['taxes'],
-                        attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
-                        attributeFields: stores['attributeFields'],
-                        supplierStore: stores['suppliers'],
-                        templateStore: stores['templates'],
-                        unitStore: stores['unit'],
-                        propertyStore: stores['properties'],
-                        dependencyStore: stores['dependencyStore'],
-                        priceSurchargeStore: stores['priceSurchargeStore'],
-                        priceGroupStore: stores['priceGroups'],
-                        categoryTreeStore: stores['categories'],
-                        articleConfiguratorSet: stores['articleConfiguratorSet'],
-                        configuratorGroupStore: stores['configuratorGroups']
-                    });
-                    var tabPanel = me.mainWindow.createMainTabPanel();
-                    me.mainWindow.insert(0, tabPanel);
-
-                    me.getController('Detail').loadPropertyStore(article);
-
-                    me.mainWindow.changeTitle();
-                    me.mainWindow.setLoading(false);
-                }
+                me.subApplication.fireEvent('batchStoreLoaded', storeData, operation, true);
             }
         });
     },
@@ -244,7 +216,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             dependencyStore = null, priceSurchargeStore = null,
             article = data.getArticle().first(), articleOptions,
             globalOptions, globalOption,
-            stores = [];
+            stores = [], globalApp = Shopware.app.Application;
 
         var supplierStore = Ext.create('Shopware.store.Supplier', {
             remoteFilter: false
@@ -342,8 +314,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         stores['priceSurchargeStore'] = priceSurchargeStore;
         stores['articleConfiguratorSet'] = articleConfiguratorSet;
 
-        var treeStore = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
-        stores['categories'] = treeStore;
+        stores['categories'] = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
 
         return stores;
     },
@@ -466,7 +437,162 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             name: 'attribute[' + fieldModel.get('name') + ']'
         });
         return field;
-    }
+    },
 
+    /**
+     * Event listener method which will be fired when all stores are loaded.
+     *
+     * The method collects all necessary stores and throws an custom event which
+     * other sub components could register on.
+     *
+     * @param { Array } storeData - The received store data
+     * @param { Array } operation - Ext.data.Operation
+     * @param { Boolean } edit - Truthy if the article was just saved and reloaded, falsy if the article was changed.
+     * @return { void }
+     */
+    onBatchStoreLoaded: function(storeData, operation, edit) {
+        var me = this, stores, article, detailCtrl = me.getController('Detail');
+
+        edit = edit || false;
+
+        //when store has been loaded use the first record as data array to create the required stores
+        if (operation.success === true) {
+
+            //prepare the associated stores to use them in the detail page
+            stores = me.prepareAssociationStores(storeData);
+
+            if(edit) {
+                article = storeData.getArticle().first();
+            } else {
+                article = me.prepareArticleDefaults(storeData, stores);
+            }
+
+            me.subApplication.article = article;
+
+            Ext.apply(me.mainWindow, {
+                article: article,
+                customerGroupStore: stores['customerGroups'],
+                shopStore: stores['shops'],
+                attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
+                attributeFields: stores['attributeFields'],
+                unitStore: stores['unit'],
+                propertyStore: stores['properties'],
+                dependencyStore: stores['dependencyStore'],
+                priceSurchargeStore: stores['priceSurchargeStore'],
+                categoryTreeStore: stores['categories'],
+                articleConfiguratorSet: stores['articleConfiguratorSet'],
+                configuratorGroupStore: stores['configuratorGroups']
+            });
+
+            if(edit) {
+                detailCtrl.loadPropertyStore(article);
+                me.mainWindow.changeTitle();
+            }
+
+            window.setTimeout(function() {
+                me.mainWindow.fireEvent('storesLoaded', article, stores);
+            }, 10);
+        }
+    },
+
+    /**
+     * Event listener method which will be triggered when the user changes the selected product in
+     * the product list module.
+     *
+     * The method checks if the currently openend instance of the product mask is running in split view mode
+     * and reloads the detail store of the selected product
+     *
+     * @param { Enlight.app.SubApplication } subApp - Sub application which triggers the split view, usally
+     *        the product list module
+     * @param { Array } options - Passed options
+     * @returns { Boolean }
+     */
+    onSplitViewStoreChange: function(subApp, options) {
+        var me = this,
+            mainWindow = me.mainWindow,
+            form = mainWindow.detailForm;
+
+        // No article was passed...
+        if(!options.hasOwnProperty('articleId')) {
+            return false;
+        }
+
+        if(!me.subApplication.hasOwnProperty('splitViewActive') || !me.subApplication.splitViewActive) {
+            return false;
+        }
+
+        // Cache the last selected row, so the user will not be
+		// interrupted in the split view mode
+		if(options.hasOwnProperty('selection')) {
+			me.subApplication.lastSelection = options.selection;
+		}
+
+        // Both function calls could throw an error...
+        try {
+            mainWindow.saveButton.setDisabled(true);
+            mainWindow.on('destroy', me.onCloseSplitViewMode, me, { single: true });
+        } catch(err) {  }
+
+        me.detailStore = me.getStore('Detail');
+        me.detailStore.getProxy().extraParams.articleId = options.articleId;
+        me.detailStore.load({
+            callback: function(records) {
+                var article = records[0];
+                me.getController('Detail').reconfigureAssociationComponents(article);
+                mainWindow.changeTitle();
+                mainWindow.saveButton.setDisabled(false);
+
+
+                var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
+                variantStore.getProxy().extraParams.articleId = options.articleId;
+                me.getVariantListing().reconfigure(variantStore);
+                me.getVariantTab().setDisabled(true);
+
+                if(me.getEsdTab().tab.active) {
+                    //only reload the esd if the tab is activated
+                    me.getEsdListing().getStore().load();
+                }
+                me.getController('Esd').resetToList();
+
+                var statisticList = me.getStatisticList();
+                if(me.getStatisticTab().tab.active) {
+                    var statisticListStore = statisticList.getStore(),
+                        statisticChartStore = me.getStatisticChart().getStore();
+
+                    //set the new article id to the extra params
+                    statisticListStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.articleId = options.articleId;
+                    statisticChartStore.getProxy().extraParams.chart = true;
+
+                    //only reload the statistic if the tab is activated
+                    //reload the list and the chart store
+                    statisticListStore.load();
+                    statisticChartStore.load();
+                }
+                statisticList.fromDate.setValue(statisticList.fromDate.initialConfig.value);
+                statisticList.toDate.setValue(statisticList.toDate.initialConfig.value);
+
+                /**
+                 * Fire the event within the subApplication in order to prevent problems when
+                 * applying the scope on callback functions
+                 */
+                me.subApplication.fireEvent('ProductModule:storesChanged', me.mainWindow.article);
+
+
+            }
+        });
+    },
+
+    /**
+     * Event listener method which will be triggered when the product mask module
+     * will be closed.
+     *
+     * @return { void }
+     */
+    onCloseSplitViewMode: function() {
+        this.subApplication.splitViewActive = false;
+        Shopware.app.Application.un('moduleConnector:splitView', this.onSplitViewStoreChange, this);
+        Shopware.app.Application.fireEvent('moduleConnector:splitViewClose', this);
+    }
 });
 //{/block}

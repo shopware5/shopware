@@ -52,6 +52,10 @@ Ext.define('Shopware.apps.Systeminfo', {
 	* @string
 	*/
     loadPath : '{url controller="systeminfo" action=load}',
+    /**
+     * Enable bulk loading
+     * @boolean
+     */
     bulkLoad: true,
 
     /**
@@ -74,7 +78,7 @@ Ext.define('Shopware.apps.Systeminfo', {
 	* Requires controllers for sub-application
 	* @array
 	*/
-    controllers : [ 'Main', 'Systeminfo' ],
+    controllers : [ 'Systeminfo', 'Main' ],
         /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

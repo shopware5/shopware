@@ -118,9 +118,8 @@ class Shopware_Install_Database
         } catch(PDOException $e) { }
 
         try {
-            $sql = "SHOW VARIABLES LIKE 'have_innodb';";
-            $result = $this->database->query($sql)->fetchColumn(1);
-            if($result != 'YES') {
+            $hasEngineSupport = $this->hasStorageEngine('InnoDB');
+            if (!$hasEngineSupport) {
                 $this->setError("Database-Error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
             }
@@ -221,5 +220,27 @@ class Shopware_Install_Database
 
     public function writeDatabaseConfig(){
 
+    }
+
+    /**
+     * Is given MySQL storage engine available?
+     *
+     * @param string $engineName
+     * @return bool
+     */
+    public function hasStorageEngine($engineName)
+    {
+        $sql = 'SHOW ENGINES;';
+        $allEngines = $this->database->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($allEngines as $engine) {
+            if ($engine['Engine'] == $engineName) {
+                $support = $engine['Support'];
+
+                return $support == 'DEFAULT' || $support == 'YES';
+            }
+        }
+
+        return false;
     }
 }

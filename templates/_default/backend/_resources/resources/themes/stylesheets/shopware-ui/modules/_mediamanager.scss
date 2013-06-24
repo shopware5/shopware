@@ -30,6 +30,16 @@
 @mixin shopware-mediamanager {
     .#{$prefix}media-manager-window {
 
+		.small-preview-image {
+			display: inline-block;
+			background: #fff;
+			border: 1px solid #ACBBC6;
+
+			img {
+				display: block;
+			}
+		}
+
         /** Toolbar styling */
         .#{$prefix}toolbar {
         	@include reset-box-shadow;
@@ -83,6 +93,10 @@
 	        	padding: 1px 0;
 		        border-bottom-color: $border-color;
 	        }
+
+			.#{$prefix}panel-body {
+				border-bottom: 0 none;
+			}
 	        
 	        /** Bottom toolbar */
 	        .#{$prefix}toolbar-default-docked-bottom {
@@ -104,6 +118,10 @@
                 }
             }
         }
+
+		.#{$prefix}grid-with-row-lines {
+			border: 0 none !important;
+		}
     }
     
     /** Dataview */
@@ -164,7 +182,11 @@
 		    border-left: 0 none;
 		    border-right: 0 none;
 	    }
-	    
+
+		.#{$prefix}panel-body {
+			border-left: 0 none
+		}
+
 	    input[type=text] {
 		    background: #eef1f4;
 		    color: $font-color;
@@ -294,6 +316,10 @@
                 }
 	        }
 	    }
+
+		.link {
+			color: #009CFF;
+		}
 	
 	    .icon {
 	        background: #EEF1F4;

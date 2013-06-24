@@ -2,7 +2,7 @@
 
 	{* Reviews *}
 	<div class="rating{if !$sUserLoggedIn} full_length{/if}">
-		<div class="star star{$sBasketItem.sVoteAverange.averange*2|round}"></div>
+		<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
 	</div>
 
 	{* Article informations *}

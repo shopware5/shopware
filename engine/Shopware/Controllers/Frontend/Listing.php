@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Listing controller
- *
- * todo@all: Documentation
+ * 
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
@@ -43,6 +36,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+
         $categoryId = $this->Request()->getParam('sCategory');
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
@@ -165,8 +159,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
             'sCategoryContent' => $categoryContent
         ));
-        if (empty($categoryContent["hideFilter"])) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId);
+
+        if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
+            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, null);
         }
 
         if(!empty($articleProperties['filterOptions'])) {
@@ -179,6 +174,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
+     * Helper function which checks the configuration for listing filters.
+     * @return boolean
+     */
+    protected function displayFiltersInListing()
+    {
+        return Shopware()->Config()->get('displayFiltersInListings', true);
+    }
+
+    /**
      * Returns listing breadcrumb
      *
      * @param int $categoryId
@@ -186,6 +190,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function getBreadcrumb($categoryId)
     {
-        return array_reverse(Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId));
+        $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
+        return array_reverse($breadcrumb);
     }
 }

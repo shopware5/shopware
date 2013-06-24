@@ -96,20 +96,6 @@ class Emotion extends ModelEntity
     private $name;
 
     /**
-     * @var integer $cols
-     *
-     * @ORM\Column(name="cols", type="integer", nullable=false)
-     */
-    private $cols;
-
-    /**
-     * @var integer $rows
-     *
-     * @ORM\Column(name="rows", type="integer", nullable=false)
-     */
-    private $rows;
-
-    /**
      * Id of the associated \Shopware\Models\User\User which
      * created this emotion.
      *
@@ -118,20 +104,6 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $userId;
-
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="cell_height", type="integer", nullable=false)
-     */
-    private $cellHeight;
-
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="article_height", type="integer", nullable=false)
-     */
-    private $articleHeight;
 
     /**
      * @var integer $categoryId
@@ -206,14 +178,6 @@ class Emotion extends ModelEntity
     private $createDate;
 
     /**
-     * Contains the template name for this emotion.
-     *
-     * @var string $template
-     * @ORM\Column(name="template", type="string", length=255, nullable=false)
-     */
-    private $template;
-
-    /**
      * Date of the last edit.
      *
      * @var \DateTime $modified
@@ -273,6 +237,32 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="show_listing", type="boolean", nullable=false)
      */
     protected $showListing;
+
+    /**
+     * @var
+     * @ORM\Column(name="grid_id", type="integer", nullable=true)
+     */
+    protected $gridId = null;
+
+    /**
+     * @var
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    protected $templateId = null;
+
+    /**
+     * @var Grid
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Grid", inversedBy="emotions")
+     * @ORM\JoinColumn(name="grid_id", referencedColumnName="id")
+     */
+    protected $grid;
+
+    /**
+     * @var Grid
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     */
+    protected $template;
 
     /**
      * Class constructor.
@@ -409,21 +399,6 @@ class Emotion extends ModelEntity
         return $this->user;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param string $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
 
     /**
      * @return \DateTime
@@ -448,38 +423,6 @@ class Emotion extends ModelEntity
     /**
      * @return int
      */
-    public function getCellHeight()
-    {
-        return $this->cellHeight;
-    }
-
-    /**
-     * @param int $cellHeight
-     */
-    public function setCellHeight($cellHeight)
-    {
-        $this->cellHeight = $cellHeight;
-    }
-
-    /**
-     * @return int
-     */
-    public function getArticleHeight()
-    {
-        return $this->articleHeight;
-    }
-
-    /**
-     * @param int $articleHeight
-     */
-    public function setArticleHeight($articleHeight)
-    {
-        $this->articleHeight = $articleHeight;
-    }
-
-    /**
-     * @return int
-     */
     public function getContainerWidth()
     {
         return $this->containerWidth;
@@ -491,38 +434,6 @@ class Emotion extends ModelEntity
     public function setContainerWidth($containerWidth)
     {
         $this->containerWidth = $containerWidth;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCols()
-    {
-        return $this->cols;
-    }
-
-    /**
-     * @param int $cols
-     */
-    public function setCols($cols)
-    {
-        $this->cols = $cols;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRows()
-    {
-        return $this->rows;
-    }
-
-    /**
-     * @param int $rows
-     */
-    public function setRows($rows)
-    {
-        $this->rows = $rows;
     }
 
     /**
@@ -694,5 +605,37 @@ class Emotion extends ModelEntity
     public function setShowListing($showListing)
     {
         $this->showListing = $showListing;
+    }
+
+    /**
+     * @param \Shopware\Models\Emotion\Grid $grid
+     */
+    public function setGrid($grid)
+    {
+        $this->grid = $grid;
+    }
+
+    /**
+     * @return \Shopware\Models\Emotion\Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
+    }
+
+    /**
+     * @return \Shopware\Models\Emotion\Grid
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param \Shopware\Models\Emotion\Grid $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 }

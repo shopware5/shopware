@@ -46,6 +46,8 @@ Ext.define('Ext.LoadMask-Shopware', {
 
     hideLoadingMsg: false,
 
+    hideModal: false,
+
     bindComponent: function(comp){
         var me = this,
             listeners = {
@@ -127,5 +129,23 @@ Ext.define('Ext.LoadMask-Shopware', {
             this._delayedTask.cancel();
             this._delayedTask = null;
         }
+    },
+
+    show: function() {
+        var me = this;
+
+        // Element support to be deprecated
+        if (this.isElement) {
+            this.ownerCt.mask(this.useMsg ? this.msg : '', this.msgCls);
+            this.fireEvent('show', this);
+
+            if(me.hideModal) {
+                var mask = Ext.get(Ext.getBody().query('.x-mask')[0]);
+                mask.hide();
+            }
+            return;
+        }
+
+        return this.callParent(arguments);
     }
 });

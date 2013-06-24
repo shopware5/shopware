@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.RiskManagement', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'RiskManagement' ],
+    controllers:[ 'RiskManagement', 'Main' ],
 
     /**
      * Required views for controller

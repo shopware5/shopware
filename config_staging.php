@@ -8,13 +8,13 @@ if (file_exists($this->DocPath()."/config.php")){
 
 $stagingConfig = array(
     'db' => array_merge($defaultConfig["db"],array(
-        'dbname' => $defaultConfig["custom"]["staging_database"]
+        'dbname' => $defaultConfig["custom"]["staging_cache_general"]
     )),
     'custom' => array_merge($defaultConfig["custom"],array(
         'is_staging' => true,
     )),
     'cache' => array(
-        'backendOptions' => array("cache_dir"=>$this->DocPath('staging_cache_database')),
+        'backendOptions' => array("cache_dir" => $this->DocPath('staging_cache_general')),
         'frontendOptions' => array()
     ),
     'httpCache' => array(
@@ -25,11 +25,13 @@ $stagingConfig = array(
         'compileDir' => $this->DocPath('staging_cache_templates_compile')
     ),
     'hook' => array(
-        'proxyDir' => $this->AppPath('ProxiesStaging'),
+        'proxyDir' => $this->DocPath('staging_cache_proxies'),
         'proxyNamespace' => $this->App() . '_ProxiesStaging'
     ),
     'model' => array(
-        'proxyDir' => $this->AppPath('ProxiesStaging'),
+        'fileCacheDir'   => $this->DocPath('staging_cache_doctrine_filecache'),
+        'attributeDir'   => $this->DocPath('staging_cache_doctrine_attributes'),
+        'proxyDir'       => $this->DocPath('staging_cache_doctrine_proxies'),
         'proxyNamespace' => $this->App() . '\ProxiesStaging'
     )
 );

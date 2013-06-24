@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Sitemap controller
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 {
@@ -89,32 +82,30 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function readCategoryUrls($parentId)
     {
-        $categories = $this->repository
-            ->getActiveChildrenByIdQuery($parentId)
-            ->getArrayResult();
+        $categories = $this->repository->getActiveChildrenList($parentId);
 
         foreach ($categories as $category) {
-            if(!empty($category['category']['external'])) {
+            if(!empty($category['external'])) {
                 continue;
             }
-	        //use a different link if it is a blog category
-	        if(!empty($category['category']['blog'])) {
-		        $category['link'] = $this->Front()->Router()->assemble(array(
-			        'sViewport' => 'blog',
-			        'sCategory' => $category['category']['id'],
-			        'title' => $category['category']['name']
-		        ));
-	        }
-	        else {
-	            $category['link'] = $this->Front()->Router()->assemble(array(
-	                'sViewport' => 'cat',
-	                'sCategory' => $category['category']['id'],
-	                'title' => $category['category']['name']
-	            ));
-	        }
+
+            //use a different link if it is a blog category
+            if (!empty($category['blog'])) {
+                $category['link'] = $this->Front()->Router()->assemble(array(
+                    'sViewport' => 'blog',
+                    'sCategory' => $category['id'],
+                    'title' => $category['name']
+                ));
+            } else {
+                $category['link'] = $this->Front()->Router()->assemble(array(
+                    'sViewport' => 'cat',
+                    'sCategory' => $category['id'],
+                    'title' => $category['name']
+                ));
+            }
 
             $this->printCategoryUrl(array(
-                'changed' => $category['category']['changed'],
+                'changed' => $category['changed'],
                 'link' => $category['link']
             ));
         }
@@ -149,15 +140,15 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 			SELECT
 				a.id,
 				DATE(a.changetime) as changed
-			FROM s_categories c, s_categories c2, s_articles_categories ac, s_articles a
-			WHERE c.id=?
-	        AND c2.left >= c.left
-	        AND c2.right <= c.right
-	        AND c2.active = 1
-	        AND ac.articleID = a.id
-	        AND ac.categoryID = c2.id
-	        AND a.active=1
-	        GROUP BY a.id
+			FROM s_articles a
+                INNER JOIN s_articles_categories_ro ac
+                    ON  ac.articleID  = a.id
+                    AND ac.categoryID = ?
+                INNER JOIN s_categories c
+                    ON  c.id = ac.categoryID
+                    AND c.active = 1
+			WHERE a.active = 1
+			GROUP BY a.id
 		";
         $result = Shopware()->Db()->query($sql, array($parentId));
         if (!$result->rowCount()) {
@@ -166,7 +157,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         while ($url = $result->fetch()) {
             $url['link'] = $this->Front()->Router()->assemble(array(
                 'sViewport' => 'detail',
-                'sArticle' => $url['id']
+                'sArticle'  => $url['id']
             ));
             $this->printArticleUrls($url);
         }
@@ -186,6 +177,9 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 		foreach($blogCategories as $blogCategory) {
 			$blogIds[] = $blogCategory["id"];
 		}
+        if (empty($blogIds)) {
+            return;
+        }
 		$blogIds = Shopware()->Db()->quote($blogIds);
 
 		$sql = "

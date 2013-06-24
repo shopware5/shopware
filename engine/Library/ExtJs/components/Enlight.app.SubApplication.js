@@ -54,30 +54,6 @@ Ext.define('Enlight.app.SubApplication', {
       */
 
     /**
-      * @cfg { Boolean/Ext.LoadMask } loadMask true to use a Ext.LoadMask while loading dependencies.
-      * Can also accept a config Object of Ext.LoadMask
-      */
-    loadMask          : true,
-    /**
-     * @cfg { Integer } Delay in milliseconds when the loading mask will automatically closed to
-     * continue the work in the backend, even when an runtime error is raised.
-     */
-    loadDelay         : 2500,
-    /**
-      * @cfg { String } loadingCls CSS name(s) to apply to the message div of Ext.LoadMask
-      */
-    loadingCls        : '',
-    /**
-      * @cfg { String } loadingText Text to show in the Ext.LoadMask
-      * todo@all - add snippet here
-      */
-    loadingText       : 'Laden ...',
-    /**
-      * @cfg { Boolean } loadingUseMsg true to show a message in the Ext.LoadMask
-      */
-    loadingUseMsg     : true,
-
-    /**
      * Scope which will be passed to the "beforeLaunch" and "launch" method
      */
     scope             : undefined,
@@ -132,25 +108,11 @@ Ext.define('Enlight.app.SubApplication', {
         config = config || {};
 
         var me          = this,
-            controllers = Ext.Array.from(config.controllers),
-            loadMask     = me.loadMask,
-            cfg;
+            controllers = Ext.Array.from(config.controllers);
 
         me.eventbus = Ext.create('Ext.app.EventBus');
         me.windowManager = Ext.create('Ext.ZIndexManager');
         me.windowManager.multipleSubWindows = me.multipleSubWindows;
-
-        if (loadMask) {
-            cfg = Ext.isObject(loadMask) ? loadMask : {
-                msg    : me.loadingText,
-                msgCls : me.loadingCls,
-                useMsg : me.loadingUseMsg,
-                delay  : me.loadDelay,
-                autoShow: true
-            };
-
-            me.loadMask =  Ext.create('Ext.LoadMask', Ext.getBody(), cfg);
-        }
 
         Ext.apply(config, {
             documentHead : Ext.getHead(),
@@ -165,7 +127,6 @@ Ext.define('Enlight.app.SubApplication', {
             windowManager  : me.windowManager
         });
         me.callParent(arguments);
-        me.init();
     },
 
     /**
@@ -176,6 +137,8 @@ Ext.define('Enlight.app.SubApplication', {
      */
     init: function() {
         var me = this;
+
+        Shopware.app.Application.fireEvent('subAppLoaded', me);
         me.onBeforeLaunch();
     },
 
@@ -188,7 +151,6 @@ Ext.define('Enlight.app.SubApplication', {
      * @return [object] instance of the added controller.
      */
     addController: function(controller, skipInit) {
-
         var me = this,
             app = me.app,
             controllers = me.controllers,
@@ -290,7 +252,6 @@ Ext.define('Enlight.app.SubApplication', {
             app         = me.app,
             controllers = me.appControllers,
             windowManager = me.windowManager,
-            loadMask    = me.loadMask,
             controller, cmp;
 
 
@@ -319,11 +280,11 @@ Ext.define('Enlight.app.SubApplication', {
             me.addSubApplication(me);
         }
 
-        me.beforeLaunch.call(me.scope || me);
-
-        if (loadMask) {
-            loadMask.hide();
+        if(Shopware.app.Application.moduleLoadMask) {
+            Shopware.app.Application.moduleLoadMask.hide();
         }
+
+        me.beforeLaunch.call(me.scope || me);
 
         cmp = me.launch.call(me.scope || me);
         if (cmp) {
@@ -461,13 +422,17 @@ Ext.define('Enlight.app.SubApplication', {
      * the event directly to the component (or it's HTML DOM elements).
      *
      * @public
-     * @param [object] selectors - Selectors to bind events on it
-     * @param [object] listeners - Associated event listeners for the selectors
-     * @param [string] controller - Name of the associated controller to catch the events there
-     * @return void
+     * @param { Object } selectors - Selectors to bind events on it
+     * @param { Object } listeners - Associated event listeners for the selectors
+     * @param { String } controller - Name of the associated controller to catch the events there
+     * @return { void|Boolean }
      */
     control: function(selectors, listeners, controller) {
-        this.eventbus.control(selectors, listeners, controller);
+        if(this.hasOwnProperty('eventbus') && this.eventbus) {
+            this.eventbus.control(selectors, listeners, controller);
+        } else {
+            return false;
+        }
     },
 
     /**
@@ -506,74 +471,48 @@ Ext.define('Enlight.app.SubApplication', {
         win.mainWindow = true;
         me.windowManager.bringToFront(win);
         return me.windowManager.mainWindow = win;
-    },
-
-    /**
-     * Loads the components (stores, views, models, controllers) for the sub application,
-     * creates them on demand, binds them to the sub application and modifies the Ext.Loader
-     * to terminates the correct loading path for the components.
-     *
-     * @private
-     * @param [string] cls - Class name
-     * @param [object] data - additional parameters
-     * @param [object] hooks - additional hooks or the scope to add the components (based on caller).
-     * @return void
-     */
-    onClassExtended: function(cls, data, hooks) {
-        var className = Ext.getClassName(cls),
-            match = className.match(/^(.*)\.controller\.|(.*)\.apps\./),
-            onBeforeClassCreated,
-            requires,
-            modules,
-            prefix;
-
-
-        if (match !== null) {
-            onBeforeClassCreated = hooks.onBeforeCreated;
-            requires = [];
-            modules = ['model', 'view', 'store', 'controller'];
-
-            hooks.onBeforeCreated = function(cls, data) {
-                var i, ln, module,
-                    items, j, subLn, item;
-
-                if(data.name === undefined) {
-                    data.name = className;
-                }
-
-                if(data.loadPath !== undefined) {
-                    Ext.Loader.setPath(data.name, data.loadPath, '', data.bulkLoad);
-                }
-
-                for (i = 0,ln = modules.length; i < ln; i++) {
-                    module = modules[i];
-                    
-
-                    items = Ext.Array.from(data[module + 's']);
-
-                    for (j = 0,subLn = items.length; j < subLn; j++) {
-                        item = items[j];   
-
-                        // we check the ClassManager here because the following
-                        // logic assumes a specific organization of folders
-                        
-                        if(!Ext.isIE) {
-	                        if (Ext.ClassManager.isCreated(item)) {
-	                            continue;
-	                        }
-                        }
-
-                        prefix = Ext.Loader.getPrefix(item);
-                        if (prefix === '' || prefix === item) {
-                            requires.push(data.name + '.' + module + '.' + item);
-                        } else {
-                            requires.push(item);
-                        }
-                    }
-                }
-
-                Ext.require(requires, Ext.Function.pass(onBeforeClassCreated, arguments, this));
-            };
-        }
     }
 });
+
+Ext.Class.registerPreprocessor('shopware.subappLoader', function(cls, data, hooks, fn) {
+    var className = Ext.getClassName(cls),
+        match = className.match(/^(Shopware|Enlight)\.controller\.|(.*)\.apps\./),
+        requires = [],
+        modules = ['model', 'view', 'store', 'controller'],
+        prefix;
+
+    if (!data.hasOwnProperty('extend') || data.extend.prototype.$className != 'Enlight.app.SubApplication' || match === null) {
+        return true;
+    }
+
+    var i, ln, module,
+        items, j, subLn, item;
+
+    if(data.name === undefined) {
+        data.name = className;
+    }
+
+    if(data.loadPath !== undefined) {
+        Ext.Loader.setPath(data.name, data.loadPath, '', data.bulkLoad);
+    }
+
+    for (i = 0,ln = modules.length; i < ln; i++) {
+        module = modules[i];
+
+
+        items = Ext.Array.from(data[module + 's']);
+
+        for (j = 0,subLn = items.length; j < subLn; j++) {
+            item = items[j];
+
+            prefix = Ext.Loader.getPrefix(item);
+            if (prefix === '' || prefix === item) {
+                requires.push(data.name + '.' + module + '.' + item);
+            } else {
+                requires.push(item);
+            }
+        }
+    }
+    Ext.require(requires, Ext.pass(fn, [cls, data, hooks], this));
+    return false;
+}, true, 'after', 'loader');

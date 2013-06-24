@@ -45,29 +45,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
 	extend: 'Ext.app.Controller',
 
     /**
-     * Required stores for controller
-     * @array
-     */
-	stores: [ 'Rules' ],
-
-    /**
-     * Required models for controller
-     * @array
-     */
-	models: [ 'Rules'],
-
-    /**
-     * Required views for controller
-     *
-     * The views are categorizied. All views which had the prefix "base" are basic components which
-     * are visible in all places of the application, all other components are responsible for the
-     * different parts of the module.
-     *
-     * @array
-     */
-    views: [ 'rules.Tree', 'rules.Add' ],
-
-    /**
      * Holder property which saves the instance of the application
      * window for later usage
      *

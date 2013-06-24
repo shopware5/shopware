@@ -29,22 +29,10 @@
 
     <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
 
-    <target name="build-truncate-changelog">
-        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/dbdeploy.truncate.sql">
-            <arg value="-u${db.user}"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
-            <arg value="--default-character-set=utf8"/>
-            <arg value="${db.name}"/>
-        </exec>
-    </target>
-
     <target name="build-database">
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
-            <fileset file="${build.dir}/scripts/dbdeploy.install.sql"/>
-            <fileset file="${sql.dir}/demo/latest.sql"/>
-            <fileset file="${build.dir}/scripts/deploy.demo.sql"/>
+            <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 
@@ -66,27 +54,42 @@
         <delete file="${build.dir}/scripts/deploy.sql"/>
 
         <antcall target="build-database-deploy"/>
+        <antcall target="build-demodata-deploy"/>
     </target>
 
-    <target name="build-database-deploy">
-        <exec dir="${build.dir}" executable="${script.phing}">
-            <arg line="-f build-db.xml" />
-            <arg line="-Ddb.user=${db.user}" />
-            <arg line="-Ddb.password=${db.password}" />
-            <arg line="-Ddb.name=${db.name}" />
-            <arg line="-Ddb.host=${db.host}" />
-            <arg line="-Ddelta.dir=${delta.dir}" />
-            <arg line="-Ddb.deploy.file=${db.deploy.file}" />
-            <arg line="-Ddb.undo.file=${db.undo.file}" />
-            <arg line="build-deltas" />
-        </exec>
+    <target name="build-demodata-deploy">
+        <concat destfile="${build.dir}/scripts/demo.template.sql">
+            <fileset file="${sql.dir}/demo/next.sql"/>
+            <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
+        </concat>
 
-        <exec executable="${script.mysql}" failonerror="true" input="${db.deploy.file}">
+        <copy file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
+            <filterset>
+                <filter token="database" value="${db.name}"/>
+                <filter token="host" value="${app.host}"/>
+                <filter token="path" value="${app.path}"/>
+            </filterset>
+        </copy>
+
+        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/demo.deploy.sql">
             <arg value="-u${db.user}"/>
             <arg value="--password=${db.password}"/>
             <arg value="--host=${db.host}"/>
             <arg value="--default-character-set=utf8"/>
             <arg value="${db.name}"/>
+        </exec>
+
+        <delete file="${build.dir}/scripts/demo.template.sql"/>
+        <delete file="${build.dir}/scripts/demo.deploy.sql"/>
+    </target>
+
+    <target name="build-database-deploy">
+        <exec executable="php" failonerror="true">
+            <arg value="${build.dir}/ApplyDeltas.php"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--username=${db.user}"/>
+            <arg value="--dbname=${db.name}"/>
         </exec>
     </target>
 
@@ -95,13 +98,13 @@
             <arg value="-R"/>
             <arg value="0777"/>
             <arg value="${cache.dir}/templates/"/>
-            <arg value="${cache.dir}/database/"/>
+            <arg value="${cache.dir}/general/"/>
             <arg value="${proxy.dir}"/>
         </exec>
 
         <delete includeEmptyDirs="true">
             <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
-            <fileset dir="${cache.dir}/database/" includes="**/*"/>
+            <fileset dir="${cache.dir}/general/" includes="**/*"/>
             <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
             <fileset dir="${proxy.dir}" includes="**/*.*"/>
         </delete>

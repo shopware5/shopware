@@ -5,22 +5,27 @@
 // mPDF will look here before looking in the usual _MPDF_TTFONTPATH
 // Useful if you already have a folder for your fonts
 // e.g. on Windows: define("_MPDF_SYSTEM_TTFONTS", 'C:/Windows/Fonts/');
+// Leave undefined if not required
 
-//define("_MPDF_SYSTEM_TTFONTS", 'C:/Windows/Fonts/');
+// define("_MPDF_SYSTEM_TTFONTS", '');
 
-// Optionally set a font (defined below in $this->fontdata) to use for missing characters
-// when using useSubstitutionsMB. Use a font like Arial Unicode MS if available
+
+// Optionally set font(s) (names as defined below in $this->fontdata) to use for missing characters
+// when using useSubstitutions. Use a font with wide coverage - dejavusanscondensed is a good start
 // only works using subsets (otherwise would add very large file)
-// doesn't do Indic, arabic, or CJK
+// doesn't do Indic or arabic
+// More than 1 font can be specified but each will add to the processing time of the script
 
-//$this->backupSubsFont = 'arialunicodems';
+$this->backupSubsFont = array('dejavusanscondensed');
 
-// Optional set a font (defined below in $this->fontdata) to use for CJK characters
-// in Plane 2 Unicode (> U+20000) when using useSubstitutionsMB. 
-// Use a font like hannomb or sunextb if available
+
+// Optionally set a font (name as defined below in $this->fontdata) to use for CJK characters
+// in Plane 2 Unicode (> U+20000) when using useSubstitutions. 
+// Use a font like hannomb or sun-extb if available
 // only works using subsets (otherwise would add very large file)
+// Leave undefined or blank if not not required
 
-//$this->backupSIPFont = 'hannomb';
+// $this->backupSIPFont = 'sun-extb';
 
 
 /*
@@ -35,7 +40,6 @@ You can also use it to define specific substitutions e.g.
 'frutiger55roman' => 'arial'
 Generic substitutions (i.e. to a sans-serif or serif font) are set 
 by including the font-family in $this->sans_fonts below
-
 To aid backwards compatability some are included:
 */
 $this->fonttrans = array(
@@ -47,7 +51,6 @@ $this->fonttrans = array(
 	'comic' => 'arial',
 	'franklin' => 'arial',
 	'albertus' => 'arial',
-
 	'arialuni' => 'arial',
 	'zn_hannom_a' => 'arial',
 	'ocr-b' => 'ocrb',
@@ -55,18 +58,16 @@ $this->fonttrans = array(
 );
 
 /*
-This array lists the file names of the TrueType .ttf font files
+This array lists the file names of the TrueType .ttf or .otf font files
 for each variant of the (internal mPDF) font-family name.
 ['R'] = Regular (Normal), others are Bold, Italic, and Bold-Italic
 Each entry must contain an ['R'] entry, but others are optional.
 Only the font (files) entered here will be available to use in mPDF.
-Put preferred default first in order
+Put preferred default first in order.
 This will be used if a named font cannot be found in any of 
 $this->sans_fonts, $this->serif_fonts or $this->mono_fonts
-['cjk'] = true; for those fonts which are primarily CJK characters (not Pan-Unicode fonts)
-['indic'] = true; for special fonts containing Indic characters
-['sip'] = true; for fonts using Unicode Supplemental Ideographic Plane (2)
-	e.g. Chinese characters in the HKCS extension
+
+['indic'] = true; for special mPDF fonts containing Indic characters
 ['sip-ext'] = 'hannomb'; name a related font file containing SIP characters
 
 If a .ttc TrueType collection file is referenced, the number of the font
@@ -123,6 +124,15 @@ $this->fontdata = array(
 );
 
 
+// Add fonts to this array if they contain characters in the SIP or SMP Unicode planes
+// but you do not require them. This allows a more efficient form of subsetting to be used.
+$this->BMPonly = array(
+	"dejavusanscondensed",
+	"dejavusans",
+	"dejavuserifcondensed",
+	"dejavuserif",
+	"dejavusansmono",
+	);
 
 // These next 3 arrays do two things:
 // 1. If a font referred to in HTML/CSS is not available to mPDF, these arrays will determine whether

@@ -34,7 +34,7 @@ $default-index: 10000;
     @include single-box-shadow;
 
     position: fixed;
-    top: 60px; right: 5px;
+    top: 60px;
     z-index: $default-index;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -156,18 +156,19 @@ $default-index: 10000;
 /*	GROWL LIKE MESSAGE	
 	-------------------------------------------- */
 .growl-msg {
-	@include single-box-shadow($font-color, 0, 0, 5px);
-	@include border-radius(3px);
     @include single-transition(opacity, 0.2s);
 	@include opacity(0);
 	position: fixed;
 	top: 50px;
-	right: 10px;
 	z-index: 99999;
-	border: 1px solid #000;
-	background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
-	min-width: 300px;
-	max-width: 400px;
+	width: 300px;
+
+	& > .#{$prefix}panel-body {
+		@include border-radius(3px);
+		@include single-box-shadow($font-color, 0, 0, 5px);
+		background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
+		border: 1px solid #000;
+	}
 	
 	.alert {
 		@include border-radius(3px);
@@ -181,4 +182,48 @@ $default-index: 10000;
     a { color: #fff; text-shadow: 0 1px 0 #000; text-decoration: underline }
 	
 	.title { font-weight: bold; margin: 0 0 4px }
+}
+/*	GROWL STICKY NOTIFICATION
+	-------------------------------------------- */
+.growl-msg-sticky-notification > .#{$prefix}panel-body {
+	@include inner-border(1px 1px 0 1px, #53585c);
+}
+.growl-msg-sticky-notification {
+	display: block;
+
+	.alert {
+		-webkit-box-shadow: 0 0 0 transparent;
+		-moz-box-shadow: 0 0 0 transparent;
+		box-shadow: 0 0 0 transparent;
+	}
+
+	.growl-msg-btn-content {
+		padding: 8px 12px 8px 0;
+	}
+
+	.#{$prefix}btn-growl-sticky-small {
+		@include border-radius(3px);
+		@include inner-border(1px 1px 0 1px, #53585c);
+		@include box-shadow(0 1px 1px #5b5b5b);
+		@include filter-gradient(#4c4c4c, #242424, vertical);
+		@include background-image(linear-gradient(top, #4c4c4c 0%,#242424 100%));
+
+		background-color: #4c4c4c;
+		display: block;
+		padding: 4px 10px;
+		border: 1px solid #000;
+		margin: 0 2px 4px;
+
+		&:hover {
+			@include filter-gradient(#242424, #4c4c4c, vertical);
+			@include background-image(linear-gradient(top, #242424 0%,#4c4c4c 100%));
+		}
+	}
+
+	.#{$prefix}btn-growl-sticky-small button {
+		color: #fff;
+		text-shadow: 0 1px 0 #000;
+		font-size: 9px;
+		font-weight: bold;
+	}
 }

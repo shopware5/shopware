@@ -157,7 +157,12 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                 labelWidth: '155px',
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
-            items       : [ this.getLoginFieldset(), this.getApiFieldset(), this.getUserBaseFieldset() ]
+            items : [
+                this.getLoginFieldset(),
+                this.getApiFieldset(),
+                this.getUserBaseFieldset(),
+                this.getUserOptionsFieldset()
+            ]
         });
         return this.formPanel;
     },
@@ -327,7 +332,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                         xtype: 'checkbox',
                         checked: checked,
                         name: 'apiActive',
-                        fieldLabel: '{s name=create_user/checkbox_api}Enabled{/s}',
+                        boxLabel: '{s name=create_user/checkbox_api}Enabled{/s}',
                         anchor: '100%',
                         uncheckedValue: 0,
                         inputValue: 1,
@@ -456,6 +461,63 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                   ]
                  }]
         }
+        );
+    },
+
+    /**
+     * @return
+     */
+    getUserOptionsFieldset: function() {
+        return Ext.create('Ext.form.FieldSet',
+                {
+                    title: 'Benutzerindividuelle Optionen',
+                    bodyPadding : 10,
+                    defaults    : {
+                        labelWidth: '155px',
+                        labelStyle: 'font-weight: 700; text-align: right;'
+                    },
+                    items: [{
+                        // Implementiert das Column Layout
+                        xtype: 'container',
+                        unstyled: true,
+                        layout: 'column',
+                        items: [
+                            {
+                                // Linke Spalte im Column Layout
+                                xtype: 'container',
+                                unstyled: true,
+                                columnWidth: 0.5,
+                                items: [
+                                    {
+                                        xtype: 'checkbox',
+                                        name: 'extendedEditor',
+                                        boxLabel: '{s name=create_user/checkbox_extended_editor}Extended Editor{/s}',
+                                        anchor: '100%',
+                                        uncheckedValue: 0,
+                                        inputValue: 1,
+                                        supportText: '{s name=create_user/checkbox_extended_editor_info}Enable or disable extended editor{/s}'
+                                    },
+                                    {
+                                        xtype: 'checkbox',
+                                        name: 'disabledCache',
+                                        boxLabel: '{s name=create_user/checkbox_disabled_cache}Disabled cache{/s}',
+                                        anchor: '100%',
+                                        uncheckedValue: 0,
+                                        inputValue: 1,
+                                        supportText: '{s name=create_user/checkbox_disabled_cache_info}Enable or disable backend-cache{/s}'
+                                    }
+                                 ]
+                            },
+                            {
+                                // Rechte Spalte im Column Layout
+                                xtype: 'container',
+                                unstyled: true,
+                                columnWidth: 0.5,
+                                items: []
+                            }
+                        ]
+                    }]
+                }
         );
     }
 });

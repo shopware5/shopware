@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
+
 /**
  * Deprecated Shopware Class to provide article export feeds
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class	sExport
+class sExport
 {
 	var $sFeedID;
 	var $sHash;
@@ -553,17 +548,12 @@ class	sExport
 		if(!empty($this->sSettings["categoryID"]))
 		{
 			$sql_add_join[] = "
-				JOIN s_categories c
-					ON c.id = {$this->sSettings["categoryID"]}
-				LEFT JOIN s_categories c2
-					ON c2.left > c.left
-					AND c2.right <= c.right
-				JOIN s_articles_categories act
-					ON act.articleID = a.id
-					AND (
-						act.categoryID = c.id
-						OR act.categoryID = c2.id
-					)
+                INNER JOIN s_articles_categories_ro act
+                    ON  act.articleID = a.id
+                    AND act.categoryID = {$this->sSettings["categoryID"]}
+                INNER JOIN s_categories c
+                    ON  c.id = act.categoryID
+                    AND c.active = 1
 			";
 		}
 		if(empty($this->sSettings["image_filter"]))
@@ -604,12 +594,12 @@ class	sExport
 		if(empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1)
 		{
 
-			$sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
-			$sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
-			$sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
-			$sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
-			$sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
-			$sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
+            $sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
+            $sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
+            $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
+            $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
 		}
 
@@ -625,10 +615,12 @@ class	sExport
 			";
 		}
 
+        $sql_add_article_detail_join_condition ='';
 		if(empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1)
 		{
 			$sql_add_group_by = "a.id";
             $configurator_settings_sql = ", NULL as configurator_settings";
+            $sql_add_article_detail_join_condition = "AND d.kind=1";
 		}
 		elseif($this->sSettings["variant_export"]==2)
 		{
@@ -768,6 +760,7 @@ class	sExport
 			FROM s_articles a
 			INNER JOIN s_articles_details d
 			ON d.articleID = a.id
+			$sql_add_article_detail_join_condition
 			LEFT JOIN s_articles_attributes at
 			ON d.id = at.articledetailsID
 
@@ -790,7 +783,7 @@ class	sExport
 				SELECT articleID
 				FROM
 					s_export_categories as ec,
-					s_articles_categories as ac
+					s_articles_categories_ro as ac
 				WHERE feedID={$this->sFeedID}
 				AND ec.categoryID=ac.categoryID
 				GROUP BY articleID
@@ -1115,7 +1108,7 @@ class	sExport
 			$sql_add_join
 			LEFT JOIN (
 				SELECT dc.dispatchID
-				FROM s_articles_categories ac,
+				FROM s_articles_categories_ro ac,
 				s_premium_dispatch_categories dc
 				WHERE ac.articleID={$basket['articleID']}
 				AND dc.categoryID=ac.categoryID
@@ -1225,7 +1218,7 @@ class	sExport
 
 			LEFT JOIN (
 				SELECT dc.dispatchID
-				FROM s_articles_categories ac,
+				FROM s_articles_categories_ro ac,
 				s_premium_dispatch_categories dc
 				WHERE ac.articleID={$basket['articleID']}
 				AND dc.categoryID=ac.categoryID

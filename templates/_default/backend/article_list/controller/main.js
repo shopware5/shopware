@@ -60,12 +60,22 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         { ref: 'articleGrid', selector: 'articleList-main-grid' }
     ],
 
+    defaultState: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+    },
+
     /**
      * Contains all snippets for the component.
      * @object
      */
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
+        splitViewTitle: '{s name=splitview_title}Split-View{/s}',
+        splitViewText: '{s name=splitview_text}The split view mode has been activated.{/s}',
+        splitViewAlreadyActive: '{s name=split_view_already_active}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}',
         messages: {
             successTitle: '{s name=messages/success}Success{/s}',
             deleteSuccess: '{s name=messages/delete_success}The selected articles have been removed{/s}',
@@ -92,13 +102,23 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 filterVariantsChange: me.onFilterVariantsChanged,
                 deleteArticle: me.onDeleteArticle,
                 deleteMultipleArticles: me.onDeleteMultipleArticles,
-                edit: me.onEdit
+                triggerSplitView: me.onTriggerSplitView,
+                edit: me.onEdit,
+                productchange: me.onProductChange
             }
         });
+
+        Shopware.app.Application.addEvents(
+            'moduleConnector:splitView',
+            'moduleConnector:splitViewClose'
+        );
+        Shopware.app.Application.on('moduleConnector:splitViewClose', me.onCloseSplitView, me);
 
         me.mainWindow = me.getView('main.Window').create({
             articleStore: me.getStore('List').load()
         });
+
+        me.subApplication.articleGrid = me.getArticleGrid();
 
         me.mainWindow.show();
         me.callParent(arguments);
@@ -134,7 +154,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             },
             failure: function() {
                 me.getArticleGrid().setLoading(false);
-            },
+            }
         });
     },
 
@@ -228,6 +248,75 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 grid.setLoading(false);
             }
         });
+    },
+
+    onTriggerSplitView: function(btn, record) {
+        var me = this,
+            mainWindow = me.mainWindow,
+            tmpPosition = mainWindow.getPosition(),
+            position = {
+                x: tmpPosition[0],
+                y: tmpPosition[1] - 40
+            };
+
+        if(!record) {
+            return;
+        }
+
+        // Is a split view already been up and running...
+        if(me.splitViewMode) {
+            Ext.MessageBox.alert(me.snippets.splitViewTitle, me.snippets.splitViewAlreadyActive);
+            return false;
+        }
+
+        // Add inidicator to the class that the split view mode is up and running...
+        if(!me.hasOwnProperty('splitViewMode') || !me.splitViewMode) {
+            me.splitViewMode = true;
+        }
+
+        Shopware.Notification.createGrowlMessage(me.snippets.splitViewTitle, me.snippets.splitViewText);
+
+        // Save the position and the size of the product list
+        me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());
+        me.defaultState = Ext.Object.merge(me.defaultState, position);
+
+        // Prepare the article list
+        mainWindow.sidebarPanel.collapse();
+        mainWindow.setPosition(0,0);
+        mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
+
+        // Open the product module and set it up for the splitview mode
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.Article',
+            action: 'detail',
+            params: {
+                splitViewMode: true,
+                articleId: record.get('articleId')
+            }
+        });
+    },
+
+    onProductChange: function(selection) {
+        var me = this,
+            record = selection[0];
+
+        // No record was selected...
+        if(!record) {
+            return false;
+        }
+
+        Shopware.app.Application.fireEvent('moduleConnector:splitView', me, {
+            articleId: record.get('articleId')
+        });
+    },
+
+    onCloseSplitView: function() {
+        var me = this,
+            mainWindow = me.mainWindow;
+
+        mainWindow.setSize(me.defaultState);
+        mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
+        me.splitViewMode = false;
     }
 });
 //{/block}

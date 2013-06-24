@@ -40,16 +40,16 @@
 Ext.define('Shopware.apps.MediaManager.view.media.View', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.mediamanager-media-view',
-
-    // todo@stp - Remove the styling here
     style: 'background: #fff',
     border: false,
+    bodyBorder: false,
     layout: 'border',
     region: 'center',
     createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
     deleteBtn: null,
+    selectedLayout: 'grid',
 
 	snippets: {
 		noMediaFound: '{s name=noMediaFound}No Media found{/s}',
@@ -99,20 +99,29 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             proxy.extraParams.validTypes = me.setValidTypes();
         }
 
-        // Create the items of the container
-        me.items = [{
-            xtype: 'container',
+        me.cardContainer = Ext.create('Ext.panel.Panel', {
+            layout: 'card',
+            activeItem: 0,
             region: 'center',
-            // todo@stp - Remove the styling here
+            unstyled: true,
             style: 'background: #fff',
-            autoScroll: true,
-            items: [
-        /* {if {acl_is_allowed privilege=upload}} */
-                me.createDropZone(),
-        /* {/if} */
-                me.createMediaView()
-            ]
-        }];
+            items: [{
+                xtype: 'container',
+                style: 'overflow-y: scroll',
+                items: [
+                /* {if {acl_is_allowed privilege=upload}} */
+                    me.createDropZone(),
+                /* {/if} */
+                    me.createMediaView()
+                ]
+            }, {
+                xtype: 'mediamanager-media-grid',
+                mediaStore: me.mediaStore
+            }]
+        });
+
+        // Create the items of the container
+        me.items = [ me.cardContainer ];
 
         if(me.createInfoPanel) {
             var infoPnl = me.createInfoPanel();
@@ -120,7 +129,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
 
         // Add additonal events
-        me.addEvents('editLabel');
+        me.addEvents('editLabel', 'changePreviewSize');
         me.callParent(arguments);
     },
 
@@ -191,7 +200,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         me.dataView = Ext.create('Ext.view.View', {
             itemSelector: '.thumb-wrap',
-            /** TODO@all - Use snippet here */
             emptyText: '<div class="empty-text"><span>'+me.snippets.noMediaFound+'</span></div>',
             multiSelect: multiSelect,
             store: me.mediaStore,
@@ -282,6 +290,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     '</tpl>',
                     '<div class="base-info">',
                         '<p>',
+                            '<strong>Download:</strong>',
+                            '<a class="link" target="_blank" href="{/literal}{url controller=MediaManager action=download}{literal}?mediaId={id}" title="{name}">{name}</a>',
+                        '</p>',
+                        '<p>',
                             '<strong>'+me.snippets.mediaInfo.name+'</strong>',
                             '<input type="text" disabled="disabled" value="{name}" />',
                         '</p>',
@@ -364,23 +376,25 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         me.infoView = Ext.create('Ext.view.View', {
             cls: 'outer-media-info-pnl',
+            border: 0,
+            bodyBorder: false,
             emptyText: me.snippets.noAdditionalInfo,
             tpl: me.createInfoPanelTemplate(),
             itemSelector: '.copy-image-path',
-            region: 'center',
             height: '100%',
+            width: 190,
             renderData: []
         });
 
         me.infoPanel = Ext.create('Ext.panel.Panel', {
             title: me.snippets.moreInfoTitle,
-            layout: 'border',
+            layout: 'fit',
             cls: Ext.baseCSSPrefix + 'more-info',
             style: 'background: #fff',
             collapsible: true,
             autoScroll:true,
             region: 'east',
-            width: 205,
+            width: 210,
             items: [ me.infoView ]
         });
 
@@ -469,6 +483,25 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
 		/* {/if} */
 
+        toolbar.add({
+            showText: true,
+            xtype: 'cycle',
+            prependText: '{s name=toolbar/view}Display as{/s} ',
+            action: 'mediamanager-media-view-layout',
+            menu: {
+                items: [{
+                    text: '{s name=toolbar/view_chart}Grid{/s}',
+                    layout: 'table',
+                    iconCls: 'sprite-application-icon-large'
+                },{
+                    text: '{s name=toolbar/view_table}Table{/s}',
+                    layout: 'grid',
+                    checked: true,
+                    iconCls: 'sprite-application-table'
+                }]
+            }
+        });
+
 		toolbar.add(
 			'->',
 			searchField,
@@ -491,7 +524,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             labelWidth: 110,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
-            width: 198,
+            width: 210,
             listeners: {
                 scope: me,
                 select: me.onChangeMediaQuantity
@@ -512,7 +545,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             displayField: 'name',
             valueField: 'value'
         });
-        pageSize.setValue(me.mediaStore.pageSize);
+        pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
             store: me.mediaStore
@@ -522,6 +555,35 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
+        // Create the data for the preview image size
+        var imageSizeData = [], i = 1;
+        for( ; i < 9; i++) {
+            var size = 16 * i;
+            imageSizeData.push({ value: size, name: size + 'x' + size + 'px' });
+        }
+
+        // Preview image size selection, especially for the list view
+        me.imageSize = Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: 'Preview-Größe',
+            queryMode: 'local',
+            labelWidth: 90,
+            width: 190,
+            hidden: true,
+            displayField: 'name',
+            valueField: 'value',
+            store: Ext.create('Ext.data.Store', {
+                fields: [ 'value', 'name' ],
+                data: imageSizeData
+            }),
+            listeners: {
+                scope: me,
+                change: function(field, newValue, value) {
+                    me.fireEvent('changePreviewSize', field, newValue, value);
+                }
+            }
+        });
+        me.imageSize.setValue(16);
+        toolbar.add(me.imageSize, { xtype: 'tbspacer', width: 6 });
         return toolbar;
 
     },

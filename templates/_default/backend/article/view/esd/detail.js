@@ -78,7 +78,8 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
 
         fileInfo:{
             title: '{s name=esd/detail/fileinfo/title}File-Info{/s}',
-            downloadFile: '{s name=esd/detail/fileinfo/download_file}Download file{/s}'
+            downloadFile: '{s name=esd/detail/fileinfo/download_file}Download file{/s}',
+            noFile: '{s name=esd/detail/fileinfo/no_file}No file choosen{/s}'
         },
 
         fileUpload:{
@@ -227,12 +228,13 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
      * @return [object] generated Ext.XTemplate
      */
     createInfoPanelTemplate: function() {
+        var me = this;
         return new Ext.XTemplate(
             '<tpl for=".">',
             '<tpl if="file">',
             '<p>{literal}<span style="font-weight: bold;">Dateiname:</span> {file}{/literal}</p>',
             '<tpl else>',
-            '<p>No file choosen</p>',
+            '<p>' + me.snippets.fileInfo.noFile + '</p>',
             '</tpl>',
             '</tpl>'
         );

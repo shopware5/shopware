@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     M.Schmaeing
- * @author     $Author$
  */
 
 /**
@@ -36,6 +28,10 @@
  * Frontend Controller for the blog article listing and the detail page.
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 {
@@ -248,7 +244,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         if(empty($blogArticleData) || empty($blogArticleData["active"])) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
         }
-        
+
         // Redirect if category is not available, inactive or external
         /** @var $category \Shopware\Models\Category\Category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
@@ -309,6 +305,22 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         //adding average vote data to the blog article
         $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId);
         $blogArticleData["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
+
+        //count the views of this blog item
+        $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
+        if(!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
+            //update the views count
+            /* @var $blogModel Shopware\Models\Blog\Blog */
+            $blogModel = $this->getRepository()->find($blogArticleId);
+            if($blogModel) {
+                $blogModel->setViews($blogModel->getViews() + 1);
+                Shopware()->Models()->flush($blogModel);
+
+                //save it to the session
+                $visitedBlogItems[] = $blogArticleId;
+                Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+            }
+        }
 
         //generate breadcrumb
         $breadcrumb = $this->getCategoryBreadcrumb($blogArticleData["categoryId"]);

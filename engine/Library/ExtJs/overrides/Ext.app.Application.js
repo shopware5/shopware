@@ -30,6 +30,8 @@
  * @author     $Author$
  */
 
+//{namespace name=backend/index/controller/main}
+
 /**
  * Ext.app.Application
  *
@@ -95,12 +97,58 @@ Ext.override(Ext.app.Application, {
 	 *
 	 * @param subapp
 	 */
-	addSubApplication: function(subapp) {
-
+	addSubApplication: function(subapp, skipInit, fn, showLoadMask) {
+        skipInit = (skipInit === undefined) ? false : true;
 		subapp.app = this;
 
-		this.addController(subapp, true);
+        if(subapp.hasOwnProperty('showLoadMask')) {
+            showLoadMask = subapp.showLoadMask;
+        }
 
-		return subapp;
-	}
+        showLoadMask = (showLoadMask === undefined) ? true : showLoadMask;
+        if(showLoadMask) {
+            this.moduleLoadMask = new Ext.LoadMask(Ext.getBody(), {
+                msg: Ext.String.format('{s name=application/loading}Loading{/s} [0]...', (subapp.localizedName) ? subapp.localizedName : subapp.name),
+                hideModal: true
+            });
+            this.moduleLoadMask.show();
+        }
+
+        fn = fn || Ext.emptyFn;
+        Ext.require(subapp.name, Ext.bind(function() {
+            this.addController(subapp, skipInit);
+            fn(subapp);
+        }, this));
+	},
+
+    /**
+      * Helper method which returns all open windows.
+      *
+      * @private
+      * @param [boolean] deprecated Wheather or not to include Shopware.apps.Deprecated.view.main.Window in the listing
+      * @return [array] active windows
+      */
+    getActiveWindows: function(deprecated) {
+        var activeWindows = [];
+
+        if (deprecated === undefined) {
+            deprecated = true;
+        }
+
+        Ext.each(Ext.WindowManager.zIndexStack, function (item) {
+            if (typeof(item) !== 'undefined') {
+                var className = item.$className;
+                if ((className == 'Ext.window.Window' || className == 'Enlight.app.Window' || className == 'Ext.Window' || (deprecated && className == 'Shopware.apps.Deprecated.view.main.Window')) && className != "Ext.window.MessageBox") {
+                    activeWindows.push(item);
+                }
+
+                className = item.alternateClassName;
+                if ((className == 'Ext.window.Window' || className == 'Enlight.app.Window' || className == 'Ext.Window' || (deprecated && className == 'Shopware.apps.Deprecated.view.main.Window')) && className != "Ext.window.MessageBox") {
+                    activeWindows.push(item);
+                }
+            }
+        });
+
+        return activeWindows;
+    }
 });

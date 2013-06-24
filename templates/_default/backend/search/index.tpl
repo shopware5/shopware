@@ -40,13 +40,13 @@
 							<div class="result-container">
 								{foreach $result as $item}
 									<a onclick="openSearchResult('{$group}', {$item.id});return false;" href="#"{if $item@iteration is odd by 2} class="odd"{/if}>
-										{if $group === 'orders'}{s name="item/order"}Order{/s} - <span class="right">{$item.totalAmount|currency}</span>{/if}{$item.name|truncate:22}
+										{if $group === 'orders'}{s name="item/order"}Order{/s} - <span class="right">{$item.totalAmount|currency}</span>{/if}<span class="name" style="display:inline-block;width: 155px">{$item.name|truncate:60}</span>
 										{if $group === 'articles' && $item.ordernumber}<span class="right">{$item.ordernumber}</span>{/if}
 										
 										{if $item.description}
-											<span class="desc">{$item.description|truncate:35}</span>
+											<span class="desc">{$item.description|truncate:45}</span>
 										{elseif $item.description_long}
-											<span class="desc">{$item.description_long|strip_tags|truncate:35}</span>
+											<span class="desc">{$item.description_long|strip_tags|truncate:45}</span>
 										{/if}
 									</a>
 								{/foreach}

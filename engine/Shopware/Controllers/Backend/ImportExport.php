@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage ImportExport
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
- * @author     Benjamin Cremer
  */
 
 /**
  * Backend Controller for the Import/Export backend module
+ *
+ * @category  Shopware
+ * @package   Shopware\Controllers\Backend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
 {
@@ -261,7 +257,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $convert = new Shopware_Components_Convert_Csv();
         $first   = true;
         $keys    = array();
-        
+
         foreach ($paginator as $row) {
             if ($first) {
                 $first = false;
@@ -657,7 +653,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             LIMIT {$offset},{$limit}
         ";
-        
+
         $stmt = Shopware()->Db()->query($sql);
 
         if ($format === 'csv') {
@@ -1603,7 +1599,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $errors[] = sprintf("Could not load image {$imageData['image']}: %s", $e->getMessage());
                 continue;
             }
-            
+
             $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
             $media = new \Shopware\Models\Media\Media();
@@ -1697,7 +1693,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'success' => true,
             'message' => sprintf("Successfully uploaded %s of %s Images", $total, $counter)
         ));
-        
+
         return;
     }
 
@@ -1844,9 +1840,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'ac_attr6'   => 'attribute_attribute6',
         );
 
-
         $updateData = $this->mapFields($category, $mapping);
-//        $updateData['parent'] = $parent;
+        $updateData['parent'] = $parent;
 
         $attribute = $this->prefixToArray($updateData, 'attribute_');
         if (!empty($attribute)) {
@@ -1858,33 +1853,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (!$categoryModel) {
             $categoryModel = new \Shopware\Models\Category\Category();
             $categoryModel->setPrimaryIdentifier($category['categoryID']);
-//            $this->getManager()->persist($categoryModel);
-            $categoryModel->fromArray($updateData);
-        }else{
-            $categoryModel->fromArray($updateData);
-            return $categoryModel;
+            $this->getManager()->persist($categoryModel);
         }
 
-
-
-        // find a neighbour with less/equal position value
-        if($categoryModel->getPosition() > 0) {
-            $sql = "SELECT id FROM s_categories c WHERE parent=? AND `position` <=? ORDER BY `position` DESC LIMIT 1";
-            $previousId = (int) Shopware()->Db()->fetchOne($sql, array($parent->getId(), $categoryModel->getPosition()));
-        }
-
-        // Use special persister in order to force position to be stored
-        if(!empty($previousId)){
-            /** @var $previous \Shopware\Models\Category\Category */
-            $previous = $categoryRepository->find($previousId);
-            $categoryRepository->persistAsNextSiblingOf($categoryModel, $previous);
-        // Else set current model as first child of its parent
-        } else {
-
-            /** @var $parent \Shopware\Models\Category\Category */
-            $categoryRepository->persistAsFirstChildOf($categoryModel, $parent);
-        }
-
+        $categoryModel->fromArray($updateData);
         return $categoryModel;
     }
 
@@ -3219,7 +3191,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.id as categoryID,
                 c.parent as parentID,
                 c.description,
-                ROUND(c.left - c2.left) as position,
+                c.position,
                 c.metakeywords,
                 c.metadescription,
                 c.cmsheadline,
@@ -3232,10 +3204,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.hidefilter
                 $attributesSelect
             FROM s_categories c
-            LEFT JOIN s_categories_attributes attr ON attr.categoryID = c.id
-            LEFT JOIN s_categories c2 ON c2.id = c.parent
+            LEFT JOIN s_categories_attributes attr
+                ON attr.categoryID = c.id
             WHERE c.id != 1
-            ORDER BY c.left
+            ORDER BY c.parent, c.position
 
              LIMIT {$offset},{$limit}
         ";
@@ -3318,23 +3290,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         Shopware()->Db()->exec($sql);
 
         $sql = "
-                SELECT
-                c.id,
-                (
-                    SELECT COUNT(ac.id)
-                    FROM s_categories c2
-
-                    INNER JOIN s_articles_categories ac
-                    ON ac.categoryID = c2.id
-
-                    WHERE c2.left >= c.left
-                    AND c2.right <= c.right
-                ) as articleCount
-
-                FROM s_categories c
-                HAVING articleCount = 0
-                AND c.id <> 1
-                AND c.id NOT IN (SELECT category_id FROM s_core_shops)
+            SELECT c.id, COUNT(ac.articleID)
+            FROM s_categories c
+                LEFT JOIN s_articles_categories ac
+                    ON ac.categoryID = c.id
+            WHERE c.id != 1
+            AND c.id NOT IN (SELECT category_id FROM s_core_shops)
+            GROUP BY c.id
+            HAVING articleCount = 0
          ";
 
         $emptyCategories = Shopware()->Db()->fetchCol($sql);
@@ -3361,8 +3324,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         Shopware()->Db()->exec("TRUNCATE s_articles_categories");
-        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
-        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
+//        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
+//        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
 
         return $result;
     }

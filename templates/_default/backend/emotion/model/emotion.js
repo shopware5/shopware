@@ -49,13 +49,12 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
     fields: [
 		//{block name="backend/emotion/model/emotion/fields"}{/block}
         { name: 'id', type: 'int' },
+        { name: 'gridId', type: 'int', useNull: true },
+        { name: 'templateId', type: 'int', useNull: true, defaultValue: 1 },
         { name: 'active', type: 'boolean' },
         { name: 'showListing', type: 'boolean' },
         { name: 'name', type: 'string' },
-        { name: 'cols', type: 'int' },
-        { name: 'rows', type: 'int' },
-        { name: 'cellHeight', type: 'int' },
-        { name: 'articleHeight', type: 'int' },
+
         { name: 'containerWidth', type: 'int' },
         { name: 'categoryId', type: 'int', useNull: true },
         { name: 'validFrom', type: 'date', dateFormat: 'd.m.Y', useNull: true },
@@ -78,7 +77,8 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
     ],
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Emotion.model.EmotionElement', name: 'getElements', associationKey: 'elements'},
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Attribute', name: 'getAttributes', associationKey: 'attribute'},
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Grid', name: 'getGrid', associationKey: 'grid' }
         //{  type: 'hasMany', model: 'Shopware.apps.Base.model.Category', name: 'getCategory', associationKey: 'category'}
     ],
     /**

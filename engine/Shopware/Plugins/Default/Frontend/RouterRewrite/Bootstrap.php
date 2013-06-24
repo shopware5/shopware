@@ -32,16 +32,13 @@
 
 /**
  *  Shopware Router Rewrite Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    protected $urlCacheTime = 0,
-        $urlToLower = false,
-        $inquiryId = null,
-        $paths = array(),
-        $urls = array();
+    protected $urlToLower = false;
+    protected $inquiryId = null;
+    protected $paths = array();
+    protected $urls = array();
 
     /**
      * Install plugin method
@@ -67,7 +64,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
         $config = Shopware()->Config();
-        $this->urlCacheTime = $config->routerUrlCache;
         $this->urlToLower = !empty($config->routerToLower);
         $this->inquiryId = $config->inquiryId;
 
@@ -137,70 +133,14 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     protected $shopId, $elementId;
 
     /**
-     * Tests the rewrite cache, and may be re-created them.
+     * @deprecated
+     * This method was moved to the RebuildIndex plugin
      *
-     * @param Enlight_Controller_EventArgs $args
+     * As the subscribed event might have been cached, the callback should not be removed right now
      */
     public function onAfterSendResponse(Enlight_Controller_EventArgs $args)
     {
-        $request = $args->getRequest();
-
-        if ($request->getModuleName() != 'frontend') {
-            return;
-        }
-
-        if (!Shopware()->Bootstrap()->issetResource('Shop')) {
-            return;
-        }
-
-        $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
-        $this->elementId = Shopware()->Db()->fetchOne($sql);
-        $this->shopId = Shopware()->Shop()->getId();
-        $sql = "
-            SELECT v.value
-            FROM s_core_config_elements e, s_core_config_values v
-            WHERE v.element_id=e.id AND e.id=? AND v.shop_id=?
-        ";
-        $cachedTime = Shopware()->Db()->fetchOne($sql, array($this->elementId, $this->shopId));
-        if(!empty($cachedTime)) {
-            $cachedTime = unserialize($cachedTime);
-        }
-        if(empty($cachedTime)) {
-            $cachedTime = '0000-00-00 00:00:00';
-        }
-
-        $cache = (int) Shopware()->Config()->routerCache;
-        $cache = $cache < 360 ? 86400 : $cache;
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
-
-        if (strtotime($cachedTime) < strtotime($currentTime) - $cache) {
-
-            $this->setCachedTime($currentTime);
-
-            $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
-            if ($resultTime === $cachedTime) {
-                $resultTime = $currentTime;
-            }
-            if($resultTime !== $currentTime) {
-                $this->setCachedTime($resultTime);
-            }
-
-            Shopware()->Cache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Shopware_RouterRewrite'));
-        }
-    }
-
-    public function setCachedTime($resultTime)
-    {
-        $sql = '
-            DELETE FROM s_core_config_values
-            WHERE element_id=? AND shop_id=?
-        ';
-        Shopware()->Db()->query($sql, array($this->elementId, $this->shopId));
-        $sql = '
-            INSERT INTO s_core_config_values (element_id, shop_id, value)
-            VALUES (?, ?, ?)
-        ';
-        Shopware()->Db()->query($sql, array($this->elementId, $this->shopId, serialize($resultTime)));
+        return;
     }
 
     /**
@@ -336,18 +276,8 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
 
         $shopId = Shopware()->Shop()->getId();
 
-        if ($this->urlCacheTime > 0) {
-            $id = 'Shopware_RouterRewrite_' . $shopId . '_' . md5($orgPath);
-            $cache = Shopware()->Cache();
-            if (($path = $cache->load($id)) === false) {
-                $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
-                $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
-                $cache->save($path ? : '', $id, array('Shopware_RouterRewrite'), $this->urlCacheTime);
-            }
-        } else {
-            $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
-            $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
-        }
+        $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';
+        $path = Shopware()->Db()->fetchOne($sql, array($orgPath, $shopId));
         if (empty($path)) {
             return null;
         }

@@ -5,7 +5,7 @@
 <link rel="shortcut icon" href="{link file='backend/_resources/images/index/favicon.ico'}" type="image/x-icon"> 
 {* <link rel="stylesheet" type="text/css" href="{link file='engine/backend/css/icons.css'}" /> *}
 <link rel="stylesheet" type="text/css" href="{link file='ExtJs/resources/css/ext-all.css'}" />
-<link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/icon-set.css'}" />
+<link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set.css'}" />
 {/block}
 
 {block name="backend_index_javascript"}

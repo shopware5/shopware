@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 .shopware-ui-main-menu {
-    @include single-box-shadow(rgba(0, 0, 0, .25), 0px, 3px, 2px, 0);
+	border-bottom: 1px solid #a8bfd1;
     position: fixed !important;
 
     .#{$prefix}menu-body {
@@ -114,19 +114,5 @@
             }
         }
         .#{$prefix}menu-item-link, .#{$prefix}menu-item-text { color: #465c6b; }
-    }
-
-    // Menu icons
-    .min-all {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico1.png') no-repeat left center;
-    }
-    .close-all {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico2.png') no-repeat left center;
-    }
-    .among-us {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico3.png') no-repeat left center;
-    }
-    .side-by-side {
-         background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_ico4.png') no-repeat left center;
     }
 }

@@ -140,9 +140,16 @@
                 ed = me.ed,
                 win = btn.up('window'),
                 dataPnl = win.down('.mediamanager-media-view'),
-                dataView = dataPnl.dataView,
-                selModel = dataView.getSelectionModel(),
-                selected = selModel.getSelection();
+                selModel, selected;
+
+            if(dataPnl.selectedLayout === 'grid') {
+                dataPnl = dataPnl.dataView;
+            } else {
+                dataPnl = dataPnl.cardContainer.getLayout().getActiveItem();
+            }
+
+            selModel = dataPnl.getSelectionModel();
+            selected = selModel.getSelection();
 
             // Loop through the selection and add the images to the editor
             Ext.each(selected, function(record) {

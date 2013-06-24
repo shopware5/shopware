@@ -5,11 +5,11 @@
 	
 	{* Breadcrumb *}
 	<div id="breadcrumb" class="detail">
-	
-		<div class="article_overview">
-			<a href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">{s name='DetailNavIndex'}{/s}</a>
-		</div>
-		
+		{if !{config name=disableArticleNavigation}}
+			<div class="article_overview">
+				<a href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">{s name='DetailNavIndex'}{/s}</a>
+			</div>
+		{/if}
 		{if $sShopname}
 			<a href="{url controller='index'}">
 				{$sShopname}

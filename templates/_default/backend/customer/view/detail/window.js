@@ -136,12 +136,18 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.shippingFieldSet.countryCombo.bindStore(stores.getCountryStore);
         me.debitFieldSet.paymentCombo.bindStore(stores.getPaymentStore);
 
-        me.orderGrid.dispatchStore = stores.getDispatchStore;
-        me.orderGrid.orderStatusStore = stores.getOrderStatusStore;
-        me.orderGrid.paymentStore = stores.getPaymentStore;
-        me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
+        if(me.hasOwnProperty('orderGrid')) {
+            me.orderGrid.dispatchStore = stores.getDispatchStore;
+            me.orderGrid.orderStatusStore = stores.getOrderStatusStore;
+            me.orderGrid.paymentStore = stores.getPaymentStore;
+            me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
+        }
         me.detailForm.loadRecord(me.record);
+        var billingComboStateStore = Ext.create('Shopware.store.CountryState'),
+            shippingComboStateStore = Ext.create('Shopware.store.CountryState');
 
+        me.billingFieldSet.countryStateCombo.bindStore(billingComboStateStore);
+        me.shippingFieldSet.countryStateCombo.bindStore(shippingComboStateStore);
 
         if (me.record instanceof Ext.data.Model &&
             me.record.getBilling() instanceof Ext.data.Store &&
@@ -151,14 +157,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
             if(billing.get('countryId')) {
                 
-                me.billingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = billing.get('countryId');
-                me.billingFieldSet.countryStateCombo.getStore().load({
+                billingComboStateStore.getProxy().extraParams.countryId = billing.get('countryId');
+                billingComboStateStore.load({
                     callback: function() {
                         if(billing.get('stateId')) {
                             me.billingFieldSet.countryStateCombo.setValue(billing.get('stateId'));
+                            me.billingFieldSet.countryStateCombo.show();
                         }
                         else {
                             me.billingFieldSet.countryStateCombo.setValue(null);
+                            me.billingFieldSet.countryStateCombo.hide();
                             billing.set('stateId',null);
                         }
                     }
@@ -176,15 +184,17 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             shipping = me.record.getShipping().first();
 
             if(shipping.get('countryId')) {
-                me.shippingFieldSet.countryStateCombo.getStore().getProxy().extraParams.countryId = shipping.get('countryId');
-                me.shippingFieldSet.countryStateCombo.getStore().load({
+                shippingComboStateStore.getProxy().extraParams.countryId = shipping.get('countryId');
+                shippingComboStateStore.load({
                     callback: function() {
                         me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
                         if(shipping.get('stateId')) {
                             me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
+                            me.shippingFieldSet.countryStateCombo.show();
                         }
                         else {
                             me.shippingFieldSet.countryStateCombo.setValue(null);
+                            me.shippingFieldSet.countryStateCombo.hide();
                             shipping.set('stateId',null);
                         }
                     }
@@ -247,12 +257,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      */
     getTabs:function () {
         var me = this,
-            form = me.createFormTab(),
-            order = me.createOrderTab();
+            form = me.createFormTab();
 
         if ( me.record.get('id') ) {
             /*{if {acl_is_allowed resource=order privilege=read}}*/
-                return [ form, order ];
+                return [ form, me.createOrderTab() ];
             /*{else}*/
                 return [ form ];
             /*{/if}*/

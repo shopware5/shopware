@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required views for this sub-application
      * @array
      */
-    views: [ 'album.Add', 'album.Setting', 'album.Tree', 'main.Selection', 'main.Window', 'media.View'],
+    views: [ 'album.Add', 'album.Setting', 'album.Tree', 'main.Selection', 'main.Window', 'media.View', 'media.Grid'],
     /**
      * Required stores for sub-application
      * @array

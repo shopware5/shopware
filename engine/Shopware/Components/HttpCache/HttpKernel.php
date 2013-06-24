@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,32 +20,28 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_HttpCache
- * @subpackage HttpCache
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Components\HttpCache;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Enlight_Controller_Response_ResponseHttp as ControllerResponse,
-    Enlight_Controller_Request_RequestHttp as ControllerRequest;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpFoundation\Cookie;
+use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
+use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 
 /**
  * Shopware Application
  *
- * todo@all: Documentation
  * <code>
  * $httpCacheKernel = new Shopware\Components\HttpCache\HttpKernel($app);
  * $httpCacheKernel->handle($request);
  * </code>
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\HttpCache
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class HttpKernel implements HttpKernelInterface
 {
@@ -63,12 +59,12 @@ class HttpKernel implements HttpKernelInterface
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param int $type
-     * @param bool $catch
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  int                                        $type
+     * @param  bool                                       $catch
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
+    public function handle(SymfonyRequest $request, $type = self::MASTER_REQUEST, $catch = true)
     {
         $front = $this->app->Front();
         $front->returnResponse(true);
@@ -76,65 +72,80 @@ class HttpKernel implements HttpKernelInterface
 
         $request->headers->set('Surrogate-Capability', 'shopware="ESI/1.0"');
 
-        $request = $this->createRequest($request);
+        $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
-        if($front->Request() === null) {
+        if ($front->Request() === null) {
             $front->setRequest($request);
             $response = $front->dispatch();
         } else {
             $dispatcher = clone $front->Dispatcher();
             $response = clone $front->Response();
             $response->clearHeaders()
-                ->clearRawHeaders()
-                ->clearBody();
+                     ->clearRawHeaders()
+                     ->clearBody();
+
             $response->setHttpResponseCode(200);
             $request->setDispatched(true);
             $dispatcher->dispatch($request, $response);
         }
 
-        $response = $this->createResponse($response);
+        $response = $this->transformEnlightResponseToSymfonyResponse($response);
 
         return $response;
     }
 
     /**
-     * @param Symfony\Component\HttpFoundation\Request $request
-     * @return \Enlight_Controller_Request_RequestHttp
+     * @param SymfonyRequest $request
+     * @return EnlightRequest
      */
-    public function createRequest(Request $request)
+    public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
     {
+        // Overwrite superglobals with state of the SymfonyRequest
         $request->overrideGlobals();
-        $request = new ControllerRequest(
-            str_replace(" ","+",$request->getUri())
-        );
 
-        $request->setQuery($request->getQuery());
-        return $request;
+        // Create englight request from global state
+        $enlightRequest = new EnlightRequest();
+
+        return $enlightRequest;
     }
 
     /**
-     * @param \Enlight_Controller_Response_ResponseHttp $response
-     * @return Symfony\Component\HttpFoundation\Response
+     * @param EnlightResponse $response
+     * @return SymfonyResponse
      */
-    public function createResponse(ControllerResponse $response)
+    public function transformEnlightResponseToSymfonyResponse(EnlightResponse $response)
     {
         $rawHeaders = $response->getHeaders();
         $headers = array();
-        foreach($rawHeaders as $header) {
-            if(!isset($headers[$header['name']]) || !empty($header['replace'])) {
+        foreach ($rawHeaders as $header) {
+            if (!isset($headers[$header['name']]) || !empty($header['replace'])) {
                 $headers[$header['name']] = array($header['value']);
             } else {
                 $headers[$header['name']][] = $header['value'];
             }
         }
-        //todo@hl Maybe transform to symfony
-        $response->sendCookies();
 
-        return new Response(
+
+        $symfonyResponse = new SymfonyResponse(
             $response->getBody(),
             $response->getHttpResponseCode(),
             $headers
         );
+
+        foreach ($response->getCookies() as $cookieName => $cookieContent) {
+            $sfCookie = new Cookie(
+                $cookieName,
+                $cookieContent['value'],
+                $cookieContent['expire'],
+                $cookieContent['path'],
+                (bool) $cookieContent['secure'],
+                (bool) $cookieContent['httpOnly']
+            );
+
+            $symfonyResponse->headers->setCookie($sfCookie);
+        }
+
+        return $symfonyResponse;
     }
 
     /**

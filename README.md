@@ -39,8 +39,6 @@ In case you wish to contribute to Shopware, fork the master tree rather than clo
 		chmod 755 -R engine/Library/Mpdf/tmp
 		chmod 755 -R engine/Library/Mpdf/ttfontdata
 		chmod 755 -R engine/Shopware/Plugins/Community
-		chmod 755 -R engine/Shopware/Proxies
-		chmod 755 -R engine/Shopware/Models/Attribute
 
 Depending on your server configuration it might be neccesarry to set whole write permissions (777) to the files and folders above.
 Also you can start testing with lower permissions due to security reasons (644 for example), if your php-process can write to

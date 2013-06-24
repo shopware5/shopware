@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,23 +20,19 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
-use Shopware\Components\HttpCache\AppCache,
-    Shopware\Components\HttpCache\HttpKernel,
-    Symfony\Component\HttpFoundation\Request;
+use Shopware\Components\HttpCache\AppCache;
+use Shopware\Components\HttpCache\HttpKernel;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  *
  * Shopware Application
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Bootstrap
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
@@ -60,21 +56,25 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $app = $this->Application();
         $loader = $app->Loader();
 
-        $classMap = $this->Application()->AppPath('Proxies') . 'ClassMap.php';
+
+        $hookOptions = $app->getOption('hook');
+        $proxyDir = rtrim(realpath($hookOptions['proxyDir']), '\\/') . DIRECTORY_SEPARATOR;
+        $classMap = $proxyDir . 'ClassMap_' . \Shopware::REVISION . '.php';
+
         $loader->readClassMap($classMap);
 
         if (($config = $app->getOption('httpCache')) !== null && !empty($config['enabled'])) {
             $loader->registerNamespace('Symfony', 'Symfony/');
             $kernel = new HttpKernel($app);
             $cache = new AppCache($kernel, $config);
-            $cache->handle(
-                Request::createFromGlobals()
-            )->send();
+            $cache->handle(Request::createFromGlobals())
+                  ->send();
         } else {
             /** @var $front Enlight_Controller_Front */
             $front = $this->getResource('Front');
             $front->Response()->setHeader(
-                'Content-Type', 'text/html; charset=' . $front->getParam('charset')
+                'Content-Type',
+                'text/html; charset=' . $front->getParam('charset')
             );
             $front->dispatch();
         }
@@ -123,11 +123,11 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         );
 
         $template->setTemplateDir(array(
-            'custom' => '_local',
-            'local' => '_local',
-            'emotion' => '_default',
-            'default' => '_default',
-            'base' => 'templates',
+            'custom'      => '_local',
+            'local'       => '_local',
+            'emotion'     => '_default',
+            'default'     => '_default',
+            'base'        => 'templates',
             'include_dir' => '.',
         ));
 
@@ -179,17 +179,11 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $shop = $this->getResource('Shop');
 
         $name = 'session-' . $shop->getId();
-        //$path = rtrim($shop->getBasePath(), '/') . '/';
-        //$host = $shop->getHost();
-        //$host = $host === 'localhost' ? null : $host;
-
         $sessionOptions['name'] = $name;
-        //$sessionOptions['cookie_path'] = $path;
-        //$sessionOptions['cookie_domain'] = $host;
 
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
-                'db'			 => $this->getResource('Db'),
+                'db'             => $this->getResource('Db'),
                 'name'           => 's_core_sessions',
                 'primary'        => 'id',
                 'modifiedColumn' => 'modified',
@@ -221,7 +215,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $options = Shopware()->getOption('mail') ? Shopware()->getOption('mail') : array();
         $config = $this->getResource('Config');
 
-        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer!='mail') {
+        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
             $options['type'] = $config->MailerMailer;
         }
         if (empty($options['type'])) {
@@ -254,14 +248,13 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
         if (!Shopware()->Loader()->loadClass($options['type'])) {
             $transportName = ucfirst(strtolower($options['type']));
-            $transportName = 'Zend_Mail_Transport_'.$transportName;
+            $transportName = 'Zend_Mail_Transport_' . $transportName;
         } else {
             $transportName = $options['type'];
         }
         unset($options['type'], $options['charset']);
 
-
-        if ($transportName=='Zend_Mail_Transport_Smtp') {
+        if ($transportName == 'Zend_Mail_Transport_Smtp') {
             $transport = Enlight_Class::Instance($transportName, array($options['host'], $options));
         } elseif (!empty($options)) {
             $transport = Enlight_Class::Instance($transportName, array($options));
@@ -271,7 +264,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {
-            $options['from'] = array('email'=>$config->Mail, 'name'=>$config->Shopname);
+            $options['from'] = array('email' => $config->Mail, 'name' => $config->Shopname);
         }
 
         if (!empty($options['from']['email'])) {
@@ -280,7 +273,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
                 !empty($options['from']['name']) ? $options['from']['name'] : null
             );
         }
-        
+
         if (!empty($options['replyTo']['email'])) {
             Enlight_Components_Mail::setDefaultReplyTo(
                 $options['replyTo']['email'],
@@ -298,8 +291,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initMail()
     {
-        if (!$this->loadResource('Config')
-         || !$this->loadResource('MailTransport')) {
+        if (!$this->loadResource('Config') || !$this->loadResource('MailTransport')) {
             return null;
         }
 
@@ -337,6 +329,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $config['db'] = $this->getResource('Db');
 
         $modelConfig = new Shopware_Components_Config($config);
+
         return $modelConfig;
     }
 
@@ -350,6 +343,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         if (!$this->issetResource('Db')) {
             return null;
         }
+
         return new Shopware_Components_Snippet_Manager();
     }
 
@@ -362,6 +356,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         /** @var $front Enlight_Controller_Front */
         $front = $this->getResource('Front');
+
         return $front->Router();
     }
 
@@ -375,6 +370,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         if (!$this->issetResource('Db')) {
             return null;
         }
+
         return new Shopware_Components_Subscriber();
     }
 
@@ -471,6 +467,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         Zend_Db_Table_Abstract::setDefaultAdapter($this->getResource('Db'));
         Zend_Db_Table_Abstract::setDefaultMetadataCache($this->getResource('Cache'));
+
         return true;
     }
 
@@ -483,8 +480,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         $this->Application()->Loader()
             ->registerNamespace('Doctrine', 'Doctrine/')
-            ->registerNamespace('DoctrineExtensions', 'DoctrineExtensions/')
-            ->registerNamespace('Gedmo', 'Gedmo/')
             ->registerNamespace('Symfony', 'Symfony/');
 
         return true;
@@ -503,7 +498,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             $this->Application()->getOption('Model')
         );
 
-        if($config->getMetadataCacheImpl() === null) {
+        if ($config->getMetadataCacheImpl() === null) {
             $cacheResource = $this->Application()->Cache();
             $config->setCacheResource($cacheResource);
         }
@@ -522,9 +517,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     public function initModelAnnotations()
     {
         $this->loadResource('Models');
+
         return $this->getResource('ModelAnnotations');
     }
-
 
     /**
      * Init doctrine method
@@ -533,7 +528,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initModels()
     {
-       /** @var $config \Shopware\Components\Model\Configuration */
+        /** @var $config \Shopware\Components\Model\Configuration */
         $config = $this->getResource('ModelConfig');
 
         // register standard doctrine annotations
@@ -546,24 +541,25 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             'Symfony\Component\Validator\Constraint'
         );
 
-        // register gedmo annotions
-        Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
-            'Gedmo/Mapping/Annotation/All.php'
-        );
-
         $cachedAnnotationReader = $config->getAnnotationsReader();
 
         $annotationDriver = new Doctrine\ORM\Mapping\Driver\AnnotationDriver(
-            $cachedAnnotationReader, array(
-            $this->Application()->Loader()->isReadable('Gedmo/Tree/Entity/MappedSuperclass'),
-            $this->Application()->AppPath('Models')
-        ));
+            $cachedAnnotationReader,
+            array(
+                $this->Application()->AppPath('Models'),
+                $config->getAttributeDir(),
+            )
+        );
+
+        $this->Application()->Loader()->registerNamespace(
+            'Shopware\Models\Attribute',
+            $config->getAttributeDir()
+        );
 
         // create a driver chain for metadata reading
         $driverChain = new Doctrine\ORM\Mapping\Driver\DriverChain();
 
         // register annotation driver for our application
-        $driverChain->addDriver($annotationDriver, 'Gedmo');
         $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
         $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
 
@@ -574,15 +570,18 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         // Create event Manager
         $eventManager = new \Doctrine\Common\EventManager();
 
-        $treeListener = new Gedmo\Tree\TreeListener;
-        $treeListener->setAnnotationReader($cachedAnnotationReader);
-        $eventManager->addEventSubscriber($treeListener);
-
         // Create new shopware event subscriber to handle the entity lifecycle events.
-        $liveCycleSubscriber = new \Shopware\Components\Model\EventSubscriber(
+        $lifeCycleSubscriber = new \Shopware\Components\Model\EventSubscriber(
             $this->Application()->Events()
         );
-        $eventManager->addEventSubscriber($liveCycleSubscriber);
+        $eventManager->addEventSubscriber($lifeCycleSubscriber);
+
+        $categorySubscriber = new \Shopware\Components\Model\CategorySubscriber();
+        $this->registerResource('CategorySubscriber', $categorySubscriber);
+        $eventManager->addEventSubscriber($categorySubscriber);
+
+        $categoryDenormalization = new \Shopware\Components\Model\CategoryDenormalization($this->Application()->Db()->getConnection());
+        $this->registerResource('CategoryDenormalization', $categoryDenormalization);
 
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
@@ -607,11 +606,12 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             $this->getResource('Template')
         );
         $mailer = new Shopware_Components_TemplateMail();
-        if($this->issetResource('Shop')) {
+        if ($this->issetResource('Shop')) {
             $mailer->setShop($this->getResource('Shop'));
         }
         $mailer->setModelManager($this->getResource('Models'));
         $mailer->setStringCompiler($stringCompiler);
+
         return $mailer;
     }
 }

@@ -72,72 +72,51 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         return $this->manager;
     }
 
-    public function getGroupsAction()
+
+    /**
+     * returns the groups for the sets grids
+     */
+    public function getSetsAction()
     {
-        if ($this->Request()->node !== 'root') {
-            $this->View()->assign(array(
+
+        $limit = intval($this->Request()->limit);
+        $offset = intval($this->Request()->start);
+        $filter = $this->Request()->getParam('filter', array());
+        $query = $this->getPropertyRepository()->getSetsQuery($offset, $limit, $filter);
+        $totalCount = $this->getManager()->getQueryCount($query);
+        $sets = $query->getArrayResult();
+
+        $this->View()->assign(
+            array(
                 'success' => true,
-                'data'    => array(),
-                'total'   => 0,
-            ));
-
-            return;
-        }
-
-        $query = $this->getPropertyRepository()
-                       ->getGroupsQuery();
-
-
-      $groups = $query->getArrayResult();
-
-       $nodes = array();
-
-        foreach ($groups as $group) {
-            $node = array(
-                'id'         => $group['id'],
-                'name'       => $group['name'],
-                'sortMode'   => $group['sortMode'],
-                'position'   => $group['position'],
-                'comparable' => $group['comparable'],
-                'isOption'   => false,
-                'expandable' => true,
-                'attribute' =>  $group['attribute']
-            );
-
-            if (!empty($group['relations'])) {
-                $node['expanded'] = true;
-                $node['data'] = array();
-
-                foreach ($group['relations'] as $relation) {
-
-                    $child = array(
-                        'id'   => $group['id'] . '_' . $relation['option']['id'],
-                        'name' => $relation['option']['name'],
-                        'position' => $relation['position'],
-                        'leaf' => true,
-                        'isOption' => true,
-                    );
-
-                    $node['data'][] = $child;
-                }
-
-
-            } else {
-                $node['leaf']    = false;
-                $node['iconCls'] = 'sprite-blue-folder-horizontal-open';
-            }
-
-            $nodes[] = $node;
-        }
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data'    => $nodes,
-            'total'   => count($nodes),
-        ));
+                'data' => $sets,
+                'total' => $totalCount,
+            )
+        );
     }
 
-    public function createGroupAction()
+
+    /**
+     * returns the groups for the sets grids
+     */
+    public function getSetAssignsAction()
+    {
+        $setId = $this->Request()->getParam('setId');
+
+        $query = $this->getPropertyRepository()->getSetAssignsQuery($setId);
+        $assignments = $query->getArrayResult();
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $assignments,
+                'total' => count($assignments),
+            )
+        );
+    }
+
+
+    public function createSetAction()
     {
         $params = $this->Request()->getPost();
         $params['attribute'] = $params['attribute'][0];
@@ -190,7 +169,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     /**
      * Updates one group identified by its identifier
      */
-    public function updateGroupAction()
+    public function updateSetAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -222,7 +201,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
-    public function deleteGroupAction()
+    public function deleteSetAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -247,27 +226,27 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true));
     }
 
-    public function onAddOptionToGroupAction()
+    public function onAddAssignmentAction()
     {
         if (!($optionId = $this->Request()->getParam('optionId'))) {
             $this->View()->assign(array('success' => false, 'message' => 'OptionId not found'));
             return;
         }
 
-        if (!($groupId = $this->Request()->getParam('groupId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'GroupId not found'));
+        if (!($setId = $this->Request()->getParam('setId'))) {
+            $this->View()->assign(array('success' => false, 'message' => 'SetId not found'));
             return;
         }
 
         /* @var $group Group */
-        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($groupId);
+        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($setId);
         if (!$group) {
             $this->View()->assign(array('success' => false, 'message' => 'Group not found'));
             return;
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
+        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(array('success' => false, 'message' => 'Option not found'));
             return;
@@ -323,20 +302,26 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true));
     }
 
-    public function getOptionsAction()
+    /**
+     * returns all groups(options) for the backend module
+     */
+    public function getGroupsAction()
     {
-        /** @var $repository \Shopware\Components\Model\ModelRepository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Property\Option');
-        $options = $repository->createQueryBuilder('option')->getQuery()->getArrayResult();
+        $limit = intval($this->Request()->limit);
+        $offset = intval($this->Request()->start);
+        $filter = $this->Request()->getParam('filter', array());
+        $query = $this->getPropertyRepository()->getOptionsQuery($offset, $limit, $filter);
+        $totalCount = $this->getManager()->getQueryCount($query);
+        $options = $query->getArrayResult();
 
         $this->View()->assign(array(
            'success' => true,
            'data'    => $options,
-           'total'   => count($options),
+           'total'   => $totalCount,
         ));
     }
 
-    public function createOptionAction()
+    public function createGroupAction()
     {
         $params = $this->Request()->getPost();
 
@@ -358,7 +343,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     /**
      * Updates one option identified by its identifier
      */
-    public function updateOptionAction()
+    public function updateGroupAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -390,7 +375,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      *
      * ALso deletes associated values due to cascade={"remove"})
      */
-    public function deleteOptionAction()
+    public function deleteGroupAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -416,7 +401,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true));
     }
 
-    public function getValuesAction()
+    public function getOptionsAction()
     {
         if (!($optionId = $this->Request()->getParam('optionId'))) {
             $this->View()->assign(array('success' => false, 'message' => 'OptionId not found'));
@@ -436,7 +421,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         ));
     }
 
-    public function createValueAction()
+    public function createOptionAction()
     {
         if (!($optionId = $this->Request()->getParam('optionId'))) {
             $this->View()->assign(array('success' => false, 'message' => 'OptionId not found'));
@@ -444,7 +429,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
+        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(array('success' => false, 'message' => 'Option not found'));
             return;
@@ -465,7 +450,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
-    public function updateValueAction()
+    public function updateOptionAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -495,7 +480,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     /**
      * Deletes one value identified by its identifier
      */
-    public function deleteValueAction()
+    public function deleteOptionAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
             $this->View()->assign(array('success' => false, 'message' => 'Id not found'));
@@ -542,7 +527,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     /**
      * Changes Position of field
      */
-    public function changeValuePositionAction()
+    public function changeOptionPositionAction()
     {
         $data = $this->Request()->getParam('data');
         $positions = json_decode($data);
@@ -557,6 +542,29 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
                ->getQuery()
                ->execute();
         }
+
+        $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * Changes Position of the set assignments
+     */
+    public function changeAssignmentPositionAction()
+    {
+        $data = $this->Request()->getParam('data');
+        $setId = $this->Request()->getParam('setId');
+        $positions = json_decode($data);
+
+        foreach ($positions as $position => $valueId) {
+           $test[] = (array(array("position"=>$position,"optionId"=>$valueId,"groupId"=>$setId)));
+
+            Shopware()->Db()->update(
+                's_filter_relations',
+                array('position' => $position),
+                array('groupID = ?' => $setId, 'optionID = ?' => $valueId)
+            );
+        }
+
 
         $this->View()->assign(array('success' => true));
     }

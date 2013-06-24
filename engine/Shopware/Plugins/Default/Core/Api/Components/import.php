@@ -33,6 +33,17 @@ class sShopwareImport
     protected $categoryRepository = null;
 
     /**
+     * @return \Shopware\Components\Model\CategoryDenormalization
+     */
+    public function getCategoryComponent()
+    {
+        $component = Shopware()->CategoryDenormalization();
+        $component->disableTransactions();
+
+        return $component;
+    }
+
+    /**
      * Internal helper function to get access to the article repository.
      *
      * @return Shopware\Models\Article\Repository
@@ -359,7 +370,7 @@ class sShopwareImport
         if(!empty($article["releasedate"]))
             $article['releasedate'] = $this->sDB->DBDate($article['releasedate']);
         elseif(isset($article['releasedate']))
-            $article['releasedate'] = NULL;
+            $article['releasedate'] = null;
         if(isset($article['shippingfree']))
             $article['shippingfree'] = empty($article['shippingfree']) ? 0 : 1;
 
@@ -424,6 +435,7 @@ class sShopwareImport
 			$article['articleID'] = $row['articleID'];
 
 		}
+
 		// Wir �berpr�fen ob Artikel vorhanden ist, wenn ja holen wir die ArtikelDetailsID
 		if(!empty($article['articledetailsID']))
 			$where = "d.id={$article['articledetailsID']}";
@@ -803,6 +815,8 @@ class sShopwareImport
 			$customer["md5_password"] = md5($customer['password']);
 		if(isset($customer["md5_password"]))
 			$customer["md5_password"] = $this->sDB->qstr($customer['md5_password']);
+		if(isset($customer["encoder"]))
+			$customer["encoder"] = $this->sDB->qstr($customer['encoder']);
 		if(isset($customer["email"]))
 			$customer["email"] = $this->sDB->qstr(trim($customer["email"]));
 		if(isset($customer["customergroup"]))
@@ -860,7 +874,8 @@ class sShopwareImport
 			"paymentpreset",
 			"language",
 			"subshopID",
-			"referer"
+			"referer",
+			"encoder"
 		);
 		if(empty($customer["userID"]))
 		{
@@ -1405,7 +1420,7 @@ class sShopwareImport
 
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-            
+
         }
 
         // set category attributes
@@ -1487,12 +1502,15 @@ class sShopwareImport
 			$price['pseudoprice'] = $price['pseudoprice']/(100+$price['tax'])*100;
 
 		$article = $this->sGetArticleNumbers($price);
-		if(empty($article))
+		if(empty($article)) {
 			return false;
-		if(empty($price['price'])&&empty($price['percent']))
+        }
+		if(empty($price['price'])&&empty($price['percent'])) {
 			return false;
-		if($price['from']<=1 && empty($price['price']))
+        }
+		if($price['from']<=1 && empty($price['price'])) {
 			return false;
+        }
 
         // Delete old price, if pricegroup, articleDetailId and 'from' matches
 		$sql = "
@@ -1523,8 +1541,9 @@ class sShopwareImport
 					articledetailsID = {$article['articledetailsID']}
 			";
 			$price['price'] = $this->sDB->GetOne($sql);
-			if(empty($price['price']))
+			if(empty($price['price'])) {
 				return false;
+			}
 			$price['price'] = $price['price']*(100-$price['percent'])/100;
 		}
 
@@ -1543,8 +1562,9 @@ class sShopwareImport
 				LIMIT 1
 			";
 			$result = $this->sDB->Execute($sql);
-			if(empty($result)||!$this->sDB->Affected_Rows())
+			if(empty($result)||!$this->sDB->Affected_Rows()) {
 				return false;
+			}
 		}
 
 		$sql = "
@@ -1552,10 +1572,12 @@ class sShopwareImport
 			VALUES ({$price['pricegroup']}, {$price['from']}, 'beliebig', {$article['articleID']}, {$article['articledetailsID']}, {$price['price']}, {$price['pseudoprice']}, {$price['baseprice']}, {$price['percent']})
 		";
 		$result = $this->sDB->Execute($sql);
-		if(empty($result))
+		if(empty($result)) {
 			return false;
-		else
+        } else {
 			return $this->sDB->Insert_ID();
+        }
+
 	}
 
 	/**
@@ -2012,67 +2034,46 @@ class sShopwareImport
 	}
 
 	/**
-	 * Einf�gen einer Artikel-Kategorie-Zuordnung
+	 * Einfügen einer Artikel-Kategorie-Zuordnung
 	 *
 	 * @param int $articleID ID des Artikels (s_articles.id)
 	 * @param int $categoryID ID der Kategorie (s_categories.id)
 	 * @access public
 	 * @return array  $inserts Array mit allen eingef�gten IDs aus s_articles_categories
 	 */
-	function sArticleCategory  ($articleID, $categoryID, $setParentCategories=false)
-	{
-		$inserts = array();
-		$categoryID = intval($categoryID);
-		$articleID = intval($articleID);
+    function sArticleCategory($articleID, $categoryID, $setParentCategories = false)
+    {
+        $categoryID = intval($categoryID);
+        $articleID  = intval($articleID);
 
-		if(empty($categoryID)||empty($articleID))
-			return false;
-
-		$categoryparentID = $categoryID;
-		$parentID = $categoryID;
-		$categories = array();
-
-        // Setting all parent categories for a given category is legacy behaviour of the API
-        // it is not recommended for shopware4 and therefore was removed from default behaviour
-        if($setParentCategories) {
-            while ($categoryID!=1 && !empty($categoryID)) {
-                $categories[] = $categoryID;
-                $sql = "SELECT parent FROM s_categories WHERE id=$categoryID";
-                $tmp = $this->sDB->GetOne($sql);
-                $parentID = $categoryID;
-                if (!empty($tmp)){
-                    $categoryID = (int) $tmp;
-                } else {
-                    $categoryID = 1;
-                }
-            }
-            $categories = implode(',', $categories);
-        } else {
-            $categories = $categoryID;
+        if (empty($categoryID) || empty($articleID)) {
+            return false;
         }
 
-
-		$sql = "
+        $sql = "
 			INSERT IGNORE INTO s_articles_categories (articleID, categoryID)
 
 			SELECT $articleID as articleID, c.id as categoryID
 			FROM `s_categories` c
-			WHERE c.id IN ($categories)
+			WHERE c.id IN ($categoryID)
 		";
 
-		if($this->sDB->Execute($sql)===false)
-			return false;
+        if ($this->sDB->Execute($sql) === false) {
+            return false;
+        }
 
-		$sql = "
+        $this->getCategoryComponent()->addAssignment($articleID, $categoryID);
+
+        $sql = "
 			SELECT ac.id
 			FROM `s_articles_categories` ac
-			WHERE ac.categoryID IN ($categories)
+			WHERE ac.categoryID IN ($categoryID)
 			AND ac.articleID=$articleID
 		";
-		$inserts = $this->sDB->GetCol($sql);
+        $inserts = $this->sDB->GetCol($sql);
 
-		return $inserts;
-	}
+        return $inserts;
+    }
 
 	/**
 	 * Einf�gen von Artikel-Kategorie-Zuordnungen f�r mehrere Kategorien gleichzeitig
@@ -2129,8 +2130,8 @@ class sShopwareImport
         if(empty($articleIDs)) {
             return false;
         }
-        
-        
+
+
 		foreach ($relatedarticleIDs as $relatedarticleID)
 		{
 			if(empty($relatedarticleID)) continue;
@@ -2139,7 +2140,7 @@ class sShopwareImport
 				INSERT IGNORE INTO s_articles_relationships (articleID, relatedarticle)
 				VALUES ($articleID, {$articleIDs[$relatedarticleID]['articleID']})
 			";
-            
+
 			$this->sDB->Execute($sql);
 		}
 		return true;
@@ -2333,28 +2334,45 @@ class sShopwareImport
 	 * @param array $categoryIDs
 	 * @return
 	 */
-	function sDeleteOtherArticlesCategories ($articleID, $categoryIDs)
-	{
-		$articleID = intval($articleID);
-		if (empty($articleID))
-			return false;
-		if(!empty($categoryIDs)&&is_array($categoryIDs))
-		{
-			$where =  "AND id!=".implode(" AND id!=",$categoryIDs)."";
-		} elseif (!empty($categoryIDs))	{
-			$where =  "AND id!=".intval($categoryIDs);
-		} else {
-			$where = "";
-		}
-		$sql = "
+    function sDeleteOtherArticlesCategories($articleID, $categoryIDs)
+    {
+        var_dump($categoriesToDelete);
+
+        $articleID = intval($articleID);
+
+        if (empty($articleID)) {
+            return false;
+        }
+
+        if (!empty($categoryIDs) && is_array($categoryIDs)) {
+            $where = "AND id !=" . implode(" AND id!=", $categoryIDs) . "";
+        } elseif (!empty($categoryIDs)) {
+            $where = "AND id !=" . intval($categoryIDs);
+        } else {
+            $where = "";
+        }
+
+        $categoriesToDeleteSql = "SELECT categoryID FROM
+			s_articles_categories
+			WHERE articleID=$articleID $where";
+
+        $categoriesToDelete = $this->sDB->GetCol($categoriesToDeleteSql);
+
+        var_dump($categoriesToDelete);
+
+        $sql = "
 			DELETE FROM
 				s_articles_categories
 			WHERE articleID=$articleID $where
 		";
-		$this->sDB->Execute($sql);
+        $this->sDB->Execute($sql);
+
+        foreach ($categoriesToDelete as $categoryId) {
+            $this->getCategoryComponent()->removeAssignment($articleID, $categoryId);
+        }
 
         return true;
-	}
+    }
 
 	/**
 	 * Deletes not specified categories
@@ -2388,6 +2406,9 @@ class sShopwareImport
 		";
 		$this->sDB->Execute($sql);
 
+        foreach ($categoryIDs as $categoryId) {
+            $this->getCategoryComponent()->removeCategoryAssignmentments($categoryId);
+        }
 
         return true;
 	}
@@ -3169,19 +3190,11 @@ class sShopwareImport
 
         $sql = "
                 SELECT
-                c.id,
-                (
-                    SELECT COUNT(ac.id)
-                    FROM s_categories c2
-
-                    INNER JOIN s_articles_categories ac
-                    ON ac.categoryID = c2.id
-
-                    WHERE c2.left >= c.left
-                    AND c2.right <= c.right
-                ) as articleCount
-
+                c.id, COUNT(ac.id) as articleCount
                 FROM s_categories c
+                    LEFT JOIN s_articles_categories ac
+                        ON ac.categoryID = c.id
+                GROUP BY c.id
                 HAVING articleCount = 0
                 AND c.id <> 1
                 AND c.id NOT IN (SELECT category_id FROM s_core_shops)
@@ -3299,7 +3312,7 @@ class sShopwareImport
 			return false;
 		if(empty($data))
 			return $this->sDeleteTranslation($type, $objectkey, $language);
-        
+
 		switch ($type)
 		{
 			case "article":
@@ -3565,7 +3578,7 @@ class sShopwareImport
 
         //set the upload file into the model. The model saves the file to the directory
         $media->setFile($file);
-        
+
         $pathInfo = pathinfo($article_download["new_link"]);
         if($media->getExtension() === null && $pathInfo['extension'] === null) {
             $this->sAPI->sSetError("In SW4 files must have an extension", 10409);
@@ -3754,15 +3767,15 @@ class sShopwareImport
             Shopware()->Models()->persist($model);
         }
         Shopware()->Models()->flush();
-        
-        
+
+
 		foreach ($languages as $languageArray)
 		{
             $language = $languageArray['isocode'];
             $localeID = $languageArray['id'];
 
 			if(!isset($article['values_'.$language])) continue;
-            
+
 			foreach($article['values_'.$language] as $key=>$value){
                 $valueModel = $valueRepository->findOneBy(array(
                     'value' => $article['values'][$key],

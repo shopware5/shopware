@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Voucher', {
      * Required views for controller
      * @array
      */
-    views:[ 'voucher.List', 'voucher.Window', 'voucher.BaseConfiguration', 'main.Window', 'code.List' ],
+    views:[ 'voucher.List', 'voucher.Window', 'voucher.BaseConfiguration', 'main.Window', 'code.List', 'code.Progress' ],
 
 
     /**

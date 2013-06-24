@@ -1032,12 +1032,11 @@ class Order extends ModelEntity
 
             $tax = $detail->getTax();
 
-            // if no tax is given use the default value 19.
+            $taxValue = 0;
+
             // additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
                 $taxValue = $tax->getTax();
-            } else {
-                $taxValue = 19;
             }
 
             if ($this->net) {
