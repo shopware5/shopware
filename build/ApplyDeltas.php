@@ -24,8 +24,28 @@ if (empty($dbConfig)) {
     $dbConfig = $config['db'];
 }
 
+$connectionSettings = array(
+    'host=' . $dbConfig['host'],
+    'dbname=' . $dbConfig['dbname'],
+);
+
+if (!empty($dbConfig['socket'])) {
+    $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
+}
+
+if (!empty($dbConfig['port'])) {
+    $connectionSettings[] = 'port=' . $dbConfig['port'];
+}
+
+$connectionString = implode(';', $connectionSettings);
+
 try {
-    $conn = new PDO('mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['dbname'], $dbConfig['username'], $dbConfig['password']);
+    $conn = new PDO(
+        'mysql:' . $connectionString,
+        $dbConfig['username'],
+        $dbConfig['password'],
+        array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'")
+    );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
