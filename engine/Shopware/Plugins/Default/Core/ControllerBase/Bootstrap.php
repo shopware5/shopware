@@ -232,13 +232,12 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             $shopId = Shopware()->Shop()->getId();
         }
         $sql = "
-            SELECT STRAIGHT_JOIN
+            SELECT
               p.id, p.description, p.link, p.target,
               g.key as `group`, m.key as mapping,
               (SELECT COUNT(*) FROM s_cms_static WHERE parentID=p.id) as childrenCount
 
-            FROM s_cms_static p FORCE INDEX(get_menu),
-                 s_cms_static_groups g
+            FROM s_cms_static p, s_cms_static_groups g
 
             LEFT JOIN s_cms_static_groups m
             ON m.id=g.mapping_id
@@ -252,7 +251,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             AND (m.id IS NULL OR s.shop_id IS NOT NULL)
             AND (m.id IS NULL OR m.active=1)
 
-            ORDER BY p.position, p.description
+            ORDER BY `mapping`, p.position, p.description
         ";
         $links = Shopware()->Db()->fetchAll($sql, array($shopId));
 
