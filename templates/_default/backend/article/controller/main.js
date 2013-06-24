@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
     refs: [
         { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
         { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
-
+        { ref: 'mediaInfo', selector:'article-detail-window article-image-info' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
 
@@ -542,6 +542,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
 
+                me.getMediaInfo().thumbnail.update();
+                me.getMediaInfo().loadRecord(Ext.create('Shopware.apps.Article.model.Media'));
 
                 var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
                 variantStore.getProxy().extraParams.articleId = options.articleId;

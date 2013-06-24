@@ -184,7 +184,11 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
                 '<div class="article-thumb-wrap">',
                     // If the type is image, then show the image
                     '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="','{link file=""}','{literal}{original}{/literal}','" /></div>',
+                        '<div class="inner-thumb"><img src="',
+                            '<tpl if="original">',
+                                '{link file=""}','{literal}{original}{/literal}',
+                            '</tpl>',
+                        '" /></div>',
                     '</div>',
                 '</div>',
             '</tpl>',
