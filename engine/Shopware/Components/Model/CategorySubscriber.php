@@ -159,20 +159,27 @@ class CategorySubscriber implements BaseEventSubscriber
             }
         }
 
-        // Entity inserts/updates
-        $entities = array_merge(
-            $uow->getScheduledEntityInsertions(),
-            $uow->getScheduledEntityUpdates()
-        );
+        // Entity Insertions
+        foreach ($uow->getScheduledEntityInsertions() as $category) {
 
-        foreach ($entities as $entity) {
-
-            if (!($entity instanceof Category)) {
+            /* @var $category Category */
+            if (!($category instanceof Category)) {
                 continue;
             }
 
+            $category = $this->setPathForCategory($category);
+
+            $md = $em->getClassMetadata(get_class($category));
+            $uow->recomputeSingleEntityChangeSet($md, $category);
+        }
+
+        // Entity updates
+        foreach ($uow->getScheduledEntityUpdates() as $category) {
+
             /* @var $category Category */
-            $category = $entity;
+            if (!($category instanceof Category)) {
+                continue;
+            }
 
             $changeSet = $uow->getEntityChangeSet($category);
 
@@ -191,18 +198,7 @@ class CategorySubscriber implements BaseEventSubscriber
                 continue;
             }
 
-            $parent = $category->getParent();
-            $parentId = $parent->getId();
-
-            $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
-            $path = implode('|', $parents);
-            if (empty($path)) {
-                $path = null;
-            } else {
-                $path = '|' . $path . '|';
-            }
-
-            $category->internalSetPath($path);
+            $category = $this->setPathForCategory($category);
 
             $md = $em->getClassMetadata(get_class($category));
             $uow->recomputeSingleEntityChangeSet($md, $category);
@@ -314,6 +310,30 @@ class CategorySubscriber implements BaseEventSubscriber
             $category = $pendingMove['category'];
             $this->backlogMoveCategory($category->getId());
         }
+    }
+
+    /**
+     * Sets the internal path field for given category based on it's parents
+     *
+     * @param Category $category
+     * @return Category
+     */
+    public function setPathForCategory(Category $category)
+    {
+        $parent = $category->getParent();
+        $parentId = $parent->getId();
+
+        $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
+        $path = implode('|', $parents);
+        if (empty($path)) {
+            $path = null;
+        } else {
+            $path = '|' . $path . '|';
+        }
+
+        $category->internalSetPath($path);
+
+        return $category;
     }
 
     /**
