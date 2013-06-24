@@ -262,9 +262,12 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.variantTab = Ext.create('Ext.container.Container', {
             title: me.snippets.variantTab,
             disabled: true,
-            tooltip: tooltip,
             layout: 'fit',
-            name: 'variant-tab'
+            name: 'variant-tab',
+            tabConfig: (me.subApp.splitViewActive) ? {
+                tooltip: tooltip,
+                tooltipType: Ext.isGecko ? 'title' : 'qtip'
+            } : { }
         });
 
         me.esdTab = Ext.create('Ext.container.Container', {
