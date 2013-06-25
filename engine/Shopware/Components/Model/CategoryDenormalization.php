@@ -104,14 +104,6 @@ class CategoryDenormalization
     }
 
     /**
-     * @return boolean
-     */
-    public function getEnableTransactions()
-    {
-        return $this->enableTransactions;
-    }
-
-    /**
      * Returns an array of all categoryIds the given $id has as parent
      *
      * Example:
@@ -132,12 +124,6 @@ class CategoryDenormalization
      */
     public function getParentCategoryIds($id)
     {
-        static $cache = array();
-
-        if (isset($cache[$id])) {
-            return $cache[$id];
-        }
-
         $stmt = $this->getConnection()->prepare('SELECT id, parent FROM s_categories WHERE id = :id AND parent IS NOT NULL');
         $stmt->execute(array(':id' => $id));
         $parent = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -158,6 +144,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Returns maxcount for paging rebuildCategoryPath()
+     *
      * @param  int $categoryId
      * @return int
      */
@@ -198,6 +186,7 @@ class CategoryDenormalization
      */
     public function rebuildCategoryPath($categoryId = null, $count = null, $offset = 0)
     {
+        $parameters = array();
         if ($categoryId === null) {
             $sql = '
                 SELECT id, path
@@ -208,8 +197,12 @@ class CategoryDenormalization
             $sql = '
                 SELECT id, path
                 FROM  s_categories
-                WHERE path LIKE :categoryId
+                WHERE path LIKE :categoryPath
             ';
+
+            $parameters = array(
+                'categoryPath' => '%|' . $categoryId . '|%'
+            );
         }
 
         if ($count !== null) {
@@ -217,7 +210,7 @@ class CategoryDenormalization
         }
 
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->execute(array('categoryId' => '%|' . $categoryId . '|%'));
+        $stmt->execute($parameters);
 
         $updateStmt = $this->getConnection()->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
 
@@ -249,6 +242,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Returns maxcount for paging removeOldAssignmentsCount()
+     *
      * @param  int $categoryId
      * @return int
      */
@@ -267,10 +262,18 @@ class CategoryDenormalization
 
         $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
+        // in case that a leaf category is moved
+        if (empty($rows)) {
+            return 1;
+        }
+
         return count($rows);
     }
 
     /**
+     * Used for category movement.
+     * If Category is moved to a new parentId this returns removes old connections
+     *
      * @param  int $categoryId
      * @param  int $count
      * @param  int $offset
@@ -293,12 +296,19 @@ class CategoryDenormalization
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute(array('categoryId' => $categoryId));
 
-        $deleteStmt = $this->getConnection()->prepare('DELETE FROM s_articles_categories_ro WHERE parentCategoryID = :categoryId');
+        $deleteStmt = $this->getConnection()->prepare('DELETE FROM s_articles_categories_ro WHERE parentCategoryID = :categoryId AND parentCategoryId <> categoryID');
 
         $count = 0;
 
-        while ($parentCategoryId = $stmt->fetchColumn()) {
-            $deleteStmt->execute(array('categoryId' => $parentCategoryId));
+        $parentCategoryId = $stmt->fetchColumn();
+
+        if ($parentCategoryId) {
+            do {
+                $deleteStmt->execute(array('categoryId' => $parentCategoryId));
+                $count += $deleteStmt->rowCount();
+            } while ($parentCategoryId = $stmt->fetchColumn());
+        } else {
+            $deleteStmt->execute(array('categoryId' => $categoryId));
             $count += $deleteStmt->rowCount();
         }
 
@@ -306,6 +316,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Returns maxcount for paging rebuildAssignmentsCount()
+     *
      * @param  int $categoryId
      * @return int
      */
@@ -324,6 +336,7 @@ class CategoryDenormalization
 
         $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
+        // in case that a leaf category is moved
         if (empty($rows)) {
             return 1;
         }
@@ -384,6 +397,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Returns maxcount for paging rebuildAllAssignmentsCount()
+     *
      * @return int
      */
     public function rebuildAllAssignmentsCount()
@@ -400,7 +415,7 @@ class CategoryDenormalization
         $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
         if (empty($rows)) {
-            return 1;
+            return 0;
         }
 
         return count($rows);
@@ -511,6 +526,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Adds new assignment beween $articleId and $categoryId
+     *
      * @param int $articleId
      * @param int $categoryId
      */
@@ -522,8 +539,10 @@ class CategoryDenormalization
     }
 
     /**
+     * Removes all connections for given $articleId
+     *
      * @param  int $articleId
-     * @return int
+     * @return int count of deleted rows
      */
     public function removeArticleAssignmentments($articleId)
     {
@@ -534,14 +553,16 @@ class CategoryDenormalization
         ';
 
         $stmt = $this->getConnection()->prepare($deleteQuery);
-        $stmt->execute($deleteQuery, array('articleId' => $articleId));
+        $stmt->execute(array('articleId' => $articleId));
 
         return $stmt->rowCount();
     }
 
     /**
+     * Removes all connections for given $categoryId
+     *
      * @param  int $categoryId
-     * @return int
+     * @return int count of deleted rows
      */
     public function removeCategoryAssignmentments($categoryId)
     {
@@ -555,19 +576,20 @@ class CategoryDenormalization
         ';
 
         $stmt = $this->getConnection()->prepare($deleteQuery);
-        $stmt->execute($deleteQuery, array('categoryId' => $categoryId));
+        $stmt->execute(array('categoryId' => $categoryId));
 
         return $stmt->rowCount();
     }
 
     /**
+     * First try to truncate table,
+     * if that Fails due to insufficient permissions, use delete query
+     *
      * @return int
      */
     public function removeAllAssignments()
     {
         // TRUNCATE is faster than DELETE
-        // First try to truncate table,
-        // if that Fails due to insufficient permissions, use delete query
         try {
             $count = $this->getConnection()->exec('TRUNCATE s_articles_categories_ro');
         } catch (\PDOException $e) {
@@ -578,6 +600,8 @@ class CategoryDenormalization
     }
 
     /**
+     * Removes assignments for non-existing articles or categories
+     *
      * @return int
      */
     public function removeOrphanedAssignments()
