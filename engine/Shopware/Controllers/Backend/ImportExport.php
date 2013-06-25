@@ -228,7 +228,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'customer.accountMode as accountmode',
             'customer.affiliate ',
             'customer.groupKey as customergroup',
-            'customer.languageIso as language',
+            'customer.languageId as language',
             'customer.shopId as subshopID',
             'customer.email as email',
             'count(orders.id) as orders_count',

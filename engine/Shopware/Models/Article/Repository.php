@@ -1832,7 +1832,7 @@ class Repository extends ModelRepository
             "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as name",
         ))
                 ->from('Shopware\Models\Article\Notification', 'notification')
-                ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageIso = notification.language')
+                ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageId = notification.language')
                 ->leftJoin('customer.billing', 'billing')
                 ->where('notification.articleNumber = :orderNumber')
                 ->setParameter("orderNumber",$articleOrderNumber);
