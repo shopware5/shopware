@@ -112,7 +112,7 @@ class sRewriteTable
         $this->manager = Shopware()->Models();
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
         $this->blogRepository = $this->manager->getRepository('Shopware\Models\Blog\Blog');
-        $this->baseCategory = Shopware()->Shop()->getCategory();
+//        $this->baseCategory = Shopware()->Shop()->getCategory();
     }
 
     /**
@@ -173,18 +173,21 @@ class sRewriteTable
         $this->template = Shopware()->Template();
 
         $keys = array_keys($this->template->registered_plugins['function']);
-        if (!(in_array('sCategoryPath', $keys))) {
-            $this->template->registerPlugin(
-                Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
-                array($this, 'sSmartyCategoryPath')
-            );
+        if (in_array('sCategoryPath', $keys)) {
+            $this->template->unregisterPlugin(Smarty::PLUGIN_FUNCTION, 'sCategoryPath');
         }
+
+        $this->template->registerPlugin(
+            Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
+            array($this, 'sSmartyCategoryPath')
+        );
+
 
         $this->data = $this->template->createData();
 
         $this->data->assign('sConfig', $this->sSYSTEM->sCONFIG);
         $this->data->assign('sRouter', $this);
-        $this->data->assign('sCategoryStart', $this->baseCategory->getId());
+        $this->data->assign('sCategoryStart', Shopware()->Shop()->getCategory()->getId());
     }
 
     /**
@@ -306,7 +309,7 @@ class sRewriteTable
             return;
         }
 
-        $parentId = $this->baseCategory->getId();
+        $parentId = Shopware()->Shop()->getCategory()->getId();
         $categories = $this->repository->getActiveChildrenList($parentId);
 
         if (isset($offset) && isset($limit)) {
@@ -584,7 +587,7 @@ class sRewriteTable
     public function sCategoryPath($category)
     {
         $parts = $this->repository->getPathById($category, 'name');
-        $level = $this->baseCategory->getLevel();
+        $level = Shopware()->Shop()->getCategory()->getLevel();
         $parts = array_slice($parts, $level);
 
         return $parts;
