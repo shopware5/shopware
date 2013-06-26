@@ -169,24 +169,65 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoArticleAction()
     {
         @set_time_limit(1200);
-        $limit = $this->Request()->getParam('limit', 50);
         $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
-        $this->SeoIndex()->registerShop($shopId);
-
+        $shop = $this->SeoIndex()->registerShop($shopId);
         list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
-
-        $this->RewriteTable()->baseSetup();
-
         $currentTime = new DateTime();
 
-        $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01', $limit);
+        $this->seoArticle(
+            (int) $this->Request()->getParam('offset', 0),
+            (int) $this->Request()->getParam('limit', 50),
+            $shop
+        );
+
         $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
         $this->View()->assign(array(
             'success' => true
         ));
+    }
+
+    /**
+     * Helper function which creates the seo urls for the
+     * passed shop id. The offset and limit parameter are used
+     * to update only an offset of article urls.
+     *
+     * @param $offset int
+     * @param $limit int
+     * @param $shop Shopware\Models\Shop\Shop
+     */
+    protected  function seoArticle($offset, $limit, $shop)
+    {
+        $this->RewriteTable()->baseSetup();
+
+        $template = Shopware()->Template();
+        $data = $template->createData();
+        $data->assign('sConfig', Shopware()->Config());
+        $data->assign('sRouter', $this->RewriteTable());
+        $data->assign('sCategoryStart', $shop->getCategory()->getId());
+
+        $sql = $this->RewriteTable()->getSeoArticleQuery();
+        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+
+        $articles = Shopware()->Db()->fetchAll($sql, array(
+            $shop->get('parentID'),
+            $shop->getId(),
+            '1900-01-01'
+        ));
+
+        foreach($articles as $article) {
+            $data->assign('sArticle', $article);
+            $path = $template->fetch(
+                'string:' . Shopware()->Config()->get('sRouterArticleTemplate'),
+                $data
+            );
+            $path = $this->RewriteTable()->sCleanupPath($path, false);
+
+            $org_path = 'sViewport=detail&sArticle=' . $article['id'];
+            $this->RewriteTable()->sInsertUrl($org_path, $path);
+        }
     }
 
     /**
