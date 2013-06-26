@@ -170,12 +170,20 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
         foreach($shops as $shopId) {
-            $this->SeoIndex()->registerShop($shopId);
+            /** @var $repository \Shopware\Models\Shop\Repository */
+            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $shop = $repository->getActiveById($shopId);
+            if ($shop === null) {
+                throw new Exception('No valid shop id passed');
+            }
+            $shop->registerResources(Shopware()->Bootstrap());
+            Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
             $this->RewriteTable()->baseSetup();
+
             $this->RewriteTable()->sCreateRewriteTableArticles('1900-01-01 00:00:00', 900000);
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
