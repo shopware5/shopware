@@ -92,6 +92,7 @@ class sRewriteTable
         return $this->preparedInsert;
     }
 
+
     /**
      * Getter function of the prepared update PDOStatement
      * @return null|PDOStatement
@@ -350,7 +351,43 @@ class sRewriteTable
         $sql = 'UPDATE `s_articles` SET `changetime`= NOW() WHERE `changetime`=?';
         Shopware()->Db()->query($sql, array('0000-00-00 00:00:00'));
 
-        $sql = "
+        $sql = $this->getSeoArticleQuery();
+        $sql = Shopware()->Db()->limit($sql, $limit);
+
+        $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+            Shopware()->Shop()->get('parentID'),
+            Shopware()->Shop()->getId(),
+            $last_update
+        ));
+
+        if ($result !== false) {
+            while ($row = $result->FetchRow()) {
+                $this->data->assign('sArticle', $row);
+                $path = $this->template->fetch('string:' . $this->sSYSTEM->sCONFIG['sROUTERARTICLETEMPLATE'], $this->data);
+                $path = $this->sCleanupPath($path, false);
+
+                $org_path = 'sViewport=detail&sArticle=' . $row['id'];
+                $this->sInsertUrl($org_path, $path);
+                $last_update = $row['changed'];
+                $last_id = $row['id'];
+            }
+        }
+
+        if (!empty($last_id)) {
+            $sql = 'UPDATE s_articles SET changetime=DATE_ADD(changetime, INTERVAL 1 SECOND) WHERE changetime=? AND id > ?';
+            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($last_update, $last_id));
+        }
+
+        return $last_update;
+    }
+
+    /**
+     * Helper function which returns the sql query for the seo articles.
+     * @return string
+     */
+    public function getSeoArticleQuery()
+    {
+        return "
 			SELECT a.*, IF(atr.name IS NULL OR atr.name='', a.name, atr.name) as name,
 			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed,
 				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
@@ -381,34 +418,7 @@ class sRewriteTable
 			AND a.changetime > ?
 			GROUP BY a.id
 			ORDER BY a.changetime, a.id
-		";
-        $sql = Shopware()->Db()->limit($sql, $limit);
-
-        $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
-            Shopware()->Shop()->get('parentID'),
-            Shopware()->Shop()->getId(),
-            $last_update
-        ));
-
-        if ($result !== false) {
-            while ($row = $result->FetchRow()) {
-                $this->data->assign('sArticle', $row);
-                $path = $this->template->fetch('string:' . $this->sSYSTEM->sCONFIG['sROUTERARTICLETEMPLATE'], $this->data);
-                $path = $this->sCleanupPath($path, false);
-
-                $org_path = 'sViewport=detail&sArticle=' . $row['id'];
-                $this->sInsertUrl($org_path, $path);
-                $last_update = $row['changed'];
-                $last_id = $row['id'];
-            }
-        }
-
-        if (!empty($last_id)) {
-            $sql = 'UPDATE s_articles SET changetime=DATE_ADD(changetime, INTERVAL 1 SECOND) WHERE changetime=? AND id > ?';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($last_update, $last_id));
-        }
-
-        return $last_update;
+          ";
     }
 
     /**
@@ -593,5 +603,13 @@ class sRewriteTable
         );
 
         return empty($categoryId) ? null : $this->sCategoryPath($categoryId);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }
