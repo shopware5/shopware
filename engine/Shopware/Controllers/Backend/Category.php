@@ -643,6 +643,20 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if (empty($categoryId)) {
                 $categoryModel = new \Shopware\Models\Category\Category();
                 Shopware()->Models()->persist($categoryModel);
+
+                // Find parent for newly created category
+                $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
+                $parentCategory = $this->getRepository()->find($params['parentId']);
+                $categoryModel->setParent($parentCategory);
+
+                // If Leaf-Category gets childcategory move all assignments to new childcategory
+                if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
+                    /** @var $article \Shopware\Models\Article\Article **/
+                    foreach ($parentCategory->getArticles() as $article) {
+                        $article->removeCategory($parentCategory);
+                        $article->addCategory($categoryModel);
+                    }
+                }
             } else {
                 $categoryModel = $this->getRepository()->find($categoryId);
             }
@@ -650,26 +664,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $params = $this->prepareAttributeAssociatedData($params);
             $params = $this->prepareCustomerGroupsAssociatedData($params);
             $params = $this->prepareMediaAssociatedData($params);
-            unset($params["articles"]);
-            unset($params["emotion"]);
-            unset($params["imagePath"]);
+
+            unset($params['articles']);
+            unset($params['emotion']);
+            unset($params['imagePath']);
+            unset($params['parentId']);
+            unset($params['parent']);
 
             $categoryModel->fromArray($params);
-
-            $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
-
-            $parentCategory = $this->getRepository()->find($params['parentId']);
-
-            $categoryModel->setParent($parentCategory);
-
-            // If Leaf-Category gets childcategory move all assignments to new childcategory
-            if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
-                /** @var $article \Shopware\Models\Article\Article **/
-                foreach ($parentCategory->getArticles() as $article) {
-                    $article->removeCategory($parentCategory);
-                    $article->addCategory($categoryModel);
-                }
-            }
 
             Shopware()->Models()->flush();
 
