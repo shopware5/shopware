@@ -167,7 +167,7 @@ class sRewriteTable
         $this->template = Shopware()->Template();
 
         $keys = array_keys($this->template->registered_plugins['function']);
-        if (!in_array('sCategoryPath', $keys)) {
+        if (!(in_array('sCategoryPath', $keys))) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
                 array($this, 'sSmartyCategoryPath')
