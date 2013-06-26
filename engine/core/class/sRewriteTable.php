@@ -60,11 +60,6 @@ class sRewriteTable
     protected $blogRepository;
 
     /**
-     * @var Shopware\Models\Category\Category
-     */
-    protected $baseCategory;
-
-    /**
      * Prepared update PDOStatement for the s_core_rewrite_urls table.
      * @var PDOStatement
      */
@@ -112,7 +107,6 @@ class sRewriteTable
         $this->manager = Shopware()->Models();
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
         $this->blogRepository = $this->manager->getRepository('Shopware\Models\Blog\Blog');
-//        $this->baseCategory = Shopware()->Shop()->getCategory();
     }
 
     /**
@@ -173,15 +167,12 @@ class sRewriteTable
         $this->template = Shopware()->Template();
 
         $keys = array_keys($this->template->registered_plugins['function']);
-        if (in_array('sCategoryPath', $keys)) {
-            $this->template->unregisterPlugin(Smarty::PLUGIN_FUNCTION, 'sCategoryPath');
+        if (!in_array('sCategoryPath', $keys)) {
+            $this->template->registerPlugin(
+                Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
+                array($this, 'sSmartyCategoryPath')
+            );
         }
-
-        $this->template->registerPlugin(
-            Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
-            array($this, 'sSmartyCategoryPath')
-        );
-
 
         $this->data = $this->template->createData();
 
