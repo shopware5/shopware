@@ -2358,6 +2358,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
+                $result = $this->getArticleRepository()->find($result->getId());
+
                 if(!$result instanceof \Shopware\Models\Article\Article) {
                     $errors[] = $result;
                     continue;
@@ -2395,8 +2397,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                             $optionModels = $configuratorOptionRepository->findBy(array("id" => $ids));
                             $configuratorSet->setOptions($optionModels);
                         }
-
-
                     }
 
                     if (!empty($updateData)) {
