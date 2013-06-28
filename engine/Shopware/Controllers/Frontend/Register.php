@@ -66,13 +66,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 	{
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
 
-		if(!isset($this->View()->register)) {
-			$this->View()->register = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
-		
-		if(!isset($this->session['sRegister'])) {
-			$this->session['sRegister'] = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
+        if (!isset($this->View()->register)) {
+            $this->View()->register = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (!isset($this->session['sRegister'])) {
+            $this->session['sRegister'] = array();
+        }
 
 		if(in_array($this->Request()->getActionName(), array('ajax_validate_password', 'ajax_validate_billing', 'ajax_validate_email'))) {
 			Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
@@ -125,7 +125,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 				$this->savePaymentAction();
 			}
 			if(empty($this->error))
-			{	
+			{
 				$this->saveRegister();
 			}
 		}
@@ -134,13 +134,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
 	/**
 	 * Saves the registration
-	 * 
+	 *
 	 * @return void
 	 */
 	public function saveRegister()
 	{
 		$paymentData = isset($this->session['sRegister']['payment']['object']) ? $this->session['sRegister']['payment']['object'] : false;
-				
+
 		$this->admin->sSaveRegister();
 
 		if(!empty($paymentData))
@@ -173,7 +173,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		{
 			$this->View()->register->personal->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 		}
-				
+
 		if (!empty($this->session['sRegister']['auth']))
 		foreach ($this->session['sRegister']['auth'] as $key => $value)
 		{
@@ -182,7 +182,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 				$this->View()->register->personal->form_data->$key = $value;
 			}
 		}
-		
+
 		if (!empty($this->session['sRegister']['billing']))
 		foreach ($this->session['sRegister']['billing'] as $key => $value)
 		{
@@ -191,7 +191,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 				$this->View()->register->personal->form_data->$key = $value;
 			}
 		}
-		
+
 		if($this->request->getParam('sValidation'))
 		{
 			// For new b2bessentials plugin (replacement for customergroup module), do validation of this parameter
@@ -219,12 +219,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		{
 			$this->View()->register->personal = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 		}
-		
+
 		if(!empty($this->post['personal']))
 		{
 			$this->View()->register->personal->form_data = new ArrayObject($this->post['personal'], ArrayObject::ARRAY_AS_PROPS);
 		}
-		
+
 		$checkData = $this->validatePersonal();
 		if (!empty($checkData['sErrorMessages']))
 		{
@@ -265,7 +265,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 				$this->View()->register->billing->form_data->$key = $value;
 			}
 		}
-		
+
 		if(!empty($this->session['sCountry'])&&empty($this->View()->register->billing->form_data->country)) {
 			$this->View()->register->billing->form_data->country = $this->session['sCountry'];
 		}
@@ -317,7 +317,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		{
 			$this->View()->register->shipping->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 		}
-		
+
 		$this->View()->register->shipping->country_list = $this->admin->sGetCountryList();
 		if(!empty($this->session['sRegister']['shipping']))
 		foreach ($this->session['sRegister']['shipping'] as $key => $value)
@@ -343,7 +343,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		}
 
 		$checkData = $this->validateShipping();
-		
+
 		if (!empty($checkData['sErrorMessages']))
 		{
 			$this->error = true;
@@ -363,7 +363,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		{
 			$this->View()->register->payment = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 		}
-		
+
 		if(!isset($this->View()->register->payment->form_data))
 		if(!empty($this->session['sPayment']))
 		{
@@ -373,9 +373,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		{
 			$this->View()->register->payment->form_data = array('payment'=>Shopware()->Config()->get('DefaultPayment'));
 		}
-		
+
 		$this->View()->register->payment->payment_means = $this->admin->sGetPaymentMeans();
-		
+
 		if(!empty($this->session['sRegister']['shipping']))
 		foreach ($this->session['sRegister']['shipping'] as $key => $value)
 		{
@@ -421,15 +421,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 	public function validatePersonal()
 	{
 		$this->admin->sSYSTEM->_POST = $this->post['personal'];
-		
+
 		$result = array();
-		
+
 		$checkData = $this->admin->sValidateStep1();
 		if(!empty($checkData['sErrorMessages']))
 		{
 			$result = $checkData;
 		}
-		
+
 		$rules = array(
 			'customer_type'=>array('required'=>0),
 			'salutation'=>array('required'=>1),
@@ -461,12 +461,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		$rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
 
 		$checkData = $this->admin->sValidateStep2($rules);
-				
+
 		if(!empty($checkData['sErrorMessages']))
 		{
 			$result = array_merge_recursive($result, $checkData);
 		}
-		
+
 		return $result;
 	}
 
@@ -588,8 +588,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
 		$rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validateShipping_FilterRules', $rules, array('subject'=>$this));
 
-		$this->admin->sSYSTEM->_POST = $this->post['shipping'];	
-			
+		$this->admin->sSYSTEM->_POST = $this->post['shipping'];
+
 		$checkData = $this->admin->sValidateStep2ShippingAddress($rules);
 
 		return $checkData;
@@ -610,9 +610,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 			);
 		}
 		$this->admin->sSYSTEM->_POST['sPayment'] = $this->post['payment'];
-				
+
 		$checkData = $this->admin->sValidateStep3();
-		
+
 		if(!empty($checkData['checkPayment']['sErrorMessages']))
 		{
 			return array(
@@ -630,9 +630,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 	{
 		$error_flags = array();
 		$error_messages = array();
-		
+
 		if (empty($this->post['personal']['email'])) {
-			
+
 		} elseif (($validator = new Zend_Validate_EmailAddress()) && !$validator->isValid($this->post['personal']['email'])) {
 			$error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
 			$error_flags['email'] = true;
@@ -655,11 +655,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 			$error_flags['email'] = false;
 			$error_flags['emailConfirmation'] = false;
 		}
-		
+
 		foreach ($error_messages as $key=>$error_message) {
 			$error_messages[$key] = utf8_encode($this->View()->fetch('string:'.$error_message));
 		}
-		
+
 		echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
 	}
 
@@ -670,9 +670,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 	{
 		$error_messages = array();
 		$error_flags = array();
-		
+
 		if(empty($this->post['personal']['password'])) {
-			
+
 		} elseif (strlen(utf8_decode($this->post['personal']['password'])) < Shopware()->Config()->get('MinPassword')){
 			$error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get(
 				'RegisterPasswordLength',
@@ -693,11 +693,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 			$error_flags['password'] = false;
 			$error_flags['passwordConfirmation'] = false;
 		}
-		
+
 		foreach ($error_messages as $key=>$error_message) {
 			$error_messages[$key] = utf8_encode($this->View()->fetch('string:'.$error_message));
 		}
-		
+
 		echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
 	}
 
@@ -731,17 +731,17 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
 		$error_messages = array();
 		$error_flags = array();
-		
+
 		if(!empty($checkData['sErrorMessages'])) {
 			foreach ($checkData['sErrorMessages'] as $error_message) {
 				$error_messages[] = utf8_encode($error_message);
 			}
 		}
-		
+
 		foreach ($rules as $field => $rule) {
 			$error_flags[$field] = !empty($checkData['sErrorFlag'][$field]);
 		}
-		
+
 		echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
 	}
 }
