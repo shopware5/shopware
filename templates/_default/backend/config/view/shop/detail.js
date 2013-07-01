@@ -79,6 +79,16 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
 
     getItems: function() {
         var me = this;
+
+        me.categorySelect = Ext.create('Shopware.apps.Config.view.element.SelectTree', {
+            name: 'categoryId',
+            allowBlank: false,
+            fieldLabel: '{s name=shop/detail/category_label}Category{/s}',
+            store: 'base.CategoryTree',
+            anchor: '100%',
+            labelWidth: 120
+        });
+
         return [{
             name: 'name',
             fieldLabel: '{s name=shop/detail/name_label}Name{/s}',
@@ -157,13 +167,9 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             allowBlank: false,
             fieldLabel: '{s name=shop/detail/locale_label}Locale{/s}',
             store: 'base.Locale'
-        },{
-            xtype: 'config-element-selecttree',
-            name: 'categoryId',
-            allowBlank: false,
-            fieldLabel: '{s name=shop/detail/category_label}Category{/s}',
-            store: 'base.CategoryTree'
-        },{
+        },
+        me.categorySelect,
+        {
             xtype: 'config-element-select',
             name: 'templateId',
             fieldLabel: '{s name=shop/detail/template_label}Template{/s}',
@@ -209,6 +215,14 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         },{
             xtype: 'config-shop-page'
         }]
+    },
+
+    loadRecord: function() {
+        var me = this;
+        me.categorySelect.setValue(null);
+        me.categorySelect.setRawValue(null);
+
+        me.callParent(arguments);
     }
 });
 //{/block}
