@@ -47,7 +47,7 @@ return array(
       'Wenn Sie die Datenbank selbst importieren möchten, führen Sie den Import bitte durch, bevor Sie fortfahren.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
     // Step 5
     'step5_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten', // Choose your license
-    'step5_ce' => 'Shopware Communtity Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
+    'step5_ce' => 'Shopware Community Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
     'step5_pe' => 'Shopware Professional (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', // Shopware Professional Edition (License: Commercial / License key required)
     'step5_ee' => 'Shopware Enterprise Business (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', // Shopware Enterprise Business Edition (License: Commercial / License key required)
     'step5_ec' => 'Shopware Enterprise Cluster (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', //  Shopware Enterprise Cluster Edition (License: Commercial / License key required)
