@@ -51,10 +51,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $repository \Shopware\Models\Category\Repository*/
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
             $articleId = $repository->getActiveArticleIdByCategoryId($categoryContent['id']);
-            $location = array(
-                'sViewport' => 'detail',
-                'sArticle' => $articleId
-            );
+            if (!empty($articleId)) {
+                $location = array(
+                    'sViewport' => 'detail',
+                    'sArticle' => $articleId
+                );
+            }
         }
         if (isset($location)) {
             return $this->redirect($location, array('code' => 301));
