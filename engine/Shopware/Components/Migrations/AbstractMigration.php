@@ -76,10 +76,10 @@ abstract class AbstractMigration
     {
         $result = array();
 
-        $regexPattern = '/\/[0-9]*-(.+)\.php$/i';
+        $regexPattern = '/[0-9]*-(.+)\.php$/i';
 
         $rc = new \ReflectionClass(get_class($this));
-        $fileName = $rc->getFileName();
+        $fileName = basename($rc->getFileName());
 
         preg_match($regexPattern, $fileName, $result);
 
