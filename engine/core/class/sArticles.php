@@ -1012,7 +1012,7 @@ class sArticles
 
         $sql = "
             SELECT
-
+                STRAIGHT_JOIN
                 a.id as articleID,
                 a.laststock,
                 a.taxID,
