@@ -122,10 +122,6 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
      */
     public function updateLog($request, $response)
     {
-        if (Shopware()->Session()->Bot === null) {
-            Shopware()->Session()->Bot = $this->checkIsBot($request->getHeader('USER_AGENT'));
-        }
-
         if ($this->shouldRefreshLog($request)) {
             $this->cleanupStatistic();
             $this->refreshBasket($request);
