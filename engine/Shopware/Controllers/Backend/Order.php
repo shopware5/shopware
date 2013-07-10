@@ -872,9 +872,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         try {
-            /**@var $order \Shopware\Models\Order\Order*/
-            $order = $this->getRepository()->find($orderId);
-
             foreach($positions as $position) {
                 if (empty($position['id'])) {
                     continue;
@@ -887,6 +884,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 }
             }
             //after each model has been removed to executes the doctrine flush.
+            Shopware()->Models()->flush();
+
+            /**@var $order \Shopware\Models\Order\Order*/
+            $order = $this->getRepository()->find($orderId);
+            $order->calculateInvoiceAmount();
+
             Shopware()->Models()->flush();
 
             $data = $this->getOrder($order->getId());
