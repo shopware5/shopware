@@ -34,6 +34,11 @@
         Ext.editorLang = '{s name=script/ext/lang}{/s}';
 	    Ext.shopwareRevision = '{Shopware::REVISION}';
     </script>
-    <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
+
+    {if $user}
+        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&loggedIn={$smarty.now}"></script>
+    {else}
+        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap"></script>
+    {/if}
 {/block}
 </head>
