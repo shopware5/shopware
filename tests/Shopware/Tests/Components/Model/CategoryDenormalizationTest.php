@@ -28,8 +28,6 @@ class PDOMock extends \PDO
 }
 
 /**
- * @requires extension sqlite3
- *
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -48,6 +46,17 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
 
     protected function setUp()
     {
+        if (!extension_loaded('sqlite3')) {
+            $this->markTestSkipped(
+              'The Sqlite3 extension is not available.'
+            );
+
+            parent::setUp();
+
+            return;
+        }
+
+
         try {
             $conn = new PDO('sqlite::memory:');
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -72,6 +81,10 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
      */
     public function getConnection()
     {
+        if (!extension_loaded('sqlite3')) {
+            return null;
+        }
+
         return $this->createDefaultDBConnection($this->conn, ':memory:');
     }
 
