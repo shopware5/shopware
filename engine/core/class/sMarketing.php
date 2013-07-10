@@ -142,7 +142,7 @@ class sMarketing
         }
 
         $sql = "
-            SELECT
+            SELECT DISTINCT
                 alsoBought.sales as sales,
                 alsoBought.related_article_id as id
 
