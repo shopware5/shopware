@@ -38,7 +38,7 @@
     {if $user}
         <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&loggedIn={$smarty.now}"></script>
     {else}
-        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap"></script>
+        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
     {/if}
 {/block}
 </head>
