@@ -532,7 +532,6 @@ class Detail extends ModelEntity
             $article->setInStock($article->getInStock() + $this->quantity);
             Shopware()->Models()->persist($article);
         }
-        $this->calculateOrderAmount();
     }
 
     /**
