@@ -424,7 +424,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initCurrency()
     {
-        return new Zend_Currency('EUR', $this->getResource('Locale'));
+        return new Zend_Currency(
+            $this->getResource('Shop')->getCurrency()->getCurrency(),
+            $this->getResource('Locale')
+        );
     }
 
     /**
