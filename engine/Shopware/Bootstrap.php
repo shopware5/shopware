@@ -414,7 +414,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initLocale()
     {
-        return new Zend_Locale('de_DE');
+        return new Zend_Locale(
+            $this->getResource('Shop')->getLocale()->getLocale()
+        );
     }
 
     /**
