@@ -414,7 +414,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initLocale()
     {
-        return new Zend_Locale('de_DE');
+        return new Zend_Locale(
+            $this->getResource('Shop')->getLocale()->getLocale()
+        );
     }
 
     /**
@@ -424,7 +426,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initCurrency()
     {
-        return new Zend_Currency('EUR', $this->getResource('Locale'));
+        return new Zend_Currency(
+            $this->getResource('Shop')->getCurrency()->getCurrency(),
+            $this->getResource('Locale')
+        );
     }
 
     /**
