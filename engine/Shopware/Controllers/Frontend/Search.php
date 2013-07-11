@@ -44,6 +44,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
     /**
      * Method that is used for "search other articles from this vendor"
+     * @deprecated Please use the Listing controller index action. The listing function expects the supplier id
+     * in the request parameter sSupplier.
      */
     public function supplierSearchAction()
     {
