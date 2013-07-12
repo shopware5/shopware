@@ -55,7 +55,7 @@
 	{* Description *}
 	{block name='frontend_blog_detail_description'}
 		<div class="description">
-			{$sArticle.description|nl2br}
+			{$sArticle.description}
 		</div>
 	{/block}
 		
