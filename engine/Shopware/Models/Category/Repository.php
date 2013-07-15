@@ -228,8 +228,6 @@ class Repository extends ModelRepository
             ->leftJoin('category.media', 'media')
             ->leftJoin('category.customerGroups', 'customerGroups')
             ->where('category.id = ?1')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
             ->setParameter(1, $categoryId);
 
         return $builder;
