@@ -3469,9 +3469,7 @@ jQuery.fn.liveSearch = function (conf) {
         var location = window.location.protocol + '//' + window.location.host;
 
         // Fix same origin miss match
-        if (config.viewport.indexOf(location) !== 0
-            && $.browser.msie &&
-            (parseInt($.browser.version, 10) === 6 || parseInt($.browser.version, 10) === 7)) {
+        if (config.viewport.indexOf(location) !== 0 && $.browser.msie) {
             return;
         }
         $.ajax({
