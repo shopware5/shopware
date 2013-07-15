@@ -288,7 +288,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
-        $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data = $query->getArrayResult();
+        $data = $data[0];
         $data["imagePath"] = $data["media"]["path"];
 
         $this->View()->assign(array('success' => true, 'data' => $data));
@@ -677,7 +678,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $categoryId = $categoryModel->getId();
             $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
-            $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $data = $query->getArrayResult();
+            $data = $data[0];
             $data["imagePath"] = $data["media"]["path"];
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
