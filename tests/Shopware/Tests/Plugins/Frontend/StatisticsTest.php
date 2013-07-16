@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -43,16 +42,21 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         parent::setUp();
 
         $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
+
+        $sql= "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
+                  ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
+        Shopware()->Db()->query($sql);
     }
 
     /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     * tear down the demo data
      */
-    protected function getDataSet()
+    protected function tearDown()
     {
-        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Statistic').'Log.xml');
+        parent::tearDown();
+
+        $sql= "DELETE FROM s_emarketing_partner where idcode = 'test123'";
+        Shopware()->Db()->query($sql);
     }
 
     /**
