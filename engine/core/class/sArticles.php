@@ -3234,7 +3234,7 @@ class sArticles
                 if (strlen($word) < 2)
                     unset($words[$word]);
             arsort($words);
-            $getArticle["sDescriptionKeywords"] = htmlspecialchars(implode(", ", array_slice(array_keys($words), 0, 20)),null, 'UTF-8', false);
+            $getArticle["sDescriptionKeywords"] = htmlspecialchars(implode(", ", array_slice(array_keys($words), 0, 20)), ENT_QUOTES, 'UTF-8', false);
         }
 
 
