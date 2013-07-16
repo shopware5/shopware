@@ -288,8 +288,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
-        $data = $query->getArrayResult();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
+
         $data["imagePath"] = $data["media"]["path"];
 
         $this->View()->assign(array('success' => true, 'data' => $data));
@@ -678,7 +681,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $categoryId = $categoryModel->getId();
             $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
-            $data = $query->getArrayResult();
+            $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $data = $paginator->getIterator()->getArrayCopy();
             $data = $data[0];
             $data["imagePath"] = $data["media"]["path"];
 
