@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -65,16 +64,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     protected $repository = null;
 
     /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Checkout').'Finish.xml');
-    }
-
-    /**
      * Standard set up for every test - just disable auth
      */
     public function setUp()
@@ -89,6 +78,16 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
+
+    /**
+     * Cleaning up testData
+     */
+    public static function tearDownAfterClass()
+    {
+        $sql= "DELETE FROM s_emarketing_partner WHERE idcode = ?";
+        Shopware()->Db()->query($sql, array('31337'));
+
+    }
     /**
      * Creates the dummy data
      *
@@ -245,70 +244,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
 
         return $id;
     }
-
-    /**
-     * test testDownloadStatistic controller action
-     *
-     * @depends testValidateTrackingCode
-     * @param $id
-     * @return $id
-     */
-    public function testDownloadStatistic($id)
-    {
-        $params["partnerId"] = intval($id);
-        $params["fromDate"] = "01.01.2000";
-        $params["toDate"] = "01.01.2222";
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Partner/downloadStatistic');
-        $header = $this->Response()->getHeaders();
-        $lastHeader = array_pop($header);
-        $this->assertEquals("Content-Disposition",$lastHeader["name"]);
-        $this->assertEquals("attachment;filename=partner_statistic.csv",$lastHeader["value"]);
-        $this->assertGreaterThan(200,strlen($this->Response()->getBody()));
-
-        return $id;
-    }
-
-    /**
-     * test testDownloadStatistic controller action
-     *
-     * @depends testSavePartner
-     * @param $id
-     * @return $id
-     */
-    public function testGetChartData($id)
-    {
-        $params["partnerId"] = $id;
-        $params["fromDate"] = "01.01.2000";
-        $params["toDate"] = "01.01.2222";
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Partner/getChartData');
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-
-        return $id;
-    }
-
-    /**
-     * test getStatisticList controller action
-     *
-     * @depends testSavePartner
-     * @param $id
-     * @return $id
-     */
-    public function testGetStatisticList($id)
-    {
-        $params["partnerId"] = $id;
-        $params["fromDate"] = "01.01.2000";
-        $params["toDate"] = "01.01.2222";
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Partner/getStatisticList');
-        $this->assertTrue($this->View()->success);
-        $this->assertTrue(!empty($this->View()->data));
-
-        return $id;
-    }
-
 
     /**
      * test getCustomer controller action
