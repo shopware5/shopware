@@ -59,7 +59,7 @@
 
     <target name="build-demodata-deploy">
         <concat destfile="${build.dir}/scripts/demo.template.sql">
-            <fileset file="${sql.dir}/demo/next.sql"/>
+            <fileset file="${demo.data}"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 
