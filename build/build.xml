@@ -99,14 +99,14 @@
             <arg value="0777"/>
             <arg value="${cache.dir}/templates/"/>
             <arg value="${cache.dir}/general/"/>
-            <arg value="${proxy.dir}"/>
+            <arg value="${cache.dir}/proxies/"/>
         </exec>
 
         <delete includeEmptyDirs="true">
             <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
-            <fileset dir="${cache.dir}/general/" includes="**/*"/>
+            <fileset dir="${cache.dir}/general/"   includes="**/*"/>
+            <fileset dir="${cache.dir}/proxies"    includes="**/*.*"/>
             <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
-            <fileset dir="${proxy.dir}" includes="**/*.*"/>
         </delete>
     </target>
 
@@ -131,7 +131,7 @@
     <target name="unit-library"/>
 
     <target name="unit-shopware" depends="build-unit">
-        <exec executable="${script.phpunit}" failonerror="false" dir="${build.dir}">
+        <exec executable="${script.phpunit}" failonerror="false" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
             <arg value="--coverage-clover=${log.dir}/clover.xml"/>
             <arg value="--coverage-html=${log.dir}/coverage"/>
@@ -139,7 +139,7 @@
     </target>
 
     <target name="unit-shopware-continuous" depends="build-unit">
-        <exec executable="${script.phpunit}" dir="${build.dir}">
+        <exec executable="${script.phpunit}" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
         </exec>
     </target>
@@ -180,15 +180,11 @@
             <arg value="codesize,design,unusedcode"/>
             <arg value="--reportfile"/>
             <arg value="${log.dir}/pmd.xml"/>
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
         </exec>
     </target>
 
     <target name="static-phpcpd" description="PHP Copy/Paste Detector">
         <exec executable="phpcpd" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
             <arg value="--log-pmd"/>
             <arg value="${log.dir}/cpd.xml"/>
             <arg value="${app.dir}/"/>
@@ -201,8 +197,6 @@
             <arg value="${log.dir}/loc.xml"/>
             <arg value="--log-csv"/>
             <arg value="${log.dir}/loc.csv"/>
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
             <arg value="--count-tests"/>
             <arg value="${app.dir}/"/>
         </exec>
@@ -217,8 +211,6 @@
             <arg value="${log.dir}/checkstyle/"/>
             <arg value="-d"/>
             <arg value="${app.dir}"/>
-            <arg value="-i"/>
-            <arg value="${proxy.dir}"/>
             <arg value="-q"/>
         </exec>
         <replaceregexp file="${log.dir}/checkstyle/checkstyle.xml"
@@ -234,7 +226,6 @@
             <arg value="--summary-xml=${log.dir}/depend/summary.xml"/>
             <arg value="--jdepend-chart=${log.dir}/depend/jdepend.svg"/>
             <arg value="--overview-pyramid=${log.dir}/depend/pyramid.svg"/>
-            <arg value="--ignore=${proxy.dir}"/>
             <arg value="${app.dir}"/>
         </exec>
     </target>
@@ -244,7 +235,6 @@
             <arg value="-l${log.dir}"/>
             <arg value="-o${log.dir}/code-browser"/>
             <arg value="-s${app.dir}"/>
-            <arg value="-i${proxy.dir}"/>
         </exec>
     </target>
 
@@ -253,7 +243,7 @@
             <arg value="project:run"/>
             <arg value="-d${app.dir}"/>
             <arg value="-t${log.dir}/api"/>
-            <arg value="-i${proxy.dir},${app.dir}/Plugins/Default/*Payment*"/>
+            <arg value="-i${app.dir}/Plugins/Default/*Payment*"/>
             <arg value="--template"/>
             <arg value="shopware"/>
             <arg value="--title"/>
@@ -296,7 +286,6 @@
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="tiny_mce.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/en.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/de.js" />
-
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/media_selection/editor_plugin.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
         </concat>

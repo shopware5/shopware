@@ -24,6 +24,10 @@ if (empty($dbConfig)) {
     $dbConfig = $config['db'];
 }
 
+if (!isset($dbConfig['host']) || empty($dbConfig['host'])) {
+    $dbConfig['host'] = 'localhost';
+}
+
 $connectionSettings = array(
     'host=' . $dbConfig['host'],
     'dbname=' . $dbConfig['dbname'],
