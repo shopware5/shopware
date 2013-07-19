@@ -25,3 +25,5 @@ library.dir.enlight = ${library.dir}/Enlight
 
 script.mysql = mysql
 script.phpunit = phpunit
+
+demo.data = ${sql.dir}/demo/next.sql
