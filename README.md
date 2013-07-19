@@ -26,26 +26,29 @@ Follow the instruction below if you want to install Shopware 4 using Git.
 
 1.) Clone the git repository to the desired location using:
 
-		git clone git@github.com:ShopwareAG/shopware-4.git
+    git clone git@github.com:ShopwareAG/shopware-4.git
 
 In case you wish to contribute to Shopware, fork the master tree rather than cloning it and create a pull request via Github. For further information please visit the section "Get involved" in this document.
 
 2.) Set the correct directory permissions:
 
-		chmod 755 config.php
-		chmod 755 -R cache
-		chmod 755 -R files
-		chmod 755 -R media
-		chmod 755 -R engine/Library/Mpdf/tmp
-		chmod 755 -R engine/Library/Mpdf/ttfontdata
-		chmod 755 -R engine/Shopware/Plugins/Community
+    chmod 755 config.php
+    chmod 755 -R cache
+    chmod 755 -R files
+    chmod 755 -R media
+    chmod 755 -R engine/Library/Mpdf/tmp
+    chmod 755 -R engine/Library/Mpdf/ttfontdata
+    chmod 755 -R engine/Shopware/Plugins/Community
+
 
 Depending on your server configuration it might be neccesarry to set whole write permissions (777) to the files and folders above.
 Also you can start testing with lower permissions due to security reasons (644 for example), if your php-process can write to
 those files.
 
+3.) An [Ant](http://ant.apache.org/) Buildfile is used to set up the configuration and database connection:
 
-3.) Point your web browser at <http://yourwebsite.com/install/> and provide details for establishing a database connection, your used licence and take the basic configuration of your new store.
+    cd build/
+    ant -Ddb.user=youruser -Ddb.password=yourpassword -Ddb.name=shopware build-database build-config
 
 ## Get involved
 
@@ -59,26 +62,27 @@ If you are not sure, how to contribute code under right license and right way yo
 
 To start contributing, just fork the repository and clone your fork to your local machine:
 
-		git clone git@github.com:[YOUR USERNAME]/shopware-4.git
+    git clone git@github.com:[YOUR USERNAME]/shopware-4.git
 
 After having done this, configure the upstream remote:
 
-		cd shopware-4
-		git remote add upstream git://github.com/ShopwareAG/shopware-4.git
-		git config branch.master.remote upstream
+    cd shopware-4
+    git remote add upstream git://github.com/ShopwareAG/shopware-4.git
+    git config branch.master.remote upstream
 
 To keep your master up-to-date:
 
-		git checkout master
-		git pull --rebase
+    git checkout master
+    git pull --rebase
+    php build/ApplyDeltas.php
 
 Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
 
-		git checkout -b feature/your-cool-feature
+    git checkout -b feature/your-cool-feature
 
 If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
 
-		git push origin feature/your-cool-feature
+    git push origin feature/your-cool-feature
 
 
 ... and send us a pull request with your changes. We'll verify the pull request and merge it with the `master` Branch.
@@ -90,22 +94,22 @@ For mosts tests a configured database connection is required.
 #### PHPUnit
 To run the Shopware 4 test suite, install PHPUnit 3.6 or later first:
 
-        pear config-set auto_discover 1
-        pear install pear.phpunit.de/PHPUnit
-        pear install phpunit/DbUnit
+    pear config-set auto_discover 1
+    pear install pear.phpunit.de/PHPUnit
+    pear install phpunit/DbUnit
 
 #### Running the tests
 The tests are located in the `tests/Shopware/` directory
 
-        cd tests/Shopware/
+    cd tests/Shopware/
 
 You can run the entire test suite with the following command:
 
-        phpunit
+    phpunit
 
 If you want to test a single component, add its path after the phpunit command, e.g.:
 
-        phpunit Tests/Components/Api/
+    phpunit Tests/Components/Api/
 
 
 ### Coding standards
