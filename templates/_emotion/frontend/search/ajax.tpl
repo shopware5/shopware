@@ -8,14 +8,14 @@
 		<ul class="searchresult">
 		{foreach $sSearchResults.sResults as $search_result}
 			<li class="searchresult">
-				{if $search_result.image}
-				<a href="{$search_result.link}" class="searchthumb" title="{$search_result.name}">
-					<img src="{$search_result.image}" class="resultimage" style="margin: 0pt 5px 0pt 0pt;">
-				</a>
+				{if $search_result.thumbNails.1}
+					<a href="{$search_result.link}" class="searchthumb" title="{$search_result.name}">
+						<img src="{$search_result.thumbNails.1}" class="resultimage" style="margin: 0pt 5px 0pt 0pt;">
+					</a>
 				{else}
 					{if !isset($sArticle.image.src)}
 						<div class="searchthumb">
-						<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />
+							<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />
 						</div>
 					{/if}
 				{/if}
