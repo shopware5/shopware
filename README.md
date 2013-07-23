@@ -26,7 +26,7 @@ Follow the instruction below if you want to install Shopware 4 using Git.
 
 1.) Clone the git repository to the desired location using:
 
-    git clone git@github.com:ShopwareAG/shopware-4.git
+    git clone https://github.com/ShopwareAG/shopware-4.git
 
 In case you wish to contribute to Shopware, fork the master tree rather than cloning it and create a pull request via Github. For further information please visit the section "Get involved" in this document.
 
@@ -49,6 +49,20 @@ those files.
 
     cd build/
     ant -Ddb.user=youruser -Ddb.password=yourpassword -Ddb.name=shopware build-database build-config
+
+4.) Download the demo data files and extract them:
+
+Go to the checkout directory and download the demo data files:
+
+	wget -O demo.zip files.shopware.de/download.php?package=demo
+
+Unzip the files to the checkout directory:
+
+	unzip demo.zip
+
+You can now access your shop
+
+Backend Login: demo/demo
 
 ## Get involved
 
