@@ -385,6 +385,13 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Fire the "afterrendereditor" event
         me.fireEvent('afterrendereditor', me, me.tinymce, input.id, me.config.editor);
+
+        window.setTimeout(function() {
+            me.changeSniffer = window.setInterval(function() {
+                var value = me.tinymce.getContent();
+                me.setRawValue(value);
+            }, 300);
+        }, 500);
     },
 
     /**
@@ -591,8 +598,11 @@ Ext.define('Shopware.form.field.TinyMCE',
      * @return void
      */
     destroy: function() {
-        this.callParent(arguments);
-        Ext.destroyMembers(this, 'tinymce');
+        var me = this;
+        me.callParent(arguments);
+
+        clearInterval(me.changeSniffer);
+        Ext.destroyMembers(me, 'tinymce');
     },
 
     /**
