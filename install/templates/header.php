@@ -27,12 +27,7 @@ if (!defined("installer")){
 
     <div class="meta">
         <p>
-            <strong>Shopware-Version:</strong> 4.1.1 RC
-        </p>
-
-        <p>
-            <strong>Installer-Version:</strong> 1.0.3
-
+            <strong>Shopware-Version:</strong> ___VERSION___
         </p>
     </div>
 </div>
