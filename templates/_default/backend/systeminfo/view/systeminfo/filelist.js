@@ -101,12 +101,13 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Filelist', {
                 flex: 1
             },{
                 header: '{s name=file_grid/column/required}Available{/s}',
-                dataIndex: 'version',
-                flex: 1
-            },{
+                dataIndex: 'available',
+                width: '65px',
+                renderer: me.renderStatus
+           },{
                 header: '{s name=file_grid/column/status}Status{/s}',
                 dataIndex: 'result',
-                flex: 1,
+                width: '65px',
                 renderer: me.renderStatus
             }
         ];
