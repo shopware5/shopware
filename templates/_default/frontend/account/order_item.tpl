@@ -143,7 +143,11 @@
 					<div class="textright">
 						{block name='frontend_account_order_item_price'}
 					    {if $article.price}
-					    	{$article.price} {$offerPosition.currency_html}*
+					        {if $article.tax_rate == 0}
+						        {$article.price} {$offerPosition.currency_html}
+						    {else}
+							    {$article.price} {$offerPosition.currency_html}*
+							{/if}
 						{else}
 							{se name="OrderItemInfoFree"}{/se}
 						{/if}
@@ -156,7 +160,11 @@
 						<strong>
 							{block name='frontend_account_order_item_amount'}
 							{if $article.amount}
-								{$article.amount} {$offerPosition.currency_html}*
+							    {if $article.tax_rate == 0}
+							        {$article.amount} {$offerPosition.currency_html}
+							    {else}
+								    {$article.amount} {$offerPosition.currency_html}*
+								{/if}
 							{else}
 								{se name="OrderItemInfoFree"}{/se}
 							{/if}
