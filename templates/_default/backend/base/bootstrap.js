@@ -153,3 +153,13 @@
 {include file='backend/base/component/element/textarea.js'}
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
+
+
+//Shopware backend application components
+{include file='backend/base/application/Shopware.controller.Listing.js'}
+{include file='backend/base/application/Shopware.data.Model.js'}
+{include file='backend/base/application/Shopware.grid.Listing.js'}
+{include file='backend/base/application/Shopware.store.Listing.js'}
+{include file='backend/base/application/Shopware.window.Detail.js'}
+{include file='backend/base/application/Shopware.window.Listing.js'}
+{include file='backend/base/application/Shopware.window.Progress.js'}
