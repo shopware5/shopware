@@ -53,7 +53,6 @@
 // Import styles for legacy browsers
 @import 'shopware-ui/legacy';
 
-
 .#{$prefix}dd-drag-proxy, .#{$prefix}boundlist, .#{$prefix}menu, .#{$prefix}datepicker {
     position: fixed !important;
 }

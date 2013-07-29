@@ -94,7 +94,6 @@
 .#{$prefix}toolbar-docked-bottom {
 	@include border-radius(0 0 3px 3px);
     background: $toolbar-background-color;
-    @include inner-border(0 1px 1px, #f0f3f6);
 
 	// Button normal style
     .#{$prefix}btn-default-toolbar-small{
