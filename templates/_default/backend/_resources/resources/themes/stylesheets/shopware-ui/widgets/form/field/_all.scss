@@ -88,7 +88,7 @@ td.#{$prefix}form-item-body {
 
 	.#{$prefix}form-field {
 		@include border-radius(3px);
-		@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
+		//@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
 		@include form-item-focus;
 		border-color: #a6b0b7;
 		border-bottom-color: #d9dee2;
