@@ -30,9 +30,12 @@
 
 // Panel header
 .#{$prefix}panel-header-default {
-	@include filter-gradient(#f7f7f7, #e5e6e8, vertical);
-	@include background-image(linear-gradient(top, #f7f7f7 0%,#e5e6e8 100%));
-	
+
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                  svg-color-stop(#f7f7f7, 0%, 1),
+                  svg-color-stop(#e5e6e8, 100%, 1)
+                )) center center no-repeat transparent;
+
 	.#{$prefix}panel-header-text-default {
 		font-weight: normal;
 		font-size: 11px;
@@ -47,8 +50,12 @@
 // Collapsed panel
 .#{$prefix}region-collapsed-placeholder {
 	@include inner-border(0 1px 0 1px, #fff);
-	@include filter-gradient(#f7f7f7, #e5e6e8, vertical);
-	@include background-image(linear-gradient(left, #f7f7f7, #e6e6e8));
+
+    background: svg-linear-gradient(0%, 0%, 100%, 0%, (
+                  svg-color-stop(#f7f7f7, 0%, 1),
+                  svg-color-stop(#e6e6e8, 100%, 1)
+                )) center center no-repeat transparent;
+
 	border-left: 1px solid $border-color !important;
 	border-bottom: 0 none;
 
@@ -145,7 +152,12 @@
     // Header
     .#{$prefix}panel-header {
         @include inner-border(1px 0 1px 0, #fff);
-        @include background-image(linear-gradient(top, #f7f7f7 0%,#e5e6e8 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#f7f7f7, 0%, 1),
+                      svg-color-stop(#e5e6e8, 100%, 1)
+                    )) center center no-repeat transparent;
+
         border-top: 0 none !important;
 
         // Header text
