@@ -58,7 +58,6 @@
 
         // Using the box shadw as the second bottom border
         //@include single-box-shadow(#fff, 0, 1px, 0, 0);
-        @include inner-border(1px 1px 1px 1px, rgba(255, 255, 255, .45));
         @include border-radius(2px);
         margin: 1px 0;
         padding: 4px 5px 3px 27px;

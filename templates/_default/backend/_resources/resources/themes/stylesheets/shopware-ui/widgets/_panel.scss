@@ -44,13 +44,11 @@
 }
 
 .#{$prefix}panel-header-default-top {
-	@include inner-border(1px 1px 1px 1px, #fff);
+	outline: #fff solid 1px;
 }
 
 // Collapsed panel
 .#{$prefix}region-collapsed-placeholder {
-	@include inner-border(0 1px 0 1px, #fff);
-
     background: svg-linear-gradient(0%, 0%, 100%, 0%, (
                   svg-color-stop(#f7f7f7, 0%, 1),
                   svg-color-stop(#e6e6e8, 100%, 1)
@@ -108,7 +106,6 @@
 
     // Panel body
     .#{$prefix}panel-body {
-        @include inner-border(0 1px 1px 0, $light-border-color);
     	border-top: 0 none;
     	box-shadow: inset 0 6px 6px -6px $font-color;
     	border-bottom: 0 none;
@@ -151,8 +148,6 @@
 
     // Header
     .#{$prefix}panel-header {
-        @include inner-border(1px 0 1px 0, #fff);
-
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                       svg-color-stop(#f7f7f7, 0%, 1),
                       svg-color-stop(#e5e6e8, 100%, 1)
