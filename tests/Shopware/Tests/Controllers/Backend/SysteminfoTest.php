@@ -83,11 +83,6 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
 
         $this->assertArrayHasKey('data', $jsonBody);
         $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('name', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('required', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('hash', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('version', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('result', $jsonBody['data'][0]);
     }
 
     public function testGetVersionList(){
