@@ -298,3 +298,170 @@
 		});
 	});
 })(jQuery);
+
+/**
+ * LastSeenArticle Collector
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesCollector',
+        defaults = {
+        };
+
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options) ;
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    Plugin.prototype.init = function () {
+
+        var me = this,
+            opts = me.options,
+            articleNum = 5,
+            index = sessionStorage.getItem('lastSeenArticleIndex') || 0,
+            i = index - articleNum+1, data, article, exists;
+
+        // Reset index if not defined
+        if(index < 0) index = 0;
+
+        for(; i < index+1; i++) {
+            data = sessionStorage.getItem('lastSeenArticle' + i);
+            if(!data) {
+                continue;
+            }
+
+            article = data.split('~')[0];
+            exists = (article == opts.articleId);
+
+            // break if the aritcle exists already
+            if(exists) {
+                break;
+            }
+        }
+
+        if(exists) {
+            return false;
+        }
+
+        sessionStorage.setItem('lastSeenArticleIndex', ++index);
+        sessionStorage.setItem('lastSeenArticle' + index, format('%0~%1~%2~%3', opts.articleId, opts.articleName, opts.linkDetailsRewrited, opts.thumbnail));
+        sessionStorage.removeItem('lastSeenArticle' + (index - articleNum));
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
+
+/**
+ * LastSeenArticle Displayer
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesDisplayer',
+        defaults = {
+        };
+
+    // Append articles to Template
+    var createTemplate = function(article, lastClass) {
+        var rule, image, hidden, desc;
+
+        if(!article) {
+            return false;
+        }
+
+        rule = $('<li>', { 'class': 'lastview_rule' + lastClass });
+        image = $('<a>', {
+            'id': article[0],
+            'rel': 'nofollow',
+            'class': 'article_image',
+            'href': article[2],
+            'style': 'background: #fff url(' + article[3] + ') no-repeat center center'
+
+        });
+
+        hidden = $('<span>', {
+            'class': 'hidden',
+            'html': article[1]
+        });
+
+        desc = $('<a>', {
+            'rel': 'nofollow',
+            'class': 'article_description',
+            'title': article[1],
+            'href': article[2],
+            'html': article[1]
+        });
+
+        hidden.appendTo(image);
+        image.appendTo(rule);
+        hidden.appendTo(rule);
+        desc.appendTo(rule);
+
+        return rule;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    Plugin.prototype.init = function () {
+        // Plugin configuration
+        var articleNum = 5,
+            index = sessionStorage.getItem('lastSeenArticleIndex'),
+            i = 1,
+            lastClass = '',
+            data, article, all;
+
+        all = index;
+        if(all > articleNum) {
+            all = articleNum;
+        }
+
+        // Append all articles to the template
+        for(; i <= all; i++) {
+            if(sessionStorage.getItem('lastSeenArticle' + index))
+            {
+                data = sessionStorage.getItem('lastSeenArticle' + index);
+                article = data.split("~");
+                if(i == all || i % 5 == 0) lastClass = '_last';
+                $('.viewlast ul').append(createTemplate(article, lastClass));
+            }
+            index = index -1;
+        }
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
