@@ -106,10 +106,10 @@
 // Default shadow
 .#{$prefix}css-shadow {
 	// Need to hardcode instead of an mixin due to the fact that we need !important here
-	-webkit-box-shadow: 0 0 3px rgba(0, 55, 110, 0.4) !important;
-	-moz-box-shadow: 0 0 3px rgba(0, 55, 110, 0.4) !important;
-	-ms-box-shadow: 0 0 3px rgba(0, 55, 110, 0.4) !important;
-	box-shadow: 0 0 3px rgba(0, 55, 110, 0.4) !important;
+	-webkit-box-shadow: 0 0 0px transparent !important;
+	-moz-box-shadow: 0 0 0px transparent !important;
+	-ms-box-shadow: 0 0 0px transparent !important;
+	box-shadow: 0 0 0px transparent !important;
 }
 
 // Ghosting modus
