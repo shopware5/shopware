@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 @mixin shopware-viewport {
-    .#{$prefix}viewport {
+    .#{$prefix}body {
         margin: 0;
         padding: 0;
         border: 0 none;
