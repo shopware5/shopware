@@ -156,14 +156,18 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
     /**
+     * @param $search
      * @param $association string
      * @return array
      */
     protected function searchAssociation($search, $association)
     {
-        $model = $this->associations[$association];
+        $builder = $this->getSearchAssociationQuery(
+            $association,
+            $this->getAssociatedModelByProperty($this->model, $association),
+            $search
+        );
 
-        $builder = $this->getSearchAssociationQuery($association, $model, $search);
         $query = $builder->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -189,5 +193,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         return $builder;
     }
+
+
+    protected function getAssociatedModelByProperty($model, $property)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($model);
+        return $metaData->getAssociationTargetClass($property);
+    }
+
 
 }

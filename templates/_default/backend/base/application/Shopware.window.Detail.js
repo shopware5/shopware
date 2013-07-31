@@ -16,13 +16,14 @@ Ext.define('Shopware.window.Detail', {
     statics: {
         displayConfig: {
             searchController: '',
-            searchUrl: '{url controller="placeholder" action="searchAssociation"}',
+            searchUrl: '{url action="searchAssociation"}',
 
             oneToManyGrid: {
                 searchField: false,
                 pagingbar: false,
                 editColumn: false
             },
+
             manyToManyGrid: {
                 searchField: false,
                 pagingbar: false,
@@ -47,10 +48,9 @@ Ext.define('Shopware.window.Detail', {
             config = Ext.apply({ }, config, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            console.log("get config", config);
             if (config.searchController) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/placeholder/', '/' + config.searchController.toLowerCase()  + '/'
+                    '/backend/base/', '/backend/' + config.searchController.toLowerCase()  + '/'
                 );
             }
 
@@ -73,7 +73,7 @@ Ext.define('Shopware.window.Detail', {
             }
             me.displayConfig[prop] = val;
             return true;
-        },
+        }
     },
 
 
@@ -116,25 +116,7 @@ Ext.define('Shopware.window.Detail', {
 
 
     /**
-     * FormPanel
-     *      TabPanel
-     *              HauptElement
-     *                  -   der Eigentliche Record
-     *                      - FieldSet
-     *                  -   1:1 Ohne Associationen
-     *                      - FieldSet
-     *              1:1
-     *                  -   Mit Assocationen
-     *                      -   N:M => Accordion
-     *                      -   1:1 => Fieldset
-     *                      -   1:N => Grid
-     *              1:N
-     *                  -   Wenn weitere Associationen:
-     *                      -   Grid hat detailseite
-     *                  -   Wenn keine Associationen
-     *                      -   Grid hat Inline-Editierung
-     *              N:M
-     *                  -   Einfaches Grid
+     *
      */
     createFormPanel: function() {
         var me = this;
@@ -304,12 +286,14 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
+
+
+
     createOneToOneItem: function(association, record) {
         var me = this, model, items = [],
             modelName, associations;
 
         modelName = association.associatedName;
-        console.log("modelName", modelName);
         var store = me.getAssociationStore(record, association);
         model = Ext.create(modelName);
         if (store instanceof Ext.data.Store && store.getCount() > 0) {
@@ -355,7 +339,7 @@ Ext.define('Shopware.window.Detail', {
         var gridStore = me.getAssociationStore(record, association);
         var grid = me.createGrid(gridStore, me.Config('manyToManyGrid'));
         var comboStore = me.createSearchComboStore(association, me.Config('searchUrl'));
-        var combo = me.createSearchCombo(comboStore, grid);
+        var combo = me.createSearchCombo(comboStore, grid, association);
 
         return Ext.create('Ext.container.Container', {
             items: [ combo, grid ],
@@ -397,10 +381,8 @@ Ext.define('Shopware.window.Detail', {
 
 
 
-    createSearchCombo: function(store, grid) {
-        var me = this, listConfig;
-
-        listConfig = me.createSearchComboListConfig();
+    createSearchCombo: function(store, grid, association) {
+        var me = this;
 
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'associationSearchField',
@@ -412,7 +394,7 @@ Ext.define('Shopware.window.Detail', {
             minChars: 2,
             fieldLabel: 'Search for',
             margin: 10,
-            listConfig: me.createSearchComboListConfig(),
+            listConfig: me.createSearchComboListConfig(association),
             listeners: {
                 select: function(combo, records) {
                     me.onSelectSearchItem(combo, records, combo.grid);
@@ -421,7 +403,17 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
-    createSearchComboListConfig: function() {
+
+    /**
+     * Creates a listing configuration for the search combo box.
+     * The search combo box is used for many to many association components.
+     * The association parameter is only passed to allow the override component
+     * identify which association search combo will be created.
+     *
+     * @param association
+     * @returns object
+     */
+    createSearchComboListConfig: function(association) {
         return {
             getInnerTpl: function() {
                 return '{literal}<a class="search-item">' +
@@ -430,6 +422,7 @@ Ext.define('Shopware.window.Detail', {
             }
         }
     },
+
 
     createSearchComboStore: function(association, searchUrl) {
         return Ext.create('Ext.data.Store', {
@@ -491,7 +484,6 @@ Ext.define('Shopware.window.Detail', {
 
         model = Ext.create(modelName);
         fields = me.createModelFields(model, alias);
-        console.log("fields", fields);
         return Ext.create('Ext.form.FieldSet', {
             flex: 1,
             items: fields,

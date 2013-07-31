@@ -20,7 +20,7 @@ Ext.define('Shopware.store.Listing', {
     proxy:{
         type:'ajax',
         api: {
-            read:    '{url action="list"}'
+            read: '{url action="list"}'
         },
         reader:{
             type:'json',

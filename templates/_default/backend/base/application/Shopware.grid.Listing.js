@@ -14,13 +14,60 @@ Ext.define('Shopware.grid.Listing', {
          */
         displayConfig: {
 
-            //toolbar configurations
+            /**
+             * Enables the grid toolbar.
+             * If you want to disable the whole shopware toolbar
+             * you can set this config to false.
+             *
+             * @boolean
+             */
             toolbar: true,
+
+            /**
+             * Displays an add button within the grid toolbar.
+             * Requires that the toolbar property is set to true.
+             * If the property is set to true, the add button will be created
+             * in the createAddButton function and will be set in the internal
+             * property "me.addButton".
+             * The add button allows the user to add new grid items over an detail page.
+             * Event Listeners:
+             *   - handler => onAddItem function
+             *
+             * @boolean
+             */
             addButton: true,
+
+            /**
+             * Displays a delete button within the grid toolbar.
+             * Requires that the toolbar property is set to true.
+             * If the property is set to true, the delete button will be created
+             * in the createDeleteButton function and will be set in the internal
+             * property "me.deleteButton".
+             * The delete button allows the user to remove multiple grid items with a
+             * single mouse click.
+             *
+             * Event Listeners:
+             *   - handler => onDeleteItems function
+             *
+             * @boolean
+             */
             deleteButton: true,
+
+            /**
+             * Displays a seach field within the grid toolbar.
+             * Requires that the toolbar property is set to true.
+             * If the property is set to true, the search field will be created
+             * in the createSearchField function and will be set in the internal
+             * property "me.searchField".
+             * The search field allows the user to filter the grid items with a fulltext
+             * search.
+             *
+             * Event Listeners:
+             *   - change => onSearch
+             */
             searchField: true,
 
-            //paging bar configuration
+
             pagingbar: true,
             pageSize: true,
 
@@ -103,6 +150,7 @@ Ext.define('Shopware.grid.Listing', {
         me.features = me.createFeatures();
         me.selModel = me.createSelectionModel();
         me.dockedItems = me.createDockedItems();
+
         me.registerEvents();
         me.callParent(arguments);
     },
@@ -122,18 +170,30 @@ Ext.define('Shopware.grid.Listing', {
      *
      * The return value will be assigned to the grid panel property "grid.columns".
      *
-     * To modify the result set you can use the following source code as example:
+     * To modify the resultset you can use the following source code as example:
      *
      * createColumns: function() {
      *    var me = this, columns = [];
      *
      *    columns = me.callParent(arguments);
      *    columns.push(me.createAdditionalColumn();
+     *
      *    return columns;
      * },
      *
      * You can also override the whole function without a callParent line to
      * specify all grid columns by yourself.
+     *
+     * To insert a column in a special array position you can use this source code as example:
+     *
+     *  createColumns: function() {
+     *      var me = this, items;
+     *      items = me.callParent(arguments);
+     *      items = Ext.Array.insert(
+     *          items, 2, [ me.createItem() ]
+     *      );
+     *      return items;
+     *  },
      *
      * @returns Array
      */
@@ -151,8 +211,9 @@ Ext.define('Shopware.grid.Listing', {
         if (me.Config('rowNumbers')) {
             columns.push(me.createRowNumberColumn());
         }
+
         Ext.each(model.fields.items, function(item, index) {
-            column = me.createFieldColumn(model, item);
+            column = me.createColumn(model, item);
             if (column !== null) {
                 columns.push(column);
             }
@@ -203,7 +264,6 @@ Ext.define('Shopware.grid.Listing', {
      *
      * To add a new specify action column you can use the following source code:
      *
-     *
      * createActionColumnItems: function() {
      *    var me = this, items = [];
      *
@@ -232,6 +292,8 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.deleteColumn is set to
      * false this function isn't called.
      *
+     * The item click will be passed to the onDeleteItem function.
+     *
      * @return Object
      */
     createDeleteColumn: function() {
@@ -252,6 +314,8 @@ Ext.define('Shopware.grid.Listing', {
      *
      * If the configuration displayConfig.editColumn is set to
      * false this function isn't called.
+     *
+     * The item click will be passed to the onEditItem function.
      *
      * @return Object
      */
@@ -291,7 +355,7 @@ Ext.define('Shopware.grid.Listing', {
      * @returns Object
      * @param model Ext.data.Model
      */
-    createFieldColumn: function(model, field) {
+    createColumn: function(model, field) {
         var me = this, column = {};
 
         if (model.idProperty === field.name) {
@@ -534,7 +598,7 @@ Ext.define('Shopware.grid.Listing', {
      * @returns Array
      */
     createPageSizes: function() {
-        var me = this, data = [];
+        var data = [];
 
         for (var i = 1; i <= 10; i++) {
             var count = i * 20;
@@ -579,6 +643,24 @@ Ext.define('Shopware.grid.Listing', {
      * The function is used from createToolbar function and calls the internal
      * functions createAddButton, createDeleteButton and createSearchField.
      *
+     * The Ext.toolbar.Fill element is set on the third position. Each other element
+     * after the Fill element will be displayed on the right side of the toolbar.
+     *
+     * To add an element on the left side of the toolbar, you can use the following source
+     * code as example:
+     *
+     *  createToolbarItems: function() {
+     *     var me = this, items;
+     *
+     *     items = me.callParent(arguments);
+     *
+     *     items = Ext.Array.insert(
+     *         items, 2, [ me.createMyToolbarItem() ]
+     *     );
+     *
+     *     return items;
+     *  },
+     *
      * @returns Array
      */
     createToolbarItems: function() {
@@ -604,6 +686,10 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.addButton is set to
      * false this function isn't called.
      *
+     * The button click will handled by the onAddItem function.
+     * To handle the button click by yourself, you can override
+     * the onAddItem function and the event won't be fired.
+     *
      * @returns Ext.button.Button
      */
     createAddButton: function() {
@@ -627,6 +713,10 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.deleteButton is set to
      * false this function isn't called.
      *
+     * The button click will handled by the onDeleteItems function.
+     * To handle the button click by yourself, you can override
+     * the onDeleteItems function and the event won't be fired.
+     *
      * @returns Ext.button.Button
      */
     createDeleteButton: function() {
@@ -638,7 +728,7 @@ Ext.define('Shopware.grid.Listing', {
             cls: 'secondary small',
             iconCls: 'sprite-minus-circle-frame',
             handler: function() {
-                me.onDeleteItems(arguments);
+                me.onDeleteItems();
             }
         });
 
@@ -650,6 +740,12 @@ Ext.define('Shopware.grid.Listing', {
      *
      * If the configuration displayConfig.searchField is set to
      * false this function isn't called.
+     *
+     * The change event of the search field will be handled through the
+     * onSearch function. If you want to handle it by yourself,
+     * override the onSearch function. If you override this function without
+     * calling the parent function, you have to handle the button creation and the event
+     * handling by yourself.
      *
      * @returns Ext.form.field.Text
      */
@@ -679,6 +775,7 @@ Ext.define('Shopware.grid.Listing', {
     /**
      * Event listener function of the selectionchange event of the grid component.
      * This event will be raised and controled in the listing controller of this component.
+     *
      * @Event selectionChanged
      */
     onSelectionChanged: function(selModel, selection) {
@@ -723,10 +820,8 @@ Ext.define('Shopware.grid.Listing', {
      * @return Ext.grid.column.Number
      */
     applyIntegerColumnConfig: function(column) {
-        var me = this;
-
         column.xtype = 'numbercolumn';
-        column.renderer = me.integerColumnRenderer;
+        column.renderer = this.integerColumnRenderer;
         column.align = 'right';
 
         return column;
@@ -741,7 +836,6 @@ Ext.define('Shopware.grid.Listing', {
      * @return Ext.grid.column.Column
      */
     applyStringColumnConfig: function(column) {
-        var me = this;
         return column;
     },
 
@@ -754,10 +848,8 @@ Ext.define('Shopware.grid.Listing', {
      * @return Ext.grid.column.Boolean
      */
     applyBooleanColumnConfig: function(column) {
-        var me = this;
-
         column.xtype = 'booleancolumn';
-        column.renderer = me.booleanColumnRenderer;
+        column.renderer = this.booleanColumnRenderer;
         return column;
     },
 
@@ -770,8 +862,6 @@ Ext.define('Shopware.grid.Listing', {
      * @return Ext.grid.column.Date
      */
     applyDateColumnConfig: function(column) {
-        var me = this;
-
         column.xtype = 'datecolumn';
         return column;
     },
@@ -785,8 +875,6 @@ Ext.define('Shopware.grid.Listing', {
      * @return Ext.grid.column.Number
      */
     applyFloatColumnConfig: function(column) {
-        var me = this;
-
         column.xtype = 'numbercolumn';
         column.align = 'right';
         return column;
