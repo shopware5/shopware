@@ -106,11 +106,24 @@
 
 // Default shadow
 .#{$prefix}css-shadow {
+
+    background: svg-box-shadow-bg(0, 0, 10, 1, #000000) center center repeat transparent;
+
+    padding: 10%;
+    margin: -10% 0 0 -10%;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+
+    -webkit-box-shadow: 0 0 0 #FFFFFF !important;
+    -moz-box-shadow: 0 0 0 #FFFFFF !important;
+    -ms-box-shadow: 0 0 0 #FFFFFF !important;
+    box-shadow: 0 0 0 #FFFFFF !important;
+
 	// Need to hardcode instead of an mixin due to the fact that we need !important here
-	-webkit-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
-	-moz-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
-	-ms-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
-	box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
+	//-webkit-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
+	//-moz-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
+	//-ms-box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
+	//box-shadow: 0 0 18px rgba(0, 55, 110, 0.4) !important;
 }
 
 // Ghosting modus
