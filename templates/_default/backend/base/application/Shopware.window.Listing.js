@@ -10,19 +10,60 @@ Ext.define('Shopware.window.Listing', {
 
     width: 990,
 
-    height: '90%',
+    height: '50%',
 
     alias : 'widget.shopware-window-listing',
 
+    /**
+     * The static property contains the shopware default configuration
+     * for this component.
+     * To override the displayConfig object, you can define the properties as follow:
+     *
+     * Ext.define('Shopware.apps......Window', {
+     *    displayConfig: {
+     *        ....
+     *    }
+     * });
+     *
+     * This object will be merged with the default displayConfig of Shopware.
+     *
+     * @object
+     */
     statics: {
+        /**
+         * Configuration of the Shopware listing window.
+         * This configuration is used for the different component elements.
+         * To override this properties, you can set the displayConfig property
+         * directly in the component.
+         *
+         * @object
+         */
         displayConfig: {
+            /**
+             * Class name of the grid which will be displayed in the center
+             * region of this window.
+             *
+             * @string
+             * @optional
+             */
             listingGrid:   'Shopware.grid.Listing',
+
+            /**
+             * Class name of the grid store. This store will be set in the
+             * listingGrid instance as grid store.
+             * The store will be loaded over this component so don't set the
+             * autoLoad parameter of the store to true.
+             *
+             * @string
+             * @required
+             */
             listingStore:  ''
         },
 
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
+         *
          * @param userOpts Object
          * @param displayConfig Object
          * @returns Object
@@ -73,6 +114,7 @@ Ext.define('Shopware.window.Listing', {
 
     /**
      * Helper function to get config access.
+     *
      * @param prop string
      * @returns mixed
      * @constructor
@@ -81,6 +123,9 @@ Ext.define('Shopware.window.Listing', {
         var me = this;
         return me._opts[prop];
     },
+
+
+
 
     initComponent: function() {
         var me = this;

@@ -49,7 +49,7 @@ Ext.define('Shopware.data.Model', {
         Object.keys(me.proxy.api).forEach(function(key) {
             value = me.proxy.api[key] + '';
             value = value.replace(
-                '/base/', '/' + me.controller.toLowerCase()  + '/'
+                '/backend/base/', '/backend/' + me.controller.toLowerCase()  + '/'
             );
             me.proxy.api[key] = value;
         });
