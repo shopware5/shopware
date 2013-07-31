@@ -87,6 +87,38 @@
 }
 
 
+// --- SVG Box Shadow --- //
+
+/**
+ * SVG Box Shadow Background
+ *
+ * Returns the svg url for a box-shadow background
+ *
+ * $offset-x        the x offset of the shadow (int)
+ * $offset-y        the y offset of the shadow (int)
+ * $blur            the range of the shadow (int)
+ * $opacity         the opacity of the shadow in decimal percentage (0.5 = 50%)
+ * $color           the color of the shadow (hex / rgba)
+ */
+@function svg-box-shadow-bg($offset-x, $offset-y, $blur, $opacity, $color) {
+  @return url('data:image/svg+xml;charset=utf-8;base64,'
+  + base64Encode('
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
+      <defs>
+          <filter id="dropshadow" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="' + $blur + '"/>
+              <feOffset dx="' + $offset-x + '" dy="' + $offset-y + '" result="offsetBlur"/>
+              <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+          </filter>
+      </defs>
+      <rect width="90%" height="90%" x="5%" y="5%" rx="5" ry="5" fill="' + $color + '" filter="url(#dropshadow)" style="opacity:' + $opacity + ';" />
+    </svg>'
+  ));
+}
+
 
 // --- SVG Gradients --- //
 
