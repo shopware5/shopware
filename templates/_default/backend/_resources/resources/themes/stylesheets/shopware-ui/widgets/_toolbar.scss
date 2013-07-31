@@ -29,8 +29,8 @@
  */
 
 // Default window toolbar
-.#{$prefix}window, .#{$prefix}window-default {
-	.#{$prefix}toolbar, .#{$prefix}toolbar-default {
+.#{$prefix}window {
+	.#{$prefix}toolbar {
 	    border-left: 1px solid $light-border-color;
        	border-right: 1px solid $light-border-color;
 
@@ -69,8 +69,8 @@
 	    }
 	}
 }
-.#{$prefix}ie9 .#{$prefix}window, .#{$prefix}ie9 .#{$prefix}window-default {
-    .#{$prefix}toolbar, .#{$prefix}toolbar-default {
+.#{$prefix}ie9 .#{$prefix}window  {
+    .#{$prefix}toolbar {
         .searchfield {
             .#{$prefix}form-item-body {
                 margin: 0 0 0 22px;
@@ -94,7 +94,6 @@
 .#{$prefix}toolbar-docked-bottom {
 	@include border-radius(0 0 3px 3px);
     background: $toolbar-background-color;
-    @include inner-border(0 1px 1px, #f0f3f6);
 
 	// Button normal style
     .#{$prefix}btn-default-toolbar-small{
