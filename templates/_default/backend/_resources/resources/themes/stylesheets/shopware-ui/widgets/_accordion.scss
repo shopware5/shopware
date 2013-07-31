@@ -74,14 +74,12 @@
 // Collpased accordion header
 .#{$prefix}accordion-item.#{$prefix}panel-collapsed {
 	.#{$prefix}accordion-hd {
-		@include inner-border(1px, #fff);
-
-        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+	     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                       svg-color-stop(#F6F7F6, 0%, 1),
                       svg-color-stop(#D0D4D8, 100%, 1)
                     )) center center no-repeat transparent !important;
-
 		border-color: #a4b4c0 !important;
+		border-bottom: 1px solid #a4b4c0;
 		
 		.#{$prefix}panel-header-text {
 			color: $font-color;
