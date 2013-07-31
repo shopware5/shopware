@@ -306,7 +306,7 @@ Ext.define('Shopware.controller.Listing', {
         }
     },
 
-    onEditItem: function(listing, record, rowIndex, colIndex, item) {
+    onEditItem: function(listing, record) {
         var me = this;
 
         if (!(record instanceof Ext.data.Model)) {

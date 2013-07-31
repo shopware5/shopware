@@ -288,7 +288,6 @@ Ext.define('Shopware.window.Detail', {
 
 
 
-
     createOneToOneItem: function(association, record) {
         var me = this, model, items = [],
             modelName, associations;
@@ -307,7 +306,7 @@ Ext.define('Shopware.window.Detail', {
 
         Ext.each(associations, function(assoc) {
             var store = me.getAssociationStore(model, assoc);
-            var grid = me.createGrid(model, me.Config('oneToManyGrid'));
+            var grid = me.createGrid(store, me.Config('oneToManyGrid'));
             if (grid) {
                 items.push(grid);
             }
@@ -322,6 +321,9 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
+
+
+
     createOneToManyItem: function(association, record) {
         var me = this;
 
@@ -331,6 +333,8 @@ Ext.define('Shopware.window.Detail', {
         grid.title = me.getModelName(association.associatedName);
         return grid;
     },
+
+
 
     createManyToManyItem: function(association, record) {
         var me = this;
@@ -380,7 +384,6 @@ Ext.define('Shopware.window.Detail', {
 
 
 
-
     createSearchCombo: function(store, grid, association) {
         var me = this;
 
@@ -403,7 +406,6 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
-
     /**
      * Creates a listing configuration for the search combo box.
      * The search combo box is used for many to many association components.
@@ -423,7 +425,6 @@ Ext.define('Shopware.window.Detail', {
         }
     },
 
-
     createSearchComboStore: function(association, searchUrl) {
         return Ext.create('Ext.data.Store', {
             model: association.associatedName,
@@ -436,20 +437,6 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
-    onSelectSearchItem: function(combo, records, grid) {
-        var inStore;
-
-        if (!grid) {
-            return;
-        }
-        Ext.each(records, function(record) {
-            inStore = grid.getStore().getById(record.get('id'));
-            if (inStore === null) {
-                grid.getStore().add(record);
-                combo.setValue('');
-            }
-        });
-    },
 
 
 
@@ -654,6 +641,7 @@ Ext.define('Shopware.window.Detail', {
 
 
 
+
     /**
      * Helper function to load the
      */
@@ -662,6 +650,8 @@ Ext.define('Shopware.window.Detail', {
             this.formPanel.loadRecord(this.record);
         }
     },
+
+
 
 
     onTabChange: function(tabPanel, newCard, oldCard, eOpts ) {
@@ -674,6 +664,87 @@ Ext.define('Shopware.window.Detail', {
 
     onCancel: function() {
         this.destroy();
+    },
+
+    onSelectSearchItem: function(combo, records, grid) {
+        var inStore;
+
+        if (!grid) {
+            return;
+        }
+        Ext.each(records, function(record) {
+            inStore = grid.getStore().getById(record.get('id'));
+            if (inStore === null) {
+                grid.getStore().add(record);
+                combo.setValue('');
+            }
+        });
+    },
+
+
+
+    /**
+     * Adds the shopware default form field configuration for integer form field.
+     * The field configuration will be applied to the passed field object.
+     *
+     * @param field
+     * @return Ext.form.field.Number
+     */
+    applyIntegerFieldConfig: function(field) {
+        field.xtype = 'numberfield';
+        field.align = 'right';
+        return field;
+    },
+
+    /**
+     * Adds the shopware default form field configuration for string form field.
+     * The field configuration will be applied to the passed field object.
+     *
+     * @param field
+     * @return Ext.form.field.Number
+     */
+    applyStringFieldConfig: function(field) {
+        field.xtype = 'textfield';
+        return field;
+    },
+
+    /**
+     * Adds the shopware default form field configuration for boolean form field.
+     * The field configuration will be applied to the passed field object.
+     *
+     * @param field
+     * @return Ext.form.field.Number
+     */
+    applyBooleanFieldConfig: function(field) {
+        field.xtype = 'checkbox';
+        field.uncheckedValue = false;
+        field.inputValue = true;
+        return field;
+    },
+
+    /**
+     * Adds the shopware default form field configuration for date form field.
+     * The field configuration will be applied to the passed field object.
+     *
+     * @param field
+     * @return Ext.form.field.Number
+     */
+    applyDateFieldConfig: function(field) {
+        field.xtype = 'datefield';
+        return field;
+    },
+
+    /**
+     * Adds the shopware default form field configuration for float form field.
+     * The field configuration will be applied to the passed field object.
+     *
+     * @param field
+     * @return Ext.form.field.Number
+     */
+    applyFloatFieldConfig: function(field) {
+        field.xtype = 'numberfield';
+        field.align = 'right';
+        return field;
     },
 
 
@@ -812,72 +883,7 @@ Ext.define('Shopware.window.Detail', {
      */
     getModelName: function(modelName) {
         return modelName.substr(modelName.lastIndexOf(".")+1);
-    },
+    }
 
-
-
-    /**
-     * Adds the shopware default form field configuration for integer form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyIntegerFieldConfig: function(field) {
-        field.xtype = 'numberfield';
-        field.align = 'right';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for string form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyStringFieldConfig: function(field) {
-        field.xtype = 'textfield';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for boolean form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyBooleanFieldConfig: function(field) {
-        field.xtype = 'checkbox';
-        field.uncheckedValue = false;
-        field.inputValue = true;
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for date form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyDateFieldConfig: function(field) {
-        field.xtype = 'datefield';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for float form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyFloatFieldConfig: function(field) {
-        field.xtype = 'numberfield';
-        field.align = 'right';
-        return field;
-    },
 });
 //{/block}
