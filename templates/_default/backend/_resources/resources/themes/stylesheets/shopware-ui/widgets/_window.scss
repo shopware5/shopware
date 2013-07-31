@@ -27,7 +27,6 @@
  * @version    $Id$
  * @author shopware AG
  */
- 
  // Deprecated modules window
 .#{$prefix}window-deprecated {
     border-color: #fc6220 !important;
@@ -51,6 +50,7 @@
 .#{$prefix}window {
     padding: 0;
     position: absolute !important;
+	background: transparent;
 
     /** Header */
     .#{$prefix}window-header {
@@ -110,6 +110,12 @@
     -moz-box-shadow: 0 0 0 transparent !important;
     -ms-box-shadow: 0 0 0 transparent !important;
     box-shadow: 0 0 0 transparent !important;
+
+	margin: 4px 0 0 4px;
+	border: 4px solid rgba(0, 0, 0, .08);
+	border-top: 0 none;
+	border-left: 0 none;
+
 }
 
 // Ghosting modus
