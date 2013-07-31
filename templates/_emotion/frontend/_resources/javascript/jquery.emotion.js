@@ -331,14 +331,14 @@
         var me = this,
             opts = me.options,
             articleNum = 5,
-            index = sessionStorage.getItem('lastSeenArticleIndex') || 0,
+            index = localStorage.getItem('lastSeenArticleIndex') || 0,
             i = index - articleNum+1, data, article, exists;
 
         // Reset index if not defined
         if(index < 0) index = 0;
 
         for(; i < index+1; i++) {
-            data = sessionStorage.getItem('lastSeenArticle' + i);
+            data = localStorage.getItem('lastSeenArticle' + i);
             if(!data) {
                 continue;
             }
@@ -356,9 +356,9 @@
             return false;
         }
 
-        sessionStorage.setItem('lastSeenArticleIndex', ++index);
-        sessionStorage.setItem('lastSeenArticle' + index, format('%0~%1~%2~%3', opts.articleId, opts.articleName, opts.linkDetailsRewrited, opts.thumbnail));
-        sessionStorage.removeItem('lastSeenArticle' + (index - articleNum));
+        localStorage.setItem('lastSeenArticleIndex', ++index);
+        localStorage.setItem('lastSeenArticle' + index, format('%0~%1~%2~%3', opts.articleId, opts.articleName, opts.linkDetailsRewrited, opts.thumbnail));
+        localStorage.removeItem('lastSeenArticle' + (index - articleNum));
     };
 
     $.fn[pluginName] = function ( options ) {
@@ -433,7 +433,7 @@
     Plugin.prototype.init = function () {
         // Plugin configuration
         var articleNum = 5,
-            index = sessionStorage.getItem('lastSeenArticleIndex'),
+            index = localStorage.getItem('lastSeenArticleIndex'),
             i = 1,
             lastClass = '',
             data, article, all;
@@ -445,9 +445,9 @@
 
         // Append all articles to the template
         for(; i <= all; i++) {
-            if(sessionStorage.getItem('lastSeenArticle' + index))
+            if(localStorage.getItem('lastSeenArticle' + index))
             {
-                data = sessionStorage.getItem('lastSeenArticle' + index);
+                data = localStorage.getItem('lastSeenArticle' + index);
                 article = data.split("~");
                 if(i == all || i % 5 == 0) lastClass = '_last';
                 $('.viewlast ul').append(createTemplate(article, lastClass));
