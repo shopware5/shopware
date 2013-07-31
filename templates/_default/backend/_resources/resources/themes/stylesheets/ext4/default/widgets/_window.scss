@@ -209,20 +209,4 @@
         @include x-frame('window-header', '#{$ui-label}-collapsed-bottom', $ui-border-radius, $window-border-width, 4px 5px 4px, $ui-background-color);
         @include x-frame('window-header', '#{$ui-label}-collapsed-left',   $ui-border-radius, $window-border-width, 5px 4px, $ui-background-color);
     }
-    
-    .#{$prefix}window-header-#{$ui-label}-top {
-        @include inner-border(1px 1px 0, $ui-inner-border-color);
-    }
-
-    .#{$prefix}window-header-#{$ui-label}-right {
-        @include inner-border(1px 1px 1px 0, $ui-inner-border-color);
-    }
-
-    .#{$prefix}window-header-#{$ui-label}-bottom {
-        @include inner-border(0px 1px 1px, $ui-inner-border-color);
-    }
-
-    .#{$prefix}window-header-#{$ui-label}-left {
-        @include inner-border(1px 0 1px 1px, $ui-inner-border-color);
-    }
 }
