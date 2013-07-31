@@ -1,8 +1,23 @@
 
 //{block name="backend/component/grid/panel"}
-Ext.define('Shopware.grid.Listing', {
+Ext.define('Shopware.grid.Listing',
+/** @lends Ext.grid.Panel# */
+{
+
+    /**
+     * The parent class that this class extends
+     * @type { String }
+     */
     extend: 'Ext.grid.Panel',
     alias: 'widget.shopware-grid-panel',
+
+    /**
+     * Is defined, when the { @link #statics.displayConfig.addButton } property is set to `true`.
+     *
+     * @default { undefined }
+     * @type { Ext.button.Button }
+     */
+    addButton: undefined,
 
     statics: {
         /**
@@ -19,7 +34,7 @@ Ext.define('Shopware.grid.Listing', {
              * If you want to disable the whole shopware toolbar
              * you can set this config to false.
              *
-             * @boolean
+             * @type { boolean }
              */
             toolbar: true,
 
@@ -27,11 +42,9 @@ Ext.define('Shopware.grid.Listing', {
              * Displays an add button within the grid toolbar.
              * Requires that the toolbar property is set to true.
              * If the property is set to true, the add button will be created
-             * in the createAddButton function and will be set in the internal
-             * property "me.addButton".
+             * in the { @link #createAddButton } function and will be set in the internal
+             * property { @link addButton }.
              * The add button allows the user to add new grid items over an detail page.
-             * Event Listeners:
-             *   - handler => onAddItem function
              *
              * @boolean
              */
@@ -46,9 +59,6 @@ Ext.define('Shopware.grid.Listing', {
              * The delete button allows the user to remove multiple grid items with a
              * single mouse click.
              *
-             * Event Listeners:
-             *   - handler => onDeleteItems function
-             *
              * @boolean
              */
             deleteButton: true,
@@ -62,8 +72,10 @@ Ext.define('Shopware.grid.Listing', {
              * The search field allows the user to filter the grid items with a fulltext
              * search.
              *
-             * Event Listeners:
-             *   - change => onSearch
+             * @event `searchItem`
+             *      @param { Ext.form.field.Text } field - The searchField
+             *      @param { String } value - The value of the searchfield
+             *
              */
             searchField: true,
 
@@ -100,12 +112,14 @@ Ext.define('Shopware.grid.Listing', {
          * Static function which sets the property value of
          * the passed property and value in the display configuration.
          *
-         * @param prop
-         * @param val
-         * @returns boolean
+         * @param { String } prop - Property which should be in the { @link #displayConfig }
+         * @param { String= } val - The value of the property (optional)
+         * @returns { Boolean }
          */
         setDisplayConfig: function(prop, val) {
             var me = this;
+
+            val = val || '';
 
             if(!me.displayConfig.hasOwnProperty(prop)) {
                 return false;
@@ -141,6 +155,8 @@ Ext.define('Shopware.grid.Listing', {
      * Initialisation of this component.
      *
      * Creates all required components for a default shopware listing.
+     *
+     * @returns { Void }
      */
     initComponent: function() {
         var me = this;
@@ -171,7 +187,7 @@ Ext.define('Shopware.grid.Listing', {
      * The return value will be assigned to the grid panel property "grid.columns".
      *
      * To modify the resultset you can use the following source code as example:
-     *
+     * @example
      * createColumns: function() {
      *    var me = this, columns = [];
      *
@@ -185,7 +201,7 @@ Ext.define('Shopware.grid.Listing', {
      * specify all grid columns by yourself.
      *
      * To insert a column in a special array position you can use this source code as example:
-     *
+     * @example
      *  createColumns: function() {
      *      var me = this, items;
      *      items = me.callParent(arguments);
@@ -292,8 +308,6 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.deleteColumn is set to
      * false this function isn't called.
      *
-     * The item click will be passed to the onDeleteItem function.
-     *
      * @return Object
      */
     createDeleteColumn: function() {
@@ -303,7 +317,7 @@ Ext.define('Shopware.grid.Listing', {
             action:'delete',
             iconCls:'sprite-minus-circle-frame',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.onDeleteItem(view, rowIndex, colIndex, item, opts, record);
+                me.fireEvent('deleteItem', me, view, rowIndex, colIndex, item, opts, record);
             }
         };
     },
@@ -315,8 +329,6 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.editColumn is set to
      * false this function isn't called.
      *
-     * The item click will be passed to the onEditItem function.
-     *
      * @return Object
      */
     createEditColumn: function() {
@@ -326,7 +338,7 @@ Ext.define('Shopware.grid.Listing', {
             action: 'edit',
             iconCls: 'sprite-pencil',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.onEditItem(view, rowIndex, colIndex, item, opts, record);
+                me.fireEvent('editItem', me, record, rowIndex, colIndex, item);
             }
         };
     },
@@ -348,8 +360,6 @@ Ext.define('Shopware.grid.Listing', {
 
     /**
      * Helper function which creates a grid column for a passed model field.
-     *
-     * Override this function to prevent the field
      *
      * @param field Ext.data.Field
      * @returns Object
@@ -486,7 +496,7 @@ Ext.define('Shopware.grid.Listing', {
         return Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function(selModel, selection) {
-                    me.onSelectionChanged(selModel, selection);
+                    me.fireEvent('selectionChanged', me, selModel, selection);
                 }
             }
         });
@@ -578,7 +588,7 @@ Ext.define('Shopware.grid.Listing', {
             valueField: 'value',
             listeners: {
                 select: function(combo, records) {
-                    me.onChangePageSize(combo, records);
+                    me.fireEvent('changePageSize', me, combo, records);
                 }
             }
         });
@@ -686,10 +696,6 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.addButton is set to
      * false this function isn't called.
      *
-     * The button click will handled by the onAddItem function.
-     * To handle the button click by yourself, you can override
-     * the onAddItem function and the event won't be fired.
-     *
      * @returns Ext.button.Button
      */
     createAddButton: function() {
@@ -700,7 +706,7 @@ Ext.define('Shopware.grid.Listing', {
             cls: 'secondary small',
             iconCls: 'sprite-plus-circle-frame',
             handler: function() {
-                me.onAddItem();
+                me.fireEvent('addItem', me, this);
             }
         });
 
@@ -713,10 +719,6 @@ Ext.define('Shopware.grid.Listing', {
      * If the configuration displayConfig.deleteButton is set to
      * false this function isn't called.
      *
-     * The button click will handled by the onDeleteItems function.
-     * To handle the button click by yourself, you can override
-     * the onDeleteItems function and the event won't be fired.
-     *
      * @returns Ext.button.Button
      */
     createDeleteButton: function() {
@@ -728,7 +730,8 @@ Ext.define('Shopware.grid.Listing', {
             cls: 'secondary small',
             iconCls: 'sprite-minus-circle-frame',
             handler: function() {
-                me.onDeleteItems();
+                var selModel = me.getSelectionModel();
+                me.fireEvent('deleteItems', me, this, selModel.getSelection());
             }
         });
 
@@ -740,12 +743,6 @@ Ext.define('Shopware.grid.Listing', {
      *
      * If the configuration displayConfig.searchField is set to
      * false this function isn't called.
-     *
-     * The change event of the search field will be handled through the
-     * onSearch function. If you want to handle it by yourself,
-     * override the onSearch function. If you override this function without
-     * calling the parent function, you have to handle the button creation and the event
-     * handling by yourself.
      *
      * @returns Ext.form.field.Text
      */
@@ -760,50 +757,13 @@ Ext.define('Shopware.grid.Listing', {
             checkChangeBuffer:500,
             listeners: {
                 change: function(field, value) {
-                    me.onSearch(field, value);
+                    me.fireEvent('search', me, field, value);
                 }
             }
         });
 
         return me.searchField;
     },
-
-    ////////////////////////////
-    ////  Event listeners   ////
-    ////////////////////////////
-
-    /**
-     * Event listener function of the selectionchange event of the grid component.
-     * This event will be raised and controled in the listing controller of this component.
-     *
-     * @Event selectionChanged
-     */
-    onSelectionChanged: function(selModel, selection) {
-        this.fireEvent('selectionChanged', this, selModel, selection);
-    },
-
-    onAddItem: function() {
-        this.fireEvent('addItem', this);
-    },
-    onDeleteItems: function() {
-        var me = this, selModel = me.getSelectionModel();
-        this.fireEvent('deleteItems', me, selModel.getSelection());
-    },
-    onDeleteItem: function (view, rowIndex, colIndex, item, opts, record) {
-        this.fireEvent('deleteItem', this, record);
-    },
-    onEditItem: function(view, rowIndex, colIndex, item, opts, record) {
-        this.fireEvent('editItem', this, record, rowIndex, colIndex, item);
-    },
-    onSearch: function(field, value) {
-        this.fireEvent('search', this, field, value);
-    },
-    onChangePageSize: function(combo, records) {
-        this.fireEvent('changePageSize', this, combo, records);
-    },
-
-
-
 
 
 
