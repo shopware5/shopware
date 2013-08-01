@@ -1,4 +1,3 @@
-
 //{block name="backend/component/window/listing"}
 Ext.define('Shopware.window.Listing', {
     extend: 'Enlight.app.Window',
@@ -12,7 +11,7 @@ Ext.define('Shopware.window.Listing', {
 
     height: '50%',
 
-    alias : 'widget.shopware-window-listing',
+    alias: 'widget.shopware-window-listing',
 
     /**
      * The static property contains the shopware default configuration
@@ -46,7 +45,7 @@ Ext.define('Shopware.window.Listing', {
              * @string
              * @optional
              */
-            listingGrid:   'Shopware.grid.Listing',
+            listingGrid: 'Shopware.grid.Listing',
 
             /**
              * Class name of the grid store. This store will be set in the
@@ -57,7 +56,7 @@ Ext.define('Shopware.window.Listing', {
              * @string
              * @required
              */
-            listingStore:  ''
+            listingStore: ''
         },
 
         /**
@@ -68,7 +67,7 @@ Ext.define('Shopware.window.Listing', {
          * @param displayConfig Object
          * @returns Object
          */
-        getDisplayConfig: function(userOpts, displayConfig) {
+        getDisplayConfig: function (userOpts, displayConfig) {
             var config;
 
             if (userOpts && userOpts.displayConfig) {
@@ -88,10 +87,10 @@ Ext.define('Shopware.window.Listing', {
          * @param val
          * @returns boolean
          */
-        setDisplayConfig: function(prop, val) {
+        setDisplayConfig: function (prop, val) {
             var me = this;
 
-            if(!me.displayConfig.hasOwnProperty(prop)) {
+            if (!me.displayConfig.hasOwnProperty(prop)) {
                 return false;
             }
             me.displayConfig[prop] = val;
@@ -104,7 +103,7 @@ Ext.define('Shopware.window.Listing', {
      * Class constructor which merges the different configurations.
      * @param opts
      */
-    constructor: function(opts) {
+    constructor: function (opts) {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
@@ -119,33 +118,30 @@ Ext.define('Shopware.window.Listing', {
      * @returns mixed
      * @constructor
      */
-    Config: function(prop) {
+    getConfig: function (prop) {
         var me = this;
         return me._opts[prop];
     },
 
-
-
-
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.items = me.createItems();
         me.callParent(arguments);
     },
 
-    createItems: function() {
+    createItems: function () {
         var me = this, items = [];
 
         items.push(me.createGridPanel());
         return items;
     },
 
-    createGridPanel: function() {
+    createGridPanel: function () {
         var me = this;
 
-        me.listingStore = Ext.create(me.Config('listingStore')).load();
-        me.gridPanel = Ext.create(me.Config('listingGrid'), {
+        me.listingStore = Ext.create(me.getConfig('listingStore')).load();
+        me.gridPanel = Ext.create(me.getConfig('listingGrid'), {
             store: me.listingStore,
             flex: 1
         });

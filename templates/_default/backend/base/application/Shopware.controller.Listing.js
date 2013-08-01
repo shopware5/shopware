@@ -1,13 +1,10 @@
-
 //{block name="backend/component/controller/listing"}
 Ext.define('Shopware.controller.Listing', {
     extend: 'Ext.app.Controller',
 
     statics: {
         displayConfig: {
-            listingWindow: '',
-            listingGrid:   '',
-            detailWindow:  ''
+
         },
 
         /**
@@ -17,7 +14,7 @@ Ext.define('Shopware.controller.Listing', {
          * @param displayConfig Object
          * @returns Object
          */
-        getDisplayConfig: function(userOpts, displayConfig) {
+        getDisplayConfig: function (userOpts, displayConfig) {
             var config;
 
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
@@ -34,10 +31,10 @@ Ext.define('Shopware.controller.Listing', {
          * @param val
          * @returns boolean
          */
-        setDisplayConfig: function(prop, val) {
+        setDisplayConfig: function (prop, val) {
             var me = this;
 
-            if(!me.displayConfig.hasOwnProperty(prop)) {
+            if (!me.displayConfig.hasOwnProperty(prop)) {
                 return false;
             }
             me.displayConfig[prop] = val;
@@ -50,7 +47,7 @@ Ext.define('Shopware.controller.Listing', {
      * Class constructor which merges the different configurations.
      * @param opts
      */
-    constructor: function(opts) {
+    constructor: function (opts) {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
@@ -64,7 +61,7 @@ Ext.define('Shopware.controller.Listing', {
      * @returns mixed
      * @constructor
      */
-    Config: function(prop) {
+    getConfig: function (prop) {
         var me = this;
         return me._opts[prop];
     },
@@ -76,37 +73,15 @@ Ext.define('Shopware.controller.Listing', {
      * After the window created the function adds the event controls
      * over the createControls function.
      */
-    init: function() {
+    init: function () {
         var me = this;
 
-        if (me.Config('listingWindow')) {
-            me.createListingWindow();
-        }
-
-        if (me.Config('listingGrid')) {
+        if (me.listingGrid) {
             me.control(me.createControls());
         }
 
+        console.log("Shopware.controller.Listing", me);
         me.callParent(arguments);
-    },
-
-
-    /**
-     * Creates and shows the configured listing window.
-     * This function requires the displayConfig.listingWindow parameter.
-     *
-     * If this parameter isn't set, the function won't be called.
-     *
-     * @returns Shopware.window.Listing
-     */
-    createListingWindow: function() {
-        var me = this;
-
-        me.listingWindow = me.getView(
-            me.Config('listingWindow')
-        ).create().show();
-
-        return me.listingWindow;
     },
 
     /**
@@ -118,13 +93,12 @@ Ext.define('Shopware.controller.Listing', {
      *
      * @returns Object
      */
-    createControls: function() {
+    createControls: function () {
         var me = this, alias, controls = {};
 
-        alias = Ext.ClassManager.getAliasesByName(me.Config('listingGrid'));
+        alias = Ext.ClassManager.getAliasesByName(me.listingGrid.$className);
         alias = alias[0];
         alias = alias.replace('widget.', '');
-
         controls[alias] = me.createListingWindowControls();
 
         return controls;
@@ -136,21 +110,21 @@ Ext.define('Shopware.controller.Listing', {
      *
      * @returns Object
      */
-    createListingWindowControls: function() {
-        var me = this;
+    createListingWindowControls: function () {
+        var me = this, events = {};
 
-        return {
-            selectionChanged: me.onSelectionChanged,
-            addItem: me.onAddItem,
-            deleteItem: me.onDeleteItem,
-            deleteItems: me.onDeleteItems,
-            editItem: me.onEditItem,
-            search: me.onSearch,
-            changePageSize: me.onChangePageSize
-        };
+        events[me.listingGrid.eventAlias + '-selection-changed'] = me.onSelectionChanged;
+        events[me.listingGrid.eventAlias + '-add-item'] = me.onAddItem;
+        events[me.listingGrid.eventAlias + '-delete-item'] = me.onDeleteItem;
+        events[me.listingGrid.eventAlias + '-delete-items'] = me.onDeleteItems;
+        events[me.listingGrid.eventAlias + '-edit-item'] = me.onEditItem;
+        events[me.listingGrid.eventAlias + '-search'] = me.onSearch;
+        events[me.listingGrid.eventAlias + '-change-page-size'] = me.onChangePageSize;
+
+        return events;
     },
 
-    onSelectionChanged: function(grid, selModel, selection) {
+    onSelectionChanged: function (grid, selModel, selection) {
         var me = this;
 
         if (!(grid instanceof Ext.grid.Panel)) {
@@ -164,124 +138,123 @@ Ext.define('Shopware.controller.Listing', {
     },
 
 
-    onAddItem: function(grid) {
-        var me = this, store = grid.getStore();
+    onAddItem: function (listing) {
+        var me = this, store = listing.getStore();
         var record = Ext.create(store.model);
-        me.createDetailWindow(record);
+        me.createDetailWindow(record, listing.getConfig('detailWindow'));
     },
 
-    onDeleteItem: function(grid, record) {
-        var me = this;
+    onDeleteItem: function (grid, record) {
+        console.log("delete item");
 
-        if (!(record instanceof Ext.data.Model)) {
-            return false;
-        }
-        if (!me.hasModelAction(record, 'destroy')) {
-            grid.getStore().remove(record);
-            return true;
-        }
-
-        Ext.MessageBox.confirm('Delete item', 'Are you sure you want to delete this item?', function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            record.destroy({
-                success: function(record, operation) {
-                    Shopware.Notification.createGrowlMessage('Success', 'Item deleted successfully');
-                },
-                failure: function(record, operation) {
-                    var rawData = record.getProxy().getReader().rawData;
-
-                    var message = 'An error occurred while deleting the record';
-                    if (Ext.isString(rawData.error) && rawData.error.length > 0) {
-                        message = message + '<br><br>' + rawData.error;
-                    }
-                    Shopware.Notification.createGrowlMessage('Failure', message);
-                }
-            });
-        });
+//        var me = this;
+//
+//        if (!(record instanceof Ext.data.Model)) {
+//            return false;
+//        }
+//        if (!me.hasModelAction(record, 'destroy')) {
+//            grid.getStore().remove(record);
+//            return true;
+//        }
+//
+//        Ext.MessageBox.confirm('Delete item', 'Are you sure you want to delete this item?', function (response) {
+//            if (response !== 'yes') {
+//                return false;
+//            }
+//            record.destroy({
+//                success: function(record, operation) {
+//                    Shopware.Notification.createGrowlMessage('Success', 'Item deleted successfully');
+//                },
+//                failure: function(record, operation) {
+//                    var rawData = record.getProxy().getReader().rawData;
+//
+//                    var message = 'An error occurred while deleting the record';
+//                    if (Ext.isString(rawData.error) && rawData.error.length > 0) {
+//                        message = message + '<br><br>' + rawData.error;
+//                    }
+//                    Shopware.Notification.createGrowlMessage('Failure', message);
+//                }
+//            });
+//        });
     },
 
-    hasModelAction: function(model, action) {
+    hasModelAction: function (model, action) {
         return (model.proxy && model.proxy.api && model.proxy.api[action]);
     },
 
-    onDeleteItems: function(grid, records) {
-        var me = this;
-
-        if (records.length <= 0) {
-            return false;
-        }
-        if (records.length === 1) {
-            return me.onDeleteItem(grid, records[0]);
-        }
-        me.deleteWindow = me.createDeleteWindow(records);
-        me.deleteWindow.show();
-
-        me.sequentialDelete(
-            null,
-            records,
-            me.deleteWindow.progressbar,
-            records.length,
-            grid.getStore()
-        );
+    onDeleteItems: function (grid, records) {
+//        var me = this;
+//
+//        if (records.length <= 0) {
+//            return false;
+//        }
+//        if (records.length === 1) {
+//            return me.onDeleteItem(grid, records[0]);
+//        }
+//        me.deleteWindow = me.createDeleteWindow(records);
+//        me.deleteWindow.show();
+//
+//        me.sequentialDelete(
+//            null,
+//            records,
+//            me.deleteWindow.progressbar,
+//            records.length,
+//            grid.getStore()
+//        );
     },
 
-    createDeleteWindow: function(records) {
-        var me = this, text;
-
-        text = me.getModelName(records[0]);
-        text += ': [0] of [1]';
-
-        return Ext.create('Shopware.window.Progress', {
-            progressTitle: text,
-            progressCount: records.length
-        });
+    createDeleteWindow: function (records) {
+//        var me = this, text;
+//
+//        text = me.getModelName(records[0]);
+//        text += ': [0] of [1]';
+//
+//        return Ext.create('Shopware.window.Progress', {
+//            progressTitle: text,
+//            progressCount: records.length
+//        });
     },
 
-    sequentialDelete: function(currentRecord, records, progressbar, count, store) {
-        var me = this, text = '';
-
-        if (currentRecord === null) {
-            currentRecord = records.shift();
-        }
-
-        text = me.getModelName(currentRecord);
-        text += ': ' + (count - records.length) + ' of ' + count;
-
-        progressbar.updateProgress(
-            (count - records.length) / count,
-            text, true
-        );
-
-        currentRecord.destroy({
-            success: function() {
-                if (store instanceof Ext.data.Store) {
-                    store.remove(currentRecord);
-                }
-                if (records.length === 0) {
-                    progressbar.updateProgress(1, 'operation done');
-                    me.deleteWindow.hide();
-                    store.load();
-                    return true;
-                }
-                currentRecord = records.shift();
-                me.sequentialDelete(currentRecord, records, progressbar, count, store);
-            },
-            failure: function() {
-
-            }
-        });
+    sequentialDelete: function (currentRecord, records, progressbar, count, store) {
+//        var me = this, text = '';
+//
+//        if (currentRecord === null) {
+//            currentRecord = records.shift();
+//        }
+//
+//        text = me.getModelName(currentRecord);
+//        text += ': ' + (count - records.length) + ' of ' + count;
+//
+//        progressbar.updateProgress(
+//            (count - records.length) / count,
+//            text, true
+//        );
+//
+//        currentRecord.destroy({
+//            success: function() {
+//                if (store instanceof Ext.data.Store) {
+//                    store.remove(currentRecord);
+//                }
+//                if (records.length === 0) {
+//                    progressbar.updateProgress(1, 'operation done');
+//                    me.deleteWindow.hide();
+//                    store.load();
+//                    return true;
+//                }
+//                currentRecord = records.shift();
+//                me.sequentialDelete(currentRecord, records, progressbar, count, store);
+//            },
+//            failure: function() {
+//
+//            }
+//        });
     },
 
-    getModelName: function(model) {
-        var me = this, name = '';
-        name = model.$className;
-        return name.substr(name.lastIndexOf(".")+1);
+    getModelName: function (modelName) {
+        return modelName.substr(modelName.lastIndexOf(".") + 1);
     },
 
-    onSearch: function(grid, searchField, value) {
-        var me = this;
+    onSearch: function (grid, searchField, value) {
         var store = grid.getStore();
 
         value = Ext.String.trim(value);
@@ -295,7 +268,7 @@ Ext.define('Shopware.controller.Listing', {
         }
     },
 
-    onChangePageSize: function(grid, combo, records) {
+    onChangePageSize: function (grid, combo, records) {
         var me = this,
             store = grid.getStore();
 
@@ -306,43 +279,54 @@ Ext.define('Shopware.controller.Listing', {
         }
     },
 
-    onEditItem: function(listing, record) {
+    /**
+     * @param listing
+     * @param record
+     * @returns { boolean }
+     */
+    onEditItem: function (listing, record) {
         var me = this;
 
         if (!(record instanceof Ext.data.Model)) {
             return false;
         }
 
-//        me.createDetailWindow(record);
-//        return;
-
         if (me.hasModelAction(record, 'detail')) {
             record.reload({
-                callback: function(result, operation) {
-                    me.createDetailWindow(result);
+                callback: function (result, operation) {
+                    me.createDetailWindow(
+                        result,
+                        listing.getConfig('detailWindow')
+                    );
                 }
             })
         } else {
-            me.createDetailWindow(record);
+            me.createDetailWindow(
+                record,
+                listing.getConfig('detailWindow')
+            );
         }
     },
 
 
     /**
-     * Creates the detail window, expects the record which has
-     * to be displayed as parameter.
+     * Helper function which creates a detail window for the passed record.
+     * The second parameter contains the detail window class name.
      *
-     * @param record Shopware.data.Model
+     * @param record Shopware.data.Model - The record which will be displayed in the detail window
+     * @param detailWindowClass string - Class name of the detail window
      */
-    createDetailWindow: function(record) {
+    createDetailWindow: function (record, detailWindowClass) {
         var me = this;
 
-        me.detailWindow = me.getView(
-            me.Config('detailWindow')
-        ).create({
+        if (!detailWindowClass) {
+            console.log("no detail window configured");
+            return false;
+        }
+
+        me.getView(detailWindowClass).create({
             record: record
         }).show();
     }
-
 });
 //{/block}

@@ -1,15 +1,14 @@
-
 //{block name="backend/component/store/listing"}
 Ext.define('Shopware.store.Listing', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
-    autoLoad:false,
+    autoLoad: false,
 
     batch: true,
 
     remoteSort: true,
 
-    remoteFilter : true,
+    remoteFilter: true,
 
     pageSize: 20,
 
@@ -17,15 +16,15 @@ Ext.define('Shopware.store.Listing', {
      * Model proxy which defines
      * the urls for the CRUD actions.
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         api: {
             read: '{url action="list"}'
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 
@@ -35,7 +34,7 @@ Ext.define('Shopware.store.Listing', {
      *
      * @param config
      */
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
 
         me.convertProxyApi();
@@ -49,13 +48,13 @@ Ext.define('Shopware.store.Listing', {
      * The base controller will be remove with the
      * configured controller name.
      */
-    convertProxyApi: function() {
+    convertProxyApi: function () {
         var me = this, value;
 
-        Object.keys(me.proxy.api).forEach(function(key) {
+        Object.keys(me.proxy.api).forEach(function (key) {
             value = me.proxy.api[key] + '';
             value = value.replace(
-                '/base/', '/' + me.controller.toLowerCase()  + '/'
+                '/base/', '/' + me.controller.toLowerCase() + '/'
             );
             me.proxy.api[key] = value;
         });
