@@ -5581,3 +5581,179 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }) : $.datepicker["_" + a + "Datepicker"].apply($.datepicker, [this[0]].concat(b))
     }, $.datepicker = new Datepicker, $.datepicker.initialized = !1, $.datepicker.uuid = (new Date).getTime(), $.datepicker.version = "1.8.21", window["DP_jQuery_" + dpuuid] = $
 })(jQuery);
+
+/**
+ * LastSeenArticle Collector
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesCollector',
+        defaults = {
+        };
+
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options) ;
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    Plugin.prototype.init = function () {
+        var me = this,
+            opts = me.options,
+            articleNum = 5,
+            index = localStorage.getItem('lastSeenArticleIndex') || 0,
+            i = index - articleNum+1, data, article, exists;
+
+        // Reset index if not defined
+        if(index < 0) index = 0;
+
+        for(; i < index+1; i++) {
+            data = localStorage.getItem('lastSeenArticle' + i);
+            if(!data) {
+                continue;
+            }
+
+            article = JSON.parse(data);
+            article = article['articleId'];
+            exists = (article == opts.articleId);
+
+            // break if the aritcle exists already
+            if(exists) {
+                break;
+            }
+        }
+
+        if(exists) {
+            return false;
+        }
+
+        localStorage.setItem('lastSeenArticleIndex', ++index);
+        localStorage.setItem('lastSeenArticle' + index, JSON.stringify(opts));
+        localStorage.removeItem('lastSeenArticle' + (index - articleNum));
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
+
+/**
+ * LastSeenArticle Displayer
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesDisplayer',
+        defaults = {
+        };
+
+    // Append articles to Template
+    var createTemplate = function(article, lastClass) {
+        var rule, image, hidden, desc;
+
+        if(!article) {
+            return false;
+        }
+
+        rule = $('<li>', { 'class': 'lastview_rule' + lastClass });
+        image = $('<a>', {
+            'id': article['articleId'],
+            'rel': 'nofollow',
+            'class': 'article_image',
+            'href': article['linkDetailsRewrited'],
+            'style': 'background: #fff url(' + article['thumbnail'] + ') no-repeat center center'
+
+        });
+
+        hidden = $('<span>', {
+            'class': 'hidden',
+            'html': article['articleName']
+        });
+
+        desc = $('<a>', {
+            'rel': 'nofollow',
+            'class': 'article_description',
+            'title': article['articleName'],
+            'href': article['linkDetailsRewrited'],
+            'html': article['articleName']
+        });
+
+        hidden.appendTo(image);
+        image.appendTo(rule);
+        hidden.appendTo(rule);
+        desc.appendTo(rule);
+
+        return rule;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    Plugin.prototype.init = function () {
+        // Plugin configuration
+        var articleNum = 5,
+            index = localStorage.getItem('lastSeenArticleIndex'),
+            i = 1,
+            lastClass = '',
+            data, article, all;
+
+        all = index;
+        if(all > articleNum) {
+            all = articleNum;
+        }
+
+        // Append all articles to the template
+        for(; i <= all; i++) {
+            if(localStorage.getItem('lastSeenArticle' + index))
+            {
+                data = localStorage.getItem('lastSeenArticle' + index);
+                article = JSON.parse(data);
+                if(i == all || i % 5 == 0) lastClass = '_last';
+
+                // Check if its emotion or default template
+                if($('.viewlast ul').length)
+                {
+                    $('.viewlast ul').append(createTemplate(article, lastClass));
+                }
+                else
+                {
+                    $('.viewlast').append(createTemplate(article, lastClass));
+                }
+            }
+            index = index -1;
+        }
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
