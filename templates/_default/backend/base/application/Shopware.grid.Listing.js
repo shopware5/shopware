@@ -1,8 +1,5 @@
-
 //{block name="backend/component/grid/panel"}
-Ext.define('Shopware.grid.Listing',
-/** @lends Ext.grid.Panel# */
-{
+Ext.define('Shopware.grid.Listing', {
 
     /**
      * The parent class that this class extends
@@ -28,6 +25,9 @@ Ext.define('Shopware.grid.Listing',
          * to add new row items.
          */
         displayConfig: {
+            eventAlias: undefined,
+            hasOwnController: false,
+            detailWindow: undefined,
 
             /**
              * Enables the grid toolbar.
@@ -99,7 +99,7 @@ Ext.define('Shopware.grid.Listing',
          * @param displayConfig Object
          * @returns Object
          */
-        getDisplayConfig: function(userOpts, displayConfig) {
+        getDisplayConfig: function (userOpts, displayConfig) {
             var config;
 
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
@@ -116,12 +116,12 @@ Ext.define('Shopware.grid.Listing',
          * @param { String= } val - The value of the property (optional)
          * @returns { Boolean }
          */
-        setDisplayConfig: function(prop, val) {
+        setDisplayConfig: function (prop, val) {
             var me = this;
 
             val = val || '';
 
-            if(!me.displayConfig.hasOwnProperty(prop)) {
+            if (!me.displayConfig.hasOwnProperty(prop)) {
                 return false;
             }
             me.displayConfig[prop] = val;
@@ -135,7 +135,7 @@ Ext.define('Shopware.grid.Listing',
      * @returns mixed
      * @constructor
      */
-    Config: function(prop) {
+    getConfig: function (prop) {
         var me = this;
         return me._opts[prop];
     },
@@ -144,7 +144,7 @@ Ext.define('Shopware.grid.Listing',
      * Class constructor which merges the different configurations.
      * @param opts
      */
-    constructor: function(opts) {
+    constructor: function (opts) {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
@@ -158,8 +158,14 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns { Void }
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
+
+        me.model = me.store.model.$className;
+        me.eventAlias = me.getConfig('eventAlias');
+        if (!me.eventAlias) {
+            me.eventAlias = me.createEventAlias();
+        }
 
         me.columns = me.createColumns();
         me.plugins = me.createPlugins();
@@ -168,14 +174,60 @@ Ext.define('Shopware.grid.Listing',
         me.dockedItems = me.createDockedItems();
 
         me.registerEvents();
+        if (me.getConfig('hasOwnController') === false) {
+            me.createDefaultListingController();
+        }
+
+        console.log("Shopware.grid.Listing", me);
         me.callParent(arguments);
     },
+
+
+    createDefaultListingController: function () {
+        var me = this;
+
+        me.controller = Ext.create('Shopware.controller.Listing', {
+            listingGrid: me,
+            subApplication: me.subApp
+        });
+        me.controller.init();
+
+        return me.controller;
+    },
+
+    /**
+     * Helper function which creates the model field set
+     * title.
+     * Shopware use as default the model name of
+     * the passed record.
+     *
+     * @param modelName
+     * @return String
+     */
+    getModelName: function (modelName) {
+        return modelName.substr(modelName.lastIndexOf(".") + 1);
+    },
+
+    createEventAlias: function () {
+        var me = this;
+        return me.getModelName(me.model).toLowerCase();
+    },
+
 
     /**
      * Registers the additional shopware events for this component
      */
-    registerEvents: function() {
-        this.addEvents('selectionChanged','addItem','deleteItem','editItem','search','changePageSize');
+    registerEvents: function () {
+        var me = this;
+
+        this.addEvents(
+            me.eventAlias + '-selection-changed',
+            me.eventAlias + '-add-item',
+            me.eventAlias + '-delete-item',
+            me.eventAlias + '-edit-item',
+            me.eventAlias + '-search',
+            me.eventAlias + '-change-page-size'
+        );
     },
 
     /**
@@ -213,7 +265,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Array
      */
-    createColumns: function() {
+    createColumns: function () {
         var me = this, model = null,
             column = null,
             columns = [];
@@ -224,18 +276,18 @@ Ext.define('Shopware.grid.Listing',
             model = Ext.create(model);
         }
 
-        if (me.Config('rowNumbers')) {
+        if (me.getConfig('rowNumbers')) {
             columns.push(me.createRowNumberColumn());
         }
 
-        Ext.each(model.fields.items, function(item, index) {
+        Ext.each(model.fields.items, function (item, index) {
             column = me.createColumn(model, item);
             if (column !== null) {
                 columns.push(column);
             }
         });
 
-        if (me.Config('actionColumn')) {
+        if (me.getConfig('actionColumn')) {
             column = me.createActionColumn();
             if (column !== null) {
                 columns.push(column);
@@ -257,7 +309,7 @@ Ext.define('Shopware.grid.Listing',
      * The function is used from createColumns function and return value will
      * be pushed as last element of the columns array.
      */
-    createActionColumn: function() {
+    createActionColumn: function () {
         var me = this, items;
 
         items = me.createActionColumnItems();
@@ -289,13 +341,13 @@ Ext.define('Shopware.grid.Listing',
      * }
      *
      */
-    createActionColumnItems: function() {
+    createActionColumnItems: function () {
         var me = this, items = [];
 
-        if (me.Config('deleteColumn')) {
+        if (me.getConfig('deleteColumn')) {
             items.push(me.createDeleteColumn());
         }
-        if (me.Config('editColumn')) {
+        if (me.getConfig('editColumn')) {
             items.push(me.createEditColumn());
         }
         return items;
@@ -310,14 +362,14 @@ Ext.define('Shopware.grid.Listing',
      *
      * @return Object
      */
-    createDeleteColumn: function() {
+    createDeleteColumn: function () {
         var me = this;
 
         return {
-            action:'delete',
-            iconCls:'sprite-minus-circle-frame',
+            action: 'delete',
+            iconCls: 'sprite-minus-circle-frame',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.fireEvent('deleteItem', me, view, rowIndex, colIndex, item, opts, record);
+                me.fireEvent(me.eventAlias + '-delete-item', me, view, rowIndex, colIndex, item, opts, record);
             }
         };
     },
@@ -331,14 +383,14 @@ Ext.define('Shopware.grid.Listing',
      *
      * @return Object
      */
-    createEditColumn: function() {
+    createEditColumn: function () {
         var me = this;
 
         return {
             action: 'edit',
             iconCls: 'sprite-pencil',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                me.fireEvent('editItem', me, record, rowIndex, colIndex, item);
+                me.fireEvent(me.eventAlias + '-edit-item', me, record, rowIndex, colIndex, item);
             }
         };
     },
@@ -354,7 +406,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @return Object
      */
-    createRowNumberColumn: function() {
+    createRowNumberColumn: function () {
         return { xtype: 'rownumberer', width: 30 };
     },
 
@@ -365,7 +417,7 @@ Ext.define('Shopware.grid.Listing',
      * @returns Object
      * @param model Ext.data.Model
      */
-    createColumn: function(model, field) {
+    createColumn: function (model, field) {
         var me = this, column = {};
 
         if (model.idProperty === field.name) {
@@ -405,10 +457,10 @@ Ext.define('Shopware.grid.Listing',
      * @param field
      * @param model
      */
-    createColumnHeader: function(model, field) {
+    createColumnHeader: function (model, field) {
         var name = field.name;
 
-        name = name.split(/(?=[A-Z])/).map(function(p) {
+        name = name.split(/(?=[A-Z])/).map(function (p) {
             return p.charAt(0).toLowerCase() + p.slice(1);
         }).join(' ');
 
@@ -441,7 +493,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Array
      */
-    createPlugins: function() {
+    createPlugins: function () {
         var me = this, plugins = [];
 
         return plugins;
@@ -469,7 +521,7 @@ Ext.define('Shopware.grid.Listing',
      * },
      * @returns Array
      */
-    createFeatures: function() {
+    createFeatures: function () {
         var me = this, features = [];
 
         return features;
@@ -490,13 +542,13 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.selection.CheckboxModel
      */
-    createSelectionModel: function() {
+    createSelectionModel: function () {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
-                selectionchange: function(selModel, selection) {
-                    me.fireEvent('selectionChanged', me, selModel, selection);
+                selectionchange: function (selModel, selection) {
+                    me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
                 }
             }
         });
@@ -517,13 +569,13 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Array
      */
-    createDockedItems: function() {
+    createDockedItems: function () {
         var me = this, items = [];
 
-        if (me.Config('toolbar')) {
+        if (me.getConfig('toolbar')) {
             items.push(me.createToolbar());
         }
-        if (me.Config('pagingbar')) {
+        if (me.getConfig('pagingbar')) {
             items.push(me.createPagingbar());
         }
         return items;
@@ -540,7 +592,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @return Ext.toolbar.Paging
      */
-    createPagingbar: function() {
+    createPagingbar: function () {
         var me = this;
 
         me.pagingbar = Ext.create('Ext.toolbar.Paging', {
@@ -548,7 +600,7 @@ Ext.define('Shopware.grid.Listing',
             dock: 'bottom'
         });
 
-        if (me.Config('pageSize')) {
+        if (me.getConfig('pageSize')) {
             var pageSizeCombo = me.createPageSizeCombo();
             me.pagingbar.add('->', pageSizeCombo, { xtype: 'tbspacer', width: 6 });
         }
@@ -567,7 +619,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.form.field.ComboBox
      */
-    createPageSizeCombo: function() {
+    createPageSizeCombo: function () {
         var me = this, value = 20;
 
         if (me.store) {
@@ -587,8 +639,8 @@ Ext.define('Shopware.grid.Listing',
             displayField: 'name',
             valueField: 'value',
             listeners: {
-                select: function(combo, records) {
-                    me.fireEvent('changePageSize', me, combo, records);
+                select: function (combo, records) {
+                    me.fireEvent(me.eventAlias + '-change-page-size', me, combo, records);
                 }
             }
         });
@@ -607,7 +659,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Array
      */
-    createPageSizes: function() {
+    createPageSizes: function () {
         var data = [];
 
         for (var i = 1; i <= 10; i++) {
@@ -633,7 +685,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.toolbar.Toolbar
      */
-    createToolbar: function() {
+    createToolbar: function () {
         var me = this;
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
@@ -673,16 +725,16 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Array
      */
-    createToolbarItems: function() {
+    createToolbarItems: function () {
         var me = this, items = [];
 
-        if (me.Config('addButton')) {
+        if (me.getConfig('addButton')) {
             items.push(me.createAddButton());
         }
-        if (me.Config('deleteButton')) {
+        if (me.getConfig('deleteButton')) {
             items.push(me.createDeleteButton())
         }
-        if (me.Config('searchField')) {
+        if (me.getConfig('searchField')) {
             items.push('->');
             items.push(me.createSearchField());
         }
@@ -698,15 +750,15 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.button.Button
      */
-    createAddButton: function() {
+    createAddButton: function () {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
             text: 'Add item',
             cls: 'secondary small',
             iconCls: 'sprite-plus-circle-frame',
-            handler: function() {
-                me.fireEvent('addItem', me, this);
+            handler: function () {
+                me.fireEvent(me.eventAlias + '-add-item', me, this);
             }
         });
 
@@ -721,7 +773,7 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.button.Button
      */
-    createDeleteButton: function() {
+    createDeleteButton: function () {
         var me = this;
 
         me.deleteButton = Ext.create('Ext.button.Button', {
@@ -729,9 +781,9 @@ Ext.define('Shopware.grid.Listing',
             disabled: true,
             cls: 'secondary small',
             iconCls: 'sprite-minus-circle-frame',
-            handler: function() {
+            handler: function () {
                 var selModel = me.getSelectionModel();
-                me.fireEvent('deleteItems', me, this, selModel.getSelection());
+                me.fireEvent(me.eventAlias + '-delete-items', me, this, selModel.getSelection());
             }
         });
 
@@ -746,18 +798,18 @@ Ext.define('Shopware.grid.Listing',
      *
      * @returns Ext.form.field.Text
      */
-    createSearchField: function() {
+    createSearchField: function () {
         var me = this;
 
         me.searchField = Ext.create('Ext.form.field.Text', {
-            cls:'searchfield',
-            width:170,
+            cls: 'searchfield',
+            width: 170,
             emptyText: 'Search ...',
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
             listeners: {
-                change: function(field, value) {
-                    me.fireEvent('search', me, field, value);
+                change: function (field, value) {
+                    me.fireEvent(me.eventAlias + '-search', me, field, value);
                 }
             }
         });
@@ -766,11 +818,10 @@ Ext.define('Shopware.grid.Listing',
     },
 
 
-
     ////////////////////////////
     /// Column configuration ///
     ////////////////////////////
-    
+
     /**
      * Adds the shopware default column configuration for a listing integer
      * column.
@@ -779,7 +830,7 @@ Ext.define('Shopware.grid.Listing',
      * @param column
      * @return Ext.grid.column.Number
      */
-    applyIntegerColumnConfig: function(column) {
+    applyIntegerColumnConfig: function (column) {
         column.xtype = 'numbercolumn';
         column.renderer = this.integerColumnRenderer;
         column.align = 'right';
@@ -795,7 +846,7 @@ Ext.define('Shopware.grid.Listing',
      * @param column
      * @return Ext.grid.column.Column
      */
-    applyStringColumnConfig: function(column) {
+    applyStringColumnConfig: function (column) {
         return column;
     },
 
@@ -807,7 +858,7 @@ Ext.define('Shopware.grid.Listing',
      * @param column
      * @return Ext.grid.column.Boolean
      */
-    applyBooleanColumnConfig: function(column) {
+    applyBooleanColumnConfig: function (column) {
         column.xtype = 'booleancolumn';
         column.renderer = this.booleanColumnRenderer;
         return column;
@@ -821,7 +872,7 @@ Ext.define('Shopware.grid.Listing',
      * @param column
      * @return Ext.grid.column.Date
      */
-    applyDateColumnConfig: function(column) {
+    applyDateColumnConfig: function (column) {
         column.xtype = 'datecolumn';
         return column;
     },
@@ -834,7 +885,7 @@ Ext.define('Shopware.grid.Listing',
      * @param column
      * @return Ext.grid.column.Number
      */
-    applyFloatColumnConfig: function(column) {
+    applyFloatColumnConfig: function (column) {
         column.xtype = 'numbercolumn';
         column.align = 'right';
         return column;
@@ -855,12 +906,12 @@ Ext.define('Shopware.grid.Listing',
      * @param record Ext.data.Model
      * @return String
      */
-    booleanColumnRenderer: function(value, record) {
+    booleanColumnRenderer: function (value, record) {
         var checked = 'sprite-ui-check-box-uncheck';
         if (value === true) {
             checked = 'sprite-ui-check-box';
         }
-        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="'+checked+'"></span>';
+        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';
     },
 
     /**
@@ -872,7 +923,7 @@ Ext.define('Shopware.grid.Listing',
      * @param record Ext.data.Model
      * @return integer
      */
-    integerColumnRenderer: function(value, record) {
+    integerColumnRenderer: function (value, record) {
         return Ext.util.Format.number(value, '0');
     }
 });

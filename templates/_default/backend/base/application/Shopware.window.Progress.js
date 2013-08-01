@@ -1,4 +1,3 @@
-
 Ext.define('Shopware.window.Progress', {
     extend: 'Enlight.app.SubWindow',
     title: 'Delete items',
@@ -10,13 +9,13 @@ Ext.define('Shopware.window.Progress', {
     progressTitle: 'Items: [0] of [1]',
     progressCount: 1,
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
         me.items = [ me.createProgressbar() ];
         me.callParent(arguments);
     },
 
-    createProgressbar: function() {
+    createProgressbar: function () {
         var me = this;
 
         me.progressbar = Ext.create('Ext.ProgressBar', {

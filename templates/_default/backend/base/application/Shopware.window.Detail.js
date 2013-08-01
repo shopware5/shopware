@@ -1,4 +1,3 @@
-
 //{block name="backend/component/window/detail"}
 Ext.define('Shopware.window.Detail', {
     extend: 'Enlight.app.Window',
@@ -10,7 +9,7 @@ Ext.define('Shopware.window.Detail', {
 
     width: 990,
     height: '90%',
-    alias : 'widget.shopware-window-detail',
+    alias: 'widget.shopware-window-detail',
     associationComponents: [],
 
     statics: {
@@ -39,7 +38,7 @@ Ext.define('Shopware.window.Detail', {
          * @param displayConfig Object
          * @returns Object
          */
-        getDisplayConfig: function(userOpts, displayConfig) {
+        getDisplayConfig: function (userOpts, displayConfig) {
             var config = { };
 
             if (userOpts && userOpts.displayConfig) {
@@ -50,7 +49,7 @@ Ext.define('Shopware.window.Detail', {
 
             if (config.searchController) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase()  + '/'
+                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
                 );
             }
 
@@ -65,10 +64,10 @@ Ext.define('Shopware.window.Detail', {
          * @param val
          * @returns boolean
          */
-        setDisplayConfig: function(prop, val) {
+        setDisplayConfig: function (prop, val) {
             var me = this;
 
-            if(!me.displayConfig.hasOwnProperty(prop)) {
+            if (!me.displayConfig.hasOwnProperty(prop)) {
                 return false;
             }
             me.displayConfig[prop] = val;
@@ -81,7 +80,7 @@ Ext.define('Shopware.window.Detail', {
      * Class constructor which merges the different configurations.
      * @param opts
      */
-    constructor: function(opts) {
+    constructor: function (opts) {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
@@ -94,7 +93,7 @@ Ext.define('Shopware.window.Detail', {
      * @returns mixed
      * @constructor
      */
-    Config: function(prop) {
+    getConfig: function (prop) {
         var me = this;
         return me._opts[prop];
     },
@@ -102,8 +101,16 @@ Ext.define('Shopware.window.Detail', {
     /**
      * Initialisation of this component.
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
+
+        console.log("detail window", me);
+
+        me.model = me.record.$className;
+        me.eventAlias = me.getConfig('eventAlias');
+        if (!me.eventAlias) {
+            me.eventAlias = me.createEventAlias();
+        }
 
         me.items = [ me.createFormPanel() ];
         me.dockedItems = me.createDockedItems();
@@ -113,12 +120,15 @@ Ext.define('Shopware.window.Detail', {
         }
     },
 
-
+    createEventAlias: function () {
+        var me = this;
+        return me.getModelName(me.model).toLowerCase();
+    },
 
     /**
      *
      */
-    createFormPanel: function() {
+    createFormPanel: function () {
         var me = this;
 
         me.formPanel = Ext.create('Ext.form.Panel', {
@@ -143,20 +153,19 @@ Ext.define('Shopware.window.Detail', {
      *
      * @returns Ext.tab.Panel
      */
-    createTabPanel: function() {
+    createTabPanel: function () {
         var me = this;
 
         return Ext.create('Ext.tab.Panel', {
             flex: 1,
             items: me.createTabItems(),
             listeners: {
-                tabchange: function(tabPanel, newCard, oldCard, eOpts ) {
+                tabchange: function (tabPanel, newCard, oldCard, eOpts) {
                     me.onTabChange(tabPanel, newCard, oldCard, eOpts);
                 }
             }
         });
     },
-
 
 
     /**
@@ -175,12 +184,12 @@ Ext.define('Shopware.window.Detail', {
      *
      *  @returns Array
      */
-    createTabItems: function() {
+    createTabItems: function () {
         var me = this;
         var associations = me.getTabItemsAssociations();
         var items = [];
 
-        Ext.each(associations, function(association) {
+        Ext.each(associations, function (association) {
             var item = me.createTabItem(association);
             if (item) {
                 items.push(item);
@@ -207,11 +216,11 @@ Ext.define('Shopware.window.Detail', {
      *
      * @returns array
      */
-    getTabItemsAssociations: function() {
+    getTabItemsAssociations: function () {
         var me = this, associations;
 
         associations = me.getAssociations(me.record.$className, [
-            { relation: 'OneToOne',  hasAssociations: true },
+            { relation: 'OneToOne', hasAssociations: true },
             { relation: 'OneToMany' },
             { relation: 'ManyToMany' }
         ]);
@@ -234,7 +243,7 @@ Ext.define('Shopware.window.Detail', {
      * @param association
      * @returns Ext.container.Container|Ext.grid.Panel
      */
-    createTabItem: function(association) {
+    createTabItem: function (association) {
         var me = this, item;
 
         if (association.isBaseRecord) {
@@ -245,10 +254,10 @@ Ext.define('Shopware.window.Detail', {
                     item = me.createOneToOneItem(association, me.record);
                     break;
                 case 'onetomany':
-                    item = me.createOneToManyItem(association, me.record);
+//                    item = me.createOneToManyItem(association, me.record);
                     break;
                 case 'manytomany':
-                    item = me.createManyToManyItem(association, me.record);
+//                    item = me.createManyToManyItem(association, me.record);
                     break;
             }
         }
@@ -256,18 +265,17 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-    createBaseItem: function() {
+    createBaseItem: function () {
         var me = this, container, items = [],
             fieldSet, associations,
             modelName = me.record.$className;
 
         items.push(me.createModelFieldSet(modelName, ''));
         associations = me.getAssociations(modelName, [
-            { relation: 'OneToOne',  hasAssociations: false }
+            { relation: 'OneToOne', hasAssociations: false }
         ]);
 
-        Ext.each(associations, function(association) {
+        Ext.each(associations, function (association) {
             fieldSet = me.createModelFieldSet(
                 association.associatedName,
                 association.associationKey
@@ -287,13 +295,12 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-    createOneToOneItem: function(association, record) {
-        var me = this, model, items = [],
+    createOneToOneItem: function (association, record) {
+        var me = this, model, items = [], store, grid,
             modelName, associations;
 
         modelName = association.associatedName;
-        var store = me.getAssociationStore(record, association);
+        store = me.getAssociationStore(record, association);
         model = Ext.create(modelName);
         if (store instanceof Ext.data.Store && store.getCount() > 0) {
             model = store.first();
@@ -304,9 +311,9 @@ Ext.define('Shopware.window.Detail', {
             { relation: 'OneToMany' }
         ]);
 
-        Ext.each(associations, function(assoc) {
-            var store = me.getAssociationStore(model, assoc);
-            var grid = me.createGrid(store, me.Config('oneToManyGrid'));
+        Ext.each(associations, function (assoc) {
+            store = me.getAssociationStore(model, assoc);
+            grid = me.createGrid(store, me.getConfig('oneToManyGrid'));
             if (grid) {
                 items.push(grid);
             }
@@ -322,41 +329,43 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-
-    createOneToManyItem: function(association, record) {
+    createOneToManyItem: function (association, record) {
         var me = this;
 
-        var store = me.getAssociationStore(record, association);
-        var grid = me.createGrid(store, me.Config('oneToManyGrid'));
+        var grid = me.createGrid(
+            me.getAssociationStore(record, association),
+            me.getConfig('oneToManyGrid')
+        );
 
         grid.title = me.getModelName(association.associatedName);
         return grid;
     },
 
 
-
-    createManyToManyItem: function(association, record) {
+    createManyToManyItem: function (association, record) {
         var me = this;
-        
-        var title = me.getModelName(association.associatedName);
-        var gridStore = me.getAssociationStore(record, association);
-        var grid = me.createGrid(gridStore, me.Config('manyToManyGrid'));
-        var comboStore = me.createSearchComboStore(association, me.Config('searchUrl'));
-        var combo = me.createSearchCombo(comboStore, grid, association);
+
+        var grid = me.createGrid(
+            me.getAssociationStore(record, association),
+            me.getConfig('manyToManyGrid')
+        );
+
+        var combo = me.createSearchCombo(
+            me.createSearchComboStore(association, me.getConfig('searchUrl')),
+            grid,
+            association
+        );
 
         return Ext.create('Ext.container.Container', {
             items: [ combo, grid ],
             layout: { type: 'vbox', align: 'stretch' },
-            title: title,
+            title: me.getModelName(association.associatedName),
             autoScroll: true
         });
     },
 
 
-
-
-    getAssociationStore: function(record, association) {
+    getAssociationStore: function (record, association) {
         var store;
 
         store = record[association.storeName];
@@ -369,7 +378,7 @@ Ext.define('Shopware.window.Detail', {
         return store;
     },
 
-    createGrid: function(store, displayConfig) {
+    createGrid: function (store, displayConfig) {
         var config = { };
         config = Ext.apply({ }, config, displayConfig);
 
@@ -382,9 +391,7 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-
-    createSearchCombo: function(store, grid, association) {
+    createSearchCombo: function (store, grid, association) {
         var me = this;
 
         return Ext.create('Ext.form.field.ComboBox', {
@@ -399,7 +406,7 @@ Ext.define('Shopware.window.Detail', {
             margin: 10,
             listConfig: me.createSearchComboListConfig(association),
             listeners: {
-                select: function(combo, records) {
+                select: function (combo, records) {
                     me.onSelectSearchItem(combo, records, combo.grid);
                 }
             }
@@ -415,9 +422,9 @@ Ext.define('Shopware.window.Detail', {
      * @param association
      * @returns object
      */
-    createSearchComboListConfig: function(association) {
+    createSearchComboListConfig: function (association) {
         return {
-            getInnerTpl: function() {
+            getInnerTpl: function () {
                 return '{literal}<a class="search-item">' +
                     '<h4>{name}</h4><span><br />{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
                     '</a>{/literal}';
@@ -425,7 +432,7 @@ Ext.define('Shopware.window.Detail', {
         }
     },
 
-    createSearchComboStore: function(association, searchUrl) {
+    createSearchComboStore: function (association, searchUrl) {
         return Ext.create('Ext.data.Store', {
             model: association.associatedName,
             proxy: {
@@ -436,11 +443,6 @@ Ext.define('Shopware.window.Detail', {
             }
         });
     },
-
-
-
-
-
 
 
     /**
@@ -466,7 +468,7 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Ext.form.FieldSet
      */
-    createModelFieldSet: function(modelName, alias) {
+    createModelFieldSet: function (modelName, alias) {
         var me = this, fields, model;
 
         model = Ext.create(modelName);
@@ -485,10 +487,10 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Array
      */
-    createModelFields: function(model, alias) {
+    createModelFields: function (model, alias) {
         var me = this, fields = [], field;
 
-        Ext.each(model.fields.items, function(item) {
+        Ext.each(model.fields.items, function (item) {
             field = me.createModelField(model, item, alias);
             if (field !== null) {
                 fields.push(field);
@@ -511,7 +513,7 @@ Ext.define('Shopware.window.Detail', {
      * @param alias string
      * @return Ext.form.field.Field
      */
-    createModelField: function(model, field, alias) {
+    createModelField: function (model, field, alias) {
         var me = this, formField = {};
 
         if (model.idProperty === field.name) {
@@ -552,8 +554,6 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-
     /**
      * Creates all docked items for the detail window
      * component.
@@ -562,7 +562,7 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Array
      */
-    createDockedItems: function() {
+    createDockedItems: function () {
         var me = this;
 
         return [
@@ -579,7 +579,7 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Ext.toolbar.Toolbar
      */
-    createToolbar: function() {
+    createToolbar: function () {
         var me = this, items = [];
 
         items.push({ xtype: 'tbfill' });
@@ -601,14 +601,14 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Ext.button.Button
      */
-    createCancelButton: function() {
+    createCancelButton: function () {
         var me = this;
 
         me.cancelButton = Ext.create('Ext.button.Button', {
-            cls:  'secondary',
+            cls: 'secondary',
             name: 'cancel-button',
             text: 'Cancel',
-            handler: function() {
+            handler: function () {
                 me.onCancel();
             }
         });
@@ -623,14 +623,14 @@ Ext.define('Shopware.window.Detail', {
      *
      * @return Ext.button.Button
      */
-    createSaveButton: function() {
+    createSaveButton: function () {
         var me = this;
 
         me.saveButton = Ext.create('Ext.button.Button', {
-            cls:  'primary',
+            cls: 'primary',
             name: 'detail-save-button',
             text: 'Save',
-            handler: function() {
+            handler: function () {
                 me.onSave();
             }
         });
@@ -638,41 +638,35 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-
-
-
     /**
      * Helper function to load the
      */
-    loadRecord: function() {
+    loadRecord: function () {
         if (this.formPanel instanceof Ext.form.Panel) {
             this.formPanel.loadRecord(this.record);
         }
     },
 
 
-
-
-    onTabChange: function(tabPanel, newCard, oldCard, eOpts ) {
-        this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts );
+    onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
+        this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
 
-    onSave: function() {
+    onSave: function () {
         this.destroy();
     },
 
-    onCancel: function() {
+    onCancel: function () {
         this.destroy();
     },
 
-    onSelectSearchItem: function(combo, records, grid) {
+    onSelectSearchItem: function (combo, records, grid) {
         var inStore;
 
         if (!grid) {
             return;
         }
-        Ext.each(records, function(record) {
+        Ext.each(records, function (record) {
             inStore = grid.getStore().getById(record.get('id'));
             if (inStore === null) {
                 grid.getStore().add(record);
@@ -682,7 +676,6 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
     /**
      * Adds the shopware default form field configuration for integer form field.
      * The field configuration will be applied to the passed field object.
@@ -690,7 +683,7 @@ Ext.define('Shopware.window.Detail', {
      * @param field
      * @return Ext.form.field.Number
      */
-    applyIntegerFieldConfig: function(field) {
+    applyIntegerFieldConfig: function (field) {
         field.xtype = 'numberfield';
         field.align = 'right';
         return field;
@@ -703,7 +696,7 @@ Ext.define('Shopware.window.Detail', {
      * @param field
      * @return Ext.form.field.Number
      */
-    applyStringFieldConfig: function(field) {
+    applyStringFieldConfig: function (field) {
         field.xtype = 'textfield';
         return field;
     },
@@ -715,7 +708,7 @@ Ext.define('Shopware.window.Detail', {
      * @param field
      * @return Ext.form.field.Number
      */
-    applyBooleanFieldConfig: function(field) {
+    applyBooleanFieldConfig: function (field) {
         field.xtype = 'checkbox';
         field.uncheckedValue = false;
         field.inputValue = true;
@@ -729,7 +722,7 @@ Ext.define('Shopware.window.Detail', {
      * @param field
      * @return Ext.form.field.Number
      */
-    applyDateFieldConfig: function(field) {
+    applyDateFieldConfig: function (field) {
         field.xtype = 'datefield';
         return field;
     },
@@ -741,14 +734,11 @@ Ext.define('Shopware.window.Detail', {
      * @param field
      * @return Ext.form.field.Number
      */
-    applyFloatFieldConfig: function(field) {
+    applyFloatFieldConfig: function (field) {
         field.xtype = 'numberfield';
         field.align = 'right';
         return field;
     },
-
-
-
 
 
     /**
@@ -773,15 +763,15 @@ Ext.define('Shopware.window.Detail', {
      * @param className
      * @param conditions
      */
-    getAssociations: function(className, conditions) {
+    getAssociations: function (className, conditions) {
         var me = this,
             associations = [],
             model = Ext.create(className);
 
-        if (model.associations .lenght <= 0) {
+        if (model.associations.lenght <= 0) {
             return associations;
         }
-        Ext.each(model.associations.items, function(association) {
+        Ext.each(model.associations.items, function (association) {
             if (me.matchAssociationConditions(association, conditions)) {
                 associations.push(association);
             }
@@ -801,7 +791,7 @@ Ext.define('Shopware.window.Detail', {
      * @param conditions
      * @returns boolean
      */
-    matchAssociationConditions: function(association, conditions) {
+    matchAssociationConditions: function (association, conditions) {
         var me = this;
         var associationInstance = Ext.create(association.associatedName);
         var match = false;
@@ -811,7 +801,7 @@ Ext.define('Shopware.window.Detail', {
             match = true;
         }
 
-        Ext.each(conditions, function(condition) {
+        Ext.each(conditions, function (condition) {
             //relation type has been set? if isn't matched continue with next condition
             if (condition.relation && condition.relation.toLowerCase() !== association.relation.toLowerCase()) {
                 return true;
@@ -835,8 +825,8 @@ Ext.define('Shopware.window.Detail', {
             if (condition.associationTypes) {
                 var typeMatch = false;
 
-                Ext.each(associationInstance.associations.items, function(item) {
-                    Ext.each(condition.associationTypes, function(type) {
+                Ext.each(associationInstance.associations.items, function (item) {
+                    Ext.each(condition.associationTypes, function (type) {
                         if (type.toLowerCase() === item.relation.toLowerCase()) {
                             typeMatch = true;
                         }
@@ -862,8 +852,8 @@ Ext.define('Shopware.window.Detail', {
      * @param word
      * @return string
      */
-    camelCaseToWord: function(word) {
-        word = word.split(/(?=[A-Z])/).map(function(p) {
+    camelCaseToWord: function (word) {
+        word = word.split(/(?=[A-Z])/).map(function (p) {
             return p.charAt(0).toLowerCase() + p.slice(1);
         }).join(' ');
 
@@ -881,8 +871,8 @@ Ext.define('Shopware.window.Detail', {
      * @param modelName
      * @return String
      */
-    getModelName: function(modelName) {
-        return modelName.substr(modelName.lastIndexOf(".")+1);
+    getModelName: function (modelName) {
+        return modelName.substr(modelName.lastIndexOf(".") + 1);
     }
 
 });

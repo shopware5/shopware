@@ -1,4 +1,3 @@
-
 //{block name="backend/component/data/model"}
 Ext.define('Shopware.data.Model', {
 
@@ -8,18 +7,18 @@ Ext.define('Shopware.data.Model', {
      * Model proxy which defines
      * the urls for the CRUD actions.
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         api: {
-            detail:  '{url action="detail"}',
-            create:  '{url action="create"}',
-            update:  '{url action="update"}',
+            detail: '{url action="detail"}',
+            create: '{url action="create"}',
+            update: '{url action="update"}',
             destroy: '{url action="delete"}'
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 
@@ -30,7 +29,7 @@ Ext.define('Shopware.data.Model', {
      *
      * @param config
      */
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         me.convertProxyApi();
         me.callParent(arguments);
@@ -43,13 +42,13 @@ Ext.define('Shopware.data.Model', {
      * The base controller will be remove with the
      * configured controller name.
      */
-    convertProxyApi: function() {
+    convertProxyApi: function () {
         var me = this, value;
 
-        Object.keys(me.proxy.api).forEach(function(key) {
+        Object.keys(me.proxy.api).forEach(function (key) {
             value = me.proxy.api[key] + '';
             value = value.replace(
-                '/backend/base/', '/backend/' + me.controller.toLowerCase()  + '/'
+                '/backend/base/', '/backend/' + me.controller.toLowerCase() + '/'
             );
             me.proxy.api[key] = value;
         });
@@ -66,7 +65,7 @@ Ext.define('Shopware.data.Model', {
      * @param options object
      * @returns Shopware.data.Model
      */
-    reload: function(options) {
+    reload: function (options) {
         var me = this, proxy = me.proxy;
 
         if (!Ext.isString(proxy.api.detail)) {
@@ -87,7 +86,7 @@ Ext.define('Shopware.data.Model', {
 
         try {
             store.load({
-                callback: function(records, operation) {
+                callback: function (records, operation) {
                     var record = records[0];
                     if (options && Ext.isFunction(options.callback)) {
                         options.callback(record, operation);
