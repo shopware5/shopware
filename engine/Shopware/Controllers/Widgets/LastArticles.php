@@ -33,6 +33,7 @@
 /**
  * Shopware Application
  *
+ * @deprecated
  * todo@all: Documentation
  */
 class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Action
@@ -40,6 +41,7 @@ class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Actio
     /**
      * Sets a template variable with the last views articles.
      *
+     * @deprecated
      * @return void
      */
     public function indexAction()

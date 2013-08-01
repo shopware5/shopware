@@ -84,6 +84,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 items: [
                     {
                         fieldLabel: '{s name=fieldset/various/disableStats}Deaktiviert die Shopware eigenen Statistiken{/s}',
+                        helpText: '{s name=fieldset/various/disableStats/help}Beachten Sie, dass die zuletzt angeschauten Artikel bei deaktivierter Einstellung nicht mehr in der Datenbank gesichert werden.{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
