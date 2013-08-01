@@ -9,8 +9,16 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
     protected $filterFields = null;
     protected $sortFields = null;
-    protected $associations = array();
 
+    /**
+     * Controller action which can be called over an ajax request.
+     * This function is normally used for backend listings.
+     *
+     * @internalParam start  - Offset for the pagination
+     * @internalParam limit  - Integer value for the max row count
+     * @internalParam sort   - Contains an array with sort conditions
+     * @internalParam filter - Contains an array with filter conditions
+     */
     public function listAction()
     {
         $this->View()->assign(
@@ -23,21 +31,137 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
+    /**
+     * The getList function returns an array of the configured class model.
+     * The listing query created in the getListQuery function.
+     * The pagination of the listing is handled inside this function.
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $sort
+     * @param array $filter
+     * @return array
+     */
     protected function getList($offset, $limit, $sort = array(), $filter = array())
     {
         $builder = $this->getListQuery();
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
+        $builder = $this->addListingSortCondition($builder, $sort);
+        $builder = $this->addListingFilterCondition($builder, $filter);
 
+        $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->getArrayCopy();
         $count = $paginator->count();
         return array('success' => true, 'data' => $data, 'total' => $count);
     }
 
+    /**
+     *
+     * @param \Shopware\Components\Model\QueryBuilder $builder
+     * @param array $sort
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function addListingSortCondition(\Shopware\Components\Model\QueryBuilder $builder, array $sort)
+    {
+        $fields = $this->getModelFields($this->model, $this->alias);
+        $conditions = array();
+        foreach($sort as $condition) {
+            if (!array_key_exists($condition['property'], $fields)) {
+                continue;
+            }
+            $condition['property'] = $fields[$condition['property']];
+            $conditions[] = $condition;
+        }
+
+        if (!empty($conditions)) {
+            $builder->addOrderBy($conditions);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param \Shopware\Components\Model\QueryBuilder $builder
+     * @param array $filters
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function addListingFilterCondition(\Shopware\Components\Model\QueryBuilder $builder, array $filters)
+    {
+        $fields = $this->getModelFields($this->model, $this->alias);
+        $conditions = array();
+
+        foreach($filters as $condition) {
+            if ($condition['property'] === 'search') {
+                foreach($fields as $field) {
+                    $conditions[] = array(
+                        'property' => $field,
+                        'operator' => 'OR',
+                        'value' => '%' . $condition['value'] . '%'
+                    );
+                }
+            } elseif (array_key_exists($condition['property'], $fields)) {
+                $conditions[] = array(
+                    'property' => $fields[$condition['property']],
+                    'operator' => 'OR',
+                    'value' => '%' . $condition['value'] . '%'
+                );
+            }
+        }
+
+        if (!empty($conditions)) {
+            $builder->addFilter($conditions);
+        }
+
+        return $builder;
+    }
+
+
+    /**
+     * @param string $model - Model class name
+     * @param null $alias - Allows to add an query alias like 'article.name'.
+     * @return array
+     */
+    protected function getModelFields($model, $alias = null)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $fields = $metaData->getFieldNames();
+        $fields = array_combine($fields, $fields);
+
+        if ($alias) {
+            $fields = array_map(function($field) use ($alias){
+                return $alias . '.' . $field;
+            }, $fields);
+        }
+
+        return $fields;
+    }
+
+
+    /**
+     * Helper function to create the query builder paginator.
+     *
+     * @param Doctrine\ORM\QueryBuilder $builder
+     * @param int $hydrationMode
+     * @return Paginator
+     */
+    protected function getQueryPaginator(\Doctrine\ORM\QueryBuilder $builder, $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY)
+    {
+        $query = $builder->getQuery();
+        $query->setHydrationMode($hydrationMode);
+        return new Paginator($query);
+    }
+
+
+    /**
+     * Helper function which creates the listing query builder.
+     * If the class property model isn't configured, the function throws an exception.
+     * The listing alias for the from table can be configured over the class property alias.
+     *
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
     protected function getListQuery()
     {
         if (empty($this->model)) {
@@ -51,6 +175,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         return $builder;
     }
+
 
     public function detailAction()
     {
@@ -105,6 +230,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $builder;
     }
 
+
     public function createAction()
     {
         $this->View()->assign(
@@ -123,13 +249,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
-    protected function save(array $data)
-    {
-
-        $detail = $this->getDetail($data['id']);
-        return array('success' => true, 'data' => $detail['data']);
-    }
-
     public function deleteAction()
     {
         $this->View()->assign(
@@ -137,6 +256,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('id', array())
             )
         );
+    }
+
+
+    protected function save(array $data)
+    {
+        $detail = $this->getDetail($data['id']);
+        return array('success' => true, 'data' => $detail['data']);
     }
 
     protected function delete(array $ids)
@@ -187,9 +313,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->select($association);
         $builder->from($model, $association);
         $builder->where($association . '.name LIKE :search');
-        $builder->setParameter('search', '%'. $search .'%');
+        $builder->setParameter('search', '%' . $search . '%');
         $builder->setFirstResult(0)
-                ->setMaxResults(20);
+            ->setMaxResults(20);
 
         return $builder;
     }
