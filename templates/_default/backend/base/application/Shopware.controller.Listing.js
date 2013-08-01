@@ -141,7 +141,11 @@ Ext.define('Shopware.controller.Listing', {
     onAddItem: function (listing) {
         var me = this, store = listing.getStore();
         var record = Ext.create(store.model);
-        me.createDetailWindow(record, listing.getConfig('detailWindow'));
+
+        me.createDetailWindow(
+            record,
+            listing.getConfig('detailWindow')
+        );
     },
 
     onDeleteItem: function (grid, record) {
