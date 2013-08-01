@@ -6,12 +6,16 @@ Ext.define('Shopware.window.Progress', {
     width: 300,
     modal: true,
     height: 90,
+
+
     progressTitle: 'Items: [0] of [1]',
     progressCount: 1,
 
     initComponent: function () {
         var me = this;
+
         me.items = [ me.createProgressbar() ];
+
         me.callParent(arguments);
     },
 
