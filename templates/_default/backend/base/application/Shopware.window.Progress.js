@@ -9,7 +9,7 @@ Ext.define('Shopware.window.Progress', {
     width: 600,
     modal: true,
     bodyPadding: 20,
-    height: 360,
+    height: 300,
     closable: false,
 
     /**
@@ -91,6 +91,7 @@ Ext.define('Shopware.window.Progress', {
         me.dockedItems = [ me.createToolbar() ];
         me.callParent(arguments);
         me.sequentialProcess(undefined, me.getConfig('tasks'));
+
     },
 
 
@@ -111,6 +112,9 @@ Ext.define('Shopware.window.Progress', {
 
         return items;
     },
+
+
+
 
     createToolbar: function () {
         var me = this;
@@ -144,7 +148,6 @@ Ext.define('Shopware.window.Progress', {
         });
 
         me.resultGrid = Ext.create('Ext.grid.Panel', {
-            title: 'Request results',
             border: false,
             columns: [
                 { xtype: 'rownumberer', width: 30 },
@@ -155,15 +158,17 @@ Ext.define('Shopware.window.Progress', {
             store: me.resultStore
         });
 
-        return Ext.create('Ext.form.FieldSet', {
+        me.resultFieldSet = Ext.create('Ext.form.FieldSet', {
             items: [ me.resultGrid ],
+            layout: 'fit',
             collapsible: true,
+            collapsed: true,
             flex: 1,
             margin: '15 0 0',
-            layout: 'fit',
-            collapsed: true,
-            title: 'Error reporting'
+            title: 'Request results'
         });
+
+        return me.resultFieldSet;
     },
 
 
@@ -215,15 +220,18 @@ Ext.define('Shopware.window.Progress', {
 
             model.setOperation(operation);
             me.resultStore.add(operation);
+            if (!operation.wasSuccessful()) {
+                me.resultFieldSet.expand();
+            }
             me.sequentialProcess(current, tasks);
         });
     },
 
     successRenderer: function(value, metaData) {
         metaData.tdAttr = 'style="vertical-align: middle;"';
-        var css = 'sprite-cross';
+        var css = 'sprite-cross-small';
         if (value) {
-            css = 'sprite-tick'
+            css = 'sprite-tick-small'
         }
         return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + css + '"></span>';
     },
@@ -232,11 +240,7 @@ Ext.define('Shopware.window.Progress', {
     requestRenderer: function(value, metaData, record) {
         var params = [], properties = [ 'id', 'number', 'name' ], propertyValue;
 
-        if (record.get('success')) {
-            return value.url;
-        }
         params.push('<strong>url</strong> = ' + value.url);
-
         Ext.each(properties, function(property) {
             propertyValue = value.jsonData[property];
             if (propertyValue) {
