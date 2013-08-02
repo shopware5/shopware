@@ -382,7 +382,7 @@ Ext.define('Shopware.window.Detail', {
         var config = { };
         config = Ext.apply({ }, config, displayConfig);
 
-        return Ext.create('Shopware.grid.Listing', {
+        return Ext.create('Shopware.grid.Panel', {
             store: store,
             minHeight: 300,
             flex: 1,
