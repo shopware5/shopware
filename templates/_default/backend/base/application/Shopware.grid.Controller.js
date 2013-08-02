@@ -1,5 +1,5 @@
 //{block name="backend/component/controller/listing"}
-Ext.define('Shopware.controller.Listing', {
+Ext.define('Shopware.grid.Controller', {
     extend: 'Ext.app.Controller',
 
     statics: {
@@ -80,7 +80,7 @@ Ext.define('Shopware.controller.Listing', {
             me.control(me.createControls());
         }
 
-        console.log("Shopware.controller.Listing", me);
+        console.log("Shopware.grid.Controller", me);
         me.callParent(arguments);
     },
 

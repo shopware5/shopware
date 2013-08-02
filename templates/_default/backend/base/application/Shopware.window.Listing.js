@@ -45,7 +45,7 @@ Ext.define('Shopware.window.Listing', {
              * @string
              * @optional
              */
-            listingGrid: 'Shopware.grid.Listing',
+            listingGrid: 'Shopware.grid.Panel',
 
             /**
              * Class name of the grid store. This store will be set in the
