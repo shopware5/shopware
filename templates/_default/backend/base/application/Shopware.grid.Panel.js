@@ -1,9 +1,64 @@
 //{block name="backend/component/grid/panel"}
+
 /**
- * The Shopware.grid.Listing components contains the Shopware boiler plate
+ * The Shopware.grid.Panel components contains the Shopware boiler plate
  * code for a full featured backend listing.
+ *
+ * How to use:
+ *  - The usage of the Shopware.grid.Panel is really simple.
+ *  - The only think you have to do, is to pass a Ext.data.Store to this component
+ *  - Each QUAD operation will be handled by the Shopware.controller.Listing component.
+ *  - To configure the different grid features you can use the following source as example:
+ *  @example
+ *      Ext.define('Shopware.apps.Product.view.list.Grid', {
+ *          extend: 'Shopware.grid.Panel',
+ *          displayConfig: {
+ *              toolbar: false,
+ *              ...
+ *          }
+ *      });
+ *  - If you descides to handle all grid events by yourself you can extend the Shopware.controller.Listing
+ *    and set the { @link #hasOwnController } property to false. In this case, shopware handles nothing for you for this component.
+ *  - If you added some custom components you want to handle by yourself but the QUAD function should be handled,
+ *    by shopware, you can add your event handlers normaly and set the { @link #hasOwnController } property to false.
+ *
+ * @event 'eventAlias-add-item'
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.button.Button } button - The add button
+ *
+ * @event 'eventAlias-delete-items'
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.button.Button } button - The add button
+ *      @param { array } selection - The current grid selection.
+ *
+ * @event `eventAlias-search`
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.form.field.Text } field - The searchField
+ *      @param { String } value - The value of the searchField
+ *
+ * @event 'eventAlias-change-page-size'
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.form.field.ComboBox } combo - The combo box field
+ *      @param { Array } records - The selected records.
+ *
+ * @event 'eventAlias-edit-item'
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.data.Model } record - The record of the row.
+ *      @param { int } rowIndex - Row index of the clicked item
+ *      @param { int } colIndex - Column index of the clicked item.
+ *      @param { object } item - The clicked item (or this Column if multiple items were not configured).
+ *      @param { Event } opts - The click event.
+ *
+ * @event 'eventAlias-delete-item'
+ *      @param { Shopware.grid.Panel } grid - Instance of this component
+ *      @param { Ext.data.Model } record - The record of the row.
+ *      @param { int } rowIndex - Row index of the clicked item
+ *      @param { int } colIndex - Column index of the clicked item.
+ *      @param { object } item - The clicked item (or this Column if multiple items were not configured).
+ *      @param { Event } opts - The click event.
+ *
  */
-Ext.define('Shopware.grid.Listing', {
+Ext.define('Shopware.grid.Panel', {
 
     /**
      * The parent class that this class extends
@@ -21,7 +76,7 @@ Ext.define('Shopware.grid.Listing', {
     alias: 'widget.shopware-grid-panel',
 
     /**
-     * Is defined, when the { @link #statics.displayConfig.addButton } property is set to `true`.
+     * Is defined, when the { @link #addButton } property is set to `true`.
      *
      * @default { undefined }
      * @type { Ext.button.Button }
@@ -46,7 +101,7 @@ Ext.define('Shopware.grid.Listing', {
          *
          * @example
          * Ext.define('Shopware.apps.Product.view.list.Grid', {
-         *     extend: 'Shopware.grid.Listing',
+         *     extend: 'Shopware.grid.Panel',
          *     displayConfig: {
          *         toolbar: false,
          *         ...
@@ -140,7 +195,7 @@ Ext.define('Shopware.grid.Listing', {
              *
              * @type { boolean }
              * @event 'eventAlias-add-item'
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.button.Button } button - The add button
              */
             addButton: true,
@@ -156,7 +211,7 @@ Ext.define('Shopware.grid.Listing', {
              *
              * @type { boolean }
              * @event 'eventAlias-delete-items'
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.button.Button } button - The add button
              *      @param { array } selection - The current grid selection.
              */
@@ -172,7 +227,7 @@ Ext.define('Shopware.grid.Listing', {
              * search.
              *
              * @event `eventAlias-search`
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.form.field.Text } field - The searchField
              *      @param { String } value - The value of the searchField
              *
@@ -208,7 +263,7 @@ Ext.define('Shopware.grid.Listing', {
              *
              * @type { boolean }
              * @event 'eventAlias-change-page-size'
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.form.field.ComboBox } combo - The combo box field
              *      @param { Array } records - The selected records.
              */
@@ -245,7 +300,7 @@ Ext.define('Shopware.grid.Listing', {
              *
              * @type { boolean }
              * @event 'eventAlias-edit-item'
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.data.Model } record - The record of the row.
              *      @param { int } rowIndex - Row index of the clicked item
              *      @param { int } colIndex - Column index of the clicked item.
@@ -263,7 +318,7 @@ Ext.define('Shopware.grid.Listing', {
              *
              * @type { boolean }
              * @event 'eventAlias-delete-item'
-             *      @param { Shopware.grid.Listing } grid - Instance of this component
+             *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.data.Model } record - The record of the row.
              *      @param { int } rowIndex - Row index of the clicked item
              *      @param { int } colIndex - Column index of the clicked item.
@@ -369,7 +424,7 @@ Ext.define('Shopware.grid.Listing', {
             me.createDefaultListingController();
         }
 
-        console.log("Shopware.grid.Listing", me);
+        console.log("Shopware.grid.Panel", me);
         me.callParent(arguments);
     },
 
@@ -377,15 +432,11 @@ Ext.define('Shopware.grid.Listing', {
     /**
      * Each grid component requires an own controller.
      *
-     * Um zu verhinden dass für jede Komponente einer Applikation ein eigener Controller
-     * erstellt werden muss, erzeugt die Shopware.grid.Listing
-     * Komponenten Ihren eigenen Controller der sich um die Quad
-     * Funktionen der Komponente kümmert.
-     * Wenn Sie einen eigenen Shopware.controller.Listing
-     * implementieren wollen, welcher die Quad Funktionen handled,
-     * können Sie das Property hasOwnController auf true setzen.
-     * Sollten Sie nur Ihre Custom Funktionen der Komponente handlen wollen,
-     * können Sie die Quad Funktionen auch weiterhin dem Standard Controller überlassen.
+     * In order to avoid having to create a new controller for every component of an application,
+     * the Shopware grid listing components generate their own controllers,
+     * which manage the quad functions of the components.
+     * If you wish to implement your own Shopware controller listing for managing
+     * quad functions, simply set the property ‘hasOwnController’ to true.
      *
      * @returns { Shopware.controller.Listing }
      */
@@ -853,7 +904,7 @@ Ext.define('Shopware.grid.Listing', {
      * The function is used from { @link #createPagingbar } function and sets the component
      * property "me.pageSizeCombo" which is used in subsequently events.
      *
-     * @returns { Ext.form.field.ComboBox } 
+     * @returns { Ext.form.field.ComboBox }
      */
     createPageSizeCombo: function () {
         var me = this, value = 20;
@@ -1122,11 +1173,6 @@ Ext.define('Shopware.grid.Listing', {
         return column;
     },
 
-
-    ///////////////////////////////
-    /// Grid renderer functions ///
-    ///////////////////////////////
-
     /**
      * Shopware default renderer function for a boolean listing column.
      * This functions expects a boolean value as first parameter.
@@ -1134,10 +1180,9 @@ Ext.define('Shopware.grid.Listing', {
      * sprite.
      *
      * @param value boolean
-     * @param record Ext.data.Model
      * @return String
      */
-    booleanColumnRenderer: function (value, record) {
+    booleanColumnRenderer: function (value) {
         var checked = 'sprite-ui-check-box-uncheck';
         if (value === true) {
             checked = 'sprite-ui-check-box';
@@ -1154,7 +1199,7 @@ Ext.define('Shopware.grid.Listing', {
      * @param record Ext.data.Model
      * @return integer
      */
-    integerColumnRenderer: function (value, record) {
+    integerColumnRenderer: function (value) {
         return Ext.util.Format.number(value, '0');
     }
 });
