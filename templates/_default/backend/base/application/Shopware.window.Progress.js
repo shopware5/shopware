@@ -20,8 +20,11 @@ Ext.define('Shopware.window.Progress', {
      */
     statics: {
         displayConfig: {
+            infoText: '',
+            tasks: [ ],
+            outputProperties: [ 'id', 'number', 'name' ],
+            displayResultGrid: true,
 
-            tasks: [ ]
         },
 
         /**
@@ -91,7 +94,6 @@ Ext.define('Shopware.window.Progress', {
         me.dockedItems = [ me.createToolbar() ];
         me.callParent(arguments);
         me.sequentialProcess(undefined, me.getConfig('tasks'));
-
     },
 
 
@@ -99,7 +101,9 @@ Ext.define('Shopware.window.Progress', {
         var me = this, items = [], item, progressContainer;
         var tasks = me.getConfig('tasks');
 
-        items.push(me.createInfoText());
+        if (me.getConfig('infoText')) {
+            items.push(me.createInfoText());
+        }
 
         Ext.each(tasks, function (task) {
             item = me.createTaskProgressBar(task);
@@ -108,7 +112,9 @@ Ext.define('Shopware.window.Progress', {
             }
         });
 
-        items.push(me.createResultGrid());
+        if (me.getConfig('displayResultGrid')) {
+            items.push(me.createResultGrid());
+        }
 
         return items;
     },
@@ -152,7 +158,7 @@ Ext.define('Shopware.window.Progress', {
             columns: [
                 { xtype: 'rownumberer', width: 30 },
                 { header: 'Success', dataIndex: 'success', width: 60, renderer: me.successRenderer },
-                { header: 'Request', dataIndex: 'request', flex: 1, renderer: me.requestRenderer },
+                { header: 'Request', dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
                 { header: 'Error message', dataIndex: 'error', flex: 1 }
             ],
             store: me.resultStore
@@ -174,7 +180,7 @@ Ext.define('Shopware.window.Progress', {
 
     createInfoText: function () {
         return Ext.create('Ext.container.Container', {
-            html: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et'
+            html: this.getConfig('infoText')
         });
     },
 
@@ -207,25 +213,44 @@ Ext.define('Shopware.window.Progress', {
         }
 
         record = current.data.shift();
-
-        var index = current.totalCount - current.data.length;
-        current.progressBar.updateProgress(
-            index / current.totalCount,
-            Ext.String.format(current.text, index, current.totalCount),
-            true
-        );
+        me.updateProgressBar(current);
 
         me.fireEvent(current.event, current, record, function(result, operation) {
-            var model = Ext.create('Shopware.model.Error');
 
-            model.setOperation(operation);
-            me.resultStore.add(operation);
-            if (!operation.wasSuccessful()) {
-                me.resultFieldSet.expand();
+            if (me.getConfig('displayResultGrid')) {
+                me.resultStore.add(
+                    me.createResponseRecord(operation)
+                );
+                if (!operation.wasSuccessful()) {
+                    me.resultFieldSet.expand();
+                }
             }
+
             me.sequentialProcess(current, tasks);
         });
     },
+
+
+    updateProgressBar: function(task) {
+        var index = task.totalCount - task.data.length;
+
+        task.progressBar.updateProgress(
+            index / task.totalCount,
+            Ext.String.format(task.text, index, task.totalCount),
+            true
+        );
+    },
+
+
+    createResponseRecord: function(operation) {
+        return Ext.create('Shopware.model.Error', {
+            success: operation.wasSuccessful(),
+            error: operation.getError(),
+            request: operation.request,
+            operation: operation
+        });
+    },
+
 
     successRenderer: function(value, metaData) {
         metaData.tdAttr = 'style="vertical-align: middle;"';
@@ -238,11 +263,17 @@ Ext.define('Shopware.window.Progress', {
 
 
     requestRenderer: function(value, metaData, record) {
-        var params = [], properties = [ 'id', 'number', 'name' ], propertyValue;
+        var me = this, operation, propertyValue,
+            params = [], requestRecord,
+            properties = me.getConfig('outputProperties');
+
+        operation = record.get('operation');
+        requestRecord = operation.getRecords();
+        requestRecord = requestRecord[0];
 
         params.push('<strong>url</strong> = ' + value.url);
         Ext.each(properties, function(property) {
-            propertyValue = value.jsonData[property];
+            propertyValue = requestRecord.get(property);
             if (propertyValue) {
                 params.push('<strong>' + property + '</strong> = ' + propertyValue);
             }
