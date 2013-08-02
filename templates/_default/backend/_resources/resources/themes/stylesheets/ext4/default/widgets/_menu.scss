@@ -130,11 +130,9 @@
         cursor: pointer;
 
         .#{$prefix}menu-item-link {
-            @include background-gradient($menu-item-active-background-color, 'matte');
             margin: 0px;
             border: 1px solid $menu-item-active-border-color;
             cursor: pointer;
-            @include border-radius(3px);
         }
     }
 

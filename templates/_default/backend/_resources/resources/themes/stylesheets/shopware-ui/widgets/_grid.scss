@@ -167,8 +167,12 @@
 	}
 
     .#{$prefix}box-inner {
-        @include filter-gradient(#f7f7f7, #e5e5e5, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #f7f7f7 0%,#e5e5e5 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#f7f7f7, 0%, 1),
+                      svg-color-stop(#e5e5e5, 100%, 1)
+                    )) center center no-repeat transparent !important;
+
     	border-top: 1px solid #fff;
         border-bottom: 1px solid #fff;
 

@@ -63,7 +63,7 @@ table.#{$prefix}form-trigger-wrap {
 
 	/** Trigger style - Focus state */
 	.#{$prefix}form-trigger {
-		@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+		//@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
 		border-color: rgba(82, 168, 236, 0.8) !important;
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAIAAACt/zAoAAAACXBIWXMAAAsTAAALEwEAmpwYAAABCklEQVQ4y2P5/OXruw8fGUgB/xkYfvz8ycLBzi4iJMhAIvj79y8LCwszEJGq8////yxA6t///6TqZGJkBOv8R7pOZrDOvyRrZGABI3LsZIDq/E+uzr/k20m2zj+oOqeu2Nq1Yh8jBy8jCxsDI+P/P7/+//ic7mVelRqK6dp/yEIZYZ7sghKdex4xcgmAIv3HpxxrieZou68//3z58ZuAP+OcDRi5hbtPfGZgYMywl2/21wTq+fT9N1EhFGUm85/x2Zff/1p81T//+P3h6y/C/oSDcGNJAS62j99/v/vyE8hlBOcSVJ1//+EKwDeff9AmPv/8+0euzr9k2/mXbDvJ9qeFiiip2v78/QsAyRmDrWsfg0MAAAAASUVORK5CYII=") no-repeat !important;
 	}
