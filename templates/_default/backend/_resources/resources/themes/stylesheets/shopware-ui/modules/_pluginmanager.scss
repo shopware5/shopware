@@ -243,7 +243,12 @@
         background-position: 0 -140px;
     }
     .detail .buy {
-        @include background-image(linear-gradient(top, #ededed 0%,#cdcdcd 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#ededed, 0%, 1),
+                      svg-color-stop(#cdcdcd, 100%, 1)
+                    )) center center no-repeat transparent;
+
         @include border-radius(12px);
         border: 1px solid #c5c5c5;
     	display: inline-block;
@@ -339,8 +344,11 @@
     .listing .section-header {
     	border-top: 1px solid #c7c7c7;
     	border-bottom: 1px solid #a9a9a9;
-    	$experimental-support-for-svg: true;
-		@include background-image(linear-gradient(top, #ededed 0%,#e2e2e2 47%,#d1d1d1 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#ededed, 0%, 1),
+                      svg-color-stop(#e2e2e2, 47%, 1),
+                      svg-color-stop(#d1d1d1, 100%, 1)
+                    )) center center no-repeat transparent;
     }
     .highlights .listing .section-header a { display: none }
     .listing .section-header h2, .listing .section-header a {
@@ -512,12 +520,11 @@ div[id^=plugin-manager-detail-window] {
 }
 .#{$prefix}tax-notice {
     @include inner-border(1px 0 0 0, #fff);
-    background: -moz-linear-gradient(top, #ededed 0%, #e2e2e2 47%, #d1d1d1 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(47%,#e2e2e2), color-stop(100%,#d1d1d1));
-    background: -webkit-linear-gradient(top, #ededed 0%,#e2e2e2 47%,#d1d1d1 100%);
-    background: -o-linear-gradient(top, #ededed 0%,#e2e2e2 47%,#d1d1d1 100%);
-    background: -ms-linear-gradient(top, #ededed 0%,#e2e2e2 47%,#d1d1d1 100%);
-    background: linear-gradient(top bottom, #ededed 0%,#e2e2e2 47%,#d1d1d1 100%);
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                  svg-color-stop(#ededed, 0%, 1),
+                  svg-color-stop(#e2e2e2, 47%, 1),
+                  svg-color-stop(#d1d1d1, 100%, 1)
+                )) center center no-repeat transparent;
     text-shadow: 0 1px 0 #fff;
     border-top: 1px solid #c7c7c7 !important;
     padding: 3px 0;
