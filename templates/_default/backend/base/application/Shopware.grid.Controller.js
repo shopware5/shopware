@@ -1,10 +1,31 @@
 //{block name="backend/component/controller/listing"}
+
 Ext.define('Shopware.grid.Controller', {
     extend: 'Ext.app.Controller',
 
+    /**
+     * The statics object contains the shopware default configuration for
+     * this component.
+     *
+     * @type { object }
+     */
     statics: {
+        /**
+         * The statics displayConfig is the shopware default configuration for
+         * this component.
+         * To override this property you can use the controller.displayConfig object.
+         *
+         * @example
+         * Ext.define('Shopware.apps.Product.controller.Product', {
+         *     extend: 'Shopware.grid.Controller',
+         *     displayConfig: {
+         *         ...
+         *     }
+         * });
+         */
         displayConfig: {
-
+            gridClass: undefined,
+            eventAlias: undefined
         },
 
         /**
@@ -76,7 +97,7 @@ Ext.define('Shopware.grid.Controller', {
     init: function () {
         var me = this;
 
-        if (me.listingGrid) {
+        if (me.getConfig('eventAlias')) {
             me.control(me.createControls());
         }
 
@@ -96,11 +117,11 @@ Ext.define('Shopware.grid.Controller', {
     createControls: function () {
         var me = this, alias, controls = {};
 
-        alias = Ext.ClassManager.getAliasesByName(me.listingGrid.$className);
+        alias = Ext.ClassManager.getAliasesByName(me.getConfig('gridClass'));
         alias = alias[0];
         alias = alias.replace('widget.', '');
         controls[alias] = me.createListingWindowControls();
-
+        controls['shopware-progress-window'] = me.createProgressWindowControls();
         return controls;
     },
 
@@ -111,18 +132,70 @@ Ext.define('Shopware.grid.Controller', {
      * @returns Object
      */
     createListingWindowControls: function () {
-        var me = this, events = {};
+        var me = this, events = {}, alias;
 
-        events[me.listingGrid.eventAlias + '-selection-changed'] = me.onSelectionChanged;
-        events[me.listingGrid.eventAlias + '-add-item'] = me.onAddItem;
-        events[me.listingGrid.eventAlias + '-delete-item'] = me.onDeleteItem;
-        events[me.listingGrid.eventAlias + '-delete-items'] = me.onDeleteItems;
-        events[me.listingGrid.eventAlias + '-edit-item'] = me.onEditItem;
-        events[me.listingGrid.eventAlias + '-search'] = me.onSearch;
-        events[me.listingGrid.eventAlias + '-change-page-size'] = me.onChangePageSize;
+        alias = me.getConfig('eventAlias');
+
+        events[alias + '-selection-changed'] = me.onSelectionChanged;
+        events[alias + '-add-item'] = me.onAddItem;
+        events[alias + '-delete-item'] = me.onDeleteItem;
+        events[alias + '-delete-items'] = me.onDeleteItems;
+        events[alias + '-edit-item'] = me.onEditItem;
+        events[alias + '-search'] = me.onSearch;
+        events[alias + '-change-page-size'] = me.onChangePageSize;
 
         return events;
     },
+
+
+    createProgressWindowControls: function(){
+        var me = this, events = {};
+
+        events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
+
+        return events;
+    },
+
+    onDeleteItems: function (grid, button, records) {
+        var me = this;
+
+        var window = Ext.create('Shopware.window.Progress', {
+            displayConfig: {
+                tasks: [
+                    {
+                        type: 'Iteration',
+
+                        text: 'Item [0] of [1]',
+                        event: me.getConfig('eventAlias') + '-batch-delete-item',
+                        size: 1,
+                        totalCount: records.length,
+                        data: records
+                    }
+                ]
+            }
+        });
+        window.show();
+    },
+
+
+    onBatchDeleteItem: function(task, record, callback) {
+        var me = this, proxy = record.getProxy();
+
+        proxy.on('exception', function(proxy, response, operation, opts) {
+            var data = Ext.decode(response.responseText);
+
+            operation.setException(data.error);
+            callback(response, operation);
+
+        }, me, { single: true });
+
+        record.destroy({
+            success: function(result, operation) {
+                callback(result, operation);
+            }
+        });
+    },
+
 
     onSelectionChanged: function (grid, selModel, selection) {
         var me = this;
@@ -148,9 +221,10 @@ Ext.define('Shopware.grid.Controller', {
         );
     },
 
-    onDeleteItem: function (grid, record) {
-        console.log("delete item");
+    
 
+
+    onDeleteItem: function (grid, record) {
 //        var me = this;
 //
 //        if (!(record instanceof Ext.data.Model)) {
@@ -182,81 +256,8 @@ Ext.define('Shopware.grid.Controller', {
 //        });
     },
 
-    hasModelAction: function (model, action) {
-        return (model.proxy && model.proxy.api && model.proxy.api[action]);
-    },
 
-    onDeleteItems: function (grid, records) {
-//        var me = this;
-//
-//        if (records.length <= 0) {
-//            return false;
-//        }
-//        if (records.length === 1) {
-//            return me.onDeleteItem(grid, records[0]);
-//        }
-//        me.deleteWindow = me.createDeleteWindow(records);
-//        me.deleteWindow.show();
-//
-//        me.sequentialDelete(
-//            null,
-//            records,
-//            me.deleteWindow.progressbar,
-//            records.length,
-//            grid.getStore()
-//        );
-    },
 
-    createDeleteWindow: function (records) {
-//        var me = this, text;
-//
-//        text = me.getModelName(records[0]);
-//        text += ': [0] of [1]';
-//
-//        return Ext.create('Shopware.window.Progress', {
-//            progressTitle: text,
-//            progressCount: records.length
-//        });
-    },
-
-    sequentialDelete: function (currentRecord, records, progressbar, count, store) {
-//        var me = this, text = '';
-//
-//        if (currentRecord === null) {
-//            currentRecord = records.shift();
-//        }
-//
-//        text = me.getModelName(currentRecord);
-//        text += ': ' + (count - records.length) + ' of ' + count;
-//
-//        progressbar.updateProgress(
-//            (count - records.length) / count,
-//            text, true
-//        );
-//
-//        currentRecord.destroy({
-//            success: function() {
-//                if (store instanceof Ext.data.Store) {
-//                    store.remove(currentRecord);
-//                }
-//                if (records.length === 0) {
-//                    progressbar.updateProgress(1, 'operation done');
-//                    me.deleteWindow.hide();
-//                    store.load();
-//                    return true;
-//                }
-//                currentRecord = records.shift();
-//                me.sequentialDelete(currentRecord, records, progressbar, count, store);
-//            },
-//            failure: function() {
-//
-//            }
-//        });
-    },
-
-    getModelName: function (modelName) {
-        return modelName.substr(modelName.lastIndexOf(".") + 1);
-    },
 
     onSearch: function (grid, searchField, value) {
         var store = grid.getStore();
@@ -272,6 +273,7 @@ Ext.define('Shopware.grid.Controller', {
         }
     },
 
+
     onChangePageSize: function (grid, combo, records) {
         var me = this,
             store = grid.getStore();
@@ -282,6 +284,7 @@ Ext.define('Shopware.grid.Controller', {
             store.load();
         }
     },
+
 
     /**
      * @param listing
@@ -303,7 +306,7 @@ Ext.define('Shopware.grid.Controller', {
                         listing.getConfig('detailWindow')
                     );
                 }
-            })
+            });
         } else {
             me.createDetailWindow(
                 record,
@@ -331,6 +334,15 @@ Ext.define('Shopware.grid.Controller', {
         me.getView(detailWindowClass).create({
             record: record
         }).show();
+    },
+
+
+    hasModelAction: function (model, action) {
+        return (model.proxy && model.proxy.api && model.proxy.api[action]);
+    },
+
+    getModelName: function (modelName) {
+        return modelName.substr(modelName.lastIndexOf(".") + 1);
     }
 });
 //{/block}

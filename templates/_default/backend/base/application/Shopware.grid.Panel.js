@@ -110,7 +110,6 @@ Ext.define('Shopware.grid.Panel', {
          */
         displayConfig: {
 
-
             /**
              * This is a required configuration property.
              * The detailWindow property contains the class name of your detail window.
@@ -269,7 +268,6 @@ Ext.define('Shopware.grid.Panel', {
              */
             pageSize: true,
 
-
             /**
              * Defines if the grid contains an additional column at the end for special grid actions.
              * Shopware creates as default an delete and edit action column item.
@@ -308,7 +306,6 @@ Ext.define('Shopware.grid.Panel', {
              *      @param { Event } opts - The click event.
              */
             editColumn: true,
-
 
             /**
              * Displays an delete column within the grid action column.
@@ -444,7 +441,10 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me.controller = Ext.create('Shopware.grid.Controller', {
-            listingGrid: me,
+            displayConfig: {
+                gridClass: me.$className,
+                eventAlias: me.eventAlias
+            },
             subApplication: me.subApp
         });
         me.controller.init();
@@ -1202,6 +1202,7 @@ Ext.define('Shopware.grid.Panel', {
     integerColumnRenderer: function (value) {
         return Ext.util.Format.number(value, '0');
     }
+
 });
 
 //{/block}

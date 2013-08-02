@@ -157,9 +157,10 @@
 
 //Shopware backend application components
 {include file='backend/base/application/Shopware.grid.Controller.js'}
-{include file='backend/base/application/Shopware.data.Model.js'}
 {include file='backend/base/application/Shopware.grid.Panel.js'}
+{include file='backend/base/application/Shopware.data.Model.js'}
 {include file='backend/base/application/Shopware.store.Listing.js'}
 {include file='backend/base/application/Shopware.window.Detail.js'}
 {include file='backend/base/application/Shopware.window.Listing.js'}
 {include file='backend/base/application/Shopware.window.Progress.js'}
+{include file='backend/base/application/Shopware.model.Error.js'}
