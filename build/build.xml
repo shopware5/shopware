@@ -29,6 +29,44 @@
 
     <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
 
+    <target name="configure" description="Set up build-variables">
+        <input message="Please enter db-host:"
+               addproperty="user.db.host"
+               defaultvalue="${db.host}" />
+
+        <input message="Please enter db-name:"
+               addproperty="user.db.name"
+               defaultvalue="${db.name}" />
+
+        <input message="Please enter db-username:"
+               addproperty="user.db.user"
+               defaultvalue="${db.user}" />
+
+        <input message="Please enter db-password:"
+               addproperty="user.db.password">
+            <handler type="secure"/>
+        </input>
+
+        <input message="Please enter app.host:"
+               addproperty="user.app.host"
+               defaultvalue="${app.host}" />
+
+        <input message="Please enter app.path:"
+               addproperty="user.app.path"
+               defaultvalue="${app.path}" />
+
+        <propertyfile
+                file="${build.dir}/build.properties"
+                comment="Project properties">
+            <entry  key="db.host"     value="${user.db.host}"/>
+            <entry  key="db.name"     value="${user.db.name}"/>
+            <entry  key="db.user"     value="${user.db.user}"/>
+            <entry  key="db.password" value="${user.db.password}"/>
+            <entry  key="app.path"    value="${user.app.path}"/>
+            <entry  key="app.host"    value="${user.app.host}"/>
+        </propertyfile>
+    </target>
+
     <target name="build-database">
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
