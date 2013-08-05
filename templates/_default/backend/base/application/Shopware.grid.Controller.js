@@ -24,13 +24,37 @@ Ext.define('Shopware.grid.Controller', {
          * });
          */
         displayConfig: {
+            /**
+             * Final class of the Shopware.grid.Panel.
+             * This class is required to get the alias of the component.
+             *
+             * @required
+             * @type { string }
+             */
             gridClass: undefined,
+
+            /**
+             * Suffix alias for the different component events.
+             * This alias must the same alias of the { @link Shopware.grid.Panel:eventAlias }  component.
+             * If you don't know the alias you can output the alias of the grid panel as follow:
+             * console.log("alias", me.eventAlias);
+             *
+             * If you haven't configured a custom event alias, the { @link Shopware.grid.Panel } creates
+             * the event alias over the configured model.
+             * @example
+             * If you passed a store with an model named: 'Shopware.apps.Product.model.Product'
+             * the { @link Shopware.grid.Panel } use "product" as event alias.
+             *
+             * @required
+             * @type { string }
+             */
             eventAlias: undefined
         },
 
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
+         *
          * @param userOpts Object
          * @param displayConfig Object
          * @returns Object
@@ -101,7 +125,6 @@ Ext.define('Shopware.grid.Controller', {
             me.control(me.createControls());
         }
 
-        console.log("Shopware.grid.Controller", me);
         me.callParent(arguments);
     },
 
@@ -112,7 +135,7 @@ Ext.define('Shopware.grid.Controller', {
      * This function requires the displayConfig.listingGrid parameter.
      * If this parameter isn't set, the function won't be called.
      *
-     * @returns Object
+     * @returns { Object }
      */
     createControls: function () {
         var me = this, alias, controls = {};
@@ -120,6 +143,7 @@ Ext.define('Shopware.grid.Controller', {
         alias = Ext.ClassManager.getAliasesByName(me.getConfig('gridClass'));
         alias = alias[0];
         alias = alias.replace('widget.', '');
+
         controls[alias] = me.createListingWindowControls();
         controls['shopware-progress-window'] = me.createProgressWindowControls();
         return controls;
@@ -129,7 +153,7 @@ Ext.define('Shopware.grid.Controller', {
      * Creates the event controls for the configured listing grid.
      * Adds all shopware default events like addItem or editItem, etc.
      *
-     * @returns Object
+     * @returns { Object }
      */
     createListingWindowControls: function () {
         var me = this, events = {}, alias;
@@ -148,6 +172,12 @@ Ext.define('Shopware.grid.Controller', {
     },
 
 
+    /**
+     * Creates all controls for the { @link Shopware.window.Progress } component.
+     * This component is used as default for multiple item deletion.
+     *
+     * @returns { Object }
+     */
     createProgressWindowControls: function(){
         var me = this, events = {};
 
@@ -156,6 +186,18 @@ Ext.define('Shopware.grid.Controller', {
         return events;
     },
 
+    /**
+     * Event listener function of the { @link Shopware.grid.Panel } component.
+     * This event is fired when the user uses the "delete items" button within the grid toolbar
+     * to delete multiple items.
+     *
+     * The function creates an { @link Shopware.window.Progress } which deletes the items
+     * in an batch mode.
+     *
+     * @param grid { Shopware.grid.Panel }
+     * @param button { Ext.button.Button }
+     * @param records { Array }
+     */
     onDeleteItems: function (grid, button, records) {
         var me = this;
 
@@ -163,11 +205,8 @@ Ext.define('Shopware.grid.Controller', {
             displayConfig: {
                 tasks: [
                     {
-                        type: 'Iteration',
-
                         text: 'Item [0] of [1]',
                         event: me.getConfig('eventAlias') + '-batch-delete-item',
-                        size: 1,
                         totalCount: records.length,
                         data: records
                     }
@@ -178,6 +217,14 @@ Ext.define('Shopware.grid.Controller', {
     },
 
 
+    /**
+     * Event listener function of the { @link Shopware.window.Progress:sequentialProcess } function.
+     * This event fired for each record which passed to the progess window.
+     *
+     * @param task { Object }
+     * @param record { Ext.data.Model }
+     * @param callback { Function }
+     */
     onBatchDeleteItem: function(task, record, callback) {
         var me = this, proxy = record.getProxy();
 
@@ -197,6 +244,15 @@ Ext.define('Shopware.grid.Controller', {
     },
 
 
+    /**
+     * Event listener function of the { @link Shopware.grid.Panel:selectionModel } component.
+     *
+     *
+     * @param grid { Shopware.grid.Panel }
+     * @param selModel { Ext.selection.CheckboxModel }
+     * @param selection { Array }
+     * @returns { boolean }
+     */
     onSelectionChanged: function (grid, selModel, selection) {
         var me = this;
 
@@ -211,6 +267,11 @@ Ext.define('Shopware.grid.Controller', {
     },
 
 
+    /**
+     * Event listener function of the { @link Shopware.grid.Panel:addButton }.
+     *
+     * @param listing { Shopware.grid.Panel }
+     */
     onAddItem: function (listing) {
         var me = this, store = listing.getStore();
         var record = Ext.create(store.model);
@@ -257,8 +318,15 @@ Ext.define('Shopware.grid.Controller', {
     },
 
 
-
-
+    /**
+     * Event listener function of the { @link Shopware.grid.Panel:createSearchField }
+     * The event is fired when the user insert a search string into the grid toolbar.
+     * The search field can be enabled or disabled over the { @link Shopware.grid.Panel:displayConfig.searchField } property.
+     *
+     * @param grid { Shopware.grid.Panel }
+     * @param searchField { Ext.form.field.Text }
+     * @param value { String }
+     */
     onSearch: function (grid, searchField, value) {
         var store = grid.getStore();
 
@@ -273,7 +341,15 @@ Ext.define('Shopware.grid.Controller', {
         }
     },
 
-
+    /**
+     * Event listener function of the { @link Shopware.grid.Panel:pageSizeCombo }.
+     * The event is fired when the user change the combo box value to change the
+     * grid store page size.
+     *
+     * @param grid { Shopware.grid.Panel }
+     * @param combo { Ext.form.field.ComboBox }
+     * @param records { Array }
+     */
     onChangePageSize: function (grid, combo, records) {
         var me = this,
             store = grid.getStore();
@@ -287,6 +363,8 @@ Ext.define('Shopware.grid.Controller', {
 
 
     /**
+     * Event listener function of the { @link Shopware.grid.Panel:editColumn }.
+     * The event is fired when the user clicks the action edit column
      * @param listing
      * @param record
      * @returns { boolean }

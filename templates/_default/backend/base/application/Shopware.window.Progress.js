@@ -170,7 +170,7 @@ Ext.define('Shopware.window.Progress', {
             collapsible: true,
             collapsed: true,
             flex: 1,
-            margin: '15 0 0',
+            margin: '20 0 0',
             title: 'Request results'
         });
 

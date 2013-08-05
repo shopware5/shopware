@@ -76,12 +76,95 @@ Ext.define('Shopware.grid.Panel', {
     alias: 'widget.shopware-grid-panel',
 
     /**
-     * Is defined, when the { @link #addButton } property is set to `true`.
+     * Is defined, when the { @link #displayConfig.toolbar } property is set to true.
+     * Created in the { @link #createToolbar } function.
+     */
+    toolbar: undefined,
+
+    /**
+     * Is defined, when the { @link #displayConfig.addButton } property is set to `true`.
+     * Created in the { @link #createAddButton } function.
      *
      * @default { undefined }
      * @type { Ext.button.Button }
      */
     addButton: undefined,
+
+    /**
+     * Is defined, when the { @link #displayConfig.deleteButton } property is set to true
+     * Created in the { @link #createDeleteButton } function.
+     *
+     * @default { undefined }
+     * @type { Ext.button.Button }
+     */
+    deleteButton: undefined,
+
+    /**
+     * Is defined, when the { @link #displayConfig.searchField } property is set to true.
+     * Created in the { @link #createSearchField } function.
+     *
+     * @default { undefined }
+     * @type { Ext.form.field.Text }
+     */
+    searchField: undefined,
+
+    /**
+     * Is defined, when the { @link #displayConfig.pageSize } property is set to true.
+     * Created in the { @link #createPageSizeCombo } function.
+     *
+     * @default { undefined }
+     * @type { Ext.form.field.ComboBox }
+     */
+    pageSizeCombo: undefined,
+
+
+    /**
+     * Is defined, when the { @link #displayConfig.pagingbar } property is set to true.
+     * created in the { @link #createPagingbar } function.
+     *
+     * @default { undefined }
+     * @type { Ext.toolbar.Paging }
+     */
+    pagingbar: undefined,
+
+    /**
+     * Is defined, when the { @link #displayConfig.hasOwnController } property is set to false.
+     *
+     * Each grid component requires an own controller.
+     * In order to avoid having to create a new controller for every component of an application,
+     * the Shopware grid listing components generate their own controllers,
+     * which manage the quad functions of the components.
+     * If you wish to implement your own Shopware controller listing for managing
+     * quad functions, simply set the property ‘hasOwnController’ to true.
+     *
+     * @default { undefined }
+     * @type { Shopware.grid.Controller }
+     */
+    controller: undefined,
+
+    /**
+     * Contains the class name of the store model.
+     * This property is used to create the { @link #eventAlias } for this component.
+     * The value will be set automatically
+     *
+     * @default { undefined }
+     * @type { Shopware.data.Model }
+     */
+    model: undefined,
+
+    /**
+     * Contains the event alias of this component.
+     * To prevent an event naming conflict, each grid panel has an own
+     * eventAlias prefix which added to each component event.
+     * @example:
+     * The store contains a model named: `Shopware.apps.Product.Model.Product`
+     * Shopware creates the event alias: `product`
+     * Each event has now the prefix `product`:  `product-add-item`
+     *
+     * @default { undefined }
+     * @type { String }
+     */
+    eventAlias: undefined,
 
     /**
      * The statics object contains the shopware default configuration for
@@ -376,7 +459,6 @@ Ext.define('Shopware.grid.Panel', {
      *
      * @param prop string
      * @returns mixed
-     * @constructor
      */
     getConfig: function (prop) {
         var me = this;
@@ -385,7 +467,8 @@ Ext.define('Shopware.grid.Panel', {
 
     /**
      * Class constructor which merges the different configurations.
-     * @param opts
+     *
+     * @param { Object } opts - Passed configuration
      */
     constructor: function (opts) {
         var me = this;
@@ -421,7 +504,6 @@ Ext.define('Shopware.grid.Panel', {
             me.createDefaultListingController();
         }
 
-        console.log("Shopware.grid.Panel", me);
         me.callParent(arguments);
     },
 
@@ -478,6 +560,7 @@ Ext.define('Shopware.grid.Panel', {
 
     /**
      * Registers the additional shopware events for this component
+     *
      * @return { Void }
      */
     registerEvents: function () {
