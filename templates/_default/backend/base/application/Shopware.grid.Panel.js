@@ -17,10 +17,10 @@
  *              ...
  *          }
  *      });
- *  - If you descides to handle all grid events by yourself you can extend the Shopware.grid.Controller
+ *  - If you decide to handle all grid events by yourself you can extend the Shopware.grid.Controller
  *    and set the { @link #hasOwnController } property to false. In this case, shopware handles nothing for you for this component.
  *  - If you added some custom components you want to handle by yourself but the QUAD function should be handled,
- *    by shopware, you can add your event handlers normaly and set the { @link #hasOwnController } property to false.
+ *    by shopware, you can add your event handlers normally and set the { @link #hasOwnController } property to false.
  *
  * @event 'eventAlias-add-item'
  *      @param { Shopware.grid.Panel } grid - Instance of this component
@@ -29,7 +29,7 @@
  * @event 'eventAlias-delete-items'
  *      @param { Shopware.grid.Panel } grid - Instance of this component
  *      @param { Ext.button.Button } button - The add button
- *      @param { array } selection - The current grid selection.
+ *      @param { Array } selection - The current grid selection.
  *
  * @event `eventAlias-search`
  *      @param { Shopware.grid.Panel } grid - Instance of this component
@@ -213,7 +213,7 @@ Ext.define('Shopware.grid.Panel', {
              *  - A store with Shopware.apps.Product.model.Product is passed to this component
              *  - The model alias will be set to "product"
              *  - All component events have now the prefix "product-..."
-             *   - Exmaple "product-add-item".
+             *   - Example "product-add-item".
              *
              * @type { string }
              */
@@ -295,12 +295,12 @@ Ext.define('Shopware.grid.Panel', {
              * @event 'eventAlias-delete-items'
              *      @param { Shopware.grid.Panel } grid - Instance of this component
              *      @param { Ext.button.Button } button - The add button
-             *      @param { array } selection - The current grid selection.
+             *      @param { Array } selection - The current grid selection.
              */
             deleteButton: true,
 
             /**
-             * Displays a seach field within the grid toolbar.
+             * Displays a search field within the grid toolbar.
              * Requires that the toolbar property is set to true.
              * If the property is set to true, the search field will be created
              * in the createSearchField function and will be set in the internal
@@ -479,19 +479,14 @@ Ext.define('Shopware.grid.Panel', {
 
     /**
      * Initialisation of this component.
-     *
      * Creates all required components for a default shopware listing.
-     *
-     * @returns { Void }
      */
     initComponent: function () {
         var me = this;
 
         me.model = me.store.model.$className;
         me.eventAlias = me.getConfig('eventAlias');
-        if (!me.eventAlias) {
-            me.eventAlias = me.createEventAlias();
-        }
+        if (!me.eventAlias) me.eventAlias = me.createEventAlias(me.model);
 
         me.columns = me.createColumns();
         me.plugins = me.createPlugins();
@@ -552,16 +547,13 @@ Ext.define('Shopware.grid.Panel', {
      *
      * @returns { String }
      */
-    createEventAlias: function () {
-        var me = this;
-        return me.getModelName(me.model).toLowerCase();
+    createEventAlias: function (modelClass) {
+        return this.getModelName(modelClass).toLowerCase();
     },
 
 
     /**
      * Registers the additional shopware events for this component
-     *
-     * @return { Void }
      */
     registerEvents: function () {
         var me = this;
@@ -628,7 +620,7 @@ Ext.define('Shopware.grid.Panel', {
             columns.push(me.createRowNumberColumn());
         }
 
-        Ext.each(model.fields.items, function (item, index) {
+        Ext.each(model.fields.items, function (item) {
             column = me.createColumn(model, item);
             if (column !== null) {
                 columns.push(column);
@@ -840,7 +832,7 @@ Ext.define('Shopware.grid.Panel', {
      * This function is called from the { @link #initComponent } function and has no configurations which prevents
      * the function call.
      *
-     * The return value will be assigned to the grid property grid.plguins
+     * The return value will be assigned to the grid property grid.plugins
      * http://docs.sencha.com/extjs/4.1.2/#!/api/Ext.grid.Panel-cfg-plugins
      *
      * To add a new plugin which isn't contained in the shopware default you can use the following
@@ -863,9 +855,7 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createPlugins: function () {
-        var me = this, plugins = [];
-
-        return plugins;
+        return [];
     },
 
     /**
@@ -893,9 +883,7 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createFeatures: function () {
-        var me = this, features = [];
-
-        return features;
+        return [];
     },
 
     /**
@@ -1262,8 +1250,8 @@ Ext.define('Shopware.grid.Panel', {
      * The function returns a span tag with a css class for a checkbox
      * sprite.
      *
-     * @param value boolean
-     * @return String
+     * @param { boolean } value
+     * @return { String }
      */
     booleanColumnRenderer: function (value) {
         var checked = 'sprite-ui-check-box-uncheck';
@@ -1278,9 +1266,8 @@ Ext.define('Shopware.grid.Panel', {
      * Grid number columns will be displayed with two precisions so this function
      * converts the passed value parameter to an integer value.
      *
-     * @param value integer|float
-     * @param record Ext.data.Model
-     * @return integer
+     * @param { int|float } value
+     * @return { int }
      */
     integerColumnRenderer: function (value) {
         return Ext.util.Format.number(value, '0');
