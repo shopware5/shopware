@@ -12,6 +12,9 @@ Ext.define('Shopware.window.Progress', {
     height: 300,
     closable: false,
 
+
+    cancelProcess: false,
+
     /**
      * The statics object contains the shopware default configuration for
      * this component.
@@ -23,8 +26,7 @@ Ext.define('Shopware.window.Progress', {
             infoText: '',
             tasks: [ ],
             outputProperties: [ 'id', 'number', 'name' ],
-            displayResultGrid: true,
-
+            displayResultGrid: true
         },
 
         /**
@@ -90,6 +92,7 @@ Ext.define('Shopware.window.Progress', {
     initComponent: function () {
         var me = this;
 
+        me.cancelProcess = false;
         me.items = me.createItems();
         me.dockedItems = [ me.createToolbar() ];
         me.callParent(arguments);
@@ -98,7 +101,7 @@ Ext.define('Shopware.window.Progress', {
 
 
     createItems: function () {
-        var me = this, items = [], item, progressContainer;
+        var me = this, items = [], item;
         var tasks = me.getConfig('tasks');
 
         if (me.getConfig('infoText')) {
@@ -127,12 +130,16 @@ Ext.define('Shopware.window.Progress', {
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: 'Cancel process'
+            text: 'Cancel process',
+            handler: function() {
+                me.cancelProcess = true;
+            }
         });
 
         me.closeButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             text: 'Close window',
+            disabled: true,
             handler: function() { me.destroy() }
         });
 
@@ -180,7 +187,8 @@ Ext.define('Shopware.window.Progress', {
 
     createInfoText: function () {
         return Ext.create('Ext.container.Container', {
-            html: this.getConfig('infoText')
+            html: this.getConfig('infoText'),
+            style: 'line-height:20px;'
         });
     },
 
@@ -208,12 +216,17 @@ Ext.define('Shopware.window.Progress', {
             current = tasks.shift();
         }
 
-        if (!current) {
+        if (!current || me.cancelProcess) {
+            me.closeButton.enable();
+            me.cancelButton.disable();
+            if (me.cancelProcess) {
+                me.updateProgressBar(current, 'Process canceled at position [0] of [1]');
+            }
             return;
         }
 
         record = current.data.shift();
-        me.updateProgressBar(current);
+        me.updateProgressBar(current, current.text);
 
         me.fireEvent(current.event, current, record, function(result, operation) {
 
@@ -231,12 +244,12 @@ Ext.define('Shopware.window.Progress', {
     },
 
 
-    updateProgressBar: function(task) {
+    updateProgressBar: function(task, text) {
         var index = task.totalCount - task.data.length;
 
         task.progressBar.updateProgress(
             index / task.totalCount,
-            Ext.String.format(task.text, index, task.totalCount),
+            Ext.String.format(text, index, task.totalCount),
             true
         );
     },

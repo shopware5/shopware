@@ -146,6 +146,7 @@ Ext.define('Shopware.grid.Controller', {
 
         controls[alias] = me.createListingWindowControls();
         controls['shopware-progress-window'] = me.createProgressWindowControls();
+
         return controls;
     },
 
@@ -178,7 +179,7 @@ Ext.define('Shopware.grid.Controller', {
      *
      * @returns { Object }
      */
-    createProgressWindowControls: function(){
+    createProgressWindowControls: function () {
         var me = this, events = {};
 
         events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
@@ -203,6 +204,7 @@ Ext.define('Shopware.grid.Controller', {
 
         var window = Ext.create('Shopware.window.Progress', {
             displayConfig: {
+                infoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
                 tasks: [
                     {
                         text: 'Item [0] of [1]',
@@ -213,6 +215,11 @@ Ext.define('Shopware.grid.Controller', {
                 ]
             }
         });
+
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-open-delete-window'), me, window, grid, records)) {
+            return;
+        }
+
         window.show();
     },
 
@@ -225,19 +232,29 @@ Ext.define('Shopware.grid.Controller', {
      * @param record { Ext.data.Model }
      * @param callback { Function }
      */
-    onBatchDeleteItem: function(task, record, callback) {
+    onBatchDeleteItem: function (task, record, callback) {
         var me = this, proxy = record.getProxy();
 
-        proxy.on('exception', function(proxy, response, operation, opts) {
+        proxy.on('exception', function (proxy, response, operation, opts) {
             var data = Ext.decode(response.responseText);
 
             operation.setException(data.error);
+
+            if (!Shopware.app.Application.fireEvent(me.getEventName('batch-delete-exception'), me, task, record, response, operation)) {
+                return;
+            }
+
             callback(response, operation);
 
         }, me, { single: true });
 
         record.destroy({
-            success: function(result, operation) {
+            success: function (result, operation) {
+
+                if (!Shopware.app.Application.fireEvent(me.getEventName('batch-delete-success'), me, task, record, result, operation)) {
+                    return;
+                }
+
                 callback(result, operation);
             }
         });
@@ -263,7 +280,8 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
         grid.deleteButton.setDisabled(selection.length <= 0);
-        return true;
+
+        return Shopware.app.Application.fireEvent(me.getEventName('after-selection-changed'), me, grid, selModel, selection);
     },
 
 
@@ -273,8 +291,13 @@ Ext.define('Shopware.grid.Controller', {
      * @param listing { Shopware.grid.Panel }
      */
     onAddItem: function (listing) {
-        var me = this, store = listing.getStore();
-        var record = Ext.create(store.model);
+        var me = this, record, store = listing.getStore();
+
+        record = Ext.create(store.model);
+
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-add-item'), me, listing, record)) {
+            return;
+        }
 
         me.createDetailWindow(
             record,
@@ -282,10 +305,10 @@ Ext.define('Shopware.grid.Controller', {
         );
     },
 
-    
-
 
     onDeleteItem: function (grid, record) {
+        var me = this;
+
 //        var me = this;
 //
 //        if (!(record instanceof Ext.data.Model)) {
@@ -321,18 +344,22 @@ Ext.define('Shopware.grid.Controller', {
     /**
      * Event listener function of the { @link Shopware.grid.Panel:createSearchField }
      * The event is fired when the user insert a search string into the grid toolbar.
-     * The search field can be enabled or disabled over the { @link Shopware.grid.Panel:displayConfig.searchField } property.
+     * The search field can be enabled or disabled over the { @link Shopware.grid.Panel:searchField } property.
      *
      * @param grid { Shopware.grid.Panel }
      * @param searchField { Ext.form.field.Text }
      * @param value { String }
      */
     onSearch: function (grid, searchField, value) {
-        var store = grid.getStore();
+        var me = this, store = grid.getStore();
 
         value = Ext.String.trim(value);
         store.filters.clear();
         store.currentPage = 1;
+
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-search'), me, grid, store, searchField, value)) {
+            return;
+        }
 
         if (value.length > 0) {
             store.filter({ property: 'search', value: value });
@@ -354,6 +381,10 @@ Ext.define('Shopware.grid.Controller', {
         var me = this,
             store = grid.getStore();
 
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-page-size-changed'), me, grid, combo, records)) {
+            return;
+        }
+
         if (combo.getValue() > 0) {
             store.pageSize = combo.getValue();
             store.currentPage = 1;
@@ -367,18 +398,21 @@ Ext.define('Shopware.grid.Controller', {
      * The event is fired when the user clicks the action edit column
      * @param listing
      * @param record
-     * @returns { boolean }
      */
     onEditItem: function (listing, record) {
         var me = this;
 
         if (!(record instanceof Ext.data.Model)) {
-            return false;
+            return;
+        }
+
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-page-size-changed'), me, listing, record)) {
+            return;
         }
 
         if (me.hasModelAction(record, 'detail')) {
             record.reload({
-                callback: function (result, operation) {
+                callback: function (result) {
                     me.createDetailWindow(
                         result,
                         listing.getConfig('detailWindow')
@@ -402,16 +436,32 @@ Ext.define('Shopware.grid.Controller', {
      * @param detailWindowClass string - Class name of the detail window
      */
     createDetailWindow: function (record, detailWindowClass) {
-        var me = this;
+        var me = this, window;
 
         if (!detailWindowClass) {
-            console.log("no detail window configured");
-            return false;
+            return;
         }
 
-        me.getView(detailWindowClass).create({
+        if (!Shopware.app.Application.fireEvent('before-create-detail-window', me, record)) {
+            return;
+        }
+
+        window = me.getView(detailWindowClass).create({
             record: record
-        }).show();
+        });
+
+        if (!Shopware.app.Application.fireEvent(me.getEventName('after-create-detail-window'), me, record, window)) {
+            return;
+        }
+
+        if (window) {
+            window.show();
+        }
+    },
+
+
+    getEventName: function (name) {
+        return this.getConfig('eventAlias') + '-' + name;
     },
 
 

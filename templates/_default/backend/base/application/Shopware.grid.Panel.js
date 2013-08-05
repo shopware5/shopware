@@ -117,7 +117,6 @@ Ext.define('Shopware.grid.Panel', {
      */
     pageSizeCombo: undefined,
 
-
     /**
      * Is defined, when the { @link #displayConfig.pagingbar } property is set to true.
      * created in the { @link #createPagingbar } function.
@@ -502,7 +501,6 @@ Ext.define('Shopware.grid.Panel', {
         me.callParent(arguments);
     },
 
-
     /**
      * Each grid component requires an own controller.
      *
@@ -550,7 +548,6 @@ Ext.define('Shopware.grid.Panel', {
     createEventAlias: function (modelClass) {
         return this.getModelName(modelClass).toLowerCase();
     },
-
 
     /**
      * Registers the additional shopware events for this component
@@ -635,6 +632,78 @@ Ext.define('Shopware.grid.Panel', {
         }
 
         return columns;
+    },
+
+    /**
+     * Helper function which creates a grid column for a passed model field.
+     * If you want to modify some columns but already want the shopware default configuration
+     * you can use the following source as example:
+     *
+     * @example
+     * createColumn: function (model, field) {
+     *      var me = this, column;
+     *      column = me.callParent(arguments);
+     *      if (field.name = 'name') {
+     *          field.header = 'MyOwnColumnHeader';
+     *      }
+     *      return column;
+     * }
+     *
+     * @param { Ext.data.Model } model - The data model which contained in the passed grid store.
+     * @param { Ext.data.Field } field - The model field which should be displayed in the grid
+     * @returns { Object }
+     */
+    createColumn: function (model, field) {
+        var me = this, column = {};
+
+        if (model.idProperty === field.name) {
+            return null;
+        }
+
+        column.xtype = 'gridcolumn';
+        column.dataIndex = field.name;
+        column.header = me.createColumnHeader(model, field);
+        column.flex = 1;
+
+        switch (field.type.type) {
+            case 'int':
+                column = me.applyIntegerColumnConfig(column);
+                break;
+            case 'string':
+                column = me.applyStringColumnConfig(column);
+                break;
+            case 'bool':
+                column = me.applyBooleanColumnConfig(column);
+                break;
+            case 'date':
+                column = me.applyDateColumnConfig(column);
+                break;
+            case 'float':
+                column = me.applyFloatColumnConfig(column);
+                break;
+        }
+
+        return column;
+    },
+
+    /**
+     * Helper function to create the grid column header
+     * for the passed model field.
+     *
+     * @param { Ext.data.Model } model - The data model which contained in the passed grid store.
+     * @param { Ext.data.Field } field - The model field which should be displayed in the grid
+     * @returns { String }
+     */
+    createColumnHeader: function (model, field) {
+        var name = field.name;
+
+        name = name.split(/(?=[A-Z])/).map(function (p) {
+            return p.charAt(0).toLowerCase() + p.slice(1);
+        }).join(' ');
+
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+
+        return name;
     },
 
     /**
@@ -752,78 +821,6 @@ Ext.define('Shopware.grid.Panel', {
      */
     createRowNumberColumn: function () {
         return { xtype: 'rownumberer', width: 30 };
-    },
-
-    /**
-     * Helper function which creates a grid column for a passed model field.
-     * If you want to modify some columns but already want the shopware default configuration
-     * you can use the following source as example:
-     *
-     * @example
-     * createColumn: function (model, field) {
-     *      var me = this, column;
-     *      column = me.callParent(arguments);
-     *      if (field.name = 'name') {
-     *          field.header = 'MyOwnColumnHeader';
-     *      }
-     *      return column;
-     * }
-     *
-     * @param { Ext.data.Model } model - The data model which contained in the passed grid store.
-     * @param { Ext.data.Field } field - The model field which should be displayed in the grid
-     * @returns { Object }
-     */
-    createColumn: function (model, field) {
-        var me = this, column = {};
-
-        if (model.idProperty === field.name) {
-            return null;
-        }
-
-        column.xtype = 'gridcolumn';
-        column.dataIndex = field.name;
-        column.header = me.createColumnHeader(model, field);
-        column.flex = 1;
-
-        switch (field.type.type) {
-            case 'int':
-                column = me.applyIntegerColumnConfig(column);
-                break;
-            case 'string':
-                column = me.applyStringColumnConfig(column);
-                break;
-            case 'bool':
-                column = me.applyBooleanColumnConfig(column);
-                break;
-            case 'date':
-                column = me.applyDateColumnConfig(column);
-                break;
-            case 'float':
-                column = me.applyFloatColumnConfig(column);
-                break;
-        }
-
-        return column;
-    },
-
-    /**
-     * Helper function to create the grid column header
-     * for the passed model field.
-     *
-     * @param { Ext.data.Model } model - The data model which contained in the passed grid store.
-     * @param { Ext.data.Field } field - The model field which should be displayed in the grid
-     * @returns { String }
-     */
-    createColumnHeader: function (model, field) {
-        var name = field.name;
-
-        name = name.split(/(?=[A-Z])/).map(function (p) {
-            return p.charAt(0).toLowerCase() + p.slice(1);
-        }).join(' ');
-
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-
-        return name;
     },
 
     /**
@@ -1173,7 +1170,6 @@ Ext.define('Shopware.grid.Panel', {
 
         return me.searchField;
     },
-
 
     /**
      * Adds the shopware default column configuration for a listing integer
