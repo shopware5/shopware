@@ -104,8 +104,6 @@ Ext.define('Shopware.window.Detail', {
     initComponent: function () {
         var me = this;
 
-        console.log("detail window", me);
-
         me.model = me.record.$className;
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) {
