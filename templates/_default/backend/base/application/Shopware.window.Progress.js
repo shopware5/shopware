@@ -9,7 +9,7 @@ Ext.define('Shopware.window.Progress', {
     width: 600,
     modal: true,
     bodyPadding: 20,
-    height: 300,
+    height: 360,
     closable: false,
 
 
@@ -175,7 +175,7 @@ Ext.define('Shopware.window.Progress', {
             items: [ me.resultGrid ],
             layout: 'fit',
             collapsible: true,
-            collapsed: true,
+            collapsed: false,
             flex: 1,
             margin: '20 0 0',
             title: 'Request results'

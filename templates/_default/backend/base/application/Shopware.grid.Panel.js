@@ -28,8 +28,8 @@
  *
  * @event 'eventAlias-delete-items'
  *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.button.Button } button - The add button
  *      @param { Array } selection - The current grid selection.
+ *      @param { Ext.button.Button } button - The add button
  *
  * @event `eventAlias-search`
  *      @param { Shopware.grid.Panel } grid - Instance of this component
@@ -1137,7 +1137,7 @@ Ext.define('Shopware.grid.Panel', {
             iconCls: 'sprite-minus-circle-frame',
             handler: function () {
                 var selModel = me.getSelectionModel();
-                me.fireEvent(me.eventAlias + '-delete-items', me, this, selModel.getSelection());
+                me.fireEvent(me.eventAlias + '-delete-items', me, selModel.getSelection(), this);
             }
         });
 
