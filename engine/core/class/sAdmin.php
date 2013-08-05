@@ -2318,7 +2318,9 @@ class sAdmin
             $userData["additional"]["payment"] = $this->sGetPaymentMeanById($userData["additional"]["user"]["paymentID"],$userData);
         }else {
             if ($this->sSYSTEM->_SESSION["sCountry"] && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]){
-                $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"] = intval($this->sSYSTEM->_SESSION["sCountry"]);
+                $sRegister = $this->sSYSTEM->_SESSION['sRegister'];
+                $sRegister['billing']['country']= intval($this->sSYSTEM->_SESSION["sCountry"]);
+                $this->sSYSTEM->_SESSION["sRegister"] = $sRegister;
             }
 
             $userData["additional"]["country"] = $this->sSYSTEM->sDB_CONNECTION->GetRow($countryQuery, array(intval($this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"])));
