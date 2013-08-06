@@ -135,7 +135,44 @@ Ext.define('Shopware.grid.Controller', {
              * @required
              * @type { string }
              */
-            eventAlias: undefined
+            eventAlias: undefined,
+
+            /**
+             * Title of the confirm message box.
+             * The confirm box will be displayed when the user try to delete some grid items.
+             *
+             * @type { string }
+             */
+            deleteConfirmTitle: 'Delete items',
+
+            /**
+             * Message of the confirm message box.
+             * The confirm box will be displayed when the user try to delete some grid items.
+             *
+             * @type { string }
+             */
+            deleteConfirmText: 'Are you sure you want to delete the selected items?',
+
+            /**
+             * Info text of the { @link Shopware.window.Progress }.
+             * The { @link Shopware.window.Progress } window will be displayed when the user
+             * try to delete some grid items.
+             *
+             * @type { string }
+             */
+            deleteInfoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
+
+            /**
+             * The progress bar text of the { @link Shopware.window.Progress }.
+             * The snippet contains two placeholders which will be replaced at runtime.
+             * The first placeholder will be replaced with the current index and
+             * the second placeholder with the total count of records.
+             *
+             * @type { string }
+             */
+            deleteProgressBarText: 'Item [0] of [1]'
+
+
         },
 
         /**
@@ -225,14 +262,15 @@ Ext.define('Shopware.grid.Controller', {
      * @returns { Object }
      */
     createControls: function () {
-        var me = this, alias, controls = {};
+        var me = this, alias, controls = {}, events = {};
 
         alias = Ext.ClassManager.getAliasesByName(me.getConfig('gridClass'));
         alias = alias[0];
         alias = alias.replace('widget.', '');
-
         controls[alias] = me.createListingWindowControls();
-        controls['shopware-progress-window'] = me.createProgressWindowControls();
+
+        events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
+        controls['shopware-progress-window'] = events;
 
         return controls;
     },
@@ -261,20 +299,6 @@ Ext.define('Shopware.grid.Controller', {
 
 
     /**
-     * Creates all controls for the { @link Shopware.window.Progress } component.
-     * This component is used as default for multiple item deletion.
-     *
-     * @returns { Object }
-     */
-    createProgressWindowControls: function () {
-        var me = this, events = {};
-
-        events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
-
-        return events;
-    },
-
-    /**
      * Event listener function of the { @link Shopware.grid.Panel } component.
      * This event is fired when the user uses the "delete items" button within the grid toolbar
      * to delete multiple items.
@@ -287,19 +311,19 @@ Ext.define('Shopware.grid.Controller', {
      * @param button { Ext.button.Button }
      */
     onDeleteItems: function (grid, records, button) {
-        var me = this;
+        var me = this, window;
 
-        Ext.MessageBox.confirm('Delete items', 'Are you sure you want to delete the selected items?', function (response) {
+        Ext.MessageBox.confirm(me.getConfig('deleteConfirmTitle'), me.getConfig('deleteConfirmText'), function (response) {
             if (response !== 'yes') {
                 return false;
             }
 
-            var window = Ext.create('Shopware.window.Progress', {
+            window = Ext.create('Shopware.window.Progress', {
                 displayConfig: {
-                    infoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
+                    infoText: me.getConfig('deleteInfoText'),
                     tasks: [
                         {
-                            text: 'Item [0] of [1]',
+                            text: me.getConfig('deleteProgressBarText'),
                             event: me.getConfig('eventAlias') + '-batch-delete-item',
                             totalCount: records.length,
                             data: records
@@ -309,7 +333,7 @@ Ext.define('Shopware.grid.Controller', {
             });
 
             if (!Shopware.app.Application.fireEvent(me.getEventName('before-open-delete-window'), me, window, grid, records)) {
-                return;
+                return false;
             }
 
             window.show();
@@ -344,13 +368,14 @@ Ext.define('Shopware.grid.Controller', {
      */
     onBatchDeleteItem: function (task, record, callback) {
         var me = this, proxy = record.getProxy(), data;
+        callback = callback || Ext.emptyFn;
 
         proxy.on('exception', function (proxy, response, operation) {
             data = Ext.decode(response.responseText);
             operation.setException(data.error);
 
             if (!Shopware.app.Application.fireEvent(me.getEventName('batch-delete-exception'), me, record, task, response, operation)) {
-                return;
+                return false;
             }
 
             callback(response, operation);
@@ -360,7 +385,7 @@ Ext.define('Shopware.grid.Controller', {
         record.destroy({
             success: function (result, operation) {
                 if (!Shopware.app.Application.fireEvent(me.getEventName('batch-delete-success'), me, record, task, result, operation)) {
-                    return;
+                    return false;
                 }
 
                 callback(result, operation);
@@ -399,6 +424,7 @@ Ext.define('Shopware.grid.Controller', {
      * Creates a new instance of the grid store model an displays it in a new detail window.
      *
      * @param listing { Shopware.grid.Panel }
+     * @returns { Shopware.window.Detail|boolean }
      */
     onAddItem: function (listing) {
         var me = this, record, store = listing.getStore();
@@ -406,10 +432,10 @@ Ext.define('Shopware.grid.Controller', {
         record = Ext.create(store.model);
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-add-item'), me, listing, record)) {
-            return;
+            return false;
         }
 
-        me.createDetailWindow(
+        return me.createDetailWindow(
             record,
             listing.getConfig('detailWindow')
         );
@@ -423,6 +449,7 @@ Ext.define('Shopware.grid.Controller', {
      * @param grid { Shopware.grid.Panel }
      * @param searchField { Ext.form.field.Text }
      * @param value { String }
+     * @returns { boolean }
      */
     onSearch: function (grid, searchField, value) {
         var me = this, store = grid.getStore();
@@ -432,7 +459,7 @@ Ext.define('Shopware.grid.Controller', {
         store.currentPage = 1;
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-search'), me, grid, store, searchField, value)) {
-            return;
+            return false;
         }
 
         if (value.length > 0) {
@@ -440,6 +467,8 @@ Ext.define('Shopware.grid.Controller', {
         } else {
             store.load();
         }
+
+        return true;
     },
 
     /**
@@ -450,13 +479,14 @@ Ext.define('Shopware.grid.Controller', {
      * @param grid { Shopware.grid.Panel }
      * @param combo { Ext.form.field.ComboBox }
      * @param records { Array }
+     * @returns { boolean }
      */
     onChangePageSize: function (grid, combo, records) {
         var me = this,
             store = grid.getStore();
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-page-size-changed'), me, grid, combo, records)) {
-            return;
+            return false;
         }
 
         if (combo.getValue() > 0) {
@@ -464,6 +494,8 @@ Ext.define('Shopware.grid.Controller', {
             store.currentPage = 1;
             store.load();
         }
+
+        return true;
     },
 
 
@@ -473,16 +505,17 @@ Ext.define('Shopware.grid.Controller', {
      *
      * @param listing { Shopware.grid.Panel }
      * @param record { Shopware.data.Model }
+     * @returns { boolean|Shopware.window.Detail }
      */
     onEditItem: function (listing, record) {
         var me = this;
 
         if (!(record instanceof Ext.data.Model)) {
-            return;
+            return false;
         }
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-edit-item'), me, listing, record)) {
-            return;
+            return false;
         }
 
         if (me.hasModelAction(record, 'detail')) {
@@ -494,14 +527,14 @@ Ext.define('Shopware.grid.Controller', {
                     );
                 }
             });
+            return true;
         } else {
-            me.createDetailWindow(
+            return me.createDetailWindow(
                 record,
                 listing.getConfig('detailWindow')
             );
         }
     },
-
 
     /**
      * Helper function which creates a detail window for the passed record.
@@ -514,11 +547,11 @@ Ext.define('Shopware.grid.Controller', {
         var me = this, window;
 
         if (!detailWindowClass) {
-            return;
+            return false;
         }
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-create-detail-window'), me, record)) {
-            return;
+            return false;
         }
 
         window = me.getView(detailWindowClass).create({
@@ -526,12 +559,14 @@ Ext.define('Shopware.grid.Controller', {
         });
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('after-create-detail-window'), me, record, window)) {
-            return;
+            return false;
         }
 
         if (window) {
             window.show();
         }
+
+        return window;
     },
 
 

@@ -6,8 +6,8 @@
  *
  * How to use:
  *  - The usage of the Shopware.grid.Panel is really simple.
- *  - The only think you have to do, is to pass a Ext.data.Store to this component
- *  - Each QUAD operation will be handled by the Shopware.grid.Controller component.
+ *  - The only thing you have to do, is to pass a Ext.data.Store to this component
+ *  - Each CRUD operation will be handled by the Shopware.grid.Controller component.
  *  - To configure the different grid features you can use the following source as example:
  *  @example
  *      Ext.define('Shopware.apps.Product.view.list.Grid', {
@@ -19,7 +19,7 @@
  *      });
  *  - If you decide to handle all grid events by yourself you can extend the Shopware.grid.Controller
  *    and set the { @link #hasOwnController } property to false. In this case, shopware handles nothing for you for this component.
- *  - If you added some custom components you want to handle by yourself but the QUAD function should be handled,
+ *  - If you added some custom components you want to handle by yourself but the CRUD function should be handled,
  *    by shopware, you can add your event handlers normally and set the { @link #hasOwnController } property to false.
  *
  * @event 'eventAlias-add-item'
@@ -132,9 +132,9 @@ Ext.define('Shopware.grid.Panel', {
      * Each grid component requires an own controller.
      * In order to avoid having to create a new controller for every component of an application,
      * the Shopware grid listing components generate their own controllers,
-     * which manage the quad functions of the components.
+     * which manage the CRUD functions of the components.
      * If you wish to implement your own Shopware controller listing for managing
-     * quad functions, simply set the property ‘hasOwnController’ to true.
+     * CRUD functions, simply set the property ‘hasOwnController’ to true.
      *
      * @default { undefined }
      * @type { Shopware.grid.Controller }
@@ -228,7 +228,7 @@ Ext.define('Shopware.grid.Panel', {
              * will handle the events of this component.
              * Additional if you have wrote an own controller that handles only
              * additional events, you can set this property to "false". In this case
-             * all quad functions will be handled by Shopware.grid.Controller and your
+             * all CRUD functions will be handled by Shopware.grid.Controller and your
              * own events can be handled in the own application controller.
              *
              * @type { boolean }
@@ -483,9 +483,9 @@ Ext.define('Shopware.grid.Panel', {
     initComponent: function () {
         var me = this;
 
-        me.model = me.store.model.$className;
+        me.model = me.store.model;
         me.eventAlias = me.getConfig('eventAlias');
-        if (!me.eventAlias) me.eventAlias = me.createEventAlias(me.model);
+        if (!me.eventAlias) me.eventAlias = me.createEventAlias(me.model.$className);
 
         me.columns = me.createColumns();
         me.plugins = me.createPlugins();
@@ -506,9 +506,9 @@ Ext.define('Shopware.grid.Panel', {
      *
      * In order to avoid having to create a new controller for every component of an application,
      * the Shopware grid listing components generate their own controllers,
-     * which manage the quad functions of the components.
+     * which manage the CRUD functions of the components.
      * If you wish to implement your own Shopware controller listing for managing
-     * quad functions, simply set the property ‘hasOwnController’ to true.
+     * CRUD functions, simply set the property ‘hasOwnController’ to true.
      *
      * @returns { Shopware.grid.Controller }
      */

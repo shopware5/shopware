@@ -222,7 +222,7 @@ Ext.define('Shopware.window.Progress', {
             if (me.cancelProcess) {
                 me.updateProgressBar(current, 'Process canceled at position [0] of [1]');
             }
-            return;
+            return false;
         }
 
         record = current.data.shift();

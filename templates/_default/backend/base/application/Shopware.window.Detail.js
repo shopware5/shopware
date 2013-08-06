@@ -662,7 +662,7 @@ Ext.define('Shopware.window.Detail', {
         var inStore;
 
         if (!grid) {
-            return;
+            return false;
         }
         Ext.each(records, function (record) {
             inStore = grid.getStore().getById(record.get('id'));
