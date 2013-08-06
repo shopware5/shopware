@@ -164,3 +164,4 @@
 {include file='backend/base/application/Shopware.window.Listing.js'}
 {include file='backend/base/application/Shopware.window.Progress.js'}
 {include file='backend/base/application/Shopware.model.Error.js'}
+{include file='backend/base/application/Shopware.grid.Association.js'}

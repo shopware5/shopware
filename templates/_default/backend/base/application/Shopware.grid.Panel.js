@@ -412,7 +412,36 @@ Ext.define('Shopware.grid.Panel', {
              * @default { false }
              * @type { boolean }
              */
-            rowNumbers: false
+            rowNumbers: false,
+
+
+            /**
+             * Column configuration object.
+             * This object can contains different configuration for
+             * the single grid columns.
+             * The configuration will be assigned at least to the
+             * generated column.
+             * If you want to modify only the header or a single
+             * property of each column you can use this property
+             * for small and quick changes.
+             *
+             * The columns will be addressed over their name.
+             * For example, you have an model field declared like this:
+             *
+             * Ext.define('Shopware.apps.Product.model.Product', {
+             *     extend: 'Shopware.data.Model',
+             *     fields: [
+             *         ...
+             *         { name: 'description', type: 'string', useNull: true },
+             *     ]
+             * });
+             *
+             * To modify the description column you can use the following example:
+             *      columns: {
+             *          description: { header: 'MyOwnDescription' }
+             *      }
+             */
+            columns: { }
         },
 
         /**
@@ -495,7 +524,7 @@ Ext.define('Shopware.grid.Panel', {
 
         me.registerEvents();
         if (me.getConfig('hasOwnController') === false) {
-            me.createDefaultListingController();
+            me.createDefaultController();
         }
 
         me.callParent(arguments);
@@ -512,7 +541,7 @@ Ext.define('Shopware.grid.Panel', {
      *
      * @returns { Shopware.grid.Controller }
      */
-    createDefaultListingController: function () {
+    createDefaultController: function () {
         var me = this;
 
         me.controller = Ext.create('Shopware.grid.Controller', {
@@ -654,7 +683,7 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Object }
      */
     createColumn: function (model, field) {
-        var me = this, column = {};
+        var me = this, column = {}, config, customConfig;
 
         if (model.idProperty === field.name) {
             return null;
@@ -682,6 +711,10 @@ Ext.define('Shopware.grid.Panel', {
                 column = me.applyFloatColumnConfig(column);
                 break;
         }
+
+        config = me.getConfig('columns');
+        customConfig = config[field.name] || {};
+        column = Ext.apply(column, customConfig);
 
         return column;
     },
