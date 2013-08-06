@@ -18,6 +18,7 @@ Vist the forum at <http://forum.shopware.de/>
 
 - PHP 5.3.2 or above
 - PHP's `cURL` and `GD` library
+- PHP option "magic_quotes_gpc" must be disabled (default PHP-config)
 - An Apache web server
 - Apache's `mod_rewrite` module
 - MySQL 5.1.0 or above
