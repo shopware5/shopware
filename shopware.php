@@ -46,7 +46,7 @@ if (ini_get('magic_quotes_gpc') && ini_set('magic_quotes_gpc', false) !== true) 
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server ist die PHP-Option `magic_quotes_gpc` aktiviertt, Shopware 4 erfordert, dass diese Option deaktiviert ist. Leider konnte die Option auch nicht deaktiviert werden.';
+    echo 'Auf Ihrem Server ist die PHP-Option `magic_quotes_gpc` aktiviert, Shopware 4 erfordert, dass diese Option deaktiviert ist. Leider konnte die Option auch nicht deaktiviert werden.';
 
     echo '<h2>Error</h2>';
     echo 'Your server has enabled the PHP-option `magic_quotes_gpc`, but Shopware 4 is required to turn it off. However it was not possible to do so.;
