@@ -600,11 +600,18 @@ class BasicEntityPersister
                     $this->quotedColumns[$sourceColumn] = $quotedColumn;
 
                     if ($newVal === null) {
-                        $result[$owningTable][$sourceColumn] = null;
+                        // Set data to result set, only if no exits.
+                        if(!isset($result[$owningTable][$sourceColumn])) {
+                            $result[$owningTable][$sourceColumn] = null;
+                        }
                     } else if ($targetClass->containsForeignIdentifier) {
                         $result[$owningTable][$sourceColumn] = $newValId[$targetClass->getFieldForColumn($targetColumn)];
-                    } else {
+                    } else if(isset($newValId[$targetClass->fieldNames[$targetColumn]])) {
                         $result[$owningTable][$sourceColumn] = $newValId[$targetClass->fieldNames[$targetColumn]];
+                    } else {
+                        //Load value from getter, if not is a entity identifier
+                        $m = 'get' . ucfirst($targetClass->fieldNames[$targetColumn]);
+                        $result[$owningTable][$sourceColumn] = $newVal->$m();
                     }
 
                     $this->_columnTypes[$sourceColumn] = $targetClass->getTypeOfColumn($targetColumn);
