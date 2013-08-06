@@ -269,6 +269,15 @@ class Configuration extends BaseConfiguration
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
 
+        $dir = $dir . '/' . \Shopware::REVISION;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775);
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
+
         parent::setProxyDir($dir);
     }
 }
