@@ -13,11 +13,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
 namespace Doctrine\DBAL\Types;
+
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * Type that maps a PHP array to a clob SQL type.
@@ -45,8 +47,7 @@ class ArrayType extends Type
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value);
         if ($val === false && $value != 'b:0;') {
-            $val = null;
-            //throw ConversionException::conversionFailed($value, $this->getName());
+            throw ConversionException::conversionFailed($value, $this->getName());
         }
         return $val;
     }
@@ -54,5 +55,10 @@ class ArrayType extends Type
     public function getName()
     {
         return Type::TARRAY;
+    }
+
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
     }
 }

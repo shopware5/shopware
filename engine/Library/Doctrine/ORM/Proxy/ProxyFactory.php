@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -21,7 +21,6 @@ namespace Doctrine\ORM\Proxy;
 
 use Doctrine\ORM\EntityManager,
     Doctrine\ORM\Mapping\ClassMetadata,
-    Doctrine\ORM\Mapping\AssociationMapping,
     Doctrine\Common\Util\ClassUtils;
 
 /**
@@ -34,13 +33,13 @@ use Doctrine\ORM\EntityManager,
 class ProxyFactory
 {
     /** The EntityManager this factory is bound to. */
-    protected $_em;
+    private $_em;
     /** Whether to automatically (re)generate proxy classes. */
-    protected $_autoGenerate;
+    private $_autoGenerate;
     /** The namespace that contains all proxy classes. */
-    protected $_proxyNamespace;
+    private $_proxyNamespace;
     /** The directory that contains all proxy classes. */
-    protected $_proxyDir;
+    private $_proxyDir;
 
     /**
      * Used to match very simple id methods that don't need
@@ -93,10 +92,6 @@ class ProxyFactory
             require $fileName;
         }
 
-        if ( ! $this->_em->getMetadataFactory()->hasMetadataFor($fqn)) {
-            $this->_em->getMetadataFactory()->setMetadataFor($fqn, $this->_em->getClassMetadata($className));
-        }
-
         $entityPersister = $this->_em->getUnitOfWork()->getEntityPersister($className);
 
         return new $fqn($entityPersister, $identifier);
@@ -106,11 +101,16 @@ class ProxyFactory
      * Generate the Proxy file name
      *
      * @param string $className
+     * @param string $baseDir Optional base directory for proxy file name generation.
+     *                        If not specified, the directory configured on the Configuration of the
+     *                        EntityManager will be used by this factory.
      * @return string
      */
-    protected function getProxyFileName($className)
+    private function getProxyFileName($className, $baseDir = null)
     {
-        return $this->_proxyDir . DIRECTORY_SEPARATOR . '__CG__' . str_replace('\\', '', $className) . '.php';
+        $proxyDir = $baseDir ?: $this->_proxyDir;
+
+        return $proxyDir . DIRECTORY_SEPARATOR . '__CG__' . str_replace('\\', '', $className) . '.php';
     }
 
     /**
@@ -120,30 +120,37 @@ class ProxyFactory
      * @param string $toDir The target directory of the proxy classes. If not specified, the
      *                      directory configured on the Configuration of the EntityManager used
      *                      by this factory is used.
+     * @return int Number of generated proxies.
      */
     public function generateProxyClasses(array $classes, $toDir = null)
     {
         $proxyDir = $toDir ?: $this->_proxyDir;
-        $proxyDir = rtrim($proxyDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $proxyDir = rtrim($proxyDir, DIRECTORY_SEPARATOR);
+        $num = 0;
+
         foreach ($classes as $class) {
             /* @var $class ClassMetadata */
-            if ($class->isMappedSuperclass) {
+            if ($class->isMappedSuperclass || $class->reflClass->isAbstract()) {
                 continue;
             }
 
-            $proxyFileName = $this->getProxyFileName($class->name);
+            $proxyFileName = $this->getProxyFileName($class->name, $proxyDir);
+
             $this->_generateProxyClass($class, $proxyFileName, self::$_proxyClassTemplate);
+            $num++;
         }
+
+        return $num;
     }
 
     /**
      * Generates a proxy class file.
      *
-     * @param $class
-     * @param $proxyClassName
-     * @param $file The path of the file to write to.
+     * @param ClassMetadata $class Metadata for the original class
+     * @param string $fileName Filename (full path) for the generated class
+     * @param string $file The proxy class template data
      */
-    protected function _generateProxyClass($class, $fileName, $file)
+    private function _generateProxyClass(ClassMetadata $class, $fileName, $file)
     {
         $methods = $this->_generateMethods($class);
         $sleepImpl = $this->_generateSleep($class);
@@ -172,7 +179,19 @@ class ProxyFactory
 
         $file = str_replace($placeholders, $replacements, $file);
 
-        file_put_contents($fileName, $file, LOCK_EX);
+        $parentDirectory = dirname($fileName);
+
+        if ( ! is_dir($parentDirectory)) {
+            if (false === @mkdir($parentDirectory, 0775, true)) {
+                throw ProxyException::proxyDirectoryNotWritable();
+            }
+        } else if ( ! is_writable($parentDirectory)) {
+            throw ProxyException::proxyDirectoryNotWritable();
+        }
+
+        $tmpFileName = $fileName . '.' . uniqid("", true);
+        file_put_contents($tmpFileName, $file);
+        rename($tmpFileName, $fileName);
     }
 
     /**
@@ -181,7 +200,7 @@ class ProxyFactory
      * @param ClassMetadata $class
      * @return string The code of the generated methods.
      */
-    protected function _generateMethods(ClassMetadata $class)
+    private function _generateMethods(ClassMetadata $class)
     {
         $methods = '';
 
@@ -262,7 +281,7 @@ class ProxyFactory
      * @param ClassMetadata $class
      * @return bool
      */
-    protected function isShortIdentifierGetter($method, $class)
+    private function isShortIdentifierGetter($method, ClassMetadata $class)
     {
         $identifier = lcfirst(substr($method->getName(), 3));
         $cheapCheck = (
@@ -275,7 +294,7 @@ class ProxyFactory
         );
 
         if ($cheapCheck) {
-            $code = file($class->reflClass->getFileName());
+            $code = file($method->getDeclaringClass()->getFileName());
             $code = trim(implode(" ", array_slice($code, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1)));
 
             $pattern = sprintf(self::PATTERN_MATCH_ID_METHOD, $method->getName(), $identifier);
@@ -293,7 +312,7 @@ class ProxyFactory
      * @param $class
      * @return string
      */
-    protected function _generateSleep(ClassMetadata $class)
+    private function _generateSleep(ClassMetadata $class)
     {
         $sleepImpl = '';
 
@@ -320,7 +339,7 @@ class ProxyFactory
     }
 
     /** Proxy class code template */
-    protected static $_proxyClassTemplate =
+    private static $_proxyClassTemplate =
 '<?php
 
 namespace <namespace>;
@@ -380,7 +399,7 @@ class <proxyClassName> extends \<className> implements \Doctrine\ORM\Proxy\Proxy
             if ($original === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
-            foreach ($class->reflFields AS $field => $reflProperty) {
+            foreach ($class->reflFields as $field => $reflProperty) {
                 $reflProperty->setValue($this, $reflProperty->getValue($original));
             }
             unset($this->_entityPersister, $this->_identifier);

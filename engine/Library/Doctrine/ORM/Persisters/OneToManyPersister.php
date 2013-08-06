@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -45,7 +45,7 @@ class OneToManyPersister extends AbstractCollectionPersister
         $mapping = $coll->getMapping();
         $class   = $this->_em->getClassMetadata($mapping['targetEntity']);
 
-        return 'DELETE FROM ' . $class->getQuotedTableName($this->_conn->getDatabasePlatform())
+        return 'DELETE FROM ' . $this->quoteStrategy->getTableName($class, $this->platform)
              . ' WHERE ' . implode('= ? AND ', $class->getIdentifierColumnNames()) . ' = ?';
     }
 
@@ -111,7 +111,7 @@ class OneToManyPersister extends AbstractCollectionPersister
         $whereClauses = array();
         $params       = array();
 
-        foreach ($targetClass->associationMappings[$mapping['mappedBy']]['joinColumns'] AS $joinColumn) {
+        foreach ($targetClass->associationMappings[$mapping['mappedBy']]['joinColumns'] as $joinColumn) {
             $whereClauses[] = $joinColumn['name'] . ' = ?';
 
             $params[] = ($targetClass->containsForeignIdentifier)
@@ -127,7 +127,7 @@ class OneToManyPersister extends AbstractCollectionPersister
         }
 
         $sql = 'SELECT count(*)'
-             . ' FROM ' . $targetClass->getQuotedTableName($this->_conn->getDatabasePlatform()) . ' t'
+             . ' FROM ' . $this->quoteStrategy->getTableName($targetClass, $this->platform) . ' t'
              . ' WHERE ' . implode(' AND ', $whereClauses);
 
         return $this->_conn->fetchColumn($sql, $params);
@@ -204,7 +204,7 @@ class OneToManyPersister extends AbstractCollectionPersister
 
         $mapping = $coll->getMapping();
         $class   = $this->_em->getClassMetadata($mapping['targetEntity']);
-        $sql     = 'DELETE FROM ' . $class->getQuotedTableName($this->_conn->getDatabasePlatform())
+        $sql     = 'DELETE FROM ' . $this->quoteStrategy->getTableName($class, $this->platform)
                  . ' WHERE ' . implode('= ? AND ', $class->getIdentifierColumnNames()) . ' = ?';
 
         return (bool) $this->_conn->executeUpdate($sql, $this->_getDeleteRowSQLParameters($coll, $element));

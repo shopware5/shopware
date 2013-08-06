@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -28,17 +28,21 @@ use Doctrine\ORM\EntityManager;
  */
 class IdentityGenerator extends AbstractIdGenerator
 {
-    /** @var string The name of the sequence to pass to lastInsertId(), if any. */
-    private $_seqName;
+    /**
+     * The name of the sequence to pass to lastInsertId(), if any.
+     *
+     * @var string
+     */
+    private $sequenceName;
 
     /**
      * @param string $seqName The name of the sequence to pass to lastInsertId()
      *                        to obtain the last generated identifier within the current
      *                        database session/connection, if any.
      */
-    public function __construct($seqName = null)
+    public function __construct($sequenceName = null)
     {
-        $this->_seqName = $seqName;
+        $this->sequenceName = $sequenceName;
     }
 
     /**
@@ -46,7 +50,7 @@ class IdentityGenerator extends AbstractIdGenerator
      */
     public function generate(EntityManager $em, $entity)
     {
-        return (int)$em->getConnection()->lastInsertId($this->_seqName);
+        return (int)$em->getConnection()->lastInsertId($this->sequenceName);
     }
 
     /**
