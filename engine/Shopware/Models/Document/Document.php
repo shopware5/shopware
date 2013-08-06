@@ -123,7 +123,7 @@ class Document extends ModelEntity
 	 * INVERSED SIDE
 	 *
 	 * @var \Shopware\Models\Document\Element $elements
-	 * @ORM\OneToMany(targetEntity="\Shopware\Models\Document\Element", mappedBy="document", orphanRemoval=true, cascade={"persist", "update"})
+	 * @ORM\OneToMany(targetEntity="\Shopware\Models\Document\Element", mappedBy="document", orphanRemoval=true, cascade={"persist"})
 	 * @ORM\JoinColumn(name="id", referencedColumnName="documentID")
 	 */
 	private $elements;

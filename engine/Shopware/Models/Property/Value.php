@@ -83,7 +83,7 @@ class Value extends ModelEntity
     /**
      * @var string $name
      *
-     * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist"})
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id")
      */
     private $option;

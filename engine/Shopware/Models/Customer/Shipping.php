@@ -163,7 +163,7 @@ class Shipping extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerShipping", mappedBy="customerShipping", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerShipping", mappedBy="customerShipping", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\CustomerShipping
      */
     protected $attribute;
