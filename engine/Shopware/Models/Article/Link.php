@@ -93,7 +93,7 @@ class Link extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticleLink
      */
     protected $attribute;

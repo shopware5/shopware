@@ -127,14 +127,14 @@ class Form extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Form
      */
     protected $attribute;

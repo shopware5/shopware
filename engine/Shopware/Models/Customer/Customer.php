@@ -267,7 +267,7 @@ class Customer extends ModelEntity
      * @Assert\Valid
      *
      * @var \Shopware\Models\Customer\Billing
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Billing", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Billing", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $billing;
 
@@ -279,7 +279,7 @@ class Customer extends ModelEntity
      * @Assert\Valid
      *
      * @var \Shopware\Models\Customer\Shipping
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $shipping;
 
@@ -289,7 +289,7 @@ class Customer extends ModelEntity
      * The association is joined over the debit userID field and the id field of the customer.
      *
      * @var \Shopware\Models\Customer\Debit
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      * @Assert\Valid
      */
     protected $debit;
@@ -300,7 +300,7 @@ class Customer extends ModelEntity
      * The association is joined over the group id field and the groupkey field of the customer.
      *
      * @var \Shopware\Models\Customer\Group $group
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist"})
      * @ORM\JoinColumn(name="customergroup", referencedColumnName="groupkey")
      */
     protected $group;
@@ -328,7 +328,7 @@ class Customer extends ModelEntity
      * INVERSE SIDE
      * @var \Shopware\Models\Attribute\Customer
      * @Assert\Valid
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 

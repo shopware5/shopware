@@ -281,7 +281,7 @@ class Category extends ModelEntity
      *
      * @var \Shopware\Models\Attribute\Category
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Category", mappedBy="category", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Category", mappedBy="category", cascade={"persist"})
      */
     protected $attribute;
 

@@ -133,7 +133,7 @@ class Image extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticleImage
      */
     protected $attribute;
@@ -159,7 +159,7 @@ class Image extends ModelEntity
      * rule sets which contains the configured configurator options.
      * Based on the image mapping, the variant images will be extended from the main image of the article.
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist"})
      */
     protected $mappings;
 

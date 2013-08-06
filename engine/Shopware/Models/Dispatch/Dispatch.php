@@ -383,14 +383,14 @@ class Dispatch extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Dispatch\ShippingCost", mappedBy="dispatch", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Dispatch\ShippingCost", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $costsMatrix;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Dispatch", mappedBy="dispatch", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Dispatch", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Dispatch
      */
     protected $attribute;

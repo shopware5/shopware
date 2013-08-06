@@ -182,7 +182,7 @@ class Site extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Site
      */
     protected $attribute;

@@ -75,7 +75,7 @@ class Group extends ModelEntity
     protected $sets;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection
      */
     protected $options;
