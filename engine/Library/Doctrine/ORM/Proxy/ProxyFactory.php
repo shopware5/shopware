@@ -84,7 +84,8 @@ class ProxyFactory
     {
         $fqn = ClassUtils::generateProxyClassName($className, $this->_proxyNamespace);
 
-        if (! class_exists($fqn, false)) {
+        // DO trigger autolaoder
+        if (! class_exists($fqn, true)) {
             $fileName = $this->getProxyFileName($className);
             if ($this->_autoGenerate) {
                 $this->_generateProxyClass($this->_em->getClassMetadata($className), $fileName, self::$_proxyClassTemplate);
