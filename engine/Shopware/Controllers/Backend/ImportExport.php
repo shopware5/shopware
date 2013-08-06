@@ -248,7 +248,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 ->groupBy('customer.id');
 
         $x = $builder->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($builder->getQuery());
+
+        $paginator = $this->getModelManager()->createPaginator($builder->getQuery());
 
         $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
         $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.customers.'.date("Y.m.d").'.csv"');
@@ -360,7 +361,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $query = $builder->getQuery();
         $query = $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         $result = $paginator->getIterator()->getArrayCopy();
         foreach ($result as $key => &$article) {

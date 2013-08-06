@@ -247,7 +247,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
         //returns the total count of the query
         $totalResult = $paginator->count();
         $shippingCosts = $paginator->getIterator()->getArrayCopy();

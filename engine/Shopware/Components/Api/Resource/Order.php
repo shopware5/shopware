@@ -134,7 +134,7 @@ class Order extends Resource
 
         $query->setHydrationMode($this->getResultMode());
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();

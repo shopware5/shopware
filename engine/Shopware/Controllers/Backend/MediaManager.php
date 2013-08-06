@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $repository = Shopware()->Models()->Media();
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit, $validTypes);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -754,7 +754,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $repository = Shopware()->Models()->Media();
         $query = $repository->getAlbumMediaQuery($album->getId());
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
