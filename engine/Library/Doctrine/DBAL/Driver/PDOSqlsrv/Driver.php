@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -53,13 +53,16 @@ class Driver implements \Doctrine\DBAL\Driver
             $dsn .= ',' . $params['port'];
         }
 
-		if (isset($params['dbname'])) {
-			$dsn .= ';Database=' .  $params['dbname'];
-		}
+        if (isset($params['dbname'])) {;
+            $dsn .= ';Database=' .  $params['dbname'];
+        }
+
+        if (isset($params['MultipleActiveResultSets'])) {
+            $dsn .= '; MultipleActiveResultSets=' . ($params['MultipleActiveResultSets'] ? 'true' : 'false');
+        }
 
         return $dsn;
     }
-
 
     public function getDatabasePlatform()
     {

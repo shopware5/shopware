@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.phpdoctrine.org>.
  */
 
@@ -34,8 +34,18 @@ class MappingException extends \Doctrine\ORM\ORMException
 
     public static function identifierRequired($entityName)
     {
-        return new self("No identifier/primary key specified for Entity '$entityName'."
-                . " Every Entity must have an identifier/primary key.");
+        if (false !== ($parent = get_parent_class($entityName))) {
+            return new self(sprintf(
+                'No identifier/primary key specified for Entity "%s" sub class of "%s". Every Entity must have an identifier/primary key.',
+                $entityName, $parent
+            ));
+        }
+
+        return new self(sprintf(
+            'No identifier/primary key specified for Entity "%s". Every Entity must have an identifier/primary key.',
+            $entityName
+        ));
+
     }
 
     public static function invalidInheritanceType($entityName, $type)
@@ -68,9 +78,26 @@ class MappingException extends \Doctrine\ORM\ORMException
         return new self("No mapping file found named '$fileName' for class '$entityName'.");
     }
 
-    public static function invalidMappingFile($entityName, $fileName)
+     /**
+     * Exception for invalid property name override.
+     *
+     * @param string $className The entity's name
+     * @param string $fieldName
+     */
+    public static function invalidOverrideFieldName($className, $fieldName)
     {
-        return new self("Invalid mapping file '$fileName' for class '$entityName'.");
+        return new self("Invalid field override named '$fieldName' for class '$className'.");
+    }
+
+    /**
+     * Exception for invalid property type override.
+     *
+     * @param string $className The entity's name
+     * @param string $fieldName
+     */
+    public static function invalidOverrideFieldType($className, $fieldName)
+    {
+        return new self("The column type of attribute '$fieldName' on class '$className' could not be changed.");
     }
 
     public static function mappingNotFound($className, $fieldName)
@@ -81,6 +108,41 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function queryNotFound($className, $queryName)
     {
         return new self("No query found named '$queryName' on class '$className'.");
+    }
+
+    public static function resultMappingNotFound($className, $resultName)
+    {
+        return new self("No result set mapping found named '$resultName' on class '$className'.");
+    }
+
+    public static function emptyQueryMapping($entity, $queryName)
+    {
+        return new self('Query named "'.$queryName.'" in "'.$entity.'" could not be empty.');
+    }
+
+    public static function nameIsMandatoryForQueryMapping($className)
+    {
+        return new self("Query name on entity class '$className' is not defined.");
+    }
+
+    public static function missingQueryMapping($entity, $queryName)
+    {
+        return new self('Query named "'.$queryName.'" in "'.$entity.' requires a result class or result set mapping.');
+    }
+
+    public static function missingResultSetMappingEntity($entity, $resultName)
+    {
+        return new self('Result set mapping named "'.$resultName.'" in "'.$entity.' requires a entity class name.');
+    }
+
+    public static function missingResultSetMappingFieldName($entity, $resultName)
+    {
+        return new self('Result set mapping named "'.$resultName.'" in "'.$entity.' requires a field name.');
+    }
+
+    public static function nameIsMandatoryForSqlResultSetMapping($className)
+    {
+        return new self("Result set mapping name on entity class '$className' is not defined.");
     }
 
     public static function oneToManyRequiresMappedBy($fieldName)
@@ -144,7 +206,17 @@ class MappingException extends \Doctrine\ORM\ORMException
 
     public static function classIsNotAValidEntityOrMappedSuperClass($className)
     {
-        return new self('Class '.$className.' is not a valid entity or mapped super class.');
+        if (false !== ($parent = get_parent_class($className))) {
+            return new self(sprintf(
+                'Class "%s" sub class of "%s" is not a valid entity or mapped super class.',
+                $className, $parent
+            ));
+        }
+
+        return new self(sprintf(
+            'Class "%s" is not a valid entity or mapped super class.',
+            $className
+        ));
     }
 
     public static function propertyTypeIsRequired($className, $propertyName)
@@ -158,27 +230,36 @@ class MappingException extends \Doctrine\ORM\ORMException
     }
 
     /**
-     *
      * @param string $entity The entity's name
      * @param string $fieldName The name of the field that was already declared
      */
-    public static function duplicateFieldMapping($entity, $fieldName) {
+    public static function duplicateFieldMapping($entity, $fieldName)
+    {
         return new self('Property "'.$fieldName.'" in "'.$entity.'" was already declared, but it must be declared only once');
     }
 
-    public static function duplicateAssociationMapping($entity, $fieldName) {
+    public static function duplicateAssociationMapping($entity, $fieldName)
+    {
         return new self('Property "'.$fieldName.'" in "'.$entity.'" was already declared, but it must be declared only once');
     }
 
-    public static function duplicateQueryMapping($entity, $queryName) {
+    public static function duplicateQueryMapping($entity, $queryName)
+    {
         return new self('Query named "'.$queryName.'" in "'.$entity.'" was already declared, but it must be declared only once');
     }
 
-    public static function singleIdNotAllowedOnCompositePrimaryKey($entity) {
+    public static function duplicateResultSetMapping($entity, $resultName)
+    {
+        return new self('Result set mapping named "'.$resultName.'" in "'.$entity.'" was already declared, but it must be declared only once');
+    }
+
+    public static function singleIdNotAllowedOnCompositePrimaryKey($entity)
+    {
         return new self('Single id is not allowed on composite primary key in entity '.$entity);
     }
 
-    public static function unsupportedOptimisticLockingType($entity, $fieldName, $unsupportedType) {
+    public static function unsupportedOptimisticLockingType($entity, $fieldName, $unsupportedType)
+    {
         return new self('Locking type "'.$unsupportedType.'" (specified in "'.$entity.'", field "'.$fieldName.'") '
                         .'is not supported by Doctrine.'
         );
@@ -204,10 +285,22 @@ class MappingException extends \Doctrine\ORM\ORMException
      * @param string $owningClass The class that declares the discriminator map.
      * @return self
      */
-    public static function invalidClassInDiscriminatorMap($className, $owningClass) {
+    public static function invalidClassInDiscriminatorMap($className, $owningClass)
+    {
         return new self(
             "Entity class '$className' used in the discriminator map of class '$owningClass' ".
             "does not exist."
+        );
+    }
+
+    public static function duplicateDiscriminatorEntry($className, array $entries, array $map)
+    {
+        return new self(
+            "The entries " . implode(', ',  $entries) . " in discriminator map of class '" . $className . "' is duplicated. " .
+            "If the discriminator map is automatically generated you have to convert it to an explicit discriminator map now. " .
+            "The entries of the current map are: @DiscriminatorMap({" . implode(', ', array_map(
+                function($a, $b) { return "'$a': '$b'"; }, array_keys($map), array_values($map)
+            )) . "})"
         );
     }
 
@@ -224,6 +317,11 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function invalidDiscriminatorColumnType($className, $type)
     {
         return new self("Discriminator column type on entity class '$className' is not allowed to be '$type'. 'string' or 'integer' type variables are suggested!");
+    }
+
+    public static function nameIsMandatoryForDiscriminatorColumns($className)
+    {
+        return new self("Discriminator column name on entity class '$className' is not defined.");
     }
 
     public static function cannotVersionIdField($className, $fieldName)
@@ -328,5 +426,16 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function invalidTargetEntityClass($targetEntity, $sourceEntity, $associationName)
     {
         return new self("The target-entity " . $targetEntity . " cannot be found in '" . $sourceEntity."#".$associationName."'.");
+    }
+
+    public static function invalidCascadeOption(array $cascades, $className, $propertyName)
+    {
+        $cascades = implode(", ", array_map(function ($e) { return "'" . $e . "'"; }, $cascades));
+        return new self(sprintf(
+            "You have specified invalid cascade options for %s::$%s: %s; available options: 'remove', 'persist', 'refresh', 'merge', and 'detach'",
+            $className,
+            $propertyName,
+            $cascades
+        ));
     }
 }

@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -15,45 +13,51 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\ORM\Mapping\Driver;
-
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+namespace Doctrine\ORM\Mapping;
 
 /**
- * Contract for metadata drivers.
+ * Is used to specify a native SQL named query.
+ * The NamedNativeQuery annotation can be applied to an entity or mapped superclass.
  *
- * @since 2.0
- * @author Jonathan H. Wage <jonwage@gmail.com>
- * @todo Rename: MetadataDriver or MappingDriver
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since   2.3
+ *
+ * @Annotation
+ * @Target("ANNOTATION")
  */
-interface Driver
+final class NamedNativeQuery implements Annotation
 {
-    /**
-     * Loads the metadata for the specified class into the provided container.
-     *
-     * @param string $className
-     * @param ClassMetadataInfo $metadata
-     */
-    function loadMetadataForClass($className, ClassMetadataInfo $metadata);
 
     /**
-     * Gets the names of all mapped classes known to this driver.
+     * The name used to refer to the query with the EntityManager methods that create query objects.
      *
-     * @return array The names of all mapped classes known to this driver.
+     * @var string
      */
-    function getAllClassNames();
+    public $name;
 
     /**
-     * Whether the class with the specified name should have its metadata loaded.
-     * This is only the case if it is either mapped as an Entity or a
-     * MappedSuperclass.
+     * The SQL query string.
      *
-     * @param string $className
-     * @return boolean
+     * @var string 
      */
-    function isTransient($className);
+    public $query;
+
+    /**
+     * The class of the result.
+     *
+     * @var string
+     */
+    public $resultClass;
+
+    /**
+     * The name of a SqlResultSetMapping, as defined in metadata.
+     * 
+     * @var string
+     */
+    public $resultSetMapping;
+
 }

@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -43,16 +43,16 @@ class VarDateTimeType extends DateTimeType
      * @throws ConversionException
      * @param string $value
      * @param AbstractPlatform $platform
-     * @return DateTime
+     * @return \DateTime
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if ($value === null) {
-            return null;
+        if ($value === null || $value instanceof \DateTime) {
+            return $value;
         }
 
         $val = date_create($value);
-        if (!$val) {
+        if ( ! $val) {
             throw ConversionException::conversionFailed($value, $this->getName());
         }
         return $val;

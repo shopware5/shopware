@@ -43,8 +43,12 @@ class CountWalker extends TreeWalkerAdapter
      */
     public function walkSelectStatement(SelectStatement $AST)
     {
+        if ($AST->havingClause) {
+            throw new \RuntimeException('Cannot count query that uses a HAVING clause. Use the output walkers for pagination');
+        }
+
         $rootComponents = array();
-        foreach ($this->_getQueryComponents() AS $dqlAlias => $qComp) {
+        foreach ($this->_getQueryComponents() as $dqlAlias => $qComp) {
             $isParent = array_key_exists('parent', $qComp)
                 && $qComp['parent'] === null
                 && $qComp['nestingLevel'] == 0
@@ -56,15 +60,21 @@ class CountWalker extends TreeWalkerAdapter
         if (count($rootComponents) > 1) {
             throw new \RuntimeException("Cannot count query which selects two FROM components, cannot make distinction");
         }
-        $root = reset($rootComponents);
-        $parentName = key($root);
-        $parent = current($root);
+        $root                = reset($rootComponents);
+        $parentName          = key($root);
+        $parent              = current($root);
+        $identifierFieldName = $parent['metadata']->getSingleIdentifierFieldName();
+
+        $pathType = PathExpression::TYPE_STATE_FIELD;
+        if (isset($parent['metadata']->associationMappings[$identifierFieldName])) {
+            $pathType = PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION;
+        }
 
         $pathExpression = new PathExpression(
             PathExpression::TYPE_STATE_FIELD | PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION, $parentName,
-            $parent['metadata']->getSingleIdentifierFieldName()
+            $identifierFieldName
         );
-        $pathExpression->type = PathExpression::TYPE_STATE_FIELD;
+        $pathExpression->type = $pathType;
 
         $distinct = $this->_getQuery()->getHint(self::HINT_DISTINCT);
         $AST->selectClause->selectExpressions = array(

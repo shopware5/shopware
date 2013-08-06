@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -81,7 +81,7 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
     /**
      * @var int
      */
-    private $defaultFetchStyle = PDO::FETCH_BOTH;
+    private $defaultFetchMode = PDO::FETCH_BOTH;
 
     /**
      * @param Statement $stmt
@@ -109,7 +109,7 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
         $this->statement->closeCursor();
         if ($this->emptied && $this->data !== null) {
             $data = $this->resultCache->fetch($this->cacheKey);
-            if (!$data) {
+            if ( ! $data) {
                 $data = array();
             }
             $data[$this->realKey] = $this->data;
@@ -132,14 +132,14 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
         return $this->statement->columnCount();
     }
 
-    public function setFetchMode($fetchStyle)
+    public function setFetchMode($fetchMode, $arg2 = null, $arg3 = null)
     {
-        $this->defaultFetchStyle = $fetchStyle;
+        $this->defaultFetchMode = $fetchMode;
     }
 
     public function getIterator()
     {
-        $data = $this->fetchAll($this->defaultFetchStyle);
+        $data = $this->fetchAll();
         return new \ArrayIterator($data);
     }
 
@@ -147,30 +147,13 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
      * fetch
      *
      * @see Query::HYDRATE_* constants
-     * @param integer $fetchStyle           Controls how the next row will be returned to the caller.
+     * @param integer $fetchMode            Controls how the next row will be returned to the caller.
      *                                      This value must be one of the Query::HYDRATE_* constants,
      *                                      defaulting to Query::HYDRATE_BOTH
      *
-     * @param integer $cursorOrientation    For a PDOStatement object representing a scrollable cursor,
-     *                                      this value determines which row will be returned to the caller.
-     *                                      This value must be one of the Query::HYDRATE_ORI_* constants, defaulting to
-     *                                      Query::HYDRATE_ORI_NEXT. To request a scrollable cursor for your
-     *                                      PDOStatement object,
-     *                                      you must set the PDO::ATTR_CURSOR attribute to Doctrine::CURSOR_SCROLL when you
-     *                                      prepare the SQL statement with Doctrine_Adapter_Interface->prepare().
-     *
-     * @param integer $cursorOffset         For a PDOStatement object representing a scrollable cursor for which the
-     *                                      $cursorOrientation parameter is set to Query::HYDRATE_ORI_ABS, this value specifies
-     *                                      the absolute number of the row in the result set that shall be fetched.
-     *
-     *                                      For a PDOStatement object representing a scrollable cursor for
-     *                                      which the $cursorOrientation parameter is set to Query::HYDRATE_ORI_REL, this value
-     *                                      specifies the row to fetch relative to the cursor position before
-     *                                      PDOStatement->fetch() was called.
-     *
      * @return mixed
      */
-    public function fetch($fetchStyle = PDO::FETCH_BOTH)
+    public function fetch($fetchMode = null)
     {
         if ($this->data === null) {
             $this->data = array();
@@ -180,12 +163,16 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
         if ($row) {
             $this->data[] = $row;
 
-            if ($fetchStyle == PDO::FETCH_ASSOC) {
+            $fetchMode = $fetchMode ?: $this->defaultFetchMode;
+
+            if ($fetchMode == PDO::FETCH_ASSOC) {
                 return $row;
-            } else if ($fetchStyle == PDO::FETCH_NUM) {
+            } else if ($fetchMode == PDO::FETCH_NUM) {
                 return array_values($row);
-            } else if ($fetchStyle == PDO::FETCH_BOTH) {
+            } else if ($fetchMode == PDO::FETCH_BOTH) {
                 return array_merge($row, array_values($row));
+            } else if ($fetchMode == PDO::FETCH_COLUMN) {
+                return reset($row);
             } else {
                 throw new \InvalidArgumentException("Invalid fetch-style given for caching result.");
             }
@@ -197,19 +184,16 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
     /**
      * Returns an array containing all of the result set rows
      *
-     * @param integer $fetchStyle           Controls how the next row will be returned to the caller.
+     * @param integer $fetchMode            Controls how the next row will be returned to the caller.
      *                                      This value must be one of the Query::HYDRATE_* constants,
      *                                      defaulting to Query::HYDRATE_BOTH
      *
-     * @param integer $columnIndex          Returns the indicated 0-indexed column when the value of $fetchStyle is
-     *                                      Query::HYDRATE_COLUMN. Defaults to 0.
-     *
      * @return array
      */
-    public function fetchAll($fetchStyle = PDO::FETCH_BOTH)
+    public function fetchAll($fetchMode = null)
     {
         $rows = array();
-        while ($row = $this->fetch($fetchStyle)) {
+        while ($row = $this->fetch($fetchMode)) {
             $rows[] = $row;
         }
         return $rows;

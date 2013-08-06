@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -27,6 +27,7 @@ use PDO,
     Doctrine\ORM\Events,
     Doctrine\Common\Collections\ArrayCollection,
     Doctrine\Common\Collections\Collection,
+    Doctrine\ORM\UnitOfWork,
     Doctrine\ORM\Proxy\Proxy;
 
 /**
@@ -54,7 +55,6 @@ class ObjectHydrator extends AbstractHydrator
     private $_rootAliases = array();
     private $_initializedCollections = array();
     private $_existingCollections = array();
-    //private $_createdEntities;
 
 
     /** @override */
@@ -66,8 +66,8 @@ class ObjectHydrator extends AbstractHydrator
 
         $this->_resultCounter = 0;
 
-        if ( ! isset($this->_hints['deferEagerLoad'])) {
-            $this->_hints['deferEagerLoad'] = true;
+        if ( ! isset($this->_hints[UnitOfWork::HINT_DEFEREAGERLOAD])) {
+            $this->_hints[UnitOfWork::HINT_DEFEREAGERLOAD] = true;
         }
 
         foreach ($this->_rsm->aliasMap as $dqlAlias => $className) {
@@ -124,7 +124,7 @@ class ObjectHydrator extends AbstractHydrator
      */
     protected function cleanup()
     {
-        $eagerLoad = (isset($this->_hints['deferEagerLoad'])) && $this->_hints['deferEagerLoad'] == true;
+        $eagerLoad = (isset($this->_hints[UnitOfWork::HINT_DEFEREAGERLOAD])) && $this->_hints[UnitOfWork::HINT_DEFEREAGERLOAD] == true;
 
         parent::cleanup();
 
@@ -161,10 +161,10 @@ class ObjectHydrator extends AbstractHydrator
     /**
      * Initializes a related collection.
      *
-     * @param object $entity The entity to which the collection belongs.
+     * @param object        $entity         The entity to which the collection belongs.
      * @param ClassMetadata $class
-     * @param string $name The name of the field on the entity that holds the collection.
-     * @param string $parentDqlAlias Alias of the parent fetch joining this collection.
+     * @param string        $fieldName      The name of the field on the entity that holds the collection.
+     * @param string        $parentDqlAlias Alias of the parent fetch joining this collection.
      */
     private function _initRelatedCollection($entity, $class, $fieldName, $parentDqlAlias)
     {
@@ -208,8 +208,8 @@ class ObjectHydrator extends AbstractHydrator
     /**
      * Gets an entity instance.
      *
-     * @param $data The instance data.
-     * @param $dqlAlias The DQL alias of the entity's class.
+     * @param array  $data     The instance data.
+     * @param string $dqlAlias The DQL alias of the entity's class.
      * @return object The entity.
      */
     private function _getEntity(array $data, $dqlAlias)
@@ -217,7 +217,16 @@ class ObjectHydrator extends AbstractHydrator
         $className = $this->_rsm->aliasMap[$dqlAlias];
 
         if (isset($this->_rsm->discriminatorColumns[$dqlAlias])) {
+
+            if ( ! isset($this->_rsm->metaMappings[$this->_rsm->discriminatorColumns[$dqlAlias]])) {
+                throw HydrationException::missingDiscriminatorMetaMappingColumn($className, $this->_rsm->discriminatorColumns[$dqlAlias], $dqlAlias);
+            }
+
             $discrColumn = $this->_rsm->metaMappings[$this->_rsm->discriminatorColumns[$dqlAlias]];
+
+            if ( ! isset($data[$discrColumn])) {
+                throw HydrationException::missingDiscriminatorColumn($className, $discrColumn, $dqlAlias);
+            }
 
             if ($data[$discrColumn] === "") {
                 throw HydrationException::emptyDiscriminatorValue($dqlAlias);
@@ -234,22 +243,14 @@ class ObjectHydrator extends AbstractHydrator
 
         $this->_hints['fetchAlias'] = $dqlAlias;
 
-        $entity = $this->_uow->createEntity($className, $data, $this->_hints);
-
-        //TODO: These should be invoked later, after hydration, because associations may not yet be loaded here.
-        if (isset($this->_ce[$className]->lifecycleCallbacks[Events::postLoad])) {
-            $this->_ce[$className]->invokeLifecycleCallbacks(Events::postLoad, $entity);
-        }
-
-        $evm = $this->_em->getEventManager();
-
-        if ($evm->hasListeners(Events::postLoad)) {
-            $evm->dispatchEvent(Events::postLoad, new LifecycleEventArgs($entity, $this->_em));
-        }
-
-        return $entity;
+        return $this->_uow->createEntity($className, $data, $this->_hints);
     }
 
+    /**
+     * @param string $className
+     * @param array  $data
+     * @return mixed
+     */
     private function _getEntityFromIdentityMap($className, array $data)
     {
         // TODO: Abstract this code and UnitOfWork::createEntity() equivalent?
@@ -307,8 +308,8 @@ class ObjectHydrator extends AbstractHydrator
      *         level of the hydrated result. A typical example are the objects of the type
      *         specified by the FROM clause in a DQL query.
      *
-     * @param array $data The data of the row to process.
-     * @param array $cache The cache to use.
+     * @param array $row    The data of the row to process.
+     * @param array $cache  The cache to use.
      * @param array $result The result array to fill.
      */
     protected function hydrateRowData(array $row, array &$cache, array &$result)
@@ -343,7 +344,7 @@ class ObjectHydrator extends AbstractHydrator
                 $path = $parentAlias . '.' . $dqlAlias;
 
                 // We have a RIGHT JOIN result here. Doctrine cannot hydrate RIGHT JOIN Object-Graphs
-                if (!isset($nonemptyComponents[$parentAlias])) {
+                if ( ! isset($nonemptyComponents[$parentAlias])) {
                     // TODO: Add special case code where we hydrate the right join objects into identity map at least
                     continue;
                 }
@@ -448,6 +449,7 @@ class ObjectHydrator extends AbstractHydrator
                             $this->_resultPointers[$dqlAlias] = $element;
                         } else {
                             $this->_uow->setOriginalEntityProperty($oid, $relationField, null);
+                            $reflField->setValue($parentObject, null);
                         }
                         // else leave $reflFieldValue null for single-valued associations
                     } else {
@@ -529,6 +531,22 @@ class ObjectHydrator extends AbstractHydrator
             foreach ($scalars as $name => $value) {
                 $result[$resultKey][$name] = $value;
             }
+        }
+    }
+
+    /**
+     * When executed in a hydrate() loop we may have to clear internal state to
+     * decrease memory consumption.
+     */
+    public function onClear($eventArgs)
+    {
+        parent::onClear($eventArgs);
+
+        $aliases              = array_keys($this->_identifierMap);
+        $this->_identifierMap = array();
+
+        foreach ($aliases as $alias) {
+            $this->_identifierMap[$alias] = array();
         }
     }
 }

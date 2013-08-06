@@ -13,46 +13,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
 namespace Doctrine\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\SqlWalker;
-use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\QueryException;
 
 /**
  * "DATE_ADD(date1, interval, unit)"
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
  */
 class DateSubFunction extends DateAddFunction
 {
-    public $firstDateExpression = null;
-    public $intervalExpression = null;
-    public $unit = null;
-
     public function getSql(SqlWalker $sqlWalker)
     {
-        $unit = strtolower($this->unit);
-        if ($unit == "day") {
-            return $sqlWalker->getConnection()->getDatabasePlatform()->getDateSubDaysExpression(
-                $this->firstDateExpression->dispatch($sqlWalker),
-                $this->intervalExpression->dispatch($sqlWalker)
-            );
-        } else if ($unit == "month") {
-            return $sqlWalker->getConnection()->getDatabasePlatform()->getDateSubMonthExpression(
-                $this->firstDateExpression->dispatch($sqlWalker),
-                $this->intervalExpression->dispatch($sqlWalker)
-            );
-        } else {
-            throw QueryException::semanticalError('DATE_SUB() only supports units of type day and month.');
+        switch (strtolower($this->unit->value)) {
+            case 'day':
+                return $sqlWalker->getConnection()->getDatabasePlatform()->getDateSubDaysExpression(
+                    $this->firstDateExpression->dispatch($sqlWalker),
+                    $this->intervalExpression->dispatch($sqlWalker)
+                );
+
+            case 'month':
+                return $sqlWalker->getConnection()->getDatabasePlatform()->getDateSubMonthExpression(
+                    $this->firstDateExpression->dispatch($sqlWalker),
+                    $this->intervalExpression->dispatch($sqlWalker)
+                );
+
+            default:
+                throw QueryException::semanticalError(
+                    'DATE_SUB() only supports units of type day and month.'
+                );
         }
     }
 }

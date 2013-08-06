@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -171,7 +171,7 @@ class ResultSetMapping
     {
         $found = false;
 
-        foreach ($this->fieldMappings AS $columnName => $columnFieldName) {
+        foreach ($this->fieldMappings as $columnName => $columnFieldName) {
             if ( ! ($columnFieldName === $fieldName && $this->columnOwnerMap[$columnName] === $alias)) continue;
 
             $this->addIndexByColumn($alias, $columnName);
@@ -308,10 +308,10 @@ class ResultSetMapping
      *
      * @todo Rename: addScalar
      */
-    public function addScalarResult($columnName, $alias, $type = null)
+    public function addScalarResult($columnName, $alias, $type = 'string')
     {
         $this->scalarMappings[$columnName] = $alias;
-        $this->typeMappings[$columnName]   = $type ?: 'string';
+        $this->typeMappings[$columnName]   = $type;
 
         if ( ! $this->isMixed && $this->fieldMappings) {
             $this->isMixed = true;
