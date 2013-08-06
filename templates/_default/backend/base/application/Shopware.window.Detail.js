@@ -14,21 +14,7 @@ Ext.define('Shopware.window.Detail', {
 
     statics: {
         displayConfig: {
-            searchController: '',
-            searchUrl: '{url action="searchAssociation"}',
-
-            oneToManyGrid: {
-                searchField: false,
-                pagingbar: false,
-                editColumn: false
-            },
-
-            manyToManyGrid: {
-                searchField: false,
-                pagingbar: false,
-                editColumn: false,
-                toolbar: false
-            }
+            searchController: undefined,
         },
 
         /**
@@ -46,12 +32,6 @@ Ext.define('Shopware.window.Detail', {
             }
             config = Ext.apply({ }, config, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
-
-            if (config.searchController) {
-                config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
-                );
-            }
 
             return config;
         },
@@ -98,6 +78,7 @@ Ext.define('Shopware.window.Detail', {
         return me._opts[prop];
     },
 
+
     /**
      * Initialisation of this component.
      */
@@ -123,14 +104,21 @@ Ext.define('Shopware.window.Detail', {
         return me.getModelName(me.model).toLowerCase();
     },
 
-    /**
-     *
-     */
     createFormPanel: function () {
         var me = this;
 
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            items: me.createTabItems(),
+            listeners: {
+                tabchange: function (tabPanel, newCard, oldCard, eOpts) {
+                    me.onTabChange(tabPanel, newCard, oldCard, eOpts);
+                }
+            }
+        });
+
         me.formPanel = Ext.create('Ext.form.Panel', {
-            items: [ me.createTabPanel() ],
+            items: [ me.tabPanel ],
             flex: 1,
             layout: {
                 type: 'hbox',
@@ -140,31 +128,6 @@ Ext.define('Shopware.window.Detail', {
 
         return me.formPanel;
     },
-
-    /**
-     * Creates the outer tab panel of the detail panel.
-     * The items of the tab panel will be created in the
-     * createTabItems function.
-     *
-     * @eventListeners
-     *  -   tabchange => Calls onTabChange function of this component
-     *
-     * @returns Ext.tab.Panel
-     */
-    createTabPanel: function () {
-        var me = this;
-
-        return Ext.create('Ext.tab.Panel', {
-            flex: 1,
-            items: me.createTabItems(),
-            listeners: {
-                tabchange: function (tabPanel, newCard, oldCard, eOpts) {
-                    me.onTabChange(tabPanel, newCard, oldCard, eOpts);
-                }
-            }
-        });
-    },
-
 
     /**
      * Creates all tab panel items of the outer tab panel.
@@ -183,34 +146,27 @@ Ext.define('Shopware.window.Detail', {
      *  @returns Array
      */
     createTabItems: function () {
-        var me = this;
-        var associations = me.getTabItemsAssociations();
-        var items = [];
+        var me = this, item, items = [];
 
-        Ext.each(associations, function (association) {
-            var item = me.createTabItem(association);
-            if (item) {
-                items.push(item);
-            }
+        Ext.each(me.getTabItemsAssociations(), function (association) {
+            item = me.createTabItem(association);
+            if (item) items.push(item);
         });
 
         return items;
     },
 
     /**
-     * Gibt alle associationen zurück, für die ein eigener Tab
-     * erstellt werden soll. Damit für den Hauptrecord auch ein
-     * tab erstellt werden muss, wird ein fake object erstellt
-     * mit der zusätlichen Konfiguration isBaseRecord
-     * Standardmäßig wird für folgende associationen ein eigener
-     * tab erstellt:
-     *  - OneToOne ohne eigene Associationen
-     *  - OneToMany
-     *  - ManyToMany
+     * Returns all records associations, which will have an own tab item.
+     * To create an own tab item for the base record, the function creates
+     * an fake association for the base record with the additional parameter
+     * "isBaseRecord".
+     * Shopware creates for the following definitions a single tab item:
      *
-     * Wenn sie möchten dass einige Associationen nicht in eigenen
-     * tabs dargestellt werden geben filtern sie diese hier einfach heraus
-     * und fügen sie an eine andere Stelle wieder ein.
+     * 1. Base record (which passed to the me.record property)
+     * 2. OneToOne associations which has no own associations
+     * 3. OneToMany associations
+     * 4. ManyToMany associations
      *
      * @returns array
      */
@@ -232,11 +188,11 @@ Ext.define('Shopware.window.Detail', {
 
     /**
      * Create the component for a single association.
-     * Sollten sie eine eigene Komponente verwenden wollen,
-     * können Sie hier ganz einfach eine eigene Componente instanzieren
-     * und als Rückgabe setzen.
+     * To display an own component for a single association,
+     * override this function, create an instance of your own component
+     * and set it as return value.
      *
-     * Die entsprechenden Daten werden automatisch in die Komponente gesetzt.
+     * The association data will be loaded automatically.
      *
      * @param association
      * @returns Ext.container.Container|Ext.grid.Panel
@@ -252,15 +208,17 @@ Ext.define('Shopware.window.Detail', {
                     item = me.createOneToOneItem(association, me.record);
                     break;
                 case 'onetomany':
-//                    item = me.createOneToManyItem(association, me.record);
+                    item = me.createOneToManyItem(association, me.record);
                     break;
                 case 'manytomany':
-//                    item = me.createManyToManyItem(association, me.record);
+                    item = me.createManyToManyItem(association, me.record);
                     break;
             }
         }
         return item;
     },
+
+
 
 
     createBaseItem: function () {
@@ -292,7 +250,6 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
-
     createOneToOneItem: function (association, record) {
         var me = this, model, items = [], store, grid,
             modelName, associations;
@@ -317,71 +274,67 @@ Ext.define('Shopware.window.Detail', {
             }
         });
 
-        return Ext.create('Ext.container.Container', {
+        var container = Ext.create('Ext.container.Container', {
             flex: 1,
             items: items,
             autoScroll: true,
             padding: 20,
             title: me.getModelName(modelName)
         });
-    },
 
+        return container;
+    },
 
     createOneToManyItem: function (association, record) {
         var me = this;
 
         var grid = me.createGrid(
             me.getAssociationStore(record, association),
-            me.getConfig('oneToManyGrid')
+            {
+                searchField: false,
+                pagingbar: false,
+                editColumn: false,
+                hasOwnController: true
+            }
         );
+
+        me.associationComponents[association.associationKey] = grid;
 
         grid.title = me.getModelName(association.associatedName);
         return grid;
     },
 
-
     createManyToManyItem: function (association, record) {
         var me = this;
 
-        var grid = me.createGrid(
-            me.getAssociationStore(record, association),
-            me.getConfig('manyToManyGrid')
-        );
+        var grid = Ext.create('Shopware.grid.Association', {
+            store: me.getAssociationStore(record, association),
+            flex: 1,
+            subApp: me.subApp,
+            displayConfig: {
+                searchController: me.getConfig('searchController'),
+                association: association
+            }
+        });
 
-        var combo = me.createSearchCombo(
-            me.createSearchComboStore(association, me.getConfig('searchUrl')),
-            grid,
-            association
-        );
+        me.associationComponents[association.associationKey] = grid;
 
         return Ext.create('Ext.container.Container', {
-            items: [ combo, grid ],
+            items: [ grid ],
             layout: { type: 'vbox', align: 'stretch' },
             title: me.getModelName(association.associatedName),
-            autoScroll: true
+            autoScroll: true,
+            border: false
         });
     },
 
-
-    getAssociationStore: function (record, association) {
-        var store;
-
-        store = record[association.storeName];
-        if (!(store instanceof Ext.data.Store)) {
-            store = Ext.create('Ext.data.Store', {
-                model: association.associatedName
-            })
-        }
-
-        return store;
-    },
-
     createGrid: function (store, displayConfig) {
-        var config = { };
+        var me = this, config = { };
         config = Ext.apply({ }, config, displayConfig);
 
         return Ext.create('Shopware.grid.Panel', {
             store: store,
+            subApp: me.subApp,
             minHeight: 300,
             flex: 1,
             displayConfig: config
@@ -389,58 +342,6 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-    createSearchCombo: function (store, grid, association) {
-        var me = this;
-
-        return Ext.create('Ext.form.field.ComboBox', {
-            name: 'associationSearchField',
-            queryMode: 'remote',
-            store: store,
-            grid: grid,
-            valueField: 'id',
-            displayField: 'name',
-            minChars: 2,
-            fieldLabel: 'Search for',
-            margin: 10,
-            listConfig: me.createSearchComboListConfig(association),
-            listeners: {
-                select: function (combo, records) {
-                    me.onSelectSearchItem(combo, records, combo.grid);
-                }
-            }
-        });
-    },
-
-    /**
-     * Creates a listing configuration for the search combo box.
-     * The search combo box is used for many to many association components.
-     * The association parameter is only passed to allow the override component
-     * identify which association search combo will be created.
-     *
-     * @param association
-     * @returns object
-     */
-    createSearchComboListConfig: function (association) {
-        return {
-            getInnerTpl: function () {
-                return '{literal}<a class="search-item">' +
-                    '<h4>{name}</h4><span><br />{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
-                    '</a>{/literal}';
-            }
-        }
-    },
-
-    createSearchComboStore: function (association, searchUrl) {
-        return Ext.create('Ext.data.Store', {
-            model: association.associatedName,
-            proxy: {
-                type: 'ajax',
-                url: searchUrl,
-                reader: { type: 'json', root: 'data', totalProperty: 'total' },
-                extraParams: { association: association.associationKey }
-            }
-        });
-    },
 
 
     /**
@@ -490,9 +391,7 @@ Ext.define('Shopware.window.Detail', {
 
         Ext.each(model.fields.items, function (item) {
             field = me.createModelField(model, item, alias);
-            if (field !== null) {
-                fields.push(field);
-            }
+            if (field) fields.push(field);
         });
 
         return fields;
@@ -550,6 +449,8 @@ Ext.define('Shopware.window.Detail', {
 
         return formField;
     },
+
+
 
 
     /**
@@ -636,14 +537,32 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
+
+
     /**
-     * Helper function to load the
+     * Helper function to load the detail window record.
      */
-    loadRecord: function () {
+    loadRecord: function (record) {
         if (this.formPanel instanceof Ext.form.Panel) {
-            this.formPanel.loadRecord(this.record);
+            this.formPanel.loadRecord(record);
         }
+        this.loadAssociationData(record);
     },
+
+    loadAssociationData: function(record) {
+        var me = this, component,
+            associations = me.getAssociations(record.$className);
+
+        Ext.each(associations, function(association) {
+            component = me.associationComponents[association.associationKey];
+            if (component) {
+                component.reconfigure(me.getAssociationStore(record, association));
+            }
+        });
+    },
+
+
+
 
 
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
@@ -658,20 +577,7 @@ Ext.define('Shopware.window.Detail', {
         this.destroy();
     },
 
-    onSelectSearchItem: function (combo, records, grid) {
-        var inStore;
 
-        if (!grid) {
-            return false;
-        }
-        Ext.each(records, function (record) {
-            inStore = grid.getStore().getById(record.get('id'));
-            if (inStore === null) {
-                grid.getStore().add(record);
-                combo.setValue('');
-            }
-        });
-    },
 
 
     /**
@@ -739,6 +645,8 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
+
+
     /**
      * Helfer function um associationen eines Models einfacher ermitteln zu können.
      * Übergeben wird der Klassenname des Models von dem die Associationen ermittelt werden sollen.
@@ -766,6 +674,8 @@ Ext.define('Shopware.window.Detail', {
             associations = [],
             model = Ext.create(className);
 
+        conditions = conditions || [];
+
         if (model.associations.lenght <= 0) {
             return associations;
         }
@@ -775,6 +685,29 @@ Ext.define('Shopware.window.Detail', {
             }
         });
         return associations;
+    },
+
+    /**
+     * Helper function which returns the associated store of the passed association.
+     * If the passed records contains no instance of the association, the function
+     * creates an new empty store.
+     *
+     * @param record
+     * @param association
+     * @returns { Ext.data.Store }
+     */
+    getAssociationStore: function (record, association) {
+        var store;
+
+        store = record[association.storeName];
+        if (!(store instanceof Ext.data.Store)) {
+            store = Ext.create('Ext.data.Store', {
+                model: association.associatedName
+            });
+            record[association.storeName] = store;
+        }
+
+        return store;
     },
 
     /**

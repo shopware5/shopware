@@ -407,7 +407,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $this->View()->assign(
             $this->searchAssociation(
                 $this->Request()->getParam('query', null),
-                $this->Request()->getParam('association', null)
+                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('start', 0),
+                $this->Request()->getParam('limit', 20)
             )
         );
     }
@@ -415,15 +417,20 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * @param $search
      * @param $association string
+     * @param $offset
+     * @param $limit
      * @return array
      */
-    protected function searchAssociation($search, $association)
+    protected function searchAssociation($search, $association, $offset, $limit)
     {
         $builder = $this->getSearchAssociationQuery(
             $association,
             $this->getAssociatedModelByProperty($this->model, $association),
             $search
         );
+
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
 
         $query = $builder->getQuery();
 
@@ -434,7 +441,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return array(
             'success' => true,
             'data' => $data,
-            'count' => $paginator->getIterator()->count()
+            'total' => $paginator->count()
         );
     }
 
@@ -445,8 +452,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->from($model, $association);
         $builder->where($association . '.name LIKE :search');
         $builder->setParameter('search', '%' . $search . '%');
-        $builder->setFirstResult(0)
-            ->setMaxResults(20);
 
         return $builder;
     }

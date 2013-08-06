@@ -353,6 +353,11 @@ Ext.define('Shopware.grid.Controller', {
      */
     onDeleteItem: function (grid, record) {
         var me = this;
+
+        if (!me.hasModelAction(record, 'destroy')) {
+            grid.getStore().remove(record);
+            return true;
+        }
         me.onDeleteItems(grid, [ record ], null);
     },
 
