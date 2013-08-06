@@ -65,14 +65,14 @@ class ModelManager extends EntityManager
     protected function __construct(Connection $conn, Configuration $config, EventManager $eventManager)
     {
         parent::__construct($conn, $config, $eventManager);
-        $this->proxyFactory = new ProxyFactory(
-            $this,
-            $config->getProxyDir(),
-            $config->getProxyNamespace(),
-            $config->getAutoGenerateProxyClasses()
-        );
-    }
 
+//        $this->proxyFactory = new ProxyFactory(
+//            $this,
+//            $config->getProxyDir(),
+//            $config->getProxyNamespace(),
+//            $config->getAutoGenerateProxyClasses()
+//        );
+    }
 
     /**
      * @return DBALQueryBuilder
