@@ -772,12 +772,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function getQueryPaginator($query, $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY)
     {
         $query->setHydrationMode($hydrationMode);
-        return new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        return new $this->getModelManager()->createPaginator($query);
     }
-
-
-
-
 
     /**
      * Controller action  to create a new template.

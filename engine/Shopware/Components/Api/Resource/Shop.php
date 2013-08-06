@@ -98,7 +98,7 @@ class Shop extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->resultMode);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();

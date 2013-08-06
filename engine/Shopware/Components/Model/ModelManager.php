@@ -235,9 +235,23 @@ class ModelManager extends EntityManager
      */
     public function getQueryCount(\Doctrine\ORM\Query $query)
     {
-        $pagination = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $pagination = $this->createPaginator($query);
+
         return $pagination->count($query);
     }
+
+    /**
+     * @param Query $query
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function createPaginator(\Doctrine\ORM\Query $query)
+    {
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        return $paginator;
+    }
+
 
     /**
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder

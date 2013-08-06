@@ -170,7 +170,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCategoryIds[] = $categoryId;
         $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $sLimitStart, $sLimitEnd, $filter);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($blogArticlesQuery);
+
+        $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
