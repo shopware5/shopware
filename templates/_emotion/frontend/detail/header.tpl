@@ -7,16 +7,10 @@
 
     {* LastSeenArticle Client Script *}
     var getThumbnailSize = function(configThumbnailSize) {
-        var thumbnail;
-
+        var thumbnail, thumbnails;
         configThumbnailSize = ~~(1 * configThumbnailSize);
-        if(configThumbnailSize == 1) thumbnail = '{$sArticle.image.src.1}';
-        else if(configThumbnailSize == 2) thumbnail = '{$sArticle.image.src.2}';
-        else if(configThumbnailSize == 3) thumbnail = '{$sArticle.image.src.3}';
-        else if(configThumbnailSize == 4) thumbnail = '{$sArticle.image.src.4}';
-        else if(configThumbnailSize == 5) thumbnail = '{$sArticle.image.src.5}';
-        else thumbnail = '{$sArticle.image.src.2}';
-
+        thumbnails = {$sArticle.image.src|json_encode};
+        thumbnail = thumbnails[configThumbnailSize];
         return thumbnail;
     };
     var configLastArticles = {ldelim}
@@ -26,7 +20,7 @@
         'articleId': ~~(1 * '{$sArticle.articleID}'),
         'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
         'articleName': '{$sArticle.articleName}',
-        'thumbnail': getThumbnailSize('{$sLastArticlesConfig.thumbnail}'),
+        'thumbnail': getThumbnailSize('{$sArticle.ThumbnailSize}'),
         {rdelim};
 
     jQuery(function($) {
