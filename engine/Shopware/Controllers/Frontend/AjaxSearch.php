@@ -101,11 +101,14 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         if (!empty($resultArticles)) {
             foreach ($resultArticles as &$result) {
                 if (empty($result['type'])) $result['type'] = 'article';
-                if (!empty($result['image'])) {
-                    $result['image'] = $basePath
-                                     . '/media/image/thumbnail/' . $result['image']
-                                     . '_57x57.'
-                                     . $result['extension'];
+                if (!empty($result["mediaId"])) {
+                    /**@var $mediaModel \Shopware\Models\Media\Media*/
+                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $result["mediaId"]);
+                    if ($mediaModel != null) {
+                        $result["thumbNails"] = array_values($mediaModel->getThumbnails());
+                        //deprecated just for the downward compatibility use the thumbNail Array instead
+                        $result["image"] = $result["thumbNails"][1];
+                    }
                 }
                 $result['link'] = $this->Front()->Router()->assemble(array('controller' => 'detail', 'sArticle' => $result['articleID'], 'title' => $result['name']));
             }

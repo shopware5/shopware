@@ -765,7 +765,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 		}
 
 		if (empty(Shopware()->Session()->sRegister)) {
-			Shopware()->Session()->sRegister = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+			Shopware()->Session()->sRegister = array();
 		}
 
 		$this->admin->sSYSTEM->_POST = array();

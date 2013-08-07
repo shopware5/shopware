@@ -292,17 +292,27 @@
 
 
         <div class="table grid_16">
-            {include file="frontend/checkout/confirm_header.tpl"}
+			{block name='frontend_checkout_confirm_confirm_head'}
+           		{include file="frontend/checkout/confirm_header.tpl"}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_before'}{/block}
 
             {* Article items *}
-            {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-                {block name='frontend_checkout_confirm_item'}
-                {include file='frontend/checkout/confirm_item.tpl'}
-                {/block}
-            {/foreach}
+			{block name='frontend_checkout_confirm_item_outer'}
+				{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+					{block name='frontend_checkout_confirm_item'}
+						{include file='frontend/checkout/confirm_item.tpl'}
+					{/block}
+				{/foreach}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_after'}{/block}
 
             {* Table footer *}
-            {include file="frontend/checkout/confirm_footer.tpl"}
+			{block name='frontend_checkout_confirm_confirm_footer'}
+            	{include file="frontend/checkout/confirm_footer.tpl"}
+			{/block}
         </div>
 
         <div class="space">&nbsp;</div>

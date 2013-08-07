@@ -430,7 +430,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'enabled'            => $plugin->getActive(),
             'cacheControllers'   => $cacheControllers,
             'noCacheControllers' => $noCacheControllers,
-            'HttpCache:proxyBan' => $this->readConfig('HttpCache:proxyBan'),
+            'HttpCache:proxyPrune' => $this->readConfig('HttpCache:proxyPrune'),
             'HttpCache:admin'    => $this->readConfig('HttpCache:admin'),
             'HttpCache:proxy'    => $this->readConfig('HttpCache:proxy')
         );

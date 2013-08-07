@@ -784,7 +784,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $sql = '
             SELECT
                 a.id as `key`, a.id as articleID, ' . $sqlRelevanceField . ' as relevance, ' . $sqlPriceField . ' as price, a.supplierID,
-                a.datum, d.sales as sales, ' . $sqlNameField . ' as name, ' . $sqlDescriptionField . ' as description, ai.img as image, ai.extension,
+                a.datum, d.sales as sales, ' . $sqlNameField . ' as name, ' . $sqlDescriptionField . ' as description, ai.img as image, ai.media_id as mediaId, ai.extension,
                 IFNULL((SELECT CONCAT(ROUND(AVG(points), 2), \'|\', COUNT(*)) as votes FROM s_articles_vote WHERE active=1 AND articleID=a.id), \'0.00|0\') as vote
 
             ' . $sqlFrom . '

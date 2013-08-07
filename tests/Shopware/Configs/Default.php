@@ -28,7 +28,7 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         ')
     ),
     'phpSettings' => array(
-        'error_reporting' => E_ALL ^ E_NOTICE,
+        'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
         'zend.ze1_compatibility_mode' => 0,

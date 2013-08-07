@@ -64,12 +64,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.articleFieldset.hide();
         }
         if(me.articleType.getValue() === 'selected_article') {
-            me.maxCountField.hide()
+            me.maxCountField.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
         } else {
-            me.maxCountField.show()
+            me.maxCountField.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
@@ -83,12 +83,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         var me = this;
 
         if(newValue !== 'selected_article') {
-            me.maxCountField.show()
+            me.maxCountField.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
         } else {
-            me.maxCountField.hide()
+            me.maxCountField.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
@@ -108,16 +108,19 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             checkboxes = me.query('checkbox');
 
         Ext.each(numberfields, function(field) {
-            if(!field.getValue()) {
-                field.setValue(500);
-            }
             if(field.getName() === 'article_slider_max_number') {
                 me.maxCountField = field;
-                field.setValue(25);
+                if(!field.getValue()) {
+                    field.setValue(25);
+                }
             }
 
             if(field.getName() === 'article_slider_rotatespeed') {
                 me.rotateSpeed = field;
+            }
+
+            if(!field.getValue()) {
+                field.setValue(500);
             }
         });
 

@@ -40,9 +40,9 @@
 
 		{foreach from=$sArticle.sLinks item=information}
 			{if $information.supplierSearch}
-				<a href="{$information.link}" target="{$information.target}" class="ico link">
-					{se name="DetailDescriptionLinkInformation"}{/se}
-				</a>
+                <a href="{url controller='cat' sCategory=$sCategoryStart sPage=1 sSupplier=$sArticle.supplierID}" target="{$information.target}" class="ico link">
+                    {se name="DetailDescriptionLinkInformation"}{/se}
+                </a>
 			{else}
 				<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" rel="nofollow" class="ico link">
 					{$information.description}

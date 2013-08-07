@@ -18,5 +18,8 @@ css_path = File.join(sass_path, "..", "css")
 # More information can be found here http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#output_style
 output_style = :compressed
 
+# base64 function for inline images
+require File.join(File.dirname(__FILE__), 'base64-encode.rb')
+
 # We need to load in the Ext4 themes folder, which includes all it's default styling, images, variables and mixins
 load File.join(File.dirname(__FILE__), $ext_path, 'resources', 'themes')

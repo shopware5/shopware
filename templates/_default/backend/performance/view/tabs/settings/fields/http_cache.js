@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                     },
                     {
                         fieldLabel: '{s name=fieldset/http/ban}Enable Proxy BAN{/s}',
-                        name: 'httpCache[HttpCache:proxyBan]',
+                        name: 'httpCache[HttpCache:proxyPrune]',
                         xtype: 'checkbox',
                         helpText: '{s name=fieldset/http/ban/help}{/s}',
                         uncheckedValue: false,

@@ -567,17 +567,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
               ON a.id = s.article_id
               AND a.active = 1
 
+            GROUP BY a.id
             ORDER BY quantity DESC
         ";
 
         $sql = Shopware()->Db()->limit($sql, $limit, $offset);
-
         $articles = Shopware()->Db()->fetchAll($sql, array('categoryId' => $category));
 
         $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
         $pages = round($count / $limit);
 
+        if ($pages == 0 && $count > 0) {
+            $pages = 1;
+        }
+
         $values = array();
+
         foreach ($articles as &$article) {
             $articleId = $article["articleID"];
 

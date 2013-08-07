@@ -23,23 +23,12 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * Returns the test DataSet
-     * Because of this DataSet you can assert fix values
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Articles').'Notification.xml');
-    }
 
     /**
      * Standard set up for every test - just disable auth
@@ -50,7 +39,25 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        $sql= "INSERT IGNORE INTO `s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`) VALUES
+                (1111111111, 'SW2001', '2010-10-04 10:46:56', 'test@example.de', 0, '1', 'http://example.com/'),
+                (1111111112, 'SW2003', '2010-10-05 10:46:55', 'test@example.com', 1, '1', 'http://example.com/'),
+                (1111111113, 'SW2001', '2010-10-04 10:46:54', 'test@example.org', 1, '1', 'http://example.com/');";
+        Shopware()->Db()->query($sql);
     }
+
+
+    /**
+     * Cleaning up testData
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $sql = "DELETE FROM s_articles_notification WHERE id IN (1111111111, 1111111112, 1111111113)";
+        Shopware()->Db()->query($sql);
+    }
+
 
     /**
      * test getList controller action
