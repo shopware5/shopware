@@ -72,7 +72,7 @@ class QueryBuilder extends BaseQueryBuilder
      * instead or call {@link setParameters()} only once, or with all the
      * parameters.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array $params The query parameters to set.
+     * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters The query parameters to set.
      * @return QueryBuilder This QueryBuilder instance.
      */
     public function setParameters($parameters)
@@ -96,6 +96,7 @@ class QueryBuilder extends BaseQueryBuilder
      *
      * @deprecated
      * @param array $parameters
+     * @return QueryBuilder This QueryBuilder instance.
      */
     public function addParameters(array $parameters)
     {
@@ -117,8 +118,6 @@ class QueryBuilder extends BaseQueryBuilder
 
         return $this;
     }
-
-
 
     /**
      * Adds filters to the query results.
@@ -273,8 +272,7 @@ class QueryBuilder extends BaseQueryBuilder
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
             $em->addCustomHints($query, null, false, true);
         }
+
         return $query;
     }
-
-
 }
