@@ -39,7 +39,6 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
      */
     protected $repo;
 
-
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -50,22 +49,20 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
 
         $this->em = Shopware()->Models();
         $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+
+        Shopware()->Bootstrap()->registerResource('Auth', new ZendAuthMock());
     }
 
     public function testUpdateOrderHistory()
     {
-        Shopware()->Bootstrap()->registerResource('Auth', new ZendAuthMock());
-
         $order = $this->createOrder();
 
         $previousPaymentStatus = $order->getPaymentStatus();
-        $previousOrderStatus = $order->getOrderStatus();;
+        $previousOrderStatus = $order->getOrderStatus();
 
-        $this->em->persist($order);
-        $this->em->flush($order);
+        $this->orderIsSaved($order);
 
-
-        $history = $this->em->getRepository('\Shopware\Models\Order\History')->findBy(array('order' => $order->getId()));
+        $history = $this->thenRetrieveHistoryOf($order);
         $this->assertCount(0, $history);
 
         $paymentStatusInProgress = $this->em->getReference('\Shopware\Models\Order\Status', 1);
@@ -78,13 +75,24 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         /** @var \Shopware\Models\Order\History[] $history */
         $history = $this->em->getRepository('\Shopware\Models\Order\History')->findBy(array('order' => $order->getId()));
 
+        $this->assertCount(1, $history);
+
         $this->assertSame($paymentStatusInProgress, $history[0]->getPaymentStatus());
         $this->assertSame($previousPaymentStatus, $history[0]->getPreviousPaymentStatus());
 
         $this->assertSame($orderStatusReserved, $history[0]->getOrderStatus());
         $this->assertSame($previousOrderStatus, $history[0]->getPreviousOrderStatus());
+    }
 
-        $this->assertCount(1, $history);
+    private function orderIsSaved($order)
+    {
+        $this->em->persist($order);
+        $this->em->flush($order);
+    }
+
+    private function thenRetrieveHistoryOf($order)
+    {
+        return $this->em->getRepository('\Shopware\Models\Order\History')->findBy(array('order' => $order->getId()));
     }
 
     public function createOrder()

@@ -1057,53 +1057,6 @@ class Order extends ModelEntity
     }
 
     /**
-     * Event listener method of the doctrine model. Fired when the model will be updated.
-     * Checks if the order or payment status has been changed and add a history entry in the s_order_history.
-     * @ORM\PostUpdate
-     */
-    public function beforeUpdate()
-    {
-        //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
-
-        $orderStatus = $changeSet['orderStatus'];
-        $paymentStatus = $changeSet['paymentStatus'];
-
-        //order or payment status changed?
-        if ($orderStatus[0] instanceof Status || $paymentStatus[0] instanceof Status) {
-            $historyData = array(
-                'userID'      => null,
-                'change_date' => date('Y-m-d H:i:s'),
-                'orderID'     => $this->getId(),
-            );
-
-            if (Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
-                $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-                $historyData['userID'] = $user->getId();
-            }
-
-            //order status changed?
-            if ($orderStatus[0] instanceof Status && $orderStatus[1]) {
-                $historyData['previous_order_status_id'] = $orderStatus[0]->getId();
-                $historyData['order_status_id'] = $orderStatus[1]->getId();
-            } else {
-                $historyData['previous_order_status_id'] = $this->orderStatus->getId();
-                $historyData['order_status_id'] = $this->orderStatus->getId();
-            }
-
-            //payment status changed?
-            if ($paymentStatus[0] instanceof Status && $paymentStatus[1]) {
-                $historyData['previous_payment_status_id'] = $paymentStatus[0]->getId();
-                $historyData['payment_status_id'] = $paymentStatus[1]->getId();
-            } else {
-                $historyData['previous_payment_status_id'] = $this->paymentStatus->getId();
-                $historyData['payment_status_id'] = $this->paymentStatus->getId();
-            }
-            Shopware()->Models()->getConnection()->insert('s_order_history', $historyData);
-        }
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\Order
      */
     public function getAttribute()
