@@ -31,7 +31,7 @@
  */
 class sArticlesTest extends PHPUnit_Framework_TestCase
 {
-    static public function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         $testHelper = TestHelper::Instance();
         require $testHelper->DocPath() . 'engine/core/class/sArticles.php';

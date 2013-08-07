@@ -1486,11 +1486,11 @@ class sArticles
      *  -   Shopware_Modules_Articles_GetFilterQuery
      *
      * @param null $activeFilters
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getFilterQuery($activeFilters = null)
     {
-        /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
+        /**@var $builder \Doctrine\DBAL\Query\QueryBuilder */
         $builder = Shopware()->Models()->getDBALQueryBuilder();
 
         $builder->select(array(
