@@ -129,8 +129,9 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $article['sReleaseDate'] = $article['sReleasedate'];
 
             // Push ThumbnailSize to template
-            $article['ThumbnailSize'] = Shopware()->Config()->thumb;
+            $lastArticles['ThumbnailSize'] = Shopware()->Config()->thumb;
 
+            $this->View()->sLastArticles = $lastArticles;
             $this->View()->sBreadcrumb = $breadcrumb;
             $this->View()->sCategoryInfo = $categoryInfo;
             $this->View()->sArticle = $article;

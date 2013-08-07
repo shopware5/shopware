@@ -41,7 +41,11 @@ class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Actio
     /**
      * Sets a template variable with the last views articles.
      *
-     * @deprecated
+     * @deprecated - The last articles are stored now in the javascript session.
+     * To display the last articles in a custom template, use the following source as example:
+     * @example
+     * {include file="frontend/plugins/index/viewlast.tpl"}
+     *
      * @return void
      */
     public function indexAction()
