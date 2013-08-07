@@ -1,6 +1,11 @@
+
 //{block name="backend/component/data/model"}
 Ext.define('Shopware.data.Model', {
 
+    /**
+     * The parent class that this class extends
+     * @type { String }
+     */
     extend: 'Ext.data.Model',
 
     /**
@@ -23,16 +28,21 @@ Ext.define('Shopware.data.Model', {
     },
 
 
-
-
+    /**
+     * Get the reference to the class from which this object was instantiated.
+     * Note that unlike self, this.statics() is scope-independent and it always
+     * returns the class from which it was called, regardless of what this points to during run-time
+     * @type { Object }
+     */
     statics: {
+
         displayConfig: {
             controller: undefined,
 
-            listing: 'Shopware.grid.Panel',
-            detail:  'Ext.form.FieldSet',
-            related: 'Shopware.grid.Association',
-            field:   'Ext.form.field.Text'
+            listing: 'Shopware.grid.Panel',         // oneToMany & own listing view
+            detail:  'Shopware.model.Container',    // oneToOne & own detail view
+            related: 'Shopware.grid.Association',   // manyToMany
+            field:   'Shopware.form.field.Search'   // manyToOne (Combo box to search)
         },
 
         /**
@@ -72,9 +82,6 @@ Ext.define('Shopware.data.Model', {
             return true;
         }
     },
-
-
-
 
     /**
      * Class constructor.
