@@ -599,6 +599,7 @@ class BasicEntityPersister
 
                     $this->quotedColumns[$sourceColumn] = $quotedColumn;
 
+                    // @shopware-hack: allow non primary keys as foreign-key target
                     if ($newVal === null) {
                         // Set data to result set, only if no exits.
                         if(!isset($result[$owningTable][$sourceColumn])) {
