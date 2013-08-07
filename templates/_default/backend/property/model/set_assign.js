@@ -52,34 +52,8 @@ Ext.define('Shopware.apps.Property.model.SetAssign', {
         { name: 'groupId', type: 'integer' },
         { name: 'position', type: 'integer' },
         { name: 'name', type: 'string' }
-    ],
-
-    /**
-     * Configure the data communication
-     * @object
-     */
-    proxy: {
-        type: 'ajax',
-
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        api: {
-            read:    '{url controller="property" action="getSetAssigns"}'
-        },
+    ]
 
 
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    }
 });
 //{/block}
