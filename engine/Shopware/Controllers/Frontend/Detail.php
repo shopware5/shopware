@@ -128,6 +128,9 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
             $article['sReleaseDate'] = $article['sReleasedate'];
 
+            // Push ThumbnailSize to template
+            $article['ThumbnailSize'] = Shopware()->Config()->thumb;
+
             $this->View()->sBreadcrumb = $breadcrumb;
             $this->View()->sCategoryInfo = $categoryInfo;
             $this->View()->sArticle = $article;
