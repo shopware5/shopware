@@ -2115,7 +2115,7 @@ class sArticles
         }
 
         $sql = "
-            SELECT STRAIGHT_JOIN
+            SELECT STRAIGHT_JOIN DISTINCT
               a.id AS articleID,
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
@@ -2144,7 +2144,7 @@ class sArticles
               ON t.id = a.taxID
 
             WHERE ag.articleID IS NULL
-            ORDER BY s.sales DESC
+            ORDER BY s.sales DESC, s.article_id DESC
             LIMIT $sLimitChart
 		";
 
