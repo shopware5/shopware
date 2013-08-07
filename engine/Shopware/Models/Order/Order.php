@@ -1071,37 +1071,35 @@ class Order extends ModelEntity
 
         //order or payment status changed?
         if ($orderStatus[0] instanceof Status || $paymentStatus[0] instanceof Status) {
-            $history = new History();
-
-            $history->setOrder($this);
-            $history->setChangeDate(new \DateTime());
-            $history->setUser(null);
+            $historyData = array(
+                'userID'      => null,
+                'change_date' => date('Y-m-d H:i:s'),
+                'orderID'     => $this->getId(),
+            );
 
             if (Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
                 $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-                $history->setUser($user);
+                $historyData['userID'] = $user->getId();
             }
 
             //order status changed?
             if ($orderStatus[0] instanceof Status && $orderStatus[1]) {
-                $history->setPreviousOrderStatus($orderStatus[0]);
-                $history->setOrderStatus($orderStatus[1]);
+                $historyData['previous_order_status_id'] = $orderStatus[0]->getId();
+                $historyData['order_status_id'] = $orderStatus[1]->getId();
             } else {
-                $history->setPreviousOrderStatus($this->orderStatus);
-                $history->setOrderStatus($this->orderStatus);
+                $historyData['previous_order_status_id'] = $this->orderStatus->getId();
+                $historyData['order_status_id'] = $this->orderStatus->getId();
             }
 
             //payment status changed?
             if ($paymentStatus[0] instanceof Status && $paymentStatus[1]) {
-                $history->setPreviousPaymentStatus($paymentStatus[0]);
-                $history->setPaymentStatus($paymentStatus[1]);
+                $historyData['previous_payment_status_id'] = $paymentStatus[0]->getId();
+                $historyData['payment_status_id'] = $paymentStatus[1]->getId();
             } else {
-                $history->setPreviousPaymentStatus($this->paymentStatus);
-                $history->setPaymentStatus($this->paymentStatus);
+                $historyData['previous_payment_status_id'] = $this->paymentStatus->getId();
+                $historyData['payment_status_id'] = $this->paymentStatus->getId();
             }
-
-            Shopware()->Models()->persist($history);
-            Shopware()->Models()->flush();
+            Shopware()->Models()->getConnection()->insert('s_order_history', $historyData);
         }
     }
 
