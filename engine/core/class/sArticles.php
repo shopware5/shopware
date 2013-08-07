@@ -121,12 +121,13 @@ class sArticles
     /**
      * Class constructor.
      */
-    public function __construct()
+    public function __construct(\Shopware\Models\Category\Category $category = null, $translationId = null, $customerGroupId = null)
     {
-        $this->category = Shopware()->Shop()->getCategory();
+        $this->category = ($category) ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->translationId = !Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null;
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+
+        $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
     }
 
     /**
