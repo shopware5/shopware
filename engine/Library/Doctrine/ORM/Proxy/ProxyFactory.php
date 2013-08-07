@@ -84,7 +84,7 @@ class ProxyFactory
     {
         $fqn = ClassUtils::generateProxyClassName($className, $this->_proxyNamespace);
 
-        // DO trigger autolaoder
+        // @shopware-hack: Class exists should trigger the autoloader so we can conditionally create proxy classes
         if (! class_exists($fqn, true)) {
             $fileName = $this->getProxyFileName($className);
             if ($this->_autoGenerate) {
