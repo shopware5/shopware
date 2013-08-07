@@ -274,18 +274,9 @@ class ModelManager extends EntityManager
         /** @var $generator \Shopware\Components\Model\Generator*/
         $generator = new \Shopware\Components\Model\Generator();
 
-        $generator->setPath(
-            $this->getConfiguration()->getAttributeDir()
-        );
-
-        $generator->setModelPath(
-            Shopware()->AppPath('Models')
-        );
-
-        $generator->setSchemaManager(
-            $this->getConnection()->getSchemaManager()
-        );
-
+        $generator->setPath($this->getConfiguration()->getAttributeDir());
+        $generator->setModelPath(Shopware()->AppPath('Models'));
+        $generator->setSchemaManager($this->getConnection()->getSchemaManager());
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateAttributeProxies($tableNames);
