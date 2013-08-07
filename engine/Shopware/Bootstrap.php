@@ -590,6 +590,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $this->registerResource('CategorySubscriber', $categorySubscriber);
         $eventManager->addEventSubscriber($categorySubscriber);
 
+        $eventManager->addEventSubscriber(new \Shopware\Models\Order\OrderHistorySubscriber());
+
         $categoryDenormalization = new \Shopware\Components\Model\CategoryDenormalization($this->Application()->Db()->getConnection());
         $this->registerResource('CategoryDenormalization', $categoryDenormalization);
 
