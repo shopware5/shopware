@@ -32,7 +32,6 @@ use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
-use Shopware\Components\Model\DBAL\QueryBuilder as DBALQueryBuilder;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -55,33 +54,12 @@ class ModelManager extends EntityManager
     protected $debugMode = false;
 
     /**
-     * Creates a new EntityManager that operates on the given database connection
-     * and uses the given Configuration and EventManager implementations.
-     *
-     * @param \Doctrine\DBAL\Connection $conn
-     * @param \Shopware\Components\Model\Configuration $config
-     * @param \Doctrine\Common\EventManager $eventManager
-     */
-    protected function __construct(Connection $conn, Configuration $config, EventManager $eventManager)
-    {
-        parent::__construct($conn, $config, $eventManager);
-
-//        $this->proxyFactory = new ProxyFactory(
-//            $this,
-//            $config->getProxyDir(),
-//            $config->getProxyNamespace(),
-//            $config->getAutoGenerateProxyClasses()
-//        );
-    }
-
-    /**
-     * @return DBALQueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function getDBALQueryBuilder()
     {
-        return new DBALQueryBuilder($this->getConnection());
+        return new \Doctrine\DBAL\Query\QueryBuilder($this->getConnection());
     }
-
 
     /**
      * Factory method to create EntityManager instances.
@@ -474,6 +452,7 @@ class ModelManager extends EntityManager
 
     /**
      * Helper function to add mysql specified command to increase the sql performance.
+     *
      * @param \Doctrine\ORM\Query $query
      * @param null $index Name of the forced index
      * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
