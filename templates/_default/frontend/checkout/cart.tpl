@@ -79,21 +79,27 @@
 				{include file="frontend/checkout/cart_header.tpl"}
 			{/block}
 
+			{block name='frontend_checkout_cart_item_before'}{/block}
+
 			{* Article items *}
-			{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-                {block name='frontend_checkout_cart_item'}
-                {include file='frontend/checkout/cart_item.tpl'}
-                {/block}
-			{/foreach}
+			{block name='frontend_checkout_cart_item_outer'}
+				{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+					{block name='frontend_checkout_cart_item'}
+						{include file='frontend/checkout/cart_item.tpl'}
+					{/block}
+				{/foreach}
+			{/block}
+
+			{block name='frontend_checkout_cart_item_after'}{/block}
 
 			{* Premium articles *}
 			{block name='frontend_checkout_cart_premiums'}
-			{include file='frontend/checkout/premiums.tpl'}
+				{include file='frontend/checkout/premiums.tpl'}
 			{/block}
 
 			{* Table foot *}
 			{block name='frontend_checkout_cart_cart_footer'}
-			{include file="frontend/checkout/cart_footer.tpl"}
+				{include file="frontend/checkout/cart_footer.tpl"}
 			{/block}
 		</div>
 

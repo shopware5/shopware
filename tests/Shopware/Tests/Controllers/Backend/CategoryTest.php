@@ -23,7 +23,6 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
@@ -179,9 +178,6 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
 
         $this->assertEquals($dummyData["parentId"],$returningData["parentId"]);
         $this->assertEquals($dummyData["name"],$returningData["name"]);
-        $this->assertGreaterThan(1,$returningData["left"]);
-        $this->assertGreaterThan(1,$returningData["right"]);
-        $this->assertEquals(1,$returningData["level"]);
         $this->assertTrue($returningData["changed"] instanceof \DateTime);
         $this->assertTrue($returningData["added"] instanceof \DateTime);
         $this->assertEquals(1,$returningData["showFilterGroups"]);
@@ -202,7 +198,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->assertTrue($this->View()->success);
         $categoryPath = $this->View()->data;
         $this->assertTrue(!empty($categoryPath));
-        $this->assertEquals(3,count(explode("/",$categoryPath[0])));
+        $this->assertEquals(2,count(explode("/",$categoryPath[0])));
     }
 
     /**

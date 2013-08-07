@@ -562,7 +562,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from($this->getEntityName(), 'c');
         $builder->select('MIN(a.id)')
-                ->innerJoin('c.articles', 'a', Expr\Join::WITH, 'a.active=1')
+                ->innerJoin('c.allArticles', 'a', Expr\Join::WITH, 'a.active=1')
                 ->where('c.active=1')
                 ->andWhere('c.id = :id');
 

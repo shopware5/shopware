@@ -71,11 +71,9 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $builder->where('category.name LIKE ?2')
-                    ->where('emotions.name LIKE ?2')
-                    ->orWhere('emotions.rows = ?1')
+            $builder->where('categories.name LIKE ?2')
+                    ->orWhere('emotions.name LIKE ?2')
                     ->orWhere('emotions.modified LIKE ?2')
-                    ->setParameter(1, $filter)
                     ->setParameter(2, '%' . $filter . '%');
         }
         if (!empty($orderBy)) {

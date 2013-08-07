@@ -1012,7 +1012,7 @@ class sArticles
 
         $sql = "
             SELECT
-
+                STRAIGHT_JOIN
                 a.id as articleID,
                 a.laststock,
                 a.taxID,
@@ -2115,7 +2115,7 @@ class sArticles
         }
 
         $sql = "
-            SELECT STRAIGHT_JOIN
+            SELECT STRAIGHT_JOIN DISTINCT
               a.id AS articleID,
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
@@ -2144,7 +2144,7 @@ class sArticles
               ON t.id = a.taxID
 
             WHERE ag.articleID IS NULL
-            ORDER BY s.sales DESC
+            ORDER BY s.sales DESC, s.article_id DESC
             LIMIT $sLimitChart
 		";
 
@@ -3224,8 +3224,8 @@ class sArticles
                 $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
             }
             //sDescriptionKeywords
-            $string = (strip_tags(html_entity_decode($getArticle["description_long"])));
-            $string = preg_replace("/[^a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½\-]/", " ", $string);
+            $string = (strip_tags(html_entity_decode($getArticle["description_long"], null, 'UTF-8')));
+            $string = str_replace(',','',$string);
             $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
             $badwords = explode(",", $this->sSYSTEM->sCONFIG['sBADWORDS']);
             $words = array_diff($words, $badwords);
@@ -3234,7 +3234,7 @@ class sArticles
                 if (strlen($word) < 2)
                     unset($words[$word]);
             arsort($words);
-            $getArticle["sDescriptionKeywords"] = htmlentities(implode(", ", array_slice(array_keys($words), 0, 20)));
+            $getArticle["sDescriptionKeywords"] = htmlspecialchars(implode(", ", array_slice(array_keys($words), 0, 20)), ENT_QUOTES, 'UTF-8', false);
         }
 
 

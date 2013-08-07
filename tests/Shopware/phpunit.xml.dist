@@ -17,10 +17,8 @@
         <whitelist>
             <directory suffix=".php">../../engine/Shopware/</directory>
             <exclude>
-                <directory>../../engine/Shopware/Proxies</directory>
                 <directory>../../engine/Shopware/Plugins/Community</directory>
                 <directory>../../engine/Shopware/Components/Xml</directory>
-                <directory>../../engine/Shopware/Models/Attribute</directory>
                 <directory suffix="Meta.php">../../engine/Shopware/Plugins/</directory>
             </exclude>
         </whitelist>

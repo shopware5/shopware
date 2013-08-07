@@ -89,12 +89,18 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     /**
      * Function to get all necessary files and the status, whether those files match with the original Shopware-Files
      */
-    public function getFileListAction(){
+    public function getFileListAction()
+    {
+        $fileName = Shopware()->AppPath() . '/Components/Check/Data/Files.md5sums';
 
-        $list = new Shopware_Components_Check_File();
-        $list->setTestDir(Shopware()->DocPath());
+        if (!is_file($fileName)) {
+            $this->View()->assign(array('success' => true, 'data' => array()));
+            return;
+        }
 
-        $this->View()->assign(array('success'=>true, 'data'=>$list->toArray()));
+        $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath());
+
+        $this->View()->assign(array('success' => true, 'data' => $list->toArray()));
     }
 
     /**

@@ -89,6 +89,13 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     }]
                 },{
                     xtype: 'container',
+                    overflowY: 'scroll',
+                    title: '{s name=window/tabpanel/file_tab/title}Shopware-Files{/s}',
+                    items:[{
+                        xtype: 'systeminfo-main-filelist'
+                    }]
+                },{
+                    xtype: 'container',
 					overflowY: 'scroll',
                     title: '{s name=window/tabpanel/version_tab/title}Version-info{/s}',
                     items:[{

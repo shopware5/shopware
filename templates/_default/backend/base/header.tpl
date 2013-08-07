@@ -26,7 +26,7 @@
 {block name="backend/base/header/javascript"}
     <script type="text/javascript" src="{link file='ExtJs/ext-all.js'}?{Shopware::REVISION}"></script>
     <script type="text/javascript" src="{link file="ExtJs/locale/ext-lang-{s name=script/ext/lang}en_GB{/s}.js"}?{Shopware::REVISION}"></script>
-    <script type="text/javascript" src="{link file='TinyMce/tiny_mce_full.js'}?{Shopware::REVISION}"></script>
+    <script type="text/javascript" src="{link file='TinyMce/tiny_mce.js'}?{Shopware::REVISION}"></script>
     <script type="text/javascript" src="{link file='CodeMirror/lib/codemirror.js'}?{Shopware::REVISION}"></script>
 
 	{* We need to put the language in there, due to the caching of the bootstrap.js *}
@@ -34,6 +34,11 @@
         Ext.editorLang = '{s name=script/ext/lang}{/s}';
 	    Ext.shopwareRevision = '{Shopware::REVISION}';
     </script>
-    <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
+
+    {if $user}
+        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&loggedIn={$smarty.now}"></script>
+    {else}
+        <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
+    {/if}
 {/block}
 </head>

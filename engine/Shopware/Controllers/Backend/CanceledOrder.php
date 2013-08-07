@@ -548,7 +548,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $sql = "SELECT  date, price, average, number, year, month FROM
         (
         SELECT DATE_FORMAT(datum, '%Y-%m-%d') as date, sum(price) as price, AVG(price) as average,
-                        COUNT(datum) as number, YEAR(datum) as year, MONTH(datum) as month
+                  COUNT(DiSTINCT sessionID) as number, YEAR(datum) as year, MONTH(datum) as month
                 FROM `s_order_basket`
                 WHERE s_order_basket.modus = 0
                     AND datum >= :startDate AND datum <= DATE_ADD(:endDate,INTERVAL 1 DAY)

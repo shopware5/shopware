@@ -890,9 +890,11 @@ class sAdmin
 
         if (!$edit){
             if (!count($sErrorMessages)){
+                $register = $this->sSYSTEM->_SESSION['sRegister'];
                 foreach ($rules as $ruleKey => $ruleValue){
-                    $this->sSYSTEM->_SESSION["sRegister"]["billing"][$ruleKey] = $p[$ruleKey];
+                    $register['billing'][$ruleKey] = $p[$ruleKey];
                 }
+                $this->sSYSTEM->_SESSION['sRegister'] = $register;
             }else {
                 foreach ($rules as $ruleKey => $ruleValue){
                     unset($this->sSYSTEM->_SESSION["sRegister"]["billing"][$ruleKey]);
@@ -947,7 +949,7 @@ class sAdmin
                 foreach ($rules as $ruleKey => $ruleValue){
                     $this->sSYSTEM->_SESSION["sRegister"]["shipping"][$ruleKey] = $p[$ruleKey];
                 }
-            }else {
+            } else {
                 foreach ($rules as $ruleKey => $ruleValue){
                     unset($this->sSYSTEM->_SESSION["sRegister"]["shipping"][$ruleKey]);
                 }
@@ -994,7 +996,7 @@ class sAdmin
 
         if (empty($this->sSYSTEM->_SESSION['sRegister']))
         {
-            $this->sSYSTEM->_SESSION['sRegister'] = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+            $this->sSYSTEM->_SESSION['sRegister'] = array();
         }
 
         // Check password if account should be created
@@ -1014,12 +1016,17 @@ class sAdmin
                     $sErrorFlag["passwordConfirmation"] = true;
                 }
             }
-            $this->sSYSTEM->_SESSION["sRegister"]["auth"]["accountmode"] = "0";	// Setting account-mode to ACCOUNT
+            $register = $this->sSYSTEM->_SESSION["sRegister"];
+            $register["auth"]["accountmode"] = "0"; // Setting account-mode to ACCOUNT
+            $this->sSYSTEM->_SESSION["sRegister"] = $register;
         }else {
             // Enforce the creation of an md5-hashed password for anonymous accounts
             $p["password"] = md5(uniqid(rand()));
 	        $encoderName = 'md5';
-            $this->sSYSTEM->_SESSION["sRegister"]["auth"]["accountmode"] = "1";	// Setting account-mode to NO_ACCOUNT
+
+            $register = $this->sSYSTEM->_SESSION["sRegister"];
+            $register["auth"]["accountmode"] = "1";  // Setting account-mode to NO_ACCOUNT
+            $this->sSYSTEM->_SESSION["sRegister"] = $register;
         }
 
         // Check current password
@@ -1054,23 +1061,26 @@ class sAdmin
 
         // Save data in session
         if (!$edit){
-            if (!count($sErrorFlag) && !count($sErrorMessages)){
+            $register = $this->sSYSTEM->_SESSION["sRegister"];
 
-                $this->sSYSTEM->_SESSION["sRegister"]["auth"]["email"] = $p["email"];
+            if (!count($sErrorFlag) && !count($sErrorMessages)){
+                $register['auth']["email"] = $p["email"];
                 // Receive Newsletter yes / no
-                $this->sSYSTEM->_SESSION["sRegister"]["auth"]["receiveNewsletter"] = $p["receiveNewsletter"];
+                $register['auth']["receiveNewsletter"] = $p["receiveNewsletter"];
                 if ($p["password"]){
-	                $this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"] = $encoderName;
-                    $this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"] = Shopware()->PasswordEncoder()->encodePassword($p["password"], $encoderName);
+                    $register['auth']["encoderName"] = $encoderName;
+                    $register['auth']["password"] = Shopware()->PasswordEncoder()->encodePassword($p["password"], $encoderName);
                 }else {
-                    unset($this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"]);
-                    unset($this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"]);
+                    unset($register['auth']["password"]);
+                    unset($register['auth']["encoderName"]);
                 }
             }else {
-                unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["email"]);
-                unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["password"]);
-                unset ($this->sSYSTEM->_SESSION["sRegister"]["auth"]["encoderName"]);
+                unset ($register['auth']["email"]);
+                unset ($register['auth']["password"]);
+                unset ($register['auth']["encoderName"]);
             }
+
+            $this->sSYSTEM->_SESSION["sRegister"] = $register;
         }
 
         list($sErrorMessages,$sErrorFlag) = Enlight()->Events()->filter('Shopware_Modules_Admin_ValidateStep1_FilterResult', array($sErrorMessages,$sErrorFlag), array('edit'=>$edit,'subject'=>$this,"post"=>$this->sSYSTEM->_POST));
@@ -1838,7 +1848,12 @@ class sAdmin
         }
         if(!$this->sSYSTEM->_SESSION["sRegisterFinished"])
         {
-            if (empty($this->sSYSTEM->_SESSION["sRegister"]["payment"]["object"]["id"])) $this->sSYSTEM->_SESSION["sRegister"]["payment"]["object"]["id"]  = $this->sSYSTEM->sCONFIG['sDEFAULTPAYMENT'];
+            if (empty($this->sSYSTEM->_SESSION["sRegister"]["payment"]["object"]["id"])) {
+                $register = $this->sSYSTEM->_SESSION["sRegister"];
+                $register["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sDEFAULTPAYMENT'];
+                $this->sSYSTEM->_SESSION["sRegister"] = $register;
+            }
+
             $neededFields["auth"] = array("email","password");
             $neededFields["billing"] = array("salutation","firstname","lastname","street","streetnumber","zipcode","city","country");
             $neededFields["payment"] = array("object"=>array("id"));
@@ -2208,10 +2223,10 @@ class sAdmin
         }
         if (empty($this->sSYSTEM->_SESSION['sRegister']))
         {
-            $this->sSYSTEM->_SESSION['sRegister'] = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+            $this->sSYSTEM->_SESSION['sRegister'] = array();
         }
 
-        $countryQuery = "SELECT c.*, a.`name` AS countryarea FROM s_core_countries c
+       $countryQuery = "SELECT c.*, a.`name` AS countryarea FROM s_core_countries c
                 LEFT JOIN s_core_countries_areas a ON a.id = c.areaID AND a.active = 1
                 WHERE c.id=?";
 
@@ -2303,7 +2318,9 @@ class sAdmin
             $userData["additional"]["payment"] = $this->sGetPaymentMeanById($userData["additional"]["user"]["paymentID"],$userData);
         }else {
             if ($this->sSYSTEM->_SESSION["sCountry"] && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]){
-                $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"] = intval($this->sSYSTEM->_SESSION["sCountry"]);
+                $sRegister = $this->sSYSTEM->_SESSION['sRegister'];
+                $sRegister['billing']['country']= intval($this->sSYSTEM->_SESSION["sCountry"]);
+                $this->sSYSTEM->_SESSION["sRegister"] = $sRegister;
             }
 
             $userData["additional"]["country"] = $this->sSYSTEM->sDB_CONNECTION->GetRow($countryQuery, array(intval($this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"])));
