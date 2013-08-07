@@ -7,6 +7,7 @@ Ext.define('Shopware.grid.Association', {
     /**
      * Configuration for the { @link Shopware.grid.Panel }.
      * Disables all none required features.
+     * @type { Object }
      */
     displayConfig: {
         pagingbar: false,
@@ -42,9 +43,8 @@ Ext.define('Shopware.grid.Association', {
         displayConfig: {
             association: undefined,
             searchController: undefined,
-            searchUrl: '{url action="searchAssociation"}',
+            searchUrl: '{url controller="base" action="searchAssociation"}',
             searchCombo: true
-
         },
 
         /**
@@ -164,7 +164,7 @@ Ext.define('Shopware.grid.Association', {
         if (me.getConfig('searchCombo')) {
             combo = me.createSearchCombo(
                 me.createSearchComboStore(
-                    me.getConfig('association'),
+                    me.getConfig('associationKey'),
                     me.getConfig('searchUrl')
                 )
             );
@@ -215,14 +215,16 @@ Ext.define('Shopware.grid.Association', {
      * @param searchUrl { String }
      * @returns { Ext.data.Store }
      */
-    createSearchComboStore: function (association, searchUrl) {
+    createSearchComboStore: function (associationKey, searchUrl) {
+        var me = this;
+
         return Ext.create('Ext.data.Store', {
-            model: association.associatedName,
+            model: me.getStore().model,
             proxy: {
                 type: 'ajax',
                 url: searchUrl,
                 reader: { type: 'json', root: 'data', totalProperty: 'total' },
-                extraParams: { association: association.associationKey }
+                extraParams: { association: associationKey }
             }
         });
     },

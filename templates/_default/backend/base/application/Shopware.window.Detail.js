@@ -7,6 +7,14 @@ Ext.define('Shopware.window.Detail', {
         align: 'stretch'
     },
 
+    /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: {
+        helper: 'Shopware.model.Helper'
+    },
+
     width: 990,
     height: '90%',
     alias: 'widget.shopware-window-detail',
@@ -14,7 +22,16 @@ Ext.define('Shopware.window.Detail', {
 
     statics: {
         displayConfig: {
+            eventAlias: undefined,
+
+            /**
+             * Name of the php controller with extends the Shopware_Controllers_Backend_Application.
+             */
             searchController: undefined,
+
+            components: {
+
+            }
         },
 
         /**
@@ -85,24 +102,15 @@ Ext.define('Shopware.window.Detail', {
     initComponent: function () {
         var me = this;
 
-        me.model = me.record.$className;
         me.eventAlias = me.getConfig('eventAlias');
-        if (!me.eventAlias) {
-            me.eventAlias = me.createEventAlias();
-        }
+        if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.record.$className);
 
         me.items = [ me.createFormPanel() ];
         me.dockedItems = me.createDockedItems();
         me.callParent(arguments);
-        if (me.record) {
-            me.loadRecord(me.record);
-        }
+//        me.loadRecord(me.record);
     },
 
-    createEventAlias: function () {
-        var me = this;
-        return me.getModelName(me.model).toLowerCase();
-    },
 
     createFormPanel: function () {
         var me = this;
@@ -203,17 +211,17 @@ Ext.define('Shopware.window.Detail', {
         if (association.isBaseRecord) {
             item = me.createBaseItem();
         } else {
-            switch (association.relation.toLowerCase()) {
-                case 'onetoone':
-                    item = me.createOneToOneItem(association, me.record);
-                    break;
-                case 'onetomany':
-                    item = me.createOneToManyItem(association, me.record);
-                    break;
-                case 'manytomany':
-                    item = me.createManyToManyItem(association, me.record);
-                    break;
-            }
+//            switch (association.relation.toLowerCase()) {
+//                case 'onetoone':
+//                    item = me.createOneToOneItem(association, me.record);
+//                    break;
+//                case 'onetomany':
+//                    item = me.createOneToManyItem(association, me.record);
+//                    break;
+//                case 'manytomany':
+//                    item = me.createManyToManyItem(association, me.record);
+//                    break;
+//            }
         }
         return item;
     },
@@ -226,228 +234,117 @@ Ext.define('Shopware.window.Detail', {
             fieldSet, associations,
             modelName = me.record.$className;
 
-        items.push(me.createModelFieldSet(modelName, ''));
-        associations = me.getAssociations(modelName, [
-            { relation: 'OneToOne', hasAssociations: false }
-        ]);
-
-        Ext.each(associations, function (association) {
-            fieldSet = me.createModelFieldSet(
-                association.associatedName,
-                association.associationKey
-            );
-            if (fieldSet !== null) {
-                items.push(fieldSet);
-            }
+        return Ext.create('Shopware.model.Container', {
+            record: me.record,
+            flex: 1
         });
-
-        return Ext.create('Ext.container.Container', {
-            flex: 1,
-            items: items,
-            autoScroll: true,
-            padding: 20,
-            title: me.getModelName(me.record.$className)
-        });
+//
+//        items.push(me.createModelFieldSet(modelName, ''));
+//        associations = me.getAssociations(modelName, [
+//            { relation: 'OneToOne', hasAssociations: false }
+//        ]);
+//
+//        Ext.each(associations, function (association) {
+//            fieldSet = me.createModelFieldSet(
+//                association.associatedName,
+//                association.associationKey
+//            );
+//            if (fieldSet !== null) {
+//                items.push(fieldSet);
+//            }
+//        });
+//
+//        return Ext.create('Ext.container.Container', {
+//            flex: 1,
+//            items: items,
+//            autoScroll: true,
+//            padding: 20,
+//            title: me.getModelName(me.record.$className)
+//        });
     },
 
-    createOneToOneItem: function (association, record) {
-        var me = this, model, items = [], store, grid,
-            modelName, associations;
 
-        modelName = association.associatedName;
-        store = me.getAssociationStore(record, association);
-        model = Ext.create(modelName);
-        if (store instanceof Ext.data.Store && store.getCount() > 0) {
-            model = store.first();
-        }
 
-        items.push(me.createModelFieldSet(modelName, modelName.toLowerCase()));
-        associations = me.getAssociations(modelName, [
-            { relation: 'OneToMany' }
-        ]);
+//    createOneToOneItem: function (association, record) {
+//        var me = this, model, items = [], store, grid,
+//            modelName, associations;
+//
+//        modelName = association.associatedName;
+//        store = me.getAssociationStore(record, association);
+//        model = Ext.create(modelName);
+//        if (store instanceof Ext.data.Store && store.getCount() > 0) {
+//            model = store.first();
+//        }
+//
+//        items.push(me.createModelFieldSet(modelName, modelName.toLowerCase()));
+//        associations = me.getAssociations(modelName, [
+//            { relation: 'OneToMany' }
+//        ]);
+//
+//        Ext.each(associations, function (assoc) {
+//            store = me.getAssociationStore(model, assoc);
+//            grid = me.createGrid(store, me.getConfig('oneToManyGrid'));
+//            if (grid) {
+//                items.push(grid);
+//            }
+//        });
+//
+//        return Ext.create('Ext.container.Container', {
+//            flex: 1,
+//            items: items,
+//            autoScroll: true,
+//            padding: 20,
+//            title: me.getModelName(modelName)
+//        });
+//    },
 
-        Ext.each(associations, function (assoc) {
-            store = me.getAssociationStore(model, assoc);
-            grid = me.createGrid(store, me.getConfig('oneToManyGrid'));
-            if (grid) {
-                items.push(grid);
-            }
-        });
 
-        var container = Ext.create('Ext.container.Container', {
-            flex: 1,
-            items: items,
-            autoScroll: true,
-            padding: 20,
-            title: me.getModelName(modelName)
-        });
 
-        return container;
-    },
+//    createOneToManyItem: function (association, record) {
+//        var me = this;
+//
+//        var grid = Ext.create('Shopware.grid.Panel', {
+//            store: me.getAssociationStore(record, association),
+//            subApp: me.subApp,
+//            minHeight: 300,
+//            flex: 1,
+//            displayConfig: {
+//                searchField: false,
+//                pagingbar: false,
+//                editColumn: false,
+//                hasOwnController: true
+//            }
+//        });
+//
+//        me.associationComponents[association.associationKey] = grid;
+//
+//        grid.title = me.getModelName(association.associatedName);
+//        return grid;
+//    },
 
-    createOneToManyItem: function (association, record) {
-        var me = this;
 
-        var grid = me.createGrid(
-            me.getAssociationStore(record, association),
-            {
-                searchField: false,
-                pagingbar: false,
-                editColumn: false,
-                hasOwnController: true
-            }
-        );
 
-        me.associationComponents[association.associationKey] = grid;
-
-        grid.title = me.getModelName(association.associatedName);
-        return grid;
-    },
 
     createManyToManyItem: function (association, record) {
-        var me = this;
+        var me = this, model, component;
 
-        var grid = Ext.create('Shopware.grid.Association', {
+        model = Ext.create(association.associatedName);
+
+        component = me.subApp.getView(model.getConfig('related')).create({
             store: me.getAssociationStore(record, association),
             flex: 1,
-            subApp: me.subApp,
-            displayConfig: {
-                searchController: me.getConfig('searchController'),
-                association: association
-            }
+            subApp: me.subApp
         });
 
-        me.associationComponents[association.associationKey] = grid;
+        me.associationComponents[association.associationKey] = component;
 
         return Ext.create('Ext.container.Container', {
-            items: [ grid ],
+            items: [ component ],
             layout: { type: 'vbox', align: 'stretch' },
             title: me.getModelName(association.associatedName),
             autoScroll: true,
             border: false
         });
-    },
-
-    createGrid: function (store, displayConfig) {
-        var me = this, config = { };
-        config = Ext.apply({ }, config, displayConfig);
-
-        return Ext.create('Shopware.grid.Panel', {
-            store: store,
-            subApp: me.subApp,
-            minHeight: 300,
-            flex: 1,
-            displayConfig: config
-        });
-    },
-
-
-
-
-    /**
-     * Erstellt für den übergebene Modelnamen ein Ext.form.FieldSet.
-     * Die Elemente dieses Fieldsets werden über createModelFields erstellt.
-     * Formfelder die zu einer Association gehören müssen einen Alias im Feldnamen
-     * besitzen damit die Daten richtig geladen werden können.
-     * Beispiel:
-     *  -  Hauptmodel: 'Shopware.apps.Product.model.Product'
-     *  -  Eine Association:
-     *       {
-     *           model: 'Shopware.apps.Product.model.Attribute',
-     *           associationKey: 'attribute',
-     *           ...
-     *       }
-     *  -> Wenn die Felder des Attribute models nun im selben Formular
-     *     angezeigt werden sollen benötigen diese dafür folgenden alias:
-     *     'attribute[name]', 'attribute[street]'
-     *
-     *
-     * @param modelName Ext.data.Model
-     * @param alias Additional alias for the field names (example: 'attribute' => 'attibute[name]')
-     *
-     * @return Ext.form.FieldSet
-     */
-    createModelFieldSet: function (modelName, alias) {
-        var me = this, fields, model;
-
-        model = Ext.create(modelName);
-        fields = me.createModelFields(model, alias);
-        return Ext.create('Ext.form.FieldSet', {
-            flex: 1,
-            items: fields,
-            title: me.getModelName(modelName)
-        });
-    },
-
-    /**
-     * Creates all Ext.form.Fields for the passed model.
-     * The alias can be used to prefix the field names.
-     * For example: 'attribute[name]'.
-     *
-     * @return Array
-     */
-    createModelFields: function (model, alias) {
-        var me = this, fields = [], field;
-
-        Ext.each(model.fields.items, function (item) {
-            field = me.createModelField(model, item, alias);
-            if (field) fields.push(field);
-        });
-
-        return fields;
-    },
-
-    /**
-     * This function creates the form field element
-     * for a single model field.
-     * This functions use different helper function like
-     * 'applyIntegerFieldConfig' to set different shopware
-     * default configurations for a form field.
-     * The id property of the model won't be displayed.
-     *
-     * @param model Ext.data.Model
-     * @param field Ext.data.Field
-     * @param alias string
-     * @return Ext.form.field.Field
-     */
-    createModelField: function (model, field, alias) {
-        var me = this, formField = {};
-
-        if (model.idProperty === field.name) {
-            return null;
-        }
-
-        formField.xtype = 'displayfield';
-        formField.anchor = '100%';
-
-        formField.labelWidth = 130;
-        formField.name = field.name;
-
-        alias += '';
-        if (alias !== undefined && Ext.isString(alias) && alias.length > 0) {
-            formField.name = alias + '[' + field.name + ']';
-        }
-        formField.fieldLabel = me.camelCaseToWord(field.name);
-
-        switch (field.type.type) {
-            case 'int':
-                formField = me.applyIntegerFieldConfig(formField);
-                break;
-            case 'string':
-                formField = me.applyStringFieldConfig(formField);
-                break;
-            case 'bool':
-                formField = me.applyBooleanFieldConfig(formField);
-                break;
-            case 'date':
-                formField = me.applyDateFieldConfig(formField);
-                break;
-            case 'float':
-                formField = me.applyFloatFieldConfig(formField);
-                break;
-        }
-
-        return formField;
     },
 
 
@@ -561,10 +458,6 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
-
-
-
-
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
         this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
@@ -575,235 +468,6 @@ Ext.define('Shopware.window.Detail', {
 
     onCancel: function () {
         this.destroy();
-    },
-
-
-
-
-    /**
-     * Adds the shopware default form field configuration for integer form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyIntegerFieldConfig: function (field) {
-        field.xtype = 'numberfield';
-        field.align = 'right';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for string form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyStringFieldConfig: function (field) {
-        field.xtype = 'textfield';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for boolean form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyBooleanFieldConfig: function (field) {
-        field.xtype = 'checkbox';
-        field.uncheckedValue = false;
-        field.inputValue = true;
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for date form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyDateFieldConfig: function (field) {
-        field.xtype = 'datefield';
-        return field;
-    },
-
-    /**
-     * Adds the shopware default form field configuration for float form field.
-     * The field configuration will be applied to the passed field object.
-     *
-     * @param field
-     * @return Ext.form.field.Number
-     */
-    applyFloatFieldConfig: function (field) {
-        field.xtype = 'numberfield';
-        field.align = 'right';
-        return field;
-    },
-
-
-
-
-    /**
-     * Helfer function um associationen eines Models einfacher ermitteln zu können.
-     * Übergeben wird der Klassenname des Models von dem die Associationen ermittelt werden sollen.
-     * Für die Filterung spezifischer Associationen kann der conditions Parameter genutzt werden.
-     * Dieser Parameter kann ein Array mit bestimmten Filter Kriterien beinhalten.
-     * Die Funktion überprüft pro Associationen jeden Filter. Sollte einer der Filter zutreffen,
-     * wird die Association am Ende in einem Array zurückgegben.
-     *
-     * Eine Filter Kriterie kann die folgenden Eigenschaften haben:
-     *  - [string] relation
-     *      -   Überprüft einen bestimmten Typen der association
-     *      -   Wenn weg gelassen wird der Associationtyp nicht überprüft
-     *      -   Mögliche Typen: 'OneToOne', 'OneToMany', 'ManyToMany'
-     *  - [boolean] hasAssociations
-     *      -   Überprüft ob die Association eigene Associationen besitzt
-     *  - [string] associationTypes
-     *      -   Überprüft ob die Associationen eine eigene Association eines bestimmtes Typen besitzt
-     *      -   Mögliche Typen: 'OneToOne', 'OneToMany', 'ManyToMany'
-     *
-     * @param className
-     * @param conditions
-     */
-    getAssociations: function (className, conditions) {
-        var me = this,
-            associations = [],
-            model = Ext.create(className);
-
-        conditions = conditions || [];
-
-        if (model.associations.lenght <= 0) {
-            return associations;
-        }
-        Ext.each(model.associations.items, function (association) {
-            if (me.matchAssociationConditions(association, conditions)) {
-                associations.push(association);
-            }
-        });
-        return associations;
-    },
-
-    /**
-     * Helper function which returns the associated store of the passed association.
-     * If the passed records contains no instance of the association, the function
-     * creates an new empty store.
-     *
-     * @param record
-     * @param association
-     * @returns { Ext.data.Store }
-     */
-    getAssociationStore: function (record, association) {
-        var store;
-
-        store = record[association.storeName];
-        if (!(store instanceof Ext.data.Store)) {
-            store = Ext.create('Ext.data.Store', {
-                model: association.associatedName
-            });
-            record[association.storeName] = store;
-        }
-
-        return store;
-    },
-
-    /**
-     * Helfer Funktion für die getAssociations Funktion.
-     * Überprüft eine einzelne Association ob einer der übergebenen
-     * Filter Kriterien entspricht.
-     *
-     * Sollten ein Filter Kriterium zutreffen oder es werden keine Filter Kriterien übergeben,
-     * liefert die Funktion als Ergebnis true zurück.
-     *
-     * @param association
-     * @param conditions
-     * @returns boolean
-     */
-    matchAssociationConditions: function (association, conditions) {
-        var me = this;
-        var associationInstance = Ext.create(association.associatedName);
-        var match = false;
-
-        //if no conditions passed, the loop won't be accessed
-        if (conditions && conditions.length <= 0) {
-            match = true;
-        }
-
-        Ext.each(conditions, function (condition) {
-            //relation type has been set? if isn't matched continue with next condition
-            if (condition.relation && condition.relation.toLowerCase() !== association.relation.toLowerCase()) {
-                return true;
-            }
-
-            //filter condition for association with own associations
-            if (condition.hasAssociations === true && associationInstance.associations.length <= 0) {
-                return true;
-            }
-
-            //filter condition for association without own associations
-            if (condition.hasAssociations === false && associationInstance.associations.length > 0) {
-                return true;
-            }
-
-            if (condition.associationTypes && associationInstance.association.length <= 0) {
-                return true;
-            }
-
-            //filter condition for association
-            if (condition.associationTypes) {
-                var typeMatch = false;
-
-                Ext.each(associationInstance.associations.items, function (item) {
-                    Ext.each(condition.associationTypes, function (type) {
-                        if (type.toLowerCase() === item.relation.toLowerCase()) {
-                            typeMatch = true;
-                        }
-                    });
-                });
-
-                if (typeMatch === false) {
-                    return true;
-                }
-            }
-
-            match = true;
-            return false;   //cancel foreach
-        });
-
-        return match;
-    },
-
-    /**
-     * Helper function to create the form field label
-     * for the passed model field.
-     *
-     * @param word
-     * @return string
-     */
-    camelCaseToWord: function (word) {
-        word = word.split(/(?=[A-Z])/).map(function (p) {
-            return p.charAt(0).toLowerCase() + p.slice(1);
-        }).join(' ');
-
-        word = word.charAt(0).toUpperCase() + word.slice(1);
-
-        return word;
-    },
-
-    /**
-     * Helper function which creates the model field set
-     * title.
-     * Shopware use as default the model name of
-     * the passed record.
-     *
-     * @param modelName
-     * @return String
-     */
-    getModelName: function (modelName) {
-        return modelName.substr(modelName.lastIndexOf(".") + 1);
     }
 
 });

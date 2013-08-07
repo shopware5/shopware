@@ -10,10 +10,10 @@ Ext.define('Shopware.data.Model', {
     proxy: {
         type: 'ajax',
         api: {
-            detail: '{url action="detail"}',
-            create: '{url action="create"}',
-            update: '{url action="update"}',
-            destroy: '{url action="delete"}'
+            detail:  '{url controller="base" action="detail"}',
+            create:  '{url controller="base" action="create"}',
+            update:  '{url controller="base" action="update"}',
+            destroy: '{url controller="base" action="delete"}'
         },
         reader: {
             type: 'json',
@@ -21,6 +21,59 @@ Ext.define('Shopware.data.Model', {
             totalProperty: 'total'
         }
     },
+
+
+
+
+    statics: {
+        displayConfig: {
+            controller: undefined,
+
+            listing: 'Shopware.grid.Panel',
+            detail:  'Ext.form.FieldSet',
+            related: 'Shopware.grid.Association',
+            field:   'Ext.form.field.Text'
+        },
+
+        /**
+         * Static function to merge the different configuration values
+         * which passed in the class constructor.
+         * @param userOpts Object
+         * @param displayConfig Object
+         * @returns Object
+         */
+        getDisplayConfig: function (userOpts, displayConfig) {
+            var config = { };
+
+            if (userOpts && userOpts.displayConfig) {
+                config = Ext.apply({ }, config, userOpts.displayConfig);
+            }
+            config = Ext.apply({ }, config, displayConfig);
+            config = Ext.apply({ }, config, this.displayConfig);
+
+            return config;
+        },
+
+        /**
+         * Static function which sets the property value of
+         * the passed property and value in the display configuration.
+         *
+         * @param prop
+         * @param val
+         * @returns boolean
+         */
+        setDisplayConfig: function (prop, val) {
+            var me = this;
+
+            if (!me.displayConfig.hasOwnProperty(prop)) {
+                return false;
+            }
+            me.displayConfig[prop] = val;
+            return true;
+        }
+    },
+
+
 
 
     /**
@@ -31,10 +84,21 @@ Ext.define('Shopware.data.Model', {
      */
     constructor: function (config) {
         var me = this;
+        me._opts = me.statics().getDisplayConfig(config, this.displayConfig);
         me.convertProxyApi();
         me.callParent(arguments);
     },
 
+    /**
+     * Helper function to get config access.
+     * @param prop string
+     * @returns mixed
+     * @constructor
+     */
+    getConfig: function (prop) {
+        var me = this;
+        return me._opts[prop];
+    },
 
     /**
      * Helper function which removes the base controller
@@ -45,10 +109,14 @@ Ext.define('Shopware.data.Model', {
     convertProxyApi: function () {
         var me = this, value;
 
+        if (!me.getConfig('controller')) {
+            me.proxy = null;
+            return;
+        }
         Object.keys(me.proxy.api).forEach(function (key) {
             value = me.proxy.api[key] + '';
             value = value.replace(
-                '/backend/base/', '/backend/' + me.controller.toLowerCase() + '/'
+                '/backend/base/', '/backend/' + me.getConfig('controller').toLowerCase() + '/'
             );
             me.proxy.api[key] = value;
         });
