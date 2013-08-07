@@ -18,3 +18,5 @@
 	</li>
 {/if}
 {/block}
+
+{block name='frontend_detail_tabs_after'}{/block} 

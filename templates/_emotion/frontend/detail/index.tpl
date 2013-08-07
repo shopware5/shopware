@@ -179,8 +179,11 @@
 								{include file="frontend/detail/related.tpl"}
 							{/block}
 					    	
-					    	{* Similar articles *}
+							{block name='frontend_detail_index_after_tabs'}{/block}
+							
+					    	        {* Similar articles *}
 							{include file='frontend/detail/similar.tpl'}
+							
 						</div>
 					</div>
 					<div class="detailinfo_shadow">&nbsp;</div>
