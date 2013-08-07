@@ -167,3 +167,4 @@
 {include file='backend/base/application/Shopware.model.Error.js'}
 {include file='backend/base/application/Shopware.grid.Association.js'}
 {include file='backend/base/application/Shopware.model.Container.js'}
+{include file='backend/base/application/Shopware.form.field.Search.js'}

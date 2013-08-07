@@ -35,8 +35,7 @@ Ext.define('Shopware.model.Container', {
              *      attribute_attr1: { fieldLabel: 'OwnLabel' }
              *  }
              */
-            fields: {
-            }
+            fields: { }
         },
 
         /**
