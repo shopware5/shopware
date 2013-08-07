@@ -91,6 +91,14 @@ Ext.define('Shopware.grid.Controller', {
     extend: 'Ext.app.Controller',
 
     /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: {
+        helper: 'Shopware.model.Helper'
+    },
+
+    /**
      * The statics object contains the shopware default configuration for
      * this component.
      *
@@ -583,27 +591,7 @@ Ext.define('Shopware.grid.Controller', {
      */
     getEventName: function (name) {
         return this.getConfig('eventAlias') + '-' + name;
-    },
-
-    /**
-     * Helper function which checks if the passed model instance
-     * has an proxy api for the passed action.
-     *
-     * @param model { Shopware.data.Model }
-     * @param action { string }
-     * @returns { boolean }
-     */
-    hasModelAction: function (model, action) {
-        return (model.proxy && model.proxy.api && model.proxy.api[action]);
-    },
-
-    /**
-     * Helper function to get the last fregment of the whole model name.
-     * @param modelName { string }
-     * @returns { string }
-     */
-    getModelName: function (modelName) {
-        return modelName.substr(modelName.lastIndexOf(".") + 1);
     }
+
 });
 //{/block}

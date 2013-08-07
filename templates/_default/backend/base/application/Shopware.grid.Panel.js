@@ -76,6 +76,14 @@ Ext.define('Shopware.grid.Panel', {
     alias: 'widget.shopware-grid-panel',
 
     /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: {
+        helper: 'Shopware.model.Helper'
+    },
+
+    /**
      * Is defined, when the { @link #displayConfig.toolbar } property is set to true.
      * Created in the { @link #createToolbar } function.
      */
@@ -514,7 +522,7 @@ Ext.define('Shopware.grid.Panel', {
 
         me.model = me.store.model;
         me.eventAlias = me.getConfig('eventAlias');
-        if (!me.eventAlias) me.eventAlias = me.createEventAlias(me.model.$className);
+        if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.model.$className);
 
         me.columns = me.createColumns();
         me.plugins = me.createPlugins();
@@ -554,28 +562,6 @@ Ext.define('Shopware.grid.Panel', {
         me.controller.init();
 
         return me.controller;
-    },
-
-    /**
-     * Helper function which creates the model field set
-     * title.
-     * Shopware use as default the model name of
-     * the passed record.
-     *
-     * @param { String } modelName - Class name of the model.
-     * @return { String }
-     */
-    getModelName: function (modelName) {
-        return modelName.substr(modelName.lastIndexOf(".") + 1);
-    },
-
-    /**
-     * Helper function to create the event alias.
-     *
-     * @returns { String }
-     */
-    createEventAlias: function (modelClass) {
-        return this.getModelName(modelClass).toLowerCase();
     },
 
     /**
@@ -691,7 +677,7 @@ Ext.define('Shopware.grid.Panel', {
 
         column.xtype = 'gridcolumn';
         column.dataIndex = field.name;
-        column.header = me.createColumnHeader(model, field);
+        column.header = me.camelCaseToWord(field.name);
         column.flex = 1;
 
         switch (field.type.type) {
@@ -719,25 +705,6 @@ Ext.define('Shopware.grid.Panel', {
         return column;
     },
 
-    /**
-     * Helper function to create the grid column header
-     * for the passed model field.
-     *
-     * @param { Ext.data.Model } model - The data model which contained in the passed grid store.
-     * @param { Ext.data.Field } field - The model field which should be displayed in the grid
-     * @returns { String }
-     */
-    createColumnHeader: function (model, field) {
-        var name = field.name;
-
-        name = name.split(/(?=[A-Z])/).map(function (p) {
-            return p.charAt(0).toLowerCase() + p.slice(1);
-        }).join(' ');
-
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-
-        return name;
-    },
 
     /**
      * Creates the action column for the grid panel.
@@ -1202,104 +1169,6 @@ Ext.define('Shopware.grid.Panel', {
         });
 
         return me.searchField;
-    },
-
-    /**
-     * Adds the shopware default column configuration for a listing integer
-     * column.
-     * The column configuration will be applied to the passed column object.
-     *
-     * @param { Object } column - The column object where the properties will be applied.
-     * @return { Ext.grid.column.Number }
-     */
-    applyIntegerColumnConfig: function (column) {
-        column.xtype = 'numbercolumn';
-        column.renderer = this.integerColumnRenderer;
-        column.align = 'right';
-
-        return column;
-    },
-
-    /**
-     * Adds the shopware default column configuration for a listing string
-     * column.
-     * The column configuration will be applied to the passed column object.
-     *
-     * @param { Object } column - The column object where the properties will be applied.
-     * @return { Ext.grid.column.Column }
-     */
-    applyStringColumnConfig: function (column) {
-        return column;
-    },
-
-    /**
-     * Adds the shopware default column configuration for a listing boolean
-     * column.
-     * The column configuration will be applied to the passed column object.
-     *
-     * @param { Object } column - The column object where the properties will be applied.
-     * @return { Ext.grid.column.Boolean }
-     */
-    applyBooleanColumnConfig: function (column) {
-        column.xtype = 'booleancolumn';
-        column.renderer = this.booleanColumnRenderer;
-        return column;
-    },
-
-    /**
-     * Adds the shopware default column configuration for a listing date
-     * column.
-     * The column configuration will be applied to the passed column object.
-     *
-     * @param { Object } column - The column object where the properties will be applied.
-     * @return { Ext.grid.column.Date }
-     */
-    applyDateColumnConfig: function (column) {
-        column.xtype = 'datecolumn';
-        return column;
-    },
-
-    /**
-     * Adds the shopware default column configuration for a listing float
-     * column.
-     * The column configuration will be applied to the passed column object.
-     *
-     * @param { Object } column - The column object where the properties will be applied.
-     * @return { Ext.grid.column.Number }
-     */
-    applyFloatColumnConfig: function (column) {
-        column.xtype = 'numbercolumn';
-        column.align = 'right';
-        return column;
-    },
-
-    /**
-     * Shopware default renderer function for a boolean listing column.
-     * This functions expects a boolean value as first parameter.
-     * The function returns a span tag with a css class for a checkbox
-     * sprite.
-     *
-     * @param { boolean } value
-     * @return { String }
-     */
-    booleanColumnRenderer: function (value) {
-        var checked = 'sprite-ui-check-box-uncheck';
-        if (value === true) {
-            checked = 'sprite-ui-check-box';
-        }
-        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';
-    },
-
-    /**
-     * Shopware default renderer function for a integer listing column.
-     * Grid number columns will be displayed with two precisions so this function
-     * converts the passed value parameter to an integer value.
-     *
-     * @param { int|float } value
-     * @return { int }
-     */
-    integerColumnRenderer: function (value) {
-        return Ext.util.Format.number(value, '0');
     }
 
 });
