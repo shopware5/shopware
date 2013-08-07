@@ -222,7 +222,7 @@ class Plugin extends ModelEntity
     private $templates;
 
     /**
-     * @var
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
      */
