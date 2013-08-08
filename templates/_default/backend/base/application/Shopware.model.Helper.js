@@ -356,6 +356,28 @@ Ext.define('Shopware.model.Helper', {
         field.xtype = 'numberfield';
         field.align = 'right';
         return field;
+    },
+
+
+    /**
+     * Helper function to get the component type for the passed
+     * association.
+     * The component type is defined in the { @link Shopware.data.Model:displayConfig }
+     * @param association
+     * @returns { string|boolean }
+     */
+    getComponentTypeOfAssociation: function(association) {
+        switch (association.relation.toLowerCase()) {
+            case 'onetoone':
+                return 'detail';
+            case 'onetomany':
+                return 'listing';
+            case 'manytomany':
+                return 'related';
+            case 'manytoone':
+                return 'field';
+        }
+        return false;
     }
 
 

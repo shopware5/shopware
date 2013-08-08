@@ -1188,7 +1188,15 @@ Ext.define('Shopware.grid.Panel', {
         });
 
         return me.searchField;
+    },
+
+
+    reloadData: function(store, record) {
+        if (store instanceof Ext.data.Store) {
+            this.reconfigure(store);
+        }
     }
+
 
 });
 

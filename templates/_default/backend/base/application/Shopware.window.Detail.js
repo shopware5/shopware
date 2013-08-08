@@ -29,9 +29,12 @@ Ext.define('Shopware.window.Detail', {
              */
             searchController: undefined,
 
-            components: {
-
-            }
+            /**
+             * Array of associations which has an own tab item.
+             * To display an association in an own tab item, add the associationKey to this array.
+             *
+             */
+            tabItemAssociations: []
         },
 
         /**
@@ -108,7 +111,7 @@ Ext.define('Shopware.window.Detail', {
         me.items = [ me.createFormPanel() ];
         me.dockedItems = me.createDockedItems();
         me.callParent(arguments);
-//        me.loadRecord(me.record);
+        me.loadRecord(me.record);
     },
 
 
@@ -184,8 +187,9 @@ Ext.define('Shopware.window.Detail', {
         associations = me.getAssociations(me.record.$className, [
             { associationKey: config }
         ]);
+
         associations = Ext.Array.insert(associations, 0, [
-            { isBaseRecord: true }
+            {  isBaseRecord: true, associationKey: 'baseRecord' }
         ]);
 
         return associations;
@@ -203,26 +207,18 @@ Ext.define('Shopware.window.Detail', {
      * @returns Ext.container.Container|Ext.grid.Panel
      */
     createTabItem: function (association) {
-        var me = this, item, model, store;
+        var me = this, item;
 
         if (association.isBaseRecord) {
             item = me.createAssociationComponent('detail', me.record, null);
         } else {
-            model = Ext.create(association.associatedName);
-            store = me.getAssociationStore(me.record, association);
-
-            switch (association.relation.toLowerCase()) {
-                case 'onetoone':
-                    item = me.createAssociationComponent('detail', model, store);
-                    break;
-                case 'onetomany':
-                    item = me.createAssociationComponent('listing', model, store);
-                    break;
-                case 'manytomany':
-                    item = me.createAssociationComponent('related', model, store);
-                    break;
-            }
+            item = me.createAssociationComponent(
+                me.getComponentTypeOfAssociation(association),
+                Ext.create(association.associatedName),
+                me.getAssociationStore(me.record, association)
+            );
         }
+        me.associationComponents[association.associationKey] = item;
         return item;
     },
 
@@ -341,14 +337,25 @@ Ext.define('Shopware.window.Detail', {
         this.loadAssociationData(record);
     },
 
+    
     loadAssociationData: function(record) {
-        var me = this, component,
-            associations = me.getAssociations(record.$className);
+        var me = this, association, component, store;
 
-        Ext.each(associations, function(association) {
-            component = me.associationComponents[association.associationKey];
-            if (component) {
-                component.reconfigure(me.getAssociationStore(record, association));
+        Object.keys(me.associationComponents).forEach(function(key) {
+            component = me.associationComponents[key];
+            store = null;
+            association = null;
+
+            if (key != 'baseRecord') {
+                association = me.getAssociations(record.$className, [ { associationKey: [ key ] } ]);
+                store = me.getAssociationStore(record, association[0]);
+            }
+
+            if (component && typeof component.reloadData === 'function') {
+                component.reloadData(
+                    store,
+                    record
+                );
             }
         });
     },
