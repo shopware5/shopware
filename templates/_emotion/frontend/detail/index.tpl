@@ -127,7 +127,7 @@
 						{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
 					{/block}
 					{block name='frontend_detail_index_after_data'}{/block}
-					
+
 					
 					{* Include buy button and quantity box *}
 					{block name="frontend_detail_index_buybox"}
@@ -181,6 +181,9 @@
 					    	
 					    	{* Similar articles *}
 							{include file='frontend/detail/similar.tpl'}
+
+							
+							{block name='frontend_detail_index_after_tabs'}{/block}
 						</div>
 					</div>
 					<div class="detailinfo_shadow">&nbsp;</div>
