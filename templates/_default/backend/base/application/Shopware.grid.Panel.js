@@ -424,6 +424,16 @@ Ext.define('Shopware.grid.Panel', {
 
 
             /**
+             * Enables the Ext.grid.plugin.RowEditing plugin.
+             * The plugin allows to modify the grid rows over a
+             * row editor.
+             *
+             * @default { false }
+             * @type { boolean }
+             */
+            rowEditing: false,
+
+            /**
              * Column configuration object.
              * This object can contains different configuration for
              * the single grid columns.
@@ -852,7 +862,16 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createPlugins: function () {
-        return [];
+        var me = this, items = [], item;
+
+        if (me.getConfig('rowEditing')) {
+            item = Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToEdit: 2
+            });
+            items.push(item)
+        }
+
+        return items;
     },
 
     /**

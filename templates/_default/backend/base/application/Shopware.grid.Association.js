@@ -4,16 +4,6 @@ Ext.define('Shopware.grid.Association', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.shopware-grid-association',
 
-    /**
-     * Configuration for the { @link Shopware.grid.Panel }.
-     * Disables all none required features.
-     * @type { Object }
-     */
-    displayConfig: {
-        pagingbar: false,
-        actionColumn: true,
-        editColumn: false
-    },
 
     /**
      * The statics object contains the shopware default configuration for
@@ -44,7 +34,10 @@ Ext.define('Shopware.grid.Association', {
             association: undefined,
             searchController: undefined,
             searchUrl: '{url controller="base" action="searchAssociation"}',
-            searchCombo: true
+            searchCombo: true,
+            pagingbar: false,
+            actionColumn: true,
+            editColumn: false
         },
 
         /**

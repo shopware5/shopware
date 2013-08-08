@@ -64,6 +64,7 @@ Ext.define('Shopware.model.Helper', {
      * the association is returned in an array at the end.
      *
      * A filter criteria can have the following properties:
+     *  - [string] associationKey
      *  - [string] relation
      *      -   Checks a specific type of association
      *      -   If left out, the Association type will not be checked
@@ -131,9 +132,9 @@ Ext.define('Shopware.model.Helper', {
      * @returns boolean
      */
     matchAssociationConditions: function (association, conditions) {
-        var me = this;
-        var associationInstance = Ext.create(association.associatedName);
-        var match = false;
+        var me = this,
+            associationInstance = Ext.create(association.associatedName),
+            match = false;
 
         //if no conditions passed, the loop won't be accessed
         if (conditions && conditions.length <= 0) {
@@ -141,6 +142,11 @@ Ext.define('Shopware.model.Helper', {
         }
 
         Ext.each(conditions, function (condition) {
+            //association key check. The condition association key has to be an array.
+            if (condition.associationKey && !Ext.Array.contains(condition.associationKey, association.associationKey)) {
+                return true;
+            }
+
             //relation type has been set? if isn't matched continue with next condition
             if (condition.relation && condition.relation.toLowerCase() !== association.relation.toLowerCase()) {
                 return true;
@@ -196,7 +202,7 @@ Ext.define('Shopware.model.Helper', {
         column.xtype = 'numbercolumn';
         column.renderer = this.integerColumnRenderer;
         column.align = 'right';
-
+        column.editor = this.applyIntegerFieldConfig({});
         return column;
     },
 
@@ -209,6 +215,7 @@ Ext.define('Shopware.model.Helper', {
      * @return { Ext.grid.column.Column }
      */
     applyStringColumnConfig: function (column) {
+        column.editor = this.applyStringFieldConfig({});
         return column;
     },
 
@@ -223,6 +230,7 @@ Ext.define('Shopware.model.Helper', {
     applyBooleanColumnConfig: function (column) {
         column.xtype = 'booleancolumn';
         column.renderer = this.booleanColumnRenderer;
+        column.editor = this.applyBooleanFieldConfig({});
         return column;
     },
 
@@ -236,6 +244,7 @@ Ext.define('Shopware.model.Helper', {
      */
     applyDateColumnConfig: function (column) {
         column.xtype = 'datecolumn';
+        column.editor = this.applyDateFieldConfig({});
         return column;
     },
 
@@ -250,6 +259,7 @@ Ext.define('Shopware.model.Helper', {
     applyFloatColumnConfig: function (column) {
         column.xtype = 'numbercolumn';
         column.align = 'right';
+        column.editor = this.applyFloatFieldConfig({});
         return column;
     },
 

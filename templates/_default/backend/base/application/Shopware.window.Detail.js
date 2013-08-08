@@ -151,7 +151,7 @@ Ext.define('Shopware.window.Detail', {
      * class. For each of this association shopware creates the element over
      * the createTabItem function.
      *
-     *  @returns Array
+     * @returns Array
      */
     createTabItems: function () {
         var me = this, item, items = [];
@@ -179,14 +179,11 @@ Ext.define('Shopware.window.Detail', {
      * @returns array
      */
     getTabItemsAssociations: function () {
-        var me = this, associations;
+        var me = this, associations, config = me.getConfig('tabItemAssociations') || [];
 
         associations = me.getAssociations(me.record.$className, [
-            { relation: 'OneToOne', hasAssociations: true },
-            { relation: 'OneToMany' },
-            { relation: 'ManyToMany' }
+            { associationKey: config }
         ]);
-
         associations = Ext.Array.insert(associations, 0, [
             { isBaseRecord: true }
         ]);
@@ -206,149 +203,47 @@ Ext.define('Shopware.window.Detail', {
      * @returns Ext.container.Container|Ext.grid.Panel
      */
     createTabItem: function (association) {
-        var me = this, item;
+        var me = this, item, model, store;
 
         if (association.isBaseRecord) {
-            item = me.createBaseItem();
+            item = me.createAssociationComponent('detail', me.record, null);
         } else {
-//            switch (association.relation.toLowerCase()) {
-//                case 'onetoone':
-//                    item = me.createOneToOneItem(association, me.record);
-//                    break;
-//                case 'onetomany':
-//                    item = me.createOneToManyItem(association, me.record);
-//                    break;
-//                case 'manytomany':
-//                    item = me.createManyToManyItem(association, me.record);
-//                    break;
-//            }
+            model = Ext.create(association.associatedName);
+            store = me.getAssociationStore(me.record, association);
+
+            switch (association.relation.toLowerCase()) {
+                case 'onetoone':
+                    item = me.createAssociationComponent('detail', model, store);
+                    break;
+                case 'onetomany':
+                    item = me.createAssociationComponent('listing', model, store);
+                    break;
+                case 'manytomany':
+                    item = me.createAssociationComponent('related', model, store);
+                    break;
+            }
         }
         return item;
     },
 
 
+    /**
+     * Helper function which creates all model components.
+     *
+     * @param type { String }
+     * @param model { Shopware.data.Model }
+     * @param store { Ext.data.Store }
+     * @returns { Object }
+     */
+    createAssociationComponent: function(type, model, store) {
+        var componentType = model.getConfig(type);
 
-
-    createBaseItem: function () {
-        var me = this, container, items = [],
-            fieldSet, associations,
-            modelName = me.record.$className;
-
-        return Ext.create('Shopware.model.Container', {
-            record: me.record,
+        return Ext.create(componentType, {
+            record: model,
+            store: store,
             flex: 1
         });
-//
-//        items.push(me.createModelFieldSet(modelName, ''));
-//        associations = me.getAssociations(modelName, [
-//            { relation: 'OneToOne', hasAssociations: false }
-//        ]);
-//
-//        Ext.each(associations, function (association) {
-//            fieldSet = me.createModelFieldSet(
-//                association.associatedName,
-//                association.associationKey
-//            );
-//            if (fieldSet !== null) {
-//                items.push(fieldSet);
-//            }
-//        });
-//
-//        return Ext.create('Ext.container.Container', {
-//            flex: 1,
-//            items: items,
-//            autoScroll: true,
-//            padding: 20,
-//            title: me.getModelName(me.record.$className)
-//        });
     },
-
-
-
-//    createOneToOneItem: function (association, record) {
-//        var me = this, model, items = [], store, grid,
-//            modelName, associations;
-//
-//        modelName = association.associatedName;
-//        store = me.getAssociationStore(record, association);
-//        model = Ext.create(modelName);
-//        if (store instanceof Ext.data.Store && store.getCount() > 0) {
-//            model = store.first();
-//        }
-//
-//        items.push(me.createModelFieldSet(modelName, modelName.toLowerCase()));
-//        associations = me.getAssociations(modelName, [
-//            { relation: 'OneToMany' }
-//        ]);
-//
-//        Ext.each(associations, function (assoc) {
-//            store = me.getAssociationStore(model, assoc);
-//            grid = me.createGrid(store, me.getConfig('oneToManyGrid'));
-//            if (grid) {
-//                items.push(grid);
-//            }
-//        });
-//
-//        return Ext.create('Ext.container.Container', {
-//            flex: 1,
-//            items: items,
-//            autoScroll: true,
-//            padding: 20,
-//            title: me.getModelName(modelName)
-//        });
-//    },
-
-
-
-//    createOneToManyItem: function (association, record) {
-//        var me = this;
-//
-//        var grid = Ext.create('Shopware.grid.Panel', {
-//            store: me.getAssociationStore(record, association),
-//            subApp: me.subApp,
-//            minHeight: 300,
-//            flex: 1,
-//            displayConfig: {
-//                searchField: false,
-//                pagingbar: false,
-//                editColumn: false,
-//                hasOwnController: true
-//            }
-//        });
-//
-//        me.associationComponents[association.associationKey] = grid;
-//
-//        grid.title = me.getModelName(association.associatedName);
-//        return grid;
-//    },
-
-
-
-
-    createManyToManyItem: function (association, record) {
-        var me = this, model, component;
-
-        model = Ext.create(association.associatedName);
-
-        component = me.subApp.getView(model.getConfig('related')).create({
-            store: me.getAssociationStore(record, association),
-            flex: 1,
-            subApp: me.subApp
-        });
-
-        me.associationComponents[association.associationKey] = component;
-
-        return Ext.create('Ext.container.Container', {
-            items: [ component ],
-            layout: { type: 'vbox', align: 'stretch' },
-            title: me.getModelName(association.associatedName),
-            autoScroll: true,
-            border: false
-        });
-    },
-
-
-
 
     /**
      * Creates all docked items for the detail window

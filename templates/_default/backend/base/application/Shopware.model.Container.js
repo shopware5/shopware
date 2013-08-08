@@ -2,9 +2,7 @@
 Ext.define('Shopware.model.Container', {
 
     extend: 'Ext.container.Container',
-
     autoScroll: true,
-    padding: 20,
 
     /**
      * List of classes to mix into this class.
@@ -35,7 +33,14 @@ Ext.define('Shopware.model.Container', {
              *      attribute_attr1: { fieldLabel: 'OwnLabel' }
              *  }
              */
-            fields: { }
+            fields: { },
+
+            /**
+             * Contains all associations which will be displayed within
+             * this component.
+             * @type { Array }
+             */
+            associations: [  ]
         },
 
         /**
@@ -107,11 +112,53 @@ Ext.define('Shopware.model.Container', {
     },
 
     createItems: function() {
-        var me = this, items = [], modelName = me.record.$className;
+        var me = this, items = [], item,
+            associations, modelName = me.record.$className;
 
         items.push(me.createModelFieldSet(modelName, ''));
 
+        associations = me.getAssociations(
+            modelName,
+            { associationKey: me.getConfig('associations') }
+        );
+
+        Ext.each(associations, function(association) {
+            var model = Ext.create(association.associatedName);
+            var store = me.getAssociationStore(me.record, association);
+
+            switch (association.relation.toLowerCase()) {
+                case 'onetoone':
+                    item = me.createAssociationComponent('detail', model, store);
+                    break;
+                case 'onetomany':
+                    item = me.createAssociationComponent('listing', model, store);
+                    break;
+                case 'manytomany':
+                    item = me.createAssociationComponent('related', model, store);
+                    break;
+            }
+            items.push(item);
+        });
+
         return items;
+    },
+
+    /**
+     * Helper function which creates all model components.
+     *
+     * @param type { String }
+     * @param model { Shopware.data.Model }
+     * @param store { Ext.data.Store }
+     * @returns { Object }
+     */
+    createAssociationComponent: function(type, model, store) {
+        var componentType = model.getConfig(type);
+
+        return Ext.create(componentType, {
+            record: model,
+            store: store,
+            flex: 1
+        });
     },
 
 
