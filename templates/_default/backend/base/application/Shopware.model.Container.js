@@ -3,6 +3,7 @@ Ext.define('Shopware.model.Container', {
 
     extend: 'Ext.container.Container',
     autoScroll: true,
+    associationComponents: [],
 
     /**
      * List of classes to mix into this class.
@@ -30,7 +31,6 @@ Ext.define('Shopware.model.Container', {
              * @example
              *  fields: {
              *      name: { fieldLabel: 'OwnLabel' },
-             *      attribute_attr1: { fieldLabel: 'OwnLabel' }
              *  }
              */
             fields: { },
@@ -106,6 +106,8 @@ Ext.define('Shopware.model.Container', {
 
     initComponent: function() {
         var me = this;
+
+        me.associationComponents = [];
         me.items = me.createItems();
         me.title = me.getModelName(me.record.$className);
         me.callParent(arguments);
@@ -113,31 +115,23 @@ Ext.define('Shopware.model.Container', {
 
     createItems: function() {
         var me = this, items = [], item,
-            associations, modelName = me.record.$className;
+            associations;
 
-        items.push(me.createModelFieldSet(modelName, ''));
+        items.push(me.createModelFieldSet(me.record.$className, ''));
 
         associations = me.getAssociations(
-            modelName,
+            me.record.$className,
             { associationKey: me.getConfig('associations') }
         );
 
         Ext.each(associations, function(association) {
-            var model = Ext.create(association.associatedName);
-            var store = me.getAssociationStore(me.record, association);
-
-            switch (association.relation.toLowerCase()) {
-                case 'onetoone':
-                    item = me.createAssociationComponent('detail', model, store);
-                    break;
-                case 'onetomany':
-                    item = me.createAssociationComponent('listing', model, store);
-                    break;
-                case 'manytomany':
-                    item = me.createAssociationComponent('related', model, store);
-                    break;
-            }
+            item = me.createAssociationComponent(
+                me.getComponentTypeOfAssociation(association),
+                Ext.create(association.associatedName),
+                me.getAssociationStore(me.record, association)
+            );
             items.push(item);
+            me.associationComponents[association.associationKey] = item;
         });
 
         return items;
@@ -294,5 +288,24 @@ Ext.define('Shopware.model.Container', {
         }
 
         return formField;
+    },
+
+
+    reloadData: function(store, record) {
+        var me = this, association, component, associationStore;
+
+        Object.keys(me.associationComponents).forEach(function(key) {
+            component = me.associationComponents[key];
+
+            if (component && typeof component.reloadData === 'function') {
+                association = me.getAssociations(record.$className, [ { associationKey: [ key ] } ]);
+                associationStore = me.getAssociationStore(record, association[0]);
+
+                component.reloadData(
+                    associationStore,
+                    record
+                );
+            }
+        });
     }
 });
