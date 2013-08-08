@@ -1,0 +1,4 @@
+From: experimental/update-doctrine
+To: next
+Conflict: (content) Merge conflict in tests/Shopware/Tests/Controllers/Backend/NotificationTest.php
+	MODIFY|tests/Shopware/Tests/Controllers/Backend/NotificationTest.php
