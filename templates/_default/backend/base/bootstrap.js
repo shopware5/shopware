@@ -61,6 +61,24 @@
 {include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
 {include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
 
+
+//Shopware backend application components
+{include file='backend/base/application/Shopware.model.Helper.js'}
+{include file='backend/base/application/Shopware.grid.Controller.js'}
+{include file='backend/base/application/Shopware.grid.Panel.js'}
+{include file='backend/base/application/Shopware.data.Model.js'}
+{include file='backend/base/application/Shopware.store.Listing.js'}
+{include file='backend/base/application/Shopware.window.Detail.js'}
+{include file='backend/base/application/Shopware.window.Listing.js'}
+{include file='backend/base/application/Shopware.window.Progress.js'}
+{include file='backend/base/application/Shopware.model.Error.js'}
+{include file='backend/base/application/Shopware.grid.Association.js'}
+{include file='backend/base/application/Shopware.model.Container.js'}
+{include file='backend/base/application/Shopware.form.field.Search.js'}
+{include file='backend/base/application/Shopware.detail.Controller.js'}
+{include file='backend/base/field/Shopware.form.field.Tax.js'}
+
+
 {* Include global models *}
 {include file='backend/base/model/user.js'}
 {include file='backend/base/model/category.js'}
@@ -155,16 +173,3 @@
 {include file='backend/base/component/element/media_selection.js'}
 
 
-//Shopware backend application components
-{include file='backend/base/application/Shopware.model.Helper.js'}
-{include file='backend/base/application/Shopware.grid.Controller.js'}
-{include file='backend/base/application/Shopware.grid.Panel.js'}
-{include file='backend/base/application/Shopware.data.Model.js'}
-{include file='backend/base/application/Shopware.store.Listing.js'}
-{include file='backend/base/application/Shopware.window.Detail.js'}
-{include file='backend/base/application/Shopware.window.Listing.js'}
-{include file='backend/base/application/Shopware.window.Progress.js'}
-{include file='backend/base/application/Shopware.model.Error.js'}
-{include file='backend/base/application/Shopware.grid.Association.js'}
-{include file='backend/base/application/Shopware.model.Container.js'}
-{include file='backend/base/application/Shopware.form.field.Search.js'}

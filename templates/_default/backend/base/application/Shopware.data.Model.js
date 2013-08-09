@@ -9,32 +9,12 @@ Ext.define('Shopware.data.Model', {
     extend: 'Ext.data.Model',
 
     /**
-     * Model proxy which defines
-     * the urls for the CRUD actions.
-     */
-    proxy: {
-        type: 'ajax',
-        api: {
-            detail:  '{url controller="base" action="detail"}',
-            create:  '{url controller="base" action="create"}',
-            update:  '{url controller="base" action="update"}',
-            destroy: '{url controller="base" action="delete"}'
-        },
-        reader: {
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
-    },
-
-
-    /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
      * @type { Object }
      */
-    statics: {
+    shopware: {
 
         displayConfig: {
             controller: undefined,
@@ -42,7 +22,28 @@ Ext.define('Shopware.data.Model', {
             listing: 'Shopware.grid.Panel',         // oneToMany & own listing view
             detail:  'Shopware.model.Container',    // oneToOne & own detail view
             related: 'Shopware.grid.Association',   // manyToMany
-            field:   'Shopware.form.field.Search'   // manyToOne (Combo box to search)
+
+            field:   'Shopware.form.field.Search',   // manyToOne (Combo box to search)
+
+
+            /**
+             * Model proxy which defines
+             * the urls for the CRUD actions.
+             */
+            proxy: {
+                type: 'ajax',
+                api: {
+                    detail:  '{url controller="base" action="detail"}',
+                    create:  '{url controller="base" action="create"}',
+                    update:  '{url controller="base" action="update"}',
+                    destroy: '{url controller="base" action="delete"}'
+                },
+                reader: {
+                    type: 'json',
+                    root: 'data',
+                    totalProperty: 'total'
+                }
+            }
         },
 
         /**
@@ -91,7 +92,7 @@ Ext.define('Shopware.data.Model', {
      */
     constructor: function (config) {
         var me = this;
-        me._opts = me.statics().getDisplayConfig(config, this.displayConfig);
+        me._opts = me.shopware.getDisplayConfig(config, this.displayConfig);
         me.convertProxyApi();
         me.callParent(arguments);
     },
@@ -117,9 +118,11 @@ Ext.define('Shopware.data.Model', {
         var me = this, value;
 
         if (!me.getConfig('controller')) {
-            me.proxy = null;
             return;
         }
+
+        me.setProxy(me.getConfig('proxy'));
+
         Object.keys(me.proxy.api).forEach(function (key) {
             value = me.proxy.api[key] + '';
             value = value.replace(

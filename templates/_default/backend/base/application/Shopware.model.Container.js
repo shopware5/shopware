@@ -26,6 +26,7 @@ Ext.define('Shopware.model.Container', {
          * It contains properties for the single elements within this component.
          */
         displayConfig: {
+            searchController: undefined,
 
             /**
              * @example
@@ -40,7 +41,10 @@ Ext.define('Shopware.model.Container', {
              * this component.
              * @type { Array }
              */
-            associations: [  ]
+            associations: [  ],
+
+
+            fieldAlias: undefined
         },
 
         /**
@@ -107,17 +111,23 @@ Ext.define('Shopware.model.Container', {
     initComponent: function() {
         var me = this;
 
+        me.fieldAssociations = me.getAssociations(me.record.$className, [
+            { relation: 'ManyToOne' }
+        ]);
+
         me.associationComponents = [];
         me.items = me.createItems();
         me.title = me.getModelName(me.record.$className);
         me.callParent(arguments);
     },
 
+
+
     createItems: function() {
         var me = this, items = [], item,
             associations;
 
-        items.push(me.createModelFieldSet(me.record.$className, ''));
+        items.push(me.createModelFieldSet(me.record.$className, me.getConfig('fieldAlias')));
 
         associations = me.getAssociations(
             me.record.$className,
@@ -130,8 +140,10 @@ Ext.define('Shopware.model.Container', {
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association)
             );
-            items.push(item);
-            me.associationComponents[association.associationKey] = item;
+            if(item) {
+                items.push(item);
+                me.associationComponents[association.associationKey] = item;
+            }
         });
 
         return items;
@@ -242,7 +254,9 @@ Ext.define('Shopware.model.Container', {
      * @return Ext.form.field.Field
      */
     createModelField: function (model, field, alias) {
-        var me = this, formField = {}, config, customConfig, name;
+        var me = this, formField = {},
+            config, customConfig, name,
+            fieldModel, fieldComponent, xtype;
 
         if (model.idProperty === field.name) {
             return null;
@@ -254,7 +268,6 @@ Ext.define('Shopware.model.Container', {
         formField.labelWidth = 130;
         formField.name = field.name;
 
-        alias += '';
         if (alias !== undefined && Ext.isString(alias) && alias.length > 0) {
             formField.name = alias + '[' + field.name + ']';
         }
@@ -278,6 +291,22 @@ Ext.define('Shopware.model.Container', {
                 break;
         }
 
+        var fieldAssociation = me.getFieldAssociation(field);
+        if (fieldAssociation !== undefined) {
+            fieldModel = Ext.create(fieldAssociation.associatedName);
+            fieldComponent = fieldModel.getConfig('field');
+            xtype = Ext.ClassManager.getAliasesByName(fieldComponent);
+            formField.xtype = xtype[0].replace('widget.', '');
+
+            if (fieldComponent === 'Shopware.form.field.Search') {
+                formField.displayConfig = {
+                    associationKey: fieldAssociation.associationKey,
+                    associationModel: fieldAssociation.associatedName,
+                    searchController: me.getConfig('searchController')
+                };
+            }
+        }
+
         name = field.name;
         if (alias) name = alias + '_' + field.name;
 
@@ -286,10 +315,21 @@ Ext.define('Shopware.model.Container', {
             customConfig = config[name] || {};
             formField = Ext.apply(formField, customConfig);
         }
-
+        
         return formField;
     },
 
+    getFieldAssociation: function(field) {
+        var me = this, fieldAssociation = undefined;
+
+        Ext.each(me.fieldAssociations, function(association) {
+            if (association.field === field.name) {
+                fieldAssociation = association;
+                return false;
+            }
+        });
+        return fieldAssociation;
+    },
 
     reloadData: function(store, record) {
         var me = this, association, component, associationStore;

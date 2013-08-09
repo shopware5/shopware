@@ -384,20 +384,103 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->delete(
-                $this->Request()->getParam('id', array())
+                $this->Request()->getParam('id', null)
             )
         );
     }
 
 
-    protected function save(array $data)
+    protected function save($data)
     {
-        $detail = $this->getDetail($data['id']);
-        return array('success' => true, 'data' => $detail['data']);
+        try {
+            /**@var $model \Shopware\Components\Model\ModelEntity */
+            $model = new $this->model();
+            if (!empty($data['id'])) {
+                $model = Shopware()->Models()->find($this->model, $data['id']);
+            } else {
+                Shopware()->Models()->persist($model);
+            }
+            $data = $this->resolveExtJsData($data);
+            $model->fromArray($data);
+
+            $violations = Shopware()->Models()->validate($model);
+            $errors = array();
+            /**@var $violation Symfony\Component\Validator\ConstraintViolation */
+            foreach ($violations as $violation) {
+                $errors[] = array(
+                    'message' => $violation->getMessage(),
+                    'property' => $violation->getPropertyPath()
+                );
+            }
+
+            if (!empty($errors)) {
+                return array('success' => false, 'violations' => $errors);
+            }
+
+            Shopware()->Models()->flush();
+
+            $detail = $this->getDetail($data['id']);
+
+            return array('success' => true, 'data' => $detail['data']);
+        } catch (Exception $e) {
+            return array('success' => true, 'error' => $e->getMessage());
+        }
     }
 
-    protected function delete(array $ids)
+
+    protected function resolveExtJsData($data) {
+        $metaData = Shopware()->Models()->getClassMetadata($this->model);
+
+        foreach($metaData->getAssociationMappings() as $mapping) {
+            if (!$mapping['isOwningSide']) {
+                continue;
+            }
+
+            //many to one
+            if ($mapping['type'] === 1) {
+                $column = $mapping['joinColumns'][0]['name'];
+                $field = $metaData->getFieldForColumn($column);
+
+                if ($data[$field]) {
+                    $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $data[$field]);
+                    $associationModel->__load();
+                    $data[$mapping['fieldName']] = $associationModel;
+                    unset($data[$field]);
+                }
+
+            //many to many
+            } elseif ($mapping['type'] === 8) {
+                $associationData = $data[$mapping['fieldName']];
+                $associationModels = array();
+                foreach($associationData as $singleData) {
+                    $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $singleData['id']);
+                    if ($associationModel) {
+                        $associationModels[] = $associationModel;
+                    }
+                }
+                $data[$mapping['fieldName']] = $associationModels;
+            }
+
+        }
+        return $data;
+    }
+
+
+    protected function delete($id)
     {
+        if (empty($id)) {
+            return array('success' => false, 'error' => 'The id parameter contains no value.');
+        }
+
+        $model = Shopware()->Models()->find($this->model, $id);
+
+        if (!($model instanceof $this->model)) {
+            return array('success' => false, 'error' => 'The passed id parameter exists no more.');
+        }
+
+        Shopware()->Models()->remove($model);
+        Shopware()->Models()->flush();
+
         return array('success' => true);
     }
 
