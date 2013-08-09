@@ -25,16 +25,13 @@ Ext.define('Shopware.window.Detail', {
             eventAlias: undefined,
 
             /**
-             * Name of the php controller with extends the Shopware_Controllers_Backend_Application.
-             */
-            searchController: undefined,
-
-            /**
              * Array of associations which has an own tab item.
              * To display an association in an own tab item, add the associationKey to this array.
              *
              */
-            tabItemAssociations: []
+            tabItemAssociations: [],
+
+            hasOwnController: false
         },
 
         /**
@@ -110,8 +107,40 @@ Ext.define('Shopware.window.Detail', {
 
         me.items = [ me.createFormPanel() ];
         me.dockedItems = me.createDockedItems();
+
+        if (me.getConfig('hasOwnController') === false) {
+            me.createDefaultController();
+        }
+
         me.callParent(arguments);
         me.loadRecord(me.record);
+    },
+
+    createDefaultController: function() {
+        var me = this;
+
+        me.controller = me.subApp.getController('Shopware.detail.Controller');
+        me.controller._opts.detailWindow = me.$className;
+        me.controller._opts.eventAlias = me.eventAlias;
+        me.controller.reloadControls();
+
+        return me.controller;
+    },
+
+    /**
+     * Event bus workaround.
+     * The detail controller isn't assigned to any sub application.
+     * To prevent a duplicate event handling, the controller event listeners
+     * has to be destroyed if the detail window will be destroyed.
+     *
+     * @returns { Object }
+     */
+    destroy: function() {
+        var me = this;
+        if (!me.getConfig('hasOwnController') && me.controller) {
+            me.subApp.eventbus.uncontrol([me.controller.$className]);
+        }
+        return me.callParent(arguments);
     },
 
 
@@ -337,7 +366,8 @@ Ext.define('Shopware.window.Detail', {
         this.loadAssociationData(record);
     },
 
-    
+
+
     loadAssociationData: function(record) {
         var me = this, association, component, store;
 
@@ -360,16 +390,30 @@ Ext.define('Shopware.window.Detail', {
         });
     },
 
+
+
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
         this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
 
     onSave: function () {
-        this.destroy();
+        this.fireEvent(
+            this.getEventName('save'), this, this.record
+        );
     },
 
     onCancel: function () {
         this.destroy();
+    },
+
+    /**
+     * Helper function to prefix the passed event name with the event alias.
+     *
+     * @param name
+     * @returns { string }
+     */
+    getEventName: function (name) {
+        return this.eventAlias + '-' + name;
     }
 
 });

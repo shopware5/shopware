@@ -96,6 +96,7 @@ Ext.define('Shopware.model.Helper', {
         return associations;
     },
 
+
     /**
      * Helper function which returns the associated store of the passed association.
      * If the passed records contains no instance of the association, the function
@@ -132,8 +133,7 @@ Ext.define('Shopware.model.Helper', {
      * @returns boolean
      */
     matchAssociationConditions: function (association, conditions) {
-        var me = this,
-            associationInstance = Ext.create(association.associatedName),
+        var associationInstance = Ext.create(association.associatedName),
             match = false;
 
         //if no conditions passed, the loop won't be accessed

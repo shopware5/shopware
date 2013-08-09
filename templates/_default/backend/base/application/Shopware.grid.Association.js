@@ -178,18 +178,16 @@ Ext.define('Shopware.grid.Association', {
     createSearchCombo: function (store) {
         var me = this;
 
-        return Ext.create('Ext.form.field.ComboBox', {
+        return Ext.create('Shopware.form.field.Search', {
             name: 'associationSearchField',
-            queryMode: 'remote',
             store: store,
-            valueField: 'id',
+            displayConfig: {
+                searchController: me.getConfig('searchController')
+            },
             pageSize: 20,
             flex: 1,
-            displayField: 'name',
-            minChars: 2,
             fieldLabel: 'Search for',
             margin: 5,
-            listConfig: me.createSearchComboListConfig(),
             listeners: {
                 select: function (combo, records) {
                     me.onSelectSearchItem(combo, records);
@@ -198,13 +196,12 @@ Ext.define('Shopware.grid.Association', {
         });
     },
 
-
     /**
      * Creates the Ext.data.Store for the search combo box.
      * The combo box store requires the association definition of the
      * displayed data. The association key will be added as extra parameter.
      *
-     * @param association { Object }
+     * @param associationKey { Object }
      * @param searchUrl { String }
      * @returns { Ext.data.Store }
      */
@@ -221,25 +218,6 @@ Ext.define('Shopware.grid.Association', {
             }
         });
     },
-
-    /**
-     * Creates a listing configuration for the search combo box.
-     * The search combo box is used for many to many association components.
-     * The association parameter is only passed to allow the override component
-     * identify which association search combo will be created.
-     *
-     * @returns object
-     */
-    createSearchComboListConfig: function () {
-        return {
-            getInnerTpl: function () {
-                return '{literal}<a class="search-item">' +
-                    '<h4>{name}</h4><span><br />{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
-                    '</a>{/literal}';
-            }
-        }
-    },
-
 
     /**
      * Event listener function of the combo box.
