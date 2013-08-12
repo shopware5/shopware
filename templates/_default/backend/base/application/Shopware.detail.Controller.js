@@ -179,6 +179,7 @@ Ext.define('Shopware.detail.Controller', {
         form.getForm().updateRecord(record);
 
         proxy.on('exception', function (proxy, response, operation) {
+            window.setLoading(false);
             data = Ext.decode(response.responseText);
             if (data.violations && data.violations.length > 0) {
                 me.createViolationMessage(data.violations);
@@ -186,8 +187,10 @@ Ext.define('Shopware.detail.Controller', {
             }
         }, me, { single: true });
 
+        window.setLoading(true);
         record.save({
             success: function(result) {
+                window.setLoading(false);
                 Shopware.Notification.createGrowlMessage('Success', 'Item saved successfully');
                 window.loadRecord(result);
             }

@@ -2,6 +2,7 @@
 Ext.define('Shopware.form.field.Search', {
 
     extend: 'Ext.form.field.ComboBox',
+
     xtype: 'widget.shopware-form-field-search',
 
     queryMode: 'remote',
@@ -14,6 +15,14 @@ Ext.define('Shopware.form.field.Search', {
 
     displayConfig: { },
 
+    /**
+     * The combo box store have to be set from outside.
+     * Normally the store is created over the { @link Shopware.model.Helper:createAssociationSearchStore } function.
+     * The { @link Shopware.form.field.Search } component is used from the { @link Shopware.grid.Association } and
+     * the { @link Shopware.model.Container }
+     * @required
+     */
+    store: undefined,
 
     /**
      * The statics object contains the shopware default configuration for
@@ -41,10 +50,7 @@ Ext.define('Shopware.form.field.Search', {
          * });
          */
         displayConfig: {
-            associationKey: undefined,
-            associationModel: undefined,
-            searchController: undefined,
-            searchUrl: '{url controller="base" action="searchAssociation"}'
+
         },
 
         /**
@@ -89,15 +95,6 @@ Ext.define('Shopware.form.field.Search', {
         }
     },
 
-    setSearchController: function(controller) {
-        var me = this,
-            searchUrl = me.statics().displayConfig.searchUrl;
-
-        me._opts['searchUrl'] = searchUrl.replace(
-            '/backend/base/', '/backend/' + controller.toLowerCase() + '/'
-        );
-    },
-
     /**
      * Helper function to get config access.
      *
@@ -122,17 +119,12 @@ Ext.define('Shopware.form.field.Search', {
         me.callParent(arguments);
     },
 
+    /**
+     * Initials the whole component and the sub elements.
+     */
     initComponent: function() {
         var me = this;
 
-        if (!me.store) {
-            me.store = me.createSearchComboStore(
-                me.getConfig('associationKey'),
-                me.getConfig('searchUrl'),
-                me.getConfig('associationModel')
-            );
-            me.store.load();
-        }
         me.listConfig = me.createSearchComboListConfig();
 
         me.callParent(arguments);
@@ -150,36 +142,18 @@ Ext.define('Shopware.form.field.Search', {
     createSearchComboListConfig: function () {
         return {
             getInnerTpl: function () {
-                return '{literal}<a class="search-item">' +
-                    '<h4>{name}</h4><span><br />{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
-                    '</a>{/literal}';
+                return '{literal}' +
+                    '<a class="search-item">' +
+                        '<h4>{name}</h4>' +
+                        '<tpl if="values.description">' +
+                            '<br /><span>{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
+                        '</tpl>' +
+                    '</a>' +
+                '{/literal}';
             }
         }
-    },
-
-
-    /**
-     * Creates the Ext.data.Store for the search combo box.
-     * The combo box store requires the association definition of the
-     * displayed data. The association key will be added as extra parameter.
-     *
-     * @param associationKey { Object }
-     * @param searchUrl { String }
-     * @returns { Ext.data.Store }
-     */
-    createSearchComboStore: function (associationKey, searchUrl, model) {
-        var me = this;
-
-        return Ext.create('Ext.data.Store', {
-            model: model,
-            proxy: {
-                type: 'ajax',
-                url: searchUrl,
-                reader: { type: 'json', root: 'data', totalProperty: 'total' },
-                extraParams: { association: associationKey }
-            }
-        });
     }
+
 
 
 });

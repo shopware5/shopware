@@ -378,7 +378,30 @@ Ext.define('Shopware.model.Helper', {
                 return 'field';
         }
         return false;
-    }
+    },
+
+
+    /**
+     * Creates an store for association search fields like many to one association
+     * or for the { @link Shopware.grid.Association } component.
+     * The store contains an extra parameter for the association key.
+     *
+     * @param model { String }
+     * @param associationKey { String }
+     * @param searchUrl { String }
+     * @returns { Ext.data.Store }
+     */
+    createAssociationSearchStore: function (model, associationKey, searchUrl) {
+        return Ext.create('Ext.data.Store', {
+            model: model,
+            proxy: {
+                type: 'ajax',
+                url: searchUrl,
+                reader: { type: 'json', root: 'data', totalProperty: 'total' },
+                extraParams: { association: associationKey }
+            }
+        });
+    },
 
 
 });
