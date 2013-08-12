@@ -944,17 +944,21 @@ class sAdmin
             // Some error occurs
             $sErrorMessages[] = $this->snippetObject->get('ErrorFillIn','Please fill in all red fields');
         }
-        if (!$edit){
-            if (!count($sErrorMessages)){
-                foreach ($rules as $ruleKey => $ruleValue){
-                    $this->sSYSTEM->_SESSION["sRegister"]["shipping"][$ruleKey] = $p[$ruleKey];
+
+        $registerSession = $this->sSYSTEM->_SESSION["sRegister"];
+        if (!$edit) {
+            if (!count($sErrorMessages)) {
+                foreach ($rules as $ruleKey => $ruleValue) {
+                    $registerSession["shipping"][$ruleKey] = $p[$ruleKey];
                 }
             } else {
-                foreach ($rules as $ruleKey => $ruleValue){
-                    unset($this->sSYSTEM->_SESSION["sRegister"]["shipping"][$ruleKey]);
+                foreach ($rules as $ruleKey => $ruleValue) {
+                    unset($registerSession["shipping"][$ruleKey]);
                 }
             }
         }
+        $this->sSYSTEM->_SESSION["sRegister"] = $registerSession;
+
         list($sErrorMessages,$sErrorFlag) = Enlight()->Events()->filter('Shopware_Modules_Admin_ValidateStep2Shipping_FilterResult', array($sErrorMessages,$sErrorFlag), array('edit'=>$edit,'rules'=>$rules,'subject'=>$this,"post"=>$this->sSYSTEM->_POST));
 
         return array("sErrorFlag"=>$sErrorFlag,"sErrorMessages"=>$sErrorMessages);
