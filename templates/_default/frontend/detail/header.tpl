@@ -83,7 +83,7 @@
             'articleId': ~~(1 * '{$sArticle.articleID}'),
             'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
             'articleName': '{$sArticle.articleName}',
-            'thumbnail': getThumbnailSize('{$sLastArticles.ThumbnailSize}'),
+            'thumbnail': getThumbnailSize('{$sLastArticles.ThumbnailSize}')
             {rdelim};
 
         jQuery(function($) {
