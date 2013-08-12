@@ -19,12 +19,53 @@ Ext.define('Shopware.data.Model', {
         displayConfig: {
             controller: undefined,
 
-            listing: 'Shopware.grid.Panel',         // oneToMany & own listing view
-            detail:  'Shopware.model.Container',    // oneToOne & own detail view
-            related: 'Shopware.grid.Association',   // manyToMany
+            /**
+             * Listing component of this model.
+             * The component configuration is used for the detail window of an application.
+             * Listing components are used for OneToMany associations.
+             * As default shopware creates a { @link Shopware.grid.Panel }.
+             * Each view definition is required if you want to support
+             * that other applications can be linked to your models.
+             *
+             * @type { String }
+             */
+            listing: 'Shopware.grid.Panel',
 
-            field:   'Shopware.form.field.Search',   // manyToOne (Combo box to search)
+            /**
+             * Detail component of this model.
+             * The component configuration is used for the detail window of an application.
+             * Detail components are used for OneToOne associations or for the base record of a detail window.
+             * As default shopware creates a { @link Shopware.model.Container }.
+             * Each view definition is required if you want to support
+             * that other applications can be linked to your models.
+             *
+             * @type { String }
+             */
+            detail:  'Shopware.model.Container',
 
+            /**
+             * Related component of this model.
+             * The component configuration is used for the detail window of an application.
+             * Related components are used for ManyToMany associations.
+             * As default shopware creates a { @link Shopware.grid.Association }.
+             * Each view definition is required if you want to support
+             * that other applications can be linked to your models.
+             *
+             * @type { String }
+             */
+            related: 'Shopware.grid.Association',
+
+            /**
+             * Field component of this model.
+             * The component configuration is used for the detail window of an application.
+             * Field components are used for ManyToOne associations.
+             * As default shopware creates a { @link Shopware.form.field.Search }.
+             * Each view definition is required if you want to support
+             * that other applications can be linked to your models.
+             *
+             * @type { String }
+             */
+            field:   'Shopware.form.field.Search',
 
             /**
              * Model proxy which defines

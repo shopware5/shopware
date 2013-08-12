@@ -437,13 +437,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             }
 
             //many to one
-            if ($mapping['type'] === 1) {
+            if ($mapping['type'] === 2) {
                 $column = $mapping['joinColumns'][0]['name'];
                 $field = $metaData->getFieldForColumn($column);
 
                 if ($data[$field]) {
                     $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $data[$field]);
-                    $associationModel->__load();
+                    if ($associationModel instanceof \Doctrine\Common\Persistence\Proxy && method_exists($associationModel, '__load')) {
+                        $associationModel->__load();
+                    }
                     $data[$mapping['fieldName']] = $associationModel;
                     unset($data[$field]);
                 }

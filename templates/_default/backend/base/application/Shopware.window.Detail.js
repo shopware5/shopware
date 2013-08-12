@@ -18,19 +18,42 @@ Ext.define('Shopware.window.Detail', {
     width: 990,
     height: '90%',
     alias: 'widget.shopware-window-detail',
+
+
+    /**
+     * Internal collection of all created association components
+     * which created in this component.
+     * The array elements are indexed with the association key.
+     * The base component for the main record is indexed with "baseRecord".
+     *
+     * @type { Array }
+     */
     associationComponents: [],
 
     statics: {
         displayConfig: {
+
+            /**
+             * Alias for the component events.
+             *
+             * @optional
+             */
             eventAlias: undefined,
 
             /**
              * Array of associations which has an own tab item.
              * To display an association in an own tab item, add the associationKey to this array.
              *
+             * @optional
              */
             tabItemAssociations: [],
 
+
+            /**
+             * Flag if the component is already controlled by an application controller.
+             *
+             * @optional
+             */
             hasOwnController: false
         },
 
@@ -75,6 +98,7 @@ Ext.define('Shopware.window.Detail', {
 
     /**
      * Class constructor which merges the different configurations.
+     *
      * @param opts
      */
     constructor: function (opts) {
@@ -86,6 +110,7 @@ Ext.define('Shopware.window.Detail', {
 
     /**
      * Helper function to get config access.
+     *
      * @param prop string
      * @returns mixed
      * @constructor

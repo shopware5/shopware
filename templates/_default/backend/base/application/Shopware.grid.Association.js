@@ -31,9 +31,11 @@ Ext.define('Shopware.grid.Association', {
          * });
          */
         displayConfig: {
-            association: undefined,
+            associationKey: undefined,
             searchController: undefined,
             searchUrl: '{url controller="base" action="searchAssociation"}',
+
+
             searchCombo: true,
             pagingbar: false,
             actionColumn: true,
@@ -155,12 +157,12 @@ Ext.define('Shopware.grid.Association', {
         var me = this, items = [], combo;
 
         if (me.getConfig('searchCombo')) {
-            combo = me.createSearchCombo(
-                me.createSearchComboStore(
-                    me.getConfig('associationKey'),
-                    me.getConfig('searchUrl')
-                )
+            me.searchStore = me.createAssociationSearchStore(
+                me.getStore().model,
+                me.getConfig('associationKey'),
+                me.getConfig('searchUrl')
             );
+            combo = me.createSearchCombo(me.searchStore);
             items.push(combo);
         }
 
@@ -181,9 +183,6 @@ Ext.define('Shopware.grid.Association', {
         return Ext.create('Shopware.form.field.Search', {
             name: 'associationSearchField',
             store: store,
-            displayConfig: {
-                searchController: me.getConfig('searchController')
-            },
             pageSize: 20,
             flex: 1,
             fieldLabel: 'Search for',
@@ -196,28 +195,7 @@ Ext.define('Shopware.grid.Association', {
         });
     },
 
-    /**
-     * Creates the Ext.data.Store for the search combo box.
-     * The combo box store requires the association definition of the
-     * displayed data. The association key will be added as extra parameter.
-     *
-     * @param associationKey { Object }
-     * @param searchUrl { String }
-     * @returns { Ext.data.Store }
-     */
-    createSearchComboStore: function (associationKey, searchUrl) {
-        var me = this;
 
-        return Ext.create('Ext.data.Store', {
-            model: me.getStore().model,
-            proxy: {
-                type: 'ajax',
-                url: searchUrl,
-                reader: { type: 'json', root: 'data', totalProperty: 'total' },
-                extraParams: { association: associationKey }
-            }
-        });
-    },
 
     /**
      * Event listener function of the combo box.
