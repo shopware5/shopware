@@ -5758,7 +5758,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     }
 })(jQuery, window, document);
 
-// JSON Parse for IE7
+// JSON Object Polyfill for IE7
 if (navigator.appVersion.indexOf("MSIE 7.") != -1)
 {
     if (typeof JSON !== 'object') {
@@ -5976,7 +5976,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
     }());
 }
 
-// Remy Sharp
+// Polyfill for older browsers
 if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
 
     var Storage = function (type) {
@@ -6010,7 +6010,6 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
             }
             return null;
         }
-
         function setData(data) {
             data = JSON.stringify(data);
             if (type == 'session') {
@@ -6019,7 +6018,6 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
                 createCookie('localStorage', data, 365);
             }
         }
-
         function clearData() {
             if (type == 'session') {
                 window.name = '';
@@ -6027,14 +6025,13 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
                 createCookie('localStorage', '', 365);
             }
         }
-
         function getData() {
             var data = type == 'session' ? window.name : readCookie('localStorage');
             return data ? JSON.parse(data) : {};
         }
 
 
-        // initialise if there's already data
+// initialise if there's already data
         var data = getData();
 
         return {
@@ -6048,7 +6045,7 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
                 return data[key] === undefined ? null : data[key];
             },
             key: function (i) {
-                // not perfect, but works
+// not perfect, but works
                 var ctr = 0;
                 for (var k in data) {
                     if (ctr == i) return k;
