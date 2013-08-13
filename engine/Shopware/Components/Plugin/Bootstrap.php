@@ -614,6 +614,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     protected function assertVersionGreaterThen($requiredVersion)
     {
         $version = $this->Application()->Config()->version;
+
+        if ($version === '___VERSION___') {
+            return true;
+        }
+
         return version_compare($version, $requiredVersion, '>=');
     }
 
