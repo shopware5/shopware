@@ -163,6 +163,23 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             . $request->getHttpHost()
             . $request->getBaseUrl() . '/';
 
+        // If local file-based proxy is used delete cache files from filesystem
+        $cacheOptions = Shopware()->getOption('HttpCache');
+        if (isset($cacheOptions['cache_dir']) && is_dir($cacheOptions['cache_dir'])) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($cacheOptions['cache_dir']),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $path) {
+                if ($path->isDir()) {
+                    rmdir($path->__toString());
+                } else {
+                    unlink($path->__toString());
+                }
+            }
+        }
+
         try {
             $client = new Zend_Http_Client(null, array(
                 'useragent' => 'Shopware/' . Shopware()->Config()->version,
