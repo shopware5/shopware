@@ -1,0 +1,4 @@
+From: bugfix/next/sw-6225-fix-typo-in-versiongreaterthan
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Components/Plugin/Bootstrap.php
+	MODIFY|engine/Shopware/Components/Plugin/Bootstrap.php
