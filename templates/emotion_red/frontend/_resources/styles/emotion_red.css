@@ -24,7 +24,7 @@
 
 /*	GENERAL
 	------------------------ */
-html, a, a:link, a:active, a:hover, a:visted {color: #333;}
+html, a, a:link, a:active, a:hover, a:visited {color: #333;}
 html {font: 12px/1.3em Arial,"Helvetica Neue",Helvetica,sans-serif; padding-top: 0px;}
 .container_20 {background-color: #fff; border-color: #fff;margin-top: 0;}
 h2, h3 {color:#000}

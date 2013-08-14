@@ -200,7 +200,7 @@ img.left {float:left;margin:1.5em 1.5em 1.5em 0;padding:0;}
 img.right {float:right;margin:1.5em 0 1.5em 1.5em;}
 a:focus, a:hover {color:#000;}
 a {color:#009;text-decoration:underline;}
-a, a:link, a:visted {color:#5E86AC}
+a, a:link, a:visited {color:#5E86AC}
 blockquote {margin:1.5em;color:#666;font-style:italic;}
 strong {font-weight:bold;}
 em, dfn {font-style:italic;}
