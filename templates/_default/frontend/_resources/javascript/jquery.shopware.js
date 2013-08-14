@@ -5759,7 +5759,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 })(jQuery, window, document);
 
 /**
- * JSON polyfill which provides support for <= IE7 using a cookie.
+ * JSON polyfill which provides support for <= IE7
  *
  * @author: Douglas Crockford
  * @link: https://github.com/douglascrockford/JSON-js/blob/master/json2.js
