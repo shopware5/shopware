@@ -76,7 +76,7 @@
             thumbnail = thumbnails[configThumbnailSize];
             return thumbnail;
         };
-        var configLastArticles = {ldelim}
+        var dataLastArticles = {ldelim}
             {foreach $sLastArticlesConfig as $key => $value}
             '{$key}': '{$value}',
             {/foreach}
@@ -87,7 +87,7 @@
             {rdelim};
 
         jQuery(function($) {
-            $('#detail').lastSeenArticlesCollector(configLastArticles);
+            $('#detail').lastSeenArticlesCollector(dataLastArticles);
         });
         //]]>
     </script>
