@@ -5758,7 +5758,12 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     }
 })(jQuery, window, document);
 
-// JSON Object Polyfill for IE7
+/**
+ * JSON polyfill which provides support for <= IE7 using a cookie.
+ *
+ * @author: Douglas Crockford
+ * @link: https://github.com/douglascrockford/JSON-js/blob/master/json2.js
+ */
 if (navigator.appVersion.indexOf("MSIE 7.") != -1)
 {
     if (typeof JSON !== 'object') {
@@ -5976,7 +5981,13 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
     }());
 }
 
-// Polyfill for older browsers
+/**
+ * localStorage polyfill which provides support for < IE7 using a cookie.
+ *
+ * @author: Remy Sharp
+ * @license: MIT http://rem.mit-license.org/
+ * @link: https://gist.github.com/remy/350433
+ */
 if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
 
     var Storage = function (type) {
