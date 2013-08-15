@@ -343,7 +343,16 @@ jQuery(document).ready(function ($) {
 //        $this.parents('form').submit();
 //    });
 
+    $("div.captcha-placeholder[data-src]").each(function() {
+        var $this = $(this),
+            requestURL = $this.attr('data-src') || '';
 
+        if (!requestURL || !requestURL.length) {
+            return false;
+        }
+
+        $this.load(requestURL);
+    });
 });
 
 /**
@@ -805,7 +814,7 @@ jQuery(document).ready(function ($) {
                 'title': 'Slide right',
                 'href': '#slideRight'
             }).appendTo(config._container).hide();
-                
+
             if($.ajaxSlider.isiPad || !config.showArrows) {
                 config.showArrows = false;
                 config._leftArrow.hide();
@@ -1131,7 +1140,7 @@ jQuery(document).ready(function ($) {
                                 } else {
                                     $.ajaxSlider.verticalSlider(config);
                                 }
-                                
+
                                 // Create our own swipe gesturce
                                 if($.ajaxSlider.isiPad) {
                                     $.ajaxSlider.initializeSwipeEvent(config);
@@ -1177,7 +1186,7 @@ jQuery(document).ready(function ($) {
             } else {
                 $.ajaxSlider.verticalSlider(config);
             }
-            
+
             // Create our own swipe gesturce
             if($.ajaxSlider.isiPad) {
                 $.ajaxSlider.initializeSwipeEvent(config);
@@ -1193,7 +1202,7 @@ jQuery(document).ready(function ($) {
                 }, 80);
             }
         },
-        
+
         /**
          * Custom swipe gesturcture implementation
          * which only handles horizontal swipes.
@@ -1209,28 +1218,28 @@ jQuery(document).ready(function ($) {
         initializeSwipeEvent: function(config) {
             var me = this, initialLeft = 0, containerLeft = 0,
                 moveLeft = 0;
-                
+
             // Bind the event listener for the custom event to handle
             // the slide change.
             config._this.bind('swipe.ajaxSlider', me.onHandleSwipeEvent);
-            
+
             // Starting the gesture
             config._this.bind('touchstart', function(event) {
                 containerLeft = config._slideContainer.css('left');
                 containerLeft = ~~(1 * containerLeft.slice(0, -2));
-                
+
                 // Check if we're swiping right now
                 if(!config.swipeRunning) {
                     //... if not, reset the control variables
                     if(moveLeft !== 0) {
-                        moveLeft = 0; 
+                        moveLeft = 0;
                     }
-                    
+
                     if(initialLeft !== 0) {
                         initialLeft = 0;
                     }
                     initialLeft = event.originalEvent.touches[0].pageX;
-                    
+
                     config.swipeRunning = true;
                     config._slideContainer.css({
                         WebkitTransition: 'left 0s ease-out',
@@ -1238,12 +1247,12 @@ jQuery(document).ready(function ($) {
                     });
                 }
             });
-            
+
             // Slide the sliding container
             config._this.bind('touchmove', function(event) {
                 moveLeft = event.originalEvent.touches[0].pageX;
                 var diffLeft = initialLeft - moveLeft;
-                
+
                 if(config.swipeRunning) {
                     if(diffLeft < -40 || diffLeft > 40) {
                         event.preventDefault();
@@ -1255,34 +1264,34 @@ jQuery(document).ready(function ($) {
             config._this.bind('touchend', function(event) {
                 var diffLeft = initialLeft - moveLeft,
                     isRight = false, fireEvent;
-                    
+
                 if(config.swipeRunning) {
                     config.swipeRunning = false;
                 }
-                
+
                 if(diffLeft < 0) {
                     // Swipe to the right
                     diffLeft *= -1;
                     isRight = true;
                 }
-                
+
                 if(diffLeft >= config.minSwipeDistance) {
                     fireEvent = (isRight) ? 'swipeRight' : 'swipeLeft';
                 } else {
                     fireEvent = '';
                 }
-                
+
                 if(fireEvent.length > 0) {
                     event.preventDefault();
                     config._this.trigger({ type: 'swipe.ajaxSlider', distance: diffLeft, direction: fireEvent, config: config, scope: me });
                 } else {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
-                
+
                 config._this.unbind('ajaxSlider.click');
             });
         },
-        
+
         /**
          * Event listener method which will be called when the user
          * swipes his finger at least the configured minimum swipe
@@ -1297,20 +1306,20 @@ jQuery(document).ready(function ($) {
          */
         onHandleSwipeEvent: function(event) {
             var me = event.scope, config = event.config;
-            
+
             config._slideContainer.css({
                 WebkitTransition: 'left 0.25s ease-out',
                 transition: 'left 0.25s ease-out'
             });
-            
+
             if(event.direction === 'swipeRight') {
                 if((config._activeSlide - 1) >= 0) {
-                    me.leftArrow(event, config);   
+                    me.leftArrow(event, config);
                 } else {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
-            } 
-            
+            }
+
             if(event.direction === 'swipeLeft') {
                 if((config._activeSlide + 1) < config._slidesCount) {
                     me.rightArrow(event, config);
@@ -1318,13 +1327,13 @@ jQuery(document).ready(function ($) {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
             }
-            
+
             if(config.layout === 'horizontal') {
                 me.handleArrowsHorizontalSlider(config);
             } else if(config.layout === 'vertical') {
-                me.handleArrowsVerticalSlider(config);  
+                me.handleArrowsVerticalSlider(config);
             }
-            
+
             // Set navigation point to active
             if (config.navigation || config.showNumbers) {
                 // Set this navigation point as active
