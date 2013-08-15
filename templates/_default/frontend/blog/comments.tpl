@@ -1,6 +1,6 @@
 <div class="doublespace">&nbsp;</div>
 <div id="commentcontainer">
-	
+
 	{* Comments headline *}
 	{if $sArticle.comments}
 		{block name='frontend_blog_comments_comments_headline'}
@@ -9,34 +9,34 @@
 		</h2>
 		{/block}
 	{/if}
-	
+
 	{* List comments *}
 	{if $sArticle.comments}
 		<ul>
 			{foreach name=comments from=$sArticle.comments item=vote}
-			
+
 				{block name='frontend_blog_comments_comment_block'}
-				
+
 				<li class="{cycle values='white,grey'}">
 					<div class="comment_outer{if $smarty.foreach.comments.last} last{/if}">
 					<div class="comment_left">
-					
+
 						{* Author *}
 						{block name='frontend_blog_comments_comment_author'}
 						<span class="author">{$vote.name}</span> <span class="date">{$vote.creationDate|date:date_long}</span>
 						{/block}
-						
+
 						{* Stars *}
 						<span class="star star{$vote.points}">{$vote.points}</span>
 					</div>
-					
+
 					<div class="comment_right">
-						
+
 						{* Headline *}
 						{block name='frontend_blog_comments_comment_headline'}
 						<p class="hline">{$vote.headline}</p>
 						{/block}
-						
+
 						{* Comment *}
 						{block name='frontend_blog_comments_comment_text'}
 						<div class="comment">{$vote.comment|nl2br}</div>
@@ -80,7 +80,7 @@
 			<input name="name" type="text" id="sCommentName" value="{$sFormData.name|escape}" class="text{if $sErrorFlag.name} instyle_error{/if}" />
 		</p>
 		{/block}
-		
+
 		{* E-Mail *}
         {block name='frontend_blog_comments_input_mail'}
         <p class="col">
@@ -107,7 +107,7 @@
 			</select>
 		</p>
 		{/block}
-		
+
 		{* Summary *}
 		{block name='frontend_blog_comments_input_summary'}
 		<p class="col">
@@ -115,7 +115,7 @@
 			<input name="headline" type="text" value="{$sFormData.headline|escape}" id="sCommentHeadline" class="text {if $sErrorFlag.headline}instyle_error{/if}" />
 		</p>
 		{/block}
-		
+
 		{* Opinion *}
 		{block name='frontend_blog_comments_input_comment'}
 		<p class="textarea">
@@ -123,14 +123,13 @@
 			<textarea name="comment" id="sComment" class="text {if $sErrorFlag.comment}instyle_error{/if}" rows="5" cols="5">{$sFormData.comment|escape}</textarea>
 		</p>
 		{/block}
-		
+
 		{* Captcha *}
 		{block name='frontend_blog_comments_input_captcha'}
-		<div class="captcha">						
+		<div class="captcha">
 			<div class="grid_4 first last">
-				<img src="{url controller='captcha' rand=$rand}" alt="Captcha" />
-				<input type="hidden" name="sRand"  value="{$rand}" />
-			</div>
+                <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+            </div>
 			<div class="grid_4 first last">
 				<label>{se name="BlogLabelCaptcha"}{/se}</label>
 				<input type="text" name="sCaptcha" class="text{if $sErrorFlag.sCaptcha} instyle_error{else} instyle{/if}" />
@@ -138,14 +137,14 @@
 		</div>
 		{/block}
 		<div class="clear">&nbsp;</div>
-		
+
 		{* Submit button *}
 		<input class="button-right large" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
-		
+
 		<p class="desc">
 			{se name="BlogInfoFields"}{/se}
 		</p>
-		
+
 	</form>
 	<div class="doublespace">&nbsp;</div>
 </div>
