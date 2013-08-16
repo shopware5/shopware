@@ -428,30 +428,95 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
 
-    protected function resolveExtJsData($data) {
+    protected function resolveExtJsData($data)
+    {
         $metaData = Shopware()->Models()->getClassMetadata($this->model);
 
         foreach($metaData->getAssociationMappings() as $mapping) {
+
+            /*
+             * @ORM\OneToOne associations
+             *
+             * Ext JS sends even for one to one associations multi dimensional array with association data.
+             * @example:
+             *    model:            Shopware\Models\Customer\Customer
+             *    association:      $billing  (Shopware\Models\Customer\Billing)
+             *    required data:    array(
+             *                          'id' => 1,
+             *                          'billing' => array(
+             *                              'street' => '...',
+             *                              ...
+             *                          )
+             *                      )
+             *
+             *    Ext JS data:      array(
+             *                          'id' => 1,
+             *                          'billing' => array(
+             *                              0 => array(
+             *                                  'street' => '...',
+             *                                  ...
+             *                              )
+             *                          )
+             *                      )
+             *
+             * So we have to remove the first level of the posted data.
+             */
+            if ($mapping['type'] === 1) {
+                $mappingData = $data[$mapping['fieldName']];
+                if (array_key_exists(0, $mappingData)) {
+                    $data[$mapping['fieldName']] = $data[$mapping['fieldName']][0];
+                }
+            }
+
             if (!$mapping['isOwningSide']) {
                 continue;
             }
 
-            //many to one
             if ($mapping['type'] === 2) {
+                /*
+                 * @ORM\ManyToOne associations.
+                 *
+                 * The many to one associations requires that the associated model
+                 * will be set in the data array.
+                 * To resolve the data we have to find out which column are used for
+                 * the mapping. This column is defined in the joinColumns array.
+                 * To get the passed id, we need to find out the property name of the column.
+                 * After getting the property name of the join column,
+                 * we can use the entity manager to find the target entity.
+                 */
                 $column = $mapping['joinColumns'][0]['name'];
                 $field = $metaData->getFieldForColumn($column);
 
                 if ($data[$field]) {
                     $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $data[$field]);
+
+                    //proxies need to be loaded, otherwise the validation will be failed.
                     if ($associationModel instanceof \Doctrine\Common\Persistence\Proxy && method_exists($associationModel, '__load')) {
                         $associationModel->__load();
                     }
                     $data[$mapping['fieldName']] = $associationModel;
+
+                    //remove the foreign key data.
                     unset($data[$field]);
                 }
 
-            //many to many
             } elseif ($mapping['type'] === 8) {
+                /*
+                 * @ORM\ManyToMany associations.
+                 *
+                 * The data of many to many association are contained in the corresponding field:
+                 * @example
+                 *    model:        Shopware\Models\Article\Article
+                 *    association:  $categories  (mapping table: s_articles_categories)
+                 *    joined:       - s_articles.id <=> s_articles_categories.articleID
+                 *                  - s_categories.id <=> s_articles_categories.categoryID
+                 *
+                 *    passed data:  'categories' => array(
+                 *                      array('id'=>1, ...),
+                 *                      array('id'=>2, ...),
+                 *                      array('id'=>3, ...)
+                 *                  )
+                 */
                 $associationData = $data[$mapping['fieldName']];
                 $associationModels = array();
                 foreach($associationData as $singleData) {
