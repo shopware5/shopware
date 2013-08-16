@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,32 +20,26 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Tellafriend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Action
 {
-    var $sSYSTEM;
+    public $sSYSTEM;
 
     public function init()
     {
         $this->sSYSTEM = Shopware()->System();
     }
 
-    public function successAction(){
-
+    public function successAction()
+    {
         $this->View()->loadTemplate("frontend/tellafriend/index.tpl");
         $this->View()->sSuccess = true;
-
     }
 
     public function indexAction()
@@ -91,12 +85,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             if (!empty(Shopware()->Config()->CaptchaColor)) {
                 $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
                 $rand = $this->Request()->getPost('sRand');
-
-                $random = md5($rand);
-
-                $calculatedValue = substr($random, 0, 5);
-
-                if (empty($rand) || $captcha != $calculatedValue) {
+                if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
                     $variables["sError"] = true;
                 }
             }
@@ -117,7 +106,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                     $context['sComment'] = '';
                 }
 
-                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context,null,array(
+                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, array(
                     "fromMail" => $this->sSYSTEM->_POST["sMail"],
                     "fromName" => $this->sSYSTEM->_POST["sName"]
                 ));
