@@ -2336,8 +2336,6 @@ class sShopwareImport
 	 */
     function sDeleteOtherArticlesCategories($articleID, $categoryIDs)
     {
-        var_dump($categoriesToDelete);
-
         $articleID = intval($articleID);
 
         if (empty($articleID)) {
@@ -2357,8 +2355,6 @@ class sShopwareImport
 			WHERE articleID=$articleID $where";
 
         $categoriesToDelete = $this->sDB->GetCol($categoriesToDeleteSql);
-
-        var_dump($categoriesToDelete);
 
         $sql = "
 			DELETE FROM
