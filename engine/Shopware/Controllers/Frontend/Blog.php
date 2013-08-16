@@ -234,14 +234,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     {
         $blogArticleId = intval($this->Request()->getQuery('blogArticle'));
         if (empty($blogArticleId)) {
-            $this->forward("index", "index"); return;
+            $this->forward("index", "index");
+            return;
         }
 
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         //redirect if the blog item is not available
-        if(empty($blogArticleData) || empty($blogArticleData["active"])) {
+        if (empty($blogArticleData) || empty($blogArticleData["active"])) {
             return $this->redirect(array('controller' => 'index'), array('code' => 301));
         }
 
@@ -284,14 +285,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             if (!$media["preview"]) {
                 /**@var $mediaModel \Shopware\Models\Media\Media*/
                 $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if($mediaModel !== null) {
+                if ($mediaModel !== null) {
                     $media["thumbNails"] = array_values($mediaModel->getThumbnails());
                 }
             } else {
                 $blogArticleData["preview"] = $media;
                 /**@var $mediaModel \Shopware\Models\Media\Media*/
                 $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if($mediaModel !== null) {
+                if ($mediaModel !== null) {
                     $blogArticleData["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
                 }
             }
@@ -308,11 +309,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         //count the views of this blog item
         $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
-        if(!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
+        if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
             //update the views count
             /* @var $blogModel Shopware\Models\Blog\Blog */
             $blogModel = $this->getRepository()->find($blogArticleId);
-            if($blogModel) {
+            if ($blogModel) {
                 $blogModel->setViews($blogModel->getViews() + 1);
                 Shopware()->Models()->flush($blogModel);
 
@@ -379,13 +380,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
 
             if (!empty(Shopware()->Config()->CaptchaColor)) {
-
                 $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
                 $rand = $this->Request()->getPost('sRand');
-                $random = md5($rand);
-                $calculatedValue = substr($random, 0, 5);
-                if (!empty($rand) && $captcha == $calculatedValue) {
-                } else {
+                if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
                     $sErrorFlag['sCaptcha'] = true;
                 }
             }
