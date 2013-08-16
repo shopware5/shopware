@@ -439,6 +439,90 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Helper function to register a plugin controller.
+     * @example
+     * <code>
+     *   public function install() {
+     *       $this->registerController('Frontend', 'Example1', 'onGetController');
+     *       return true;
+     *   }
+     * </code>
+     *
+     * @param string $module - Possible values: Frontend, Backend, Widgets, Api
+     * @param string $name - The name of the controller
+     * @param string $listener - Name of the event listener function which will be called
+     * @return $this
+     * @throws Exception
+     */
+    public function registerController($module, $name, $listener = 'getDefaultControllerPath')
+    {
+        if (empty($module)) {
+            throw new Exception('Register controller requires a module name');
+        }
+        if (empty($name)) {
+            throw new Exception('Register controller requires a controller name');
+        }
+        $this->subscribeEvent(
+            'Enlight_Controller_Dispatcher_ControllerPath_' . $module . '_' . $name,
+            $listener
+        );
+        return $this;
+    }
+
+
+    /**
+     * @param Enlight_Event_EventArgs $arguments
+     * @throws Exception
+     * @return string
+     */
+    public function getDefaultControllerPath(Enlight_Event_EventArgs $arguments)
+    {
+        $eventName = $arguments->getName();
+        $eventName = str_replace('Enlight_Controller_Dispatcher_ControllerPath_', '', $eventName);
+
+        $parts = explode('_', $eventName);
+
+        $module = $parts[0];
+        $controller = $parts[1];
+
+        $path = $this->Path() . 'Controllers/' . ucfirst($module) . '/' . ucfirst($controller) . '.php';
+
+        if (!file_exists($path)) {
+            throw new Enlight_Exception('Controller "' . $controller . '" can\'t load failure');
+        }
+
+        //register plugin model directory
+        if (file_exists($this->Path() . 'Models')) {
+            $this->registerCustomModels();
+        }
+
+        //register plugin views directory
+        if (file_exists($this->Path() . 'Views')) {
+            $this->Application()->Template()->addTemplateDir(
+                $this->Path() . 'Views/'
+            );
+        }
+
+        //register plugin snippet directory
+        if (file_exists($this->Path() . 'Snippets')) {
+            $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+            );
+        }
+
+        //register plugin component directory
+        if (file_exists($this->Path() . 'Components')) {
+            $this->Application()->Loader()->registerNamespace(
+                'Shopware_Components',
+                $this->Path() . 'Components/'
+            );
+        }
+
+        return $path;
+
+    }
+
+    /**
      * Returns capabilities
      */
     public function getCapabilities()
