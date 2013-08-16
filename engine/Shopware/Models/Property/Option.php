@@ -38,8 +38,6 @@ use Shopware\Components\Model\ModelEntity,
 /**
  * Shopware Article Model
  *
- * todo@all: Documentation
- *
  * @ORM\Entity
  * @ORM\Table(name="s_filter_options")
  */

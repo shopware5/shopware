@@ -62,14 +62,14 @@ class Template extends ModelEntity
     private $name;
 
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="file", type="string", length=255, nullable=false)
      */
     private $file;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="grid")
      * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
      */
     protected $emotions;
 
