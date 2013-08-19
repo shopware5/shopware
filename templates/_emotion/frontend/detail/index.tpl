@@ -158,33 +158,37 @@
 					<div id="tabs">
 						{* Tabsnavigation *}
 						{include file="frontend/detail/tabs.tpl"}
-							
-						<div class="inner_tabs">
-						
-							{* Article description *}
-							{block name="frontend_detail_index_tabs_description"}
-								{include file="frontend/detail/description.tpl"}
-							{/block}
-							
-							
-							{* Article rating *}
-							{if !{config name=VoteDisable}}
-							{block name="frontend_detail_index_tabs_rating"}
-								{include file="frontend/detail/comment.tpl"}
-							{/block}
-							{/if}
-							
-							{* Related articles *}
-							{block name="frontend_detail_index_tabs_related"}
-								{include file="frontend/detail/related.tpl"}
-							{/block}
-					    	
-					    	{* Similar articles *}
-							{include file='frontend/detail/similar.tpl'}
 
-							
-							{block name='frontend_detail_index_after_tabs'}{/block}
+						{block name="frontend_detail_index_outer_tabs"}
+						<div class="inner_tabs">
+
+							{block name="frontend_detail_index_inner_tabs"}
+								{block name='frontend_detail_index_before_tabs'}{/block}
+
+								{* Article description *}
+								{block name="frontend_detail_index_tabs_description"}
+									{include file="frontend/detail/description.tpl"}
+								{/block}
+
+								{* Article rating *}
+								{if !{config name=VoteDisable}}
+									{block name="frontend_detail_index_tabs_rating"}
+										{include file="frontend/detail/comment.tpl"}
+									{/block}
+								{/if}
+
+								{* Related articles *}
+								{block name="frontend_detail_index_tabs_related"}
+									{include file="frontend/detail/related.tpl"}
+								{/block}
+
+								{* Similar articles *}
+								{include file='frontend/detail/similar.tpl'}
+
+								{block name='frontend_detail_index_after_tabs'}{/block}
+							{/block}
 						</div>
+						{/block}
 					</div>
 					<div class="detailinfo_shadow">&nbsp;</div>
 						{* "Customers bought also" slider *}
