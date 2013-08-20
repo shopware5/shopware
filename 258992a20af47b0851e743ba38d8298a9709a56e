@@ -1,0 +1,4 @@
+From: bugfix/master/sw-6883-business-essentials
+To: master
+Conflict: (content) Merge conflict in engine/core/class/sAdmin.php
+	MODIFY|engine/core/class/sAdmin.php
