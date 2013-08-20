@@ -43,8 +43,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         'path': '{s name=path}Image path{/s}',
         'actions': '{s name=actions}Action(s){/s}',
         'link': '{s name=link}Link{/s}',
-		'alttext': '{s name=alttext}Alternative Text{/s}',
-		'title': '{s name=title}Title{/s}'
+        'alttext': '{s name=alttext}Alternative Text{/s}',
+        'title': '{s name=title}Title{/s}'
     },
 
     /**
