@@ -1605,7 +1605,6 @@ class sAdmin
 
         $data = array(
             $userObject["auth"]["password"],
-	        $userObject["auth"]["encoderName"],
             $userObject["auth"]["email"],
             $userObject["payment"]["object"]["id"],
             $userObject["auth"]["accountmode"],
@@ -1615,17 +1614,17 @@ class sAdmin
             $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"],
             $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"],
             $this->subshopId,
-            empty($referer) ? "" : $referer
-
+            empty($referer) ? "" : $referer,
+            $userObject["auth"]["encoderName"],
         );
         $sql = '
 			INSERT INTO s_user
 			(
-				password, encoder, email, paymentID, active, accountmode,
+				password, email, paymentID, active, accountmode,
 			 	validation, firstlogin,sessionID, affiliate, customergroup,
-			 	language, subshopID, referer
+			 	language, subshopID, referer, encoder
 			)
-			VALUES (?,?,?,?,1,?,?,NOW(),?,?,?,?,?,?)
+			VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
 		';
 
         list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainData_FilterSql', array($sql,$data), array('subject'=>$this));
