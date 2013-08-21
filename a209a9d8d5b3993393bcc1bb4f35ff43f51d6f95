@@ -1,0 +1,4 @@
+From: feature/master/sw-5369-update-copyright-year
+To: master
+Conflict: (content) Merge conflict in engine/core/class/sAdmin.php
+	MODIFY|engine/core/class/sAdmin.php
