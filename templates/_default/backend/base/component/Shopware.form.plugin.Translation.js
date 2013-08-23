@@ -294,12 +294,16 @@ Ext.define('Shopware.form.plugin.Translation',
         var result = [];
 
         Ext.each(fields, function(field) {
-            var value = field.getValue();
+            var value = field.getValue(),
+                config = field.initialConfig;
 
-            if(value) {
-                field.initialConfig.emptyText = value;
+            if(!config.xtype) {
+                config.xtype = field.xtype;
             }
-            result.push(field.initialConfig)
+            if(value) {
+                config.emptyText = value;
+            }
+            result.push(config)
         });
 
         return result;
