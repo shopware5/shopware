@@ -1,10 +1,12 @@
 <?php
-class Migrations_Migration131 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration132 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up()
     {
         $sql = <<<'EOD'
-ALTER TABLE  `s_articles_top_seller_ro` ADD INDEX  `listing_query` (  `sales` ,  `article_id` );
+DELETE FROM s_core_subscribes
+WHERE subscribe = 'Shopware_Modules_Marketing_GetSimilarShownArticles'
+AND listener = 'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::afterSimilarShownArticlesSelected'
 EOD;
         $this->addSql($sql);
     }
