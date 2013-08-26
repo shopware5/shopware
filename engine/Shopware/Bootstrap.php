@@ -603,6 +603,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             $eventManager
         );
 
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
+
         $entityManager = Shopware\Components\Model\ModelManager::create($conn, $config, $eventManager);
 
         return $entityManager;
