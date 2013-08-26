@@ -1,3 +1,5 @@
+
+//{block name="backend/application/window/progress"}
 Ext.define('Shopware.window.Progress', {
     extend: 'Ext.window.Window',
     title: 'Delete items',
@@ -296,3 +298,4 @@ Ext.define('Shopware.window.Progress', {
     }
 
 });
+//{/block}

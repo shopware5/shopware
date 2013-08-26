@@ -1,4 +1,4 @@
-//{block name="backend/component/grid/panel"}
+//{block name="backend/application/grid/panel"}
 
 /**
  * The Shopware.grid.Panel components contains the Shopware boiler plate
@@ -22,41 +22,15 @@
  *  - If you added some custom components you want to handle by yourself but the CRUD function should be handled,
  *    by shopware, you can add your event handlers normally and set the { @link #hasOwnController } property to false.
  *
- * @event 'eventAlias-add-item'
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.button.Button } button - The add button
+ * This components fires the following shopware events:
+ *  @event 'eventAlias-add-item'
+ *  @event 'eventAlias-delete-items'
+ *  @event `eventAlias-search`
+ *  @event 'eventAlias-change-page-size'
+ *  @event 'eventAlias-edit-item'
+ *  @event 'eventAlias-delete-item'
  *
- * @event 'eventAlias-delete-items'
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Array } selection - The current grid selection.
- *      @param { Ext.button.Button } button - The add button
- *
- * @event `eventAlias-search`
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.form.field.Text } field - The searchField
- *      @param { String } value - The value of the searchField
- *
- * @event 'eventAlias-change-page-size'
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.form.field.ComboBox } combo - The combo box field
- *      @param { Array } records - The selected records.
- *
- * @event 'eventAlias-edit-item'
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.data.Model } record - The record of the row.
- *      @param { int } rowIndex - Row index of the clicked item
- *      @param { int } colIndex - Column index of the clicked item.
- *      @param { object } item - The clicked item (or this Column if multiple items were not configured).
- *      @param { Event } opts - The click event.
- *
- * @event 'eventAlias-delete-item'
- *      @param { Shopware.grid.Panel } grid - Instance of this component
- *      @param { Ext.data.Model } record - The record of the row.
- *      @param { int } rowIndex - Row index of the clicked item
- *      @param { int } colIndex - Column index of the clicked item.
- *      @param { object } item - The clicked item (or this Column if multiple items were not configured).
- *      @param { Event } opts - The click event.
- *
+ * The events are documentated in the { @link #registerEvents } function
  */
 Ext.define('Shopware.grid.Panel', {
 
@@ -581,11 +555,79 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         this.addEvents(
+            /**
+             * Event is fired when the user change the grid selection.
+             * This event is event fired, when the selection changed
+             * over a grid reload.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.button.Button } button - The add button
+             */
             me.eventAlias + '-selection-changed',
+
+            /**
+             * Event is fired when the user clicks on the { @link #addButton }
+             * to add new grid rows.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.button.Button } button - The add button
+             */
             me.eventAlias + '-add-item',
+
+            /**
+             * Event is fired when the user clicks the { @link #deleteColumn }
+             * icon to delete a single grid row.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.data.Model } record - The record of the row.
+             * @param { int } rowIndex - Row index of the clicked item
+             * @param { int } colIndex - Column index of the clicked item.
+             * @param { object } item - The clicked item (or this Column if multiple items were not configured).
+             * @param { Event } opts - The click event.
+             */
             me.eventAlias + '-delete-item',
+
+            /**
+             * Event is fired when the user clicks on the { @link #deleteButton }
+             * to delete all selected grid rows.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Array } selection - The current grid selection.
+             * @param { Ext.button.Button } button - The add button
+             */
+            me.eventAlias + '-delete-items',
+
+            /**
+             * Event is fired when the user clicks on the { @link #editColumn }
+             * icon to open the detail window for a single grid row.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.data.Model } record - The record of the row.
+             * @param { int } rowIndex - Row index of the clicked item
+             * @param { int } colIndex - Column index of the clicked item.
+             * @param { object } item - The clicked item (or this Column if multiple items were not configured).
+             * @param { Event } opts - The click event.
+             */
             me.eventAlias + '-edit-item',
+
+            /**
+             * Event is fired when the user insert a search term into the
+             * { @link #searchField } to filter the grid rows.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.form.field.Text } field - The searchField
+             * @param { String } value - The value of the searchField
+             */
             me.eventAlias + '-search',
+
+            /**
+             * Event is fired when the user change the { @link #pageSizeCombo }
+             * value to display more or less grid rows on a single page.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component
+             * @param { Ext.form.field.ComboBox } combo - The combo box field
+             * @param { Array } records - The selected records.
+             */
             me.eventAlias + '-change-page-size'
         );
     },
@@ -1191,6 +1233,14 @@ Ext.define('Shopware.grid.Panel', {
     },
 
 
+    /**
+     * Helper function which is used from the { @link Shopware.detail.Controller }
+     * to reload the associated record data.
+     * This component requires only a store which is an instance of the Ext.data.Store.
+     *
+     * @param store
+     * @param record
+     */
     reloadData: function(store, record) {
         if (store instanceof Ext.data.Store) {
             this.reconfigure(store);

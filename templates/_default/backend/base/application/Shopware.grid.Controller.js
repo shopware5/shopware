@@ -1,4 +1,4 @@
-//{block name="backend/component/controller/listing"}
+//{block name="backend/application/grid/controller"}
 
 /**
  * The Shopware.grid.Controller contains the Shopware default controls

@@ -1,4 +1,4 @@
-//{block name="backend/component/grid/association"}
+//{block name="backend/application/grid/association"}
 
 Ext.define('Shopware.grid.Association', {
     extend: 'Shopware.grid.Panel',
