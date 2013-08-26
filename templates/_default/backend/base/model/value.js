@@ -29,7 +29,7 @@
  */
 //{block name="backend/base/model/value"}
 Ext.define('Shopware.apps.Base.model.Value', {
-    extend: 'Ext.data.Model',
+    extend: 'Shopware.data.Model',
 
     alternateClassName: 'Shopware.model.Value',
 
