@@ -195,7 +195,12 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             return false;
         }
 
+        if (data.view.initialConfig.grid.xtype == 'property-main-setAssignGrid') {
+            return true;
+        }
+
         var inStore = me.subApplication.setAssignStore.getById(record.get('id'));
+
         return (inStore === null);
     },
     
@@ -375,8 +380,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 me.saveGroupPosition(group);
             }
         });
-
-
     },
 
     /**

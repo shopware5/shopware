@@ -65,7 +65,8 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
             plugins: {
                 ptype: 'gridviewdragdrop',
                 ddGroup: 'set-assignment-grid-dd',
-                dragText: me.snippets.dragText
+                dragText: me.snippets.dragText,
+                enableDrop: false
             }
         };
 
