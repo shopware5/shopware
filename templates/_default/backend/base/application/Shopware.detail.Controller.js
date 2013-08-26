@@ -1,4 +1,4 @@
-//{block name="backend/component/controller/detail"}
+//{block name="backend/application/controller/detail"}
 
 /**
  *

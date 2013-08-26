@@ -1,4 +1,6 @@
 
+//{block name="backend/application/form/field/search"}
+
 Ext.define('Shopware.form.field.Search', {
 
     extend: 'Ext.form.field.ComboBox',
@@ -157,3 +159,4 @@ Ext.define('Shopware.form.field.Search', {
 
 
 });
+//{/block}

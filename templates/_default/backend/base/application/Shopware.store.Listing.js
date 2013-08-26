@@ -1,4 +1,6 @@
-//{block name="backend/component/store/listing"}
+
+//{block name="backend/application/store/listing"}
+
 Ext.define('Shopware.store.Listing', {
     extend: 'Ext.data.Store',
 

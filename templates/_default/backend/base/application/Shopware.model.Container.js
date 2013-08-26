@@ -1,8 +1,17 @@
 
+//{block name="backend/application/model/container"}
+
 Ext.define('Shopware.model.Container', {
 
     extend: 'Ext.container.Container',
     autoScroll: true,
+
+    /**
+     * Internal property which contains all created association components.
+     * This array is used to reload the association data in the component when
+     * the data is reloaded.
+     * @type { Array }
+     */
     associationComponents: [],
 
     /**
@@ -149,6 +158,7 @@ Ext.define('Shopware.model.Container', {
              *
              * @optional - For the base model
              * @required - For associated models
+             * @type { String }
              */
             fieldAlias: undefined
         },
@@ -502,3 +512,4 @@ Ext.define('Shopware.model.Container', {
         });
     }
 });
+//{/block}

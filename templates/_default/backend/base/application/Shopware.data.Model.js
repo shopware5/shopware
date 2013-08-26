@@ -1,5 +1,5 @@
 
-//{block name="backend/component/data/model"}
+//{block name="backend/application/data/model"}
 Ext.define('Shopware.data.Model', {
 
     /**

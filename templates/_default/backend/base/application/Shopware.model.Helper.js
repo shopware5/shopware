@@ -1,3 +1,6 @@
+
+//{block name="backend/application/model/helper"}
+
 /**
  * Helper class which contains different global functions which used
  * by the new backend components.
@@ -401,7 +404,7 @@ Ext.define('Shopware.model.Helper', {
                 extraParams: { association: associationKey }
             }
         });
-    },
-
-
+    }
 });
+
+//{/block}

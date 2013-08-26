@@ -1,4 +1,6 @@
-//{block name="backend/component/window/listing"}
+
+//{block name="backend/application/window/listing"}
+
 Ext.define('Shopware.window.Listing', {
     extend: 'Enlight.app.Window',
 
