@@ -33,7 +33,7 @@
  */
 //{block name="backend/base/model/media"}
 Ext.define('Shopware.apps.Base.model.Media', {
-	extend: 'Ext.data.Model',
+	extend: 'Shopware.data.Model',
 	fields: [
 		//{block name="backend/base/model/media/fields"}{/block}
         'created',
