@@ -298,7 +298,7 @@ Ext.define('Shopware.window.Progress', {
      *
      * @param current
      * @param tasks
-     * @returns {boolean}
+     * @returns { boolean }
      */
     sequentialProcess: function (current, tasks) {
         var me = this, record;
@@ -398,7 +398,7 @@ Ext.define('Shopware.window.Progress', {
     /**
      * Creates a response record for the result grid.
      *
-     * @param {Ext.data.Operation } operation - The request operation.
+     * @param { Ext.data.Operation } operation - The request operation.
      * @returns { Shopware.model.Error }
      */
     createResponseRecord: function(operation) {
@@ -418,7 +418,7 @@ Ext.define('Shopware.window.Progress', {
      *
      * @param value
      * @param metaData
-     * @returns {string}
+     * @returns { String }
      */
     successRenderer: function(value, metaData) {
         metaData.tdAttr = 'style="vertical-align: middle;"';
@@ -438,7 +438,7 @@ Ext.define('Shopware.window.Progress', {
      * @param value
      * @param metaData
      * @param record
-     * @returns {string}
+     * @returns { String }
      */
     requestRenderer: function(value, metaData, record) {
         var me = this, operation, propertyValue,
