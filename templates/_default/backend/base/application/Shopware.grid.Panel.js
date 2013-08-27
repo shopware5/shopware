@@ -29,6 +29,7 @@
  *  @event 'eventAlias-change-page-size'
  *  @event 'eventAlias-edit-item'
  *  @event 'eventAlias-delete-item'
+ *  @event 'eventAlias-after-init-component'
  *
  * The events are documented in the { @link #registerEvents } function
  */
@@ -519,6 +520,8 @@ Ext.define('Shopware.grid.Panel', {
             me.createDefaultController();
         }
 
+        me.fireEvent(me.eventAlias + '-after-init-component', me);
+
         me.callParent(arguments);
     },
 
@@ -628,7 +631,14 @@ Ext.define('Shopware.grid.Panel', {
              * @param { Ext.form.field.ComboBox } combo - The combo box field
              * @param { Array } records - The selected records.
              */
-            me.eventAlias + '-change-page-size'
+            me.eventAlias + '-change-page-size',
+
+            /**
+             * Event fired after all default elements of this component created.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             */
+            me.eventAlias + '-after-init-component'
         );
     },
 

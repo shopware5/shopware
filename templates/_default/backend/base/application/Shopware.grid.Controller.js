@@ -38,6 +38,7 @@
  *  @event 'eventAlias-before-edit-item'
  *  @event 'eventAlias-before-create-detail-window'
  *  @event 'eventAlias-after-create-detail-window'
+ *  @event 'eventAlias-after-init'
  *
  * The event parameter are documented in the { @link #registerEvents } function.
  */
@@ -133,8 +134,6 @@ Ext.define('Shopware.grid.Controller', {
              * @type { string }
              */
             deleteProgressBarText: 'Item [0] of [1]'
-
-
         },
 
         /**
@@ -211,6 +210,8 @@ Ext.define('Shopware.grid.Controller', {
             me.control(me.createControls());
             me.registerEvents();
         }
+
+        me.fireEvent(me.getEventName('after-init'), me);
 
         me.callParent(arguments);
     },
@@ -331,7 +332,14 @@ Ext.define('Shopware.grid.Controller', {
              * @param { Shopware.data.Model } record - The record which will be displayed in the detail window to edit.
              * @param { Shopware.detail.Window } window - The created detail window.
              */
-            me.getEventName('after-create-detail-window')
+            me.getEventName('after-create-detail-window'),
+
+            /**
+             * Event fired after the controller was initialed, but before the me.callParent(arguments) was called.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             */
+            me.getEventName('after-init')
         );
     },
 

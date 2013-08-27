@@ -4,6 +4,14 @@
 Ext.define('Shopware.window.Listing', {
     extend: 'Enlight.app.Window',
 
+    /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: {
+        helper: 'Shopware.model.Helper'
+    },
+
     layout: {
         type: 'hbox',
         align: 'stretch'
@@ -44,7 +52,7 @@ Ext.define('Shopware.window.Listing', {
              * Class name of the grid which will be displayed in the center
              * region of this window.
              *
-             * @string
+             * @type { String }
              * @optional
              */
             listingGrid: 'Shopware.grid.Panel',
@@ -55,10 +63,18 @@ Ext.define('Shopware.window.Listing', {
              * The store will be loaded over this component so don't set the
              * autoLoad parameter of the store to true.
              *
-             * @string
+             * @type { String }
              * @required
              */
-            listingStore: ''
+            listingStore: '',
+
+            /**
+             * Alias for the fired events to prevent a duplicate event name
+             * in different modules.
+             *
+             * @type { String }
+             */
+            eventAlias: undefined
         },
 
         /**
@@ -125,29 +141,86 @@ Ext.define('Shopware.window.Listing', {
         return me._opts[prop];
     },
 
+    /**
+     * Initialisation of this component.
+     * Creates all required elements for this component.
+     */
     initComponent: function () {
         var me = this;
 
+        me.fireEvent(me.eventAlias + '-before-init-component', me);
+
+        me.listingStore = me.createListingStore();
+        me.eventAlias = me.getConfig('eventAlias');
+        if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.listingStore.model.$className);
+
+        me.registerEvents();
+
         me.items = me.createItems();
+
+        me.fireEvent(me.eventAlias + '-after-init-component', me);
+
         me.callParent(arguments);
     },
 
+    /**
+     * Registers all required custom events of this component.
+     */
+    registerEvents: function() {
+        var me = this;
+
+        me.addEvents(
+            me.eventAlias + '-after-create-items',
+            me.eventAlias + '-after-create-grid-panel',
+            me.eventAlias + '-before-init-component',
+            me.eventAlias + '-after-init-component'
+        );
+    },
+
+    /**
+     * Creates the listing store for the grid panel.
+     *
+     * @returns { Shopware.store.Listing }
+     */
+    createListingStore: function() {
+        return Ext.create(this.getConfig('listingStore'));
+    },
+
+    /**
+     * Creates all required elements for this component.
+     *
+     * @returns { Array }
+     */
     createItems: function () {
         var me = this, items = [];
 
         items.push(me.createGridPanel());
+
+        me.fireEvent(me.eventAlias + '-after-create-items', me, items);
+
         return items;
     },
 
+    /**
+     * Creates the grid panel for the listing window.
+     * The grid panel requires the listing store which will be set as grid store.
+     *
+     * @returns { Shopware.grid.Panel }
+     */
     createGridPanel: function () {
         var me = this;
 
-        me.listingStore = Ext.create(me.getConfig('listingStore')).load();
+        me.listingStore.load();
+
         me.gridPanel = Ext.create(me.getConfig('listingGrid'), {
             store: me.listingStore,
             flex: 1
         });
+
+        me.fireEvent(me.eventAlias + '-after-create-grid-panel', me, me.gridPanel);
+
         return me.gridPanel;
     }
+
 });
 //{/block}
