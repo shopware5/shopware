@@ -66,7 +66,7 @@ Ext.define('Shopware.window.Listing', {
              * @type { String }
              * @required
              */
-            listingStore: '',
+            listingStore: undefined,
 
             /**
              * Alias for the fired events to prevent a duplicate event name
