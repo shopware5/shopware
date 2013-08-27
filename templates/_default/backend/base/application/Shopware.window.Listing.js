@@ -148,13 +148,13 @@ Ext.define('Shopware.window.Listing', {
     initComponent: function () {
         var me = this;
 
-        me.fireEvent(me.eventAlias + '-before-init-component', me);
-
         me.listingStore = me.createListingStore();
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.listingStore.model.$className);
 
         me.registerEvents();
+
+        me.fireEvent(me.eventAlias + '-before-init-component', me);
 
         me.items = me.createItems();
 
@@ -170,9 +170,47 @@ Ext.define('Shopware.window.Listing', {
         var me = this;
 
         me.addEvents(
-            me.eventAlias + '-after-create-items',
-            me.eventAlias + '-after-create-grid-panel',
+
+            /**
+             * Event fired before the window element will be create in the { @link #createItems } function.
+             * The listing store is already created at this point and can be access over "window.listingStore".
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             */
             me.eventAlias + '-before-init-component',
+
+            /**
+             * Event fired before the shopware default items of the listing window will be created.
+             * This event can be used to insert some elements at the beginning of the items array.
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             * @param { Array } items - Contains the create window elements.
+             */
+            me.eventAlias + '-before-create-items',
+
+            /**
+             * Event fired after the shopware default items of the listing window created.
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             * @param { Array } items - Contains the create window elements.
+             */
+            me.eventAlias + '-after-create-items',
+
+            /**
+             * Event fired after the { @link Shopware.grid.Panel } created.
+             * This event can be used to modify the grid view or to reposition the grid within the window.
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             * @param { Shopware.grid.Panel } grid - Instance of the create { @link Shopware.grid.Panel }
+             */
+            me.eventAlias + '-after-create-grid-panel',
+
+            /**
+             * Event fired after the component was initialed. The event is fired before the me.callParent(arguments)
+             * function called in the initComponent function.
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             */
             me.eventAlias + '-after-init-component'
         );
     },
@@ -193,6 +231,8 @@ Ext.define('Shopware.window.Listing', {
      */
     createItems: function () {
         var me = this, items = [];
+
+        me.fireEvent(me.eventAlias + '-before-create-items', me, items);
 
         items.push(me.createGridPanel());
 
