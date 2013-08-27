@@ -29,7 +29,36 @@
  *  @event 'eventAlias-change-page-size'
  *  @event 'eventAlias-edit-item'
  *  @event 'eventAlias-delete-item'
+ *  @event 'eventAlias-before-init-component'
  *  @event 'eventAlias-after-init-component'
+ *
+ *  @event 'eventAlias-after-create-columns'
+ *  @event 'eventAlias-column-created'
+ *  @event 'eventAlias-action-column-created'
+ *  @event 'eventAlias-before-create-action-column-items'
+ *  @event 'eventAlias-after-create-action-column-items'
+ *  @event 'eventAlias-delete-action-column-created'
+ *  @event 'eventAlias-edit-action-column-created'
+ *  @event 'eventAlias-before-create-plugins'
+ *  @event 'eventAlias-after-create-plugins'
+ *  @event 'eventAlias-selection-model-created'
+ *  @event 'eventAlias-before-create-docked-items'
+ *  @event 'eventAlias-after-create-docked-items'
+ *  @event 'eventAlias-paging-bar-created'
+ *  @event 'eventAlias-page-size-combo-created'
+ *  @event 'eventAlias-before-create-page-sizes'
+ *  @event 'eventAlias-after-create-page-sizes'
+ *  @event 'eventAlias-toolbar-created'
+ *  @event 'eventAlias-before-create-toolbar-items'
+ *  @event 'eventAlias-before-create-right-toolbar-items'
+ *  @event 'eventAlias-after-create-toolbar-items'
+ *  @event 'eventAlias-add-button-created'
+ *  @event 'eventAlias-delete-button-created'
+ *  @event 'eventAlias-search-field-created'
+ *  @event 'eventAlias-before-reload-data'
+ *  @event 'eventAlias-after-reload-data'
+ *  @event 'eventAlias-before-create-features'
+ *  @event 'eventAlias-after-create-features'
  *
  * The events are documented in the { @link #registerEvents } function
  */
@@ -509,13 +538,15 @@ Ext.define('Shopware.grid.Panel', {
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.model.$className);
 
+        me.registerEvents();
+        me.fireEvent(me.eventAlias + '-before-init-component', me);
+
         me.columns = me.createColumns();
         me.plugins = me.createPlugins();
         me.features = me.createFeatures();
         me.selModel = me.createSelectionModel();
         me.dockedItems = me.createDockedItems();
 
-        me.registerEvents();
         if (me.getConfig('hasOwnController') === false) {
             me.createDefaultController();
         }
@@ -559,7 +590,7 @@ Ext.define('Shopware.grid.Panel', {
 
         this.addEvents(
             /**
-             * Event is fired when the user change the grid selection.
+             * Event fired when the user change the grid selection.
              * This event is event fired, when the selection changed
              * over a grid reload.
              *
@@ -569,7 +600,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-selection-changed',
 
             /**
-             * Event is fired when the user clicks on the { @link #addButton }
+             * Event fired when the user clicks on the { @link #addButton }
              * to add new grid rows.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -578,7 +609,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-add-item',
 
             /**
-             * Event is fired when the user clicks the { @link #deleteColumn }
+             * Event fired when the user clicks the { @link #deleteColumn }
              * icon to delete a single grid row.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -591,7 +622,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-delete-item',
 
             /**
-             * Event is fired when the user clicks on the { @link #deleteButton }
+             * Event fired when the user clicks on the { @link #deleteButton }
              * to delete all selected grid rows.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -601,7 +632,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-delete-items',
 
             /**
-             * Event is fired when the user clicks on the { @link #editColumn }
+             * Event fired when the user clicks on the { @link #editColumn }
              * icon to open the detail window for a single grid row.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -614,7 +645,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-edit-item',
 
             /**
-             * Event is fired when the user insert a search term into the
+             * Event fired when the user insert a search term into the
              * { @link #searchField } to filter the grid rows.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -624,7 +655,7 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-search',
 
             /**
-             * Event is fired when the user change the { @link #pageSizeCombo }
+             * Event fired when the user change the { @link #pageSizeCombo }
              * value to display more or less grid rows on a single page.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
@@ -634,11 +665,286 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-change-page-size',
 
             /**
+             * Event fired before the component will be initialed. The event
+             * alias is at this point already defined.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             */
+            me.eventAlias + '-before-init-component',
+
+            /**
              * Event fired after all default elements of this component created.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component.
              */
-            me.eventAlias + '-after-init-component'
+            me.eventAlias + '-after-init-component',
+
+            /**
+             * Event fired before the grid columns created. This event can be used
+             * to add additional column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } columns - An empty array which will be returned as column array.
+             */
+            me.eventAlias + '-before-create-columns',
+
+            /**
+             * Event fired after the grid columns created. This event can be used
+             * to add additional column over the Ext JS event system.
+             * 
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } columns - The filled columns array contains all generated columns.
+             */
+            me.eventAlias + '-after-create-columns',
+
+            /**
+             * Event fired after a single grid column was created.
+             * This event can be used to modify a single grid column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Object } column - The created column object.
+             * @param { Shopware.data.Model } model - The model which contains the field for the column
+             * @param { Ext.data.Field } field - The current model field which used to generate the column
+             */
+            me.eventAlias + '-column-created',
+
+            /**
+             * Event fired after the grid action column created. This event can be used
+             * to modify the action column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Object } column - The created action column object.
+             */
+            me.eventAlias + '-action-column-created',
+
+            /**
+             * Event fired before the default shopware action column items will be created.
+             * The items parameter contains an empty array which will be returned as action column items.
+             * This event can be used to add some action column items at the beginning of the column.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - An empty array
+             */
+            me.eventAlias + '-before-create-action-column-items',
+
+            /**
+             * Event fired after the default shopware action column items created.
+             * The passed items array contains the created action column items.
+             * This event can be used to add some action column items at the end of the column.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the generated action column items.
+             */
+            me.eventAlias + '-after-create-action-column-items',
+
+            /**
+             * Event fired after the default shopware delete action colunn item was created.
+             * This event can be used to modify the action column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Object } column - The generated delete action column item.
+             */
+            me.eventAlias + '-delete-action-column-created',
+
+            /**
+             * Event fired after the default shopware edit action column item was created.
+             * This event can be used to modify the default edit column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Object } column - The generated edit action column item.
+             */
+            me.eventAlias + '-edit-action-column-created',
+
+            /**
+             * Event fired before the default shopware grid plugins will be created.
+             * The passed items array can be used to add additional plugins.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - An empty array which can be used to add additional plugins.
+             */
+            me.eventAlias + '-before-create-plugins',
+
+            /**
+             * Event fired after the default shopware grid plugins created.
+             * This event can be used to add additional plugins at the end of the plugins array.
+             * Some plugins requires additional plugins which initialed before the own plugin can be created.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the generated plugins.
+             */
+            me.eventAlias + '-after-create-plugins',
+
+            /**
+             * Event fired after the default shopware selection model created.
+             * This event can be used to modify the selection model or add some event listeners
+             * on the component.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.selection.Model } selModel - The created grid selection model
+             */
+            me.eventAlias + '-selection-model-created',
+
+            /**
+             * Event fired before the default shopware docked items created.
+             * This event can be used to insert some items at the beginning of the docked items array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - An empty array which returned as docked items definition.
+             */
+            me.eventAlias + '-before-create-docked-items',
+
+            /**
+             * Event fired after the default shopware docked items created.
+             * This event can be used to add some items at the end of the docked items array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the created docked items which returned as docked items definition.
+             */
+            me.eventAlias + '-after-create-docked-items',
+
+            /**
+             * Event fired after the default shopware paging bar created.
+             * This event can be used to add some event listeners or modify the view of the paging bar.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.toolbar.Paging } pagingbar - The created paging bar.
+             */
+            me.eventAlias + '-paging-bar-created',
+
+            /**
+             * Event fired after the page size combo box of the paging bar created.
+             * This event can be used to add some event listeners or modify the view of the page size combo.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.form.field.ComboBox } combo - The created combo box.
+             */
+            me.eventAlias + '-page-size-combo-created',
+
+            /**
+             * Event fired before the different page sizes of the paging bar created.
+             * This event can be used to insert some sizes at the beginning of the array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } data - An empty array which used as page size combo store data definition.
+             */
+            me.eventAlias + '-before-create-page-sizes',
+
+            /**
+             * Event fired after the default shopware page sizes created.
+             * This event can be used to push some sizes at the end of the array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } data - Contains the already generated page sizes, which used as page size combo store data definition.
+             */
+            me.eventAlias + '-after-create-page-sizes',
+
+            /**
+             * Event fired after the default shopware toolbar created.
+             * This event can be used add some even listeners to the toolbar or to modify the view of the toolbar.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.toolbar.Toolbar } toolbar - The created toolbar instance.
+             */
+            me.eventAlias + '-toolbar-created',
+
+            /**
+             * Event fired before the shopware default toolbar items created.
+             * This event can be used to insert some toolbar items at the beginning of the array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Empty array at this point, used as definition for the toolbar items.
+             */
+            me.eventAlias + '-before-create-toolbar-items',
+
+            /**
+             * Event fired before the toolbar fill element added to the toolbar.
+             * This event can be used to add some toolbar items before the fill element to display
+             * them after the default shopware items but not on the right side of the toolbar.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the already created toolbar items like the add or delete button
+             */
+            me.eventAlias + '-before-create-right-toolbar-items',
+
+            /**
+             * Event fired after all toolbar items created. This event can be used
+             * to push some toolbar items at the end of the array.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the created toolbar items.
+             */
+            me.eventAlias + '-after-create-toolbar-items',
+
+            /**
+             * Event fired after the default shopware toolbar add button created.
+             * This event can be used to modify the button view or to add some event listeners
+             * to the add button.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.button.Button } button - Contains the button instance
+             */
+            me.eventAlias + '-add-button-created',
+
+            /**
+             * Event fired after the default shopware toolbar delete button created.
+             * This event can be used to modify the button view or to add some event listeners
+             * to the button.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.button.Button } button - Instance of the created delete button
+             */
+            me.eventAlias + '-delete-button-created',
+
+            /**
+             * Event fired after the default shopware search field created.
+             * This event can be used to modify the text field view or to add some event listeners
+             * to the search field.
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.form.field.Text } field - Instance of the created search field.
+             */
+            me.eventAlias + '-search-field-created',
+
+            /**
+             * Event fired before the grid panel data will be reloaded. To cancel the reload
+             * add an event listener to this event and set the return value to false.
+             * The { @link #reloadData } function is an interface function which is used in the detail
+             * view to reload associated data of a record.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.data.Store } store - Instance of the grid store.
+             * @param { Shopware.data.Model } record - Contains null in this component
+             */
+            me.eventAlias + '-before-reload-data',
+
+            /**
+             * Event fired after the grid store reconfigured.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Ext.data.Store } store - Instance of the grid store.
+             * @param { Shopware.data.Model } record - Contains null in this component
+             */
+            me.eventAlias + '-after-reload-data',
+
+            /**
+             * Event fired before the default shopware grid features created.
+             * This event can be used to insert some grid features at the beginning of the feature definition.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - An empty array which is used as feature definition.
+             */
+            me.eventAlias + '-before-create-features',
+
+            /**
+             * Event fired after the default shopware grid features created.
+             * Some features requires additional features or has collision with some grid plugins, so
+             * the { @link #createFeatures } function contains an before and after event for the feature
+             * definition.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } items - Contains the created grid features.
+             */
+            me.eventAlias + '-after-create-features'
+
         );
     },
 
@@ -690,6 +996,8 @@ Ext.define('Shopware.grid.Panel', {
             model = Ext.create(model);
         }
 
+        me.fireEvent(me.eventAlias + '-before-create-columns', me, columns);
+        
         if (me.getConfig('rowNumbers')) {
             columns.push(me.createRowNumberColumn());
         }
@@ -707,6 +1015,8 @@ Ext.define('Shopware.grid.Panel', {
                 columns.push(column);
             }
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-columns', me, columns);
 
         return columns;
     },
@@ -764,6 +1074,8 @@ Ext.define('Shopware.grid.Panel', {
         customConfig = config[field.name] || {};
         column = Ext.apply(column, customConfig);
 
+        me.fireEvent(me.eventAlias + '-column-created', me, column, model, field);
+
         return column;
     },
 
@@ -783,15 +1095,19 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Object }
      */
     createActionColumn: function () {
-        var me = this, items;
+        var me = this, items, column;
 
         items = me.createActionColumnItems();
 
-        return {
+        column = {
             xtype: 'actioncolumn',
             width: 30 * items.length,
             items: items
         }
+
+        me.fireEvent(me.eventAlias + '-action-column-created', me, column);
+
+        return column;
     },
 
     /**
@@ -819,12 +1135,17 @@ Ext.define('Shopware.grid.Panel', {
     createActionColumnItems: function () {
         var me = this, items = [];
 
+        me.fireEvent(me.eventAlias + '-before-create-action-column-items', me, items);
+
         if (me.getConfig('deleteColumn')) {
             items.push(me.createDeleteColumn());
         }
         if (me.getConfig('editColumn')) {
             items.push(me.createEditColumn());
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-action-column-items', me, items);
+
         return items;
     },
 
@@ -838,15 +1159,19 @@ Ext.define('Shopware.grid.Panel', {
      * @return { Object }
      */
     createDeleteColumn: function () {
-        var me = this;
+        var me = this, column;
 
-        return {
+        column = {
             action: 'delete',
             iconCls: 'sprite-minus-circle-frame',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.fireEvent(me.eventAlias + '-delete-item', me, record, rowIndex, colIndex, item, opts);
             }
         };
+
+        me.fireEvent(me.eventAlias + '-delete-action-column-created', me, column);
+
+        return column;
     },
 
     /**
@@ -859,15 +1184,19 @@ Ext.define('Shopware.grid.Panel', {
      * @return { Object }
      */
     createEditColumn: function () {
-        var me = this;
+        var me = this, column;
 
-        return {
+        column = {
             action: 'edit',
             iconCls: 'sprite-pencil',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.fireEvent(me.eventAlias + '-edit-item', me, record, rowIndex, colIndex, item, opts);
             }
         };
+
+        me.fireEvent(me.eventAlias + '-edit-action-column-created', me, column);
+
+        return column;
     },
 
     /**
@@ -916,12 +1245,16 @@ Ext.define('Shopware.grid.Panel', {
     createPlugins: function () {
         var me = this, items = [], item;
 
+        me.fireEvent(me.eventAlias + '-before-create-plugins', me, items);
+
         if (me.getConfig('rowEditing')) {
             item = Ext.create('Ext.grid.plugin.RowEditing', {
                 clicksToEdit: 2
             });
             items.push(item)
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-plugins', me, items);
 
         return items;
     },
@@ -951,7 +1284,13 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createFeatures: function () {
-        return [];
+        var me = this, items = [];
+
+        me.fireEvent(me.eventAlias + '-before-create-features', me, items);
+
+        me.fireEvent(me.eventAlias + '-after-create-features', me, items);
+
+        return items;
     },
 
     /**
@@ -969,15 +1308,19 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Ext.selection.CheckboxModel }
      */
     createSelectionModel: function () {
-        var me = this;
+        var me = this, selModel;
 
-        return Ext.create('Ext.selection.CheckboxModel', {
+        selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function (selModel, selection) {
                     return me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
                 }
             }
         });
+
+        me.fireEvent(me.eventAlias + '-selection-model-created', me, selModel);
+
+        return selModel;
     },
 
     /**
@@ -998,12 +1341,17 @@ Ext.define('Shopware.grid.Panel', {
     createDockedItems: function () {
         var me = this, items = [];
 
+        me.fireEvent(me.eventAlias + '-before-create-docked-items', me, items);
+
         if (me.getConfig('toolbar')) {
             items.push(me.createToolbar());
         }
         if (me.getConfig('pagingbar')) {
             items.push(me.createPagingbar());
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-docked-items', me, items);
+
         return items;
     },
 
@@ -1030,6 +1378,8 @@ Ext.define('Shopware.grid.Panel', {
             var pageSizeCombo = me.createPageSizeCombo();
             me.pagingbar.add('->', pageSizeCombo, { xtype: 'tbspacer', width: 6 });
         }
+
+        me.fireEvent(me.eventAlias + '-paging-bar-created', me, me.pagingbar);
 
         return me.pagingbar;
     },
@@ -1070,6 +1420,9 @@ Ext.define('Shopware.grid.Panel', {
                 }
             }
         });
+
+        me.fireEvent(me.eventAlias + '-page-size-combo-created', me, me.pageSizeCombo);
+
         return me.pageSizeCombo;
     },
 
@@ -1086,12 +1439,16 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Array }
      */
     createPageSizes: function () {
-        var data = [];
+        var me = this, data = [];
+
+        me.fireEvent(me.eventAlias + '-before-create-page-sizes', me, data);
 
         for (var i = 1; i <= 10; i++) {
             var count = i * 20;
             data.push({ value: count, name: count + ' items' });
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-page-sizes', me, data);
 
         return data;
     },
@@ -1114,6 +1471,8 @@ Ext.define('Shopware.grid.Panel', {
             dock: 'top',
             items: me.createToolbarItems()
         });
+
+        me.fireEvent(me.eventAlias + '-toolbar-created', me, me.toolbar);
 
         return me.toolbar;
     },
@@ -1153,16 +1512,23 @@ Ext.define('Shopware.grid.Panel', {
     createToolbarItems: function () {
         var me = this, items = [];
 
+        me.fireEvent(me.eventAlias + '-before-create-toolbar-items', me, items);
+
         if (me.getConfig('addButton')) {
             items.push(me.createAddButton());
         }
         if (me.getConfig('deleteButton')) {
             items.push(me.createDeleteButton())
         }
+
+        me.fireEvent(me.eventAlias + '-before-create-right-toolbar-items', me, items);
+
         if (me.getConfig('searchField')) {
             items.push('->');
             items.push(me.createSearchField());
         }
+
+        me.fireEvent(me.eventAlias + '-after-create-toolbar-items', me, items);
 
         return items;
     },
@@ -1186,6 +1552,8 @@ Ext.define('Shopware.grid.Panel', {
                 me.fireEvent(me.eventAlias + '-add-item', me, this);
             }
         });
+
+        me.fireEvent(me.eventAlias + '-add-button-created', me, me.addButton);
 
         return me.addButton;
     },
@@ -1211,6 +1579,8 @@ Ext.define('Shopware.grid.Panel', {
                 me.fireEvent(me.eventAlias + '-delete-items', me, selModel.getSelection(), this);
             }
         });
+
+        me.fireEvent(me.eventAlias + '-delete-button-created', me, me.deleteButton);
 
         return me.deleteButton;
     },
@@ -1239,6 +1609,8 @@ Ext.define('Shopware.grid.Panel', {
             }
         });
 
+        me.fireEvent(me.eventAlias + '-search-field-created', me, me.searchField);
+
         return me.searchField;
     },
 
@@ -1252,8 +1624,16 @@ Ext.define('Shopware.grid.Panel', {
      * @param record
      */
     reloadData: function(store, record) {
+        var me = this;
+
         if (store instanceof Ext.data.Store) {
-            this.reconfigure(store);
+            if (!me.fireEvent(me.eventAlias + '-before-reload-data', me, store, record)) {
+                return false;
+            }
+
+            me.reconfigure(store);
+
+            me.fireEvent(me.eventAlias + '-after-reload-data', me, store, record);
         }
     }
 
