@@ -63,24 +63,32 @@ Ext.define('Shopware.grid.Controller', {
     },
 
     /**
+     * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
+     * is scope-independent and it always returns the class from which it was called, regardless of what
+     * this points to during run-time.
+     *
      * The statics object contains the shopware default configuration for
-     * this component.
+     * this component. The different shopware configurations are stored
+     * within the displayConfig object.
      *
      * @type { object }
      */
     statics: {
         /**
-         * The statics displayConfig is the shopware default configuration for
+         * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To override this property you can use the controller.displayConfig object.
+         * To set the shopware configuration, you can set the displayConfig directly
+         * as property of the component:
          *
          * @example
-         * Ext.define('Shopware.apps.Product.controller.Product', {
-         *     extend: 'Shopware.grid.Controller',
-         *     displayConfig: {
-         *         ...
-         *     }
-         * });
+         *      Ext.define('Shopware.apps.Product.controller.List', {
+         *          extend: 'Shopware.grid.Controller',
+         *          displayConfig: {
+         *              gridClass: 'Shopware.apps.Product.view.list.Product',
+         *              eventAlias: 'product',
+         *              ...
+         *          }
+         *      });
          */
         displayConfig: {
             /**

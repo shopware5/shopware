@@ -2,27 +2,85 @@
 //{block name="backend/application/store/listing"}
 
 Ext.define('Shopware.store.Listing', {
+
+    /**
+     * The Store class encapsulates a client side cache of Model objects.
+     * Stores load data via a Proxy, and also provide functions for sorting,
+     * filtering and querying the model instances contained within it.
+     *
+     * @type { String }
+     */
     extend: 'Ext.data.Store',
 
+    /**
+     * If data is not specified, and if autoLoad is true or an Object,
+     * this store's load method is automatically called after creation.
+     * If the value of autoLoad is an Object, this Object will be passed to the store's load method.
+     */
     autoLoad: false,
 
+    /**
+     * Performs a batch of Operations, in the order specified by batchOrder. Used internally by Ext.data.Store's sync method.
+     * @type { boolean }
+     */
     batch: true,
 
+    /**
+     * True to defer any sorting operation to the server. If false, sorting is done locally on the client.
+     * @type { boolean }
+     */
     remoteSort: true,
 
+    /**
+     * True to defer any filtering operation to the server. If false, filtering is done locally on the client.
+     * @type { boolean }
+     */
     remoteFilter: true,
 
+    /**
+     * The number of records considered to form a 'page'.
+     * This is used to power the built-in paging using the nextPage and
+     * previousPage functions when the grid is paged using a PagingScroller.
+     */
     pageSize: 20,
 
     /**
-     * Get the reference to the class from which this object was instantiated.
-     * Note that unlike self, this.statics() is scope-independent and it always
-     * returns the class from which it was called, regardless of what this points to during run-time
-     * @type { Object }
+     * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
+     * is scope-independent and it always returns the class from which it was called, regardless of what
+     * this points to during run-time.
+     *
+     * The statics object contains the shopware default configuration for
+     * this component. The different shopware configurations are stored
+     * within the displayConfig object.
+     *
+     * @type { object }
      */
-    shopware: {
-
+    statics: {
+        /**
+         * The statics displayConfig contains the default shopware configuration for
+         * this component.
+         * To set the shopware configuration, you can set the displayConfig directly
+         * as property of the component:
+         *
+         * @example
+         *      Ext.define('Shopware.apps.Product.store.Product', {
+         *          extend: 'Shopware.store.Listing',
+         *          displayConfig: {
+         *              controller: 'product'
+         *              ...
+         *          }
+         *      });
+         */
         displayConfig: {
+            /**
+             * Name of the php controller which loads the store data.
+             *
+             * @example
+             * PHP Controller = Shopware_Controllers_Backend_Article
+             * value of this property => 'article'
+             *
+             * @type { String }
+             */
             controller: undefined,
 
             /**

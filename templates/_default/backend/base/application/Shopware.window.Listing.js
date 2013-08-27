@@ -24,28 +24,32 @@ Ext.define('Shopware.window.Listing', {
     alias: 'widget.shopware-window-listing',
 
     /**
-     * The static property contains the shopware default configuration
-     * for this component.
-     * To override the displayConfig object, you can define the properties as follow:
+     * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
+     * is scope-independent and it always returns the class from which it was called, regardless of what
+     * this points to during run-time.
      *
-     * Ext.define('Shopware.apps......Window', {
-     *    displayConfig: {
-     *        ....
-     *    }
-     * });
+     * The statics object contains the shopware default configuration for
+     * this component. The different shopware configurations are stored
+     * within the displayConfig object.
      *
-     * This object will be merged with the default displayConfig of Shopware.
-     *
-     * @object
+     * @type { object }
      */
     statics: {
         /**
-         * Configuration of the Shopware listing window.
-         * This configuration is used for the different component elements.
-         * To override this properties, you can set the displayConfig property
-         * directly in the component.
+         * The statics displayConfig contains the default shopware configuration for
+         * this component.
+         * To set the shopware configuration, you can set the displayConfig directly
+         * as property of the component:
          *
-         * @object
+         * @example
+         *      Ext.define('Shopware.apps.Product.view.list.Window', {
+         *          extend: 'Shopware.window.Listing',
+         *          displayConfig: {
+         *              listingGrid: 'Shopware.apps.Product.view.list.Product',
+         *              listingStore: 'Shopware.apps.Product.store.Product'
+         *              ...
+         *          }
+         *      });
          */
         displayConfig: {
             /**

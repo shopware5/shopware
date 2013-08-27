@@ -124,15 +124,12 @@ Ext.define('Shopware.model.Helper', {
     },
 
     /**
-     * Helfer Funktion für die getAssociations Funktion.
-     * Überprüft eine einzelne Association ob einer der übergebenen
-     * Filter Kriterien entspricht.
+     * Helper function for the { @link #getAssociations } function.
+     * This function checks if the passed assiociation matchs on one of the passed conditions.
+     * If one condition match on the passed association the function returns true.
      *
-     * Sollten ein Filter Kriterium zutreffen oder es werden keine Filter Kriterien übergeben,
-     * liefert die Funktion als Ergebnis true zurück.
-     *
-     * @param association
-     * @param conditions
+     * @param { Ext.data.Association } association - The association which has to be checked.
+     * @param { Array } conditions - Array of conditions
      * @returns boolean
      */
     matchAssociationConditions: function (association, conditions) {
