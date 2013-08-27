@@ -308,19 +308,8 @@ class Repository extends ModelRepository
         foreach ($shops as $currentShop) {
             $this->fixActive($currentShop);
         }
-        foreach ($shops as $currentShop) {
-            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
-                if ($shop === null) {
-                    $shop = $currentShop;
-                }
-            } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            } elseif ($currentShop->getSecure() && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            }
-        }
+
+        $shop = $this->getShopByRequest($shops, $requestPath);
 
         if ($shop !== null) {
             return $shop;
@@ -375,5 +364,35 @@ class Repository extends ModelRepository
             }
             $shop->setSecureBaseUrl($baseUrl);
         }
+    }
+
+    /**
+     * returns the right shop depending on the request object
+     *
+     * @param $shops \Shopware\Models\Shop\Shop[]
+     * @param $requestPath
+     * @return null|\Shopware\Models\Shop\Shop $shop
+     */
+    protected function getShopByRequest($shops, $requestPath)
+    {
+        $shop = null;
+        foreach ($shops as $currentShop) {
+            $requestPathTail = str_replace($currentShop->getBaseUrl(), '', $requestPath, $matchCount);
+            $requestPathTailSecure = str_replace($currentShop->getSecureBaseUrl(), '', $requestPath, $matchCountSecure);
+            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
+                if ($shop === null) {
+                    $shop = $currentShop;
+                }
+            } elseif ($matchCount > 0 && in_array($requestPathTail[0],array('/', '?'))
+                    || $requestPath == $currentShop->getBaseUrl()) {
+                $shop = $currentShop;
+                break;
+            } elseif ($currentShop->getSecure() && $matchCountSecure > 0 && in_array($requestPathTailSecure[0],array('/', '?'))
+                    || $requestPath == $currentShop->getSecureBaseUrl()) {
+                $shop = $currentShop;
+                break;
+            }
+        }
+        return $shop;
     }
 }
