@@ -34,14 +34,89 @@ Ext.define('Shopware.grid.Association', {
          *      });
          */
         displayConfig: {
+            /**
+             * Alphanumeric key of the association.
+             * This key is requires for the search request.
+             * @example:
+             * You have a base model like this:
+             *      Ext.define('Shopware.apps.Product.model.Product', {
+             *          extend: 'Shopware.data.Model',
+             *          displayConfig: {
+             *              controller: 'Product',
+             *              detail: 'Shopware.apps.Product.view.detail.Product'
+             *          },
+             *          fields: [
+             *              { name: 'id', type: 'int', useNull: true },
+             *              { name: 'name', type: 'string' },
+             *              { name: 'description', type: 'string', useNull: true },
+             *              ...
+             *          ],
+             *
+             *          associations: [
+             *              {
+             *                  relation: 'ManyToMany',
+             *                  type: 'hasMany',
+             *                  model: 'Shopware.apps.Product.model.Category',
+             *                  name: 'getCategory',
+             *                  associationKey: 'categories'
+             *              }
+             *          ]
+             *      });
+             *
+             * The Shopware.apps.Product.model.Category association should be displayed
+             * in a Shopware.grid.Association, because it is a ManyToMany relation.
+             *
+             * The definition of the Shopware.grid.Association looks now like this:
+             *      Ext.define('Shopware.apps.Product.view.detail.Category', {
+             *          extend: 'Shopware.grid.Association',
+             *          alias: 'widget.product-view-detail-category',
+             *          title: 'Category',
+             *
+             *          displayConfig: {
+             *              searchController: 'product',
+             *              associationKey: 'categories'
+             *          }
+             *      });
+             */
             associationKey: undefined,
+
+            /**
+             * Controller name of the php controller.
+             * Used for the search request and will be set in the searchUrl.
+             * @type { String }
+             */
             searchController: undefined,
+
+            /**
+             * Url for the search request. The "controller=base" path will be replaced with the
+             * { @link #searchController } property.
+             *
+             * @type { String }
+             */
             searchUrl: '{url controller="base" action="searchAssociation"}',
 
-
+            /**
+             * Configuration for the search combo box.
+             * If the property is set to false, the { @link #createAssociationSearchStore } won't be called.
+             *
+             * @type { boolean }
+             */
             searchCombo: true,
+
+            /**
+             * Configuration of the { @link Shopware.grid.Panel }.
+             * The association grid don't need a paging bar so we can hide this by using the grid panel config.
+             *
+             * @@type { boolean }
+             */
             pagingbar: false,
-            actionColumn: true,
+
+            /**
+             * Configuration of the { @link Shopware.grid.Panel }.
+             * The associated data of a many to many association has no detail view.
+             *
+             * @type { boolean }
+             */
             editColumn: false
         },
 
@@ -53,7 +128,7 @@ Ext.define('Shopware.grid.Association', {
          * @returns Object
          */
         getDisplayConfig: function (userOpts, displayConfig) {
-            var config = { };
+            var config;
 
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
