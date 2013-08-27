@@ -31,7 +31,6 @@
  *  @event 'eventAlias-delete-item'
  *  @event 'eventAlias-before-init-component'
  *  @event 'eventAlias-after-init-component'
- *
  *  @event 'eventAlias-after-create-columns'
  *  @event 'eventAlias-column-created'
  *  @event 'eventAlias-action-column-created'

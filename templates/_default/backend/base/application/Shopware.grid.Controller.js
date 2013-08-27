@@ -28,17 +28,26 @@
  * });
  *
  * This component fires the following custom events:
+ *  @event 'eventAlias-before-init'
+ *  @event 'eventAlias-after-init'
+ *
  *  @event 'eventAlias-before-open-delete-window'
  *  @event 'eventAlias-batch-delete-exception'
  *  @event 'eventAlias-batch-delete-success'
  *  @event 'eventAlias-after-selection-changed'
+ *  @event 'eventAlias-after-page-size-changed'
  *  @event 'eventAlias-before-add-item'
+ *  @event 'eventAlias-after-add-item'
+ *  @event 'eventAlias-before-delete-items'
  *  @event 'eventAlias-before-search'
+ *  @event 'eventAlias-after-search'
  *  @event 'eventAlias-before-page-size-changed'
  *  @event 'eventAlias-before-edit-item'
+ *  @event 'eventAlias-after-edit-item'
  *  @event 'eventAlias-before-create-detail-window'
  *  @event 'eventAlias-after-create-detail-window'
- *  @event 'eventAlias-after-init'
+ *  @event 'eventAlias-after-create-controls'
+ *  @event 'eventAlias-after-create-listing-window-controls'
  *
  * The event parameter are documented in the { @link #registerEvents } function.
  */
@@ -206,6 +215,8 @@ Ext.define('Shopware.grid.Controller', {
     init: function () {
         var me = this;
 
+        me.fireEvent(me.getEventName('before-init'), me);
+
         if (me.getConfig('eventAlias')) {
             me.control(me.createControls());
             me.registerEvents();
@@ -339,8 +350,85 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @param { Shopware.grid.Controller } controller - Instance of this component
              */
-            me.getEventName('after-init')
-        );
+            me.getEventName('after-init'),
+
+            /**
+             * Event fired after all controller event listeners registered.
+             * This event can be used to add some event listeners to the passed controls array.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Object } controls - Contains the created controller event listeners.
+             */
+            me.getEventName('after-create-controls'),
+
+            /**
+             * Event fired after the default shopware event listeners for the listing window created.
+             * This event can be used to add some additional event listeners for the controlled listing window.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Object } events - Contains all created listing window event listeners.
+             */
+            me.getEventName('after-create-listing-window-controls'),
+
+            /**
+             * Event fired before the selected grid rows will be deleted.
+             * The event is event fired before the confirm message displayed. This event
+             * can be used to modify the passed record or to modify the confirm message.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Array } records - The selected grid record
+             * @param { Shopware.grid.Panel } grid - The instance of the grid.
+             * @param { String } title - Contains the title for the delete confirm message box.
+             * @param { String } text - Contains the info text for the delete confirm message box.
+             */
+            me.getEventName('before-delete-items'),
+
+            /**
+             * Event fired after the detail window was created for a new record.
+             * This event can be used to modify the detail view or to add additional processes.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.window.Detail } window - Instance of the created detail window.
+             * @param { Shopware.data.Model } record - The record which will be displayed in the detail window.
+             * @param { Shopware.grid.Panel } listing - Instance of the grid panel.
+             */
+            me.getEventName('after-add-item'),
+
+            /**
+             * Event fired after the search request done.
+             * This event can be used to modify the filter result or to modify the search field.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - Instance of the grid panel
+             * @param { Shopware.data.Store } store - The listing store which was filtered.
+             * @param { Ext.form.field.Text } searchField - Instance of the grid search field.
+             * @param { String } value - The inserted search value.
+             */
+            me.getEventName('after-search'),
+
+            /**
+             * Event fired after the user changed the grid page size.
+             * This event is an notification event which can be used for additional processes.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - Instance of the grid panel
+             * @param { Ext.form.field.ComboBox } combo - Instance of the page size combo box.
+             * @param { Array } records - The selected records of the combo box.
+             */
+            me.getEventName('after-page-size-changed'),
+
+            /**
+             * Event fired after the edit record was reloaded and loaded in the detail window.
+             * Event can be used to modify the detail view or additional processes.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.window.Detail } window - Instance of the created detail window which will be displayed.
+             * @param { Shopware.grid.Panel } grid - Instance of the grid panel
+             * @param { Shopware.data.Model } record - Instance of the record which will be displayed in the detail window.
+             */
+            me.getEventName('after-edit-item')
+
+          );
     },
 
     /**
@@ -362,6 +450,8 @@ Ext.define('Shopware.grid.Controller', {
 
         events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
         controls['shopware-progress-window'] = events;
+
+        Shopware.app.Application.fireEvent(me.getEventName('after-create-controls'), me, controls);
 
         return controls;
     },
@@ -385,6 +475,8 @@ Ext.define('Shopware.grid.Controller', {
         events[alias + '-search'] = me.onSearch;
         events[alias + '-change-page-size'] = me.onChangePageSize;
 
+        Shopware.app.Application.fireEvent(me.getEventName('after-create-listing-window-controls'), me, events, alias);
+
         return events;
     },
 
@@ -402,9 +494,14 @@ Ext.define('Shopware.grid.Controller', {
      * @param button { Ext.button.Button }
      */
     onDeleteItems: function (grid, records, button) {
-        var me = this, window;
+        var me = this, window,
+            text = me.getConfig('deleteConfirmText'), title = me.getConfig('deleteConfirmTitle');
 
-        Ext.MessageBox.confirm(me.getConfig('deleteConfirmTitle'), me.getConfig('deleteConfirmText'), function (response) {
+        if (!Shopware.app.Application.fireEvent('before-delete-items', me, records, grid, title, text)) {
+            return false;
+        }
+
+        Ext.MessageBox.confirm(title, text, function (response) {
             if (response !== 'yes') {
                 return false;
             }
@@ -464,6 +561,7 @@ Ext.define('Shopware.grid.Controller', {
      */
     onBatchDeleteItem: function (task, record, callback) {
         var me = this, proxy = record.getProxy(), data;
+
         callback = callback || Ext.emptyFn;
 
         proxy.on('exception', function (proxy, response, operation) {
@@ -523,7 +621,7 @@ Ext.define('Shopware.grid.Controller', {
      * @returns { Shopware.window.Detail|boolean }
      */
     onAddItem: function (listing) {
-        var me = this, record, store = listing.getStore();
+        var me = this, record, store = listing.getStore(), window;
 
         record = Ext.create(store.model);
 
@@ -531,10 +629,14 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
-        return me.createDetailWindow(
+        window = me.createDetailWindow(
             record,
             listing.getConfig('detailWindow')
         );
+
+        Shopware.app.Application.fireEvent(me.getEventName('after-add-item'), me, window, record, listing);
+
+        return window;
     },
 
     /**
@@ -558,13 +660,17 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
+        store.on('load', function() {
+            Shopware.app.Application.fireEvent(me.getEventName('after-search'), me, grid, store, searchField, value);
+        }, me, { single: true });
+
         if (value.length > 0) {
             store.filter({ property: 'search', value: value });
         } else {
             store.load();
         }
 
-        return true;
+        return true
     },
 
     /**
@@ -591,7 +697,7 @@ Ext.define('Shopware.grid.Controller', {
             store.load();
         }
 
-        return true;
+        return Shopware.app.Application.fireEvent(me.getEventName('after-page-size-changed'), me, grid, combo, records);
     },
 
 
@@ -604,7 +710,7 @@ Ext.define('Shopware.grid.Controller', {
      * @returns { boolean|Shopware.window.Detail }
      */
     onEditItem: function (listing, record) {
-        var me = this;
+        var me = this, window;
 
         if (!(record instanceof Ext.data.Model)) {
             return false;
@@ -617,18 +723,24 @@ Ext.define('Shopware.grid.Controller', {
         if (me.hasModelAction(record, 'detail')) {
             record.reload({
                 callback: function (result) {
-                    me.createDetailWindow(
+                    window = me.createDetailWindow(
                         result,
                         listing.getConfig('detailWindow')
                     );
+
+                    Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
                 }
             });
+
             return true;
         } else {
-            return me.createDetailWindow(
+            window = me.createDetailWindow(
                 record,
                 listing.getConfig('detailWindow')
             );
+
+            Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
+            return true;
         }
     },
 
