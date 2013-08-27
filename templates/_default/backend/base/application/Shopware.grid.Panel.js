@@ -30,7 +30,7 @@
  *  @event 'eventAlias-edit-item'
  *  @event 'eventAlias-delete-item'
  *
- * The events are documentated in the { @link #registerEvents } function
+ * The events are documented in the { @link #registerEvents } function
  */
 Ext.define('Shopware.grid.Panel', {
 
@@ -964,7 +964,7 @@ Ext.define('Shopware.grid.Panel', {
         return Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function (selModel, selection) {
-                    me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
+                    return me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
                 }
             }
         });

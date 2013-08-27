@@ -27,65 +27,19 @@
  *    }
  * });
  *
+ * This component fires the following custom events:
+ *  @event 'eventAlias-before-open-delete-window'
+ *  @event 'eventAlias-batch-delete-exception'
+ *  @event 'eventAlias-batch-delete-success'
+ *  @event 'eventAlias-after-selection-changed'
+ *  @event 'eventAlias-before-add-item'
+ *  @event 'eventAlias-before-search'
+ *  @event 'eventAlias-before-page-size-changed'
+ *  @event 'eventAlias-before-edit-item'
+ *  @event 'eventAlias-before-create-detail-window'
+ *  @event 'eventAlias-after-create-detail-window'
  *
- * @event 'eventAlias-before-open-delete-window'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.window.Progress } window - Created instance of the Shopware.window.Progress.
- *      @param { Shopware.grid.Panel } controller - Instance of the controlled Shopware.grid.Panel
- *      @param { Shopware.data.Model[] } records - All selected records.
- *
- * @event 'eventAlias-batch-delete-exception'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.data.Model } record - The record which was trying to delete
- *      @param { Object } task - The current task configuration which passed to the window constructor.
- *      @param { Object } response - The Ext.data.Operation response object.
- *      @param { Ext.data.Operation } operation - The operation which throws the exception.
- *
- * @event 'eventAlias-batch-delete-success'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.data.Model } record - The deleted record.
- *      @param { Object } task - The current task configuration which passed to the window constructor.
- *      @param { Object } result - The result set of the data operation.
- *      @param { Ext.data.Operation } operation - The destroy operation which was executed.
- *
- * @event 'eventAlias-after-selection-changed'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
- *      @param { Ext.selection.CheckboxModel } selModel - The grid selection model.
- *      @param { Ext.data.Model[] } selection - The current selection of the grid.
- *
- * @event 'eventAlias-before-add-item'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
- *      @param { Shopware.data.Model } record - The created record which will be displayed in the detail window
- *
- * @event 'eventAlias-before-search'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
- *      @param { Shopware.data.Store } store - The grid store.
- *      @param { Ext.form.field.Text } searchField - The search field of the grid.
- *      @param { String } value - The trimmed search value, which will be assigned to the store.filter function.
- *
- * @event 'eventAlias-before-page-size-changed'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
- *      @param { Ext.form.field.ComboBox } combo - The page size combo box.
- *      @param { Ext.data.Model[] } selection - The combo box selection.
- *
- * @event 'eventAlias-before-edit-item'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
- *      @param { Shopware.data.Model } record - The record which will be displayed in the detail window to edit.
- *
- * @event 'eventAlias-before-create-detail-window'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.data.Model } record - The record which will be displayed in the detail window.
- *
- * @event 'eventAlias-after-create-detail-window'
- *      @param { Shopware.grid.Controller } controller - Instance of this component
- *      @param { Shopware.data.Model } record - The record which will be displayed in the detail window to edit.
- *      @param { Shopware.detail.Window } window - The created detail window.
- *
+ * The event parameter are documented in the { @link #registerEvents } function.
  */
 Ext.define('Shopware.grid.Controller', {
     extend: 'Ext.app.Controller',
@@ -255,9 +209,130 @@ Ext.define('Shopware.grid.Controller', {
 
         if (me.getConfig('eventAlias')) {
             me.control(me.createControls());
+            me.registerEvents();
         }
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Registers all required custom events of this component.
+     */
+    registerEvents: function() {
+        var me = this;
+
+        this.addEvents(
+            /**
+             * Event fired before the batch window opened to delete multiple grid items.
+             * If you set false as return value in the even listener, the window won't be opened.
+             * This allows you to implement your own delete process.
+             * The last event parameter contains the selected records which has to be delete.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.window.Progress } window - Created instance of the Shopware.window.Progress.
+             * @param { Shopware.grid.Panel } controller - Instance of the controlled Shopware.grid.Panel
+             * @param { Shopware.data.Model[] } records - All selected records.
+             */
+            me.getEventName('before-open-delete-window'),
+
+            /**
+             * Event fired if an exception occurred on removing a single grid row over the batch delete
+             * window.
+             * The Ext.data.Operation contains the occurred error message in operation.getException().
+             * The passed Shopware.data.Model is the record which was tried to delete.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.data.Model } record - The record which was trying to delete
+             * @param { Object } task - The current task configuration which passed to the window constructor.
+             * @param { Object } response - The Ext.data.Operation response object.
+             * @param { Ext.data.Operation } operation - The operation which throws the exception.
+             */
+            me.getEventName('batch-delete-exception'),
+
+            /**
+             * Event fired after a single record was deleted successfully from the batch window.
+             * The passed record, contains the data of the deleted record for additionally notifications or processes.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.data.Model } record - The deleted record.
+             * @param { Object } task - The current task configuration which passed to the window constructor.
+             * @param { Object } result - The result set of the data operation.
+             * @param { Ext.data.Operation } operation - The destroy operation which was executed.
+             */
+            me.getEventName('batch-delete-success'),
+
+            /**
+             * Event fired after the user changed the grid selection over the grid selection model.
+             * To cancel the selection change set the event listener return value to false.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
+             * @param { Ext.selection.CheckboxModel } selModel - The grid selection model.
+             * @param { Ext.data.Model[] } selection - The current selection of the grid.
+             */
+            me.getEventName('after-selection-changed'),
+
+            /**
+             * Event fired before a new record will be displayed in the detail window.
+             * If the event listener returns false, the window won't be created.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
+             * @param { Shopware.data.Model } record - The created record which will be displayed in the detail window
+             */
+            me.getEventName('before-add-item'),
+
+            /**
+             * Event fired before the inserted search value will be set as grid store filter value.
+             * To cancel the search process set the return value of the event listener function to false.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
+             * @param { Shopware.data.Store } store - The grid store.
+             * @param { Ext.form.field.Text } searchField - The search field of the grid.
+             * @param { String } value - The trimmed search value, which will be assigned to the store.filter function.
+             */
+            me.getEventName('before-search'),
+
+            /**
+             * Event is fired before the grid store page size changed and the store will be reloaded.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
+             * @param { Ext.form.field.ComboBox } combo - The page size combo box.
+             * @param { Ext.data.Model[] } selection - The combo box selection.
+             */
+            me.getEventName('before-page-size-changed'),
+
+            /**
+             * Event is fired before the detail window will be opened to edit a single grid row.
+             * To cancel the window creation, set false as return value in the event listener.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.grid.Panel } grid - The controlled grid panel of the grid controller.
+             * @param { Shopware.data.Model } record - The record which will be displayed in the detail window to edit.
+             */
+            me.getEventName('before-edit-item'),
+
+            /**
+             * General event which fired each time before the detail window will be created.
+             * This event is even fired when a new record will be displayed or a grid record will be edited.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.data.Model } record - The record which will be displayed in the detail window.
+             */
+            me.getEventName('before-create-detail-window'),
+
+            /**
+             * General event which fired each time after a detail window was created.
+             * This event is fired when the user creates a new record or edit an existing record.
+             *
+             * @param { Shopware.grid.Controller } controller - Instance of this component
+             * @param { Shopware.data.Model } record - The record which will be displayed in the detail window to edit.
+             * @param { Shopware.detail.Window } window - The created detail window.
+             */
+            me.getEventName('after-create-detail-window')
+        );
     },
 
     /**
