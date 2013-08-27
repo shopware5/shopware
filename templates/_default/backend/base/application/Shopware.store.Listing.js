@@ -157,7 +157,7 @@ Ext.define('Shopware.store.Listing', {
      */
     constructor: function (config) {
         var me = this;
-        me._opts = me.shopware.getDisplayConfig(config, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(config, this.displayConfig);
         me.convertProxyApi();
         me.callParent(arguments);
     },
