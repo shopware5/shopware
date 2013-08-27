@@ -44,7 +44,7 @@ Ext.define('Shopware.window.Progress', {
          *      Ext.define('Shopware.apps.Product.view.batch.Window', {
          *          extend: 'Shopware.window.Progress',
          *          displayConfig: {
-         *              infoText: 'Deletes all selected products in a batch modus ...',
+         *              infoText: 'Deletes all selected products in a batch mode ...',
          *              ...
          *          }
          *      });
@@ -161,7 +161,7 @@ Ext.define('Shopware.window.Progress', {
     initComponent: function () {
         var me = this;
 
-        //reset the cancel proccess flag
+        //reset the cancel process flag
         me.cancelProcess = false;
 
         me.items = me.createItems();
@@ -396,6 +396,8 @@ Ext.define('Shopware.window.Progress', {
             //recursive call!
             me.sequentialProcess(current, tasks);
         });
+
+        return true;
     },
 
     /**

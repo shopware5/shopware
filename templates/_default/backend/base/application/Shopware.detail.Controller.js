@@ -188,8 +188,8 @@ Ext.define('Shopware.detail.Controller', {
 
     /**
      *
-     * @param window { Shopware.window.Detail }
-     * @param record { Shopware.data.Model }
+     * @param { Shopware.window.Detail } window
+     * @param { Shopware.data.Model } record
      */
     onSave: function(window, record) {
         var me = this, proxy = record.getProxy(), data, form = window.formPanel;
@@ -199,17 +199,25 @@ Ext.define('Shopware.detail.Controller', {
         }
         form.getForm().updateRecord(record);
 
-        proxy.on('exception', function (proxy, response, operation) {
+        proxy.on('exception', function (proxy, response) {
+
             window.setLoading(false);
+
             data = Ext.decode(response.responseText);
             if (data.violations && data.violations.length > 0) {
                 me.createViolationMessage(data.violations);
                 me.markFieldsAsInvalid(window, data.violations);
             }
+
         }, me, { single: true });
 
+        //active loading mask of the detail window
         window.setLoading(true);
+
+        //start save request of the { @link Shopware.data.Model }
         record.save({
+
+            //success callback function.
             success: function(result) {
                 window.setLoading(false);
                 Shopware.Notification.createGrowlMessage('Success', 'Item saved successfully');

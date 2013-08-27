@@ -15,8 +15,6 @@ Ext.define('Shopware.form.field.Search', {
 
     minChars: 2,
 
-    displayConfig: { },
-
     /**
      * The combo box store have to be set from outside.
      * Normally the store is created over the { @link Shopware.model.Helper:createAssociationSearchStore } function.
@@ -53,7 +51,11 @@ Ext.define('Shopware.form.field.Search', {
          *      });
          */
         displayConfig: {
-
+            /**
+             * Activates or deactivate the listing template function which displays
+             * additional information for each record.
+             */
+            listTemplate: true
         },
 
         /**
@@ -128,7 +130,9 @@ Ext.define('Shopware.form.field.Search', {
     initComponent: function() {
         var me = this;
 
-        me.listConfig = me.createSearchComboListConfig();
+        if (me.getConfig('listTemplate')) {
+            me.listConfig = me.createSearchComboListConfig();
+        }
 
         me.callParent(arguments);
     },
@@ -156,8 +160,5 @@ Ext.define('Shopware.form.field.Search', {
             }
         }
     }
-
-
-
 });
 //{/block}
