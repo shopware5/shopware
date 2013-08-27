@@ -15,13 +15,34 @@ Ext.define('Shopware.detail.Controller', {
     },
 
     /**
+     * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
+     * is scope-independent and it always returns the class from which it was called, regardless of what
+     * this points to during run-time.
+     *
      * The statics object contains the shopware default configuration for
-     * this component.
+     * this component. The different shopware configurations are stored
+     * within the displayConfig object.
      *
      * @type { object }
      */
     statics: {
+        /**
+         * The statics displayConfig contains the default shopware configuration for
+         * this component.
+         * To set the shopware configuration, you can set the displayConfig directly
+         * as property of the component:
+         *
+         * @example
+         *      Ext.define('Shopware.apps.Product.controller.Detail', {
+         *          extend: 'Shopware.detail.Controller',
+         *          displayConfig: {
+         *              eventAlias: 'product',
+         *              ...
+         *          }
+         *      });
+         */
         displayConfig: {
+
             /**
              * Final class of the Shopware.window.Detail.
              * This class is required to get the alias of the component.

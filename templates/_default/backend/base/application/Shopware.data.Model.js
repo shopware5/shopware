@@ -12,10 +12,26 @@ Ext.define('Shopware.data.Model', {
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
+     *
      * @type { Object }
      */
     shopware: {
 
+        /**
+         * The shopware displayConfig contains the default shopware configuration for
+         * this component.
+         * To set the shopware configuration, you can set the displayConfig directly
+         * as property of the component:
+         *
+         * @example
+         *      Ext.define('Shopware.apps.Product.model.Product', {
+         *          extend: 'Shopware.data.Model',
+         *          displayConfig: {
+         *              listing: 'Shopware.apps.Product.view.list.Product',
+         *              ...
+         *          }
+         *      });
+         */
         displayConfig: {
             controller: undefined,
 
@@ -133,6 +149,7 @@ Ext.define('Shopware.data.Model', {
      */
     constructor: function (config) {
         var me = this;
+
         me._opts = me.shopware.getDisplayConfig(config, this.displayConfig);
         me.convertProxyApi();
         me.callParent(arguments);
