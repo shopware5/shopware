@@ -750,6 +750,8 @@ Ext.define('Shopware.grid.Controller', {
      *
      * @param record { Shopware.data.Model } - The record which will be displayed in the detail window
      * @param detailWindowClass { string } - Class name of the detail window
+     *
+     * @returns boolean|Shopware.window.Detail
      */
     createDetailWindow: function (record, detailWindowClass) {
         var me = this, window;
