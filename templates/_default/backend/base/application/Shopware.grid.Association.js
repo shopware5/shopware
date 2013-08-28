@@ -1,9 +1,17 @@
 //{block name="backend/application/grid/association"}
 
 Ext.define('Shopware.grid.Association', {
+    /**
+     * The parent class that this class extends.
+     * @type { String }
+     */
     extend: 'Shopware.grid.Panel',
-    alias: 'widget.shopware-grid-association',
 
+    /**
+     * Override required!
+     * @type { String }
+     */
+    alias: 'widget.shopware-grid-association',
 
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()

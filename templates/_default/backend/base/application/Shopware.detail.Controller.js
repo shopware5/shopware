@@ -1,8 +1,5 @@
-//{block name="backend/application/controller/detail"}
 
-/**
- *
- */
+//{block name="backend/application/controller/detail"}
 Ext.define('Shopware.detail.Controller', {
     extend: 'Enlight.app.Controller',
 
@@ -141,18 +138,104 @@ Ext.define('Shopware.detail.Controller', {
         var me = this;
 
         if (me.getConfig('eventAlias')) {
+            me.registerEvents();
             me.control(me.createControls());
         }
 
         me.callParent(arguments);
     },
 
+    /**
+     * Helper function to reload the controller event listeners.
+     * This function is used from the Shopware.window.Detail.
+     * Workaround for the sub application event bus.
+     */
     reloadControls: function() {
         var me = this;
 
         if (me.getConfig('eventAlias')) {
+            me.registerEvents();
             me.control(me.createControls());
         }
+    },
+
+    registerEvents: function() {
+        var me = this;
+
+        me.addEvents(
+            /**
+             * Event fired at the beginning of the { @link #onSave } event listener function
+             * If the event listener returns false, the save process will be canceled.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('start-save-record'),
+
+            /**
+             * Event fired before the record parameter will be updated with the form panel data of the
+             * detail window.
+             * If the event listener function returns false, the updateRecord() won't be executed.
+             * This allows you to update the record manually and cancel the shopware default process.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('update-record-on-save'),
+
+            /**
+             * Event fired after the record parameter updated with the detail window form data.
+             * This event can be used to modify the record data before the send request will be send.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('after-update-record-on-save'),
+
+            /**
+             * Event fired if the save request throws an exception.
+             * In case of an exception the data object can contains a Doctrine violations array if the
+             * Doctrine model was validated through the Symfony Constraint validator.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Object } data - Response text of the save request. Contains a violation property if the model was validate over the Doctrine validator.
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('save-exception'),
+
+            /**
+             * Event fired before the save request will be fired.
+             * If the event listener function of this event returns false, the save request won't be started.
+             * The record parameter contains the updated model data and used for the save request.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('before-send-save-request'),
+
+            /**
+             * Event fired after the save request done and was successfully.
+             * After this event the detail window will be reloaded over the { @link Shopware.window.Detail:loadRecord } function.
+             * The result parameter will be passed to the loadRecord function, to allow a php modification of the record data.
+             *
+             * @param { Shopware.detail.Controller } controller - Instance of this controller
+             * @param { Shopware.data.Model } result - Result set of the save request.
+             * @param { Shopware.window.Detail } window - Detail window which fired the save event
+             * @param { Shopware.data.Model } record - The displayed record of the detail window which used for the save request.
+             * @param { Ext.form.Panel } form - Form panel of the detail window. This window contains the updated record data.
+             */
+            me.getEventName('save-successfully')
+        );
     },
 
     /**
@@ -176,17 +259,23 @@ Ext.define('Shopware.detail.Controller', {
     },
 
 
+    /**
+     * Creates all event listener definitions for the detail window events.
+     *
+     * @returns { Object }
+     */
     createDetailWindowControls: function() {
-        var me = this, events = {}, alias;
+        var me = this, events = {};
 
-        alias = me.getConfig('eventAlias');
-
-        events[alias + '-save'] = me.onSave;
+        events[me.getEventName('save')] = me.onSave;
 
         return events;
     },
 
     /**
+     * Event listener function of the { @link Shopware.window.Detail } 'save' event.
+     * This event is used to save a single record with the modified detail data of
+     * the detail window.
      *
      * @param { Shopware.window.Detail } window
      * @param { Shopware.data.Model } record
@@ -194,17 +283,36 @@ Ext.define('Shopware.detail.Controller', {
     onSave: function(window, record) {
         var me = this, proxy = record.getProxy(), data, form = window.formPanel;
 
+        //check if the Ext JS form is valid
         if (!form.getForm().isValid()) {
             return false;
         }
-        form.getForm().updateRecord(record);
 
+        //allows to cancel the save process.
+        if (!Shopware.app.Application.fireEvent(me.getEventName('start-save-record'), me, window, record, form)) {
+            return false;
+        }
+
+        //this event allows to skip the update record process.
+        if (Shopware.app.Application.fireEvent(me.getEventName('update-record-on-save'), me, window, record, form)) {
+            //update the passed record with the form data.
+            form.getForm().updateRecord(record);
+        }
+
+        Shopware.app.Application.fireEvent(me.getEventName('after-update-record-on-save'), me, window, record, form);
+
+        //add event listener to the model proxy to get access on thrown exceptions
         proxy.on('exception', function (proxy, response) {
-
+            //remove loading mask from the window
             window.setLoading(false);
 
             data = Ext.decode(response.responseText);
+
+            Shopware.app.Application.fireEvent(me.getEventName('save-exception'), me, data, window, record, form);
+
+            //check if the response text contains field violations
             if (data.violations && data.violations.length > 0) {
+                //if violations exists, create a growl message and try to focus the fields.
                 me.createViolationMessage(data.violations);
                 me.markFieldsAsInvalid(window, data.violations);
             }
@@ -214,18 +322,31 @@ Ext.define('Shopware.detail.Controller', {
         //active loading mask of the detail window
         window.setLoading(true);
 
+        if (!Shopware.app.Application.fireEvent(me.getEventName('before-send-save-request'), me, window, record, form)) {
+            return false;
+        }
+
         //start save request of the { @link Shopware.data.Model }
         record.save({
-
             //success callback function.
             success: function(result) {
                 window.setLoading(false);
+
+                Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form);
+
                 Shopware.Notification.createGrowlMessage('Success', 'Item saved successfully');
+
                 window.loadRecord(result);
             }
         });
     },
 
+    /**
+     * Helper function which creates an <ul> for the different violation messages.
+     * This message will be displayed in the sticky growl message.
+     *
+     * @param { Array } violations
+     */
     createViolationMessage: function(violations) {
         var template = '';
 
@@ -241,11 +362,17 @@ Ext.define('Shopware.detail.Controller', {
         });
     },
 
+    /**
+     * Helper function to focus a violation field and set the violation message as field error message.
+     *
+     * @param { Shopware.window.Detail } window
+     * @param { Array } violations
+     */
     markFieldsAsInvalid: function(window, violations) {
         var me = this;
         
         Ext.each(violations, function(violation) {
-            var field = me.getFieldByName(window, violation.property);
+            var field = me.getFieldByName(window.formPanel, violation.property);
             if (field) {
                 field.focus();
                 field.markInvalid(violation.message);
@@ -253,9 +380,17 @@ Ext.define('Shopware.detail.Controller', {
         });
     },
 
-    getFieldByName: function(window, fieldName) {
-        var me = this, result = undefined,
-            fields = window.formPanel.getForm().getFields();
+    /**
+     * Helper function to get a form field by his name.
+     *
+     * @param { Ext.form.Panel } form - The form panel which contains the field
+     * @param { String } fieldName - Name of the searched field.
+     *
+     * @returns { undefined|Ext.form.field.Field }
+     */
+    getFieldByName: function(form, fieldName) {
+        var result = undefined,
+            fields = form.getForm().getFields();
 
         fields.each(function(field) {
             if (field.name === fieldName) {
@@ -269,8 +404,9 @@ Ext.define('Shopware.detail.Controller', {
     /**
      * Helper function to prefix the passed event name with the event alias.
      *
-     * @param name
-     * @returns { string }
+     * @param { String } name
+     *
+     * @returns { String }
      */
     getEventName: function (name) {
         return this.getConfig('eventAlias') + '-' + name;
