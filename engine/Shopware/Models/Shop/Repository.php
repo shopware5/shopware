@@ -309,6 +309,7 @@ class Repository extends ModelRepository
             $this->fixActive($currentShop);
         }
 
+        //returns the right shop depending on the url
         $shop = $this->getShopByRequest($shops, $requestPath);
 
         if ($shop !== null) {
@@ -377,18 +378,34 @@ class Repository extends ModelRepository
     {
         $shop = null;
         foreach ($shops as $currentShop) {
+            // strips the main part of the url so only the tail part remains f.e. /blog/blogId=5 or ?feedId=3
             $requestPathTail = str_replace($currentShop->getBaseUrl(), '', $requestPath, $matchCount);
+            // strips the main secure part of the url like $requestPathTail
             $requestPathTailSecure = str_replace($currentShop->getSecureBaseUrl(), '', $requestPath, $matchCountSecure);
             if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
+                //if the base url matches exactly the basePath we have found the main shop but the loop will continue
                 if ($shop === null) {
                     $shop = $currentShop;
                 }
             } elseif ($matchCount > 0 && in_array($requestPathTail[0],array('/', '?'))
                     || $requestPath == $currentShop->getBaseUrl()) {
+                /*
+                 * $matchCount ensures that at least one match was found
+                 * will check if a language shop or a subshop matches exactly with the same base url
+                 * or if the tail path starts with / or ? than we can suppose that this is a well formed url
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
                 $shop = $currentShop;
                 break;
             } elseif ($currentShop->getSecure() && $matchCountSecure > 0 && in_array($requestPathTailSecure[0],array('/', '?'))
                     || $requestPath == $currentShop->getSecureBaseUrl()) {
+                /*
+                 * only if the shop is used in the ssl mode
+                 * $matchCountSecure ensures that at least one match was found
+                 * will check if a language shop or a subshop matches exactly with the same base url
+                 * or if the tail path starts with / or ? than we can suppose that this is a well formed url
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
                 $shop = $currentShop;
                 break;
             }
