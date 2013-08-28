@@ -83,6 +83,7 @@ Ext.define('Shopware.grid.Association', {
             /**
              * Controller name of the php controller.
              * Used for the search request and will be set in the searchUrl.
+             *
              * @type { String }
              */
             searchController: undefined,
