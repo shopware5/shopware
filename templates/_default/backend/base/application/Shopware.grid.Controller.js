@@ -223,14 +223,14 @@ Ext.define('Shopware.grid.Controller', {
     init: function () {
         var me = this;
 
-        me.fireEvent(me.getEventName('before-init'), me);
+        Shopware.app.Application.fireEvent(me.getEventName('before-init'), me);
 
         if (me.getConfig('eventAlias')) {
             me.control(me.createControls());
             me.registerEvents();
         }
 
-        me.fireEvent(me.getEventName('after-init'), me);
+        Shopware.app.Application.fireEvent(me.getEventName('after-init'), me);
 
         me.callParent(arguments);
     },

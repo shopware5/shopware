@@ -3,16 +3,41 @@
 
 Ext.define('Shopware.form.field.Search', {
 
+    /**
+     * The parent class that this class extends.
+     * @type { String }
+     */
     extend: 'Ext.form.field.ComboBox',
 
+    /**
+     * This property provides a shorter alternative to creating objects than using a full class name. Using xtype is the most common way to define component instances, especially in a container.
+     * @type { String }
+     */
     xtype: 'widget.shopware-form-field-search',
 
+    /**
+     * In queryMode: 'remote', the ComboBox loads its Store dynamically based upon user interaction.
+     * This is typically used for auto complete type inputs, and after the user finishes typing, the Store is loaded.
+     * A parameter containing the typed string is sent in the load request. The default parameter name for the input string is query, but this can be configured using the queryParam config.
+     */
     queryMode: 'remote',
 
+    /**
+     * The underlying data value name to bind to this ComboBox.
+     * @type { String }
+     */
     valueField: 'id',
 
+    /**
+     * The underlying data field name to bind to this ComboBox.
+     * @type { String }
+     */
     displayField: 'name',
 
+    /**
+     * The minimum number of characters the user must type before auto complete and typeAhead activate.
+     * @type { Number }
+     */
     minChars: 2,
 
     /**
