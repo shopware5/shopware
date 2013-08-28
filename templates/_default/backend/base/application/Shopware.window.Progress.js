@@ -161,6 +161,10 @@ Ext.define('Shopware.window.Progress', {
     initComponent: function () {
         var me = this;
 
+        me.registerEvents();
+
+        me.fireEvent('before-init-component', me);
+
         //reset the cancel process flag
         me.cancelProcess = false;
 
@@ -168,12 +172,160 @@ Ext.define('Shopware.window.Progress', {
 
         me.dockedItems = [ me.createToolbar() ];
 
+        me.fireEvent('after-init-component', me);
+
         me.callParent(arguments);
+
+        me.fireEvent('before-start-sequential-process', me);
 
         //starts the batch process.
         me.sequentialProcess(undefined, me.getConfig('tasks'));
     },
 
+    /**
+     * Register all required custom events of this component.
+     */
+    registerEvents: function() {
+        var me = this;
+
+        me.addEvents(
+            /**
+             * Event fired at the beginning of the { @link #initComponent } function.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             */
+            'before-init-component',
+
+            /**
+             * Event fired after the default shopware elements for this component created
+             * and before the me.callParent(arguments) call in the { @link #initComponent } function
+             * executed.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             */
+            'after-init-component',
+
+            /**
+             * Event fired after the me.callParent(arguments) call in the { @link #initComponent } function
+             * and before the batch process started in the { @link #sequentialProcess } function.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             */
+            'before-start-sequential-process',
+
+            /**
+             * Event fired before the default shopware elements for this component will be created.
+             * If the event listener function returns false, the function process will be canceled
+             * and the items parameter will be set as function return value.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Array } items - An empty array at this point, which used as function return value.
+             */
+            'before-create-items',
+
+            /**
+             * Event fired after all default shopware items for this component created.
+             * This event can be used to add additional component items.
+             * The items parameter contains all created elements and will be set as items
+             * array of this component.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Array } items - Contains all created items like the info text, task progress bars and the result field set.
+             */
+            'after-create-items',
+
+            /**
+             * Event fired before the default shopware toolbar will be created.
+             * If the event listener function returns false, the function will be canceled and the
+             * toolbar parameter will be set as function return value.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Null } toolbar - This parameter will be set as return value if the event listener returns false.
+             */
+            'before-create-toolbar',
+
+            /**
+             * Event fired after the toolbar element created.
+             * This event can be used to modify the toolbar view. To add additional toolbar items
+             * or to remove items, you can use the following events:
+             *  - after-create-toolbar-items
+             *  - before-create-toolbar-items
+             *  - after-create-toolbar-fill-item
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Ext.toolbar.Toolbar } toolbar - The created bottom toolbar.
+             */
+            'after-create-toolbar',
+
+            /**
+             * Event fired
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Array } items - An empty array at this point, which will be set as function return value if the event listener returns false.
+             */
+            'before-create-toolbar-items',
+
+            /**
+             * Event fired after the tb fill element pushed in the toolbar items array.
+             * This event can be used to add elements after the fill element but before
+             * shopware adds the default toolbar items.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Array } items - Array which contains a tb fill element and will be set as function return value.
+             */
+            'after-create-toolbar-fill-item',
+
+            /**
+             * Event fired after the default shopware toolbar items created.
+             * This event can be used to remove or add items in the items array.
+             * The items parameter will be set as function return value.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Array } items - Contains all created toolbar items. This parameter will be set as function return value.
+             */
+            'after-create-toolbar-items',
+
+            /**
+             * Event fired at the beginning of the { @link #createResultFieldSet } function.
+             * The event can be used to cancel the function process, by returning false in the event listener function.
+             * If the event listener returns false, the fieldSet parameter will be set as function return value.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Null } fieldSet - This parameter will be set as return value if the event listener returns false.
+             */
+            'before-result-field-set-created',
+
+            /**
+             * Event fired after the result grid created.
+             * The resultGrid parameter will be set into the items array of the result field set.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Ext.grid.Panel } resultGrid - Instance of the created result grid
+             */
+            'after-result-grid-created',
+
+            /**
+             * Event fired after the result field set was created in the { @link #createResultFieldSet }
+             * function.
+             * The resultFieldSet parameter will be set as function return value.
+             * To modify the result grid or add some event listeners to the grid, use the
+             * after-result-grid-created event.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Ext.form.FieldSet } resultFieldSet - This parameter is used as function return value.
+             */
+            'after-result-field-set-created',
+
+            /**
+             * Event fired after a task toolbar created. This event can be used to
+             * add event listeners to the toolbar element or to modify the toolbar view.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Object } task - The task for which the toolbar will be created
+             * @param { Ext.ProgressBar } progressbar - The created progress bar for the current task. This parameter will be set as return value.
+             */
+            'task-toolbar-created'
+        );
+    },
 
     /**
      * Creates all required elements for this component.
@@ -185,6 +337,10 @@ Ext.define('Shopware.window.Progress', {
     createItems: function () {
         var me = this, items = [], item;
         var tasks = me.getConfig('tasks');
+
+        if (!me.fireEvent('before-create-items', me, items)) {
+            return items;
+        }
 
         if (me.getConfig('infoText')) {
             items.push(me.createInfoText());
@@ -198,8 +354,10 @@ Ext.define('Shopware.window.Progress', {
         });
 
         if (me.getConfig('displayResultGrid')) {
-            items.push(me.createResultGrid());
+            items.push(me.createResultFieldSet());
         }
+
+        me.fireEvent('after-create-items', me, items);
 
         return items;
     },
@@ -213,7 +371,34 @@ Ext.define('Shopware.window.Progress', {
      * @returns { Ext.toolbar.Toolbar }
      */
     createToolbar: function () {
-        var me = this;
+        var me = this, toolbar = null;
+
+        if (!me.fireEvent('before-create-toolbar', me, toolbar)) {
+            return toolbar;
+        }
+
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'bottom',
+            items: me.createToolbarItems()
+        });
+
+        me.fireEvent('after-create-toolbar', me, me.toolbar);
+
+        return me.toolbar;
+    },
+
+    /**
+     * Creates the toolbar elements.
+     * The first element is a toolbar fill element to display
+     *
+     * @returns { Array }
+     */
+    createToolbarItems: function() {
+        var me = this, items = [];
+
+        if (!me.fireEvent('before-create-toolbar-items', me, items)) {
+            return items;
+        }
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
@@ -230,13 +415,17 @@ Ext.define('Shopware.window.Progress', {
             handler: function() { me.destroy() }
         });
 
-        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            dock: 'bottom',
-            items: [ '->', me.cancelButton, me.closeButton ]
-        });
+        items.push('->');
 
+        me.fireEvent('after-create-toolbar-fill-item', me, items);
 
-        return me.toolbar;
+        items.push(me.cancelButton);
+
+        items.push(me.closeButton);
+
+        me.fireEvent('after-create-toolbar-items', me, items);
+
+        return items;
     },
 
 
@@ -246,9 +435,13 @@ Ext.define('Shopware.window.Progress', {
      *
      * @returns { Ext.form.FieldSet }
      */
-    createResultGrid: function () {
-        var me = this;
+    createResultFieldSet: function () {
+        var me = this, fieldSet = null;
 
+        if (!me.fireEvent('before-result-field-set-created', me, fieldSet)) {
+            return fieldSet;
+        }
+        
         me.resultStore = Ext.create('Ext.data.Store', {
             model: 'Shopware.model.Error'
         });
@@ -264,6 +457,8 @@ Ext.define('Shopware.window.Progress', {
             store: me.resultStore
         });
 
+        me.fireEvent('after-result-grid-created', me, me.resultGrid);
+
         me.resultFieldSet = Ext.create('Ext.form.FieldSet', {
             items: [ me.resultGrid ],
             layout: 'fit',
@@ -273,6 +468,8 @@ Ext.define('Shopware.window.Progress', {
             margin: '20 0 0',
             title: 'Request results'
         });
+
+        me.fireEvent('after-result-field-set-created', me, me.resultFieldSet);
 
         return me.resultFieldSet;
     },
@@ -301,6 +498,8 @@ Ext.define('Shopware.window.Progress', {
      * @returns { Ext.ProgressBar }
      */
     createTaskProgressBar: function (task) {
+        var me = this;
+
         task.progressBar = Ext.create('Ext.ProgressBar', {
             animate: true,
             text: Ext.String.format(task.text, 0, task.totalCount),
@@ -308,6 +507,8 @@ Ext.define('Shopware.window.Progress', {
             height: 20,
             margin: '15 0 0'
         });
+
+        me.fireEvent('task-toolbar-created', me, task, task.progressBar);
 
         return task.progressBar;
     },
