@@ -53,6 +53,20 @@ Ext.define('Shopware.model.Container', {
          *      });
          */
         displayConfig: {
+            /**
+             * The event alias is used to customize the component events for each
+             * backend application.
+             * The event alias is an optional parameter. If the property is set to
+             * undefined, the grid component use the model name as alias.
+             * For example:
+             *  - A store with Shopware.apps.Product.model.Product is passed to this component
+             *  - The model alias will be set to "product"
+             *  - All component events have now the prefix "product-..."
+             *   - Example "product-add-item".
+             *
+             * @type { string }
+             */
+            eventAlias: undefined,
 
             /**
              * The searchController property is used for manyToOne associations.
@@ -253,6 +267,12 @@ Ext.define('Shopware.model.Container', {
     initComponent: function() {
         var me = this;
 
+        me.eventAlias = me.getConfig('eventAlias');
+        if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.record.$className);
+        me.registerEvents();
+
+        me.fireEvent(me.eventAlias + '-before-init-component', me);
+
         me.fieldAssociations = me.getAssociations(me.record.$className, [
             { relation: 'ManyToOne' }
         ]);
@@ -260,7 +280,205 @@ Ext.define('Shopware.model.Container', {
         me.associationComponents = [];
         me.items = me.createItems();
         me.title = me.getModelName(me.record.$className);
+
+        me.fireEvent(me.eventAlias + '-after-init-component', me);
+
         me.callParent(arguments);
+    },
+
+    /**
+     * Registers the additional custom events of this component.
+     */
+    registerEvents: function() {
+        var me = this;
+
+        this.addEvents(
+            /**
+             * Event fired before shopware creates the default elements for this component.
+             * @param { Shopware.model.Container } container - Instance of this component
+             */
+            me.eventAlias + '-before-init-component',
+
+            /**
+             * Event fired after all shopware default elements created, but before the me.callParent(arguments)
+             * call done.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             */
+            me.eventAlias + '-after-init-component',
+
+            /**
+             * Event fired before the shopware default elements will be created.
+             * Return false in the event listener to cancel the default process.
+             * Event can also be used to add some elements at the beginning of the items array.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Array } items - Empty array which will be used as items definition of this component.
+             */
+            me.eventAlias + '-before-create-items',
+
+            /**
+             * Event fired after all shopware default elements created.
+             * This event can be used to modify the created items or to push additional items at the end of the items array.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Array } items - Contains all created items like the model field set and all association components.
+             */
+            me.eventAlias + '-after-create-items',
+
+            /**
+             * Event fired after an association component created. Association components created if the { @link #associations }
+             * property is filled with association keys.
+             * The association components are defined in the { @link Shopware.data.Model:shopware } config object.
+             * The event can be used to modify the component or to replace the created association component with another.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { mixed } component - The created association component. This could be an Shopware.model.Container, Shopware.grid.Association, Shopware.grid.Panel or a custom component.
+             * @param { String } type - Association type which defined in the association.relation property. (listing, detail, related, field)
+             * @param { Shopware.data.Model } model - Instance of the associated model. This model was used to get the component type.
+             * @param { Ext.data.Store } store - Store of the association, this store contains all associated data for the created component.
+             */
+            me.eventAlias + '-association-component-created',
+
+            /**
+             * Event fired after all form fields created for the current model.
+             * This function can be used to push additional form field to the fields array.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Array } fields - Contains the created model fields
+             * @param { Shopware.data.Model } model - Instance of the model which used to create the field set
+             * @param { String } alias - Field alias for one to one associations.
+             */
+            me.eventAlias + '-model-fields-created',
+
+            /**
+             * Event fired before a model field set will be created.
+             * This event can be used to cancel the field set creation.
+             * If the event listener returns false, the fieldSet parameter will be used as return value.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { null } fieldSet - This value will be used as return value, if the listener returns false.
+             * @param { Array } items - Array which used as item definition for the form field set.
+             * @param { Shopware.data.Model } model - Instance of the model which used to create the form field set.
+             * @param { String } alias - Field alias for one to one association which displayed in the same form panel.
+             */
+            me.eventAlias + '-before-model-field-set-created',
+
+            /**
+             * Event fired after the column containers created and pushed into the items array which used for as item
+             * definition of the form field set.
+             * This event can be used to modify the items array or to push additional items.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Array } fields - Contains the created model fields
+             * @param { Array } items - Contains the created column containers which used for the items definition of the field set.
+             * @param { Shopware.data.Model } model - Instance of the model which used to create the field set
+             * @param { String } alias - Field alias for one to one associations.
+             */
+            me.eventAlias + '-column-containers-created',
+
+            /**
+             * Event fired after the form field set created and before the field set will be set as return value of the
+             * function. The fieldSet parameter contains the created form field set.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.form.FieldSet } fieldSet - The created field set which will be set as function return value.
+             * @param { Shopware.data.Model } model - Instance of the model which used to create the field set
+             * @param { String } alias - Field alias for one to one associations.
+             */
+            me.eventAlias + '-after-model-field-set-created',
+
+            /**
+             * Event fired before a single model form field will be created. If the event listener function
+             * returns false, the formField parameter will be used as return value and the default process will
+             * be canceled.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Shopware.data.Model } model - Instance of the field model which used to create the form field.
+             * @param { Ext.data.Field } field - The model field which used to generate the form field.
+             * @param { String } alias - Field alias for one to one associations.
+             */
+            me.eventAlias + '-before-create-model-field',
+
+            /**
+             * Event fired after an association field was created for a single model field.
+             * An association field are created if the corresponding model contains a many to one association
+             * for a model field.
+             * For example: Many articles are belongs to one supplier, so the form field supplierId should be displayed
+             * as a search combo box to select an article supplier.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Shopware.data.Model } model - Instance of the field model which used to create the form field.
+             * @param { Ext.form.field.Field } formField - The generated form field, this parameter will be set as function return value.
+             * @param { Ext.data.Field } field - The model field which used to generate the form field.
+             * @param { Ext.data.association.HasMany } fieldAssociation - Association of the model field. Used for many to one associations.
+             */
+            me.eventAlias + '-association-field-created',
+
+            /**
+             * Event fired after one model form field was created by the { @link #createModelField } function.
+             * This event is even fired for association fields.
+             * The formField parameter contains the created form field and will be used as function return value.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.form.field.Field } formField - The generated form field, this parameter will be set as function return value.
+             * @param { Ext.data.Field } field - The model field which used to generate the form field.
+             * @param { Ext.data.association.HasMany } fieldAssociation - Association of the model field. Used for many to one associations.
+             */
+            me.eventAlias + '-model-field-created',
+
+            /**
+             * Event fired before the reloaded data will be set in the association components.
+             * If the event listener function returns false, the process will be canceled and the function returns false.
+             * To cancel the reload for a single association component within this container, use the "eventAlias-before-reload-association-data"
+             * event.
+             * The store parameter contains the association store which will be null for one to one associations.
+             * The record parameter contains the first record of the association store and will be used for additional association
+             * stores.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.data.Store } store - Instance of the association store.
+             * @param { Shopware.data.Model } record - Instance of the record which will be loaded into this container.
+             */
+            me.eventAlias + '-before-reload-data',
+
+            /**
+             * Event fired before the reloaded data will be set in a single association component.
+             * If the event listener function returns false, the reloadData function of this component won't be called
+             * and the function continue with the next association.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.data.Store } store - Instance of the association store.
+             * @param { Shopware.data.Model } record - Instance of the record which will be loaded into this container.
+             * @param { mixed } component - Component of the association. This component has to implement a reloadData function which will be called to reload the data.
+             * @param { Ext.data.association.HasMany } association - Definition of the model association which will be reloaded.
+             * @param { Ext.data.Store } associationStore - Store of the association which passed to the reloadData function.
+             */
+            me.eventAlias + '-before-reload-association-data',
+
+            /**
+             * Event fired after the reloaded data was set in a single association component.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.data.Store } store - Instance of the association store.
+             * @param { Shopware.data.Model } record - Instance of the record which will be loaded into this container.
+             * @param { mixed } component - Component of the association. This component has to implement a reloadData function which will be called to reload the data.
+             * @param { Ext.data.association.HasMany } association - Definition of the model association which will be reloaded.
+             * @param { Ext.data.Store } associationStore - Store of the association which passed to the reloadData function.
+             */
+            me.eventAlias + '-after-reload-association-data',
+
+            /**
+             * Event fired after the reloaded data was set in each association component.
+             * To get all association components at this point, you can get them over the container parameter in
+             * the associationComponents property.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Ext.data.Store } store - Instance of the association store.
+             * @param { Shopware.data.Model } record - Instance of the record which will be loaded into this container.
+             */
+            me.eventAlias + '-after-reload-data'
+        );
     },
 
 
@@ -279,6 +497,10 @@ Ext.define('Shopware.model.Container', {
         var me = this, items = [], item,
             associations;
 
+        if (!me.fireEvent(me.eventAlias + '-before-create-items', me, items)) {
+            return false;
+        }
+
         items.push(
             me.createModelFieldSet(
                 me.record.$className,
@@ -294,17 +516,21 @@ Ext.define('Shopware.model.Container', {
 
         //the associations will be displayed within this component.
         Ext.each(associations, function(association) {
+
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association)
             );
+
             //check if the component creation was canceled, or throws an exception
             if(item) {
                 items.push(item);
                 me.associationComponents[association.associationKey] = item;
             }
         });
+
+        me.fireEvent(me.eventAlias + '-after-create-items', me, items);
 
         return items;
     },
@@ -318,13 +544,17 @@ Ext.define('Shopware.model.Container', {
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store) {
-        var componentType = model.getConfig(type);
+        var me = this, component, componentType = model.getConfig(type);
 
-        return Ext.create(componentType, {
+        component = Ext.create(componentType, {
             record: model,
             store: store,
             flex: 1
         });
+
+        me.fireEvent(me.eventAlias + '-association-component-created', me, component, type, model, store);
+
+        return component;
     },
 
 
@@ -343,7 +573,11 @@ Ext.define('Shopware.model.Container', {
      * @return Ext.form.FieldSet
      */
     createModelFieldSet: function (modelName, alias) {
-        var me = this, model = Ext.create(modelName), items = [], container, fields;
+        var me = this, fieldSet = null, model = Ext.create(modelName), items = [], container, fields;
+
+        if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model, alias)) {
+            return fieldSet;
+        }
 
         //convert all model fields to form fields.
         fields = me.createModelFields(model, alias);
@@ -364,13 +598,19 @@ Ext.define('Shopware.model.Container', {
         });
         items.push(container);
 
-        return Ext.create('Ext.form.FieldSet', {
+        me.fireEvent(me.eventAlias + '-column-containers-created', me, fields, items, model, alias);
+
+        fieldSet = Ext.create('Ext.form.FieldSet', {
             flex: 1,
             padding: '10 20',
             layout: 'column',
             items: items,
             title: me.getModelName(modelName)
         });
+
+        me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model, alias);
+
+        return fieldSet;
     },
 
     /**
@@ -387,6 +627,8 @@ Ext.define('Shopware.model.Container', {
             field = me.createModelField(model, item, alias);
             if (field) fields.push(field);
         });
+
+        me.fireEvent(me.eventAlias + '-model-fields-created', me, fields, model, alias);
 
         return fields;
     },
@@ -408,6 +650,10 @@ Ext.define('Shopware.model.Container', {
         var me = this, formField = {},
             config, customConfig, name,
             fieldModel, fieldComponent, xtype;
+
+        if (!me.fireEvent(me.eventAlias + '-before-create-model-field', me, formField, model, field, alias)) {
+            return formField;
+        }
 
         //don't display the id property
         if (model.idProperty === field.name) {
@@ -472,6 +718,8 @@ Ext.define('Shopware.model.Container', {
                     me.getConfig('searchUrl')
                 ).load();
             }
+
+            me.fireEvent(me.eventAlias + '-association-field-created', model, formField, field, fieldAssociation);
         }
 
         //get the component field configuration. This configuration contains custom field configuration.
@@ -481,6 +729,8 @@ Ext.define('Shopware.model.Container', {
             customConfig = config[field.name] || {};
             formField = Ext.apply(formField, customConfig);
         }
+
+        me.fireEvent(me.eventAlias + '-model-field-created', model, formField, field, fieldAssociation);
         
         return formField;
     },
@@ -514,19 +764,43 @@ Ext.define('Shopware.model.Container', {
     reloadData: function(store, record) {
         var me = this, association, component, associationStore;
 
+        //event to cancel the reload process.
+        if (!me.fireEvent(me.eventAlias + '-before-reload-data', me, store, record)) {
+            return false;
+        }
+
+        //iterate the object keys, to get access of the association component, which indexed in the associationComponents array with the association key.
         Object.keys(me.associationComponents).forEach(function(key) {
             component = me.associationComponents[key];
 
+            //if the component hasn't implement the reloadData function, the component will be skipped.
             if (component && typeof component.reloadData === 'function') {
-                association = me.getAssociations(record.$className, [ { associationKey: [ key ] } ]);
-                associationStore = me.getAssociationStore(record, association[0]);
 
+                association = me.getAssociations(
+                    record.$className,
+                    [ { associationKey: [ key ] } ]
+                );
+                associationStore = me.getAssociationStore(
+                    record,
+                    association[0]
+                );
+
+                //if the event listener returns false, continue with the next association.
+                if (!me.fireEvent(me.eventAlias + '-before-reload-association-data', me, store, record, component, association, associationStore)) {
+                    return true;
+                }
+
+                //all association components has to implement a reload data function for a uniform interface.
                 component.reloadData(
                     associationStore,
                     record
                 );
+
+                me.fireEvent(me.eventAlias + '-after-reload-association-data', me, store, record, component, association, associationStore);
             }
         });
+
+        me.fireEvent(me.eventAlias + '-after-reload-data', me, store, record);
     }
 });
 //{/block}
