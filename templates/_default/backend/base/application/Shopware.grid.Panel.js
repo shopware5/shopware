@@ -598,7 +598,8 @@ Ext.define('Shopware.grid.Panel', {
              * over a grid reload.
              *
              * @param { Shopware.grid.Panel } grid - Instance of this component
-             * @param { Ext.button.Button } button - The add button
+             * @param { Ext.selection.Model } selModel - The selection model of the grid panel
+             * @param { Array } records - The selected records.
              */
             me.eventAlias + '-selection-changed',
 

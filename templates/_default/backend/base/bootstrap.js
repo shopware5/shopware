@@ -76,6 +76,9 @@
 {include file='backend/base/application/Shopware.model.Container.js'}
 {include file='backend/base/application/Shopware.form.field.Search.js'}
 {include file='backend/base/application/Shopware.detail.Controller.js'}
+{include file='backend/base/application/Shopware.listing.InfoPanel.js'}
+{include file='backend/base/application/Shopware.listing.FilterPanel.js'}
+{include file='backend/base/application/Shopware.filter.Field.js'}
 
 
 {* Include global models *}

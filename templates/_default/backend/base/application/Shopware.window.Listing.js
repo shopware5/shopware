@@ -12,10 +12,7 @@ Ext.define('Shopware.window.Listing', {
         helper: 'Shopware.model.Helper'
     },
 
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
+    layout: 'border',
 
     width: 990,
 
@@ -78,7 +75,9 @@ Ext.define('Shopware.window.Listing', {
              *
              * @type { String }
              */
-            eventAlias: undefined
+            eventAlias: undefined,
+
+            extensions: [ ],
         },
 
         /**
@@ -201,6 +200,15 @@ Ext.define('Shopware.window.Listing', {
             me.eventAlias + '-after-create-items',
 
             /**
+             * Event fired after the default shopware elements for this component
+             * created and all defined extensions loaded.
+             *
+             * @param { Shopware.window.Listing } window - Instance of this component.
+             * @param { Array } items - Contains the created window elements and all defined extensions
+             */
+            me.eventAlias + '-after-extensions-loaded',
+
+            /**
              * Event fired after the { @link Shopware.grid.Panel } created.
              * This event can be used to modify the grid view or to reposition the grid within the window.
              *
@@ -241,6 +249,19 @@ Ext.define('Shopware.window.Listing', {
         items.push(me.createGridPanel());
 
         me.fireEvent(me.eventAlias + '-after-create-items', me, items);
+
+        Ext.each(me.getConfig('extensions'), function(extension) {
+            //extension isn't defined? Continue with next extension
+            if (!extension) return true;
+
+            //support for simple extension definition over strings
+            if (Ext.isString(extension)) extension = { xtype: extension };
+
+            extension.listingWindow = me;
+            items.push(extension);
+        });
+
+        me.fireEvent(me.eventAlias + '-after-extensions-loaded', me, items);
 
         return items;
     },

@@ -327,6 +327,21 @@ Ext.define('Shopware.model.Container', {
             me.eventAlias + '-after-create-items',
 
             /**
+             * Event fired before an association component will be created. Association components created if the { @link #associations }
+             * property is filled with association keys.
+             * The association components are defined in the { @link Shopware.data.Model:shopware } config object.
+             * If the event listener function returns false, the function process will be canceled and the component parameter
+             * will be set as return value.
+             *
+             * @param { Shopware.model.Container } container - Instance of this component
+             * @param { Object } component - An empty object which will be set as return value if the event listener returns false
+             * @param { String } type - Association type which defined in the association.relation property. (listing, detail, related, field)
+             * @param { Shopware.data.Model } model - Instance of the associated model. This model was used to get the component type.
+             * @param { Ext.data.Store } store - Store of the association, this store contains all associated data for the created component.
+             */
+            me.eventAlias + '-before-association-component-created',
+
+            /**
              * Event fired after an association component created. Association components created if the { @link #associations }
              * property is filled with association keys.
              * The association components are defined in the { @link Shopware.data.Model:shopware } config object.
@@ -338,7 +353,7 @@ Ext.define('Shopware.model.Container', {
              * @param { Shopware.data.Model } model - Instance of the associated model. This model was used to get the component type.
              * @param { Ext.data.Store } store - Store of the association, this store contains all associated data for the created component.
              */
-            me.eventAlias + '-association-component-created',
+            me.eventAlias + '-after-association-component-created',
 
             /**
              * Event fired after all form fields created for the current model.
@@ -544,7 +559,11 @@ Ext.define('Shopware.model.Container', {
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store) {
-        var me = this, component, componentType = model.getConfig(type);
+        var me = this, component = { }, componentType = model.getConfig(type);
+
+        if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
+            return component;
+        }
 
         component = Ext.create(componentType, {
             record: model,
@@ -552,7 +571,7 @@ Ext.define('Shopware.model.Container', {
             flex: 1
         });
 
-        me.fireEvent(me.eventAlias + '-association-component-created', me, component, type, model, store);
+        me.fireEvent(me.eventAlias + '-after-association-component-created', me, component, type, model, store);
 
         return component;
     },
@@ -724,6 +743,8 @@ Ext.define('Shopware.model.Container', {
 
         //get the component field configuration. This configuration contains custom field configuration.
         config = me.getConfig('fields');
+        console.log("config fields", config);
+
         if (config) {
             //check if the current field is defined in the fields configuration. Otherwise use an empty object which will be applied.
             customConfig = config[field.name] || {};
