@@ -91,13 +91,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
 
         // Register base stores
         me.navigationStore = me.getStore('main.Navigation');
-        me.shopStore = Ext.data.StoreManager.lookup('base.Shop').load({
-//            callback: function(records, operation, success) {
-//                if(records.length > 0) {
-//                    me.getShopField().setValue(records[0].getId());
-//                }
-//            }
-        });
+        me.shopStore = Ext.data.StoreManager.lookup('base.ShopLanguage').load();
         me.formStore = me.getStore('main.Form');
 
         // Register events
