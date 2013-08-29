@@ -213,6 +213,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $conditions = array();
 
         foreach ($filters as $condition) {
+
             if ($condition['property'] === 'search') {
                 foreach ($fields as $field) {
                     $conditions[] = array(
@@ -222,10 +223,16 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     );
                 }
             } elseif (array_key_exists($condition['property'], $fields)) {
+                $value = $condition['value'];
+                if (!is_numeric($condition['value'])) {
+                    $value = '%' . $value . '%';
+                }
+
                 $conditions[] = array(
                     'property' => $fields[$condition['property']],
-                    'operator' => 'OR',
-                    'value' => '%' . $condition['value'] . '%'
+                    'operator' => $condition['operator'],
+                    'value' => $value,
+                    'expression' => $condition['expression']
                 );
             }
         }
@@ -233,6 +240,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         if (!empty($conditions)) {
             $builder->addFilter($conditions);
         }
+
 
         return $builder;
     }
