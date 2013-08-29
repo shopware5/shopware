@@ -98,6 +98,7 @@
 {include file='backend/base/store/dispatch.js'}
 {include file='backend/base/store/payment.js'}
 {include file='backend/base/store/shop.js'}
+{include file='backend/base/store/shopLanguage.js'}
 {include file='backend/base/store/translation.js'}
 {include file='backend/base/store/supplier.js'}
 {include file='backend/base/store/country.js'}

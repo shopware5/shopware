@@ -53,7 +53,7 @@ Ext.define('Shopware.form.PluginPanel',
      * Store which contains the different shops.
      * @object Ext.data.Store
      */
-    shopStore: Ext.create('Shopware.apps.Base.store.Shop'),
+    shopStore: Ext.create('Shopware.apps.Base.store.ShopLanguage'),
 
     /**
      * Store which contains the form elements.
