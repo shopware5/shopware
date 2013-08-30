@@ -5,7 +5,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="center" class="grid_13">
+	<div id="center" class="grid_16">
 		<div class="contentlisting_box">
 		
 			{* include paging *}
