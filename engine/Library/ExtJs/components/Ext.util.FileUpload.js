@@ -122,7 +122,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @boolean
      */
-    checkSize: true,
+    checkSize: false,
 
     /**
      * Max file size (in byte). Will be ignored if
