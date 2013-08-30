@@ -1015,7 +1015,7 @@ class Order extends ModelEntity
     {
         $this->history = $history;
     }
-
+        
     /**
      * The calculateInvoiceAmount function recalculated the net and gross amount based on the
      * order positions.

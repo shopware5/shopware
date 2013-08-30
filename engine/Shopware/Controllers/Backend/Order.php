@@ -595,6 +595,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             /**@var $order \Shopware\Models\Order\Order*/
             $statusBefore  = $order->getOrderStatus();
             $clearedBefore = $order->getPaymentStatus();
+            $invoiceShippingBefore = $order->getInvoiceShipping();
+            $invoiceShippingNetBefore = $order->getInvoiceShippingNet();
 
             if (!empty($data['clearedDate'])) {
                 try {
@@ -605,6 +607,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
 
             $order->fromArray($data);
+
+            //check if the invoice shipping has been changed
+            $invoiceShippingChanged = (bool) ($invoiceShippingBefore != $order->getInvoiceShipping());
+            $invoiceShippingNetChanged = (bool) ($invoiceShippingNetBefore != $order->getInvoiceShippingNet());
+            if ($invoiceShippingChanged || $invoiceShippingNetChanged) {
+                //recalculate the new invoice amount
+                $order->calculateInvoiceAmount();
+            }
 
             Shopware()->Models()->flush();
             Shopware()->Models()->clear();
