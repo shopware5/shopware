@@ -180,7 +180,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             if (!array_key_exists($condition['property'], $fields)) {
                 continue;
             }
-            $condition['property'] = $fields[$condition['property']];
+            $condition['property'] = $fields[$condition['property']]['alias'];
             $conditions[] = $condition;
         }
 
@@ -217,26 +217,39 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             if ($condition['property'] === 'search') {
                 foreach ($fields as $field) {
                     $conditions[] = array(
-                        'property' => $field,
+                        'property' => $field['alias'],
                         'operator' => 'OR',
                         'value' => '%' . $condition['value'] . '%'
                     );
                 }
             } elseif (array_key_exists($condition['property'], $fields)) {
                 $value = $condition['value'];
-                if (!is_numeric($condition['value'])) {
-                    $value = '%' . $value . '%';
+                $field = $fields[$condition['property']];
+
+                switch($field['type']) {
+                    case 'date':
+                        $date = new DateTime($value);
+                        $value = $date->format('Y-m-d');
+                        break;
+                    case 'datetime':
+                        $date = new DateTime($value);
+                        $value = $date->format('Y-m-d');
+                        $value = '%' . $value . '%';
+                        break;
+                    case 'string':
+                    case 'text':
+                    default:
+                        $value = '%' . $value . '%';
                 }
 
                 $conditions[] = array(
-                    'property' => $fields[$condition['property']],
+                    'property' => $fields[$condition['property']]['alias'],
                     'operator' => $condition['operator'],
                     'value' => $value,
                     'expression' => $condition['expression']
                 );
             }
         }
-
         if (!empty($conditions)) {
             $builder->addFilter($conditions);
         }
@@ -264,12 +277,12 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $fields = array_combine($fields, $fields);
 
         if ($alias) {
-            $fields = array_map(
-                function ($field) use ($alias) {
-                    return $alias . '.' . $field;
-                },
-                $fields
-            );
+            foreach($fields as &$field) {
+                $field = array(
+                    'alias' => $alias . '.' . $field,
+                    'type' => $metaData->getTypeOfField($field)
+                );
+            }
         }
 
         return $fields;
@@ -310,7 +323,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array($this->alias))
-            ->from($this->model, $this->alias);
+                ->from($this->model, $this->alias);
 
         return $builder;
     }
@@ -442,7 +455,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         foreach($metaData->getAssociationMappings() as $mapping) {
 
-            /*
+            /**
              * @ORM\OneToOne associations
              *
              * Ext JS sends even for one to one associations multi dimensional array with association data.
@@ -481,7 +494,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             }
 
             if ($mapping['type'] === 2) {
-                /*
+                /**
                  * @ORM\ManyToOne associations.
                  *
                  * The many to one associations requires that the associated model

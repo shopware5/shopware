@@ -541,6 +541,10 @@ Ext.define('Shopware.grid.Panel', {
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.model.$className);
 
+        me.fieldAssociations = me.getAssociations(me.model.$className, [
+            { relation: 'ManyToOne' }
+        ]);
+
         me.registerEvents();
         me.fireEvent(me.eventAlias + '-before-init-component', me);
 
@@ -1056,22 +1060,29 @@ Ext.define('Shopware.grid.Panel', {
         column.header = me.camelCaseToWord(field.name);
         column.flex = 1;
 
-        switch (field.type.type) {
-            case 'int':
-                column = me.applyIntegerColumnConfig(column);
-                break;
-            case 'string':
-                column = me.applyStringColumnConfig(column);
-                break;
-            case 'bool':
-                column = me.applyBooleanColumnConfig(column);
-                break;
-            case 'date':
-                column = me.applyDateColumnConfig(column);
-                break;
-            case 'float':
-                column = me.applyFloatColumnConfig(column);
-                break;
+        var fieldAssociation = me.getFieldAssociation(field.name);
+
+        if (fieldAssociation === undefined) {
+            switch (field.type.type) {
+                case 'int':
+                    column = me.applyIntegerColumnConfig(column);
+                    break;
+                case 'string':
+                    column = me.applyStringColumnConfig(column);
+                    break;
+                case 'bool':
+                    column = me.applyBooleanColumnConfig(column);
+                    break;
+                case 'date':
+                    column = me.applyDateColumnConfig(column, field.dateFormat);
+                    break;
+                case 'float':
+                    column = me.applyFloatColumnConfig(column);
+                    break;
+            }
+        } else {
+            column.association = fieldAssociation;
+            column.renderer = me.associationColumnRenderer;
         }
 
         config = me.getConfig('columns');
@@ -1639,6 +1650,50 @@ Ext.define('Shopware.grid.Panel', {
 
             me.fireEvent(me.eventAlias + '-after-reload-data', me, store, record);
         }
+    },
+
+    /**
+     * Helper function which checks if an many to one association is configured for
+     * the passed field.
+     *
+     * @param fieldName { String }
+     * @returns { undefined|Ext.data.association.Association }
+     */
+    getFieldAssociation: function(fieldName) {
+        var me = this, fieldAssociation = undefined;
+
+        Ext.each(me.fieldAssociations, function(association) {
+            if (association.field === fieldName) {
+                fieldAssociation = association;
+                return false;
+            }
+        });
+        return fieldAssociation;
+    },
+
+    associationColumnRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
+        var column = this.columns[colIndex], result;
+
+        if (!column.association) {
+            return value;
+        }
+        var associationStore = record[column.association.storeName];
+
+        if (!(associationStore instanceof Ext.data.Store) || associationStore.getCount() <= 0) {
+            return value;
+        }
+        var associationRecord = associationStore.first();
+        if (!(associationRecord instanceof Ext.data.Model)) {
+            return value;
+        }
+
+        result = associationRecord.get('name');
+        if (result) return result;
+
+        result = associationRecord.get('description');
+        if (result) return result;
+
+        return value;
     }
 
 

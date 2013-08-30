@@ -13,11 +13,10 @@ Ext.define('Shopware.listing.InfoPanel', {
     },
 
     region: 'east',
-    width: 300,
+    width: 200,
     cls: 'detail-view',
     collapsible: true,
     layout: 'fit',
-
 
     title: 'Detailed information',
 
