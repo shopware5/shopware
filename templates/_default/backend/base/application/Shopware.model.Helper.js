@@ -242,8 +242,11 @@ Ext.define('Shopware.model.Helper', {
      * @param { Object } column - The column object where the properties will be applied.
      * @return { Ext.grid.column.Date }
      */
-    applyDateColumnConfig: function (column) {
+    applyDateColumnConfig: function (column, format) {
         column.xtype = 'datecolumn';
+        if (format) {
+            column.format = format;
+        }
         column.editor = this.applyDateFieldConfig({});
         return column;
     },
