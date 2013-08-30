@@ -1015,19 +1015,6 @@ class Order extends ModelEntity
     {
         $this->history = $history;
     }
-
-    /**
-     * If the shipping costs has been changed the invoice amount has to be recalculated
-     * @ORM\PreUpdate
-     */
-    public function beforeUpdate() {
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
-        $invoiceShippingChanged = (bool) ($changeSet['invoiceShipping'][0] != $changeSet['invoiceShipping'][1]);
-        $invoiceShippingNetChanged = (bool) ($changeSet['invoiceShippingNet'][0] != $changeSet['invoiceShippingNet'][1]);
-        if ($invoiceShippingChanged || $invoiceShippingNetChanged) {
-            $this->calculateInvoiceAmount();
-        }
-    }
         
     /**
      * The calculateInvoiceAmount function recalculated the net and gross amount based on the
