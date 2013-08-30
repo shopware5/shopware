@@ -44,7 +44,7 @@ Ext.define('Shopware.model.Container', {
          *      Ext.define('Shopware.apps.Product.view.detail.Product', {
          *          extend: 'Shopware.model.Container',
          *          displayConfig: {
-         *              searchController: 'product',
+         *              controller: 'product',
          *              fields: {
          *                  name: { fieldLabel: 'Product name' }
          *              },
@@ -69,7 +69,7 @@ Ext.define('Shopware.model.Container', {
             eventAlias: undefined,
 
             /**
-             * The searchController property is used for manyToOne associations.
+             * The controller property is used for manyToOne associations.
              * This controller will be requested to load the associated data.
              * In the default case, this controller is the backend php application controller
              * name like 'Article', 'Banner', etc.
@@ -77,14 +77,14 @@ Ext.define('Shopware.model.Container', {
              * @type { String }
              * @required
              */
-            searchController: undefined,
+            controller: undefined,
 
             /**
              * The searchUrl property is used to request the associated data
              * of the base model.
              * Shopware requests the association data as default from the
              * application php backend controller.
-             * The searchUrl requires an configured { @link #searchController }.
+             * The searchUrl requires an configured { @link #controller }.
              *
              * @type { String }
              */
@@ -208,9 +208,9 @@ Ext.define('Shopware.model.Container', {
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            if (config.searchController) {
+            if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
                 );
             }
             return config;

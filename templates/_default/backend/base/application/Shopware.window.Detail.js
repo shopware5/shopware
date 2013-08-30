@@ -156,6 +156,8 @@ Ext.define('Shopware.window.Detail', {
     initComponent: function () {
         var me = this;
 
+        me.associationComponents = [];
+
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.record.$className);
 
@@ -298,7 +300,8 @@ Ext.define('Shopware.window.Detail', {
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
-                me.getAssociationStore(me.record, association)
+                me.getAssociationStore(me.record, association),
+                association.associationKey
             );
         }
         me.associationComponents[association.associationKey] = item;
@@ -314,13 +317,16 @@ Ext.define('Shopware.window.Detail', {
      * @param store { Ext.data.Store }
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store) {
+    createAssociationComponent: function(type, model, store, associationKey) {
         var componentType = model.getConfig(type);
 
         return Ext.create(componentType, {
             record: model,
             store: store,
-            flex: 1
+            flex: 1,
+            displayConfig: {
+                associationKey: associationKey
+            }
         });
     },
 

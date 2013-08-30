@@ -20,13 +20,12 @@ Ext.define('Shopware.listing.FilterPanel', {
     collapsible: true,
     layout: 'anchor',
 
-
     title: 'Filters',
 
     statics: {
         displayConfig: {
 
-            searchController: undefined,
+            controller: undefined,
             searchUrl: '{url controller="base" action="searchAssociation"}',
 
             model: undefined,
@@ -54,9 +53,9 @@ Ext.define('Shopware.listing.FilterPanel', {
             config = Ext.apply({ }, config, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            if (config.searchController) {
+            if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
                 );
             }
 
