@@ -272,6 +272,7 @@ Ext.define('Shopware.grid.Association', {
             store: store,
             pageSize: 20,
             flex: 1,
+            subApp: me.subApp,
             fieldLabel: 'Search for',
             margin: 5,
             listeners: {

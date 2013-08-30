@@ -535,7 +535,8 @@ Ext.define('Shopware.model.Container', {
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
-                me.getAssociationStore(me.record, association)
+                me.getAssociationStore(me.record, association),
+                association.associationKey
             );
 
             //check if the component creation was canceled, or throws an exception
@@ -558,7 +559,7 @@ Ext.define('Shopware.model.Container', {
      * @param store { Ext.data.Store } - Ext.data.Store of the association
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store) {
+    createAssociationComponent: function(type, model, store, associationKey) {
         var me = this, component = { }, componentType = model.getConfig(type);
 
         if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
@@ -568,7 +569,10 @@ Ext.define('Shopware.model.Container', {
         component = Ext.create(componentType, {
             record: model,
             store: store,
-            flex: 1
+            flex: 1,
+            displayConfig: {
+                associationKey: associationKey
+            }
         });
 
         me.fireEvent(me.eventAlias + '-after-association-component-created', me, component, type, model, store);
@@ -728,6 +732,7 @@ Ext.define('Shopware.model.Container', {
             //the field component are defined with the full class name, but we need the xtype for this component
             xtype = Ext.ClassManager.getAliasesByName(fieldComponent);
             formField.xtype = xtype[0].replace('widget.', '');
+            formField.subApp = me.subApp;
 
             //if no custom field configured, we have to configure the display config of the component
             if (fieldComponent === 'Shopware.form.field.Search') {
@@ -737,13 +742,11 @@ Ext.define('Shopware.model.Container', {
                     me.getConfig('searchUrl')
                 ).load();
             }
-
             me.fireEvent(me.eventAlias + '-association-field-created', model, formField, field, fieldAssociation);
         }
 
         //get the component field configuration. This configuration contains custom field configuration.
         config = me.getConfig('fields');
-        console.log("config fields", config);
 
         if (config) {
             //check if the current field is defined in the fields configuration. Otherwise use an empty object which will be applied.

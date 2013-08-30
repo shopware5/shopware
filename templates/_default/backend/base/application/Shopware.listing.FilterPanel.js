@@ -26,13 +26,14 @@ Ext.define('Shopware.listing.FilterPanel', {
     statics: {
         displayConfig: {
 
+            searchController: undefined,
+            searchUrl: '{url controller="base" action="searchAssociation"}',
+
             model: undefined,
 
             displayFields: [],
 
-            fields: {
-                name: { }
-            }
+            fields: { }
         },
 
         /**
@@ -52,6 +53,13 @@ Ext.define('Shopware.listing.FilterPanel', {
 
             config = Ext.apply({ }, config, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
+
+            if (config.searchController) {
+                config.searchUrl = config.searchUrl.replace(
+                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
+                );
+            }
+
             return config;
         },
 
@@ -101,6 +109,8 @@ Ext.define('Shopware.listing.FilterPanel', {
     initComponent: function() {
         var me = this;
 
+        console.log("FilterPanel", me.subApp, me.subApplication);
+
         me.gridPanel = me.listingWindow.gridPanel;
 
         me.items = me.createItems();
@@ -130,6 +140,10 @@ Ext.define('Shopware.listing.FilterPanel', {
 
     createFilterFields: function() {
         var me = this, displayFields = me.getConfig('displayFields');
+
+        me.fieldAssociations = me.getAssociations(me.getConfig('model'), [
+            { relation: 'ManyToOne' }
+        ]);
 
         var fields = me.createModelFields(
             Ext.create(me.getConfig('model'))
@@ -211,22 +225,21 @@ Ext.define('Shopware.listing.FilterPanel', {
             values = me.getForm().getValues();
 
         me.gridPanel.getStore().clearFilter(true);
-        console.log("values", values);
 
         Object.keys(values).forEach(function (key) {
-            if (me.hasModelField(me.getConfig('model'), key)) {
-                me.gridPanel.getStore().filters.add(key,
-                    Ext.create('Ext.util.Filter', {
-                        property: key,
-                        value: Ext.String.trim(values[key])
-                    })
-                );
+            if (!me.hasModelField(me.getConfig('model'), key)) {
+                return true;
             }
+
+            me.gridPanel.getStore().filters.add(key,
+                Ext.create('Ext.util.Filter', {
+                    property: key,
+                    value: values[key]
+                })
+            );
         });
 
-        if (me.gridPanel.getStore().filters.length > 0) {
-            me.gridPanel.getStore().load();
-        }
+        me.gridPanel.getStore().load();
     },
 
 
