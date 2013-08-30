@@ -36,7 +36,7 @@ Ext.define('Shopware.grid.Association', {
          *          extend: 'Shopware.grid.Association',
          *          displayConfig: {
          *              associationKey: 'categories',
-         *              searchController: 'product',
+         *              controller: 'product',
          *              ...
          *          }
          *      });
@@ -81,7 +81,7 @@ Ext.define('Shopware.grid.Association', {
              *          title: 'Category',
              *
              *          displayConfig: {
-             *              searchController: 'product',
+             *              controller: 'product',
              *              associationKey: 'categories'
              *          }
              *      });
@@ -94,11 +94,11 @@ Ext.define('Shopware.grid.Association', {
              *
              * @type { String }
              */
-            searchController: undefined,
+            controller: undefined,
 
             /**
              * Url for the search request. The "controller=base" path will be replaced with the
-             * { @link #searchController } property.
+             * { @link #controller } property.
              *
              * @type { String }
              */
@@ -142,9 +142,9 @@ Ext.define('Shopware.grid.Association', {
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            if (config.searchController) {
+            if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
                 );
             }
             return config;

@@ -80,7 +80,10 @@ Ext.define('Shopware.form.field.Search', {
              * Activates or deactivate the listing template function which displays
              * additional information for each record.
              */
-            listTemplate: true
+            listTemplate: true,
+
+
+            controller: undefined,
         },
 
         /**
@@ -96,9 +99,9 @@ Ext.define('Shopware.form.field.Search', {
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            if (config.searchController) {
+            if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.searchController.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
                 );
             }
             return config;
