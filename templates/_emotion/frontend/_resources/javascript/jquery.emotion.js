@@ -144,16 +144,6 @@
 
         /** Auto suggestion on iOS devices */
         if($.isiPad()) {
-	       	$('input#searchfield, .register input[type=text]').attr({
-		       	'autocomplete': 'off',
-		       	'autocorrect': 'off',
-		       	'autocapitalize': 'off'
-	       	}); 
-	       	$('.register input[type=text]').attr('autocapitalize', 'on');
-	       	$('input#register_personal_email').attr({
-		    	'type': 'email',
-		    	'autocapitalize': 'off'
-	       	});
 	       	
 	       	// ... and use the slimbox instead of the cloud zoom
             $("#zoom1, [rel^='lightbox']").slimbox();
