@@ -144,7 +144,7 @@ Ext.define('Shopware.grid.Association', {
 
             if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller + '/'
                 );
             }
             return config;
