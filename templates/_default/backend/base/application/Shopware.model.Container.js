@@ -210,7 +210,7 @@ Ext.define('Shopware.model.Container', {
 
             if (config.controller) {
                 config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
+                    '/backend/base/', '/backend/' + config.controller + '/'
                 );
             }
             return config;

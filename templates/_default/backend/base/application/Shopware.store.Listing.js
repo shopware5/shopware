@@ -90,7 +90,7 @@ Ext.define('Shopware.store.Listing', {
             proxy: {
                 type: 'ajax',
                 api: {
-                    read: '{url action="list"}'
+                    read: '{url controller="base" action="list"}'
                 },
                 reader: {
                     type: 'json',
@@ -180,7 +180,7 @@ Ext.define('Shopware.store.Listing', {
         Object.keys(me.proxy.api).forEach(function (key) {
             value = me.proxy.api[key] + '';
             value = value.replace(
-                '/backend/base/', '/backend/' + me.getConfig('controller').toLowerCase() + '/'
+                '/backend/base/', '/backend/' + me.getConfig('controller') + '/'
             );
             me.proxy.api[key] = value;
         });
