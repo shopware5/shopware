@@ -51,11 +51,11 @@
 			    	<div class="clear">&nbsp;</div>
 			    </div>
 		    {/block}
-		    
+
 		    {foreach from=$sDownloads item=offerPosition}
 			    {foreach name=offerdetails from=$offerPosition.details item=article}
 				    {if $article.esdarticle}
-				    	
+
 				    	{block name="frontend_account_downloads_table_row"}
 				    	<div class="table_row{if $smarty.foreach.offerdetails.last} lastrow{/if}">
 				    		<div class="grid_3">
@@ -69,7 +69,7 @@
 				    			<strong>{$article.name}</strong>
 				    			{/block}
 				    			{block name='frontend_account_downloads_serial'}
-				    			{if $article.serial}
+				    			{if $article.serial && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
 				                <p>
 				                	{se name="DownloadsSerialnumber"}{/se} <strong>{$article.serial}</strong>
 				                </p>
@@ -79,7 +79,7 @@
 	
 				    		<div class="grid_5">
 				    			{block name='frontend_account_downloads_link'}
-				    			{if $article.esdarticle}
+				    			{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
 				    				<div class="center">
 					    			<a href="{$article.esdLink}" title="{s name='DownloadsLink'}{/s} {$article.name}" class="button-right small_right">
 					    				{se name="DownloadsLink"}{/se}
