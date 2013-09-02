@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $builder = $this->getListQuery();
         $builder->setFirstResult($offset)
-            ->setMaxResults($limit);
+                ->setMaxResults($limit);
 
         $builder = $this->addListingSortCondition($builder, $sort);
         $builder = $this->addListingFilterCondition($builder, $filter);
@@ -216,34 +216,20 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
             if ($condition['property'] === 'search') {
                 foreach ($fields as $field) {
+                    $value = $this->formatSearchValue($condition['value'], $field);
+
                     $conditions[] = array(
                         'property' => $field['alias'],
                         'operator' => 'OR',
-                        'value' => '%' . $condition['value'] . '%'
+                        'value' => $value
                     );
                 }
             } elseif (array_key_exists($condition['property'], $fields)) {
-                $value = $condition['value'];
                 $field = $fields[$condition['property']];
-
-                switch($field['type']) {
-                    case 'date':
-                        $date = new DateTime($value);
-                        $value = $date->format('Y-m-d');
-                        break;
-                    case 'datetime':
-                        $date = new DateTime($value);
-                        $value = $date->format('Y-m-d');
-                        $value = '%' . $value . '%';
-                        break;
-                    case 'string':
-                    case 'text':
-                    default:
-                        $value = '%' . $value . '%';
-                }
+                $value = $this->formatSearchValue($condition['value'], $field);
 
                 $conditions[] = array(
-                    'property' => $fields[$condition['property']]['alias'],
+                    'property' => $field['alias'],
                     'operator' => $condition['operator'],
                     'value' => $value,
                     'expression' => $condition['expression']
@@ -258,6 +244,26 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $builder;
     }
 
+    protected function formatSearchValue($value, $field)
+    {
+        switch($field['type']) {
+            case 'date':
+                $date = new DateTime($value);
+                $value = $date->format('Y-m-d');
+                break;
+            case 'datetime':
+                $date = new DateTime($value);
+                $value = $date->format('Y-m-d');
+                $value = '%' . $value . '%';
+                break;
+            case 'string':
+            case 'text':
+            default:
+                $value = '%' . $value . '%';
+        }
+
+        return $value;
+    }
 
     /**
      * Helper function which returns all field names of the passed model.
@@ -522,7 +528,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 }
 
             } elseif ($mapping['type'] === 8) {
-                /*
+                /**
                  * @ORM\ManyToMany associations.
                  *
                  * The data of many to many association are contained in the corresponding field:

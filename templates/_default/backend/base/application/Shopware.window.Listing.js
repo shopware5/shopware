@@ -77,7 +77,7 @@ Ext.define('Shopware.window.Listing', {
              */
             eventAlias: undefined,
 
-            extensions: [ ],
+            extensions: [ ]
         },
 
         /**

@@ -75,7 +75,7 @@ Ext.define('Shopware.window.Detail', {
              *
              * @optional
              */
-            tabItemAssociations: [],
+            associations: [],
 
 
             /**
@@ -172,6 +172,12 @@ Ext.define('Shopware.window.Detail', {
         me.loadRecord(me.record);
     },
 
+    /**
+     * Creates a default controller for this component which adds event listener
+     * function for all shopware default events of this component.
+     *
+     * @returns { Shopware.detail.Controller }
+     */
     createDefaultController: function() {
         var me = this;
 
@@ -200,6 +206,16 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
+    /**
+     * Creates the form and tab panel for the window. The form panel
+     * are used to send the model data back to the php controller.
+     * For this reason, the form panel has to be the outer container
+     * in the detail window.
+     * The tab panel will be the only child element of the form panel.
+     * Items of the tab panel created in the { @link #createTabItems } function.
+     *
+     * @returns { Ext.form.Panel }
+     */
     createFormPanel: function () {
         var me = this;
 
@@ -267,7 +283,7 @@ Ext.define('Shopware.window.Detail', {
      * @returns array
      */
     getTabItemsAssociations: function () {
-        var me = this, associations, config = me.getConfig('tabItemAssociations') || [];
+        var me = this, associations, config = me.getConfig('associations') || [];
 
         associations = me.getAssociations(me.record.$className, [
             { associationKey: config }
@@ -414,8 +430,6 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
-
     /**
      * Helper function to load the detail window record.
      */
@@ -427,7 +441,19 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
+    /**
+     * Helper function to reload the associated data of the passed record.
+     * Associations can be displayed within a Shopware.model.Container or
+     * within the detail window as own tab item.
+     * The associations which will be displayed in own tab items are defined
+     * in the { @link #associations } property of the displayConfig.
+     * All created association tab items are stored in the { @link #associationComponents }
+     * object.
+     * This components will be iterated and if the components include the reloadDate function
+     * the association data can be reloaded over this function.
+     *
+     * @param record
+     */
     loadAssociationData: function(record) {
         var me = this, association, component, store;
 
@@ -436,7 +462,9 @@ Ext.define('Shopware.window.Detail', {
             store = null;
             association = null;
 
+            //check if the association key is the base record of the detail window.
             if (key != 'baseRecord') {
+                //In this case we have no association store
                 association = me.getAssociations(record.$className, [ { associationKey: [ key ] } ]);
                 store = me.getAssociationStore(record, association[0]);
             }
@@ -451,11 +479,22 @@ Ext.define('Shopware.window.Detail', {
     },
 
 
-
+    /**
+     * Event listener which called when the detail window tab panel changes
+     * the active tab item.
+     *
+     * @param tabPanel
+     * @param newCard
+     * @param oldCard
+     * @param eOpts
+     */
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
         this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
 
+    /**
+     * Event listener function of the save button in the bottom toolbar.
+     */
     onSave: function () {
         this.fireEvent(
             this.getEventName('save'), this, this.record

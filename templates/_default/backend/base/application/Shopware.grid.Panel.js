@@ -952,7 +952,6 @@ Ext.define('Shopware.grid.Panel', {
              * @param { Array } items - Contains the created grid features.
              */
             me.eventAlias + '-after-create-features'
-
         );
     },
 
@@ -1671,17 +1670,37 @@ Ext.define('Shopware.grid.Panel', {
         return fieldAssociation;
     },
 
+    /**
+     * Renderer function of an association column field.
+     * This function is used for foreign key columns which contains
+     * initial the numeric foreign key.
+     * This renderer function converts the foreign key value to
+     * a human readable value.
+     *
+     * @param { mixed } value - The foreign key value
+     * @param { Object } metaData - Cell meta data
+     * @param { Ext.data.Model } record - The record of the grid row
+     * @param { int } rowIndex - Index of the grid row
+     * @param { int } colIndex - Index of the grid column
+     * @param { Ext.data.Store } store - The grid store
+     * @returns { String }
+     */
     associationColumnRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
         var column = this.columns[colIndex], result;
 
+        //check if the association was assigned to the grid column
         if (!column.association) {
             return value;
         }
+        //if the association assigned, we can get the association store of the record
         var associationStore = record[column.association.storeName];
 
+        //check if the association was loaded through the listing query
         if (!(associationStore instanceof Ext.data.Store) || associationStore.getCount() <= 0) {
             return value;
         }
+
+        //get the first record of the store to display the human readable data
         var associationRecord = associationStore.first();
         if (!(associationRecord instanceof Ext.data.Model)) {
             return value;

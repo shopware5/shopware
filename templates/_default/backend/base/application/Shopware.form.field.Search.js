@@ -1,6 +1,5 @@
 
 //{block name="backend/application/form/field/search"}
-
 Ext.define('Shopware.form.field.Search', {
 
     /**
@@ -81,29 +80,21 @@ Ext.define('Shopware.form.field.Search', {
              * additional information for each record.
              */
             listTemplate: true,
-
-
-            controller: undefined,
         },
 
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
-         * @param userOpts Object
-         * @param displayConfig Object
+         * @param { Object } userOpts
+         * @param { Object } displayConfig
          * @returns Object
          */
         getDisplayConfig: function (userOpts, displayConfig) {
-            var config = { };
+            var config;
 
             config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
             config = Ext.apply({ }, config, this.displayConfig);
 
-            if (config.controller) {
-                config.searchUrl = config.searchUrl.replace(
-                    '/backend/base/', '/backend/' + config.controller.toLowerCase() + '/'
-                );
-            }
             return config;
         },
 
