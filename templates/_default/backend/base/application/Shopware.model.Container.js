@@ -532,6 +532,7 @@ Ext.define('Shopware.model.Container', {
         //the associations will be displayed within this component.
         Ext.each(associations, function(association) {
 
+            //Important row! This call creates the each association component which can be defined in the association array.
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),

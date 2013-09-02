@@ -537,6 +537,11 @@ Ext.define('Shopware.grid.Controller', {
                 return false;
             }
 
+            //reload store after all items deleted.
+            window.on('process-done', function() {
+                grid.getStore().load();
+            }, me, { single: true });
+
             window.show();
         });
     },

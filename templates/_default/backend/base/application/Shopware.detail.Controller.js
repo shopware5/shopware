@@ -159,6 +159,9 @@ Ext.define('Shopware.detail.Controller', {
         }
     },
 
+    /**
+     * Registers all custom events of this component.
+     */
     registerEvents: function() {
         var me = this;
 

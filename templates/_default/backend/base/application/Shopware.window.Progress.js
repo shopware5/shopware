@@ -323,7 +323,19 @@ Ext.define('Shopware.window.Progress', {
              * @param { Object } task - The task for which the toolbar will be created
              * @param { Ext.ProgressBar } progressbar - The created progress bar for the current task. This parameter will be set as return value.
              */
-            'task-toolbar-created'
+            'task-toolbar-created',
+
+            /**
+             * Event fired after all task processes done or if the user canceled the
+             * sequential process over the cancel button.
+             * If the process canceled over the button, the processCanceled parameter
+             * is set to true.
+             *
+             * @param { Shopware.window.Progress } window - Instance of this component.
+             * @param { Object } task - The last task which was executed
+             * @param { Boolean } processCanceled - Flag if the process canceled over the cancel button.
+             */
+            'process-done'
         );
     },
 
@@ -545,6 +557,8 @@ Ext.define('Shopware.window.Progress', {
             if (me.cancelProcess) {
                 me.updateProgressBar(current, 'Process canceled at position [0] of [1]');
             }
+            me.fireEvent('process-done', me, current, me.cancelProcess);
+
             return false;
         }
 
