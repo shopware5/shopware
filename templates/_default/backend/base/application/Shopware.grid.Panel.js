@@ -1005,6 +1005,7 @@ Ext.define('Shopware.grid.Panel', {
     createColumns: function () {
         var me = this, model = null,
             column = null,
+            configColumns = me.getConfig('columns'),
             columns = [];
 
         model = me.store.model.$className;
@@ -1019,11 +1020,15 @@ Ext.define('Shopware.grid.Panel', {
             columns.push(me.createRowNumberColumn());
         }
 
-        Ext.each(model.fields.items, function (item) {
-            column = me.createColumn(model, item);
-            if (column !== null) {
-                columns.push(column);
-            }
+        var keys = model.fields.keys;
+        if (Object.keys(configColumns).length > 0) keys = Object.keys(configColumns);
+
+        Ext.each(keys, function(key) {
+            var modelField = me.getFieldByName(model.fields.items, key);
+            column = me.createColumn(model, modelField);
+
+            //column created? then push it into the columns array
+            if (column !== null) columns.push(column);
         });
 
         if (me.getConfig('actionColumn')) {
@@ -1096,6 +1101,7 @@ Ext.define('Shopware.grid.Panel', {
 
         config = me.getConfig('columns');
         customConfig = config[field.name] || {};
+        if (Ext.isString(customConfig)) customConfig = { header: customConfig };
         column = Ext.apply(column, customConfig);
 
         me.fireEvent(me.eventAlias + '-column-created', me, column, model, field);

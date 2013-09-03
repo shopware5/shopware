@@ -213,7 +213,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $conditions = array();
 
         foreach ($filters as $condition) {
-
             if ($condition['property'] === 'search') {
                 foreach ($fields as $field) {
                     $value = $this->formatSearchValue($condition['value'], $field);
@@ -224,6 +223,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                         'value' => $value
                     );
                 }
+
             } elseif (array_key_exists($condition['property'], $fields)) {
                 $field = $fields[$condition['property']];
                 $value = $this->formatSearchValue($condition['value'], $field);
@@ -248,13 +248,20 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         switch($field['type']) {
             case 'date':
-                $date = new DateTime($value);
-                $value = $date->format('Y-m-d');
-                break;
             case 'datetime':
+                //validates the date value. If the value is no date value, return
+                $date = date_parse($value);
+                if (!checkdate($date['month'], $date['day'], $date['year'])) {
+                    $value = '%' . $value . '%';
+                    break;
+                }
+
                 $date = new DateTime($value);
                 $value = $date->format('Y-m-d');
-                $value = '%' . $value . '%';
+                //search values for date time should added the % wildcards to search for time values.
+                if ($field['datetime']) {
+                    $value = '%' . $value . '%';
+                }
                 break;
             case 'string':
             case 'text':
@@ -460,7 +467,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $metaData = Shopware()->Models()->getClassMetadata($this->model);
 
         foreach($metaData->getAssociationMappings() as $mapping) {
-
             /**
              * @ORM\OneToOne associations
              *
@@ -627,8 +633,14 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select($association);
         $builder->from($model, $association);
-        $builder->where($association . '.name LIKE :search');
-        $builder->setParameter('search', '%' . $search . '%');
+
+        if (strlen($search) > 0) {
+            $fields = $this->getModelFields($model, $association);
+            foreach($fields as $field) {
+                $builder->orWhere($field . ' LIKE :search');
+            }
+            $builder->setParameter('search', '%' . $search . '%');
+        }
 
         return $builder;
     }

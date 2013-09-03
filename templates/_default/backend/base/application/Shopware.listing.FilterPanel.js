@@ -145,28 +145,36 @@ Ext.define('Shopware.listing.FilterPanel', {
     },
 
     createFilterFields: function() {
-        var me = this, displayFields = me.getConfig('displayFields');
+        var me = this, items = [], field, config,
+            record = Ext.create(me.getConfig('model'));
 
         me.fieldAssociations = me.getAssociations(me.getConfig('model'), [
             { relation: 'ManyToOne' }
         ]);
 
-        var fields = me.createModelFields(
-            Ext.create(me.getConfig('model'))
-        );
+        var configFields = me.getConfig('fields');
 
-        var items = [];
-        Ext.each(fields, function(field) {
-            //Display only the configured display fields
-            if (displayFields.length > 0 && !(displayFields[field.name])) {
+        Ext.each(record.fields.items, function(modelField) {
+            //check if the fields property is set and if the current model field is configured in this property.
+            if (Object.keys(configFields).length > 0 && !(configFields.hasOwnProperty(modelField.name))) {
+                //if the field isn't configured, the column won't be displayed in filter panel
                 return true;
             }
 
-            var container = Ext.create('Shopware.filter.Field', {
-                field: field
-            });
+            //get configuration of the current model field.
+            config = configFields[modelField.name];
+            if (Ext.isString(config)) config = { fieldLabel: config };
+
+            field = me.createModelField(record, modelField, undefined, config);
+
+            //field wasn't created? Continue with next iteration
+            if (!field) return true;
+
+            //create filter field container to add a checkbox for each field.
+            var container = Ext.create('Shopware.filter.Field', { field: field });
             field.container = container;
-            items.push(container)
+
+            items.push(container);
         });
 
         return Ext.create('Ext.container.Container', {

@@ -100,6 +100,7 @@ Ext.define('Shopware.model.Container', {
              */
             searchUrl: '{url controller="base" action="searchAssociation"}',
 
+
             /**
              * The fields property can contains custom form field configurations.
              * It allows to customize the different form fields without overriding the
@@ -531,33 +532,34 @@ Ext.define('Shopware.model.Container', {
      * @returns { Array }
      */
     createItems: function() {
-        var me = this, items = [], item,
-            associations, fields;
+        var me = this, items = [], item, config,
+            associations, fields, field;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-items', me, items)) {
             return false;
         }
 
-        me.modelFields = me.createModelFields(
-            me.record,
-            me.getConfig('fieldAlias')
-        );
-
         Ext.each(me.getConfig('fieldSets'), function(fieldSet) {
             fields = [];
 
-            if (fieldSet.fields.length <= 0) {
-                items.push(me.createModelFieldSet(me.record.$className, me.modelFields));
-            } else {
-                Ext.each(fieldSet.fields, function(field) {
-                    fields.push(me.getFieldByName(me.modelFields, field));
-                });
-                item = me.createModelFieldSet(me.record.$className, fields);
-                if (fieldSet.title !== undefined) {
-                    item.setTitle(fieldSet.title);
-                }
-                items.push(item);
-            }
+            var keys = me.record.fields.keys;
+            if (Object.keys(fieldSet.fields).length > 0) keys = Object.keys(fieldSet.fields);
+
+            Ext.each(keys, function(key) {
+                config = fieldSet.fields[key] || {};
+                if (Ext.isString(config)) config = { fieldLabel: config };
+
+                field = me.createModelField(
+                    me.record,
+                    me.getFieldByName(me.record.fields.items, key),
+                    me.getConfig('fieldAlias'),
+                    config
+                );
+                if (field) fields.push(field);
+            });
+
+            item = me.createModelFieldSet(me.record.$className, fields, fieldSet.title);
+            items.push(item);
         });
 
         //get all record associations, which defined in the display config.
@@ -635,7 +637,7 @@ Ext.define('Shopware.model.Container', {
      *
      * @return Ext.form.FieldSet
      */
-    createModelFieldSet: function (modelName, fields) {
+    createModelFieldSet: function (modelName, fields, title) {
         var me = this, fieldSet = null, model = Ext.create(modelName), items = [], container;
 
         if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model)) {
@@ -665,7 +667,7 @@ Ext.define('Shopware.model.Container', {
             padding: '10 20',
             layout: 'column',
             items: items,
-            title: me.getModelName(modelName)
+            title: title || me.getModelName(modelName)
         });
 
         me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
@@ -706,10 +708,9 @@ Ext.define('Shopware.model.Container', {
      *
      * @return { Ext.form.field.Field }
      */
-    createModelField: function (model, field, alias) {
+    createModelField: function (model, field, alias, customConfig) {
         var me = this, formField = {},
-            config, customConfig, name,
-            fieldModel, fieldComponent, xtype;
+            name, fieldModel, fieldComponent, xtype;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-model-field', me, formField, model, field, alias)) {
             return formField;
@@ -783,13 +784,8 @@ Ext.define('Shopware.model.Container', {
         }
 
         //get the component field configuration. This configuration contains custom field configuration.
-        config = me.getConfig('fields');
-
-        if (config) {
-            //check if the current field is defined in the fields configuration. Otherwise use an empty object which will be applied.
-            customConfig = config[field.name] || {};
-            formField = Ext.apply(formField, customConfig);
-        }
+        customConfig = customConfig || {};
+        formField = Ext.apply(formField, customConfig);
 
         me.fireEvent(me.eventAlias + '-model-field-created', model, formField, field, fieldAssociation);
         
