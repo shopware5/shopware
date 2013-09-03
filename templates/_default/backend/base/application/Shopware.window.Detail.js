@@ -229,20 +229,28 @@ Ext.define('Shopware.window.Detail', {
      * @returns { Ext.form.Panel }
      */
     createFormPanel: function () {
-        var me = this;
+        var me = this, items;
 
-        me.tabPanel = Ext.create('Ext.tab.Panel', {
-            flex: 1,
-            items: me.createTabItems(),
-            listeners: {
-                tabchange: function (tabPanel, newCard, oldCard, eOpts) {
-                    me.onTabChange(tabPanel, newCard, oldCard, eOpts);
+        items = me.createTabItems();
+
+        //check if more than one tab was created
+        if (items.length > 1) {
+            //in this case, we have to display a tab panel.
+            me.tabPanel = Ext.create('Ext.tab.Panel', {
+                flex: 1,
+                items: items,
+                listeners: {
+                    tabchange: function (tabPanel, newCard, oldCard, eOpts) {
+                        me.onTabChange(tabPanel, newCard, oldCard, eOpts);
+                    }
                 }
-            }
-        });
+            });
+            //otherwise, the created item would be displayed directly in the form panel.
+            items = [ me.tabPanel ];
+        }
 
         me.formPanel = Ext.create('Ext.form.Panel', {
-            items: [ me.tabPanel ],
+            items: items,
             flex: 1,
             layout: {
                 type: 'hbox',
