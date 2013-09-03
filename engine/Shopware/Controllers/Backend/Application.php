@@ -118,6 +118,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected $sortFields;
 
     /**
+     * Helper function to get the repository of the configured model.
+     * @return \Shopware\Models\Partner\Repository
+     */
+    protected function getRepository()
+    {
+        return Shopware()->Models()->getRepository($this->model);
+    }
+
+    /**
      * Controller action which can be called over an ajax request.
      * This function is normally used for backend listings.
      * The listing will be selected over the getList function.
@@ -637,7 +646,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         if (strlen($search) > 0) {
             $fields = $this->getModelFields($model, $association);
             foreach($fields as $field) {
-                $builder->orWhere($field . ' LIKE :search');
+                $builder->orWhere($field['alias'] . ' LIKE :search');
             }
             $builder->setParameter('search', '%' . $search . '%');
         }
