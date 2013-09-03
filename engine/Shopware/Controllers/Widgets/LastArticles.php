@@ -53,5 +53,7 @@ class Shopware_Controllers_Widgets_LastArticles extends Enlight_Controller_Actio
         $articleId = (int) $this->Request()->getParam('sArticle');
         $articles = Shopware()->Modules()->Articles()->sGetLastArticles($articleId);
         $this->View()->assign('sLastArticles', $articles, true);
+        $numberOfArticles = Shopware()->Config()->lastarticlestoshow;
+        $this->View()->assign('sLastArticlesNum', $numberOfArticles);
     }
 }

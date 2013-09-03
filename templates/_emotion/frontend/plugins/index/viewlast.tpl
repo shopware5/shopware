@@ -5,6 +5,7 @@
 </div>
 <script>
     jQuery(function($) {
-        $('.viewlast').lastSeenArticlesDisplayer();
+        var NumberOfArticles = '{$sLastArticlesNum}';
+        $('.viewlast').lastSeenArticlesDisplayer(NumberOfArticles);
     })
 </script>

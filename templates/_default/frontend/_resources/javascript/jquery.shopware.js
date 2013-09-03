@@ -5710,17 +5710,18 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         this.options = $.extend( {}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.init();
+        this.init(options);
     }
 
-    Plugin.prototype.init = function () {
+    Plugin.prototype.init = function (options) {
         // Plugin configuration
-        var articleNum = 5,
+        var articleNum = options,
             index = localStorage.getItem('lastSeenArticleIndex'),
             i = 1,
             lastClass = '',
             data, article, all;
 
+        if(!articleNum) articleNum = 5;
         all = index;
         if(all > articleNum) {
             all = articleNum;
