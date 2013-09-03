@@ -23,6 +23,16 @@ Ext.define('Shopware.model.Container', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -104,6 +114,13 @@ Ext.define('Shopware.model.Container', {
              *  }
              */
             fields: { },
+
+            fieldSets: [
+                {
+                    fields: [ ],
+                    title: undefined
+                }
+            ],
 
             /**
              * The association property can contains the association which has to be displayed
@@ -197,15 +214,19 @@ Ext.define('Shopware.model.Container', {
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
-         *
          * @param { Object } userOpts
-         * @param { Object } displayConfig
-         * @returns { Object }
+         * @param { Object } definition
+         * @returns Object
          */
-        getDisplayConfig: function (userOpts, displayConfig) {
-            var config;
+        getDisplayConfig: function (userOpts, definition) {
+            var config = { };
 
-            config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
+            if (userOpts && typeof userOpts.configure == 'function') {
+                config = Ext.apply({ }, config, userOpts.configure());
+            }
+            if (definition && typeof definition.configure === 'function') {
+                config = Ext.apply({ }, config, definition.configure());
+            }
             config = Ext.apply({ }, config, this.displayConfig);
 
             if (config.controller) {
@@ -215,6 +236,7 @@ Ext.define('Shopware.model.Container', {
             }
             return config;
         },
+
 
         /**
          * Static function which sets the property value of
@@ -256,7 +278,7 @@ Ext.define('Shopware.model.Container', {
     constructor: function (opts) {
         var me = this;
 
-        me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
 
@@ -510,18 +532,33 @@ Ext.define('Shopware.model.Container', {
      */
     createItems: function() {
         var me = this, items = [], item,
-            associations;
+            associations, fields;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-items', me, items)) {
             return false;
         }
 
-        items.push(
-            me.createModelFieldSet(
-                me.record.$className,
-                me.getConfig('fieldAlias')
-            )
+        me.modelFields = me.createModelFields(
+            me.record,
+            me.getConfig('fieldAlias')
         );
+
+        Ext.each(me.getConfig('fieldSets'), function(fieldSet) {
+            fields = [];
+
+            if (fieldSet.fields.length <= 0) {
+                items.push(me.createModelFieldSet(me.record.$className, me.modelFields));
+            } else {
+                Ext.each(fieldSet.fields, function(field) {
+                    fields.push(me.getFieldByName(me.modelFields, field));
+                });
+                item = me.createModelFieldSet(me.record.$className, fields);
+                if (fieldSet.title !== undefined) {
+                    item.setTitle(fieldSet.title);
+                }
+                items.push(item);
+            }
+        });
 
         //get all record associations, which defined in the display config.
         associations = me.getAssociations(
@@ -571,8 +608,11 @@ Ext.define('Shopware.model.Container', {
             record: model,
             store: store,
             flex: 1,
-            displayConfig: {
-                associationKey: associationKey
+            subApp: me.subApp,
+            configure: function() {
+                return {
+                    associationKey: associationKey
+                };
             }
         });
 
@@ -592,19 +632,15 @@ Ext.define('Shopware.model.Container', {
      * brackets.
      *
      * @param modelName { String } - Full class name of the model. Used to create a model instance.
-     * @param alias { String } - Additional alias for the field names (example: 'attribute' => 'attribute[name]')
      *
      * @return Ext.form.FieldSet
      */
-    createModelFieldSet: function (modelName, alias) {
-        var me = this, fieldSet = null, model = Ext.create(modelName), items = [], container, fields;
+    createModelFieldSet: function (modelName, fields) {
+        var me = this, fieldSet = null, model = Ext.create(modelName), items = [], container;
 
-        if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model, alias)) {
+        if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model)) {
             return fieldSet;
         }
-
-        //convert all model fields to form fields.
-        fields = me.createModelFields(model, alias);
 
         //create a column container to display the columns in a two column layout
         container = Ext.create('Ext.container.Container', {
@@ -622,7 +658,7 @@ Ext.define('Shopware.model.Container', {
         });
         items.push(container);
 
-        me.fireEvent(me.eventAlias + '-column-containers-created', me, fields, items, model, alias);
+        me.fireEvent(me.eventAlias + '-column-containers-created', me, fields, items, model);
 
         fieldSet = Ext.create('Ext.form.FieldSet', {
             flex: 1,
@@ -632,7 +668,7 @@ Ext.define('Shopware.model.Container', {
             title: me.getModelName(modelName)
         });
 
-        me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model, alias);
+        me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
 
         return fieldSet;
     },

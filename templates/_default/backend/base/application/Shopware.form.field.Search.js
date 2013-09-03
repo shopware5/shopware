@@ -49,6 +49,16 @@ Ext.define('Shopware.form.field.Search', {
     store: undefined,
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -79,24 +89,30 @@ Ext.define('Shopware.form.field.Search', {
              * Activates or deactivate the listing template function which displays
              * additional information for each record.
              */
-            listTemplate: true,
+            listTemplate: false
         },
 
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
          * @param { Object } userOpts
-         * @param { Object } displayConfig
+         * @param { Object } definition
          * @returns Object
          */
-        getDisplayConfig: function (userOpts, displayConfig) {
-            var config;
+        getDisplayConfig: function (userOpts, definition) {
+            var config = { };
 
-            config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
+            if (userOpts && typeof userOpts.configure == 'function') {
+                config = Ext.apply({ }, config, userOpts.configure());
+            }
+            if (definition && typeof definition.configure === 'function') {
+                config = Ext.apply({ }, config, definition.configure());
+            }
             config = Ext.apply({ }, config, this.displayConfig);
 
             return config;
         },
+
 
         /**
          * Static function which sets the property value of
@@ -139,7 +155,7 @@ Ext.define('Shopware.form.field.Search', {
     constructor: function (opts) {
         var me = this;
 
-        me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
 
