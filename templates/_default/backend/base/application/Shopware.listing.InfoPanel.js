@@ -20,6 +20,16 @@ Ext.define('Shopware.listing.InfoPanel', {
 
     title: 'Detailed information',
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
     statics: {
         displayConfig: {
             model: undefined
@@ -27,20 +37,21 @@ Ext.define('Shopware.listing.InfoPanel', {
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
-         *
-         * @param userOpts Object
-         * @param displayConfig Object
+         * @param { Object } userOpts
+         * @param { Object } definition
          * @returns Object
          */
-        getDisplayConfig: function (userOpts, displayConfig) {
-            var config;
+        getDisplayConfig: function (userOpts, definition) {
+            var config = { };
 
-            if (userOpts && userOpts.displayConfig) {
-                config = Ext.apply({ }, userOpts.displayConfig);
+            if (userOpts && typeof userOpts.configure == 'function') {
+                config = Ext.apply({ }, config, userOpts.configure());
             }
-
-            config = Ext.apply({ }, config, displayConfig);
+            if (definition && typeof definition.configure === 'function') {
+                config = Ext.apply({ }, config, definition.configure());
+            }
             config = Ext.apply({ }, config, this.displayConfig);
+
             return config;
         },
 
@@ -70,7 +81,7 @@ Ext.define('Shopware.listing.InfoPanel', {
     constructor: function (opts) {
         var me = this;
 
-        me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
 

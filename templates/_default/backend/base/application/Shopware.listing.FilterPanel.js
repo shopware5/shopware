@@ -22,6 +22,16 @@ Ext.define('Shopware.listing.FilterPanel', {
 
     title: 'Filters',
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
     statics: {
         displayConfig: {
 
@@ -38,19 +48,19 @@ Ext.define('Shopware.listing.FilterPanel', {
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
-         *
-         * @param userOpts Object
-         * @param displayConfig Object
+         * @param { Object } userOpts
+         * @param { Object } definition
          * @returns Object
          */
-        getDisplayConfig: function (userOpts, displayConfig) {
-            var config;
+        getDisplayConfig: function (userOpts, definition) {
+            var config = { };
 
-            if (userOpts && userOpts.displayConfig) {
-                config = Ext.apply({ }, userOpts.displayConfig);
+            if (userOpts && typeof userOpts.configure == 'function') {
+                config = Ext.apply({ }, config, userOpts.configure());
             }
-
-            config = Ext.apply({ }, config, displayConfig);
+            if (definition && typeof definition.configure === 'function') {
+                config = Ext.apply({ }, config, definition.configure());
+            }
             config = Ext.apply({ }, config, this.displayConfig);
 
             if (config.controller) {
@@ -58,7 +68,6 @@ Ext.define('Shopware.listing.FilterPanel', {
                     '/backend/base/', '/backend/' + config.controller + '/'
                 );
             }
-
             return config;
         },
 
@@ -88,7 +97,7 @@ Ext.define('Shopware.listing.FilterPanel', {
     constructor: function (opts) {
         var me = this;
 
-        me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
 
@@ -107,8 +116,6 @@ Ext.define('Shopware.listing.FilterPanel', {
 
     initComponent: function() {
         var me = this;
-
-        console.log("FilterPanel", me.subApp, me.subApplication);
 
         me.gridPanel = me.listingWindow.gridPanel;
 

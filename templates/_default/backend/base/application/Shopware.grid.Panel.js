@@ -177,6 +177,16 @@ Ext.define('Shopware.grid.Panel', {
     eventAlias: undefined,
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -472,15 +482,19 @@ Ext.define('Shopware.grid.Panel', {
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
-         *
          * @param { Object } userOpts
-         * @param { Object } displayConfig
-         * @returns { Object }
+         * @param { Object } definition
+         * @returns Object
          */
-        getDisplayConfig: function (userOpts, displayConfig) {
-            var config;
+        getDisplayConfig: function (userOpts, definition) {
+            var config = { };
 
-            config = Ext.apply({ }, userOpts.displayConfig, displayConfig);
+            if (userOpts && typeof userOpts.configure == 'function') {
+                config = Ext.apply({ }, config, userOpts.configure());
+            }
+            if (definition && typeof definition.configure === 'function') {
+                config = Ext.apply({ }, config, definition.configure());
+            }
             config = Ext.apply({ }, config, this.displayConfig);
 
             return config;
@@ -526,7 +540,7 @@ Ext.define('Shopware.grid.Panel', {
     constructor: function (opts) {
         var me = this;
 
-        me._opts = me.statics().getDisplayConfig(opts, this.displayConfig);
+        me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
 
@@ -577,14 +591,10 @@ Ext.define('Shopware.grid.Panel', {
     createDefaultController: function () {
         var me = this;
 
-        me.controller = Ext.create('Shopware.grid.Controller', {
-            displayConfig: {
-                gridClass: me.$className,
-                eventAlias: me.eventAlias
-            },
-            subApplication: me.subApp
-        });
-        me.controller.init();
+        me.controller = me.subApp.getController('Shopware.grid.Controller');
+        me.controller._opts.gridClass = me.$className;
+        me.controller._opts.eventAlias = me.eventAlias;
+        me.controller.reloadControls();
 
         return me.controller;
     },

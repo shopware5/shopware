@@ -404,6 +404,26 @@ Ext.define('Shopware.model.Helper', {
                 extraParams: { association: associationKey }
             }
         });
+    },
+
+    /**
+     * Helper function to get a field by his name.
+     *
+     * @param fields
+     * @param name
+     * @returns { undefined|Object }
+     */
+    getFieldByName: function(fields, name) {
+        var result = undefined;
+
+        Ext.each(fields, function(field) {
+            if (field.name == name) {
+                result = field;
+                return false;
+            }
+        });
+
+        return result;
     }
 });
 
