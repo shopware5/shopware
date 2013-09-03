@@ -69,8 +69,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
         salutation:{
             label:'{s name=address/salutation}Salutation{/s}',
             mr:'{s name=address/salutation_mr}Mr{/s}',
-            ms:'{s name=address/salutation_ms}Mrs{/s}',
-            company:'{s name=address/salutation_company}Company{/s}'
+            ms:'{s name=address/salutation_ms}Mrs{/s}'
         },
         firstName:'{s name=address/first_name}First name{/s}',
         lastName:'{s name=address/last_name}Last name{/s}',
@@ -135,8 +134,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
         me.title = me.snippets.title;
         me.salutationData = [
             ['mr', me.snippets.salutation.mr],
-            ['ms', me.snippets.salutation.ms],
-            ['company', me.snippets.salutation.company]
+            ['ms', me.snippets.salutation.ms]
         ];
 
         me.items = me.createBillingForm();
