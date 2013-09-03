@@ -10,7 +10,7 @@
             {if !{config name='IgnoreAGB'}}
                 <input type="hidden" class="agb-checkbox" name="sAGB" value="{if $sAGBChecked}1{else}0{/if}" />
             {/if}
-			<input type="hidden" name="descentCheckoutConfirm" value="1" />
+			<input type="hidden" name="sourceCheckoutConfirm" value="1" />
 			<div class="grid_5 first">
 				<input type="radio" name="register[payment]" class="radio auto_submit" value="{$payment_mean.id}" id="payment_mean{$payment_mean.id}"{if $payment_mean.id eq $sPayment.id} checked="checked"{/if} />
 				<label class="description" for="payment_mean{$payment_mean.id}">{$payment_mean.description}</label>
