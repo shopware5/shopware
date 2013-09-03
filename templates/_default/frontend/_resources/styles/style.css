@@ -440,9 +440,9 @@ div#notes .table_row .action a.basket,
 #detailbox #img {width: 285px;}
 #detailbox #img img {display: block;margin:0 auto;}
 #detailbox #img #wrap {display: block; min-height: 255px;}
+#detailbox #img #wrap .mousetrap { opacity: 0; background: #fff }
 #zoom1 {display:block}
 #zoom1 {display: block;margin: 0 auto;}
-.mousetrap { opacity: 0; background: #fff }
 
 .cloud-zoom-big, #cloud-zoom-big {border: 5px solid;}
 #thumbs a {padding: 2px;border: 1px solid;margin: 2px;width: 56px;height: 56px;display: block;}
