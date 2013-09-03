@@ -510,7 +510,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 	{
 		if($this->Request()->isPost())
 		{
-            $descentIsCheckoutConfirm = $this->Request()->getParam('descentCheckoutConfirm');
+            $sourceIsCheckoutConfirm = $this->Request()->getParam('sourceCheckoutConfirm');
 			$values = $this->Request()->getPost('register');
 			$this->admin->sSYSTEM->_POST['sPayment'] = $values['payment'];
 
@@ -518,7 +518,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
 			if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed']))
 			{
-                if(empty($descentIsCheckoutConfirm)) {
+                if(empty($sourceIsCheckoutConfirm)) {
 				    $this->View()->sErrorFlag = $checkData['checkPayment']['sErrorFlag'];
 				    $this->View()->sErrorMessages = $checkData['checkPayment']['sErrorMessages'];
                 }
