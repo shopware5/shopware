@@ -264,7 +264,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns the default shop
+     * Returns the default shop with additional data
      *
      * @return \Shopware\Models\Shop\Shop
      */
@@ -277,6 +277,20 @@ class Repository extends ModelRepository
         if($shop !== null) {
             $this->fixActive($shop);
         }
+
+        return $shop;
+    }
+
+    /**
+     * Returns only the default shop model
+     *
+     * @return \Shopware\Models\Shop\Shop
+     */
+    public function getDefault()
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->where('shop.default = 1');
+        $shop = $builder->getQuery()->getOneOrNullResult();
 
         return $shop;
     }
