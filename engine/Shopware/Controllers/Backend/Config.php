@@ -166,6 +166,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $shopRepository = $this->getRepository('shop');
         $elements = $this->Request()->getParam('elements');
+
+        /* @var $defaultShop \Shopware\Models\Shop\Shop */
+        $defaultShop = $shopRepository->getDefault();
+        if($defaultShop === null) {
+            $this->View()->assign(array('success' => false, 'message' => 'No default shop found. Check your shop configuration'));
+            return;
+        }
+
         foreach ($elements as $elementData) {
             /** @var $element Shopware\Models\Config\Element */
             $element = Shopware()->Models()->find(
@@ -177,11 +185,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             }
             $values = array();
             foreach ($elementData['values'] as $valueData) {
+                /* @var $shop \Shopware\Models\Shop\Shop */
                 $shop = $shopRepository->find(
                     $valueData['shopId']
                 );
                 //  Scope not match
-                if (empty($elementData['scope']) && $shop->getId() != 1) {
+                if (empty($elementData['scope']) && $shop->getId() != $defaultShop->getId()) {
                     continue;
                 }
                 // Do not save missing translations
@@ -189,7 +198,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     continue;
                 }
                 // Do not save default value
-                if ($valueData['value'] === $elementData['value']) {
+                if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
                     continue;
                 }
                 $value = new Shopware\Models\Config\Value();
