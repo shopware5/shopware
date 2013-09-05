@@ -1668,7 +1668,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $total++;
             
             //clear entities to avoid memory leak
-            if($total % 100 == 0) {
+            if ($total % 100 == 0) {
                 Shopware()->Models()->clear();
             }
         }
