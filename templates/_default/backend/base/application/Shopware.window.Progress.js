@@ -1,8 +1,11 @@
 
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/window/progress"}
 Ext.define('Shopware.window.Progress', {
     extend: 'Ext.window.Window',
-    title: 'Delete items',
+    title: '{s name="progress_window/title"}Delete items{/s}',
+
     alias: 'widget.shopware-progress-window',
     layout: {
         type: 'vbox',
@@ -102,7 +105,17 @@ Ext.define('Shopware.window.Progress', {
              *
              * @type { boolean }
              */
-            displayResultGrid: true
+            displayResultGrid: true,
+
+            cancelButtonText: '{s name="progress_window/cancel_button_text"}Cancel process{/s}',
+            closeButtonText: '{s name="progress_window/close_button_text"}Close window{/s}',
+
+            successHeader: '{s name="progress_window/success_header"}Success{/s}',
+            requestHeader: '{s name="progress_window/request_header"}Request{/s}',
+            errorHeader: '{s name="progress_window/error_header"}Error message{/s}',
+            requestResultTitle: '{s name="progress_window/request_result_title"}Request results{/s}',
+            processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}'
+
         },
 
         /**
@@ -429,7 +442,7 @@ Ext.define('Shopware.window.Progress', {
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: 'Cancel process',
+            text: me.getConfig('cancelButtonText'),
             handler: function() {
                 me.cancelProcess = true;
             }
@@ -437,7 +450,7 @@ Ext.define('Shopware.window.Progress', {
 
         me.closeButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: 'Close window',
+            text: me.getConfig('closeButtonText'),
             disabled: true,
             handler: function() { me.destroy() }
         });
@@ -477,9 +490,9 @@ Ext.define('Shopware.window.Progress', {
             border: false,
             columns: [
                 { xtype: 'rownumberer', width: 30 },
-                { header: 'Success', dataIndex: 'success', width: 60, renderer: me.successRenderer },
-                { header: 'Request', dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
-                { header: 'Error message', dataIndex: 'error', flex: 1 }
+                { header: me.getConfig('successHeader'), dataIndex: 'success', width: 60, renderer: me.successRenderer },
+                { header: me.getConfig('requestHeader'), dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
+                { header: me.getConfig('errorHeader'), dataIndex: 'error', flex: 1 }
             ],
             store: me.resultStore
         });
@@ -493,7 +506,7 @@ Ext.define('Shopware.window.Progress', {
             collapsed: false,
             flex: 1,
             margin: '20 0 0',
-            title: 'Request results'
+            title: me.getConfig('requestResultTitle')
         });
 
         me.fireEvent('after-result-field-set-created', me, me.resultFieldSet);
@@ -570,7 +583,7 @@ Ext.define('Shopware.window.Progress', {
 
             //if the process canceled over the button, set an info text at which position the process canceled.
             if (me.cancelProcess) {
-                me.updateProgressBar(current, 'Process canceled at position [0] of [1]');
+                me.updateProgressBar(current, me.getConfig('processCanceledText'));
             }
             me.fireEvent('process-done', me, current, me.cancelProcess);
 

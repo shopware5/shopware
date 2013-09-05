@@ -1,4 +1,7 @@
 
+
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/data/model"}
 Ext.define('Shopware.data.Model', {
 

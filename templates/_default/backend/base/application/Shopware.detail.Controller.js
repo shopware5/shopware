@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/controller/detail"}
 Ext.define('Shopware.detail.Controller', {
     extend: 'Enlight.app.Controller',
@@ -74,7 +76,12 @@ Ext.define('Shopware.detail.Controller', {
              * @required
              * @type { string }
              */
-            eventAlias: undefined
+            eventAlias: undefined,
+
+            saveSuccessTitle: '{s name="detail_controller/save_success_title"}Success{/s}',
+            saveSuccessMessage: '{s name="detail_controller/save_success_message"}Item saved successfully{/s}',
+
+            violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}'
         },
 
         /**
@@ -352,7 +359,10 @@ Ext.define('Shopware.detail.Controller', {
 
                 Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form);
 
-                Shopware.Notification.createGrowlMessage('Success', 'Item saved successfully');
+                Shopware.Notification.createGrowlMessage(
+                    me.getConfig('saveSuccessTitle'),
+                    me.getConfig('saveSuccessMessage')
+                );
 
                 window.loadRecord(result);
             }
@@ -366,7 +376,8 @@ Ext.define('Shopware.detail.Controller', {
      * @param { Array } violations
      */
     createViolationMessage: function(violations) {
-        var template = '';
+        var me = this,
+            template = '';
 
         Ext.each(violations, function(violation) {
             template += '<li style="line-height: 13px; padding: 3px 0"><b>' + violation.property + '</b>: ' + violation.message + '</li>';
@@ -374,7 +385,7 @@ Ext.define('Shopware.detail.Controller', {
 
         template = '<ul>' + template + '</ul>';
         Shopware.Notification.createStickyGrowlMessage({
-            title: 'Violation errors',
+            title: me.getConfig('violationErrorTitle'),
             text: template,
             width: 400
         });

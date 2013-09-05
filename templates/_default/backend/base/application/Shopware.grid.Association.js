@@ -1,3 +1,6 @@
+
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/grid/association"}
 
 Ext.define('Shopware.grid.Association', {
@@ -136,7 +139,9 @@ Ext.define('Shopware.grid.Association', {
              *
              * @type { boolean }
              */
-            editColumn: false
+            editColumn: false,
+
+            comboFieldLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
         },
 
         /**
@@ -291,7 +296,7 @@ Ext.define('Shopware.grid.Association', {
             pageSize: 20,
             flex: 1,
             subApp: me.subApp,
-            fieldLabel: 'Search for',
+            fieldLabel: me.getConfig('comboFieldLabel'),
             margin: 5,
             listeners: {
                 select: function (combo, records) {

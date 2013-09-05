@@ -1,3 +1,6 @@
+
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/grid/controller"}
 
 /**
@@ -132,7 +135,7 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @type { string }
              */
-            deleteConfirmTitle: 'Delete items',
+            deleteConfirmTitle: '{s name="grid_controller/delete_confirm_title"}Delete items{/s}',
 
             /**
              * Message of the confirm message box.
@@ -140,7 +143,7 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @type { string }
              */
-            deleteConfirmText: 'Are you sure you want to delete the selected items?',
+            deleteConfirmText: '{s name="grid_controller/delete_confirm_text"}Are you sure you want to delete the selected items?{/s}',
 
             /**
              * Info text of the { @link Shopware.window.Progress }.
@@ -149,7 +152,7 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @type { string }
              */
-            deleteInfoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
+            deleteInfoText: '{s name="grid_controller/delete_info_text"}<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.{/s}',
 
             /**
              * The progress bar text of the { @link Shopware.window.Progress }.
@@ -159,7 +162,7 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @type { string }
              */
-            deleteProgressBarText: 'Item [0] of [1]'
+            deleteProgressBarText: '{s name="grid_controller/delete_progress_bar_text"}Item [0] of [1]{/s}'
         },
 
         /**
@@ -530,7 +533,8 @@ Ext.define('Shopware.grid.Controller', {
      */
     onDeleteItems: function (grid, records, button) {
         var me = this, window,
-            text = me.getConfig('deleteConfirmText'), title = me.getConfig('deleteConfirmTitle');
+            text = me.getConfig('deleteConfirmText'),
+            title = me.getConfig('deleteConfirmTitle');
 
         if (!Shopware.app.Application.fireEvent('before-delete-items', me, records, grid, title, text)) {
             return false;
@@ -546,7 +550,6 @@ Ext.define('Shopware.grid.Controller', {
                 return true;
             }
 
-            console.log("records", records);
             window = Ext.create('Shopware.window.Progress', {
                 configure: function() {
                     return {

@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/model/container"}
 
 Ext.define('Shopware.model.Container', {
@@ -795,7 +797,6 @@ Ext.define('Shopware.model.Container', {
             formField = Ext.apply(formField, customConfig);
 
         } else if (Ext.isFunction(customConfig)) {
-
             formField = customConfig.call(this, model, formField, field, fieldAssociation);
         }
 

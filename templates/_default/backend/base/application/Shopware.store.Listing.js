@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/store/listing"}
 
 Ext.define('Shopware.store.Listing', {

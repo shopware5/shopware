@@ -1,4 +1,5 @@
 
+//{namespace name=backend/application/main}
 
 Ext.define('Shopware.filter.Field', {
 

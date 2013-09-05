@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 Ext.define('Shopware.listing.InfoPanel', {
     extend: 'Ext.panel.Panel',
 
@@ -18,7 +20,7 @@ Ext.define('Shopware.listing.InfoPanel', {
     collapsible: true,
     layout: 'fit',
 
-    title: 'Detailed information',
+    title: '{s name="info_panel/title"}Detailed information{/s}',
 
     /**
      * Override required!
@@ -33,7 +35,8 @@ Ext.define('Shopware.listing.InfoPanel', {
     statics: {
         displayConfig: {
             model: undefined,
-            fields: {  }
+            fields: {  },
+            emptyText: '{s name="info_panel/empty_text"}No record selected.{/s}'
         },
 
         /**
@@ -140,7 +143,7 @@ Ext.define('Shopware.listing.InfoPanel', {
             tpl: me.createTemplate(),
             flex: 1,
             style: 'color: #6c818f;font-size:11px',
-            emptyText: '<div style="font-size:13px; text-align: center;">No record selected.</div>',
+            emptyText: '<div style="font-size:13px; text-align: center;">' + me.getConfig('emptyText') + '</div>',
             deferEmptyText: false,
             itemSelector: 'div.item',
             renderData: []

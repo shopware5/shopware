@@ -1,3 +1,6 @@
+
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/grid/panel"}
 
 /**
@@ -476,7 +479,13 @@ Ext.define('Shopware.grid.Panel', {
              *          description: { header: 'MyOwnDescription' }
              *      }
              */
-            columns: { }
+            columns: { },
+
+
+            pageSizeLabel: '{s name="grid_panel/page_size_label"}Items per page{/s}',
+            addButtonText: '{s name="grid_panel/add_button_text"}Add item{/s}',
+            deleteButtonText: '{s name="grid_panel/delete_button_text"}Delete all selected{/s}',
+            searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}'
         },
 
         /**
@@ -1133,7 +1142,7 @@ Ext.define('Shopware.grid.Panel', {
             xtype: 'actioncolumn',
             width: 30 * items.length,
             items: items
-        }
+        };
 
         me.fireEvent(me.eventAlias + '-action-column-created', me, column);
 
@@ -1433,7 +1442,7 @@ Ext.define('Shopware.grid.Panel', {
         }
 
         me.pageSizeCombo = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Items per page',
+            fieldLabel: me.getConfig('pageSizeLabel'),
             labelWidth: 110,
             queryMode: 'local',
             value: value,
@@ -1499,6 +1508,7 @@ Ext.define('Shopware.grid.Panel', {
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
+            ui: 'shopware-ui',
             items: me.createToolbarItems()
         });
 
@@ -1575,8 +1585,7 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: 'Add item',
-            cls: 'secondary small',
+            text: me.getConfig('addButtonText'),
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent(me.eventAlias + '-add-item', me, this);
@@ -1600,9 +1609,8 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me.deleteButton = Ext.create('Ext.button.Button', {
-            text: 'Delete all selected',
+            text: me.getConfig('deleteButtonText'),
             disabled: true,
-            cls: 'secondary small',
             iconCls: 'sprite-minus-circle-frame',
             handler: function () {
                 var selModel = me.getSelectionModel();
@@ -1629,7 +1637,7 @@ Ext.define('Shopware.grid.Panel', {
         me.searchField = Ext.create('Ext.form.field.Text', {
             cls: 'searchfield',
             width: 170,
-            emptyText: 'Search ...',
+            emptyText: me.getConfig('searchFieldText'),
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {

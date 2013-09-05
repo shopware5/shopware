@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 Ext.define('Shopware.listing.FilterPanel', {
     extend: 'Ext.form.Panel',
 
@@ -20,7 +22,7 @@ Ext.define('Shopware.listing.FilterPanel', {
     collapsible: true,
     layout: 'anchor',
 
-    title: 'Filters',
+    title: '{s name="filter_panel/title"}Filters{/s}',
 
     /**
      * Override required!
@@ -42,7 +44,11 @@ Ext.define('Shopware.listing.FilterPanel', {
 
             displayFields: [],
 
-            fields: { }
+            fields: { },
+
+            infoText: '{s name="filter_panel/info_text"}Aktivieren Sie der verschiedenen Felder über die davor angezeigte Checkbox. Aktivierte Felder werden mit einer UND Bedingung verknüpft.{/s}',
+            filterButtonText: '{s name="filter_panel/filter_button_text"}Filter result{/s}',
+            resetButtonText: '{s name="filter_panel/reset_button_text"}Reset filters{/s}'
         },
 
         /**
@@ -137,8 +143,10 @@ Ext.define('Shopware.listing.FilterPanel', {
     },
 
     createInfoText: function() {
+        var me = this;
+
         return Ext.create('Ext.container.Container', {
-            html: 'Aktivieren Sie der verschiedenen Felder über die davor angezeigte Checkbox. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
+            html: me.getConfig('infoText'),
             style: 'color: #6c818f; font-size: 11px; line-height: 14px;',
             margin: '0 0 10'
         });
@@ -211,7 +219,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         return Ext.create('Ext.button.Button', {
             cls: 'secondary small',
             iconCls: 'sprite-funnel',
-            text: 'Filter result',
+            text: me.getConfig('filterButtonText'),
             handler: function() {
                 me.filterGridStore();
             }
@@ -224,7 +232,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         return Ext.create('Ext.button.Button', {
             cls: 'secondary small',
             iconCls: 'sprite-funnel--minus',
-            text: 'Reset filters',
+            text: me.getConfig('resetButtonText'),
             handler: function() {
                 me.getForm().reset();
                 me.gridPanel.getStore().clearFilter(true);

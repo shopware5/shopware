@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 //{block name="backend/application/window/detail"}
 
 Ext.define('Shopware.window.Detail', {
@@ -93,7 +95,11 @@ Ext.define('Shopware.window.Detail', {
              *
              * @optional
              */
-            hasOwnController: false
+            hasOwnController: false,
+
+            cancelButtonText: '{s name="detail_window/cancel_button_text"}Cancel{/s}',
+            saveButtonText: '{s name="detail_window/save_button_text"}Save{/s}'
+
         },
 
         /**
@@ -422,7 +428,7 @@ Ext.define('Shopware.window.Detail', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: 'Cancel',
+            text: me.getConfig('cancelButtonText'),
             handler: function () {
                 me.onCancel();
             }
@@ -444,7 +450,7 @@ Ext.define('Shopware.window.Detail', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: 'Save',
+            text: me.getConfig('saveButtonText'),
             handler: function () {
                 me.onSave();
             }
