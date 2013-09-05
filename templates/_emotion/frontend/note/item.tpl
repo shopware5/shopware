@@ -29,7 +29,7 @@
 
 		{* Delivery informations *}
 		{if {config name=BASKETSHIPPINGINFO}}
-			<div class="delivery{if !$sUserLoggedIn} full_length{/if}" {if {config name=VoteDisable}}style="top:14px"{/if} >
+			<div class="delivery{if !$sUserLoggedIn} full_length{/if}{if {config name=VoteDisable}} vote_disabled{/if}"  >
 				{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sBasketItem}
 			</div>
 		{/if}

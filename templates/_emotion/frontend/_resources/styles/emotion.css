@@ -2679,6 +2679,7 @@ div#notes .table_row a.zoom_picture:hover {background-position: 0 bottom;}
 
 div#notes .table_row .delivery {top: 30px; right: 0;}
 div#notes .table_row .delivery.full_length {top: 38px; right: auto; left: 590px; }
+div#notes .table_row .delivery.full_length.vote_disabled {top:14px;}
 div#notes .table_row .title {width: 450px;}
 
 
