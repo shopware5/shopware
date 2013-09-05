@@ -622,7 +622,6 @@ class sArticles
 
         $sLimitStart = ($sPage - 1) * $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
         $sLimitEnd = $this->sSYSTEM->_GET['sPerPage'] ? $this->sSYSTEM->_GET['sPerPage'] : $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
-        $limitNew = !empty($this->sSYSTEM->sCONFIG['sARTICLELIMIT']) ? (int)$this->sSYSTEM->sCONFIG['sARTICLELIMIT'] : 125;
 
         $sql_add_where = "";
         $sql_search_fields = "";
@@ -796,7 +795,8 @@ class sArticles
         }
 
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
-            'subject' => $this, 'id' => $categoryId
+            'subject' => $this,
+            'id'      => $categoryId
         ))) {
             return false;
         }
@@ -807,6 +807,9 @@ class sArticles
             $sCategoryConfig = array();
         }
 
+        $defaultPerPage = (int) $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
+        $defaultSort    = 0;
+
         // PerPage
         if (!empty($this->sSYSTEM->_GET['sPerPage'])) {
             $sCategoryConfig['sPerPage'] = (int)$this->sSYSTEM->_GET['sPerPage'];
@@ -816,18 +819,19 @@ class sArticles
         if (!empty($sCategoryConfig['sPerPage'])) {
             $sPerPage = $sCategoryConfig['sPerPage'];
         } elseif (empty($this->sSYSTEM->_GET['sPerPage'])) {
-            $sPerPage = (int)$this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
+            $sPerPage = $defaultPerPage;
         }
 
         // Order List by
         if (isset($this->sSYSTEM->_POST['sSort'])) {
             $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
-        } elseif(!empty($this->sSYSTEM->_GET['sSort'])) {
+        } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
             $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
         }
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
         }
+        $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : $defaultSort;
 
         if (isset($this->sSYSTEM->_GET['sSupplier']) && empty($this->sSYSTEM->_GET['sSupplier'])
             || !empty($this->sSYSTEM->_GET['sFilterProperties'])
@@ -849,13 +853,17 @@ class sArticles
             && empty($this->sSYSTEM->_GET['sFilterProperties'])) {
             $this->sSYSTEM->_GET['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
         }
+
         if (!empty($this->sSYSTEM->_GET['sSupplier']) && is_numeric($this->sSYSTEM->_GET['sSupplier'])) {
             $sCategoryConfig['sSupplier'] = (int)$this->sSYSTEM->_GET['sSupplier'];
         }
+
         if (!empty($this->sSYSTEM->_GET['sTemplate'])) {
             $sCategoryConfig['sTemplate'] = basename($this->sSYSTEM->_GET['sTemplate']);
         }
-        if(!empty($sCategoryConfig)) {
+
+        // save category config to session
+        if (!empty($sCategoryConfig)) {
             $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId] = $sCategoryConfig;
         } else {
             unset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId]);
@@ -864,8 +872,6 @@ class sArticles
         $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int)$this->sSYSTEM->_GET['sPage'] : 1;
         $sLimitStart = ($sPage - 1) * $sPerPage;
         $sLimitEnd = $sPerPage;
-
-        $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
 
         //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
         $sqlFromPath = "
@@ -926,7 +932,6 @@ class sArticles
                     ";
                 }
         }
-
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
@@ -1180,9 +1185,29 @@ class sArticles
             $numberPages = $this->sSYSTEM->sCONFIG['sMAXPAGES'];
         }
 
+        $categoryParams = array();
+        if ($sSort != $defaultSort) {
+            $categoryParams['sSort'] = $sSort;
+        }
+
+        if ($sPerPage != $defaultPerPage) {
+            $categoryParams['sPerPage'] = $sPerPage;
+        }
+
+        if (isset($sCategoryConfig['sFilterProperties'])) {
+            $categoryParams['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
+        }
+
+        if (isset($sCategoryConfig['sSupplier'])) {
+            $categoryParams['sSupplier'] = $sCategoryConfig['sSupplier'];
+        }
+
+        if (isset($sCategoryConfig['sTemplate'])) {
+            $categoryParams['sTemplate'] = $sCategoryConfig['sTemplate'];
+        }
+
         // Make Array with page-structure to render in template
         $pages = array();
-
         if ($numberPages > 1) {
             for ($i = 1; $i <= $numberPages; $i++) {
                 if ($i == $sPage) {
@@ -1191,18 +1216,18 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $i), false);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
@@ -1326,8 +1351,6 @@ class sArticles
                 $articles[$articleKey]["referenceprice"] = $basePrice;
             }
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
-
-
         } // For every article in this list
 
         // Build result array
@@ -1339,6 +1362,7 @@ class sArticles
         $result['sNumberArticles'] = $numberArticles;
         $result['sNumberPages'] = $numberPages;
         $result['sPage'] = $sPage;
+        $result['categoryParams'] = $categoryParams;
 
         if (!empty($sCategoryConfig['sTemplate'])) {
             $result['sTemplate'] = $sCategoryConfig['sTemplate'];
@@ -2235,7 +2259,7 @@ class sArticles
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
         }
-        
+
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
@@ -3125,7 +3149,6 @@ class sArticles
             // Load article-configurations
             $getArticle = $this->sGetArticleConfig($getArticle["articleID"], $getArticle);
 
-
             if ($getArticle["sConfigurator"]) {
                 if ($getArticle["pricegroupActive"]) {
                     // The default variant's price group price is calculated above and is not overwritten by sGetArticleConfig
@@ -3223,6 +3246,7 @@ class sArticles
             if ($this->showArticleNavigation()) {
                 $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
             }
+
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"], null, 'UTF-8')));
             $string = str_replace(',','',$string);
