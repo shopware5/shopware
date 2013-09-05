@@ -78,10 +78,25 @@ Ext.define('Shopware.detail.Controller', {
              */
             eventAlias: undefined,
 
+            /**
+             * Title of the Shopware growl message, which displayed when a model saved
+             * successfully.
+             * @type { String }
+             */
             saveSuccessTitle: '{s name="detail_controller/save_success_title"}Success{/s}',
 
+            /**
+             * Message of the Shopware growl message, which displayed when a model saved
+             * successfully.
+             * @type { String }
+             */
             saveSuccessMessage: '{s name="detail_controller/save_success_message"}Item saved successfully{/s}',
 
+            /**
+             * Title of the Shopware sticky notification message, which displayed when a model
+             * can't be saved and some model violations thrown.
+             * @type { String }
+             */
             violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}'
         },
 
@@ -302,6 +317,13 @@ Ext.define('Shopware.detail.Controller', {
      * Event listener function of the { @link Shopware.window.Detail } 'save' event.
      * This event is used to save a single record with the modified detail data of
      * the detail window.
+     * This function throws the following events
+     *  - start-save-record
+     *  - update-record-on-save
+     *  - after-update-record-on-save
+     *  - save-exception
+     *  - before-send-save-request
+     *  - save-successfully
      *
      * @param { Shopware.window.Detail } window
      * @param { Shopware.data.Model } record
