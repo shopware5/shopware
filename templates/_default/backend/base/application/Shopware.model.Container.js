@@ -110,20 +110,35 @@ Ext.define('Shopware.model.Container', {
 
 
             /**
-             * The fields property can contains custom form field configurations.
-             * It allows to customize the different form fields without overriding the
-             * createFormField function.
-             * The field configuration will be applied at least to the form field, so it
-             * allows to override the each field configuration like listeners, validation or something
-             * else.
+             * The fieldSets property allows to define how the model fields will
+             * be displayed.
+             * It configures how many field sets are created within this container
+             * and in which order the fields will be displayed.
+             * Each form field will be created through the { @link #createModelField } function.
              *
              * @example
-             *  fields: {
-             *      name: { fieldLabel: 'OwnLabel' },
-             *  }
+             *  Ext.define('Shopware.apps.Product.view.detail.Product', {
+             *      extend: 'Shopware.model.Container',
+             *      fieldSets: [
+             *          {
+             *              title: 'First field set',
+             *              fields: {
+             *                  name: { fieldLabel: 'my own label' }
+             *              }
+             *          },
+             *          {
+             *              title: 'Second field set',
+             *              fields: {
+             *                  active: 'Shorthand to change the field label'
+             *              }
+             *          }
+             *      ]
+             *  });
+             *
+             *  The configuration of each field can contains additional form field
+             *  configurations which will be assigned at least to the created model form field.
+             *  This allows to override each configuration of an field.
              */
-            fields: { },
-
             fieldSets: [
                 {
                     fields: [ ],

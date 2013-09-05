@@ -484,12 +484,31 @@ Ext.define('Shopware.grid.Panel', {
              */
             columns: { },
 
+            /**
+             * Contains the field label for the { @link #pageSizeCombo }.
+             * The page size combo box is displayed in the grid pagingbar.
+             *
+             * @type { String }
+             */
             pageSizeLabel: '{s name="grid_panel/page_size_label"}Items per page{/s}',
 
+            /**
+             * Contains the text for the { @link #addButton }.
+             * The add button is displayed in the grid toolbar.
+             * @type { String }
+             */
             addButtonText: '{s name="grid_panel/add_button_text"}Add item{/s}',
 
+            /**
+             * Contains the text for the { @link #deleteButton }
+             * @type { String }
+             */
             deleteButtonText: '{s name="grid_panel/delete_button_text"}Delete all selected{/s}',
 
+            /**
+             * Contains the emptyText value for the { @link #searchField }.
+             * @type { String }
+             */
             searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}'
         },
 
