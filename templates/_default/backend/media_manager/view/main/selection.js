@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
             action: 'mediamanager-selection-window-apply-selection',
             handler: function(btn) {
                 if (Ext.isFunction(me.selectionHandler)) {
-                    console.log("me.mediaView", me.mediaView);
                     me.selectionHandler.call(
                         me.eventScope,
                         btn,

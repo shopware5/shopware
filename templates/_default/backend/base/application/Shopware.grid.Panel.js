@@ -555,7 +555,6 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this);
-        console.log("opts", me._opts);
 
         me.callParent(arguments);
     },
