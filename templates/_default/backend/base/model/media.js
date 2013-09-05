@@ -34,6 +34,13 @@
 //{block name="backend/base/model/media"}
 Ext.define('Shopware.apps.Base.model.Media', {
 	extend: 'Shopware.data.Model',
+
+    configure: function() {
+        return {
+            field: 'Shopware.form.field.Media'
+        };
+    },
+
 	fields: [
 		//{block name="backend/base/model/media/fields"}{/block}
         'created',

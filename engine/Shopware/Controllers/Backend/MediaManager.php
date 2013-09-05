@@ -297,6 +297,20 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
     }
 
+
+    public function getMediaAction()
+    {
+        $id = $this->Request()->getParam('mediaId', null);
+
+        if (empty($id)) {
+            $this->View()->assign(array('success' => false, 'error' => 'No id passed'));
+        }
+        $builder = $this->getMedia($id);
+        $data = $builder->getQuery()->getArrayResult();
+
+        $this->View()->assign(array('success' => true, 'data' => $data[0]));
+    }
+
     /**
      * Internal helper function to get a single media.
      * @param integer $id

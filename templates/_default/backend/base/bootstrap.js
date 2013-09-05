@@ -175,3 +175,6 @@
 {include file='backend/base/component/element/media_selection.js'}
 
 
+{include file='backend/base/application/Shopware.form.field.Media.js'}
+
+
