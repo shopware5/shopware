@@ -205,13 +205,6 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     private function getSchemaManager()
     {
-        /**@var $connection \Doctrine\DBAL\Connection*/
-        $connection = \Doctrine\DBAL\DriverManager::getConnection(
-            array('pdo' => Shopware()->Db()->getConnection())
-        );
-
-        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
-        return $connection->getSchemaManager();
+        return $this->Application()->Models()->getConnection()->getSchemaManager();
     }
 }
