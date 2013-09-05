@@ -290,7 +290,7 @@ class ModelManager extends EntityManager
         );
 
         $generator->setSchemaManager(
-            $this->getOwnSchemaManager()
+            $this->getConnection()->getSchemaManager()
         );
 
         $generator->generateAttributeModels($tableNames);
@@ -338,24 +338,6 @@ class ModelManager extends EntityManager
         $proxyFactory = $this->getProxyFactory();
         $proxyFactory->generateProxyClasses($metadata);
     }
-
-    /**
-     * Helper function to create an own database schema manager to remove
-     * all dependencies to the existing shopware models and meta data caches.
-     * @return \Doctrine\DBAL\Connection
-     */
-    private function getOwnSchemaManager()
-    {
-        /**@var $connection \Doctrine\DBAL\Connection*/
-        $connection = \Doctrine\DBAL\DriverManager::getConnection(
-            array('pdo' => Shopware()->Db()->getConnection())
-        );
-
-        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
-        return $connection->getSchemaManager();
-    }
-
 
     /**
      * Shopware helper function to extend an attribute table.
