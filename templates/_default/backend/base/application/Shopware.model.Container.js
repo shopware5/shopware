@@ -558,7 +558,7 @@ Ext.define('Shopware.model.Container', {
                 if (field) fields.push(field);
             });
 
-            item = me.createModelFieldSet(me.record.$className, fields, fieldSet.title);
+            item = me.createModelFieldSet(me.record.$className, fields, fieldSet);
             items.push(item);
         });
 
@@ -637,8 +637,11 @@ Ext.define('Shopware.model.Container', {
      *
      * @return Ext.form.FieldSet
      */
-    createModelFieldSet: function (modelName, fields, title) {
-        var me = this, fieldSet = null, model = Ext.create(modelName), items = [], container;
+    createModelFieldSet: function (modelName, fields, customConfig) {
+        var me = this, fieldSet = null,
+            model = Ext.create(modelName), items = [], container;
+
+        customConfig = customConfig || {};
 
         if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model)) {
             return fieldSet;
@@ -667,8 +670,10 @@ Ext.define('Shopware.model.Container', {
             padding: '10 20',
             layout: 'column',
             items: items,
-            title: title || me.getModelName(modelName)
+            title: me.getModelName(modelName)
         });
+
+        fieldSet = Ext.apply(fieldSet, customConfig);
 
         me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
 
@@ -705,6 +710,7 @@ Ext.define('Shopware.model.Container', {
      * @param model { Ext.data.Model } - Instance of the model which fields should be displayed
      * @param field { Ext.data.Field } - The model field which will be used for the form field creation.
      * @param alias { string } - Field alias for associations. See { @link #fieldAlias }
+     * @param customConfig { Object } - Custom configuration of the passed field.
      *
      * @return { Ext.form.field.Field }
      */
@@ -785,7 +791,13 @@ Ext.define('Shopware.model.Container', {
 
         //get the component field configuration. This configuration contains custom field configuration.
         customConfig = customConfig || {};
-        formField = Ext.apply(formField, customConfig);
+        if (Ext.isObject(customConfig)) {
+            formField = Ext.apply(formField, customConfig);
+
+        } else if (Ext.isFunction(customConfig)) {
+
+            formField = customConfig.call(this, model, formField, field, fieldAssociation);
+        }
 
         me.fireEvent(me.eventAlias + '-model-field-created', model, formField, field, fieldAssociation);
         

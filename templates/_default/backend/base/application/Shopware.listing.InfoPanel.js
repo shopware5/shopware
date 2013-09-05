@@ -32,8 +32,10 @@ Ext.define('Shopware.listing.InfoPanel', {
 
     statics: {
         displayConfig: {
-            model: undefined
+            model: undefined,
+            fields: {  }
         },
+
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
@@ -148,12 +150,23 @@ Ext.define('Shopware.listing.InfoPanel', {
     },
 
     createTemplate: function() {
-        var me = this, fields = [];
+        var me = this, fields = [], model, keys, field, config,
+            configFields = me.getConfig('fields');
 
         if (me.getConfig('model')) {
-            var model = Ext.create(me.getConfig('model'));
-            Ext.each(model.fields.items, function(field) {
-                fields.push('<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>')
+            model = Ext.create(me.getConfig('model'));
+            keys = model.fields.keys;
+            if (Object.keys(configFields).length > 0) keys = Object.keys(configFields);
+
+            Ext.each(keys, function(key) {
+                field = me.getFieldByName(model.fields.items, key);
+                config = configFields[key];
+
+                if (Ext.isObject(config) || (Ext.isString(config) && config.length > 0)) {
+                    fields.push(config);
+                } else {
+                    fields.push(me.createTemplateForField(model, field));
+                }
             });
         }
 
@@ -165,6 +178,11 @@ Ext.define('Shopware.listing.InfoPanel', {
             '</tpl>'
         );
     },
+
+    createTemplateForField: function(model, field) {
+        return '<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>'
+    },
+
 
     updateInfoView: function(record) {
         var me = this;
