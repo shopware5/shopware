@@ -49,18 +49,24 @@ Ext.define('Shopware.model.Container', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.detail.Product', {
          *          extend: 'Shopware.model.Container',
-         *          displayConfig: {
-         *              controller: 'product',
-         *              fields: {
-         *                  name: { fieldLabel: 'Product name' }
-         *              },
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  controller: 'product',
+         *                  fieldSets: [
+         *                      {
+         *                          title: 'First product field set'
+         *                          fields: [
+         *                              name: { fieldLabel: 'Product name' }
+         *                          ]
+         *                      }
+         *                  ],
+         *                  ...
+         *              }
          *          }
          *      });
          */
@@ -152,8 +158,10 @@ Ext.define('Shopware.model.Container', {
              *
              *  Ext.define('Shopware.apps.Product.view.detail.Product', {
              *      extend: 'Shopware.model.Container',
-             *      displayConfig: {
-             *          associations: [ 'attribute' ]
+             *      configure: function() {
+             *          return {
+             *              associations: [ 'attribute' ]
+             *          }
              *      }
              *  });
              *  
@@ -197,8 +205,8 @@ Ext.define('Shopware.model.Container', {
              *
              *  Ext.define('Shopware.apps.Product.view.detail.Product', {
              *      extend: 'Shopware.model.Container',
-             *      displayConfig: {
-             *          associations: [ 'attribute' ]
+             *      configure: function() {
+             *          return { associations: [ 'attribute' ] };
              *      }
              *  });
              *

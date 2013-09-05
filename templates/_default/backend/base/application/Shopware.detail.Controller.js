@@ -38,15 +38,15 @@ Ext.define('Shopware.detail.Controller', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.controller.Detail', {
          *          extend: 'Shopware.detail.Controller',
-         *          displayConfig: {
-         *              eventAlias: 'product',
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  eventAlias: 'product'
+         *              }
          *          }
          *      });
          */
@@ -79,6 +79,7 @@ Ext.define('Shopware.detail.Controller', {
             eventAlias: undefined,
 
             saveSuccessTitle: '{s name="detail_controller/save_success_title"}Success{/s}',
+
             saveSuccessMessage: '{s name="detail_controller/save_success_message"}Item saved successfully{/s}',
 
             violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}'

@@ -15,9 +15,11 @@
  *  @example
  *      Ext.define('Shopware.apps.Product.view.list.Grid', {
  *          extend: 'Shopware.grid.Panel',
- *          displayConfig: {
- *              toolbar: false,
- *              ...
+ *          configure: function() {
+ *              return {
+ *                  toolbar: false,
+ *                  ...
+ *              }
  *          }
  *      });
  *  - If you decide to handle all grid events by yourself you can extend the Shopware.grid.Controller
@@ -204,17 +206,18 @@ Ext.define('Shopware.grid.Panel', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.list.Product', {
          *          extend: 'Shopware.grid.Panel',
-         *          displayConfig: {
-         *              detailWindow: 'Shopware.apps.Product.view.detail.Window',
-         *              eventAlias: 'product',
-         *              hasOwnController: true,
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  detailWindow: 'Shopware.apps.Product.view.detail.Window',
+         *                  eventAlias: 'product',
+         *                  hasOwnController: true,
+         *                  ...
+         *              }
          *          }
          *      });
          */
@@ -481,10 +484,12 @@ Ext.define('Shopware.grid.Panel', {
              */
             columns: { },
 
-
             pageSizeLabel: '{s name="grid_panel/page_size_label"}Items per page{/s}',
+
             addButtonText: '{s name="grid_panel/add_button_text"}Add item{/s}',
+
             deleteButtonText: '{s name="grid_panel/delete_button_text"}Delete all selected{/s}',
+
             searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}'
         },
 
@@ -550,6 +555,8 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me._opts = me.statics().getDisplayConfig(opts, this);
+        console.log("opts", me._opts);
+
         me.callParent(arguments);
     },
 

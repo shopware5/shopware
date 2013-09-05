@@ -50,15 +50,16 @@ Ext.define('Shopware.window.Progress', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.batch.Window', {
          *          extend: 'Shopware.window.Progress',
-         *          displayConfig: {
-         *              infoText: 'Deletes all selected products in a batch mode ...',
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  infoText: 'Deletes all selected products in a batch mode ...',
+         *                  ...
+         *              }
          *          }
          *      });
          */
@@ -76,16 +77,18 @@ Ext.define('Shopware.window.Progress', {
              *  records = [ recordA, recordB, ... ];
              *
              *  window = Ext.create('Shopware.window.Progress', {
-             *      displayConfig: {
-             *          infoText: 'Delete products in a batch mode. Each product will be deleted in a single request. This task requires some minutes, please wait ...',
-             *          tasks: [
-             *              {
-             *                  text: 'Delete product [0] of [1]',
-             *                  event: 'delete-product-item',
-             *                  totalCount: records.length,
-             *                  data: records
-             *              }
-             *          ]
+             *      configure: function() {
+             *          return {
+             *              infoText: 'Delete products in a batch mode. Each product will be deleted in a single request. This task requires some minutes, please wait ...',
+             *              tasks: [
+             *                  {
+             *                      text: 'Delete product [0] of [1]',
+             *                      event: 'delete-product-item',
+             *                      totalCount: records.length,
+             *                      data: records
+             *                  }
+             *              ]
+             *          }
              *      }
              *  });
              *
