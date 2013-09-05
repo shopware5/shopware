@@ -33,15 +33,16 @@ Ext.define('Shopware.data.Model', {
         /**
          * The displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.model.Product', {
          *          extend: 'Shopware.data.Model',
-         *          displayConfig: {
-         *              listing: 'Shopware.apps.Product.view.list.Product',
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  listing: 'Shopware.apps.Product.view.list.Product',
+         *                  ...
+         *              }
          *          }
          *      });
          */

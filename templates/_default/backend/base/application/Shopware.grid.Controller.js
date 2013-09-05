@@ -14,9 +14,11 @@
  *
  * Ext.define('Shopware.apps.Product.controller.Listing', {
  *     extend: 'Shopware.grid.Controller',
- *     displayConfig: {
- *         gridClass: 'Shopware.apps.Product.view.list.Product',
- *         eventAlias: 'product'
+ *     configure: function() {
+ *          return {
+ *              gridClass: 'Shopware.apps.Product.view.list.Product',
+ *              eventAlias: 'product'
+ *          }
  *     }
  * });
  *
@@ -24,9 +26,11 @@
  * Ext.define('Shopware.apps.Product.view.list.Product', {
  *    extend: 'Shopware.grid.Panel',
  *    alias:  'widget.product-listing-grid',
- *    displayConfig: {
- *        detailWindow: 'Shopware.apps.Product.view.detail.Window',
- *        eventAlias: 'product'
+ *    configure: function() {
+ *          return {
+ *              detailWindow: 'Shopware.apps.Product.view.detail.Window',
+ *              eventAlias: 'product'
+ *          }
  *    }
  * });
  *
@@ -89,16 +93,17 @@ Ext.define('Shopware.grid.Controller', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.controller.List', {
          *          extend: 'Shopware.grid.Controller',
-         *          displayConfig: {
-         *              gridClass: 'Shopware.apps.Product.view.list.Product',
-         *              eventAlias: 'product',
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  gridClass: 'Shopware.apps.Product.view.list.Product',
+         *                  eventAlias: 'product',
+         *                  ...
+         *              }
          *          }
          *      });
          */

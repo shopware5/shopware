@@ -59,16 +59,17 @@ Ext.define('Shopware.window.Detail', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.detail.Window', {
          *          extend: 'Shopware.detail.Window',
-         *          displayConfig: {
-         *              eventAlias: 'product',
-         *              tabItemAssociations: [ 'categories', 'variants' ],
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  eventAlias: 'product',
+         *                  tabItemAssociations: [ 'categories', 'variants' ],
+         *                  ...
+         *              }
          *          }
          *      });
          */

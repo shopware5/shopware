@@ -41,16 +41,17 @@ Ext.define('Shopware.grid.Association', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.detail.Category', {
          *          extend: 'Shopware.grid.Association',
-         *          displayConfig: {
-         *              associationKey: 'categories',
-         *              controller: 'product',
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  associationKey: 'categories',
+         *                  controller: 'product',
+         *                  ...
+         *              }
          *          }
          *      });
          */
@@ -62,9 +63,11 @@ Ext.define('Shopware.grid.Association', {
              * You have a base model like this:
              *      Ext.define('Shopware.apps.Product.model.Product', {
              *          extend: 'Shopware.data.Model',
-             *          displayConfig: {
-             *              controller: 'Product',
-             *              detail: 'Shopware.apps.Product.view.detail.Product'
+             *          configure: function() {
+             *              return {
+             *                  controller: 'Product',
+             *                  detail: 'Shopware.apps.Product.view.detail.Product'
+             *              }
              *          },
              *          fields: [
              *              { name: 'id', type: 'int', useNull: true },
@@ -93,9 +96,11 @@ Ext.define('Shopware.grid.Association', {
              *          alias: 'widget.product-view-detail-category',
              *          title: 'Category',
              *
-             *          displayConfig: {
-             *              controller: 'product',
-             *              associationKey: 'categories'
+             *          configure: function() {
+             *              return {
+             *                  controller: 'product',
+             *                  associationKey: 'categories'
+             *              }
              *          }
              *      });
              */
@@ -141,7 +146,9 @@ Ext.define('Shopware.grid.Association', {
              */
             editColumn: false,
 
-            comboFieldLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
+            searchComboConfig: {
+                fieldLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
+            }
         },
 
         /**

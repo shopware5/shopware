@@ -75,14 +75,15 @@ Ext.define('Shopware.form.field.Search', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.detail.SearchField', {
          *          extend: 'Shopware.form.field.Search',
-         *          displayConfig: {
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  ...
+         *              }
          *          }
          *      });
          */

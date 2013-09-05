@@ -47,16 +47,17 @@ Ext.define('Shopware.window.Listing', {
         /**
          * The statics displayConfig contains the default shopware configuration for
          * this component.
-         * To set the shopware configuration, you can set the displayConfig directly
-         * as property of the component:
+         * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example
          *      Ext.define('Shopware.apps.Product.view.list.Window', {
          *          extend: 'Shopware.window.Listing',
-         *          displayConfig: {
-         *              listingGrid: 'Shopware.apps.Product.view.list.Product',
-         *              listingStore: 'Shopware.apps.Product.store.Product'
-         *              ...
+         *          configure: function() {
+         *              return {
+         *                  listingGrid: 'Shopware.apps.Product.view.list.Product',
+         *                  listingStore: 'Shopware.apps.Product.store.Product'
+         *                  ...
+         *              }
          *          }
          *      });
          */

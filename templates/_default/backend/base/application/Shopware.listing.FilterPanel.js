@@ -34,7 +34,31 @@ Ext.define('Shopware.listing.FilterPanel', {
         return { };
     },
 
+    /**
+     * Get the reference to the class from which this object was instantiated.
+     * Note that unlike self, this.statics() is scope-independent and it always
+     * returns the class from which it was called, regardless of what this points to during run-time
+     *
+     * @type { Object }
+     */
     statics: {
+
+        /**
+         * The displayConfig contains the default shopware configuration for
+         * this component.
+         * To set the shopware configuration, you can use the configure function and set an object as return value
+         *
+         * @example
+         *      Ext.define('Shopware.apps.Product.view.listing.extension.Filter', {
+         *          extend: 'Shopware.listing.FilterPanel',
+         *          configure: function() {
+         *              return {
+         *                  model: 'Shopware.apps.Product.model.Product',
+         *                  ...
+         *              }
+         *          }
+         *      });
+         */
         displayConfig: {
 
             controller: undefined,
