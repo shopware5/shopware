@@ -138,6 +138,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     public function defaultSearchAction()
     {
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($this->Request()->sSearch))));
+        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
+        $term = str_replace("/","",$term);
 
         // Load search configuration
         $config = $this->getSearchConfiguration($term);
@@ -195,7 +197,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 }
             }
 
-            // todo@all Build old template base compatibility array
             $resultSmartyArray = array(
                 'sArticles' => $articles,
                 'sArticlesCount' => $resultCount,
