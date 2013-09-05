@@ -4403,13 +4403,13 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
 		";
-        $object = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
+        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
-        if (!empty($object)) {
-            $object = unserialize($object);
+        if (!empty($objectData)) {
+            $objectData = unserialize($objectData);
         } else {
-            $object = array();
+            $objectData = array();
         }
         if (!empty($fallback)) {
             $sql = "
@@ -4423,11 +4423,11 @@ class sArticles
             );
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
-                $object = array_merge($objectFallback, $object);
+                $objectData = array_merge($objectFallback, $objectData);
             }
         }
-        if (!empty($object)) {
-            foreach ($object as $translateKey => $value) {
+        if (!empty($objectData)) {
+            foreach ($objectData as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
                 } else {
