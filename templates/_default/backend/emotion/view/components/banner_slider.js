@@ -42,7 +42,9 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         'banner_administration': '{s name=banner_administration}Banner administration{/s}',
         'path': '{s name=path}Image path{/s}',
         'actions': '{s name=actions}Action(s){/s}',
-        'link': '{s name=link}Link{/s}'
+        'link': '{s name=link}Link{/s}',
+        'alttext': '{s name=alttext}Alternative Text{/s}',
+        'title': '{s name=title}Title{/s}'
     },
 
     /**
@@ -100,7 +102,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         });
 
         me.bannerStore = Ext.create('Ext.data.Store', {
-            fields: [ 'position', 'path', 'link', 'mediaId' ]
+            fields: [ 'position', 'path', 'link', 'alttext', 'title', 'mediaId' ]
         });
 
         me.ddGridPlugin = Ext.create('Ext.grid.plugin.DragDrop');
@@ -166,6 +168,22 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 allowBlank: true
             }
         }, {
+            dataIndex: 'alttext',
+            header: snippets.alttext,
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: true
+            }
+        }, {
+            dataIndex: 'title',
+            header: snippets.title,
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: true
+            }
+        }, {
             xtype: 'actioncolumn',
             header: snippets.actions,
             width: 60,
@@ -199,7 +217,9 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 position: count,
                 path: record.get('path'),
                 mediaId: record.get('id'),
-                link: record.get('link')
+                link: record.get('link'),
+                alttext: record.get('alttext'),
+                title: record.get('title')
             });
             store.add(model);
         });
