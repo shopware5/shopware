@@ -4,9 +4,11 @@
 	<div class="grid_12">
 	
 		{* Reviews *}
-		<div class="rating">
-			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
-		</div>
+		{if !{config name=VoteDisable}}
+			<div class="rating">
+				<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
+			</div>
+		{/if}
 		
 		{* Article picture *}
 		{if $sBasketItem.image.src.0}
