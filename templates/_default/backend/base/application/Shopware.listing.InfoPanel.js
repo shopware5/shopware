@@ -20,6 +20,10 @@ Ext.define('Shopware.listing.InfoPanel', {
     collapsible: true,
     layout: 'fit',
 
+    /**
+     * Title of the info panel.
+     * @type { String }
+     */
     title: '{s name="info_panel/title"}Detailed information{/s}',
 
     /**
@@ -58,8 +62,53 @@ Ext.define('Shopware.listing.InfoPanel', {
          *      });
          */
         displayConfig: {
+            /**
+             * Contains the full Ext JS model name of the listing records which will be displayed within the panel.
+             * @type { String }
+             */
             model: undefined,
-            fields: {  },
+
+            /**
+             * Contains the definition which model fields will be displayed within the info panel.
+             * If this object contains no field definition, shopware creates for prototyping a info
+             * field for each model field.
+             * If the object contains some field definitions, only the configured fields will be displayed.
+             *
+             * @example
+             * You have an model with the following field definition:
+             * Ext.define('Shopware.apps.Product.model.Product', {
+             *    fields: [
+             *        { name: 'name', type: 'string'  },
+             *        { name: 'active', type: 'boolean'  },
+             *        { name: 'description', type: 'string'  },
+             *    ]
+             * });
+             *
+             * If you want to display only the name field, set only the name field into the { @link #fields } property:
+             * Ext.define('Shopware.apps.Product.view.list.extension.Info', {
+             *    configure: function() {
+             *        return {
+             *            fields: {
+             *                name: undefined
+             *            }
+             *        }
+             *    }
+             * });
+             *
+             * This definition allows you to display only the name model field within the 
+             * info panel. The `undefined` value says that shopware creates a default info field
+             * for the name field with the following template:
+             *      '<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>'
+             * 
+             * Each info field is created in the { @link #createTemplateForField }.
+             * If you want to modify the template of a info field, you can set
+             * three different values:
+             *  1. A string => The string will be set as template
+             *  2. A object => The object can be an Ext.XTemplate
+             *  3. A function => The configured function will be called to create the info field.
+             */
+            fields: { },
+
             emptyText: '{s name="info_panel/empty_text"}No record selected.{/s}'
         },
 
@@ -150,6 +199,11 @@ Ext.define('Shopware.listing.InfoPanel', {
         me.callParent(arguments);
     },
 
+    /**
+     * Registers the grid panel event listener to update the info panel
+     * if the selection-changed event was fired.
+     * This event is fired when the selection of the grid panel changed.
+     */
     addEventListeners: function() {
         var me = this;
 
@@ -162,6 +216,11 @@ Ext.define('Shopware.listing.InfoPanel', {
         });
     },
 
+    /**
+     * Creates all items for this component.
+     * The return value will be assigned to the { @link items } property of this component.
+     * @returns { Array }
+     */
     createItems: function() {
         var me = this, items = [];
 
@@ -170,6 +229,12 @@ Ext.define('Shopware.listing.InfoPanel', {
         return items;
     },
 
+    /**
+     * Creates the { @link #infoView } component.
+     * This component is used to display the model data into a plain data view.
+     * The different fields can be configured in the { @link #fields } property.
+     * @returns { Ext.view.View }
+     */
     createInfoView: function(){
         var me = this;
 
@@ -186,6 +251,14 @@ Ext.define('Shopware.listing.InfoPanel', {
         return me.infoView;
     },
 
+    /**
+     * Creates the template for the { @link #infoView } component.
+     * The template is used to define how the data will be displayed within
+     * the data view component.
+     * The view of each field can be configured in the { @link #fields } property.
+     *
+     * @returns { Ext.XTemplate }
+     */
     createTemplate: function() {
         var me = this, fields = [], model, keys, field, config,
             configFields = me.getConfig('fields');
@@ -199,7 +272,9 @@ Ext.define('Shopware.listing.InfoPanel', {
                 field = me.getFieldByName(model.fields.items, key);
                 config = configFields[key];
 
-                if (Ext.isObject(config) || (Ext.isString(config) && config.length > 0)) {
+                if (Ext.isFunction(config)) {
+                    field = config.call(me, me, field);
+                } else if (Ext.isObject(config) || (Ext.isString(config) && config.length > 0)) {
                     fields.push(config);
                 } else {
                     fields.push(me.createTemplateForField(model, field));
@@ -216,11 +291,24 @@ Ext.define('Shopware.listing.InfoPanel', {
         );
     },
 
+    /**
+     * Small wrapper function which creates the info view for a single model field.
+     * @param { Shopware.data.Model } model
+     * @param { Ext.data.Field } field
+     * @returns { String }
+     */
     createTemplateForField: function(model, field) {
         return '<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>'
     },
 
-
+    /**
+     * Helper function which updates the { @link #infoView } component
+     * with the passed record data.
+     * This function is called from the selection-changed event listener function.
+     *
+     * @param { Shopware.data.Model } record
+     * @returns { boolean }
+     */
     updateInfoView: function(record) {
         var me = this;
 

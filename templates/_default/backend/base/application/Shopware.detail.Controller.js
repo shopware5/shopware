@@ -336,6 +336,8 @@ Ext.define('Shopware.detail.Controller', {
             return false;
         }
 
+        console.log("window fields", window.formPanel.getForm().getFields().items);
+        
         //allows to cancel the save process.
         if (!Shopware.app.Application.fireEvent(me.getEventName('start-save-record'), me, window, record, form)) {
             return false;
@@ -424,33 +426,12 @@ Ext.define('Shopware.detail.Controller', {
         var me = this;
         
         Ext.each(violations, function(violation) {
-            var field = me.getFieldByName(window.formPanel, violation.property);
+            var field = me.getFieldByName(window.formPanel.getForm().getFields().items, violation.property);
             if (field) {
                 field.focus();
                 field.markInvalid(violation.message);
             }
         });
-    },
-
-    /**
-     * Helper function to get a form field by his name.
-     *
-     * @param { Ext.form.Panel } form - The form panel which contains the field
-     * @param { String } fieldName - Name of the searched field.
-     *
-     * @returns { undefined|Ext.form.field.Field }
-     */
-    getFieldByName: function(form, fieldName) {
-        var result = undefined,
-            fields = form.getForm().getFields();
-
-        fields.each(function(field) {
-            if (field.name === fieldName) {
-                result = field;
-                return false;
-            }
-        });
-        return result;
     },
 
     /**

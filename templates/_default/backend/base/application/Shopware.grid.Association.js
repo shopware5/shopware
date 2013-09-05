@@ -58,7 +58,10 @@ Ext.define('Shopware.grid.Association', {
         displayConfig: {
             /**
              * Alphanumeric key of the association.
-             * This key is requires for the search request.
+             * This key is required for the search request.
+             * The association key will be set in the default case automatically from the parent component like the
+             * { @link Shopware.window.Detail } .
+             *
              * @example:
              * You have a base model like this:
              *      Ext.define('Shopware.apps.Product.model.Product', {
@@ -103,6 +106,7 @@ Ext.define('Shopware.grid.Association', {
              *              }
              *          }
              *      });
+             *
              */
             associationKey: undefined,
 
@@ -146,9 +150,12 @@ Ext.define('Shopware.grid.Association', {
              */
             editColumn: false,
 
-            searchComboConfig: {
-                fieldLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
-            }
+            /**
+             * Field label for the { @link #searchComboBox } , which is displayed in the
+             * grid toolbar.
+             * @type { String }
+             */
+            searchComboLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
         },
 
         /**
@@ -279,8 +286,8 @@ Ext.define('Shopware.grid.Association', {
                 me.getConfig('associationKey'),
                 me.getConfig('searchUrl')
             );
-            combo = me.createSearchCombo(me.searchStore);
-            items.push(combo);
+            me.searchComboBox = me.createSearchCombo(me.searchStore);
+            items.push(me.searchComboBox);
         }
 
         return items;

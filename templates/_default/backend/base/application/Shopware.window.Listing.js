@@ -90,6 +90,12 @@ Ext.define('Shopware.window.Listing', {
              */
             eventAlias: undefined,
 
+            /**
+             * Array of listing window extensions.
+             * This array will be assigned to the internal { @link #items } property.
+             * Each extension becomes the listing window as reference under { @link #listingWindow }.
+             * @type { Array }
+             */
             extensions: [ ]
         },
 
@@ -271,6 +277,7 @@ Ext.define('Shopware.window.Listing', {
 
         me.fireEvent(me.eventAlias + '-after-create-items', me, items);
 
+        //iterate all extensions and add them to the items array.
         Ext.each(me.getConfig('extensions'), function(extension) {
             //extension isn't defined? Continue with next extension
             if (!extension) return true;
@@ -278,6 +285,7 @@ Ext.define('Shopware.window.Listing', {
             //support for simple extension definition over strings
             if (Ext.isString(extension)) extension = { xtype: extension };
 
+            //set reference to the listing window.
             extension.listingWindow = me;
             items.push(extension);
         });

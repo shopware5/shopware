@@ -12,21 +12,6 @@ Ext.define('Shopware.form.field.Media', {
     alias: 'widget.shopware-media-field',
 
     /**
-     * Contains the shopware base path.
-     * Used to display the images.
-     * @type { String }
-     */
-    mediaPath: '{link file=""}',
-
-    /**
-     * Url for the "no picture" image.
-     * This image is displayed when the media field contains no value.
-     * @type { String }
-     */
-    noMedia: '{link file="templates/_default/frontend/_resources/images/no_picture.jpg"}',
-
-
-    /**
      * Defines the component layout.
      * @type { Object }
      */
@@ -85,7 +70,19 @@ Ext.define('Shopware.form.field.Media', {
          *      });
          */
         displayConfig: {
+            /**
+             * Contains the text for the { @link #selectButton }.
+             * The button is used to open the media selection and allows the user to select
+             * a single media.
+             * @type { String }
+             */
             selectButtonText: '{s name="media_field/select_button_text"}Select media{/s}',
+
+            /**
+             * Contains the text for the { @link #resetButton }.
+             * The reset button is used to remove an already assign media object.
+             * @type { String }
+             */
             resetButtonText: '{s name="media_field/reset_button_text"}Reset media{/s}'
         },
 
@@ -153,6 +150,20 @@ Ext.define('Shopware.form.field.Media', {
         var me = this;
         return me._opts[prop];
     },
+
+    /**
+     * Contains the shopware base path.
+     * Used to display the images.
+     * @type { String }
+     */
+    mediaPath: '{link file=""}',
+
+    /**
+     * Url for the "no picture" image.
+     * This image is displayed when the media field contains no value.
+     * @type { String }
+     */
+    noMedia: '{link file="templates/_default/frontend/_resources/images/no_picture.jpg"}',
 
     /**
      * Current value of the media field.
