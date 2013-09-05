@@ -31,8 +31,7 @@ Ext.define('Shopware.data.Model', {
     statics: {
 
         /**
-         * The displayConfig contains the default shopware configuration for
-         * this component.
+         * The displayConfig contains the default shopware configuration for this component.
          * To set the shopware configuration, you can use the configure function and set an object as return value
          *
          * @example

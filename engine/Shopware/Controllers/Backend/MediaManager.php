@@ -301,11 +301,27 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     public function getMediaAction()
     {
         $id = $this->Request()->getParam('mediaId', null);
+        $path = $this->Request()->getParam('path', null);
 
-        if (empty($id)) {
-            $this->View()->assign(array('success' => false, 'error' => 'No id passed'));
+        if (empty($id) && empty($path)) {
+            $this->View()->assign(array('success' => false, 'error' => 'No id or path passed'));
+            return;
         }
-        $builder = $this->getMedia($id);
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('media', 'attribute'))
+               ->from('Shopware\Models\Media\Media', 'media')
+               ->leftJoin('media.attribute', 'attribute')
+               ->setMaxResults(1);
+
+        if (!empty($id)) {
+            $builder->where('media.id = :id');
+            $builder->setParameter('id', $id);
+        } else if (!empty($path)) {
+            $builder->where('media.path = :path');
+            $builder->setParameter('path', $path);
+        }
+
         $data = $builder->getQuery()->getArrayResult();
 
         $this->View()->assign(array('success' => true, 'data' => $data[0]));

@@ -5,11 +5,31 @@ Ext.define('Shopware.form.field.Media', {
 
     extend: 'Ext.form.FieldContainer',
 
+    /**
+     * List of short aliases for class names. Most useful for defining xtypes for widgets
+     * @type { String }
+     */
     alias: 'widget.shopware-media-field',
 
+    /**
+     * Contains the shopware base path.
+     * Used to display the images.
+     * @type { String }
+     */
     mediaPath: '{link file=""}',
+
+    /**
+     * Url for the "no picture" image.
+     * This image is displayed when the media field contains no value.
+     * @type { String }
+     */
     noMedia: '{link file="templates/_default/frontend/_resources/images/no_picture.jpg"}',
 
+
+    /**
+     * Defines the component layout.
+     * @type { Object }
+     */
     layout: {
         type: 'hbox',
         align: 'stretch'
@@ -134,13 +154,87 @@ Ext.define('Shopware.form.field.Media', {
         return me._opts[prop];
     },
 
+    /**
+     * Current value of the media field.
+     * Can be set over the { @link #setValue } function.
+     * To get the value use the { @link #getValue } function.
+     */
     value: undefined,
 
+    /**
+     * Contains the media path of the current selected medium.
+     * Event set if the media field use the id property of a medium.
+     * @type { String }
+     */
     path: undefined,
+
+    /**
+     * Contains the id of the media model.
+     * @type { int }
+     */
     mediaId: undefined,
 
+    /**
+     * Configuration which { @link #Shopware.apps.Base.model.Media } property
+     * will be set as field value.
+     * Possible values: 'path', 'id'
+     *
+     * @type { String }
+     */
     valueField: 'id',
 
+    /**
+     * Contains the instance of the select button,
+     * which created in the { @link #createSelectButton } function.
+     * @type { Ext.button.Button }
+     */
+    selectButton: undefined,
+
+    /**
+     * Contains the instance of the reset button,
+     * which created in the { @link #createResetButton } function.
+     * @type { Ext.button.Button }
+     */
+    resetButton: undefined,
+
+    /**
+     * Contains the instance of the preview image.
+     * The preview image is created in the { @link #createPreview } function.
+     * @type { Ext.Img }
+     */
+    preview: undefined,
+
+    /**
+     * Contains an \Shopware\Models\Media\Album id
+     * to filter the album tree of the media selection.
+     * @type { int }
+     */
+    albumId: undefined,
+
+    /**
+     * Array of file types which allows to be select.
+     *
+     * @type { Array }
+     */
+    validTypes: [ ],
+
+    /**
+     * Record of the current selected media object.
+     * @type { Shopware.data.Model }
+     */
+    record: undefined,
+
+    /**
+     * The initComponent template method is an important initialization step for a Component.
+     * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
+     * The initComponent method of the class being created is called first, with each initComponent method up the hierarchy
+     * to Ext.Component being called thereafter. This makes it easy to implement and, if needed, override the constructor
+     * logic of the Component at any step in the hierarchy.
+     * The initComponent method must contain a call to callParent in order to ensure that the parent class'
+     * initComponent method is also called.
+     * All config options passed to the constructor are applied to this before initComponent is called, so you
+     * can simply access them with this.someOption.
+     */
     initComponent: function() {
         var me = this;
 
@@ -148,6 +242,16 @@ Ext.define('Shopware.form.field.Media', {
         me.callParent(arguments);
     },
 
+    /**
+     * Creates all components for this class.
+     * The Shopware.form.field.Media component creates
+     * a container for the { @link #resetButton } and { @link #selectButton }.
+     * Additionally the media field contains a container to display
+     * the current select image.
+     * This container contains a { @link #Ext.Img } object.
+     *
+     * @returns { Array }
+     */
     createItems: function() {
         var me = this;
 
@@ -157,6 +261,13 @@ Ext.define('Shopware.form.field.Media', {
         ];
     },
 
+    /**
+     * Creates the container for the { @link #selectButton } and
+     * { @link #resetButton }.
+     * This container will be displayed on the left side of the media field.
+     *
+     * @returns { Ext.container.Container }
+     */
     createButtonContainer: function() {
         var me = this;
 
@@ -169,12 +280,18 @@ Ext.define('Shopware.form.field.Media', {
                 align: 'stretch'
             },
             items: [
-                me.createMediaButton(),
-                me.createDeleteButton()
+                me.createSelectButton(),
+                me.createResetButton()
             ]
         });
     },
 
+    /**
+     * Creates the container for the { @link #preview } image.
+     * This container is displayed on the right side of the media field.
+     *
+     * @returns { Ext.container.Container }
+     */
     createPreviewContainer: function() {
         var me = this;
 
@@ -185,10 +302,18 @@ Ext.define('Shopware.form.field.Media', {
         });
     },
 
-    createMediaButton: function() {
+    /**
+     * Creates the { @link #selectButton }, which displayed within the button
+     * container on the left side of the media field.
+     * The button handler function calls the internal { @link #openMediaManager } function
+     * which opens the media selection.
+     *
+     * @returns { Ext.button.Button }
+     */
+    createSelectButton: function() {
         var me = this;
 
-        return Ext.create('Ext.button.Button', {
+        me.selectButton = Ext.create('Ext.button.Button', {
             text: me.getConfig('selectButtonText'),
             iconCls: 'sprite-inbox-image',
             cls: 'secondary small',
@@ -197,12 +322,22 @@ Ext.define('Shopware.form.field.Media', {
                 me.openMediaManager()
             }
         });
+
+        return me.selectButton;
     },
 
-    createDeleteButton: function() {
+    /**
+     * Creates the { @link #resetButton }, which displayed within
+     * the button container on the left side of the media field.
+     * The button handler calls the internal { @link #removeMedia } function, which
+     * reset the internal value properties and the preview image.
+     *
+     * @returns { Ext.button.Button }
+     */
+    createResetButton: function() {
         var me = this;
 
-        return Ext.create('Ext.button.Button', {
+        me.resetButton = Ext.create('Ext.button.Button', {
             text: me.getConfig('resetButtonText'),
             iconCls: 'sprite-inbox--minus',
             cls: 'secondary small',
@@ -210,8 +345,14 @@ Ext.define('Shopware.form.field.Media', {
                 me.removeMedia();
             }
         });
+
+        return me.resetButton;
     },
 
+    /**
+     * Helper function which resets the internal value properties
+     * and the preview image.
+     */
     removeMedia: function() {
         var me = this;
 
@@ -221,6 +362,12 @@ Ext.define('Shopware.form.field.Media', {
         me.preview.setSrc(me.noMedia);
     },
 
+    /**
+     * Creates the { @link #preview } image which displayed
+     * within the preview container on the right side of the media field.
+     *
+     * @returns { Ext.Img }
+     */
     createPreview: function() {
         var me = this;
 
@@ -236,7 +383,12 @@ Ext.define('Shopware.form.field.Media', {
         return me.preview;
     },
 
-
+    /**
+     * Helper function which opens the media manager in selection mode.
+     * The media manager album tree can be filtered for a specify album id.
+     * This id can be configured in the { @link #albumId } property of this
+     * component.
+     */
     openMediaManager: function() {
         var me = this;
 
@@ -249,13 +401,26 @@ Ext.define('Shopware.form.field.Media', {
                 albumId: me.albumId
             },
             mediaSelectionCallback: me.onSelectMedia,
-            selectionMode: me.multiSelect,
+            selectionMode: false,
             validTypes: me.validTypes || []
         });
         me.fireEvent('afterOpenMediaManager', me);
     },
 
 
+    /**
+     * Event listener function of the media manager.
+     * This function is called, when the user selects
+     * an image in the media selection and clicks the "accept selection" button.
+     * The selected media object values will be assigned to the internal properties
+     * { @link #path }, { @link #record }, { @link #mediaId } and { @link #value }.
+     * Additionally the media image will be displayed in the { @link #preview } object.
+     *
+     * @param { Ext.button.Button } button
+     * @param { Enlight.app.Window } window
+     * @param { Array } selection
+     * @returns { boolean }
+     */
     onSelectMedia: function(button, window, selection) {
         var me = this,
             record = selection[0];
@@ -274,55 +439,88 @@ Ext.define('Shopware.form.field.Media', {
         window.close();
     },
 
-
+    /**
+     * Helper function to update the { @link #preview } image.
+     *
+     * @param { String } image
+     */
     updatePreview: function(image) {
         this.preview.setSrc(
             this.mediaPath + image
         );
     },
 
+    /**
+     * Returns the current value of the media field.
+     * This function can returns different values:
+     *  - undefined => No image is selected
+     *  - string => Path of the media model (If the { @link #valueField } parameter is set to `path`)
+     *  - int => Id of the media model (If the { @link #valueField } parameter is set to `id`)
+     *
+     * @returns { string|undefined|int }
+     */
     getValue: function() {
         return this.value;
     },
-    
+
+    /**
+     * Sets the current value of the media field.
+     * This function is used by the { @link Ext.form.Base } object
+     * to load a record into the form panel.
+     *
+     * @param value
+     */
     setValue: function(value) {
         var me = this;
 
-        if (me.valueField === 'path') {
-            me.path = value;
-            me.mediaId = null;
-        } else if (me.valueField === 'id') {
-            me.mediaId = value;
-            me.requestMediaPath(value);
+        if (value !== me.value) {
+            me.requestMediaData(value);
         }
 
         this.value = value;
         this.updatePreview(value);
     },
 
+    /**
+     * This function is used if an { @link Ext.data.Model } will be
+     * updated with the form data.
+     * The function has to return an object with the values which will
+     * be updated in the model.
+     *
+     * @returns { Object }
+     */
     getSubmitData: function() {
         var value = {};
         value[this.name] = this.value;
         return value;
     },
 
+    /**
+     * Helper function which request the whole
+     * media data for the current value.
+     * This function is required to display the preview
+     * image even if only a media id is passed to the media field.
+     *
+     * @param { string|int } value - Current value of the media field.
+     */
+    requestMediaData: function(value) {
+        var me = this, params = {};
 
-    requestMediaPath: function(mediaId) {
-        var me = this;
+        params[me.valueField] = value;
 
         Ext.Ajax.request({
             url: '{url controller=mediaManager action=getMedia}',
             method: 'POST',
-            params: {
-                mediaId: mediaId
-            },
+            params: params,
             success: function(response) {
                 var operation = Ext.decode(response.responseText);
 
                 if (operation.success == true) {
-                    me.mediaId = operation.data.id;
-                    me.path = operation.data.path;
+                    me.record = Ext.create('Shopware.apps.Base.model.Media', operation.data);
+                    me.mediaId = me.record.get('id');
+                    me.path = me.record.get('path');
                     me.updatePreview(me.path);
+                    console.log("me", me);
                 }
             }
         });
