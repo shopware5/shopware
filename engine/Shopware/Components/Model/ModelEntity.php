@@ -40,26 +40,16 @@ abstract class ModelEntity
      * $model->setShipping($shippingModel->fromArray($shippingData));
      *
      * @param array $array
-     * @throws \Exception
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function fromArray(array $array = array())
     {
-        $env        = Shopware()->Environment();
-        $request    = Shopware()->Front()->Request();
-        $isFrontend = $request && ($request->getModuleName() === 'frontend');
-
-        if ($isFrontend && $env === 'production') {
-            throw new \Exception("Using fromArray is not permitted in frontend");
-        }
-
         foreach ($array as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
             }
         }
-
         return $this;
     }
 
