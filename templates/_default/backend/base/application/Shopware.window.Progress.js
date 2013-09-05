@@ -552,7 +552,7 @@ Ext.define('Shopware.window.Progress', {
         var me = this, record;
 
         //no current task passed? Take the first task in the tasks array
-        if (!current && tasks.length > 0) {
+        if (current == undefined && tasks.length > 0) {
             current = tasks.shift();
         }
 

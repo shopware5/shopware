@@ -546,17 +546,20 @@ Ext.define('Shopware.grid.Controller', {
                 return true;
             }
 
+            console.log("records", records);
             window = Ext.create('Shopware.window.Progress', {
-                displayConfig: {
-                    infoText: me.getConfig('deleteInfoText'),
-                    tasks: [
-                        {
-                            text: me.getConfig('deleteProgressBarText'),
-                            event: me.getConfig('eventAlias') + '-batch-delete-item',
-                            totalCount: records.length,
-                            data: records
-                        }
-                    ]
+                configure: function() {
+                    return {
+                        infoText: me.getConfig('deleteInfoText'),
+                            tasks: [
+                            {
+                                text: me.getConfig('deleteProgressBarText'),
+                                event: me.getConfig('eventAlias') + '-batch-delete-item',
+                                totalCount: records.length,
+                                data: records
+                            }
+                        ]
+                    };
                 }
             });
 
@@ -674,6 +677,10 @@ Ext.define('Shopware.grid.Controller', {
             listing.getConfig('detailWindow')
         );
 
+        Shopware.app.Application.on(window.eventAlias + '-save-successfully', function() {
+            listing.getStore().load();
+        }, me);
+
         Shopware.app.Application.fireEvent(me.getEventName('after-add-item'), me, window, record, listing);
 
         return window;
@@ -768,6 +775,10 @@ Ext.define('Shopware.grid.Controller', {
                         listing.getConfig('detailWindow')
                     );
 
+                    Shopware.app.Application.on(window.eventAlias + '-save-successfully', function() {
+                        listing.getStore().load();
+                    }, me);
+
                     Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
                 }
             });
@@ -778,6 +789,10 @@ Ext.define('Shopware.grid.Controller', {
                 record,
                 listing.getConfig('detailWindow')
             );
+
+            Shopware.app.Application.on(window.eventAlias + '-save-successfully', function() {
+                listing.getStore().load();
+            }, me);
 
             Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
             return true;

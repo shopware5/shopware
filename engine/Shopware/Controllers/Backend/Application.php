@@ -462,7 +462,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
             Shopware()->Models()->flush();
 
-            $detail = $this->getDetail($data['id']);
+            $detail = $this->getDetail($model->getId());
 
             return array('success' => true, 'data' => $detail['data']);
         } catch (Exception $e) {
