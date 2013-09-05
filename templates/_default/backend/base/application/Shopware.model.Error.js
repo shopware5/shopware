@@ -1,4 +1,6 @@
 
+//{namespace name=backend/application/main}
+
 Ext.define('Shopware.model.Error', {
 
     extend:'Ext.data.Model',
