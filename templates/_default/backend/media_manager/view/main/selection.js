@@ -74,6 +74,15 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
     initComponent: function() {
         var me = this;
 
+        me.mediaView = Ext.create('Shopware.apps.MediaManager.view.media.View', {
+            mediaStore: me.mediaStore,
+            validTypes: me.validTypes,
+            createInfoPanel: false,
+            createDeleteButton: false,
+            createMediaQuantitySelection: false,
+            selectionMode: me.selectionMode
+        });
+
         me.items = [{
             xtype: 'mediamanager-album-tree',
             store: me.albumStore,
@@ -95,15 +104,8 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
                     dataIndex: 'text'
                 }];
             }
-        }, {
-            xtype: 'mediamanager-media-view',
-            mediaStore: me.mediaStore,
-            validTypes: me.validTypes,
-            createInfoPanel: false,
-            createDeleteButton: false,
-            createMediaQuantitySelection: false,
-            selectionMode: me.selectionMode
-        }];
+        }, me.mediaView
+        ];
 
         me.bbar = me.createFooterToolbar();
         me.callParent(arguments);
@@ -131,9 +133,16 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
             text: me.snippets.applySelection,
             cls: 'primary',
             action: 'mediamanager-selection-window-apply-selection',
-            listeners: {
-                scope: me.eventScope,
-                click: me.selectionHandler
+            handler: function(btn) {
+                if (Ext.isFunction(me.selectionHandler)) {
+                    console.log("me.mediaView", me.mediaView);
+                    me.selectionHandler.call(
+                        me.eventScope,
+                        btn,
+                        me,
+                        me.mediaView.dataView.getSelectionModel().getSelection()
+                    );
+                }
             }
         });
 
