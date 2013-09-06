@@ -35,6 +35,82 @@ Ext.define('Shopware.window.Detail', {
     associationComponents: [],
 
     /**
+     * Contains the generated event alias.
+     * If the { @link #configure } function returns an eventAlias
+     * property, this property contains the configured alias.
+     * Otherwise shopware creates an event alias over the model name.
+     *
+     * @type { String }
+     */
+    eventAlias: undefined,
+
+    /**
+     * Contains the instance of the passed { @link Shopware.data.Model }.
+     * The record is passed in the default case from the { @link Shopware.detail.Controller }
+     * and is used to generate the detail window components.
+     *
+     * @type { Shopware.data.Model }
+     */
+    record: undefined,
+
+    /**
+     * Instance of the own { @link Shopware.detail.Controller }.
+     * Each { @link Shopware.window.Detail } component requires an own configured controller.
+     * If the sub application contains none own implemented controller, the detail window
+     * creates his own controller by himself.
+     * If you have an own controller in your sub application which extends the
+     * { @link Shopware.detail.Controller }, you can set the { @link #hasOwnController } property
+     * to true and the detail window won't creates his own controller.
+     *
+     * @type { Shopware.detail.Controller }
+     */
+    controller: undefined,
+
+    /**
+     * Contains the generated { @link Ext.tab.Panel } .
+     * The tab panel will be created, if the { @link #createTabItems } function
+     * returns more than one element.
+     * Otherwise the one created tab item will be directly set into the { @link #formPanel } as
+     * sub element.
+     * @type { Ext.tab.Panel }
+     */
+    tabPanel: undefined,
+
+    /**
+     * Contains the created { @link Ext.form.Panel }.
+     * The form panel is the outer container of the detail window, because
+     * all model fields has to be stored in the same form panel to send the whole
+     * model data and association data in one save request.
+     *
+     * @type { Ext.form.Panel }
+     */
+    formPanel: undefined,
+
+    /**
+     * Contains the { @link Ext.toolbar.Toolbar } instance
+     * which created in the { @link #createToolbar } function.
+     * The toolbar contains as default the { @link #saveButton } and the { @link #cancelButton }.
+     * @type { Ext.toolbar.Toolbar }
+     */
+    toolbar: undefined,
+
+    /**
+     * Contains the instance of the created cancel button.
+     * The cancel button, allows the user to revert all changes in the detail view and
+     * close the window without saving the modified data.
+     * @type { Ext.button.Button }
+     */
+    cancelButton: undefined,
+
+    /**
+     * Contains the instance of the created save button.
+     * The save button updates the current displayed record with the { @link #formPanel } data
+     * and sends an save request in the { @link Shopware.detail.Controller:onSave } function.
+     * @type { Ext.button.Button }
+     */
+    saveButton: undefined,
+
+    /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.
      *
@@ -90,7 +166,6 @@ Ext.define('Shopware.window.Detail', {
              */
             associations: [],
 
-
             /**
              * Flag if the component is already controlled by an application controller.
              *
@@ -98,7 +173,16 @@ Ext.define('Shopware.window.Detail', {
              */
             hasOwnController: false,
 
+            /**
+             * Button text for the { @link #cancelButton }.
+             * @type { String }
+             */
             cancelButtonText: '{s name="detail_window/cancel_button_text"}Cancel{/s}',
+
+            /**
+             * Button text for the { @link #saveButton }.
+             * @type { String }
+             */
             saveButtonText: '{s name="detail_window/save_button_text"}Save{/s}'
 
         },

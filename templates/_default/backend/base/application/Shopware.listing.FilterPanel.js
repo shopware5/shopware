@@ -46,6 +46,77 @@ Ext.define('Shopware.listing.FilterPanel', {
      */
     title: '{s name="filter_panel/title"}Filters{/s}',
 
+
+    /**
+     * Reference to the { @link Shopware.window.Listing } which contains
+     * the filter panel extension definition.
+     * This reference is set automatically.
+     *
+     * IMPORTANT: In the default case shopware expects that the
+     * listing window has an own property named "gridPanel" which
+     * contains the instance of the { @link Shopware.grid.Panel }.
+     * This grid panel is used to filter the store of the listing.
+     */
+    listingWindow: undefined,
+
+    /**
+     * Instance of the { @link Shopware.grid.Panel }.
+     * The grid panel property is set with the { @link #listingWindow:gridPanel }
+     * property.
+     * The shopware grid panel instance of this property is used to assign the
+     * filter values.
+     *
+     * @type { Shopware.grid.Panel }
+     */
+    gridPanel: undefined,
+
+    /**
+     * Contains the info text which displayed at the top of the filter panel.
+     * Can be configured over the { @link #configure }.
+     *
+     * @type { String }
+     */
+    infoText: undefined,
+
+    /**
+     * Instance of the panel toolbar.
+     * The toolbar contains the { @link #filterButton } and { @link #resetButton }
+     * which allows the user to filter the listing result or to reset all filters
+     * which assigned to the listing store.
+     *
+     * @type { Ext.toolbar.Toolbar }
+     */
+    toolbar: undefined,
+
+    /**
+     * Instance of the filter button.
+     * This button filters the listing store with the configured filter fields.
+     *
+     * @type { Ext.button.Button }
+     */
+    filterButton: undefined,
+
+    /**
+     * Instance of the filter reset button.
+     * This button resets all already assigned filters from the listing store
+     * and reloads the listing data.
+     *
+     * @type { Ext.button.Button }
+     */
+    resetButton: undefined,
+
+    /**
+     * Contains all field associations which configured in the model.
+     * Fields associations are defined with the `relation: ManyToOne` flag.
+     * Additionally to the relation flag, the field associations contains the
+     * corresponding field name in the association property "field: shopId".
+     * This associations will be stored in this property to display
+     * a { @link Shopware.form.field.Search } for human readable values.
+     *
+     * @type { Array }
+     */
+    fieldAssociations: [ ],
+
     /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.

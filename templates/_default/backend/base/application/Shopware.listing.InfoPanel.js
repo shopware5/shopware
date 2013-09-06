@@ -21,6 +21,42 @@ Ext.define('Shopware.listing.InfoPanel', {
     layout: 'fit',
 
     /**
+     * Contains an instance of { @link Ext.view.View }.
+     * This component contains the { @link Ext.XTemplate } which
+     * defines how the info view data is displayed.
+     * @type { Ext.view.View }
+     */
+    infoView: undefined,
+
+    /**
+     * Reference to the { @link Shopware.window.Listing } which contains
+     * the info panel extension definition.
+     * This reference is set automatically.
+     *
+     * IMPORTANT: In the default case shopware expects that the
+     * listing window has an own property named "gridPanel" which
+     * contains the instance of the { @link Shopware.grid.Panel }.
+     * This grid panel is used to add an event listener function to the
+     * { @link Shopware.grid.Panel } selection-changed event.
+     *
+     * @type { Shopware.window.Listing }
+     */
+    listingWindow: undefined,
+
+    /**
+     * Instance of the { @link Shopware.grid.Panel }.
+     * The grid panel property is set with the { @link #listingWindow:gridPanel }
+     * property.
+     * This grid panel is used to add an event listener function to the
+     * { @link Shopware.grid.Panel } selection-changed event.
+     *
+     * @type { Shopware.grid.Panel }
+     */
+    gridPanel: undefined,
+
+
+
+    /**
      * Title of the info panel.
      * @type { String }
      */

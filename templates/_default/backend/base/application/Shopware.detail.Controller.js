@@ -336,8 +336,6 @@ Ext.define('Shopware.detail.Controller', {
             return false;
         }
 
-        console.log("window fields", window.formPanel.getForm().getFields().items);
-        
         //allows to cancel the save process.
         if (!Shopware.app.Application.fireEvent(me.getEventName('start-save-record'), me, window, record, form)) {
             return false;

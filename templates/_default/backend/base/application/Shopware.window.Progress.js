@@ -25,6 +25,12 @@ Ext.define('Shopware.window.Progress', {
      */
     cancelProcess: false,
 
+    cancelButton: undefined,
+    closeButton: undefined,
+    resultStore: undefined,
+    resultGrid: undefined,
+    resultFieldSet: undefined,
+
     /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.

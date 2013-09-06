@@ -17,6 +17,38 @@ Ext.define('Shopware.model.Container', {
     associationComponents: [],
 
     /**
+     * Contains the generated event alias.
+     * If the { @link #configure } function returns an eventAlias
+     * property, this property contains the configured alias.
+     * Otherwise shopware creates an event alias over the model name.
+     *
+     * @type { String }
+     */
+    eventAlias: undefined,
+
+    /**
+     * Contains all field associations which configured in the model.
+     * Fields associations are defined with the `relation: ManyToOne` flag.
+     * Additionally to the relation flag, the field associations contains the
+     * corresponding field name in the association property "field: shopId".
+     * This associations will be stored in this property to display
+     * a { @link Shopware.form.field.Search } for human readable values.
+     *
+     * @type { Array }
+     */
+    fieldAssociations: undefined,
+
+    /**
+     * Contains the passed record instance of this container.
+     * The record is used to generate the model container components.
+     * This property requires an instance of the { @link Shopware.data.Model }.
+     *
+     * @type { Shopware.data.Model }
+     */
+    record: undefined,
+
+
+    /**
      * List of classes to mix into this class.
      * @type { Object }
      */
@@ -747,8 +779,7 @@ Ext.define('Shopware.model.Container', {
      * @return { Ext.form.field.Field }
      */
     createModelField: function (model, field, alias, customConfig) {
-        var me = this, formField = {},
-            name, fieldModel, fieldComponent, xtype;
+        var me = this, formField = {}, fieldModel, fieldComponent, xtype;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-model-field', me, formField, model, field, alias)) {
             return formField;
