@@ -159,7 +159,7 @@ Ext.define('Shopware.window.Listing', {
              *      alias:  'widget.product-listing-filter-panel',
              *      configure: function() {
              *          return {
-             *              controller: 'product',
+             *              controller: 'Product',
              *              model: 'Shopware.apps.Product.model.Product',
              *          };
              *      }

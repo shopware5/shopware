@@ -88,7 +88,7 @@ Ext.define('Shopware.model.Container', {
          *          extend: 'Shopware.model.Container',
          *          configure: function() {
          *              return {
-         *                  controller: 'product',
+         *                  controller: 'Product',
          *                  fieldSets: [
          *                      {
          *                          title: 'First product field set'
@@ -103,6 +103,19 @@ Ext.define('Shopware.model.Container', {
          *      });
          */
         displayConfig: {
+
+            /**
+             * @required - For @ORM\ManyToMany and @ORM\ManyToOne doctrine associations.
+             *
+             * The controller property is used for manyToOne associations.
+             * This controller will be requested to load the associated data.
+             * In the default case, this controller is the backend php application controller
+             * name like 'Article', 'Banner', etc.
+             *
+             * @type { String }
+             */
+            controller: undefined,
+
             /**
              * The event alias is used to customize the component events for each
              * backend application.
@@ -119,18 +132,6 @@ Ext.define('Shopware.model.Container', {
             eventAlias: undefined,
 
             /**
-             * @required
-             *
-             * The controller property is used for manyToOne associations.
-             * This controller will be requested to load the associated data.
-             * In the default case, this controller is the backend php application controller
-             * name like 'Article', 'Banner', etc.
-             *
-             * @type { String }
-             */
-            controller: undefined,
-
-            /**
              * The searchUrl property is used to request the associated data
              * of the base model.
              * Shopware requests the association data as default from the
@@ -140,7 +141,6 @@ Ext.define('Shopware.model.Container', {
              * @type { String }
              */
             searchUrl: '{url controller="base" action="searchAssociation"}',
-
 
             /**
              * The fieldSets property allows to define how the model fields will
