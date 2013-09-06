@@ -40,6 +40,19 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             'Enlight_Controller_Action_PreDispatch',
             'onPreDispatch'
         );
+
+        $this->createCronJob(
+            'HTTP Cache löschen',
+            'ClearHttpCache',
+            86400,
+            true
+        );
+
+        $this->subscribeEvent(
+            'Shopware_CronJob_ClearHttpCache',
+            'onClearHttpCache'
+        );
+
         $this->subscribeEvent('Shopware\Models\Article\Article::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Category\Category::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Banner\Banner::postPersist', 'onPostPersist');
@@ -248,6 +261,43 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->setCacheHeaders();
         $this->setNoCacheCookie();
     }
+
+    /**
+     * Callback for event Shopware_CronJob_ClearHttpCache
+     *
+     * Clears the file-based http-cache storage directory
+     * 
+     * @param Shopware_Components_Cron_CronJob $job
+     * @return string
+     */
+    public function onClearHttpCache(\Shopware_Components_Cron_CronJob $job)
+    {
+        // If local file-based proxy is used delete cache files from filesystem
+        $cacheOptions = Shopware()->getOption('HttpCache');
+        if (isset($cacheOptions['cache_dir']) && is_dir($cacheOptions['cache_dir'])) {
+            $cacheDir = $cacheOptions['cache_dir'];
+            $counter  = 0;
+
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($cacheDir),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $path) {
+                if ($path->isDir()) {
+                    rmdir($path->__toString());
+                } else {
+                    $counter++;
+                    unlink($path->__toString());
+                }
+            }
+
+            return "Removed $counter files from $cacheDir\n";
+        }
+
+        return 'HTTP-Cache Directory not set.';
+    }
+
 
     /**
      * Sets the shopware cache headers
