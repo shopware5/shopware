@@ -176,6 +176,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
     /**
+     * Helper function which adds the listing sort conditions to the passed query builder object.
+     *
+     * @example
+     * The backend listing store of shopware creates a following sort array:
+     *  $sort = array(
+     *      array('property' => 'name', 'direction' => 'DESC'),
+     *      array('property' => 'id', 'direction' => 'ASC')
+     *  );
+     *
+     * Important: Doctrine requires the query builder field alias for each field.
+     * You can get a field mapping over the { @link #getModelFields } function.
+     * This function creates an associated array with the model field name as array key
+     * and as value an array with the query builder field alias under $field['alias'].
+     *
+     * Shopware resolves the passed Ext JS name over this function and use the alias of the field
+     * to sort the query builder.
      *
      * @param \Shopware\Components\Model\QueryBuilder $builder
      * @param array $sort
@@ -211,6 +227,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * To handle the filter condition by yourself, you can override this function and return
      * the query builder object.
+     *
+     * @example
+     *  $filter = array(
+     *      array(
+     *          'property' => 'name',
+     *          'value' => 'Test article',
+     *          'operator' => 'OR',
+     *          'expression' => 'LIKE'
+     *      ),
+     *      array(
+     *          'property' => 'active',
+     *          'value' => '1',
+     *          'operator' => 'AND',
+     *          'expression' => '='
+     *      ),
+     *  )
      *
      * @param \Shopware\Components\Model\QueryBuilder $builder
      * @param array $filters
@@ -253,7 +285,19 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $builder;
     }
 
-    protected function formatSearchValue($value, $field)
+    /**
+     * Helper function which formats the Ext JS search value
+     * to a valid doctrine field value for the passed field.
+     * This function is used to supports different date search strings
+     * like the german and english date format.
+     * Additionally this function adds the sql wildcards at the right points of
+     * the search value.
+     *
+     * @param string $value
+     * @param array $field
+     * @return string
+     */
+    protected function formatSearchValue($value, array $field)
     {
         switch($field['type']) {
             case 'date':
@@ -351,6 +395,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
 
+    /**
+     * Controller action which can be called over ajax requests.
+     * This function is used to load the detailed information for a single record.
+     * Shopware use this function as "detail" api call of a single { @link Shopware.data.Model }.
+     * This function is only a wrapper function, the { @link #getDetail } function contains the
+     * logic to get the detail data of the record.
+     *
+     * @internalParam $this->Request()->getParam('id')
+     */
     public function detailAction()
     {
         $this->View()->assign(
@@ -360,6 +413,18 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
+    /**
+     * Contains the logic to get the detailed information of a single record.
+     * The function expects the model identifier value as parameter.
+     * To add additional data to the detailed information you can override the
+     * { @link #getAdditionalDetailData } function.
+     *
+     * To extend the query builder object to select more detailed information,
+     * you can override the { @link #getDetailQuery } function.
+     *
+     * @param int $id - Identifier of the doctrine model.
+     * @return array
+     */
     public function getDetail($id)
     {
         $builder = $this->getDetailQuery($id);
@@ -374,7 +439,30 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return array('success' => true, 'data' => $data);
     }
 
-
+    /**
+     * Helper function which can be used to add additional data which selected over
+     * additional queries.
+     *
+     * @example
+     *  You have an @ORM\ManyToMany association in your doctrine model and won't select
+     *  this data over the detail query builder, because the result set would be to big
+     *  for a single select.
+     *  So you can override this function and add the additional data into the passed data array:
+     *
+     *      protected function getAdditionalDetailData(array $data)
+     *      {
+     *          $builder = Shopware()->Models()->createQueryBuilder();
+     *          $builder->select(...)
+     *                  ->from(...)
+     *
+     *          $data['associationName'] = $builder->getQuery()->getArrayResult();
+     *
+     *          return $data;
+     *      }
+     *
+     * @param array $data
+     * @return array
+     */
     protected function getAdditionalDetailData(array $data)
     {
         return $data;
@@ -383,6 +471,23 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Creates the query builder to selected the detailed model data.
      * Override this function to load all associations.
+     * Shopware selects as default only the configured model.
+     *
+     * If you want to load more detailed information you can override this function.
+     * Important: We suggest to select not to much association in one query, because the query
+     * result could be to big to select the whole data in one query. You can select and add additional
+     * data in the { @link #getAdditionalDetailData } function.
+     * This function should be used to select @ORM\OneToOne associations.
+     *
+     * @example
+     *      protected function getDetailQuery($id)
+     *      {
+     *          $builder = parent::getDetailQuery($id);
+     *          $builder->leftJoin('association', 'alias');
+     *          $builder->addSelect('alias');
+     *          return $builder;
+     *      }
+     *
      *
      * @param $id
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
@@ -404,7 +509,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $builder;
     }
 
-
+    /**
+     * Controller action to create a new record.
+     * This function can be called over an ajax request.
+     * This function is only a wrapper function and calls the internal
+     * { @link #save } function which creates and updates the records.
+     * The createAction function pass the request params as function parameter
+     * to the save function.
+     * The save function return value will be assigned to the template engine.
+     */
     public function createAction()
     {
         $this->View()->assign(
@@ -414,6 +527,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
+    /**
+     * Controller action to update existing records.
+     * This function can be called over an ajax request.
+     * The function is only a wrapper function and calls the internal
+     * { @link #save } function which creates and updates the records.
+     * The updateAction function pass the request params as function parameter
+     * to the save function.
+     * The save function return value will be assigned to the template engine.
+     */
     public function updateAction()
     {
         $this->View()->assign(
@@ -423,6 +545,15 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
+    /**
+     * Controller action delete a single record.
+     * This function can be called over an ajax request.
+     * The function is only a wrapper function and calls the internal
+     * { @link #delete } function which deletes the single record.
+     * The deleteAction pass the request id parameter as function parameter
+     * to the delete function.
+     * The return value of the delete function will be assigned to the template engine.
+     */
     public function deleteAction()
     {
         $this->View()->assign(
@@ -432,8 +563,40 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
-
-    protected function save($data)
+    /**
+     * Contains the logic to create or update an existing record.
+     * If the passed $data parameter contains a filled "id" property,
+     * the function executes an entity manager find query for the configured
+     * model and the passed id. If the $data parameter contains no id property,
+     * this function creates a new instance of the configured model.
+     *
+     * If you have some doctrine association in your model, or you want
+     * to modify the passed data object, you can use the { @link #resolveExtJsData } function
+     * to modify the data property.
+     *
+     * You can implement \Symfony\Component\Validator\Constraints asserts in your model
+     * which will be validate in the save process.
+     * If the asserts throws an exception or some fields are invalid, the function returns
+     * an array like this:
+     *
+     * array(
+     *      'success' => false,
+     *      'violations' => array(
+     *          array(
+     *              'message' => 'Property can not be null',
+     *              'property' => 'article.name'
+     *          ),
+     *          ...
+     *      )
+     * )
+     *
+     * If the save process was successfully, the function returns a success array with the
+     * updated model data.
+     *
+     * @param $data
+     * @return array
+     */
+    public function save($data)
     {
         try {
             /**@var $model \Shopware\Components\Model\ModelEntity */
@@ -471,6 +634,32 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
 
+    /**
+     * Helper function which resolves the passed Ext JS data of an model.
+     * This function resolves the following associations automatically:
+     *  @ORM\OneToOne associations
+     *      => Ext JS sends even for @ORM\OneToOne associations, a multi dimensional array
+     *      => array('billing' => array( 0 => array('id' => ...) ))
+     *      => The function removes the first level of the array to have to model data directly in the association property.
+     *      => array('billing' => array('id' => ...))
+     *
+     *  @ORM\ManyToOne associations
+     *      => @ORM\ManyToOne requires the related doctrine model in the association key property.
+     *      => But Ext JS sends only the foreign key property.
+     *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
+     *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
+     *      => 'article' => array('id' => 1, ... , 'shop' => Shopware()->Models()->find(Model, $data['shopId']);
+     *
+     *  @ORM\ManyToMany associations
+     *      => @ORM\ManyToMany requires like the @ORM\ManyToOne associations the resolved doctrine models in the association property.
+     *      => But Ext JS sends only an array of foreign keys.
+     *      => 'article' => array('id' => 1, 'categories' => array(array('id'=>1), array('id'=>2), ...)
+     *      => This function iterates the association property and resolves each foreign key value with the corresponding doctrine model
+     *      => 'article' => array('id' => 1, 'categories' => array(Shopware()->Models()->find(Model, 1), Shopware()->Models()->find(Model, 2), ...)
+     *
+     * @param $data
+     * @return mixed
+     */
     protected function resolveExtJsData($data)
     {
         $metaData = Shopware()->Models()->getClassMetadata($this->model);
@@ -574,8 +763,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $data;
     }
 
-
-    protected function delete($id)
+    /**
+     * Internal function which deletes the configured model with the passed identifier.
+     * This function is used from the { @link #deleteAction } function which can be called over an ajax request.
+     * The function can returns three different states:
+     *  1. array('success' => false, 'error' => 'The id parameter contains no value.')
+     *   => The passed $id parameter is empty
+     *  2. array('success' => false, 'error' => 'The passed id parameter exists no more.')
+     *   => The passed $id parameter contains no valid id for the configured model and the entity manager find function returns no valid entity.
+     *  3. array('success' => true)
+     *   => Delete was successfully.
+     *
+     *
+     * @param $id
+     * @return array
+     */
+    public function delete($id)
     {
         if (empty($id)) {
             return array('success' => false, 'error' => 'The id parameter contains no value.');
@@ -594,6 +797,21 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
 
+    /**
+     * Controller action which called to search associated data of the configured model.
+     * This function is used from the { @link Shopware.form.field.Search } backend component
+     * to resolve @ORM\ManyToMany or @ORM\ManyToOne associations in the different backend components.
+     *
+     * The function expects the following request parameter:
+     *  query - Search string which inserted in the search field.
+     *  association - Doctrine property name of the association
+     *  start - Pagination start value
+     *  limit - Pagination limit value
+     *
+     * This function is like the other controller actions only a wrapper function and calls
+     * the internal searchAssociation function to find the requested data.
+     *
+     */
     public function searchAssociationAction()
     {
         $this->View()->assign(
@@ -607,13 +825,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
     /**
-     * @param $search
-     * @param $association string
-     * @param $offset
-     * @param $limit
+     * This function is used from the { @link #searchAssociationAction } function
+     * and is used to find associated data of the configured model like @ORM\ManyToMany or @ORM\ManyToOne associations.
+     *
+     * The function expects the following parameter:
+     *  query - Search string which inserted in the search field.
+     *  association - Doctrine property name of the association
+     *  start - Pagination start value
+     *  limit - Pagination limit value
+     *
+     * @param string $search
+     * @param string $association
+     * @param int $offset
+     * @param int $limit
      * @return array
      */
-    protected function searchAssociation($search, $association, $offset, $limit)
+    public function searchAssociation($search, $association, $offset, $limit)
     {
         $builder = $this->getSearchAssociationQuery(
             $association,
@@ -637,6 +864,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
     }
 
+    /**
+     * Creates the query builder object for the { @link #searchAssociation } function.
+     * It creates a simple query builder object which contains the selection to the associated
+     * model and if the $search parameter contains a search value, the function creates an orWhere
+     * condition for each model field with a like operation.
+     *
+     * @param $association
+     * @param $model
+     * @param $search
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
     protected function getSearchAssociationQuery($association, $model, $search)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -654,7 +892,14 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         return $builder;
     }
 
-
+    /**
+     * Helper function which return the model name of an association for
+     * the passed model and property name.
+     *
+     * @param $model
+     * @param $property
+     * @return string
+     */
     protected function getAssociatedModelByProperty($model, $property)
     {
         $metaData = Shopware()->Models()->getClassMetadata($model);
