@@ -133,10 +133,9 @@ standards.
 
 ### How to report bugs / feature requests?
 
-We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature request. You can either use the Github issue tracker or our Jira based web-frontend:
+We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests.
 
 * [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
-* [Github Issue tracker](https://github.com/ShopwareAG/shopware-4/issues)
 
 # Copying / License
 
