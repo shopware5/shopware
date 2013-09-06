@@ -426,6 +426,35 @@ Ext.define('Shopware.model.Helper', {
         });
 
         return result;
+    },
+
+    /**
+     * Helper function which checks over the ext class manager if the class is already loaded and exists.
+     *
+     * @param className
+     * @returns { boolean }
+     */
+    classExists: function(className) {
+        var definition = Ext.ClassManager.get(className);
+
+        return (definition !== null);
+    },
+
+
+    /**
+     * Helper function to throw an Shopware configuration error.
+     *
+     * @param { String } message
+     * @param { String } title
+     */
+    throwException: function(message, title) {
+        title = title || "Shopware configuration error";
+
+        throw {
+            name: title,
+            message: message,
+            toString: function() { return this.name + ": " + this.message }
+        };
     }
 });
 

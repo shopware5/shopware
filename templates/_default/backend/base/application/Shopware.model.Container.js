@@ -119,13 +119,14 @@ Ext.define('Shopware.model.Container', {
             eventAlias: undefined,
 
             /**
+             * @required
+             *
              * The controller property is used for manyToOne associations.
              * This controller will be requested to load the associated data.
              * In the default case, this controller is the backend php application controller
              * name like 'Article', 'Banner', etc.
              *
              * @type { String }
-             * @required
              */
             controller: undefined,
 
@@ -211,7 +212,7 @@ Ext.define('Shopware.model.Container', {
              *          }
              *      }
              *  });
-             *  
+             *
              *  The attribute association component will be created in the { @link #createAssociationComponent }
              *
              * @type { Array }
@@ -220,6 +221,9 @@ Ext.define('Shopware.model.Container', {
 
 
             /**
+             * @required - For associated models
+             * @optional - For the base model
+             *
              * The fieldAlias property is used to prefix the form fields with the
              * associationKey of the associated model.
              * To display different models in the same Ext.form.Panel, the association
@@ -262,8 +266,6 @@ Ext.define('Shopware.model.Container', {
              *      -   field.name = attribute['name']
              *
              *
-             * @optional - For the base model
-             * @required - For associated models
              * @type { String }
              */
             fieldAlias: undefined

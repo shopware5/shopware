@@ -109,15 +109,18 @@ Ext.define('Shopware.grid.Controller', {
          */
         displayConfig: {
             /**
+             * @required
+             *
              * Final class of the Shopware.grid.Panel.
              * This class is required to get the alias of the component.
              *
-             * @required
              * @type { string }
              */
             gridClass: undefined,
 
             /**
+             * @required
+             *
              * Suffix alias for the different component events.
              * This alias must the same alias of the { @link Shopware.grid.Panel:eventAlias }  component.
              * If you don't know the alias you can output the alias of the grid panel as follow:
@@ -129,7 +132,6 @@ Ext.define('Shopware.grid.Controller', {
              * If you passed a store with an model named: 'Shopware.apps.Product.model.Product'
              * the { @link Shopware.grid.Panel } use "product" as event alias.
              *
-             * @required
              * @type { string }
              */
             eventAlias: undefined,
@@ -246,7 +248,20 @@ Ext.define('Shopware.grid.Controller', {
 
         Shopware.app.Application.fireEvent(me.getEventName('before-init'), me);
 
-        if (me.getConfig('eventAlias')) {
+        //Check configuration for extended grid controllers.
+        //The class name check prevents the exception if the default components creates his own controller.
+        if (me.$className !== 'Shopware.grid.Controller') {
+            if (!me.getConfig('eventAlias')) {
+                me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
+            }
+
+            if (!me.getConfig('gridClass')) {
+                me.throwException(me.$className + ": Component requires the `gridClass` property in the configure() function");
+            }
+        }
+
+
+        if (me.getConfig('eventAlias') && me.getConfig('gridClass')) {
             me.control(me.createControls());
             me.registerEvents();
         }
@@ -264,10 +279,15 @@ Ext.define('Shopware.grid.Controller', {
     reloadControls: function() {
         var me = this;
 
-        if (me.getConfig('eventAlias')) {
-            me.control(me.createControls());
-            me.registerEvents();
+        if (!me.getConfig('eventAlias')) {
+            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
         }
+        if (!me.getConfig('gridClass')) {
+            me.throwException(me.$className + ": Component requires the `gridClass` property in the configure() function");
+        }
+
+        me.control(me.createControls());
+        me.registerEvents();
     },
 
     /**
@@ -559,6 +579,7 @@ Ext.define('Shopware.grid.Controller', {
                 configure: function() {
                     return {
                         infoText: me.getConfig('deleteInfoText'),
+                        subApp: me.subApplication,
                         tasks: [
                             {
                                 text: me.getConfig('deleteProgressBarText'),
@@ -680,6 +701,10 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
+        if (!listing.getConfig('detailWindow')) {
+            me.throwException(listing.$className + ": Component requires the `detailWindow` property in the configure() function");
+        }
+
         window = me.createDetailWindow(
             record,
             listing.getConfig('detailWindow')
@@ -773,6 +798,10 @@ Ext.define('Shopware.grid.Controller', {
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-edit-item'), me, listing, record)) {
             return false;
+        }
+
+        if (!listing.getConfig('detailWindow')) {
+            me.throwException(listing.$className + ": Component requires the `detailWindow` property in the configure() function");
         }
 
         if (me.hasModelAction(record, 'detail')) {

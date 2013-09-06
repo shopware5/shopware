@@ -224,12 +224,13 @@ Ext.define('Shopware.grid.Panel', {
         displayConfig: {
 
             /**
+             * @required - For the add and edit action
+             *
              * This is a required configuration property.
              * The detailWindow property contains the class name of your detail window.
              * If the property isn't configured, the add and edit function has no
              * effect.
              *
-             * @required
              * @type { string }
              */
             detailWindow: undefined,

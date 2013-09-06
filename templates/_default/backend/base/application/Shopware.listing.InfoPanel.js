@@ -99,7 +99,10 @@ Ext.define('Shopware.listing.InfoPanel', {
          */
         displayConfig: {
             /**
+             * @required - Or override createTemplate function.
+             *
              * Contains the full Ext JS model name of the listing records which will be displayed within the panel.
+             *
              * @type { String }
              */
             model: undefined,
@@ -145,6 +148,9 @@ Ext.define('Shopware.listing.InfoPanel', {
              */
             fields: { },
 
+            /**
+             * Configuration text for the info panel if no record is selected.
+             */
             emptyText: '{s name="info_panel/empty_text"}No record selected.{/s}'
         },
 

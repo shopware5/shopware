@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @var array $filterFields
      */
-    protected $filterFields;
+    protected $filterFields = array();
 
 
     /**
@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @var array $sortFields
      */
-    protected $sortFields;
+    protected $sortFields = array();
 
     /**
      * Helper function to get the repository of the configured model.
@@ -195,10 +195,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param \Shopware\Components\Model\QueryBuilder $builder
      * @param array $sort
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return \Shopware\Components\Model\QueryBuilder
      */
     protected function addListingSortCondition(\Shopware\Components\Model\QueryBuilder $builder, array $sort)
     {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
         $fields = $this->getModelFields($this->model, $this->alias);
         $conditions = array();
         foreach ($sort as $condition) {
@@ -252,10 +259,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param \Shopware\Components\Model\QueryBuilder $builder
      * @param array $filters
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return \Shopware\Components\Model\QueryBuilder
      */
     protected function addListingFilterCondition(\Shopware\Components\Model\QueryBuilder $builder, array $filters)
     {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
         $fields = $this->getModelFields($this->model, $this->alias);
         $conditions = array();
 
@@ -401,7 +415,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         if (empty($this->model)) {
             throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The model property of your PHP-Controller is not configured!'
+                'The `model` property of your PHP controller is not configured!'
             );
         }
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -611,10 +625,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * updated model data.
      *
      * @param $data
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function save($data)
     {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
         try {
             /**@var $model \Shopware\Components\Model\ModelEntity */
             $model = new $this->model();
@@ -793,10 +814,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *
      * @param $id
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function delete($id)
     {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
         if (empty($id)) {
             return array('success' => false, 'error' => 'The id parameter contains no value.');
         }
@@ -855,10 +883,17 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param string $association
      * @param int $offset
      * @param int $limit
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function searchAssociation($search, $association, $offset, $limit)
     {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
         $builder = $this->getSearchAssociationQuery(
             $association,
             $this->getAssociatedModelByProperty($this->model, $association),

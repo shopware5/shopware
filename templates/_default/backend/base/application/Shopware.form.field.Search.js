@@ -42,11 +42,12 @@ Ext.define('Shopware.form.field.Search', {
     minChars: 2,
 
     /**
+     * @required
+     *
      * The combo box store have to be set from outside.
      * Normally the store is created over the { @link Shopware.model.Helper:createAssociationSearchStore } function.
      * The { @link Shopware.form.field.Search } component is used from the { @link Shopware.grid.Association } and
      * the { @link Shopware.model.Container }
-     * @required
      */
     store: undefined,
 
