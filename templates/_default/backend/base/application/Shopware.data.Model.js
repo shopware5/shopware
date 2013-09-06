@@ -48,6 +48,8 @@ Ext.define('Shopware.data.Model', {
         displayConfig: {
 
             /**
+             * @required - For the base model.
+             *
              * Class of the php controller
              * This property is required for the CRUD operations of the Shopware.data.Model.
              * The proxy api reference first on the base controller. The base controller
@@ -58,7 +60,6 @@ Ext.define('Shopware.data.Model', {
              * value of this property => 'article'
              *
              * @type { String }
-             * @required
              */
             controller: undefined,
 

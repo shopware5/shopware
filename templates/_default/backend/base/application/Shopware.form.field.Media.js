@@ -550,7 +550,6 @@ Ext.define('Shopware.form.field.Media', {
                     me.mediaId = me.record.get('id');
                     me.path = me.record.get('path');
                     me.updatePreview(me.path);
-                    console.log("me", me);
                 }
             }
         });

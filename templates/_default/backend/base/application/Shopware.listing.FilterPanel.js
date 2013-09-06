@@ -155,6 +155,8 @@ Ext.define('Shopware.listing.FilterPanel', {
         displayConfig: {
 
             /**
+             * @required
+             *
              * Name of the php controller which loads the store data.
              *
              * @example
@@ -411,7 +413,10 @@ Ext.define('Shopware.listing.FilterPanel', {
             if (!field) return true;
 
             //create filter field container to add a checkbox for each field.
-            var container = Ext.create('Shopware.filter.Field', { field: field });
+            var container = Ext.create('Shopware.filter.Field', {
+                field: field,
+                subApp: me.subApp
+            });
             field.container = container;
 
             items.push(container);

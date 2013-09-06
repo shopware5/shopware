@@ -76,6 +76,17 @@ Ext.define('Shopware.grid.Association', {
          *      });
          */
         displayConfig: {
+
+            /**
+             * @required
+             *
+             * Controller name of the php controller.
+             * Used for the search request and will be set in the searchUrl.
+             *
+             * @type { String }
+             */
+            controller: undefined,
+
             /**
              * Alphanumeric key of the association.
              * This key is required for the search request.
@@ -129,14 +140,6 @@ Ext.define('Shopware.grid.Association', {
              *
              */
             associationKey: undefined,
-
-            /**
-             * Controller name of the php controller.
-             * Used for the search request and will be set in the searchUrl.
-             *
-             * @type { String }
-             */
-            controller: undefined,
 
             /**
              * Url for the search request. The "controller=base" path will be replaced with the
@@ -298,7 +301,7 @@ Ext.define('Shopware.grid.Association', {
      * @returns { Array }
      */
     createToolbarItems: function() {
-        var me = this, items = [], combo;
+        var me = this, items = [];
 
         if (me.getConfig('searchCombo')) {
             me.searchStore = me.createAssociationSearchStore(

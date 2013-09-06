@@ -15,6 +15,14 @@ Ext.define('Shopware.store.Listing', {
     extend: 'Ext.data.Store',
 
     /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: {
+        helper: 'Shopware.model.Helper'
+    },
+
+    /**
      * If data is not specified, and if autoLoad is true or an Object,
      * this store's load method is automatically called after creation.
      * If the value of autoLoad is an Object, this Object will be passed to the store's load method.
@@ -86,6 +94,8 @@ Ext.define('Shopware.store.Listing', {
          */
         displayConfig: {
             /**
+             * @required
+             *
              * Name of the php controller which loads the store data.
              *
              * @example
@@ -187,7 +197,7 @@ Ext.define('Shopware.store.Listing', {
         var me = this, value;
 
         if (!me.getConfig('controller')) {
-            return;
+            me.throwException(me.$className + ": Component requires the `controller` property in the configure() function.");
         }
 
         me.setProxy(me.getConfig('proxy'));

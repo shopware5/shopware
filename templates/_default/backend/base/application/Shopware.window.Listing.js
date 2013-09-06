@@ -117,22 +117,24 @@ Ext.define('Shopware.window.Listing', {
          */
         displayConfig: {
             /**
+             * @required
+             *
              * Class name of the grid which will be displayed in the center
              * region of this window.
              *
              * @type { String }
-             * @optional
              */
-            listingGrid: 'Shopware.grid.Panel',
+            listingGrid: undefined,
 
             /**
+             * @required
+             *
              * Class name of the grid store. This store will be set in the
              * listingGrid instance as grid store.
              * The store will be loaded over this component so don't set the
              * autoLoad parameter of the store to true.
              *
              * @type { String }
-             * @required
              */
             listingStore: undefined,
 
@@ -349,6 +351,12 @@ Ext.define('Shopware.window.Listing', {
      * @returns { Shopware.store.Listing }
      */
     createListingStore: function() {
+        var me = this;
+
+        if (!me.getConfig('listingStore')) {
+            me.throwException(me.$className + ": Component requires the configured `listingStore` property in the configure() function.");
+        }
+
         return Ext.create(this.getConfig('listingStore'));
     },
 
@@ -395,9 +403,14 @@ Ext.define('Shopware.window.Listing', {
 
         me.listingStore.load();
 
+        if (!me.getConfig('listingGrid')) {
+            me.throwException(me.$className + ": Component requires the configured `listingGrid` property in the configure() function.");
+        }
+
         me.gridPanel = Ext.create(me.getConfig('listingGrid'), {
             store: me.listingStore,
-            flex: 1
+            flex: 1,
+            subApp: me.subApp
         });
 
         me.fireEvent(me.eventAlias + '-after-create-grid-panel', me, me.gridPanel);

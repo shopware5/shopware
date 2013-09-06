@@ -53,15 +53,18 @@ Ext.define('Shopware.detail.Controller', {
         displayConfig: {
 
             /**
-             * Final class of the Shopware.window.Detail.
+             * @required
+             *
+             * Full class name of the Shopware.window.Detail.
              * This class is required to get the alias of the component.
              *
-             * @required
              * @type { string }
              */
             detailWindow: undefined,
 
             /**
+             * @required
+             *
              * Suffix alias for the different component events.
              * This alias must the same alias of the { @link Shopware.grid.Panel:eventAlias }  component.
              * If you don't know the alias you can output the alias of the grid panel as follow:
@@ -73,7 +76,6 @@ Ext.define('Shopware.detail.Controller', {
              * If you passed a store with an model named: 'Shopware.apps.Product.model.Product'
              * the { @link Shopware.grid.Panel } use "product" as event alias.
              *
-             * @required
              * @type { string }
              */
             eventAlias: undefined,
@@ -175,10 +177,15 @@ Ext.define('Shopware.detail.Controller', {
     init: function () {
         var me = this;
 
-        if (me.getConfig('eventAlias')) {
-            me.registerEvents();
-            me.control(me.createControls());
+        if (!me.getConfig('eventAlias')) {
+            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
         }
+        if (!me.getConfig('detailWindow')) {
+            me.throwException(me.$className + ": Component requires the `detailWindow` property in the configure() function");
+        }
+
+        me.registerEvents();
+        me.control(me.createControls());
 
         me.callParent(arguments);
     },
@@ -191,10 +198,15 @@ Ext.define('Shopware.detail.Controller', {
     reloadControls: function() {
         var me = this;
 
-        if (me.getConfig('eventAlias')) {
-            me.registerEvents();
-            me.control(me.createControls());
+        if (!me.getConfig('eventAlias')) {
+            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
         }
+        if (!me.getConfig('detailWindow')) {
+            me.throwException(me.$className + ": Component requires the `detailWindow` property in the configure() function");
+        }
+
+        me.registerEvents();
+        me.control(me.createControls());
     },
 
     /**
