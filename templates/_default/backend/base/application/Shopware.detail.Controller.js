@@ -177,15 +177,21 @@ Ext.define('Shopware.detail.Controller', {
     init: function () {
         var me = this;
 
-        if (!me.getConfig('eventAlias')) {
-            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
-        }
-        if (!me.getConfig('detailWindow')) {
-            me.throwException(me.$className + ": Component requires the `detailWindow` property in the configure() function");
+        //Check configuration for extended detail controllers.
+        //The class name check prevents the exception if the default components creates his own controller.
+        if (me.$className !== 'Shopware.detail.Controller') {
+            if (!me.getConfig('eventAlias')) {
+                me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
+            }
+            if (!me.getConfig('detailWindow')) {
+                me.throwException(me.$className + ": Component requires the `detailWindow` property in the configure() function");
+            }
         }
 
-        me.registerEvents();
-        me.control(me.createControls());
+        if (me.getConfig('eventAlias') && me.getConfig('detailWindow')) {
+            me.registerEvents();
+            me.control(me.createControls());
+        }
 
         me.callParent(arguments);
     },

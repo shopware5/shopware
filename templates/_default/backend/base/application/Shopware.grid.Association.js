@@ -69,7 +69,7 @@ Ext.define('Shopware.grid.Association', {
          *          configure: function() {
          *              return {
          *                  associationKey: 'categories',
-         *                  controller: 'product',
+         *                  controller: 'Product',
          *                  ...
          *              }
          *          }
@@ -132,7 +132,7 @@ Ext.define('Shopware.grid.Association', {
              *
              *          configure: function() {
              *              return {
-             *                  controller: 'product',
+             *                  controller: 'Product',
              *                  associationKey: 'categories'
              *              }
              *          }

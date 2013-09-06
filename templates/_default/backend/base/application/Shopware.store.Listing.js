@@ -86,7 +86,7 @@ Ext.define('Shopware.store.Listing', {
          *          extend: 'Shopware.store.Listing',
          *          configure: function() {
          *              return {
-         *                  controller: 'product'
+         *                  controller: 'Product'
          *                  ...
          *              }
          *          }
