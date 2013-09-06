@@ -47,6 +47,26 @@ Ext.define('Shopware.filter.Field', {
         helper: 'Shopware.model.Helper'
     },
 
+
+    /**
+     * Instance of the prepended checkbox. The checkbox is used
+     * to enable or disable the filter field. A disabled filter field
+     * returns no value if you call the updateRecord or getValues function
+     * of the form panel.
+     *
+     * @type { Ext.form.field.Checkbox }
+     */
+    checkbox: undefined,
+
+    /**
+     * Instance of the passed field object which will be displayed
+     * as filter field.
+     * This field is created from the { @link Shopware.listing.FilterPanel } and
+     * will be wrapped with this component to enable or disable the filter values.
+     * @type { Ext.form.field.Field }
+     */
+    field: undefined,
+
     /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.

@@ -231,9 +231,26 @@ Ext.define('Shopware.form.field.Media', {
 
     /**
      * Record of the current selected media object.
+     * This property is set through the { @link #requestMediaData } function.
+     *
      * @type { Shopware.data.Model }
      */
     record: undefined,
+
+    /**
+     * Contains an instance of Ext.container.Container
+     * which holds the { @link #selectButton } and the { @link #resetButton }
+     * @type { Ext.container.Container }
+     */
+    buttonContainer: undefined,
+
+    /**
+     * Contains an instance of Ext.container.Container
+     * which holds the { @link #preview } element.
+     * This container is displayed on the right side of the media field.
+     * @type { Ext.container.Container }
+     */
+    previewContainer: undefined,
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -282,7 +299,7 @@ Ext.define('Shopware.form.field.Media', {
     createButtonContainer: function() {
         var me = this;
 
-        return Ext.create('Ext.container.Container', {
+        me.buttonContainer = Ext.create('Ext.container.Container', {
             width: 180,
             padding: '0 10',
             style: "background: #fff",
@@ -295,6 +312,7 @@ Ext.define('Shopware.form.field.Media', {
                 me.createResetButton()
             ]
         });
+        return me.buttonContainer;
     },
 
     /**
@@ -306,11 +324,12 @@ Ext.define('Shopware.form.field.Media', {
     createPreviewContainer: function() {
         var me = this;
 
-        return Ext.create('Ext.container.Container', {
+        me.previewContainer = Ext.create('Ext.container.Container', {
             flex: 1,
             style: "background: #fff",
             items: [ me.createPreview() ]
         });
+        return me.previewContainer;
     },
 
     /**

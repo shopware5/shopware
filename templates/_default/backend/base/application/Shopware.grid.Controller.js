@@ -559,7 +559,7 @@ Ext.define('Shopware.grid.Controller', {
                 configure: function() {
                     return {
                         infoText: me.getConfig('deleteInfoText'),
-                            tasks: [
+                        tasks: [
                             {
                                 text: me.getConfig('deleteProgressBarText'),
                                 event: me.getConfig('eventAlias') + '-batch-delete-item',

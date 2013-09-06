@@ -17,6 +17,26 @@ Ext.define('Shopware.grid.Association', {
     alias: 'widget.shopware-grid-association',
 
     /**
+     * Instance of the search store.
+     * The search store is used for the { @link #searchComboBox }
+     * and will be created dynamically.
+     * The search store proxy use the { @link #searchUrl } property
+     * as read url.
+     * @type { Ext.data.Store }
+     */
+    searchStore: undefined,
+
+    /**
+     * Instance of the search combo box.
+     * The search combo box is used to add new items
+     * to the association grid.
+     * The search combo box is created dynamically
+     * and uses the { @link #searchStore } as combo box store.
+     * @type { Shopware.form.field.Search }
+     */
+    searchComboBox: undefined,
+
+    /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.
      *

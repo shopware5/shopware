@@ -22,6 +22,60 @@ Ext.define('Shopware.window.Listing', {
 
     alias: 'widget.shopware-window-listing',
 
+
+    /**
+     * Contains the generated event alias.
+     * If the { @link #configure } function returns an eventAlias
+     * property, this property contains the configured alias.
+     * Otherwise shopware creates an event alias over the model name.
+     *
+     * @type { String }
+     */
+    eventAlias: undefined,
+
+    /**
+     * Contains the created { @link Shopware.store.Listing } instance.
+     * This store is configured over the { @link #configure } function.
+     * The configure function returns the full class name of the listing store
+     * which will be created in { @link #createListingStore } function.
+     *
+     * @example
+     *  Ext.define('...', {
+     *      extend: 'Shopware.window.Listing',
+     *      configure: function() {
+     *          return {
+     *              listingStore: 'Shopware.apps.Product.store.List',
+     *              gridPanel: 'Shopware.apps.Product.view.list.Product'
+     *          }
+     *      }
+     *  });
+     *
+     * @type { Shopware.store.Listing }
+     */
+    listingStore: undefined,
+
+    /**
+     * Contains the created { @link Shopware.grid.Panel } instance.
+     * This grid panel is configured over the { @link #configure } function.
+     * The configure function returns the full class name of the grid panel
+     * which will be created in the { @link #createGridPanel } function.
+     *
+     * @example
+     *  Ext.define('...', {
+     *      extend: 'Shopware.window.Listing',
+     *      configure: function() {
+     *          return {
+     *              listingStore: 'Shopware.apps.Product.store.List',
+     *              gridPanel: 'Shopware.apps.Product.view.list.Product'
+     *          }
+     *      }
+     *  });
+     *
+     * @type { Shopware.grid.Panel }
+     */
+    gridPanel: undefined,
+
+
     /**
      * Override required!
      * This function is used to override the { @link #displayConfig } object of the statics() object.
@@ -94,6 +148,41 @@ Ext.define('Shopware.window.Listing', {
              * Array of listing window extensions.
              * This array will be assigned to the internal { @link #items } property.
              * Each extension becomes the listing window as reference under { @link #listingWindow }.
+             *
+             * @example
+             *  First you have to define the extension view:
+             *
+             *  Ext.define('Shopware.apps.Product.view.list.extension.Filter', {
+             *      extend: 'Shopware.listing.FilterPanel',
+             *      alias:  'widget.product-listing-filter-panel',
+             *      configure: function() {
+             *          return {
+             *              controller: 'product',
+             *              model: 'Shopware.apps.Product.model.Product',
+             *          };
+             *      }
+             *  });
+             *
+             *
+             *  Now you can add the extension to the extensions array:
+             *  Ext.define('...', {
+             *      extend: 'Shopware.window.Listing',
+             *      configure: function() {
+             *          return {
+             *              listingStore: 'Shopware.apps.Product.store.List',
+             *              gridPanel: 'Shopware.apps.Product.view.list.Product',
+             *              extensions: [
+             *                  { xtype: 'product-listing-filter-panel' }
+             *              ]
+             *          }
+             *      }
+             *  });
+             *
+             * Each extension will be pushed as defined into the items array
+             * in the { @link #createItems } function.
+             * Additionally each extension becomes a reference to the listing window (this component)
+             * into the property "extension.listingWindow = me"
+             *
              * @type { Array }
              */
             extensions: [ ]
@@ -285,7 +374,7 @@ Ext.define('Shopware.window.Listing', {
             //support for simple extension definition over strings
             if (Ext.isString(extension)) extension = { xtype: extension };
 
-            //set reference to the listing window.
+            //set ref
             extension.listingWindow = me;
             items.push(extension);
         });
