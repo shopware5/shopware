@@ -1304,7 +1304,7 @@ class sArticles
             $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
-            $articles[$articleKey]["image"] = $this->sGetArticlePictures($articles[$articleKey]["articleID"], true, 0);
+            $articles[$articleKey]["image"] = $this->getArticleMainCover($articles[$articleKey]["articleID"]);
 
             // Links to details, basket
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
@@ -3765,7 +3765,7 @@ class sArticles
             'averange' => round($getPromotionResult['sVoteAverange'][0], 2),
             'count' => round($getPromotionResult['sVoteAverange'][1]),
         );
-        $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, "", false, $mode == "random" ? true : false);
+        $getPromotionResult["image"] = $this->getArticleMainCover($getPromotionResult["articleID"]);
 
         $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
         $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
@@ -3878,8 +3878,8 @@ class sArticles
      * Internal helper function to get the cover image of an article.
      * If the orderNumber parameter is set, the function checks first
      * if an variant image configured. If this is the case, this
-     * image will be used as cover image. Otherwise the function returns
-     * the main image of the article.
+     * image will be used as cover image. Otherwise the function calls the
+     * getArticleMainCover function which returns the absolute main image
      *
      * @param $articleId
      * @param $orderNumber
@@ -3915,6 +3915,26 @@ class sArticles
         }
 
         //if no variant images founded and no normal article image we will return the main image of the article even if this image has an mapping configuration.
+        return $this->getArticleMainCover($articleId, $articleAlbum);
+    }
+
+    /**
+     * Returns the the absolute main article image
+     * This method is slightly different than the getArticleCover method.
+     * This method returns the main cover depending on the main flag
+     *
+     * @param $articleId
+     * @param $articleAlbum
+     * @return array
+     */
+    public function getArticleMainCover($articleId, $articleAlbum = null) {
+        if($articleAlbum === null) {
+            //now we search for the default article album of the media manager, this album contains the thumbnail configuration.
+            /**@var $model \Shopware\Models\Media\Album*/
+            $articleAlbum = $this->getMediaRepository()
+                    ->getAlbumWithSettingsQuery(-1)
+                    ->getOneOrNullResult();
+        }
         $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
     }
