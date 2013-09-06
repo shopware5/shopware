@@ -202,7 +202,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $fields = $this->getModelFields($this->model, $this->alias);
         $conditions = array();
         foreach ($sort as $condition) {
+            //check if the passed field is a valid doctrine model field of the configured model.
             if (!array_key_exists($condition['property'], $fields)) {
+                continue;
+            }
+
+            //check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
+            if (!empty($this->sortFields) && !in_array($condition['property'], $this->sortFields)) {
                 continue;
             }
             $condition['property'] = $fields[$condition['property']]['alias'];
@@ -255,7 +261,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         foreach ($filters as $condition) {
             if ($condition['property'] === 'search') {
-                foreach ($fields as $field) {
+                foreach ($fields as $name => $field) {
+
+                    //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                    if (!empty($this->filterFields) && !in_array($name, $this->filterFields)) {
+                        continue;
+                    }
+
                     $value = $this->formatSearchValue($condition['value'], $field);
 
                     $conditions[] = array(
@@ -266,6 +278,11 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 }
 
             } elseif (array_key_exists($condition['property'], $fields)) {
+                //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                if (!empty($this->filterFields) && !in_array($condition['property'], $this->filterFields)) {
+                    continue;
+                }
+
                 $field = $fields[$condition['property']];
                 $value = $this->formatSearchValue($condition['value'], $field);
 
