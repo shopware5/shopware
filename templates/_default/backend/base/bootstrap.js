@@ -45,6 +45,7 @@
 {include file='ExtJs/overrides/Ext.MessageBox.js'}
 {include file='ExtJs/overrides/Ext.grid.RowEditor.js'}
 {include file='ExtJs/overrides/Ext.picker.Date.js'}
+{include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
@@ -79,6 +80,10 @@
 {include file='backend/base/application/Shopware.listing.InfoPanel.js'}
 {include file='backend/base/application/Shopware.listing.FilterPanel.js'}
 {include file='backend/base/application/Shopware.filter.Field.js'}
+
+{include file='backend/base/application/Shopware.store.Association.js'}
+{include file='backend/base/application/Shopware.form.field.Media.js'}
+
 
 
 {* Include global models *}
@@ -175,6 +180,5 @@
 {include file='backend/base/component/element/media_selection.js'}
 
 
-{include file='backend/base/application/Shopware.form.field.Media.js'}
 
 
