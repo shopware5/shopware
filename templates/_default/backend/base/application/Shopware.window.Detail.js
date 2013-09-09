@@ -435,7 +435,7 @@ Ext.define('Shopware.window.Detail', {
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association),
-                association.associationKey
+                association
             );
         }
         me.associationComponents[association.associationKey] = item;
@@ -451,7 +451,7 @@ Ext.define('Shopware.window.Detail', {
      * @param store { Ext.data.Store }
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store, associationKey) {
+    createAssociationComponent: function(type, model, store, association) {
         var componentType = model.getConfig(type);
 
         return Ext.create(componentType, {
@@ -459,10 +459,14 @@ Ext.define('Shopware.window.Detail', {
             store: store,
             flex: 1,
             subApp: this.subApp,
+            association: association,
             configure: function() {
-                return {
-                    associationKey: associationKey
-                };
+                if (association) {
+                    return {
+                        associationKey: association.associationKey
+                    };
+                }
+                return { };
             }
         });
     },
@@ -610,6 +614,13 @@ Ext.define('Shopware.window.Detail', {
      * @param eOpts
      */
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
+
+        if (newCard.association && newCard.association.loadOnDemand) {
+            if (typeof newCard.getStore === 'function' && newCard.getStore().getCount() <= 0) {
+                newCard.getStore().load();
+            }
+        }
+
         this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
 
