@@ -1,0 +1,4 @@
+From: experimental/refactor-http-cache
+To: master
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
