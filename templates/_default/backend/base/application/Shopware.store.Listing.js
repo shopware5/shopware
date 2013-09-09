@@ -1,7 +1,6 @@
 
 //{namespace name=backend/application/main}
-
-//{block name="backend/application/store/listing"}
+//{block name="backend/application/Shopware.store.Listing"}
 
 Ext.define('Shopware.store.Listing', {
 

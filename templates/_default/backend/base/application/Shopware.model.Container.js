@@ -1,7 +1,7 @@
 
 //{namespace name=backend/application/main}
 
-//{block name="backend/application/model/container"}
+//{block name="backend/application/Shopware.model.Container"}
 
 Ext.define('Shopware.model.Container', {
 
@@ -605,14 +605,22 @@ Ext.define('Shopware.model.Container', {
             return false;
         }
 
+        //iterate all defined field sets. If no field set configured, the component is used for none model fields.
         Ext.each(me.getConfig('fieldSets'), function(fieldSet) {
             fields = [];
 
+            //we require an array of model field names which has to be displayed. So we use as default all model fields.
             var keys = me.record.fields.keys;
+
+            //now check if the developer configured an offset of fields within the fields object.
             if (Object.keys(fieldSet.fields).length > 0) keys = Object.keys(fieldSet.fields);
 
+            //iterate all model field names and create a form field for each field.
             Ext.each(keys, function(key) {
+                //check if a custom field config is configured.
                 config = fieldSet.fields[key] || {};
+
+                //shorthand for translations
                 if (Ext.isString(config)) config = { fieldLabel: config };
 
                 field = me.createModelField(
@@ -621,6 +629,8 @@ Ext.define('Shopware.model.Container', {
                     me.getConfig('fieldAlias'),
                     config
                 );
+
+                //check if the field was created successfully.
                 if (field) fields.push(field);
             });
 
@@ -637,7 +647,7 @@ Ext.define('Shopware.model.Container', {
         //the associations will be displayed within this component.
         Ext.each(associations, function(association) {
 
-            //Important row! This call creates the each association component which can be defined in the association array.
+            //Important row! This call creates each association component which can be defined in the association array.
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),

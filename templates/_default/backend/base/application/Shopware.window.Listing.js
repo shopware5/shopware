@@ -1,7 +1,6 @@
 
 //{namespace name=backend/application/main}
-
-//{block name="backend/application/window/listing"}
+//{block name="backend/application/Shopware.window.Listing"}
 
 Ext.define('Shopware.window.Listing', {
     extend: 'Enlight.app.Window',

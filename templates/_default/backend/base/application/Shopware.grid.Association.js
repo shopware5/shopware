@@ -1,7 +1,7 @@
 
 //{namespace name=backend/application/main}
 
-//{block name="backend/application/grid/association"}
+//{block name="backend/application/Shopware.grid.Association"}
 
 Ext.define('Shopware.grid.Association', {
     /**

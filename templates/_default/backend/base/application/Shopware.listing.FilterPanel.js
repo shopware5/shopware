@@ -1,5 +1,7 @@
 
+
 //{namespace name=backend/application/main}
+//{block name="backend/application/Shopware.listing.FilterPanel"}
 
 Ext.define('Shopware.listing.FilterPanel', {
     extend: 'Ext.form.Panel',
@@ -541,3 +543,4 @@ Ext.define('Shopware.listing.FilterPanel', {
 
 
 });
+//{/block}

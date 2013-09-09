@@ -1,7 +1,8 @@
 
-//{namespace name=backend/application/main}
 
-//{block name="backend/application/window/progress"}
+//{namespace name=backend/application/main}
+//{block name="backend/application/Shopware.window.Progress"}
+
 Ext.define('Shopware.window.Progress', {
     extend: 'Ext.window.Window',
     title: '{s name="progress_window/title"}Delete items{/s}',
@@ -25,10 +26,51 @@ Ext.define('Shopware.window.Progress', {
      */
     cancelProcess: false,
 
+    /**
+     * Instance of the cancel process button which allows the user
+     * to cancel the batch process.
+     * The cancel button is created in the { @link #createCancelButton } function.
+     *
+     * @type { Ext.button.Button }
+     */
     cancelButton: undefined,
+
+    /**
+     * Instance of the close window button which will be enabled
+     * if the user cancel the process or the whole process ends.
+     * The button is created in the { @link #createCloseButton } function.
+     *
+     * @type { Ext.button.Button }
+     */
     closeButton: undefined,
+
+    /**
+     * Contains the instance of the data operation result store.
+     * This store contains all operation results.
+     * The store is used for the { @link #resultGrid } property.
+     *
+     * @type { Ext.data.Store }
+     */
     resultStore: undefined,
+
+    /**
+     * Instance of the data operation result grid.
+     * This grid displays the result of each data operation which
+     * processed through the progress window.
+     * The result grid is created in the { @link #createResultGrid } function.
+     *
+     * @type { Ext.grid.Panel }
+     */
     resultGrid: undefined,
+
+    /**
+     * Instance of the result field set.
+     * The field set contains the result grid which displays the result of each data
+     * operation which done through the progress window.
+     * The result grid is wrapped with a field set to collapse the result.
+     *
+     * @type { Ext.form.FieldSet }
+     */
     resultFieldSet: undefined,
 
     /**
@@ -116,15 +158,51 @@ Ext.define('Shopware.window.Progress', {
              */
             displayResultGrid: true,
 
+            /**
+             * Button text of the { @link #cancelButton }
+             * @type { String }
+             */
             cancelButtonText: '{s name="progress_window/cancel_button_text"}Cancel process{/s}',
+
+            /**
+             * Button text of the { @link #closeButton }
+             * @type { String }
+             */
             closeButtonText: '{s name="progress_window/close_button_text"}Close window{/s}',
 
+            /**
+             * Text for the success result grid column header.
+             * @type { String }
+             */
             successHeader: '{s name="progress_window/success_header"}Success{/s}',
-            requestHeader: '{s name="progress_window/request_header"}Request{/s}',
-            errorHeader: '{s name="progress_window/error_header"}Error message{/s}',
-            requestResultTitle: '{s name="progress_window/request_result_title"}Request results{/s}',
-            processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}'
 
+            /**
+             * Text for the request data grid column header.
+             * @type { String }
+             */
+            requestHeader: '{s name="progress_window/request_header"}Request{/s}',
+
+            /**
+             * Text for the error result grid column header.
+             * @type { String }
+             */
+            errorHeader: '{s name="progress_window/error_header"}Error message{/s}',
+
+            /**
+             * Title of the { @link #resultFieldSet }
+             * @type { String }
+             */
+            requestResultTitle: '{s name="progress_window/request_result_title"}Request results{/s}',
+
+            /**
+             * Text for a canceled process.
+             * Can contains two dynamic values which will be displayed in the `[0]` and `[1]` placeholders.
+             * The first value which will be assigned, contains the index of the last iteration of the current task.
+             * The second value which will be assigned, contains the total count of the last iteration of the current task.
+             *
+             * @type { String }
+             */
+            processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}'
         },
 
         /**
@@ -498,20 +576,7 @@ Ext.define('Shopware.window.Progress', {
             return fieldSet;
         }
         
-        me.resultStore = Ext.create('Ext.data.Store', {
-            model: 'Shopware.model.Error'
-        });
-
-        me.resultGrid = Ext.create('Ext.grid.Panel', {
-            border: false,
-            columns: [
-                { xtype: 'rownumberer', width: 30 },
-                { header: me.getConfig('successHeader'), dataIndex: 'success', width: 60, renderer: me.successRenderer },
-                { header: me.getConfig('requestHeader'), dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
-                { header: me.getConfig('errorHeader'), dataIndex: 'error', flex: 1 }
-            ],
-            store: me.resultStore
-        });
+        me.resultGrid = me.createResultGrid();
 
         me.fireEvent('after-result-grid-created', me, me.resultGrid);
 
@@ -528,6 +593,31 @@ Ext.define('Shopware.window.Progress', {
         me.fireEvent('after-result-field-set-created', me, me.resultFieldSet);
 
         return me.resultFieldSet;
+    },
+
+    /**
+     * Creates the result grid which displays all data operation results.
+     * The grid store is bind to the { @link #resultStore } property of this component.
+     *
+     * @returns { Ext.grid.Panel }
+     */
+    createResultGrid: function() {
+        var me = this;
+
+        me.resultStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.model.DataOperation'
+        });
+
+        return Ext.create('Ext.grid.Panel', {
+            border: false,
+            columns: [
+                { xtype: 'rownumberer', width: 30 },
+                { header: me.getConfig('successHeader'), dataIndex: 'success', width: 60, renderer: me.successRenderer },
+                { header: me.getConfig('requestHeader'), dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
+                { header: me.getConfig('errorHeader'), dataIndex: 'error', flex: 1 }
+            ],
+            store: me.resultStore
+        });
     },
 
 
@@ -680,10 +770,10 @@ Ext.define('Shopware.window.Progress', {
      * Creates a response record for the result grid.
      *
      * @param { Ext.data.Operation } operation - The request operation.
-     * @returns { Shopware.model.Error }
+     * @returns { Shopware.model.DataOperation }
      */
     createResponseRecord: function(operation) {
-        return Ext.create('Shopware.model.Error', {
+        return Ext.create('Shopware.model.DataOperation', {
             success: operation.wasSuccessful(),
             error: operation.getError(),
             request: operation.request,

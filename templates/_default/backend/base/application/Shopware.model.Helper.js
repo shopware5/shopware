@@ -1,7 +1,7 @@
 
 //{namespace name=backend/application/main}
 
-//{block name="backend/application/model/helper"}
+//{block name="backend/application/Shopware.model.Helper"}
 
 /**
  * Helper class which contains different global functions which used
@@ -427,19 +427,6 @@ Ext.define('Shopware.model.Helper', {
 
         return result;
     },
-
-    /**
-     * Helper function which checks over the ext class manager if the class is already loaded and exists.
-     *
-     * @param className
-     * @returns { boolean }
-     */
-    classExists: function(className) {
-        var definition = Ext.ClassManager.get(className);
-
-        return (definition !== null);
-    },
-
 
     /**
      * Helper function to throw an Shopware configuration error.

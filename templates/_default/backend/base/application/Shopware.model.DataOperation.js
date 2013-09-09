@@ -1,7 +1,8 @@
 
 //{namespace name=backend/application/main}
+//{block name="backend/application/Shopware.model.DataOperation"}
 
-Ext.define('Shopware.model.Error', {
+Ext.define('Shopware.model.DataOperation', {
 
     extend:'Ext.data.Model',
 
@@ -14,5 +15,4 @@ Ext.define('Shopware.model.Error', {
         { name: 'operation' },
     ]
 });
-
-
+//{/block}
