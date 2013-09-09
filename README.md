@@ -132,7 +132,7 @@ All contributions should follow the [PSR-1](https://github.com/php-fig/fig-stand
 standards.
 
 
-### How to report bugs / feature requests?
+## How to report bugs / feature requests?
 
 We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have one place to go, we've decided to close the GitHub issue tracker in favor of our Jira issue tracker, which is directly connected to our development division.
 
@@ -146,7 +146,7 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 The changelog and all available commits are located under <https://github.com/ShopwareAG/shopware-4/commits/master>.
 
-## Futher reading
+## Further reading
 
 * [Shopware AG](http://www.shopware.de) - Homepage of shopware AG
 * [Shopware Wiki](http://wiki.shopware.de) - Shopware Wiki
