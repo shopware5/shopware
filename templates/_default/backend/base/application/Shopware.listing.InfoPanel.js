@@ -283,6 +283,8 @@ Ext.define('Shopware.listing.InfoPanel', {
         me.infoView = Ext.create('Ext.view.View', {
             tpl: me.createTemplate(),
             flex: 1,
+            autoScroll: true,
+            padding: 5,
             style: 'color: #6c818f;font-size:11px',
             emptyText: '<div style="font-size:13px; text-align: center;">' + me.getConfig('emptyText') + '</div>',
             deferEmptyText: false,

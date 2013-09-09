@@ -814,7 +814,7 @@ Ext.define('Shopware.grid.Controller', {
 
                     Shopware.app.Application.on(window.eventAlias + '-save-successfully', function() {
                         listing.getStore().load();
-                    }, me);
+                    }, me, { single: true });
 
                     Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
                 }
@@ -829,7 +829,7 @@ Ext.define('Shopware.grid.Controller', {
 
             Shopware.app.Application.on(window.eventAlias + '-save-successfully', function() {
                 listing.getStore().load();
-            }, me);
+            }, me, { single: true });
 
             Shopware.app.Application.fireEvent(me.getEventName('after-edit-item'), me, window, listing, record);
             return true;

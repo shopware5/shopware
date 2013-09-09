@@ -100,7 +100,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected $filterFields = array();
 
-
     /**
      * Contains the available sort fields for the listing query.
      * If no fields configured, the listing query allows to sort the result with each model field.
@@ -149,284 +148,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
     /**
-     * The getList function returns an array of the configured class model.
-     * The listing query created in the getListQuery function.
-     * The pagination of the listing is handled inside this function.
-     *
-     * @param int $offset
-     * @param int $limit
-     * @param array $sort
-     * @param array $filter
-     * @return array
-     */
-    protected function getList($offset, $limit, $sort = array(), $filter = array())
-    {
-        $builder = $this->getListQuery();
-        $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-
-        $builder = $this->addListingSortCondition($builder, $sort);
-        $builder = $this->addListingFilterCondition($builder, $filter);
-
-        $paginator = $this->getQueryPaginator($builder);
-        $data = $paginator->getIterator()->getArrayCopy();
-        $count = $paginator->count();
-
-        return array('success' => true, 'data' => $data, 'total' => $count);
-    }
-
-    /**
-     * Helper function which adds the listing sort conditions to the passed query builder object.
-     *
-     * @example
-     * The backend listing store of shopware creates a following sort array:
-     *  $sort = array(
-     *      array('property' => 'name', 'direction' => 'DESC'),
-     *      array('property' => 'id', 'direction' => 'ASC')
-     *  );
-     *
-     * Important: Doctrine requires the query builder field alias for each field.
-     * You can get a field mapping over the { @link #getModelFields } function.
-     * This function creates an associated array with the model field name as array key
-     * and as value an array with the query builder field alias under $field['alias'].
-     *
-     * Shopware resolves the passed Ext JS name over this function and use the alias of the field
-     * to sort the query builder.
-     *
-     * @param \Shopware\Components\Model\QueryBuilder $builder
-     * @param array $sort
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    protected function addListingSortCondition(\Shopware\Components\Model\QueryBuilder $builder, array $sort)
-    {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
-        $fields = $this->getModelFields($this->model, $this->alias);
-        $conditions = array();
-        foreach ($sort as $condition) {
-            //check if the passed field is a valid doctrine model field of the configured model.
-            if (!array_key_exists($condition['property'], $fields)) {
-                continue;
-            }
-
-            //check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
-            if (!empty($this->sortFields) && !in_array($condition['property'], $this->sortFields)) {
-                continue;
-            }
-            $condition['property'] = $fields[$condition['property']]['alias'];
-            $conditions[] = $condition;
-        }
-
-        if (!empty($conditions)) {
-            $builder->addOrderBy($conditions);
-        }
-
-        return $builder;
-    }
-
-    /**
-     * This function adds the filter conditions for the listing query.
-     * Ext JS passes only the field name as property name. The doctrine query builder
-     * requires additional the table alias for the order by condition field.
-     * This function maps the passed Ext JS field with the corresponding model field.
-     *
-     * If you only want to shrink the available filter fields, you can configure the available
-     * filter fields in the class property $filterFields.
-     *
-     * To handle the filter condition by yourself, you can override this function and return
-     * the query builder object.
-     *
-     * @example
-     *  $filter = array(
-     *      array(
-     *          'property' => 'name',
-     *          'value' => 'Test article',
-     *          'operator' => 'OR',
-     *          'expression' => 'LIKE'
-     *      ),
-     *      array(
-     *          'property' => 'active',
-     *          'value' => '1',
-     *          'operator' => 'AND',
-     *          'expression' => '='
-     *      ),
-     *  )
-     *
-     * @param \Shopware\Components\Model\QueryBuilder $builder
-     * @param array $filters
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    protected function addListingFilterCondition(\Shopware\Components\Model\QueryBuilder $builder, array $filters)
-    {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
-        $fields = $this->getModelFields($this->model, $this->alias);
-        $conditions = array();
-
-        foreach ($filters as $condition) {
-            if ($condition['property'] === 'search') {
-                foreach ($fields as $name => $field) {
-
-                    //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                    if (!empty($this->filterFields) && !in_array($name, $this->filterFields)) {
-                        continue;
-                    }
-
-                    $value = $this->formatSearchValue($condition['value'], $field);
-
-                    $conditions[] = array(
-                        'property' => $field['alias'],
-                        'operator' => 'OR',
-                        'value' => $value
-                    );
-                }
-
-            } elseif (array_key_exists($condition['property'], $fields)) {
-                //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                if (!empty($this->filterFields) && !in_array($condition['property'], $this->filterFields)) {
-                    continue;
-                }
-
-                $field = $fields[$condition['property']];
-                $value = $this->formatSearchValue($condition['value'], $field);
-
-                $conditions[] = array(
-                    'property' => $field['alias'],
-                    'operator' => $condition['operator'],
-                    'value' => $value,
-                    'expression' => $condition['expression']
-                );
-            }
-        }
-        if (!empty($conditions)) {
-            $builder->addFilter($conditions);
-        }
-
-
-        return $builder;
-    }
-
-    /**
-     * Helper function which formats the Ext JS search value
-     * to a valid doctrine field value for the passed field.
-     * This function is used to supports different date search strings
-     * like the german and english date format.
-     * Additionally this function adds the sql wildcards at the right points of
-     * the search value.
-     *
-     * @param string $value
-     * @param array $field
-     * @return string
-     */
-    protected function formatSearchValue($value, array $field)
-    {
-        switch($field['type']) {
-            case 'date':
-            case 'datetime':
-                //validates the date value. If the value is no date value, return
-                $date = date_parse($value);
-                if (!checkdate($date['month'], $date['day'], $date['year'])) {
-                    $value = '%' . $value . '%';
-                    break;
-                }
-
-                $date = new DateTime($value);
-                $value = $date->format('Y-m-d');
-                //search values for date time should added the % wildcards to search for time values.
-                if ($field['datetime']) {
-                    $value = '%' . $value . '%';
-                }
-                break;
-            case 'string':
-            case 'text':
-            default:
-                $value = '%' . $value . '%';
-        }
-
-        return $value;
-    }
-
-    /**
-     * Helper function which returns all field names of the passed model.
-     * The alias parameter can be used to prefix the model fields with an query alias.
-     * This is required if you select more than one table over an doctrine query builder.
-     *
-     * The returned array is associated with the model field names.
-     *
-     * @param string $model - Model class name
-     * @param null $alias - Allows to add an query alias like 'article.name'.
-     * @return array
-     */
-    protected function getModelFields($model, $alias = null)
-    {
-        $metaData = Shopware()->Models()->getClassMetadata($model);
-        $fields = $metaData->getFieldNames();
-        $fields = array_combine($fields, $fields);
-
-        if ($alias) {
-            foreach($fields as &$field) {
-                $field = array(
-                    'alias' => $alias . '.' . $field,
-                    'type' => $metaData->getTypeOfField($field)
-                );
-            }
-        }
-
-        return $fields;
-    }
-
-
-    /**
-     * Helper function to create the query builder paginator.
-     *
-     * @param Doctrine\ORM\QueryBuilder $builder
-     * @param int $hydrationMode
-     * @return Paginator
-     */
-    protected function getQueryPaginator(
-        \Doctrine\ORM\QueryBuilder $builder,
-        $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-    ) {
-        $query = $builder->getQuery();
-        $query->setHydrationMode($hydrationMode);
-        return new Paginator($query);
-    }
-
-
-    /**
-     * Helper function which creates the listing query builder.
-     * If the class property model isn't configured, the function throws an exception.
-     * The listing alias for the from table can be configured over the class property alias.
-     *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    protected function getListQuery()
-    {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array($this->alias))
-                ->from($this->model, $this->alias);
-
-        return $builder;
-    }
-
-
-    /**
      * Controller action which can be called over ajax requests.
      * This function is used to load the detailed information for a single record.
      * Shopware use this function as "detail" api call of a single { @link Shopware.data.Model }.
@@ -442,102 +163,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('id')
             )
         );
-    }
-
-    /**
-     * Contains the logic to get the detailed information of a single record.
-     * The function expects the model identifier value as parameter.
-     * To add additional data to the detailed information you can override the
-     * { @link #getAdditionalDetailData } function.
-     *
-     * To extend the query builder object to select more detailed information,
-     * you can override the { @link #getDetailQuery } function.
-     *
-     * @param int $id - Identifier of the doctrine model.
-     * @return array
-     */
-    public function getDetail($id)
-    {
-        $builder = $this->getDetailQuery($id);
-        $query = $builder->getQuery();
-
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
-
-        $data = $paginator->getIterator()->current();
-        $data = $this->getAdditionalDetailData($data);
-
-        return array('success' => true, 'data' => $data);
-    }
-
-    /**
-     * Helper function which can be used to add additional data which selected over
-     * additional queries.
-     *
-     * @example
-     *  You have an @ORM\ManyToMany association in your doctrine model and won't select
-     *  this data over the detail query builder, because the result set would be to big
-     *  for a single select.
-     *  So you can override this function and add the additional data into the passed data array:
-     *
-     *      protected function getAdditionalDetailData(array $data)
-     *      {
-     *          $builder = Shopware()->Models()->createQueryBuilder();
-     *          $builder->select(...)
-     *                  ->from(...)
-     *
-     *          $data['associationName'] = $builder->getQuery()->getArrayResult();
-     *
-     *          return $data;
-     *      }
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function getAdditionalDetailData(array $data)
-    {
-        return $data;
-    }
-
-    /**
-     * Creates the query builder to selected the detailed model data.
-     * Override this function to load all associations.
-     * Shopware selects as default only the configured model.
-     *
-     * If you want to load more detailed information you can override this function.
-     * Important: We suggest to select not to much association in one query, because the query
-     * result could be to big to select the whole data in one query. You can select and add additional
-     * data in the { @link #getAdditionalDetailData } function.
-     * This function should be used to select @ORM\OneToOne associations.
-     *
-     * @example
-     *      protected function getDetailQuery($id)
-     *      {
-     *          $builder = parent::getDetailQuery($id);
-     *          $builder->leftJoin('association', 'alias');
-     *          $builder->addSelect('alias');
-     *          return $builder;
-     *      }
-     *
-     *
-     * @param $id
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    protected function getDetailQuery($id)
-    {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The model property of your PHP-Controller is not configured!'
-            );
-        }
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array($this->alias))
-            ->from($this->model, $this->alias)
-            ->where($this->alias . '.id = :id')
-            ->setParameter('id', $id);
-
-        return $builder;
     }
 
     /**
@@ -592,6 +217,124 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('id', null)
             )
         );
+    }
+
+    /**
+     * Controller action which called to reload associated data.
+     * This function is used to load @ORM\OneToMany associations
+     * which should be displayed in an own listing on the detail page.
+     */
+    public function reloadAssociationAction()
+    {
+        $this->View()->assign(
+            $this->reloadAssociation(
+                $this->Request()->getParam('id', null),
+                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('start', 0),
+                $this->Request()->getParam('limit', 20),
+                $this->Request()->getParam('sort', array()),
+                $this->Request()->getParam('filter', array())
+            )
+        );
+    }
+
+    /**
+     * Controller action which called to search associated data of the configured model.
+     * This function is used from the { @link Shopware.form.field.Search } backend component
+     * to resolve @ORM\ManyToMany or @ORM\ManyToOne associations in the different backend components.
+     *
+     * The function expects the following request parameter:
+     *  query - Search string which inserted in the search field.
+     *  association - Doctrine property name of the association
+     *  start - Pagination start value
+     *  limit - Pagination limit value
+     *
+     * This function is like the other controller actions only a wrapper function and calls
+     * the internal searchAssociation function to find the requested data.
+     *
+     */
+    public function searchAssociationAction()
+    {
+        $this->View()->assign(
+            $this->searchAssociation(
+                $this->Request()->getParam('query', null),
+                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('start', 0),
+                $this->Request()->getParam('limit', 20)
+            )
+        );
+    }
+
+    /**
+     * The getList function returns an array of the configured class model.
+     * The listing query created in the getListQuery function.
+     * The pagination of the listing is handled inside this function.
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $sort
+     * @param array $filter
+     * @return array
+     */
+    protected function getList($offset, $limit, $sort = array(), $filter = array())
+    {
+        $builder = $this->getListQuery();
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $filter = $this->getFilterConditions(
+            $filter,
+            $this->model,
+            $this->alias,
+            $this->filterFields
+        );
+
+        $sort = $this->getSortConditions(
+            $sort,
+            $this->model,
+            $this->alias,
+            $this->sortFields
+        );
+
+        if (!empty($sort)) {
+            $builder->addOrderBy($sort);
+        }
+
+        if (!empty($filter)) {
+            $builder->addFilter($filter);
+        }
+
+        $paginator = $this->getQueryPaginator($builder);
+        $data = $paginator->getIterator()->getArrayCopy();
+        $count = $paginator->count();
+
+        return array('success' => true, 'data' => $data, 'total' => $count);
+    }
+
+    /**
+     * Contains the logic to get the detailed information of a single record.
+     * The function expects the model identifier value as parameter.
+     * To add additional data to the detailed information you can override the
+     * { @link #getAdditionalDetailData } function.
+     *
+     * To extend the query builder object to select more detailed information,
+     * you can override the { @link #getDetailQuery } function.
+     *
+     * @param int $id - Identifier of the doctrine model.
+     * @return array
+     */
+    public function getDetail($id)
+    {
+        $builder = $this->getDetailQuery($id);
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = new Paginator($query);
+
+        $data = $paginator->getIterator()->current();
+        $data = $this->getAdditionalDetailData($data);
+
+        return array('success' => true, 'data' => $data);
     }
 
     /**
@@ -671,6 +414,283 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
     }
 
+    /**
+     * Internal function which deletes the configured model with the passed identifier.
+     * This function is used from the { @link #deleteAction } function which can be called over an ajax request.
+     * The function can returns three different states:
+     *  1. array('success' => false, 'error' => 'The id parameter contains no value.')
+     *   => The passed $id parameter is empty
+     *  2. array('success' => false, 'error' => 'The passed id parameter exists no more.')
+     *   => The passed $id parameter contains no valid id for the configured model and the entity manager find function returns no valid entity.
+     *  3. array('success' => true)
+     *   => Delete was successfully.
+     *
+     *
+     * @param $id
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @return array
+     */
+    public function delete($id)
+    {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
+        if (empty($id)) {
+            return array('success' => false, 'error' => 'The id parameter contains no value.');
+        }
+
+        $model = Shopware()->Models()->find($this->model, $id);
+
+        if (!($model instanceof $this->model)) {
+            return array('success' => false, 'error' => 'The passed id parameter exists no more.');
+        }
+
+        Shopware()->Models()->remove($model);
+        Shopware()->Models()->flush();
+
+        return array('success' => true);
+    }
+
+    /**
+     * Internal function which called from the { @link #reloadAssociationAction }.
+     * This function contains the logic to reload an association listing for @ORM\OneToMany
+     * associations.
+     *
+     * The passed id is the primary key value of the configured main model in the { @link #model }
+     * property.
+     * The passed associationKey contains the property name of the association.
+     *
+     *
+     * Important: This function works only for associations of the configured { @link #model } property.
+     * If you want to reload association listings of other models, you have to override this function.
+     *
+     * @param $id
+     * @param $associationKey
+     * @param $offset
+     * @param $limit
+     * @param array $sort
+     * @param array $filter
+     * @return array
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function reloadAssociation($id, $associationKey, $offset, $limit, $sort = array(), $filter = array())
+    {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+        
+        $association = $this->getOwningSideAssociation(
+            $this->model,
+            $associationKey
+        );
+
+        $builder = $this->getReloadAssociationQuery(
+            $id,
+            $association['sourceEntity'],
+            $association['inversedBy'],
+            $association['fieldName']
+        );
+
+        $sort = $this->getSortConditions(
+            $sort,
+            $association['sourceEntity'],
+            $association['inversedBy']
+        );
+
+        $filter = $this->getFilterConditions(
+            $filter,
+            $association['sourceEntity'],
+            $association['inversedBy']
+        );
+
+        if (!empty($filter)) {
+            $builder->addFilter($filter);
+        }
+        if (!empty($sort)) {
+            $builder->addOrderBy($sort);
+        }
+
+        $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = new Paginator($query);
+        $data = $paginator->getIterator()->getArrayCopy();
+
+        return array(
+            'success' => true,
+            'data' => $data,
+            'total' => $paginator->count()
+        );
+    }
+
+    /**
+     * This function is used from the { @link #searchAssociationAction } function
+     * and is used to find associated data of the configured model like @ORM\ManyToMany or @ORM\ManyToOne associations.
+     *
+     * The function expects the following parameter:
+     *  query - Search string which inserted in the search field.
+     *  association - Doctrine property name of the association
+     *  start - Pagination start value
+     *  limit - Pagination limit value
+     *
+     * @param string $search
+     * @param string $association
+     * @param int $offset
+     * @param int $limit
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @return array
+     */
+    public function searchAssociation($search, $association, $offset, $limit)
+    {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
+        $builder = $this->getSearchAssociationQuery(
+            $association,
+            $this->getAssociatedModelByProperty($this->model, $association),
+            $search
+        );
+
+        $builder->setFirstResult($offset)
+        ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = new Paginator($query);
+        $data = $paginator->getIterator()->getArrayCopy();
+
+        return array(
+            'success' => true,
+            'data' => $data,
+            'total' => $paginator->count()
+        );
+    }
+
+    /**
+     * Helper function which creates the listing query builder.
+     * If the class property model isn't configured, the function throws an exception.
+     * The listing alias for the from table can be configured over the class property alias.
+     *
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    protected function getListQuery()
+    {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array($this->alias))
+        ->from($this->model, $this->alias);
+
+        return $builder;
+    }
+
+    /**
+     * Creates the query builder to selected the detailed model data.
+     * Override this function to load all associations.
+     * Shopware selects as default only the configured model.
+     *
+     * If you want to load more detailed information you can override this function.
+     * Important: We suggest to select not to much association in one query, because the query
+     * result could be to big to select the whole data in one query. You can select and add additional
+     * data in the { @link #getAdditionalDetailData } function.
+     * This function should be used to select @ORM\OneToOne associations.
+     *
+     * @example
+     *      protected function getDetailQuery($id)
+     *      {
+     *          $builder = parent::getDetailQuery($id);
+     *          $builder->leftJoin('association', 'alias');
+     *          $builder->addSelect('alias');
+     *          return $builder;
+     *      }
+     *
+     *
+     * @param $id
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    protected function getDetailQuery($id)
+    {
+        if (empty($this->model)) {
+            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
+                'The model property of your PHP-Controller is not configured!'
+            );
+        }
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array($this->alias))
+        ->from($this->model, $this->alias)
+        ->where($this->alias . '.id = :id')
+        ->setParameter('id', $id);
+
+        return $builder;
+    }
+
+    /**
+     * Creates the query builder object for the { @link #searchAssociation } function.
+     * It creates a simple query builder object which contains the selection to the associated
+     * model and if the $search parameter contains a search value, the function creates an orWhere
+     * condition for each model field with a like operation.
+     *
+     * @param $association
+     * @param $model
+     * @param $search
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    protected function getSearchAssociationQuery($association, $model, $search)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select($association);
+        $builder->from($model, $association);
+
+        if (strlen($search) > 0) {
+            $fields = $this->getModelFields($model, $association);
+            foreach($fields as $field) {
+                $builder->orWhere($field['alias'] . ' LIKE :search');
+            }
+            $builder->setParameter('search', '%' . $search . '%');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Creates the query builder object for the { @link #reloadAssociation } function.
+     *
+     * @param $id - Primary key of the configured { @link #model }.
+     * @param $model - Full model class name which will be selected
+     * @param $alias - Query alias for the selected model
+     * @param $fieldName - Property name of the foreign key column in the associated model.
+     *
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    protected function getReloadAssociationQuery($id, $model, $alias, $fieldName)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+
+        $builder->select(array($alias));
+        $builder->from($model, $alias);
+        $builder->innerJoin($alias. '.' . $fieldName, $fieldName);
+        $builder->where($fieldName . '.id = :id');
+        $builder->setParameter('id', $id);
+
+        return $builder;
+    }
 
     /**
      * Helper function which resolves the passed Ext JS data of an model.
@@ -802,146 +822,32 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal function which deletes the configured model with the passed identifier.
-     * This function is used from the { @link #deleteAction } function which can be called over an ajax request.
-     * The function can returns three different states:
-     *  1. array('success' => false, 'error' => 'The id parameter contains no value.')
-     *   => The passed $id parameter is empty
-     *  2. array('success' => false, 'error' => 'The passed id parameter exists no more.')
-     *   => The passed $id parameter contains no valid id for the configured model and the entity manager find function returns no valid entity.
-     *  3. array('success' => true)
-     *   => Delete was successfully.
+     * Helper function which can be used to add additional data which selected over
+     * additional queries.
      *
+     * @example
+     *  You have an @ORM\ManyToMany association in your doctrine model and won't select
+     *  this data over the detail query builder, because the result set would be to big
+     *  for a single select.
+     *  So you can override this function and add the additional data into the passed data array:
      *
-     * @param $id
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     *      protected function getAdditionalDetailData(array $data)
+     *      {
+     *          $builder = Shopware()->Models()->createQueryBuilder();
+     *          $builder->select(...)
+     *                  ->from(...)
+     *
+     *          $data['associationName'] = $builder->getQuery()->getArrayResult();
+     *
+     *          return $data;
+     *      }
+     *
+     * @param array $data
      * @return array
      */
-    public function delete($id)
+    protected function getAdditionalDetailData(array $data)
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
-        if (empty($id)) {
-            return array('success' => false, 'error' => 'The id parameter contains no value.');
-        }
-
-        $model = Shopware()->Models()->find($this->model, $id);
-
-        if (!($model instanceof $this->model)) {
-            return array('success' => false, 'error' => 'The passed id parameter exists no more.');
-        }
-
-        Shopware()->Models()->remove($model);
-        Shopware()->Models()->flush();
-
-        return array('success' => true);
-    }
-
-
-    /**
-     * Controller action which called to search associated data of the configured model.
-     * This function is used from the { @link Shopware.form.field.Search } backend component
-     * to resolve @ORM\ManyToMany or @ORM\ManyToOne associations in the different backend components.
-     *
-     * The function expects the following request parameter:
-     *  query - Search string which inserted in the search field.
-     *  association - Doctrine property name of the association
-     *  start - Pagination start value
-     *  limit - Pagination limit value
-     *
-     * This function is like the other controller actions only a wrapper function and calls
-     * the internal searchAssociation function to find the requested data.
-     *
-     */
-    public function searchAssociationAction()
-    {
-        $this->View()->assign(
-            $this->searchAssociation(
-                $this->Request()->getParam('query', null),
-                $this->Request()->getParam('association', null),
-                $this->Request()->getParam('start', 0),
-                $this->Request()->getParam('limit', 20)
-            )
-        );
-    }
-
-    /**
-     * This function is used from the { @link #searchAssociationAction } function
-     * and is used to find associated data of the configured model like @ORM\ManyToMany or @ORM\ManyToOne associations.
-     *
-     * The function expects the following parameter:
-     *  query - Search string which inserted in the search field.
-     *  association - Doctrine property name of the association
-     *  start - Pagination start value
-     *  limit - Pagination limit value
-     *
-     * @param string $search
-     * @param string $association
-     * @param int $offset
-     * @param int $limit
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @return array
-     */
-    public function searchAssociation($search, $association, $offset, $limit)
-    {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
-        $builder = $this->getSearchAssociationQuery(
-            $association,
-            $this->getAssociatedModelByProperty($this->model, $association),
-            $search
-        );
-
-        $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-
-        $query = $builder->getQuery();
-
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
-        $data = $paginator->getIterator()->getArrayCopy();
-
-        return array(
-            'success' => true,
-            'data' => $data,
-            'total' => $paginator->count()
-        );
-    }
-
-    /**
-     * Creates the query builder object for the { @link #searchAssociation } function.
-     * It creates a simple query builder object which contains the selection to the associated
-     * model and if the $search parameter contains a search value, the function creates an orWhere
-     * condition for each model field with a like operation.
-     *
-     * @param $association
-     * @param $model
-     * @param $search
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    protected function getSearchAssociationQuery($association, $model, $search)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select($association);
-        $builder->from($model, $association);
-
-        if (strlen($search) > 0) {
-            $fields = $this->getModelFields($model, $association);
-            foreach($fields as $field) {
-                $builder->orWhere($field['alias'] . ' LIKE :search');
-            }
-            $builder->setParameter('search', '%' . $search . '%');
-        }
-
-        return $builder;
+        return $data;
     }
 
     /**
@@ -956,6 +862,240 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $metaData = Shopware()->Models()->getClassMetadata($model);
         return $metaData->getAssociationTargetClass($property);
+    }
+
+    /**
+     * Helper function which returns the owning side association definition
+     * of the passed property.
+     * This function is used to reload association listings over the { @link #reloadAssociation }
+     * function.
+     *
+     * @param $model
+     * @param $property
+     * @return array
+     */
+    protected function getOwningSideAssociation($model, $property)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $mapping = $metaData->getAssociationMapping($property);
+
+        if ($mapping['isOwningSide']) {
+            return $mapping;
+        }
+
+        $associationMetaData = Shopware()->Models()->getClassMetadata($mapping['targetEntity']);
+        return $associationMetaData->getAssociationMapping($mapping['mappedBy']);
+    }
+
+    /**
+     * Helper function which adds the listing sort conditions to the passed query builder object.
+     *
+     * @example
+     * The backend listing store of shopware creates a following sort array:
+     *  $sort = array(
+     *      array('property' => 'name', 'direction' => 'DESC'),
+     *      array('property' => 'id', 'direction' => 'ASC')
+     *  );
+     *
+     * Important: Doctrine requires the query builder field alias for each field.
+     * You can get a field mapping over the { @link #getModelFields } function.
+     * This function creates an associated array with the model field name as array key
+     * and as value an array with the query builder field alias under $field['alias'].
+     *
+     * Shopware resolves the passed Ext JS name over this function and use the alias of the field
+     * to sort the query builder.
+     *
+     * @param array $sort
+     * @param $model
+     * @param $alias
+     * @param array $whiteList
+     * @return array
+     */
+    protected function getSortConditions($sort, $model, $alias, $whiteList = array())
+    {
+        $fields = $this->getModelFields($model, $alias);
+        $conditions = array();
+        foreach ($sort as $condition) {
+            //check if the passed field is a valid doctrine model field of the configured model.
+            if (!array_key_exists($condition['property'], $fields)) {
+                continue;
+            }
+
+            //check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
+            if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
+                continue;
+            }
+            $condition['property'] = $fields[$condition['property']]['alias'];
+            $conditions[] = $condition;
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * This function converts the Ext JS passed filter conditions to
+     * a valid doctrine filter array.
+     *
+     * Ext JS passes only the field name as property name. The doctrine query builder
+     * requires additional the table alias for the order by condition field.
+     * This function maps the passed Ext JS field with the corresponding model field.
+     *
+     * The passed whiteList parameter can contains a list of field names which allows to filtered.
+     * If the parameter contains an empty array, the function filters each model field.
+     *
+     * To handle the filter condition by yourself, you can override this function and return
+     * the query builder object.
+     *
+     * @example
+     *  Ext JS sends the following filter array:
+     *  $filter = array(
+     *      array(
+     *          'property' => 'name',
+     *          'value' => 'Test article',
+     *          'operator' => 'OR',
+     *          'expression' => 'LIKE'
+     *      ),
+     *      array(
+     *          'property' => 'active',
+     *          'value' => '1',
+     *          'operator' => 'AND',
+     *          'expression' => '='
+     *      ),
+     *  )
+     *
+     * @param $filters - List of filter conditions in Ext JS format.
+     * @param $model - Full name of the selected model.
+     * @param $alias - Query alias of the FROM query path.
+     * @param array $whiteList - Array of filterable fields, or an empty array
+     * @return array
+     */
+    protected function getFilterConditions($filters, $model, $alias, $whiteList = array())
+    {
+        $fields = $this->getModelFields($model, $alias);
+        $conditions = array();
+
+        foreach ($filters as $condition) {
+            if ($condition['property'] === 'search') {
+                foreach ($fields as $name => $field) {
+
+                    //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                    if (!empty($whiteList) && !in_array($name, $whiteList)) {
+                        continue;
+                    }
+
+                    $value = $this->formatSearchValue($condition['value'], $field);
+
+                    $conditions[] = array(
+                        'property' => $field['alias'],
+                        'operator' => 'OR',
+                        'value' => $value
+                    );
+                }
+
+            } elseif (array_key_exists($condition['property'], $fields)) {
+                //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
+                    continue;
+                }
+
+                $field = $fields[$condition['property']];
+                $value = $this->formatSearchValue($condition['value'], $field);
+
+                $conditions[] = array(
+                    'property' => $field['alias'],
+                    'operator' => $condition['operator'],
+                    'value' => $value,
+                    'expression' => $condition['expression']
+                );
+            }
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * Helper function to create the query builder paginator.
+     *
+     * @param Doctrine\ORM\QueryBuilder $builder
+     * @param int $hydrationMode
+     * @return Paginator
+     */
+    protected function getQueryPaginator(
+        \Doctrine\ORM\QueryBuilder $builder,
+        $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+    ) {
+        $query = $builder->getQuery();
+        $query->setHydrationMode($hydrationMode);
+        return new Paginator($query);
+    }
+
+    /**
+     * Helper function which formats the Ext JS search value
+     * to a valid doctrine field value for the passed field.
+     * This function is used to supports different date search strings
+     * like the german and english date format.
+     * Additionally this function adds the sql wildcards at the right points of
+     * the search value.
+     *
+     * @param string $value
+     * @param array $field
+     * @return string
+     */
+    protected function formatSearchValue($value, array $field)
+    {
+        switch($field['type']) {
+        case 'date':
+        case 'datetime':
+            //validates the date value. If the value is no date value, return
+            $date = date_parse($value);
+            if (!checkdate($date['month'], $date['day'], $date['year'])) {
+                $value = '%' . $value . '%';
+                break;
+            }
+
+            $date = new DateTime($value);
+            $value = $date->format('Y-m-d');
+            //search values for date time should added the % wildcards to search for time values.
+            if ($field['datetime']) {
+                $value = '%' . $value . '%';
+            }
+            break;
+        case 'string':
+        case 'text':
+        default:
+            $value = '%' . $value . '%';
+        }
+
+        return $value;
+    }
+
+    /**
+     * Helper function which returns all field names of the passed model.
+     * The alias parameter can be used to prefix the model fields with an query alias.
+     * This is required if you select more than one table over an doctrine query builder.
+     *
+     * The returned array is associated with the model field names.
+     *
+     * @param string $model - Model class name
+     * @param null $alias - Allows to add an query alias like 'article.name'.
+     * @return array
+     */
+    protected function getModelFields($model, $alias = null)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $fields = $metaData->getFieldNames();
+        $fields = array_combine($fields, $fields);
+
+        if ($alias) {
+            foreach($fields as &$field) {
+                $field = array(
+                    'alias' => $alias . '.' . $field,
+                    'type' => $metaData->getTypeOfField($field)
+                );
+            }
+        }
+
+        return $fields;
     }
 
 
