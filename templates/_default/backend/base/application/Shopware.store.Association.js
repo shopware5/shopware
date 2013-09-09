@@ -1,7 +1,6 @@
 
 //{namespace name=backend/application/main}
-
-
+//{block name="backend/application/Shopware.store.Association"}
 Ext.define('Shopware.store.Association', {
 
     /**
@@ -105,6 +104,12 @@ Ext.define('Shopware.store.Association', {
              */
             controller: undefined,
 
+            /**
+             * Url for the search request. The "controller=base" path will be replaced with the
+             * { @link #controller } property.
+             *
+             * @type { String }
+             */
             searchUrl: '{url controller="base" action="reloadAssociation"}'
         },
 
@@ -227,3 +232,4 @@ Ext.define('Shopware.store.Association', {
         return me;
     }
 });
+//{/block}

@@ -1,8 +1,4 @@
 
-//{namespace name=backend/application/main}
-
-//{block name="backend/application/grid/controller"}
-
 /**
  * The Shopware.grid.Controller contains the Shopware default controls
  * for a full featured backend listing.
@@ -58,6 +54,9 @@
  *
  * The event parameter are documented in the { @link #registerEvents } function.
  */
+
+//{namespace name=backend/application/main}
+//{block name="backend/application/Shopware.grid.Controller"}
 Ext.define('Shopware.grid.Controller', {
     extend: 'Ext.app.Controller',
 

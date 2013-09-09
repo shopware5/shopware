@@ -2,7 +2,7 @@
 
 //{namespace name=backend/application/main}
 
-//{block name="backend/application/data/model"}
+//{block name="backend/application/Shopware.data.Model"}
 Ext.define('Shopware.data.Model', {
 
     /**

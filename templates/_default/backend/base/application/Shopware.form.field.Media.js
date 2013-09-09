@@ -1,6 +1,6 @@
 
 //{namespace name=backend/application/main}
-
+//{block name="backend/application/Shopware.form.field.Media"}
 Ext.define('Shopware.form.field.Media', {
 
     extend: 'Ext.form.FieldContainer',
@@ -555,3 +555,4 @@ Ext.define('Shopware.form.field.Media', {
         });
     }
 });
+//{/block}

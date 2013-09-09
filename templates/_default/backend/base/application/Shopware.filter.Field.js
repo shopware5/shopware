@@ -1,6 +1,6 @@
 
 //{namespace name=backend/application/main}
-
+//{block name="backend/application/Shopware.filter.Field"}
 Ext.define('Shopware.filter.Field', {
 
     /**
@@ -213,3 +213,5 @@ Ext.define('Shopware.filter.Field', {
         me.callParent(arguments);
     }
 });
+
+//{/block}

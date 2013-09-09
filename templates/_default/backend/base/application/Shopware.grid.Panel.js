@@ -1,7 +1,4 @@
 
-//{namespace name=backend/application/main}
-
-//{block name="backend/application/grid/panel"}
 
 /**
  * The Shopware.grid.Panel components contains the Shopware boiler plate
@@ -66,6 +63,8 @@
  *
  * The events are documented in the { @link #registerEvents } function
  */
+//{namespace name=backend/application/main}
+//{block name="backend/application/Shopware.grid.Panel"}
 Ext.define('Shopware.grid.Panel', {
 
     /**
