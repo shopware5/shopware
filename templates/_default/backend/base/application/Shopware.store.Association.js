@@ -220,6 +220,11 @@ Ext.define('Shopware.store.Association', {
             filters: me.filters.items,
             sorters: me.getSorters()
         }, options);
+
+        options.page = options.page || me.currentPage;
+        options.start = (options.start !== undefined) ? options.start : (options.page - 1) * me.pageSize;
+        options.limit = options.limit || me.pageSize;
+
         me.lastOptions = options;
 
         operation = new Ext.data.Operation(options);

@@ -84,6 +84,7 @@ Ext.override(Ext.data.proxy.Server, {
     /**
      * Encodes the array of { @link Ext.util.Filter } objects into a string to be sent in the request url. By default,
      * this simply JSON-encodes the filter data
+     *
      * @param { Ext.util.Filter[] } filters The array of { @link Ext.util.Filter Filter } objects
      * @return { String } The encoded filters
      */
