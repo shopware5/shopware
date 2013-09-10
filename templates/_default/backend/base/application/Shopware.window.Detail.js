@@ -614,12 +614,12 @@ Ext.define('Shopware.window.Detail', {
      * @param eOpts
      */
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
+        var me = this;
 
-        if (newCard.association && newCard.association.loadOnDemand) {
-            if (typeof newCard.getStore === 'function' && newCard.getStore().getCount() <= 0) {
-                newCard.getStore().load();
-            }
+        if (me.loadTabOnDemand(newCard)) {
+            newCard.getStore().load();
         }
+
 
         this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
     },
@@ -645,6 +645,42 @@ Ext.define('Shopware.window.Detail', {
      */
     getEventName: function (name) {
         return this.eventAlias + '-' + name;
+    },
+
+    /**
+     * Helper function which validates if the passed tab item
+     * is configured as lazy loading tab.
+     * The function checks the following conditions:
+     *  1. Tab item association has been set
+     *  2. `loadOnDemand` flag of association is set
+     *  3. Tab item has a getStore function, and the store contains no data
+     *  4. getStore returns an instance of Shopware.store.Association or the store configured a read url
+     *
+     * @param tabItem
+     * @returns { boolean }
+     */
+    loadTabOnDemand: function(tabItem) {
+        var me = this;
+
+        if (!(tabItem.association)) {
+            console.log("1");
+            return false;
+        }
+
+        if (!(tabItem.association.loadOnDemand)) {
+            return false;
+        }
+
+        if (typeof tabItem.getStore !== 'function') {
+            return false;
+        }
+
+        if (tabItem.getStore().getCount() > 0) {
+            return false;
+        }
+
+        return (tabItem.getStore() instanceof Shopware.store.Association)
+            || (me.hasModelAction(tabItem.getStore(), 'read') !== undefined);
     }
 
 });
