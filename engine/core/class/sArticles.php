@@ -3973,10 +3973,9 @@ class sArticles
         Enlight()->Events()->notify('Shopware_Modules_Articles_GetArticlePictures_Start', array('subject' => $this, 'id' => $articleId));
 
         //first we get the article cover
-        if($forceMainImage) {
+        if ($forceMainImage) {
             $cover = $this->getArticleMainCover($articleId, $articleAlbum);
-        }
-        else {
+        } else {
             $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
         }
 
