@@ -333,7 +333,7 @@ Ext.define('Shopware.grid.Association', {
             pageSize: 20,
             flex: 1,
             subApp: me.subApp,
-            fieldLabel: me.getConfig('comboFieldLabel'),
+            fieldLabel: me.getConfig('searchComboLabel'),
             margin: 5,
             listeners: {
                 select: function (combo, records) {

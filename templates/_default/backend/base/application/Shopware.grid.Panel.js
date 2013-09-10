@@ -1142,6 +1142,7 @@ Ext.define('Shopware.grid.Panel', {
 
         config = me.getConfig('columns');
         customConfig = config[field.name] || {};
+
         if (Ext.isString(customConfig)) customConfig = { header: customConfig };
         column = Ext.apply(column, customConfig);
 
@@ -1738,10 +1739,9 @@ Ext.define('Shopware.grid.Panel', {
      * @param { Ext.data.Model } record - The record of the grid row
      * @param { int } rowIndex - Index of the grid row
      * @param { int } colIndex - Index of the grid column
-     * @param { Ext.data.Store } store - The grid store
      * @returns { String }
      */
-    associationColumnRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
+    associationColumnRenderer: function(value, metaData, record, rowIndex, colIndex) {
         var column = this.columns[colIndex], result;
 
         //check if the association was assigned to the grid column
@@ -1770,8 +1770,6 @@ Ext.define('Shopware.grid.Panel', {
 
         return value;
     }
-
-
 });
 
 //{/block}

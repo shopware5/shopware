@@ -174,7 +174,7 @@ Ext.define('Shopware.model.Container', {
              */
             fieldSets: [
                 {
-                    fields: [ ],
+                    fields: { },
                     title: undefined
                 }
             ],
@@ -652,7 +652,7 @@ Ext.define('Shopware.model.Container', {
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association),
-                association.associationKey
+                association
             );
 
             //check if the component creation was canceled, or throws an exception
@@ -673,9 +673,10 @@ Ext.define('Shopware.model.Container', {
      * @param type { String } - Possible values: field, detail, listing, related
      * @param model { Shopware.data.Model } - Contains the model instance of the association
      * @param store { Ext.data.Store } - Ext.data.Store of the association
+     * @param association { Ext.data.Association } - Definition of the association.
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store, associationKey) {
+    createAssociationComponent: function(type, model, store, association) {
         var me = this, component = { }, componentType = model.getConfig(type);
 
         if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
@@ -687,10 +688,14 @@ Ext.define('Shopware.model.Container', {
             store: store,
             flex: 1,
             subApp: me.subApp,
+            association: association,
             configure: function() {
-                return {
-                    associationKey: associationKey
-                };
+                if (association) {
+                    return {
+                        associationKey: association.associationKey
+                    };
+                }
+                return { };
             }
         });
 
