@@ -62,6 +62,22 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * Contains the repository class of the configured
+     * doctrine model.
+     *
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $repository;
+
+    /**
+     * Contains the global shopware entity manager.
+     * The manager is used for each doctrine entity operation.
+     *
+     * @var \Shopware\Components\Model\ModelManager
+     */
+    protected $manager;
+
+    /**
      * The model property is the only required class property.
      * If this property isn't set, the whole backend application don't works.
      * To configure this property you have only to set the whole model class name into this parameter.
@@ -117,12 +133,68 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected $sortFields = array();
 
     /**
+     * Initialisation of the controller.
+     * Throws an exception is the model property isn't configured.
+     *
+     * @throws Exception
+     */
+    public function init()
+    {
+        if (empty($this->model)) {
+            throw new Exception(
+                'The `model` property of your PHP controller is not configured!'
+            );
+        }
+
+        parent::init();
+    }
+
+    /**
      * Helper function to get the repository of the configured model.
      * @return \Shopware\Models\Partner\Repository
      */
     protected function getRepository()
     {
-        return Shopware()->Models()->getRepository($this->model);
+        if ($this->repository === null) {
+            $this->repository = $this->getManager()->getRepository($this->model);
+        }
+        return $this->repository;
+    }
+
+    /**
+     * Allows to set the repository property of this class.
+     * The repository is used for find queries for the configured model.
+     *
+     * @param \Shopware\Components\Model\ModelRepository $repository
+     */
+    public function setRepository(\Shopware\Components\Model\ModelRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Allows to set the manager property of this class.
+     * The manager is used for each data operation with doctrine models.
+     *
+     * @param \Shopware\Components\Model\ModelManager $manager
+     */
+    public function setManager(\Shopware\Components\Model\ModelManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
+    /**
+     * Returns the instance of the global shopware entity manager.
+     * Used for each data operation with doctrine models.
+     *
+     * @return \Shopware\Components\Model\ModelManager
+     */
+    public function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+        return $this->manager;
     }
 
     /**
@@ -280,7 +352,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $builder = $this->getListQuery();
         $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $filter = $this->getFilterConditions(
             $filter,
@@ -368,29 +440,23 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * updated model data.
      *
      * @param $data
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function save($data)
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
         try {
             /**@var $model \Shopware\Components\Model\ModelEntity */
             $model = new $this->model();
             if (!empty($data['id'])) {
-                $model = Shopware()->Models()->find($this->model, $data['id']);
+                $model = $this->getManager()->find($this->model, $data['id']);
             } else {
-                Shopware()->Models()->persist($model);
+                $this->getManager()->persist($model);
             }
+
             $data = $this->resolveExtJsData($data);
             $model->fromArray($data);
 
-            $violations = Shopware()->Models()->validate($model);
+            $violations = $this->getManager()->validate($model);
             $errors = array();
             /**@var $violation Symfony\Component\Validator\ConstraintViolation */
             foreach ($violations as $violation) {
@@ -404,7 +470,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 return array('success' => false, 'violations' => $errors);
             }
 
-            Shopware()->Models()->flush();
+            $this->getManager()->flush();
 
             $detail = $this->getDetail($model->getId());
 
@@ -427,29 +493,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *
      * @param $id
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function delete($id)
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
         if (empty($id)) {
             return array('success' => false, 'error' => 'The id parameter contains no value.');
         }
 
-        $model = Shopware()->Models()->find($this->model, $id);
+        $model = $this->getManager()->find($this->model, $id);
 
         if (!($model instanceof $this->model)) {
             return array('success' => false, 'error' => 'The passed id parameter exists no more.');
         }
 
-        Shopware()->Models()->remove($model);
-        Shopware()->Models()->flush();
+        $this->getManager()->remove($model);
+        $this->getManager()->flush();
 
         return array('success' => true);
     }
@@ -474,16 +533,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param array $sort
      * @param array $filter
      * @return array
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function reloadAssociation($id, $associationKey, $offset, $limit, $sort = array(), $filter = array())
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-        
         $association = $this->getOwningSideAssociation(
             $this->model,
             $associationKey
@@ -516,7 +568,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
 
         $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $query = $builder->getQuery();
 
@@ -545,17 +597,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param string $association
      * @param int $offset
      * @param int $limit
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @return array
      */
     public function searchAssociation($search, $association, $offset, $limit)
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-
         $builder = $this->getSearchAssociationQuery(
             $association,
             $this->getAssociatedModelByProperty($this->model, $association),
@@ -563,7 +608,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
 
         $builder->setFirstResult($offset)
-        ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $query = $builder->getQuery();
 
@@ -580,22 +625,16 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
     /**
      * Helper function which creates the listing query builder.
-     * If the class property model isn't configured, the function throws an exception.
+     * If the class property model isn't configured, the init function throws an exception.
      * The listing alias for the from table can be configured over the class property alias.
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     protected function getListQuery()
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The `model` property of your PHP controller is not configured!'
-            );
-        }
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array($this->alias))
-        ->from($this->model, $this->alias);
+            ->from($this->model, $this->alias);
 
         return $builder;
     }
@@ -623,20 +662,14 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param $id
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     * @throws Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     protected function getDetailQuery($id)
     {
-        if (empty($this->model)) {
-            throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(
-                'The model property of your PHP-Controller is not configured!'
-            );
-        }
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array($this->alias))
-        ->from($this->model, $this->alias)
-        ->where($this->alias . '.id = :id')
-        ->setParameter('id', $id);
+            ->from($this->model, $this->alias)
+            ->where($this->alias . '.id = :id')
+            ->setParameter('id', $id);
 
         return $builder;
     }
@@ -654,7 +687,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function getSearchAssociationQuery($association, $model, $search)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->getManager()->createQueryBuilder();
         $builder->select($association);
         $builder->from($model, $association);
 
@@ -681,7 +714,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function getReloadAssociationQuery($id, $model, $alias, $fieldName)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->getManager()->createQueryBuilder();
 
         $builder->select(array($alias));
         $builder->from($model, $alias);
@@ -706,21 +739,21 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *      => But Ext JS sends only the foreign key property.
      *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
      *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
-     *      => 'article' => array('id' => 1, ... , 'shop' => Shopware()->Models()->find(Model, $data['shopId']);
+     *      => 'article' => array('id' => 1, ... , 'shop' => $this->getManager()->find(Model, $data['shopId']);
      *
      *  @ORM\ManyToMany associations
      *      => @ORM\ManyToMany requires like the @ORM\ManyToOne associations the resolved doctrine models in the association property.
      *      => But Ext JS sends only an array of foreign keys.
      *      => 'article' => array('id' => 1, 'categories' => array(array('id'=>1), array('id'=>2), ...)
      *      => This function iterates the association property and resolves each foreign key value with the corresponding doctrine model
-     *      => 'article' => array('id' => 1, 'categories' => array(Shopware()->Models()->find(Model, 1), Shopware()->Models()->find(Model, 2), ...)
+     *      => 'article' => array('id' => 1, 'categories' => array($this->getManager()->find(Model, 1), $this->getManager()->find(Model, 2), ...)
      *
      * @param $data
      * @return mixed
      */
     protected function resolveExtJsData($data)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($this->model);
+        $metaData = $this->getManager()->getClassMetadata($this->model);
 
         foreach($metaData->getAssociationMappings() as $mapping) {
             /**
@@ -777,7 +810,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $field = $metaData->getFieldForColumn($column);
 
                 if ($data[$field]) {
-                    $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $data[$field]);
+                    $associationModel = $this->getManager()->find($mapping['targetEntity'], $data[$field]);
 
                     //proxies need to be loaded, otherwise the validation will be failed.
                     if ($associationModel instanceof \Doctrine\Common\Persistence\Proxy && method_exists($associationModel, '__load')) {
@@ -809,7 +842,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $associationData = $data[$mapping['fieldName']];
                 $associationModels = array();
                 foreach($associationData as $singleData) {
-                    $associationModel = Shopware()->Models()->find($mapping['targetEntity'], $singleData['id']);
+                    $associationModel = $this->getManager()->find($mapping['targetEntity'], $singleData['id']);
                     if ($associationModel) {
                         $associationModels[] = $associationModel;
                     }
@@ -833,7 +866,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *      protected function getAdditionalDetailData(array $data)
      *      {
-     *          $builder = Shopware()->Models()->createQueryBuilder();
+     *          $builder = $this->getManager()->createQueryBuilder();
      *          $builder->select(...)
      *                  ->from(...)
      *
@@ -860,7 +893,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function getAssociatedModelByProperty($model, $property)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $metaData = $this->getManager()->getClassMetadata($model);
         return $metaData->getAssociationTargetClass($property);
     }
 
@@ -876,14 +909,14 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function getOwningSideAssociation($model, $property)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $metaData = $this->getManager()->getClassMetadata($model);
         $mapping = $metaData->getAssociationMapping($property);
 
         if ($mapping['isOwningSide']) {
             return $mapping;
         }
 
-        $associationMetaData = Shopware()->Models()->getClassMetadata($mapping['targetEntity']);
+        $associationMetaData = $this->getManager()->getClassMetadata($mapping['targetEntity']);
         return $associationMetaData->getAssociationMapping($mapping['mappedBy']);
     }
 
@@ -1044,26 +1077,26 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected function formatSearchValue($value, array $field)
     {
         switch($field['type']) {
-        case 'date':
-        case 'datetime':
-            //validates the date value. If the value is no date value, return
-            $date = date_parse($value);
-            if (!checkdate($date['month'], $date['day'], $date['year'])) {
-                $value = '%' . $value . '%';
-                break;
-            }
+            case 'date':
+            case 'datetime':
+                //validates the date value. If the value is no date value, return
+                $date = date_parse($value);
+                if (!checkdate($date['month'], $date['day'], $date['year'])) {
+                    $value = '%' . $value . '%';
+                    break;
+                }
 
-            $date = new DateTime($value);
-            $value = $date->format('Y-m-d');
-            //search values for date time should added the % wildcards to search for time values.
-            if ($field['datetime']) {
+                $date = new DateTime($value);
+                $value = $date->format('Y-m-d');
+                //search values for date time should added the % wildcards to search for time values.
+                if ($field['datetime']) {
+                    $value = '%' . $value . '%';
+                }
+                break;
+            case 'string':
+            case 'text':
+            default:
                 $value = '%' . $value . '%';
-            }
-            break;
-        case 'string':
-        case 'text':
-        default:
-            $value = '%' . $value . '%';
         }
 
         return $value;
@@ -1082,7 +1115,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function getModelFields($model, $alias = null)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($model);
+        $metaData = $this->getManager()->getClassMetadata($model);
         $fields = $metaData->getFieldNames();
         $fields = array_combine($fields, $fields);
 
