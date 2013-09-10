@@ -1329,7 +1329,7 @@ class sArticles
             $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
-            $articles[$articleKey]["image"] = $this->sGetArticlePictures($articles[$articleKey]["articleID"], true, 0);
+            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
             // Links to details, basket
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
@@ -3182,8 +3182,8 @@ class sArticles
 
             // Get Article images
             // =================================================.
-            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']); // ï¿½ndern
-            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']); // ï¿½ndern
+            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']);
+            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']);
 
             // Links
             // =================================================.
@@ -3789,7 +3789,7 @@ class sArticles
             'averange' => round($getPromotionResult['sVoteAverange'][0], 2),
             'count' => round($getPromotionResult['sVoteAverange'][1]),
         );
-        $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, "", false, $mode == "random" ? true : false);
+        $getPromotionResult["image"] = $this->getArticleListingCover($getPromotionResult["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
         $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
         $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
@@ -3902,8 +3902,8 @@ class sArticles
      * Internal helper function to get the cover image of an article.
      * If the orderNumber parameter is set, the function checks first
      * if an variant image configured. If this is the case, this
-     * image will be used as cover image. Otherwise the function returns
-     * the main image of the article.
+     * image will be used as cover image. Otherwise the function calls the
+     * getArticleMainCover function which returns the absolute main image
      *
      * @param $articleId
      * @param $orderNumber
@@ -3938,24 +3938,49 @@ class sArticles
             return $this->getDataOfArticleImage($cover, $articleAlbum);
         }
 
-        //if no variant images founded and no normal article image we will return the main image of the article even if this image has an mapping configuration.
+        //if no variant or normal article image is found we will return the main image of the article even if this image has a variant restriction
+        return $this->getArticleMainCover($articleId, $articleAlbum);
+    }
+
+    /**
+     * Returns the the absolute main article image
+     * This method returns the main cover depending on the main flag no matter if any variant restriction is set
+     *
+     * @param $articleId
+     * @param $articleAlbum
+     * @return array
+     */
+    public function getArticleMainCover($articleId, $articleAlbum)
+    {
         $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
+    }
+
+    /**
+     * Wrapper method to specialize the sGetArticlePictures method for the listing images
+     *
+     * @param $articleId
+     * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
+     * @return array
+     */
+    public function getArticleListingCover($articleId, $forceMainImage = false)
+    {
+        return $this->sGetArticlePictures($articleId, true, 0, null, null, null, $forceMainImage);
     }
 
     /**
      * Get all pictures from a certain article
      * @access public
      * @param        $sArticleID
-     * @param bool   $onlyCover
-     * @param        $pictureSize
+     * @param bool $onlyCover
+     * @param int $pictureSize | unused variable
      * @param string $ordernumber
-     * @param bool   $allImages
-     * @param bool   $realtime
-     * @internal param null $articleDetailId
+     * @param bool $allImages | unused variable
+     * @param bool $realtime | unused variable
+     * @param bool $forceMainImage | will return the main image no matter which variant restriction is set
      * @return array
      */
-    public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false)
+    public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false, $forceMainImage = false)
     {
         static $articleAlbum;
         if($articleAlbum === null) {
@@ -3972,7 +3997,12 @@ class sArticles
         Enlight()->Events()->notify('Shopware_Modules_Articles_GetArticlePictures_Start', array('subject' => $this, 'id' => $articleId));
 
         //first we get the article cover
-        $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
+        if ($forceMainImage) {
+            $cover = $this->getArticleMainCover($articleId, $articleAlbum);
+        } else {
+            $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
+        }
+
 
         if ($onlyCover) {
             $cover = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticlePictures_FilterResult', $cover, array('subject' => $this, 'id' => $articleId));
