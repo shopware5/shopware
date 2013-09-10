@@ -1304,7 +1304,7 @@ class sArticles
             $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
-            $articles[$articleKey]["image"] = $this->sGetArticlePictures($articles[$articleKey]["articleID"], true, 0, null, null, null, Shopware()->Config()->get('forceArticleMainImageInListing'));
+            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"],Shopware()->Config()->get('forceArticleMainImageInListing'));
 
             // Links to details, basket
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
@@ -3765,7 +3765,7 @@ class sArticles
             'averange' => round($getPromotionResult['sVoteAverange'][0], 2),
             'count' => round($getPromotionResult['sVoteAverange'][1]),
         );
-        $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, null, null, null, Shopware()->Config()->get('forceArticleMainImageInListing'));
+        $getPromotionResult["image"] = $this->getArticleListingCover($getPromotionResult["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
         $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
         $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
@@ -3929,6 +3929,18 @@ class sArticles
     public function getArticleMainCover($articleId, $articleAlbum) {
         $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
+    }
+
+    /**
+     * Wrapper method to specialize the sGetArticlePictures method for the listing images
+     *
+     * @param $articleId
+     * @param bool $forceMainImage
+     * @return array
+     */
+    public function getArticleListingCover($articleId, $forceMainImage = false)
+    {
+        return $this->sGetArticlePictures($articleId, true, 0, null, null, null, $forceMainImage);
     }
 
     /**
