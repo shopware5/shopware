@@ -1304,7 +1304,7 @@ class sArticles
             $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
-            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"],Shopware()->Config()->get('forceArticleMainImageInListing'));
+            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
             // Links to details, basket
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
@@ -3926,7 +3926,8 @@ class sArticles
      * @param $articleAlbum
      * @return array
      */
-    public function getArticleMainCover($articleId, $articleAlbum) {
+    public function getArticleMainCover($articleId, $articleAlbum)
+    {
         $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
     }
@@ -3935,7 +3936,7 @@ class sArticles
      * Wrapper method to specialize the sGetArticlePictures method for the listing images
      *
      * @param $articleId
-     * @param bool $forceMainImage
+     * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
      * @return array
      */
     public function getArticleListingCover($articleId, $forceMainImage = false)

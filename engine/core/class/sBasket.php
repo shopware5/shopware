@@ -1354,7 +1354,7 @@ class sBasket
 				continue;
 			}
 			$getArticles[$key]["articlename"] = $getArticles[$key]["articleName"];
-            $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']->getArticleListingCover($value["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));;
+            $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']->getArticleListingCover($value["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 			// Links to details, basket
 			$getArticles[$key]["id"] = $value["id"];
 			$getArticles[$key]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=basket&sAdd=".$value["ordernumber"];
