@@ -202,10 +202,11 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * This function is normally used for backend listings.
      * The listing will be selected over the getList function.
      *
-     * @requestParam start  - Offset for the pagination
-     * @requestParam limit  - Integer value for the max row count
-     * @requestParam sort   - Contains an array with sort conditions
-     * @requestParam filter - Contains an array with filter conditions
+     * The function expects the following request parameter:
+     *  query - Search string which inserted in the search field.
+     *  association - Doctrine property name of the association
+     *  start - Pagination start value
+     *  limit - Pagination limit value
      */
     public function listAction()
     {
@@ -446,10 +447,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         try {
             /**@var $model \Shopware\Components\Model\ModelEntity */
-            $model = new $this->model();
             if (!empty($data['id'])) {
-                $model = $this->getManager()->find($this->model, $data['id']);
+                $model = $this->getRepository()->find($data['id']);
             } else {
+                $model = new $this->model();
                 $this->getManager()->persist($model);
             }
 
