@@ -140,6 +140,7 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 
 {include file='backend/base/component/element/boolean.js'}
+{include file='backend/base/component/element/boolean_select.js'}
 {include file='backend/base/component/element/button.js'}
 {include file='backend/base/component/element/color.js'}
 {include file='backend/base/component/element/date.js'}
