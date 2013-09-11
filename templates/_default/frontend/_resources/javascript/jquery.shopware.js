@@ -5643,15 +5643,14 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 localStorage.removeItem('lastSeenArticle' + i);
     
                 // Downgrading all articles with higher index
-                var newindex;
-                var tmpdata;
-                var j = i+1;
-                for(; j <= index; j++)
-                {
-                    newindex = j - 1;
-                    tmpdata = localStorage.getItem('lastSeenArticle' + j);
+                var newIndex,
+                    tmpData;
+
+                for(var j = i + 1; j <= index; j++) {
+                    newIndex = j - 1;
+                    tmpData = localStorage.getItem('lastSeenArticle' + j);
                     localStorage.removeItem('lastSeenArticle' + j);
-                    localStorage.setItem('lastSeenArticle' + newindex, tmpdata);
+                    localStorage.setItem('lastSeenArticle' + newIndex, tmpData);
                 }
     
                 // Adding this article on top index

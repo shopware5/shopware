@@ -1,13 +1,13 @@
 {* Last seen articles *}
 <div class="viewlast">
-	<p class="heading">{s name='WidgetsRecentlyViewedHeadlineFixed'}Zuletzt Angeschaut{/s}</p>
+	<p class="heading">{s name='WidgetsRecentlyViewedHeadline'}{/s}</p>
 </div>
 <script>
     jQuery(function($) {
-        var anzsavedarticles = localStorage.getItem('lastSeenArticleIndex');
-        if(anzsavedarticles) {
-            var NumberOfArticles = '{config name=lastarticlestoshow}';
-            $('.viewlast').lastSeenArticlesDisplayer(NumberOfArticles);
+        var savedArticleCount = localStorage.getItem('lastSeenArticleIndex');
+        if(savedArticleCount) {
+            var numberOfArticles = '{config name=lastarticlestoshow}';
+            $('.viewlast').lastSeenArticlesDisplayer(numberOfArticles);
         }
         else {
             $('.viewlast').hide();

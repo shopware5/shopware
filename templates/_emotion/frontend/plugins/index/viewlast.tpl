@@ -5,10 +5,10 @@
 </div>
 <script>
     jQuery(function($) {
-        var anzsavedarticles = localStorage.getItem('lastSeenArticleIndex');
-        if(anzsavedarticles) {
-            var NumberOfArticles = '{config name=lastarticlestoshow}';
-            $('.viewlast').lastSeenArticlesDisplayer(NumberOfArticles);
+        var savedArticleCount = localStorage.getItem('lastSeenArticleIndex');
+        if(savedArticleCount) {
+            var numberOfArticles = '{config name=lastarticlestoshow}';
+            $('.viewlast').lastSeenArticlesDisplayer(numberOfArticles);
         }
         else {
             $('.viewlast').hide();
