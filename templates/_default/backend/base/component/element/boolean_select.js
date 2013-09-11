@@ -28,6 +28,8 @@
  */
 
 //{namespace name=backend/base/component/main}
+
+//{block name="backend/base/component/element/boolean_select"}
 Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {
     extend:'Ext.form.field.ComboBox',
     alias:[
@@ -42,11 +44,6 @@ Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {
         ["", '{s name=element/boolean_select/empty_value}Inherited{/s}'],
         [true, '{s name=element/boolean_select/yes}Yes{/s}'],
         [false, '{s name=element/boolean_select/no}No{/s}']
-    ],
-
-    initComponent:function () {
-        var me = this;
-
-        me.callParent(arguments);
-    }
+    ]
 });
+//{/block}

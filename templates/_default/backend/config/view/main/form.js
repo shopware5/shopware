@@ -184,15 +184,15 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
      * this is done to support the not selected values by the customer
      * cause checkboxes only have two states
      *
-     * @param field
-     * @param shop
-     * @param initialValue
-     * @returns field
+     * @param { Shopware.apps.Base.view.element.BooleanSelect } field
+     * @param { Shopware.apps.Base.model.Shop } shop
+     * @param { int } initialValue
+     * @returns Shopware.apps.Base.view.element.BooleanSelect
      */
     convertCheckBoxToComboBox: function (field, shop, initialValue) {
         var booleanSelectValue = field.value;
 
-        if (shop.getId() != 1 && initialValue === undefined) {
+        if (shop.get('id') != 1 && initialValue === undefined) {
             // set empty string only for foreign shops as a fallback to the default shop
             // the default shop always got a value
             booleanSelectValue = '';
