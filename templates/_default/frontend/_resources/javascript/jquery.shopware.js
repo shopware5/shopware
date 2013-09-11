@@ -5636,6 +5636,28 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
 
         if(exists) {
+
+            if(i != index) {
+
+                // Delete existing article on old position
+                localStorage.removeItem('lastSeenArticle' + i);
+    
+                // Downgrading all articles with higher index
+                var newindex;
+                var tmpdata;
+                var j = i+1;
+                for(; j <= index; j++)
+                {
+                    newindex = j - 1;
+                    tmpdata = localStorage.getItem('lastSeenArticle' + j);
+                    localStorage.removeItem('lastSeenArticle' + j);
+                    localStorage.setItem('lastSeenArticle' + newindex, tmpdata);
+                }
+    
+                // Adding this article on top index
+                localStorage.setItem('lastSeenArticle' + index, JSON.stringify(opts));
+            }
+
             return false;
         }
 

@@ -4,6 +4,13 @@
 </div>
 <script>
     jQuery(function($) {
-        $('.viewlast').lastSeenArticlesDisplayer();
+        var anzsavedarticles = localStorage.getItem('lastSeenArticleIndex');
+        if(anzsavedarticles) {
+            var NumberOfArticles = '{config name=lastarticlestoshow}';
+            $('.viewlast').lastSeenArticlesDisplayer(NumberOfArticles);
+        }
+        else {
+            $('.viewlast').hide();
+        }
     })
 </script>
