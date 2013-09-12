@@ -43,6 +43,11 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
     public static $repository = null;
 
     /**
+     * @var $communityStore CommunityStore
+     */
+    protected $communityStore = null;
+
+    /**
      * @return Shopware\Components\Model\ModelRepository
      */
     protected function getRepository()
@@ -51,6 +56,19 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
             self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Plugin\Plugin');
         }
         return self::$repository;
+    }
+
+    /**
+     * helper method to return the community store
+     *
+     * @return CommunityStore|null
+     */
+    private function getCommunityStore()
+    {
+        if ($this->communityStore === null) {
+            $this->communityStore = new CommunityStore();
+        }
+        return $this->communityStore;
     }
 
     /**
@@ -304,7 +322,7 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
                 $message = $upload->getMessages();
                 $message = implode("\n", $message);
             } else {
-                $this->decompressFile($upload->getFileName());
+                $this->getCommunityStore()->decompressFile($upload->getFileName());
             }
         } catch (Exception $e) {
             $message = $e->getMessage();
@@ -323,6 +341,7 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
     /**
      * Decompress a given plugin zip file.
      *
+     * @deprecated unused method use the decompressFile method in the CommunityStore component instead
      * @param  $file
      */
     public function decompressFile($file)
@@ -339,6 +358,7 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
 
     /**
      * Direct download of a plugin zip file.
+     * @deprecated | unused action
      */
     public function downloadAction()
     {
