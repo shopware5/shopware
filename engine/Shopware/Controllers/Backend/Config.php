@@ -193,6 +193,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 if (empty($elementData['scope']) && $shop->getId() != $defaultShop->getId()) {
                     continue;
                 }
+
+                // Do not save empty checkbox / boolean select values the fallback should be used
+                if (($elementData['type'] == "checkbox" || $elementData['type'] == "boolean") && $valueData['value'] === '') {
+                    continue;
+                }
+
                 // Do not save missing translations
                 if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
                     continue;

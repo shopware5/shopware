@@ -216,7 +216,7 @@ Ext.define('Shopware.form.PluginPanel',
             form.getElements().each(function(element) {
                 value = element.getValues().find('shopId', shop.getId());
                 value = element.getValues().getAt(value);
-
+                var initialValue = value;
                 type = element.get('type').toLowerCase();
                 type = 'base-element-' + type;
                 name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
@@ -238,7 +238,7 @@ Ext.define('Shopware.form.PluginPanel',
                     }
                 }
 
-                fields.push(Ext.apply({
+                var field = Ext.apply({
                     xtype: type,
                     name: name,
                     elementName: elementName,
@@ -248,7 +248,14 @@ Ext.define('Shopware.form.PluginPanel',
                     emptyText: shop.get('default') ? null : element.get('value'),
                     disabled: !element.get('scope') && !shop.get('default'),
                     allowBlank: !element.get('required') || !shop.get('default')
-                }, options));
+                }, options);
+
+                if (field.xtype == "base-element-boolean" || field.xtype == "base-element-checkbox") {
+                    field = me.convertCheckBoxToComboBox(field, shop, initialValue);
+                }
+
+                fields.push(field);
+
             });
             if(fields.length > 0) {
                 tabs.push({
@@ -284,6 +291,38 @@ Ext.define('Shopware.form.PluginPanel',
             });
         }
         return items;
+    },
+
+    /**
+     * helper method to convert the checkbox to a combobox
+     * this is done to support the not selected values by the customer
+     * cause checkboxes only have two states
+     *
+     * @param { Shopware.apps.Base.view.element.BooleanSelect } field
+     * @param { Shopware.apps.Base.model.Shop } shop
+     * @param { int } initialValue
+     * @returns Shopware.apps.Base.view.element.BooleanSelect
+     */
+    convertCheckBoxToComboBox: function (field, shop, initialValue) {
+        var booleanSelectValue = field.value;
+
+        if (shop.get('id') != 1 && initialValue === undefined) {
+            // set empty string only for foreign shops as a fallback to the default shop
+            // the default shop always got a value
+            booleanSelectValue = '';
+        }
+        else {
+            //cast the value to boolean
+            booleanSelectValue = Boolean(field.value);
+        }
+
+        Ext.apply(field, {
+            xtype: "base-element-boolean-select",
+            value: booleanSelectValue,
+            emptyText: ""
+        });
+
+        return field;
     },
 
     /**
