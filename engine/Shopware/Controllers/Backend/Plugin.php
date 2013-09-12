@@ -304,7 +304,7 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
                 $message = $upload->getMessages();
                 $message = implode("\n", $message);
             } else {
-                $this->decompressFile($upload->getFileName());
+                Shopware()->CommunityStore()->decompressFile($upload->getFileName());
             }
         } catch (Exception $e) {
             $message = $e->getMessage();
@@ -323,6 +323,7 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
     /**
      * Decompress a given plugin zip file.
      *
+     * @deprecated unused method use the decompressFile method in the CommunityStore component instead
      * @param  $file
      */
     public function decompressFile($file)
@@ -335,36 +336,5 @@ class Shopware_Controllers_Backend_Plugin extends Shopware_Controllers_Backend_E
             )
         ));
         $filter->filter($file);
-    }
-
-    /**
-     * Direct download of a plugin zip file.
-     */
-    public function downloadAction()
-    {
-        return; //As long as this action is not being used, they should be inactive.
-        $url = $this->Request()->link;
-        $tmp = @tempnam(Shopware()->DocPath() . 'files/downloads', 'plugins');
-
-        try {
-            $client = new Zend_Http_Client($url, array(
-                'timeout' => 10,
-                'useragent' => 'Shopware/' . Shopware()->Config()->Version
-            ));
-            $client->setStream($tmp);
-            $client->request('GET');
-
-            $this->decompressFile($tmp);
-
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-        }
-
-        @unlink($tmp);
-
-        $this->View()->assign(array(
-            'success' => !isset($message),
-            'message' => isset($message) ? $message : ''
-        ));
     }
 }
