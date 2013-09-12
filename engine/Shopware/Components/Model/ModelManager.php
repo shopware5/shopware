@@ -253,7 +253,7 @@ class ModelManager extends EntityManager
     public function getValidator()
     {
         if (null === $this->validator) {
-            $reader = new \Doctrine\Common\Annotations\AnnotationReader;
+            $reader = $this->getConfiguration()->getAnnotationsReader();
             $this->validator = new \Symfony\Component\Validator\Validator(
                 new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(
                     new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($reader)
@@ -261,6 +261,7 @@ class ModelManager extends EntityManager
                 new \Symfony\Component\Validator\ConstraintValidatorFactory()
             );
         }
+
         return $this->validator;
     }
 
