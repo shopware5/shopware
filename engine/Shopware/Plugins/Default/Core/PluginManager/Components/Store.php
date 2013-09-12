@@ -904,16 +904,15 @@ class CommunityStore
         } else {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($directory),
-                RecursiveIteratorIterator::CHILD_FIRST);
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
 
-            $isWritable = true;
             foreach ($iterator as $path) {
                 if (!is_writable($path->__toString())) {
-                    $isWritable = false;
-                    break;
+                    return false;
                 }
             }
-            return $isWritable;
+            return true;
         }
     }
 }
