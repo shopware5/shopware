@@ -11,7 +11,7 @@ class Migrations_Migration135 Extends Shopware\Components\Migrations\AbstractMig
 
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'forceArticleMainImageInListing' LIMIT 1);
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
-        VALUES (@elementId, '2', 'Always display the article thumbnail in list views');
+        VALUES (@elementId, '2', 'Always display the defined article preview image in list views');
 EOD;
         $this->addSql($sql);
     }
