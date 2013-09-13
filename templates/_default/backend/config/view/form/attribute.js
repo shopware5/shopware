@@ -91,12 +91,21 @@ Ext.define('Shopware.apps.Config.view.form.Attribute', {
                 scope: me,
                 change: function(combo, value) {
                     var form = combo.up('form'),
-                        field = form.down('[name=store]');
+                        storeFormField = form.down('[name=store]'),
+                        translatableFormField = form.down('[name=translatable]'),
+                        translatableFields = new Array('textarea', 'text', 'html');
                     if(value == 'select') {
-                        field.show();
+                        storeFormField.show();
                     } else {
-                        field.setValue(null);
-                        field.hide();
+                        storeFormField.setValue(null);
+                        storeFormField.hide();
+                    }
+
+                    //if the fields are not translatable don't show the checkbox
+                    if (translatableFields.indexOf(value) == -1) {
+                        translatableFormField.hide();
+                    } else {
+                        translatableFormField.show();
                     }
                 }
             }
