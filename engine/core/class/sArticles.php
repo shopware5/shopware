@@ -1869,8 +1869,13 @@ class sArticles
             $filters = $activeFilters;
             $filters[] = $property['valueID'];
             $link = $baseLink . '&sFilterProperties=' . implode('|', $filters);
-            $removeLink = $baseLink . '&sFilterProperties=0';
 
+            if(empty($lastOptionId) || $lastOptionId != $property['optionID']) {
+                //only set the default remove link once per option group like color
+                $removeLink = $baseLink . '&sFilterProperties=0';
+            }
+            $lastOptionId = $property['optionID'];
+            
             if (!empty($activeFilters)
                 && in_array($property['valueID'], $activeFilters)
             ) {
