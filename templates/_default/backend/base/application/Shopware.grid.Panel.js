@@ -748,6 +748,15 @@ Ext.define('Shopware.grid.Panel', {
             me.eventAlias + '-before-create-columns',
 
             /**
+             * Event fired before the grid action column created. This event can be used
+             * to add additional column over the Ext JS event system.
+             *
+             * @param { Shopware.grid.Panel } grid - Instance of this component.
+             * @param { Array } columns - An empty array which will be returned as column array.
+             */
+            me.eventAlias + '-before-create-action-columns',
+
+            /**
              * Event fired after the grid columns created. This event can be used
              * to add additional column over the Ext JS event system.
              * 
@@ -1072,6 +1081,8 @@ Ext.define('Shopware.grid.Panel', {
             if (column !== null) columns.push(column);
         });
 
+        me.fireEvent(me.eventAlias + '-before-create-action-columns', me, columns);
+
         if (me.getConfig('actionColumn')) {
             column = me.createActionColumn();
             if (column !== null) {
@@ -1118,6 +1129,7 @@ Ext.define('Shopware.grid.Panel', {
         var fieldAssociation = me.getFieldAssociation(field.name);
 
         if (fieldAssociation === undefined) {
+
             switch (field.type.type) {
                 case 'int':
                     column = me.applyIntegerColumnConfig(column);
@@ -1135,6 +1147,7 @@ Ext.define('Shopware.grid.Panel', {
                     column = me.applyFloatColumnConfig(column);
                     break;
             }
+
         } else {
             column.association = fieldAssociation;
             column.renderer = me.associationColumnRenderer;
@@ -1144,7 +1157,12 @@ Ext.define('Shopware.grid.Panel', {
         customConfig = config[field.name] || {};
 
         if (Ext.isString(customConfig)) customConfig = { header: customConfig };
-        column = Ext.apply(column, customConfig);
+
+        if (Ext.isObject(customConfig)) {
+            column = Ext.apply(column, customConfig);
+        } else if (Ext.isFunction(customConfig)) {
+            column = customConfig.call(this, model, column, field, fieldAssociation);
+        }
 
         me.fireEvent(me.eventAlias + '-column-created', me, column, model, field);
 
