@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         'path': '{s name=path}Image path{/s}',
         'actions': '{s name=actions}Action(s){/s}',
         'link': '{s name=link}Link{/s}',
-        'alttext': '{s name=alttext}Alternative Text{/s}',
+        'altText': '{s name=altText}Alternative text{/s}',
         'title': '{s name=title}Title{/s}'
     },
 
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         });
 
         me.bannerStore = Ext.create('Ext.data.Store', {
-            fields: [ 'position', 'path', 'link', 'alttext', 'title', 'mediaId' ]
+            fields: [ 'position', 'path', 'link', 'altText', 'title', 'mediaId' ]
         });
 
         me.ddGridPlugin = Ext.create('Ext.grid.plugin.DragDrop');
@@ -168,8 +168,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 allowBlank: true
             }
         }, {
-            dataIndex: 'alttext',
-            header: snippets.alttext,
+            dataIndex: 'altText',
+            header: snippets.altText,
             flex: 1,
             editor: {
                 xtype: 'textfield',
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 path: record.get('path'),
                 mediaId: record.get('id'),
                 link: record.get('link'),
-                alttext: record.get('alttext'),
+                altText: record.get('altText'),
                 title: record.get('title')
             });
             store.add(model);
