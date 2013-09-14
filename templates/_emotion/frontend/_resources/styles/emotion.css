@@ -2800,6 +2800,7 @@ input.instyle_error[type="text"], input.instyle_error[type="password"],
 .register .description {margin-left: 265px; color: #999; font-size: 11px; line-height: 12px;}
 .register .alt_shipping input {float: left;}
 .register .alt_shipping span {margin: 6px 0 5px 5px; float: left; width: 420px; display: block;}
+.register .alt_shipping label {margin: 6px 0 5px 5px; float: left; width: 420px; display: block;}
 
 .register .alternative_shipping select {width: 297px;}
 
