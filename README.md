@@ -11,7 +11,7 @@
 Shopware 4 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next eCommerce project.
 Furthermore Shopware 4 provides an event-driven plugin-system and an advanced hook system, which unleashes the truth power and gives you the ability to customize every part of it.
 
-Vist the forum at <http://forum.shopware.de/>
+Visit the forum at <http://forum.shopware.de/>
 
 ### Shopware Server Requirements
 
