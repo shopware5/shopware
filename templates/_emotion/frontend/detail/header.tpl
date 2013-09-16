@@ -6,26 +6,36 @@
     //<![CDATA[
 
     {* LastSeenArticle Client Script *}
-    var getThumbnailSize = function(configThumbnailSize) {
-        var thumbnail, thumbnails;
-        configThumbnailSize = ~~(1 * configThumbnailSize);
-        thumbnails = {$sArticle.image.src|json_encode};
-        thumbnail = thumbnails[configThumbnailSize];
-        return thumbnail;
-    };
-    var configLastArticles = {ldelim}
-        {foreach $sLastArticlesConfig as $key => $value}
-        '{$key}': '{$value}',
-        {/foreach}
-        'articleId': ~~(1 * '{$sArticle.articleID}'),
-        'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
-        'articleName': '{$sArticle.articleName}',
-        'thumbnail': getThumbnailSize('{$sArticle.ThumbnailSize}')
-        {rdelim};
+    ;(function() {
+        var getThumbnailSize = function(configThumbnailSize) {
+            var thumbnail, thumbnails;
+            configThumbnailSize = ~~(1 * configThumbnailSize);
+            thumbnails = {$sArticle.image.src|json_encode};
+            thumbnail = thumbnails[configThumbnailSize];
+            return thumbnail;
+        };
+        var configLastArticles = {ldelim}
+            {foreach $sLastArticlesConfig as $key => $value}
+            '{$key}': '{$value}',
+            {/foreach}
+            'articleId': ~~(1 * '{$sArticle.articleID}'),
+            'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
+            'articleName': '{$sArticle.articleName}',
+            'thumbnail': getThumbnailSize('{$sLastArticles.ThumbnailSize}')
+            {rdelim};
 
-    jQuery(function($) {
-        $('#detail').lastSeenArticlesCollector(configLastArticles);
-    });
+        jQuery(function($) {
+            var numberOfArticles = '{config name=lastarticlestoshow}';
+            var languageCode = '{$Shop->getId()}';
+
+            $('#detail').lastSeenArticlesCollector({
+                lastArticles: configLastArticles,
+                numArticles: numberOfArticles,
+                shopId: languageCode
+            });
+        });
+    })();
+
     //]]>
 </script>
 {/block}
