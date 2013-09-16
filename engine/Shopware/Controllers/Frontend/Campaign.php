@@ -37,14 +37,18 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
     public function indexAction()
     {
         if (Shopware()->Shop()->get('esi')) {
-            $getMetaFields = Shopware()->Db()->fetchRow('
-                SELECT seo_keywords, seo_description, name FROM s_emotion WHERE id = ?
+            $emotionData = Shopware()->Db()->fetchRow('
+                SELECT * FROM s_emotion WHERE id = ?
             ', array($this->Request()->getParam('emotionId')));
 
+            if(empty($emotionData) || $emotionData["active"] != 1) {
+                $this->Response()->setHttpResponseCode(404);
+                return $this->forward('index', 'index');
+            }
             //$this->View()->extendsBlock('frontend_index_header_title', $getMetaFields['name'], null);
-            $this->View()->assign('sBreadcrumb', array(0 => array('name' => $getMetaFields['name'])));
-            $this->View()->assign('seo_keywords', $getMetaFields['seo_keywords']);
-            $this->View()->assign('seo_description', $getMetaFields['seo_description']);
+            $this->View()->assign('sBreadcrumb', array(0 => array('name' => $emotionData['name'])));
+            $this->View()->assign('seo_keywords', $emotionData['seo_keywords']);
+            $this->View()->assign('seo_description', $emotionData['seo_description']);
 
             $this->View()->assign('emotionId', intval($this->Request()->getParam('emotionId')));
         } else {
