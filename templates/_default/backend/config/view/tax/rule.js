@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
         var me = this,
             topBar = me.callParent();
         me.addButton = Ext.apply(topBar[0],{ disabled:true });
-        
+
         topBar.push({
             xtype: 'config-element-select',
             flex: 1,
@@ -184,7 +184,14 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             name: 'customerGroupId',
             editable: false,
             store: 'base.CustomerGroup',
-            emptyText: 'Please select...'
+            listeners: {
+                enable: function() {
+                    // if available get the first entry
+                    if(this.store.getAt('0')) {
+                        this.setValue(this.store.getAt('0').get('id'));
+                    }
+                }
+            }
         });
         return topBar;
     }
