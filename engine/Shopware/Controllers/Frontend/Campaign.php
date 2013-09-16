@@ -38,14 +38,16 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
     {
         if (Shopware()->Shop()->get('esi')) {
             $emotionData = Shopware()->Db()->fetchRow('
-                SELECT * FROM s_emotion WHERE id = ?
+                SELECT * FROM s_emotion
+                WHERE id = ? and active = 1
+                AND (valid_from IS NULL || valid_from <= now())
+                AND (valid_to IS NULL || valid_to >= now())
             ', array($this->Request()->getParam('emotionId')));
 
-            if(empty($emotionData) || $emotionData["active"] != 1) {
+            if(empty($emotionData)) {
                 $this->Response()->setHttpResponseCode(404);
                 return $this->forward('index', 'index');
             }
-            //$this->View()->extendsBlock('frontend_index_header_title', $getMetaFields['name'], null);
             $this->View()->assign('sBreadcrumb', array(0 => array('name' => $emotionData['name'])));
             $this->View()->assign('seo_keywords', $emotionData['seo_keywords']);
             $this->View()->assign('seo_description', $emotionData['seo_description']);
