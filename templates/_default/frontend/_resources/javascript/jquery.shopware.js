@@ -5606,28 +5606,27 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         this.options = $.extend( {}, defaults, options) ;
         this._defaults = defaults;
         this._name = pluginName;
-        this.init();
+        this.init(options);
     }
 
-    Plugin.prototype.init = function () {
+    Plugin.prototype.init = function (options) {
         var me = this,
             opts = me.options,
-            articleNum = 5,
-            index = localStorage.getItem('lastSeenArticleIndex') || 0,
+            articleNum = opts.numArticles,
+            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId) || 0,
             i = index - articleNum+1, data, article, exists;
 
         // Reset index if not defined
         if(index < 0) index = 0;
 
         for(; i < index+1; i++) {
-            data = localStorage.getItem('lastSeenArticle' + i);
+            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + i);
             if(!data) {
                 continue;
             }
 
             article = JSON.parse(data);
-            article = article['articleId'];
-            exists = (article == opts.articleId);
+            exists = (article.articleId == opts.lastArticles.articleId);
 
             // break if the aritcle exists already
             if(exists) {
@@ -5636,11 +5635,9 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
 
         if(exists) {
-
             if(i != index) {
-
                 // Delete existing article on old position
-                localStorage.removeItem('lastSeenArticle' + i);
+                localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
     
                 // Downgrading all articles with higher index
                 var newIndex,
@@ -5648,21 +5645,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
                 for(var j = i + 1; j <= index; j++) {
                     newIndex = j - 1;
-                    tmpData = localStorage.getItem('lastSeenArticle' + j);
-                    localStorage.removeItem('lastSeenArticle' + j);
-                    localStorage.setItem('lastSeenArticle' + newIndex, tmpData);
+                    tmpData = localStorage.getItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
                 }
     
                 // Adding this article on top index
-                localStorage.setItem('lastSeenArticle' + index, JSON.stringify(opts));
+                localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
             }
-
             return false;
         }
-
-        localStorage.setItem('lastSeenArticleIndex', ++index);
-        localStorage.setItem('lastSeenArticle' + index, JSON.stringify(opts));
-        localStorage.removeItem('lastSeenArticle' + (index - articleNum));
+    
+        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
+        localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+        localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
     };
 
     $.fn[pluginName] = function ( options ) {
@@ -5736,24 +5732,23 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
     Plugin.prototype.init = function (options) {
         // Plugin configuration
-        var articleNum = options,
-            index = localStorage.getItem('lastSeenArticleIndex'),
+        var articleNum = options.numArticles,
+            shopId = options.shopId,
+            index = localStorage.getItem('lastSeenArticleIndex-' + shopId),
             i = 1,
             lastClass = '',
             data, article, all;
 
         if(!articleNum) articleNum = 5;
         all = index;
-        if(all > articleNum) {
-            all = articleNum;
-        }
 
         // Append all articles to the template
         for(; i <= all; i++) {
-            if(localStorage.getItem('lastSeenArticle' + index))
+            if(localStorage.getItem('lastSeenArticle-' + shopId + index))
             {
-                data = localStorage.getItem('lastSeenArticle' + index);
+                data = localStorage.getItem('lastSeenArticle-' + shopId + index);
                 article = JSON.parse(data);
+                lastClass = '';
                 if(i == all || i % 5 == 0) lastClass = '_last';
 
                 // Check if its emotion or default template
