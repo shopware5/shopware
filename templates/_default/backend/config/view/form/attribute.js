@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Config.view.form.Attribute', {
                     var form = combo.up('form'),
                         storeFormField = form.down('[name=store]'),
                         translatableFormField = form.down('[name=translatable]'),
-                        translatableFields = new Array('textarea', 'text', 'html');
+                        translatableFields = ['textarea', 'text', 'html'];
                     if(value == 'select') {
                         storeFormField.show();
                     } else {
