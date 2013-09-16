@@ -180,6 +180,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'validFromTime',
             fieldLabel: '{s name=settings/time_control/start_time}Start time{/s}',
             increment: 30,
+            validationEvent: false,
+            altFormats: 'H:i:s',
             anchor: '100%'
         });
 
@@ -187,8 +189,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'validToTime',
             fieldLabel: '{s name=settings/time_control/end_time}End time{/s}',
             increment: 30,
+            altFormats: 'H:i:s',
             anchor: '100%'
-        })
+        });
 
         return {
             xtype: 'fieldset',

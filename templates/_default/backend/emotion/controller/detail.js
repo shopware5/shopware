@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         errorTitle: '{s name=save/error/title}Error{/s}',
         saveSuccessMessage: '{s name=save/success/message}The emotion [0] has been saved.{/s}',
         saveErrorMessage: '{s name=save/error/message}An error has occurred while saving the emotion:{/s}',
-        onSaveChangesNotValid: '{s name=save/error/not_valid}There were not filled in all required fields{/s}',
+        onSaveChangesNotValid: '{s name=save/error/not_valid}All required fields have not been filled{/s}',
         removeSuccessMessage: '{s name=remove/success/message}Emotion(s) has been removed{/s}',
         removeErrorMessage: '{s name=remove/error/message}An error has occurred while removing the emotion(s):{/s}',
 		growlMessage: '{s name=growlMessage}Emotion{/s}',
