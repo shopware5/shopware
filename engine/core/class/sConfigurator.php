@@ -603,7 +603,7 @@ class sConfigurator
             'stockmin' => $data['stockMin'],
             'weight' => $data['weight'],
             'width' => $data['width'],
-            'length' => $data['length'],
+            'length' => $data['len'],
             'height' => $data['height'],
             'ean' => $data['ean'],
             'position' => $data['position'],
