@@ -5611,3 +5611,520 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }) : $.datepicker["_" + a + "Datepicker"].apply($.datepicker, [this[0]].concat(b))
     }, $.datepicker = new Datepicker, $.datepicker.initialized = !1, $.datepicker.uuid = (new Date).getTime(), $.datepicker.version = "1.8.21", window["DP_jQuery_" + dpuuid] = $
 })(jQuery);
+
+/**
+ * LastSeenArticle Collector
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesCollector',
+        defaults = {
+        };
+
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options) ;
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init(options);
+    }
+
+    Plugin.prototype.init = function (options) {
+        var me = this,
+            opts = me.options,
+            articleNum = opts.numArticles,
+            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId) || 0,
+            i = index - articleNum+1, data, article, exists;
+
+        // Reset index if not defined
+        if(index < 0) index = 0;
+
+        for(; i < index+1; i++) {
+            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + i);
+            if(!data) {
+                continue;
+            }
+
+            article = JSON.parse(data);
+            exists = (article.articleId == opts.lastArticles.articleId);
+
+            // break if the aritcle exists already
+            if(exists) {
+                break;
+            }
+        }
+
+        if(exists) {
+            if(i != index) {
+                // Delete existing article on old position
+                localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
+    
+                // Downgrading all articles with higher index
+                var newIndex,
+                    tmpData;
+
+                for(var j = i + 1; j <= index; j++) {
+                    newIndex = j - 1;
+                    tmpData = localStorage.getItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
+                }
+    
+                // Adding this article on top index
+                localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+            }
+            return false;
+        }
+    
+        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
+        localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+        localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
+
+/**
+ * LastSeenArticle Displayer
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesDisplayer',
+        defaults = {
+        };
+
+    // Append articles to Template
+    var createTemplate = function(article, lastClass) {
+        var rule, image, hidden, desc;
+
+        if(!article) {
+            return false;
+        }
+
+        rule = $('<li>', { 'class': 'lastview_rule' + lastClass });
+        image = $('<a>', {
+            'id': article['articleId'],
+            'rel': 'nofollow',
+            'class': 'article_image',
+            'href': article['linkDetailsRewrited'],
+            'style': 'background: #fff url(' + article['thumbnail'] + ') no-repeat center center'
+
+        });
+
+        hidden = $('<span>', {
+            'class': 'hidden',
+            'html': article['articleName']
+        });
+
+        desc = $('<a>', {
+            'rel': 'nofollow',
+            'class': 'article_description',
+            'title': article['articleName'],
+            'href': article['linkDetailsRewrited'],
+            'html': article['articleName']
+        });
+
+        hidden.appendTo(image);
+        image.appendTo(rule);
+        hidden.appendTo(rule);
+        desc.appendTo(rule);
+
+        return rule;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init(options);
+    }
+
+    Plugin.prototype.init = function (options) {
+        // Plugin configuration
+        var articleNum = options.numArticles,
+            shopId = options.shopId,
+            index = localStorage.getItem('lastSeenArticleIndex-' + shopId),
+            i = 1,
+            lastClass = '',
+            data, article, all;
+
+        if(!articleNum) articleNum = 5;
+        all = index;
+
+        // Append all articles to the template
+        for(; i <= all; i++) {
+            if(localStorage.getItem('lastSeenArticle-' + shopId + index))
+            {
+                data = localStorage.getItem('lastSeenArticle-' + shopId + index);
+                article = JSON.parse(data);
+                lastClass = '';
+                if(i == all || i % 5 == 0) lastClass = '_last';
+
+                // Check if its emotion or default template
+                if($('.viewlast ul').length)
+                {
+                    $('.viewlast ul').append(createTemplate(article, lastClass));
+                }
+                else
+                {
+                    $('.viewlast').append(createTemplate(article, lastClass));
+                }
+            }
+            index = index -1;
+        }
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})(jQuery, window, document);
+
+/**
+ * JSON polyfill which provides support for <= IE7
+ *
+ * @author: Douglas Crockford
+ * @link: https://github.com/douglascrockford/JSON-js/blob/master/json2.js
+ */
+if (navigator.appVersion.indexOf("MSIE 7.") != -1)
+{
+    if (typeof JSON !== 'object') {
+        JSON = {};
+    }
+
+    (function () {
+        'use strict';
+
+        function f(n) {
+            // Format integers to have at least two digits.
+            return n < 10 ? '0' + n : n;
+        }
+
+        if (typeof Date.prototype.toJSON !== 'function') {
+
+            String.prototype.toJSON =
+                Number.prototype.toJSON =
+                    Boolean.prototype.toJSON = function () {
+                        return this.valueOf();
+                    };
+        }
+
+        var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            gap,
+            indent,
+            meta = { // table of character substitutions
+                '\b': '\\b',
+                '\t': '\\t',
+                '\n': '\\n',
+                '\f': '\\f',
+                '\r': '\\r',
+                '"' : '\\"',
+                '\\': '\\\\'
+            },
+            rep;
+
+        function quote(string) {
+
+            escapable.lastIndex = 0;
+            return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string'
+                    ? c
+                    : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' : '"' + string + '"';
+        }
+
+        function str(key, holder) {
+
+            var i, // The loop counter.
+                k, // The member key.
+                v, // The member value.
+                length,
+                mind = gap,
+                partial,
+                value = holder[key];
+
+            if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+                value = value.toJSON(key);
+            }
+
+            if (typeof rep === 'function') {
+                value = rep.call(holder, key, value);
+            }
+
+            switch (typeof value) {
+                case 'string':
+                    return quote(value);
+
+                case 'number':
+
+                    return isFinite(value) ? String(value) : 'null';
+
+                case 'boolean':
+                case 'null':
+
+                    return String(value);
+
+                case 'object':
+
+                    if (!value) {
+                        return 'null';
+                    }
+
+                    gap += indent;
+                    partial = [];
+
+                    if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+                        length = value.length;
+                        for (i = 0; i < length; i += 1) {
+                            partial[i] = str(i, value) || 'null';
+                        }
+
+                        v = partial.length === 0
+                            ? '[]'
+                            : gap
+                            ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']'
+                            : '[' + partial.join(',') + ']';
+                        gap = mind;
+                        return v;
+                    }
+
+                    if (rep && typeof rep === 'object') {
+                        length = rep.length;
+                        for (i = 0; i < length; i += 1) {
+                            if (typeof rep[i] === 'string') {
+                                k = rep[i];
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+                    } else {
+
+                        for (k in value) {
+                            if (Object.prototype.hasOwnProperty.call(value, k)) {
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+                    }
+
+                    v = partial.length === 0
+                        ? '{}'
+                        : gap
+                        ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}'
+                        : '{' + partial.join(',') + '}';
+                    gap = mind;
+                    return v;
+            }
+        }
+
+        if (typeof JSON.stringify !== 'function') {
+            JSON.stringify = function (value, replacer, space) {
+
+                var i;
+                gap = '';
+                indent = '';
+
+
+                if (typeof space === 'number') {
+                    for (i = 0; i < space; i += 1) {
+                        indent += ' ';
+                    }
+
+                } else if (typeof space === 'string') {
+                    indent = space;
+                }
+
+                rep = replacer;
+                if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                        typeof replacer.length !== 'number')) {
+                    throw new Error('JSON.stringify');
+                }
+
+                return str('', {'': value});
+            };
+        }
+
+        if (typeof JSON.parse !== 'function') {
+            JSON.parse = function (text, reviver) {
+
+                var j;
+
+                function walk(holder, key) {
+
+                    var k, v, value = holder[key];
+                    if (value && typeof value === 'object') {
+                        for (k in value) {
+                            if (Object.prototype.hasOwnProperty.call(value, k)) {
+                                v = walk(value, k);
+                                if (v !== undefined) {
+                                    value[k] = v;
+                                } else {
+                                    delete value[k];
+                                }
+                            }
+                        }
+                    }
+                    return reviver.call(holder, key, value);
+                }
+
+                text = String(text);
+                cx.lastIndex = 0;
+                if (cx.test(text)) {
+                    text = text.replace(cx, function (a) {
+                        return '\\u' +
+                            ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                    });
+                }
+
+                if (/^[\],:{}\s]*$/
+                    .test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+                        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                    j = eval('(' + text + ')');
+
+                    return typeof reviver === 'function'
+                        ? walk({'': j}, '')
+                        : j;
+                }
+
+                throw new SyntaxError('JSON.parse');
+            };
+        }
+    }());
+}
+
+/**
+ * localStorage polyfill which provides support for < IE7 using a cookie.
+ *
+ * @author: Remy Sharp
+ * @license: MIT http://rem.mit-license.org/
+ * @link: https://gist.github.com/remy/350433
+ */
+if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
+
+    var Storage = function (type) {
+        function createCookie(name, value, days) {
+            var date, expires;
+
+            if (days) {
+                date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                expires = "; expires="+date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=",
+                ca = document.cookie.split(';'),
+                i, c;
+
+            for (i=0; i < ca.length; i++) {
+                c = ca[i];
+                while (c.charAt(0)==' ') {
+                    c = c.substring(1,c.length);
+                }
+
+                if (c.indexOf(nameEQ) == 0) {
+                    return c.substring(nameEQ.length,c.length);
+                }
+            }
+            return null;
+        }
+        function setData(data) {
+            data = JSON.stringify(data);
+            if (type == 'session') {
+                window.name = data;
+            } else {
+                createCookie('localStorage', data, 365);
+            }
+        }
+        function clearData() {
+            if (type == 'session') {
+                window.name = '';
+            } else {
+                createCookie('localStorage', '', 365);
+            }
+        }
+        function getData() {
+            var data = type == 'session' ? window.name : readCookie('localStorage');
+            return data ? JSON.parse(data) : {};
+        }
+
+
+// initialise if there's already data
+        var data = getData();
+
+        return {
+            length: 0,
+            clear: function () {
+                data = {};
+                this.length = 0;
+                clearData();
+            },
+            getItem: function (key) {
+                return data[key] === undefined ? null : data[key];
+            },
+            key: function (i) {
+// not perfect, but works
+                var ctr = 0;
+                for (var k in data) {
+                    if (ctr == i) return k;
+                    else ctr++;
+                }
+                return null;
+            },
+            removeItem: function (key) {
+                delete data[key];
+                this.length--;
+                setData(data);
+            },
+            setItem: function (key, value) {
+                data[key] = value+''; // forces the value to a string
+                this.length++;
+                setData(data);
+            }
+        };
+    };
+
+    if (typeof window.localStorage == 'undefined') window.localStorage = new Storage('local');
+    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new Storage('session');
+
+})();
