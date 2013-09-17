@@ -918,7 +918,7 @@ class sOrder
             )
         );
 
-        if ($shouldSendMail && !empty(Shopware()->Config()->sendOrderMail)) {
+        if ($shouldSendMail && Shopware()->Config()->get('sendOrderMail')) {
             $mail->send();
         }
 	}
