@@ -124,6 +124,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             }
             $this->updateExpiry();
             $this->updateSessionId();
+
+            //reset failed login count
+            $this->setFailedLogins(0);
         } else {
             // If more then 4 previous failed logins lock account for n * failedlogins seconds
             if ($user->failedlogins >= 4) {
