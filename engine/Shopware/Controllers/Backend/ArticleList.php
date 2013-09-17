@@ -277,7 +277,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 			$categorySql =  "
                 LEFT JOIN s_categories c
                     ON  c.id = :categoryId
-                    AND c.active = 1
 
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = articles.id
