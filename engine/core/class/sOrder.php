@@ -797,8 +797,9 @@ class sOrder
 		DELETE FROM s_order_basket WHERE sessionID=?
 		",array($this->sSYSTEM->sSESSION_ID));
 
-
-        $this->sendMail($variables);
+        if (!empty(Shopware()->Config()->sendOrderMail)){
+            $this->sendMail($variables);
+        }
 
         // Check if voucher is affected
         $this->sTellFriend();
