@@ -3261,6 +3261,9 @@ class sAdmin
 				SUM(IF(b.modus=0,$amount/b.currencyFactor,0)) as amount,
 				SUM(IF(b.modus=0,$amount_net/b.currencyFactor,0)) as amount_net,
 				SUM(CAST(b.price as DECIMAL(10,2))*b.quantity) as amount_display,
+				MAX(d.length) as `length`,
+				MAX(d.height) as height,
+				MAX(d.width) as width,
 				u.id as userID
 				$sql_select
 			FROM s_order_basket b
