@@ -1326,7 +1326,7 @@ class sArticles
             );
 
             $articles[$articleKey]["articleName"] = $this->sOptimizeText($articles[$articleKey]["articleName"]);
-            $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
+            $articles[$articleKey]["description_long"] = $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
             $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
