@@ -871,6 +871,7 @@ class sBasket
 				$surchargename = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEADD"];
 			}else {
 				$surchargename = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEDEV"];
+				$amount = $this->sGetAmountArticles();
 			}
 			//print_r($amount); exit;
 			$surcharge = $amount["totalAmount"] / 100 * $percent;
