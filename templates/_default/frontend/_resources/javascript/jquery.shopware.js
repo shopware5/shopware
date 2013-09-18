@@ -5644,7 +5644,13 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             opts = me.options,
             articleNum = opts.numArticles,
             index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId) || 0,
-            i = index - articleNum+1, data, article, exists;
+            i = index - articleNum+1, data, article, exists,
+            url;
+
+        // Remove query string from article url
+        url = opts.lastArticles.linkDetailsRewrited;
+        url = url.substring(0, url.indexOf('?'));
+        opts.lastArticles.linkDetailsRewrited = url;
 
         // Reset index if not defined
         if(index < 0) index = 0;
