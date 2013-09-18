@@ -41,9 +41,9 @@ Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {
     editable: false,
 
     store: [
-        ["", '{s name=element/boolean_select/empty_value}Inherited{/s}'],
-        [true, '{s name=element/boolean_select/yes}Yes{/s}'],
-        [false, '{s name=element/boolean_select/no}No{/s}']
+        ["", 'Vererbt (Inherited)'],
+        [true, 'Ja (Yes)'],
+        [false, 'Nein (No)']
     ]
 });
 //{/block}
