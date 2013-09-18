@@ -98,6 +98,8 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
      */
     snippets: {
         title: '{s name=image/rule/title}Create new image mapping{/s}',
+        cancel: '{s name=cancel_button}Cancel{/s}',
+        save: '{s name=general/save_button}Save{/s}'
     },
 
     /**
@@ -202,18 +204,18 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
                 {
                     xtype: 'button',
                     cls: 'secondary',
-                    text: 'Cancel',
+                    text: me.snippets.cancel,
                     handler: function() {
                         me.destroy();
                     }
                 }, {
                     xtype: 'button',
                     cls: 'primary',
-                    text: 'Save',
+                    text: me.snippets.save,
                     handler: function() {
                         me.fireEvent('createImageMapping', me);
                     }
-                },
+                }
             ]
         });
     }
