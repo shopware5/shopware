@@ -146,7 +146,8 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             },
 
             'property-main-setAssignGrid dataview': {
-                drop: me.onDropSetAssignment
+                drop: me.onDropSetAssignment,
+                beforedrop: me.onBeforeDropSetAssignment,
             },
 
             'property-main-optionGrid': {
@@ -176,7 +177,33 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         me.callParent(arguments);
     },
 
+    /**
+     * Event listener function of the grid drag and drop plugin.
+     * This event listener function checks if the dragged records
+     * is already in the set assignment store.
+     * If this is the case, the drop event is cancled.
+     *
+     * @param node
+     * @param data
+     * @returns { boolean }
+     */
+    onBeforeDropSetAssignment: function(node, data) {
+        var me = this;
+        var record = data.records[0];
 
+        if (!record) {
+            return false;
+        }
+
+        if (data.view.initialConfig.grid.xtype == 'property-main-setAssignGrid') {
+            return true;
+        }
+
+        var inStore = me.subApplication.setAssignStore.getById(record.get('id'));
+
+        return (inStore === null);
+    },
+    
     /**
      * Saves current positions in the grid to the backend
      *
@@ -242,7 +269,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             setId = store.getProxy().extraParams.setId;
 
         store.each(function(item) {
-            orderedItems[index] = item.get('optionId');
+            orderedItems[index] = item.get('id');
             index +=1;
         });
 
@@ -353,8 +380,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 me.saveGroupPosition(group);
             }
         });
-
-
     },
 
     /**
@@ -371,8 +396,8 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         Ext.Ajax.request({
             url: '{url controller="property" action="removeOptionFromGroup"}',
             params: {
-                groupId: record.data.groupId,
-                optionId: record.data.optionId
+                groupId: record.get('groupId'),
+                optionId: record.get('id')
             },
             success: function(response, opts) {
                 Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.successfulRemovedAssignment, me.snippets.growlMessage);

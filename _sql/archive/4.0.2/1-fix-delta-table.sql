@@ -1,8 +1,0 @@
--- //
-
-TRUNCATE `changelog`;
-
--- //@UNDO
-
--- //
-

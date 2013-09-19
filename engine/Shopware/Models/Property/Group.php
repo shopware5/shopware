@@ -40,8 +40,6 @@ use Shopware\Components\Model\ModelEntity,
 /**
  * Shopware Article Property Model
  *
- * todo@all: Documentation
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_filter")
  */

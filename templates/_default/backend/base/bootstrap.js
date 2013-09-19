@@ -98,6 +98,7 @@
 {include file='backend/base/store/dispatch.js'}
 {include file='backend/base/store/payment.js'}
 {include file='backend/base/store/shop.js'}
+{include file='backend/base/store/shop_language.js'}
 {include file='backend/base/store/translation.js'}
 {include file='backend/base/store/supplier.js'}
 {include file='backend/base/store/country.js'}
@@ -139,6 +140,7 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 
 {include file='backend/base/component/element/boolean.js'}
+{include file='backend/base/component/element/boolean_select.js'}
 {include file='backend/base/component/element/button.js'}
 {include file='backend/base/component/element/color.js'}
 {include file='backend/base/component/element/date.js'}

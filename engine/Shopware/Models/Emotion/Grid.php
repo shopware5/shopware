@@ -81,7 +81,7 @@ class Grid extends ModelEntity
      * @ORM\Column(name="cell_height", type="integer", nullable=false)
      */
     private $cellHeight = 185;
- 
+
     /**
      * @var integer $articleHeight
      *
@@ -102,7 +102,8 @@ class Grid extends ModelEntity
      */
     protected $emotions;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->emotions = new ArrayCollection();
     }
 

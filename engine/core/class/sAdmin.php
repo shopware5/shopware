@@ -1605,7 +1605,6 @@ class sAdmin
 
         $data = array(
             $userObject["auth"]["password"],
-	        $userObject["auth"]["encoderName"],
             $userObject["auth"]["email"],
             $userObject["payment"]["object"]["id"],
             $userObject["auth"]["accountmode"],
@@ -1615,17 +1614,17 @@ class sAdmin
             $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"],
             $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"],
             $this->subshopId,
-            empty($referer) ? "" : $referer
-
+            empty($referer) ? "" : $referer,
+            $userObject["auth"]["encoderName"],
         );
         $sql = '
 			INSERT INTO s_user
 			(
-				password, encoder, email, paymentID, active, accountmode,
+				password, email, paymentID, active, accountmode,
 			 	validation, firstlogin,sessionID, affiliate, customergroup,
-			 	language, subshopID, referer
+			 	language, subshopID, referer, encoder
 			)
-			VALUES (?,?,?,?,1,?,?,NOW(),?,?,?,?,?,?)
+			VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
 		';
 
         list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainData_FilterSql', array($sql,$data), array('subject'=>$this));
@@ -1992,7 +1991,7 @@ class sAdmin
      */
     public function sGetDownloads (){
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-		SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status, comment
+		SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status,cleared, comment
 		FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 10
 		",array($this->sSYSTEM->_SESSION["sUserId"]));
 
@@ -3262,6 +3261,9 @@ class sAdmin
 				SUM(IF(b.modus=0,$amount/b.currencyFactor,0)) as amount,
 				SUM(IF(b.modus=0,$amount_net/b.currencyFactor,0)) as amount_net,
 				SUM(CAST(b.price as DECIMAL(10,2))*b.quantity) as amount_display,
+				MAX(d.length) as `length`,
+				MAX(d.height) as height,
+				MAX(d.width) as width,
 				u.id as userID
 				$sql_select
 			FROM s_order_basket b

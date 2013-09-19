@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      */
     getGridTranslationPlugin: function () {
         return Ext.create('Shopware.grid.plugin.Translation', {
-            translationType: 'propertyoption'
+            translationType: 'propertygroup'
         });
     },
 

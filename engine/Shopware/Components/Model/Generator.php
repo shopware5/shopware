@@ -346,9 +346,9 @@ class %className% extends ModelEntity
     }
 
     /**
-     * The generate model function create the doctrine model for 
+     * The generate model function create the doctrine model for
      * the passed table name.
-     * 
+     *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @return int
      */
@@ -523,7 +523,6 @@ class %className% extends ModelEntity
      */
     protected function getPropertyNameOfColumnName($table, $column)
     {
-        $filter = new \Zend_Filter_Word_UnderscoreToCamelCase();
         $foreignKey = $this->getColumnForeignKey($table, $column);
         if ($foreignKey instanceof \Doctrine\DBAL\Schema\ForeignKeyConstraint) {
             $table = $foreignKey->getForeignTableName();
@@ -531,8 +530,21 @@ class %className% extends ModelEntity
             $fullName = $this->getClassNameOfTableName($table);
             return lcfirst($fullName) . 'Id';
         } else {
-            return lcfirst($filter->filter($column->getName()));
+            return lcfirst($this->underscoreToCamelCase($column->getName()));
         }
+    }
+
+    /**
+     * Converts underscore separated string into a camelCase separated string
+     *
+     * @param string $str
+     * @return string
+     */
+    protected function underscoreToCamelCase($str)
+    {
+        $func = create_function('$c', 'return strtoupper($c[1]);');
+
+        return preg_replace_callback('/_([a-zA-Z])/', $func, $str);
     }
 
     /**

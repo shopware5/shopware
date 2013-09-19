@@ -21,4 +21,4 @@ app.dir   = ${basedir}/engine/Shopware
 script.mysql   = mysql
 script.phpunit = phpunit
 
-demo.data = ${sql.dir}/demo/next.sql
+demo.data = ${sql.dir}/demo/latest.sql

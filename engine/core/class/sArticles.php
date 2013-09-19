@@ -622,7 +622,6 @@ class sArticles
 
         $sLimitStart = ($sPage - 1) * $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
         $sLimitEnd = $this->sSYSTEM->_GET['sPerPage'] ? $this->sSYSTEM->_GET['sPerPage'] : $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
-        $limitNew = !empty($this->sSYSTEM->sCONFIG['sARTICLELIMIT']) ? (int)$this->sSYSTEM->sCONFIG['sARTICLELIMIT'] : 125;
 
         $sql_add_where = "";
         $sql_search_fields = "";
@@ -796,7 +795,8 @@ class sArticles
         }
 
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
-            'subject' => $this, 'id' => $categoryId
+            'subject' => $this,
+            'id'      => $categoryId
         ))) {
             return false;
         }
@@ -807,6 +807,9 @@ class sArticles
             $sCategoryConfig = array();
         }
 
+        $defaultPerPage = (int) $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
+        $defaultSort    = 0;
+
         // PerPage
         if (!empty($this->sSYSTEM->_GET['sPerPage'])) {
             $sCategoryConfig['sPerPage'] = (int)$this->sSYSTEM->_GET['sPerPage'];
@@ -816,18 +819,19 @@ class sArticles
         if (!empty($sCategoryConfig['sPerPage'])) {
             $sPerPage = $sCategoryConfig['sPerPage'];
         } elseif (empty($this->sSYSTEM->_GET['sPerPage'])) {
-            $sPerPage = (int)$this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
+            $sPerPage = $defaultPerPage;
         }
 
         // Order List by
         if (isset($this->sSYSTEM->_POST['sSort'])) {
             $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
-        } elseif(!empty($this->sSYSTEM->_GET['sSort'])) {
+        } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
             $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
         }
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
         }
+        $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : $defaultSort;
 
         if (isset($this->sSYSTEM->_GET['sSupplier']) && empty($this->sSYSTEM->_GET['sSupplier'])
             || !empty($this->sSYSTEM->_GET['sFilterProperties'])
@@ -849,13 +853,17 @@ class sArticles
             && empty($this->sSYSTEM->_GET['sFilterProperties'])) {
             $this->sSYSTEM->_GET['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
         }
+
         if (!empty($this->sSYSTEM->_GET['sSupplier']) && is_numeric($this->sSYSTEM->_GET['sSupplier'])) {
             $sCategoryConfig['sSupplier'] = (int)$this->sSYSTEM->_GET['sSupplier'];
         }
+
         if (!empty($this->sSYSTEM->_GET['sTemplate'])) {
             $sCategoryConfig['sTemplate'] = basename($this->sSYSTEM->_GET['sTemplate']);
         }
-        if(!empty($sCategoryConfig)) {
+
+        // save category config to session
+        if (!empty($sCategoryConfig)) {
             $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId] = $sCategoryConfig;
         } else {
             unset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId]);
@@ -864,8 +872,6 @@ class sArticles
         $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int)$this->sSYSTEM->_GET['sPage'] : 1;
         $sLimitStart = ($sPage - 1) * $sPerPage;
         $sLimitEnd = $sPerPage;
-
-        $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : 0;
 
         //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
         $sqlFromPath = "
@@ -926,7 +932,6 @@ class sArticles
                     ";
                 }
         }
-
 
         if (strpos($orderBy, 'price') !== false) {
             $select_price = "
@@ -1180,9 +1185,29 @@ class sArticles
             $numberPages = $this->sSYSTEM->sCONFIG['sMAXPAGES'];
         }
 
+        $categoryParams = array();
+        if ($sSort != $defaultSort) {
+            $categoryParams['sSort'] = $sSort;
+        }
+
+        if ($sPerPage != $defaultPerPage) {
+            $categoryParams['sPerPage'] = $sPerPage;
+        }
+
+        if (isset($sCategoryConfig['sFilterProperties'])) {
+            $categoryParams['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
+        }
+
+        if (isset($sCategoryConfig['sSupplier'])) {
+            $categoryParams['sSupplier'] = $sCategoryConfig['sSupplier'];
+        }
+
+        if (isset($sCategoryConfig['sTemplate'])) {
+            $categoryParams['sTemplate'] = $sCategoryConfig['sTemplate'];
+        }
+
         // Make Array with page-structure to render in template
         $pages = array();
-
         if ($numberPages > 1) {
             for ($i = 1; $i <= $numberPages; $i++) {
                 if ($i == $sPage) {
@@ -1191,18 +1216,18 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $i), false);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
@@ -1304,7 +1329,7 @@ class sArticles
             $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
 
             // Require Pictures
-            $articles[$articleKey]["image"] = $this->sGetArticlePictures($articles[$articleKey]["articleID"], true, 0);
+            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
             // Links to details, basket
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
@@ -1326,8 +1351,6 @@ class sArticles
                 $articles[$articleKey]["referenceprice"] = $basePrice;
             }
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
-
-
         } // For every article in this list
 
         // Build result array
@@ -1339,6 +1362,7 @@ class sArticles
         $result['sNumberArticles'] = $numberArticles;
         $result['sNumberPages'] = $numberPages;
         $result['sPage'] = $sPage;
+        $result['categoryParams'] = $categoryParams;
 
         if (!empty($sCategoryConfig['sTemplate'])) {
             $result['sTemplate'] = $sCategoryConfig['sTemplate'];
@@ -1845,8 +1869,13 @@ class sArticles
             $filters = $activeFilters;
             $filters[] = $property['valueID'];
             $link = $baseLink . '&sFilterProperties=' . implode('|', $filters);
-            $removeLink = $baseLink . '&sFilterProperties=0';
 
+            if(empty($lastOptionId) || $lastOptionId != $property['optionID']) {
+                //only set the default remove link once per option group like color
+                $removeLink = $baseLink . '&sFilterProperties=0';
+            }
+            $lastOptionId = $property['optionID'];
+            
             if (!empty($activeFilters)
                 && in_array($property['valueID'], $activeFilters)
             ) {
@@ -2235,7 +2264,7 @@ class sArticles
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
         }
-        
+
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
@@ -2835,6 +2864,9 @@ class sArticles
                 aDetails.packunit,
                 aDetails.suppliernumber,
                 aDetails.ean,
+                aDetails.width,
+                aDetails.length,
+                aDetails.height,
                 weight,
                 a.laststock,
                 aDetails.unitID,
@@ -3125,7 +3157,6 @@ class sArticles
             // Load article-configurations
             $getArticle = $this->sGetArticleConfig($getArticle["articleID"], $getArticle);
 
-
             if ($getArticle["sConfigurator"]) {
                 if ($getArticle["pricegroupActive"]) {
                     // The default variant's price group price is calculated above and is not overwritten by sGetArticleConfig
@@ -3159,8 +3190,8 @@ class sArticles
 
             // Get Article images
             // =================================================.
-            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']); // ï¿½ndern
-            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']); // ï¿½ndern
+            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']);
+            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']);
 
             // Links
             // =================================================.
@@ -3223,6 +3254,7 @@ class sArticles
             if ($this->showArticleNavigation()) {
                 $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
             }
+
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"], null, 'UTF-8')));
             $string = str_replace(',','',$string);
@@ -3632,7 +3664,8 @@ class sArticles
                     IFNULL(p.pricegroup, IFNULL(p2.pricegroup, 'EK')) as pricegroup,
                     pricegroupID, pricegroupActive, filtergroupID,
                     d.purchaseunit, d.referenceunit,
-                    d.unitID, laststock, additionaltext,
+                    d.unitID, d.length, d.height, d.width,
+                    laststock, additionaltext,
                     d.shippingtime,
                     (a.configurator_set_id IS NOT NULL) as sConfigurator,
                     IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
@@ -3765,7 +3798,7 @@ class sArticles
             'averange' => round($getPromotionResult['sVoteAverange'][0], 2),
             'count' => round($getPromotionResult['sVoteAverange'][1]),
         );
-        $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, "", false, $mode == "random" ? true : false);
+        $getPromotionResult["image"] = $this->getArticleListingCover($getPromotionResult["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
 
         $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
         $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
@@ -3878,8 +3911,8 @@ class sArticles
      * Internal helper function to get the cover image of an article.
      * If the orderNumber parameter is set, the function checks first
      * if an variant image configured. If this is the case, this
-     * image will be used as cover image. Otherwise the function returns
-     * the main image of the article.
+     * image will be used as cover image. Otherwise the function calls the
+     * getArticleMainCover function which returns the absolute main image
      *
      * @param $articleId
      * @param $orderNumber
@@ -3914,24 +3947,49 @@ class sArticles
             return $this->getDataOfArticleImage($cover, $articleAlbum);
         }
 
-        //if no variant images founded and no normal article image we will return the main image of the article even if this image has an mapping configuration.
+        //if no variant or normal article image is found we will return the main image of the article even if this image has a variant restriction
+        return $this->getArticleMainCover($articleId, $articleAlbum);
+    }
+
+    /**
+     * Returns the the absolute main article image
+     * This method returns the main cover depending on the main flag no matter if any variant restriction is set
+     *
+     * @param $articleId
+     * @param $articleAlbum
+     * @return array
+     */
+    public function getArticleMainCover($articleId, $articleAlbum)
+    {
         $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
+    }
+
+    /**
+     * Wrapper method to specialize the sGetArticlePictures method for the listing images
+     *
+     * @param $articleId
+     * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
+     * @return array
+     */
+    public function getArticleListingCover($articleId, $forceMainImage = false)
+    {
+        return $this->sGetArticlePictures($articleId, true, 0, null, null, null, $forceMainImage);
     }
 
     /**
      * Get all pictures from a certain article
      * @access public
      * @param        $sArticleID
-     * @param bool   $onlyCover
-     * @param        $pictureSize
+     * @param bool $onlyCover
+     * @param int $pictureSize | unused variable
      * @param string $ordernumber
-     * @param bool   $allImages
-     * @param bool   $realtime
-     * @internal param null $articleDetailId
+     * @param bool $allImages | unused variable
+     * @param bool $realtime | unused variable
+     * @param bool $forceMainImage | will return the main image no matter which variant restriction is set
      * @return array
      */
-    public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false)
+    public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false, $forceMainImage = false)
     {
         static $articleAlbum;
         if($articleAlbum === null) {
@@ -3948,7 +4006,12 @@ class sArticles
         Enlight()->Events()->notify('Shopware_Modules_Articles_GetArticlePictures_Start', array('subject' => $this, 'id' => $articleId));
 
         //first we get the article cover
-        $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
+        if ($forceMainImage) {
+            $cover = $this->getArticleMainCover($articleId, $articleAlbum);
+        } else {
+            $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
+        }
+
 
         if ($onlyCover) {
             $cover = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticlePictures_FilterResult', $cover, array('subject' => $this, 'id' => $articleId));
@@ -4403,13 +4466,13 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
 		";
-        $object = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
+        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
-        if (!empty($object)) {
-            $object = unserialize($object);
+        if (!empty($objectData)) {
+            $objectData = unserialize($objectData);
         } else {
-            $object = array();
+            $objectData = array();
         }
         if (!empty($fallback)) {
             $sql = "
@@ -4423,11 +4486,11 @@ class sArticles
             );
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
-                $object = array_merge($objectFallback, $object);
+                $objectData = array_merge($objectFallback, $objectData);
             }
         }
-        if (!empty($object)) {
-            foreach ($object as $translateKey => $value) {
+        if (!empty($objectData)) {
+            foreach ($objectData as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
                 } else {

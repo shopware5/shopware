@@ -440,6 +440,7 @@ div#notes .table_row .action a.basket,
 #detailbox #img {width: 285px;}
 #detailbox #img img {display: block;margin:0 auto;}
 #detailbox #img #wrap {display: block; min-height: 255px;}
+#detailbox #img #wrap .mousetrap { opacity: 0; background: #fff }
 #zoom1 {display:block}
 #zoom1 {display: block;margin: 0 auto;}
 
@@ -758,6 +759,7 @@ div#notes .article_price_unit p { margin: 0; }
 .register .privacy, .register .alt_shipping {margin-left: 205px;}
 .register .privacy {margin-left: 175px;}
 .register .privacy label, .register .alt_shipping label {width:400px;margin:0;}
+.register .alt_shipping label {display: inline; float:inherit;}
 .register .check label, .register .salutation span label, .register .privacy label {margin: 4px 0 0 5px;}
 .register .error {margin: 0;border-bottom: 0 none;}
 #registerbutton {width: 241px;display:block; background: url(../images/backgrounds/bg_basketbutton.png) no-repeat;border: 0 none; height: 40px;color: #fff; font-size: 14px;}

@@ -1,3 +1,0 @@
-ALTER TABLE `s_order` CHANGE `userID` `userID` INT( 11 ) NULL DEFAULT NULL;
--- //@UNDO
-ALTER TABLE `s_order` CHANGE `userID` `userID` INT( 11 ) NOT NULL DEFAULT '0';

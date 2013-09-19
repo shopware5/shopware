@@ -117,8 +117,8 @@
 				</div>
 				{* Footer *}
 				{block name="frontend_index_footer"}
-				    {if $sLastArticlesShow}
-				    	{action module=widgets controller=lastArticles}
+				    {if $sLastArticlesShow && !$isEmotionLandingPage}
+                        {include file="frontend/plugins/index/viewlast.tpl"}
 				    {/if}
 				{/block}
 			</div>

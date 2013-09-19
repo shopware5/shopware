@@ -169,7 +169,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     {
         $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown', 'getSimilarShownBackendController');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_SimilarShown', 'initSimilarShownResource');
-        $this->subscribeEvent('Shopware_Modules_Marketing_GetSimilarShownArticles', 'afterSimilarShownArticlesSelected');
         $this->subscribeEvent('Shopware_Plugins_LastArticles_ResetLastArticles', 'afterSimilarShownArticlesReset');
         $this->subscribeEvent('Shopware_Modules_Articles_Before_SetLastArticle', 'beforeSetLastArticle');
 
@@ -204,42 +203,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         $this->subscribeEvent('Shopware\Models\Article\Article::postPersist', 'refreshArticle');
     }
 
-
-    /**
-     * Event listener function of the Shopware_Modules_Marketing_GetSimilarShownArticles event.
-     * This event is used to refresh the elapsed similar shown article data, if the user
-     * configured a live refresh in the performance backend module.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     * @return mixed
-     */
-    public function afterSimilarShownArticlesSelected(Enlight_Event_EventArgs $arguments)
-    {
-        if (Shopware()->Session()->Bot || !($this->isSimilarShownActivated())) {
-            return $arguments->getReturn();
-        }
-        $strategy = $this->Application()->Config()->get(
-            'similarRefreshStrategy',
-            self::AGGREGATE_STRATEGY_LIVE
-        );
-
-        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE) {
-            return $arguments->getReturn();
-        }
-
-        if (Shopware()->Front()->returnResponse()) {
-            $this->SimilarShown()->updateElapsedSimilarShownArticles(50);
-        } else {
-            $event = new Enlight_Event_EventHandler(
-                'Enlight_Controller_Front_AfterSendResponse',
-                array($this, 'afterSendResponseOnSimilarShown')
-            );
-            Shopware()->Events()->registerListener($event);
-        }
-
-        return $arguments->getReturn();
-    }
-
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin SimilarShown controller.
@@ -270,35 +233,34 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     }
 
     /**
-     * Plugin event listener function which fired after
-     * the response send.
-     * This function is used in the case that the similar shown articles configuration
-     * is set to "live". That means that we have to refresh the similar shown articles
-     * after each access on the similar shown core function.
-     * This function refresh only a minimum stack of the similar shown data
-     * to prevent long server times.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     */
-    public function afterSendResponseOnSimilarShown(Enlight_Event_EventArgs $arguments)
-    {
-        $this->SimilarShown()->updateElapsedSimilarShownArticles(50);
-    }
-
-    /**
      * Event listener function of the Shopware_Plugins_LastArticles_ResetLastArticles
      * event. This event is fired after the Shopware_Plugins_LastArticles plugin resets
      * the s_emarketing_lastarticles data for a validation time.
      * This listener is used to update the similar shown article data at the same time.
      *
      * @param Enlight_Event_EventArgs $arguments
+     * @return mixed
      */
     public function afterSimilarShownArticlesReset(Enlight_Event_EventArgs $arguments)
     {
         if (!($this->isSimilarShownActivated())) {
-            return;
+            return $arguments->getReturn();
         }
-        $this->SimilarShown()->updateElapsedSimilarShownArticles(50);
+
+        $strategy = $this->Application()->Config()->get(
+            'similarRefreshStrategy',
+            self::AGGREGATE_STRATEGY_LIVE
+        );
+
+        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE) {
+            return $arguments->getReturn();
+        }
+
+        $this->SimilarShown()->resetSimilarShown(
+            $this->SimilarShown()->getSimilarShownValidationTime()
+        );
+
+        return $arguments->getReturn();
     }
 
     /**
@@ -316,15 +278,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return $arguments->getReturn();
         }
 
-        $strategy = $this->Application()->Config()->get(
-            'similarRefreshStrategy',
-            self::AGGREGATE_STRATEGY_LIVE
-        );
-
-        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE) {
-            return $arguments->getReturn();
-        }
-
         $articleId = $arguments->getArticle();
 
         $sql = "SELECT COUNT(id)
@@ -332,12 +285,12 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                 WHERE sessionID = :sessionId
                 AND   articleID = :articleId";
 
-        $alreadyViewed = Shopware()->Db()->fetchCol($sql, array(
+        $alreadyViewed = Shopware()->Db()->fetchOne($sql, array(
             'sessionId' => Shopware()->SessionID(),
             'articleId' => $articleId
         ));
 
-        if (count($alreadyViewed) <= 0) {
+        if ($alreadyViewed > 0) {
             return $arguments->getReturn();
         }
 
@@ -381,7 +334,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return true;
         }
 
-        $this->SimilarShown()->updateElapsedSimilarShownArticles();
+        $this->SimilarShown()->resetSimilarShown();
         $this->SimilarShown()->initSimilarShown();
         return true;
     }
