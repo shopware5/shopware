@@ -1,0 +1,8 @@
+From: feature/next/sw-4498-update-to-doctrine-2.4
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/SelfHealing/Bootstrap.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/SelfHealing/Bootstrap.php
+Conflict: (content) Merge conflict in engine/Shopware/Components/Model/ModelManager.php
+	MODIFY|engine/Shopware/Components/Model/ModelManager.php
+Conflict: (content) Merge conflict in engine/Shopware/Bootstrap.php
+	MODIFY|engine/Shopware/Bootstrap.php
