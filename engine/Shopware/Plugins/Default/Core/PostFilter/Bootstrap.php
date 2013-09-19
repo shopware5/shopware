@@ -228,7 +228,17 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
             $link = $this->basePathUrl . $link;
         }
-        if ($this->useSecure && $src[1] != 'a') {
+
+        //check canonical shopware configuration
+        // canonical = HTTP
+        $forceUnsecureCanonical = Shopware()->Config()->get('forceUnsecureCanonical');
+
+        //check if the current link is a canonical link
+        $isCanonical = (strpos($src[0], 'rel="canonical"') !== false);
+
+        $replaceCanonical = !($isCanonical && $forceUnsecureCanonical);
+
+        if ($this->useSecure && $src[1] != 'a' && $replaceCanonical) {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);
         }
 
