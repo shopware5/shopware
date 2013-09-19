@@ -657,7 +657,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		}
 
 		foreach ($error_messages as $key=>$error_message) {
-			$error_messages[$key] = utf8_encode($this->View()->fetch('string:'.$error_message));
+			$error_messages[$key] = $this->View()->fetch('string:'.$error_message);
 		}
 
 		echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
@@ -695,14 +695,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 		}
 
 		foreach ($error_messages as $key=>$error_message) {
-			$error_messages[$key] = utf8_encode($this->View()->fetch('string:'.$error_message));
+			$error_messages[$key] = $this->View()->fetch('string:'.$error_message);
 		}
 
 		echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
 	}
 
 	/**
-	 * Validates the billing informations
+	 * Validates the billing information
 	 * and returns an json string with error
 	 * codes and messages
 	 *

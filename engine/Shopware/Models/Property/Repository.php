@@ -270,12 +270,17 @@ class Repository extends ModelRepository
     public function getSetAssignsQueryBuilder($setId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('relations.id', 'groups.id as groupId', 'relations.optionId','relations.position', 'option.name'))
-                ->from('Shopware\Models\Property\Relation', 'relations')
-                ->leftJoin('relations.group', 'groups')
-                ->leftJoin('relations.option', 'option')
-                ->where('relations.groupId = ?1')
-                ->setParameter(1, $setId)
+        $builder->select(array(
+            'options.id',
+            'options.name',
+            'relations.groupId',
+            'relations.position'
+        ));
+
+        $builder->from('Shopware\Models\Property\Option', 'options')
+                ->innerJoin('options.relations', 'relations')
+                ->where('relations.groupId = :id')
+                ->setParameter('id', $setId)
                 ->orderBy('relations.position');
 
         return $builder;

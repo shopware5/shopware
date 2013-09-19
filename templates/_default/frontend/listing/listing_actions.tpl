@@ -5,11 +5,17 @@
 {/block}
 {block name='frontend_listing_actions_top'}
 	<div class="top">
-		
+
 		{* Sort filter *}
 		{block name='frontend_listing_actions_sort'}
 			<form method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
-                <input type="hidden" name="sPage" value="1">
+            {foreach from=$categoryParams key=key item=value}
+                {if $key == 'sSort'}
+                    {continue}
+                {/if}
+                <input type="hidden" name="{$key}" value="{$value}">
+            {/foreach}
+            <input type="hidden" name="sPage" value="1">
 			<div class="sort-filter">
 				<label>{s name='ListingLabelSort'}{/s}</label>
 				<select name="sSort" class="auto_submit">
@@ -23,13 +29,19 @@
 			</div>
 			</form>
 		{/block}
-		
+
 		{* Article per page *}
 		{block name='frontend_listing_actions_items_per_page'}
 		{if $sPerPage}
 			<form method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
-                <input type="hidden" name="sPage" value="1">
-			<div class="articleperpage{if $sCategoryContent.noViewSelect} rightalign{/if}">
+            {foreach from=$categoryParams key=key item=value}
+                {if $key == 'sPerPage'}
+                    {continue}
+                {/if}
+                <input type="hidden" name="{$key}" value="{$value}">
+            {/foreach}
+            <input type="hidden" name="sPage" value="1">
+            <div class="articleperpage{if $sCategoryContent.noViewSelect} rightalign{/if}">
 				<label>{s name='ListingLabelItemsPerPage'}{/s}</label>
 				<select name="sPerPage" class="auto_submit">
 				{foreach from=$sPerPage item=perPage}
@@ -40,19 +52,19 @@
 			</form>
 		{/if}
 		{/block}
-		
+
 		{* Change layout *}
-		
+
 		{block name="frontend_listing_actions_change_layout"}
 		{if !$sCategoryContent.noViewSelect}
 			<div class="list-settings">
-			<label>{s name='ListingActionsSettingsTitle'}Darstellung:{/s}</label>
-			<a href="{url sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='table'}" class="table-view {if $sBoxMode=='table'}active{/if}" title="{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}">&nbsp;</a>
-			<a href="{url sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='list'}" class="list-view {if $sBoxMode=='list'}active{/if}" title="{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}">&nbsp;</a>	
-			</div>
+                <label>{s name='ListingActionsSettingsTitle'}Darstellung:{/s}</label>
+                <a href="{url params=$categoryParams sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='table'}" class="table-view {if $sBoxMode=='table'}active{/if}" title="{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}">&nbsp;</a>
+                <a href="{url params=$categoryParams sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='list'}" class="list-view {if $sBoxMode=='list'}active{/if}" title="{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}">&nbsp;</a>
+            </div>
 		{/if}
 		{/block}
-		
+
 		<noscript>
 			<input type="submit" class="buttonkit green small rounded" value="OK" />
 		</noscript>
@@ -61,14 +73,14 @@
 {block name='frontend_listing_actions_paging'}
 	{if $sNumberPages && $sNumberPages > 1}
 	<div class="bottom">
-	
+
 		{* Paging *}
 		<div class="paging">
 			<label>{s name='ListingPaging'}{/s}</label>
 			{if $sPages.previous}
 				<a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{s name='ListingLinkPrevious'}{/s}" class="navi prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
 			{/if}
-			
+
 			{* Articles per page *}
 			{foreach from=$sPages.numbers item=page}
 				{if $page.value<$sPage+4 AND $page.value>$sPage-4}
@@ -85,7 +97,7 @@
 				<a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{s name='ListingLinkNext'}{/s}" class="navi more">{s name="ListingTextNext"}&gt;{/s}</a>
 			{/if}
 		</div>
-		
+
 		{block name='frontend_listing_actions_count'}
 		{* Count sites *}
 		<div class="display_sites">

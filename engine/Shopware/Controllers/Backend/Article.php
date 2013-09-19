@@ -3957,7 +3957,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     $cursor = $article;
                 }
                 //call the recursive interpreter to resolve all commands
-                $name[] = $this->recursiveInterpreter($cursor, 0, $command['commands']);
+                $value = $this->recursiveInterpreter($cursor, 0, $command['commands']);
+                $name[] = str_replace(' ', '-', $value);
             } else {
                 $name[] = $counter;
             }

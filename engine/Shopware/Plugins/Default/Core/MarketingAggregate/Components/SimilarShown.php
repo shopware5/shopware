@@ -37,10 +37,18 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     /**
      * Resets the similar show article data.
      */
-    public function resetSimilarShown()
+    public function resetSimilarShown(DateTime $validationTime = null)
     {
-        $sql = "DELETE FROM s_articles_similar_shown_ro";
-        Shopware()->Db()->query($sql);
+        if ($validationTime) {
+            $sql = "DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime";
+            Shopware()->Db()->query(
+                $sql,
+                array('validationTime' => $validationTime->format('Y-m-d 00:00:00'))
+            );
+        } else {
+            $sql = "DELETE FROM s_articles_similar_shown_ro ";
+            Shopware()->Db()->query($sql);
+        }
     }
 
     /**
@@ -131,9 +139,9 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      *
      * @return DateTime
      */
-    protected function getSimilarShownValidationTime()
+    public function getSimilarShownValidationTime()
     {
-        //get top seller order time interval
+        //get similar shown validation time
         $interval = Shopware()->Config()->get('similarValidationTime', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.

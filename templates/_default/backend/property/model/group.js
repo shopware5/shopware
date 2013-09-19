@@ -49,7 +49,10 @@ Ext.define('Shopware.apps.Property.model.Group', {
 		//{block name="backend/property/model/Group/fields"}{/block}
         { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
-        { name: 'filterable', type: 'boolean' }
+        { name: 'filterable', type: 'boolean' },
+
+        //property for set assignment grid.
+        { name: 'groupId',    type: 'int', useNull: true, defaultValue: null }
     ],
 
     /**

@@ -2,6 +2,7 @@
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
+- **Issue-Tracker**: <http://jira.shopware.de/jira>
 
 ## Overview
 
@@ -10,7 +11,7 @@
 Shopware 4 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next eCommerce project.
 Furthermore Shopware 4 provides an event-driven plugin-system and an advanced hook system, which unleashes the truth power and gives you the ability to customize every part of it.
 
-Vist the forum at <http://forum.shopware.de/>
+Visit the forum at <http://forum.shopware.de/>
 
 ### Shopware Server Requirements
 
@@ -133,10 +134,9 @@ standards.
 
 ### How to report bugs / feature requests?
 
-We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature request. You can either use the Github issue tracker or our Jira based web-frontend:
+We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have one place to go, we've decided to close the GitHub issue tracker in favor of our Jira issue tracker, which is directly connected to our development division.
 
 * [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
-* [Github Issue tracker](https://github.com/ShopwareAG/shopware-4/issues)
 
 # Copying / License
 
@@ -146,7 +146,7 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 The changelog and all available commits are located under <https://github.com/ShopwareAG/shopware-4/commits/master>.
 
-## Futher reading
+## Further reading
 
 * [Shopware AG](http://www.shopware.de) - Homepage of shopware AG
 * [Shopware Wiki](http://wiki.shopware.de) - Shopware Wiki

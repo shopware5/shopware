@@ -1015,7 +1015,7 @@ class Order extends ModelEntity
     {
         $this->history = $history;
     }
-
+        
     /**
      * The calculateInvoiceAmount function recalculated the net and gross amount based on the
      * order positions.
@@ -1054,55 +1054,6 @@ class Order extends ModelEntity
             $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
         }
 
-    }
-
-    /**
-     * Event listener method of the doctrine model. Fired when the model will be updated.
-     * Checks if the order or payment status has been changed and add a history entry in the s_order_history.
-     * @ORM\PostUpdate
-     */
-    public function beforeUpdate()
-    {
-        //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
-
-        $orderStatus = $changeSet['orderStatus'];
-        $paymentStatus = $changeSet['paymentStatus'];
-
-        //order or payment status changed?
-        if ($orderStatus[0] instanceof Status || $paymentStatus[0] instanceof Status) {
-            $history = new History();
-
-            $history->setOrder($this);
-            $history->setChangeDate(new \DateTime());
-            $history->setUser(null);
-
-            if (Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
-                $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-                $history->setUser($user);
-            }
-
-            //order status changed?
-            if ($orderStatus[0] instanceof Status && $orderStatus[1]) {
-                $history->setPreviousOrderStatus($orderStatus[0]);
-                $history->setOrderStatus($orderStatus[1]);
-            } else {
-                $history->setPreviousOrderStatus($this->orderStatus);
-                $history->setOrderStatus($this->orderStatus);
-            }
-
-            //payment status changed?
-            if ($paymentStatus[0] instanceof Status && $paymentStatus[1]) {
-                $history->setPreviousPaymentStatus($paymentStatus[0]);
-                $history->setPaymentStatus($paymentStatus[1]);
-            } else {
-                $history->setPreviousPaymentStatus($this->paymentStatus);
-                $history->setPaymentStatus($this->paymentStatus);
-            }
-
-            Shopware()->Models()->persist($history);
-            Shopware()->Models()->flush();
-        }
     }
 
     /**

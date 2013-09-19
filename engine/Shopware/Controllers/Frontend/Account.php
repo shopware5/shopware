@@ -188,6 +188,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 	public function downloadsAction()
 	{
 		$this->View()->sDownloads = $this->admin->sGetDownloads();
+        //this has to be assigned here because the config method in smarty can't handle array structures
+		$this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
 	}
 
     /**
@@ -510,6 +512,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 	{
 		if($this->Request()->isPost())
 		{
+            $sourceIsCheckoutConfirm = $this->Request()->getParam('sourceCheckoutConfirm');
 			$values = $this->Request()->getPost('register');
 			$this->admin->sSYSTEM->_POST['sPayment'] = $values['payment'];
 
@@ -517,8 +520,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
 			if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed']))
 			{
-				$this->View()->sErrorFlag = $checkData['checkPayment']['sErrorFlag'];
-				$this->View()->sErrorMessages = $checkData['checkPayment']['sErrorMessages'];
+                if(empty($sourceIsCheckoutConfirm)) {
+				    $this->View()->sErrorFlag = $checkData['checkPayment']['sErrorFlag'];
+				    $this->View()->sErrorMessages = $checkData['checkPayment']['sErrorMessages'];
+                }
 				return $this->forward('payment');
 			}
 			else

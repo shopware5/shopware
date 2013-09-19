@@ -1,6 +1,7 @@
 <?php
 /**
- * Product detail controller
+ * Shopware 4.0
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,28 +20,19 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
- * Shopware Backend Controller
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 {
-	/**
-	 * Pre dispatch method
-	 *
-	 * Sets the scope
+    /**
+     * Pre dispatch method
+     *
+     * Sets the scope
      */
     public function preDispatch()
     {
@@ -128,6 +120,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
             $article['sReleaseDate'] = $article['sReleasedate'];
 
+            // Push ThumbnailSize to template
+            $lastArticles['ThumbnailSize'] = Shopware()->Config()->thumb;
+
+            $this->View()->sLastArticles = $lastArticles;
             $this->View()->sBreadcrumb = $breadcrumb;
             $this->View()->sCategoryInfo = $categoryInfo;
             $this->View()->sArticle = $article;
@@ -173,13 +169,9 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         if (!empty(Shopware()->Config()->CaptchaColor) && !$voteConfirmed) {
-
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
             $rand = $this->Request()->getPost('sRand');
-            $random = md5($rand);
-            $calculatedValue = substr($random, 0, 5);
-            if (!empty($rand) && $captcha == $calculatedValue) {
-            } else {
+            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
                 $sErrorFlag['sCaptcha'] = true;
             }
         }

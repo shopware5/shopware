@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             anchor: '100%',
             name: 'categoryId',
             emptyText: '{s name=settings/select_category_empty}Please select...{/s}',
+            allowBlank: false,
             pageSize: 15,
             fieldLabel: '{s name=settings/select_category_field}Select a category{/s}',
             store: me.categoryPathStore,
@@ -111,6 +112,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/select_grid_field}Select a grid{/s}',
             name: 'gridId',
             allowBlank: false,
+            editable: false,
             queryMode: 'remote',
             store: gridStore,
             displayField: 'name',
@@ -178,6 +180,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'validFromTime',
             fieldLabel: '{s name=settings/time_control/start_time}Start time{/s}',
             increment: 30,
+            validationEvent: false,
+            altFormats: 'H:i:s',
             anchor: '100%'
         });
 
@@ -185,8 +189,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'validToTime',
             fieldLabel: '{s name=settings/time_control/end_time}End time{/s}',
             increment: 30,
+            altFormats: 'H:i:s',
             anchor: '100%'
-        })
+        });
 
         return {
             xtype: 'fieldset',

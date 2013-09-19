@@ -115,8 +115,7 @@ class Value extends ModelEntity
     public function __construct(Option $option, $value)
     {
         $this->option = $option;
-        $this->value  = $value;
-
+        $this->setValue($value);
         $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

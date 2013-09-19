@@ -198,10 +198,13 @@ abstract class Resource
     public function flush($entity = null)
     {
         if ($this->getAutoFlush()) {
+            $this->getManager()->getConnection()->beginTransaction();
             try {
                 $this->getManager()->flush($entity);
+                $this->getManager()->getConnection()->commit();
                 $this->getManager()->clear();
             } catch (\Exception $e) {
+                $this->getManager()->getConnection()->rollBack();
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }
         }

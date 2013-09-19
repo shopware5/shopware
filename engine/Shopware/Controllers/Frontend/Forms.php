@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,15 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Forms
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
- * @author     Stefan Hamann
- * @author     Heiner Lohaus
  */
 
 use Shopware\Models\Form\Form,
@@ -36,7 +27,9 @@ use Shopware\Models\Form\Form,
 /**
  * Shopware Frontend Controller for the form module
  *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   Shopware\Controllers\Frontend
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 {
@@ -64,6 +57,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Render form - onSubmit checkFields -
      *
+     * @throws Enlight_Exception
      * @return void
      */
     public function indexAction()
@@ -86,7 +80,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         /* @var $field Field */
-        foreach($form->getFields() as $field) {
+        foreach ($form->getFields() as $field) {
             $this->_elements[$field->getId()] = array(
                 'id'        => (string) $field->getId(), // intended string cast to keep compatibility
                 'name'      => $field->getName(),
@@ -113,7 +107,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
                             $getBasket = Shopware()->Modules()->Basket()->sGetBasket();
                             //$text = ''; Fix 100363 / 5416 Thanks to H. Ronecker
-                            foreach($getBasket["content"] as $basketRow) {
+                            foreach ($getBasket["content"] as $basketRow) {
                                 if (empty($basketRow["modus"])) {
                                     $text .= "\n{$basketRow["quantity"]} x {$basketRow["articlename"]} ({$basketRow["ordernumber"]}) - {$basketRow["price"]} " . Shopware()->System()->sCurrency["currency"];
                                 }
@@ -182,20 +176,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         if (!empty(Shopware()->Config()->CaptchaColor)) {
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-
             $rand = $this->Request()->getPost('sRand');
-            $random = md5($rand);
-
-            $calculatedValue = substr($random, 0, 5);
-
-            if (empty($rand) || $captcha != $calculatedValue) {
+            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
                 $this->_elements["sCaptcha"]['class'] = " instyle_error";
                 $this->_errors["e"]["sCaptcha"] = true;
             }
         }
 
         if (!empty($this->_errors)) {
-            foreach($this->_errors['e'] as $key => $value) {
+            foreach ($this->_errors['e'] as $key => $value) {
                 if (isset($this->_errors['e'][$key])) {
                     if ($this->_elements[$key]['typ'] == "text2") {
                         $class = explode(";", $this->_elements[$key]['class']);
@@ -208,13 +197,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         $isSpam = false;
-        foreach($this->_postData as $value) {
+        foreach ($this->_postData as $value) {
             if (is_array($value)) {
                 continue;
             }
 
             $badwords = array(" sex ", " porn ", " viagra ", "url=", "src=", "link=");
-            foreach($badwords as $badword) {
+            foreach ($badwords as $badword) {
                 if (strpos($value, $badword) !== false) {
                     $isSpam = true;
                 }
@@ -240,7 +229,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mail->IsHTML($template['ishtml']);
 
          //eMail field available check
-        foreach($this->_elements as $element) {
+        foreach ($this->_elements as $element) {
             if ($element['typ'] == "email") {
                 $postEmail = $this->_postData[$element['id']];
                 $postEmail = trim($postEmail);
@@ -259,7 +248,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mail->Subject  = $content["email_subject"];
         $mail->Body     = $content["email_template"];
 
-        foreach($this->_postData as $key => $value) {
+        foreach ($this->_postData as $key => $value) {
             if ($this->_elements[$key]['typ'] == "text2") {
                 $names = explode(";", $this->_elements[$key]['name']);
 
@@ -378,7 +367,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "select":
                 $values = explode(";", $element['value']);
                 $output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "</option>";
-                foreach($values as $value) {
+                foreach ($values as $value) {
                     if ($value == $post) {
                         $output .= "<option selected>$value</option>";
                     } else {
@@ -389,7 +378,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 break;
             case "radio":
                 $values = explode(";", $element['value']);
-                foreach($values as $value) {
+                foreach ($values as $value) {
                     if ($value == $post) {
                         $checked = " checked";
                     } else {
@@ -466,7 +455,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         }
                         break;
                     case "text2":
-                        foreach(array_keys($value) as $key) {
+                        foreach (array_keys($value) as $key) {
                             $value[$key] = trim(strip_tags($value[$key]));
                             if (empty($value[$key])) {
                                 unset($value[$key]);

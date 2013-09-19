@@ -988,7 +988,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 if (empty($info)) {
                     die(json_encode(array('success' => false, 'noNamespace' => true)));
                 }
-                $this->decompressFile($upload->getFileName());
+                $this->getCommunityStore()->decompressFile($upload->getFileName());
                 $this->refreshPluginList();
             }
         } catch (Exception $e) {
@@ -1026,8 +1026,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * Decompress a given plugin zip file.
-     *
-     * @param  $file
+     * @deprecated unused method use the decompressFile method in the CommunityStore component instead
+     * @param $file
+     * @throws Enlight_Exception
      */
     public function decompressFile($file)
     {

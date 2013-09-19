@@ -300,11 +300,15 @@ class CommunityStore
      *
      * @param        $file
      * @param string $source
+     * @throws Enlight_Exception
      */
     public function decompressFile($file, $source = 'Community')
     {
         $target = Shopware()->AppPath('Plugins_' . $source);
 
+        if (!$this->isPluginDirectoryWritable($target, true)) {
+            throw new Enlight_Exception("A directory or a file in ". $target ." is not writable, please change the permissions recursively");
+        }
         $filter = new Zend_Filter_Decompress(array(
             'adapter' => 'Zip',
             'options' => array(
@@ -881,6 +885,34 @@ class CommunityStore
                 'data' => $resultSet,
                 'total' => count($resultSet)
             );
+        }
+    }
+
+    /**
+     * helper method to check if the directory is writable
+     * Used to check if a plugin can be extracted in this directory
+     *
+     * @param $directory | the directory in which the permissions are checked
+     * @param bool $recursive | if true, the directory will be checked recursively
+     *
+     * @return bool
+     */
+    protected function isPluginDirectoryWritable($directory, $recursive = false)
+    {
+        if (!$recursive) {
+            return is_writable($directory);
+        } else {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directory),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $path) {
+                if (!is_writable($path->__toString())) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

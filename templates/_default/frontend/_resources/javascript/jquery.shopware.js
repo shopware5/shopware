@@ -343,7 +343,16 @@ jQuery(document).ready(function ($) {
 //        $this.parents('form').submit();
 //    });
 
+    $("div.captcha-placeholder[data-src]").each(function() {
+        var $this = $(this),
+            requestURL = $this.attr('data-src') || '';
 
+        if (!requestURL || !requestURL.length) {
+            return false;
+        }
+
+        $this.load(requestURL);
+    });
 });
 
 /**
@@ -805,7 +814,7 @@ jQuery(document).ready(function ($) {
                 'title': 'Slide right',
                 'href': '#slideRight'
             }).appendTo(config._container).hide();
-                
+
             if($.ajaxSlider.isiPad || !config.showArrows) {
                 config.showArrows = false;
                 config._leftArrow.hide();
@@ -1131,7 +1140,7 @@ jQuery(document).ready(function ($) {
                                 } else {
                                     $.ajaxSlider.verticalSlider(config);
                                 }
-                                
+
                                 // Create our own swipe gesturce
                                 if($.ajaxSlider.isiPad) {
                                     $.ajaxSlider.initializeSwipeEvent(config);
@@ -1177,7 +1186,7 @@ jQuery(document).ready(function ($) {
             } else {
                 $.ajaxSlider.verticalSlider(config);
             }
-            
+
             // Create our own swipe gesturce
             if($.ajaxSlider.isiPad) {
                 $.ajaxSlider.initializeSwipeEvent(config);
@@ -1193,7 +1202,7 @@ jQuery(document).ready(function ($) {
                 }, 80);
             }
         },
-        
+
         /**
          * Custom swipe gesturcture implementation
          * which only handles horizontal swipes.
@@ -1209,28 +1218,28 @@ jQuery(document).ready(function ($) {
         initializeSwipeEvent: function(config) {
             var me = this, initialLeft = 0, containerLeft = 0,
                 moveLeft = 0;
-                
+
             // Bind the event listener for the custom event to handle
             // the slide change.
             config._this.bind('swipe.ajaxSlider', me.onHandleSwipeEvent);
-            
+
             // Starting the gesture
             config._this.bind('touchstart', function(event) {
                 containerLeft = config._slideContainer.css('left');
                 containerLeft = ~~(1 * containerLeft.slice(0, -2));
-                
+
                 // Check if we're swiping right now
                 if(!config.swipeRunning) {
                     //... if not, reset the control variables
                     if(moveLeft !== 0) {
-                        moveLeft = 0; 
+                        moveLeft = 0;
                     }
-                    
+
                     if(initialLeft !== 0) {
                         initialLeft = 0;
                     }
                     initialLeft = event.originalEvent.touches[0].pageX;
-                    
+
                     config.swipeRunning = true;
                     config._slideContainer.css({
                         WebkitTransition: 'left 0s ease-out',
@@ -1238,12 +1247,12 @@ jQuery(document).ready(function ($) {
                     });
                 }
             });
-            
+
             // Slide the sliding container
             config._this.bind('touchmove', function(event) {
                 moveLeft = event.originalEvent.touches[0].pageX;
                 var diffLeft = initialLeft - moveLeft;
-                
+
                 if(config.swipeRunning) {
                     if(diffLeft < -40 || diffLeft > 40) {
                         event.preventDefault();
@@ -1255,34 +1264,34 @@ jQuery(document).ready(function ($) {
             config._this.bind('touchend', function(event) {
                 var diffLeft = initialLeft - moveLeft,
                     isRight = false, fireEvent;
-                    
+
                 if(config.swipeRunning) {
                     config.swipeRunning = false;
                 }
-                
+
                 if(diffLeft < 0) {
                     // Swipe to the right
                     diffLeft *= -1;
                     isRight = true;
                 }
-                
+
                 if(diffLeft >= config.minSwipeDistance) {
                     fireEvent = (isRight) ? 'swipeRight' : 'swipeLeft';
                 } else {
                     fireEvent = '';
                 }
-                
+
                 if(fireEvent.length > 0) {
                     event.preventDefault();
                     config._this.trigger({ type: 'swipe.ajaxSlider', distance: diffLeft, direction: fireEvent, config: config, scope: me });
                 } else {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
-                
+
                 config._this.unbind('ajaxSlider.click');
             });
         },
-        
+
         /**
          * Event listener method which will be called when the user
          * swipes his finger at least the configured minimum swipe
@@ -1297,20 +1306,20 @@ jQuery(document).ready(function ($) {
          */
         onHandleSwipeEvent: function(event) {
             var me = event.scope, config = event.config;
-            
+
             config._slideContainer.css({
                 WebkitTransition: 'left 0.25s ease-out',
                 transition: 'left 0.25s ease-out'
             });
-            
+
             if(event.direction === 'swipeRight') {
                 if((config._activeSlide - 1) >= 0) {
-                    me.leftArrow(event, config);   
+                    me.leftArrow(event, config);
                 } else {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
-            } 
-            
+            }
+
             if(event.direction === 'swipeLeft') {
                 if((config._activeSlide + 1) < config._slidesCount) {
                     me.rightArrow(event, config);
@@ -1318,13 +1327,13 @@ jQuery(document).ready(function ($) {
                     config._slideContainer.css('left', -(config.scrollWidth * config._activeSlide));
                 }
             }
-            
+
             if(config.layout === 'horizontal') {
                 me.handleArrowsHorizontalSlider(config);
             } else if(config.layout === 'vertical') {
-                me.handleArrowsVerticalSlider(config);  
+                me.handleArrowsVerticalSlider(config);
             }
-            
+
             // Set navigation point to active
             if (config.navigation || config.showNumbers) {
                 // Set this navigation point as active
@@ -2192,6 +2201,24 @@ jQuery(document).ready(function ($) {
  * Shopware AG (c) 2010
  */
 jQuery.fn.liveSearch = function (conf) {
+
+    /**
+     * Converts the url to a protocol relative url, so we don't need to manually
+     * check the used http protocol. See the example from paul irish to get an idea
+     * how it should work:
+     *    `http://www.paulirish.com/2010/the-protocol-relative-url/`
+     *    `http://blog.httpwatch.com/2010/02/10/using-protocol-relative-urls-to-switch-between-http-and-https/`
+     *
+     * @param {String} url - the url which needs to be converted
+     * @returns {String} converted string
+     */
+    var convertUrlToRelativeUrl = function(url) {
+        url = url.replace('https:', '');
+        url = url.replace('http:', '');
+
+        return url;
+    };
+
     var config = jQuery.extend({
         url: '',
         id: 'search_results',
@@ -2209,6 +2236,10 @@ jQuery.fn.liveSearch = function (conf) {
     }, conf);
 
     var liveSearch = jQuery('#' + config.id);
+
+    if(config.hasOwnProperty('url') && config.url.length) {
+        config.url = convertUrlToRelativeUrl(config.url);
+    }
 
     // Create live-search if it doesn't exist
     if (!liveSearch.length) {
@@ -2275,7 +2306,6 @@ jQuery.fn.liveSearch = function (conf) {
         };
 
         var doLiveSearch = function () {
-
             if (input.val() === config.lastValue) {
                 return;
             }
@@ -5581,3 +5611,520 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }) : $.datepicker["_" + a + "Datepicker"].apply($.datepicker, [this[0]].concat(b))
     }, $.datepicker = new Datepicker, $.datepicker.initialized = !1, $.datepicker.uuid = (new Date).getTime(), $.datepicker.version = "1.8.21", window["DP_jQuery_" + dpuuid] = $
 })(jQuery);
+
+/**
+ * LastSeenArticle Collector
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesCollector',
+        defaults = {
+        };
+
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options) ;
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init(options);
+    }
+
+    Plugin.prototype.init = function (options) {
+        var me = this,
+            opts = me.options,
+            articleNum = opts.numArticles,
+            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId) || 0,
+            i = index - articleNum+1, data, article, exists;
+
+        // Reset index if not defined
+        if(index < 0) index = 0;
+
+        for(; i < index+1; i++) {
+            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + i);
+            if(!data) {
+                continue;
+            }
+
+            article = JSON.parse(data);
+            exists = (article.articleId == opts.lastArticles.articleId);
+
+            // break if the aritcle exists already
+            if(exists) {
+                break;
+            }
+        }
+
+        if(exists) {
+            if(i != index) {
+                // Delete existing article on old position
+                localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
+    
+                // Downgrading all articles with higher index
+                var newIndex,
+                    tmpData;
+
+                for(var j = i + 1; j <= index; j++) {
+                    newIndex = j - 1;
+                    tmpData = localStorage.getItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
+                    localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
+                }
+    
+                // Adding this article on top index
+                localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+            }
+            return false;
+        }
+    
+        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
+        localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+        localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})( jQuery, window, document );
+
+/**
+ * LastSeenArticle Displayer
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function ( $, window, document, undefined ) {
+    "use strict";
+
+    var pluginName = 'lastSeenArticlesDisplayer',
+        defaults = {
+        };
+
+    // Append articles to Template
+    var createTemplate = function(article, lastClass) {
+        var rule, image, hidden, desc;
+
+        if(!article) {
+            return false;
+        }
+
+        rule = $('<li>', { 'class': 'lastview_rule' + lastClass });
+        image = $('<a>', {
+            'id': article['articleId'],
+            'rel': 'nofollow',
+            'class': 'article_image',
+            'href': article['linkDetailsRewrited'],
+            'style': 'background: #fff url(' + article['thumbnail'] + ') no-repeat center center'
+
+        });
+
+        hidden = $('<span>', {
+            'class': 'hidden',
+            'html': article['articleName']
+        });
+
+        desc = $('<a>', {
+            'rel': 'nofollow',
+            'class': 'article_description',
+            'title': article['articleName'],
+            'href': article['linkDetailsRewrited'],
+            'html': article['articleName']
+        });
+
+        hidden.appendTo(image);
+        image.appendTo(rule);
+        hidden.appendTo(rule);
+        desc.appendTo(rule);
+
+        return rule;
+    };
+
+    function Plugin( element, options ) {
+        this.element = element;
+        this.options = $.extend( {}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init(options);
+    }
+
+    Plugin.prototype.init = function (options) {
+        // Plugin configuration
+        var articleNum = options.numArticles,
+            shopId = options.shopId,
+            index = localStorage.getItem('lastSeenArticleIndex-' + shopId),
+            i = 1,
+            lastClass = '',
+            data, article, all;
+
+        if(!articleNum) articleNum = 5;
+        all = index;
+
+        // Append all articles to the template
+        for(; i <= all; i++) {
+            if(localStorage.getItem('lastSeenArticle-' + shopId + index))
+            {
+                data = localStorage.getItem('lastSeenArticle-' + shopId + index);
+                article = JSON.parse(data);
+                lastClass = '';
+                if(i == all || i % 5 == 0) lastClass = '_last';
+
+                // Check if its emotion or default template
+                if($('.viewlast ul').length)
+                {
+                    $('.viewlast ul').append(createTemplate(article, lastClass));
+                }
+                else
+                {
+                    $('.viewlast').append(createTemplate(article, lastClass));
+                }
+            }
+            index = index -1;
+        }
+    };
+
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+            }
+        });
+    }
+})(jQuery, window, document);
+
+/**
+ * JSON polyfill which provides support for <= IE7
+ *
+ * @author: Douglas Crockford
+ * @link: https://github.com/douglascrockford/JSON-js/blob/master/json2.js
+ */
+if (navigator.appVersion.indexOf("MSIE 7.") != -1)
+{
+    if (typeof JSON !== 'object') {
+        JSON = {};
+    }
+
+    (function () {
+        'use strict';
+
+        function f(n) {
+            // Format integers to have at least two digits.
+            return n < 10 ? '0' + n : n;
+        }
+
+        if (typeof Date.prototype.toJSON !== 'function') {
+
+            String.prototype.toJSON =
+                Number.prototype.toJSON =
+                    Boolean.prototype.toJSON = function () {
+                        return this.valueOf();
+                    };
+        }
+
+        var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            gap,
+            indent,
+            meta = { // table of character substitutions
+                '\b': '\\b',
+                '\t': '\\t',
+                '\n': '\\n',
+                '\f': '\\f',
+                '\r': '\\r',
+                '"' : '\\"',
+                '\\': '\\\\'
+            },
+            rep;
+
+        function quote(string) {
+
+            escapable.lastIndex = 0;
+            return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string'
+                    ? c
+                    : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' : '"' + string + '"';
+        }
+
+        function str(key, holder) {
+
+            var i, // The loop counter.
+                k, // The member key.
+                v, // The member value.
+                length,
+                mind = gap,
+                partial,
+                value = holder[key];
+
+            if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+                value = value.toJSON(key);
+            }
+
+            if (typeof rep === 'function') {
+                value = rep.call(holder, key, value);
+            }
+
+            switch (typeof value) {
+                case 'string':
+                    return quote(value);
+
+                case 'number':
+
+                    return isFinite(value) ? String(value) : 'null';
+
+                case 'boolean':
+                case 'null':
+
+                    return String(value);
+
+                case 'object':
+
+                    if (!value) {
+                        return 'null';
+                    }
+
+                    gap += indent;
+                    partial = [];
+
+                    if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+                        length = value.length;
+                        for (i = 0; i < length; i += 1) {
+                            partial[i] = str(i, value) || 'null';
+                        }
+
+                        v = partial.length === 0
+                            ? '[]'
+                            : gap
+                            ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']'
+                            : '[' + partial.join(',') + ']';
+                        gap = mind;
+                        return v;
+                    }
+
+                    if (rep && typeof rep === 'object') {
+                        length = rep.length;
+                        for (i = 0; i < length; i += 1) {
+                            if (typeof rep[i] === 'string') {
+                                k = rep[i];
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+                    } else {
+
+                        for (k in value) {
+                            if (Object.prototype.hasOwnProperty.call(value, k)) {
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+                    }
+
+                    v = partial.length === 0
+                        ? '{}'
+                        : gap
+                        ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}'
+                        : '{' + partial.join(',') + '}';
+                    gap = mind;
+                    return v;
+            }
+        }
+
+        if (typeof JSON.stringify !== 'function') {
+            JSON.stringify = function (value, replacer, space) {
+
+                var i;
+                gap = '';
+                indent = '';
+
+
+                if (typeof space === 'number') {
+                    for (i = 0; i < space; i += 1) {
+                        indent += ' ';
+                    }
+
+                } else if (typeof space === 'string') {
+                    indent = space;
+                }
+
+                rep = replacer;
+                if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                        typeof replacer.length !== 'number')) {
+                    throw new Error('JSON.stringify');
+                }
+
+                return str('', {'': value});
+            };
+        }
+
+        if (typeof JSON.parse !== 'function') {
+            JSON.parse = function (text, reviver) {
+
+                var j;
+
+                function walk(holder, key) {
+
+                    var k, v, value = holder[key];
+                    if (value && typeof value === 'object') {
+                        for (k in value) {
+                            if (Object.prototype.hasOwnProperty.call(value, k)) {
+                                v = walk(value, k);
+                                if (v !== undefined) {
+                                    value[k] = v;
+                                } else {
+                                    delete value[k];
+                                }
+                            }
+                        }
+                    }
+                    return reviver.call(holder, key, value);
+                }
+
+                text = String(text);
+                cx.lastIndex = 0;
+                if (cx.test(text)) {
+                    text = text.replace(cx, function (a) {
+                        return '\\u' +
+                            ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                    });
+                }
+
+                if (/^[\],:{}\s]*$/
+                    .test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+                        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                    j = eval('(' + text + ')');
+
+                    return typeof reviver === 'function'
+                        ? walk({'': j}, '')
+                        : j;
+                }
+
+                throw new SyntaxError('JSON.parse');
+            };
+        }
+    }());
+}
+
+/**
+ * localStorage polyfill which provides support for < IE7 using a cookie.
+ *
+ * @author: Remy Sharp
+ * @license: MIT http://rem.mit-license.org/
+ * @link: https://gist.github.com/remy/350433
+ */
+if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
+
+    var Storage = function (type) {
+        function createCookie(name, value, days) {
+            var date, expires;
+
+            if (days) {
+                date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                expires = "; expires="+date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=",
+                ca = document.cookie.split(';'),
+                i, c;
+
+            for (i=0; i < ca.length; i++) {
+                c = ca[i];
+                while (c.charAt(0)==' ') {
+                    c = c.substring(1,c.length);
+                }
+
+                if (c.indexOf(nameEQ) == 0) {
+                    return c.substring(nameEQ.length,c.length);
+                }
+            }
+            return null;
+        }
+        function setData(data) {
+            data = JSON.stringify(data);
+            if (type == 'session') {
+                window.name = data;
+            } else {
+                createCookie('localStorage', data, 365);
+            }
+        }
+        function clearData() {
+            if (type == 'session') {
+                window.name = '';
+            } else {
+                createCookie('localStorage', '', 365);
+            }
+        }
+        function getData() {
+            var data = type == 'session' ? window.name : readCookie('localStorage');
+            return data ? JSON.parse(data) : {};
+        }
+
+
+// initialise if there's already data
+        var data = getData();
+
+        return {
+            length: 0,
+            clear: function () {
+                data = {};
+                this.length = 0;
+                clearData();
+            },
+            getItem: function (key) {
+                return data[key] === undefined ? null : data[key];
+            },
+            key: function (i) {
+// not perfect, but works
+                var ctr = 0;
+                for (var k in data) {
+                    if (ctr == i) return k;
+                    else ctr++;
+                }
+                return null;
+            },
+            removeItem: function (key) {
+                delete data[key];
+                this.length--;
+                setData(data);
+            },
+            setItem: function (key, value) {
+                data[key] = value+''; // forces the value to a string
+                this.length++;
+                setData(data);
+            }
+        };
+    };
+
+    if (typeof window.localStorage == 'undefined') window.localStorage = new Storage('local');
+    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new Storage('session');
+
+})();

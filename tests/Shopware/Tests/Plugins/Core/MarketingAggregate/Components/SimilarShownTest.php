@@ -129,16 +129,17 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         $this->insertDemoData();
         $this->SimilarShown()->initSimilarShown();
 
+        $countBefore = count($this->getAllSimilarShown());
         $this->saveConfig('similarRefreshStrategy', 3);
         Shopware()->Cache()->clean();
 
-        $this->setSimilarShownInvalid();
+        $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
 
-        $result = $this->dispatch('/sommerwelten/accessoires/170/sonnenbrille-red');
-        $this->assertEquals(200, $result->getHttpResponseCode());
+        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', array());
 
-        $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
-        $this->assertCount(50, $articles);
+        $articles = $this->getAllSimilarShown();
+
+        $this->assertCount($countBefore - 20, $articles);
     }
 
     public function testSimilarCronJobRefresh()

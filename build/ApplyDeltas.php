@@ -2,6 +2,8 @@
 <?php
 // ./ApplyDeltas.php --username="root" --password="example" --host="localhost" --dbname="example-db"
 
+date_default_timezone_set('UTC');
+
 $shopPath = realpath(__DIR__ . '/../');
 
 $longopts  = array(
@@ -28,6 +30,8 @@ if (!isset($dbConfig['host']) || empty($dbConfig['host'])) {
     $dbConfig['host'] = 'localhost';
 }
 
+$password = isset($dbConfig['password']) ? $dbConfig['password'] : '';
+
 $connectionSettings = array(
     'host=' . $dbConfig['host'],
     'dbname=' . $dbConfig['dbname'],
@@ -47,7 +51,7 @@ try {
     $conn = new PDO(
         'mysql:' . $connectionString,
         $dbConfig['username'],
-        $dbConfig['password'],
+        $password,
         array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'")
     );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

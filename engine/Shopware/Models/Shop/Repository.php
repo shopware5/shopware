@@ -264,7 +264,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns the default shop
+     * Returns the default shop with additional data
      *
      * @return \Shopware\Models\Shop\Shop
      */
@@ -277,6 +277,20 @@ class Repository extends ModelRepository
         if($shop !== null) {
             $this->fixActive($shop);
         }
+
+        return $shop;
+    }
+
+    /**
+     * Returns only the default shop model
+     *
+     * @return \Shopware\Models\Shop\Shop
+     */
+    public function getDefault()
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->where('shop.default = 1');
+        $shop = $builder->getQuery()->getOneOrNullResult();
 
         return $shop;
     }
@@ -308,19 +322,9 @@ class Repository extends ModelRepository
         foreach ($shops as $currentShop) {
             $this->fixActive($currentShop);
         }
-        foreach ($shops as $currentShop) {
-            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
-                if ($shop === null) {
-                    $shop = $currentShop;
-                }
-            } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            } elseif ($currentShop->getSecure() && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            }
-        }
+
+        //returns the right shop depending on the url
+        $shop = $this->getShopByRequest($shops, $requestPath);
 
         if ($shop !== null) {
             return $shop;
@@ -375,5 +379,51 @@ class Repository extends ModelRepository
             }
             $shop->setSecureBaseUrl($baseUrl);
         }
+    }
+
+    /**
+     * returns the right shop depending on the request object
+     *
+     * @param $shops \Shopware\Models\Shop\Shop[]
+     * @param $requestPath
+     * @return null|\Shopware\Models\Shop\Shop $shop
+     */
+    protected function getShopByRequest($shops, $requestPath)
+    {
+        $shop = null;
+        foreach ($shops as $currentShop) {
+            // strips the main part of the url so only the tail part remains f.e. /blog/blogId=5 or ?feedId=3
+            $requestPathTail = str_replace($currentShop->getBaseUrl(), '', $requestPath, $matchCount);
+            // strips the main secure part of the url like $requestPathTail
+            $requestPathTailSecure = str_replace($currentShop->getSecureBaseUrl(), '', $requestPath, $matchCountSecure);
+            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
+                //if the base url matches exactly the basePath we have found the main shop but the loop will continue
+                if ($shop === null) {
+                    $shop = $currentShop;
+                }
+            } elseif ($matchCount > 0 && in_array($requestPathTail[0],array('/', '?'))
+                    || $requestPath == $currentShop->getBaseUrl()) {
+                /*
+                 * $matchCount ensures that at least one match was found
+                 * will check if a language shop or a subshop matches exactly with the same base url
+                 * or if the tail path starts with / or ? than we can suppose that this is a well formed url
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
+                $shop = $currentShop;
+                break;
+            } elseif ($currentShop->getSecure() && $matchCountSecure > 0 && in_array($requestPathTailSecure[0],array('/', '?'))
+                    || $requestPath == $currentShop->getSecureBaseUrl()) {
+                /*
+                 * only if the shop is used in the ssl mode
+                 * $matchCountSecure ensures that at least one match was found
+                 * will check if a language shop or a subshop matches exactly with the same base url
+                 * or if the tail path starts with / or ? than we can suppose that this is a well formed url
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
+                $shop = $currentShop;
+                break;
+            }
+        }
+        return $shop;
     }
 }
