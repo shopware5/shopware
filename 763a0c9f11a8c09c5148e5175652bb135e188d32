@@ -1,0 +1,6 @@
+From: bugfix/sw-5308-add-corelog
+To: master
+Conflict: (content) Merge conflict in shopware.php
+	MODIFY|shopware.php
+Conflict: (content) Merge conflict in README.md
+	MODIFY|README.md
