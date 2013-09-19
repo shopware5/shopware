@@ -8,7 +8,7 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{$sCategoryContent.sSelf}" title="{if $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
+<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
 {/block}
 
 {* RSS and Atom feeds *}

@@ -264,6 +264,11 @@ class sCategories
         $detailUrl = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
         $detailUrl .= $category['category']['id'];
 
+        $canonical = $detailUrl;
+        if (Shopware()->Config()->get('forceUnsecureCanonical')) {
+            $canonical = str_replace('https://', 'http://', $canonical);
+        }
+
         $category = array_merge($category['category'], array(
             'description' => $category['category']['name'],
             'cmsheadline' => $category['category']['cmsHeadline'],
@@ -274,6 +279,7 @@ class sCategories
             'childrenCount' => (int) $category['childrenCount'],
             'articleCount' => (int) $category['articleCount'],
             'sSelf' => $detailUrl,
+            'sSelfCanonical' => $canonical,
             'rssFeed' => $detailUrl . '&sRss=1',
             'atomFeed' => $detailUrl . '&sAtom=1',
         ));
