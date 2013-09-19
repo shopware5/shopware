@@ -3203,12 +3203,13 @@ jQuery.fn.liveSearch = function (conf) {
 
     //creates an modal window with text and headline
     $.modal = function (text, headline, settings) {
-        if (settings) $.extend(config, settings);
+        if (settings) lConfig = $.extend(true, {}, config, settings);
+        else lConfig = $.extend(true, {}, config);
         if ($('.modal')) $('.modal').remove();
         var modal = $('<div>', {
             'class': 'modal',
             'css': {
-                'width': config.width
+                'width': lConfig.width
             }
         });
 
@@ -3220,22 +3221,22 @@ jQuery.fn.liveSearch = function (conf) {
             }).appendTo(modal);
         }
         if (text.length) {
-            var container = $(config.textContainer, {
+            var container = $(lConfig.textContainer, {
                 'html': text
             });
 
-            if (config.textClass.length) {
-                container.addClass(config.textClass)
+            if (lConfig.textClass.length) {
+                container.addClass(lConfig.textClass)
             }
             container.appendTo(modal);
         }
 
         //get css properties
         modal.show();
-        if(!config.position) {
-            config.position = modal.css('position');
+        if(!lConfig.position) {
+            lConfig.position = modal.css('position');
         }
-        config.top = modal.css('top');
+        lConfig.top = modal.css('top');
         modal.hide();
 
 
@@ -3247,32 +3248,32 @@ jQuery.fn.liveSearch = function (conf) {
 
         modal.show().css('marginLeft', -(modal.width()/2)).hide();
 
-        if (config.useOverlay == true) {
+        if (lConfig.useOverlay == true) {
             $.modal.overlay.fadeIn();
 
-            $(config.overlay).bind('click', function (event) {
+            $(lConfig.overlay).bind('click', function (event) {
                 $.modalClose();
             });
         }
         $('.modal').fadeIn('fast');
 
         if($.browser.msie && parseInt($.browser.version) == 6) {
-            $.ie6fix.open(modal, config);
+            $.ie6fix.open(modal, lConfig);
         } else {
-            if (config.position == 'absolute') {
+            if (lConfig.position == 'absolute') {
                 modal.css({
-                    'position': config.position,
+                    'position': lConfig.position,
                     'bottom': 'auto'
-                }).fadeIn(config.animationSpeed);
-            } else if (config.position == 'fixed') {
+                }).fadeIn(lConfig.animationSpeed);
+            } else if (lConfig.position == 'fixed') {
                 $('.modal').fadeIn();
                 modal.css({
-                    'position': config.position,
+                    'position': lConfig.position,
                     'top': -(modal.height() + 100) + 'px',
                     'display': 'block'
                 }).animate({
                             'top': '40px'
-                        }, config.animationSpeed)
+                        }, lConfig.animationSpeed)
             }
         }
 
@@ -5672,7 +5673,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             if(i != index) {
                 // Delete existing article on old position
                 localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
-    
+
                 // Downgrading all articles with higher index
                 var newIndex,
                     tmpData;
@@ -5683,13 +5684,13 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                     localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
                     localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
                 }
-    
+
                 // Adding this article on top index
                 localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
             }
             return false;
         }
-    
+
         localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
         localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
         localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
