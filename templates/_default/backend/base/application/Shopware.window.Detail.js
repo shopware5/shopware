@@ -183,7 +183,6 @@ Ext.define('Shopware.window.Detail', {
              * @type { String }
              */
             saveButtonText: '{s name="detail_window/save_button_text"}Save{/s}'
-
         },
 
         /**
@@ -361,13 +360,6 @@ Ext.define('Shopware.window.Detail', {
 
     /**
      * Creates all tab panel items of the outer tab panel.
-     * Shopware creates for the following definitions a single tab item:
-     *
-     * 1. Base record (which passed to the me.record property)
-     * 2. OneToOne associations which has no own associations
-     * 3. OneToMany associations
-     * 4. ManyToMany associations
-     *
      * This definitions will be defined in the getTabItemsAssociations function.
      * The function getTabItemsAssociations returns only an array of Ext.association.Association
      * class. For each of this association shopware creates the element over
@@ -387,16 +379,13 @@ Ext.define('Shopware.window.Detail', {
     },
 
     /**
-     * Returns all records associations, which will have an own tab item.
-     * To create an own tab item for the base record, the function creates
+     * Returns all associations which should be displayed in an own
+     * tab item.
+     * This function returns all Ext.data.Association which defined
+     * in the { @link #associations } property of this component.
+     * Additionally the function creates
      * an fake association for the base record with the additional parameter
      * "isBaseRecord".
-     * Shopware creates for the following definitions a single tab item:
-     *
-     * 1. Base record (which passed to the me.record property)
-     * 2. OneToOne associations which has no own associations
-     * 3. OneToMany associations
-     * 4. ManyToMany associations
      *
      * @returns array
      */
@@ -449,6 +438,7 @@ Ext.define('Shopware.window.Detail', {
      * @param type { String }
      * @param model { Shopware.data.Model }
      * @param store { Ext.data.Store }
+     * @param association { Ext.data.Association }
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store, association) {
@@ -491,24 +481,66 @@ Ext.define('Shopware.window.Detail', {
      * Creates the bottom toolbar of the detail window.
      * The shopware toolbar contains as default a cancel and
      * save button.
-     * This function creates a toolbar wich will be assigned
+     * This function creates a toolbar which will be assigned
      * to the property "me.toolbar".
      *
      * @return Ext.toolbar.Toolbar
      */
     createToolbar: function () {
-        var me = this, items = [];
-
-        items.push({ xtype: 'tbfill' });
-        items.push(me.createCancelButton());
-        items.push(me.createSaveButton());
+        var me = this;
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            items: items,
+            items: me.createToolbarItems(),
             dock: 'bottom'
         });
         return me.toolbar;
     },
+
+    /**
+     * Creates the toolbar items for the detail window toolbar.
+     *
+     * The function is used from { @link #createToolbar } function and calls the internal
+     * functions { @link #createCancelButton } and { @link #createSaveButton }.
+     *
+     * The Ext.toolbar.Fill element is set on the first position. Each other element
+     * after the Fill element will be displayed on the right side of the toolbar.
+     *
+     * To add an element additional element to the toolbar, you can use the following source
+     * code as example:
+     *
+     * @example
+     *  createToolbarItems: function() {
+     *     var me = this, items;
+     *
+     *     items = me.callParent(arguments);
+     *
+     *     items = Ext.Array.insert(
+     *         items, 1, [
+     *            { xtype: 'button', text: 'MyButton', handler: function() { ... } }
+     *        ]
+     *     );
+     *
+     *     return items;
+     *  },
+     *
+     * @returns { Array }
+     */
+    createToolbarItems: function() {
+        var me = this, items = [];
+
+        me.fireEvent(this.getEventName('before-create-toolbar-items'), me, items);
+
+        items.push({ xtype: 'tbfill' });
+
+        items.push(me.createCancelButton());
+
+        items.push(me.createSaveButton());
+
+        me.fireEvent(this.getEventName('after-create-toolbar-items'), me, items);
+
+        return items;
+    },
+
 
     /**
      * Creates the cancel button which will be displayed
@@ -663,7 +695,6 @@ Ext.define('Shopware.window.Detail', {
         var me = this;
 
         if (!(tabItem.association)) {
-            console.log("1");
             return false;
         }
 
