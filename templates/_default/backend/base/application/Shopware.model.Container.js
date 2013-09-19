@@ -599,7 +599,7 @@ Ext.define('Shopware.model.Container', {
      */
     createItems: function() {
         var me = this, items = [], item, config,
-            associations, fields, field;
+            associations, fields, field, keys;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-items', me, items)) {
             return false;
@@ -607,21 +607,30 @@ Ext.define('Shopware.model.Container', {
 
         //iterate all defined field sets. If no field set configured, the component is used for none model fields.
         Ext.each(me.getConfig('fieldSets'), function(fieldSet) {
-            fields = [];
 
-            //we require an array of model field names which has to be displayed. So we use as default all model fields.
-            var keys = me.record.fields.keys;
+            //check for function configuration.
+            if (Ext.isFunction(fieldSet)) {
+                item = fieldSet.call(this, items, me.record.$className);
+                if (item) items.push(item);
+                return true;
+            }
+
+            fields = [];
+            keys = [];
 
             //now check if the developer configured an offset of fields within the fields object.
-            if (Object.keys(fieldSet.fields).length > 0) keys = Object.keys(fieldSet.fields);
+            if (Object.keys(fieldSet.fields).length > 0) {
+                keys = Object.keys(fieldSet.fields);
+
+            //use only all field names if the only one field set is configured.
+            } else if (me.getConfig('fieldSets').length <= 1) {
+                keys = me.record.fields.keys;
+            }
 
             //iterate all model field names and create a form field for each field.
             Ext.each(keys, function(key) {
                 //check if a custom field config is configured.
                 config = fieldSet.fields[key] || {};
-
-                //shorthand for translations
-                if (Ext.isString(config)) config = { fieldLabel: config };
 
                 field = me.createModelField(
                     me.record,
@@ -720,9 +729,11 @@ Ext.define('Shopware.model.Container', {
      */
     createModelFieldSet: function (modelName, fields, customConfig) {
         var me = this, fieldSet = null,
+            title = me.getModelName(modelName),
             model = Ext.create(modelName), items = [], container;
 
         customConfig = customConfig || {};
+        if (customConfig.title) title = customConfig.title;
 
         if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model)) {
             return fieldSet;
@@ -751,7 +762,7 @@ Ext.define('Shopware.model.Container', {
             padding: '10 20',
             layout: 'column',
             items: items,
-            title: me.getModelName(modelName)
+            title: title
         });
 
         fieldSet = Ext.apply(fieldSet, customConfig);
@@ -759,26 +770,6 @@ Ext.define('Shopware.model.Container', {
         me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
 
         return fieldSet;
-    },
-
-    /**
-     * Creates all Ext.form.Fields for the passed model.
-     * The alias can be used to prefix the field names.
-     * For example: 'attribute[name]'.
-     *
-     * @return Array
-     */
-    createModelFields: function (model, alias) {
-        var me = this, fields = [], field;
-
-        Ext.each(model.fields.items, function (item) {
-            field = me.createModelField(model, item, alias);
-            if (field) fields.push(field);
-        });
-
-        me.fireEvent(me.eventAlias + '-model-fields-created', me, fields, model, alias);
-
-        return fields;
     },
 
     /**
@@ -870,7 +861,9 @@ Ext.define('Shopware.model.Container', {
         }
 
         //get the component field configuration. This configuration contains custom field configuration.
+        if (Ext.isString(customConfig)) customConfig = { fieldLabel: customConfig };
         customConfig = customConfig || {};
+
         if (Ext.isObject(customConfig)) {
             formField = Ext.apply(formField, customConfig);
 
