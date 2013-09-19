@@ -230,7 +230,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         //check canonical shopware configuration
-        // canonical = HTTP
         $forceUnsecureCanonical = Shopware()->Config()->get('forceUnsecureCanonical');
 
         //check if the current link is a canonical link
