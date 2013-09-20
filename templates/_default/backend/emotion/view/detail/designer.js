@@ -762,17 +762,31 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onOpenSettingsWindow: function(event, el) {
         var me = this,
             element = Ext.get(el),
-            id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
+            child = element.child('.x-emotion-element-delete'),
+            id = child.getAttribute('data-emotionId'),
             store = me.dataviewStore.getAt(0).get('elements'),
-            record;
+            record, attr, i, component, fields;
+
+
+        if(!id) {
+            for(i in child.dom.attributes) {
+                attr = child.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = parseInt(attr.value, 10);
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
             if(item.internalId == id) {
                 record = item;
+                return false;
             }
         });
-        var component = record.getComponent().first(),
-            fields = component.getFields();
+
+        component = record.getComponent().first(),
+        fields = component.getFields();
 
         me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion);
     },
