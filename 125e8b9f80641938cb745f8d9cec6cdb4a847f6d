@@ -1,0 +1,663 @@
+From: feature/next/sw-4498-update-to-doctrine-2.4
+To: next
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/SelfHealing/Bootstrap.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/SelfHealing/Bootstrap.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Version.php
+	MODIFY|engine/Library/Doctrine/ORM/Version.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/UnitOfWork.php
+	MODIFY|engine/Library/Doctrine/ORM/UnitOfWork.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/UnexpectedResultException.php
+	ADD|engine/Library/Doctrine/ORM/UnexpectedResultException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Setup.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Setup.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/SchemaValidator.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/SchemaValidator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/SchemaTool.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/SchemaTool.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/ResolveTargetEntityListener.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/ResolveTargetEntityListener.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Pagination/WhereInWalker.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Pagination/WhereInWalker.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Pagination/Paginator.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Pagination/Paginator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Pagination/LimitSubqueryWalker.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Pagination/LimitSubqueryWalker.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Tools/Pagination/LimitSubqueryOutputWalker.php
+	ADD|engine/Library/Doctrine/ORM/Tools/Pagination/LimitSubqueryOutputWalker.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Tools/Pagination/CountOutputWalker.php
+	ADD|engine/Library/Doctrine/ORM/Tools/Pagination/CountOutputWalker.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/Driver/YamlExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/Driver/YamlExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/Driver/XmlExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/Driver/XmlExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/Driver/PhpExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/Driver/PhpExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/Driver/AnnotationExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/Driver/AnnotationExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/Driver/AbstractExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/Driver/AbstractExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Export/ClassMetadataExporter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Export/ClassMetadataExporter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/EntityRepositoryGenerator.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/EntityRepositoryGenerator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/EntityGenerator.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/EntityGenerator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/DisconnectedClassMetadataFactory.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/DisconnectedClassMetadataFactory.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/DebugUnitOfWorkListener.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/DebugUnitOfWorkListener.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/ConvertDoctrine1Schema.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/ConvertDoctrine1Schema.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/MetadataFilter.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/MetadataFilter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Helper/EntityManagerHelper.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Helper/EntityManagerHelper.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/ConsoleRunner.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/ConsoleRunner.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ValidateSchemaCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ValidateSchemaCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/UpdateCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/UpdateCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/DropCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/DropCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/CreateCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/CreateCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/AbstractCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/SchemaTool/AbstractCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/RunDqlCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/RunDqlCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/InfoCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/InfoCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateRepositoriesCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateRepositoriesCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateProxiesCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateProxiesCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateEntitiesCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/GenerateEntitiesCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/EnsureProductionSettingsCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/EnsureProductionSettingsCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ConvertMappingCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ConvertMappingCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ConvertDoctrine1SchemaCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ConvertDoctrine1SchemaCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/ResultCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/ResultCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/QueryCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/QueryCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/MetadataCommand.php
+	MODIFY|engine/Library/Doctrine/ORM/Tools/Console/Command/ClearCache/MetadataCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/QueryBuilder.php
+	MODIFY|engine/Library/Doctrine/ORM/QueryBuilder.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/TreeWalkerChain.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/TreeWalkerChain.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/TreeWalkerAdapter.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/TreeWalkerAdapter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/TreeWalker.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/TreeWalker.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/SqlWalker.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/SqlWalker.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/ResultSetMappingBuilder.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/ResultSetMappingBuilder.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/ResultSetMapping.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/ResultSetMapping.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/QueryException.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/QueryException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Parser.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Parser.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/ParameterTypeInferer.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/ParameterTypeInferer.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Query/Parameter.php
+	ADD|engine/Library/Doctrine/ORM/Query/Parameter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Lexer.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Lexer.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Select.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Select.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Orx.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Orx.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/OrderBy.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/OrderBy.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Math.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Math.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Literal.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Literal.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Join.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Join.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/GroupBy.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/GroupBy.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Func.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Func.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/From.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/From.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Composite.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Composite.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Comparison.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Comparison.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Base.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Base.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr/Andx.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr/Andx.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Expr.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Expr.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/Exec/MultiTableDeleteExecutor.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/Exec/MultiTableDeleteExecutor.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/WhereClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/WhereClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/UpdateStatement.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/UpdateStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/UpdateItem.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/UpdateItem.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/UpdateClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/UpdateClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SubselectFromClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SubselectFromClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Subselect.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Subselect.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SimpleSelectExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SimpleSelectExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SimpleSelectClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SimpleSelectClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SimpleArithmeticExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SimpleArithmeticExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SelectStatement.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SelectStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SelectExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SelectExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/SelectClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/SelectClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/RangeVariableDeclaration.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/RangeVariableDeclaration.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/QuantifiedExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/QuantifiedExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/OrderByClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/OrderByClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/NullComparisonExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/NullComparisonExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Node.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Node.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/LikeExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/LikeExpression.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/JoinAssociationDeclaration.php
+	ADD|engine/Library/Doctrine/ORM/Query/AST/JoinAssociationDeclaration.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Join.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Join.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/InstanceOfExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/InstanceOfExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/InputParameter.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/InputParameter.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/IndexBy.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/IndexBy.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/InExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/InExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/IdentificationVariableDeclaration.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/IdentificationVariableDeclaration.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/HavingClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/HavingClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/GroupByClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/GroupByClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Functions/IdentityFunction.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Functions/IdentityFunction.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Functions/DateSubFunction.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Functions/DateSubFunction.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/Functions/ConcatFunction.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/Functions/ConcatFunction.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ExistsExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ExistsExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/EmptyCollectionComparisonExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/EmptyCollectionComparisonExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/DeleteStatement.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/DeleteStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/DeleteClause.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/DeleteClause.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ConditionalTerm.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ConditionalTerm.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ConditionalPrimary.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ConditionalPrimary.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ConditionalFactor.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ConditionalFactor.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ConditionalExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ConditionalExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ComparisonExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ComparisonExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/BetweenExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/BetweenExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ArithmeticTerm.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ArithmeticTerm.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ArithmeticFactor.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ArithmeticFactor.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/ArithmeticExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/ArithmeticExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query/AST/AggregateExpression.php
+	MODIFY|engine/Library/Doctrine/ORM/Query/AST/AggregateExpression.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Query.php
+	MODIFY|engine/Library/Doctrine/ORM/Query.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Proxy/ProxyFactory.php
+	MODIFY|engine/Library/Doctrine/ORM/Proxy/ProxyFactory.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Proxy/Autoloader.php
+	MODIFY|engine/Library/Doctrine/ORM/Proxy/Autoloader.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Persisters/SqlValueVisitor.php
+	ADD|engine/Library/Doctrine/ORM/Persisters/SqlValueVisitor.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Persisters/SqlExpressionVisitor.php
+	ADD|engine/Library/Doctrine/ORM/Persisters/SqlExpressionVisitor.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/SingleTablePersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/SingleTablePersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/OneToManyPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/OneToManyPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/ManyToManyPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/ManyToManyPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/JoinedSubclassPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/JoinedSubclassPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/ElementCollectionPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/ElementCollectionPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/BasicEntityPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/BasicEntityPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/AbstractEntityInheritancePersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/AbstractEntityInheritancePersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Persisters/AbstractCollectionPersister.php
+	MODIFY|engine/Library/Doctrine/ORM/Persisters/AbstractCollectionPersister.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/PersistentCollection.php
+	MODIFY|engine/Library/Doctrine/ORM/PersistentCollection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/ORMInvalidArgumentException.php
+	MODIFY|engine/Library/Doctrine/ORM/ORMInvalidArgumentException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/ORMException.php
+	MODIFY|engine/Library/Doctrine/ORM/ORMException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/NonUniqueResultException.php
+	MODIFY|engine/Library/Doctrine/ORM/NonUniqueResultException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/NativeQuery.php
+	MODIFY|engine/Library/Doctrine/ORM/NativeQuery.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/UnderscoreNamingStrategy.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/UnderscoreNamingStrategy.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Table.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Table.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/SqlResultSetMapping.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/SqlResultSetMapping.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/QuoteStrategy.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/QuoteStrategy.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/NamingStrategy.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/NamingStrategy.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/NamedNativeQuery.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/NamedNativeQuery.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/MappingException.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/MappingException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/ManyToMany.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/ManyToMany.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/FieldResult.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/FieldResult.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/EntityResult.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/EntityResult.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/YamlDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/YamlDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/XmlDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/XmlDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/StaticPHPDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/StaticPHPDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/PHPDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/PHPDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/DriverChain.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/DriverChain.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/DatabaseDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/DatabaseDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/Driver/AnnotationDriver.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/Driver/AnnotationDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/DiscriminatorColumn.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/DiscriminatorColumn.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/DefaultQuoteStrategy.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/DefaultQuoteStrategy.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/DefaultNamingStrategy.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/DefaultNamingStrategy.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/CustomIdGenerator.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/CustomIdGenerator.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/ColumnResult.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/ColumnResult.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/ClassMetadataInfo.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/ClassMetadataInfo.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Mapping/ClassMetadataFactory.php
+	MODIFY|engine/Library/Doctrine/ORM/Mapping/ClassMetadataFactory.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/AttributeOverrides.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/AttributeOverrides.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/AttributeOverride.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/AttributeOverride.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/AssociationOverrides.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/AssociationOverrides.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Mapping/AssociationOverride.php
+	ADD|engine/Library/Doctrine/ORM/Mapping/AssociationOverride.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Internal/Hydration/SimpleObjectHydrator.php
+	MODIFY|engine/Library/Doctrine/ORM/Internal/Hydration/SimpleObjectHydrator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php
+	MODIFY|engine/Library/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Internal/Hydration/HydrationException.php
+	MODIFY|engine/Library/Doctrine/ORM/Internal/Hydration/HydrationException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Internal/Hydration/AbstractHydrator.php
+	MODIFY|engine/Library/Doctrine/ORM/Internal/Hydration/AbstractHydrator.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Id/UuidGenerator.php
+	ADD|engine/Library/Doctrine/ORM/Id/UuidGenerator.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/ORM/Id/BigIntegerIdentityGenerator.php
+	ADD|engine/Library/Doctrine/ORM/Id/BigIntegerIdentityGenerator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Event/OnFlushEventArgs.php
+	MODIFY|engine/Library/Doctrine/ORM/Event/OnFlushEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Event/LifecycleEventArgs.php
+	MODIFY|engine/Library/Doctrine/ORM/Event/LifecycleEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/EntityRepository.php
+	MODIFY|engine/Library/Doctrine/ORM/EntityRepository.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/EntityManager.php
+	MODIFY|engine/Library/Doctrine/ORM/EntityManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/Configuration.php
+	MODIFY|engine/Library/Doctrine/ORM/Configuration.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/ORM/AbstractQuery.php
+	MODIFY|engine/Library/Doctrine/ORM/AbstractQuery.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Version.php
+	MODIFY|engine/Library/Doctrine/DBAL/Version.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Types/VarDateTimeType.php
+	MODIFY|engine/Library/Doctrine/DBAL/Types/VarDateTimeType.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Types/Type.php
+	MODIFY|engine/Library/Doctrine/DBAL/Types/Type.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Types/SimpleArrayType.php
+	ADD|engine/Library/Doctrine/DBAL/Types/SimpleArrayType.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Types/ObjectType.php
+	MODIFY|engine/Library/Doctrine/DBAL/Types/ObjectType.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Types/JsonArrayType.php
+	ADD|engine/Library/Doctrine/DBAL/Types/JsonArrayType.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Types/GuidType.php
+	ADD|engine/Library/Doctrine/DBAL/Types/GuidType.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Types/ArrayType.php
+	MODIFY|engine/Library/Doctrine/DBAL/Types/ArrayType.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Tools/Console/Helper/ConnectionHelper.php
+	MODIFY|engine/Library/Doctrine/DBAL/Tools/Console/Helper/ConnectionHelper.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Tools/Console/Command/RunSqlCommand.php
+	MODIFY|engine/Library/Doctrine/DBAL/Tools/Console/Command/RunSqlCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Tools/Console/Command/ReservedWordsCommand.php
+	MODIFY|engine/Library/Doctrine/DBAL/Tools/Console/Command/ReservedWordsCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Tools/Console/Command/ImportCommand.php
+	MODIFY|engine/Library/Doctrine/DBAL/Tools/Console/Command/ImportCommand.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Statement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Statement.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/ShardingException.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/ShardingException.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/ShardManager.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/ShardManager.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/ShardChoser/ShardChoser.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/ShardChoser/ShardChoser.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/ShardChoser/MultiTenantShardChoser.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/ShardChoser/MultiTenantShardChoser.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/SQLAzure/Schema/MultiTenantVisitor.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/SQLAzure/Schema/MultiTenantVisitor.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/SQLAzure/SQLAzureShardManager.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/SQLAzure/SQLAzureShardManager.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/SQLAzure/SQLAzureFederationsSynchronizer.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/SQLAzure/SQLAzureFederationsSynchronizer.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/PoolingShardManager.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/PoolingShardManager.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Sharding/PoolingShardConnection.php
+	ADD|engine/Library/Doctrine/DBAL/Sharding/PoolingShardConnection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Visitor/Visitor.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Visitor/Visitor.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Visitor/DropSchemaSqlCollector.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Visitor/DropSchemaSqlCollector.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Visitor/CreateSchemaSqlCollector.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Visitor/CreateSchemaSqlCollector.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/TableDiff.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/TableDiff.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Table.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Table.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Synchronizer/SingleDatabaseSynchronizer.php
+	ADD|engine/Library/Doctrine/DBAL/Schema/Synchronizer/SingleDatabaseSynchronizer.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Synchronizer/SchemaSynchronizer.php
+	ADD|engine/Library/Doctrine/DBAL/Schema/Synchronizer/SchemaSynchronizer.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Synchronizer/AbstractSchemaSynchronizer.php
+	ADD|engine/Library/Doctrine/DBAL/Schema/Synchronizer/AbstractSchemaSynchronizer.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/SqliteSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/SqliteSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Sequence.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Sequence.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/SchemaDiff.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/SchemaDiff.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/SchemaConfig.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/SchemaConfig.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Schema.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Schema.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/SQLServerSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/SQLServerSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/PostgreSqlSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/PostgreSqlSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/OracleSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/OracleSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/MySqlSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/MySqlSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Index.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Index.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/ForeignKeyConstraint.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/ForeignKeyConstraint.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Schema/DrizzleSchemaManager.php
+	ADD|engine/Library/Doctrine/DBAL/Schema/DrizzleSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Constraint.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Constraint.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Comparator.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Comparator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/ColumnDiff.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/ColumnDiff.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/Column.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/Column.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/AbstractSchemaManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/AbstractSchemaManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Schema/AbstractAsset.php
+	MODIFY|engine/Library/Doctrine/DBAL/Schema/AbstractAsset.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/SQLParserUtilsException.php
+	ADD|engine/Library/Doctrine/DBAL/SQLParserUtilsException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/SQLParserUtils.php
+	MODIFY|engine/Library/Doctrine/DBAL/SQLParserUtils.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Query/QueryException.php
+	MODIFY|engine/Library/Doctrine/DBAL/Query/QueryException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Query/QueryBuilder.php
+	MODIFY|engine/Library/Doctrine/DBAL/Query/QueryBuilder.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Query/Expression/ExpressionBuilder.php
+	MODIFY|engine/Library/Doctrine/DBAL/Query/Expression/ExpressionBuilder.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Portability/Statement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Portability/Statement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Portability/Connection.php
+	MODIFY|engine/Library/Doctrine/DBAL/Portability/Connection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/SqlitePlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/SqlitePlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/SQLServerPlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/SQLServerPlatform.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/SQLAzurePlatform.php
+	ADD|engine/Library/Doctrine/DBAL/Platforms/SQLAzurePlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/PostgreSqlPlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/PostgreSqlPlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/OraclePlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/OraclePlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/MySqlPlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/MySqlPlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/Keywords/MsSQLKeywords.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/Keywords/MsSQLKeywords.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/Keywords/DrizzleKeywords.php
+	ADD|engine/Library/Doctrine/DBAL/Platforms/Keywords/DrizzleKeywords.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/DrizzlePlatform.php
+	ADD|engine/Library/Doctrine/DBAL/Platforms/DrizzlePlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/DB2Platform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/DB2Platform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Platforms/AbstractPlatform.php
+	MODIFY|engine/Library/Doctrine/DBAL/Platforms/AbstractPlatform.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Logging/SQLLogger.php
+	MODIFY|engine/Library/Doctrine/DBAL/Logging/SQLLogger.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Logging/LoggerChain.php
+	MODIFY|engine/Library/Doctrine/DBAL/Logging/LoggerChain.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Logging/EchoSQLLogger.php
+	MODIFY|engine/Library/Doctrine/DBAL/Logging/EchoSQLLogger.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Logging/DebugStack.php
+	MODIFY|engine/Library/Doctrine/DBAL/Logging/DebugStack.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/LockMode.php
+	MODIFY|engine/Library/Doctrine/DBAL/LockMode.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Id/TableGeneratorSchemaVisitor.php
+	ADD|engine/Library/Doctrine/DBAL/Id/TableGeneratorSchemaVisitor.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Id/TableGenerator.php
+	ADD|engine/Library/Doctrine/DBAL/Id/TableGenerator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Event/SchemaCreateTableEventArgs.php
+	MODIFY|engine/Library/Doctrine/DBAL/Event/SchemaCreateTableEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/DriverManager.php
+	MODIFY|engine/Library/Doctrine/DBAL/DriverManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/Statement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/Statement.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvStatement.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvStatement.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvException.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvException.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvConnection.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/SQLSrv/SQLSrvConnection.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/SQLSrv/LastInsertId.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/SQLSrv/LastInsertId.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/SQLSrv/Driver.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/SQLSrv/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/ResultStatement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/ResultStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOStatement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOSqlsrv/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOSqlsrv/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOSqlite/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOSqlite/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOPgSql/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOPgSql/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOMySql/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOMySql/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/PDOIbm/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/PDOIbm/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/OCI8/OCI8Statement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/OCI8/OCI8Statement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/OCI8/OCI8Connection.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/OCI8/OCI8Connection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/Mysqli/MysqliStatement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/Mysqli/MysqliStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Statement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Statement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Exception.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Exception.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver/IBMDB2/DB2Driver.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/DBAL/Driver/DrizzlePDOMySql/Driver.php
+	ADD|engine/Library/Doctrine/DBAL/Driver/DrizzlePDOMySql/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Driver.php
+	MODIFY|engine/Library/Doctrine/DBAL/Driver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/DBALException.php
+	MODIFY|engine/Library/Doctrine/DBAL/DBALException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Connections/MasterSlaveConnection.php
+	MODIFY|engine/Library/Doctrine/DBAL/Connections/MasterSlaveConnection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Connection.php
+	MODIFY|engine/Library/Doctrine/DBAL/Connection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Cache/ResultCacheStatement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Cache/ResultCacheStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/DBAL/Cache/ArrayStatement.php
+	MODIFY|engine/Library/Doctrine/DBAL/Cache/ArrayStatement.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Version.php
+	MODIFY|engine/Library/Doctrine/Common/Version.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Util/Inflector.php
+	MODIFY|engine/Library/Doctrine/Common/Util/Inflector.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Util/Debug.php
+	MODIFY|engine/Library/Doctrine/Common/Util/Debug.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Util/ClassUtils.php
+	MODIFY|engine/Library/Doctrine/Common/Util/ClassUtils.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/StaticReflectionProperty.php
+	ADD|engine/Library/Doctrine/Common/Reflection/StaticReflectionProperty.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/StaticReflectionParser.php
+	ADD|engine/Library/Doctrine/Common/Reflection/StaticReflectionParser.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/StaticReflectionMethod.php
+	ADD|engine/Library/Doctrine/Common/Reflection/StaticReflectionMethod.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/StaticReflectionClass.php
+	ADD|engine/Library/Doctrine/Common/Reflection/StaticReflectionClass.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/ReflectionProviderInterface.php
+	ADD|engine/Library/Doctrine/Common/Reflection/ReflectionProviderInterface.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/Psr0FindFile.php
+	ADD|engine/Library/Doctrine/Common/Reflection/Psr0FindFile.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Reflection/ClassFinderInterface.php
+	ADD|engine/Library/Doctrine/Common/Reflection/ClassFinderInterface.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/PersistentObject.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/PersistentObject.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/ObjectRepository.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/ObjectRepository.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/ObjectManager.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/ObjectManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/ReflectionService.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/ReflectionService.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/MappingException.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/MappingException.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/SymfonyFileLocator.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/SymfonyFileLocator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/StaticPHPDriver.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/StaticPHPDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/MappingDriverChain.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/MappingDriverChain.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/MappingDriver.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/MappingDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/FileDriver.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/FileDriver.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/Driver/DefaultFileLocator.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/Driver/DefaultFileLocator.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Mapping/AbstractClassMetadataFactory.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Mapping/AbstractClassMetadataFactory.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Event/PreUpdateEventArgs.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Event/PreUpdateEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Event/OnClearEventArgs.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Event/OnClearEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/Event/LifecycleEventArgs.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/Event/LifecycleEventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Persistence/AbstractManagerRegistry.php
+	MODIFY|engine/Library/Doctrine/Common/Persistence/AbstractManagerRegistry.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Lexer.php
+	MODIFY|engine/Library/Doctrine/Common/Lexer.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/EventManager.php
+	MODIFY|engine/Library/Doctrine/Common/EventManager.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/EventArgs.php
+	MODIFY|engine/Library/Doctrine/Common/EventArgs.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/CommonException.php
+	MODIFY|engine/Library/Doctrine/Common/CommonException.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Selectable.php
+	ADD|engine/Library/Doctrine/Common/Collections/Selectable.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/ExpressionBuilder.php
+	ADD|engine/Library/Doctrine/Common/Collections/ExpressionBuilder.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/Value.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/Value.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/ExpressionVisitor.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/ExpressionVisitor.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/Expression.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/Expression.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/CompositeExpression.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/CompositeExpression.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/Comparison.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/Comparison.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Expr/ClosureExpressionVisitor.php
+	ADD|engine/Library/Doctrine/Common/Collections/Expr/ClosureExpressionVisitor.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Collections/Criteria.php
+	ADD|engine/Library/Doctrine/Common/Collections/Criteria.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Collections/ArrayCollection.php
+	MODIFY|engine/Library/Doctrine/Common/Collections/ArrayCollection.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/ClassLoader.php
+	MODIFY|engine/Library/Doctrine/Common/ClassLoader.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Cache/WinCacheCache.php
+	MODIFY|engine/Library/Doctrine/Common/Cache/WinCacheCache.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Cache/RedisCache.php
+	ADD|engine/Library/Doctrine/Common/Cache/RedisCache.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Cache/PhpFileCache.php
+	ADD|engine/Library/Doctrine/Common/Cache/PhpFileCache.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Cache/FilesystemCache.php
+	ADD|engine/Library/Doctrine/Common/Cache/FilesystemCache.php
+Conflict: (add/add) Merge conflict in engine/Library/Doctrine/Common/Cache/FileCache.php
+	ADD|engine/Library/Doctrine/Common/Cache/FileCache.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Cache/CacheProvider.php
+	MODIFY|engine/Library/Doctrine/Common/Cache/CacheProvider.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Cache/Cache.php
+	MODIFY|engine/Library/Doctrine/Common/Cache/Cache.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Annotations/FileCacheReader.php
+	MODIFY|engine/Library/Doctrine/Common/Annotations/FileCacheReader.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Annotations/AnnotationReader.php
+	MODIFY|engine/Library/Doctrine/Common/Annotations/AnnotationReader.php
+Conflict: (content) Merge conflict in engine/Library/Doctrine/Common/Annotations/AnnotationException.php
+	MODIFY|engine/Library/Doctrine/Common/Annotations/AnnotationException.php
+Conflict: (content) Merge conflict in UPGRADE.md
+	MODIFY|UPGRADE.md
+Conflict: (rename/add) Rename engine/Library/Doctrine/ORM/Proxy/ProxyException.php->engine/Library/Doctrine/ORM/Proxy/Autoloader.php in c5d1bd3b549927d41a7ef9dbd67989bcf324bfea. engine/Library/Doctrine/ORM/Proxy/Autoloader.php added in HEAD\
+Adding as engine/Library/Doctrine/ORM/Proxy/Autoloader.php~HEAD instead
+	ADD|engine/Library/Doctrine/ORM/Proxy/Autoloader.php
+	MOVE|engine/Library/Doctrine/ORM/Proxy/Autoloader.php->engine/Library/Doctrine/ORM/Proxy/Autoloader.php.theirs|engine/Library/Doctrine/ORM/Proxy/ProxyException.php
+Conflict: (rename/rename) Rename "engine/Library/Doctrine/ORM/Query/AST/JoinVariableDeclaration.php"->"engine/Library/Doctrine/ORM/Query/AST/JoinClassPathExpression.php" in branch "HEAD" rename "engine/Library/Doctrine/ORM/Query/AST/JoinVariableDeclaration.php"->"engine/Library/Doctrine/ORM/Query/AST/NewObjectExpression.php" in "c5d1bd3b549927d41a7ef9dbd67989bcf324bfea"
+	MOVE|engine/Library/Doctrine/ORM/Query/AST/JoinClassPathExpression.php|engine/Library/Doctrine/ORM/Query/AST/JoinVariableDeclaration.php
+	MOVE|engine/Library/Doctrine/ORM/Query/AST/NewObjectExpression.php|engine/Library/Doctrine/ORM/Query/AST/JoinVariableDeclaration.php
