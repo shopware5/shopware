@@ -459,7 +459,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
             $violations = $this->getManager()->validate($model);
             $errors = array();
-            /**@var $violation Symfony\Component\Validator\ConstraintViolation */
+            /** @var $violation Symfony\Component\Validator\ConstraintViolation */
             foreach ($violations as $violation) {
                 $errors[] = array(
                     'message' => $violation->getMessage(),
@@ -694,7 +694,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         if (strlen($search) > 0) {
             $fields = $this->getModelFields($model, $association);
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $builder->orWhere($field['alias'] . ' LIKE :search');
             }
             $builder->setParameter('search', '%' . $search . '%');
@@ -756,7 +756,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $metaData = $this->getManager()->getClassMetadata($this->model);
 
-        foreach($metaData->getAssociationMappings() as $mapping) {
+        foreach ($metaData->getAssociationMappings() as $mapping) {
             /**
              * @ORM\OneToOne associations
              *
@@ -842,7 +842,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                  */
                 $associationData = $data[$mapping['fieldName']];
                 $associationModels = array();
-                foreach($associationData as $singleData) {
+                foreach ($associationData as $singleData) {
                     $associationModel = $this->getManager()->find($mapping['targetEntity'], $singleData['id']);
                     if ($associationModel) {
                         $associationModels[] = $associationModel;
@@ -1077,7 +1077,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function formatSearchValue($value, array $field)
     {
-        switch($field['type']) {
+        switch ($field['type']) {
             case 'date':
             case 'datetime':
                 //validates the date value. If the value is no date value, return
@@ -1121,7 +1121,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $fields = array_combine($fields, $fields);
 
         if ($alias) {
-            foreach($fields as &$field) {
+            foreach ($fields as &$field) {
                 $field = array(
                     'alias' => $alias . '.' . $field,
                     'type' => $metaData->getTypeOfField($field)
@@ -1131,6 +1131,4 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         return $fields;
     }
-
-
 }
