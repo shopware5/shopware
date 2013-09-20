@@ -773,7 +773,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $query->setHydrationMode($hydrationMode);
 
-        return new $this->getModelManager()->createPaginator($query);
+        return $this->getModelManager()->createPaginator($query);
     }
 
     /**
