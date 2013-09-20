@@ -104,7 +104,7 @@ class ShippingCost extends ModelEntity
      * OWNING SIDE
      * @var \Shopware\Models\Dispatch\Dispatch $dispatch
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Dispatch\Dispatch", inversedBy="costsMatrix", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Dispatch\Dispatch", inversedBy="costsMatrix", cascade={"persist"})
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
      */
     protected $dispatch;

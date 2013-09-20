@@ -15,13 +15,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Schema\Visitor\Visitor;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class ForeignKeyConstraint extends AbstractAsset implements Constraint
 {
@@ -110,6 +111,35 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     }
 
     /**
+     * Return the non-schema qualified foreign table name.
+     *
+     * @return string
+     */
+    public function getUnqualifiedForeignTableName()
+    {
+        $parts = explode(".", $this->_foreignTableName);
+        return strtolower(end($parts));
+    }
+
+    /**
+     * Get the quoted representation of this asset but only if it was defined with one. Otherwise
+     * return the plain unquoted value as inserted.
+     *
+     * @param AbstractPlatform $platform
+     * @return string
+     */
+    public function getQuotedForeignTableName(AbstractPlatform $platform)
+    {
+        $keywords = $platform->getReservedKeywordsList();
+        $parts = explode(".", $this->getForeignTableName());
+        foreach ($parts AS $k => $v) {
+            $parts[$k] = ($this->_quoted || $keywords->isKeyword($v)) ? $platform->quoteIdentifier($v) : $v;
+        }
+
+        return implode(".", $parts);
+    }
+
+    /**
      * @return array
      */
     public function getForeignColumns()
@@ -125,6 +155,16 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     public function getOption($name)
     {
         return $this->_options[$name];
+    }
+
+    /**
+     * Gets the options associated with this constraint
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->_options;
     }
 
     /**

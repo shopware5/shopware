@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -32,7 +32,17 @@ class ORMException extends Exception
     public static function missingMappingDriverImpl()
     {
         return new self("It's a requirement to specify a Metadata Driver and pass it ".
-            "to Doctrine\ORM\Configuration::setMetadataDriverImpl().");
+            "to Doctrine\\ORM\\Configuration::setMetadataDriverImpl().");
+    }
+
+    public static function namedQueryNotFound($queryName)
+    {
+        return new self('Could not find a named query by the name "' . $queryName . '"');
+    }
+
+    public static function namedNativeQueryNotFound($nativeQueryName)
+    {
+        return new self('Could not find a named native query by the name "' . $nativeQueryName . '"');
     }
 
     public static function entityMissingForeignAssignedId($entity, $relatedEntity)
@@ -54,6 +64,7 @@ class ORMException extends Exception
             "you need to adjust the metadata mapping accordingly."
         );
     }
+
     public static function unrecognizedField($field)
     {
         return new self("Unrecognized field: $field");
@@ -110,7 +121,7 @@ class ORMException extends Exception
     }
 
     public static function invalidResultCacheDriver() {
-        return new self("Invalid result cache driver; it must implement \Doctrine\Common\Cache\Cache.");
+        return new self("Invalid result cache driver; it must implement Doctrine\\Common\\Cache\\Cache.");
     }
 
     public static function notSupported() {
@@ -141,12 +152,16 @@ class ORMException extends Exception
 
     public static function invalidEntityRepository($className)
     {
-        return new self("Invalid repository class '".$className."'. ".
-                "it must be a Doctrine\ORM\EntityRepository.");
+        return new self("Invalid repository class '".$className."'. It must be a Doctrine\Common\Persistence\ObjectRepository.");
     }
 
     public static function missingIdentifierField($className, $fieldName)
     {
         return new self("The identifier $fieldName is missing for a query of " . $className);
+    }
+
+    public static function overwriteInternalDQLFunctionNotAllowed($functionName)
+    {
+        return new self("It is not allowed to overwrite internal function '$functionName' in the DQL parser through user-defined functions.");
     }
 }

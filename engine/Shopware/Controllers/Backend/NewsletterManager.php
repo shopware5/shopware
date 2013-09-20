@@ -126,7 +126,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => Shopware()->Models()->toArray($model)));
-        
+
     }
 
     /**
@@ -272,7 +272,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
             $model= Shopware()->Models()->find('Shopware\Models\Newsletter\Group', $id);
 
-            
+
             if (!$model instanceof \Shopware\Models\Newsletter\Group) {
                 continue;
             }
@@ -500,7 +500,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true));
-        
+
     }
 
     /**
@@ -515,7 +515,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $query = $this->getCampaignsRepository()->getListAddressesQuery($filter, $sort, $limit, $offset);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
         //returns the total count of the query
         $totalResult = $paginator->count();
         //returns the customer data
@@ -540,7 +540,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $query = $this->getCampaignsRepository()->getListSenderQuery($filter, $sort, $limit, $offset);
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
         //returns the total count of the query
         $totalResult = $paginator->count();
         //returns the customer data
@@ -554,7 +554,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'total' => $totalResult,
         ));
 
-        
+
     }
 
     /**
@@ -610,7 +610,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $query = $this->getCampaignsRepository()->getListNewslettersQuery($filter, $sort, $limit, $offset);
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();

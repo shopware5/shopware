@@ -179,32 +179,15 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     private function generateModels($path)
     {
-        /**@var $generator \Shopware\Components\Model\Generator*/
+        /** @var $generator \Shopware\Components\Model\Generator */
         $generator = new \Shopware\Components\Model\Generator();
 
-        $generator->setPath(
-            $path
-        );
-
-        $generator->setModelPath(
-            Shopware()->AppPath('Models')
-        );
-
+        $generator->setPath($path);
+        $generator->setModelPath(Shopware()->AppPath('Models'));
         $generator->setSchemaManager(
-            $this->getSchemaManager()
-        );
+			$this->Application()->Models()->getConnection()->getSchemaManager()
+		);
 
         return $generator->generateAttributeModels(array());
-    }
-
-    /**
-     * Helper function to create an own database schema manager to remove
-     * all dependencies to the existing shopware models and meta data caches.
-     *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-     */
-    private function getSchemaManager()
-    {
-        return $this->Application()->Models()->getConnection()->getSchemaManager();
     }
 }

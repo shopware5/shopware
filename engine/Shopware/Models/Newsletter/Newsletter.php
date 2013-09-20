@@ -186,7 +186,7 @@ class Newsletter extends ModelEntity
      *
      * Inverse side of the mailing-container association
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "update", "remove"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "remove"})
      */
     private $containers;
 

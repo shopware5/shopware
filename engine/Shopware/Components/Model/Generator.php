@@ -260,6 +260,10 @@ class %className% extends ModelEntity
         return $this->tableMapping;
     }
 
+    /**
+     * @param string $tableName
+     * @return int
+     */
     public function getSourceCodeForTable($tableName)
     {
         $table = $this->getSchemaManager()->listTableDetails($tableName);
@@ -289,7 +293,7 @@ class %className% extends ModelEntity
 
         $errors = array();
         /**@var $table \Doctrine\DBAL\Schema\Table*/
-        foreach($this->getSchemaManager()->listTables() as $table) {
+        foreach ($this->getSchemaManager()->listTables() as $table) {
             if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
                 continue;
             }
@@ -330,8 +334,8 @@ class %className% extends ModelEntity
         }
 
         $result = file_put_contents($file, $sourceCode);
-        return ($result !== false);
 
+        return ($result !== false);
     }
 
     /**
@@ -762,8 +766,8 @@ class %className% extends ModelEntity
 
         $classes = array();
 
-        /**@var $file SplFileInfo*/
-        foreach($iterator as $file) {
+        /**@var $file \SplFileInfo*/
+        foreach ($iterator as $file) {
             $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
             if ($file->isDir() || $extension !== 'php') {
                 continue;

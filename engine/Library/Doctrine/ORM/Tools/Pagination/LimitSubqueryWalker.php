@@ -59,7 +59,7 @@ class LimitSubqueryWalker extends TreeWalkerAdapter
         $parentName = null;
         $selectExpressions = array();
 
-        foreach ($this->_getQueryComponents() AS $dqlAlias => $qComp) {
+        foreach ($this->_getQueryComponents() as $dqlAlias => $qComp) {
             // preserve mixed data in query for ordering
             if (isset($qComp['resultVariable'])) {
                 $selectExpressions[] = new SelectExpression($qComp['resultVariable'], $dqlAlias);
@@ -74,6 +74,10 @@ class LimitSubqueryWalker extends TreeWalkerAdapter
         }
 
         $identifier = $parent['metadata']->getSingleIdentifierFieldName();
+        if (isset($parent['metadata']->associationMappings[$identifier])) {
+            throw new \RuntimeException("Paginating an entity with foreign key as identifier only works when using the Output Walkers. Call Paginator#setUseOutputWalkers(true) before iterating the paginator.");
+        }
+
         $this->_getQuery()->setHint(
             self::IDENTIFIER_TYPE,
             Type::getType($parent['metadata']->getTypeOfField($identifier))
@@ -100,7 +104,7 @@ class LimitSubqueryWalker extends TreeWalkerAdapter
                     $pathExpression->type = PathExpression::TYPE_STATE_FIELD;
                     $AST->selectClause->selectExpressions[] = new SelectExpression(
                         $pathExpression,
-                    	'_dctrn_ord' . $this->_aliasCounter++
+                        '_dctrn_ord' . $this->_aliasCounter++
                     );
                 }
             }

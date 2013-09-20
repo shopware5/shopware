@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -15,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -31,10 +29,9 @@ use Symfony\Component\Console\Input\InputArgument,
  * Command to generate the SQL needed to update the database schema to match
  * the current mapping information.
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ *
  * @link    www.doctrine-project.org
  * @since   2.0
- * @version $Revision$
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Jonathan Wage <jonwage@gmail.com>
@@ -71,20 +68,19 @@ class UpdateCommand extends AbstractCommand
             ),
         ));
 
-        $fullName = $this->getName();
         $this->setHelp(<<<EOT
-The <info>$fullName</info> command generates the SQL needed to
+The <info>%command.name%</info> command generates the SQL needed to
 synchronize the database schema with the current mapping metadata of the
 default entity manager.
 
 For example, if you add metadata for a new column to an entity, this command
 would generate and output the SQL needed to add the new column to the database:
 
-<info>$fullName --dump-sql</info>
+<info>%command.name% --dump-sql</info>
 
 Alternatively, you can execute the generated queries:
 
-<info>$fullName --force</info>
+<info>%command.name% --force</info>
 
 Finally, be aware that if the <info>--complete</info> option is passed, this
 task will drop all database assets (e.g. tables, etc) that are *not* described

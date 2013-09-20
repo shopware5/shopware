@@ -72,6 +72,10 @@ class Configuration extends BaseConfiguration
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
+        \Doctrine\DBAL\Types\Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
+        \Doctrine\DBAL\Types\Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
+        \Doctrine\DBAL\Types\Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');
+
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
@@ -264,6 +268,15 @@ class Configuration extends BaseConfiguration
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+
+        $dir = $dir . '/' . \Shopware::REVISION;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775);
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
 
         parent::setProxyDir($dir);
     }

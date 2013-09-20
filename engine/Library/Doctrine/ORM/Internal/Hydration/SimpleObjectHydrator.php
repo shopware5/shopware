@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -75,7 +75,7 @@ class SimpleObjectHydrator extends AbstractHydrator
             return;
         }
 
-        foreach ($this->_rsm->declaringClasses AS $column => $class) {
+        foreach ($this->_rsm->declaringClasses as $column => $class) {
             $this->declaringClasses[$column] = $this->_em->getClassMetadata($class);
         }
     }
@@ -91,6 +91,10 @@ class SimpleObjectHydrator extends AbstractHydrator
         // We need to find the correct entity class name if we have inheritance in resultset
         if ($this->class->inheritanceType !== ClassMetadata::INHERITANCE_TYPE_NONE) {
             $discrColumnName = $this->_platform->getSQLResultCasing($this->class->discriminatorColumn['name']);
+
+            if ( ! isset($sqlResult[$discrColumnName])) {
+                throw HydrationException::missingDiscriminatorColumn($entityName, $discrColumnName, key($this->_rsm->aliasMap));
+            }
 
             if ($sqlResult[$discrColumnName] === '') {
                 throw HydrationException::emptyDiscriminatorValue(key($this->_rsm->aliasMap));
@@ -129,17 +133,6 @@ class SimpleObjectHydrator extends AbstractHydrator
 
         $uow    = $this->_em->getUnitOfWork();
         $entity = $uow->createEntity($entityName, $data, $this->_hints);
-
-        //TODO: These should be invoked later, after hydration, because associations may not yet be loaded here.
-        if (isset($this->class->lifecycleCallbacks[Events::postLoad])) {
-            $this->class->invokeLifecycleCallbacks(Events::postLoad, $entity);
-        }
-
-        $evm = $this->_em->getEventManager();
-
-        if ($evm->hasListeners(Events::postLoad)) {
-            $evm->dispatchEvent(Events::postLoad, new LifecycleEventArgs($entity, $this->_em));
-        }
 
         $result[] = $entity;
     }
@@ -185,10 +178,13 @@ class SimpleObjectHydrator extends AbstractHydrator
                 // One solution is to load the association, but it might require extra efforts.
                 return array('name' => $column);
 
-            default:
+            case (isset($this->_rsm->metaMappings[$column])):
                 return array(
                     'name' => $this->_rsm->metaMappings[$column]
                 );
+
+            default:
+                return null;
         }
     }
 }

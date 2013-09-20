@@ -13,13 +13,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
 namespace Doctrine\ORM\Persisters;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Persister for entities that participate in a hierarchy mapped with the
@@ -113,9 +114,27 @@ class SingleTablePersister extends AbstractEntityInheritancePersister
     {
         $conditionSql = parent::_getSelectConditionSQL($criteria, $assoc);
 
-        // Append discriminator condition
-        if ($conditionSql) $conditionSql .= ' AND ';
+        if ($conditionSql) {
+            $conditionSql .= ' AND ';
+        }
 
+        return $conditionSql . $this->_getSelectConditionDiscriminatorValueSQL();
+    }
+
+    /** {@inheritdoc} */
+    protected function _getSelectConditionCriteriaSQL(Criteria $criteria)
+    {
+        $conditionSql = parent::_getSelectConditionCriteriaSQL($criteria);
+
+        if ($conditionSql) {
+            $conditionSql .= ' AND ';
+        }
+
+        return $conditionSql . $this->_getSelectConditionDiscriminatorValueSQL();
+    }
+
+    protected function _getSelectConditionDiscriminatorValueSQL()
+    {
         $values = array();
 
         if ($this->_class->discriminatorValue !== null) { // discriminators can be 0
@@ -128,10 +147,8 @@ class SingleTablePersister extends AbstractEntityInheritancePersister
             $values[] = $this->_conn->quote($discrValues[$subclassName]);
         }
 
-        $conditionSql .= $this->_getSQLTableAlias($this->_class->name) . '.' . $this->_class->discriminatorColumn['name']
-                       . ' IN (' . implode(', ', $values) . ')';
-
-        return $conditionSql;
+        return $this->_getSQLTableAlias($this->_class->name) . '.' . $this->_class->discriminatorColumn['name']
+                . ' IN (' . implode(', ', $values) . ')';
     }
 
     /** {@inheritdoc} */

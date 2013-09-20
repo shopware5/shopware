@@ -130,7 +130,7 @@ class Vote extends ModelEntity
     /**
      * OWNING SIDE
      * @var \Shopware\Models\Article\Article $article
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist"})
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
     protected $article;
