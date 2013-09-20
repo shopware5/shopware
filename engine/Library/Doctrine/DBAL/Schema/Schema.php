@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -47,7 +47,7 @@ use Doctrine\DBAL\Schema\Visitor\Visitor;
  * execute them. Only the queries for the currently connected database are
  * executed.
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ *
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
@@ -84,10 +84,11 @@ class Schema extends AbstractAsset
         $this->_schemaConfig = $schemaConfig;
         $this->_setName($schemaConfig->getName() ?: 'public');
 
-        foreach ($tables AS $table) {
+        foreach ($tables as $table) {
             $this->_addTable($table);
         }
-        foreach ($sequences AS $sequence) {
+
+        foreach ($sequences as $sequence) {
             $this->_addSequence($sequence);
         }
     }
@@ -155,6 +156,9 @@ class Schema extends AbstractAsset
      */
     private function getFullQualifiedAssetName($name)
     {
+        if ($this->isIdentifierQuoted($name)) {
+            $name = $this->trimQuotes($name);
+        }
         if (strpos($name, ".") === false) {
             $name = $this->getName() . "." . $name;
         }
@@ -193,7 +197,7 @@ class Schema extends AbstractAsset
     /**
      * @throws SchemaException
      * @param  string $sequenceName
-     * @return Doctrine\DBAL\Schema\Sequence
+     * @return \Doctrine\DBAL\Schema\Sequence
      */
     public function getSequence($sequenceName)
     {
@@ -205,7 +209,7 @@ class Schema extends AbstractAsset
     }
 
     /**
-     * @return Doctrine\DBAL\Schema\Sequence[]
+     * @return \Doctrine\DBAL\Schema\Sequence[]
      */
     public function getSequences()
     {
@@ -222,6 +226,11 @@ class Schema extends AbstractAsset
     {
         $table = new Table($tableName);
         $this->_addTable($table);
+
+        foreach ($this->_schemaConfig->getDefaultTableOptions() as $name => $value) {
+            $table->addOption($name, $value);
+        }
+
         return $table;
     }
 
@@ -285,7 +294,7 @@ class Schema extends AbstractAsset
     /**
      * Return an array of necessary sql queries to create the schema on the given platform.
      *
-     * @param AbstractPlatform $platform
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @return array
      */
     public function toSql(\Doctrine\DBAL\Platforms\AbstractPlatform $platform)
@@ -299,7 +308,7 @@ class Schema extends AbstractAsset
     /**
      * Return an array of necessary sql queries to drop the schema on the given platform.
      *
-     * @param AbstractPlatform $platform
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @return array
      */
     public function toDropSql(\Doctrine\DBAL\Platforms\AbstractPlatform $platform)
@@ -312,7 +321,7 @@ class Schema extends AbstractAsset
 
     /**
      * @param Schema $toSchema
-     * @param AbstractPlatform $platform
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function getMigrateToSql(Schema $toSchema, \Doctrine\DBAL\Platforms\AbstractPlatform $platform)
     {
@@ -323,7 +332,7 @@ class Schema extends AbstractAsset
 
     /**
      * @param Schema $fromSchema
-     * @param AbstractPlatform $platform
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function getMigrateFromSql(Schema $fromSchema, \Doctrine\DBAL\Platforms\AbstractPlatform $platform)
     {
@@ -339,10 +348,10 @@ class Schema extends AbstractAsset
     {
         $visitor->acceptSchema($this);
 
-        foreach ($this->_tables AS $table) {
+        foreach ($this->_tables as $table) {
             $table->visit($visitor);
         }
-        foreach ($this->_sequences AS $sequence) {
+        foreach ($this->_sequences as $sequence) {
             $sequence->visit($visitor);
         }
     }
@@ -354,10 +363,10 @@ class Schema extends AbstractAsset
      */
     public function __clone()
     {
-        foreach ($this->_tables AS $k => $table) {
+        foreach ($this->_tables as $k => $table) {
             $this->_tables[$k] = clone $table;
         }
-        foreach ($this->_sequences AS $k => $sequence) {
+        foreach ($this->_sequences as $k => $sequence) {
             $this->_sequences[$k] = clone $sequence;
         }
     }

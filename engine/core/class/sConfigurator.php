@@ -105,7 +105,7 @@ class sConfigurator
 
         //get posted groups and options
         $selectedItems = $this->sSYSTEM->_POST["group"];
-        
+
         if (empty($selectedItems)) {
             $selectedItems = array();
         }
@@ -340,7 +340,7 @@ class sConfigurator
     {
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = Shopware()->Models()->createPaginator($query);
 
         return $paginator->getIterator()->current();
     }

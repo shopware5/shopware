@@ -110,7 +110,7 @@ class Group extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\PropertyGroup
      */
     protected $attribute;

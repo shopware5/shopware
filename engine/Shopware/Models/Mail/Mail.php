@@ -160,14 +160,14 @@ class Mail extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $attachments;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Mail
      */
     protected $attribute;

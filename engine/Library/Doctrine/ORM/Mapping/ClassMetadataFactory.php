@@ -13,24 +13,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
 namespace Doctrine\ORM\Mapping;
 
-use ReflectionException,
-    Doctrine\ORM\ORMException,
-    Doctrine\ORM\EntityManager,
-    Doctrine\DBAL\Platforms,
-    Doctrine\ORM\Events,
-    Doctrine\Common\Persistence\Mapping\RuntimeReflectionService,
-    Doctrine\Common\Persistence\Mapping\ReflectionService,
-    Doctrine\Common\Persistence\Mapping\ClassMetadataFactory as ClassMetadataFactoryInterface;
+use ReflectionException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Platforms;
+use Doctrine\ORM\Events;
+use Doctrine\Common\Persistence\Mapping\ReflectionService;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata as ClassMetadataInterface;
+use Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory;
+use Doctrine\ORM\Id\IdentityGenerator;
+use Doctrine\ORM\Id\BigIntegerIdentityGenerator;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 
 /**
  * The ClassMetadataFactory is used to create ClassMetadata objects that contain all the
- * metadata mapping informations of a class which describes how a class should be mapped
+ * metadata mapping information of a class which describes how a class should be mapped
  * to a relational database.
  *
  * @since   2.0
@@ -39,7 +42,7 @@ use ReflectionException,
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class ClassMetadataFactory implements ClassMetadataFactoryInterface
+class ClassMetadataFactory extends AbstractClassMetadataFactory
 {
     /**
      * @var EntityManager
@@ -47,12 +50,12 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     private $em;
 
     /**
-     * @var AbstractPlatform
+     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
     private $targetPlatform;
 
     /**
-     * @var \Doctrine\ORM\Mapping\Driver\Driver
+     * @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
     private $driver;
 
@@ -62,27 +65,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     private $evm;
 
     /**
-     * @var \Doctrine\Common\Cache\Cache
-     */
-    private $cacheDriver;
-
-    /**
-     * @var array
-     */
-    private $loadedMetadata = array();
-
-    /**
-     * @var bool
-     */
-    private $initialized = false;
-
-    /**
-     * @var ReflectionService
-     */
-    private $reflectionService;
-
-    /**
-     * @param EntityManager $$em
+     * @param EntityManager $em
      */
     public function setEntityManager(EntityManager $em)
     {
@@ -90,55 +73,9 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     }
 
     /**
-     * Sets the cache driver used by the factory to cache ClassMetadata instances.
-     *
-     * @param \Doctrine\Common\Cache\Cache $cacheDriver
+     * {@inheritDoc}.
      */
-    public function setCacheDriver($cacheDriver)
-    {
-        $this->cacheDriver = $cacheDriver;
-    }
-
-    /**
-     * Gets the cache driver used by the factory to cache ClassMetadata instances.
-     *
-     * @return \Doctrine\Common\Cache\Cache
-     */
-    public function getCacheDriver()
-    {
-        return $this->cacheDriver;
-    }
-
-    public function getLoadedMetadata()
-    {
-        return $this->loadedMetadata;
-    }
-
-    /**
-     * Forces the factory to load the metadata of all classes known to the underlying
-     * mapping driver.
-     *
-     * @return array The ClassMetadata instances of all mapped classes.
-     */
-    public function getAllMetadata()
-    {
-        if ( ! $this->initialized) {
-            $this->initialize();
-        }
-
-        $metadata = array();
-        foreach ($this->driver->getAllClassNames() as $className) {
-            $metadata[] = $this->getMetadataFor($className);
-        }
-
-        return $metadata;
-    }
-
-    /**
-     * Lazy initialization of this stuff, especially the metadata driver,
-     * since these are not needed at all when a metadata cache is active.
-     */
-    private function initialize()
+    protected function initialize()
     {
         $this->driver = $this->em->getConfiguration()->getMetadataDriverImpl();
         $this->targetPlatform = $this->em->getConnection()->getDatabasePlatform();
@@ -147,215 +84,99 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     }
 
     /**
-     * Gets the class metadata descriptor for a class.
-     *
-     * @param string $className The name of the class.
-     * @return \Doctrine\ORM\Mapping\ClassMetadata
+     * {@inheritDoc}
      */
-    public function getMetadataFor($className)
+    protected function doLoadMetadata($class, $parent, $rootEntityFound, array $nonSuperclassParents)
     {
-        if ( ! isset($this->loadedMetadata[$className])) {
-            $realClassName = $className;
+        /* @var $class ClassMetadata */
+        /* @var $parent ClassMetadata */
+        if ($parent) {
+            $class->setInheritanceType($parent->inheritanceType);
+            $class->setDiscriminatorColumn($parent->discriminatorColumn);
+            $class->setIdGeneratorType($parent->generatorType);
+            $this->addInheritedFields($class, $parent);
+            $this->addInheritedRelations($class, $parent);
+            $class->setIdentifier($parent->identifier);
+            $class->setVersioned($parent->isVersioned);
+            $class->setVersionField($parent->versionField);
+            $class->setDiscriminatorMap($parent->discriminatorMap);
+            $class->setLifecycleCallbacks($parent->lifecycleCallbacks);
+            $class->setChangeTrackingPolicy($parent->changeTrackingPolicy);
 
-            // Check for namespace alias
-            if (strpos($className, ':') !== false) {
-                list($namespaceAlias, $simpleClassName) = explode(':', $className);
-                $realClassName = $this->em->getConfiguration()->getEntityNamespace($namespaceAlias) . '\\' . $simpleClassName;
-
-                if (isset($this->loadedMetadata[$realClassName])) {
-                    // We do not have the alias name in the map, include it
-                    $this->loadedMetadata[$className] = $this->loadedMetadata[$realClassName];
-
-                    return $this->loadedMetadata[$realClassName];
-                }
-            }
-
-            if ($this->cacheDriver) {
-                if (($cached = $this->cacheDriver->fetch("$realClassName\$CLASSMETADATA")) !== false) {
-                    $this->wakeupReflection($cached, $this->getReflectionService());
-                    $this->loadedMetadata[$realClassName] = $cached;
-                } else {
-                    foreach ($this->loadMetadata($realClassName) as $loadedClassName) {
-                        $this->cacheDriver->save(
-                            "$loadedClassName\$CLASSMETADATA", $this->loadedMetadata[$loadedClassName], null
-                        );
-                    }
-                }
-            } else {
-                $this->loadMetadata($realClassName);
-            }
-
-            if ($className != $realClassName) {
-                // We do not have the alias name in the map, include it
-                $this->loadedMetadata[$className] = $this->loadedMetadata[$realClassName];
+            if ($parent->isMappedSuperclass) {
+                $class->setCustomRepositoryClass($parent->customRepositoryClassName);
             }
         }
 
-        return $this->loadedMetadata[$className];
-    }
-
-    /**
-     * Checks whether the factory has the metadata for a class loaded already.
-     *
-     * @param string $className
-     * @return boolean TRUE if the metadata of the class in question is already loaded, FALSE otherwise.
-     */
-    public function hasMetadataFor($className)
-    {
-        return isset($this->loadedMetadata[$className]);
-    }
-
-    /**
-     * Sets the metadata descriptor for a specific class.
-     *
-     * NOTE: This is only useful in very special cases, like when generating proxy classes.
-     *
-     * @param string $className
-     * @param ClassMetadata $class
-     */
-    public function setMetadataFor($className, $class)
-    {
-        $this->loadedMetadata[$className] = $class;
-    }
-
-    /**
-     * Get array of parent classes for the given entity class
-     *
-     * @param string $name
-     * @return array $parentClasses
-     */
-    protected function getParentClasses($name)
-    {
-        // Collect parent classes, ignoring transient (not-mapped) classes.
-        $parentClasses = array();
-        foreach (array_reverse($this->getReflectionService()->getParentClasses($name)) as $parentClass) {
-            if ( ! $this->driver->isTransient($parentClass)) {
-                $parentClasses[] = $parentClass;
-            }
-        }
-        return $parentClasses;
-    }
-
-    /**
-     * Loads the metadata of the class in question and all it's ancestors whose metadata
-     * is still not loaded.
-     *
-     * @param string $name The name of the class for which the metadata should get loaded.
-     * @param array  $tables The metadata collection to which the loaded metadata is added.
-     */
-    protected function loadMetadata($name)
-    {
-        if ( ! $this->initialized) {
-            $this->initialize();
+        // Invoke driver
+        try {
+            $this->driver->loadMetadataForClass($class->getName(), $class);
+        } catch (ReflectionException $e) {
+            throw MappingException::reflectionFailure($class->getName(), $e);
         }
 
-        $loaded = array();
-
-        $parentClasses = $this->getParentClasses($name);
-        $parentClasses[] = $name;
-
-        // Move down the hierarchy of parent classes, starting from the topmost class
-        $parent = null;
-        $rootEntityFound = false;
-        $visited = array();
-        foreach ($parentClasses as $className) {
-            if (isset($this->loadedMetadata[$className])) {
-                $parent = $this->loadedMetadata[$className];
-                if ( ! $parent->isMappedSuperclass) {
-                    $rootEntityFound = true;
-                    array_unshift($visited, $className);
-                }
-                continue;
+        // If this class has a parent the id generator strategy is inherited.
+        // However this is only true if the hierarchy of parents contains the root entity,
+        // if it consists of mapped superclasses these don't necessarily include the id field.
+        if ($parent && $rootEntityFound) {
+            if ($parent->isIdGeneratorSequence()) {
+                $class->setSequenceGeneratorDefinition($parent->sequenceGeneratorDefinition);
+            } else if ($parent->isIdGeneratorTable()) {
+                $class->tableGeneratorDefinition = $parent->tableGeneratorDefinition;
             }
 
-            $class = $this->newClassMetadataInstance($className);
-            $this->initializeReflection($class, $this->getReflectionService());
-
-            if ($parent) {
-                $class->setInheritanceType($parent->inheritanceType);
-                $class->setDiscriminatorColumn($parent->discriminatorColumn);
+            if ($parent->generatorType) {
                 $class->setIdGeneratorType($parent->generatorType);
-                $this->addInheritedFields($class, $parent);
-                $this->addInheritedRelations($class, $parent);
-                $class->setIdentifier($parent->identifier);
-                $class->setVersioned($parent->isVersioned);
-                $class->setVersionField($parent->versionField);
-                $class->setDiscriminatorMap($parent->discriminatorMap);
-                $class->setLifecycleCallbacks($parent->lifecycleCallbacks);
-                $class->setChangeTrackingPolicy($parent->changeTrackingPolicy);
-                if ($parent->isMappedSuperclass) {
-                    $class->setCustomRepositoryClass($parent->customRepositoryClassName);
-                }
             }
 
-            // Invoke driver
-            try {
-                $this->driver->loadMetadataForClass($className, $class);
-            } catch (ReflectionException $e) {
-                throw MappingException::reflectionFailure($className, $e);
+            if ($parent->idGenerator) {
+                $class->setIdGenerator($parent->idGenerator);
             }
-
-            // If this class has a parent the id generator strategy is inherited.
-            // However this is only true if the hierachy of parents contains the root entity,
-            // if it consinsts of mapped superclasses these don't necessarily include the id field.
-            if ($parent && $rootEntityFound) {
-                if ($parent->isIdGeneratorSequence()) {
-                    $class->setSequenceGeneratorDefinition($parent->sequenceGeneratorDefinition);
-                } else if ($parent->isIdGeneratorTable()) {
-                    $class->getTableGeneratorDefinition($parent->tableGeneratorDefinition);
-                }
-                if ($parent->generatorType) {
-                    $class->setIdGeneratorType($parent->generatorType);
-                }
-                if ($parent->idGenerator) {
-                    $class->setIdGenerator($parent->idGenerator);
-                }
-            } else {
-                $this->completeIdGeneratorMapping($class);
-            }
-
-            if ($parent && $parent->isInheritanceTypeSingleTable()) {
-                $class->setPrimaryTable($parent->table);
-            }
-
-            if ($parent && $parent->containsForeignIdentifier) {
-                $class->containsForeignIdentifier = true;
-            }
-
-            if ($parent && !empty ($parent->namedQueries)) {
-                $this->addInheritedNamedQueries($class, $parent);
-            }
-
-            $class->setParentClasses($visited);
-
-            if ($this->evm->hasListeners(Events::loadClassMetadata)) {
-                $eventArgs = new \Doctrine\ORM\Event\LoadClassMetadataEventArgs($class, $this->em);
-                $this->evm->dispatchEvent(Events::loadClassMetadata, $eventArgs);
-            }
-            $this->wakeupReflection($class, $this->getReflectionService());
-
-            $this->validateRuntimeMetadata($class, $parent);
-
-            $this->loadedMetadata[$className] = $class;
-
-            $parent = $class;
-
-            if ( ! $class->isMappedSuperclass) {
-                $rootEntityFound = true;
-                array_unshift($visited, $className);
-            }
-
-            $loaded[] = $className;
+        } else {
+            $this->completeIdGeneratorMapping($class);
         }
 
-        return $loaded;
+        if ($parent && $parent->isInheritanceTypeSingleTable()) {
+            $class->setPrimaryTable($parent->table);
+        }
+
+        if ($parent && $parent->containsForeignIdentifier) {
+            $class->containsForeignIdentifier = true;
+        }
+
+        if ($parent && !empty($parent->namedQueries)) {
+            $this->addInheritedNamedQueries($class, $parent);
+        }
+
+        if ($parent && !empty($parent->namedNativeQueries)) {
+            $this->addInheritedNamedNativeQueries($class, $parent);
+        }
+
+        if ($parent && !empty($parent->sqlResultSetMappings)) {
+            $this->addInheritedSqlResultSetMappings($class, $parent);
+        }
+
+        $class->setParentClasses($nonSuperclassParents);
+
+        if ( $class->isRootEntity() && ! $class->isInheritanceTypeNone() && ! $class->discriminatorMap) {
+            $this->addDefaultDiscriminatorMap($class);
+        }
+
+        if ($this->evm->hasListeners(Events::loadClassMetadata)) {
+            $eventArgs = new LoadClassMetadataEventArgs($class, $this->em);
+            $this->evm->dispatchEvent(Events::loadClassMetadata, $eventArgs);
+        }
+
+        $this->wakeupReflection($class, $this->getReflectionService());
+        $this->validateRuntimeMetadata($class, $parent);
     }
 
     /**
      * Validate runtime metadata is correctly defined.
      *
      * @param ClassMetadata $class
-     * @param ClassMetadata $parent
+     * @param $parent
+     * @throws MappingException
      */
     protected function validateRuntimeMetadata($class, $parent)
     {
@@ -369,33 +190,85 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
         $class->validateLifecycleCallbacks($this->getReflectionService());
 
         // verify inheritance
-        if (!$class->isMappedSuperclass && !$class->isInheritanceTypeNone()) {
-            if (!$parent) {
+        if ( ! $class->isMappedSuperclass && !$class->isInheritanceTypeNone()) {
+            if ( ! $parent) {
                 if (count($class->discriminatorMap) == 0) {
                     throw MappingException::missingDiscriminatorMap($class->name);
                 }
-                if (!$class->discriminatorColumn) {
+                if ( ! $class->discriminatorColumn) {
                     throw MappingException::missingDiscriminatorColumn($class->name);
                 }
             } else if ($parent && !$class->reflClass->isAbstract() && !in_array($class->name, array_values($class->discriminatorMap))) {
-                // enforce discriminator map for all entities of an inheritance hierachy, otherwise problems will occur.
+                // enforce discriminator map for all entities of an inheritance hierarchy, otherwise problems will occur.
                 throw MappingException::mappedClassNotPartOfDiscriminatorMap($class->name, $class->rootEntityName);
             }
         } else if ($class->isMappedSuperclass && $class->name == $class->rootEntityName && (count($class->discriminatorMap) || $class->discriminatorColumn)) {
-            // second condition is necessary for mapped superclasses in the middle of an inheritance hierachy
+            // second condition is necessary for mapped superclasses in the middle of an inheritance hierarchy
             throw MappingException::noInheritanceOnMappedSuperClass($class->name);
         }
     }
 
     /**
-     * Creates a new ClassMetadata instance for the given class name.
-     *
-     * @param string $className
-     * @return \Doctrine\ORM\Mapping\ClassMetadata
+     * {@inheritDoc}
      */
     protected function newClassMetadataInstance($className)
     {
-        return new ClassMetadata($className);
+        return new ClassMetadata($className, $this->em->getConfiguration()->getNamingStrategy());
+    }
+
+    /**
+     * Adds a default discriminator map if no one is given
+     *
+     * If an entity is of any inheritance type and does not contain a
+     * discriminator map, then the map is generated automatically. This process
+     * is expensive computation wise.
+     *
+     * The automatically generated discriminator map contains the lowercase short name of
+     * each class as key.
+     *
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $class
+     * @throws MappingException
+     */
+    private function addDefaultDiscriminatorMap(ClassMetadata $class)
+    {
+        $allClasses = $this->driver->getAllClassNames();
+        $fqcn = $class->getName();
+        $map = array($this->getShortName($class->name) => $fqcn);
+
+        $duplicates = array();
+        foreach ($allClasses as $subClassCandidate) {
+            if (is_subclass_of($subClassCandidate, $fqcn)) {
+                $shortName = $this->getShortName($subClassCandidate);
+
+                if (isset($map[$shortName])) {
+                    $duplicates[] = $shortName;
+                }
+
+                $map[$shortName] = $subClassCandidate;
+            }
+        }
+
+        if ($duplicates) {
+            throw MappingException::duplicateDiscriminatorEntry($class->name, $duplicates, $map);
+        }
+
+        $class->setDiscriminatorMap($map);
+    }
+
+    /**
+     * Get the lower-case short name of a class.
+     *
+     * @param string $className
+     * @return string
+     */
+    private function getShortName($className)
+    {
+        if (strpos($className, "\\") === false) {
+            return strtolower($className);
+        }
+
+        $parts = explode("\\", $className);
+        return strtolower(end($parts));
     }
 
     /**
@@ -406,7 +279,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      */
     private function addInheritedFields(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
-        foreach ($parentClass->fieldMappings as $fieldName => $mapping) {
+        foreach ($parentClass->fieldMappings as $mapping) {
             if ( ! isset($mapping['inherited']) && ! $parentClass->isMappedSuperclass) {
                 $mapping['inherited'] = $parentClass->name;
             }
@@ -425,6 +298,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
+     * @throws MappingException
      */
     private function addInheritedRelations(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
@@ -457,7 +331,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     private function addInheritedNamedQueries(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
         foreach ($parentClass->namedQueries as $name => $query) {
-            if (!isset ($subClass->namedQueries[$name])) {
+            if ( ! isset ($subClass->namedQueries[$name])) {
                 $subClass->addNamedQuery(array(
                     'name'  => $query['name'],
                     'query' => $query['query']
@@ -467,10 +341,63 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     }
 
     /**
+     * Adds inherited named native queries to the subclass mapping.
+     *
+     * @since 2.3
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
+     */
+    private function addInheritedNamedNativeQueries(ClassMetadata $subClass, ClassMetadata $parentClass)
+    {
+        foreach ($parentClass->namedNativeQueries as $name => $query) {
+            if ( ! isset ($subClass->namedNativeQueries[$name])) {
+                $subClass->addNamedNativeQuery(array(
+                    'name'              => $query['name'],
+                    'query'             => $query['query'],
+                    'isSelfClass'       => $query['isSelfClass'],
+                    'resultSetMapping'  => $query['resultSetMapping'],
+                    'resultClass'       => $query['isSelfClass'] ? $subClass->name : $query['resultClass'],
+                ));
+            }
+        }
+    }
+
+    /**
+     * Adds inherited sql result set mappings to the subclass mapping.
+     *
+     * @since 2.3
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
+     */
+    private function addInheritedSqlResultSetMappings(ClassMetadata $subClass, ClassMetadata $parentClass)
+    {
+        foreach ($parentClass->sqlResultSetMappings as $name => $mapping) {
+            if ( ! isset ($subClass->sqlResultSetMappings[$name])) {
+                $entities = array();
+                foreach ($mapping['entities'] as $entity) {
+                    $entities[] = array(
+                        'fields'                => $entity['fields'],
+                        'isSelfClass'           => $entity['isSelfClass'],
+                        'discriminatorColumn'   => $entity['discriminatorColumn'],
+                        'entityClass'           => $entity['isSelfClass'] ? $subClass->name : $entity['entityClass'],
+                    );
+                }
+
+                $subClass->addSqlResultSetMapping(array(
+                    'name'          => $mapping['name'],
+                    'columns'       => $mapping['columns'],
+                    'entities'      => $entities,
+                ));
+            }
+        }
+    }
+
+    /**
      * Completes the ID generator mapping. If "auto" is specified we choose the generator
      * most appropriate for the targeted database platform.
      *
-     * @param \Doctrine\ORM\Mapping\ClassMetadata $class
+     * @param ClassMetadataInfo $class
+     * @throws ORMException
      */
     private function completeIdGeneratorMapping(ClassMetadataInfo $class)
     {
@@ -491,103 +418,126 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
                 // For PostgreSQL IDENTITY (SERIAL) we need a sequence name. It defaults to
                 // <table>_<column>_seq in PostgreSQL for SERIAL columns.
                 // Not pretty but necessary and the simplest solution that currently works.
-                $seqName = $this->targetPlatform instanceof Platforms\PostgreSQLPlatform ?
-                        $class->getTableName() . '_' . $class->columnNames[$class->identifier[0]] . '_seq' :
-                        null;
-                $class->setIdGenerator(new \Doctrine\ORM\Id\IdentityGenerator($seqName));
+                $sequenceName = null;
+                $fieldName    = $class->identifier ? $class->getSingleIdentifierFieldName() : null;
+
+                if ($this->targetPlatform instanceof Platforms\PostgreSQLPlatform) {
+                    $columnName     = $class->getSingleIdentifierColumnName();
+                    $quoted         = isset($class->fieldMappings[$fieldName]['quoted']) || isset($class->table['quoted']);
+                    $sequenceName   = $class->getTableName() . '_' . $columnName . '_seq';
+                    $definition     = array(
+                        'sequenceName' => $this->targetPlatform->fixSchemaElementName($sequenceName)
+                    );
+
+                    if ($quoted) {
+                        $definition['quoted'] = true;
+                    }
+
+                    $sequenceName = $this->em->getConfiguration()->getQuoteStrategy()->getSequenceName($definition, $class, $this->targetPlatform);
+                }
+
+                $generator = ($fieldName && $class->fieldMappings[$fieldName]['type'] === "bigint")
+                    ? new BigIntegerIdentityGenerator($sequenceName)
+                    : new IdentityGenerator($sequenceName);
+
+                $class->setIdGenerator($generator);
+
                 break;
+
             case ClassMetadata::GENERATOR_TYPE_SEQUENCE:
                 // If there is no sequence definition yet, create a default definition
                 $definition = $class->sequenceGeneratorDefinition;
+
                 if ( ! $definition) {
-                    $sequenceName = $class->getTableName() . '_' . $class->getSingleIdentifierColumnName() . '_seq';
-                    $definition['sequenceName'] = $this->targetPlatform->fixSchemaElementName($sequenceName);
-                    $definition['allocationSize'] = 1;
-                    $definition['initialValue'] = 1;
+                    $fieldName      = $class->getSingleIdentifierFieldName();
+                    $columnName     = $class->getSingleIdentifierColumnName();
+                    $quoted         = isset($class->fieldMappings[$fieldName]['quoted']) || isset($class->table['quoted']);
+                    $sequenceName   = $class->getTableName() . '_' . $columnName . '_seq';
+                    $definition     = array(
+                        'sequenceName'      => $this->targetPlatform->fixSchemaElementName($sequenceName),
+                        'allocationSize'    => 1,
+                        'initialValue'      => 1,
+                    );
+
+                    if ($quoted) {
+                        $definition['quoted'] = true;
+                    }
+
                     $class->setSequenceGeneratorDefinition($definition);
                 }
+
                 $sequenceGenerator = new \Doctrine\ORM\Id\SequenceGenerator(
-                    $definition['sequenceName'],
+                    $this->em->getConfiguration()->getQuoteStrategy()->getSequenceName($definition, $class, $this->targetPlatform),
                     $definition['allocationSize']
                 );
                 $class->setIdGenerator($sequenceGenerator);
                 break;
+
             case ClassMetadata::GENERATOR_TYPE_NONE:
                 $class->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
                 break;
+
+            case ClassMetadata::GENERATOR_TYPE_UUID:
+                $class->setIdGenerator(new \Doctrine\ORM\Id\UuidGenerator());
+                break;
+
             case ClassMetadata::GENERATOR_TYPE_TABLE:
                 throw new ORMException("TableGenerator not yet implemented.");
                 break;
+
+            case ClassMetadata::GENERATOR_TYPE_CUSTOM:
+                $definition = $class->customGeneratorDefinition;
+                if ( ! class_exists($definition['class'])) {
+                    throw new ORMException("Can't instantiate custom generator : " .
+                        $definition['class']);
+                }
+                $class->setIdGenerator(new $definition['class']);
+                break;
+
             default:
                 throw new ORMException("Unknown generator type: " . $class->generatorType);
         }
     }
 
     /**
-     * Check if this class is mapped by this EntityManager + ClassMetadata configuration
-     *
-     * @param $class
-     * @return bool
+     * {@inheritDoc}
      */
-    public function isTransient($class)
+    protected function wakeupReflection(ClassMetadataInterface $class, ReflectionService $reflService)
     {
-        if ( ! $this->initialized) {
-            $this->initialize();
-        }
-
-        // Check for namespace alias
-        if (strpos($class, ':') !== false) {
-            list($namespaceAlias, $simpleClassName) = explode(':', $class);
-            $class = $this->em->getConfiguration()->getEntityNamespace($namespaceAlias) . '\\' . $simpleClassName;
-        }
-
-        return $this->driver->isTransient($class);
-    }
-
-    /**
-     * Get reflectionService.
-     *
-     * @return \Doctrine\Common\Persistence\Mapping\ReflectionService
-     */
-    public function getReflectionService()
-    {
-        if ($this->reflectionService === null) {
-            $this->reflectionService = new RuntimeReflectionService();
-        }
-        return $this->reflectionService;
-    }
-
-    /**
-     * Set reflectionService.
-     *
-     * @param reflectionService the value to set.
-     */
-    public function setReflectionService(ReflectionService $reflectionService)
-    {
-        $this->reflectionService = $reflectionService;
-    }
-
-    /**
-     * Wakeup reflection after ClassMetadata gets unserialized from cache.
-     *
-     * @param ClassMetadataInfo $class
-     * @param ReflectionService $reflService
-     * @return void
-     */
-    protected function wakeupReflection(ClassMetadataInfo $class, ReflectionService $reflService)
-    {
+        /* @var $class ClassMetadata */
         $class->wakeupReflection($reflService);
     }
 
     /**
-     * Initialize Reflection after ClassMetadata was constructed.
-     *
-     * @param ClassMetadataInfo $class
-     * @param ReflectionService $reflService
-     * @return void
+     * {@inheritDoc}
      */
-    protected function initializeReflection(ClassMetadataInfo $class, ReflectionService $reflService)
+    protected function initializeReflection(ClassMetadataInterface $class, ReflectionService $reflService)
     {
+        /* @var $class ClassMetadata */
         $class->initializeReflection($reflService);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFqcnFromAlias($namespaceAlias, $simpleClassName)
+    {
+        return $this->em->getConfiguration()->getEntityNamespace($namespaceAlias) . '\\' . $simpleClassName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDriver()
+    {
+        return $this->driver;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function isEntity(ClassMetadataInterface $class)
+    {
+        return isset($class->isMappedSuperclass) && $class->isMappedSuperclass === false;
     }
 }

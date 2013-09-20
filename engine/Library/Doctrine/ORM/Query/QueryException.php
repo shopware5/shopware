@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -15,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -26,10 +24,9 @@ use Doctrine\ORM\Query\AST\PathExpression;
 /**
  * Description of QueryException
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
- * @version $Revision: 3938 $
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
@@ -37,14 +34,19 @@ use Doctrine\ORM\Query\AST\PathExpression;
  */
 class QueryException extends \Doctrine\ORM\ORMException
 {
-    public static function syntaxError($message)
+    public static function dqlError($dql)
     {
-        return new self('[Syntax Error] ' . $message);
+        return new self($dql);
     }
 
-    public static function semanticalError($message)
+    public static function syntaxError($message, $previous = null)
     {
-        return new self('[Semantical Error] ' . $message);
+        return new self('[Syntax Error] ' . $message, 0, $previous);
+    }
+
+    public static function semanticalError($message, $previous = null)
+    {
+        return new self('[Semantical Error] ' . $message, 0, $previous);
     }
 
     public static function invalidLockMode()
@@ -94,7 +96,7 @@ class QueryException extends \Doctrine\ORM\ORMException
     }
 
     /**
-     * @param \Doctrine\ORM\Mapping\AssociationMapping $assoc
+     * @param array $assoc
      */
     public static function iterateWithFetchJoinCollectionNotAllowed($assoc)
     {

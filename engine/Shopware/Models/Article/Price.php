@@ -124,7 +124,7 @@ class Price extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", mappedBy="articlePrice", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", mappedBy="articlePrice", cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticlePrice
      */
     protected $attribute;

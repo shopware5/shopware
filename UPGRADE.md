@@ -1,6 +1,12 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of shopware.
 
+## 4.2.0
+
+* Doctrine has been updated to version 2.3. See: https://github.com/doctrine/doctrine2/blob/2.3/UPGRADE.md
+* Break: `Doctrine\ORM\Query::setParamters()` has changed. See: https://github.com/doctrine/doctrine2/blob/2.3/UPGRADE.md
+* `Shopware\Components\Model\QueryBuilder::setParamters()` provides old behavior.
+
 ## 4.1.3
 
 * `Shopware_Components_Plugin_Bootstrap::assertVersionGreaterThen()` is now an alias to  `Shopware_Components_Plugin_Bootstrap::assertMinimumVersion()` and returns always `true` if run on an development/git Version of Shopware

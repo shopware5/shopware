@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -23,6 +23,7 @@ use PDO,
     Doctrine\DBAL\Connection,
     Doctrine\DBAL\Types\Type,
     Doctrine\ORM\EntityManager,
+    Doctrine\ORM\Events,
     Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
@@ -36,22 +37,22 @@ use PDO,
  */
 abstract class AbstractHydrator
 {
-    /** @var ResultSetMapping The ResultSetMapping. */
+    /** @var \Doctrine\ORM\Query\ResultSetMapping The ResultSetMapping. */
     protected $_rsm;
 
     /** @var EntityManager The EntityManager instance. */
     protected $_em;
 
-    /** @var AbstractPlatform The dbms Platform instance */
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform The dbms Platform instance */
     protected $_platform;
 
-    /** @var UnitOfWork The UnitOfWork of the associated EntityManager. */
+    /** @var \Doctrine\ORM\UnitOfWork The UnitOfWork of the associated EntityManager. */
     protected $_uow;
 
     /** @var array The cache used during row-by-row hydration. */
     protected $_cache = array();
 
-    /** @var Statement The statement that provides the data to hydrate. */
+    /** @var \Doctrine\DBAL\Driver\Statement The statement that provides the data to hydrate. */
     protected $_stmt;
 
     /** @var array The query hints. */
@@ -83,6 +84,9 @@ abstract class AbstractHydrator
         $this->_rsm   = $resultSetMapping;
         $this->_hints = $hints;
 
+        $evm = $this->_em->getEventManager();
+        $evm->addEventListener(array(Events::onClear), $this);
+
         $this->prepare();
 
         return new IterableResult($this);
@@ -93,6 +97,7 @@ abstract class AbstractHydrator
      *
      * @param object $stmt
      * @param object $resultSetMapping
+     * @param array $hints
      * @return mixed
      */
     public function hydrateAll($stmt, $resultSetMapping, array $hints = array())
@@ -233,7 +238,7 @@ abstract class AbstractHydrator
 
             if (isset($cache[$key]['isScalar'])) {
                 $value = $cache[$key]['type']->convertToPHPValue($value, $this->_platform);
-                
+
                 $rowData['scalars'][$cache[$key]['fieldName']] = $value;
 
                 continue;
@@ -373,5 +378,13 @@ abstract class AbstractHydrator
         }
 
         $this->_em->getUnitOfWork()->registerManaged($entity, $id, $data);
+    }
+
+    /**
+     * When executed in a hydrate() loop we have to clear internal state to
+     * decrease memory consumption.
+     */
+    public function onClear($eventArgs)
+    {
     }
 }

@@ -121,12 +121,13 @@ class sArticles
     /**
      * Class constructor.
      */
-    public function __construct()
+    public function __construct(\Shopware\Models\Category\Category $category = null, $translationId = null, $customerGroupId = null)
     {
-        $this->category = Shopware()->Shop()->getCategory();
+        $this->category = ($category) ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->translationId = !Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null;
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+
+        $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
     }
 
     /**
@@ -1485,11 +1486,11 @@ class sArticles
      *  -   Shopware_Modules_Articles_GetFilterQuery
      *
      * @param null $activeFilters
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getFilterQuery($activeFilters = null)
     {
-        /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
+        /**@var $builder \Doctrine\DBAL\Query\QueryBuilder */
         $builder = Shopware()->Models()->getDBALQueryBuilder();
 
         $builder->select(array(

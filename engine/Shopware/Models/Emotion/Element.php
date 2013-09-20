@@ -130,7 +130,7 @@ class Element extends ModelEntity
      * emotion and grid elements.
      *
      * @var \Shopware\Models\Emotion\Emotion $emotion
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Emotion", inversedBy="elements", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Emotion", inversedBy="elements", cascade={"persist"})
      * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
      */
     protected $emotion;
@@ -148,7 +148,7 @@ class Element extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Data", mappedBy="element", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Data", mappedBy="element", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $data;

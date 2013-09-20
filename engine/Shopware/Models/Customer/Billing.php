@@ -200,7 +200,7 @@ class Billing extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerBilling", mappedBy="customerBilling", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerBilling", mappedBy="customerBilling", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\CustomerBilling
      */
     protected $attribute;

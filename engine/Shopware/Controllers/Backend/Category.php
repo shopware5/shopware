@@ -289,7 +289,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
 
@@ -516,7 +516,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         $data = $paginator->getIterator()->getArrayCopy();
         $count = $paginator->count();
@@ -682,7 +682,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryId = $categoryModel->getId();
             $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $data = $paginator->getIterator()->getArrayCopy();
             $data = $data[0];
             $data["imagePath"] = $data["media"]["path"];

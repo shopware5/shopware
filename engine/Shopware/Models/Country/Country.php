@@ -179,14 +179,14 @@ class Country extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $states;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Country
      */
     protected $attribute;

@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -62,49 +62,50 @@ class SimpleAnnotationReader implements Reader
     /**
      * Gets the annotations applied to a class.
      *
-     * @param ReflectionClass $class The ReflectionClass of the class from which
+     * @param \ReflectionClass $class The ReflectionClass of the class from which
      *                               the class annotations should be read.
+     *
      * @return array An array of Annotations.
      */
     public function getClassAnnotations(\ReflectionClass $class)
     {
-        $this->parser->setTarget(Target::TARGET_CLASS);
         return $this->parser->parse($class->getDocComment(), 'class '.$class->getName());
     }
 
-     /**
+    /**
      * Gets the annotations applied to a method.
      *
-     * @param ReflectionMethod $property The ReflectionMethod of the method from which
+     * @param \ReflectionMethod $method The ReflectionMethod of the method from which
      *                                   the annotations should be read.
+     *
      * @return array An array of Annotations.
      */
     public function getMethodAnnotations(\ReflectionMethod $method)
     {
-        $this->parser->setTarget(Target::TARGET_METHOD);
         return $this->parser->parse($method->getDocComment(), 'method '.$method->getDeclaringClass()->name.'::'.$method->getName().'()');
     }
 
     /**
      * Gets the annotations applied to a property.
      *
-     * @param ReflectionProperty $property The ReflectionProperty of the property
+     * @param \ReflectionProperty $property The ReflectionProperty of the property
      *                                     from which the annotations should be read.
+     *
      * @return array An array of Annotations.
      */
     public function getPropertyAnnotations(\ReflectionProperty $property)
     {
-        $this->parser->setTarget(Target::TARGET_PROPERTY);
         return $this->parser->parse($property->getDocComment(), 'property '.$property->getDeclaringClass()->name.'::$'.$property->getName());
     }
 
     /**
      * Gets a class annotation.
      *
-     * @param ReflectionClass $class The ReflectionClass of the class from which
+     * @param \ReflectionClass $class The ReflectionClass of the class from which
      *                               the class annotations should be read.
      * @param string $annotationName The name of the annotation.
-     * @return The Annotation or NULL, if the requested annotation does not exist.
+     *
+     * @return mixed The Annotation or NULL, if the requested annotation does not exist.
      */
     public function getClassAnnotation(\ReflectionClass $class, $annotationName)
     {
@@ -120,9 +121,10 @@ class SimpleAnnotationReader implements Reader
     /**
      * Gets a method annotation.
      *
-     * @param ReflectionMethod $method
+     * @param \ReflectionMethod $method
      * @param string $annotationName The name of the annotation.
-     * @return The Annotation or NULL, if the requested annotation does not exist.
+     *
+     * @return mixed The Annotation or NULL, if the requested annotation does not exist.
      */
     public function getMethodAnnotation(\ReflectionMethod $method, $annotationName)
     {
@@ -138,9 +140,9 @@ class SimpleAnnotationReader implements Reader
     /**
      * Gets a property annotation.
      *
-     * @param ReflectionProperty $property
+     * @param \ReflectionProperty $property
      * @param string $annotationName The name of the annotation.
-     * @return The Annotation or NULL, if the requested annotation does not exist.
+     * @return mixed The Annotation or NULL, if the requested annotation does not exist.
      */
     public function getPropertyAnnotation(\ReflectionProperty $property, $annotationName)
     {

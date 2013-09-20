@@ -228,7 +228,7 @@ class Payment extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Payment
      */
     protected $attribute;

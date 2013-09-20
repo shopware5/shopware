@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -47,11 +47,15 @@ class BlobType extends Type
         if (null === $value) {
             return null;
         }
+
         if (is_string($value)) {
             $value = fopen('data://text/plain;base64,' . base64_encode($value), 'r');
-        } else if ( ! is_resource($value)) {
+        } 
+        
+        if ( ! is_resource($value)) {
             throw ConversionException::conversionFailed($value, self::BLOB);
         }
+
         return $value;
     }
 

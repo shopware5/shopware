@@ -36,6 +36,39 @@ class DBALException extends \Exception
             "Doctrine currently supports only the following drivers: ".implode(", ", $knownDrivers));
     }
 
+    public static function driverExceptionDuringQuery(\Exception $driverEx, $sql, array $params = array())
+    {
+        $msg = "An exception occurred while executing '".$sql."'";
+        if ($params) {
+            $msg .= " with params " . self::formatParameters($params);
+        }
+        $msg .= ":\n\n".$driverEx->getMessage();
+
+        return new self($msg, 0, $driverEx);
+    }
+
+    /**
+     * Returns a human-readable representation of an array of parameters.
+     * This properly handles binary data by returning a hex representation.
+     *
+     * @param array $params
+     *
+     * @return string
+     */
+    private static function formatParameters(array $params)
+    {
+        return '[' . implode(', ', array_map(function($param) {
+            $json = @json_encode($param);
+
+            if (! is_string($json) || $json == 'null' && is_string($param)) {
+                // JSON encoding failed, this is not a UTF-8 string.
+                return '"\x' . implode('\x', str_split(bin2hex($param), 2)) . '"';
+            }
+
+            return $json;
+        }, $params)) . ']';
+    }
+
     public static function invalidWrapperClass($wrapperClass)
     {
         return new self("The given 'wrapperClass' ".$wrapperClass." has to be a ".
@@ -78,7 +111,14 @@ class DBALException extends \Exception
 
     public static function unknownColumnType($name)
     {
-        return new self('Unknown column type '.$name.' requested.');
+        return new self('Unknown column type "'.$name.'" requested. Any Doctrine type that you use has ' .
+            'to be registered with \Doctrine\DBAL\Types\Type::addType(). You can get a list of all the ' .
+            'known types with \Doctrine\DBAL\Types\Type::getTypeMap(). If this error occurs during database ' .
+            'introspection then you might have forgot to register all database types for a Doctrine Type. Use ' .
+            'AbstractPlatform#registerDoctrineTypeMapping() or have your custom types implement ' .
+            'Type#getMappedDatabaseTypes(). If the type name is empty you might ' .
+            'have a problem with the cache or forgot some mapping information.'
+        );
     }
 
     public static function typeNotFound($name)

@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -46,15 +46,31 @@ abstract class AbstractCollectionPersister
     protected $_uow;
 
     /**
+     * The database platform.
+     *
+     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
+     */
+    protected $platform;
+    
+    /**
+     * The quote strategy.
+     *
+     * @var \Doctrine\ORM\Mapping\QuoteStrategy
+     */
+    protected $quoteStrategy;
+
+    /**
      * Initializes a new instance of a class derived from AbstractCollectionPersister.
      *
      * @param \Doctrine\ORM\EntityManager $em
      */
     public function __construct(EntityManager $em)
     {
-        $this->_em = $em;
-        $this->_uow = $em->getUnitOfWork();
-        $this->_conn = $em->getConnection();
+        $this->_em              = $em;
+        $this->_uow             = $em->getUnitOfWork();
+        $this->_conn            = $em->getConnection();
+        $this->platform         = $this->_conn->getDatabasePlatform();
+        $this->quoteStrategy    = $em->getConfiguration()->getQuoteStrategy();
     }
 
     /**

@@ -86,7 +86,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its text-child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Text
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $text;
 
@@ -96,7 +96,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its banner child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Banner
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $banner;
 
@@ -106,7 +106,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its link childs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $links;
 
@@ -116,7 +116,7 @@ class Container extends ModelEntity
     * Inverse side of the association between the container and its article childs
     *
      * @var \Doctrine\Common\Collections\ArrayCollection
-    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist", "update", "remove"})
+    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
     */
     protected $articles;
 

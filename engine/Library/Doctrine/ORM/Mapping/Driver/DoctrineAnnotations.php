@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -39,6 +39,7 @@ require_once __DIR__.'/../UniqueConstraint.php';
 require_once __DIR__.'/../Index.php';
 require_once __DIR__.'/../JoinTable.php';
 require_once __DIR__.'/../SequenceGenerator.php';
+require_once __DIR__.'/../CustomIdGenerator.php';
 require_once __DIR__.'/../ChangeTrackingPolicy.php';
 require_once __DIR__.'/../OrderBy.php';
 require_once __DIR__.'/../NamedQueries.php';
@@ -52,3 +53,14 @@ require_once __DIR__.'/../PreRemove.php';
 require_once __DIR__.'/../PostRemove.php';
 require_once __DIR__.'/../PostLoad.php';
 require_once __DIR__.'/../PreFlush.php';
+require_once __DIR__.'/../FieldResult.php';
+require_once __DIR__.'/../ColumnResult.php';
+require_once __DIR__.'/../EntityResult.php';
+require_once __DIR__.'/../NamedNativeQuery.php';
+require_once __DIR__.'/../NamedNativeQueries.php';
+require_once __DIR__.'/../SqlResultSetMapping.php';
+require_once __DIR__.'/../SqlResultSetMappings.php';
+require_once __DIR__.'/../AssociationOverride.php';
+require_once __DIR__.'/../AssociationOverrides.php';
+require_once __DIR__.'/../AttributeOverride.php';
+require_once __DIR__.'/../AttributeOverrides.php';

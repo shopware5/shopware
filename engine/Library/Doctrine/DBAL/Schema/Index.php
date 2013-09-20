@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -39,12 +39,19 @@ class Index extends AbstractAsset implements Constraint
     protected $_isPrimary = false;
 
     /**
+     * Platform specific flags for indexes.
+     *
+     * @var array
+     */
+    protected $_flags = array();
+
+    /**
      * @param string $indexName
      * @param array $column
      * @param bool $isUnique
      * @param bool $isPrimary
      */
-    public function __construct($indexName, array $columns, $isUnique=false, $isPrimary=false)
+    public function __construct($indexName, array $columns, $isUnique = false, $isPrimary = false, array $flags = array())
     {
         $isUnique = ($isPrimary)?true:$isUnique;
 
@@ -52,8 +59,11 @@ class Index extends AbstractAsset implements Constraint
         $this->_isUnique = $isUnique;
         $this->_isPrimary = $isPrimary;
 
-        foreach($columns AS $column) {
+        foreach ($columns as $column) {
             $this->_addColumn($column);
+        }
+        foreach ($flags as $flag) {
+            $this->addFlag($flag);
         }
     }
 
@@ -75,6 +85,14 @@ class Index extends AbstractAsset implements Constraint
     public function getColumns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnquotedColumns()
+    {
+        return array_map(array($this, 'trimQuotes'), $this->getColumns());
     }
 
     /**
@@ -108,11 +126,11 @@ class Index extends AbstractAsset implements Constraint
      * @param  int $pos
      * @return bool
      */
-    public function hasColumnAtPosition($columnName, $pos=0)
+    public function hasColumnAtPosition($columnName, $pos = 0)
     {
-        $columnName = strtolower($columnName);
-        $indexColumns = \array_map('strtolower', $this->getColumns());
-        return \array_search($columnName, $indexColumns) === $pos;
+        $columnName   = $this->trimQuotes(strtolower($columnName));
+        $indexColumns = array_map('strtolower', $this->getUnquotedColumns());
+        return array_search($columnName, $indexColumns) === $pos;
     }
 
     /**
@@ -125,7 +143,7 @@ class Index extends AbstractAsset implements Constraint
     {
         $sameColumns = true;
         for ($i = 0; $i < count($this->_columns); $i++) {
-            if (!isset($columnNames[$i]) || strtolower($this->_columns[$i]) != strtolower($columnNames[$i])) {
+            if (!isset($columnNames[$i]) || $this->trimQuotes(strtolower($this->_columns[$i])) != $this->trimQuotes(strtolower($columnNames[$i]))) {
                 $sameColumns = false;
             }
         }
@@ -150,7 +168,7 @@ class Index extends AbstractAsset implements Constraint
         $sameColumns = $this->spansColumns($other->getColumns());
 
         if ($sameColumns) {
-            if (!$this->isUnique() && !$this->isPrimary()) {
+            if ( ! $this->isUnique() && !$this->isPrimary()) {
                 // this is a special case: If the current key is neither primary or unique, any uniqe or
                 // primary key will always have the same effect for the index and there cannot be any constraint
                 // overlaps. This means a primary or unique index can always fullfill the requirements of just an
@@ -185,4 +203,40 @@ class Index extends AbstractAsset implements Constraint
         }
         return false;
     }
+
+    /**
+     * Add Flag for an index that translates to platform specific handling.
+     *
+     * @example $index->addFlag('CLUSTERED')
+     * @param string $flag
+     * @return Index
+     */
+    public function addFlag($flag)
+    {
+        $this->flags[strtolower($flag)] = true;
+        return $this;
+    }
+
+    /**
+     * Does this index have a specific flag?
+     *
+     * @param string $flag
+     * @return bool
+     */
+    public function hasFlag($flag)
+    {
+        return isset($this->flags[strtolower($flag)]);
+    }
+
+    /**
+     * Remove a flag
+     *
+     * @param string $flag
+     * @return void
+     */
+    public function removeFlag($flag)
+    {
+        unset($this->flags[strtolower($flag)]);
+    }
 }
+

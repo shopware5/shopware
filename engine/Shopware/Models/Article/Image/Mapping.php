@@ -72,7 +72,7 @@ class Mapping extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Rule", mappedBy="mapping", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Rule", mappedBy="mapping", orphanRemoval=true, cascade={"persist"})
      */
     protected $rules;
 

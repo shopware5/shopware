@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -15,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -30,10 +28,9 @@ use Symfony\Component\Console\Input\InputArgument,
 /**
  * Command to create the database schema for a set of classes based on their mappings.
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
- * @version $Revision$
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Jonathan Wage <jonwage@gmail.com>
@@ -65,12 +62,12 @@ EOT
 
     protected function executeSchemaCommand(InputInterface $input, OutputInterface $output, SchemaTool $schemaTool, array $metadatas)
     {
-        $output->write('ATTENTION: This operation should not be executed in a production environment.' . PHP_EOL . PHP_EOL);
-
         if ($input->getOption('dump-sql') === true) {
             $sqls = $schemaTool->getCreateSchemaSql($metadatas);
-            $output->write(implode(';' . PHP_EOL, $sqls) . PHP_EOL);
+            $output->write(implode(';' . PHP_EOL, $sqls) . ';' . PHP_EOL);
         } else {
+            $output->write('ATTENTION: This operation should not be executed in a production environment.' . PHP_EOL . PHP_EOL);
+
             $output->write('Creating database schema...' . PHP_EOL);
             $schemaTool->createSchema($metadatas);
             $output->write('Database schema created successfully!' . PHP_EOL);

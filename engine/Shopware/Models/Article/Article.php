@@ -323,7 +323,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="supplierID", referencedColumnName="id")
      */
     protected $supplier;
@@ -335,7 +335,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $details;
@@ -348,7 +348,7 @@ class Article extends ModelEntity
      * @Assert\NotBlank
      * @Assert\Valid
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="main_detail_id", referencedColumnName="id")
      */
     protected $mainDetail;
@@ -360,7 +360,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $links;
 
@@ -371,7 +371,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $downloads;
 
@@ -382,7 +382,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $images;
@@ -402,7 +402,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $votes;
 
@@ -413,7 +413,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist"})
      */
     protected $attribute;
 
@@ -422,7 +422,7 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Article\Configurator\Set
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
      */
     protected $configuratorSet;
@@ -430,7 +430,7 @@ class Article extends ModelEntity
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="s_filter_articles",
      *      joinColumns={
      *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -447,7 +447,7 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Article\Configurator\Template\Template
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $configuratorTemplate;
 
@@ -456,7 +456,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $esds;
 

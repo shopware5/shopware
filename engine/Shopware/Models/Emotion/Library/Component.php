@@ -122,7 +122,7 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;

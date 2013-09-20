@@ -124,7 +124,7 @@ class Document extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Document
      */
     protected $attribute;

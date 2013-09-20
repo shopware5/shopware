@@ -91,14 +91,14 @@ class State extends ModelEntity
      *
      * @var \Shopware\Models\Country\Country $country
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country", inversedBy="states", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country", inversedBy="states", cascade={"persist"})
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
      */
     protected $country;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CountryState", mappedBy="countryState", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CountryState", mappedBy="countryState", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\CountryState
      */
     protected $attribute;

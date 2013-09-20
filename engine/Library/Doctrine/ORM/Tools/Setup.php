@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
 */
 
@@ -63,6 +63,9 @@ class Setup
      * Use this method to register all autoloaders for a setup where Doctrine is installed
      * though {@link http://pear.doctrine-project.org}.
      *
+     * This method registers autoloaders for both Doctrine and Symfony top
+     * level namespaces.
+     *
      * @return void
      */
     static public function registerAutoloadPEAR()
@@ -74,15 +77,8 @@ class Setup
         $loader = new ClassLoader("Doctrine");
         $loader->register();
 
-        $parts = explode(PATH_SEPARATOR, get_include_path());
-
-        foreach ($parts AS $includePath) {
-            if ($includePath != "." && file_exists($includePath . "/Doctrine")) {
-                $loader = new ClassLoader("Symfony\Component", $includePath . "/Doctrine");
-                $loader->register();
-                return;
-            }
-        }
+        $loader = new ClassLoader("Symfony");
+        $loader->register();
     }
 
     /**
@@ -111,12 +107,13 @@ class Setup
      * @param boolean $isDevMode
      * @param string $proxyDir
      * @param Cache $cache
+     * @param bool $useSimpleAnnotationReader
      * @return Configuration
      */
-    static public function createAnnotationMetadataConfiguration(array $paths, $isDevMode = false, $proxyDir = null, Cache $cache = null)
+    static public function createAnnotationMetadataConfiguration(array $paths, $isDevMode = false, $proxyDir = null, Cache $cache = null, $useSimpleAnnotationReader = true)
     {
         $config = self::createConfiguration($isDevMode, $proxyDir, $cache);
-        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($paths));
+        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver($paths, $useSimpleAnnotationReader));
         return $config;
     }
 
@@ -165,19 +162,24 @@ class Setup
         $proxyDir = $proxyDir ?: sys_get_temp_dir();
         if ($isDevMode === false && $cache === null) {
             if (extension_loaded('apc')) {
-                $cache = new \Doctrine\Common\Cache\ApcCache;
+                $cache = new \Doctrine\Common\Cache\ApcCache();
             } else if (extension_loaded('xcache')) {
-                $cache = new \Doctrine\Common\Cache\XcacheCache;
+                $cache = new \Doctrine\Common\Cache\XcacheCache();
             } else if (extension_loaded('memcache')) {
                 $memcache = new \Memcache();
                 $memcache->connect('127.0.0.1');
                 $cache = new \Doctrine\Common\Cache\MemcacheCache();
                 $cache->setMemcache($memcache);
+            } else if (extension_loaded('redis')) {
+                $redis = new \Redis();
+                $redis->connect('127.0.0.1');
+                $cache = new \Doctrine\Common\Cache\RedisCache();
+                $cache->setRedis($redis);
             } else {
-                $cache = new ArrayCache;
+                $cache = new ArrayCache();
             }
         } else if ($cache === null) {
-            $cache = new ArrayCache;
+            $cache = new ArrayCache();
         }
         $cache->setNamespace("dc2_" . md5($proxyDir) . "_"); // to avoid collisions
 
@@ -185,7 +187,7 @@ class Setup
         $config->setMetadataCacheImpl($cache);
         $config->setQueryCacheImpl($cache);
         $config->setResultCacheImpl($cache);
-        $config->setProxyDir( $proxyDir );
+        $config->setProxyDir($proxyDir);
         $config->setProxyNamespace('DoctrineProxies');
         $config->setAutoGenerateProxyClasses($isDevMode);
 

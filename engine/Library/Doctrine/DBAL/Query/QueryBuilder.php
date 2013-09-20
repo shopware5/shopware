@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -113,7 +113,7 @@ class QueryBuilder
     /**
      * Initializes a new <tt>QueryBuilder</tt>.
      *
-     * @param Doctrine\DBAL\Connection $connection DBAL Connection
+     * @param \Doctrine\DBAL\Connection $connection DBAL Connection
      */
     public function __construct(Connection $connection)
     {
@@ -134,7 +134,7 @@ class QueryBuilder
      * For more complex expression construction, consider storing the expression
      * builder object in a local variable.
      *
-     * @return Doctrine\DBAL\Query\ExpressionBuilder
+     * @return \Doctrine\DBAL\Query\Expression\ExpressionBuilder
      */
     public function expr()
     {
@@ -154,7 +154,7 @@ class QueryBuilder
     /**
      * Get the associated DBAL Connection for this query builder.
      *
-     * @return Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection
      */
     public function getConnection()
     {
@@ -271,6 +271,7 @@ class QueryBuilder
      * </code>
      *
      * @param array $params The query parameters to set.
+     * @param array $types  The query parameters types to set.
      * @return QueryBuilder This QueryBuilder instance.
      */
     public function setParameters(array $params, array $types = array())
@@ -306,7 +307,7 @@ class QueryBuilder
      * Sets the position of the first result to retrieve (the "offset").
      *
      * @param integer $firstResult The first result to return.
-     * @return Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
+     * @return \Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
      */
     public function setFirstResult($firstResult)
     {
@@ -330,7 +331,7 @@ class QueryBuilder
      * Sets the maximum number of results to retrieve (the "limit").
      *
      * @param integer $maxResults The maximum number of results to retrieve.
-     * @return Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
+     * @return \Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
      */
     public function setMaxResults($maxResults)
     {
@@ -356,10 +357,10 @@ class QueryBuilder
      * The available parts are: 'select', 'from', 'set', 'where',
      * 'groupBy', 'having' and 'orderBy'.
      *
-     * @param string $sqlPartName
-     * @param string $sqlPart
-     * @param string $append
-     * @return Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
+     * @param string  $sqlPartName
+     * @param string  $sqlPart
+     * @param boolean $append
+     * @return \Doctrine\DBAL\Query\QueryBuilder This QueryBuilder instance.
      */
     public function add($sqlPartName, $sqlPart, $append = false)
     {
@@ -374,7 +375,7 @@ class QueryBuilder
 
         if ($append) {
             if ($sqlPartName == "orderBy" || $sqlPartName == "groupBy" || $sqlPartName == "select" || $sqlPartName == "set") {
-                foreach ($sqlPart AS $part) {
+                foreach ($sqlPart as $part) {
                     $this->sqlParts[$sqlPartName][] = $part;
                 }
             } else if ($isArray && is_array($sqlPart[key($sqlPart)])) {
@@ -940,38 +941,41 @@ class QueryBuilder
         return $this;
     }
 
-    /**
-     * Converts this instance into a SELECT string in SQL.
-     *
-     * @return string
-     */
     private function getSQLForSelect()
     {
         $query = 'SELECT ' . implode(', ', $this->sqlParts['select']) . ' FROM ';
 
         $fromClauses = array();
+        $joinsPending = true;
+        $joinAliases = array();
 
         // Loop through all FROM clauses
         foreach ($this->sqlParts['from'] as $from) {
             $fromClause = $from['table'] . ' ' . $from['alias'];
 
-            if (isset($this->sqlParts['join'][$from['alias']])) {
-                foreach ($this->sqlParts['join'][$from['alias']] as $join) {
-                    $fromClause .= ' ' . strtoupper($join['joinType'])
-                                 . ' JOIN ' . $join['joinTable'] . ' ' . $join['joinAlias']
-                                 . ' ON ' . ((string) $join['joinCondition']);
+            if ($joinsPending && isset($this->sqlParts['join'][$from['alias']])) {
+                foreach ($this->sqlParts['join'] as $joins) {
+                    foreach ($joins as $join) {
+                        $fromClause .= ' ' . strtoupper($join['joinType'])
+                                     . ' JOIN ' . $join['joinTable'] . ' ' . $join['joinAlias']
+                                     . ' ON ' . ((string) $join['joinCondition']);
+                        $joinAliases[$join['joinAlias']] = true;
+                    }
                 }
+                $joinsPending = false;
             }
 
             $fromClauses[$from['alias']] = $fromClause;
         }
 
-        // loop through all JOIN clasues for validation purpose
+        // loop through all JOIN clauses for validation purpose
+        $knownAliases = array_merge($fromClauses,$joinAliases);
         foreach ($this->sqlParts['join'] as $fromAlias => $joins) {
-            if ( ! isset($fromClauses[$fromAlias]) ) {
-                throw QueryException::unknownFromAlias($fromAlias, array_keys($fromClauses));
+            if ( ! isset($knownAliases[$fromAlias]) ) {
+                throw QueryException::unknownAlias($fromAlias, array_keys($knownAliases));
             }
         }
+
 
         $query .= implode(', ', $fromClauses)
                 . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '')

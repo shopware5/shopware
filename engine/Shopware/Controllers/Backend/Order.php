@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
 
             //returns the total count of the query
             $total = $paginator->count();
@@ -1188,7 +1188,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             $query = $this->getRepository()->getOrdersQuery(array(array('property' => 'orders.id', 'value' => $orderId)), null, 0, 1);
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $order = $paginator->getIterator()->getArrayCopy();
 
             $this->View()->assign(array(

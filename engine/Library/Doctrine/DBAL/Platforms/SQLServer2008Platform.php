@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -28,7 +28,7 @@ namespace Doctrine\DBAL\Platforms;
 class SQLServer2008Platform extends SQLServer2005Platform
 {
     /**
-     * @override
+     * {@inheritDoc}
      */
     public function getDateTimeTypeDeclarationSQL(array $fieldDeclaration)
     {
@@ -38,7 +38,7 @@ class SQLServer2008Platform extends SQLServer2005Platform
     }
 
     /**
-     * @override
+     * {@inheritDoc}
      */
     public function getDateTypeDeclarationSQL(array $fieldDeclaration)
     {
@@ -46,7 +46,7 @@ class SQLServer2008Platform extends SQLServer2005Platform
     }
 
     /**
-     * @override
+     * {@inheritDoc}
      */
     public function getTimeTypeDeclarationSQL(array $fieldDeclaration)
     {
@@ -54,7 +54,7 @@ class SQLServer2008Platform extends SQLServer2005Platform
     }
 
     /**
-     * @override
+     * {@inheritDoc}
      */
     public function getDateTimeFormatString()
     {
@@ -62,22 +62,32 @@ class SQLServer2008Platform extends SQLServer2005Platform
     }
 
     /**
-     * @override
-	 */
+     * {@inheritDoc}
+     */
+    public function getDateTimeTzFormatString()
+    {
+        return 'Y-m-d H:i:s.u P';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getDateFormatString()
     {
         return 'Y-m-d';
     }
 
     /**
-     * @override
-	 */
+     * {@inheritDoc}
+     */
     public function getTimeFormatString()
     {
         return 'H:i:s';
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Adding Datetime2 Type
      */
     protected function initializeDoctrineTypeMappings()

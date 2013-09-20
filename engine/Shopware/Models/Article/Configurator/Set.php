@@ -71,7 +71,7 @@ class Set extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="sets", cascade={"persist", "update"})
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_group_relations",
      *      joinColumns={
      *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
@@ -85,7 +85,7 @@ class Set extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="sets", cascade={"persist", "update"})
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_option_relations",
      *      joinColumns={
      *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
@@ -106,13 +106,13 @@ class Set extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
     protected $dependencies;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
     protected $priceSurcharges;
 

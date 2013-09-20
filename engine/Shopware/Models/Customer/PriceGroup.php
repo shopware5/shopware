@@ -74,7 +74,7 @@ class PriceGroup extends ModelEntity
 
     /**
      * Flag which indicates a net price.
-     * 
+     *
      * @var integer $netto
      * @ORM\Column(name="netto", type="integer", nullable=false)
      */
@@ -82,14 +82,14 @@ class PriceGroup extends ModelEntity
 
     /**
      * Flag which indicates if a price group is active or not.
-     * 
+     *
      * @var integer $taxInput
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active;
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup", cascade={"update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup")
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $customers;

@@ -69,7 +69,7 @@ class WhereInWalker extends TreeWalkerAdapter
     public function walkSelectStatement(SelectStatement $AST)
     {
         $rootComponents = array();
-        foreach ($this->_getQueryComponents() AS $dqlAlias => $qComp) {
+        foreach ($this->_getQueryComponents() as $dqlAlias => $qComp) {
             $isParent = array_key_exists('parent', $qComp)
                 && $qComp['parent'] === null
                 && $qComp['nestingLevel'] == 0
@@ -81,14 +81,18 @@ class WhereInWalker extends TreeWalkerAdapter
         if (count($rootComponents) > 1) {
             throw new \RuntimeException("Cannot count query which selects two FROM components, cannot make distinction");
         }
-        $root = reset($rootComponents);
-        $parentName = key($root);
-        $parent = current($root);
+        $root                = reset($rootComponents);
+        $parentName          = key($root);
+        $parent              = current($root);
+        $identifierFieldName = $parent['metadata']->getSingleIdentifierFieldName();
 
-        $pathExpression = new PathExpression(
-            PathExpression::TYPE_STATE_FIELD, $parentName, $parent['metadata']->getSingleIdentifierFieldName()
-        );
-        $pathExpression->type = PathExpression::TYPE_STATE_FIELD;
+        $pathType = PathExpression::TYPE_STATE_FIELD;
+        if (isset($parent['metadata']->associationMappings[$identifierFieldName])) {
+            $pathType = PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION;
+        }
+
+        $pathExpression       = new PathExpression(PathExpression::TYPE_STATE_FIELD | PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION, $parentName, $identifierFieldName);
+        $pathExpression->type = $pathType;
 
         $count = $this->_getQuery()->getHint(self::HINT_PAGINATOR_ID_COUNT);
 
@@ -98,11 +102,8 @@ class WhereInWalker extends TreeWalkerAdapter
                 array($pathExpression)
             );
             $expression = new InExpression($arithmeticExpression);
-            $ns = self::PAGINATOR_ID_ALIAS;
+            $expression->literals[] = new InputParameter(":" . self::PAGINATOR_ID_ALIAS);
 
-            for ($i = 1; $i <= $count; $i++) {
-                $expression->literals[] = new InputParameter(":{$ns}_$i");
-            }
         } else {
             $expression = new NullComparisonExpression($pathExpression);
             $expression->not = false;
@@ -120,7 +121,9 @@ class WhereInWalker extends TreeWalkerAdapter
                         $conditionalPrimary
                     ))
                 ));
-            } elseif ($AST->whereClause->conditionalExpression instanceof ConditionalExpression) {
+            } elseif ($AST->whereClause->conditionalExpression instanceof ConditionalExpression
+                || $AST->whereClause->conditionalExpression instanceof ConditionalFactor
+            ) {
                 $tmpPrimary = new ConditionalPrimary;
                 $tmpPrimary->conditionalExpression = $AST->whereClause->conditionalExpression;
                 $AST->whereClause->conditionalExpression = new ConditionalTerm(array(

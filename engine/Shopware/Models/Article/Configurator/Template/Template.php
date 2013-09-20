@@ -216,14 +216,14 @@ class Template extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Template\Price", mappedBy="template", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Template\Price", mappedBy="template", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $prices;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Template", mappedBy="template", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Template", mappedBy="template", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Template
      */
     protected $attribute;
@@ -232,7 +232,7 @@ class Template extends ModelEntity
      * OWNING SIDE
      * @var \Shopware\Models\Article\Unit $unit
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Unit", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Unit", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
     protected $unit;

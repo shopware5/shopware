@@ -146,7 +146,7 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history", cascade={"update"})
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      * @var \Shopware\Models\Order\Order $order
      */

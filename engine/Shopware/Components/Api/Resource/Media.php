@@ -86,7 +86,7 @@ class Media extends Resource
         $query = $this->getRepository()->getMediaListQuery($criteria, $orderBy, $limit, $offset);
         $query->setHydrationMode($this->resultMode);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();

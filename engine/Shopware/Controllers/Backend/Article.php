@@ -1924,7 +1924,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         return $paginator->getIterator()->getArrayCopy();
     }
@@ -3381,7 +3381,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
 
             //returns the total count of the query
             $totalResult = $paginator->count();
@@ -3414,7 +3414,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getEsdByArticleQuery($articleId, $filter, $limit, $start, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3445,7 +3445,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getSerialsByEsdQuery($esdId, $filter, $start, $limit, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3874,7 +3874,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $details = $paginator->getIterator()->getArrayCopy();
 
             $counter = $offset;

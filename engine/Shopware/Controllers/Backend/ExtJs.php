@@ -241,4 +241,11 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         echo $template;
     }
 
+    /**
+     * @return \Shopware\Components\Model\ModelManager
+     */
+    public function getModelManager()
+    {
+        return Shopware()->Models();
+    }
 }

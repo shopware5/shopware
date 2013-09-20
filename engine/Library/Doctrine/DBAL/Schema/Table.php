@@ -15,7 +15,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -28,7 +28,7 @@ use Doctrine\DBAL\DBALException;
 /**
  * Object Representation of a table
  *
- * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @version $Revision$
@@ -89,15 +89,15 @@ class Table extends AbstractAsset
         $this->_setName($tableName);
         $this->_idGeneratorType = $idGeneratorType;
 
-        foreach ($columns AS $column) {
+        foreach ($columns as $column) {
             $this->_addColumn($column);
         }
 
-        foreach ($indexes AS $idx) {
+        foreach ($indexes as $idx) {
             $this->_addIndex($idx);
         }
 
-        foreach ($fkConstraints AS $constraint) {
+        foreach ($fkConstraints as $constraint) {
             $this->_addForeignKeyConstraint($constraint);
         }
 
@@ -135,7 +135,7 @@ class Table extends AbstractAsset
     {
         $primaryKey = $this->_createIndex($columns, $indexName ?: "primary", true, true);
 
-        foreach ($columns AS $columnName) {
+        foreach ($columns as $columnName) {
             $column = $this->getColumn($columnName);
             $column->setNotnull(true);
         }
@@ -157,6 +157,33 @@ class Table extends AbstractAsset
         }
 
         return $this->_createIndex($columnNames, $indexName, false, false);
+    }
+
+    /**
+     * Drop an index from this table.
+     *
+     * @param string $indexName
+     * @return void
+     */
+    public function dropPrimaryKey()
+    {
+        $this->dropIndex($this->_primaryKeyName);
+        $this->_primaryKeyName = false;
+    }
+
+    /**
+     * Drop an index from this table.
+     *
+     * @param string $indexName
+     * @return void
+     */
+    public function dropIndex($indexName)
+    {
+        $indexName = strtolower($indexName);
+        if ( ! $this->hasIndex($indexName)) {
+            throw SchemaException::indexDoesNotExist($indexName, $this->_name);
+        }
+        unset($this->_indexes[$indexName]);
     }
 
     /**
@@ -184,7 +211,7 @@ class Table extends AbstractAsset
      */
     public function columnsAreIndexed(array $columnsNames)
     {
-        foreach ($this->getIndexes() AS $index) {
+        foreach ($this->getIndexes() as $index) {
             /* @var $index Index */
             if ($index->spansColumns($columnsNames)) {
                 return true;
@@ -207,7 +234,7 @@ class Table extends AbstractAsset
             throw SchemaException::indexNameInvalid($indexName);
         }
 
-        foreach ($columnNames AS $columnName => $indexColOptions) {
+        foreach ($columnNames as $columnName => $indexColOptions) {
             if (is_numeric($columnName) && is_string($indexColOptions)) {
                 $columnName = $indexColOptions;
             }
@@ -243,11 +270,9 @@ class Table extends AbstractAsset
      */
     public function renameColumn($oldColumnName, $newColumnName)
     {
-        $column = $this->getColumn($oldColumnName);
-        $this->dropColumn($oldColumnName);
-
-        $column->_setName($newColumnName);
-        return $this;
+        throw new DBALException("Table#renameColumn() was removed, because it drops and recreates " .
+            "the column instead. There is no fix available, because a schema diff cannot reliably detect if a " .
+            "column was renamed or one column was created and another one dropped.");
     }
 
     /**
@@ -330,7 +355,7 @@ class Table extends AbstractAsset
         if ($foreignTable instanceof Table) {
             $foreignTableName = $foreignTable->getName();
 
-            foreach ($foreignColumnNames AS $columnName) {
+            foreach ($foreignColumnNames as $columnName) {
                 if ( ! $foreignTable->hasColumn($columnName)) {
                     throw SchemaException::columnDoesNotExist($columnName, $foreignTable->getName());
                 }
@@ -339,7 +364,7 @@ class Table extends AbstractAsset
             $foreignTableName = $foreignTable;
         }
 
-        foreach ($localColumnNames AS $columnName) {
+        foreach ($localColumnNames as $columnName) {
             if ( ! $this->hasColumn($columnName)) {
                 throw SchemaException::columnDoesNotExist($columnName, $this->_name);
             }
@@ -388,7 +413,7 @@ class Table extends AbstractAsset
     protected function _addIndex(Index $indexCandidate)
     {
         // check for duplicates
-        foreach ($this->_indexes AS $existingIndex) {
+        foreach ($this->_indexes as $existingIndex) {
             if ($indexCandidate->isFullfilledBy($existingIndex)) {
                 return $this;
             }
@@ -402,7 +427,7 @@ class Table extends AbstractAsset
         }
 
         // remove overruled indexes
-        foreach ($this->_indexes AS $idxKey => $existingIndex) {
+        foreach ($this->_indexes as $idxKey => $existingIndex) {
             if ($indexCandidate->overrules($existingIndex)) {
                 unset($this->_indexes[$idxKey]);
             }
@@ -488,7 +513,7 @@ class Table extends AbstractAsset
         if ($this->hasPrimaryKey()) {
             $pkCols = $this->getPrimaryKey()->getColumns();
         }
-        foreach ($this->getForeignKeys() AS $fk) {
+        foreach ($this->getForeignKeys() as $fk) {
             /* @var $fk ForeignKeyConstraint */
             $fkCols = array_merge($fkCols, $fk->getColumns());
         }
@@ -522,7 +547,7 @@ class Table extends AbstractAsset
     public function getColumn($columnName)
     {
         $columnName = strtolower($this->trimQuotes($columnName));
-        if (!$this->hasColumn($columnName)) {
+        if ( ! $this->hasColumn($columnName)) {
             throw SchemaException::columnDoesNotExist($columnName, $this->_name);
         }
 
@@ -534,10 +559,18 @@ class Table extends AbstractAsset
      */
     public function getPrimaryKey()
     {
-        if (!$this->hasPrimaryKey()) {
+        if ( ! $this->hasPrimaryKey()) {
             return null;
         }
         return $this->getIndex($this->_primaryKeyName);
+    }
+
+    public function getPrimaryKeyColumns()
+    {
+        if ( ! $this->hasPrimaryKey()) {
+            throw new DBALException("Table " . $this->getName() . " has no primary key.");
+        }
+        return $this->getPrimaryKey()->getColumns();
     }
 
     /**
@@ -567,7 +600,7 @@ class Table extends AbstractAsset
     public function getIndex($indexName)
     {
         $indexName = strtolower($indexName);
-        if (!$this->hasIndex($indexName)) {
+        if ( ! $this->hasIndex($indexName)) {
             throw SchemaException::indexDoesNotExist($indexName, $this->_name);
         }
         return $this->_indexes[$indexName];
@@ -613,15 +646,15 @@ class Table extends AbstractAsset
     {
         $visitor->acceptTable($this);
 
-        foreach ($this->getColumns() AS $column) {
+        foreach ($this->getColumns() as $column) {
             $visitor->acceptColumn($this, $column);
         }
 
-        foreach ($this->getIndexes() AS $index) {
+        foreach ($this->getIndexes() as $index) {
             $visitor->acceptIndex($this, $index);
         }
 
-        foreach ($this->getForeignKeys() AS $constraint) {
+        foreach ($this->getForeignKeys() as $constraint) {
             $visitor->acceptForeignKey($this, $constraint);
         }
     }
@@ -631,13 +664,13 @@ class Table extends AbstractAsset
      */
     public function __clone()
     {
-        foreach ($this->_columns AS $k => $column) {
+        foreach ($this->_columns as $k => $column) {
             $this->_columns[$k] = clone $column;
         }
-        foreach ($this->_indexes AS $k => $index) {
+        foreach ($this->_indexes as $k => $index) {
             $this->_indexes[$k] = clone $index;
         }
-        foreach ($this->_fkConstraints AS $k => $fk) {
+        foreach ($this->_fkConstraints as $k => $fk) {
             $this->_fkConstraints[$k] = clone $fk;
             $this->_fkConstraints[$k]->setLocalTable($this);
         }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 
@@ -48,6 +49,73 @@ class QueryBuilder extends BaseQueryBuilder
     public function setAlias($alias)
     {
         $this->alias = $alias;
+        return $this;
+    }
+
+    /**
+     * Sets a collection of query parameters for the query being constructed.
+     *
+     * <code>
+     *     $qb = $em->createQueryBuilder()
+     *         ->select('u')
+     *         ->from('User', 'u')
+     *         ->where('u.id = :user_id1 OR u.id = :user_id2')
+     *         ->setParameters(new ArrayCollection(array(
+     *             new Parameter('user_id1', 1),
+     *             new Parameter('user_id2', 2)
+    )));
+     * </code>
+     *
+     * Notice: This method overrides ALL parameters in Doctrine 2.3 and up.
+     * We keep the old Doctrine < 2.3 behavior here for Shopware BC reasons,
+     * however this will change in the future. Use {@link setParameter()}
+     * instead or call {@link setParameters()} only once, or with all the
+     * parameters.
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters The query parameters to set.
+     * @return QueryBuilder This QueryBuilder instance.
+     */
+    public function setParameters($parameters)
+    {
+        $existingParameters = $this->getParameters();
+
+        if (count($existingParameters) && is_array($parameters)) {
+            return $this->addParameters($parameters);
+        }
+
+        return parent::setParameters($parameters);
+    }
+
+    /**
+     * Temporary helper method to use instead of {@link setParameters()},
+     * when you really want old Doctrine parameter behavior.
+     *
+     * Warning: This method will be removed in Shopware 5+ and you
+     * should only use it to quickly move backwards to the old
+     * {@link setParameters()} behavior.
+     *
+     * @deprecated
+     * @param array $parameters
+     * @return QueryBuilder This QueryBuilder instance.
+     */
+    public function addParameters(array $parameters)
+    {
+        $existingParameters = $this->getParameters();
+        $newParameters = new ArrayCollection();
+
+        foreach ($existingParameters as $existingParameter) {
+            if (!isset($parameters[$existingParameter->getName()])) {
+                $newParameters->add($existingParameter);
+            }
+        }
+
+        foreach ($parameters as $key => $value) {
+            $parameter = new \Doctrine\ORM\Query\Parameter($key, $value);
+            $newParameters->add($parameter);
+        }
+
+        $this->setParameters($newParameters);
+
         return $this;
     }
 
@@ -204,8 +272,7 @@ class QueryBuilder extends BaseQueryBuilder
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
             $em->addCustomHints($query, null, false, true);
         }
+
         return $query;
     }
-
-
 }
