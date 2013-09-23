@@ -5762,7 +5762,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         image.appendTo(rule);
         hidden.appendTo(rule);
         desc.appendTo(rule);
-
         return rule;
     };
 
