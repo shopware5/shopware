@@ -5659,7 +5659,9 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
 
         // Reset index if not defined
-        if(index < 0) index = 0;
+        if(index < 0) {
+            index = 0;
+        }
 
         for(; i < index+1; i++) {
             data = localStorage.getItem('lastSeenArticle-'+opts.shopId + i);
@@ -5680,7 +5682,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             if(i != index) {
                 // Delete existing article on old position
                 localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
-    
+
                 // Downgrading all articles with higher index
                 var newIndex,
                     tmpData;
@@ -5691,13 +5693,13 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                     localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
                     localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
                 }
-    
+
                 // Adding this article on top index
                 localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
             }
             return false;
         }
-    
+
         localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
         localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
         localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
