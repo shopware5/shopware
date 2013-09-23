@@ -805,10 +805,22 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
     onBeforeResize: function(resizer, width, height, event) {
         var element = resizer.el,
-           me = this,
-           id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
-           store = me.dataviewStore.getAt(0).get('elements'),
-           record;
+            me = this,
+            child = element.child('.x-emotion-element-delete'),
+            id = child.getAttribute('data-emotionId'),
+            store = me.dataviewStore.getAt(0).get('elements'),
+            record, attr, i;
+
+
+        if(!id) {
+            for(i in child.dom.attributes) {
+                attr = child.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = parseInt(attr.value, 10);
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
            if(item.internalId == id) {
@@ -829,14 +841,26 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onResizeDrag: function(resizer, width, height, event) {
         var element = resizer.el,
             me = this,
-            id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
+            child = element.child('.x-emotion-element-delete'),
+            id = child.getAttribute('data-emotionId'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
             cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
-            baseCls, record;
+            baseCls, record, i, attr;
+
+
+        if(!id) {
+            for(i in child.dom.attributes) {
+                attr = child.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = parseInt(attr.value, 10);
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
             if(item.internalId == id) {
