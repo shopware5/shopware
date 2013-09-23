@@ -5648,7 +5648,15 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             url = opts.lastArticles.linkDetailsRewrited;
 
         // Remove query string from article url
-        opts.lastArticles.linkDetailsRewrited =url.substring(0, url.indexOf('?'));
+        if(url.indexOf('?') == -1) {
+            // SEO URL does not exists
+            if(url.indexOf('/sCategory') != -1) {
+                opts.lastArticles.linkDetailsRewrited = url.substring(0, url.indexOf('/sCategory'));
+            }
+        }
+        else {
+            opts.lastArticles.linkDetailsRewrited = url.substring(0, url.indexOf('?'));
+        }
 
         // Reset index if not defined
         if(index < 0) index = 0;
