@@ -45,7 +45,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     autoScroll: true,
     bodyPadding: 20,
 
-
     /**
      * Initializes the component and builds up the main interface
      *
@@ -411,14 +410,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     },
 
     createDropZone: function(view) {
-        var me = this, scrollState;
+        var me = this;
 
         var proxyElement;
         me.dropZone = new Ext.dd.DropZone(view.dataView.getEl(), {
             ddGroup: 'emotion-dd',
 
             getTargetFromEvent: function(e) {
-                return e.getTarget(view.rowSelector);
+                return e.getTarget(view.itemSelector);
             },
 
             // While over a target node, return the default drop allowed class which
@@ -519,6 +518,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                    colWidth = (Ext.get(id).getWidth() - 40) / me.dataviewStore.getAt(0).data.settings.cols,
                    startCol, startRow, record = data.draggedRecord, endRow, endCol,
                    entry = me.dataviewStore.getAt(0), elements = entry.get('elements');
+
+
 
                 x = x - stage.getX();
                 y = y - stage.getY();
@@ -718,12 +719,23 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                 },
 
                 getDragData: function() {
-                    var sourceEl = item, d;
+                    var sourceEl = item,
+                        child = element.child('.x-emotion-element-delete'),
+                        id = child.getAttribute('data-emotionId'),
+                        records = me.dataviewStore.getAt(0).get('elements'),
+                        attr, i, d, record, proxy;
 
-                    var id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
-                        records = me.dataviewStore.getAt(0).get('elements'), record;
+                    if(!id) {
+                        for(i in child.dom.attributes) {
+                            attr = child.dom.attributes[i];
+                            if(attr.name == 'data-emotionid') {
+                                id = parseInt(attr.value, 10);
+                                break;
+                            }
+                        }
+                    }
 
-                    var proxy = element.dragZone.proxy;
+                    proxy = element.dragZone.proxy;
                     if(!proxy.getEl().hasCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')) {
                         proxy.getEl().addCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')
                     }
@@ -793,10 +805,22 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
     onBeforeResize: function(resizer, width, height, event) {
         var element = resizer.el,
-           me = this,
-           id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
-           store = me.dataviewStore.getAt(0).get('elements'),
-           record;
+            me = this,
+            child = element.child('.x-emotion-element-delete'),
+            id = child.getAttribute('data-emotionId'),
+            store = me.dataviewStore.getAt(0).get('elements'),
+            record, attr, i;
+
+
+        if(!id) {
+            for(i in child.dom.attributes) {
+                attr = child.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = parseInt(attr.value, 10);
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
            if(item.internalId == id) {
@@ -817,14 +841,26 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onResizeDrag: function(resizer, width, height, event) {
         var element = resizer.el,
             me = this,
-            id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
+            child = element.child('.x-emotion-element-delete'),
+            id = child.getAttribute('data-emotionId'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
             cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
-            baseCls, record;
+            baseCls, record, i, attr;
+
+
+        if(!id) {
+            for(i in child.dom.attributes) {
+                attr = child.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = parseInt(attr.value, 10);
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
             if(item.internalId == id) {
