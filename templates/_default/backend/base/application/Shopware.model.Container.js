@@ -581,7 +581,29 @@ Ext.define('Shopware.model.Container', {
              * @param { Ext.data.Store } store - Instance of the association store.
              * @param { Shopware.data.Model } record - Instance of the record which will be loaded into this container.
              */
-            me.eventAlias + '-after-reload-data'
+            me.eventAlias + '-after-reload-data',
+
+            /**
+             * Fired when a association component configured
+             * as lazy loading component and the component moves into
+             * the visible area.
+             * Return false to prevent the reload.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Object } component
+             */
+            me.eventAlias + '-before-load-lazy-loading-component',
+
+            /**
+             * Fired after a lazy loading component loaded.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Object } component
+             * @param { Array } records - The loaded records
+             * @param { Ext.data.Operation } operation - The data operation
+             */
+            me.eventAlias + '-after-load-lazy-loading-component',
+
         );
     },
 
@@ -712,6 +734,20 @@ Ext.define('Shopware.model.Container', {
                     config.controller = baseRecord.getConfig('controller');
                 }
                 return config;
+            }
+        });
+
+        component.on('viewready', function() {
+            if (me.isLazyLoadingComponent(component)) {
+                if (!(me.fireEvent(me.eventAlias + '-before-load-lazy-loading-component', me, component))) {
+                    return true;
+                }
+
+                component.getStore().load({
+                    callback: function(records, operation) {
+                        me.fireEvent(me.eventAlias + '-after-load-lazy-loading-component', me, component, records, operation);
+                    }
+                });
             }
         });
 

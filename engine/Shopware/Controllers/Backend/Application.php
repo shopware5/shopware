@@ -215,7 +215,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
                 $this->Request()->getParam('sort', array()),
-                $this->Request()->getParam('filter', array())
+                $this->Request()->getParam('filter', array()),
+                $this->Request()->getParams()
             )
         );
     }
@@ -345,11 +346,12 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param int $offset
      * @param int $limit
-     * @param array $sort
-     * @param array $filter
+     * @param array $sort Contains an array of Ext JS sort conditions
+     * @param array $filter Contains an array of Ext JS filters
+     * @param array $wholeParams Contains all passed request parameters
      * @return array
      */
-    protected function getList($offset, $limit, $sort = array(), $filter = array())
+    protected function getList($offset, $limit, $sort = array(), $filter = array(), array $wholeParams = array())
     {
         $builder = $this->getListQuery();
         $builder->setFirstResult($offset)

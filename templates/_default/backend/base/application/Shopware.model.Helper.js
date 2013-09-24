@@ -442,6 +442,42 @@ Ext.define('Shopware.model.Helper', {
             message: message,
             toString: function() { return this.name + ": " + this.message }
         };
+    },
+
+
+    /**
+     * Helper function which validates if the passed component
+     * is configured as lazy loading component.
+     * The function checks the following conditions:
+     *  1. Component association has been set
+     *  2. `lazyLoading` flag of association is set
+     *  3. Component has a getStore function, and the store contains no data
+     *  4. getStore returns an instance of Shopware.store.Association or the store configured a read url
+     *
+     * @param component
+     * @returns { boolean }
+     */
+    isLazyLoadingComponent: function(component) {
+        var me = this;
+
+        if (!(component.association)) {
+            return false;
+        }
+
+        if (!(component.association.lazyLoading)) {
+            return false;
+        }
+
+        if (typeof component.getStore !== 'function') {
+            return false;
+        }
+
+        if (component.getStore().getCount() > 0) {
+            return false;
+        }
+
+        return (component.getStore() instanceof Shopware.store.Association)
+            || (me.hasModelAction(component.getStore(), 'read') !== undefined);
     }
 });
 

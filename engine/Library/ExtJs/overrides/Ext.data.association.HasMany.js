@@ -29,7 +29,7 @@
  *              storeClass: 'Shopware.apps.Product.store.Variant',
  *
  *              relation: 'OneToMany',
- *              loadOnDemand: true,
+ *              lazyLoading: true,
  *
  *              type: 'hasMany',
  *              model: 'Shopware.apps.Product.model.Variant',
@@ -47,7 +47,7 @@ Ext.override(Ext.data.association.HasMany, {
      *
      * @type { boolean }
      */
-    loadOnDemand: true,
+    lazyLoading: true,
 
     /**
      * Shopware mapping property for doctrine association
