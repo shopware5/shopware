@@ -661,7 +661,8 @@ Ext.define('Shopware.model.Container', {
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association),
-                association
+                association,
+                me.record
             );
 
             //check if the component creation was canceled, or throws an exception
@@ -683,15 +684,17 @@ Ext.define('Shopware.model.Container', {
      * @param model { Shopware.data.Model } - Contains the model instance of the association
      * @param store { Ext.data.Store } - Ext.data.Store of the association
      * @param association { Ext.data.Association } - Definition of the association.
+     * @param baseRecord { Shopware.data.Model }
+     *
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store, association) {
+    createAssociationComponent: function(type, model, store, association, baseRecord) {
         var me = this, component = { }, componentType = model.getConfig(type);
 
         if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
             return component;
         }
-
+        
         component = Ext.create(componentType, {
             record: model,
             store: store,
@@ -699,12 +702,16 @@ Ext.define('Shopware.model.Container', {
             subApp: me.subApp,
             association: association,
             configure: function() {
+                var config = { };
+
                 if (association) {
-                    return {
-                        associationKey: association.associationKey
-                    };
+                    config.associationKey = association.associationKey;
                 }
-                return { };
+
+                if (baseRecord && baseRecord.getConfig('controller')) {
+                    config.controller = baseRecord.getConfig('controller');
+                }
+                return config;
             }
         });
 
@@ -872,7 +879,7 @@ Ext.define('Shopware.model.Container', {
         }
 
         me.fireEvent(me.eventAlias + '-model-field-created', model, formField, field, fieldAssociation);
-        
+
         return formField;
     },
 
