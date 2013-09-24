@@ -251,7 +251,7 @@ Ext.define('Shopware.grid.Association', {
 
         me._opts = me.statics().getDisplayConfig(opts, this);
         args = arguments;
-        args[0].configure = function() {
+        opts.configure = function() {
             return me._opts;
         };
         me.callParent(args);

@@ -195,16 +195,16 @@ Ext.define('Shopware.form.field.Search', {
      */
     createSearchComboListConfig: function () {
         return {
-            getInnerTpl: function () {
-                return '{literal}' +
+            getInnerTpl: [
+                '{literal}' +
                     '<a class="search-item">' +
                         '<h4>{name}</h4>' +
                         '<tpl if="values.description">' +
                             '<br /><span>{[Ext.util.Format.ellipsis(values.description, 150)]}</span>' +
                         '</tpl>' +
                     '</a>' +
-                '{/literal}';
-            }
+                '{/literal}'
+            ].join()
         }
     }
 });

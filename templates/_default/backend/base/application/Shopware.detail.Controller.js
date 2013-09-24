@@ -98,7 +98,24 @@ Ext.define('Shopware.detail.Controller', {
              * can't be saved and some model violations thrown.
              * @type { String }
              */
-            violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}'
+            violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}',
+
+
+            /**
+             * Title of the Shopware growl message, which displayed when the user
+             * tries to save the detail data but the form panel contains invalid data.
+             *
+             * @type { String }
+             */
+            invalidFormTitle: '{s name="detail_controller/invalid_form_title"}Form validation error{/s}',
+
+            /**
+             * Message of the Shopware growl message, which displayed when the user
+             * tries to save the detail data but the form panel contains invalid data.
+             *
+             * @type { String }
+             */
+            invalidFormMessage: '{s name="detail_controller/invalid_form_message"}The form contains invalid data, please check the inserted values.{/s}',
         },
 
         /**
@@ -309,6 +326,10 @@ Ext.define('Shopware.detail.Controller', {
         var me = this, alias, controls = {};
 
         alias = Ext.ClassManager.getAliasesByName(me.getConfig('detailWindow'));
+        if (!alias || alias.length <= 0) {
+            return false;
+        }
+
         alias = alias[0];
         alias = alias.replace('widget.', '');
         controls[alias] = me.createDetailWindowControls();
@@ -350,6 +371,10 @@ Ext.define('Shopware.detail.Controller', {
 
         //check if the Ext JS form is valid
         if (!form.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage(
+                me.getConfig('invalidFormTitle'),
+                me.getConfig('invalidFormMessage')
+            );
             return false;
         }
 

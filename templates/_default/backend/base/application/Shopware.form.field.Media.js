@@ -422,7 +422,10 @@ Ext.define('Shopware.form.field.Media', {
     openMediaManager: function() {
         var me = this;
 
-        me.fireEvent('beforeOpenMediaManager', me);
+        if (!(me.fireEvent('before-open-media-manager', me))) {
+            return false;
+        }
+
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.MediaManager',
             layout: 'small',
@@ -434,7 +437,8 @@ Ext.define('Shopware.form.field.Media', {
             selectionMode: false,
             validTypes: me.validTypes || []
         });
-        me.fireEvent('afterOpenMediaManager', me);
+
+        me.fireEvent('after-open-media-manager', me);
     },
 
 
