@@ -334,24 +334,25 @@ Ext.define('Shopware.window.Detail', {
             me.getEventName('save'),
 
             /**
-             * Fired when a association tab item configured
-             * as lazy loading tab and the tab will be activated.
+             * Fired when a association component configured
+             * as lazy loading component and the component moves into
+             * the visible area.
              * Return false to prevent the reload.
              *
              * @param { Shopware.window.Detail } window
-             * @param { Ext.tab.Panel } tabPanel
-             * @param { Ext.tab.Tab } newCard
+             * @param { Object } component
              */
-            me.getEventName('before-load-tab-on-demand'),
+            me.getEventName('before-load-lazy-loading-component'),
 
             /**
-             * Fired after a lazy loading tab loaded.
+             * Fired after a lazy loading component loaded.
              *
              * @param { Shopware.window.Detail } window
-             * @param { Ext.tab.Panel } tabPanel
-             * @param { Ext.tab.Tab } newCard
+             * @param { Object } component
+             * @param { Array } records - The loaded records
+             * @param { Ext.data.Operation } operation - The data operation
              */
-            me.getEventName('after-load-tab-on-demand'),
+            me.getEventName('after-load-lazy-loading-component'),
 
             /**
              * Fired before the reloaded association data
@@ -632,9 +633,10 @@ Ext.define('Shopware.window.Detail', {
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store, association, baseRecord) {
-        var componentType = model.getConfig(type);
+        var me = this,
+            componentType = model.getConfig(type);
 
-        return Ext.create(componentType, {
+        var component = Ext.create(componentType, {
             record: model,
             store: store,
             flex: 1,
@@ -654,6 +656,22 @@ Ext.define('Shopware.window.Detail', {
                 return config;
             }
         });
+
+        component.on('viewready', function() {
+            if (me.isLazyLoadingComponent(component)) {
+                if (!(me.fireEvent(me.getEventName('before-load-lazy-loading-component'), me, component))) {
+                    return true;
+                }
+
+                component.getStore().load({
+                    callback: function(records, operation) {
+                        me.fireEvent(me.getEventName('after-load-lazy-loading-component'), me, component, records, operation);
+                    }
+                });
+            }
+        });
+
+        return component;
     },
 
     /**
@@ -844,6 +862,9 @@ Ext.define('Shopware.window.Detail', {
                     record
                 );
             }
+            if (me.isLazyLoadingComponent(component)) {
+                component.getStore().load();
+            }
 
             me.fireEvent(me.getEventName('after-load-association-component'), me, record, component, store, association);
         });
@@ -867,17 +888,6 @@ Ext.define('Shopware.window.Detail', {
         if (!(me.fireEvent(me.getEventName('before-tab-changed'), me, tabPanel, newCard, oldCard, eOpts))) {
             return false;
         }
-
-        if (me.loadTabOnDemand(newCard)) {
-            if (!(me.fireEvent(me.getEventName('before-load-tab-on-demand'), me, tabPanel, newCard))) {
-                return false;
-            }
-
-            newCard.getStore().load();
-
-            me.fireEvent(me.getEventName('after-load-tab-on-demand'), me, tabPanel, newCard);
-        }
-
 
         me.fireEvent(me.getEventName('after-tab-changed'), me, tabPanel, newCard, oldCard, eOpts);
     },
@@ -905,40 +915,7 @@ Ext.define('Shopware.window.Detail', {
         return this.eventAlias + '-' + name;
     },
 
-    /**
-     * Helper function which validates if the passed tab item
-     * is configured as lazy loading tab.
-     * The function checks the following conditions:
-     *  1. Tab item association has been set
-     *  2. `loadOnDemand` flag of association is set
-     *  3. Tab item has a getStore function, and the store contains no data
-     *  4. getStore returns an instance of Shopware.store.Association or the store configured a read url
-     *
-     * @param tabItem
-     * @returns { boolean }
-     */
-    loadTabOnDemand: function(tabItem) {
-        var me = this;
 
-        if (!(tabItem.association)) {
-            return false;
-        }
-
-        if (!(tabItem.association.loadOnDemand)) {
-            return false;
-        }
-
-        if (typeof tabItem.getStore !== 'function') {
-            return false;
-        }
-
-        if (tabItem.getStore().getCount() > 0) {
-            return false;
-        }
-
-        return (tabItem.getStore() instanceof Shopware.store.Association)
-            || (me.hasModelAction(tabItem.getStore(), 'read') !== undefined);
-    }
 
 });
 //{/block}
