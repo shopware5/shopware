@@ -543,7 +543,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         );
 
         $builder = $this->getReloadAssociationQuery(
-            $id,
             $association['sourceEntity'],
             $association['inversedBy'],
             $association['fieldName']
@@ -568,8 +567,16 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             $builder->addOrderBy($sort);
         }
 
+        $expr = $this->getManager()->getExpressionBuilder();
+        $builder->andWhere(
+            $expr->orX(
+                $expr->eq($association['fieldName'] . '.id', ':id')
+            )
+        );
+        $builder->setParameter('id', $id);
+
         $builder->setFirstResult($offset)
-            ->setMaxResults($limit);
+                ->setMaxResults($limit);
 
         $query = $builder->getQuery();
 
@@ -706,22 +713,19 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Creates the query builder object for the { @link #reloadAssociation } function.
      *
-     * @param $id - Primary key of the configured { @link #model }.
      * @param $model - Full model class name which will be selected
      * @param $alias - Query alias for the selected model
      * @param $fieldName - Property name of the foreign key column in the associated model.
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    protected function getReloadAssociationQuery($id, $model, $alias, $fieldName)
+    protected function getReloadAssociationQuery($model, $alias, $fieldName)
     {
         $builder = $this->getManager()->createQueryBuilder();
 
         $builder->select(array($alias));
         $builder->from($model, $alias);
         $builder->innerJoin($alias. '.' . $fieldName, $fieldName);
-        $builder->where($fieldName . '.id = :id');
-        $builder->setParameter('id', $id);
 
         return $builder;
     }
