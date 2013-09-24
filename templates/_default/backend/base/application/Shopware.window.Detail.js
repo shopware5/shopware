@@ -281,6 +281,176 @@ Ext.define('Shopware.window.Detail', {
         me.loadRecord(me.record);
     },
 
+    registerEvents: function() {
+        var me = this;
+
+        me.addEvents(
+            /**
+             * Event fired before the main tab changed.
+             * Return false to prevent the tab change
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Ext.tab.Panel } tabPanel
+             * @param { Ext.tab.Tab } newCard
+             * @param { Ext.tab.Tab } oldCard
+             * @param { Object } eventOptions
+             */
+            me.getEventName('before-tab-changed'),
+
+            /**
+             * Fired after the main tab changed.
+             * @param { Shopware.window.Detail } window
+             * @param { Ext.tab.Panel } tabPanel
+             * @param { Ext.tab.Tab } newCard
+             * @param { Ext.tab.Tab } oldCard
+             * @param { Object } eventOptions
+             */
+            me.getEventName('after-tab-changed'),
+
+            /**
+             * Fired before the passed record will be loaded.
+             * Even fired when the detail page will be reloaded.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             */
+            me.getEventName('before-load-record'),
+
+            /**
+             * Fired after the record load into the form panel.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             */
+            me.getEventName('after-load-record'),
+
+            /**
+             * Fired over the saveButton click.
+             * Controlled from the Shopware.detail.Controller.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             */
+            me.getEventName('save'),
+
+            /**
+             * Fired when a association tab item configured
+             * as lazy loading tab and the tab will be activated.
+             * Return false to prevent the reload.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Ext.tab.Panel } tabPanel
+             * @param { Ext.tab.Tab } newCard
+             */
+            me.getEventName('before-load-tab-on-demand'),
+
+            /**
+             * Fired after a lazy loading tab loaded.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Ext.tab.Panel } tabPanel
+             * @param { Ext.tab.Tab } newCard
+             */
+            me.getEventName('after-load-tab-on-demand'),
+
+            /**
+             * Fired before the reloaded association data
+             * will be set into the association components.
+             *
+             * Return false to prevent the whole reload of the
+             * association components.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             */
+            me.getEventName('before-load-associations'),
+
+            /**
+             * Fired after all association components reloaded.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             */
+            me.getEventName('after-load-associations'),
+
+            /**
+             * Fired before a single association component will be
+             * reloaded.
+             * Return false to prevent the reload of the single component.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             * @param { Object } component
+             * @param { Ext.data.Store } store
+             * @param { Object } association
+             */
+            me.getEventName('before-load-association-component'),
+
+            /**
+             * Fired after a single association was reloaded.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Shopware.data.Model } record
+             * @param { Object } component
+             * @param { Ext.data.Store } store
+             * @param { Object } association
+             */
+            me.getEventName('after-load-association-component'),
+
+            /**
+             * Fired before the toolbar elements created.
+             * Return false to prevent the default component creation.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Array } items
+             */
+            me.getEventName('before-create-toolbar-items'),
+
+            /**
+             * Fired after the shopware toolbar elements created.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Array } items
+             */
+            me.getEventName('after-create-toolbar-items'),
+
+            /**
+             * Fired before a single tab item will be created.
+             * Return false to prevent the tab item creation.#
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Object } association
+             */
+            me.getEventName('before-create-tab-item'),
+
+            /**
+             * Fired after a single tab item created.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Object } association
+             * @param { Object } item
+             */
+            me.getEventName('after-create-tab-item'),
+
+            /**
+             * Fired before all tab items will be created,
+             * return false to prevent the default creation.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Array } items
+             */
+            me.getEventName('before-create-tab-items'),
+
+            /**
+             * Fired after all tab items created.
+             *
+             * @param { Shopware.window.Detail } window
+             * @param { Array } items
+             */
+            me.getEventName('after-create-tab-items')
+        );
+    },
+
     /**
      * Creates a default controller for this component which adds event listener
      * function for all shopware default events of this component.
@@ -370,10 +540,16 @@ Ext.define('Shopware.window.Detail', {
     createTabItems: function () {
         var me = this, item, items = [];
 
+        if (!me.fireEvent(me.getEventName('before-create-tab-items'), me, items)) {
+            return [];
+        }
+
         Ext.each(me.getTabItemsAssociations(), function (association) {
             item = me.createTabItem(association);
             if (item) items.push(item);
         });
+
+        me.fireEvent(me.getEventName('after-create-tab-items'), me, items);
 
         return items;
     },
@@ -417,17 +593,29 @@ Ext.define('Shopware.window.Detail', {
     createTabItem: function (association) {
         var me = this, item;
 
+        if (!me.fireEvent(me.getEventName('before-create-tab-item'), me, association)) {
+            return false;
+        }
+
         if (association.isBaseRecord) {
-            item = me.createAssociationComponent('detail', me.record, null);
+            item = me.createAssociationComponent('detail', me.record, null, null, me.record);
         } else {
             item = me.createAssociationComponent(
                 me.getComponentTypeOfAssociation(association),
                 Ext.create(association.associatedName),
                 me.getAssociationStore(me.record, association),
-                association
+                association,
+                me.record
             );
         }
         me.associationComponents[association.associationKey] = item;
+
+        me.fireEvent(me.getEventName('after-create-tab-item'), me, association, item);
+
+        if (item.title === undefined) {
+            item.title = me.getModelName(association.associatedName);
+        }
+
         return item;
     },
 
@@ -439,9 +627,11 @@ Ext.define('Shopware.window.Detail', {
      * @param model { Shopware.data.Model }
      * @param store { Ext.data.Store }
      * @param association { Ext.data.Association }
+     * @param baseRecord { Shopware.data.Model }
+     *
      * @returns { Object }
      */
-    createAssociationComponent: function(type, model, store, association) {
+    createAssociationComponent: function(type, model, store, association, baseRecord) {
         var componentType = model.getConfig(type);
 
         return Ext.create(componentType, {
@@ -451,12 +641,17 @@ Ext.define('Shopware.window.Detail', {
             subApp: this.subApp,
             association: association,
             configure: function() {
+                var config = { };
+
                 if (association) {
-                    return {
-                        associationKey: association.associationKey
-                    };
+                    config.associationKey = association.associationKey;
                 }
-                return { };
+
+                if (baseRecord && baseRecord.getConfig('controller')) {
+                    config.controller = baseRecord.getConfig('controller');
+                }
+
+                return config;
             }
         });
     },
@@ -528,7 +723,7 @@ Ext.define('Shopware.window.Detail', {
     createToolbarItems: function() {
         var me = this, items = [];
 
-        me.fireEvent(this.getEventName('before-create-toolbar-items'), me, items);
+        me.fireEvent(me.getEventName('before-create-toolbar-items'), me, items);
 
         items.push({ xtype: 'tbfill' });
 
@@ -536,7 +731,7 @@ Ext.define('Shopware.window.Detail', {
 
         items.push(me.createSaveButton());
 
-        me.fireEvent(this.getEventName('after-create-toolbar-items'), me, items);
+        me.fireEvent(me.getEventName('after-create-toolbar-items'), me, items);
 
         return items;
     },
@@ -591,9 +786,18 @@ Ext.define('Shopware.window.Detail', {
      * Helper function to load the detail window record.
      */
     loadRecord: function (record) {
+        var me = this;
+
+        if (!(me.fireEvent(me.getEventName('before-load-record'), me, record))) {
+            return false;
+        }
+
         if (this.formPanel instanceof Ext.form.Panel) {
             this.formPanel.loadRecord(record);
         }
+
+        me.fireEvent(me.getEventName('after-load-record'), me, record);
+
         this.loadAssociationData(record);
     },
 
@@ -614,6 +818,10 @@ Ext.define('Shopware.window.Detail', {
     loadAssociationData: function(record) {
         var me = this, association, component, store;
 
+        if (!(me.fireEvent(me.getEventName('before-load-associations'), me, record))) {
+            return false;
+        }
+
         Object.keys(me.associationComponents).forEach(function(key) {
             component = me.associationComponents[key];
             store = null;
@@ -626,13 +834,21 @@ Ext.define('Shopware.window.Detail', {
                 store = me.getAssociationStore(record, association[0]);
             }
 
+            if (!(me.fireEvent(me.getEventName('before-load-association-component'), me, record, component, store, association))) {
+                return true;
+            }
+
             if (component && typeof component.reloadData === 'function') {
                 component.reloadData(
                     store,
                     record
                 );
             }
+
+            me.fireEvent(me.getEventName('after-load-association-component'), me, record, component, store, association);
         });
+
+        me.fireEvent(me.getEventName('after-load-associations'), me, record);
     },
 
 
@@ -648,12 +864,22 @@ Ext.define('Shopware.window.Detail', {
     onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
         var me = this;
 
+        if (!(me.fireEvent(me.getEventName('before-tab-changed'), me, tabPanel, newCard, oldCard, eOpts))) {
+            return false;
+        }
+
         if (me.loadTabOnDemand(newCard)) {
+            if (!(me.fireEvent(me.getEventName('before-load-tab-on-demand'), me, tabPanel, newCard))) {
+                return false;
+            }
+
             newCard.getStore().load();
+
+            me.fireEvent(me.getEventName('after-load-tab-on-demand'), me, tabPanel, newCard);
         }
 
 
-        this.fireEvent('tabChange', this, tabPanel, newCard, oldCard, eOpts);
+        me.fireEvent(me.getEventName('after-tab-changed'), me, tabPanel, newCard, oldCard, eOpts);
     },
 
     /**
