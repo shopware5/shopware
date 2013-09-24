@@ -633,10 +633,22 @@ Ext.define('Shopware.window.Detail', {
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store, association, baseRecord) {
-        var me = this,
-            componentType = model.getConfig(type);
+        var me = this, component = { };
 
-        var component = Ext.create(componentType, {
+        if (!(model instanceof Shopware.data.Model)) {
+            me.throwException(model.$className + ' has to be an instance of Shopware.data.Model');
+        }
+        if (baseRecord && !(baseRecord instanceof Shopware.data.Model)) {
+            me.throwException(baseRecord.$className + ' has to be an instance of Shopware.data.Model');
+        }
+
+        var componentType = model.getConfig(type);
+
+        if (!me.fireEvent(me.getEventName('before-association-component-created'), me, component, type, model, store)) {
+            return component;
+        }
+
+        component = Ext.create(componentType, {
             record: model,
             store: store,
             flex: 1,
@@ -657,6 +669,7 @@ Ext.define('Shopware.window.Detail', {
             }
         });
 
+        //add lazy loading event listener. 
         component.on('viewready', function() {
             if (me.isLazyLoadingComponent(component)) {
                 if (!(me.fireEvent(me.getEventName('before-load-lazy-loading-component'), me, component))) {
@@ -670,6 +683,9 @@ Ext.define('Shopware.window.Detail', {
                 });
             }
         });
+
+        me.fireEvent(me.getEventName('after-association-component-created'), me, component, type, model, store);
+
 
         return component;
     },

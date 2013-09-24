@@ -602,8 +602,7 @@ Ext.define('Shopware.model.Container', {
              * @param { Array } records - The loaded records
              * @param { Ext.data.Operation } operation - The data operation
              */
-            me.eventAlias + '-after-load-lazy-loading-component',
-
+            me.eventAlias + '-after-load-lazy-loading-component'
         );
     },
 
@@ -711,7 +710,16 @@ Ext.define('Shopware.model.Container', {
      * @returns { Object }
      */
     createAssociationComponent: function(type, model, store, association, baseRecord) {
-        var me = this, component = { }, componentType = model.getConfig(type);
+        var me = this, component = { };
+
+        if (!(model instanceof Shopware.data.Model)) {
+            me.throwException(model.$className + ' has to be an instance of Shopware.data.Model');
+        }
+        if (baseRecord && !(baseRecord instanceof Shopware.data.Model)) {
+            me.throwException(baseRecord.$className + ' has to be an instance of Shopware.data.Model');
+        }
+
+        var componentType = model.getConfig(type);
 
         if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
             return component;
