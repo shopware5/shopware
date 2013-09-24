@@ -193,6 +193,8 @@ Ext.define('Shopware.filter.Field', {
 
         me.checkbox.on('change', function(checkbox, value) {
             var field = me.items.items[1];
+            if (!field) return false;
+
             if (value) {
                 field.enable();
             } else {

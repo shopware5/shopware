@@ -298,6 +298,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     }
 
 
+    /**
+     * Controller action which allows to request the media
+     * data over a mediaId parameter or over the path property of a media model.
+     */
     public function getMediaAction()
     {
         $id = $this->Request()->getParam('mediaId', null);
