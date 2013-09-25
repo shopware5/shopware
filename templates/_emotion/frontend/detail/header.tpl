@@ -11,7 +11,11 @@
             var thumbnail, thumbnails;
             configThumbnailSize = ~~(1 * configThumbnailSize);
             thumbnails = {$sArticle.image.src|json_encode};
-            thumbnail = thumbnails[configThumbnailSize];
+            if(thumbnails) {
+                thumbnail = thumbnails[configThumbnailSize];
+            } else {
+                thumbnail = '{link file='frontend/_resources/images/no_picture.jpg'}';
+            }
             return thumbnail;
         };
         var configLastArticles = {ldelim}
@@ -27,11 +31,13 @@
         jQuery(function($) {
             var numberOfArticles = '{config name=lastarticlestoshow}';
             var languageCode = '{$Shop->getId()}';
+            var basePath = '{$Shop->getBaseUrl()}';
 
             $('#detail').lastSeenArticlesCollector({
                 lastArticles: configLastArticles,
                 numArticles: numberOfArticles,
-                shopId: languageCode
+                shopId: languageCode,
+                basePath: basePath
             });
         });
     })();
