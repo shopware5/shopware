@@ -5643,7 +5643,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         var me = this,
             opts = me.options,
             articleNum = opts.numArticles,
-            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId) || 0,
+            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId + '-' + opts.basePath) || 0,
             i = index - articleNum+1, data, article, exists,
             url = opts.lastArticles.linkDetailsRewrited;
 
@@ -5664,7 +5664,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
 
         for(; i < index+1; i++) {
-            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + i);
+            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + i);
             if(!data) {
                 continue;
             }
@@ -5681,7 +5681,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         if(exists) {
             if(i != index) {
                 // Delete existing article on old position
-                localStorage.removeItem('lastSeenArticle-' + opts.shopId + i);
+                localStorage.removeItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + i);
 
                 // Downgrading all articles with higher index
                 var newIndex,
@@ -5689,20 +5689,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
                 for(var j = i + 1; j <= index; j++) {
                     newIndex = j - 1;
-                    tmpData = localStorage.getItem('lastSeenArticle-' + opts.shopId + j);
-                    localStorage.removeItem('lastSeenArticle-' + opts.shopId + j);
-                    localStorage.setItem('lastSeenArticle-' + opts.shopId + newIndex, tmpData);
+                    tmpData = localStorage.getItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + j);
+                    localStorage.removeItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + j);
+                    localStorage.setItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + newIndex, tmpData);
                 }
 
                 // Adding this article on top index
-                localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
+                localStorage.setItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
             }
             return false;
         }
 
-        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId, ++index);
-        localStorage.setItem('lastSeenArticle-'+opts.shopId + index, JSON.stringify(opts.lastArticles));
-        localStorage.removeItem('lastSeenArticle-'+opts.shopId + (index - articleNum));
+        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId + '-' + opts.basePath, ++index);
+        localStorage.setItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
+        localStorage.removeItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + (index - articleNum));
     };
 
     $.fn[pluginName] = function ( options ) {
@@ -5777,7 +5777,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         // Plugin configuration
         var articleNum = options.numArticles,
             shopId = options.shopId,
-            index = localStorage.getItem('lastSeenArticleIndex-' + shopId),
+            basePath = options.basePath,
+            index = localStorage.getItem('lastSeenArticleIndex-' + shopId + '-' + basePath),
             i = 1,
             lastClass = '',
             data, article, all;
@@ -5787,9 +5788,9 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
         // Append all articles to the template
         for(; i <= all; i++) {
-            if(localStorage.getItem('lastSeenArticle-' + shopId + index))
+            if(localStorage.getItem('lastSeenArticle-' + shopId + '-' + basePath + index))
             {
-                data = localStorage.getItem('lastSeenArticle-' + shopId + index);
+                data = localStorage.getItem('lastSeenArticle-' + shopId + '-' + basePath + index);
                 article = JSON.parse(data);
                 lastClass = '';
                 if(i == all || i % 5 == 0) lastClass = '_last';
