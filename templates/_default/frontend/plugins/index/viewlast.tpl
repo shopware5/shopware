@@ -5,13 +5,15 @@
 <script>
     jQuery(function($) {
         var shopId = '{$Shop->getId()}';
-        var savedArticleCount = localStorage.getItem('lastSeenArticleIndex-' + shopId);
+        var basePath = '{$Shop->getBaseUrl()}';
+        var savedArticleCount = localStorage.getItem('lastSeenArticleIndex-' + shopId + '-' + basePath);
         if(savedArticleCount) {
             var numberOfArticles = '{config name=lastarticlestoshow}';
 
             $('.viewlast').lastSeenArticlesDisplayer({
                 numArticles: numberOfArticles,
-                shopId: shopId
+                shopId: shopId,
+                basePath: basePath
             });
         }
         else {
