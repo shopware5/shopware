@@ -77,7 +77,7 @@
                 if(thumbnails) {
                     thumbnail = thumbnails[configThumbnailSize];
                 } else {
-                    thumbnail = '../../resource/images/no_picture.jpg';
+                    thumbnail = '{link file='frontend/_resources/images/no_picture.jpg'}';
                 }
                 return thumbnail;
             };
