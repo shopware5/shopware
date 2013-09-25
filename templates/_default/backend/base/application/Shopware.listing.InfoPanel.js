@@ -319,6 +319,7 @@ Ext.define('Shopware.listing.InfoPanel', {
 
                 if (Ext.isFunction(config)) {
                     field = config.call(me, me, field);
+                    if (field) fields.push(field);
                 } else if (Ext.isObject(config) || (Ext.isString(config) && config.length > 0)) {
                     fields.push(config);
                 } else {
@@ -343,7 +344,9 @@ Ext.define('Shopware.listing.InfoPanel', {
      * @returns { String }
      */
     createTemplateForField: function(model, field) {
-        return '<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>'
+        var me = this;
+
+        return '<p style="padding: 2px"><b>' + me.camelCaseToWord(field.name) +':</b> {literal}{' + field.name + '}{/literal}</p>'
     },
 
     /**
