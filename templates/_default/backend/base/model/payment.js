@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Base.model.Payment', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend:'Shopware.data.Model',
 
     /**
      * unique id

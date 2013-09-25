@@ -77,5 +77,30 @@ Ext.override(Ext.data.proxy.Server, {
         }
 
         me.afterRequest(request, success);
+    },
+
+
+
+    /**
+     * Encodes the array of { @link Ext.util.Filter } objects into a string to be sent in the request url. By default,
+     * this simply JSON-encodes the filter data
+     *
+     * @param { Ext.util.Filter[] } filters The array of { @link Ext.util.Filter Filter } objects
+     * @return { String } The encoded filters
+     */
+    encodeFilters: function(filters) {
+        var min = [],
+            length = filters.length,
+            i = 0;
+
+        for (; i < length; i++) {
+            min[i] = {
+                property: filters[i].property,
+                value   : filters[i].value,
+                operator: filters[i].operator,
+                expression: filters[i].expression
+            };
+        }
+        return this.applyEncoding(min);
     }
 });
