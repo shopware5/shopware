@@ -2,7 +2,9 @@
  * Overwrite the json data writer to send the
  * associated data in the same request
  */
-Ext.override(Ext.data.writer.Json, {
+Ext.define('Ext.data.writer.Json-Shopware', {
+    override: 'Ext.data.writer.Json',
+
     getRecordData: function (record) {
         var me = this, data, associationData;
 
