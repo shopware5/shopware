@@ -29,7 +29,7 @@
  */
 //{block name="backend/base/model/form"}
 Ext.define('Shopware.apps.Base.model.Form', {
-    extend: 'Shopware.data.Model',
+    extend: 'Ext.data.Model',
 
     alternateClassName: 'Shopware.model.Form',
 
