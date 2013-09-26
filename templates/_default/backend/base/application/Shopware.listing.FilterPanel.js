@@ -6,7 +6,7 @@
 Ext.define('Shopware.listing.FilterPanel', {
     extend: 'Ext.form.Panel',
 
-    alias: 'widget.listing-filter-panel',
+    alias: 'widget.shopware-listing-filter-panel',
 
 
     /**
@@ -120,16 +120,6 @@ Ext.define('Shopware.listing.FilterPanel', {
     fieldAssociations: [ ],
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
@@ -155,6 +145,21 @@ Ext.define('Shopware.listing.FilterPanel', {
          *      });
          */
         displayConfig: {
+            /**
+             * Suffix alias for the different component events.
+             * This alias must the same alias of the { @link Shopware.listing.FilterPanel:eventAlias }  component.
+             * If you don't know the alias you can output the alias of the grid panel as follow:
+             * console.log("alias", me.eventAlias);
+             *
+             * If you haven't configured a custom event alias, the { @link Shopware.listing.FilterPanel } creates
+             * the event alias over the configured model.
+             * @example
+             * If you passed a store with an model named: 'Shopware.apps.Product.model.Product'
+             * the { @link Shopware.grid.Panel } use "product" as event alias.
+             *
+             * @type { string }
+             */
+            eventAlias: undefined,
 
             /**
              * @required
@@ -297,6 +302,16 @@ Ext.define('Shopware.listing.FilterPanel', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Class constructor which merges the different configurations.
      * @param opts
      */
@@ -334,6 +349,13 @@ Ext.define('Shopware.listing.FilterPanel', {
     initComponent: function() {
         var me = this;
 
+        me.checkRequirements();
+
+        me.eventAlias = me.getConfig('eventAlias');
+        if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.getConfig('model'));
+
+        me.registerEvents();
+
         me.gridPanel = me.listingWindow.gridPanel;
 
         me.items = me.createItems();
@@ -341,6 +363,71 @@ Ext.define('Shopware.listing.FilterPanel', {
         me.dockedItems = me.createDockedItems();
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!me.getConfig('controller')) {
+            me.throwException(me.$className + ": Component requires the `controller` property in the configure() function");
+        }
+        if (!me.getConfig('model')) {
+            me.throwException(me.$className + ": Component requires the `model` property in the configure() function");
+        }
+        if (me.alias.length <= 0) {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-listing-filter-panel') {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+    },
+
+    /**
+     * Registers all custom component events.
+     */
+    registerEvents: function() {
+        this.addEvents(
+            /**
+             * Fired before a single filter value will be
+             * assigned as Ext.ux.grid.filter.Filter to the grid panel store.
+             *
+             * @param { Shopware.listing.FilterPanel } filterPanel - Instance of this component
+             * @param { Shopware.grid.Panel } gridPanel - Instance of the listing window grid panel
+             * @param { String } key - Name of the filter field
+             * @param { Mixed } value - Value of the filter field.
+             */
+            this.eventAlias + '-before-apply-field-filter',
+
+            /**
+             * Fired before the grid panel store will be reloaded.
+             * This event can be used to add additionally filters.
+             *
+             * @param { Shopware.listing.FilterPanel } filterPanel - Instance of this component
+             * @param { Shopware.grid.Panel } gridPanel - Instance of the listing window grid panel
+             */
+            this.eventAlias + '-before-grid-load-filter',
+
+            /**
+             * Fired before the grid panel filters will be reset.
+             * Return false to prevent the filter process.
+             *
+             * @param { Shopware.listing.FilterPanel } filterPanel - Instance of this component
+             * @param { Shopware.grid.Panel } gridPanel - Instance of the listing window grid panel
+             */
+            this.eventAlias + '-before-filter-grid',
+
+            /**
+             *
+             * @param { Shopware.listing.FilterPanel } filterPanel - Instance of this component
+             * @param { Shopware.grid.Panel } gridPanel - Instance of the listing window grid panel
+             * @param { Array } records - Contains the loaded records
+             * @param { Ext.data.Operation } operation - The data operation of the store.load() event.
+             */
+            this.eventAlias + '-after-filter-grid'
+        );
     },
 
     /**
@@ -519,14 +606,39 @@ Ext.define('Shopware.listing.FilterPanel', {
      * The form values will be converted into an { @link Ext.util.Filter }
      */
     filterGridStore: function() {
+        var me = this;
+
+        if (!me.fireEvent(me.eventAlias + '-before-filter-grid', me, me.gridPanel)) {
+            return false;
+        }
+        me.gridPanel.getStore().clearFilter(true);
+
+        me.createFilters();
+
+        me.fireEvent(me.eventAlias + '-before-grid-load-filter', me, me.gridPanel);
+
+        me.gridPanel.getStore().load({
+            callback: function(records, operation) {
+                me.fireEvent(me.eventAlias + '-after-filter-grid', me, me.gridPanel, records, operation);
+            }
+        });
+    },
+
+    /**
+     * Wrapper function which can be overwritten to
+     * add additional filter values.
+     */
+    createFilters: function() {
         var me = this,
             model = Ext.create(me.getConfig('model')),
             values = me.getForm().getValues();
 
-        me.gridPanel.getStore().clearFilter(true);
-
         Object.keys(values).forEach(function (key) {
             if (me.getFieldByName(model.fields.items, key) === undefined) {
+                return true;
+            }
+
+            if (!me.fireEvent(me.eventAlias + '-before-apply-field-filter', me, me.gridPanel, key, values[key])) {
                 return true;
             }
 
@@ -537,10 +649,6 @@ Ext.define('Shopware.listing.FilterPanel', {
                 })
             );
         });
-
-        me.gridPanel.getStore().load();
     }
-
-
 });
 //{/block}
