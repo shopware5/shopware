@@ -39,7 +39,8 @@
  *      ]
  *  });
  */
-Ext.override(Ext.data.association.HasMany, {
+Ext.define('Ext.data.association.HasMany-Shopware', {
+    override: 'Ext.data.association.HasMany',
 
     /**
      * Flag if the store will be loaded
