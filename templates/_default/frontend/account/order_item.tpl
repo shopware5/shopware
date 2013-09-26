@@ -119,7 +119,7 @@
 					
 					{block name='frontend_account_order_item_downloadlink'}
 					{* If ESD-Article *}
-					{if $article.esdarticle}
+					{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
 						<p class="download">
 							<strong>
 								<a href="{$article.esdLink}">
