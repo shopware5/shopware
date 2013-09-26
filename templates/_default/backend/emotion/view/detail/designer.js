@@ -195,6 +195,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         specs = {
                             cls: baseCls + ' x-emotion-element ' + (component.get('cls').length ? ' ' + component.get('cls') : ''),
                             tag: 'div',
+                            'data-emotionid': element.internalId,
                             style: {
                                 top: (element.get('startRow') -1) * 45 + 'px',
                                 left: (element.get('startCol') -1) * baseWidth + 'px',
@@ -246,8 +247,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         ] },
                         { tag: 'div', cls: 'x-emotion-element-handle' },
                         { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
-                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionId': element.internalId },
-                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionId': element.internalId }
+                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
+                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
                     ];
                 },
 
@@ -315,8 +316,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         { tag: 'div', cls: 'x-emotion-element-handle' },
                         { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
                         { tag: 'div', cls: 'x-emotion-element-info', html: snippet },
-                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionId': element.internalId },
-                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionId': element.internalId }
+                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
+                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
                     ];
                 },
 
@@ -332,8 +333,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     return [
                         { tag: 'div', cls: 'x-emotion-element-handle' },
                         { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
-                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionId': element.internalId },
-                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionId': element.internalId }
+                        { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
+                        { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
                     ];
                 }
             }
@@ -397,8 +398,19 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onDeleteElement: function(event, el) {
         var me = this,
             element = Ext.get(el),
-            id =  element.getAttribute('data-emotionId'),
-            store = me.dataviewStore.getAt(0).get('elements');
+            id =  element.getAttribute('data-emotionid'),
+            store = me.dataviewStore.getAt(0).get('elements'),
+            i, attr;
+
+        if(!id) {
+            for(i in element.dom.attributes) {
+                attr = element.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = attr.value;
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(record) {
             if(record.internalId == id) {
@@ -518,8 +530,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                    colWidth = (Ext.get(id).getWidth() - 40) / me.dataviewStore.getAt(0).data.settings.cols,
                    startCol, startRow, record = data.draggedRecord, endRow, endCol,
                    entry = me.dataviewStore.getAt(0), elements = entry.get('elements');
-
-
 
                 x = x - stage.getX();
                 y = y - stage.getY();
@@ -720,24 +730,23 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                 getDragData: function() {
                     var sourceEl = item,
-                        child = element.child('.x-emotion-element-delete'),
-                        id = child.getAttribute('data-emotionId'),
+                        id = element.getAttribute('data-emotionid'),
                         records = me.dataviewStore.getAt(0).get('elements'),
-                        attr, i, d, record, proxy;
-
-                    if(!id) {
-                        for(i in child.dom.attributes) {
-                            attr = child.dom.attributes[i];
-                            if(attr.name == 'data-emotionid') {
-                                id = parseInt(attr.value, 10);
-                                break;
-                            }
-                        }
-                    }
+                        d, record, proxy, i, attr;
 
                     proxy = element.dragZone.proxy;
                     if(!proxy.getEl().hasCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')) {
                         proxy.getEl().addCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')
+                    }
+
+                    if(!id) {
+                        for(i in element.dom.attributes) {
+                            attr = element.dom.attributes[i];
+                            if(attr.name == 'data-emotionid') {
+                                id = attr.value;
+                                break;
+                            }
+                        }
                     }
 
                     Ext.each(records, function(item) {
@@ -745,8 +754,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                             record = item;
                             return false;
                         }
-
                     });
+
                     if (sourceEl) {
                         d = sourceEl.cloneNode(true);
                         d.id = Ext.id();
@@ -774,17 +783,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onOpenSettingsWindow: function(event, el) {
         var me = this,
             element = Ext.get(el),
-            child = element.child('.x-emotion-element-delete'),
-            id = child.getAttribute('data-emotionId'),
+            id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             record, attr, i, component, fields;
 
 
         if(!id) {
-            for(i in child.dom.attributes) {
-                attr = child.dom.attributes[i];
+            for(i in element.dom.attributes) {
+                attr = element.dom.attributes[i];
                 if(attr.name == 'data-emotionid') {
-                    id = parseInt(attr.value, 10);
+                    id = attr.value;
                     break;
                 }
             }
@@ -806,17 +814,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onBeforeResize: function(resizer, width, height, event) {
         var element = resizer.el,
             me = this,
-            child = element.child('.x-emotion-element-delete'),
-            id = child.getAttribute('data-emotionId'),
+            id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             record, attr, i;
 
 
         if(!id) {
-            for(i in child.dom.attributes) {
-                attr = child.dom.attributes[i];
+            for(i in element.dom.attributes) {
+                attr = element.dom.attributes[i];
                 if(attr.name == 'data-emotionid') {
-                    id = parseInt(attr.value, 10);
+                    id = attr.value;
                     break;
                 }
             }
@@ -841,8 +848,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     onResizeDrag: function(resizer, width, height, event) {
         var element = resizer.el,
             me = this,
-            child = element.child('.x-emotion-element-delete'),
-            id = child.getAttribute('data-emotionId'),
+            id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
@@ -853,10 +859,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
 
         if(!id) {
-            for(i in child.dom.attributes) {
-                attr = child.dom.attributes[i];
+            for(i in element.dom.attributes) {
+                attr = element.dom.attributes[i];
                 if(attr.name == 'data-emotionid') {
-                    id = parseInt(attr.value, 10);
+                    id = attr.value, 10;
                     break;
                 }
             }
@@ -907,14 +913,24 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         var element = resizer.el,
             me = this,
             view = me.dataView.getEl(),
-            id = element.child('.x-emotion-element-delete').getAttribute('data-emotionId'),
+            id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
             cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
-            record, baseCls;
+            record, baseCls, i, attr;
+
+        if(!id) {
+            for(i in element.dom.attributes) {
+                attr = element.dom.attributes[i];
+                if(attr.name == 'data-emotionid') {
+                    id = attr.value;
+                    break;
+                }
+            }
+        }
 
         Ext.each(store, function(item) {
             if(item.internalId == id) {
