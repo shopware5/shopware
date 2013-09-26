@@ -57,16 +57,6 @@ Ext.define('Shopware.model.Container', {
     },
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -320,6 +310,16 @@ Ext.define('Shopware.model.Container', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Helper function to get config access.
      *
      * @param prop string
@@ -356,8 +356,11 @@ Ext.define('Shopware.model.Container', {
     initComponent: function() {
         var me = this;
 
+        me.checkRequirements();
+
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.record.$className);
+
         me.registerEvents();
 
         me.fireEvent(me.eventAlias + '-before-init-component', me);
@@ -373,6 +376,17 @@ Ext.define('Shopware.model.Container', {
         me.fireEvent(me.eventAlias + '-after-init-component', me);
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!(me.record instanceof Shopware.data.Model)) {
+            me.throwException(me.$className + ": Component requires a passed Shopware.data.Model in the `record property.");
+        }
     },
 
     /**

@@ -5,7 +5,7 @@
 Ext.define('Shopware.listing.InfoPanel', {
     extend: 'Ext.panel.Panel',
 
-    alias: 'widget.listing-info-panel',
+    alias: 'widget.shopware-listing-info-panel',
 
     /**
      * List of classes to mix into this class.
@@ -55,23 +55,11 @@ Ext.define('Shopware.listing.InfoPanel', {
      */
     gridPanel: undefined,
 
-
-
     /**
      * Title of the info panel.
      * @type { String }
      */
     title: '{s name="info_panel/title"}Detailed information{/s}',
-
-    /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
 
     /**
      * Get the reference to the class from which this object was instantiated.
@@ -196,6 +184,16 @@ Ext.define('Shopware.listing.InfoPanel', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Class constructor which merges the different configurations.
      * @param opts
      */
@@ -233,6 +231,8 @@ Ext.define('Shopware.listing.InfoPanel', {
     initComponent: function() {
         var me = this;
 
+        me.checkRequirements();
+
         me.gridPanel = me.listingWindow.gridPanel;
 
         me.items = me.createItems();
@@ -240,6 +240,26 @@ Ext.define('Shopware.listing.InfoPanel', {
         me.addEventListeners();
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!(me.listingWindow instanceof Ext.window.Window)) {
+            me.throwException(me.$className + ": Component requires a passed listingWindow property which contains the instance of the assigned Shopware.window.Listing");
+        }
+        if (!(me.listingWindow.gridPanel instanceof Shopware.grid.Panel)) {
+            me.throwException(me.$className + ": The listingWindow.gridPanel property contains no Shopware.grid.Panel instance.");
+        }
+        if (me.alias.length <= 0) {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-listing-info-panel') {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
     },
 
     /**

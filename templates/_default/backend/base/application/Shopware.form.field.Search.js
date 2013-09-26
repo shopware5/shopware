@@ -14,7 +14,7 @@ Ext.define('Shopware.form.field.Search', {
      * This property provides a shorter alternative to creating objects than using a full class name. Using xtype is the most common way to define component instances, especially in a container.
      * @type { String }
      */
-    xtype: 'widget.shopware-form-field-search',
+    alias: 'widget.shopware-form-field-search',
 
     /**
      * In queryMode: 'remote', the ComboBox loads its Store dynamically based upon user interaction.
@@ -50,16 +50,6 @@ Ext.define('Shopware.form.field.Search', {
      * the { @link Shopware.model.Container }
      */
     store: undefined,
-
-    /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
 
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
@@ -138,6 +128,17 @@ Ext.define('Shopware.form.field.Search', {
             return true;
         }
     },
+
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
 
     /**
      * Helper function to get config access.
