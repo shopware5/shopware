@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Base.model.DocType', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend:'Ext.data.Model',
     /**
      * The fields used for this model
      * @array

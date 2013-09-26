@@ -28,7 +28,8 @@
  * @author     Stephan Pohl
  * @author     $Author$
  */
-Ext.override(Ext.data.proxy.Server, {
+Ext.define('Ext.data.proxy.Server-Shopware', {
+    override: 'Ext.data.proxy.Server',
 
     processResponse: function(success, operation, request, response, callback, scope) {
         var me = this,
