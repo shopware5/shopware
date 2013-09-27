@@ -178,6 +178,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 	public function ordersAction()
 	{
 		$this->View()->sOpenOrders = $this->admin->sGetOpenOrderData();
+        //this has to be assigned here because the config method in smarty can't handle array structures
+        $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
 	}
 
 	/**
