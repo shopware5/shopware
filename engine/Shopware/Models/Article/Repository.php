@@ -2218,6 +2218,52 @@ class Repository extends ModelRepository
 
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleImagesWithVariantsQuery($articleId) {
+        $builder = $this->getArticleImagesWithVariantsQueryBuilder($articleId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getArticleImagesWithVariantsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleImagesWithVariantsQueryBuilder($articleId) {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+		
+        $builder->select(array(
+					'images.id',
+					'images.articleId',
+					'images.path',
+					'images.position',
+					'images.width',
+					'images.height',
+					'images.relations',
+					'images.extension',
+					'images.parentId',
+					'images.mediaId',
+					'articleDetails.inStock',
+					'articleDetails.id AS childId',
+					'articleDetails.additionalText')
+				)
+        ->from('Shopware\Models\Article\Image', 'images')
+        ->leftJoin('images.children','children')
+				->leftJoin('children.articleDetail', 'articleDetails')
+        ->where('images.articleId = :articleId')
+        ->setParameter('articleId', $articleId)
+				->groupBY('images.id')
+        ->addOrderBy('images.position', 'ASC');
+
+        return $builder;
+    }	
+
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete prices associated
      * with the given article
      * @param $articleId
