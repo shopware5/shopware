@@ -263,5 +263,9 @@
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
             <argument type="service" id="db_connection" />
         </service>
+
+        <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
+            <argument type="service" id="resource_loader" />
+        </service>
     </services>
 </container>
