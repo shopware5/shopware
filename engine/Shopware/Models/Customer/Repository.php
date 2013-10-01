@@ -100,24 +100,36 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.orders', 'orders', \Doctrine\ORM\Query\Expr\Join::WITH, 'orders.status != -1 AND orders.status != 4')
                 ->groupBy('customer.id');
 
-        //filter the displayed columns with the passed filter string
-        if (!empty($filter)) {
-            $builder->where('billing.number LIKE ?1')         //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')    //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')     //Full text search for the last name of the customer
-                    ->orWhere('customer.firstLogin LIKE ?3')  //Search only for the end of the first login date.
-                    ->orWhere('customergroups.name LIKE ?2')   //Full text search for the customer group
-                    ->orWhere('billing.company LIKE ?2')      //Full text search for the company of the customer
-                    ->orWhere('billing.city LIKE ?2')         //Full text search for the city of the customer
-                    ->orWhere('billing.zipCode LIKE ?1')     //Search only the beginning of the customer number.
-                    ->setParameter(1,       $filter . '%')
-                    ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter      );
+
+        // Filter tokens are separated by a blank character
+        $filter = ! empty($filter) ? explode(' ', $filter) : null;
+
+        if ($filter) {
+            // Build where-clause for each filter token and combine them by logical AND operation
+            foreach ($filter as $index => $token) {
+                $clause = $builder->expr()->orX(
+                    $builder->expr()->like('billing.number', '?'.($index * 3 + 1)),         //Search only the beginning of the customer number.
+                    $builder->expr()->like('billing.firstName', '?'.($index * 3 + 2)),      //Full text search for the first name of the customer
+                    $builder->expr()->like('billing.lastName', '?'.($index * 3 + 2)),       //Full text search for the last name of the customer
+                    $builder->expr()->like('customer.firstLogin', '?'.($index * 3 + 3)),    //Search only for the end of the first login date.
+                    $builder->expr()->like('customergroups.name', '?'.($index * 3 + 2)),    //Full text search for the customer group
+                    $builder->expr()->like('billing.company', '?'.($index * 3 + 2)),        //Full text search for the company of the customer
+                    $builder->expr()->like('billing.city', '?'.($index * 3 + 2)),           //Full text search for the city of the customer
+                    $builder->expr()->like('billing.zipCode', '?'.($index * 3 + 1))         //Search only the beginning of the customer number.
+                );
+                $builder->andWhere($clause)
+                        ->setParameter($index * 3 + 1,       $token . '%')
+                        ->setParameter($index * 3 + 2, '%' . $token . '%')
+                        ->setParameter($index * 3 + 3, '%' . $token      );
+            }
         }
+
         //filter the customers with the passed customer group parameter
         if (!empty($customerGroup)) {
-            $builder->andWhere('customergroups.id = ?4')
-                    ->setParameter(4, $customerGroup);
+            // Determine parameter Id based on the amount of filter tokens
+            $paramId = count($filter) * 3 + 1;
+            $builder->andWhere('customergroups.id = ?'.$paramId)
+                    ->setParameter($paramId, $customerGroup);
         }
 
         $this->addOrderBy($builder, $orderBy);
