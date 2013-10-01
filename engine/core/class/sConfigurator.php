@@ -120,9 +120,8 @@ class sConfigurator
         //where the assigned configurator options and groups are.
         $data = $repository->getArticleConfiguratorSetByArticleIdIndexedByIdsQuery($id)
                 ->getArrayResult();
-
         $data = $data[0]['configuratorSet'];
-
+	
         $customerGroupKey = $this->sSYSTEM->sUSERGROUP;
         if (empty($customerGroupKey)) {
             $customerGroupKey = 'EK';
@@ -141,7 +140,7 @@ class sConfigurator
             //the convert functions changes the property names, so we save the ids in internal helper properties.
             $groupId = $option['groupId'];
             $optionId = $option['id'];
-
+            $mydetaildata = $repository->getArticleDetailByConfiguratorOptionIdQuery($id,$optionId)->getArrayResult();
             //the groups in the data property indexed by their ids, so we can use "array_key_exists" to check if the group id of the current options exists in our group array.
             if (array_key_exists($groupId, $data['groups'])) {
                 //if the group exist, we save the option id into in helper array. This helper array is only used for "configurator - tables".
@@ -165,6 +164,7 @@ class sConfigurator
                 $option = $this->module->sGetTranslation($option, $option['optionID'], 'configuratoroption');
                 $option['user_selected'] = $selected;
                 $option['selected'] = $selected;
+                $option['details'] = $mydetaildata;
 
                 //now we assign the option into the options array element to corresponding group.
                 $data['groups'][$groupId]['options'][$optionId] = $option;
@@ -703,6 +703,7 @@ class sConfigurator
             'optionnameOrig' => $data['name'],
             'optionname' => $data['name'],
             'optionposition' => $data['position'],
+            'details' => $data['details'],
             'optionactive' => 1,
         );
     }
