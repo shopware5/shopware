@@ -3648,6 +3648,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     -ms-transition: bottom 0.2s;
     transition: bottom 0.2s;
     width: 100%;
+    height: 0; /* set height to 0 to suppress responding to mouse events */
     text-align: center;
 }
 .banner-slider-emotion .ajaxSlider .slide_navigation a {
@@ -3692,7 +3693,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 .banner-slider-emotion:hover .ajaxSlider .rightArrow { right: 0 }
 .banner-slider-emotion:hover .ajaxSlider .leftArrow { left: 0 }
 #content .banner-slider-emotion:hover .ajaxSlider .slide_navigation {
-    bottom: 35px;
+    bottom: 58px; /* Adjust bottom position to reflect height change of slide navigation container (58px = 35px + 23px) */
 }
 #content .banner-slider-emotion .slide {
     float: left;
