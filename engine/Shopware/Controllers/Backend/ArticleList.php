@@ -306,6 +306,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 			$order = $order['property'] . ' ' . $order['direction'];
 		}
 
+        list($sqlParams, $filterSql, $categorySql, $imageSQL, $order) = Enlight()->Events()->filter(
+            'Shopware_Controllers_Backend_ArticleList_SQLParts',
+            array($sqlParams, $filterSql, $categorySql, $imageSQL, $order),
+            array('subject' => $this)
+        );
+
 		if ($showVariants) {
             $sql = "
 				SELECT DISTINCT SQL_CALC_FOUND_ROWS
@@ -385,6 +391,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 			";
 		}
 
+        $sql = Enlight()->Events()->filter('Shopware_Controllers_Backend_ArticleList_ListSQL', $sql, array('subject' => $this, 'sqlParams' => $sqlParams));
 		$articles = Shopware()->Db()->fetchAll($sql, $sqlParams);
 
 		$sql= "SELECT FOUND_ROWS() as count";
