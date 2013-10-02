@@ -149,6 +149,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 if($array['label'] !== null) {
                     $data['elements'][$elementsKey]['label'] = $array['label'];
                 }
+                if($array['description'] !== null) {
+                    $data['elements'][$elementsKey]['description'] = $array['description'];
+                }
             }
         }
 
