@@ -35,12 +35,15 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
+class Enlight_View_Twig implements Enlight_View_EngineInterface
 {
+
+    protected $assignments = array();
+
     /**
      * The template manager instance.
      *
-     * @var     Enlight_Template_Manager
+     * @var Twig_Environment
      */
     protected $engine;
 
@@ -73,25 +76,15 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      *
      * @param   Enlight_Template_Manager $engine
      */
-    public function __construct(Enlight_View_EngineInterface $engine)
+    public function __construct(Twig_Environment $engine)
     {
         $this->engine = $engine;
-        $this->engines = array($engine);
-    }
-
-    public function setActiveEngine(Enlight_View_EngineInterface $engine) {
-        $this->engine = $engine;
-        return $this;
-    }
-
-    public function addEngine(Enlight_View_EngineInterface $engine) {
-        $this->engines[] = $engine;
-        return $this;
+        $this->assignments = array();
     }
 
     /**
      * Returns the instance of the Enlight_Template_Manager which has been set in the class constructor.
-     * @return  Enlight_Template_Manager
+     * @return  Twig_Environment
      */
     public function Engine()
     {
@@ -113,21 +106,19 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     }
 
     /**
-     * This function sets the default template directory into the internal instance of the Enlight_Template_Manager
+     * This function sets the default template directory into the internal instance of the Twig_Environment
      *
      * @param   string|array $path
      * @return  Enlight_View_Default
      */
     public function setTemplateDir($path)
     {
-        foreach($this->engines as $engine) {
-            $engine->setTemplateDir($path);
-        }
+        $this->engine->setTemplateDir($path);
         return $this;
     }
 
     /**
-     * This function adds a template directory into the internal instance of the Enlight_Template_Manager
+     * This function adds a template directory into the internal instance of the Twig_Environment
      *
      * @param   $templateDir
      * @param   null $key
@@ -135,9 +126,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function addTemplateDir($templateDir, $key = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->addTemplateDir($templateDir, $key);
-        }
+        $this->engine->addTemplateDir($templateDir, $key);
         return $this;
     }
 
@@ -164,26 +153,26 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     }
 
     /**
-     * Loads a template by name over the Enlight_Template_Manager.
+     * Loads a template by name over the Twig_Environment.
      *
      * @param   string $template_name
      * @return  Enlight_View_Default
      */
     public function loadTemplate($template_name)
     {
-        $this->template = $this->engine->createTemplate($template_name, null, null, $this->engine, false);
-        return $this;
+        return $this->createTemplate($template_name);
     }
 
     /**
-     * Creates a new template by name over the Enlight_Template_Manager.
+     * Creates a new template by name over the Twig_Environment.
      *
      * @param   $template_name
-     * @return  Enlight_Template_Default
+     * @return  Enlight_Template_Twig
      */
     public function createTemplate($template_name)
     {
-        return $this->engine->createTemplate($template_name, $this->template);
+        $this->template = new Enlight_Template_Twig($this->engine, $template_name);
+        return $this->template;
     }
 
     /**
@@ -216,7 +205,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     }
 
     /**
-     * Checks if the Enlight_Template_Manager stored the given template.
+     * Checks if the Twig_Environment stored the given template.
      * @param   $template_name
      * @return  bool
      */
@@ -237,9 +226,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->assign($spec, $value, $nocache, $scope);
-        }
+        $this->assignments[$spec] = $value;
         return $this;
     }
 
@@ -252,10 +239,10 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function clearAssign($spec = null, $scope = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->clearAssign($spec, $scope);
+        if ($this->scope !== null && $scope === null) {
+            $scope = $this->scope;
         }
-        return true;
+        return $this->Template()->clearAssign($spec, $scope);
     }
 
     /**
@@ -283,7 +270,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     }
 
     /**
-     * Fetch an template by name over the Enlight_Template_Manager.
+     * Fetch an template by name over the Twig_Environment.
      *
      * @param   $template_name
      * @return  string

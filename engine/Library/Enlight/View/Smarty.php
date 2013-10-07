@@ -35,7 +35,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
+class Enlight_View_Smarty extends Enlight_View implements Enlight_View_Cache
 {
     /**
      * The template manager instance.
@@ -73,22 +73,10 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      *
      * @param   Enlight_Template_Manager $engine
      */
-    public function __construct(Enlight_View_EngineInterface $engine)
+    public function __construct(Enlight_Template_Manager $engine)
     {
         $this->engine = $engine;
-        $this->engines = array($engine);
     }
-
-    public function setActiveEngine(Enlight_View_EngineInterface $engine) {
-        $this->engine = $engine;
-        return $this;
-    }
-
-    public function addEngine(Enlight_View_EngineInterface $engine) {
-        $this->engines[] = $engine;
-        return $this;
-    }
-
     /**
      * Returns the instance of the Enlight_Template_Manager which has been set in the class constructor.
      * @return  Enlight_Template_Manager
@@ -120,9 +108,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function setTemplateDir($path)
     {
-        foreach($this->engines as $engine) {
-            $engine->setTemplateDir($path);
-        }
+        $this->engine->setTemplateDir($path);
         return $this;
     }
 
@@ -135,9 +121,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function addTemplateDir($templateDir, $key = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->addTemplateDir($templateDir, $key);
-        }
+        $this->engine->addTemplateDir($templateDir, $key);
         return $this;
     }
 
@@ -237,8 +221,16 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->assign($spec, $value, $nocache, $scope);
+        if ($this->nocache !== null && $nocache === null) {
+            $nocache = $this->nocache;
+        }
+        if ($this->scope !== null && $scope === null) {
+            $scope = $this->scope;
+        }
+        if($this->template !== null) {
+            $this->template->assign($spec, $value, $nocache, $scope);
+        } else {
+            $this->engine->assign($spec, $value, $nocache);
         }
         return $this;
     }
@@ -252,10 +244,10 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function clearAssign($spec = null, $scope = null)
     {
-        foreach($this->engines as $engine) {
-            $engine->clearAssign($spec, $scope);
+        if ($this->scope !== null && $scope === null) {
+            $scope = $this->scope;
         }
-        return true;
+        return $this->Template()->clearAssign($spec, $scope);
     }
 
     /**

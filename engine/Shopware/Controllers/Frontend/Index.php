@@ -29,18 +29,19 @@
  */
 class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 {
-    public function preDispatch()
-    {
-        if ($this->Request()->getActionName() != 'index') {
-            $this->forward('index'); return;
-        }
-        $this->View()->loadTemplate('frontend/home/index.tpl');
-    }
+//    public function preDispatch()
+//    {
+//        if ($this->Request()->getActionName() != 'index') {
+//            $this->forward('index'); return;
+//        }
+////        $this->View()->loadTemplate('frontend/home/index.tpl');
+//    }
 
     public function indexAction()
     {
         $category = Shopware()->Shop()->get('parentID');
 
+        $this->View()->assign('test', 123);
         $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
 
         if (Shopware()->Shop()->getTemplate()->getVersion() == 1) {

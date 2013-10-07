@@ -326,7 +326,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
         return $tpl;
     }
 
-
     /**
      * Create code frame for compiled and cached templates
      *
