@@ -63,6 +63,21 @@ if (is_dir('update')) {
     return;
 }
 
+// check for composer autoloader
+if (!file_exists('vendor/autoload.php')) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
+
+    echo '<h2>Fehler</h2>';
+    echo 'Bitte führen Sie zuerst "composer install" aus.';
+
+    echo '<h2>Error</h2>';
+    echo 'Please execute "composer install" install';
+    return;
+}
+
+// include composer autoloader
+require 'vendor/autoload.php';
+
 set_include_path(
     '.' . PATH_SEPARATOR .
     dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library

@@ -14,6 +14,10 @@ Thumbs.db
 # PhpStorm-Project
 .idea/
 
+# Composer
+composer.phar
+vendor/
+
 # Internal Repositories
 internal/
 engine/Shopware/Plugins/Commercial/
