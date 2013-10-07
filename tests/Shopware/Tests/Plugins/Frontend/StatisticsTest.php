@@ -148,9 +148,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
      */
     public function testRefreshReferer($referer, $partner, $result, $assert)
     {
-        $request = $this->Request()
-            ->setHeader('REFERER', $referer)
-            ->setQuery('sPartner', $partner);
+        $request = $this->Request()->setQuery(array('sPartner'=> $partner, 'referer'=> $referer));
 
         $this->Plugin()->refreshReferer($request);
 
