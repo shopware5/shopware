@@ -111,16 +111,19 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
     protected function initTwig()
     {
-        $loader = new Twig_Loader_Filesystem($this->Application()->AppPath() . '/../../templates/_twig');
+        $loader = new Twig_Loader_Filesystem(
+            $this->Application()->AppPath() . '/../../templates/_twig'
+        );
+
         $twig = new Twig_Environment($loader, array(
-            //'cache' => $this->Application()->AppPath() . '/../cache/twig'
+            'debug' => true,
         ));
+        $twig->addExtension(new Twig_Extension_Debug());
 
         $interface = new Enlight_View_Twig($twig);
 
         return $interface;
     }
-
 
     /**
      * Init template method

@@ -17,6 +17,7 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "twig/twig": "1.*"
+        "twig/twig": "1.*",
+        "twig/extensions": "1.*"
     }
 }
