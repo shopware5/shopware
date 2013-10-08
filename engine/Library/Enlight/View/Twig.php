@@ -95,7 +95,7 @@ class Enlight_View_Twig implements Enlight_View_EngineInterface
      * Returns the instance of the Enlight_Template_Default which will be set by the setTemplate or loadTemplate
      * function.
      *
-     * @return  Enlight_Template_Default
+     * @return  Enlight_Template_Twig
      */
     public function Template()
     {
@@ -171,7 +171,7 @@ class Enlight_View_Twig implements Enlight_View_EngineInterface
      */
     public function createTemplate($template_name)
     {
-        $this->template = new Enlight_Template_Twig($this->engine, $template_name);
+        $this->template = new Enlight_Template_Twig($this, $template_name);
         return $this->template;
     }
 
@@ -226,7 +226,13 @@ class Enlight_View_Twig implements Enlight_View_EngineInterface
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
-        $this->assignments[$spec] = $value;
+
+        if ($this->template !== null) {
+            $this->template->assign($spec, $value);
+        } else {
+            $this->assignments[$spec] = $value;
+        }
+
         return $this;
     }
 
@@ -253,6 +259,8 @@ class Enlight_View_Twig implements Enlight_View_EngineInterface
      */
     public function getAssign($spec = null)
     {
+        return $this->assignments;
+
         if ($this->template !== null) {
             return $this->template->getTemplateVars($spec);
         }

@@ -37,14 +37,15 @@
 class Enlight_Template_Twig
 {
     protected $assignments = array();
-
     protected $twig;
-
     protected $path;
 
-    public function __construct(Twig_Environment $engine, $path) {
+    public function __construct(Enlight_View_Twig $engine, $path)
+    {
         $this->twig = $engine;
         $this->path = $path;
+
+        $this->assignments = $engine->getAssign();
     }
 
     /**
@@ -59,6 +60,7 @@ class Enlight_Template_Twig
     public function assign($tpl_var, $value = null, $nocache = false, $scope = null)
     {
         $this->assignments[$tpl_var] = $value;
+
         return $this;
     }
 
@@ -170,12 +172,9 @@ class Enlight_Template_Twig
         return array();
     }
 
-    public function fetch() {
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($this, 4);
-        exit();
-
-        return $this->twig->render($this->path, $this->assignments);
+    public function fetch()
+    {
+        return $this->twig->Engine()->render($this->path, $this->assignments);
     }
 
     public function hasTemplate() {

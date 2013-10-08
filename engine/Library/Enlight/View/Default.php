@@ -79,12 +79,14 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
         $this->engines = array($engine);
     }
 
-    public function setActiveEngine(Enlight_View_EngineInterface $engine) {
+    public function setActiveEngine(Enlight_View_EngineInterface $engine)
+    {
         $this->engine = $engine;
         return $this;
     }
 
-    public function addEngine(Enlight_View_EngineInterface $engine) {
+    public function addEngine(Enlight_View_EngineInterface $engine)
+    {
         $this->engines[] = $engine;
         return $this;
     }
