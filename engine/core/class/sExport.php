@@ -230,7 +230,13 @@ class sExport
 			$this->sSettings['encoding'] = 'ISO-8859-1';
 		}
 
-		$this->sMultishop = $this->sGetMultishop($this->sSettings["multishopID"]);
+        if(empty($this->sSettings["languageID"]))
+        {
+            //just a fall back for update reasons
+            $this->sSettings["languageID"] = $this->sSettings["multishopID"];
+        }
+
+		$this->sMultishop = $this->sGetMultishop($this->sSettings["languageID"]);
 
 		if(empty($this->sSettings["categoryID"]))
 		{
@@ -248,10 +254,7 @@ class sExport
 		{
 			$this->sSettings["currencyID"] = $this->sMultishop["defaultcurrency"];
 		}
-		if(empty($this->sSettings["languageID"]))
-		{
-			$this->sSettings["languageID"] = $this->sSettings["multishopID"];
-		}
+
 		$this->sLanguage = $this->sGetMultishop($this->sSettings["languageID"]);
 
 		$this->sCurrency = $this->sGetCurrency($this->sSettings["currencyID"]);
@@ -265,17 +268,10 @@ class sExport
 
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-
-        $shop = $repository->getActiveById($this->sSettings['multishopID']);
-
-        //$shop = $repository->getActiveById($this->sLanguage['id']);
+        $shop = $repository->getActiveById($this->sLanguage['id']);
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
-
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale');
-
-        $shop->setLocale($repository->find($this->sMultishop['locale']));
         $shop->registerResources(Shopware()->Bootstrap());
 
         $this->shop = $shop;
