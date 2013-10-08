@@ -3845,7 +3845,7 @@ class sArticles
      * @param $articleAlbum \Shopware\Models\Media\Album
      * @return array
      */
-    private function getDataOfArticleImage($image, $articleAlbum)
+    protected function getDataOfArticleImage($image, $articleAlbum)
     {
         //initial the data array
         $imageData = array();
