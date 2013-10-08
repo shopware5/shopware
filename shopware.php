@@ -85,14 +85,30 @@ set_include_path(
     dirname(__FILE__) . '/templates/'                           // Templates
 );
 
+use Shopware\Components\HttpCache\AppCache;
+use Symfony\Component\HttpFoundation\Request;
+
 include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
+include_once 'Shopware/ShopwareKernel.php';
 
 $environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
 if (empty($environment)){
     $environment = 'production';
 }
 
-$s = new Shopware($environment);
+$kernel = new ShopwareKernel($environment, false);
 
-return $s->run();
+// @TODO fix/add autoloading
+
+//@TODO implement new cache-switch mechanism here
+if (false) {
+    // @TODO fix autoloading, AppCache could not be found automatically at the moment
+    //$kernel->loadClassCache();
+    $kernel = new AppCache($kernel, array());
+}
+
+// @TODO Shopware instance is currently not aware of the request
+$request = Request::createFromGlobals();
+
+return $kernel->handle($request);

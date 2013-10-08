@@ -63,6 +63,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
         $loader->readClassMap($classMap);
 
+        // @TODO custom httpCache modification do not work anymore after Kernel integration
         if (($config = $app->getOption('httpCache')) !== null && !empty($config['enabled'])) {
             $loader->registerNamespace('Symfony', 'Symfony/');
             $kernel = new HttpKernel($app);
