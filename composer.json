@@ -16,6 +16,9 @@
         "php": ">=5.3.2",
         "ext-curl": "*",
         "ext-mbstring": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "symfony/http-kernel": "2.3.x-dev",
+        "symfony/config": "2.3.x-dev",
+        "symfony/dependency-injection": "2.3.x-dev"
     }
 }

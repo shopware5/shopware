@@ -225,6 +225,7 @@ class AppCache extends HttpCache
      */
     protected function forward(Request $request, $raw = false, Response $entry = null)
     {
+        $this->getKernel()->boot();
         /** @var $bootstrap \Shopware_Bootstrap */
         $bootstrap = $this->getKernel()->getApp()->Bootstrap();
 
@@ -247,7 +248,7 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir);
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
     }
 
     /**
