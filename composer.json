@@ -17,6 +17,9 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
+        "symfony/http-kernel": "2.3.x-dev",
+        "symfony/config": "2.3.x-dev",
+        "symfony/dependency-injection": "2.3.x-dev",
         "twig/twig": "1.*",
         "twig/extensions": "1.*"
     }

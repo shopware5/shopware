@@ -29,6 +29,8 @@
  * @author     $Author$
  */
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Shopware Application
  */
@@ -41,6 +43,11 @@ class Shopware extends Enlight_Application
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
     protected $oldPath = null;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Constructor method
@@ -87,6 +94,26 @@ class Shopware extends Enlight_Application
     public function DocPath($path = null)
     {
         return $this->OldPath($path);
+    }
+
+    /**
+     * Assigns dependency injection container
+     *
+     * @param ContainerInterface $container
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Returns injection container
+     *
+     * @return ContainerInterface
+     */
+    public function Container()
+    {
+        return $this->container;
     }
 
     /**
