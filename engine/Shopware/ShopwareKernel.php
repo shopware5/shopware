@@ -2,6 +2,7 @@
 
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -23,7 +24,7 @@ class ShopwareKernel
     protected $shopware;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var Container
      */
     protected $container;
 
@@ -175,7 +176,28 @@ class ShopwareKernel
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Configs/'));
         $loader->load('services.xml');
         $loader->load('twig.xml');
+
+        $this->addShopwareConfig($container, 'shopware.', $this->getShopware()->getOptions());
+
         return $container;
+    }
+
+    /**
+     * Adds all shopware configuration as di container parameter.
+     * Each shopware configuration has the alias "shopware."
+     * @param Container $container
+     * @param string $alias
+     * @param array|string $options
+     */
+    protected function addShopwareConfig(Container $container, $alias, $options)
+    {
+        foreach($options as $key => $option) {
+            $container->setParameter($alias . $key, $option);
+
+            if (is_array($option)) {
+                $this->addShopwareConfig($container, $alias . $key . '.' , $option);
+            }
+        }
     }
 
     /**
@@ -225,7 +247,7 @@ class ShopwareKernel
 
     /**
      * Returns the di container
-     * @return \Symfony\Component\DependencyInjection\Container
+     * @return Container
      */
     protected function getContainer()
     {
