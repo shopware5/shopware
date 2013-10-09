@@ -324,6 +324,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                     if($item['id']==$insertID)
                     {
                         $this->View()->sArticle = $item;
+                        // Article name should equal the one used in shopping basket: display name = articlename + additionaltext
+                        $this->View()->sArticleName = $item['articlename'];
                         break;
                     }
                 }
