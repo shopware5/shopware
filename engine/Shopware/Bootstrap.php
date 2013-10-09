@@ -163,15 +163,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initDb()
     {
-        $config = Shopware()->getOption('db');
-
-        $db = Enlight_Components_Db::factory(
-            isset($config['adapter']) ? $config['adapter'] : 'PDO_MYSQL',
-            $config
-        );
-        $db->getConnection();
-
-        return $db;
+        return $this->getContainerService('db');
     }
 
     /**
@@ -360,8 +352,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         if (!$this->issetResource('Db')) {
             return null;
         }
-
-        return new Shopware_Components_Snippet_Manager();
+        return $this->getContainerService('snippets');
     }
 
     /**
@@ -388,7 +379,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             return null;
         }
 
-        return new Shopware_Components_Subscriber();
+        return $this->getContainerService('subscriber');
     }
 
     /**
@@ -471,17 +462,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initCache()
     {
-        $config = Shopware()->getOption('cache');
-
-        $cache = Zend_Cache::factory(
-            'Core',
-            $config['backend'],
-            $config['frontendOptions'],
-            $config['backendOptions']
-        );
-
+        $cache = $this->getContainerService('cache');
         Zend_Locale_Data::setCache($cache);
-
         return $cache;
     }
 
@@ -645,5 +627,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;
+    }
+
+    private function getContainerService($name)
+    {
+        return $this->Application()->Container()->get($name);
     }
 }
