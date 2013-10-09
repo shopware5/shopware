@@ -1,8 +1,11 @@
 <?php
 
-use Shopware\DependencyInjection\ShopwareExtension;
-use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -12,52 +15,46 @@ use Symfony\Component\HttpKernel\Kernel;
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
  */
-class ShopwareKernel extends Kernel
+class ShopwareKernel
 {
     /**
      * @var Shopware
      */
     protected $shopware;
 
-    protected function initializeContainer()
-    {
-        // shopware has to be initialized because we need its options
-        // before the container is loaded
-        $this->initializeShopware();
-
-        parent::initializeContainer();
-
-        $this->getShopware()->setContainer($this->getContainer());
-    }
-
-    protected function prepareContainer(ContainerBuilder $container)
-    {
-        $extension = new ShopwareExtension($this->getShopware()->getOptions());
-        $container->registerExtension($extension);
-        $container->loadFromExtension($extension->getAlias(), array());
-
-        parent::prepareContainer($container);
-    }
-
-    protected function initializeShopware()
-    {
-        $this->shopware = new Shopware($this->environment);
-    }
+    /**
+     * @var \Symfony\Component\DependencyInjection\Container
+     */
+    protected $container;
 
     /**
-     * @return Shopware
+     * Enables the debug mode
+     * @var boolean
      */
-    protected function getShopware()
-    {
-        return $this->shopware;
-    }
+    protected $debug;
 
     /**
-     * @deprecated This makes the Shopware instance accessible to e.g. HttpCache, this has to be removed!
+     * Contains the current environment
+     * @var string
      */
-    public function getApp()
+    protected $environment;
+
+    /**
+     * Flag if the kernel already booted
+     * @var bool
+     */
+    protected $booted;
+
+    /**
+     * @param $environment
+     * @param $debug
+     */
+    public function __construct($environment, $debug)
     {
-        return $this->getShopware();
+        $this->environment = $environment;
+        $this->debug = $debug;
+        $this->booted = false;
+        $this->name = 'Shopware';
     }
 
     /**
@@ -71,7 +68,7 @@ class ShopwareKernel extends Kernel
      *
      * @return string
      */
-    public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(Request $request)
     {
         if (false === $this->booted) {
             $this->boot();
@@ -79,83 +76,169 @@ class ShopwareKernel extends Kernel
 
         // httpkernel could not be executed here because
         // the filled request is ignored currently
-        return $this->shopware->run();
+        return $this->getShopware()->run();
     }
 
     /**
-     * Returns an array of bundles to registers.
-     *
-     * @return BundleInterface[] An array of bundle instances.
+     * Boots the shopware and symfony di container
      */
-    public function registerBundles()
+    protected function boot()
     {
-        return array();
+        $this->initializeShopware();
+
+        $this->initializeContainer();
+
+        $this->getShopware()->setContainer($this->getContainer());
+
+        $this->booted = true;
     }
 
     /**
-     * Loads the container configuration
-     *
-     * @param LoaderInterface $loader A LoaderInterface instance
+     * Creates a new instance of the Shopware application
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    protected function initializeShopware()
     {
-        $loader->load(__DIR__.'/Configs/config_'.$this->getEnvironment().'.xml');
+        $this->shopware = new Shopware($this->environment);
     }
 
     /**
-     * {@inheritdoc}
+     * Initializes the service container.
      *
-     * Needs to be overwritten to fulfill shopware project requirements
-     *
-     * @return string
+     * The cached version of the service container is used when fresh, otherwise the
+     * container is built.
      */
-    public function getCacheDir()
+    protected function initializeContainer()
     {
-        // @TODO is the cache folder configurable? then this has to be refactored!
+        $class = $this->getContainerClass();
+
+        $cache = new ConfigCache(
+            $this->getCacheDir() . '/' . $class . '.php',
+            $this->debug
+        );
+
+        if (!$cache->isFresh()) {
+            $container = $this->buildContainer();
+            $container->compile();
+            $this->dumpContainer($cache, $container, $class, 'Container');
+        }
+
+        require_once $cache;
+
+        $this->container = new $class();
+        $this->container->set('kernel', $this);
+    }
+
+    /**
+     * Dumps the service container to PHP code in the cache.
+     *
+     * @param ConfigCache $cache     The config cache
+     * @param ContainerBuilder $container The service container
+     * @param string $class     The name of the class to generate
+     * @param string $baseClass The name of the container's base class
+     */
+    protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
+    {
+        // cache the container
+        $dumper = new PhpDumper($container);
+
+        $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass));
+
+        //TODO implement the stripComments to reduce the container content
+//        if (!$this->debug) {
+//            $content = self::stripComments($content);
+//        }
+
+        $cache->write($content, $container->getResources());
+    }
+
+    /**
+     * Builds the service container.
+     *
+     * @return ContainerBuilder The compiled service container
+     *
+     * @throws \RuntimeException
+     */
+    protected function buildContainer()
+    {
+        foreach (array('cache' => $this->getCacheDir()) as $name => $dir) {
+            if (!is_dir($dir)) {
+                if (false === @mkdir($dir, 0777, true)) {
+                    throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
+                }
+            } elseif (!is_writable($dir)) {
+                throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
+            }
+        }
+
+        $container = $this->getContainerBuilder();
+        $container->addObjectResource($this);
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Configs/'));
+        $loader->load('services.xml');
+        $loader->load('twig.xml');
+        return $container;
+    }
+
+    /**
+     * Gets a new ContainerBuilder instance used to build the service container.
+     *
+     * @return ContainerBuilder
+     */
+    protected function getContainerBuilder()
+    {
+        return new ContainerBuilder(
+            new ParameterBag(
+                $this->getKernelParameters()
+            )
+        );
+    }
+
+    /**
+     * Returns the kernel parameters.
+     *
+     * @return array An array of kernel parameters
+     */
+    protected function getKernelParameters()
+    {
+        return array(
+            'kernel.root_dir' => __DIR__ . '/../../',
+            'kernel.environment' => $this->environment,
+            'kernel.debug' => $this->debug,
+            'kernel.name' => $this->name,
+            'kernel.cache_dir' => $this->getCacheDir(),
+            'kernel.charset' => 'UTF-8',
+            'kernel.container_class' => $this->getContainerClass(),
+        );
+    }
+
+    /**
+     * @return Shopware
+     */
+    protected function getShopware()
+    {
+        return $this->shopware;
+    }
+
+    protected function getCacheDir()
+    {
         return __DIR__ . '/../../cache/symfony';
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * Needs to be overwritten to fulfill shopware project requirements
-     *
-     * @return string
+     * Returns the di container
+     * @return \Symfony\Component\DependencyInjection\Container
      */
-    public function getLogDir()
+    protected function getContainer()
     {
-        // @TODO logging is not needed currently. however the kernel needs a valid log folder.
-        return __DIR__ . '/../../cache/symfony/logs';
+        return $this->container;
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the container class.
      *
-     * Needs to be overwritten to fulfill shopware project requirements
-     *
-     * @return string
+     * @return string The container class
      */
-    public function getRootDir()
+    protected function getContainerClass()
     {
-        return __DIR__ . '/../..';
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Needs to be overwritten to fulfill shopware project requirements
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return 'Shopware';
-    }
-
-    public function getCharset()
-    {
-        $options = $this->getShopware()->getOption('front');
-
-        return isset($options['charset']) ? $options['charset'] : 'UTF-8';
+        return $this->name . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 }

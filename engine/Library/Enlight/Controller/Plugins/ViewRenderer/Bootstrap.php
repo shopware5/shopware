@@ -187,10 +187,6 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
     protected function initView()
     {
         $view = new Enlight_View_Default($this->engine);
-
-        $view->addEngine($this->Application()->Twig());
-        $view->setActiveEngine($this->Application()->Twig());
-
         $this->Action()->setView($view);
     }
 
@@ -324,8 +320,8 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
             $part = strtolower($part);
         }
 
-//        $templateName = implode(DIRECTORY_SEPARATOR, $parts) . '.tpl';
-        $templateName = implode(DIRECTORY_SEPARATOR, $parts) . '.html.twig';
+        $templateName = implode(DIRECTORY_SEPARATOR, $parts) . '.tpl';
+//        $templateName = implode(DIRECTORY_SEPARATOR, $parts) . '.html.twig';
         return $templateName;
     }
 }

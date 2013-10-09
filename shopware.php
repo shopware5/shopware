@@ -97,7 +97,7 @@ if (empty($environment)){
     $environment = 'production';
 }
 
-$kernel = new ShopwareKernel($environment, false);
+$kernel = new ShopwareKernel($environment, true);
 
 // @TODO fix/add autoloading
 
