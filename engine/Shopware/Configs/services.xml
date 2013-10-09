@@ -34,6 +34,5 @@
             <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
-
     </services>
 </container>

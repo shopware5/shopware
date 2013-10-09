@@ -111,4 +111,6 @@ if (false) {
 // @TODO Shopware instance is currently not aware of the request
 $request = Request::createFromGlobals();
 
-return $kernel->handle($request);
+$response = $kernel->handle($request);
+
+$response->send();

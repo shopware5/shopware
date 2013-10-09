@@ -7,16 +7,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
+
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpFoundation\Cookie;
+use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
+use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 
 /**
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
  */
-class ShopwareKernel
+class ShopwareKernel implements HttpKernelInterface
 {
     /**
      * @var Shopware
@@ -47,8 +52,8 @@ class ShopwareKernel
     protected $booted;
 
     /**
-     * @param $environment
-     * @param $debug
+     * @param string $environment
+     * @param boolean $debug
      */
     public function __construct($environment, $debug)
     {
@@ -67,24 +72,70 @@ class ShopwareKernel
      *
      * {@inheritdoc}
      *
-     * @return string
+     * @return SymfonyResponse
      */
-    public function handle(Request $request)
+    public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
         if (false === $this->booted) {
             $this->boot();
         }
 
-        // httpkernel could not be executed here because
-        // the filled request is ignored currently
-        return $this->getShopware()->run();
+        $front = $this->getShopware()->Front();
+        $front->returnResponse(true);
+        $front->throwExceptions(!$catch);
+
+        $response = $front->dispatch();
+        $response = $this->transformEnlightResponseToSymfonyResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * @param EnlightResponse $response
+     * @return SymfonyResponse
+     */
+    public function transformEnlightResponseToSymfonyResponse(EnlightResponse $response)
+    {
+        $rawHeaders = $response->getHeaders();
+        $headers = array();
+        foreach ($rawHeaders as $header) {
+            if (!isset($headers[$header['name']]) || !empty($header['replace'])) {
+                $headers[$header['name']] = array($header['value']);
+            } else {
+                $headers[$header['name']][] = $header['value'];
+            }
+        }
+
+        $symfonyResponse = new SymfonyResponse(
+            $response->getBody(),
+            $response->getHttpResponseCode(),
+            $headers
+        );
+
+        foreach ($response->getCookies() as $cookieName => $cookieContent) {
+            $sfCookie = new Cookie(
+                $cookieName,
+                $cookieContent['value'],
+                $cookieContent['expire'],
+                $cookieContent['path'],
+                (bool) $cookieContent['secure'],
+                (bool) $cookieContent['httpOnly']
+            );
+
+            $symfonyResponse->headers->setCookie($sfCookie);
+        }
+
+        return $symfonyResponse;
     }
 
     /**
      * Boots the shopware and symfony di container
      */
-    protected function boot()
+    public function boot()
     {
+        if ($this->booted) {
+            return;
+        }
         $this->initializeShopware();
 
         $this->initializeContainer();
