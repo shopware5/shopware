@@ -249,6 +249,17 @@ class ShopwareKernel implements HttpKernelInterface
                 $this->addShopwareConfig($container, $alias . $key . '.' , $option);
             }
         }
+
+        // fill container parameters with needed but currently optional options
+        $defaults = array(
+            'config' => array()
+        );
+
+        foreach ($defaults as $key => $defaultConfigs) {
+            if (!isset($options[$key])) {
+                $container->setParameter($alias . $key, $defaultConfigs);
+            }
+        }
     }
 
     /**
