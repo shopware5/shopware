@@ -8,7 +8,7 @@
         <parameter key="twig.class">Twig_Environment</parameter>
         <parameter key="twig.extension.debug.class">Twig_Extension_Debug</parameter>
 
-        <parameter key="twig.loader.filesystem.class">Symfony\Bundle\TwigBundle\Loader\FilesystemLoader</parameter>
+        <parameter key="twig.loader.filesystem.class">Twig_Loader_Filesystem</parameter>
         <parameter key="twig.templates.path">%kernel.root_dir%/templates/_twig</parameter>
         <parameter key="twig.options" type="collection">
             <parameter key="debug">%kernel.debug%</parameter>

@@ -67,7 +67,7 @@ return array_merge($customConfig, array(
         'charset' => 'utf-8'
     ), $customConfig['mail']),
     'httpCache' => array_merge(array(
-        'enabled' => true,
+        'enabled' => false,
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => array('Authorization', 'Cookie'),
