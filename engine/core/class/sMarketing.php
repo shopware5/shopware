@@ -310,7 +310,7 @@ class sMarketing
 			}
 
             if (empty($premium["available"])) $premium["sDifference"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"] - $sBasketAmount);
-            $premium["sArticle"] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", 0, $premium["articleID"]);
+            $premium["sArticle"] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", 0, $premium["premium_ordernumber"]);
             $premium["startprice"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"]);
             $sql = "SELECT ordernumber, additionaltext FROM s_articles_details WHERE articleID={$premium["articleID"]} AND kind != 3";
             $premium["sVariants"] = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
