@@ -327,19 +327,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initConfig()
     {
-        if (!$this->issetResource('Db')) {
-            return null;
-        }
-
-        $config = Shopware()->getOption('config', array());
-        if (!isset($config['cache'])) {
-            $config['cache'] = $this->getResource('Cache');
-        }
-        $config['db'] = $this->getResource('Db');
-
-        $modelConfig = new Shopware_Components_Config($config);
-
-        return $modelConfig;
+        return $this->getContainerService('config');
     }
 
     /**
@@ -349,6 +337,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initSnippets()
     {
+        //@TODO logic has to be done in service definition
         if (!$this->issetResource('Db')) {
             return null;
         }
@@ -462,9 +451,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     protected function initCache()
     {
-        $cache = $this->getContainerService('cache');
-        Zend_Locale_Data::setCache($cache);
-        return $cache;
+        return $this->getContainerService('cache');
     }
 
     /**
