@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="shopware.snippet_manager.class">Shopware_Components_Snippet_Manager</parameter>
         <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
+        <parameter key="shopware.cache_factory.class">Shopware\DependencyInjection\Bridge\Cache</parameter>
+        <parameter key="shopware.config_factory.class">Shopware\DependencyInjection\Bridge\Config</parameter>
     </parameters>
 
     <services>
@@ -17,22 +19,49 @@
 
             <argument>%shopware.db.adapter%</argument>
             <argument>%shopware.db%</argument>
-            <call method="getConnection" />
+            <call method="getConnection"/>
         </service>
 
-        <service id="snippets" class="%shopware.snippet_manager.class%" />
-        <service id="subscriber" class="%shopware.subscriber.class%" />
+        <service id="snippets" class="%shopware.snippet_manager.class%"/>
+        <service id="subscriber" class="%shopware.subscriber.class%"/>
 
-        <service id="cache"
+        <!-- start cache services -->
+        <!-- this is the main cache service, however we need to execute
+        some additional code during cache initialisation which is done in the
+        cache factory -->
+        <service id="cache_zend"
                  class="Zend_Cache_Core"
                  factory-class="Zend_Cache"
-                 factory-method="factory">
+                 factory-method="factory"
+                 public="false">
 
             <argument>Core</argument>
             <argument>%shopware.cache.backend%</argument>
             <argument>%shopware.cache.frontendOptions%</argument>
             <argument>%shopware.cache.backendOptions%</argument>
         </service>
+
+        <service id="cache_factory" class="%shopware.cache_factory.class%">
+            <argument type="service" id="cache_zend"/>
+        </service>
+
+        <service id="cache"
+                 class="Zend_Cache_Core"
+                 factory-service="cache_factory"
+                 factory-method="factory">
+        </service>
+        <!-- end cache services-->
+
+        <service id="config_factory" class="%shopware.config_factory.class%">
+            <argument type="service" id="cache" />
+            <argument>%shopware.config%</argument>
+            <argument type="service" id="db" on-invalid="ignore"/>
+        </service>
+
+        <service id="config"
+                 class="Shopware_Components_Config"
+                 factory-service="config_factory"
+                 factory-method="factory" />
 
     </services>
 </container>
