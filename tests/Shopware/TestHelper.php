@@ -1,4 +1,8 @@
 <?php
+error_reporting(-1);
+ini_set('display_errors', true);
+
+
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -32,8 +36,10 @@ set_include_path(
     $docPath
 );
 
+require 'vendor/autoload.php';
 include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
+include_once 'Shopware/ShopwareKernel.php';
 
 /**
  * Shopware Test Helper
@@ -62,24 +68,6 @@ class TestHelper extends Shopware
         $this->oldPath = realpath(__DIR__ . '/../../') . '/';
 
         parent::__construct('testing', $this->TestPath() . 'Configs/Default.php');
-
-        $this->Bootstrap()->loadResource('Zend');
-        $this->Bootstrap()->loadResource('Cache');
-        $this->Bootstrap()->loadResource('Db');
-        $this->Bootstrap()->loadResource('Table');
-        $this->Bootstrap()->loadResource('Plugins');
-
-        // generate attribute models
-        $this->Bootstrap()->Models()->generateAttributeModels();
-
-        $this->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
-
-        /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $this->Bootstrap()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $shop = $repository->getActiveDefault();
-        $shop->registerResources($this->Bootstrap());
-
-        $_SERVER['HTTP_HOST'] = $shop->getHost();
     }
 
     /**
@@ -111,7 +99,44 @@ class TestHelper extends Shopware
     }
 }
 
-/**
- * Start test application
- */
-TestHelper::Instance();
+class TestKernel extends ShopwareKernel
+{
+
+    protected function initializeShopware() {
+        $this->shopware = TestHelper::Instance();
+    }
+
+    public function getTestInstance() {
+        return $this->shopware;
+    }
+
+    public function getTestContainer() {
+        return $this->container;
+    }
+}
+
+error_reporting(-1);
+ini_set('display_errors', true);
+
+$kernel = new TestKernel('testing', true);
+$kernel->boot();
+
+$kernel->getTestInstance()->Bootstrap()->loadResource('Zend');
+$kernel->getTestInstance()->Bootstrap()->loadResource('Cache');
+$kernel->getTestInstance()->Bootstrap()->loadResource('Db');
+$kernel->getTestInstance()->Bootstrap()->loadResource('Table');
+$kernel->getTestInstance()->Bootstrap()->loadResource('Plugins');
+
+// generate attribute models
+$kernel->getTestInstance()->Bootstrap()->Models()->generateAttributeModels();
+$kernel->getTestInstance()->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+
+/** @var $repository \Shopware\Models\Shop\Repository */
+$repository = $kernel->getTestInstance()->Bootstrap()->Models()->getRepository('Shopware\Models\Shop\Shop');
+$shop = $repository->getActiveDefault();
+$shop->registerResources($kernel->getTestInstance()->Bootstrap());
+
+$_SERVER['HTTP_HOST'] = $shop->getHost();
+
+//$test = $kernel->getTestInstance()->Db()->fetchAll("SELECT id FROM s_articles LIMIT 1");
+//die(print_r($test));
