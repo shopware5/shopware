@@ -24,6 +24,13 @@
         "monolog/monolog": "1.6.*"
     },
     "autoload": {
-        "psr-0": {"Shopware\\Components\\": "engine/"}
+        "psr-0": {
+            "Shopware\\Components\\": "engine/",
+            "Shopware_Components": "engine/",
+            "Shopware_Controllers": "engine/",
+            "Enlight": "engine/Library/",
+            "Doctrine": "engine/Library/",
+            "Zend": "engine/Library/"
+        }
     }
 }
