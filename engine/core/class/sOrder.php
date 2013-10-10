@@ -505,6 +505,34 @@ class sOrder
 		}else {
 			$partner = $this->sSYSTEM->_SESSION["sPartner"];
 		}
+        
+        $params = array(
+            'ordernumber'          => $orderNumber,
+            'userID'               => $this->sUserData["additional"]["user"]["id"],
+            'invoice_amount'       => $this->sBasketData["AmountWithTaxNumeric"],
+            'invoice_amount_net'   => $this->sBasketData["AmountNetNumeric"],
+            'invoice_shipping'     => floatval($this->sShippingcostsNumeric),
+            'invoice_shipping_net' => floatval($this->sShippingcostsNumericNet),
+            'ordertime'            => null,
+            'status'               => 0,
+            'cleared'              => 17,
+            'paymentID'            => $this->sUserData["additional"]["user"]["paymentID"],
+            'transactionID'        => $this->bookingId,
+            'customercomment'      => $this->sComment,
+            'net'                  => $net,
+            'taxfree'              => $taxfree,
+            'partnerID'            => (string) $partner,
+            'temporaryID'          => (string) $this->uniqueID,
+            'referer'              => (string) $this->sSYSTEM->_SESSION['sReferer'],
+            'language'             => $shop->getId(),
+            'dispatchID'           => $dispatchId,
+            'currency'             => $this->sSYSTEM->sCurrency["currency"],
+            'currencyFactor'       => $this->sSYSTEM->sCurrency["factor"],
+            'subshopID'            => $mainShop->getId(),
+            'remote_addr'          => (string) $_SERVER['REMOTE_ADDR']
+        );
+        
+        $params = Enlight()->Events()->filter('Shopware_Modules_Order_SaveOrder_FilterSQLParams', $params, array('subject'=>$this));
 
 		$sql = "
 		INSERT INTO s_order (
@@ -513,29 +541,30 @@ class sOrder
 		    cleared, paymentID, transactionID, customercomment,
 		    net,taxfree, partnerID,temporaryID,referer,language,dispatchID,
 		    currency,currencyFactor,subshopID,remote_addr
-		) VALUES ('".$orderNumber."',
-			".$this->sUserData["additional"]["user"]["id"].",
-			".$this->sBasketData["AmountWithTaxNumeric"].",
-			".$this->sBasketData["AmountNetNumeric"].",
-			".floatval($this->sShippingcostsNumeric).",
-			".floatval($this->sShippingcostsNumericNet).",
-			now(),
-			0,
-			17,
-			".$this->sUserData["additional"]["user"]["paymentID"].",
-			'".$this->bookingId."',
-			".$this->sSYSTEM->sDB_CONNECTION->qstr($this->sComment).",
-			$net,
-			$taxfree,
-			".$this->sSYSTEM->sDB_CONNECTION->qstr((string) $partner).",
-			".$this->sSYSTEM->sDB_CONNECTION->qstr((string) $this->uniqueID).",
-			".$this->sSYSTEM->sDB_CONNECTION->qstr((string) $this->sSYSTEM->_SESSION['sReferer']).",
-			'".$shop->getId()."',
-			'$dispatchId',
-			'".$this->sSYSTEM->sCurrency["currency"]."',
-			'".$this->sSYSTEM->sCurrency["factor"]."',
-			'".$mainShop->getId()."',
-			".$this->sSYSTEM->sDB_CONNECTION->qstr((string) $_SERVER['REMOTE_ADDR'])."
+		) VALUES (
+            '". $this->sSYSTEM->sDB_CONNECTION->qstr($params['ordernumber']) ."',
+			". (int) $params['userID'] .",
+			". (float) $params['invoice_amount'] .",
+			". (float) $params['invoice_amount_net'] .",
+			". (float) $params['invoice_shipping'] .",
+			". (float) $params['invoice_shipping'] .",
+			". (($params['ordertime'] === null) ? "NOW()" : "'" . $this->sSYSTEM->sDB_CONNECTION->qstr($params['ordertime']) . "'") . "'
+			". (int) $params['status'] . ",
+			". (int) $params['cleared'] . ",
+			". (int) $params['paymentID'] . ",
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['transactionID']) ."',
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['customercomment']) ."',
+			". (int) $params['net'] . ",
+			". (int) $params['taxfree'] . ",
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['partnerID']) ."',
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['temporaryID']) ."',
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['referer']) ."',
+			". (int) $params['language'] . ",
+			". (int) $params['dispatchID'] . ",
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['currency']) ."',
+			". (float) $params['currencyFactor'] .",
+			". (int) $params['subshopID'] . ",
+			'". $this->sSYSTEM->sDB_CONNECTION->qstr($params['remote_addr']) ."',
 		)
 		";
 
