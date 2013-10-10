@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', true);
+error_reporting(E_ALL);
+
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -88,6 +91,7 @@ require 'Enlight/Application.php';
 require 'Shopware/Application.php';
 require 'Shopware/Kernel.php';
 require 'Shopware/ConfigLoader.php';
+require 'Shopware/PluginAwareShopwareKernel.php';
 
 use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
@@ -99,6 +103,7 @@ if (empty($environment)){
 }
 
 $kernel = new Kernel($environment, $environment !== 'production');
+
 //@TODO implement new cache-switch mechanism here
 if (false) {
     $kernel = new AppCache($kernel, array());

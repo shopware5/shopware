@@ -66,6 +66,11 @@ class Kernel implements HttpKernelInterface
     protected $container;
 
     /**
+     * @var Container
+     */
+    protected $pluginContainer;
+
+    /**
      * Enables the debug mode
      * @var boolean
      */
@@ -172,6 +177,9 @@ class Kernel implements HttpKernelInterface
         $this->initializeConfig();
         $this->initializeContainer();
         $this->initializeShopware();
+        $this->initializePluginContainer();
+
+        $this->getShopware()->setPluginContainer($this->pluginContainer);
 
         $this->booted = true;
     }
@@ -405,5 +413,45 @@ class Kernel implements HttpKernelInterface
     protected function getConfig()
     {
         return $this->config;
+    }
+
+    protected function initializePluginContainer()
+    {
+        try {
+            $this->pluginContainer = $this->buildPluginContainer();
+            $this->pluginContainer->compile();
+
+        } catch (\Exception $e) {
+            $this->kernelException = $e;
+            $this->container->set('kernel.exception', $e);
+        }
+    }
+
+    protected function buildPluginContainer()
+    {
+        $container = $this->getContainerBuilder();
+        $container->addObjectResource($this);
+
+        $this->addShopwareConfig($container, 'shopware.', $this->config);
+        $this->addContainerExtensions($container);
+
+        return $container;
+    }
+
+    public function addContainerExtensions(ContainerBuilder $container)
+    {
+        $this->getShopware()->Front();
+
+        $collection = array();
+        $collection = $this->shopware->Events()->filter(
+            'Shopware_Plugin_Container_Add_Services',
+            $collection,
+            array()
+        );
+
+        foreach ($collection as $absolutePath) {
+            $loader = new XmlFileLoader($container, new FileLocator(dirname($absolutePath)));
+            $loader->load(basename($absolutePath));
+        }
     }
 }
