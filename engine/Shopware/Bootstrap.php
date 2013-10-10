@@ -518,7 +518,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
 
         // register symfony validation annotions
         Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint'
+            'Symfony\Component\Validator\Constraint',
+            realpath(__DIR__ . '/../../vendor/symfony/validator')
         );
 
         $cachedAnnotationReader = $config->getAnnotationsReader();

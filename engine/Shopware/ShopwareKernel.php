@@ -302,7 +302,7 @@ class ShopwareKernel implements HttpKernelInterface
         return $this->shopware;
     }
 
-    protected function getCacheDir()
+    public function getCacheDir()
     {
         return __DIR__ . '/../../cache/symfony';
     }
