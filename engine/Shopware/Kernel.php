@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware;
+
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
@@ -31,19 +33,21 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Kernel;
-
+use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpFoundation\Cookie;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
-use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 
 /**
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
+ *
+ * @category  Shopware
+ * @package   Shopware\ShopwareKernel
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class ShopwareKernel implements HttpKernelInterface
+class Kernel implements HttpKernelInterface
 {
     /**
      * @var Shopware
@@ -166,14 +170,8 @@ class ShopwareKernel implements HttpKernelInterface
         }
 
         $this->initializeConfig();
-
         $this->initializeContainer();
-
-        $this->shopware = new Shopware(
-            $this->environment,
-            $this->getConfig(),
-            $this->getContainer()
-        );
+        $this->initializeShopware();
 
         $this->booted = true;
     }
@@ -183,25 +181,18 @@ class ShopwareKernel implements HttpKernelInterface
      * the Shopware_Application.
      * The shopware configuration is required before the shopware application booted,
      * to pass the configuration to the Symfony di container.
-     *
-     * @return array
      */
     protected function initializeConfig()
     {
-        $configLoader = new Shopware\Config(
+        $configLoader = new ConfigLoader(
             $this->getDocumentRoot(),
             $this->environment,
             $this->name
         );
-        $this->config = $configLoader->loadConfig(
-            __DIR__ . '/Configs/Default.php'
-        );
-        return $this->config;
-    }
 
-    protected function getDocumentRoot()
-    {
-        return __DIR__ . '/../../';
+        $this->config = $configLoader->loadConfig(
+            $this->getConfigPath()
+        );
     }
 
     /**
@@ -209,7 +200,11 @@ class ShopwareKernel implements HttpKernelInterface
      */
     protected function initializeShopware()
     {
-        $this->shopware = new Shopware($this->environment);
+        $this->shopware = new \Shopware(
+            $this->environment,
+            $this->getConfig(),
+            $this->getContainer()
+        );
     }
 
     /**
@@ -240,6 +235,30 @@ class ShopwareKernel implements HttpKernelInterface
     }
 
     /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return __DIR__ . '/../../cache/symfony';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigPath()
+    {
+        return __DIR__  . '/Configs/Default.php';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDocumentRoot()
+    {
+        return __DIR__ . '/../../';
+    }
+
+    /**
      * Dumps the service container to PHP code in the cache.
      *
      * @param ConfigCache $cache     The config cache
@@ -255,7 +274,7 @@ class ShopwareKernel implements HttpKernelInterface
         $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass));
 
         if (!$this->debug) {
-            $content = Kernel::stripComments($content);
+            $content = SymfonyKernel::stripComments($content);
         }
 
         $cache->write($content, $container->getResources());
@@ -294,13 +313,14 @@ class ShopwareKernel implements HttpKernelInterface
     /**
      * Adds all shopware configuration as di container parameter.
      * Each shopware configuration has the alias "shopware."
+     *
      * @param Container $container
      * @param string $alias
      * @param array|string $options
      */
     protected function addShopwareConfig(Container $container, $alias, $options)
     {
-        foreach($options as $key => $option) {
+        foreach ($options as $key => $option) {
             $container->setParameter($alias . $key, $option);
 
             if (is_array($option)) {
@@ -360,11 +380,6 @@ class ShopwareKernel implements HttpKernelInterface
         return $this->shopware;
     }
 
-    public function getCacheDir()
-    {
-        return __DIR__ . '/../../cache/symfony';
-    }
-
     /**
      * Returns the di container
      * @return Container
@@ -384,6 +399,9 @@ class ShopwareKernel implements HttpKernelInterface
         return $this->name . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
+    /**
+     * @return array
+     */
     protected function getConfig()
     {
         return $this->config;

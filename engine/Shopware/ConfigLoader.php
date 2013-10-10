@@ -33,9 +33,11 @@ namespace Shopware;
  * The ShopwareKernel injects the loaded configuration and the Symfony DI-Container
  * into the Shopware_Application.
  *
- * @package Shopware
+ * @category  Shopware
+ * @package   Shopware\ConfigLoader
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class ConfigLoader
 {
     /**
      * Contains the document root.
@@ -64,8 +66,8 @@ class Config
      */
     public function __construct($documentRoot, $environment, $applicationName)
     {
-        $this->documentRoot = $documentRoot;
-        $this->environment = $environment;
+        $this->documentRoot    = $documentRoot;
+        $this->environment     = $environment;
         $this->applicationName = $applicationName;
     }
 
@@ -88,6 +90,7 @@ class Config
         if (!in_array($suffix, array('php', 'inc'))) {
             throw new \Exception('Invalid configuration file provided; unknown config type');
         }
+
         $config = include $file;
 
         if (!is_array($config)) {
@@ -95,6 +98,7 @@ class Config
                 'Invalid configuration file provided; PHP file does not return array value'
             );
         }
+
         return $config;
     }
 
@@ -114,14 +118,51 @@ class Config
         return $this->documentRoot;
     }
 
+    /**
+     * Legacy function for the AppPath function within configuration files.
+     *
+     * @param string|null $path
+     * @return string
+     */
+    public function AppPath($path = null)
+    {
+        if ($path !== null) {
+            $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
+            return $this->documentRoot . '/engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
+        }
+
+        return $this->documentRoot . '/engine/Shopware/';
+    }
+
+    /**
+     * Legacy function for the TestPath function within configuration files.
+     *
+     * @param string|null $path
+     * @return string
+     */
+    public function TestPath($path = null)
+    {
+        if ($path !== null) {
+            $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
+            return $this->documentRoot . '/tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
+        }
+
+        return $this->documentRoot . '/tests/Shopware/';
+    }
+
+    /**
+     * @return string
+     */
     public function Environment()
     {
         return $this->environment;
     }
 
+    /**
+     * @return string
+     */
     public function App()
     {
         return $this->applicationName;
     }
 }
-

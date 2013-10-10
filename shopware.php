@@ -75,9 +75,6 @@ if (!file_exists('vendor/autoload.php')) {
     return;
 }
 
-// include composer autoloader
-require 'vendor/autoload.php';
-
 set_include_path(
     '.' . PATH_SEPARATOR .
     dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
@@ -85,20 +82,23 @@ set_include_path(
     dirname(__FILE__) . '/templates/'                           // Templates
 );
 
+// include composer autoloader
+require 'vendor/autoload.php';
+require 'Enlight/Application.php';
+require 'Shopware/Application.php';
+require 'Shopware/Kernel.php';
+require 'Shopware/ConfigLoader.php';
+
+use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
 use Symfony\Component\HttpFoundation\Request;
-
-include_once 'Enlight/Application.php';
-include_once 'Shopware/Application.php';
-include_once 'Shopware/ShopwareKernel.php';
-include_once 'Shopware/Config.php';
 
 $environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
 if (empty($environment)){
     $environment = 'production';
 }
 
-$kernel = new ShopwareKernel($environment, $environment !== 'production');
+$kernel = new Kernel($environment, $environment !== 'production');
 //@TODO implement new cache-switch mechanism here
 if (false) {
     $kernel = new AppCache($kernel, array());
