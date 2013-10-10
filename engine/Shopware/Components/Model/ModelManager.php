@@ -32,6 +32,11 @@ use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -240,17 +245,16 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return \Symfony\Component\Validator\Validator
+     * @return Validator
      */
     public function getValidator()
     {
         if (null === $this->validator) {
             $reader = $this->getConfiguration()->getAnnotationsReader();
-            $this->validator = new \Symfony\Component\Validator\Validator(
-                new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(
-                    new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($reader)
-                ),
-                new \Symfony\Component\Validator\ConstraintValidatorFactory()
+            $this->validator = new Validator(
+                new ClassMetadataFactory(new AnnotationLoader($reader)),
+                new ConstraintValidatorFactory(),
+                new Translator('en_us')
             );
         }
 
