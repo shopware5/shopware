@@ -81,6 +81,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $emotion = $this->SeoIndex()->countEmotions($shopId);
         $content = $this->SeoIndex()->countContent($shopId);
         $statistic = $this->SeoIndex()->countStatic($shopId);
+        $supplier = $this->SeoIndex()->countSuppliers($shopId);
 
         $this->View()->assign(array(
             'success' => true,
@@ -90,7 +91,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
                 'blog' => $blog,
                 'emotion' => $emotion,
                 'statistic' => $statistic,
-                'content' => $content
+                'content' => $content,
+                'supplier' => $supplier
             ))
         ));
     }
@@ -266,6 +268,36 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $this->RewriteTable()->baseSetup();
 
         $this->RewriteTable()->sCreateRewriteTableContent($offset, $limit);
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
+    }
+
+    /**
+     * Create SEO links for Suppliers
+     */
+    public function seoSupplierAction()
+    {
+        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+            $this->View()->assign(array(
+                'success' => true
+            ));
+            return;
+        }
+
+        @set_time_limit(1200);
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
+        $shopId = (int)$this->Request()->getParam('shopId', 1);
+
+        // Create shop
+        $shop = $this->SeoIndex()->registerShop($shopId);
+
+        // Make sure a template is available
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableSuppliers($shop, $offset, $limit);
 
         $this->View()->assign(array(
             'success' => true

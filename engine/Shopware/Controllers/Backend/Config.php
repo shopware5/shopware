@@ -212,9 +212,24 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
+
+                Shopware()->Config()->offsetSet($element->getName(), $values);
             }
+
+            $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
+                'subject' => $this,
+                'element' => $element,
+                'shop'    => $shop
+            ));
+
             $element->setValues($values);
             Shopware()->Models()->flush($element);
+
+            Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', array(
+                'subject' => $this,
+                'element' => $element,
+                'shop'    => $shop
+            ));
         }
 
         $this->View()->assign(array('success' => true));

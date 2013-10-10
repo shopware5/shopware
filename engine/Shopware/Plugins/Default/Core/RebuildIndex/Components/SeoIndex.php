@@ -292,4 +292,33 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         return count($static);
     }
+
+    /**
+     * Get the number of supplier which friendly url will be updated
+     *
+     * @param $shopId
+     * @return int
+     */
+    public function countSuppliers($shopId)
+    {
+        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+            return 0;
+        }
+
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+
+        $shop = $this->registerShop($shopId);
+
+        if ($shop->getDefault()) {
+            $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
+        } else {
+            $builder = $repository->getTranslatedFriendlyUrlSuppliersCountQueryBuilder($shopId);
+            $result = $builder->execute()->fetch(PDO::FETCH_ASSOC);
+
+            $numResults = $result['supplierCount'];
+        }
+
+        return (int) $numResults;
+    }
 }
