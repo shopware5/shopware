@@ -90,14 +90,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface
-     */
-    protected function initLog()
-    {
-        return $this->getContainerService('monolog');
-    }
-
-    /**
      * Init template method
      *
      * @return Enlight_Template_Manager
@@ -125,16 +117,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $template->setDefaultResourceType('snippet');
 
         return $template;
-    }
-
-    /**
-     * Init database method
-     *
-     * @return Zend_Db_Adapter_Pdo_Abstract
-     */
-    protected function initDb()
-    {
-        return $this->getContainerService('db');
     }
 
     /**
@@ -292,16 +274,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     }
 
     /**
-     * Init config method
-     *
-     * @return Shopware_Components_Config
-     */
-    protected function initConfig()
-    {
-        return $this->getContainerService('config');
-    }
-
-    /**
      * Init snippets method
      *
      * @return Enlight_Components_Snippet_Manager|null
@@ -413,16 +385,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     protected function initDate()
     {
         return new Zend_Date($this->getResource('Locale'));
-    }
-
-    /**
-     * Init cache method
-     *
-     * @return Zend_Cache_Core
-     */
-    protected function initCache()
-    {
-        return $this->getContainerService('cache');
     }
 
     /**
