@@ -215,4 +215,12 @@ class Enlight_Hook_HookManager extends Enlight_Class
         $this->aliases = array();
         return $this;
     }
+
+    /**
+     * @param \Enlight_Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
 }

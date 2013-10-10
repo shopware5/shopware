@@ -29,6 +29,7 @@
  * @author     $Author$
  */
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -45,18 +46,15 @@ class Shopware extends Enlight_Application
     protected $oldPath = null;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * Constructor method
      *
      * @param string $environment
      * @param mixed $options
      */
-    public function __construct($environment = 'production', $options = null)
+    public function __construct($environment = 'production', array $options, Container $container)
     {
+        $this->container = $container;
+
         Shopware($this);
 
         if ($this->oldPath === null) {

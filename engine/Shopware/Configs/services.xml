@@ -9,9 +9,18 @@
         <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
         <parameter key="shopware.cache_factory.class">Shopware\DependencyInjection\Bridge\Cache</parameter>
         <parameter key="shopware.config_factory.class">Shopware\DependencyInjection\Bridge\Config</parameter>
+        <parameter key="shopware.event_manager.class">Enlight_Event_EventManager</parameter>
+        <parameter key="shopware.hook_manager.class">Enlight_Hook_HookManager</parameter>
+        <parameter key="shopware.plugin_manager.class">Enlight_Plugin_PluginManager</parameter>
     </parameters>
 
     <services>
+        <service id="snippets" class="%shopware.snippet_manager.class%"/>
+        <service id="subscriber" class="%shopware.subscriber.class%"/>
+        <service id="plugins" class="%shopware.plugin_manager.class%" />
+        <service id="hooks"   class="%shopware.hook_manager.class%" />
+        <service id="events"  class="%shopware.event_manager.class%" />
+
         <service id="db"
                  class="Enlight_Components_Db_Adapter_Pdo_Mysql"
                  factory-class="Enlight_Components_Db"
@@ -21,9 +30,6 @@
             <argument>%shopware.db%</argument>
             <call method="getConnection"/>
         </service>
-
-        <service id="snippets" class="%shopware.snippet_manager.class%"/>
-        <service id="subscriber" class="%shopware.subscriber.class%"/>
 
         <!-- start cache services -->
         <!-- this is the main cache service, however we need to execute

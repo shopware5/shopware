@@ -91,6 +91,7 @@ use Symfony\Component\HttpFoundation\Request;
 include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
 include_once 'Shopware/ShopwareKernel.php';
+include_once 'Shopware/Config.php';
 
 $environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
 if (empty($environment)){

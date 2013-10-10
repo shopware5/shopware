@@ -63,12 +63,15 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     protected $controller_name;
 
+    protected $container;
+
+
     /**
      * The Enlight_Controller_Action class constructor expects an instance of the
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
      *
-     * @param Enlight_Controller_Request_Request   $request
+     * @param Enlight_Controller_Request_Request $request
      * @param Enlight_Controller_Response_Response $response
      */
     public function __construct(Enlight_Controller_Request_Request $request,
@@ -144,7 +147,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             if (!$event = Enlight_Application::Instance()->Events()->notifyUntil(
                 __CLASS__ . '_' . $action_name,
                 array('subject' => $this)
-            )) {
+            )
+            ) {
                 $this->$action();
             }
             $this->postDispatch();
@@ -197,7 +201,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string $action
      * @param string $controller
      * @param string $module
-     * @param array  $params
+     * @param array $params
      */
     public function forward($action, $controller = null, $module = null, array $params = null)
     {
@@ -220,7 +224,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Redirect the request. The frontend router will assemble the url.
      *
      * @param string|array $url
-     * @param array        $options
+     * @param array $options
      */
     public function redirect($url, array $options = array())
     {
@@ -234,7 +238,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $uri = $this->Request()->getScheme() . '://' . $this->Request()->getHttpHost();
             $url = $uri . $url;
         }
-        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int) $options['code']);
+        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int)$options['code']);
     }
 
     /**
@@ -340,7 +344,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Magic caller method
      *
      * @param  string $name
-     * @param  array  $value
+     * @param  array $value
      * @throws Enlight_Controller_Exception
      * @return mixed
      */
@@ -355,5 +359,45 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         }
 
         return parent::__call($name, $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param mixed $container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    protected function getDb()
+    {
+        return $this->getContainer()->get('db');
+    }
+
+    /**
+     * @return \Shopware\Components\Model\ModelManager
+     */
+    protected function getModelManager()
+    {
+        return Enlight()->Models();
+    }
+
+    /**
+     * @return Enlight_Event_EventManager
+     */
+    protected function getEventManager()
+    {
+        return Enlight()->Events();
     }
 }
