@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', true);
-error_reporting(E_ALL);
-
 /**
  * Shopware 4.0
  * Copyright © 2012 shopware AG
@@ -91,14 +88,13 @@ require 'Enlight/Application.php';
 require 'Shopware/Application.php';
 require 'Shopware/Kernel.php';
 require 'Shopware/ConfigLoader.php';
-require 'Shopware/PluginAwareShopwareKernel.php';
 
 use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
 use Symfony\Component\HttpFoundation\Request;
 
 $environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
-if (empty($environment)){
+if (empty($environment)) {
     $environment = 'production';
 }
 
