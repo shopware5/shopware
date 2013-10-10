@@ -27,7 +27,7 @@ engine/Shopware/Plugins/Community/
 engine/Shopware/Plugins/Local/
 
 # Userconfigurations
-config.php
+/config.php
 engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
