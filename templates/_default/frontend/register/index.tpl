@@ -47,14 +47,22 @@
 			
 		<form method="post" action="{url action=saveRegister}">
 			
+			{block name="frontend_register_index_after_form"}{/block}
+			
 			{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
 			{include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
+			
+			{block name="frontend_register_index_after_personal"}{/block}
 			
 			{include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
 			{include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
 			
+			{block name="frontend_register_index_after_billing"}{/block}
+			
 			{include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
 			{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
+			
+			{block name="frontend_register_index_after_shipping"}{/block}
 			
 			<div class="payment_method register_last"></div>
 
