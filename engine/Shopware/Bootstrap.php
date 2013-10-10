@@ -110,6 +110,14 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     }
 
     /**
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function initLog()
+    {
+        return $this->getContainerService('monolog');
+    }
+
+    /**
      * Init template method
      *
      * @return Enlight_Template_Manager
@@ -614,6 +622,10 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         return $mailer;
     }
 
+    /**
+     * @param string $name
+     * @return object
+     */
     private function getContainerService($name)
     {
         return $this->Application()->Container()->get($name);

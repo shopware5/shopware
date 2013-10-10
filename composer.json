@@ -20,7 +20,8 @@
         "symfony/http-kernel": "2.3.*",
         "symfony/config": "2.3.*",
         "symfony/dependency-injection": "2.3.*",
-        "symfony/validator": "2.3.*"
+        "symfony/validator": "2.3.*",
+        "monolog/monolog": "1.6.*"
     },
     "autoload": {
         "psr-0": {"Shopware\\Components\\": "engine/"}

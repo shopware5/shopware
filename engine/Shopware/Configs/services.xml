@@ -21,6 +21,19 @@
         <service id="hooks"   class="%shopware.hook_manager.class%" />
         <service id="events"  class="%shopware.event_manager.class%" />
 
+        <service id="monoglog.handler.streamhandler" class="Monolog\Handler\StreamHandler" public="false">
+            <argument>%kernel.root_dir%/logs/default.log</argument>
+        </service>
+
+        <service id="log" alias="monolog"/>
+        <service id="monolog" class="Monolog\Logger">
+            <argument>default</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monoglog.handler.streamhandler" />
+            </call>
+        </service>
+
+
         <service id="db"
                  class="Enlight_Components_Db_Adapter_Pdo_Mysql"
                  factory-class="Enlight_Components_Db"

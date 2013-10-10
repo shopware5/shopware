@@ -400,6 +400,7 @@ class Kernel implements HttpKernelInterface
     /**
      * Gets the container class.
      *
+     * @param string $nameSuffix
      * @return string The container class
      */
     protected function getContainerClass($nameSuffix = null)
@@ -420,7 +421,6 @@ class Kernel implements HttpKernelInterface
         try {
             $this->pluginContainer = $this->buildPluginContainer();
             $this->pluginContainer->compile();
-
         } catch (\Exception $e) {
             $this->kernelException = $e;
             $this->container->set('kernel.exception', $e);
