@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4.0
+ * Copyright © 2013 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
@@ -27,6 +49,12 @@ class ShopwareKernel implements HttpKernelInterface
      * @var Shopware
      */
     protected $shopware;
+
+    /**
+     * Contains the merged shopware configuration
+     * @var array
+     */
+    protected $config;
 
     /**
      * @var Container
@@ -136,13 +164,44 @@ class ShopwareKernel implements HttpKernelInterface
         if ($this->booted) {
             return;
         }
-        $this->initializeShopware();
+
+        $this->initializeConfig();
 
         $this->initializeContainer();
 
-        $this->getShopware()->setContainer($this->getContainer());
+        $this->shopware = new Shopware(
+            $this->environment,
+            $this->getConfig(),
+            $this->getContainer()
+        );
 
         $this->booted = true;
+    }
+
+    /**
+     * Loads the shopware configuration, which will be injected into
+     * the Shopware_Application.
+     * The shopware configuration is required before the shopware application booted,
+     * to pass the configuration to the Symfony di container.
+     *
+     * @return array
+     */
+    protected function initializeConfig()
+    {
+        $configLoader = new Shopware\Config(
+            $this->getDocumentRoot(),
+            $this->environment,
+            $this->name
+        );
+        $this->config = $configLoader->loadConfig(
+            __DIR__ . '/Configs/Default.php'
+        );
+        return $this->config;
+    }
+
+    protected function getDocumentRoot()
+    {
+        return __DIR__ . '/../../';
     }
 
     /**
@@ -195,10 +254,9 @@ class ShopwareKernel implements HttpKernelInterface
 
         $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass));
 
-        //TODO implement the stripComments to reduce the container content
-//        if (!$this->debug) {
-//            $content = self::stripComments($content);
-//        }
+        if (!$this->debug) {
+            $content = Kernel::stripComments($content);
+        }
 
         $cache->write($content, $container->getResources());
     }
@@ -228,7 +286,7 @@ class ShopwareKernel implements HttpKernelInterface
         $loader->load('services.xml');
         $loader->load('twig.xml');
 
-        $this->addShopwareConfig($container, 'shopware.', $this->getShopware()->getOptions());
+        $this->addShopwareConfig($container, 'shopware.', $this->config);
 
         return $container;
     }
@@ -284,7 +342,7 @@ class ShopwareKernel implements HttpKernelInterface
     protected function getKernelParameters()
     {
         return array(
-            'kernel.root_dir' => __DIR__ . '/../../',
+            'kernel.root_dir' => $this->getDocumentRoot(),
             'kernel.environment' => $this->environment,
             'kernel.debug' => $this->debug,
             'kernel.name' => $this->name,
@@ -324,5 +382,10 @@ class ShopwareKernel implements HttpKernelInterface
     protected function getContainerClass()
     {
         return $this->name . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+    }
+
+    protected function getConfig()
+    {
+        return $this->config;
     }
 }

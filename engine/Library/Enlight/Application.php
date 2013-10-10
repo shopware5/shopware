@@ -133,7 +133,7 @@ class Enlight_Application
      * @param string $environment
      * @param mixed $options
      */
-    public function __construct($environment, $options = null)
+    public function __construct($environment, array $options)
     {
         self::$instance = $this;
         $this->environment = $environment;
@@ -150,8 +150,6 @@ class Enlight_Application
 
         $this->_loader = new Enlight_Loader();
         $this->_loader->registerNamespace('Enlight', 'Enlight/');
-
-        $options = $this->loadConfig($options);
 
         if (!empty($options['app'])) {
             $this->app = $options['app'];
