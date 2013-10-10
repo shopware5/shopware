@@ -44,6 +44,8 @@ class Shopware extends Enlight_Application
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
     protected $oldPath = null;
+    protected $container;
+    protected $pluginContainer;
 
     /**
      * Constructor method
@@ -91,13 +93,13 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Assigns dependency injection container
+     * Assigns dependency injection container for plugins
      *
      * @param ContainerInterface $container
      */
-    public function setContainer(ContainerInterface $container)
+    public function setPluginContainer(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->pluginContainer = $container;
     }
 
     /**
