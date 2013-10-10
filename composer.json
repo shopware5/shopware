@@ -17,8 +17,12 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "symfony/http-kernel": "2.3.x-dev",
-        "symfony/config": "2.3.x-dev",
-        "symfony/dependency-injection": "2.3.x-dev"
+        "symfony/http-kernel": "2.3.*",
+        "symfony/config": "2.3.*",
+        "symfony/dependency-injection": "2.3.*",
+        "symfony/validator": "2.3.*"
+    },
+    "autoload": {
+        "psr-0": {"Shopware\\Components\\": "engine/"}
     }
 }

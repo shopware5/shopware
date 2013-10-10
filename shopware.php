@@ -97,20 +97,12 @@ if (empty($environment)){
     $environment = 'production';
 }
 
-$kernel = new ShopwareKernel($environment, true);
-
-// @TODO fix/add autoloading
-
+$kernel = new ShopwareKernel($environment, $environment !== 'production');
 //@TODO implement new cache-switch mechanism here
 if (false) {
-    // @TODO fix autoloading, AppCache could not be found automatically at the moment
-    //$kernel->loadClassCache();
     $kernel = new AppCache($kernel, array());
 }
 
-// @TODO Shopware instance is currently not aware of the request
 $request = Request::createFromGlobals();
-
-$response = $kernel->handle($request);
-
-$response->send();
+$kernel->handle($request)
+       ->send();
