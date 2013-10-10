@@ -394,9 +394,9 @@ class Kernel implements HttpKernelInterface
      *
      * @return string The container class
      */
-    protected function getContainerClass()
+    protected function getContainerClass($nameSuffix = null)
     {
-        return $this->name . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+        return $this->name . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
     /**
