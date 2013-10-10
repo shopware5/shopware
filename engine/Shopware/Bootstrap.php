@@ -48,38 +48,18 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     /**
      * Run application method
      *
+     * @deprecated 4.2 Dispatching is done in \Shopware\Kernel::handle()
      * @return mixed
      */
     public function run()
     {
-        $app = $this->Application();
-        $loader = $app->Loader();
-
-
-        $hookOptions = $app->getOption('hook');
-        $proxyDir = rtrim(realpath($hookOptions['proxyDir']), '\\/') . DIRECTORY_SEPARATOR;
-        $classMap = $proxyDir . 'ClassMap_' . \Shopware::REVISION . '.php';
-
-        $loader->readClassMap($classMap);
-
-        // @TODO custom httpCache modification do not work anymore after Kernel integration
-        if (($config = $app->getOption('httpCache')) !== null && !empty($config['enabled'])) {
-            $loader->registerNamespace('Symfony', 'Symfony/');
-            $kernel = new HttpKernel($app);
-            $cache = new AppCache($kernel, $config);
-            $cache->handle(Request::createFromGlobals())
-                  ->send();
-        } else {
-            /** @var $front Enlight_Controller_Front */
-            $front = $this->getResource('Front');
-            $front->Response()->setHeader(
-                'Content-Type',
-                'text/html; charset=' . $front->getParam('charset')
-            );
-            $front->dispatch();
-        }
-
-        $loader->saveClassMap($classMap);
+        /** @var $front Enlight_Controller_Front */
+        $front = $this->getResource('Front');
+        $front->Response()->setHeader(
+            'Content-Type',
+            'text/html; charset=' . $front->getParam('charset')
+        );
+        $front->dispatch();
     }
 
     /**
