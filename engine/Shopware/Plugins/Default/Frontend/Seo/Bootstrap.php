@@ -114,12 +114,29 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $controller = $request->getControllerName();
 
+        if ($request->getQuery('sViewport') === 'supplier' || $request->getQuery('controller') === 'supplier') {
+            $alias = $this->sGetQueryAliasList();
+
+            if(array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
+                unset($queryBlacklist[$index]);
+            }
+            if($index = array_search('sSupplier', $queryBlacklist, true)) {
+                unset($queryBlacklist[$index]);
+            }
+
+            $queryBlacklist[] = 'sCategory';
+            if(array_key_exists('sCategory', $alias)) {
+                $queryBlacklist[] = $alias['sCategory'];
+            }
+        }
+
         if (!empty($controllerBlacklist) && in_array($controller, $controllerBlacklist)) {
             $metaRobots = 'noindex,follow';
         } elseif (!empty($queryBlacklist)) {
             foreach ($queryBlacklist as $queryKey) {
                 if ($request->getQuery($queryKey) !== null) {
                     $metaRobots = 'noindex,follow';
+                    break;
                 }
             }
         }
@@ -132,6 +149,23 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
+    }
+
+    /**
+     * Returns the query alias list as an array.
+     *
+     * @return array
+     */
+    public function sGetQueryAliasList()
+    {
+        $sQueryAliasList = array();
+        if (!empty(Shopware()->Config()->SeoQueryAlias)) {
+            foreach (explode(',', Shopware()->Config()->SeoQueryAlias) as $alias) {
+                list($key, $value) = explode('=', trim($alias));
+                $sQueryAliasList[$key] = $value;
+            }
+        }
+        return $sQueryAliasList;
     }
 
     /**

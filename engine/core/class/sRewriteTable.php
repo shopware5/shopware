@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Shop;
+
 /**
  * Deprecated Shopware Class that handles url rewrites
  *
@@ -65,6 +67,11 @@ class sRewriteTable
      */
     protected $preparedUpdate = null;
 
+    /**
+     * Translation handler.
+     * @var Shopware_Components_Translation
+     */
+    private $translator;
 
     /**
      * Prepared insert PDOStatement for the s_core_rewrite_urls table.
@@ -189,7 +196,6 @@ class sRewriteTable
      */
     public function sCreateRewriteTable($last_update)
     {
-
         $this->baseSetup();
 
         $this->sCreateRewriteTableCleanup();
@@ -199,6 +205,7 @@ class sRewriteTable
         $this->sCreateRewriteTableCampaigns();
         $last_update = $this->sCreateRewriteTableArticles($last_update);
         $this->sCreateRewriteTableContent();
+        $this->sCreateRewriteTableSuppliers(Shopware()->Shop());
 
         return $last_update;
     }
@@ -260,6 +267,16 @@ class sRewriteTable
 			ON a.id = REPLACE(ru.org_path, 'sViewport=detail&sArticle=', '')
 			WHERE ru.org_path LIKE 'sViewport=detail&sArticle=%'
 			AND a.id IS NULL
+		";
+        $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+
+        // delete all non-existing suppliers
+        $sql = "
+            DELETE ru FROM s_core_rewrite_urls ru
+            LEFT JOIN s_articles a
+			ON a.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
+            WHERE ru.org_path LIKE 'sViewport=supplier&sSupplier=%'
+            AND a.id IS NULL
 		";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
     }
@@ -445,6 +462,47 @@ class sRewriteTable
     }
 
     /**
+     * @return \Shopware_Components_Translation
+     */
+    private function getTranslator()
+    {
+        if (null === $this->translator) {
+            $this->translator = new Shopware_Components_Translation();
+        }
+
+        return $this->translator;
+    }
+
+    /**
+     * Create rewrite rules for suppliers
+     */
+    public function sCreateRewriteTableSuppliers(Shop $shop, $offset = null, $limit = null)
+    {
+        if (empty($this->sSYSTEM->sCONFIG['sSEOSUPPLIER']) || $this->sSYSTEM->sCONFIG['sSEOSUPPLIER'] === false) {
+            return;
+        }
+
+        $suppliers = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier')->getFriendlyUrlSuppliersQuery($offset, $limit)->getArrayResult();
+
+        foreach ($suppliers as $supplier) {
+            $path = $supplier['name'];
+
+            if(!$shop->getDefault())
+            {
+                $translation = $this->getTranslator()->read($shop->getId(), 'supplier', $supplier['id']);
+                $path = array_key_exists('name', $translation)?$translation['name']:null;
+            }
+            if($path)
+            {
+                $path = $this->sCleanupPath($path.'/', false);
+
+                $org_path = 'sViewport=supplier&sSupplier=' . $supplier['id'];
+                $this->sInsertUrl($org_path, $path);
+            }
+        }
+    }
+
+    /**
      * Create emotion rewrite rules
      */
     public function sCreateRewriteTableCampaigns($offset=null, $limit=null)
@@ -543,13 +601,11 @@ class sRewriteTable
         }
         $update = $this->getPreparedUpdate();
 
-
         $update->execute(array(
             $org_path,
             $path,
             Shopware()->Shop()->getId()
         ));
-
 
         $insert = $this->getPreparedInsert();
         $insert->execute(array(
