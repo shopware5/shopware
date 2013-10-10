@@ -162,7 +162,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request->setPathInfo();
 
         if (($host = $request->getHeader('X_FORWARDED_HOST')) !== null
-            && $host === $shop->getSecureHost()
+            && $host === $shop->getSecureHost() && $shop->getSecure() == true
         ) {
             $request->setSecure();
             $request->setBasePath($shop->getSecureBasePath());
