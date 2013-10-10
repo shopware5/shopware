@@ -27,7 +27,6 @@ use Shopware\Components\HttpCache\HttpKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- *
  * Shopware Application
  *
  * @category  Shopware
