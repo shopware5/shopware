@@ -22,9 +22,14 @@ class ServiceDefinition {
      * @param       $xmlPath
      * @param       $alias
      * @param array $config
+     *
+     * @throws \Exception
      */
-    public function __construct($xmlPath, $alias, array $config)
+    public function __construct($xmlPath, $alias = null, array $config = null)
     {
+        if (!empty($config) && empty($alias)) {
+            throw new \Exception('The passed service configuration requires a configuration alias.');
+        }
         $this->alias = $alias;
         $this->config = $config;
         $this->xmlPath = $xmlPath;

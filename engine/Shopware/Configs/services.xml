@@ -123,13 +123,11 @@
                  class="Shopware\DependencyInjection\Bridge\Models">
 
             <argument type="service" id="model_config" />
-            <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
             <argument type="service" id="loader" />
             <argument type="service" id="events" />
             <argument type="service" id="db" />
-
-            <!--TODO Inject new resource loader-->
             <argument type="service" id="resource_loader" />
+            <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
             <argument>%kernel.root_dir%</argument>
         </service>
 
