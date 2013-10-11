@@ -69,6 +69,11 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     protected $resourceStatus = array();
 
     /**
+     * @var Enlight_Components_ResourceLoader
+     */
+    protected $resourceLoader;
+
+    /**
      * Instance of the enlight application.
      *
      * @var Enlight_Application
@@ -84,6 +89,9 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     public function __construct(Enlight_Application $application)
     {
         $this->setApplication($application);
+
+        $this->resourceLoader = $application->Container();
+
         parent::__construct();
     }
 
@@ -120,6 +128,44 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
         $front = $this->getResource('Front');
 
         return $front->dispatch();
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasInit($name)
+    {
+        return method_exists($this, $this->buildInitName($name));
+    }
+
+    /**
+     * Wrapper function to call the protected init*-Functions.
+     * Only $caller-instances of Enlight_Components_ResourceLoader is allowed to call.
+     *
+     * @param string $name
+     * @param $caller
+     * @return mixed
+     * @throws
+     */
+    public function callInit($name, $caller)
+    {
+        if (!($caller instanceof Enlight_Components_ResourceLoader)) {
+            throw \Exception("TODO");
+        }
+
+        $methodName = $this->buildInitName($name);
+
+        return $this->$methodName();
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    protected function buildInitName($name)
+    {
+        return 'init' . ucfirst($name);
     }
 
     /**
@@ -207,16 +253,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function registerResource($name, $resource)
     {
-        $this->resourceList[$name] = $resource;
-        $this->resourceStatus[$name] = self::STATUS_ASSIGNED;
-        $this->Application()->Events()->notify(
-            'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
-                'subject' => $this,
-                'resource' => $resource
-            )
-        );
-
-        return $this;
+        return $this->resourceLoader->registerResource($name, $resource);
     }
 
     /**
@@ -227,7 +264,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function hasResource($name)
     {
-        return isset($this->resourceList[$name]) || $this->loadResource($name);
+        return $this->resourceLoader->hasResource($name);
     }
 
     /**
@@ -239,7 +276,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function issetResource($name)
     {
-        return isset($this->resourceList[$name]);
+        return $this->resourceLoader->issetResource($name);
     }
 
     /**
@@ -252,14 +289,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function getResource($name)
     {
-        if (!isset($this->resourceStatus[$name])) {
-            $this->loadResource($name);
-        }
-        if ($this->resourceStatus[$name] === self::STATUS_NOT_FOUND) {
-            throw new Enlight_Exception('Resource "' . $name . '" not found failure');
-        }
-
-        return $this->resourceList[$name];
+        return $this->resourceLoader->getResource($name);
     }
 
     /**
@@ -278,52 +308,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function loadResource($name)
     {
-        if (isset($this->resourceStatus[$name])) {
-            switch ($this->resourceStatus[$name]) {
-                case self::STATUS_BOOTSTRAP:
-                    throw new Enlight_Exception('Resource "' . $name . '" can\'t resolve all dependencies');
-                case self::STATUS_NOT_FOUND:
-                    return false;
-                case self::STATUS_ASSIGNED:
-                case self::STATUS_LOADED:
-                    return true;
-                default:
-                    break;
-            }
-        }
-
-        $container = $this->Application()->Container();
-
-        try {
-            $this->resourceStatus[$name] = self::STATUS_BOOTSTRAP;
-
-            $event = $this->Application()->Events()->notifyUntil(
-                'Enlight_Bootstrap_InitResource_' . $name, array('subject' => $this)
-            );
-
-            if ($event) {
-                $this->resourceList[$name] = $event->getReturn();
-            } elseif (method_exists($this, 'init' . $name)) {
-                $this->resourceList[$name] = call_user_func(array($this, 'init' . $name));
-            } elseif ($container->has($name)) {
-                $this->resourceList[$name] = $container->get($name);
-            }
-
-            $this->Application()->Events()->notify(
-                'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this)
-            );
-        } catch (Exception $e) {
-            $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
-            throw $e;
-        }
-
-        if (isset($this->resourceList[$name]) && $this->resourceList[$name] !== null) {
-            $this->resourceStatus[$name] = self::STATUS_LOADED;
-            return true;
-        } else {
-            $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
-            return false;
-        }
+        return $this->resourceLoader->loadResource($name);
     }
 
     /**
@@ -335,12 +320,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function resetResource($name)
     {
-        if (isset($this->resourceList[$name])) {
-            unset($this->resourceList[$name]);
-            unset($this->resourceStatus[$name]);
-        }
-
-        return $this;
+        return $this->resourceLoader->resetResource($name);
     }
 
     /**
@@ -352,6 +332,6 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function __call($name, $arguments = null)
     {
-        return $this->getResource($name);
+        return $this->resourceLoader->getResource($name);
     }
 }

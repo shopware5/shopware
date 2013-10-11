@@ -348,9 +348,11 @@ class Enlight_Application
      */
     public function Bootstrap()
     {
+
         if (!$this->_bootstrap) {
             $class = $this->App() . '_Bootstrap';
             $this->_bootstrap = Enlight_Class::Instance($class, array($this));
+
         }
         return $this->_bootstrap;
     }

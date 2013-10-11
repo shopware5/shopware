@@ -44,8 +44,7 @@ class Shopware extends Enlight_Application
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
     protected $oldPath = null;
-    protected $container;
-    protected $pluginContainer;
+    protected $resourceLoader;
 
     /**
      * Constructor method
@@ -53,9 +52,9 @@ class Shopware extends Enlight_Application
      * @param string $environment
      * @param mixed $options
      */
-    public function __construct($environment = 'production', array $options, Container $container)
+    public function __construct($environment = 'production', array $options, \Enlight_Components_ResourceLoader $resourceLoader)
     {
-        $this->container = $container;
+        $this->resourceLoader = $resourceLoader;
 
         Shopware($this);
 
@@ -63,7 +62,14 @@ class Shopware extends Enlight_Application
             $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
         }
 
+
+        error_reporting(-1);
+        ini_set('display_errors', true);
+
         parent::__construct($environment, $options);
+
+        //$this->resourceLoader->setBootstrap($this->Bootstrap());
+        //$this->resourceLoader->setEventManager($this->Events());
     }
 
     /**
@@ -93,23 +99,13 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Assigns dependency injection container for plugins
-     *
-     * @param ContainerInterface $container
-     */
-    public function setPluginContainer(ContainerInterface $container)
-    {
-        $this->pluginContainer = $container;
-    }
-
-    /**
      * Returns injection container
      *
-     * @return ContainerInterface
+     * @return \Enlight_Components_ResourceLoader
      */
-    public function Container()
+    public function ResourceLoader()
     {
-        return $this->container;
+        return $this->resourceLoader;
     }
 
     /**

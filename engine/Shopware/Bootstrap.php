@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\HttpCache\AppCache;
 use Shopware\Components\HttpCache\HttpKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -71,7 +70,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @throws Exception
      * @return Enlight_Controller_Front
      */
-    protected function initFront()
+    public function initFront()
     {
         $front = parent::initFront();
 
@@ -94,7 +93,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Template_Manager
      */
-    protected function initTemplate()
+    public function initTemplate()
     {
         $template = parent::initTemplate();
 
@@ -124,7 +123,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Components_Session_Namespace
      */
-    protected function initSession()
+    public function initSession()
     {
         $sessionOptions = $this->Application()->getOption('session', array());
 
@@ -172,7 +171,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Zend_Mail_Transport_Abstract
      */
-    protected function initMailTransport()
+    public function initMailTransport()
     {
         $options = Shopware()->getOption('mail') ? Shopware()->getOption('mail') : array();
         $config = $this->getResource('Config');
@@ -251,7 +250,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Components_Mail
      */
-    protected function initMail()
+    public function initMail()
     {
         if (!$this->loadResource('Config') || !$this->loadResource('MailTransport')) {
             return null;
@@ -278,12 +277,13 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Components_Snippet_Manager|null
      */
-    protected function initSnippets()
+    public function initSnippets()
     {
         //@TODO logic has to be done in service definition
         if (!$this->issetResource('Db')) {
             return null;
         }
+
         return $this->getContainerService('snippets');
     }
 
@@ -292,7 +292,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Controller_Router
      */
-    protected function initRouter()
+    public function initRouter()
     {
         /** @var $front Enlight_Controller_Front */
         $front = $this->getResource('Front');
@@ -305,7 +305,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Shopware_Components_Subscriber
      */
-    protected function initSubscriber()
+    public function initSubscriber()
     {
         if (!$this->issetResource('Db')) {
             return null;
@@ -319,7 +319,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Plugin_PluginManager
      */
-    protected function initPlugins()
+    public function initPlugins()
     {
         $this->loadResource('Table');
 
@@ -352,7 +352,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Zend_Locale
      */
-    protected function initLocale()
+    public function initLocale()
     {
         $locale = 'de_DE';
         if ($this->hasResource('Shop')) {
@@ -367,7 +367,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Zend_Currency
      */
-    protected function initCurrency()
+    public function initCurrency()
     {
         $currency = 'EUR';
         if ($this->hasResource('Shop')) {
@@ -382,7 +382,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Zend_Date
      */
-    protected function initDate()
+    public function initDate()
     {
         return new Zend_Date($this->getResource('Locale'));
     }
@@ -392,7 +392,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return bool
      */
-    protected function initTable()
+    public function initTable()
     {
         Zend_Db_Table_Abstract::setDefaultAdapter($this->getResource('Db'));
         Zend_Db_Table_Abstract::setDefaultMetadataCache($this->getResource('Cache'));
@@ -467,6 +467,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     private function getContainerService($name)
     {
-        return $this->Application()->Container()->get($name);
+        return stdClass;
+
+        return $this->Application()->ResourceLoader()->getService($name);
     }
 }

@@ -32,7 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -51,7 +50,7 @@ use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 class Kernel implements HttpKernelInterface
 {
     /**
-     * @var Shopware
+     * @var \Shopware
      */
     protected $shopware;
 
@@ -70,6 +69,8 @@ class Kernel implements HttpKernelInterface
      * @var Container
      */
     protected $pluginContainer;
+
+    protected $resourceLoader;
 
     /**
      * Enables the debug mode
@@ -119,6 +120,7 @@ class Kernel implements HttpKernelInterface
         }
 
         $front = $this->getShopware()->Front();
+
         $front->returnResponse(true);
         $front->throwExceptions(!$catch);
 
@@ -177,12 +179,12 @@ class Kernel implements HttpKernelInterface
 
         $this->initializeConfig();
         $this->initializeContainer();
+        $this->initializeResourceLoader();
         $this->initializeShopware();
         $this->getContainer()->set('application', $this->shopware);
         $this->shopware->boot();
 
         $this->initializePluginContainer();
-
         $this->getShopware()->setPluginContainer($this->pluginContainer);
 
         $this->booted = true;
@@ -215,8 +217,14 @@ class Kernel implements HttpKernelInterface
         $this->shopware = new \Shopware(
             $this->environment,
             $this->getConfig(),
-            $this->getContainer()
+            $this->resourceLoader
         );
+    }
+
+    protected function initializeResourceLoader()
+    {
+        $this->resourceLoader = new \Enlight_Components_ResourceLoader($this->getContainer());
+        //$this->getContainer()->set('resource_loader', $this->resourceLoader);
     }
 
     /**
@@ -437,12 +445,12 @@ class Kernel implements HttpKernelInterface
         $container->addObjectResource($this);
 
         $this->addShopwareConfig($container, 'shopware.', $this->config);
-        $this->addContainerExtensions($container);
+        $this->addPluginContainerExtensions($container);
 
         return $container;
     }
 
-    public function addContainerExtensions(ContainerBuilder $container)
+    public function addPluginContainerExtensions(ContainerBuilder $container)
     {
         $this->getShopware()->Front();
 
