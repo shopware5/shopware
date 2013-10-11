@@ -277,12 +277,4 @@ class Enlight_Event_EventManager extends Enlight_Class
         $this->listeners = array();
         return $this;
     }
-
-    /**
-     * @param \Enlight_Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
 }

@@ -30,6 +30,7 @@ $customConfig = array_merge(array(
     ),
     'hook' => array(),
     'model' => array(),
+    'config' => array(),
     'custom' => array(),
     'backendSession' => array(),
 ), $customConfig);
@@ -52,6 +53,7 @@ return array_merge($customConfig, array(
         'showException' => true,
         'charset' => 'utf-8'
     ), $customConfig['front']),
+    'config' => array_merge(array(), $customConfig['config']),
     'template' => array_merge(array(
         'compileCheck' => true,
         'compileLocking' => true,
