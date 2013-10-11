@@ -156,7 +156,7 @@ class Models
 
         // Create new shopware event subscriber to handle the entity lifecycle events.
         $lifeCycleSubscriber = new EventSubscriber(
-            $this->$eventManager
+            $this->eventManager
         );
         $eventManager->addEventSubscriber($lifeCycleSubscriber);
 
