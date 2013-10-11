@@ -24,6 +24,7 @@
 
 namespace Shopware;
 
+use Shopware\DependencyInjection\ServiceDefinition;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
@@ -443,15 +444,26 @@ class Kernel implements HttpKernelInterface
         $this->getShopware()->Front();
 
         $collection = array();
+
+        //throw event to collect all plugin container service definitions.
         $collection = $this->shopware->Events()->filter(
             'Shopware_Plugin_Container_Add_Services',
             $collection,
             array()
         );
 
-        foreach ($collection as $absolutePath) {
-            $loader = new XmlFileLoader($container, new FileLocator(dirname($absolutePath)));
-            $loader->load(basename($absolutePath));
+        /**@var $service ServiceDefinition*/
+        foreach ($collection as $service) {
+            if (!$service instanceof ServiceDefinition) {
+                throw new \Exception('Some plugin tries to add a service without using the \Shopware\DependencyInjection\Service class');
+            }
+
+            if ($service->getConfig()) {
+                $this->addShopwareConfig($container, $service->getAlias(), $service->getConfig());
+            }
+
+            $loader = new XmlFileLoader($container, new FileLocator(dirname($service->getXmlPath())));
+            $loader->load(basename($service->getXmlPath()));
         }
     }
 }
