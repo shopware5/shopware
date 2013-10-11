@@ -469,7 +469,7 @@ class Kernel implements HttpKernelInterface
         /**@var $service ServiceDefinition*/
         foreach ($collection as $service) {
             if (!$service instanceof ServiceDefinition) {
-                throw new \Exception('Some plugin tries to add a service without using the \Shopware\DependencyInjection\Service class');
+                throw new \Exception('Some plugin tries to add a service without using the \Shopware\DependencyInjection\ServiceDefinition class');
             }
 
             if ($service->getConfig()) {

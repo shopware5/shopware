@@ -17,8 +17,24 @@ use Shopware\Models\Order\OrderHistorySubscriber;
 class Models
 {
 
+    /**
+     * Contains the shopware model configuration
+     * @var Configuration
+     */
     protected $config;
+
+    /**
+     * Paths to the doctrine entities.
+     * @var
+     */
     protected $modelPath;
+
+    /**
+     * Contains the current application auto loader.
+     * Used to register additional namespaces
+     *
+     * @var \Enlight_Loader
+     */
     protected $loader;
     protected $eventManager;
     protected $db;
@@ -27,11 +43,11 @@ class Models
 
     public function __construct(
         Configuration $config,
-        $modelPath,
         \Enlight_Loader $loader,
         \Enlight_Event_EventManager $eventManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        $resourceLoader,
+        \Enlight_Components_ResourceLoader $resourceLoader,
+        $modelPath,
         $kernelRootDir
     ) {
         $this->config = $config;
