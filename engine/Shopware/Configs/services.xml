@@ -129,7 +129,7 @@
             <argument type="service" id="db" />
 
             <!--TODO Inject new resource loader-->
-            <argument type="service" id="application" />
+            <argument type="service" id="resource_loader" />
             <argument>%kernel.root_dir%</argument>
         </service>
 

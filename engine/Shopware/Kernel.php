@@ -227,7 +227,7 @@ class Kernel implements HttpKernelInterface
     protected function initializeResourceLoader()
     {
         $this->resourceLoader = new \Enlight_Components_ResourceLoader($this->getContainer());
-        //$this->getContainer()->set('resource_loader', $this->resourceLoader);
+        $this->getContainer()->set('resource_loader', $this->resourceLoader);
     }
 
     /**

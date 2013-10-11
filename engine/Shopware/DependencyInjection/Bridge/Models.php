@@ -50,7 +50,7 @@ class Models
             'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
         );
 
-        // register symfony validation annotions
+        // register symfony validation annotations
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
             realpath($this->kernelRootDir . '/vendor/symfony/validator')
@@ -78,7 +78,7 @@ class Models
         $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
         $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
 
-        $this->resourceLoader->Bootstrap()->registerResource('ModelAnnotations', $annotationDriver);
+        $this->resourceLoader->registerResource('ModelAnnotations', $annotationDriver);
 
         $this->config->setMetadataDriverImpl($driverChain);
 
@@ -93,8 +93,7 @@ class Models
 
         $categorySubscriber = new CategorySubscriber();
 
-        //TODO Use the new resource loader
-        $this->resourceLoader->Bootstrap()->registerResource('CategorySubscriber', $categorySubscriber);
+        $this->resourceLoader->registerResource('CategorySubscriber', $categorySubscriber);
         $eventManager->addEventSubscriber($categorySubscriber);
 
         $eventManager->addEventSubscriber(new OrderHistorySubscriber());
@@ -103,8 +102,7 @@ class Models
             $this->db->getConnection()
         );
 
-        //TODO Use the new resource loader
-        $this->resourceLoader->Bootstrap()->registerResource('CategoryDenormalization', $categoryDenormalization);
+        $this->resourceLoader->registerResource('CategoryDenormalization', $categoryDenormalization);
 
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
