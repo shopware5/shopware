@@ -328,7 +328,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('services.xml');
         $loader->load('twig.xml');
 
-        $this->addShopwareConfig($container, 'shopware.', $this->config);
+        $this->addShopwareConfig($container, 'shopware', $this->config);
 
         return $container;
     }
@@ -344,10 +344,10 @@ class Kernel implements HttpKernelInterface
     protected function addShopwareConfig(Container $container, $alias, $options)
     {
         foreach ($options as $key => $option) {
-            $container->setParameter($alias . $key, $option);
+            $container->setParameter($alias . '.' . $key, $option);
 
             if (is_array($option)) {
-                $this->addShopwareConfig($container, $alias . $key . '.' , $option);
+                $this->addShopwareConfig($container, $alias . '.' . $key, $option);
             }
         }
 
@@ -447,7 +447,7 @@ class Kernel implements HttpKernelInterface
         $container = $this->getContainerBuilder();
         $container->addObjectResource($this);
 
-        $this->addShopwareConfig($container, 'shopware.', $this->config);
+        $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addPluginContainerExtensions($container);
 
         return $container;
