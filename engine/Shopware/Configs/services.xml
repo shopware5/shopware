@@ -111,12 +111,10 @@
             <argument type="service" id="hooks" />
         </service>
 
-
         <service id="model_config"
                  class="Shopware\Components\Model\Configuration"
                  factory-service="modelConfig_factory"
                  factory-method="factory" />
-
 
 
         <service id="model_factory"
