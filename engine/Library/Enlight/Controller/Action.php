@@ -360,44 +360,4 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         return parent::__call($name, $value);
     }
-
-    /**
-     * @return mixed
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * @param mixed $container
-     */
-    public function setContainer($container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected function getDb()
-    {
-        return $this->getContainer()->get('db');
-    }
-
-    /**
-     * @return \Shopware\Components\Model\ModelManager
-     */
-    protected function getModelManager()
-    {
-        return Enlight()->Models();
-    }
-
-    /**
-     * @return Enlight_Event_EventManager
-     */
-    protected function getEventManager()
-    {
-        return Enlight()->Events();
-    }
 }

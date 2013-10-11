@@ -62,14 +62,8 @@ class Shopware extends Enlight_Application
             $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
         }
 
-
-        error_reporting(-1);
-        ini_set('display_errors', true);
-
         parent::__construct($environment, $options);
 
-        //$this->resourceLoader->setBootstrap($this->Bootstrap());
-        //$this->resourceLoader->setEventManager($this->Events());
     }
 
     /**

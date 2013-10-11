@@ -467,8 +467,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     private function getContainerService($name)
     {
-        return stdClass;
-
         return $this->Application()->ResourceLoader()->getService($name);
     }
 }

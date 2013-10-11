@@ -506,7 +506,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         /** @var $controller Enlight_Controller_Action */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
-        $controller->setContainer(Enlight()->Container());
 
         $action = $this->getActionMethod($request);
 

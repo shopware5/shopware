@@ -90,7 +90,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     {
         $this->setApplication($application);
 
-        $this->resourceLoader = $application->Container();
+        $this->resourceLoader = $application->ResourceLoader();
 
         parent::__construct();
     }

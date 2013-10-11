@@ -130,6 +130,7 @@
 
             <!--TODO Inject new resource loader-->
             <argument type="service" id="application" />
+            <argument>%kernel.root_dir%</argument>
         </service>
 
 
