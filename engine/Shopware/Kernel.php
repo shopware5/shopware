@@ -178,6 +178,9 @@ class Kernel implements HttpKernelInterface
         $this->initializeConfig();
         $this->initializeContainer();
         $this->initializeShopware();
+        $this->getContainer()->set('application', $this->shopware);
+        $this->shopware->boot();
+
         $this->initializePluginContainer();
 
         $this->getShopware()->setPluginContainer($this->pluginContainer);

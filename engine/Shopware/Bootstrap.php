@@ -407,10 +407,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initDoctrine()
     {
-        $this->Application()->Loader()
-            ->registerNamespace('Doctrine', 'Doctrine/')
-            ->registerNamespace('Symfony', 'Symfony/');
-
         return true;
     }
 
@@ -421,21 +417,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initModelConfig()
     {
-        $this->loadResource('Doctrine');
-
-        $config = new Shopware\Components\Model\Configuration(
-            $this->Application()->getOption('Model')
-        );
-
-        if ($config->getMetadataCacheImpl() === null) {
-            $cacheResource = $this->Application()->Cache();
-            $config->setCacheResource($cacheResource);
-        }
-
-        $hookManager = $this->Application()->Hooks();
-        $config->setHookManager($hookManager);
-
-        return $config;
+        return $this->getContainerService('model_config');
     }
 
     /**
@@ -457,92 +439,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initModels()
     {
-        /** @var $config \Shopware\Components\Model\Configuration */
-        $config = $this->getResource('ModelConfig');
-
-        // register standard doctrine annotations
-        Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
-            'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-        );
-
-        // register symfony validation annotions
-        Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint',
-            realpath(__DIR__ . '/../../vendor/symfony/validator')
-        );
-
-        $cachedAnnotationReader = $config->getAnnotationsReader();
-
-        $annotationDriver = new Doctrine\ORM\Mapping\Driver\AnnotationDriver(
-            $cachedAnnotationReader,
-            array(
-                $this->Application()->AppPath('Models'),
-                $config->getAttributeDir(),
-            )
-        );
-
-        $this->Application()->Loader()->registerNamespace(
-            'Shopware\Models\Attribute',
-            $config->getAttributeDir()
-        );
-
-        // create a driver chain for metadata reading
-        $driverChain = new Doctrine\ORM\Mapping\Driver\DriverChain();
-
-        // register annotation driver for our application
-        $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
-        $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
-
-        $this->registerResource('ModelAnnotations', $annotationDriver);
-
-        $config->setMetadataDriverImpl($driverChain);
-
-        // Create event Manager
-        $eventManager = new \Doctrine\Common\EventManager();
-
-        // Create new shopware event subscriber to handle the entity lifecycle events.
-        $lifeCycleSubscriber = new \Shopware\Components\Model\EventSubscriber(
-            $this->Application()->Events()
-        );
-        $eventManager->addEventSubscriber($lifeCycleSubscriber);
-
-        $categorySubscriber = new \Shopware\Components\Model\CategorySubscriber();
-        $this->registerResource('CategorySubscriber', $categorySubscriber);
-        $eventManager->addEventSubscriber($categorySubscriber);
-
-        $eventManager->addEventSubscriber(new \Shopware\Models\Order\OrderHistorySubscriber());
-
-        $categoryDenormalization = new \Shopware\Components\Model\CategoryDenormalization($this->Application()->Db()->getConnection());
-        $this->registerResource('CategoryDenormalization', $categoryDenormalization);
-
-        // now create the entity manager and use the connection
-        // settings we defined in our application.ini
-        $conn = \Doctrine\DBAL\DriverManager::getConnection(
-            array('pdo' => $this->Application()->Db()->getConnection()),
-            $config,
-            $eventManager
-        );
-
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
-
-        $entityManager = Shopware\Components\Model\ModelManager::create($conn, $config, $eventManager);
-
-        \Doctrine\ORM\Proxy\Autoloader::register(
-            $config->getProxyDir(),
-            $config->getProxyNamespace(),
-            function ($proxyDir, $proxyNamespace, $className) use ($entityManager) {
-                if (0 === stripos($className, $proxyNamespace)) {
-                    $fileName = str_replace('\\', '', substr($className, strlen($proxyNamespace) + 1));
-                    if (!is_file($fileName)) {
-                        $classMetadata = $entityManager->getClassMetadata($className);
-                        $entityManager->getProxyFactory()->generateProxyClasses(array($classMetadata), $proxyDir);
-                    }
-                }
-            }
-        );
-
-        return $entityManager;
+        return $this->getContainerService('models');
     }
 
     /**

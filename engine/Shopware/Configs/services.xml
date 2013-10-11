@@ -9,17 +9,16 @@
         <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
         <parameter key="shopware.cache_factory.class">Shopware\DependencyInjection\Bridge\Cache</parameter>
         <parameter key="shopware.config_factory.class">Shopware\DependencyInjection\Bridge\Config</parameter>
-        <parameter key="shopware.event_manager.class">Enlight_Event_EventManager</parameter>
-        <parameter key="shopware.hook_manager.class">Enlight_Hook_HookManager</parameter>
-        <parameter key="shopware.plugin_manager.class">Enlight_Plugin_PluginManager</parameter>
+        <parameter key="shopware.model_factory.class">Shopware\DependencyInjection\Bridge\Models</parameter>
     </parameters>
 
     <services>
+        <service id="application" synthetic="true" />
+        <service id="loader" class="Enlight_Loader" />
+        <service id="resource_loader" synthetic="true" />
+
         <service id="snippets" class="%shopware.snippet_manager.class%"/>
         <service id="subscriber" class="%shopware.subscriber.class%"/>
-        <service id="plugins" class="%shopware.plugin_manager.class%" />
-        <service id="hooks"   class="%shopware.hook_manager.class%" />
-        <service id="events"  class="%shopware.event_manager.class%" />
 
         <service id="monoglog.handler.streamhandler" class="Monolog\Handler\StreamHandler" public="false">
             <argument>%kernel.root_dir%/logs/default.log</argument>
@@ -80,6 +79,63 @@
         <service id="config"
                  class="Shopware_Components_Config"
                  factory-service="config_factory"
+                 factory-method="factory" />
+
+
+        <service id="plugins"
+                 class="Enlight_Plugin_PluginManager">
+
+            <argument type="service" id="application" />
+        </service>
+
+        <service id="events"
+                 class="Enlight_Event_EventManager">
+
+            <argument type="service" id="application" />
+        </service>
+
+        <service id="hooks"
+                 class="Enlight_Hook_HookManager">
+
+            <argument type="service" id="application" />
+            <argument>%shopware.hook%</argument>
+        </service>
+
+
+
+        <service id="model_config_factory"
+                 class="Shopware\DependencyInjection\Bridge\ModelConfig">
+
+            <argument>%shopware.Model%</argument>
+            <argument type="service" id="cache" />
+            <argument type="service" id="hooks" />
+        </service>
+
+
+        <service id="model_config"
+                 class="Shopware\Components\Model\Configuration"
+                 factory-service="modelConfig_factory"
+                 factory-method="factory" />
+
+
+
+        <service id="model_factory"
+                 class="Shopware\DependencyInjection\Bridge\Models">
+
+            <argument type="service" id="model_config" />
+            <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
+            <argument type="service" id="loader" />
+            <argument type="service" id="events" />
+            <argument type="service" id="db" />
+
+            <!--TODO Inject new resource loader-->
+            <argument type="service" id="application" />
+        </service>
+
+
+        <service id="models"
+                 class="Shopware\Components\Model\ModelManager"
+                 factory-service="model_factory"
                  factory-method="factory" />
 
     </services>
