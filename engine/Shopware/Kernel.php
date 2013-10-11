@@ -70,6 +70,9 @@ class Kernel implements HttpKernelInterface
      */
     protected $pluginContainer;
 
+    /**
+     * @var \Enlight_Components_ResourceLoader
+     */
     protected $resourceLoader;
 
     /**
@@ -185,7 +188,7 @@ class Kernel implements HttpKernelInterface
         $this->shopware->boot();
 
         $this->initializePluginContainer();
-        $this->getShopware()->setPluginContainer($this->pluginContainer);
+        $this->resourceLoader->setPluginContainer($this->pluginContainer);
 
         $this->booted = true;
     }

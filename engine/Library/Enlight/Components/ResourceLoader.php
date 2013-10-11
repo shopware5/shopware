@@ -110,7 +110,7 @@ class Enlight_Components_ResourceLoader
 
     public function get($name)
     {
-        $this->getResource($name);
+        return $this->getResource($name);
     }
 
     /**
@@ -214,7 +214,6 @@ class Enlight_Components_ResourceLoader
 
         try {
             $this->resourceStatus[$name] = self::STATUS_BOOTSTRAP;
-
             $event = false;
             if ($this->eventManager) {
                 $event = $this->eventManager->notifyUntil(

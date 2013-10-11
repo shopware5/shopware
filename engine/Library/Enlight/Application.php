@@ -148,7 +148,7 @@ class Enlight_Application
             require_once('Enlight/Loader.php');
         }
 
-        $this->_loader = $this->Container()->get('loader');
+        $this->_loader = $this->ResourceLoader()->get('loader');
 
         if (!empty($options['app'])) {
             $this->app = $options['app'];
@@ -177,9 +177,11 @@ class Enlight_Application
 
     public function boot()
     {
-        $this->_hooks = $this->Container()->get('hooks');
-        $this->_events = $this->Container()->get('events');
-        $this->_plugins = $this->Container()->get('plugins');
+        $this->_hooks = $this->ResourceLoader()->get('hooks');
+        $this->_events = $this->ResourceLoader()->get('events');
+        $this->_plugins = $this->ResourceLoader()->get('plugins');
+        $this->ResourceLoader()->setBootstrap($this->Bootstrap());
+        $this->ResourceLoader()->setEventManager($this->_events);
     }
 
     /**
@@ -348,7 +350,6 @@ class Enlight_Application
      */
     public function Bootstrap()
     {
-
         if (!$this->_bootstrap) {
             $class = $this->App() . '_Bootstrap';
             $this->_bootstrap = Enlight_Class::Instance($class, array($this));

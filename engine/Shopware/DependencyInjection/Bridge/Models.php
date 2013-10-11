@@ -23,6 +23,7 @@ class Models
     protected $eventManager;
     protected $db;
     protected $resourceLoader;
+    protected $kernelRootDir;
 
     public function __construct(
         Configuration $config,
@@ -30,7 +31,8 @@ class Models
         \Enlight_Loader $loader,
         \Enlight_Event_EventManager $eventManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        $resourceLoader
+        $resourceLoader,
+        $kernelRootDir
     ) {
         $this->config = $config;
         $this->modelPath = $modelPath;
@@ -38,6 +40,7 @@ class Models
         $this->eventManager = $eventManager;
         $this->db = $db;
         $this->resourceLoader = $resourceLoader;
+        $this->kernelRootDir = $kernelRootDir;
     }
 
     public function factory()
@@ -50,7 +53,7 @@ class Models
         // register symfony validation annotions
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            realpath(__DIR__ . '/../../vendor/symfony/validator')
+            realpath($this->kernelRootDir . '/vendor/symfony/validator')
         );
 
         $cachedAnnotationReader = $this->config->getAnnotationsReader();
