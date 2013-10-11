@@ -190,7 +190,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? ('?' . $i) : null);
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':filterParam' . $i) : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
@@ -199,7 +199,7 @@ class QueryBuilder extends BaseQueryBuilder
             }
 
             if ($where !== null) {
-                $this->setParameter($i, $where);
+                $this->setParameter('filterParam' . $i, $where);
                 ++$i;
             }
         }
