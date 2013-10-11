@@ -63,8 +63,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     protected $controller_name;
 
-    protected $container;
-
 
     /**
      * The Enlight_Controller_Action class constructor expects an instance of the
