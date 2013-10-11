@@ -14,9 +14,16 @@ use Shopware\Components\Model\EventSubscriber;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\OrderHistorySubscriber;
 
+/**
+ * Wrapper service class for the doctrine entity manager.
+ * The factory function creates the new instance of the entity manager.
+ * The class constructor injects all required components and services
+ * which required for the entity manager.
+ *
+ * @package Shopware\DependencyInjection\Bridge
+ */
 class Models
 {
-
     /**
      * Contains the shopware model configuration
      * @var Configuration
@@ -36,11 +43,53 @@ class Models
      * @var \Enlight_Loader
      */
     protected $loader;
+
+    /**
+     * Contains the application event manager which is used
+     * to inject it into the doctrine event manager.
+     *
+     * @var \Enlight_Event_EventManager
+     */
     protected $eventManager;
+
+    /**
+     * Contains the current application database pdo adapter.
+     * This adapter is injected into the doctrine environment for the
+     * database connection of doctrine processes.
+     *
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     protected $db;
+
+    /**
+     * Instance of the application resource loader.
+     * The loader is used to load resources or to add dynamically
+     * new resource at runtime.
+     * The model service class use it to add the shopware specified
+     * doctrine event subscribers like the CategoryDenormalization.
+     *
+     * @var \Enlight_Components_ResourceLoader
+     */
     protected $resourceLoader;
+
+    /**
+     * Contains the directory path of the shopware installation.
+     *
+     * @var string
+     */
     protected $kernelRootDir;
 
+    /**
+     * Injects all required components.
+     *
+     * @param Configuration                            $config
+     * @param \Enlight_Loader                          $loader
+     * @param \Enlight_Event_EventManager              $eventManager
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param \Enlight_Components_ResourceLoader       $resourceLoader
+     * @param                                          $modelPath
+     * @param                                          $kernelRootDir
+     */
     public function __construct(
         Configuration $config,
         \Enlight_Loader $loader,
@@ -59,6 +108,10 @@ class Models
         $this->kernelRootDir = $kernelRootDir;
     }
 
+    /**
+     * Creates the entity manager for the application.
+     * @return ModelManager
+     */
     public function factory()
     {
         // register standard doctrine annotations

@@ -2,10 +2,28 @@
 
 namespace Shopware\DependencyInjection\Bridge;
 
+use Shopware\Components\Model\Configuration;
+
 class ModelConfig
 {
+    /**
+     * @var array
+     */
     protected $option;
+
+    /**
+     * Current instance of the application cache layer.
+     *
+     * @var \Zend_Cache_Core
+     */
     protected $cache;
+
+    /**
+     * Instance of the application hook manager.
+     * Used to make the doctrine repositories hookable.
+     *
+     * @var \Enlight_Hook_HookManager
+     */
     protected $hookManager;
 
     public function __construct($option, \Zend_Cache_Core $cache, \Enlight_Hook_HookManager $hookManager)
@@ -17,7 +35,7 @@ class ModelConfig
 
     public function factory()
     {
-        $config = new \Shopware\Components\Model\Configuration(
+        $config = new Configuration(
             $this->option
         );
 
