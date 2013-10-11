@@ -148,8 +148,7 @@ class Enlight_Application
             require_once('Enlight/Loader.php');
         }
 
-        $this->_loader = new Enlight_Loader();
-        $this->_loader->registerNamespace('Enlight', 'Enlight/');
+        $this->_loader = $this->Container()->get('loader');
 
         if (!empty($options['app'])) {
             $this->app = $options['app'];
@@ -174,10 +173,13 @@ class Enlight_Application
         $this->_loader->registerNamespace($this->App(), $this->AppPath());
 
         $this->setOptions($options);
+    }
 
-        $this->_hooks = new Enlight_Hook_HookManager($this, $this->getOption('hook'));
-        $this->_events = new Enlight_Event_EventManager($this);
-        $this->_plugins = new Enlight_Plugin_PluginManager($this);
+    public function boot()
+    {
+        $this->_hooks = $this->Container()->get('hooks');
+        $this->_events = $this->Container()->get('events');
+        $this->_plugins = $this->Container()->get('plugins');
     }
 
     /**
