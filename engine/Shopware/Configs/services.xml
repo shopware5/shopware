@@ -81,7 +81,6 @@
                  factory-service="config_factory"
                  factory-method="factory" />
 
-
         <service id="plugins"
                  class="Enlight_Plugin_PluginManager">
 
@@ -101,8 +100,6 @@
             <argument>%shopware.hook%</argument>
         </service>
 
-
-
         <service id="model_config_factory"
                  class="Shopware\DependencyInjection\Bridge\ModelConfig">
 
@@ -116,7 +113,6 @@
                  factory-service="modelConfig_factory"
                  factory-method="factory" />
 
-
         <service id="model_factory"
                  class="Shopware\DependencyInjection\Bridge\Models">
 
@@ -128,7 +124,6 @@
             <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
             <argument>%kernel.root_dir%</argument>
         </service>
-
 
         <service id="models"
                  class="Shopware\Components\Model\ModelManager"
