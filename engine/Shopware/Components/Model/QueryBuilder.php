@@ -200,7 +200,6 @@ class QueryBuilder extends BaseQueryBuilder
 
             if ($where !== null) {
                 $this->setParameter($paramenterKey, $where);
-                ++$i;
             }
         }
 
