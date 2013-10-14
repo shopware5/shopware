@@ -20,6 +20,7 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
+use Shopware\Components\ResourceLoader;
 
 /**
  * The Enlight_Bootstrap is responsible to manage the application resources.
@@ -116,8 +117,8 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
      */
     public function callInit($name, $caller)
     {
-        if (!($caller instanceof Enlight_Components_ResourceLoader)) {
-            throw \Exception("Only instances of Enlight_Components_ResourceLoader are allowed to use callInit()");
+        if (!($caller instanceof ResourceLoader)) {
+            throw new \Exception("Only instances of Enlight_Components_ResourceLoader are allowed to use callInit()");
         }
 
         $methodName = $this->buildInitName($name);
