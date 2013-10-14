@@ -35,40 +35,6 @@
 abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
 {
     /**
-     * Constant for the bootstrap status, set before the resource is initialed
-     */
-    const STATUS_BOOTSTRAP = 0;
-
-    /**
-     * Constant for the bootstrap status, set after the resource is successfully initialed
-     */
-    const STATUS_LOADED = 1;
-
-    /**
-     * Constant for the bootstrap status, set if an exception is thrown by the initialisation
-     */
-    const STATUS_NOT_FOUND = 2;
-
-    /**
-     * Constant for the bootstrap status, set when the resource is registered.
-     */
-    const STATUS_ASSIGNED = 3;
-
-    /**
-     * Property which contains all registered resources
-     *
-     * @var array
-     */
-    protected $resourceList = array();
-
-    /**
-     * Property which contains all states for the registered resources.
-     *
-     * @var array
-     */
-    protected $resourceStatus = array();
-
-    /**
      * @var Enlight_Components_ResourceLoader
      */
     protected $resourceLoader;
@@ -141,7 +107,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
 
     /**
      * Wrapper function to call the protected init*-Functions.
-     * Only $caller-instances of Enlight_Components_ResourceLoader is allowed to call.
+     * Only $caller-instances of Enlight_Components_ResourceLoader are allowed to call.
      *
      * @param string $name
      * @param $caller
@@ -151,7 +117,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     public function callInit($name, $caller)
     {
         if (!($caller instanceof Enlight_Components_ResourceLoader)) {
-            throw \Exception("TODO");
+            throw \Exception("Only instances of Enlight_Components_ResourceLoader are allowed to use callInit()");
         }
 
         $methodName = $this->buildInitName($name);
