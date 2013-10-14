@@ -21,6 +21,28 @@ class Shopware_Tests_Components_Model_QueryBuilderTest extends PHPUnit_Framework
     /**
      *
      */
+    public function testAddFilterBehavior()
+    {
+        $this->querybuilder->setParameters(array('foo' => 'far'));
+        $this->querybuilder->addFilter(array('yoo' => 'yar', 'bar' => 'boo'));
+        $this->querybuilder->addFilter(array('yaa' => 'yaa', 'baa' => 'baa'));
+
+        $result = $this->querybuilder->getParameters()->toArray();
+
+        $expectedResult = array(
+            new \Doctrine\ORM\Query\Parameter('foo', 'far'),
+            new \Doctrine\ORM\Query\Parameter('yoo', 'yar'),
+            new \Doctrine\ORM\Query\Parameter('bar', 'boo'),
+            new \Doctrine\ORM\Query\Parameter('yaa', 'yaa'),
+            new \Doctrine\ORM\Query\Parameter('baa', 'baa'),
+        );
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     *
+     */
     public function testEnsureOldDoctrineSetParametersBehavior()
     {
         $this->querybuilder->setParameters(array('foo' => 'bar'));
