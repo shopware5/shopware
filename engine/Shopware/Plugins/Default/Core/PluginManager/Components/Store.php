@@ -306,8 +306,9 @@ class CommunityStore
     {
         $target = Shopware()->AppPath('Plugins_' . $source);
 
-        if (!$this->isPluginDirectoryWritable($target, true)) {
-            throw new Enlight_Exception("A directory or a file in ". $target ." is not writable, please change the permissions recursively");
+        $error = null; // Variable to store error information
+        if (!$this->isPluginDirectoryWritable($target, true, $error)) {
+            throw new Enlight_Exception($error ." is not writable, please change the permissions of ". $target ." recursively");
         }
         $filter = new Zend_Filter_Decompress(array(
             'adapter' => 'Zip',
@@ -894,10 +895,11 @@ class CommunityStore
      *
      * @param $directory | the directory in which the permissions are checked
      * @param bool $recursive | if true, the directory will be checked recursively
+     * @param string $error | filled with the path which was not writable in case of an error
      *
      * @return bool
      */
-    protected function isPluginDirectoryWritable($directory, $recursive = false)
+    protected function isPluginDirectoryWritable($directory, $recursive = false, &$error = false)
     {
         if (!$recursive) {
             return is_writable($directory);
@@ -909,6 +911,10 @@ class CommunityStore
 
             foreach ($iterator as $path) {
                 if (!is_writable($path->__toString())) {
+                    if ($error !== false) {
+                        $error = $path->getRealPath();
+                    }
+
                     return false;
                 }
             }
