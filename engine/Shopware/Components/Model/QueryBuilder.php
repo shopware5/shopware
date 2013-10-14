@@ -148,7 +148,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addFilter(array $filter)
     {
-        $i = 0;
+        $i = 1;
         foreach ($filter as $exprKey => $where) {
             if (is_object($where)) {
                 $this->andWhere($where);
@@ -190,7 +190,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':filterParam' . $i) : null);
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':' . $exprKey) : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
@@ -199,7 +199,7 @@ class QueryBuilder extends BaseQueryBuilder
             }
 
             if ($where !== null) {
-                $this->setParameter('filterParam' . $i, $where);
+                $this->setParameter($exprKey, $where);
                 ++$i;
             }
         }
