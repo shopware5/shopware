@@ -44,6 +44,10 @@ class Shopware extends Enlight_Application
     protected $app     = 'Shopware';
     protected $appPath = 'engine/Shopware/';
     protected $oldPath = null;
+
+    /**
+     * @var Shopware\Components\ResourceLoader
+     */
     protected $resourceLoader;
 
     /**
@@ -52,7 +56,7 @@ class Shopware extends Enlight_Application
      * @param string $environment
      * @param mixed $options
      */
-    public function __construct($environment = 'production', array $options, \Enlight_Components_ResourceLoader $resourceLoader)
+    public function __construct($environment = 'production', array $options, \Shopware\Components\ResourceLoader $resourceLoader)
     {
         $this->resourceLoader = $resourceLoader;
 
@@ -62,9 +66,24 @@ class Shopware extends Enlight_Application
             $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
         }
 
-        parent::__construct($environment, $options);
-
+        parent::__construct($environment, $options, $resourceLoader->getService('loader'));
     }
+
+    /**
+     * Boots all required components for the shopware application like
+     * event, plugin and hook manager.
+     * Override from the Enlight_Application to use the
+     * new resource loader to initials the components.
+     */
+    public function boot()
+    {
+        $this->_hooks = $this->ResourceLoader()->get('hooks');
+        $this->_events = $this->ResourceLoader()->get('events');
+        $this->_plugins = $this->ResourceLoader()->get('plugins');
+        $this->ResourceLoader()->setBootstrap($this->Bootstrap());
+        $this->ResourceLoader()->setEventManager($this->_events);
+    }
+
 
     /**
      * Returns old path
@@ -95,7 +114,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns injection container
      *
-     * @return \Enlight_Components_ResourceLoader
+     * @return \Shopware\Components\ResourceLoader
      */
     public function ResourceLoader()
     {

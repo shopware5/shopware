@@ -26,6 +26,7 @@ namespace Shopware;
 
 use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
+use Shopware\Components\ResourceLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
@@ -72,7 +73,7 @@ class Kernel implements HttpKernelInterface
     protected $pluginContainer;
 
     /**
-     * @var \Enlight_Components_ResourceLoader
+     * @var ResourceLoader
      */
     protected $resourceLoader;
 
@@ -227,7 +228,7 @@ class Kernel implements HttpKernelInterface
 
     protected function initializeResourceLoader()
     {
-        $this->resourceLoader = new \Enlight_Components_ResourceLoader($this->getContainer());
+        $this->resourceLoader = new ResourceLoader($this->getContainer());
         $this->getContainer()->set('resource_loader', $this->resourceLoader);
     }
 

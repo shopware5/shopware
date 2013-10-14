@@ -12,6 +12,7 @@ use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\EventSubscriber;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ResourceLoader;
 use Shopware\Models\Order\OrderHistorySubscriber;
 
 /**
@@ -68,7 +69,7 @@ class Models
      * The model service class use it to add the shopware specified
      * doctrine event subscribers like the CategoryDenormalization.
      *
-     * @var \Enlight_Components_ResourceLoader
+     * @var ResourceLoader
      */
     protected $resourceLoader;
 
@@ -86,7 +87,7 @@ class Models
      * @param \Enlight_Loader                          $loader
      * @param \Enlight_Event_EventManager              $eventManager
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param \Enlight_Components_ResourceLoader       $resourceLoader
+     * @param ResourceLoader      $resourceLoader
      * @param                                          $modelPath
      * @param                                          $kernelRootDir
      */
@@ -95,7 +96,7 @@ class Models
         \Enlight_Loader $loader,
         \Enlight_Event_EventManager $eventManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        \Enlight_Components_ResourceLoader $resourceLoader,
+        ResourceLoader $resourceLoader,
         $modelPath,
         $kernelRootDir
     ) {
