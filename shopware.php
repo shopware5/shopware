@@ -87,7 +87,6 @@ require 'vendor/autoload.php';
 require 'Enlight/Application.php';
 require 'Shopware/Application.php';
 require 'Shopware/Kernel.php';
-require 'Shopware/ConfigLoader.php';
 
 use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
