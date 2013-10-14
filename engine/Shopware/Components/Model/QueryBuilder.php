@@ -168,7 +168,7 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $paramenterKey = str_replace(array('.'), array('_') , $exprKey);
+            $parameterKey = str_replace(array('.'), array('_') , $exprKey);
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
@@ -190,7 +190,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':' . $paramenterKey) : null);
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':' . $parameterKey) : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
@@ -199,7 +199,7 @@ class QueryBuilder extends BaseQueryBuilder
             }
 
             if ($where !== null) {
-                $this->setParameter($paramenterKey, $where);
+                $this->setParameter($parameterKey, $where);
             }
         }
 
