@@ -53,16 +53,6 @@ Ext.define('Shopware.store.Association', {
     pageSize: 20,
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -160,6 +150,16 @@ Ext.define('Shopware.store.Association', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Helper function to get config access.
      * @param prop string
      * @returns mixed
@@ -183,7 +183,6 @@ Ext.define('Shopware.store.Association', {
         me.extraParams = config.extraParams;
         me._opts = me.statics().getDisplayConfig(config, this);
 
-
         return me.callParent(config);
     },
 
@@ -199,9 +198,7 @@ Ext.define('Shopware.store.Association', {
             operation,
             proxy;
 
-        if (!me.getConfig('controller')) {
-            me.throwException(me.$className + ": Reload not available. Please configure the store `controller` property.");
-        }
+        me.checkRequirements();
 
         //create dynamically proxy to prevent a defined reader in the association store.
         //if an reader would be defined, the record data can't be read.
@@ -235,6 +232,17 @@ Ext.define('Shopware.store.Association', {
         }
         
         return me;
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!me.getConfig('controller')) {
+            me.throwException(me.$className + ": Reload not available. Please configure the store `controller` property.");
+        }
     }
 });
 //{/block}

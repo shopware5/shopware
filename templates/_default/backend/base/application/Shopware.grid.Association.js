@@ -37,16 +37,6 @@ Ext.define('Shopware.grid.Association', {
     searchComboBox: undefined,
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -231,6 +221,16 @@ Ext.define('Shopware.grid.Association', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Helper function to get config access.
      *
      * @param prop string
@@ -255,6 +255,23 @@ Ext.define('Shopware.grid.Association', {
             return me._opts;
         };
         me.callParent(args);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!(me.store instanceof Ext.data.Store)) {
+            me.throwException(me.$className + ": Component requires a configured store, which has to been passed in the class constructor.");
+        }
+        if (me.alias.length <= 0) {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-grid-association') {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
     },
 
     /**

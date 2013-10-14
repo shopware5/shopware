@@ -68,16 +68,6 @@ Ext.define('Shopware.filter.Field', {
     field: undefined,
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -147,6 +137,16 @@ Ext.define('Shopware.filter.Field', {
             me.displayConfig[prop] = val;
             return true;
         }
+    },
+
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
     },
 
     /**

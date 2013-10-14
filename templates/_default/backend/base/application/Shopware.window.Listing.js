@@ -74,17 +74,6 @@ Ext.define('Shopware.window.Listing', {
      */
     gridPanel: undefined,
 
-
-    /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
@@ -229,6 +218,15 @@ Ext.define('Shopware.window.Listing', {
         }
     },
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
 
     /**
      * Class constructor which merges the different configurations.
@@ -268,6 +266,8 @@ Ext.define('Shopware.window.Listing', {
     initComponent: function () {
         var me = this;
 
+        me.checkRequirements();
+
         me.listingStore = me.createListingStore();
         me.eventAlias = me.getConfig('eventAlias');
         if (!me.eventAlias) me.eventAlias = me.getEventAlias(me.listingStore.model.$className);
@@ -281,6 +281,26 @@ Ext.define('Shopware.window.Listing', {
         me.fireEvent(me.eventAlias + '-after-init-component', me);
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (me.alias.length <= 0) {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-window-listing') {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (!me.getConfig('listingGrid')) {
+            me.throwException(me.$className + ": Component requires the configured `listingGrid` property in the configure() function.");
+        }
+        if (!me.getConfig('listingStore')) {
+            me.throwException(me.$className + ": Component requires the configured `listingStore` property in the configure() function.");
+        }
     },
 
     /**
@@ -352,10 +372,6 @@ Ext.define('Shopware.window.Listing', {
     createListingStore: function() {
         var me = this;
 
-        if (!me.getConfig('listingStore')) {
-            me.throwException(me.$className + ": Component requires the configured `listingStore` property in the configure() function.");
-        }
-
         return Ext.create(this.getConfig('listingStore'));
     },
 
@@ -401,10 +417,6 @@ Ext.define('Shopware.window.Listing', {
         var me = this;
 
         me.listingStore.load();
-
-        if (!me.getConfig('listingGrid')) {
-            me.throwException(me.$className + ": Component requires the configured `listingGrid` property in the configure() function.");
-        }
 
         me.gridPanel = Ext.create(me.getConfig('listingGrid'), {
             store: me.listingStore,
