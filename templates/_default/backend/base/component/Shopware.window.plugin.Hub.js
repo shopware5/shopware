@@ -251,7 +251,7 @@ Ext.define('Shopware.window.plugin.Hud', {
 			 */
 			getDragData: function(event) {
 				var source = event.getTarget(view.itemSelector, 10), d, element = Ext.get(source),
-                    id;
+                    id, attr, i;
 
                 var proxy = view.dragZone.proxy;
                 if(!proxy.getEl().hasCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')) {
@@ -261,6 +261,17 @@ Ext.define('Shopware.window.plugin.Hud', {
 				if(!source || !element) { return false; }
 
                 id = ~~(1 * element.getAttribute('data-componentId'));
+
+                if(!id) {
+                    for(i in element.dom.attributes) {
+                        attr = element.dom.attributes[i];
+                        if(attr.name == 'data-componentid') {
+                            id = parseInt(attr.value, 10);
+                            break;
+                        }
+                    }
+                }
+
 				d = source.cloneNode(true);
 				d.id = Ext.id();
 

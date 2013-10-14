@@ -279,7 +279,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function refreshReferer($request)
     {
-        $referer = $request->getHeader('Referer', $request->getParam('referer'));
+        $referer = $request->getParam('referer');
         $partner = $request->getParam('partner', $request->getParam('sPartner'));
 
         if (empty($referer)
