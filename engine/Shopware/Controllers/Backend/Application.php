@@ -1083,7 +1083,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function formatSearchValue($value, array $field)
     {
+
         switch ($field['type']) {
+            case 'boolean':
+                break;
             case 'date':
             case 'datetime':
                 //validates the date value. If the value is no date value, return

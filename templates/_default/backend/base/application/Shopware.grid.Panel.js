@@ -1142,7 +1142,7 @@ Ext.define('Shopware.grid.Panel', {
 
         column.xtype = 'gridcolumn';
         column.dataIndex = field.name;
-        column.header = me.camelCaseToWord(field.name);
+        column.header = me.getHumanReadableWord(field.name);
         column.flex = 1;
 
         var fieldAssociation = me.getFieldAssociation(field.name);

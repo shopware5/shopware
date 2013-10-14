@@ -695,6 +695,7 @@ Ext.define('Shopware.window.Progress', {
 
             return false;
         }
+        if (!current.hasOwnProperty('totalCount')) current.totalCount = current.data.length;
 
         //get next record of the data array of the current task.
         record = current.data.shift();
@@ -732,14 +733,18 @@ Ext.define('Shopware.window.Progress', {
          *
          */
         me.fireEvent(current.event, current, record, function(result, operation) {
+            //no result grid configured? Continue with next operation.
+            if (!me.getConfig('displayResultGrid')) {
+                //recursive call!
+                me.sequentialProcess(current, tasks);
+            }
 
-            if (me.getConfig('displayResultGrid')) {
-                me.resultStore.add(
-                    me.createResponseRecord(operation)
-                );
-                if (!operation.wasSuccessful()) {
-                    me.resultFieldSet.expand();
-                }
+            var responseRecord = me.createResponseRecord(result, operation);
+            me.resultStore.add(responseRecord);
+
+            //if the data operation wasn't successfully, expand the result grid
+            if (!responseRecord.get('success')) {
+                me.resultFieldSet.expand();
             }
 
             //recursive call!
@@ -772,11 +777,49 @@ Ext.define('Shopware.window.Progress', {
      * @param { Ext.data.Operation } operation - The request operation.
      * @returns { Shopware.model.DataOperation }
      */
-    createResponseRecord: function(operation) {
+    createResponseRecord: function(result, operation) {
+        var success = false, error = '', request, data = { };
+
+        if (Ext.isObject(result) && result.hasOwnProperty('responseText')) {
+            data = Ext.decode(result.responseText);
+        }
+
+        //check where the success property is set.
+        if (data.hasOwnProperty('success')) {
+            success = data.success;
+
+        } else if (Ext.isObject(operation) && operation.hasOwnProperty('wasSuccessful')) {
+            success = operation.wasSuccessful();
+
+        } else if (Ext.isObject(operation) && operation.hasOwnProperty('success')) {
+            success = operation.success;
+
+        } else if (Ext.isObject(result) && result.hasOwnProperty('success')) {
+            success = result.success;
+
+        } else if (Ext.isObject(result) && result.hasOwnProperty('status')) {
+            success = (result.status === 200);
+
+        }
+
+        if (data.hasOwnProperty('error')) {
+            error = data.error;
+        } else if (Ext.isObject(operation) && operation.hasOwnProperty('getError')) {
+            error = operation.getError();
+        } else if (Ext.isObject(operation) && operation.hasOwnProperty('error')) {
+            error = operation.error;
+        }
+
+        if (Ext.isObject(operation) && operation.hasOwnProperty('request')) {
+            request = operation.request;
+        } else if (Ext.isObject(result) && result.hasOwnProperty('request')) {
+            request = result.request;
+        }
+
         return Ext.create('Shopware.model.DataOperation', {
-            success: operation.wasSuccessful(),
-            error: operation.getError(),
-            request: operation.request,
+            success: success,
+            error: error,
+            request: request,
             operation: operation
         });
     },
@@ -814,19 +857,36 @@ Ext.define('Shopware.window.Progress', {
     requestRenderer: function(value, metaData, record) {
         var me = this, operation, propertyValue,
             params = [], requestRecord,
+            url,
             properties = me.getConfig('outputProperties');
 
         operation = record.get('operation');
-        requestRecord = operation.getRecords();
-        requestRecord = requestRecord[0];
 
-        params.push('<strong>url</strong> = ' + value.url);
-        Ext.each(properties, function(property) {
-            propertyValue = requestRecord.get(property);
-            if (propertyValue) {
-                params.push('<strong>' + property + '</strong> = ' + propertyValue);
-            }
-        });
+        //check if the passed operation contains an offset of records
+        if (Ext.isObject(operation) && operation.hasOwnProperty('getRecords')) {
+            requestRecord = operation.getRecords();
+            requestRecord = requestRecord[0];
+        }
+
+        //check which object contains the request url.
+        if (Ext.isObject(value) && value.hasOwnProperty('url')) {
+            url = value.url;
+        } else if (Ext.isObject(value)
+            && value.hasOwnProperty('options')
+            && value.options.hasOwnProperty('url')) {
+            url = value.options.url;
+        }
+
+        params.push('<strong>url</strong> = ' + url);
+        //if we have a record, we can show the configured properties.
+        if (requestRecord) {
+            Ext.each(properties, function(property) {
+                propertyValue = requestRecord.get(property);
+                if (propertyValue) {
+                    params.push('<strong>' + property + '</strong> = ' + propertyValue);
+                }
+            });
+        }
 
         return params.join('<br>');
     }

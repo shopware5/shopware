@@ -44,7 +44,7 @@ Ext.define('Shopware.model.Helper', {
     },
 
     /**
-     * Helper function to convert a camel case word into a human readable
+     * Helper function to convert a camel case word into a normal
      * word.
      *
      * @param { String} word
@@ -58,6 +58,20 @@ Ext.define('Shopware.model.Helper', {
         }).join(' ');
 
         return newWord.charAt(0).toUpperCase() + newWord.slice(1);
+    },
+
+    /**
+     * Helper function which creates a human readable field name.
+     * This function use the camelCaseToWord function and additionally
+     * removes the " id" suffix of foreign keys.
+     *
+     * @param word
+     * @returns { String }
+     */
+    getHumanReadableWord: function(word) {
+        word = this.camelCaseToWord(word);
+        word = word.replace(' id', '');
+        return word;
     },
 
     /**
