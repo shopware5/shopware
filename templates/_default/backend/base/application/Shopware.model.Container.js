@@ -876,7 +876,7 @@ Ext.define('Shopware.model.Container', {
         }
 
         //convert the model field name to a human readable word
-        formField.fieldLabel = me.camelCaseToWord(field.name);
+        formField.fieldLabel =  me.getHumanReadableWord(field.name);
 
         //check if the field is configured as association field.
         var fieldAssociation = me.getFieldAssociation(field.name);
