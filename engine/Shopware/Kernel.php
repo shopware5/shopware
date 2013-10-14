@@ -420,7 +420,8 @@ class Kernel implements HttpKernelInterface
      */
     protected function getContainerClass($nameSuffix = null)
     {
-        return $this->name . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+
+        return $this->name . \Shopware::REVISION . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
     /**
