@@ -23,7 +23,7 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-database, build-config, build-cache-dir" />
+    <target name="build-unit" depends="build-composer-install, build-database, build-config, build-cache-dir" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
@@ -65,6 +65,34 @@
             <entry  key="app.path"    value="${user.app.path}"/>
             <entry  key="app.host"    value="${user.app.host}"/>
         </propertyfile>
+    </target>
+
+    <target name="build-composer-install">
+        <exec executable="bash">
+            <arg value="-c" />
+            <arg value="curl -s http://getcomposer.org/installer | php" />
+        </exec>
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="install" />
+            <arg value="--no-interaction" />
+            <arg value="--optimize-autoloader" />
+        </exec>
+    </target>
+    <target name="build-composer-update">
+        <echo message="Self-updating composer" level="debug"/>
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="self-update" />
+            <arg value="--no-interaction" />
+        </exec>
+        <echo message="composer self-update complete" level="debug"/>
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="update" />
+            <arg value="--no-interaction" />
+            <arg value="--optimize-autoloader" />
+        </exec>
     </target>
 
     <target name="build-database">
