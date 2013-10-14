@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware\Components\ResourceLoader;
 
 /**
  * Shopware Application
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware extends Enlight_Application
 {
@@ -54,9 +50,10 @@ class Shopware extends Enlight_Application
      * Constructor method
      *
      * @param string $environment
-     * @param mixed $options
+     * @param array $options
+     * @param ResourceLoader $resourceLoader
      */
-    public function __construct($environment = 'production', array $options, \Shopware\Components\ResourceLoader $resourceLoader)
+    public function __construct($environment, array $options, ResourceLoader $resourceLoader)
     {
         $this->resourceLoader = $resourceLoader;
 
@@ -114,7 +111,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns injection container
      *
-     * @return \Shopware\Components\ResourceLoader
+     * @return ResourceLoader
      */
     public function ResourceLoader()
     {

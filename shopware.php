@@ -84,7 +84,6 @@ set_include_path(
 
 // include composer autoloader
 require 'vendor/autoload.php';
-require 'Enlight/Application.php';
 require 'Shopware/Application.php';
 require 'Shopware/Kernel.php';
 

@@ -33,11 +33,8 @@ set_include_path(
 );
 
 require 'vendor/autoload.php';
-
-include_once 'Enlight/Application.php';
 include_once 'Shopware/Application.php';
 include_once 'Shopware/Kernel.php';
-include_once 'Shopware/ConfigLoader.php';
 
 /**
  * Shopware Test Helper
@@ -66,23 +63,6 @@ class TestHelper extends Shopware
         $this->oldPath = realpath(__DIR__ . '/../../') . '/';
 
         parent::__construct('testing', $config, $container);
-
-        $this->Bootstrap()->loadResource('Zend');
-        $this->Bootstrap()->loadResource('Cache');
-        $this->Bootstrap()->loadResource('Db');
-        $this->Bootstrap()->loadResource('Table');
-        $this->Bootstrap()->loadResource('Plugins');
-
-        $this->Bootstrap()->Models()->generateAttributeModels();
-
-        $this->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
-
-        /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $this->Bootstrap()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $shop = $repository->getActiveDefault();
-        $shop->registerResources($this->Bootstrap());
-
-        $_SERVER['HTTP_HOST'] = $shop->getHost();
     }
 
     /**
@@ -109,7 +89,7 @@ class TestKernel extends \Shopware\Kernel
         $this->shopware = new \TestHelper(
             $this->environment,
             $this->getConfig(),
-            $this->getContainer()
+            $this->resourceLoader
         );
     }
 
@@ -125,6 +105,24 @@ class TestKernel extends \Shopware\Kernel
     {
         $kernel = new self('testing', true);
         $kernel->boot();
+
+        $shopwareBootstrap = $kernel->getShopware()->Bootstrap();
+
+        $shopwareBootstrap->loadResource('Zend');
+        $shopwareBootstrap->loadResource('Cache');
+        $shopwareBootstrap->loadResource('Db');
+        $shopwareBootstrap->loadResource('Table');
+        $shopwareBootstrap->loadResource('Plugins');
+
+        $shopwareBootstrap->Models()->generateAttributeModels();
+        $shopwareBootstrap->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+
+        /** @var $repository \Shopware\Models\Shop\Repository */
+        $repository = $shopwareBootstrap->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shop = $repository->getActiveDefault();
+        $shop->registerResources($shopwareBootstrap);
+
+        $_SERVER['HTTP_HOST'] = $shop->getHost();
     }
 }
 

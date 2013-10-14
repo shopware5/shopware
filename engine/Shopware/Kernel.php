@@ -186,6 +186,7 @@ class Kernel implements HttpKernelInterface
         $this->initializeContainer();
         $this->initializeResourceLoader();
         $this->initializeShopware();
+
         $this->getContainer()->set('application', $this->shopware);
         $this->shopware->boot();
 
@@ -397,7 +398,7 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
-     * @return Shopware
+     * @return \Shopware
      */
     protected function getShopware()
     {
