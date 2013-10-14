@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\DependencyInjection;
+namespace Shopware\Components\DependencyInjection;
 
 class ServiceDefinition {
     /**

@@ -24,7 +24,8 @@
 
 namespace Shopware;
 
-use Shopware\DependencyInjection\ServiceDefinition;
+use Shopware\Components\DependencyInjection\ServiceDefinition;
+use Shopware\Components\ConfigLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;

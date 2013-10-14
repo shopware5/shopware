@@ -7,9 +7,9 @@
     <parameters>
         <parameter key="shopware.snippet_manager.class">Shopware_Components_Snippet_Manager</parameter>
         <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
-        <parameter key="shopware.cache_factory.class">Shopware\DependencyInjection\Bridge\Cache</parameter>
-        <parameter key="shopware.config_factory.class">Shopware\DependencyInjection\Bridge\Config</parameter>
-        <parameter key="shopware.model_factory.class">Shopware\DependencyInjection\Bridge\Models</parameter>
+        <parameter key="shopware.cache_factory.class">Shopware\Components\DependencyInjection\Bridge\Cache</parameter>
+        <parameter key="shopware.config_factory.class">Shopware\Components\DependencyInjection\Bridge\Config</parameter>
+        <parameter key="shopware.model_factory.class">Shopware\Components\DependencyInjection\Bridge\Models</parameter>
     </parameters>
 
     <services>
@@ -101,7 +101,7 @@
         </service>
 
         <service id="model_config_factory"
-                 class="Shopware\DependencyInjection\Bridge\ModelConfig">
+                 class="Shopware\Components\DependencyInjection\Bridge\ModelConfig">
 
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache" />
@@ -114,7 +114,7 @@
                  factory-method="factory" />
 
         <service id="model_factory"
-                 class="Shopware\DependencyInjection\Bridge\Models">
+                 class="Shopware\Components\DependencyInjection\Bridge\Models">
 
             <argument type="service" id="model_config" />
             <argument type="service" id="loader" />

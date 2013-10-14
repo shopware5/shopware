@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\DependencyInjection\Bridge;
+namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Zend_Cache_Core;
 use Zend_Locale_Data;

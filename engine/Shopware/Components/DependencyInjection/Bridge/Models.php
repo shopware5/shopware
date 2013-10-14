@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\DependencyInjection\Bridge;
+namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;

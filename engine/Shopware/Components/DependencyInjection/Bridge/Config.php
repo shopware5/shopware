@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\DependencyInjection\Bridge;
+namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware_Components_Config;

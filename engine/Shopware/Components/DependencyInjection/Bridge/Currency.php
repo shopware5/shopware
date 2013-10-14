@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\DependencyInjection\Bridge;
+namespace Shopware\Components\DependencyInjection\Bridge;
 
 class Currency
 {
