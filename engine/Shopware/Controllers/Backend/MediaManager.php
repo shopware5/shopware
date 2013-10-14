@@ -297,6 +297,40 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
     }
 
+
+    /**
+     * Controller action which allows to request the media
+     * data over a mediaId parameter or over the path property of a media model.
+     */
+    public function getMediaAction()
+    {
+        $id = $this->Request()->getParam('mediaId', null);
+        $path = $this->Request()->getParam('path', null);
+
+        if (empty($id) && empty($path)) {
+            $this->View()->assign(array('success' => false, 'error' => 'No id or path passed'));
+            return;
+        }
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('media', 'attribute'))
+               ->from('Shopware\Models\Media\Media', 'media')
+               ->leftJoin('media.attribute', 'attribute')
+               ->setMaxResults(1);
+
+        if (!empty($id)) {
+            $builder->where('media.id = :id');
+            $builder->setParameter('id', $id);
+        } else if (!empty($path)) {
+            $builder->where('media.path = :path');
+            $builder->setParameter('path', $path);
+        }
+
+        $data = $builder->getQuery()->getArrayResult();
+
+        $this->View()->assign(array('success' => true, 'data' => $data[0]));
+    }
+
     /**
      * Internal helper function to get a single media.
      * @param integer $id

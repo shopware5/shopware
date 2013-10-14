@@ -45,6 +45,7 @@
 {include file='ExtJs/overrides/Ext.MessageBox.js'}
 {include file='ExtJs/overrides/Ext.grid.RowEditor.js'}
 {include file='ExtJs/overrides/Ext.picker.Date.js'}
+{include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
@@ -60,6 +61,30 @@
 {include file='ExtJs/components/Ext.ux.RowExpander.js'}
 {include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
 {include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
+
+
+//Shopware backend application components
+{include file='backend/base/application/Shopware.model.Helper.js'}
+{include file='backend/base/application/Shopware.grid.Controller.js'}
+{include file='backend/base/application/Shopware.grid.Panel.js'}
+{include file='backend/base/application/Shopware.data.Model.js'}
+{include file='backend/base/application/Shopware.store.Listing.js'}
+{include file='backend/base/application/Shopware.window.Detail.js'}
+{include file='backend/base/application/Shopware.window.Listing.js'}
+{include file='backend/base/application/Shopware.window.Progress.js'}
+{include file='backend/base/application/Shopware.model.DataOperation.js'}
+{include file='backend/base/application/Shopware.grid.Association.js'}
+{include file='backend/base/application/Shopware.model.Container.js'}
+{include file='backend/base/application/Shopware.form.field.Search.js'}
+{include file='backend/base/application/Shopware.detail.Controller.js'}
+{include file='backend/base/application/Shopware.listing.InfoPanel.js'}
+{include file='backend/base/application/Shopware.listing.FilterPanel.js'}
+{include file='backend/base/application/Shopware.filter.Field.js'}
+
+{include file='backend/base/application/Shopware.store.Association.js'}
+{include file='backend/base/application/Shopware.form.field.Media.js'}
+
+
 
 {* Include global models *}
 {include file='backend/base/model/user.js'}
@@ -155,3 +180,7 @@
 {include file='backend/base/component/element/textarea.js'}
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
+
+
+
+

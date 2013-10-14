@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 4.1.3
 
+* Add configuration `Always display item short descriptions in listing views`.
 * `Shopware_Components_Plugin_Bootstrap::assertVersionGreaterThen()` is now an alias to  `Shopware_Components_Plugin_Bootstrap::assertMinimumVersion()` and returns always `true` if run on an development/git Version of Shopware
 * Added a new method `getDefault()` in `engine/Shopware/Models/Shop/Repository.php` which returns just the default shop without calling `fixActiv()`.
 * Removed the unused `downloadAction()` in `engine/Shopware/Controllers/Backend/Plugin.php`

@@ -94,7 +94,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $config['filter']['supplier'] = $config['sFilter']['supplier'] = (int)$this->Request()->sFilter_supplier;
         $config['filter']['category'] = $config['sFilter']['category'] = (int)$this->Request()->sFilter_category;
         $config['filter']['price'] = $config['sFilter']['price'] = (int)$this->Request()->sFilter_price;
-        $config['filter']['propertyGroup'] = $config['sFilter']['propertygroup'] = $this->Request()->sFilter_propertygroup;
+        $config['filter']['propertyGroup'] = $this->Request()->sFilter_propertygroup;
+        $config['filter']['propertygroup'] = $config['filter']['propertyGroup'];
+        $config['sFilter']['propertygroup']= $config['filter']['propertyGroup'];
 
         $config['sortSearchResultsBy'] = $config["sSort"] = (int)$this->Request()->sSort;
         $config['sortSearchResultsByDirection'] = (int)$this->Request()->sOrder;

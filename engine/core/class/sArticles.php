@@ -1327,7 +1327,9 @@ class sArticles
             );
 
             $articles[$articleKey]["articleName"] = $this->sOptimizeText($articles[$articleKey]["articleName"]);
-            $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
+            if (Shopware()->Config()->get('useShortDescriptionInListing')) {
+                $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
+            }
 
             // Require Pictures
             $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
@@ -3480,7 +3482,10 @@ class sArticles
 
         // Strip tags from descriptions
         $getPromotionResult["articleName"] = $this->sOptimizeText($getPromotionResult["articleName"]);
-        $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
+
+        if (Shopware()->Config()->get('useShortDescriptionInListing')) {
+            $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
+        }
 
         $getPromotionResult['sVoteAverange'] = explode('|', $getPromotionResult['sVoteAverange']);
         $getPromotionResult['sVoteAverange'] = array(
@@ -3792,7 +3797,9 @@ class sArticles
 
         // Strip tags from descriptions
         $getPromotionResult["articleName"] = $this->sOptimizeText($getPromotionResult["articleName"]);
-        $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
+        if (Shopware()->Config()->get('useShortDescriptionInListing')) {
+            $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
+        }
 
         $getPromotionResult['sVoteAverange'] = explode('|', $getPromotionResult['sVoteAverange']);
         $getPromotionResult['sVoteAverange'] = array(
