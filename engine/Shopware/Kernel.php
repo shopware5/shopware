@@ -326,7 +326,6 @@ class Kernel implements HttpKernelInterface
         $container->addObjectResource($this);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Configs/'));
         $loader->load('services.xml');
-        $loader->load('twig.xml');
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
 
