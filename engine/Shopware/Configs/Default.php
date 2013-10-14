@@ -33,6 +33,7 @@ $customConfig = array_merge(array(
     'config' => array(),
     'custom' => array(),
     'backendSession' => array(),
+    'plugins' => array()
 ), $customConfig);
 
 return array_merge($customConfig, array(
@@ -54,6 +55,7 @@ return array_merge($customConfig, array(
         'charset' => 'utf-8'
     ), $customConfig['front']),
     'config' => array_merge(array(), $customConfig['config']),
+    'plugins' => array_merge(array(), $customConfig['plugins']),
     'template' => array_merge(array(
         'compileCheck' => true,
         'compileLocking' => true,
