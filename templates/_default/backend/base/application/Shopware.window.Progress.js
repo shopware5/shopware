@@ -73,15 +73,6 @@ Ext.define('Shopware.window.Progress', {
      */
     resultFieldSet: undefined,
 
-    /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
 
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
@@ -246,6 +237,15 @@ Ext.define('Shopware.window.Progress', {
         }
     },
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
 
     /**
      * Helper function to get config access.

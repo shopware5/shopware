@@ -67,15 +67,6 @@ Ext.define('Shopware.grid.Controller', {
     mixins: {
         helper: 'Shopware.model.Helper'
     },
-    /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
 
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
@@ -211,6 +202,15 @@ Ext.define('Shopware.grid.Controller', {
         }
     },
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
 
     /**
      * Class constructor which merges the different configurations.
@@ -222,7 +222,6 @@ Ext.define('Shopware.grid.Controller', {
         me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to get config access.
@@ -250,15 +249,8 @@ Ext.define('Shopware.grid.Controller', {
         //Check configuration for extended grid controllers.
         //The class name check prevents the exception if the default components creates his own controller.
         if (me.$className !== 'Shopware.grid.Controller') {
-            if (!me.getConfig('eventAlias')) {
-                me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
-            }
-
-            if (!me.getConfig('gridClass')) {
-                me.throwException(me.$className + ": Component requires the `gridClass` property in the configure() function");
-            }
+            me.checkRequirements();
         }
-
 
         if (me.getConfig('eventAlias') && me.getConfig('gridClass')) {
             me.control(me.createControls());
@@ -271,6 +263,21 @@ Ext.define('Shopware.grid.Controller', {
     },
 
     /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!me.getConfig('eventAlias')) {
+            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
+        }
+
+        if (!me.getConfig('gridClass')) {
+            me.throwException(me.$className + ": Component requires the `gridClass` property in the configure() function");
+        }
+    },
+
+    /**
      * Helper function to reload the controller event listeners.
      * This function is used from the Shopware.window.Detail.
      * Workaround for the sub application event bus.
@@ -278,12 +285,7 @@ Ext.define('Shopware.grid.Controller', {
     reloadControls: function() {
         var me = this;
 
-        if (!me.getConfig('eventAlias')) {
-            me.throwException(me.$className + ": Component requires the `eventAlias` property in the configure() function");
-        }
-        if (!me.getConfig('gridClass')) {
-            me.throwException(me.$className + ": Component requires the `gridClass` property in the configure() function");
-        }
+        me.checkRequirements();
 
         me.control(me.createControls());
         me.registerEvents();
@@ -700,9 +702,7 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
-        if (!listing.getConfig('detailWindow')) {
-            me.throwException(listing.$className + ": Component requires the `detailWindow` property in the configure() function");
-        }
+        me.checkRequirements();
 
         window = me.createDetailWindow(
             record,
@@ -799,9 +799,7 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
-        if (!listing.getConfig('detailWindow')) {
-            me.throwException(listing.$className + ": Component requires the `detailWindow` property in the configure() function");
-        }
+        me.checkRequirements();
 
         if (me.hasModelAction(record, 'detail')) {
             record.reload({
