@@ -66,6 +66,7 @@ class Shopware extends Enlight_Application
         parent::__construct($environment, $options, $resourceLoader->getService('loader'));
     }
 
+
     /**
      * Boots all required components for the shopware application like
      * event, plugin and hook manager.
@@ -76,7 +77,8 @@ class Shopware extends Enlight_Application
     {
         $this->_hooks = $this->ResourceLoader()->get('hooks');
         $this->_events = $this->ResourceLoader()->get('events');
-        $this->_plugins = $this->ResourceLoader()->get('plugins');
+        //only initials the plugin manager class. The plugin service registers the plugins and should use in the application.
+        $this->_plugins = $this->ResourceLoader()->get('plugin_manager');
         $this->ResourceLoader()->setBootstrap($this->Bootstrap());
         $this->ResourceLoader()->setEventManager($this->_events);
     }

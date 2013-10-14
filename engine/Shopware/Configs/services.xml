@@ -81,11 +81,8 @@
                  factory-service="config_factory"
                  factory-method="factory" />
 
-        <service id="plugins"
-                 class="Enlight_Plugin_PluginManager">
 
-            <argument type="service" id="application" />
-        </service>
+
 
         <service id="events"
                  class="Enlight_Event_EventManager">
@@ -128,6 +125,31 @@
         <service id="models"
                  class="Shopware\Components\Model\ModelManager"
                  factory-service="model_factory"
+                 factory-method="factory" />
+
+
+        <!--this service creates only the plugin manager class, to use a plugin manager
+            use the "plugin" service which contains the registered plugins of shopware-->
+        <service id="plugin_manager"
+                 class="Enlight_Plugin_PluginManager">
+
+            <argument type="service" id="application" />
+        </service>
+
+        <service id="plugin_factory"
+                 class="Shopware\Components\DependencyInjection\Bridge\Plugins">
+
+            <argument>%kernel.root_dir%/engine/Shopware/Plugins</argument>
+            <argument type="service" id="cache" />
+            <argument type="service" id="events" />
+            <argument type="service" id="plugin_manager" />
+            <argument type="service" id="loader" />
+            <argument>%shopware.plugins%</argument>
+        </service>
+
+        <service id="plugins"
+                 class="Enlight_Plugin_PluginManager"
+                 factory-service="plugin_factory"
                  factory-method="factory" />
 
     </services>

@@ -36,7 +36,7 @@ use Shopware\Components\ResourceLoader;
 abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
 {
     /**
-     * @var Enlight_Components_ResourceLoader
+     * @var \Shopware\Components\ResourceLoader
      */
     protected $resourceLoader;
 
@@ -108,7 +108,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
 
     /**
      * Wrapper function to call the protected init*-Functions.
-     * Only $caller-instances of Enlight_Components_ResourceLoader are allowed to call.
+     * Only $caller-instances of \Shopware\Components\ResourceLoader are allowed to call.
      *
      * @param string $name
      * @param $caller
@@ -118,7 +118,7 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     public function callInit($name, $caller)
     {
         if (!($caller instanceof ResourceLoader)) {
-            throw new \Exception("Only instances of Enlight_Components_ResourceLoader are allowed to use callInit()");
+            throw new \Exception("Only instances of Shopware\\Components\\ResourceLoader are allowed to use callInit()");
         }
 
         $methodName = $this->buildInitName($name);

@@ -279,7 +279,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function initSnippets()
     {
-        //@TODO logic has to be done in service definition
         if (!$this->issetResource('Db')) {
             return null;
         }
@@ -323,28 +322,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     {
         $this->loadResource('Table');
 
-        $config = Shopware()->getOption('plugins', array());
-        if (!isset($config['cache'])) {
-            $config['cache'] = $this->getResource('Cache');
-        }
-        if (!isset($config['namespaces'])) {
-            $config['namespaces'] = array('Core', 'Frontend', 'Backend');
-        }
-
-        $plugins = $this->Application()->Plugins();
-        $events = $this->Application()->Events();
-        foreach ($config['namespaces'] as $namespace) {
-            $namespace = new Shopware_Components_Plugin_Namespace($namespace);
-            $plugins->registerNamespace($namespace);
-            $events->registerSubscriber($namespace->Subscriber());
-        }
-
-        $loader = $this->Application()->Loader();
-        foreach (array('Local', 'Community', 'Default', 'Commercial') as $dir) {
-            $loader->registerNamespace('Shopware_Plugins', $this->Application()->AppPath('Plugins_' . $dir));
-        }
-
-        return $plugins;
+        return $this->getContainerService('plugins');
     }
 
     /**
