@@ -129,16 +129,20 @@ class Enlight_Application
      * given options parameter.
      * After the configuration is loaded, the application name and path is taken from the config and set in the class properties.
      *
-     * @throws Exception
+     *
      * @param string $environment
-     * @param mixed $options
+     * @param mixed  $options
+     * @param        $loader
+     *
+     * @throws Exception
      */
-    public function __construct($environment, array $options)
+    public function __construct($environment, array $options, $loader)
     {
         self::$instance = $this;
         $this->environment = $environment;
         $this->path = dirname(dirname(__FILE__)) . $this->DS();
         $this->core_path = $this->path . 'Enlight' . $this->DS();
+        $this->_loader = $loader;
 
         if (!class_exists('Enlight_Class', false)) {
             require_once('Enlight/Exception.php');
@@ -147,8 +151,6 @@ class Enlight_Application
             require_once('Enlight/Class.php');
             require_once('Enlight/Loader.php');
         }
-
-        $this->_loader = $this->ResourceLoader()->get('loader');
 
         if (!empty($options['app'])) {
             $this->app = $options['app'];
@@ -177,11 +179,9 @@ class Enlight_Application
 
     public function boot()
     {
-        $this->_hooks = $this->ResourceLoader()->get('hooks');
-        $this->_events = $this->ResourceLoader()->get('events');
-        $this->_plugins = $this->ResourceLoader()->get('plugins');
-        $this->ResourceLoader()->setBootstrap($this->Bootstrap());
-        $this->ResourceLoader()->setEventManager($this->_events);
+        $this->_events = new Enlight_Event_EventManager();
+        $this->_hooks = new Enlight_Hook_HookManager($this);
+        $this->_plugins = new Enlight_Plugin_PluginManager($this);
     }
 
     /**

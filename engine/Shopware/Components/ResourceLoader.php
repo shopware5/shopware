@@ -1,11 +1,13 @@
 <?php
 
+namespace Shopware\Components;
+
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- * Class Enlight_Components_ResourceLoader
+ * Class ResourceLoader
  */
-class Enlight_Components_ResourceLoader
+class ResourceLoader
 {
     /**
      * Constant for the bootstrap status, set before the resource is initialed
@@ -72,7 +74,7 @@ class Enlight_Components_ResourceLoader
 
     /**
      * @param \Enlight_Bootstrap $bootstrap
-     * @return Enlight_Components_ResourceLoader
+     * @return \Shopware\Components\ResourceLoader
      */
     public function setBootstrap(\Enlight_Bootstrap $bootstrap)
     {
@@ -83,7 +85,7 @@ class Enlight_Components_ResourceLoader
 
     /**
      * @param \Symfony\Component\DependencyInjection\Container $container
-     * @return Enlight_Components_ResourceLoader
+     * @return \Shopware\Components\ResourceLoader
      */
     public function setPluginContainer(Container $container)
     {
@@ -94,7 +96,7 @@ class Enlight_Components_ResourceLoader
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
-     * @return Enlight_Components_ResourceLoader
+     * @return \Shopware\Components\ResourceLoader
      */
     public function setEventManager(\Enlight_Event_EventManager $eventManager)
     {
