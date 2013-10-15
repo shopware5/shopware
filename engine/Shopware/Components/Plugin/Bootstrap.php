@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Emotion\Library\Component;
+use Shopware\Models\Emotion\Library\Field;
 
 /**
  * Shopware Plugin Bootstrap
@@ -54,7 +56,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Constructor method
      *
-     * @param $name
+     * @param                     $name
      * @param Enlight_Config|null $info
      */
     public function __construct($name, $info = null)
@@ -85,6 +87,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Helper function to get access on the http cache plugin.
      * Notice if the Http Cache plugin isn't installed, this function
      * returns null.
+     *
      * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
      */
     protected function HttpCache()
@@ -95,12 +98,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return null;
         }
 
-        /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
         $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $httpCache->getId());
 
         if (!$plugin->getActive() || !$plugin->getInstalled()) {
             return null;
         }
+
         return $httpCache;
     }
 
@@ -110,6 +114,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param \Enlight_Config $currentPluginInfo
      * @param \Enlight_Config $updatePluginInfo
+     *
      * @return bool
      */
     public function hasInfoNewerVersion(Enlight_Config $updatePluginInfo, Enlight_Config $currentPluginInfo)
@@ -153,6 +158,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Update plugin method
      *
      * @param string $version
+     *
      * @return bool
      */
     public function update($version)
@@ -160,6 +166,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (empty($this->info->capabilities['update']) || empty($this->info->capabilities['install'])) {
             return false;
         }
+
         return $this->install();
     }
 
@@ -214,14 +221,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public final function Plugin()
     {
-        if($this->plugin === null) {
+        if ($this->plugin === null) {
             $repo = Shopware()->Models()->getRepository(
                 'Shopware\Models\Plugin\Plugin'
             );
-            $this->plugin = $repo->findOneBy(array(
-                'id' => $this->getId()
-            ));
+            $this->plugin = $repo->findOneBy(
+                array(
+                    'id' => $this->getId()
+                )
+            );
         }
+
         return $this->plugin;
     }
 
@@ -242,9 +252,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public final function Form()
     {
-        if(!$this->hasForm()) {
+        if (!$this->hasForm()) {
             $this->form = $this->initForm();
         }
+
         return $this->form;
     }
 
@@ -253,18 +264,23 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public final function hasForm()
     {
-        if($this->form === null && $this->getName() !== null) {
+        if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(array(
-                'name' => $this->getName()
-            ));
+            $this->form = $formRepository->findOneBy(
+                array(
+                    'name' => $this->getName()
+                )
+            );
         }
-        if($this->form === null && $this->getId() !== null) {
+        if ($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(array(
-                'pluginId' => $this->getId()
-            ));
+            $this->form = $formRepository->findOneBy(
+                array(
+                    'pluginId' => $this->getId()
+                )
+            );
         }
+
         return $this->form !== null;
     }
 
@@ -275,16 +291,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         $info = $this->Info();
         $formRepository = $this->Forms();
-        $form  = new \Shopware\Models\Config\Form;
+        $form = new \Shopware\Models\Config\Form;
         $form->setPluginId($this->getId());
         $form->setName($info->name);
         $form->setLabel($info->label);
         $form->setDescription($info->description);
-        $parent = $formRepository->findOneBy(array(
-            'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other'
-        ));
+        $parent = $formRepository->findOneBy(
+            array(
+                'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other'
+            )
+        );
         $form->setParent($parent);
         $this->Application()->Models()->persist($form);
+
         return $form;
     }
 
@@ -304,31 +323,36 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new menu item instance
      *
      * @param array $options
+     *
      * @return Shopware\Models\Menu\Menu|null
      */
     public function createMenuItem(array $options)
     {
-        if(!isset($options['label'])) {
+        if (!isset($options['label'])) {
             return null;
         }
-        if(isset($options['parent'])
-          && $options['parent'] instanceof \Shopware\Models\Menu\Menu) {
+        if (isset($options['parent'])
+            && $options['parent'] instanceof \Shopware\Models\Menu\Menu
+        ) {
             $parentId = $options['parent']->getId();
         } else {
             $parentId = null;
             unset($options['parent']);
         }
-        $item = $this->Menu()->findOneBy(array(
-            'label' => $options['label'],
-            'parentId' => $parentId
-        ));
-        if($item === null) {
+        $item = $this->Menu()->findOneBy(
+            array(
+                'label'    => $options['label'],
+                'parentId' => $parentId
+            )
+        );
+        if ($item === null) {
             $item = new Shopware\Models\Menu\Menu();
         }
         $item->fromArray($options);
         $plugin = $this->Plugin();
         $plugin->getMenuItems()->add($item);
         $item->setPlugin($plugin);
+
         return $item;
     }
 
@@ -346,34 +370,38 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new payment instance
      *
      * @param   array $options
-     * @param   null $description
-     * @param   null $action
+     * @param   null  $description
+     * @param   null  $action
+     *
      * @return  \Shopware\Models\Payment\Payment
      */
     public function createPayment($options, $description = null, $action = null)
     {
-        if(is_string($options)) {
+        if (is_string($options)) {
             $options = array('name' => $options);
         }
-        $payment = $this->Payments()->findOneBy(array(
-            'name' => $options['name']
-        ));
-        if($payment === null) {
+        $payment = $this->Payments()->findOneBy(
+            array(
+                'name' => $options['name']
+            )
+        );
+        if ($payment === null) {
             $payment = new \Shopware\Models\Payment\Payment();
             $payment->setName($options['name']);
             $this->Application()->Models()->persist($payment);
         }
         $payment->fromArray($options);
-        if($description !== null) {
+        if ($description !== null) {
             $payment->setDescription($description);
         }
-        if($action !== null) {
+        if ($action !== null) {
             $payment->setAction($action);
         }
         $plugin = $this->Plugin();
         $plugin->getPayments()->add($payment);
         $payment->setPlugin($plugin);
         Shopware()->Models()->flush($payment);
+
         return $payment;
     }
 
@@ -381,19 +409,22 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new template
      *
      * @param   array|string $options
+     *
      * @return  \Shopware\Models\Shop\Template
      */
     public function createTemplate($options)
     {
-        if(is_string($options)) {
+        if (is_string($options)) {
             $options = array('template' => $options);
         }
-        $template = $this->Payments()->findOneBy(array(
-            'template' => $options['template']
-        ));
-        if($template === null) {
+        $template = $this->Payments()->findOneBy(
+            array(
+                'template' => $options['template']
+            )
+        );
+        if ($template === null) {
             $template = new \Shopware\Models\Shop\Template();
-            if(!isset($options['name'])) {
+            if (!isset($options['name'])) {
                 $options['name'] = ucfirst($options['template']);
             }
         }
@@ -401,6 +432,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $plugin = $this->Plugin();
         $plugin->getTemplates()->add($template);
         $template->setPlugin($plugin);
+
         return $template;
     }
 
@@ -413,9 +445,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 			INSERT INTO s_crontab (`name`, `action`, `next`, `start`, `interval`, `active`, `end`, `pluginID`)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 		';
-        Shopware()->Db()->query($sql, array(
-            $name, $action, new Zend_Date(), null, $interval, $active, new Zend_Date(), $this->getId()
-        ));
+        Shopware()->Db()->query(
+            $sql,
+            array(
+                $name,
+                $action,
+                new Zend_Date(),
+                null,
+                $interval,
+                $active,
+                new Zend_Date(),
+                $this->getId()
+            )
+        );
     }
 
     /**
@@ -424,8 +466,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * {@inheritDoc}
      *
      * @param string|Enlight_Event_Handler $event
-     * @param string $listener
-     * @param integer  $position
+     * @param string                       $listener
+     * @param integer                      $position
+     *
      * @return Enlight_Plugin_Bootstrap_Config
      */
     public function subscribeEvent($event, $listener = null, $position = null)
@@ -435,6 +478,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         } else {
             parent::subscribeEvent($event, $listener, $position);
         }
+
         return $this;
     }
 
@@ -513,7 +557,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return array(
             'version' => $this->getVersion(),
-            'label' => $this->getLabel()
+            'label'   => $this->getLabel()
         );
     }
 
@@ -535,9 +579,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * @deprecated Use the event subscriber direct
-     * @param $event
-     * @param $listener
+     *
+     * @param      $event
+     * @param      $listener
      * @param null $position
+     *
      * @return Enlight_Event_Handler_Plugin
      */
     public function createEvent($event, $listener, $position = null)
@@ -545,17 +591,22 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $handler = new Enlight_Event_Handler_Plugin(
             $event, $this->collection, $this, $listener, $position
         );
+
         return $handler;
     }
 
     /**
      * @deprecated Use the event subscriber (Event: class::method::type)
-     * @param   $class
+     *
+     * @param        $class
+     *
      * @deprecated
-     * @param   $method
-     * @param   $listener
+     *
+     * @param        $method
+     * @param        $listener
      * @param   null $type
      * @param   null $position
+     *
      * @return  Enlight_Event_Handler_Plugin
      */
     public function createHook($class, $method, $listener, $type = null, $position = null)
@@ -564,6 +615,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $class . '::' . $method . '::' . $type,
             $this->collection, $this, $listener, $position
         );
+
         return $handler;
     }
 
@@ -571,6 +623,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Subscribe hook method
      *
      * @param Enlight_Hook_HookHandler $handler
+     *
      * @return Shopware_Components_Plugin_Bootstrap
      */
     public function subscribeHook($handler)
@@ -583,26 +636,36 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @deprecated Use the createCronJob method
      */
-    public function subscribeCron($name, $action, $interval = 86400, $active = true, $next = null, $start = null, $end = null)
-    {
+    public function subscribeCron(
+        $name,
+        $action,
+        $interval = 86400,
+        $active = true,
+        $next = null,
+        $start = null,
+        $end = null
+    ) {
         $this->createCronJob($name, $action, $interval, $active);
     }
 
     /**
      * Check if a list of given plugins is currently available
      * and active
+     *
      * @param array $plugins
+     *
      * @return bool
      */
     protected function assertRequiredPluginsPresent(array $plugins)
     {
-        foreach ($plugins as $plugin){
+        foreach ($plugins as $plugin) {
             $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
             $test = Shopware()->Db()->fetchOne($sql, array($plugin));
-            if (empty($test)){
+            if (empty($test)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -615,7 +678,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * use assertVersionGreaterThen().
      *
      * @since 4.1.3 introduced assertMinimumVersion($requiredVersion)
+     *
      * @param  string $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
      * @return bool
      */
     protected function assertMinimumVersion($requiredVersion)
@@ -636,7 +701,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * the currently installed shopware version.
      *
      * @deprectated 4.1.3 Use assertMinimumVersion instead
+     *
      * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
      * @return bool
      */
     protected function assertVersionGreaterThen($requiredVersion)
@@ -653,15 +720,18 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'Shopware\CustomModels',
             $this->Path() . 'Models/'
         );
-        $this->Application()->ModelAnnotations()->addPaths(array(
-            $this->Path() . 'Models/'
-        ));
+        $this->Application()->ModelAnnotations()->addPaths(
+            array(
+                $this->Path() . 'Models/'
+            )
+        );
     }
 
 
     /**
      * Helper function to enable the http cache for a single shopware controller.
-     * @param int $cacheTime
+     *
+     * @param int   $cacheTime
      * @param array $cacheIds
      */
     public function enableControllerCache($cacheTime = 3600, $cacheIds = array())
@@ -681,6 +751,103 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if ($httpCache) {
             $httpCache->disableControllerCache();
         }
+    }
+
+
+    /**
+     * Creates a new component which can be used in the backend emotion
+     * module. This function is required for the subsequent function like
+     * the createEmotionComponentCheckboxField which expects a already
+     * created emotion component.
+     *
+     * @param $name
+     * @param $xType
+     * @param $description
+     * @param $template
+     * @param $cls
+     *
+     * @return Component
+     */
+    public function createEmotionComponent(
+        $name,
+        $xType,
+        $description,
+        $template,
+        $cls
+    ) {
+        $component = new Component();
+        $component->setName($name);
+        $component->setCls($cls);
+        $component->setXType($xType);
+        $component->setDescription($description);
+        $component->setTemplate($template);
+        $component->setPluginId($this->getId());
+
+        $this->Application()->Models()->persist($component);
+        $this->Application()->Models()->flush($component);
+
+        return $component;
+    }
+
+    /**
+     * Creates a checkbox field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param           $name
+     * @param           $fieldLabel
+     * @param null      $supportText
+     * @param null      $helpTitle
+     * @param null      $helpText
+     * @param bool      $allowBlank
+     *
+     * @throws Exception
+     * @return Component
+     */
+    protected function createEmotionComponentCheckboxField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = null,
+        $helpTitle = null,
+        $helpText = null,
+        $allowBlank = false
+    ) {
+
+        return $this->createEmotionField($component, array(
+            'component' => $component,
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'allowBlank' => $allowBlank,
+
+            'valueType' => null
+        ));
+    }
+
+
+    /**
+     * Internal helper function which creates a single emotion component field.
+     *
+     * @param Component $component
+     * @param array $data
+     *
+     * @return Field
+     * @throws Exception
+     */
+    private function createEmotionField(Component $component, array $data)
+    {
+        if (!($component instanceof Component)) {
+            throw new \Exception("The passed component object has to be an instance of \\Shopware\\Models\\Emotion\\Library\\Component");
+        }
+
+        $field = new Field();
+        $field->fromArray($data);
+        $this->Application()->Models()->persist($field);
+        $this->Application()->Models()->flush($field);
+
+        return $field;
     }
 
 }
