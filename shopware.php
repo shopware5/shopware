@@ -91,16 +91,24 @@ use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
 use Symfony\Component\HttpFoundation\Request;
 
-$environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
+$environment = getenv('ENV') ? getenv('ENV') : getenv('REDIRECT_ENV');
 if (empty($environment)) {
     $environment = 'production';
 }
 
-$kernel = new Kernel($environment, $environment !== 'production');
+$cacheOptions = array(
+    'enabled'        => true,
+    'stale_if_error' => false,
+    'cache_dir'      => __DIR__ . '/cache/html/'
+);
 
-//@TODO implement new cache-switch mechanism here
-if (false) {
-    $kernel = new AppCache($kernel, array());
+if (is_file(__DIR__ . '/config_http.php')) {
+    $cacheOptions = array_merge($cacheOptions, include __DIR__ . '/config_http.php');
+}
+
+$kernel = new Kernel($environment, $environment !== 'production');
+if ($cacheOptions['enabled']) {
+    $kernel = new AppCache($kernel, $cacheOptions);
 }
 
 $request = Request::createFromGlobals();
