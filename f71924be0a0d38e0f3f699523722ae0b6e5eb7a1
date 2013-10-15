@@ -1,0 +1,6 @@
+From: feature/next/sw-6844-add-plugin-helper-functions
+To: next
+Conflict: (add/add) Merge conflict in tests/Shopware/Tests/Components/Model/QueryBuilderTest.php
+	ADD|tests/Shopware/Tests/Components/Model/QueryBuilderTest.php
+Conflict: (content) Merge conflict in UPGRADE.md
+	MODIFY|UPGRADE.md
