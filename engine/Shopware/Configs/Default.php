@@ -21,7 +21,6 @@ $customConfig = array_merge(array(
     'front' => array(),
     'template' => array(),
     'mail' => array(),
-    'httpCache' => array(),
     'session' => array(),
     'phpSettings' => array(),
     'cache' => array(
@@ -70,17 +69,6 @@ return array_merge($customConfig, array(
     'mail' => array_merge(array(
         'charset' => 'utf-8'
     ), $customConfig['mail']),
-    'httpCache' => array_merge(array(
-        'enabled' => false,
-        'debug' => false,
-        'default_ttl' => 0,
-        'private_headers' => array('Authorization', 'Cookie'),
-        'allow_reload' => false,
-        'allow_revalidate' => false,
-        'stale_while_revalidate' => 2,
-        'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_html')
-    ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
         'cookie_lifetime' => 0,

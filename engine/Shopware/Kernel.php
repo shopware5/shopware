@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
+use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 
 /**
  * Middleware class between the old Shopware bootstrap mechanism
@@ -129,10 +130,42 @@ class Kernel implements HttpKernelInterface
         $front->returnResponse(true);
         $front->throwExceptions(!$catch);
 
-        $response = $front->dispatch();
+        $request = $this->transformSymfonyRequestToEnlightRequest($request);
+
+        if ($front->Request() === null) {
+            $front->setRequest($request);
+            $response = $front->dispatch();
+        } else {
+            $dispatcher = clone $front->Dispatcher();
+            $response   = clone $front->Response();
+
+            $response->clearHeaders()
+                     ->clearRawHeaders()
+                     ->clearBody();
+
+            $response->setHttpResponseCode(200);
+            $request->setDispatched(true);
+            $dispatcher->dispatch($request, $response);
+        }
+
         $response = $this->transformEnlightResponseToSymfonyResponse($response);
 
         return $response;
+    }
+
+    /**
+     * @param SymfonyRequest $request
+     * @return EnlightRequest
+     */
+    public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
+    {
+        // Overwrite superglobals with state of the SymfonyRequest
+        $request->overrideGlobals();
+
+        // Create englight request from global state
+        $enlightRequest = new EnlightRequest();
+
+        return $enlightRequest;
     }
 
     /**
@@ -227,6 +260,9 @@ class Kernel implements HttpKernelInterface
         );
     }
 
+    /**
+     * Creates a new instance of the ResourceLoader
+     */
     protected function initializeResourceLoader()
     {
         $this->resourceLoader = new ResourceLoader($this->getContainer());
@@ -434,6 +470,9 @@ class Kernel implements HttpKernelInterface
         return $this->config;
     }
 
+    /**
+     *
+     */
     protected function initializePluginContainer()
     {
         try {
@@ -445,6 +484,9 @@ class Kernel implements HttpKernelInterface
         }
     }
 
+    /**
+     * @return ContainerBuilder
+     */
     protected function buildPluginContainer()
     {
         $container = $this->getContainerBuilder();
@@ -456,6 +498,10 @@ class Kernel implements HttpKernelInterface
         return $container;
     }
 
+    /**
+     * @param ContainerBuilder $container
+     * @throws \Exception
+     */
     public function addPluginContainerExtensions(ContainerBuilder $container)
     {
         $this->getShopware()->Front();
@@ -469,7 +515,7 @@ class Kernel implements HttpKernelInterface
             array()
         );
 
-        /**@var $service ServiceDefinition*/
+        /** @var $service ServiceDefinition */
         foreach ($collection as $service) {
             if (!$service instanceof ServiceDefinition) {
                 throw new \Exception('Some plugin tries to add a service without using the \Shopware\DependencyInjection\ServiceDefinition class');
