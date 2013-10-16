@@ -318,11 +318,33 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      *
      * @return Enlight_Plugin_PluginManager
      */
-    public function initPlugins()
+    protected function initPlugins()
     {
         $this->loadResource('Table');
 
-        return $this->getContainerService('plugins');
+        $config = Shopware()->getOption('plugins', array());
+        if (!isset($config['cache'])) {
+            $config['cache'] = $this->getResource('Cache');
+        }
+        if (!isset($config['namespaces'])) {
+            $config['namespaces'] = array('Core', 'Frontend', 'Backend');
+        }
+
+        $plugins = $this->Application()->Plugins();
+        $events = $this->Application()->Events();
+
+        foreach ($config['namespaces'] as $namespace) {
+            $namespace = new Shopware_Components_Plugin_Namespace($namespace);
+            $plugins->registerNamespace($namespace);
+            $events->registerSubscriber($namespace->Subscriber());
+        }
+
+        $loader = $this->Application()->Loader();
+        foreach (array('Local', 'Community', 'Default', 'Commercial') as $dir) {
+            $loader->registerNamespace('Shopware_Plugins', $this->Application()->AppPath('Plugins_' . $dir));
+        }
+
+        return $plugins;
     }
 
     /**
