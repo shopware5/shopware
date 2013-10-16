@@ -79,7 +79,7 @@ class Status extends ModelEntity
     /**
      * @var string $group
      *
-     * @ORM\Column(name="group", type="string", length=25, nullable=false)
+     * @ORM\Column(name="`group`", type="string", length=25, nullable=false)
      */
     private $group;
 
