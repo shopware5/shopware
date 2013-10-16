@@ -378,47 +378,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         return true;
     }
 
-    /**
-     * Init doctrine method
-     *
-     * @return bool
-     */
-    public function initDoctrine()
-    {
-        return true;
-    }
-
-    /**
-     * Init doctrine method
-     *
-     * @return \Doctrine\ORM\Configuration
-     */
-    public function initModelConfig()
-    {
-        return $this->getContainerService('model_config');
-    }
-
-    /**
-     * Init doctrine method
-     *
-     * @return \Doctrine\ORM\Mapping\Driver\AnnotationDriver
-     */
-    public function initModelAnnotations()
-    {
-        $this->loadResource('Models');
-
-        return $this->getResource('ModelAnnotations');
-    }
-
-    /**
-     * Init doctrine method
-     *
-     * @return Shopware\Components\Model\ModelManager
-     */
-    public function initModels()
-    {
-        return $this->getContainerService('models');
-    }
 
     /**
      * @return \Shopware_Components_TemplateMail
