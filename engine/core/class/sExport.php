@@ -178,6 +178,9 @@ class sExport
 	{
 		$hash = $this->sDB->qstr($this->sHash);
 
+        /** @var $shopRepository \Shopware\Models\Shop\Repository */
+        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+
 		$sql = "
 			SELECT
 				id as feedID, s_export.*
@@ -230,7 +233,14 @@ class sExport
 			$this->sSettings['encoding'] = 'ISO-8859-1';
 		}
 
-		$this->sMultishop = $this->sGetMultishop($this->sSettings["multishopID"]);
+        if(empty($this->sSettings["languageID"]))
+        {
+            $defaultShop = $shopRepository->getDefault();
+            //just a fall back for update reasons
+            $this->sSettings["languageID"] = $defaultShop->getId();
+        }
+
+		$this->sMultishop = $this->sGetMultishop($this->sSettings["languageID"]);
 
 		if(empty($this->sSettings["categoryID"]))
 		{
@@ -248,10 +258,7 @@ class sExport
 		{
 			$this->sSettings["currencyID"] = $this->sMultishop["defaultcurrency"];
 		}
-		if(empty($this->sSettings["languageID"]))
-		{
-			$this->sSettings["languageID"] = $this->sSettings["multishopID"];
-		}
+
 		$this->sLanguage = $this->sGetMultishop($this->sSettings["languageID"]);
 
 		$this->sCurrency = $this->sGetCurrency($this->sSettings["currencyID"]);
@@ -263,19 +270,10 @@ class sExport
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-
-        $shop = $repository->getActiveById($this->sSettings['multishopID']);
-
-        //$shop = $repository->getActiveById($this->sLanguage['id']);
+        $shop = $shopRepository->getActiveById($this->sLanguage['id']);
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
-
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale');
-
-        $shop->setLocale($repository->find($this->sMultishop['locale']));
         $shop->registerResources(Shopware()->Bootstrap());
 
         $this->shop = $shop;
@@ -544,6 +542,21 @@ class sExport
 			";
 			$sql_add_select[] = "ta.objectdata as article_translation";
 			$sql_add_select[] = "td.objectdata as detail_translation";
+
+            //read the fallback for the case the translation is not going to be set
+            if(!empty($this->sLanguage["fallback"])) {
+                $sqlFallbackLanguageId = $this->sDB->qstr($this->sLanguage["fallback"]);
+                $sql_add_join[] = "
+				LEFT JOIN s_core_translations as taf
+				ON taf.objectkey=a.id AND taf.objecttype='article' AND taf.objectlanguage=$sqlFallbackLanguageId
+
+				LEFT JOIN s_core_translations as tdf
+				ON tdf.objectkey=d.id AND tdf.objecttype='variant' AND tdf.objectlanguage=$sqlFallbackLanguageId
+			";
+                $sql_add_select[] = "taf.objectdata as article_translation_fallback";
+                $sql_add_select[] = "tdf.objectdata as detail_translation_fallback";
+            }
+
 		}
 		if(!empty($this->sSettings["categoryID"]))
 		{
