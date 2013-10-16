@@ -425,8 +425,10 @@ class sRewriteTable
 
         //get all blog category ids
         $blogCategoryIds = array();
+		$blogCategoryContent = array();
         foreach ($blogCategories as $blogCategory) {
             $blogCategoryIds[] = $blogCategory["id"];
+			$blogCategoryContent[$blogCategory["id"]] = Shopware()->Modules()->Categories()->sGetCategoryContent($blogCategory["id"]);
         }
 
         /** @var $repository \Shopware\Models\Blog\Repository */
@@ -435,6 +437,8 @@ class sRewriteTable
         $blogArticles = $blogArticlesQuery->getArrayResult();
 
         foreach ($blogArticles as $blogArticle) {
+			$blogArticle['sCategoryContent'] = $blogCategoryContent[$blogArticle['categoryId']]; 
+			mail('service@religioese-geschenke.de', 'Shopware-Debug', print_r($blogArticle, true)); 
             $this->data->assign('blogArticle', $blogArticle);
             $path = $this->template->fetch('string:' . Shopware()->Config()->routerBlogTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
@@ -443,6 +447,7 @@ class sRewriteTable
             $this->sInsertUrl($org_path, $path);
         }
     }
+
 
     /**
      * Create emotion rewrite rules
