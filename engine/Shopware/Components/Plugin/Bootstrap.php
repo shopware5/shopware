@@ -439,6 +439,116 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Helper function to register a plugin controller.
+     *
+     * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
+     *  1. The plugin directory must contain a 'Controller' subdirectory.
+     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in the module directory.
+     *  4. The controller file must have the same name as the controller class.
+     *
+     * If all the requirements are fulfilled, the controller is registered automatically.
+     * Additionally, the following plugin namespaces/directories are registered, if available:
+     *  1. The 'Views' plugin directory is added as a template directory.
+     *  2. The 'Snippets' plugin directory is added as a config directory.
+     *  3. The 'Components' plugin directory is added as a component namespace.
+     *
+     * @example
+     * <code>
+     *   public function install() {
+     *       $this->registerController('Frontend', 'Example1');
+     *       return true;
+     *   }
+     * </code>
+     *
+     * @param string $module - Possible values: Frontend, Backend, Widgets, Api
+     * @param string $name - The name of the controller
+     * @param string $listener - Name of the event listener function which will be called
+     * @return $this
+     * @throws Exception
+     */
+    public function registerController($module, $name, $listener = 'getDefaultControllerPath')
+    {
+        if (empty($module)) {
+            throw new Exception('Register controller requires a module name');
+        }
+        if (empty($name)) {
+            throw new Exception('Register controller requires a controller name');
+        }
+        $this->subscribeEvent(
+            'Enlight_Controller_Dispatcher_ControllerPath_' . $module . '_' . $name,
+            $listener
+        );
+        return $this;
+    }
+
+
+    /**
+     * Standard event listener function for plugin controllers.
+     * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
+     *  1. The plugin directory must contain a 'Controller' subdirectory.
+     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in the module directory.
+     *  4. The controller file must have the same name as the controller class.
+     *
+     * If all the requirements are fulfilled, the controller is registered automatically.
+     * Additionally, the following plugin namespaces/directories are registered, if available:
+     *  1. The 'Views' plugin directory is added as a template directory.
+     *  2. The 'Snippets' plugin directory is added as a config directory.
+     *  3. The 'Components' plugin directory is added as a component namespace.
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     * @throws Exception
+     * @return string
+     */
+    public function getDefaultControllerPath(Enlight_Event_EventArgs $arguments)
+    {
+        $eventName = $arguments->getName();
+        $eventName = str_replace('Enlight_Controller_Dispatcher_ControllerPath_', '', $eventName);
+
+        $parts = explode('_', $eventName);
+
+        $module = $parts[0];
+        $controller = $parts[1];
+
+        $path = $this->Path() . 'Controllers/' . ucfirst($module) . '/' . ucfirst($controller) . '.php';
+
+        if (!file_exists($path)) {
+            throw new Enlight_Exception('Controller "' . $controller . '" can\'t load failure');
+        }
+
+        //register plugin model directory
+        if (file_exists($this->Path() . 'Models')) {
+            $this->registerCustomModels();
+        }
+
+        //register plugin views directory
+        if (file_exists($this->Path() . 'Views')) {
+            $this->Application()->Template()->addTemplateDir(
+                $this->Path() . 'Views/'
+            );
+        }
+
+        //register plugin snippet directory
+        if (file_exists($this->Path() . 'Snippets')) {
+            $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+            );
+        }
+
+        //register plugin component directory
+        if (file_exists($this->Path() . 'Components')) {
+            $this->Application()->Loader()->registerNamespace(
+                'Shopware_Components',
+                $this->Path() . 'Components/'
+            );
+        }
+
+        return $path;
+
+    }
+
+    /**
      * Returns capabilities
      */
     public function getCapabilities()
