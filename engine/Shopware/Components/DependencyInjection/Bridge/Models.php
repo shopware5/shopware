@@ -6,7 +6,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Mapping\Driver\DriverChain;
+use Doctrine\ORM\Proxy\Autoloader;
 use Shopware\Components\Model\CategoryDenormalization;
 use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\Model\Configuration;
@@ -83,13 +83,14 @@ class Models
     /**
      * Injects all required components.
      *
-     * @param Configuration                            $config
-     * @param \Enlight_Loader                          $loader
-     * @param \Enlight_Event_EventManager              $eventManager
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param ResourceLoader      $resourceLoader
-     * @param                                          $modelPath
-     * @param                                          $kernelRootDir
+     * @param Configuration                                                  $config
+     * @param \Enlight_Loader                                                $loader
+     * @param \Enlight_Event_EventManager                                    $eventManager
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql                       $db
+     * @param ResourceLoader                                                 $resourceLoader
+     * @param string                                                         $modelPath
+     * @param string                                                         $kernelRootDir
+     * @param AnnotationDriver                                               $modelAnnotation
      */
     public function __construct(
         Configuration $config,
@@ -98,7 +99,8 @@ class Models
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ResourceLoader $resourceLoader,
         $modelPath,
-        $kernelRootDir
+        $kernelRootDir,
+        AnnotationDriver $modelAnnotation
     ) {
         $this->config = $config;
         $this->modelPath = $modelPath;
@@ -115,6 +117,7 @@ class Models
      */
     public function factory()
     {
+
         // register standard doctrine annotations
         AnnotationRegistry::registerFile(
             'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
@@ -126,31 +129,10 @@ class Models
             realpath($this->kernelRootDir . '/vendor/symfony/validator')
         );
 
-        $cachedAnnotationReader = $this->config->getAnnotationsReader();
-
-        $annotationDriver = new AnnotationDriver(
-            $cachedAnnotationReader,
-            array(
-                $this->modelPath,
-                $this->config->getAttributeDir(),
-            )
-        );
-
         $this->loader->registerNamespace(
             'Shopware\Models\Attribute',
             $this->config->getAttributeDir()
         );
-
-        // create a driver chain for metadata reading
-        $driverChain = new DriverChain();
-
-        // register annotation driver for our application
-        $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
-        $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
-
-        $this->resourceLoader->registerResource('ModelAnnotations', $annotationDriver);
-
-        $this->config->setMetadataDriverImpl($driverChain);
 
         // Create event Manager
         $eventManager = new EventManager();
@@ -189,7 +171,7 @@ class Models
             $conn, $this->config, $eventManager
         );
 
-        \Doctrine\ORM\Proxy\Autoloader::register(
+        Autoloader::register(
             $this->config->getProxyDir(),
             $this->config->getProxyNamespace(),
             function ($proxyDir, $proxyNamespace, $className) use ($entityManager) {
