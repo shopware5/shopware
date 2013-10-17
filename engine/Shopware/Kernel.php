@@ -224,7 +224,9 @@ class Kernel implements HttpKernelInterface
         $this->shopware->boot();
 
         $this->initializePluginContainer();
-        $this->resourceLoader->setPluginContainer($this->pluginContainer);
+        if ($this->pluginContainer) {
+            $this->resourceLoader->setPluginContainer($this->pluginContainer);
+        }
 
         $this->booted = true;
     }
