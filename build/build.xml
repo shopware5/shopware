@@ -67,31 +67,38 @@
         </propertyfile>
     </target>
 
-    <target name="build-composer-install">
-        <exec executable="bash">
+    <target name="check-composer-binary">
+        <available file="${basedir}/composer.phar" property="composer.binary.present"/>
+    </target>
+
+    <target name="install-composer-binary" depends="check-composer-binary"  unless="composer.binary.present">
+        <exec executable="bash" failonerror="true">
             <arg value="-c" />
             <arg value="curl -s http://getcomposer.org/installer | php" />
         </exec>
-        <exec executable="php">
-            <arg value="composer.phar" />
-            <arg value="install" />
-            <arg value="--no-interaction" />
-            <arg value="--optimize-autoloader" />
-        </exec>
     </target>
-    <target name="build-composer-update">
-        <echo message="Self-updating composer" level="debug"/>
+
+    <target name="update-composer-binary" depends="install-composer-binary">
         <exec executable="php">
             <arg value="composer.phar" />
             <arg value="self-update" />
             <arg value="--no-interaction" />
         </exec>
-        <echo message="composer self-update complete" level="debug"/>
-        <exec executable="php">
+    </target>
+
+    <target name="build-composer-install" depends="update-composer-binary">
+        <exec executable="php" failonerror="true">
+            <arg value="composer.phar" />
+            <arg value="install" />
+            <arg value="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="build-composer-update" depends="update-composer-binary">
+        <exec executable="php" failonerror="true">
             <arg value="composer.phar" />
             <arg value="update" />
             <arg value="--no-interaction" />
-            <arg value="--optimize-autoloader" />
         </exec>
     </target>
 
