@@ -57,7 +57,7 @@
 				{* Unit price *}
 				{block name="frontend_note_item_unitprice"}
 				{if $sBasketItem.purchaseunit}
-		            	<div class="article_price_unit">
+                    <div class="article_price_unit">
 		                <p>
 		                    <strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
 		                </p>
@@ -90,7 +90,7 @@
 		{if $sBasketItem.itemInfo}
 			{$sBasketItem.itemInfo}
 		{else}
-			<strong class="price">{$sBasketItem.price|currency}*</strong>
+			<strong class="price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</strong>
 		{/if}
 		
 		{* Remove article *}
