@@ -761,26 +761,29 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * created emotion component.
      *
      * @param $name
-     * @param $xType
-     * @param $description
-     * @param $template
      * @param $cls
+     * @param $template
+     * @param string $xType
+     * @param null $convertFunction
+     * @param string $description
      *
      * @return Component
      */
     public function createEmotionComponent(
         $name,
-        $xType,
-        $description,
+        $cls,
         $template,
-        $cls
+        $xType = '',
+        $convertFunction = null,
+        $description = ''
     ) {
         $component = new Component();
         $component->setName($name);
-        $component->setCls($cls);
         $component->setXType($xType);
-        $component->setDescription($description);
+        $component->setCls($cls);
         $component->setTemplate($template);
+        $component->setConvertFunction($convertFunction);
+        $component->setDescription($description);
         $component->setPluginId($this->getId());
 
         $this->Application()->Models()->persist($component);
@@ -789,40 +792,415 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return $component;
     }
 
+
     /**
      * Creates a checkbox field for the passed emotion component widget.
      *
      * @param Component $component
-     * @param           $name
-     * @param           $fieldLabel
-     * @param null      $supportText
-     * @param null      $helpTitle
-     * @param null      $helpText
-     * @param bool      $allowBlank
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param bool $allowBlank
      *
-     * @throws Exception
-     * @return Component
+     * @return Field
      */
     protected function createEmotionComponentCheckboxField(
         Component $component,
         $name,
         $fieldLabel,
-        $supportText = null,
-        $helpTitle = null,
-        $helpText = null,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
         $allowBlank = false
     ) {
-
         return $this->createEmotionField($component, array(
-            'component' => $component,
+            'componentId' => $component->getId(),
+            'xType' => 'checkboxfield',
             'name' => $name,
             'fieldLabel' => $fieldLabel,
             'supportText' => $supportText,
             'helpTitle' => $helpTitle,
             'helpText' => $helpText,
-            'allowBlank' => $allowBlank,
+            'allowBlank' => $allowBlank
+        ));
+    }
 
-            'valueType' => null
+
+    /**
+     * Create a combobox field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $store
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $displayField
+     * @param string $valueField
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentComboboxField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $store = '',
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $displayField = '',
+        $valueField = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'combobox',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'store' => $store,
+            'valueField' => $valueField,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'displayField' => $displayField,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a date field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentDateField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'datefield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a display field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentDisplayField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'displayfield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText'=> $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a hidden field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param string $valueType
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentHiddenField(
+        Component $component,
+        $name,
+        $valueType = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'hiddenfield',
+            'name' => $name,
+            'valueType' => $valueType,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a html editor field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentEditorField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'htmleditor',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a number field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentNumberField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'numberfield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a radio field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentRadioField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'radiofield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a text field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentTextField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'textfield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a text area field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentTextareaField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'textareafield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
+        ));
+    }
+
+
+    /**
+     * Create a time field for the passed emotion component widget.
+     *
+     * @param Component $component
+     * @param $name
+     * @param $fieldLabel
+     * @param string $supportText
+     * @param string $helpTitle
+     * @param string $helpText
+     * @param string $defaultValue
+     * @param bool $allowBlank
+     *
+     * @return Field
+     */
+    protected function createEmotionComponentTimeField(
+        Component $component,
+        $name,
+        $fieldLabel,
+        $supportText = '',
+        $helpTitle = '',
+        $helpText = '',
+        $defaultValue = '',
+        $allowBlank = false
+    ) {
+        return $this->createEmotionField($component, array(
+            'componentId' => $component->getId(),
+            'xType' => 'timefield',
+            'name' => $name,
+            'fieldLabel' => $fieldLabel,
+            'supportText' => $supportText,
+            'helpTitle' => $helpTitle,
+            'helpText' => $helpText,
+            'defaultValue' => $defaultValue,
+            'allowBlank' => $allowBlank
         ));
     }
 
@@ -841,6 +1219,21 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (!($component instanceof Component)) {
             throw new \Exception("The passed component object has to be an instance of \\Shopware\\Models\\Emotion\\Library\\Component");
         }
+
+        $defaults = array(
+            'fieldLabel' => '',
+            'valueType' => '',
+            'store' => '',
+            'supportText' => '',
+            'helpTitle' => '',
+            'helpText' => '',
+            'defaultValue' => '',
+            'displayField' => '',
+            'valueField' => '',
+            'allowBlank' => ''
+        );
+
+        $data = array_merge($defaults, $data);
 
         $field = new Field();
         $field->fromArray($data);
