@@ -114,11 +114,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function dispatch($action)
     {
-        $args = array(
-            'subject' => $this,
-            'request' => $this->Request(),
+        $args = new Enlight_Controller_ActionEventArgs(array(
+            'subject'  => $this,
+            'request'  => $this->Request(),
             'response' => $this->Response()
-        );
+        ));
 
         $moduleName = ucfirst($this->Request()->getModuleName());
 
