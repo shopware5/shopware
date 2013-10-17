@@ -172,6 +172,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             );
 
             foreach ($iterator as $path) {
+                if(strcmp($path->getPathName(), (rtrim($cacheOptions['cache_dir'], '/').'/.gitkeep')) === 0) {
+                    continue;
+                }
                 if ($path->isDir()) {
                     rmdir($path->__toString());
                 } else {
