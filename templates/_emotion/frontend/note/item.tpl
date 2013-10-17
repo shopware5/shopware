@@ -87,7 +87,7 @@
 		{if $sBasketItem.itemInfo}
 			{$sBasketItem.itemInfo}
 		{else}
-			<strong class="price">{$sBasketItem.price|currency}*</strong>
+			<strong class="price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</strong>
 		{/if}
 
 		{* Remove article *}
