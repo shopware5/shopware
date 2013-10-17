@@ -21,6 +21,7 @@
 namespace   Shopware\Models\Emotion\Library;
 use         Shopware\Components\Model\ModelEntity,
             Doctrine\ORM\Mapping AS ORM;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  *
@@ -113,6 +114,14 @@ class Component extends ModelEntity
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="emotionComponents")
+     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
+     * @var Plugin
+     */
+    protected $plugin;
+
 
     /**
      * INVERSE SIDE
@@ -290,5 +299,21 @@ class Component extends ModelEntity
     public function setConvertFunction($convertFunction)
     {
         $this->convertFunction = $convertFunction;
+    }
+
+    /**
+     * @return \Shopware\Models\Plugin\Plugin
+     */
+    public function getPlugin()
+    {
+        return $this->plugin;
+    }
+
+    /**
+     * @param \Shopware\Models\Plugin\Plugin $plugin
+     */
+    public function setPlugin($plugin)
+    {
+        $this->plugin = $plugin;
     }
 }

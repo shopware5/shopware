@@ -28,6 +28,21 @@ use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Emotion\Library\Field;
 
 /**
+ * Shopware Emotion Component Manager
+ *
+ * Create your own emotion components.
+ * To create a new component in your plugin Bootstrap.php
+ * for example you can call:
+ *
+ * $widget = $this->Emotion()->createComponent('MyWidget', 'my-widget', 'my_widget.tpl');
+ *
+ * Now after you created a new component,
+ * you can create your own config fields for the component.
+ * To create a text field for example you can call:
+ *
+ * $this->Emotion()->createTextField($widget, 'my-textfield', 'My Text Field Label');
+ *
+ *
  * @category  Shopware
  * @package   Shopware\Components\Emotion
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
@@ -61,8 +76,7 @@ class Manager
     }
 
     /**
-     * Class constructor required to inject the plugin
-     * id.
+     * Class constructor required to inject the plugin id.
      * The plugin id is optional, so the emotion manager
      * can also used without the plugin bootstrap scope.
      *
@@ -110,8 +124,9 @@ class Manager
 
     /**
      * Creates a checkbox field for the passed emotion component widget.
-     * Creates a Ext.form.field.Checkbox element
-     * http://sencha.com/api/latest/
+     *
+     * Creates a Ext.form.field.Checkbox element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Checkbox
      *
      * @param Component $component
      * @param string $name
@@ -123,7 +138,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createCheckboxField(
+    public function createCheckboxField(
         Component $component,
         $name,
         $fieldLabel,
@@ -146,7 +161,10 @@ class Manager
 
 
     /**
-     * Create a combobox field for the passed emotion component widget.
+     * Creates a combobox field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.ComboBox element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.ComboBox
      *
      * @param Component $component
      * @param string $name
@@ -162,7 +180,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createComboboxField(
+    public function createComboBoxField(
         Component $component,
         $name,
         $fieldLabel,
@@ -193,7 +211,10 @@ class Manager
 
 
     /**
-     * Create a date field for the passed emotion component widget.
+     * Creates a date field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Date element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Date
      *
      * @param Component $component
      * @param string $name
@@ -206,7 +227,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createDateField(
+    public function createDateField(
         Component $component,
         $name,
         $fieldLabel,
@@ -231,7 +252,10 @@ class Manager
 
 
     /**
-     * Create a display field for the passed emotion component widget.
+     * Creates a display field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Display element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Display
      *
      * @param Component $component
      * @param string $name
@@ -244,7 +268,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createDisplayField(
+    public function createDisplayField(
         Component $component,
         $name,
         $fieldLabel,
@@ -269,7 +293,10 @@ class Manager
 
 
     /**
-     * Create a hidden field for the passed emotion component widget.
+     * Creates a hidden field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Hidden element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Hidden
      *
      * @param Component $component
      * @param string $name
@@ -279,7 +306,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createHiddenField(
+    public function createHiddenField(
         Component $component,
         $name,
         $valueType = '',
@@ -298,7 +325,10 @@ class Manager
 
 
     /**
-     * Create a html editor field for the passed emotion component widget.
+     * Creates a html editor field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.HtmlEditor element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.HtmlEditor
      *
      * @param Component $component
      * @param string $name
@@ -311,7 +341,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createEditorField(
+    public function createEditorField(
         Component $component,
         $name,
         $fieldLabel,
@@ -336,7 +366,10 @@ class Manager
 
 
     /**
-     * Create a number field for the passed emotion component widget.
+     * Creates a number field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Number element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Number
      *
      * @param Component $component
      * @param string $name
@@ -349,7 +382,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createNumberField(
+    public function createNumberField(
         Component $component,
         $name,
         $fieldLabel,
@@ -374,7 +407,10 @@ class Manager
 
 
     /**
-     * Create a radio field for the passed emotion component widget.
+     * Creates a radio field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Radio element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Radio
      *
      * @param Component $component
      * @param string $name
@@ -386,7 +422,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createRadioField(
+    public function createRadioField(
         Component $component,
         $name,
         $fieldLabel,
@@ -409,7 +445,10 @@ class Manager
 
 
     /**
-     * Create a text field for the passed emotion component widget.
+     * Creates a text field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Text element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
      *
      * @param Component $component
      * @param string $name
@@ -422,7 +461,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createTextField(
+    public function createTextField(
         Component $component,
         $name,
         $fieldLabel,
@@ -447,7 +486,10 @@ class Manager
 
 
     /**
-     * Create a text area field for the passed emotion component widget.
+     * Creates a text area field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.TextArea element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
      *
      * @param Component $component
      * @param string $name
@@ -460,7 +502,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createTextareaField(
+    public function createTextAreaField(
         Component $component,
         $name,
         $fieldLabel,
@@ -485,7 +527,10 @@ class Manager
 
 
     /**
-     * Create a time field for the passed emotion component widget.
+     * Creates a time field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Time element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Time
      *
      * @param Component $component
      * @param string $name
@@ -498,7 +543,7 @@ class Manager
      *
      * @return Field
      */
-    protected function createTimeField(
+    public function createTimeField(
         Component $component,
         $name,
         $fieldLabel,
@@ -531,7 +576,7 @@ class Manager
      * @return Field
      * @throws \Exception
      */
-    private function createField(Component $component, array $data)
+    public function createField(Component $component, array $data)
     {
         if (!($component instanceof Component)) {
             throw new \Exception("The passed component object has to be an instance of \\Shopware\\Models\\Emotion\\Library\\Component");
