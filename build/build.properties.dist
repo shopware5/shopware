@@ -18,7 +18,7 @@ sql.dir   = ${basedir}/_sql
 cache.dir = ${basedir}/cache
 app.dir   = ${basedir}/engine/Shopware
 
-script.mysql   = mysql
-script.phpunit = phpunit
+script.mysql    = mysql
+script.phpunit  = ${basedir}/vendor/bin/phpunit
 
 demo.data = ${sql.dir}/demo/latest.sql
