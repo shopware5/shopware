@@ -3224,10 +3224,11 @@ class sAdmin
      * Get dispatch methods
      * @param int $countryID
      * @param int $paymentID
+     * @param null $stateId
      * @access public
      * @return array
      */
-    public function sGetDispatchBasket ($countryID=null, $paymentID = null)
+    public function sGetDispatchBasket ($countryID=null, $paymentID = null, $stateId = null)
     {
         $sql_select = '';
         if(!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT']))
@@ -3333,6 +3334,10 @@ class sAdmin
             $countryID = (int) $user['additional']['countryShipping']['id'];
         else
             $countryID = (int) $countryID;
+
+        if(!empty($user['additional']['stateShipping']['id'])) {
+            $stateId = $user['additional']['stateShipping']['id'];
+        }
         $sql = "
             SELECT main_id FROM s_core_shops WHERE id=".(int) $this->sSYSTEM->sSubShop['id']."
         ";
@@ -3341,6 +3346,7 @@ class sAdmin
         if(is_null($mainId)) {
             $mainId = (int) $this->sSYSTEM->sSubShop['id'];
         }
+        $basket['basketStateId'] = (int) $stateId;
         $basket['countryID'] = $countryID;
         $basket['paymentID'] = $paymentID;
         $basket['customergroupID'] = (int) $this->sSYSTEM->sUSERGROUPDATA['id'];
@@ -3375,14 +3381,15 @@ class sAdmin
      * Get premium dispatch methods
      * @param int $countryID
      * @param int $paymentID
+     * @param null $stateId
      * @access public
      * @return array
      */
-    public function sGetPremiumDispatches ($countryID=null, $paymentID = null)
+    public function sGetPremiumDispatches ($countryID=null, $paymentID = null, $stateId = null)
     {
         $this->sCreateHolidaysTable();
 
-        $basket = $this->sGetDispatchBasket($countryID, $paymentID);
+        $basket = $this->sGetDispatchBasket($countryID, $paymentID, $stateId);
 
         $sql = "SELECT id, bind_sql FROM s_premium_dispatch WHERE active=1 AND type IN (0) AND bind_sql IS NOT NULL AND bind_sql != ''";
         $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
