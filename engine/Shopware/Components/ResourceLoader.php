@@ -44,11 +44,6 @@ class ResourceLoader
     protected $resourceStatus = array();
 
     /**
-     * @var Enlight_Event_EventManager
-     */
-    protected $eventManager;
-
-    /**
      * @var Container
      */
     protected $container;
@@ -58,9 +53,8 @@ class ResourceLoader
      */
     protected $pluginContainer;
 
-
     /**
-     * @var Enlight_Bootstrap
+     * @var \Enlight_Bootstrap
      */
     protected $bootstrap;
 
@@ -95,21 +89,18 @@ class ResourceLoader
     }
 
     /**
-     * @param \Enlight_Event_EventManager $eventManager
-     * @return \Shopware\Components\ResourceLoader
+     * @param string $name
+     * @return object
      */
-    public function setEventManager(\Enlight_Event_EventManager $eventManager)
-    {
-        $this->eventManager = $eventManager;
-
-        return $this;
-    }
-
     public function getService($name)
     {
         return $this->container->get($name);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function get($name)
     {
         return $this->getResource($name);
@@ -121,15 +112,15 @@ class ResourceLoader
      *
      * @param string $name
      * @param mixed $resource
-     * @return Enlight_Bootstrap
+     * @return \Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
         $this->resourceList[$name] = $resource;
         $this->resourceStatus[$name] = self::STATUS_ASSIGNED;
 
-        if ($this->eventManager) {
-            $this->eventManager->notify(
+        if ($this->container->has('events')) {
+            $this->container->get('events')->notify(
                 'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
                     'subject'  => $this->bootstrap,
                     'resource' => $resource
@@ -169,6 +160,7 @@ class ResourceLoader
      * set and an \Exception is thrown.
      *
      * @param string $name
+     * @throws \Exception
      * @return mixed
      */
     public function getResource($name)
@@ -196,6 +188,8 @@ class ResourceLoader
      * In case the resource successfully initialed the resource has the status STATUS_LOADED
      *
      * @param string $name
+     * @throws \Exception
+     * @throws \Enlight_Exception
      * @return bool
      */
     public function loadResource($name)
@@ -203,7 +197,7 @@ class ResourceLoader
         if (isset($this->resourceStatus[$name])) {
             switch ($this->resourceStatus[$name]) {
                 case self::STATUS_BOOTSTRAP:
-                    throw new Enlight_Exception('Resource "' . $name . '" can\'t resolve all dependencies');
+                    throw new \Enlight_Exception('Resource "' . $name . '" can\'t resolve all dependencies');
                 case self::STATUS_NOT_FOUND:
                     return false;
                 case self::STATUS_ASSIGNED:
@@ -217,9 +211,11 @@ class ResourceLoader
         try {
             $this->resourceStatus[$name] = self::STATUS_BOOTSTRAP;
             $event = false;
-            if ($this->eventManager) {
-                $event = $this->eventManager->notifyUntil(
-                    'Enlight_Bootstrap_InitResource_' . $name, array('subject' => $this->bootstrap)
+
+            if ($this->container->has('events')) {
+                $event = $this->container->get('events')->notifyUntil(
+                    'Enlight_Bootstrap_InitResource_' . $name,
+                    array('subject' => $this->bootstrap)
                 );
             }
 
@@ -233,13 +229,12 @@ class ResourceLoader
                 $this->resourceList[$name] = $this->container->get($name);
             }
 
-            if ($this->eventManager) {
-                $this->eventManager->notify(
+            if ($this->container->has('events')) {
+                $this->container->get('events')->notify(
                     'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this->bootstrap)
                 );
             }
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
             throw $e;
         }
@@ -258,7 +253,7 @@ class ResourceLoader
      * list properties.
      *
      * @param string $name
-     * @return Enlight_Bootstrap
+     * @return \Enlight_Bootstrap
      */
     public function resetResource($name)
     {

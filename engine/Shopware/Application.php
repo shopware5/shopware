@@ -80,7 +80,6 @@ class Shopware extends Enlight_Application
         //only initials the plugin manager class. The plugin service registers the plugins and should use in the application.
         $this->_plugins = $this->ResourceLoader()->get('plugin_manager');
         $this->ResourceLoader()->setBootstrap($this->Bootstrap());
-        $this->ResourceLoader()->setEventManager($this->_events);
     }
 
 
