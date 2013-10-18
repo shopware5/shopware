@@ -162,7 +162,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return true;
         }
 
-        $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops');
+        $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
 
         $currentTime = new DateTime();
 
