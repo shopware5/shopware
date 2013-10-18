@@ -2978,9 +2978,12 @@ class sArticles
 
             // Building link 'More articles from this supplier'
             // =================================================.
+            //
+            // This is most likely dead code. I'll update it for now, as part of SW-6977, but its
+            // not tested nor should it be in use anywhere
             $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                . "?sViewport=search&sSearch=" . $getArticle['supplierID']
-                . "&sSearchMode=supplier&sSearchText=" . urlencode($getArticle['supplierName']);
+                . "sViewport=cat&sSupplier=" . $getArticle['supplierID']
+                . "&sSearchText=" . urlencode($getArticle['supplierName']);
 
             $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
                 "description" => $getArticle["supplierName"],

@@ -36,49 +36,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if ($this->Request()->sSearchMode == "supplier") {
-            return $this->forward("supplierSearch");
-        }
         return $this->forward("defaultSearch");
-    }
-
-    /**
-     * Method that is used for "search other articles from this vendor"
-     * @deprecated Please use the Listing controller index action. The listing function expects the supplier id
-     * in the request parameter sSupplier.
-     */
-    public function supplierSearchAction()
-    {
-        $search = $this->Request()->sSearch;
-
-        $variables = Shopware()->Modules()->Articles()->sGetArticlesByName('a.name ASC', '', 'supplier', $search);
-        $search = $this->Request()->sSearchText;
-
-
-        foreach ($variables['sPerPage'] as $perPageKey => &$perPage) {
-            $perPage['link'] = str_replace('sPage=' . $this->Request()->sPage, 'sPage=1', $perPage['link']);
-        }
-
-        $searchResults = $variables['sArticles'];
-
-        foreach ($searchResults as $searchResult) {
-            if (is_array($searchResult)) {
-                $searchResult = $searchResult['id'];
-            }
-            $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int)$searchResult);
-            if (!empty($article['articleID'])) {
-                $articles[] = $article;
-            }
-        }
-
-        $this->View()->loadTemplate('frontend/search/index.tpl');
-        $this->View()->sSearchResults = $articles;
-        $this->View()->sSearchResultsNum = empty($variables['sNumberArticles']) ? count($articles) : $variables['sNumberArticles'];
-        $this->View()->sSearchTerm = $search;
-        $this->View()->sPages = $variables['sPages'];
-        $this->View()->sPerPage = $variables['sPerPage'];
-        $this->View()->sNumberPages = $variables['sNumberPages'];
-        $this->View()->sPage = $this->Request()->sPage;
     }
 
     /**
