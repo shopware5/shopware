@@ -452,9 +452,12 @@ class sAdmin
 
         }
 
-        if (!count($getPaymentMeans)){
-            $this->sSYSTEM->E_CORE_WARNING("sGetPaymentMeans #00","Could not get any payment-means".$sql);
-            return;
+        //if no payment is left use always the fallback payment no matter if it has any restrictions too
+        if (!count($getPaymentMeans)) {
+            $sql = "SELECT * FROM s_core_paymentmeans WHERE id =?";
+            $fallBackPayment = Shopware()->Db()->fetchRow($sql, array(Shopware()->Config()->get('paymentdefault')));
+
+            $getPaymentMeans[] = $this->sGetPaymentTranslation($fallBackPayment);
         }
 
         $getPaymentMeans = Enlight()->Events()->filter('Shopware_Modules_Admin_GetPaymentMeans_DataFilter', $getPaymentMeans, array('subject'=>$this));
