@@ -3475,8 +3475,7 @@ class sArticles
         if (!empty($getPromotionResult["purchaseunit"]) && !empty($getPromotionResult["referenceunit"])) {
             $basePrice = str_replace(",", ".", $getPromotionResult['price']);
             $basePrice = floatval($basePrice);
-            $refPrice = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
-            $getPromotionResult['referenceprice'] = number_format($refPrice, 2, ",", ".");
+            $getPromotionResult['referenceprice'] = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
         }
 
         // Strip tags from descriptions
@@ -3790,8 +3789,7 @@ class sArticles
         if (!empty($getPromotionResult["purchaseunit"]) && !empty($getPromotionResult["referenceunit"])) {
             $basePrice = str_replace(",", ".", $getPromotionResult['price']);
             $basePrice = floatval($basePrice);
-            $refPrice = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
-            $getPromotionResult['referenceprice'] = number_format($refPrice, 2, ",", ".");
+            $getPromotionResult['referenceprice'] = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
         }
 
         // Strip tags from descriptions
