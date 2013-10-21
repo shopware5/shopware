@@ -21,6 +21,8 @@
  * @author     $Author$
  */
 
+use Shopware\Components\ResourceLoader;
+
 /**
  * The Enlight_Application component forms the basis for the enlight project.
  *
@@ -129,19 +131,18 @@ class Enlight_Application
      * given options parameter.
      * After the configuration is loaded, the application name and path is taken from the config and set in the class properties.
      *
-     *
      * @param string $environment
-     * @param mixed  $options
-     * @param        $loader
-     *
-     * @throws Exception
+     * @param array $options
+     * @param ResourceLoader $resourceLoader
      */
-    public function __construct($environment, array $options, $loader)
+    public function __construct($environment, array $options, ResourceLoader $resourceLoader)
     {
         self::$instance = $this;
         $this->environment = $environment;
         $this->path = dirname(dirname(__FILE__)) . $this->DS();
         $this->core_path = $this->path . 'Enlight' . $this->DS();
+
+        $loader = $resourceLoader->get('Loader');
         $this->_loader = $loader;
 
         if (!class_exists('Enlight_Class', false)) {
@@ -175,13 +176,12 @@ class Enlight_Application
         $this->_loader->registerNamespace($this->App(), $this->AppPath());
 
         $this->setOptions($options);
-    }
 
-    public function boot()
-    {
-        $this->_events = new Enlight_Event_EventManager();
-        $this->_hooks = new Enlight_Hook_HookManager($this);
-        $this->_plugins = new Enlight_Plugin_PluginManager($this);
+        $this->_hooks    = $this->ResourceLoader()->get('hooks');
+        $this->_events   = $this->ResourceLoader()->get('events');
+        $this->_plugins  = new Enlight_Plugin_PluginManager($this);
+
+        $resourceLoader->setBootstrap($this->Bootstrap());
     }
 
     /**
