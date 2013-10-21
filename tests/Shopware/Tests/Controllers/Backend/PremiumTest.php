@@ -109,7 +109,11 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      * @param $lastId The id of the last created article
      * @depends testCreatePremiumArticle
      */
-    public function testEditPremiumArticle($lastId){
+    public function testEditPremiumArticle($lastId)
+    {
+        // Clear entitymanager to prevent weird 'model shop not persisted' errors.
+        Shopware()->Models()->clear();
+
         $premiumData = $this->premiumData;
         $premiumData['pseudoOrderNumber'] = 'SW987';
         $premiumData['id'] = $lastId;
