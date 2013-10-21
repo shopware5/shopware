@@ -2094,8 +2094,7 @@ class sAdmin
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderDetailsValue["price"]);
 
-                    /** GET ARTICLE DETAILS START - @date: 05-24-2011 */
-                    $tmpArticle = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, $getOrderDetails[$orderDetailsKey]['articleID']);
+                    $tmpArticle = $this->sSYSTEM->sMODULES['sArticles']->sGetProductByOrdernumber($getOrderDetails[$orderDetailsKey]['articleordernumber']);
 
                     if(!empty($tmpArticle) && is_array($tmpArticle)) {
 
