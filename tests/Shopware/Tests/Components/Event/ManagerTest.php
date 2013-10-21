@@ -29,6 +29,15 @@
  */
 class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    public function setUp()
+    {
+        $this->eventManager = new Enlight_Event_EventManager();
+    }
 
     public function testAppendEventWithArray()
     {
@@ -36,11 +45,12 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
             array($this, 'appendEventWithArrayListener')
         );
-        Shopware()->Events()->registerListener($event);
 
-        /**@var $values \Doctrine\Common\Collections\ArrayCollection */
+        $this->eventManager->registerListener($event);
+
+        /** @var $values \Doctrine\Common\Collections\ArrayCollection */
         $values = new \Doctrine\Common\Collections\ArrayCollection(array('foo', 'bar'));
-        $values = Shopware()->Events()->collect(
+        $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
             $values
         );
@@ -67,9 +77,9 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
             array($this, 'appendEventWithSingleValueListener')
         );
-        Shopware()->Events()->registerListener($event);
+        $this->eventManager->registerListener($event);
 
-        $values = Shopware()->Events()->collect(
+        $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
             $values,
             array()
@@ -91,9 +101,9 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
             array($this, 'appendEventWithNullValueListener')
         );
-        Shopware()->Events()->registerListener($event);
+        $this->eventManager->registerListener($event);
 
-        $values = Shopware()->Events()->collect(
+        $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
             $values,
             array()
@@ -115,9 +125,9 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithBooleanValue',
             array($this, 'appendEventWithBooleanValueListener')
         );
-        Shopware()->Events()->registerListener($event);
+        $this->eventManager->registerListener($event);
 
-        $values = Shopware()->Events()->collect(
+        $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithBooleanValue',
             $values
         );
@@ -136,7 +146,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
     public function testAppendEventWithNoListener()
     {
         $values = new \Doctrine\Common\Collections\ArrayCollection(array('foo', 'bar'));
-        $values = Shopware()->Events()->collect(
+        $values = $this->eventManager->collect(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNoListener',
             $values
         );
