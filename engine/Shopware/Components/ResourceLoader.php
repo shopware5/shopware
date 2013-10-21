@@ -49,11 +49,6 @@ class ResourceLoader
     protected $container;
 
     /**
-     * @var Container
-     */
-    protected $pluginContainer;
-
-    /**
      * @var \Enlight_Bootstrap
      */
     protected $bootstrap;
@@ -73,17 +68,6 @@ class ResourceLoader
     public function setBootstrap(\Enlight_Bootstrap $bootstrap)
     {
         $this->bootstrap = $bootstrap;
-
-        return $this;
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\Container $container
-     * @return \Shopware\Components\ResourceLoader
-     */
-    public function setPluginContainer(Container $container)
-    {
-        $this->pluginContainer = $container;
 
         return $this;
     }
@@ -223,8 +207,6 @@ class ResourceLoader
                 $this->resourceList[$name] = $event->getReturn();
             } elseif ($this->bootstrap && $this->bootstrap->hasInit($name)) {
                 $this->resourceList[$name] = $this->bootstrap->callInit($name, $this);
-            } elseif ($this->pluginContainer && $this->pluginContainer->has($name)) {
-                $this->resourceList[$name] = $this->pluginContainer->get($name);
             } elseif ($this->container->has($name)) {
                 $this->resourceList[$name] = $this->container->get($name);
             }

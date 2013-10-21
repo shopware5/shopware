@@ -69,11 +69,6 @@ class Kernel implements HttpKernelInterface
     protected $container;
 
     /**
-     * @var Container
-     */
-    protected $pluginContainer;
-
-    /**
      * @var ResourceLoader
      */
     protected $resourceLoader;
@@ -220,10 +215,6 @@ class Kernel implements HttpKernelInterface
         $this->initializeContainer();
         $this->initializeResourceLoader();
         $this->initializeShopware();
-        $this->initializePluginContainer();
-        if ($this->pluginContainer) {
-            $this->resourceLoader->setPluginContainer($this->pluginContainer);
-        }
 
         $this->booted = true;
     }
@@ -456,65 +447,5 @@ class Kernel implements HttpKernelInterface
     protected function getConfig()
     {
         return $this->config;
-    }
-
-    /**
-     *
-     */
-    protected function initializePluginContainer()
-    {
-        try {
-            $this->pluginContainer = $this->buildPluginContainer();
-            $this->pluginContainer->compile();
-        } catch (\Exception $e) {
-            $this->kernelException = $e;
-            $this->container->set('kernel.exception', $e);
-        }
-    }
-
-    /**
-     * @return ContainerBuilder
-     */
-    protected function buildPluginContainer()
-    {
-        $container = $this->getContainerBuilder();
-        $container->addObjectResource($this);
-
-        $this->addShopwareConfig($container, 'shopware', $this->config);
-        $this->addPluginContainerExtensions($container);
-
-        return $container;
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @throws \Exception
-     */
-    public function addPluginContainerExtensions(ContainerBuilder $container)
-    {
-        $this->getShopware()->Front();
-
-        $collection = array();
-
-        //throw event to collect all plugin container service definitions.
-        $collection = $this->shopware->Events()->filter(
-            'Shopware_Plugin_Container_Add_Services',
-            $collection,
-            array()
-        );
-
-        /** @var $service ServiceDefinition */
-        foreach ($collection as $service) {
-            if (!$service instanceof ServiceDefinition) {
-                throw new \Exception('Some plugin tries to add a service without using the \Shopware\DependencyInjection\ServiceDefinition class');
-            }
-
-            if ($service->getConfig()) {
-                $this->addShopwareConfig($container, $service->getAlias(), $service->getConfig());
-            }
-
-            $loader = new XmlFileLoader($container, new FileLocator(dirname($service->getXmlPath())));
-            $loader->load(basename($service->getXmlPath()));
-        }
     }
 }
