@@ -49,7 +49,8 @@ those files.
 3.) An [Ant](http://ant.apache.org/) Buildfile is used to set up the configuration and database connection:
 
     cd build/
-    ant -Ddb.user=youruser -Ddb.password=yourpassword -Ddb.name=shopware build-database build-config
+    ant configure
+    ant build-config build-composer-install build-database
 
 4.) Download the demo data files and extract them:
 
@@ -106,26 +107,15 @@ If you're done hacking, filling bugs or building fancy new features push your ch
 #### Database
 For mosts tests a configured database connection is required.
 
-#### PHPUnit
-To run the Shopware 4 test suite, install PHPUnit 3.6 or later first:
-
-    pear config-set auto_discover 1
-    pear install pear.phpunit.de/PHPUnit
-    pear install phpunit/DbUnit
-
 #### Running the tests
 The tests are located in the `tests/Shopware/` directory
-
-    cd tests/Shopware/
-
 You can run the entire test suite with the following command:
 
-    phpunit
+    vendor/bin/phpunit -c tests/Shopware
 
 If you want to test a single component, add its path after the phpunit command, e.g.:
 
-    phpunit Tests/Components/Api/
-
+    vendor/bin/phpunit -c tests/Shopware tests/Shopware/Tests/Components/Api/
 
 ### Coding standards
 All contributions should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding
