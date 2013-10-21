@@ -134,6 +134,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         if (!$this->dispatcher) {
             $this->setDispatcher('Enlight_Controller_Dispatcher_Default');
         }
+
         if (!$this->request) {
             $this->setRequest('Enlight_Controller_Request_RequestHttp');
         }
@@ -159,8 +160,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
              */
             try {
                 $this->router->route($this->request);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 if ($this->throwExceptions()) {
                     throw $e;
                 }
@@ -212,15 +212,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                      */
                     try {
                         $this->dispatcher->dispatch($this->request, $this->response);
-                    }
-                    catch (Exception $e) {
+                    } catch (Exception $e) {
                         if ($this->throwExceptions()) {
                             throw $e;
                         }
                         $this->response->setException($e);
                     }
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     if ($this->throwExceptions()) {
                         throw $e;
                     }
@@ -234,8 +232,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                     $eventArgs
                 );
             } while (!$this->request->isDispatched());
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
             }
@@ -250,8 +247,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                 'Enlight_Controller_Front_DispatchLoopShutdown',
                 $eventArgs
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
             }
