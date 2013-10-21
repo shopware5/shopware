@@ -63,25 +63,8 @@ class Shopware extends Enlight_Application
             $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
         }
 
-        parent::__construct($environment, $options, $resourceLoader->getService('loader'));
+        parent::__construct($environment, $options, $resourceLoader);
     }
-
-
-    /**
-     * Boots all required components for the shopware application like
-     * event, plugin and hook manager.
-     * Override from the Enlight_Application to use the
-     * new resource loader to initials the components.
-     */
-    public function boot()
-    {
-        $this->_hooks = $this->ResourceLoader()->get('hooks');
-        $this->_events = $this->ResourceLoader()->get('events');
-        //only initials the plugin manager class. The plugin service registers the plugins and should use in the application.
-        $this->_plugins = $this->ResourceLoader()->get('plugin_manager');
-        $this->ResourceLoader()->setBootstrap($this->Bootstrap());
-    }
-
 
     /**
      * Returns old path
