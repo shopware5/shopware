@@ -106,6 +106,8 @@ class Kernel implements HttpKernelInterface
         $this->debug = $debug;
         $this->booted = false;
         $this->name = 'Shopware';
+
+        $this->initializeConfig();
     }
 
     /**
@@ -215,7 +217,6 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
-        $this->initializeConfig();
         $this->initializeContainer();
         $this->initializeResourceLoader();
         $this->initializeShopware();
@@ -303,7 +304,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getCacheDir()
     {
-        return __DIR__ . '/../../cache/symfony';
+        return $this->config['hook']['proxyDir'];
     }
 
     /**
