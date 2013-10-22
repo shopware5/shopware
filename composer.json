@@ -31,9 +31,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Shopware\\Components\\": "engine/",
-            "Shopware_Components": "engine/",
-            "Shopware_Controllers": "engine/",
+            "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Doctrine": "engine/Library/",
             "Zend": "engine/Library/"

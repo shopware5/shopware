@@ -172,8 +172,6 @@ class Enlight_Application
             throw new Exception('App "' . $this->app . '" with path "' . $this->appPath . '" not found failure');
         }
 
-        $this->_loader->registerNamespace($this->App(), $this->AppPath());
-
         $this->setOptions($options);
 
         $this->_hooks    = $resourceLoader->get('hooks');
