@@ -298,14 +298,13 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
         foreach ($this->getListeners($event) as $listener) {
-            /**@var $listenerCollection ArrayCollection*/
             $listenerCollection = $listener->execute($eventArgs);
             if ($listenerCollection instanceof ArrayCollection) {
-                foreach($listenerCollection->getValues() as $value) {
+                foreach ($listenerCollection->getValues() as $value) {
                     $collection->add($value);
                 }
             } else if ($listenerCollection !== null) {
-                $collection->add($value);
+                $collection->add($listenerCollection);
             }
         }
         $eventArgs->setProcessed(true);
