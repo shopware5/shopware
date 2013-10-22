@@ -142,8 +142,7 @@ class Enlight_Application
         $this->path = dirname(dirname(__FILE__)) . $this->DS();
         $this->core_path = $this->path . 'Enlight' . $this->DS();
 
-        $loader = $resourceLoader->get('Loader');
-        $this->_loader = $loader;
+        $this->_loader = $resourceLoader->get('Loader');
 
         if (!class_exists('Enlight_Class', false)) {
             require_once('Enlight/Exception.php');
@@ -177,8 +176,8 @@ class Enlight_Application
 
         $this->setOptions($options);
 
-        $this->_hooks    = $this->ResourceLoader()->get('hooks');
-        $this->_events   = $this->ResourceLoader()->get('events');
+        $this->_hooks    = $resourceLoader->get('hooks');
+        $this->_events   = $resourceLoader->get('events');
         $this->_plugins  = new Enlight_Plugin_PluginManager($this);
 
         $resourceLoader->setBootstrap($this->Bootstrap());
