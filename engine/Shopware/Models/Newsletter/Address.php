@@ -129,6 +129,14 @@ class Address extends ModelEntity
     private $lastReadId = 0;
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param string $email
      */
     public function setEmail($email)
