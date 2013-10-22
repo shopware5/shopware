@@ -63,10 +63,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     {
         $config = Shopware()->Config();
 
-        require_once(Shopware()->OldPath() . 'engine/core/class/sSystem.php');
-
         $system = new sSystem();
-
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
@@ -125,10 +122,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             }
         }
 
-        //$system->sCurrencyData = self::getCurrencyData();
-        //$system->sCurrencyData[$system->sCurrency]['flag'] = true;
-        //$system->sCurrency = $system->sCurrencyData[$system->sCurrency];
-
         if ($request !== null) {
             $system->sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
@@ -142,8 +135,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
         $system->sBasefile = $config->baseFile;
 
-        //$config['sPREMIUM'] = $system->sLicenseData['sPREMIUM'];
-        //$config['sCurrencies'] = $system->sCurrencyData;
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 

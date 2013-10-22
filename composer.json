@@ -37,6 +37,9 @@
             "Enlight": "engine/Library/",
             "Doctrine": "engine/Library/",
             "Zend": "engine/Library/"
-        }
+        },
+        "classmap": [
+            "engine/core/class/"
+        ]
     }
 }
