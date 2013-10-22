@@ -353,7 +353,7 @@ class Kernel implements HttpKernelInterface
 
         $container = $this->getContainerBuilder();
         $container->addObjectResource($this);
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Configs/'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
