@@ -29,13 +29,8 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Proxy\Autoloader;
-use Shopware\Components\Model\CategoryDenormalization;
-use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\Model\Configuration;
-use Shopware\Components\Model\EventSubscriber;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\ResourceLoader;
-use Shopware\Models\Order\OrderHistorySubscriber;
 
 /**
  * Wrapper service class for the doctrine entity manager.
@@ -73,7 +68,7 @@ class Models
      * Contains the application event manager which is used
      * to inject it into the doctrine event manager.
      *
-     * @var \Enlight_Event_EventManager
+     * @var EventManager
      */
     protected $eventManager;
 
@@ -82,20 +77,9 @@ class Models
      * This adapter is injected into the doctrine environment for the
      * database connection of doctrine processes.
      *
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var \Pdo
      */
     protected $db;
-
-    /**
-     * Instance of the application resource loader.
-     * The loader is used to load resources or to add dynamically
-     * new resource at runtime.
-     * The model service class use it to add the shopware specified
-     * doctrine event subscribers like the CategoryDenormalization.
-     *
-     * @var ResourceLoader
-     */
-    protected $resourceLoader;
 
     /**
      * Contains the directory path of the shopware installation.
@@ -105,34 +89,32 @@ class Models
     protected $kernelRootDir;
 
     /**
-     * Injects all required components.
-     *
-     * @param Configuration                                                  $config
-     * @param \Enlight_Loader                                                $loader
-     * @param \Enlight_Event_EventManager                                    $eventManager
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql                       $db
-     * @param ResourceLoader                                                 $resourceLoader
-     * @param string                                                         $modelPath
-     * @param string                                                         $kernelRootDir
-     * @param AnnotationDriver                                               $modelAnnotation
+     * @param EventManager      $eventManager
+     * @param Configuration     $config
+     * @param \Enlight_Loader   $loader
+     * @param \Pdo              $db
+     * @param string            $modelPath
+     * @param string            $kernelRootDir
+     * @param AnnotationDriver  $modelAnnotation
      */
     public function __construct(
+        EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
-        \Enlight_Event_EventManager $eventManager,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        ResourceLoader $resourceLoader,
+        \Pdo $db,
         $modelPath,
         $kernelRootDir,
         AnnotationDriver $modelAnnotation
     ) {
+        $this->eventManager = $eventManager;
         $this->config = $config;
         $this->modelPath = $modelPath;
         $this->loader = $loader;
-        $this->eventManager = $eventManager;
         $this->db = $db;
-        $this->resourceLoader = $resourceLoader;
         $this->kernelRootDir = $kernelRootDir;
+
+        // annotation driver is not really used here but has to be loaded first
+        $this->modelAnnotation = $modelAnnotation;
     }
 
     /**
@@ -141,7 +123,6 @@ class Models
      */
     public function factory()
     {
-
         // register standard doctrine annotations
         AnnotationRegistry::registerFile(
             'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
@@ -158,41 +139,21 @@ class Models
             $this->config->getAttributeDir()
         );
 
-        // Create event Manager
-        $eventManager = new EventManager();
-
-        // Create new shopware event subscriber to handle the entity lifecycle events.
-        $lifeCycleSubscriber = new EventSubscriber(
-            $this->eventManager
-        );
-        $eventManager->addEventSubscriber($lifeCycleSubscriber);
-
-        $categorySubscriber = new CategorySubscriber();
-
-        $this->resourceLoader->registerResource('CategorySubscriber', $categorySubscriber);
-        $eventManager->addEventSubscriber($categorySubscriber);
-
-        $eventManager->addEventSubscriber(new OrderHistorySubscriber());
-
-        $categoryDenormalization = new CategoryDenormalization(
-            $this->db->getConnection()
-        );
-
-        $this->resourceLoader->registerResource('CategoryDenormalization', $categoryDenormalization);
-
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
         $conn = DriverManager::getConnection(
-            array('pdo' => $this->db->getConnection()),
+            array('pdo' => $this->db),
             $this->config,
-            $eventManager
+            $this->eventManager
         );
 
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
 
         $entityManager = ModelManager::create(
-            $conn, $this->config, $eventManager
+            $conn,
+            $this->config,
+            $this->eventManager
         );
 
         Autoloader::register(

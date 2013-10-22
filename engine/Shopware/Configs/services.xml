@@ -32,6 +32,10 @@
             </call>
         </service>
 
+        <service id="db_connection"
+                 class="Pdo"
+                 factory-service="db"
+                 factory-method="getConnection" />
 
         <service id="db"
                  class="Enlight_Components_Db_Adapter_Pdo_Mysql"
@@ -92,33 +96,24 @@
             <argument>%shopware.hook%</argument>
         </service>
 
-
-
-        <service id="model_config_factory"
-                 class="Shopware\Components\DependencyInjection\Bridge\ModelConfig">
+        <service id="model_config"
+                 class="Shopware\Components\Model\Configuration">
 
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache" />
             <argument type="service" id="hooks" />
         </service>
 
-        <service id="model_config"
-                 class="Shopware\Components\Model\Configuration"
-                 factory-service="modelConfig_factory"
-                 factory-method="factory" />
-
         <service id="model_factory"
                  class="Shopware\Components\DependencyInjection\Bridge\Models">
 
+            <argument type="service" id="model_event_manager" />
             <argument type="service" id="model_config" />
             <argument type="service" id="loader" />
-            <argument type="service" id="events" />
-            <argument type="service" id="db" />
-            <argument type="service" id="resource_loader" />
+            <argument type="service" id="db_connection" />
             <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
             <argument>%kernel.root_dir%</argument>
             <argument type="service" id="model_annotations" />
-
         </service>
 
         <service id="models"
@@ -138,5 +133,32 @@
                  class="Doctrine\ORM\Mapping\Driver\AnnotationDriver"
                  factory-service="model_annotations_factory"
                  factory-method="factory" />
+
+        <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false">
+            <call method="addEventSubscriber">
+                <argument type="service" id="EventSubscriber" />
+            </call>
+            <call method="addEventSubscriber">
+                <argument type="service" id="CategorySubscriber" />
+            </call>
+            <call method="addEventSubscriber">
+                <argument type="service" id="OrderHistorySubscriber" />
+            </call>
+        </service>
+
+        <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="OrderHistorySubscriber" class="Shopware\Models\Order\OrderHistorySubscriber" public="false">
+        </service>
+
+        <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
+            <argument type="service" id="CategoryDenormalization" />
+        </service>
+
+        <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
+            <argument type="service" id="db_connection" />
+        </service>
     </services>
 </container>
