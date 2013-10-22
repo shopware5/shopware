@@ -201,12 +201,11 @@ abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
     /**
      * Registers the Zend namespace.
      *
+     * @deprecated 4.2.0 Superseded by composer autoloader.
      * @return bool
      */
     protected function initZend()
     {
-        $this->Application()->Loader()->registerNamespace('Zend', 'Zend/');
-
         return true;
     }
 
