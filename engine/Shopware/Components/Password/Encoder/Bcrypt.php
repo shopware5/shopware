@@ -70,8 +70,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isPasswordValid($password, $hash)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_verify($password, $hash);
     }
 
@@ -81,8 +79,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_hash($password, PASSWORD_DEFAULT, $this->options);
     }
 
@@ -92,8 +88,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isReencodeNeeded($hash)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
     }
 }
