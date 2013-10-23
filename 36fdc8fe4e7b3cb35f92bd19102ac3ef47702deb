@@ -1,0 +1,9 @@
+From: feature/master/sw-5369-update-copyright-year
+To: master
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/PluginManager/Components/Store.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/PluginManager/Components/Store.php
+Conflict: (content) Merge conflict in engine/Shopware/Controllers/Widgets/LastArticles.php
+	MODIFY|engine/Shopware/Controllers/Widgets/LastArticles.php
+Conflict: (delete/modify) engine/Shopware/Controllers/Backend/Plugin.php deleted in HEAD and modified in 11e54f4afc3832733031d6d783cce1b38b390cfb. Version 11e54f4afc3832733031d6d783cce1b38b390cfb of engine/Shopware/Controllers/Backend/Plugin.php left in tree.
+	DELETE|engine/Shopware/Controllers/Backend/Plugin.php
+	MODIFY|engine/Shopware/Controllers/Backend/Plugin.php
