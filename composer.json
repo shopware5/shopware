@@ -25,7 +25,8 @@
         "symfony/validator": "2.3.*",
         "symfony/filesystem": "2.3.*",
         "symfony/console": "2.3.*",
-        "monolog/monolog": "1.6.*"
+        "monolog/monolog": "1.6.*",
+        "ircmaxell/password-compat": "1.0.3"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
