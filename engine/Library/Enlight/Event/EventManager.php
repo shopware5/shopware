@@ -69,7 +69,9 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function registerListener(Enlight_Event_Handler $handler)
     {
-        $list =& $this->listeners[$handler->getName()];
+        $eventName = strtolower($handler->getName());
+
+        $list =& $this->listeners[$eventName];
 
         if ($handler->getPosition()) {
             $position = (int)$handler->getPosition();
@@ -95,8 +97,10 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
-        if (!empty($this->listeners[$handler->getName()])) {
-            $this->listeners[$handler->getName()] = array_diff($this->listeners[$handler->getName()], array($handler));
+        $eventName = strtolower($handler->getName());
+
+        if (!empty($this->listeners[$eventName])) {
+            $this->listeners[$eventName] = array_diff($this->listeners[$eventName], array($handler));
         }
 
         return $this;
@@ -111,6 +115,8 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function hasListeners($event)
     {
+        $event = strtolower($event);
+
         return isset($this->listeners[$event]) && count($this->listeners[$event]);
     }
 
@@ -123,6 +129,8 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function getListeners($event)
     {
+        $event = strtolower($event);
+
         if (isset($this->listeners[$event])) {
             return $this->listeners[$event];
         } else {

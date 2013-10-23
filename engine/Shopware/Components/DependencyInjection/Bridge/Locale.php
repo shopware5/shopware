@@ -24,34 +24,26 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\ResourceLoader;
+
 /**
-* @category  Shopware
-* @package   Shopware\Components\DependencyInjection\Bridge
-* @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection\Bridge
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class Locale
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
-     *
-     * @return null|\Shopware_Components_Config
+     * @param ResourceLoader $resourceLoader
+     * @return \Zend_Locale
      */
-    public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
-    ) {
-        if (!$db) {
-            return null;
+    public function factory(ResourceLoader $resourceLoader)
+    {
+        $locale = 'de_DE';
+        if ($resourceLoader->hasResource('Shop')) {
+            $locale = $resourceLoader->getResource('Shop')->getLocale()->getLocale();
         }
 
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
-        }
-        $config['db'] = $db;
-
-        return new \Shopware_Components_Config($config);
+        return new \Zend_Locale($locale);
     }
 }

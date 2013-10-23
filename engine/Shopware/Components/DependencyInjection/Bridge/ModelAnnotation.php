@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;
 
@@ -40,55 +41,30 @@ use Shopware\Components\Model\Configuration;
 class ModelAnnotation
 {
     /**
-     * Contains the shopware model configuration
-     *
-     * @var Configuration
-     */
-    protected $config;
-
-    /**
-     * Paths to the doctrine entities.
-     *
-     * @var
-     */
-    protected $modelPath;
-
-
-    /**
-     * Injects all required components.
-     *
-     * @param Configuration                            $config
-     * @param string                                   $modelPath
-     */
-    public function __construct(Configuration $config, $modelPath)
-    {
-        $this->config = $config;
-        $this->modelPath = $modelPath;
-    }
-
-    /**
      * Creates the entity manager for the application.
      *
-     * @return \Doctrine\ORM\Mapping\Driver\AnnotationDriver
+     * @param Configuration $config
+     * @param string        $modelPath
+     * @return AnnotationDriver
      */
-    public function factory()
+    public function factory(Configuration $config, $modelPath)
     {
         $annotationDriver = new AnnotationDriver(
-            $this->config->getAnnotationsReader(),
+            $config->getAnnotationsReader(),
             array(
-                $this->modelPath,
-                $this->config->getAttributeDir(),
+                $modelPath,
+                $config->getAttributeDir(),
             )
         );
 
         // create a driver chain for metadata reading
-        $driverChain = new \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain();
+        $driverChain = new MappingDriverChain();
 
         // register annotation driver for our application
         $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
         $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
 
-        $this->config->setMetadataDriverImpl($driverChain);
+        $config->setMetadataDriverImpl($driverChain);
 
         return $annotationDriver;
     }

@@ -49,9 +49,10 @@ class ResourceLoader
     protected $container;
 
     /**
-     * @var \Enlight_Bootstrap
+     * @var \Shopware_Bootstrap
      */
     protected $bootstrap;
+
 
     /**
      * @param Container $container
@@ -59,15 +60,29 @@ class ResourceLoader
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->container->setResourceLoader($this);
+
     }
 
     /**
-     * @param \Enlight_Bootstrap $bootstrap
+     * @param \Shopware_Bootstrap $bootstrap
      * @return \Shopware\Components\ResourceLoader
      */
-    public function setBootstrap(\Enlight_Bootstrap $bootstrap)
+    public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
         $this->bootstrap = $bootstrap;
+        $this->container->set('bootstrap', $bootstrap);
+
+        return $this;
+    }
+
+    /**
+     * @param \Shopware $application
+     * @return \Shopware\Components\ResourceLoader
+     */
+    public function setApplication(\Shopware $application)
+    {
+        $this->container->set('application', $application);
 
         return $this;
     }
@@ -78,7 +93,7 @@ class ResourceLoader
      */
     public function getService($name)
     {
-        return $this->container->get($name);
+        return $this->container->getService($name);
     }
 
     /**
@@ -100,11 +115,13 @@ class ResourceLoader
      */
     public function registerResource($name, $resource)
     {
+        $this->container->set($name, $resource);
+
         $this->resourceList[$name] = $resource;
         $this->resourceStatus[$name] = self::STATUS_ASSIGNED;
 
         if ($this->container->has('events')) {
-            $this->container->get('events')->notify(
+            $this->container->getService('events')->notify(
                 'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
                     'subject'  => $this->bootstrap,
                     'resource' => $resource
@@ -197,7 +214,7 @@ class ResourceLoader
             $event = false;
 
             if ($this->container->has('events')) {
-                $event = $this->container->get('events')->notifyUntil(
+                $event = $this->container->getService('events')->notifyUntil(
                     'Enlight_Bootstrap_InitResource_' . $name,
                     array('subject' => $this->bootstrap)
                 );
@@ -205,14 +222,12 @@ class ResourceLoader
 
             if ($event) {
                 $this->resourceList[$name] = $event->getReturn();
-            } elseif ($this->bootstrap && $this->bootstrap->hasInit($name)) {
-                $this->resourceList[$name] = $this->bootstrap->callInit($name, $this);
             } elseif ($this->container->has($name)) {
-                $this->resourceList[$name] = $this->container->get($name);
+                $this->resourceList[$name] = $this->container->getService($name);
             }
 
             if ($this->container->has('events')) {
-                $this->container->get('events')->notify(
+                $this->container->getService('events')->notify(
                     'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this->bootstrap)
                 );
             }

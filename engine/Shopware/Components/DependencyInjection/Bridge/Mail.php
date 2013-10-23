@@ -24,34 +24,37 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\ResourceLoader;
+
 /**
-* @category  Shopware
-* @package   Shopware\Components\DependencyInjection\Bridge
-* @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection\Bridge
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class Mail
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
-     *
-     * @return null|\Shopware_Components_Config
+     * @param ResourceLoader                $resourceLoader
+     * @param \Shopware_Components_Config   $config
+     * @param array                         $options
+     * @return \Enlight_Components_Mail|null
      */
-    public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
-    ) {
-        if (!$db) {
+    public function factory(ResourceLoader $resourceLoader, \Shopware_Components_Config $config, array $options)
+    {
+        if (!$resourceLoader->loadResource('MailTransport')) {
             return null;
         }
 
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
+        if (isset($options['charset'])) {
+            $defaultCharSet = $options['charset'];
+        } elseif (!empty($config->CharSet)) {
+            $defaultCharSet = $config->CharSet;
+        } else {
+            $defaultCharSet = null;
         }
-        $config['db'] = $db;
 
-        return new \Shopware_Components_Config($config);
+        $mail = new \Enlight_Components_Mail($defaultCharSet);
+
+        return $mail;
     }
 }

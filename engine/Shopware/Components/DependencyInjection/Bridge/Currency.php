@@ -24,34 +24,28 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\ResourceLoader;
+
 /**
-* @category  Shopware
-* @package   Shopware\Components\DependencyInjection\Bridge
-* @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection\Bridge
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class Currency
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
+     * @param ResourceLoader    $resourceLoader
+     * @param \Zend_Locale      $locale
      *
-     * @return null|\Shopware_Components_Config
+     * @return \Zend_Currency
      */
-    public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
-    ) {
-        if (!$db) {
-            return null;
+    public function factory(ResourceLoader $resourceLoader, \Zend_Locale $locale)
+    {
+        $currency = 'EUR';
+        if ($resourceLoader->hasResource('Shop')) {
+            $currency = $resourceLoader->getResource('Shop')->getCurrency()->getCurrency();
         }
 
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
-        }
-        $config['db'] = $db;
-
-        return new \Shopware_Components_Config($config);
+        return new \Zend_Currency($currency, $locale);
     }
 }

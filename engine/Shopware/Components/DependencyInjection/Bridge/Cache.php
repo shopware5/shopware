@@ -39,16 +39,14 @@ use Zend_Locale_Data;
  */
 class Cache
 {
-    private $zendCache;
-
-    public function __construct(Zend_Cache_Core $zendCache)
+    /**
+     * @param \Zend_Cache_Core $zendCache
+     * @return \Zend_Cache_Core
+     */
+    public function factory(\Zend_Cache_Core $zendCache)
     {
-        $this->zendCache = $zendCache;
-    }
+        Zend_Locale_Data::setCache($zendCache);
 
-    public function factory()
-    {
-        Zend_Locale_Data::setCache($this->zendCache);
-        return $this->zendCache;
+        return $zendCache;
     }
 }

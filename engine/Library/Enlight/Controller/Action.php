@@ -355,6 +355,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         return $this->response;
     }
 
+    public function get($name)
+    {
+        return $this->resourceLoader->get($name);
+    }
+
     /**
      * @return \Shopware\Components\Model\ModelManager
      */

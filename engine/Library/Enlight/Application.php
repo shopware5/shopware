@@ -144,14 +144,6 @@ class Enlight_Application
 
         $this->_loader = $resourceLoader->get('Loader');
 
-        if (!class_exists('Enlight_Class', false)) {
-            require_once('Enlight/Exception.php');
-            require_once('Enlight/Hook.php');
-            require_once('Enlight/Singleton.php');
-            require_once('Enlight/Class.php');
-            require_once('Enlight/Loader.php');
-        }
-
         if (!empty($options['app'])) {
             $this->app = $options['app'];
         } elseif (!isset($this->app)) {
@@ -176,9 +168,6 @@ class Enlight_Application
 
         $this->_hooks    = $resourceLoader->get('hooks');
         $this->_events   = $resourceLoader->get('events');
-        $this->_plugins  = new Enlight_Plugin_PluginManager($this);
-
-        $resourceLoader->setBootstrap($this->Bootstrap());
     }
 
     /**
@@ -330,15 +319,6 @@ class Enlight_Application
         $this->_events = $manager;
     }
 
-    /**
-     * Returns the instance of the plugin manager, which is initialed in the class constructor
-     *
-     * @return Enlight_Plugin_PluginManager
-     */
-    public function Plugins()
-    {
-        return $this->_plugins;
-    }
 
     /**
      * Returns the instance of the application bootstrap
@@ -363,57 +343,6 @@ class Enlight_Application
     public static function Instance()
     {
         return self::$instance;
-    }
-
-    /**
-     * This method is used to load a given configuration. The config
-     * parameter can be an instance of Zend_Config, an array of settings or
-     * a file path. If the given config parameter is a file path,
-     * the file will be loaded and returned as an array.
-     *
-     * @throws Enlight_Exception
-     * @param mixed $config
-     * @return array Array of application configurations
-     */
-    public function loadConfig($config)
-    {
-        if ($config instanceof Zend_Config) {
-            return $config->toArray();
-        } elseif (is_array($config)) {
-            return $config;
-        }
-
-        $environment = $this->Environment();
-        $suffix = strtolower(pathinfo($config, PATHINFO_EXTENSION));
-
-        switch ($suffix) {
-            case 'ini':
-                require_once 'Zend/Config/Ini.php';
-                $config = new Zend_Config_Ini($config, $environment);
-                break;
-            case 'xml':
-                require_once 'Zend/Config/Xml.php';
-                $config = new Zend_Config_Xml($config, $environment);
-                break;
-            case 'yaml':
-                require_once 'Zend/Config/Yaml.php';
-                $config = new Zend_Config_Yaml($config, $environment);
-                break;
-            case 'php':
-            case 'inc':
-                $config = include $config;
-                if (!is_array($config)) {
-                    throw new Enlight_Exception(
-                        'Invalid configuration file provided; PHP file does not return array value'
-                    );
-                }
-                return $config;
-                break;
-            default:
-                throw new Enlight_Exception('Invalid configuration file provided; unknown config type');
-        }
-
-        return $config->toArray();
     }
 
     /**
@@ -513,6 +442,7 @@ class Enlight_Application
      * @param string $name
      * @param array $value
      * @return mixed
+     * @deprecated 4.2
      */
     public function __call($name, $value = null)
     {
@@ -522,15 +452,19 @@ class Enlight_Application
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
+
         return $this->Bootstrap()->getResource($name);
     }
 
     /**
      * Returns called resource
      *
+     * Example: Enlight_Application::Db()
+     *
      * @throws Enlight_Exception
      * @param string $name
      * @param array $value
+     * @deprecated 4.2
      * @return mixed
      */
     public static function __callStatic($name, $value = null)
@@ -542,6 +476,7 @@ class Enlight_Application
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
+
         return $enlight->Bootstrap()->getResource($name);
     }
 }

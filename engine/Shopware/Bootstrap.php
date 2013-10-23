@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\HttpCache\HttpKernel;
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Shopware Application
  *
@@ -35,6 +32,33 @@ use Symfony\Component\HttpFoundation\Request;
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
     /**
+     * @var \Shopware\Components\ResourceLoader
+     */
+    protected $resourceLoader;
+
+    /**
+     * Instance of the enlight application.
+     *
+     * @var Enlight_Application
+     */
+    protected $application;
+
+    /**
+     * The class constructor sets the instance of the given enlight application into
+     * the internal $application property.
+     *
+     * @param Shopware $application
+     */
+    public function __construct(Shopware $application)
+    {
+        $this->setApplication($application);
+
+        $this->resourceLoader = $application->ResourceLoader();
+
+        parent::__construct();
+    }
+
+    /**
      * Returns the application instance.
      *
      * @return Enlight_Application|Shopware
@@ -42,6 +66,19 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     public function Application()
     {
         return $this->application;
+    }
+
+    /**
+     * Sets the application instance into the internal $application property.
+     *
+     * @param  Enlight_Application $application
+     * @return Enlight_Bootstrap
+     */
+    public function setApplication(Enlight_Application $application)
+    {
+        $this->application = $application;
+
+        return $this;
     }
 
     /**
@@ -58,374 +95,100 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
             'Content-Type',
             'text/html; charset=' . $front->getParam('charset')
         );
+
         $front->dispatch();
     }
 
     /**
-     * Loads the Zend resource and initials the Enlight_Controller_Front class.
-     * After the front resource is loaded, the controller path is added to the
-     * front dispatcher. After the controller path is set to the dispatcher,
-     * the plugin namespace of the front resource is set.
+     * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
+     * The given name will be used as identifier.
      *
-     * @throws Exception
-     * @return Enlight_Controller_Front
+     * @param string $name
+     * @param mixed $resource
+     * @return Enlight_Bootstrap
      */
-    public function initFront()
+    public function registerResource($name, $resource)
     {
-        $front = parent::initFront();
-
-        try {
-            $this->loadResource('Cache');
-            $this->loadResource('Db');
-            $this->loadResource('Plugins');
-        } catch (Exception $e) {
-            if ($front->throwExceptions()) {
-                throw $e;
-            }
-            $front->Response()->setException($e);
-        }
-
-        return $front;
+        return $this->resourceLoader->registerResource($name, $resource);
     }
 
     /**
-     * Init template method
+     * Checks if the given resource name is already registered. If not the resource is loaded.
      *
-     * @return Enlight_Template_Manager
-     */
-    public function initTemplate()
-    {
-        $template = parent::initTemplate();
-
-        $template->setEventManager(
-            $this->Application()->Events()
-        );
-
-        $template->setTemplateDir(array(
-            'custom'      => '_local',
-            'local'       => '_local',
-            'emotion'     => '_default',
-            'default'     => '_default',
-            'base'        => 'templates',
-            'include_dir' => '.',
-        ));
-
-        $snippetManager = $this->getResource('Snippets');
-        $resource = new Enlight_Components_Snippet_Resource($snippetManager);
-        $template->registerResource('snippet', $resource);
-        $template->setDefaultResourceType('snippet');
-
-        return $template;
-    }
-
-    /**
-     * Init session method
-     *
-     * @return Enlight_Components_Session_Namespace
-     */
-    public function initSession()
-    {
-        $sessionOptions = $this->Application()->getOption('session', array());
-
-        if (!empty($sessionOptions['unitTestEnabled'])) {
-            Enlight_Components_Session::$_unitTestEnabled = true;
-        }
-        unset($sessionOptions['unitTestEnabled']);
-
-        if (Enlight_Components_Session::isStarted()) {
-            Enlight_Components_Session::writeClose();
-        }
-
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->getResource('Shop');
-
-        $name = 'session-' . $shop->getId();
-        $sessionOptions['name'] = $name;
-
-        if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
-            $config_save_handler = array(
-                'db'             => $this->getResource('Db'),
-                'name'           => 's_core_sessions',
-                'primary'        => 'id',
-                'modifiedColumn' => 'modified',
-                'dataColumn'     => 'data',
-                'lifetimeColumn' => 'expiry'
-            );
-            Enlight_Components_Session::setSaveHandler(
-                new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-            );
-            unset($sessionOptions['save_handler']);
-        }
-
-        Enlight_Components_Session::start($sessionOptions);
-
-        $this->registerResource('SessionID', Enlight_Components_Session::getId());
-
-        $namespace = new Enlight_Components_Session_Namespace('Shopware');
-
-        return $namespace;
-    }
-
-    /**
-     * Init mail transport
-     *
-     * @return Zend_Mail_Transport_Abstract
-     */
-    public function initMailTransport()
-    {
-        $options = Shopware()->getOption('mail') ? Shopware()->getOption('mail') : array();
-        $config = $this->getResource('Config');
-
-        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
-            $options['type'] = $config->MailerMailer;
-        }
-        if (empty($options['type'])) {
-            $options['type'] = 'sendmail';
-        }
-
-        if ($options['type'] == 'smtp') {
-            if (!isset($options['username']) && !empty($config->MailerUsername)) {
-                if (!empty($config->MailerAuth)) {
-                    $options['auth'] = $config->MailerAuth;
-                } elseif (empty($options['auth'])) {
-                    $options['auth'] = 'login';
-                }
-                $options['username'] = $config->MailerUsername;
-                $options['password'] = $config->MailerPassword;
-            }
-            if (!isset($options['ssl']) && !empty($config->MailerSMTPSecure)) {
-                $options['ssl'] = $config->MailerSMTPSecure;
-            }
-            if (!isset($options['port']) && !empty($config->MailerPort)) {
-                $options['port'] = $config->MailerPort;
-            }
-            if (!isset($options['name']) && !empty($config->MailerHostname)) {
-                $options['name'] = $config->MailerHostname;
-            }
-            if (!isset($options['host']) && !empty($config->MailerHost)) {
-                $options['host'] = $config->MailerHost;
-            }
-        }
-
-        if (!Shopware()->Loader()->loadClass($options['type'])) {
-            $transportName = ucfirst(strtolower($options['type']));
-            $transportName = 'Zend_Mail_Transport_' . $transportName;
-        } else {
-            $transportName = $options['type'];
-        }
-        unset($options['type'], $options['charset']);
-
-        if ($transportName == 'Zend_Mail_Transport_Smtp') {
-            $transport = Enlight_Class::Instance($transportName, array($options['host'], $options));
-        } elseif (!empty($options)) {
-            $transport = Enlight_Class::Instance($transportName, array($options));
-        } else {
-            $transport = Enlight_Class::Instance($transportName);
-        }
-        Enlight_Components_Mail::setDefaultTransport($transport);
-
-        if (!isset($options['from']) && !empty($config->Mail)) {
-            $options['from'] = array('email' => $config->Mail, 'name' => $config->Shopname);
-        }
-
-        if (!empty($options['from']['email'])) {
-            Enlight_Components_Mail::setDefaultFrom(
-                $options['from']['email'],
-                !empty($options['from']['name']) ? $options['from']['name'] : null
-            );
-        }
-
-        if (!empty($options['replyTo']['email'])) {
-            Enlight_Components_Mail::setDefaultReplyTo(
-                $options['replyTo']['email'],
-                !empty($options['replyTo']['name']) ? $options['replyTo']['name'] : null
-            );
-        }
-
-        return $transport;
-    }
-
-    /**
-     * Init mail method
-     *
-     * @return Enlight_Components_Mail
-     */
-    public function initMail()
-    {
-        if (!$this->loadResource('Config') || !$this->loadResource('MailTransport')) {
-            return null;
-        }
-
-        $options = Shopware()->getOption('mail');
-        $config = $this->getResource('Config');
-
-        if (isset($options['charset'])) {
-            $defaultCharSet = $options['charset'];
-        } elseif (!empty($config->CharSet)) {
-            $defaultCharSet = $config->CharSet;
-        } else {
-            $defaultCharSet = null;
-        }
-
-        $mail = new Enlight_Components_Mail($defaultCharSet);
-
-        return $mail;
-    }
-
-    /**
-     * Init snippets method
-     *
-     * @return Enlight_Components_Snippet_Manager|null
-     */
-    public function initSnippets()
-    {
-        if (!$this->issetResource('Db')) {
-            return null;
-        }
-
-        return $this->getContainerService('snippets');
-    }
-
-    /**
-     * Init router method
-     *
-     * @return Enlight_Controller_Router
-     */
-    public function initRouter()
-    {
-        /** @var $front Enlight_Controller_Front */
-        $front = $this->getResource('Front');
-
-        return $front->Router();
-    }
-
-    /**
-     * Init subscriber method
-     *
-     * @return Shopware_Components_Subscriber
-     */
-    public function initSubscriber()
-    {
-        if (!$this->issetResource('Db')) {
-            return null;
-        }
-
-        return $this->getContainerService('subscriber');
-    }
-
-    /**
-     * Init plugins method
-     *
-     * @return Enlight_Plugin_PluginManager
-     */
-    protected function initPlugins()
-    {
-        $this->loadResource('Table');
-
-        $config = Shopware()->getOption('plugins', array());
-        if (!isset($config['cache'])) {
-            $config['cache'] = $this->getResource('Cache');
-        }
-        if (!isset($config['namespaces'])) {
-            $config['namespaces'] = array('Core', 'Frontend', 'Backend');
-        }
-
-        $plugins = $this->Application()->Plugins();
-        $events = $this->Application()->Events();
-
-        foreach ($config['namespaces'] as $namespace) {
-            $namespace = new Shopware_Components_Plugin_Namespace($namespace);
-            $plugins->registerNamespace($namespace);
-            $events->registerSubscriber($namespace->Subscriber());
-        }
-
-        $loader = $this->Application()->Loader();
-        foreach (array('Local', 'Community', 'Default', 'Commercial') as $dir) {
-            $loader->registerNamespace('Shopware_Plugins', $this->Application()->AppPath('Plugins_' . $dir));
-        }
-
-        return $plugins;
-    }
-
-    /**
-     * Init locale method
-     *
-     * @return Zend_Locale
-     */
-    public function initLocale()
-    {
-        $locale = 'de_DE';
-        if ($this->hasResource('Shop')) {
-            $locale = $this->getResource('Shop')->getLocale()->getLocale();
-        }
-
-        return new Zend_Locale($locale);
-    }
-
-    /**
-     * Init currency method
-     *
-     * @return Zend_Currency
-     */
-    public function initCurrency()
-    {
-        $currency = 'EUR';
-        if ($this->hasResource('Shop')) {
-            $currency = $this->getResource('Shop')->getCurrency()->getCurrency();
-        }
-
-        return new Zend_Currency($currency, $this->getResource('Locale'));
-    }
-
-    /**
-     * Init date method
-     *
-     * @return Zend_Date
-     */
-    public function initDate()
-    {
-        return new Zend_Date($this->getResource('Locale'));
-    }
-
-    /**
-     * Init table method
-     *
+     * @param string $name
      * @return bool
      */
-    public function initTable()
+    public function hasResource($name)
     {
-        Zend_Db_Table_Abstract::setDefaultAdapter($this->getResource('Db'));
-        Zend_Db_Table_Abstract::setDefaultMetadataCache($this->getResource('Cache'));
-
-        return true;
-    }
-
-
-    /**
-     * @return \Shopware_Components_TemplateMail
-     */
-    public function initTemplateMail()
-    {
-        $this->loadResource('MailTransport');
-        $stringCompiler = new Shopware_Components_StringCompiler(
-            $this->getResource('Template')
-        );
-        $mailer = new Shopware_Components_TemplateMail();
-        if ($this->issetResource('Shop')) {
-            $mailer->setShop($this->getResource('Shop'));
-        }
-        $mailer->setModelManager($this->getResource('Models'));
-        $mailer->setStringCompiler($stringCompiler);
-
-        return $mailer;
+        return $this->resourceLoader->hasResource($name);
     }
 
     /**
+     * Checks if the given resource name is already registered.
+     * Unlike as the hasResource method is, if the resource does not exist the resource will not even loaded.
+     *
      * @param string $name
-     * @return object
+     * @return bool
      */
-    private function getContainerService($name)
+    public function issetResource($name)
     {
-        return $this->Application()->ResourceLoader()->getService($name);
+        return $this->resourceLoader->issetResource($name);
+    }
+
+    /**
+     * Getter method for a single resource. If the source is not already registered, this function will
+     * load the resource automatically. In case the resource is not found the status STATUS_NOT_FOUND is
+     * set and an Enlight_Exception is thrown.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getResource($name)
+    {
+        return $this->resourceLoader->getResource($name);
+    }
+
+    /**
+     * Loads the given resource. If the resource is already registered and the status
+     * is STATUS_BOOTSTRAP an Enlight_Exception is thrown.
+     * The resource is initial by the Enlight_Bootstrap_InitResource event.
+     * If this event doesn't exist for the given resource, the resource is initialed
+     * by call_user_func.
+     * After the resource is initialed the event Enlight_Bootstrap_AfterInitResource is
+     * fired. In case an exception is thrown by initializing the resource,
+     * Enlight sets the status STATUS_NOT_FOUND for the resource in the resource status list.
+     * In case the resource successfully initialed the resource has the status STATUS_LOADED
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function loadResource($name)
+    {
+        return $this->resourceLoader->loadResource($name);
+    }
+
+    /**
+     * If the given resource is set, the resource and the resource status are removed from the
+     * list properties.
+     *
+     * @param string $name
+     * @return Enlight_Bootstrap
+     */
+    public function resetResource($name)
+    {
+        return $this->resourceLoader->resetResource($name);
+    }
+
+    /**
+     * Returns called resource
+     *
+     * @param string $name
+     * @param array $arguments
+     * @deprecated 4.2
+     * @return Enlight_Class Resource
+     */
+    public function __call($name, $arguments = null)
+    {
+        return $this->resourceLoader->getResource($name);
     }
 }
