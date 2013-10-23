@@ -22,19 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-$docPath = realpath(dirname(__FILE__) . '/../../');
-
+$docPath = realpath(__DIR__ . '/../../');
 set_include_path(
-    get_include_path() . PATH_SEPARATOR .
+    $docPath . PATH_SEPARATOR .
     $docPath . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    $docPath . '/engine/' . PATH_SEPARATOR .           // Shopware
-    $docPath . '/templates/' . PATH_SEPARATOR .        // Templates
-    $docPath
+    $docPath . '/templates/' . PATH_SEPARATOR          // Templates
 );
 
-require 'vendor/autoload.php';
-include_once 'Shopware/Application.php';
-include_once 'Shopware/Kernel.php';
+require $docPath . '/vendor/autoload.php';
 
 /**
  * Shopware Test Helper
@@ -60,9 +55,8 @@ class TestHelper extends Shopware
     public function __construct($env, $config, $container)
     {
         $this->testPath = __DIR__ . '/';
-        $this->oldPath = realpath(__DIR__ . '/../../') . '/';
 
-        parent::__construct('testing', $config, $container);
+        parent::__construct($env, $config, $container);
     }
 
     /**
@@ -107,13 +101,6 @@ class TestKernel extends \Shopware\Kernel
         $kernel->boot();
 
         $shopwareBootstrap = $kernel->getShopware()->Bootstrap();
-
-        $shopwareBootstrap->loadResource('Zend');
-        $shopwareBootstrap->loadResource('Cache');
-        $shopwareBootstrap->loadResource('Db');
-        $shopwareBootstrap->loadResource('Table');
-        $shopwareBootstrap->loadResource('Plugins');
-
         $shopwareBootstrap->Models()->generateAttributeModels();
         $shopwareBootstrap->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 

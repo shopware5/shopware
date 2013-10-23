@@ -415,7 +415,7 @@ class Kernel implements HttpKernelInterface
     /**
      * @return \Shopware
      */
-    protected function getShopware()
+    public function getShopware()
     {
         return $this->shopware;
     }

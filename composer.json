@@ -40,6 +40,7 @@
         },
         "classmap": [
             "engine/core/class/"
-        ]
+        ],
+        "files": ["engine/Shopware/Application.php"]
     }
 }
