@@ -1006,6 +1006,7 @@ class sArticles
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         $now = Shopware()->Db()->quote(date('Y-m-d'));
 
+        //deprecated the priceForBasePrice is no longer used
         $priceForBasePrice = "
         (
             SELECT price
@@ -1337,20 +1338,16 @@ class sArticles
             $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
             $articles[$articleKey]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $articles[$articleKey]["articleID"] . "&sCategory=" . $categoryId;
 
-            if ($articles[$articleKey]["purchaseunit"] > 0 && !empty($articles[$articleKey]["referenceunit"])) {
-
-                $articles[$articleKey]["purchaseunit"] = (float)$articles[$articleKey]["purchaseunit"];
-                $articles[$articleKey]["referenceunit"] = (float)$articles[$articleKey]["referenceunit"];
-
-                // SW-4508 Don't use cheapest price for baseprice calculation
-                $basePrice = str_replace(",",".",$articles[$articleKey]["priceForBasePrice"]);
-                $p = $this->sCalculatingPrice($basePrice, $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
-
-                $basePrice = str_replace(",",".",$p);
-
-                $basePrice = $basePrice / $articles[$articleKey]["purchaseunit"] * $articles[$articleKey]["referenceunit"];
-                $basePrice = $this->sFormatPrice($basePrice);
-                $articles[$articleKey]["referenceprice"] = $basePrice;
+            $calculatedBasePriceData = $this->calculateCheapestBasePriceData(
+                $articles[$articleKey]["price"],
+                $articles[$articleKey]["articleID"],
+                $articles[$articleKey]["pricegroup"],
+                $articles[$articleKey]["pricegroupID"]
+            );
+            if(!empty($calculatedBasePriceData)) {
+                $articles[$articleKey]["purchaseunit"] = $calculatedBasePriceData["purchaseunit"];
+                $articles[$articleKey]["referenceunit"] = $calculatedBasePriceData["referenceunit"];
+                $articles[$articleKey]["referenceprice"] = $calculatedBasePriceData["referenceprice"];
             }
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
         } // For every article in this list
@@ -2817,6 +2814,44 @@ class sArticles
     }
 
     /**
+     * returns the cheapest variant for the baseprice calculation
+     *
+     * @param $article
+     * @param $priceGroup
+     * @param $priceGroupId
+     * @return mixed
+     */
+    public function getCheapestVariant($article, $priceGroup, $priceGroupId)
+    {
+        if (empty($priceGroupId)) {
+            $sql = "
+                SELECT * FROM s_articles_prices, s_articles_details WHERE
+                s_articles_details.id=s_articles_prices.articledetailsID AND
+                pricegroup=?
+                AND s_articles_details.articleID=?
+                GROUP BY ROUND(price,2)
+                ORDER BY price ASC
+                LIMIT 2
+            ";
+        } else {
+            $sql = "
+                SELECT * FROM s_articles_details
+                LEFT JOIN
+                s_articles_prices ON s_articles_details.id=s_articles_prices.articledetailsID AND
+                pricegroup=? AND s_articles_prices.from = '1'
+                WHERE
+                s_articles_details.articleID=?
+                GROUP BY ROUND(price,2)
+                ORDER BY price ASC
+                LIMIT 2
+			";
+        }
+
+        $variantData = Shopware()->Db()->fetchRow($sql, array($priceGroup, $article));
+        return $variantData;
+    }
+
+    /**
      * Get one article with all available data
      * @param int $id article id
      * @param null $sCategoryID
@@ -3120,31 +3155,6 @@ class sArticles
             }
             if (!$getArticle["purchasesteps"]) $getArticle["purchasesteps"] = 1;
 
-            // Calculating price for reference-unit
-            if ($getArticle["purchaseunit"] > 0 && $getArticle["referenceunit"]) {
-
-                $getArticle["purchaseunit"] = (float) $getArticle["purchaseunit"];
-                $getArticle["referenceunit"] = (float) $getArticle["referenceunit"];
-
-                if (!empty($getArticle["sBlockPrices"][0])) {
-                    $price = str_replace(",", ".", $getArticle["sBlockPrices"][0]["price"]);
-                    $tax = 0;
-
-                    $basePrice = $this->sCalculatingPriceNum($price, $tax, false,true,$getArticle["taxID"],false, $getArticle);
-                } else {
-                    $price = $getArticle["price"];
-                    $tax = $getArticle["tax"];
-
-                    $basePrice = $this->sCalculatingPriceNum($price, $tax, false,false,$getArticle["taxID"],false, $getArticle);
-                }
-
-                $basePrice = $basePrice / $getArticle["purchaseunit"] * $getArticle["referenceunit"];
-                $basePrice = $this->sFormatPrice($basePrice);
-                $getArticle["referenceprice"] = $basePrice;
-            } else {
-                unset ($getArticle["purchaseunit"]);
-            }
-            // ---
 
             // Read unit if set
             if ($getArticle["unitID"]) {
@@ -3183,12 +3193,19 @@ class sArticles
             }
             if ($getArticle["priceStartingFrom"]) $getArticle["priceStartingFrom"] = $this->sCalculatingPrice($getArticle["priceStartingFrom"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
 
-            // Update article impressions
-            // =================================================.
-//            $updateImpressions = $this->sSYSTEM->sDB_CONNECTION->Execute("
-//				UPDATE s_articles_details SET impressions=impressions+1 WHERE articleID={$getArticle["articleID"]} AND kind=1
-//				");
+            // Calculating price for reference-unit
+            if ($getArticle["purchaseunit"] > 0 && $getArticle["referenceunit"]) {
+                $getArticle["purchaseunit"] = (float)$getArticle["purchaseunit"];
+                $getArticle["referenceunit"] = (float)$getArticle["referenceunit"];
 
+                $getArticle["referenceprice"] = $this->calculateReferencePrice(
+                    $getArticle["price"],
+                    $getArticle["purchaseunit"],
+                    $getArticle["referenceunit"]
+                );
+            } else {
+                unset($getArticle["purchaseunit"]);
+            }
 
             // Get Article images
             // =================================================.
@@ -3278,6 +3295,53 @@ class sArticles
         $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
 
         return $getArticle;
+    }
+
+    /**
+     * calculates the reference price with the base price data
+     *
+     * @param $price | the final price which will be shown
+     * @param float $purchaseUnit
+     * @param float $referenceUnit
+     * @return float
+     */
+    public function calculateReferencePrice($price, $purchaseUnit, $referenceUnit)
+    {
+        $purchaseUnit = (float)$purchaseUnit;
+        $referenceUnit = (float)$referenceUnit;
+
+        $price = floatval(str_replace(",", ".", $price));
+        return $price / $purchaseUnit * $referenceUnit;
+    }
+
+    /**
+     * calculates the cheapest base price data
+     *
+     * @param $price | the final price which will be shown
+     * @param int $articleId
+     * @param float $priceGroup
+     * @param float $priceGroupId
+     * @return array
+     */
+    public function calculateCheapestBasePriceData($price, $articleId, $priceGroup, $priceGroupId)
+    {
+        $returnData = array();
+        $cheapestVariantData = $this->getCheapestVariant($articleId, $priceGroup, $priceGroupId);
+
+        if (!$cheapestVariantData["purchaseunit"] || empty($cheapestVariantData["referenceunit"])) {
+            // stop the calculation because no unit data is set
+            return null;
+        }
+
+        $returnData["purchaseunit"] = (float)$cheapestVariantData["purchaseunit"];
+        $returnData["referenceunit"] = (float)$cheapestVariantData["referenceunit"];
+        $returnData["referenceprice"] = $this->calculateReferencePrice(
+            $price,
+            $returnData["purchaseunit"],
+            $returnData["referenceunit"]
+        );
+
+        return $returnData;
     }
 
     /**
@@ -3450,13 +3514,6 @@ class sArticles
         // Formating prices
         $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
 
-        if ($getPromotionResult["purchaseunit"] > 0 && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false, $getPromotionResult);
-            $basePrice = $basePrice / $getPromotionResult["purchaseunit"] * $getPromotionResult["referenceunit"];
-            $basePrice = $this->sFormatPrice($basePrice);
-            $getPromotionResult["referenceprice"] = $basePrice;
-        }
-
         if (!empty($getPromotionResult["unitID"])) {
             $getPromotionResult["sUnit"] = $this->sGetUnit($getPromotionResult["unitID"]);
         }
@@ -3469,13 +3526,16 @@ class sArticles
             $getPromotionResult["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
         }
 
-        $getPromotionResult["purchaseunit"] = (float)$getPromotionResult["purchaseunit"];
-        $getPromotionResult["referenceunit"] = (float)$getPromotionResult["referenceunit"];
+        // Calculating price for reference-unit
+        if ($getPromotionResult["purchaseunit"] > 0 && $getPromotionResult["referenceunit"]) {
+            $getPromotionResult["purchaseunit"] = (float)$getPromotionResult["purchaseunit"];
+            $getPromotionResult["referenceunit"] = (float)$getPromotionResult["referenceunit"];
 
-        if (!empty($getPromotionResult["purchaseunit"]) && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = str_replace(",", ".", $getPromotionResult['price']);
-            $basePrice = floatval($basePrice);
-            $getPromotionResult['referenceprice'] = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
+            $getPromotionResult["referenceprice"] = $this->calculateReferencePrice(
+                $getPromotionResult["price"],
+                $getPromotionResult["purchaseunit"],
+                $getPromotionResult["referenceunit"]
+            );
         }
 
         // Strip tags from descriptions
@@ -3765,13 +3825,6 @@ class sArticles
         // Formating prices
         $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"],$getPromotionResult);
 
-        if ($getPromotionResult["purchaseunit"] > 0 && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = $this->sCalculatingPriceNum($getPromotionResult["price"], 0, false, false, $getPromotionResult["taxID"] ,false, $getPromotionResult);
-            $basePrice = $basePrice / $getPromotionResult["purchaseunit"] * $getPromotionResult["referenceunit"];
-            $basePrice = $this->sFormatPrice($basePrice);
-            $getPromotionResult["referenceprice"] = $basePrice;
-        }
-
         if (!empty($getPromotionResult["unitID"])) {
             $getPromotionResult["sUnit"] = $this->sGetUnit($getPromotionResult["unitID"]);
         }
@@ -3783,13 +3836,17 @@ class sArticles
             $getPromotionResult["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
         }
 
-        $getPromotionResult["purchaseunit"] = (float)$getPromotionResult["purchaseunit"];
-        $getPromotionResult["referenceunit"] = (float)$getPromotionResult["referenceunit"];
+        $calculatedBasePriceData = $this->calculateCheapestBasePriceData(
+            $getPromotionResult["price"],
+            $value,
+            $getPromotionResult["pricegroup"],
+            $getPromotionResult["pricegroupID"]
+        );
 
-        if (!empty($getPromotionResult["purchaseunit"]) && !empty($getPromotionResult["referenceunit"])) {
-            $basePrice = str_replace(",", ".", $getPromotionResult['price']);
-            $basePrice = floatval($basePrice);
-            $getPromotionResult['referenceprice'] = $basePrice / $getPromotionResult['purchaseunit'] * $getPromotionResult['referenceunit'];
+        if (!empty($calculatedBasePriceData)) {
+            $getPromotionResult["purchaseunit"] = $calculatedBasePriceData["purchaseunit"];
+            $getPromotionResult["referenceunit"] = $calculatedBasePriceData["referenceunit"];
+            $getPromotionResult['referenceprice'] = $calculatedBasePriceData["referenceprice"];
         }
 
         // Strip tags from descriptions
