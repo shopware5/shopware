@@ -150,7 +150,7 @@ class Models
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
 
-        $entityManager = ModelManager::create(
+        $entityManager = ModelManager::createInstance(
             $conn,
             $this->config,
             $this->eventManager
