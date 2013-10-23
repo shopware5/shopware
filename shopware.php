@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,13 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 
 // Check the minimum required php version
@@ -76,16 +72,13 @@ if (!file_exists('vendor/autoload.php')) {
 }
 
 set_include_path(
-    '.' . PATH_SEPARATOR .
-    dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    dirname(__FILE__) . '/engine/' . PATH_SEPARATOR .           // Shopware
-    dirname(__FILE__) . '/templates/'                           // Templates
+    __DIR__ . PATH_SEPARATOR .
+    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
+    __DIR__ . '/templates/'                           // Templates
 );
 
 // include composer autoloader
 require 'vendor/autoload.php';
-require 'Shopware/Application.php';
-require 'Shopware/Kernel.php';
 
 use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
