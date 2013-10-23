@@ -23,6 +23,7 @@
         "symfony/config": "2.3.*",
         "symfony/dependency-injection": "2.3.*",
         "symfony/validator": "2.3.*",
+        "symfony/filesystem": "2.3.*",
         "monolog/monolog": "1.6.*"
     },
     "require-dev": {
