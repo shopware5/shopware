@@ -69,14 +69,13 @@ class ModelManager extends EntityManager
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param mixed $conn An array with the connection parameters or an existing
-     *      Connection instance.
-     * @param Configuration $config The Configuration instance to use.
-     * @param \Doctrine\Common\EventManager|null $eventManager The EventManager instance to use.
+     * @param Connection $conn
+     * @param Configuration $config
+     * @param EventManager $eventManager
      * @throws \Doctrine\ORM\ORMException
-     * @return ModelManager The created EntityManager.
+     * @return ModelManager
      */
-    public static function create(Connection $conn, Configuration $config, EventManager $eventManager = null)
+    public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -98,7 +97,6 @@ class ModelManager extends EntityManager
      */
     public function __call($name, $args)
     {
-        /** @todo make path custom able */
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
