@@ -64,6 +64,9 @@ class Shopware extends Enlight_Application
         }
 
         parent::__construct($environment, $options, $resourceLoader);
+
+        $resourceLoader->setBootstrap($this->Bootstrap());
+        $resourceLoader->setApplication($this);
     }
 
     /**
@@ -200,6 +203,16 @@ class Shopware extends Enlight_Application
     public function TemplateMail()
     {
         return $this->_bootstrap->getResource('TemplateMail');
+    }
+
+    /**
+     * Returns the instance of the plugin manager, which is initialed in the class constructor
+     *
+     * @return Enlight_Plugin_PluginManager
+     */
+    public function Plugins()
+    {
+        return $this->_bootstrap->getResource('plugin_manager');
     }
 
     /**

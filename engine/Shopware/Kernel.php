@@ -122,7 +122,8 @@ class Kernel implements HttpKernelInterface
             $this->boot();
         }
 
-        $front = $this->getShopware()->Front();
+        /** @var $front \Enlight_Controller_Front **/
+        $front = $this->resourceLoader->getResource('front');
 
         $front->returnResponse(true);
         $front->throwExceptions(!$catch);
@@ -277,7 +278,7 @@ class Kernel implements HttpKernelInterface
         if (!$cache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
-            $this->dumpContainer($cache, $container, $class, 'Container');
+            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
         }
 
         require_once $cache;

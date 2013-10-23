@@ -24,34 +24,33 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\ResourceLoader;
+
 /**
-* @category  Shopware
-* @package   Shopware\Components\DependencyInjection\Bridge
-* @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection\Bridge
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class TemplateMail
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
-     *
-     * @return null|\Shopware_Components_Config
+     * @param ResourceLoader $resourceLoader
+     * @return \Shopware_Components_TemplateMail
      */
-    public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
-    ) {
-        if (!$db) {
-            return null;
-        }
+    public function factory(ResourceLoader $resourceLoader)
+    {
+        $resourceLoader->loadResource('MailTransport');
 
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
+        $stringCompiler = new \Shopware_Components_StringCompiler(
+            $resourceLoader->getResource('Template')
+        );
+        $mailer = new \Shopware_Components_TemplateMail();
+        if ($resourceLoader->issetResource('Shop')) {
+            $mailer->setShop($resourceLoader->getResource('Shop'));
         }
-        $config['db'] = $db;
+        $mailer->setModelManager($resourceLoader->getResource('Models'));
+        $mailer->setStringCompiler($stringCompiler);
 
-        return new \Shopware_Components_Config($config);
+        return $mailer;
     }
 }

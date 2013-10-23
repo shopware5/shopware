@@ -22,36 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\Components\DependencyInjection;
+
+use Shopware\Components\ResourceLoader;
+use Symfony\Component\DependencyInjection\Container as BaseContainer;
 
 /**
-* @category  Shopware
-* @package   Shopware\Components\DependencyInjection\Bridge
-* @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Config
+class Container extends BaseContainer
 {
     /**
-     * @param \Zend_Cache_Core                          $cache
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql  $db
-     * @param array                                     $config
-     *
-     * @return null|\Shopware_Components_Config
+     * @var ResourceLoader
      */
-    public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        $config = array()
-    ) {
-        if (!$db) {
-            return null;
+    protected $resourceLoader;
+
+    /**
+     * @param ResourceLoader $resourceLoader
+     */
+    public function setResourceLoader(ResourceLoader $resourceLoader)
+    {
+        $this->resourceLoader = $resourceLoader;
+    }
+
+    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    {
+        if (null === $this->resourceLoader) {
+            return parent::get($id, $invalidBehavior);
         }
 
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
-        }
-        $config['db'] = $db;
+        return $this->resourceLoader->get($id);
+    }
 
-        return new \Shopware_Components_Config($config);
+    public function getService($id)
+    {
+        return parent::get($id);
     }
 }

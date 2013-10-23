@@ -45,84 +45,26 @@ use Shopware\Components\Model\ModelManager;
 class Models
 {
     /**
-     * Contains the shopware model configuration
-     * @var Configuration
-     */
-    protected $config;
-
-    /**
-     * Paths to the doctrine entities.
-     * @var
-     */
-    protected $modelPath;
-
-    /**
-     * Contains the current application auto loader.
-     * Used to register additional namespaces
+     * Creates the entity manager for the application.
      *
-     * @var \Enlight_Loader
-     */
-    protected $loader;
-
-    /**
-     * Contains the application event manager which is used
-     * to inject it into the doctrine event manager.
-     *
-     * @var EventManager
-     */
-    protected $eventManager;
-
-    /**
-     * Contains the current application database pdo adapter.
-     * This adapter is injected into the doctrine environment for the
-     * database connection of doctrine processes.
-     *
-     * @var \Pdo
-     */
-    protected $db;
-
-    /**
-     * Contains the directory path of the shopware installation.
-     *
-     * @var string
-     */
-    protected $kernelRootDir;
-
-    /**
      * @param EventManager      $eventManager
      * @param Configuration     $config
      * @param \Enlight_Loader   $loader
      * @param \Pdo              $db
-     * @param string            $modelPath
      * @param string            $kernelRootDir
      * @param AnnotationDriver  $modelAnnotation
+     *
+     * @return ModelManager
      */
-    public function __construct(
+    public function factory(
         EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
         \Pdo $db,
-        $modelPath,
         $kernelRootDir,
+        // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
     ) {
-        $this->eventManager = $eventManager;
-        $this->config = $config;
-        $this->modelPath = $modelPath;
-        $this->loader = $loader;
-        $this->db = $db;
-        $this->kernelRootDir = $kernelRootDir;
-
-        // annotation driver is not really used here but has to be loaded first
-        $this->modelAnnotation = $modelAnnotation;
-    }
-
-    /**
-     * Creates the entity manager for the application.
-     * @return ModelManager
-     */
-    public function factory()
-    {
         // register standard doctrine annotations
         AnnotationRegistry::registerFile(
             'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
@@ -131,20 +73,20 @@ class Models
         // register symfony validation annotations
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            realpath($this->kernelRootDir . '/vendor/symfony/validator')
+            realpath($kernelRootDir . '/vendor/symfony/validator')
         );
 
-        $this->loader->registerNamespace(
+        $loader->registerNamespace(
             'Shopware\Models\Attribute',
-            $this->config->getAttributeDir()
+            $config->getAttributeDir()
         );
 
         // now create the entity manager and use the connection
         // settings we defined in our application.ini
         $conn = DriverManager::getConnection(
-            array('pdo' => $this->db),
-            $this->config,
-            $this->eventManager
+            array('pdo' => $db),
+            $config,
+            $eventManager
         );
 
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
@@ -152,13 +94,13 @@ class Models
 
         $entityManager = ModelManager::createInstance(
             $conn,
-            $this->config,
-            $this->eventManager
+            $config,
+            $eventManager
         );
 
         Autoloader::register(
-            $this->config->getProxyDir(),
-            $this->config->getProxyNamespace(),
+            $config->getProxyDir(),
+            $config->getProxyNamespace(),
             function ($proxyDir, $proxyNamespace, $className) use ($entityManager) {
                 if (0 === stripos($className, $proxyNamespace)) {
                     $fileName = str_replace('\\', '', substr($className, strlen($proxyNamespace) + 1));

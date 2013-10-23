@@ -686,21 +686,23 @@ class Shop extends ModelEntity
 
         /** @var $snippets \Enlight_Plugin_PluginManager */
         $plugins = $bootstrap->getResource('Plugins');
+
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
         $pluginNamespace = null;
-        foreach($plugins as $pluginNamespace) {
-            if($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
+
+        foreach ($plugins as $pluginNamespace) {
+            if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }
         }
 
-        if($this->getTemplate() !== null) {
+        if ($this->getTemplate() !== null) {
             /** @var $template \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if($template->getVersion() == 2) {
+            if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
