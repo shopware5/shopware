@@ -254,8 +254,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * When setting the batchSize/limit for this resource, keep in mind, the the actual number of links generated
      * might be four times higher than the batchSize (as four resources are handled).
      */
-    public function countContent()
+    public function countContent($shopId)
     {
+        $this->registerShop($shopId);
+
         $counts = array(
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_emarketing_promotion_main`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
@@ -264,5 +266,30 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         );
 
         return max($counts);
+    }
+
+    /**
+     * Count Static routes
+     */
+    public function countStatic($shopId)
+    {
+        $this->registerShop($shopId);
+        $urls = Shopware()->Config()->seoStaticUrls;
+
+        if (empty($urls)) {
+            return;
+        }
+        $static = array();
+
+        if (!empty($urls))
+        {
+            foreach (explode("\n", $urls) as $url) {
+                list($key, $value) = explode(',', trim($url));
+                if (empty($key) || empty($value)) continue;
+                $static[$key] = $value;
+            }
+        }
+
+        return count($static);
     }
 }
