@@ -79,12 +79,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $article = $this->SeoIndex()->countArticles($shopId);
         $blog = $this->SeoIndex()->countBlogs($shopId);
         $emotion = $this->SeoIndex()->countEmotions($shopId);
-
-        $statistic = 1;
-        $content = 0;
-        if ($shopId === 1) {
-            $content = $this->SeoIndex()->countContent();
-        }
+        $content = $this->SeoIndex()->countContent($shopId);
+        $statistic = $this->SeoIndex()->countStatic($shopId);
 
         $this->View()->assign(array(
             'success' => true,
