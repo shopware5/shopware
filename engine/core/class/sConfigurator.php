@@ -422,6 +422,9 @@ class sConfigurator
         if ($selected["unitID"]) {
             $articleData["sUnit"] = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($selected["unitID"]);
         }
+        else {
+            $articleData["sUnit"] = null;
+        }
 
         $articleData['pricegroup'] = $selectedPrice['customerGroupKey'];
         $articleData["pricenumeric"] = $selectedPrice['pricenumeric'];
