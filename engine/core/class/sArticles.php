@@ -1311,11 +1311,6 @@ class sArticles
             }
             // ---
 
-            // Read unit if set
-            if ($articles[$articleKey]["unitID"]) {
-                $articles[$articleKey]["sUnit"] = $this->sGetUnit($articles[$articleKey]["unitID"]);
-            }
-
             if (empty($articles[$articleKey]['sVoteAverange'])) {
                 $articles[$articleKey]['sVoteAverange'] = '0.00|00';
             }
@@ -1344,11 +1339,12 @@ class sArticles
                 $articles[$articleKey]["pricegroup"],
                 $articles[$articleKey]["pricegroupID"]
             );
-            if(!empty($calculatedBasePriceData)) {
-                $articles[$articleKey]["purchaseunit"] = $calculatedBasePriceData["purchaseunit"];
-                $articles[$articleKey]["referenceunit"] = $calculatedBasePriceData["referenceunit"];
-                $articles[$articleKey]["referenceprice"] = $calculatedBasePriceData["referenceprice"];
-            }
+
+            $articles[$articleKey]["purchaseunit"] = empty($calculatedBasePriceData["purchaseunit"]) ? null: $calculatedBasePriceData["purchaseunit"];
+            $articles[$articleKey]["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
+            $articles[$articleKey]["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
+            $articles[$articleKey]["referenceprice"] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
+
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
         } // For every article in this list
 
@@ -3335,6 +3331,11 @@ class sArticles
 
         $returnData["purchaseunit"] = (float)$cheapestVariantData["purchaseunit"];
         $returnData["referenceunit"] = (float)$cheapestVariantData["referenceunit"];
+        $returnData["packunit"] = $cheapestVariantData["packunit"];
+        // Read unit if set
+        if ($cheapestVariantData["unitID"]) {
+            $returnData["sUnit"] = $this->sGetUnit($cheapestVariantData["unitID"]);
+        }
         $returnData["referenceprice"] = $this->calculateReferencePrice(
             $price,
             $returnData["purchaseunit"],
@@ -3825,9 +3826,6 @@ class sArticles
         // Formating prices
         $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"],$getPromotionResult);
 
-        if (!empty($getPromotionResult["unitID"])) {
-            $getPromotionResult["sUnit"] = $this->sGetUnit($getPromotionResult["unitID"]);
-        }
         if ($getPromotionResult["pseudoprice"]) {
             $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
             $discPseudo = str_replace(",", ".", $getPromotionResult["pseudoprice"]);
@@ -3844,9 +3842,10 @@ class sArticles
         );
 
         if (!empty($calculatedBasePriceData)) {
-            $getPromotionResult["purchaseunit"] = $calculatedBasePriceData["purchaseunit"];
-            $getPromotionResult["referenceunit"] = $calculatedBasePriceData["referenceunit"];
-            $getPromotionResult['referenceprice'] = $calculatedBasePriceData["referenceprice"];
+            $getPromotionResult["purchaseunit"] = empty($calculatedBasePriceData["purchaseunit"]) ? null: $calculatedBasePriceData["purchaseunit"];
+            $getPromotionResult["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
+            $getPromotionResult["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
+            $getPromotionResult['referenceprice'] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
         }
 
         // Strip tags from descriptions
