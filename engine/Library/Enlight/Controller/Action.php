@@ -20,8 +20,8 @@
  * @author     $Author$
  */
 
+use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
-use Shopware\Components\ResourceLoader;
 
 /**
  * Basic class for each Enlight controller action.
@@ -64,7 +64,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $response;
 
     /**
-     * @var Shopware\Components\ResourceLoader
+     * @var Shopware\Components\DependencyInjection\ResourceLoader
      */
     protected $resourceLoader;
 

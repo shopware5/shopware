@@ -1,8 +1,6 @@
 <?php
 
-namespace Shopware\Components;
-
-use Shopware\Components\DependencyInjection\Container;
+namespace Shopware\Components\DependencyInjection;
 
 /**
  * @category  Shopware
@@ -67,7 +65,7 @@ class ResourceLoader
 
     /**
      * @param \Shopware_Bootstrap $bootstrap
-     * @return \Shopware\Components\ResourceLoader
+     * @return ResourceLoader
      */
     public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
@@ -79,7 +77,7 @@ class ResourceLoader
 
     /**
      * @param \Shopware $application
-     * @return \Shopware\Components\ResourceLoader
+     * @return ResourceLoader
      */
     public function setApplication(\Shopware $application)
     {

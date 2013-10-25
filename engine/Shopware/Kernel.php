@@ -24,9 +24,9 @@
 
 namespace Shopware;
 
+use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
-use Shopware\Components\ResourceLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
@@ -123,7 +123,7 @@ class Kernel implements HttpKernelInterface
         }
 
         /** @var $front \Enlight_Controller_Front **/
-        $front = $this->resourceLoader->getResource('front');
+        $front = $this->resourceLoader->get('front');
 
         $front->returnResponse(true);
         $front->throwExceptions(!$catch);

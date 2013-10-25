@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\ResourceLoader;
+use Shopware\Components\DependencyInjection\ResourceLoader;
 
 /**
  * @category  Shopware

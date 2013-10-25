@@ -24,8 +24,6 @@
 
 namespace Shopware\Components\DependencyInjection;
 
-use Shopware\Components\ResourceLoader;
-
 /**
  * ResourceLoaderAwareInterface should be implemented by classes that depends on a ResourceLoader.
  *
