@@ -61,7 +61,7 @@ class Front
         $front->setParams($options);
 
         /** @var $plugins  \Enlight_Plugin_PluginManager */
-        $plugins = $resourceLoader->getResource('Plugins');
+        $plugins = $resourceLoader->get('Plugins');
 
         $plugins->registerNamespace($front->Plugins());
 
@@ -75,9 +75,9 @@ class Front
         }
 
         try {
-            $resourceLoader->loadResource('Cache');
-            $resourceLoader->loadResource('Db');
-            $resourceLoader->loadResource('Plugins');
+            $resourceLoader->load('Cache');
+            $resourceLoader->load('Db');
+            $resourceLoader->load('Plugins');
         } catch (\Exception $e) {
             if ($front->throwExceptions()) {
                 throw $e;

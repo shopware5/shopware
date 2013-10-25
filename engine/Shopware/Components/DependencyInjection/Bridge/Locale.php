@@ -40,8 +40,8 @@ class Locale
     public function factory(ResourceLoader $resourceLoader)
     {
         $locale = 'de_DE';
-        if ($resourceLoader->hasResource('Shop')) {
-            $locale = $resourceLoader->getResource('Shop')->getLocale()->getLocale();
+        if ($resourceLoader->has('Shop')) {
+            $locale = $resourceLoader->get('Shop')->getLocale()->getLocale();
         }
 
         return new \Zend_Locale($locale);

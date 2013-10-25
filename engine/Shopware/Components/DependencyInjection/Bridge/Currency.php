@@ -42,8 +42,8 @@ class Currency
     public function factory(ResourceLoader $resourceLoader, \Zend_Locale $locale)
     {
         $currency = 'EUR';
-        if ($resourceLoader->hasResource('Shop')) {
-            $currency = $resourceLoader->getResource('Shop')->getCurrency()->getCurrency();
+        if ($resourceLoader->has('Shop')) {
+            $currency = $resourceLoader->get('Shop')->getCurrency()->getCurrency();
         }
 
         return new \Zend_Currency($currency, $locale);

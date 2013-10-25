@@ -47,6 +47,13 @@ class Container extends BaseContainer
         $this->resourceLoader = $resourceLoader;
     }
 
+    /**
+     * Wraps container get call to resource loader.
+     * So the resource loader is able to trigger events
+     * for internal loaded service dependencies
+     *
+     * {@inheritdoc}
+     */
     public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
         if (null === $this->resourceLoader) {
@@ -56,8 +63,27 @@ class Container extends BaseContainer
         return $this->resourceLoader->get($id);
     }
 
+    /**
+     * Returns service directly from container
+     * {@inheritdoc}
+     */
     public function getService($id)
     {
         return parent::get($id);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    public function getNormalizedId($id)
+    {
+        $id = strtolower($id);
+
+        if (isset($this->aliases[$id])) {
+            $id = $this->aliases[$id];
+        }
+
+        return $id;
     }
 }

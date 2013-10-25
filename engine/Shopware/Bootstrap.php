@@ -109,7 +109,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
-        return $this->resourceLoader->registerResource($name, $resource);
+        $this->resourceLoader->set($name, $resource);
+
+        return $this;
     }
 
     /**
@@ -120,7 +122,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function hasResource($name)
     {
-        return $this->resourceLoader->hasResource($name);
+        return $this->resourceLoader->has($name);
     }
 
     /**
@@ -132,7 +134,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function issetResource($name)
     {
-        return $this->resourceLoader->issetResource($name);
+        return $this->resourceLoader->initialized($name);
     }
 
     /**
@@ -145,7 +147,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function getResource($name)
     {
-        return $this->resourceLoader->getResource($name);
+        return $this->resourceLoader->get($name);
     }
 
     /**
@@ -164,7 +166,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function loadResource($name)
     {
-        return $this->resourceLoader->loadResource($name);
+        return $this->resourceLoader->load($name);
     }
 
     /**
@@ -176,7 +178,9 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function resetResource($name)
     {
-        return $this->resourceLoader->resetResource($name);
+        $this->resourceLoader->reset($name);
+
+        return $this;
     }
 
     /**
@@ -189,6 +193,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function __call($name, $arguments = null)
     {
-        return $this->resourceLoader->getResource($name);
+        return $this->resourceLoader->get($name);
     }
 }

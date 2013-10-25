@@ -51,7 +51,7 @@ class Plugins
         array $config
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
-        $resourceLoader->loadResource('Table');
+        $resourceLoader->load('Table');
 
         if (!isset($config['cache'])) {
             $config['cache'] = $cache;

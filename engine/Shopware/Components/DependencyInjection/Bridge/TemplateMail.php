@@ -39,16 +39,16 @@ class TemplateMail
      */
     public function factory(ResourceLoader $resourceLoader)
     {
-        $resourceLoader->loadResource('MailTransport');
+        $resourceLoader->load('MailTransport');
 
         $stringCompiler = new \Shopware_Components_StringCompiler(
-            $resourceLoader->getResource('Template')
+            $resourceLoader->get('Template')
         );
         $mailer = new \Shopware_Components_TemplateMail();
-        if ($resourceLoader->issetResource('Shop')) {
-            $mailer->setShop($resourceLoader->getResource('Shop'));
+        if ($resourceLoader->initialized('Shop')) {
+            $mailer->setShop($resourceLoader->get('Shop'));
         }
-        $mailer->setModelManager($resourceLoader->getResource('Models'));
+        $mailer->setModelManager($resourceLoader->get('Models'));
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;
