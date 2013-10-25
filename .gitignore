@@ -15,30 +15,29 @@ Thumbs.db
 .idea/
 
 # Internal Repositories
-internal/
-engine/Shopware/Plugins/Commercial/
+/internal/
+/engine/Shopware/Plugins/Commercial/
 
 # User installed plugins
-engine/Shopware/Plugins/Community/
-engine/Shopware/Plugins/Local/
+/engine/Shopware/Plugins/Community/
+/engine/Shopware/Plugins/Local/
 
 # Userconfigurations
-config.php
-engine/Shopware/Configs/Custom.php
+/config.php
+/engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
-tests/Shopware/TempFiles/
-cache/
-
+/tests/Shopware/TempFiles/
+/cache/
 
 # User provided content
-media/archive/
-media/image/
-media/music/
-media/pdf/
-media/temp/
-media/unknown/
-media/video/
+/media/archive/
+/media/image/
+/media/music/
+/media/pdf/
+/media/temp/
+/media/unknown/
+/media/video/
 
-files/documents
-files/downloads
+/files/documents/
+/files/downloads/
