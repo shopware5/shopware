@@ -3315,8 +3315,8 @@ class sArticles
      *
      * @param $price | the final price which will be shown
      * @param int $articleId
-     * @param float $priceGroup
-     * @param float $priceGroupId
+     * @param string $priceGroup
+     * @param int $priceGroupId
      * @return array
      */
     public function calculateCheapestBasePriceData($price, $articleId, $priceGroup, $priceGroupId)
