@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\DependencyInjection;
 
-use Shopware\Components\ResourceLoader;
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 
 /**

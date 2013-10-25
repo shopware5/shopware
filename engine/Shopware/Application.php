@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\ResourceLoader;
+use Shopware\Components\DependencyInjection\ResourceLoader;
 
 /**
  * Shopware Application

@@ -32,7 +32,7 @@
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
     /**
-     * @var \Shopware\Components\ResourceLoader
+     * @var \Shopware\Components\DependencyInjection\ResourceLoader
      */
     protected $resourceLoader;
 

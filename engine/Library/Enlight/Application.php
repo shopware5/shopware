@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-use Shopware\Components\ResourceLoader;
+use Shopware\Components\DependencyInjection\ResourceLoader;
 
 /**
  * The Enlight_Application component forms the basis for the enlight project.
