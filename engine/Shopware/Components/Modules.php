@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,43 +20,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Modules
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
- * Backend Controller for the backend user management
- * todo@all: Documentation
- * @changes
- * 2012-05-04 sth
- * - Remove support for inherit folders
- * - Fix bug in auto-loader that occurs on osx machines
+ * @category  Shopware
+ * @package   Shopware\Components\Core
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 {
-    /**
-     * Path to engine/core/class
-     * @var string
-     */
-    protected $module_path;
-
     /**
      * Name of system class
      * @var string
      */
     protected $system;
-
-    /**
-     * List with all known module classes from database
-     * @var array
-     */
-    protected $modules_list;
 
     /**
      * Container that hold references to all modules already loaded
@@ -66,14 +43,11 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * Initiate class parameters
+     * @deprecated 4.2
      * @return void
      */
     public function init()
     {
-        $this->module_path = Shopware()->OldPath() . 'engine/core/class/';
-        $this->modules_list = Shopware()->Db()->fetchAssoc('
-			SELECT basename, basefile, inheritname, inheritfile FROM s_core_factory
-		');
     }
 
     /**
@@ -95,33 +69,11 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
         if (!isset($this->modules_container[$name])) {
             $this->modules_container[$name] = null;
             $name = basename($name);
-            $module = isset($this->modules_list[$name]) ? $this->modules_list[$name] : array();
 
-            // This path will be uses in included files - DO NOT DELETE IT
-            $path = $this->module_path;
-
-            if (empty($module['basename'])) {
-                $module['basename'] = $name;
-            }
-            if (empty($module['basefile'])) {
-                $module['basefile'] = $module['basename'] . '.php';
-            }
-
-            if (file_exists($this->module_path . $module['basefile'])) {
-                require_once($this->module_path . $module['basefile']);
-            }
-
-            $class_name = $module['basename'];
-
-            if (!empty($class_name)) {
-                Shopware()->Hooks()->setAlias($name, $class_name);
-                $proxy = Shopware()->Hooks()->getProxy($class_name);
-                $this->modules_container[$name] = new $proxy;
-            }
-
-            if (!empty($this->modules_container[$name])) {
-                $this->modules_container[$name]->sSYSTEM = $this->system;
-            }
+            Shopware()->Hooks()->setAlias($name, $name);
+            $proxy = Shopware()->Hooks()->getProxy($name);
+            $this->modules_container[$name] = new $proxy;
+            $this->modules_container[$name]->sSYSTEM = $this->system;
         }
     }
 
@@ -144,6 +96,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
         if (!isset($this->modules_container[$name])) {
             $this->loadModule($name);
         }
+
         return $this->modules_container[$name];
     }
 

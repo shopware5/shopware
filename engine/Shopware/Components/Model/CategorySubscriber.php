@@ -46,6 +46,11 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $em;
 
     /**
+     * @var CategoryDenormalization
+     */
+    protected $categoryDenormalization;
+
+    /**
      * @var array
      */
     protected $pendingAddAssignments = array();
@@ -66,14 +71,21 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $disabledForNextFlush = false;
 
     /**
-     * @return \Shopware\Components\Model\CategoryDenormalization
+     * @param CategoryDenormalization $categoryDenormalization
+     */
+    public function __construct(CategoryDenormalization $categoryDenormalization)
+    {
+        $this->categoryDenormalization = $categoryDenormalization;
+    }
+
+    /**
+     * @return CategoryDenormalization
      */
     public function getCategoryComponent()
     {
-        $component = Shopware()->CategoryDenormalization();
-        $component->disableTransactions();
+        $this->categoryDenormalization->disableTransactions();
 
-        return $component;
+        return $this->categoryDenormalization;
     }
 
     /**

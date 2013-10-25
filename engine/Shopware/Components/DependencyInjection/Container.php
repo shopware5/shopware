@@ -22,72 +22,67 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Password\Encoder;
+namespace Shopware\Components\DependencyInjection;
+
+use Symfony\Component\DependencyInjection\Container as BaseContainer;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ * @package   Shopware\Components\DependencyInjection
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Bcrypt implements PasswordEncoderInterface
+class Container extends BaseContainer
 {
+    /**
+     * @var ResourceLoader
+     */
+    protected $resourceLoader;
 
     /**
-     * @var array
+     * @param ResourceLoader $resourceLoader
      */
-    protected $options = array();
-
-    /**
-     * @param array $options
-     */
-    public function __construct($options = null)
+    public function setResourceLoader(ResourceLoader $resourceLoader)
     {
-        if ($options !== null) {
-            $this->options = $options;
+        $this->resourceLoader = $resourceLoader;
+    }
+
+    /**
+     * Wraps container get call to resource loader.
+     * So the resource loader is able to trigger events
+     * for internal loaded service dependencies
+     *
+     * {@inheritdoc}
+     */
+    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    {
+        if (null === $this->resourceLoader) {
+            return parent::get($id, $invalidBehavior);
         }
+
+        return $this->resourceLoader->get($id);
     }
 
     /**
+     * Returns service directly from container
+     * {@inheritdoc}
+     */
+    public function getService($id)
+    {
+        return parent::get($id);
+    }
+
+    /**
+     * @param $id
      * @return string
      */
-    public function getName()
+    public function getNormalizedId($id)
     {
-        return 'Bcrypt';
-    }
+        $id = strtolower($id);
 
-    /**
-     * @return boolean
-     */
-    public function isCompatible()
-    {
-        return version_compare(PHP_VERSION, '5.3.7', '>=');
-    }
+        if (isset($this->aliases[$id])) {
+            $id = $this->aliases[$id];
+        }
 
-    /**
-     * @param  string $password
-     * @param  string $hash
-     * @return bool
-     */
-    public function isPasswordValid($password, $hash)
-    {
-        return password_verify($password, $hash);
-    }
-
-    /**
-     * @param  string $password
-     * @return string
-     */
-    public function encodePassword($password)
-    {
-        return password_hash($password, PASSWORD_DEFAULT, $this->options);
-    }
-
-    /**
-     * @param  string $hash
-     * @return bool
-     */
-    public function isReencodeNeeded($hash)
-    {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
+        return $id;
     }
 }

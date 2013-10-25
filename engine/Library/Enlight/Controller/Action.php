@@ -20,6 +20,9 @@
  * @author     $Author$
  */
 
+use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+
 /**
  * Basic class for each Enlight controller action.
  *
@@ -32,31 +35,38 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Controller_Action extends Enlight_Class implements Enlight_Hook
+abstract class Enlight_Controller_Action extends Enlight_Class implements Enlight_Hook, ResourceLoaderAwareInterface
 {
     /**
-     * @var Enlight_Controller_Front Contains an instance of the Enlight_Controller_Front.
+     * @var Enlight_Controller_Front
      */
     protected $front;
 
     /**
-     * @var Enlight_View_Default Contains an instance of the Enlight_View_Default.
+     * @var Enlight_View_Default
      */
     protected $view;
 
     /**
-     * @var Enlight_Controller_Request_Request Contains an instance of the Enlight_Controller_Request_Request.
      * Will be set in the class constructor. Passed to the class init and controller init function.
      * Required for the forward, dispatch and redirect functions.
+     *
+     * @var Enlight_Controller_Request_Request
      */
     protected $request;
 
     /**
-     * @var Enlight_Controller_Response_Response Contains an instance of the Enlight_Controller_Response_Response.
      * Will be set in the class constructor. Passed to the class init and controller init function.
      * Required for the forward, dispatch and redirect functions.
+     *
+     * @var Enlight_Controller_Response_Response
      */
     protected $response;
+
+    /**
+     * @var Shopware\Components\DependencyInjection\ResourceLoader
+     */
+    protected $resourceLoader;
 
     /**
      * @var string Contains the name of the controller.
@@ -68,7 +78,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
      *
-     * @param Enlight_Controller_Request_Request   $request
+     * @param Enlight_Controller_Request_Request $request
      * @param Enlight_Controller_Response_Response $response
      */
     public function __construct(Enlight_Controller_Request_Request $request,
@@ -144,7 +154,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             if (!$event = Enlight_Application::Instance()->Events()->notifyUntil(
                 __CLASS__ . '_' . $action_name,
                 array('subject' => $this)
-            )) {
+            )
+            ) {
                 $this->$action();
             }
             $this->postDispatch();
@@ -197,7 +208,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string $action
      * @param string $controller
      * @param string $module
-     * @param array  $params
+     * @param array $params
      */
     public function forward($action, $controller = null, $module = null, array $params = null)
     {
@@ -220,7 +231,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Redirect the request. The frontend router will assemble the url.
      *
      * @param string|array $url
-     * @param array        $options
+     * @param array $options
      */
     public function redirect($url, array $options = array())
     {
@@ -234,7 +245,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $uri = $this->Request()->getScheme() . '://' . $this->Request()->getHttpHost();
             $url = $uri . $url;
         }
-        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int) $options['code']);
+        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int)$options['code']);
     }
 
     /**
@@ -248,6 +259,14 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         $this->view = $view;
 
         return $this;
+    }
+
+    /**
+     * @param ResourceLoader $loader
+     */
+    public function setResourceLoader(ResourceLoader $loader = null)
+    {
+        $this->resourceLoader = $loader;
     }
 
     /**
@@ -336,11 +355,24 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         return $this->response;
     }
 
+    public function get($name)
+    {
+        return $this->resourceLoader->get($name);
+    }
+
+    /**
+     * @return \Shopware\Components\Model\ModelManager
+     */
+    public function getModelManager()
+    {
+        return $this->resourceLoader->get('Models');
+    }
+
     /**
      * Magic caller method
      *
      * @param  string $name
-     * @param  array  $value
+     * @param  array $value
      * @throws Enlight_Controller_Exception
      * @return mixed
      */

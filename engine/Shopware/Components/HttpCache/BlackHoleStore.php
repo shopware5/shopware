@@ -22,72 +22,80 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Password\Encoder;
+namespace Shopware\Components\HttpCache;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 /**
+ * Dummy Storage
+ *
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ * @package   Shopware\Components\HttpCache
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Bcrypt implements PasswordEncoderInterface
+class BlackHoleStore implements StoreInterface
 {
-
     /**
-     * @var array
+     * {@inheritdoc}
      */
-    protected $options = array();
-
-    /**
-     * @param array $options
-     */
-    public function __construct($options = null)
+    public function lookup(Request $request)
     {
-        if ($options !== null) {
-            $this->options = $options;
-        }
+        return null;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function write(Request $request, Response $response)
     {
-        return 'Bcrypt';
+        return 'dummy';
     }
 
     /**
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function isCompatible()
+    public function invalidate(Request $request)
     {
-        return version_compare(PHP_VERSION, '5.3.7', '>=');
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isPasswordValid($password, $hash)
+    public function lock(Request $request)
     {
-        return password_verify($password, $hash);
+        return true;
     }
 
     /**
-     * @param  string $password
-     * @return string
+     * {@inheritdoc}
      */
-    public function encodePassword($password)
+    public function unlock(Request $request)
     {
-        return password_hash($password, PASSWORD_DEFAULT, $this->options);
+        return true;
     }
 
     /**
-     * @param  string $hash
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isReencodeNeeded($hash)
+    public function isLocked(Request $request)
     {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function purge($url)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cleanup()
+    {
     }
 }

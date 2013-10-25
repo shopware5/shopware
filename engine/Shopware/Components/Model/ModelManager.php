@@ -32,6 +32,11 @@ use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -64,14 +69,13 @@ class ModelManager extends EntityManager
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param mixed $conn An array with the connection parameters or an existing
-     *      Connection instance.
-     * @param Configuration $config The Configuration instance to use.
-     * @param \Doctrine\Common\EventManager|null $eventManager The EventManager instance to use.
+     * @param Connection $conn
+     * @param Configuration $config
+     * @param EventManager $eventManager
      * @throws \Doctrine\ORM\ORMException
-     * @return ModelManager The created EntityManager.
+     * @return ModelManager
      */
-    public static function create(Connection $conn, Configuration $config, EventManager $eventManager = null)
+    public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -93,7 +97,6 @@ class ModelManager extends EntityManager
      */
     public function __call($name, $args)
     {
-        /** @todo make path custom able */
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
@@ -240,17 +243,16 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return \Symfony\Component\Validator\Validator
+     * @return Validator
      */
     public function getValidator()
     {
         if (null === $this->validator) {
             $reader = $this->getConfiguration()->getAnnotationsReader();
-            $this->validator = new \Symfony\Component\Validator\Validator(
-                new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(
-                    new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($reader)
-                ),
-                new \Symfony\Component\Validator\ConstraintValidatorFactory()
+            $this->validator = new Validator(
+                new ClassMetadataFactory(new AnnotationLoader($reader)),
+                new ConstraintValidatorFactory(),
+                new Translator('en_us')
             );
         }
 
