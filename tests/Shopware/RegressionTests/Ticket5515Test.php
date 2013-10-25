@@ -38,6 +38,8 @@ class Shopware_RegressionTests_Ticket5515 extends Enlight_Components_Test_Plugin
      */
     public function testDeprecatedAPIArticleUpdate()
     {
+        // Clear entitymanager to prevent weird 'model shop not persisted' errors.
+        Shopware()->Models()->clear();
 
 	    //initial check for the article data
 	    $sql= "SELECT * FROM s_articles WHERE id = ?";

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
@@ -54,10 +55,14 @@ class Configuration extends BaseConfiguration
     protected $fileCacheDir;
 
     /**
-     * @param $options
+     * @param array $options
+     * @param \Zend_Cache_Core $cache
+     * @param \Enlight_Hook_HookManager $hookManager
      */
-    public function __construct($options)
+    public function __construct($options, \Zend_Cache_Core $cache, \Enlight_Hook_HookManager $hookManager)
     {
+        $this->setHookManager($hookManager);
+
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
@@ -72,15 +77,19 @@ class Configuration extends BaseConfiguration
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
-        \Doctrine\DBAL\Types\Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
-        \Doctrine\DBAL\Types\Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
-        \Doctrine\DBAL\Types\Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');
+        Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
+        Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
+        Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');
 
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
+        }
+
+        if ($this->getMetadataCacheImpl() === null) {
+            $this->setCacheResource($cache);
         }
     }
 

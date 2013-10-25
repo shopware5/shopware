@@ -21,6 +21,8 @@
  * @author     $Author$
  */
 
+use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+
 /**
  * Implements all methods to register single or multiple controllers and load them automatically.
  *
@@ -185,10 +187,10 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     {
         try {
             $dir = new DirectoryIterator($path);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new Enlight_Controller_Exception("Directory $path not readable", 0, $e);
         }
+
         foreach ($dir as $file) {
             if ($file->isDot() || !$file->isDir()) {
                 continue;
@@ -497,15 +499,20 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         try {
             Enlight_Application::Instance()->Loader()->loadClass($class, $path);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
         }
 
         $proxy = Enlight_Application::Instance()->Hooks()->getProxy($class);
+
         /** @var $controller Enlight_Controller_Action */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
+
+        if ($controller instanceof ResourceLoaderAwareInterface) {
+            $resourceLoader = Enlight_Application::Instance()->ResourceLoader();
+            $controller->setResourceLoader($resourceLoader);
+        }
 
         $action = $this->getActionMethod($request);
 
@@ -519,8 +526,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         try {
             $controller->dispatch($action);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $curObLevel = ob_get_level();
             if ($curObLevel > $obLevel) {
                 do {

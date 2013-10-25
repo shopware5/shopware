@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,13 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 
 // Check the minimum required php version
@@ -63,21 +59,51 @@ if (is_dir('update')) {
     return;
 }
 
+// check for composer autoloader
+if (!file_exists('vendor/autoload.php')) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
+
+    echo '<h2>Fehler</h2>';
+    echo 'Bitte führen Sie zuerst "composer install" aus.';
+
+    echo '<h2>Error</h2>';
+    echo 'Please execute "composer install" install';
+    return;
+}
+
 set_include_path(
-    '.' . PATH_SEPARATOR .
-    dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    dirname(__FILE__) . '/engine/' . PATH_SEPARATOR .           // Shopware
-    dirname(__FILE__) . '/templates/'                           // Templates
+    __DIR__ . PATH_SEPARATOR .
+    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
+    __DIR__ . '/templates/'                           // Templates
 );
 
-include_once 'Enlight/Application.php';
-include_once 'Shopware/Application.php';
+// include composer autoloader
+require 'vendor/autoload.php';
 
-$environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
-if (empty($environment)){
+use Shopware\Kernel;
+use Shopware\Components\HttpCache\AppCache;
+use Symfony\Component\HttpFoundation\Request;
+
+$environment = getenv('ENV') ? getenv('ENV') : getenv('REDIRECT_ENV');
+if (empty($environment)) {
     $environment = 'production';
 }
 
-$s = new Shopware($environment);
+$cacheOptions = array(
+    'enabled'        => true,
+    'stale_if_error' => false,
+    'cache_dir'      => __DIR__ . '/cache/html/'
+);
 
-return $s->run();
+if (is_file(__DIR__ . '/config_http.php')) {
+    $cacheOptions = array_merge($cacheOptions, include __DIR__ . '/config_http.php');
+}
+
+$kernel = new Kernel($environment, $environment !== 'production');
+if ($cacheOptions['enabled']) {
+    $kernel = new AppCache($kernel, $cacheOptions);
+}
+
+$request = Request::createFromGlobals();
+$kernel->handle($request)
+       ->send();

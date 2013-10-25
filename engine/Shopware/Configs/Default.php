@@ -21,7 +21,6 @@ $customConfig = array_merge(array(
     'front' => array(),
     'template' => array(),
     'mail' => array(),
-    'httpCache' => array(),
     'session' => array(),
     'phpSettings' => array(),
     'cache' => array(
@@ -30,8 +29,10 @@ $customConfig = array_merge(array(
     ),
     'hook' => array(),
     'model' => array(),
+    'config' => array(),
     'custom' => array(),
     'backendSession' => array(),
+    'plugins' => array()
 ), $customConfig);
 
 return array_merge($customConfig, array(
@@ -52,6 +53,8 @@ return array_merge($customConfig, array(
         'showException' => true,
         'charset' => 'utf-8'
     ), $customConfig['front']),
+    'config' => array_merge(array(), $customConfig['config']),
+    'plugins' => array_merge(array(), $customConfig['plugins']),
     'template' => array_merge(array(
         'compileCheck' => true,
         'compileLocking' => true,
@@ -66,17 +69,6 @@ return array_merge($customConfig, array(
     'mail' => array_merge(array(
         'charset' => 'utf-8'
     ), $customConfig['mail']),
-    'httpCache' => array_merge(array(
-        'enabled' => true,
-        'debug' => false,
-        'default_ttl' => 0,
-        'private_headers' => array('Authorization', 'Cookie'),
-        'allow_reload' => false,
-        'allow_revalidate' => false,
-        'stale_while_revalidate' => 2,
-        'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_html')
-    ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
         'cookie_lifetime' => 0,

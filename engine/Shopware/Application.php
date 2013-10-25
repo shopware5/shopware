@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,17 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
+
+use Shopware\Components\DependencyInjection\ResourceLoader;
 
 /**
  * Shopware Application
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware extends Enlight_Application
 {
@@ -43,24 +42,31 @@ class Shopware extends Enlight_Application
     protected $oldPath = null;
 
     /**
+     * @var Shopware\Components\ResourceLoader
+     */
+    protected $resourceLoader;
+
+    /**
      * Constructor method
      *
      * @param string $environment
-     * @param mixed $options
+     * @param array $options
+     * @param ResourceLoader $resourceLoader
      */
-    public function __construct($environment = 'production', $options = null)
+    public function __construct($environment, array $options, ResourceLoader $resourceLoader)
     {
+        $this->resourceLoader = $resourceLoader;
+
         Shopware($this);
 
         if ($this->oldPath === null) {
-            $this->oldPath = dirname(realpath(dirname($this->AppPath()))) . $this->DS();
+            $this->oldPath = realpath(__DIR__ . '/../../') . '/';
         }
 
-        if ($options === null) {
-            $options = $this->AppPath() . 'Configs/Default.php';
-        }
+        parent::__construct($environment, $options, $resourceLoader);
 
-        parent::__construct($environment, $options);
+        $resourceLoader->setBootstrap($this->Bootstrap());
+        $resourceLoader->setApplication($this);
     }
 
     /**
@@ -87,6 +93,16 @@ class Shopware extends Enlight_Application
     public function DocPath($path = null)
     {
         return $this->OldPath($path);
+    }
+
+    /**
+     * Returns injection container
+     *
+     * @return ResourceLoader
+     */
+    public function ResourceLoader()
+    {
+        return $this->resourceLoader;
     }
 
     /**
@@ -187,6 +203,16 @@ class Shopware extends Enlight_Application
     public function TemplateMail()
     {
         return $this->_bootstrap->getResource('TemplateMail');
+    }
+
+    /**
+     * Returns the instance of the plugin manager, which is initialed in the class constructor
+     *
+     * @return Enlight_Plugin_PluginManager
+     */
+    public function Plugins()
+    {
+        return $this->_bootstrap->getResource('plugin_manager');
     }
 
     /**

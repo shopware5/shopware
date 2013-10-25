@@ -35,13 +35,15 @@
 class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
 {
 	protected $db;
-	
+
 	public function init()
 	{
+        die("asdf");
+
 		$this->db = Shopware()->Db();
 	}
     /**
-     * Returns an array of events that this subscriber listens 
+     * Returns an array of events that this subscriber listens
      *
      * @return array
      */
@@ -57,9 +59,9 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	 	ORDER BY event, position
     	 ';
     	 $rows = $this->db->fetchAll($sql);
-    	 
+
     	 $events = array();
-    	 
+
     	 if(!empty($rows))
     	 foreach ($rows as $row)
     	 {
@@ -70,7 +72,7 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	 		//$row['pluginID']
     	 	);
     	 }
-    	     	 
+
     	 return $events;
     }
 
@@ -95,9 +97,9 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     {
         return $this->deleteSubscribe($handler);
     }
-    
+
     /**
-     * Returns an array of events that this subscriber listens 
+     * Returns an array of events that this subscriber listens
      *
      * @return array
      */
@@ -113,14 +115,14 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	 	ORDER BY position
     	 ';
     	 $rows = $this->db->fetchAll($sql);
-    	 
+
     	 $hooks = array();
-    	 
+
     	 if(!empty($rows))
     	 foreach ($rows as $row)
     	 {
     	 	list($row['class'], $row['method']) = explode('::', $row['subscribe']);
-    	 	
+
     	 	$hooks[] = new Enlight_Hook_HookHandler(
     	 		$row['class'],
     	 		$row['method'],
@@ -130,36 +132,36 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	 		$row['pluginID']
     	 	);
     	 }
-    	 
+
     	 return $hooks;
     }
-    
+
     public function subscribeEvent(Enlight_Event_EventHandler $handler)
     {
     	return $this->saveSubscribe($handler);
     }
-    
+
     public function subscribeHook(Enlight_Hook_HookHandler $handler)
     {
     	return $this->saveSubscribe($handler);
     }
-    
+
     public function unsubscribeEvent(Enlight_Event_EventHandler $handler)
     {
     	return $this->deleteSubscribe($handler);
     }
-    
+
     public function unsubscribeHook(Enlight_Hook_HookHandler $handler)
     {
     	return $this->deleteSubscribe($handler);
     }
-    
+
     public function unsubscribeEvents($where=array())
     {
     	$where['type'] = 0;
      	return $this->deleteSubscribes($where);
     }
-    
+
     public function unsubscribeHooks($where=array())
     {
     	if(!isset($where['type'])) {
@@ -167,7 +169,7 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	}
     	return $this->deleteSubscribes($where);
     }
-    
+
     protected function deleteSubscribes($values)
     {
     	$where = array();
@@ -191,7 +193,7 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	$result = $this->db->query($sql);
     	return (bool) $result;
     }
-        
+
     protected function deleteSubscribe($handler)
     {
     	switch (get_class($handler))
@@ -222,7 +224,7 @@ class Shopware_Components_Subscriber extends Enlight_Event_Subscriber
     	));
     	return (bool) $result;
     }
-        
+
     protected function saveSubscribe($handler)
     {
     	switch (get_class($handler))

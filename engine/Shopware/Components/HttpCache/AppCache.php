@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
@@ -95,6 +96,8 @@ class AppCache extends HttpCache
      */
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
+        $request->headers->set('Surrogate-Capability', 'shopware="ESI/1.0"');
+
         if (strpos($request->getPathInfo(), '/backend/') === 0) {
             return $this->pass($request, $catch);
         }
@@ -159,7 +162,6 @@ class AppCache extends HttpCache
 
         // If Response is not fresh age > 0 AND contains a mathing no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
-            $this->record($request, 'no-cache-tag');
             $response = $this->fetch($request);
         }
 
@@ -213,27 +215,6 @@ class AppCache extends HttpCache
         return false;
     }
 
-
-    /**
-     * Forwards the Request to the backend and returns the Response.
-     *
-     * @param Request  $request A Request instance
-     * @param Boolean  $raw     Whether to catch exceptions or not
-     * @param Response $entry   A Response instance (the stale entry if present, null otherwise)
-     *
-     * @return Response A Response instance
-     */
-    protected function forward(Request $request, $raw = false, Response $entry = null)
-    {
-        /** @var $bootstrap \Shopware_Bootstrap */
-        $bootstrap = $this->getKernel()->getApp()->Bootstrap();
-
-        $bootstrap->registerResource('HttpCache', $this);
-        $bootstrap->registerResource('Esi', $this->esi);
-
-        return parent::forward($request, $raw, $entry);
-    }
-
     /**
      * @return \Symfony\Component\HttpKernel\HttpCache\Esi
      */
@@ -243,11 +224,11 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @return \Symfony\Component\HttpKernel\HttpCache\Store
+     * @return StoreInterface
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir);
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
     }
 
     /**

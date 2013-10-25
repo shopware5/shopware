@@ -88,6 +88,21 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     protected $invokeParams = array();
 
     /**
+     * @var Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    /**
+     * @param Enlight_Event_EventManager $eventManager
+     */
+    public function __construct(Enlight_Event_EventManager $eventManager)
+    {
+        $this->eventManager = $eventManager;
+
+        parent::__construct();
+    }
+
+    /**
      * Dispatch function of the front controller.
      *
      * If the flags noErrorHandler and noViewRenderer aren't set, the error handler and the view renderer
@@ -123,7 +138,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             'subject' => $this
         ));
 
-        Enlight_Application::Instance()->Events()->notify(
+        $this->eventManager->notify(
             'Enlight_Controller_Front_StartDispatch',
             $eventArgs
         );
@@ -134,6 +149,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         if (!$this->dispatcher) {
             $this->setDispatcher('Enlight_Controller_Dispatcher_Default');
         }
+
         if (!$this->request) {
             $this->setRequest('Enlight_Controller_Request_RequestHttp');
         }
@@ -145,11 +161,10 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         $eventArgs->set('response', $this->Response());
 
         try {
-
             /**
              * Notify plugins of router startup
              */
-            Enlight_Application::Instance()->Events()->notify(
+            $this->eventManager->notify(
                 'Enlight_Controller_Front_RouteStartup',
                 $eventArgs
             );
@@ -159,8 +174,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
              */
             try {
                 $this->router->route($this->request);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 if ($this->throwExceptions()) {
                     throw $e;
                 }
@@ -170,7 +184,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             /**
              * Notify plugins of router completion
              */
-            Enlight_Application::Instance()->Events()->notify(
+            $this->eventManager->notify(
                 'Enlight_Controller_Front_RouteShutdown',
                 $eventArgs
             );
@@ -178,7 +192,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             /**
              * Notify plugins of dispatch loop startup
              */
-            Enlight_Application::Instance()->Events()->notify(
+            $this->eventManager->notify(
                 'Enlight_Controller_Front_DispatchLoopStartup',
                 $eventArgs
             );
@@ -195,7 +209,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                  * Notify plugins of dispatch startup
                  */
                 try {
-                    Enlight_Application::Instance()->Events()->notify(
+                    $this->eventManager->notify(
                         'Enlight_Controller_Front_PreDispatch',
                         $eventArgs
                     );
@@ -212,15 +226,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                      */
                     try {
                         $this->dispatcher->dispatch($this->request, $this->response);
-                    }
-                    catch (Exception $e) {
+                    } catch (Exception $e) {
                         if ($this->throwExceptions()) {
                             throw $e;
                         }
                         $this->response->setException($e);
                     }
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     if ($this->throwExceptions()) {
                         throw $e;
                     }
@@ -229,13 +241,12 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                 /**
                  * Notify plugins of dispatch completion
                  */
-                Enlight_Application::Instance()->Events()->notify(
+                $this->eventManager->notify(
                     'Enlight_Controller_Front_PostDispatch',
                     $eventArgs
                 );
             } while (!$this->request->isDispatched());
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
             }
@@ -246,12 +257,11 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
          * Notify plugins of dispatch loop completion
          */
         try {
-            Enlight_Application::Instance()->Events()->notify(
+            $this->eventManager->notify(
                 'Enlight_Controller_Front_DispatchLoopShutdown',
                 $eventArgs
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
             }
@@ -262,13 +272,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             return $this->response;
         }
 
-        if (!Enlight_Application::Instance()->Events()->notifyUntil(
+        if (!$this->eventManager->notifyUntil(
             'Enlight_Controller_Front_SendResponse', $eventArgs
         )) {
             $this->Response()->sendResponse();
         }
 
-        Enlight_Application::Instance()->Events()->notify(
+        $this->eventManager->notify(
             'Enlight_Controller_Front_AfterSendResponse',
             $eventArgs
         );
