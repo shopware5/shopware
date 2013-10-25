@@ -24,6 +24,7 @@
 
 namespace Shopware;
 
+use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
@@ -358,6 +359,8 @@ class Kernel implements HttpKernelInterface
         $loader->load('services.xml');
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
+
+        $container->addCompilerPass(new EventListenerCompilerPass());
 
         return $container;
     }

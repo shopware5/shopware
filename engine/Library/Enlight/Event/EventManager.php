@@ -58,6 +58,16 @@ class Enlight_Event_EventManager extends Enlight_Class
         return $this->listeners;
     }
 
+    public function registerSimpleListener($name, $callback)
+    {
+        $handler = new \Enlight_Event_Handler_Default(
+            $name,
+            $callback
+        );
+
+        $this->registerListener($handler);
+    }
+
     /**
      * Registers the given event handler and adds it to the internal listeners array.
      * If no event position is set in the event handler, the event handler will be added to the
