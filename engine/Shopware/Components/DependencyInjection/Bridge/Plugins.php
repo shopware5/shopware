@@ -45,17 +45,12 @@ class Plugins
     public function factory(
         ResourceLoader $resourceLoader,
         \Enlight_Loader $loader,
-        \Zend_Cache_Core $cache,
         \Enlight_Event_EventManager $eventManager,
         \Shopware $application,
         array $config
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
         $resourceLoader->load('Table');
-
-        if (!isset($config['cache'])) {
-            $config['cache'] = $cache;
-        }
 
         if (!isset($config['namespaces'])) {
             $config['namespaces'] = array('Core', 'Frontend', 'Backend');

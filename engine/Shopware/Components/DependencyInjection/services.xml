@@ -105,7 +105,6 @@
 
             <argument type="service" id="resource_loader"/>
             <argument type="service" id="Loader"/>
-            <argument type="service" id="cache"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
             <argument>%shopware.plugins%</argument>
