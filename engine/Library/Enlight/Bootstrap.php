@@ -20,7 +20,6 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
-use Shopware\Components\ResourceLoader;
 
 /**
  * The Enlight_Bootstrap is responsible to manage the application resources.

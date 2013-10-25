@@ -41,7 +41,7 @@ class Mail
      */
     public function factory(ResourceLoader $resourceLoader, \Shopware_Components_Config $config, array $options)
     {
-        if (!$resourceLoader->loadResource('MailTransport')) {
+        if (!$resourceLoader->load('MailTransport')) {
             return null;
         }
 

@@ -51,14 +51,14 @@ class Session
         }
 
         /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $resourceLoader->getResource('Shop');
+        $shop = $resourceLoader->get('Shop');
 
         $name = 'session-' . $shop->getId();
         $sessionOptions['name'] = $name;
 
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
-                'db'             => $resourceLoader->getResource('Db'),
+                'db'             => $resourceLoader->get('Db'),
                 'name'           => 's_core_sessions',
                 'primary'        => 'id',
                 'modifiedColumn' => 'modified',
@@ -73,7 +73,7 @@ class Session
 
         \Enlight_Components_Session::start($sessionOptions);
 
-        $resourceLoader->registerResource('SessionID', \Enlight_Components_Session::getId());
+        $resourceLoader->set('SessionID', \Enlight_Components_Session::getId());
 
         $namespace = new \Enlight_Components_Session_Namespace('Shopware');
 

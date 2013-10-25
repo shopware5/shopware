@@ -2,10 +2,12 @@
 
 namespace Shopware\Components;
 
-use Symfony\Component\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
- * Class ResourceLoader
+ * @category  Shopware
+ * @package   Shopware\Components\DependencyInjection
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class ResourceLoader
 {
@@ -61,7 +63,6 @@ class ResourceLoader
     {
         $this->container = $container;
         $this->container->setResourceLoader($this);
-
     }
 
     /**
@@ -88,33 +89,17 @@ class ResourceLoader
     }
 
     /**
-     * @param string $name
-     * @return object
-     */
-    public function getService($name)
-    {
-        return $this->container->getService($name);
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function get($name)
-    {
-        return $this->getResource($name);
-    }
-
-    /**
      * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
      * The given name will be used as identifier.
      *
      * @param string $name
      * @param mixed $resource
-     * @return \Enlight_Bootstrap
+     * @return ResourceLoader
      */
-    public function registerResource($name, $resource)
+    public function set($name, $resource)
     {
+        $name = $this->container->getNormalizedId($name);
+
         $this->container->set($name, $resource);
 
         $this->resourceList[$name] = $resource;
@@ -123,7 +108,7 @@ class ResourceLoader
         if ($this->container->has('events')) {
             $this->container->getService('events')->notify(
                 'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
-                    'subject'  => $this->bootstrap,
+                    'subject'  => $this,
                     'resource' => $resource
                 )
             );
@@ -138,9 +123,11 @@ class ResourceLoader
      * @param string $name
      * @return bool
      */
-    public function hasResource($name)
+    public function has($name)
     {
-        return isset($this->resourceList[$name]) || $this->loadResource($name);
+        $name = $this->container->getNormalizedId($name);
+
+        return isset($this->resourceList[$name]) || $this->load($name);
     }
 
     /**
@@ -150,8 +137,10 @@ class ResourceLoader
      * @param string $name
      * @return bool
      */
-    public function issetResource($name)
+    public function initialized($name)
     {
+        $name = $this->container->getNormalizedId($name);
+
         return isset($this->resourceList[$name]);
     }
 
@@ -164,10 +153,12 @@ class ResourceLoader
      * @throws \Exception
      * @return mixed
      */
-    public function getResource($name)
+    public function get($name)
     {
+        $name = $this->container->getNormalizedId($name);
+
         if (!isset($this->resourceStatus[$name])) {
-            $this->loadResource($name);
+            $this->load($name);
         }
 
         if ($this->resourceStatus[$name] === self::STATUS_NOT_FOUND) {
@@ -193,8 +184,10 @@ class ResourceLoader
      * @throws \Enlight_Exception
      * @return bool
      */
-    public function loadResource($name)
+    public function load($name)
     {
+        $name = $this->container->getNormalizedId($name);
+
         if (isset($this->resourceStatus[$name])) {
             switch ($this->resourceStatus[$name]) {
                 case self::STATUS_BOOTSTRAP:
@@ -216,7 +209,7 @@ class ResourceLoader
             if ($this->container->has('events')) {
                 $event = $this->container->getService('events')->notifyUntil(
                     'Enlight_Bootstrap_InitResource_' . $name,
-                    array('subject' => $this->bootstrap)
+                    array('subject' => $this)
                 );
             }
 
@@ -228,7 +221,7 @@ class ResourceLoader
 
             if ($this->container->has('events')) {
                 $this->container->getService('events')->notify(
-                    'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this->bootstrap)
+                    'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this)
                 );
             }
         } catch (\Exception $e) {
@@ -250,14 +243,16 @@ class ResourceLoader
      * list properties.
      *
      * @param string $name
-     * @return \Enlight_Bootstrap
+     * @return ResourceLoader
      */
-    public function resetResource($name)
+    public function reset($name)
     {
+        $name = $this->container->getNormalizedId($name);
         if (isset($this->resourceList[$name])) {
             unset($this->resourceList[$name]);
             unset($this->resourceStatus[$name]);
         }
+        $this->container->set($name, null);
 
         return $this;
     }
