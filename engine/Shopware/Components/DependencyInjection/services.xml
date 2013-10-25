@@ -279,5 +279,14 @@
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
             <argument type="service" id="db_connection" />
         </service>
+
+        <service id="event.listener.foo_listener" class="Shopware\Components\Event\Listener\FooListener">
+            <argument type="service" id="db_connection"/>
+            <tag name="shopware.event_manager.listener"
+                 event="Enlight_Controller_Front_StartDispatch"
+                 method="onStartDispatch" />
+        </service>
+
+
     </services>
 </container>
