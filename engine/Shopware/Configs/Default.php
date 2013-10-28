@@ -92,8 +92,8 @@ return array_merge($customConfig, array(
         ), $customConfig['cache']['frontendOptions']),
         'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
         'backendOptions' => array_merge(array(
-            'hashed_directory_umask' => 0771,
-            'cache_file_umask' => 0644,
+            'hashed_directory_perm' => 0771,
+            'cache_file_perm' => 0644,
             'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
             'cache_dir' => $this->DocPath('cache_general'),
             'file_name_prefix' => 'shopware'
