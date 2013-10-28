@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: FormElement.php 23945 2011-05-02 22:49:02Z adamlundrigan $
+ * @version    $Id$
  */
 
 /**
@@ -31,20 +31,20 @@ require_once 'Zend/View/Helper/HtmlElement.php';
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_View_Helper_FormElement extends Zend_View_Helper_HtmlElement
 {
     /**
-     * @var Zend_Translate
+     * @var Zend_Translate_Adapter|null
      */
     protected $_translator;
 
     /**
      * Get translator
      *
-     * @return Zend_Translate
+     * @return Zend_Translate_Adapter|null
      */
     public function getTranslator()
     {
@@ -54,7 +54,7 @@ abstract class Zend_View_Helper_FormElement extends Zend_View_Helper_HtmlElement
     /**
      * Set translator
      *
-     * @param  Zend_Translate $translator
+     * @param  Zend_Translate|Zend_Translate_Adapter|null $translator
      * @return Zend_View_Helper_FormElement
      */
     public function setTranslator($translator = null)

@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Amf
  * @subpackage Response
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Http.php 24481 2011-09-29 14:18:40Z matthew $
+ * @version    $Id$
  */
 
 /** Zend_Amf_Response */
@@ -28,7 +28,7 @@ require_once 'Zend/Amf/Response.php';
  *
  * @package    Zend_Amf
  * @subpackage Response
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Amf_Response_Http extends Zend_Amf_Response
@@ -56,7 +56,7 @@ class Zend_Amf_Response_Http extends Zend_Amf_Response
 
     protected function isIeOverSsl()
     {
-        $ssl = $_SERVER['HTTPS'];
+        $ssl = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : false;
         if (!$ssl || ($ssl == 'off')) {
             // IIS reports "off", whereas other browsers simply don't populate
             return false;

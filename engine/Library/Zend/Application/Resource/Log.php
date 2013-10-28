@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Log.php 23772 2011-02-28 21:35:29Z ralph $
+ * @version    $Id$
  */
 
 /**
@@ -27,13 +27,13 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
 
 
 /**
- * Resource for initializing the locale
+ * Resource for initializing logger
  *
  * @uses       Zend_Application_Resource_ResourceAbstract
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application_Resource_Log
@@ -66,6 +66,11 @@ class Zend_Application_Resource_Log
         return $this;
     }
 
+    /**
+     * Retrieve logger object
+     *
+     * @return Zend_Log
+     */
     public function getLog()
     {
         if (null === $this->_log) {

@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Amf
  * @subpackage Parse
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Serializer.php 23772 2011-02-28 21:35:29Z ralph $
+ * @version    $Id$
  */
 
 /**
@@ -25,7 +25,7 @@
  *
  * @package    Zend_Amf
  * @subpackage Parse
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Amf_Parse_Serializer
@@ -38,6 +38,13 @@ abstract class Zend_Amf_Parse_Serializer
     protected $_stream;
 
     /**
+     * str* functions overloaded using mbstring.func_overload
+     *
+     * @var bool
+     */
+    protected $mbStringFunctionsOverloaded;
+
+    /**
      * Constructor
      *
      * @param  Zend_Amf_Parse_OutputStream $stream
@@ -46,6 +53,7 @@ abstract class Zend_Amf_Parse_Serializer
     public function __construct(Zend_Amf_Parse_OutputStream $stream)
     {
         $this->_stream = $stream;
+        $this->_mbStringFunctionsOverloaded = function_exists('mb_strlen') && (ini_get('mbstring.func_overload') !== '') && ((int)ini_get('mbstring.func_overload') & 2);
     }
 
     /**

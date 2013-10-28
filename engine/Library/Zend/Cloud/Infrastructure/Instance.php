@@ -3,7 +3,7 @@
  * @category   Zend
  * @package    Zend_Cloud
  * @subpackage Infrastructure
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -12,7 +12,7 @@
  *
  * @package    Zend_Cloud
  * @subpackage Infrastructure
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Cloud_Infrastructure_Instance 
@@ -70,9 +70,7 @@ class Zend_Cloud_Infrastructure_Instance
         self::INSTANCE_ID,
         self::INSTANCE_STATUS,
         self::INSTANCE_IMAGEID,
-        self::INSTANCE_ZONE,
-        self::INSTANCE_RAM,
-        self::INSTANCE_STORAGE,
+        self::INSTANCE_ZONE
     );
 
     /**

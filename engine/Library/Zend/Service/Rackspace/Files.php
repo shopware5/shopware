@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Rackspace
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -43,13 +43,13 @@ class Zend_Service_Rackspace_Files extends Zend_Service_Rackspace_Abstract
     const ERROR_PARAM_NO_METADATA              = 'You must specify the metadata array';
     const ERROR_CDN_TTL_OUT_OF_RANGE           = 'TTL must be a number in seconds, min is 900 sec and maximum is 1577836800 (50 years)';
     const ERROR_PARAM_UPDATE_CDN               = 'You must specify at least one the parameters: ttl, cdn_enabled or log_retention';
-    const HEADER_CONTENT_TYPE                  = 'Content-type';
+    const HEADER_CONTENT_TYPE                  = 'Content-Type';
     const HEADER_HASH                          = 'Etag';
-    const HEADER_LAST_MODIFIED                 = 'Last-modified';
-    const HEADER_CONTENT_LENGTH                = 'Content-length';
+    const HEADER_LAST_MODIFIED                 = 'Last-Modified';
+    const HEADER_CONTENT_LENGTH                = 'Content-Length';
     const HEADER_COPY_FROM                     = 'X-Copy-From';
-    const METADATA_OBJECT_HEADER               = "X-object-meta-";
-    const METADATA_CONTAINER_HEADER            = "X-container-meta-";
+    const METADATA_OBJECT_HEADER               = "X-Object-Meta-";
+    const METADATA_CONTAINER_HEADER            = "X-Container-Meta-";
     const CDN_URI                              = "X-CDN-URI";
     const CDN_SSL_URI                          = "X-CDN-SSL-URI";
     const CDN_ENABLED                          = "X-CDN-Enabled";
@@ -251,9 +251,11 @@ class Zend_Service_Rackspace_Files extends Zend_Service_Rackspace_Abstract
             case '204': // break intentionally omitted
                 $headers= $result->getHeaders();
                 $count= strlen(self::METADATA_CONTAINER_HEADER);
+                // Zend_Http_Response alters header name in array key, so match our header to what will be in the headers array
+                $headerName = ucwords(strtolower(self::METADATA_CONTAINER_HEADER)); 
                 $metadata= array();
                 foreach ($headers as $type => $value) {
-                    if (strpos($type,self::METADATA_CONTAINER_HEADER)!==false) {
+                    if (strpos($type,$headerName)!==false) {
                         $metadata[strtolower(substr($type, $count))]= $value;
                     }
                 }
@@ -330,15 +332,17 @@ class Zend_Service_Rackspace_Files extends Zend_Service_Rackspace_Abstract
         return false;
     }
     /**
-     * Store a file in a container 
+     * Store a file in a container
      *
      * @param string $container
      * @param string $object
      * @param string $content
      * @param array $metadata
+     * @param string $content_type
+     *
      * @return boolean
      */
-    public function storeObject($container,$object,$content,$metadata=array()) {
+    public function storeObject($container,$object,$content,$metadata=array(),$content_type=null) {
         if (empty($container)) {
             require_once 'Zend/Service/Rackspace/Exception.php';
             throw new Zend_Service_Rackspace_Exception(self::ERROR_PARAM_NO_NAME_CONTAINER);
@@ -350,6 +354,9 @@ class Zend_Service_Rackspace_Files extends Zend_Service_Rackspace_Abstract
         if (empty($content)) {
             require_once 'Zend/Service/Rackspace/Exception.php';
             throw new Zend_Service_Rackspace_Exception(self::ERROR_PARAM_NO_CONTENT);
+        }
+        if (!empty($content_type)) {
+           $headers[self::HEADER_CONTENT_TYPE]= $content_type;
         }
         if (!empty($metadata) && is_array($metadata)) {
             foreach ($metadata as $key => $value) {
@@ -481,9 +488,11 @@ class Zend_Service_Rackspace_Files extends Zend_Service_Rackspace_Abstract
             case '200': // break intentionally omitted
                 $headers= $result->getHeaders();
                 $count= strlen(self::METADATA_OBJECT_HEADER);
+                // Zend_Http_Response alters header name in array key, so match our header to what will be in the headers array
+                $headerName = ucwords(strtolower(self::METADATA_OBJECT_HEADER)); 
                 $metadata= array();
                 foreach ($headers as $type => $value) {
-                    if (strpos($type,self::METADATA_OBJECT_HEADER)!==false) {
+                    if (strpos($type,$headerName)!==false) {
                         $metadata[strtolower(substr($type, $count))]= $value;
                     }
                 }
