@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,36 +18,38 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\ORM\Proxy;
+namespace Doctrine\ORM\Mapping;
 
 /**
- * ORM Proxy Exception
+ * A resolver is used to instantiate an entity listener.
  *
- * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @link        www.doctrine-project.com
- * @since       1.0
- * @author      Benjamin Eberlei <kontakt@beberlei.de>
+ * @since   2.4
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProxyException extends \Doctrine\ORM\ORMException {
+interface EntityListenerResolver
+{
+    /**
+     * Clear all instances from the set, or a specific class when given.
+     *
+     * @param  string $className The fully-qualified class name
+     * 
+     * @return void
+     */
+    function clear($className = null);
 
-    public static function proxyDirectoryRequired() {
-        return new self("You must configure a proxy directory. See docs for details");
-    }
+    /**
+     * Returns a entity listener instance for the given class name.
+     *
+     * @param   string $className The fully-qualified class name
+     * 
+     * @return  object An entity listener
+     */
+    function resolve($className);
 
-    public static function proxyDirectoryNotWritable() {
-        return new self("Your proxy directory must be writable.");
-    }
-
-    public static function proxyNamespaceRequired() {
-        return new self("You must configure a proxy namespace. See docs for details");
-    }
-
-    public static function notProxyClass($className, $proxyNamespace)
-    {
-        return new self(sprintf(
-            "The class %s is not part of the proxy namespace %s",
-            $className, $proxyNamespace
-        ));
-    }
-
+    /**
+     * Register a entity listener instance.
+     *
+     * @param   object $object An entity listener
+     */
+    function register($object);
 }
