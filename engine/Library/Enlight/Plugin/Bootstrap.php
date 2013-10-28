@@ -104,4 +104,16 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
     {
         return $this->collection->Application();
     }
+
+    /**
+     * Get service from resource loader
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function get($name)
+    {
+        // todo@all inject resourceloader during plugin construction
+        return $this->collection->Application()->ResourceLoader()->get($name);
+    }
 }
