@@ -1,0 +1,345 @@
+<?php
+/**
+ * Shopware 4.0 - Dispatch
+ * Copyright © 2012 shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Models
+ * @subpackage Backend, Newsletter
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author     Tiago Garcia
+ * @author     $Author$
+ */
+
+namespace   Shopware\Models\Newsletter;
+use         Shopware\Components\Model\ModelEntity,
+            Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * Shopware Data model represents a non-customer shop visior contact data.
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="s_campaigns_maildata")
+ */
+class ContactData extends ModelEntity
+{
+    /**
+     * Autoincrement ID
+     *
+     * @var integer $id
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * The actual email address
+     *
+     * @var string $email
+     * @ORM\Column(name="email", type="string", nullable=false)
+     */
+    protected $email;
+
+    /**
+     * ID of the newsletter-group this data belongs to
+     *
+     * @var integer $groupId
+     *
+     * @ORM\Column(name="groupID", type="integer", nullable=false)
+     */
+    protected $groupId;
+
+    /**
+     * @var string $salutation
+     *
+     * @ORM\Column(name="salutation", type="string", nullable=true)
+     */
+    protected $salutation;
+
+    /**
+     * @var string title
+     *
+     * @ORM\Column(name="title", type="string", nullable=true)
+     */
+    protected $title;
+
+    /**
+     * @var string $firstName
+     *
+     * @ORM\Column(name="firstname", type="string", nullable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string $lastName
+     *
+     * @ORM\Column(name="lastname", type="string", nullable=true)
+     */
+    protected $lastName;
+
+    /**
+     * @var string $street
+     *
+     * @ORM\Column(name="street", type="string", nullable=true)
+     */
+    protected $street;
+
+    /**
+     * @var string $streetNumber
+     *
+     * @ORM\Column(name="streetNumber", type="string", nullable=true)
+     */
+    protected $streetNumber;
+
+    /**
+     * @var string $zipCode
+     *
+     * @ORM\Column(name="zipcode", type="string", nullable=true)
+     */
+    protected $zipCode;
+
+    /**
+     * @var string $city
+     *
+     * @ORM\Column(name="city", type="string", nullable=true)
+     */
+    protected $city;
+
+    /**
+     * @var \DateTime $added
+     *
+     * @ORM\Column(name="added", type="datetime", nullable=false)
+     */
+    protected $added;
+
+    /**
+     * @var \DateTime $deleted
+     *
+     * @ORM\Column(name="deleted", type="datetime", nullable=true)
+     */
+    protected $deleted;
+
+    /**
+     * @param \DateTime $added
+     */
+    public function setAdded($added)
+    {
+        $this->added = $added;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAdded()
+    {
+        return $this->added;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param \DateTime $deleted
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param int $groupId
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param string $street
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string $streetNumber
+     */
+    public function setStreetNumber($streetNumber)
+    {
+        $this->streetNumber = $streetNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreetNumber()
+    {
+        return $this->streetNumber;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $zipCode
+     */
+    public function setZipCode($zipCode)
+    {
+        $this->zipCode = $zipCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipCode()
+    {
+        return $this->zipCode;
+    }
+
+
+}
+
