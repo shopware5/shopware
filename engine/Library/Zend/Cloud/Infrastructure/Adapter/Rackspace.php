@@ -3,7 +3,7 @@
  * @category   Zend
  * @package    Zend_Cloud_Infrastructure
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -19,7 +19,7 @@ require_once 'Zend/Cloud/Infrastructure/Adapter/AbstractAdapter.php';
  *
  * @package    Zend_Cloud_Infrastructure
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Cloud_Infrastructure_Adapter_Rackspace extends Zend_Cloud_Infrastructure_Adapter_AbstractAdapter
@@ -148,7 +148,6 @@ class Zend_Cloud_Infrastructure_Adapter_Rackspace extends Zend_Cloud_Infrastruct
             $this->rackspace->getHttpClient()->setAdapter($options[self::HTTP_ADAPTER]);
         }
         
-        $this->flavors= $this->rackspace->listFlavors(true);
     }
     /**
      * Convert the attributes of Rackspace server into attributes of Infrastructure

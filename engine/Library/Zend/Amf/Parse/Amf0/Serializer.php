@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Amf
  * @subpackage Parse_Amf0
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Serializer.php 23772 2011-02-28 21:35:29Z ralph $
+ * @version    $Id$
  */
 
 /** Zend_Amf_Constants */
@@ -32,7 +32,7 @@ require_once 'Zend/Amf/Parse/Serializer.php';
  * @uses       Zend_Amf_Parse_Serializer
  * @package    Zend_Amf
  * @subpackage Parse_Amf0
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Amf_Parse_Amf0_Serializer extends Zend_Amf_Parse_Serializer
@@ -127,7 +127,7 @@ class Zend_Amf_Parse_Amf0_Serializer extends Zend_Amf_Parse_Serializer
                 case (is_bool($data)):
                     $markerType = Zend_Amf_Constants::AMF0_BOOLEAN;
                     break;
-                case (is_string($data) && (strlen($data) > 65536)):
+                case (is_string($data) && (($this->_mbStringFunctionsOverloaded ? mb_strlen($data, '8bit') : strlen($data)) > 65536)):
                     $markerType = Zend_Amf_Constants::AMF0_LONGSTRING;
                     break;
                 case (is_string($data)):
