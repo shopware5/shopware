@@ -355,6 +355,12 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         return $this->response;
     }
 
+    /**
+     * Get service from resource loader
+     *
+     * @param string $name
+     * @return mixed
+     */
     public function get($name)
     {
         return $this->resourceLoader->get($name);

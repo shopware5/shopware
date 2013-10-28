@@ -100,7 +100,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $list =& $this->listeners[$eventName];
 
         if ($handler->getPosition()) {
-            $position = (int)$handler->getPosition();
+            $position = (int) $handler->getPosition();
         } else {
             $position = count($list);
         }
@@ -337,7 +337,7 @@ class Enlight_Event_EventManager extends Enlight_Class
                 foreach ($listenerCollection->getValues() as $value) {
                     $collection->add($value);
                 }
-            } else if ($listenerCollection !== null) {
+            } elseif ($listenerCollection !== null) {
                 $collection->add($listenerCollection);
             }
         }
