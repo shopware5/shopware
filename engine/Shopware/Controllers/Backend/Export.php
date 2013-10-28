@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
             $row['purchaseunit'] = floatval($row['purchaseunit']);
             $row['referenceunit'] = floatval($row['referenceunit']);
 			if(!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
-				$row['referenceprice'] = $row['price']/$row['purchaseunit']/$row['referenceunit'];
+                $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice($row['price'], $row['purchaseunit'], $row['referenceunit']);
 			}
 
 			$rows[] = $row;

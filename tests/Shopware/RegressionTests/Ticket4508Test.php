@@ -120,18 +120,18 @@ class Shopware_RegressionTests_Ticket4508 extends Enlight_Components_Test_Plugin
     {
         $categories = array(
             23 => array(
-                206 => '100,00'
+                206 => '100.0'
             ),
             21 => array(
-                9 => '49,98',
-                2 => '39,98',
-                3 => '21,36',
-                12 => '14,27',
-                122 => '14,95',
-                7 => '12,45',
-                8 => '99,90',
-                4 => '11,41',
-                5 => '54,75'
+                9 => '49.98',
+                2 => '39.98',
+                3 => '21.357142857143',
+                12 => '14.271428571429',
+                122 => '14.95',
+                7 => '12.45',
+                8 => '99.90',
+                4 => '11.414285714286',
+                5 => '54.75'
             )
         );
 
@@ -162,10 +162,10 @@ class Shopware_RegressionTests_Ticket4508 extends Enlight_Components_Test_Plugin
         $categories = array(
             21 => array(
                 // base price calculation
-                7 => '12,13', //
-                122 => '11,99', //
-                5 => '15,33',
-                2 => '39,80'
+                7 => '12.45',
+                122 => '14.95',
+                5 => '54.75',
+                2 => '39.98'
 
             )
         );
