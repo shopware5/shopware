@@ -216,6 +216,27 @@ class AppCache extends HttpCache
     }
 
     /**
+     * Forwards the Request to the backend and returns the Response.
+     *
+     * @param Request  $request A Request instance
+     * @param Boolean  $raw     Whether to catch exceptions or not
+     * @param Response $entry   A Response instance (the stale entry if present, null otherwise)
+     *
+     * @return Response A Response instance
+     */
+    protected function forward(Request $request, $raw = false, Response $entry = null)
+    {
+        $this->getKernel()->boot();
+
+        /** @var $bootstrap \Shopware\Components\DependencyInjection\ResourceLoader */
+        $resourceLoader = $this->getKernel()->getResourceLoader();
+        $resourceLoader->set('HttpCache', $this);
+        $resourceLoader->set('Esi', $this->esi);
+
+        return parent::forward($request, $raw, $entry);
+    }
+
+    /**
      * @return \Symfony\Component\HttpKernel\HttpCache\Esi
      */
     protected function createEsi()
