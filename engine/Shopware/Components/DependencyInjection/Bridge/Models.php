@@ -98,20 +98,6 @@ class Models
             $eventManager
         );
 
-        Autoloader::register(
-            $config->getProxyDir(),
-            $config->getProxyNamespace(),
-            function ($proxyDir, $proxyNamespace, $className) use ($entityManager) {
-                if (0 === stripos($className, $proxyNamespace)) {
-                    $fileName = str_replace('\\', '', substr($className, strlen($proxyNamespace) + 1));
-                    if (!is_file($fileName)) {
-                        $classMetadata = $entityManager->getClassMetadata($className);
-                        $entityManager->getProxyFactory()->generateProxyClasses(array($classMetadata), $proxyDir);
-                    }
-                }
-            }
-        );
-
         return $entityManager;
     }
 }
