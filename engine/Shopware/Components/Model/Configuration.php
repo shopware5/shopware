@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -69,7 +70,9 @@ class Configuration extends BaseConfiguration
 
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
-        $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
+
+
+        $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
         $this->setFileCacheDir($options['fileCacheDir']);
