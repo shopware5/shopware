@@ -885,8 +885,8 @@ abstract class Zend_Db_Table_Abstract
             // if no primary key was specified and none was found in the metadata
             // then throw an exception.
             if (empty($this->_primary)) {
-                require_once 'Zend/Db/Table/Exception.php';
-                throw new Zend_Db_Table_Exception("A table must have a primary key, but none was found for table '{$this->_name}'");
+                $this->_primary[1] = "id";
+                $this->_identity = 1;
             }
         } else if (!is_array($this->_primary)) {
             $this->_primary = array(1 => $this->_primary);

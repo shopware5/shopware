@@ -747,10 +747,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             if ((is_dir($file)) and ($this->_options['hashed_directory_level']>0)) {
                 // Recursive call
                 $result = $this->_clean($file . DIRECTORY_SEPARATOR, $mode, $tags) && $result;
-                if ($mode == Zend_Cache::CLEANING_MODE_ALL) {
-                    // we try to drop the structure too
-                    @rmdir($file);
-                }
+                @rmdir($file);
             }
         }
         return $result;
@@ -915,10 +912,16 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
         $partsArray = array();
         $root = $this->_options['cache_dir'];
         $prefix = $this->_options['file_name_prefix'];
-        if ($this->_options['hashed_directory_level']>0) {
+        if ($this->_options['hashed_directory_level'] > 0) {
+            if(strpos($id, '_') !== false) {
+                $idArray = explode('_', $id);
+            } else {
+                $idArray = array();
+            }
             $hash = hash('adler32', $id);
             for ($i=0 ; $i < $this->_options['hashed_directory_level'] ; $i++) {
-                $root = $root . $prefix . '--' . substr($hash, 0, $i + 1) . DIRECTORY_SEPARATOR;
+                $dir = isset($idArray[$i]) ? $idArray[$i] : substr($hash, 0, $i + 1);
+                $root = $root . $prefix . '--' . $dir . DIRECTORY_SEPARATOR;
                 $partsArray[] = $root;
             }
         }
