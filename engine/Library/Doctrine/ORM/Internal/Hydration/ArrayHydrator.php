@@ -185,22 +185,21 @@ class ArrayHydrator extends AbstractHydrator
                 } else {
                     $oneToOne = true;
 
+                    // @shopware-hack: backport https://github.com/doctrine/doctrine2/commit/9a3298347c5319eed73805d13ca4f75d87736b9c
+
                     if (
                         ( ! isset($nonemptyComponents[$dqlAlias])) &&
                         ( ! isset($baseElement[$relationAlias]))
                     ) {
                         $baseElement[$relationAlias] = null;
-                    } else if (
-                        ( ! isset($baseElement[$relationAlias])) ||
-                        ( ! isset($this->_identifierMap[$path][$id[$parent]][$id[$dqlAlias]]))
-                    ) {
+                    } else if ( ! isset($baseElement[$relationAlias])) {
                         $baseElement[$relationAlias] = $data;
                     }
                 }
 
                 $coll =& $baseElement[$relationAlias];
 
-                if ($coll !== null) {
+                if (is_array($coll)) {
                     $this->updateResultPointer($coll, $index, $dqlAlias, $oneToOne);
                 }
             } else {
