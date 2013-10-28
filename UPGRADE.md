@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
 * Break: `Doctrine\ORM\Query::setParamters()` has changed. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
 * `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
 * Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
+* Update Zend Framework to version 1.12.3 (latest stable)
 
 ## 4.1.3
 
