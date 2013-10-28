@@ -51,13 +51,6 @@ class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_
 	 	);
 		$this->subscribeEvent($event);
 		
-		$event = $this->createEvent(
-	 		'Enlight_Controller_Router_Assemble',
-	 		'onAssemble',
-	 		10
-	 	);
-		$this->subscribeEvent($event);
-		
 		return true;
 	}
 	
@@ -124,92 +117,6 @@ class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_
 		} else {
 			return;
 		}
-	}
-	
-	/**
-	 * Event listener method
-	 *
-	 * @param Enlight_Event_EventArgs $args
-	 */
-	public static function onAssemble(Enlight_Event_EventArgs $args)
-	{
-        return;
-
-		$query = $args->getParams();
-		
-		if(!empty($query['module']) && $query['module']!='frontend') {
-			return;
-		}
-		if(!empty($query['title'])) {
-			$title = $query['title'];
-		} elseif (!empty($query['sViewport']) && $query['sViewport']=='detail') {
-			$title = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($query['sArticle']);
-		} elseif (!empty($query['sViewport']) && $query['sViewport']=='cat') {
-			$sql = 'SELECT description FROM s_categories WHERE id=?';
-			$title = Shopware()->Db()->fetchOne($sql, array($query['sCategory']));
-		}
-		unset($query['title'], $query['module']);
-		
-		if(!empty($query['sAction']) && $query['sAction']=='index') {
-			unset($query['sAction']);
-		}
-		if(!empty($query['sViewport']) && $query['sViewport']=='index') {
-			unset($query['sViewport']);
-		}
-		
-		$result = '';
-		
-		if(!empty($query['sViewport'])) {
-			switch ($query['sViewport']) {
-				case 'custom':
-					$result .= 'unternehmen/';
-					$parts = array('sViewport', 'sCustom');
-					break;
-				case 'detail':
-					$parts = array('sViewport', 'sArticle', 'sCategory');
-					break;
-				case 'cat':
-					$parts = array('sViewport', 'sCategory', 'sPage');
-					break;
-				case 'campaign':
-					$parts = array('sViewport', 'sCampaign');
-					break;
-				case 'search':
-					if(!empty($query['sSearchMode']) && $query['sSearchMode'] == 'supplier') {
-						$result .= 'Supplier-'.self::sCleanupPath($query['sSearchText']);
-						$parts = array('sSearch');
-						unset($query['sSearchText'], $query['sSearchMode'], $query['sViewport']);
-					}
-					break;
-				default:
-					break;
-			}
-		}
-		
-		if(!empty($parts)) {
-			if(!empty($title)) {
-				$result .= self::sCleanupPath($title);
-			}
-			foreach ($parts as $key) {
-				if(!empty($query[$key])) {
-					$result .= '_'.$query[$key];
-					unset($query[$key]);
-				}
-			}
-			$result .= '.html';
-			if(!empty($query)) {
-				$result .= '?'.http_build_query($query, '', '&');
-			}
-		} elseif(!empty($query)) {
-			$result .= Shopware()->Config()->BaseFile;
-			$result .= '/';
-			if(!empty($query))
-			{
-				$result .= http_build_query($query, '', '/');
-				$result = str_replace('=', ',', $result);
-			}
-		}
-		return $result;
 	}
 	
 	/**
