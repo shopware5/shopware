@@ -2812,6 +2812,7 @@ class sArticles
     /**
      * returns the cheapest variant for the baseprice calculation
      *
+     * @since 4.1.4
      * @param $article
      * @param $priceGroup
      * @param $priceGroupId
@@ -3296,6 +3297,7 @@ class sArticles
     /**
      * calculates the reference price with the base price data
      *
+     * @since 4.1.4
      * @param $price | the final price which will be shown
      * @param float $purchaseUnit
      * @param float $referenceUnit
@@ -3313,6 +3315,7 @@ class sArticles
     /**
      * calculates the cheapest base price data
      *
+     * @since 4.1.4
      * @param $price | the final price which will be shown
      * @param int $articleId
      * @param string $priceGroup
