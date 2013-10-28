@@ -1,0 +1,4 @@
+From: feature/next/sw-7190-zend-update-cleanup
+To: next
+Conflict: (content) Merge conflict in UPGRADE.md
+	MODIFY|UPGRADE.md
