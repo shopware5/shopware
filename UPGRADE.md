@@ -5,7 +5,8 @@ In this document you will find a changelog of the important changes related to t
 
 * Doctrine has been updated to version 2.4. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
 * Break: `Doctrine\ORM\Query::setParamters()` has changed. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
-* `Shopware\Components\Model\QueryBuilder::setParamters()` provides old behavior.
+* `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
+* Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
 
 ## 4.1.3
 
