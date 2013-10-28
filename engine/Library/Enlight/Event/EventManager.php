@@ -59,6 +59,32 @@ class Enlight_Event_EventManager extends Enlight_Class
     }
 
     /**
+     * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
+     *
+     * @param $eventName
+     * @param $listener
+     * @param int $priority
+     *
+     * @return  Enlight_Event_EventManager
+     */
+    public function addListener($eventName, $listener, $priority = 0)
+    {
+        if ($priority === 0) {
+            $priority = null;
+        }
+
+        $handler = new \Enlight_Event_Handler_Default(
+            $eventName,
+            $listener,
+            $priority
+        );
+
+        $this->registerListener($handler);
+
+        return $this;
+    }
+
+    /**
      * Registers the given event handler and adds it to the internal listeners array.
      * If no event position is set in the event handler, the event handler will be added to the
      * end of the list.

@@ -46,7 +46,6 @@
             <argument>%shopware.template%</argument>
         </service>
 
-
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
         <service id="session"
                  class="Enlight_Components_Session_Namespace"
@@ -96,7 +95,6 @@
         </service>
 
         <service id="plugins_factory" class="Shopware\Components\DependencyInjection\Bridge\Plugins" />
-
         <service id="plugin_manager" alias="plugins" />
         <service id="plugins"
                  class="Enlight_Plugin_PluginManager"
@@ -110,9 +108,6 @@
             <argument>%shopware.plugins%</argument>
         </service>
 
-
-
-
         <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
         <service id="front"
                  class="Enlight_Controller_Front"
@@ -124,7 +119,6 @@
             <argument type="service" id="events"/>
             <argument>%shopware.front%</argument>
         </service>
-
 
         <service id="router"
                  class="Enlight_Controller_Router"
@@ -138,12 +132,7 @@
 
         <service id="shopware.loader" alias="Loader" />
         <service id="Loader"     class="Enlight_Loader" />
-
-
-
         <service id="snippets"   class="%shopware.snippet_manager.class%"/>
-
-
         <service id="subscriber" class="Shopware_Components_Subscriber">
 
         </service>
@@ -197,7 +186,6 @@
             <argument type="service" id="cache_zend"/>
         </service>
 
-
         <service id="config_factory" class="%shopware.config_factory.class%" />
         <service id="config"
                  class="Shopware_Components_Config"
@@ -207,7 +195,6 @@
             <argument type="service" id="db" on-invalid="ignore"/>
             <argument>%shopware.config%</argument>
          </service>
-
 
         <service id="shopware.event_manager" alias="events" />
         <service id="events" class="Enlight_Event_EventManager" />
@@ -241,7 +228,6 @@
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
-
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
         <service id="shopware.model_annotations" alias="ModelAnnotations" />
         <service id="ModelAnnotations"
@@ -253,27 +239,20 @@
             <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
         </service>
 
-        <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false">
-            <call method="addEventSubscriber">
-                <argument type="service" id="EventSubscriber" />
-            </call>
-            <call method="addEventSubscriber">
-                <argument type="service" id="CategorySubscriber" />
-            </call>
-            <call method="addEventSubscriber">
-                <argument type="service" id="OrderHistorySubscriber" />
-            </call>
-        </service>
+        <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false" />
 
         <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
             <argument type="service" id="shopware.event_manager" />
+            <tag name="doctrine.event_subscriber" />
         </service>
 
         <service id="OrderHistorySubscriber" class="Shopware\Models\Order\OrderHistorySubscriber" public="false">
+            <tag name="doctrine.event_subscriber" />
         </service>
 
         <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
             <argument type="service" id="CategoryDenormalization" />
+            <tag name="doctrine.event_subscriber" />
         </service>
 
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
