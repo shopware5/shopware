@@ -407,18 +407,23 @@ class sConfigurator
 
         // Calculating price for reference-unit
         if ($selected["purchaseunit"] > 0 && $selected["referenceunit"]) {
-            $selected["purchaseunit"] = (float) $selected["purchaseunit"];
-            $selected["referenceunit"] = (float) $selected["referenceunit"];
-            $price = str_replace(",", ".", $selected["price"][0]["price"]);
-            $basePrice = $price / $selected["purchaseunit"] * $selected["referenceunit"];
-            $basePrice = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($basePrice);;
-            $articleData['purchaseunit'] = $selected['purchaseunit'];
-            $articleData['referenceunit'] = $selected['referenceunit'];
-            $articleData['referenceprice'] = $basePrice;
+            $selected["purchaseunit"] = (float)$selected["purchaseunit"];
+            $selected["referenceunit"] = (float)$selected["referenceunit"];
+            $articleData['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
+                $selected["price"][0]["price"],
+                $selected["purchaseunit"],
+                $selected["referenceunit"]
+            );
         }
+        //these information should always been overwritten even if they're empty
+        $articleData['purchaseunit'] = $selected['purchaseunit'];
+        $articleData['referenceunit'] = $selected['referenceunit'];
 
         if ($selected["unitID"]) {
             $articleData["sUnit"] = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($selected["unitID"]);
+        }
+        else {
+            $articleData["sUnit"] = null;
         }
 
         $articleData['pricegroup'] = $selectedPrice['customerGroupKey'];

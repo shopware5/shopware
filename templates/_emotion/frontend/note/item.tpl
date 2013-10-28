@@ -62,7 +62,7 @@
 							<strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
 							{if $sBasketItem.purchaseunit != $sBasketItem}
 								{if $sBasketItem.referenceunit}
-									{$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description}
+									({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
 								{/if}
 							{/if}
 						</p>
