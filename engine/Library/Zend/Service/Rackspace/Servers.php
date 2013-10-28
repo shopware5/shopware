@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Rackspace
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -1006,7 +1006,7 @@ class Zend_Service_Rackspace_Servers extends Zend_Service_Rackspace_Abstract
             case '200' : 
             case '203' : // break intentionally omitted   
                 $backup = json_decode($result->getBody(),true);
-                return $image['backupSchedule'];
+                return $backup['backupSchedule'];
             case '503' :
                 $this->errorMsg= self::ERROR_SERVICE_UNAVAILABLE;
                 break;

@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Text
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: MultiByte.php 24499 2011-10-09 00:17:40Z dasprid $
+ * @version   $Id$
  */
 
 /**
@@ -24,7 +24,7 @@
  *
  * @category  Zend
  * @package   Zend_Text
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Text_MultiByte
@@ -107,7 +107,7 @@ class Zend_Text_MultiByte
         $lengthOfPadding = $padLength - iconv_strlen($input, $charset);
         $padStringLength = iconv_strlen($padString, $charset);
 
-        if ($padStringLength === 0 || $lengthOfPadding === 0) {
+        if ($padStringLength === 0 || $lengthOfPadding <= 0) {
             $return = $input;
         } else {
             $repeatCount = floor($lengthOfPadding / $padStringLength);
