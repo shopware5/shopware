@@ -310,7 +310,7 @@ class Kernel implements HttpKernelInterface
      */
     protected function getDocumentRoot()
     {
-        return __DIR__ . '/../../';
+        return realpath(__DIR__ . '/../../') . '/';
     }
 
     /**
@@ -416,6 +416,14 @@ class Kernel implements HttpKernelInterface
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
         );
+    }
+
+    /**
+     * @return ResourceLoader
+     */
+    public function getResourceLoader()
+    {
+        return $this->resourceLoader;
     }
 
     /**

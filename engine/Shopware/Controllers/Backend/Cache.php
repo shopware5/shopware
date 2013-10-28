@@ -164,10 +164,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             . $request->getBaseUrl() . '/';
 
         // If local file-based proxy is used delete cache files from filesystem
-        $cacheOptions = Shopware()->getOption('HttpCache');
-        if (isset($cacheOptions['cache_dir']) && is_dir($cacheOptions['cache_dir'])) {
+        if ($this->resourceLoader->has('HttpCache')) {
+            /** @var $proxy Shopware\Components\HttpCache\AppCache */
+            $proxy = $this->resourceLoader->get('HttpCache');
             $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($cacheOptions['cache_dir']),
+                new RecursiveDirectoryIterator($proxy->getCacheDir()),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
@@ -337,9 +338,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     public function getHttpCacheInfo()
     {
         $request = $this->Request();
-        if (Shopware()->Bootstrap()->issetResource('HttpCache')) {
+
+        if ($this->resourceLoader->has('HttpCache')) {
             /** @var $proxy Shopware\Components\HttpCache\AppCache */
-            $proxy = Shopware()->Bootstrap()->getResource('HttpCache');
+            $proxy = $this->resourceLoader->get('HttpCache');
             $info = $this->getDirectoryInfo($proxy->getCacheDir());
             $info['backend'] = 'shopware="ESI/1.0"';
         } elseif ($request->getHeader('Surrogate-Capability') !== false) {
