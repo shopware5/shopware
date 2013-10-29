@@ -30,6 +30,7 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\DBAL\QueryBuilder as DBALQueryBuilder;
@@ -235,8 +236,28 @@ class ModelManager extends EntityManager
      */
     public function getQueryCount(\Doctrine\ORM\Query $query)
     {
-        $pagination = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $pagination = $this->createPaginator($query);
+
         return $pagination->count($query);
+    }
+
+    /**
+     * Returns new instance of Paginator
+     *
+     * This method should be used instead of
+     * new \Doctrine\ORM\Tools\Pagination\Paginator($query).
+     *
+     * As of SW 4.2 $paginator->setUseOutputWalkers(false) will be set here.
+     *
+     * @since 4.1.4
+     * @param Query $query
+     * @return Paginator
+     */
+    public function createPaginator(\Doctrine\ORM\Query $query)
+    {
+        $paginator = new Paginator($query);
+
+        return $paginator;
     }
 
     /**
