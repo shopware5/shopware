@@ -34,6 +34,7 @@ use Doctrine\ORM\Query;
 class ModelManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @requires PHP 5.4.0
      * @covers Shopware\Components\Model\ModelManager::createPaginator
      */
     public function testCreatePaginator()
