@@ -353,6 +353,13 @@ class Customer extends ModelEntity
     protected $notifications;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
+     */
+    protected $paymentInstances;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
@@ -361,6 +368,7 @@ class Customer extends ModelEntity
         $this->firstLogin = new \DateTime();
         $this->lastLogin  = new \DateTime();
         $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paymentInstances = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1039,5 +1047,21 @@ class Customer extends ModelEntity
     public function getLanguageId()
     {
         return $this->languageId;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
     }
 }
