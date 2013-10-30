@@ -241,6 +241,13 @@ class Payment extends ModelEntity
     protected $plugin;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
+     */
+    protected $paymentInstances;
+
+    /**
      * Gets the id of the payment
      *
      * @return integer
@@ -744,4 +751,19 @@ class Payment extends ModelEntity
         $this->plugin = $plugin;
     }
 
+    /**
+     * @param mixed $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
+    }
 }

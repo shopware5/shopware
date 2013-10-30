@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,24 +20,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
+namespace ShopwarePlugin\ShopwarePaymentMethods\Components;
+
 /**
- * @Deprecated: will be removed in the near future. Please refer to PaymentMethods plugin for more information and future-proof examples.
+ * Abstract class BasePaymentMethod
+ * All PaymentMethod implementations should extend this class.
+ * Current methods are legacy, more may be added in the future.
  *
- * todo@all: Documentation
+ * @package ShopwarePlugin\ShopwarePaymentMethods\Components
  */
-class sPaymentMean{
-	var $sSYSTEM;
-	function sInit(){
-		return array();
-	}
+abstract class BasePaymentMethod {
+    public abstract function sInit();
+    public abstract function sUpdate();
+    public abstract function sInsert($userId);
+    public abstract function getData();
 }
-?>
