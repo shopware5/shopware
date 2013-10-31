@@ -2605,6 +2605,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $template->fromArray($data);
         $template->setArticle($article);
 
+        if ($data['unitId']) {
+            /** @var $articleUnit Shopware\Models\Article\Unit */
+            $articleUnit = Shopware()->Models()->find('Shopware\Models\Article\Unit', $data['unitId']);
+            if ($articleUnit !== null) {
+                $template->setUnit($articleUnit);
+            }
+        }
+
         Shopware()->Models()->persist($template);
         Shopware()->Models()->flush();
     }
