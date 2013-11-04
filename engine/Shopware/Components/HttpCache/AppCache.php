@@ -45,24 +45,9 @@ use Symfony\Component\HttpFoundation\Response;
 class AppCache extends HttpCache
 {
     /**
-     * @var
+     * @var string
      */
     protected $cacheDir;
-
-    /**
-     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
-     */
-    protected $kernel;
-
-    /**
-     * @var \Symfony\Component\HttpKernel\HttpCache\Store
-     */
-    private $store;
-
-    /**
-     * @var \Symfony\Component\HttpKernel\HttpCache\Esi
-     */
-    private $esi;
 
     /**
      * Constructor.
@@ -72,16 +57,18 @@ class AppCache extends HttpCache
      */
     public function __construct(HttpKernelInterface $kernel, $options)
     {
-        $this->kernel = $kernel;
-
         if (isset($options['cache_dir'])) {
             $this->cacheDir = $options['cache_dir'];
         }
 
+        $options += array(
+            'purge_allowed_ips' => array('127.0.0.1', '::1'),
+        );
+
         parent::__construct(
             $kernel,
-            $this->store = $this->createStore(),
-            $this->esi = $this->createEsi(),
+            $this->createStore(),
+            $this->createEsi(),
             $options
         );
     }
@@ -107,7 +94,12 @@ class AppCache extends HttpCache
             return $this->pass($request, $catch);
         }
 
-        return parent::handle($request, $type, $catch);
+        $response = parent::handle($request, $type, $catch);
+
+        $response->headers->remove('cache-control');
+        $response->headers->addCacheControlDirective('nocache');
+
+        return $response;
     }
 
     /**
@@ -117,28 +109,40 @@ class AppCache extends HttpCache
      * @param Boolean $catch   Whether to process exceptions
      *
      * @return Response A Response instance
-     *
-     * @see RFC2616 13.10
      */
     protected function invalidate(Request $request, $catch = false)
     {
-        if ($_SERVER['SERVER_ADDR'] !== $request->getClientIp()) {
-            return parent::invalidate($request);
+        if ($request->getMethod() !== 'BAN' && $request->getMethod() !== 'PURGE') {
+            return parent::invalidate($request, $catch);
         }
 
+        // Reject all non-authorized clients
+        if (!$this->isPurgeRequestAllowed($request)) {
+            return new Response('', 405);
+        }
+
+        $response = new Response();
+
         if ($request->getMethod() === 'BAN') {
-            $response = new Response();
-            $this->getStore()->purgeAll();
-            $response->setStatusCode(200, 'Banned');
+            if ($request->headers->has('x-shopware-invalidates')) {
+                $cacheId = $request->headers->get('x-shopware-invalidates');
+                $result = $this->getStore()->purgeByHeader('x-shopware-cache-id', $cacheId);
+            } else {
+                $result = $this->getStore()->purgeAll();
+            }
+
+            if ($result) {
+                $response->setStatusCode(200, 'Banned');
+            } else {
+                $response->setStatusCode(404, 'Not Banned');
+            }
+
         } elseif ($request->getMethod() === 'PURGE') {
-            $response = new Response();
             if ($this->getStore()->purge($request->getUri())) {
                 $response->setStatusCode(200, 'Purged');
             } else {
                 $response->setStatusCode(404, 'Not purged');
             }
-        } else {
-            $response = parent::invalidate($request);
         }
 
         return $response;
@@ -198,15 +202,19 @@ class AppCache extends HttpCache
     protected function containsNoCacheTag(Request $request, Response $response)
     {
         // Not cache sites with nocache header
-        if ($response->headers->has('x-shopware-allow-nocache')
-            && $request->cookies->has('nocache')
-        ) {
-            $cacheTag = $response->headers->get('x-shopware-allow-nocache');
-            $cacheTag = explode(', ', $cacheTag);
-            foreach ($cacheTag as $cacheTagValue) {
-                if (strpos($request->cookies->get('nocache'), $cacheTagValue) !== false) {
-                    return true;
-                }
+        if (!$response->headers->has('x-shopware-allow-nocache')
+            || !$request->cookies->has('nocache')) {
+
+            return false;
+        }
+
+        $cacheTag      = $response->headers->get('x-shopware-allow-nocache');
+        $cacheTag      = explode(', ', $cacheTag);
+        $noCacheCookie = $request->cookies->get('nocache');
+
+        foreach ($cacheTag as $cacheTagValue) {
+            if (strpos($noCacheCookie, $cacheTagValue) !== false) {
+                return true;
             }
         }
 
@@ -229,7 +237,7 @@ class AppCache extends HttpCache
         $bootstrap = $this->getKernel()->getApp()->Bootstrap();
 
         $bootstrap->registerResource('HttpCache', $this);
-        $bootstrap->registerResource('Esi', $this->esi);
+        $bootstrap->registerResource('Esi', $this->getEsi());
 
         return parent::forward($request, $raw, $entry);
     }
@@ -256,5 +264,47 @@ class AppCache extends HttpCache
     public function getCacheDir()
     {
         return $this->cacheDir;
+    }
+
+    /**
+     * Checks if current purge request is allowed.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return bool
+     */
+    protected function isPurgeRequestAllowed(Request $request)
+    {
+        if ($request->server->has('SERVER_ADDR')) {
+            if ($request->server->has('SERVER_ADDR') == $request->getClientIp()) {
+                return true;
+            }
+        }
+
+        return $this->isPurgeIPAllowed($request->getClientIp());
+    }
+
+    /**
+     * Checks if $ip is allowed for Http PURGE requests
+     *
+     * @param string $ip
+     * @return bool
+     */
+    protected function isPurgeIPAllowed($ip)
+    {
+        $allowedIps = array_fill_keys($this->getPurgeAllowedIPs(), true);
+
+        return isset($allowedIps[$ip]);
+    }
+
+    /**
+     * Returns an array of allowed IPs for Http PURGE requests.
+     *
+     * @return array
+     */
+    protected function getPurgeAllowedIPs()
+    {
+        $allowedIps = $this->options['purge_allowed_ips'];
+
+        return $allowedIps;
     }
 }

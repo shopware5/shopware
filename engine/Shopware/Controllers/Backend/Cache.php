@@ -159,10 +159,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             return true;
         }
 
-        $proxyUrl = $request->getScheme() . '://'
-            . $request->getHttpHost()
-            . $request->getBaseUrl() . '/';
-
         // If local file-based proxy is used delete cache files from filesystem
         $cacheOptions = Shopware()->getOption('HttpCache');
         if (isset($cacheOptions['cache_dir']) && is_dir($cacheOptions['cache_dir'])) {
@@ -183,20 +179,19 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        try {
-            $client = new Zend_Http_Client(null, array(
-                'useragent' => 'Shopware/' . Shopware()->Config()->version,
-                'timeout' => 5,
-            ));
-            $client->setUri($proxyUrl)->request('BAN');
-        } catch (Exception $e) {
-            return false;
-        }
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+        $proxyUrl = $httpCache->getProxyUrl($this->Request());
 
-        try {
-            Shopware()->Db()->exec('TRUNCATE s_cache_log');
-        } catch (\Exeption $e) {
-            Shopware()->Db()->exec('DELETE FROM s_cache_log');
+        if ($proxyUrl !== null) {
+            try {
+                $client = new Zend_Http_Client($proxyUrl, array(
+                    'useragent' => 'Shopware/' . Shopware()->Config()->version,
+                    'timeout' => 5,
+                ));
+                $client->request('BAN');
+            } catch (\Exception $e) {
+                return false;
+            }
         }
 
         return true;
