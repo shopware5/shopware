@@ -24,14 +24,16 @@
 
 namespace Shopware\Components\Model;
 
+use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Connection;
-use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\EventManager;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
@@ -59,11 +61,11 @@ class ModelManager extends EntityManager
     protected $debugMode = false;
 
     /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return DBALQueryBuilder
      */
     public function getDBALQueryBuilder()
     {
-        return new \Doctrine\DBAL\Query\QueryBuilder($this->getConnection());
+        return new DBALQueryBuilder($this->getConnection());
     }
 
     /**
@@ -97,6 +99,7 @@ class ModelManager extends EntityManager
      */
     public function __call($name, $args)
     {
+        /** @todo make path custom able */
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
@@ -222,17 +225,24 @@ class ModelManager extends EntityManager
     }
 
     /**
+     * Returns new instance of Paginator
+     *
+     * This method should be used instead of
+     * new \Doctrine\ORM\Tools\Pagination\Paginator($query).
+     *
+     * As of SW 4.2 $paginator->setUseOutputWalkers(false) will be set here.
+     *
+     * @since 4.1.4
      * @param Query $query
-     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     * @return Paginator
      */
     public function createPaginator(\Doctrine\ORM\Query $query)
     {
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = new Paginator($query);
         $paginator->setUseOutputWalkers(false);
 
         return $paginator;
     }
-
 
     /**
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder

@@ -915,10 +915,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function getDispatches()
     {
         $country = $this->getSelectedCountry();
-        if(empty($country)) {
+        $state = $this->getSelectedState();
+        if (empty($country)) {
             return false;
         }
-        return $this->admin->sGetDispatches($country['id']);
+        $stateId = !empty($state['id']) ? $state['id'] : null;
+        return $this->admin->sGetPremiumDispatches($country['id'], null, $stateId);
     }
 
     /**
@@ -1014,7 +1016,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return false;
         }
 
-        $dispatches = $this->admin->sGetDispatches($this->session['sCountry']);
+        $dispatches = $this->admin->sGetPremiumDispatches($this->session['sCountry'], null, $this->session['sState']);
         if (empty($dispatches)) {
             unset($this->session['sDispatch']);
             return false;

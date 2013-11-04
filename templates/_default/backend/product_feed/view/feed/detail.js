@@ -144,12 +144,13 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
             },
             items:[
                 {
-                    name:'shopId',
+                    name:'languageId',
                     fieldLabel:'{s name=detail_general/field/shop}Shop{/s}',
-                    store: Ext.create('Shopware.store.Shop').load(),
+                    store: me.shopStore.load(),
                     valueField: 'id',
-                    helpText:'{s name=detail_general/field/shop/help}The URLs/domains for the Article and Imagelinks will be changed based on this value{/s}',
-                    displayField: 'name'
+                    helpText:'{s name=detail_general/field/language_id/help}The export language{/s}',
+                    displayField: 'name',
+                    editable:false
                 },
                 {
                     name:'customerGroupId',
@@ -158,15 +159,6 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     valueField:'id',
                     helpText:'{s name=detail_general/field/customergroup/help}Defines the customer group the prices are taken out of{/s}',
                     displayField:'name'
-                },
-                {
-                    name:'languageId',
-                    fieldLabel:'{s name=detail_general/field/language}Language{/s}',
-                    store: me.shopStore.load(),
-                    valueField: 'id',
-                    emptyText: '{s name=detail_general/language_combo_box/standard}Standard{/s}',
-                    helpText:'{s name=detail_general/field/language_id/help}The export language{/s}',
-                    displayField: 'name'
                 },
                 {
                     name:'currencyId',

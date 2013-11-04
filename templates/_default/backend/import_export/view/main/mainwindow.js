@@ -611,7 +611,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
             items: [
                 {
                     xtype: 'combobox',
-                    fieldLabel: 'Daten',
+                    fieldLabel: me.snippets.data,
                     name: 'type',
                     store: me.getImportComboStore(),
                     emptyText: me.snippets.choose,

@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
     alias : 'widget.supplier-main-create',
     layout : 'fit',
     title : '{s name=title}Supplier - Create{/s}',
-    width : 700,
+    width : 750,
     height : '90%',
     autoScroll: true,
     stateful : true,
@@ -81,7 +81,10 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             region      : 'center',
             width       : '100%',
             autoScroll: true,
-            defaults : me.getFormDefaults(),
+            defaults : {
+                labelWidth  : 130,
+                anchor      : '100%'
+            },
             bodyPadding : 10,
             items : [
                 {
@@ -118,8 +121,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
     {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
-            emptyText : '{s name=description}Description{/s}',
-            defaults : this.getFormDefaults()
+            fieldLabel : '{s name=description}Description{/s}',
+            labelWidth: 130
         });
     },
     /**
@@ -146,18 +149,6 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
         ];
     },
     /**
-     * Returns an Object with default settings for every form element.
-     *
-     * @return object
-     */
-    getFormDefaults : function()
-    {
-        return {
-            labelWidth  : 130,
-            anchor      : '100%'
-        };
-    },
-    /**
      * Returns a media drop field.
      *
      * @return Shopware.MediaManager.MediaSelection
@@ -169,9 +160,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             name            : 'media-manager-selection',
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
-            labelWidth  : 130,
-            anchor      : '100%',
-            albumId: -12 // Default supplier albumId
+            albumId: -12, // Default supplier albumId
+            labelWidth: 130
         });
     }
 });

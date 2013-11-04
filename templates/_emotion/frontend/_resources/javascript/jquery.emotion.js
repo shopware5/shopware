@@ -288,3 +288,148 @@
 		});
 	});
 })(jQuery);
+
+/**
+ * Overview button progressive enhancement
+ * using the { @link sessionStorage } to provide a personalized link with the currently active
+ * filter properties for the HTTP cache.
+ *
+ * Copyright (c) 2013, shopware AG
+ */
+;(function($, window, undefined) {
+     /*global jQuery:false */
+    "use strict";
+
+    var pluginName = 'httpCacheFilters',
+        defaults = {
+            mode: 'listing'
+        },
+        hasSessionStorageSupport = typeof(window.Storage) !== 'undefined' || !window.hasOwnProperty('sessionStorage');
+
+    /**
+     * Plugin constructor which merges the default settings
+     * with the user configuration and sets up the DOM bridge.
+     *
+     * @param { HTMLElement } element
+     * @param { Object } options
+     * @returms { Void }
+     * @constructor
+     */
+    function Plugin(element, options) {
+        var me = this;
+
+        me.element = element;
+        me.opts = $.extend({}, defaults, options);
+        me._defaults = defaults;
+        me._name = pluginName;
+
+        me.init();
+    }
+
+    /**
+     * Initialized the plugin, checks if { @link sessionStorage } is
+     * supported and sets up the event listener.
+     *
+     * @returns { Boolean } Falsy, if { @link sessionStorage } isn't supported, otherwise truthy
+     */
+    Plugin.prototype.init = function() {
+        var me = this,
+            mode;
+
+        // Check if the browser support { @link sessionStorage }
+        if(!hasSessionStorageSupport) {
+            return false;
+        }
+
+        // Terminate if we're on the category listing or on the detail page
+        mode = $(me.element).hasClass('ctl_detail') ? 'detail' : 'listing';
+        if(mode === 'listing') {
+            $('.artbox .artbox_thumb, .artbox .title, .artbox .buynow').on('click.' + pluginName, $.proxy(me.onOpenDetailPage, me));
+            $('.filter_properties .close a').on('click.' + pluginName, $.proxy(me.onResetFilterOptions, me));
+        } else {
+            me.restoreState();
+        }
+
+        return true;
+    };
+
+    /**
+     * Event callback which will be fired when the user wants to open up
+     * the detail page.
+     *
+     * The method just proxies the method { @link #saveCurrentState }.
+     *
+     * @event `click`
+     * @returns { Void }
+     */
+    Plugin.prototype.onOpenDetailPage = function() {
+        var me = this;
+        me.saveCurrentState();
+    };
+
+    /**
+     * Event callback which will be fired when the user wants to
+     * reset a filter property group.
+     *
+     * The method reads out the url of the reset link and save it
+     * to the { @link sessionStorage }.
+     *
+     * @param { Event } event
+     * @return { Void }
+     */
+    Plugin.prototype.onResetFilterOptions = function(event) {
+        var me = this,
+            $this = $(event.currentTarget),
+            url = $this.attr('href');
+
+        me.saveCurrentState(url);
+    };
+
+    /**
+     * Saves the passed url to the { @link sessionStorage } using
+     * the { @link pluginName } as the key of the entry.
+     *
+     * @param { String } [url] - URL, which should be saved.
+     * @returns { Boolean }
+     */
+    Plugin.prototype.saveCurrentState = function(url) {
+        if(!url || !url.length) {
+            url = window.location.href;
+        }
+        window.sessionStorage.setItem(pluginName, url);
+
+        return true;
+    };
+
+    /**
+     * Restores a state from the `sessionStorage` on the
+     * detail page and removes the entry to prevent
+     * strange behaviors of the overview link.
+     *
+     * @returns { Boolean } Truthy, if all went well, otherwise falsy
+     */
+    Plugin.prototype.restoreState = function() {
+        if(!window.sessionStorage.getItem(pluginName)) {
+            return false;
+        }
+        $('.article_overview a').attr('href', window.sessionStorage.getItem(pluginName));
+
+        window.sessionStorage.removeItem(pluginName);
+        return true;
+    };
+
+    /** Lightweight plugin starter */
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                new Plugin( this, options ));
+            }
+        });
+    };
+
+    /** Fire up the plugin */
+    $(function() {
+        $('body').httpCacheFilters();
+    });
+})(jQuery, window);

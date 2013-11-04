@@ -146,12 +146,20 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
 				$row['group_instock'] = explode(';', $row['group_instock']);
 				$row['group_active'] = explode(';', $row['group_active']);
 			}
-			if(!empty($row['article_translation'])) {
+			if (!empty($row['article_translation'])) {
 				$translation = $export->sMapTranslation('article', $row['article_translation']);
 				$row = array_merge($row, $translation);
 			}
-			if(!empty($row['detail_translation'])) {
+            else if (!empty($row['article_translation_fallback'])) {
+                $translation = $export->sMapTranslation('article', $row['article_translation_fallback']);
+                $row = array_merge($row, $translation);
+            }
+			if (!empty($row['detail_translation'])) {
 				$translation = $export->sMapTranslation('detail', $row['detail_translation']);
+				$row = array_merge($row, $translation);
+			}
+            else if (!empty($row['detail_translation_fallback'])) {
+				$translation = $export->sMapTranslation('detail', $row['detail_translation_fallback']);
 				$row = array_merge($row, $translation);
 			}
 			$row['name'] = htmlspecialchars_decode($row['name']);
@@ -161,7 +169,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
             $row['purchaseunit'] = floatval($row['purchaseunit']);
             $row['referenceunit'] = floatval($row['referenceunit']);
 			if(!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
-				$row['referenceprice'] = $row['price']/$row['purchaseunit']/$row['referenceunit'];
+                $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice($row['price'], $row['purchaseunit'], $row['referenceunit']);
 			}
 
 			$rows[] = $row;

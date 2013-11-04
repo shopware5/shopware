@@ -110,16 +110,6 @@ Ext.define('Shopware.window.Detail', {
     saveButton: undefined,
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -225,6 +215,15 @@ Ext.define('Shopware.window.Detail', {
         }
     },
 
+    /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
 
     /**
      * Class constructor which merges the different configurations.
@@ -265,6 +264,8 @@ Ext.define('Shopware.window.Detail', {
     initComponent: function () {
         var me = this;
 
+        me.checkRequirements();
+
         me.associationComponents = [];
 
         me.eventAlias = me.getConfig('eventAlias');
@@ -279,6 +280,23 @@ Ext.define('Shopware.window.Detail', {
 
         me.callParent(arguments);
         me.loadRecord(me.record);
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!(me.record instanceof Shopware.data.Model)) {
+            me.throwException(me.$className + ": Component requires a passed Shopware.data.Model in the `record` property.");
+        }
+        if (me.alias.length <= 0) {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
+        if (me.alias.length === 1 && me.alias[0] === 'widget.shopware-window-detail') {
+            me.throwException(me.$className + ": Component requires a configured Ext JS widget alias.");
+        }
     },
 
     registerEvents: function() {

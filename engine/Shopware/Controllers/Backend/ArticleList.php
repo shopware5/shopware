@@ -90,6 +90,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                      '`to` LIKE ?'          => 'beliebig',
                 )
             );
+            Shopware()->Events()->notify(
+                'Shopware_Plugins_HttpCache_InvalidateCacheId',
+                array('cacheId' => 'a' . $article->getId())
+            );
         }
 
         $number = $this->Request()->getPost('number');
