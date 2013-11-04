@@ -1,0 +1,8 @@
+From: feature/next/sw-5271-supplier-seo
+To: next
+Conflict: (content) Merge conflict in templates/_default/backend/supplier/view/main/edit.js
+	MODIFY|templates/_default/backend/supplier/view/main/edit.js
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php
+Conflict: (content) Merge conflict in engine/Shopware/Plugins/Default/Core/RebuildIndex/Components/SeoIndex.php
+	MODIFY|engine/Shopware/Plugins/Default/Core/RebuildIndex/Components/SeoIndex.php
