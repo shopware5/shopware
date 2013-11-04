@@ -53,7 +53,6 @@ Ext.define('Shopware.apps.ProductFeed.model.Detail', {
         { name : 'hash', type : 'string' },
         { name : 'active', type : 'int' },
         { name : 'variantExport', type : 'int', useNull:true },
-        { name : 'shopId', type : 'int', useNull:true},
         { name : 'customerGroupId', type : 'int', useNull:true },
         { name : 'languageId', type : 'int', useNull:true },
         { name : 'categoryId', type : 'int', useNull:true },

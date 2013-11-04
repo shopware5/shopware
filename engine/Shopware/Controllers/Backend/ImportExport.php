@@ -29,6 +29,11 @@
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
+
+use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Newsletter\ContactData;
+use Shopware\Models\Newsletter\Group;
+
 class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -80,6 +85,24 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     protected $customerRepository = null;
 
     /**
+     * Repository for the Group model
+     * @var \Shopware\Models\Newsletter\Repository
+     */
+    protected $groupRepository = null;
+
+    /**
+     * Repository for the Address model
+     * @var \Shopware\Models\Newsletter\Repository
+     */
+    protected $addressRepository = null;
+
+    /**
+     * Repository for the ContactData model
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $contactDataRepository = null;
+
+    /**
      * @var string path to termporary uploaded file for import
      */
     protected $uploadedFilePath;
@@ -106,6 +129,42 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $this->articleRepository = $this->getManager()->getRepository('Shopware\Models\Article\Article');
         }
         return $this->articleRepository;
+    }
+
+    /**
+     * Helper function to get access to the Group repository.
+     * @return Shopware\Models\Newsletter\Repository
+     */
+    protected function getGroupRepository()
+    {
+        if ($this->groupRepository === null) {
+            $this->groupRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Group');
+        }
+        return $this->groupRepository;
+    }
+
+    /**
+     * Helper function to get access to the Address repository.
+     * @return Shopware\Models\Newsletter\Repository
+     */
+    protected function getAddressRepository()
+    {
+        if ($this->addressRepository === null) {
+            $this->addressRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Address');
+        }
+        return $this->addressRepository;
+    }
+
+    /**
+     * Helper function to get access to the ContactData repository.
+     * @return Shopware\Components\Model\ModelRepository
+     */
+    protected function getContactDataRepository()
+    {
+        if ($this->contactDataRepository === null) {
+            $this->contactDataRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\ContactData');
+        }
+        return $this->contactDataRepository;
     }
 
     /**
@@ -1866,9 +1925,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      */
     public function importNewsletter($filePath)
     {
-        $newsletterRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Address');
-        $newsletterGroupRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Group');
-
         $results = new Shopware_Components_CsvIterator($filePath, ';');
 
         $insertCount = 0;
@@ -1879,102 +1935,67 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $emailValidator = new Zend_Validate_EmailAddress();
 
         foreach ($results as $newsletterData) {
-            $updated = false;
-
             if (empty($newsletterData['email'])) {
+                $errors[] = "Empty email field";
                 continue;
             }
 
             if (!$emailValidator->isValid($newsletterData['email'])) {
+                $errors[] = "Invalid email address: ".$newsletterData['email'];
                 continue;
             }
 
             // Set newsletter recipient/group
             $group = null;
             if ($newsletterData['group']) {
-                $group = $newsletterGroupRepository->findOneBy(array('name' => $newsletterData['group']));
+                $group = $this->getGroupRepository()->findOneByName($newsletterData['group']);
             }
             if(!$group && $newsletterData['group']) {
-                $group = new \Shopware\Models\Newsletter\Group();
+                $group = new Group();
                 $group->setName($newsletterData['group']);
                 $this->getManager()->persist($group);
+            } elseif(!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
+                $group = $this->getGroupRepository()->findOneBy($groupId);
+            } elseif(!$group) {
+                // If no group is specified and no default config exists, don't import the address
+                // This should never actually happen, as a default should always exist
+                // but its better to be safe than sorry
+                continue;
             }
 
-            /** @var \Shopware\Models\Newsletter\Address $existingRecipient  */
-            $existingRecipient = $newsletterRepository->findOneBy(array('email' => $newsletterData['email']));
-            if (!$existingRecipient) {
-                $recipient = new Shopware\Models\Newsletter\Address();
-                $recipient->setEmail($newsletterData['email']);
-
-                if($newsletterData['userID']) {
-                    $recipient->setIsCustomer(true);
-                }else{
-                    $recipient->setIsCustomer(false);
-                }
-
-                if ($group) {
-                    $recipient->setNewsletterGroup($group);
-                }
-                $this->getManager()->persist($recipient);
-                $this->getManager()->flush();
-
-                $insertCount++;
-            }else{
-                $updated = true;
-                if($newsletterData['userID']) {
-                    $existingRecipient->setIsCustomer(true);
-                }else{
-                    $existingRecipient->setIsCustomer(false);
-                }
-
-                if ($group) {
-                    $existingRecipient->setNewsletterGroup($group);
-                }
-                $this->getManager()->persist($existingRecipient);
-                $this->getManager()->flush();
-            }
-
-            if ($group && !empty($newsletterData['firstname'])) {
-	            $sql = "
-					INSERT INTO s_campaigns_maildata (
-						groupID, email, firstname, lastname, salutation, street, streetnumber, zipcode, title, city
-					) VALUES (
-						:groupId, :eMail, :firstName, :lastName, :salutation, :street, :streetNumber, :zipCode, :title, :city
-					)
-                    ON DUPLICATE KEY UPDATE
-	                    groupId = :groupId,
-	                    email = :eMail,
-	                    firstname = :firstName,
-	                    lastname = :lastName,
-	                    salutation = :salutation,
-	                    street = :street,
-	                    streetnumber = :streetNumber,
-	                    zipcode = :zipCode,
-	                    title = :title,
-	                    city = :city
-				";
-                Shopware()->Db()->query($sql, array(
-	                "groupId" => $group->getId(),
-	                "eMail" => $newsletterData['email'],
-	                "firstName" => $newsletterData['firstname'],
-	                "lastName" => $newsletterData['lastname'],
-	                "salutation" => $newsletterData['salutation'],
-	                "street" => $newsletterData['street'],
-	                "streetNumber" => $newsletterData['streetnumber'],
-	                "zipCode" => $newsletterData['zipcode'],
-	                "title" => $newsletterData['title'],
-	                "city" => $newsletterData['city']
-                ));
-
-                if ($existingRecipient) {
-                    $updated = true;
-                }
-            }
-
-            if($updated) {
+            //Create/Update the Address entry
+            $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']) ? : new Address();
+            if ($recipient->getId()) {
                 $updateCount++;
+            } else {
+                $insertCount++;
             }
+            $recipient->setEmail($newsletterData['email']);
+            $recipient->setIsCustomer(!empty($newsletterData['userID']));
 
+            //Only set the group if it was explicitly provided or it's a new entry
+            if ($group && ($newsletterData['group'] || !$recipient->getId())) {
+                $recipient->setNewsletterGroup($group);
+            }
+            $this->getManager()->persist($recipient);
+            $this->getManager()->flush();
+
+
+            //Create/Update the ContactData entry
+            $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email'])?:new ContactData();
+            //sanitize to avoid setting fields the user's not supposed to access
+            unset($newsletterData['added']);
+            unset($newsletterData['deleted']);
+            $contactData->fromArray($newsletterData);
+
+            //Only set the group if it was explicitly provided or it's a new entry
+            if ($group && ($newsletterData['group'] || !$contactData->getId())) {
+                $contactData->setGroupId($group->getId());
+            }
+            $contactData->setAdded(new \DateTime());
+
+            $this->getManager()->persist($contactData);
+            $this->getManager()->flush();
         }
 
         if (!empty($errors)) {

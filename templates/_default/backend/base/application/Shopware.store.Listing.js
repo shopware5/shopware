@@ -54,16 +54,6 @@ Ext.define('Shopware.store.Listing', {
     pageSize: 20,
 
     /**
-     * Override required!
-     * This function is used to override the { @link #displayConfig } object of the statics() object.
-     *
-     * @returns { Object }
-     */
-    configure: function() {
-        return { };
-    },
-
-    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -163,6 +153,16 @@ Ext.define('Shopware.store.Listing', {
     },
 
     /**
+     * Override required!
+     * This function is used to override the { @link #displayConfig } object of the statics() object.
+     *
+     * @returns { Object }
+     */
+    configure: function() {
+        return { };
+    },
+
+    /**
      * Helper function to get config access.
      * @param prop string
      * @returns mixed
@@ -195,9 +195,7 @@ Ext.define('Shopware.store.Listing', {
     convertProxyApi: function () {
         var me = this, value;
 
-        if (!me.getConfig('controller')) {
-            me.throwException(me.$className + ": Component requires the `controller` property in the configure() function.");
-        }
+        me.checkRequirements();
 
         me.setProxy(me.getConfig('proxy'));
 
@@ -208,6 +206,17 @@ Ext.define('Shopware.store.Listing', {
             );
             me.proxy.api[key] = value;
         });
+    },
+
+    /**
+     * Helper function which checks all component requirements.
+     */
+    checkRequirements: function() {
+        var me = this;
+
+        if (!me.getConfig('controller')) {
+            me.throwException(me.$className + ": Component requires the `controller` property in the configure() function.");
+        }
     }
 });
 //{/block}

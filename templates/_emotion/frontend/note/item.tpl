@@ -62,7 +62,7 @@
 							<strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
 							{if $sBasketItem.purchaseunit != $sBasketItem}
 								{if $sBasketItem.referenceunit}
-									{$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description}
+									({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
 								{/if}
 							{/if}
 						</p>
@@ -87,7 +87,7 @@
 		{if $sBasketItem.itemInfo}
 			{$sBasketItem.itemInfo}
 		{else}
-			<strong class="price">{$sBasketItem.price|currency}*</strong>
+			<strong class="price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</strong>
 		{/if}
 
 		{* Remove article *}

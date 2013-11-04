@@ -159,10 +159,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             return true;
         }
 
-        $proxyUrl = $request->getScheme() . '://'
-            . $request->getHttpHost()
-            . $request->getBaseUrl() . '/';
-
         // If local file-based proxy is used delete cache files from filesystem
         if ($this->resourceLoader->has('HttpCache')) {
             /** @var $proxy Shopware\Components\HttpCache\AppCache */
@@ -173,6 +169,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             );
 
             foreach ($iterator as $path) {
+                if(strcmp($path->getPathName(), (rtrim($cacheOptions['cache_dir'], '/').'/.gitkeep')) === 0) {
+                    continue;
+                }
                 if ($path->isDir()) {
                     rmdir($path->__toString());
                 } else {
@@ -181,20 +180,19 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        try {
-            $client = new Zend_Http_Client(null, array(
-                'useragent' => 'Shopware/' . Shopware()->Config()->version,
-                'timeout' => 5,
-            ));
-            $client->setUri($proxyUrl)->request('BAN');
-        } catch (Exception $e) {
-            return false;
-        }
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+        $proxyUrl = $httpCache->getProxyUrl($this->Request());
 
-        try {
-            Shopware()->Db()->exec('TRUNCATE s_cache_log');
-        } catch (\Exeption $e) {
-            Shopware()->Db()->exec('DELETE FROM s_cache_log');
+        if ($proxyUrl !== null) {
+            try {
+                $client = new Zend_Http_Client($proxyUrl, array(
+                    'useragent' => 'Shopware/' . Shopware()->Config()->version,
+                    'timeout' => 5,
+                ));
+                $client->request('BAN');
+            } catch (\Exception $e) {
+                return false;
+            }
         }
 
         return true;

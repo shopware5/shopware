@@ -452,9 +452,12 @@ class sAdmin
 
         }
 
-        if (!count($getPaymentMeans)){
-            $this->sSYSTEM->E_CORE_WARNING("sGetPaymentMeans #00","Could not get any payment-means".$sql);
-            return;
+        //if no payment is left use always the fallback payment no matter if it has any restrictions too
+        if (!count($getPaymentMeans)) {
+            $sql = "SELECT * FROM s_core_paymentmeans WHERE id =?";
+            $fallBackPayment = Shopware()->Db()->fetchRow($sql, array(Shopware()->Config()->get('paymentdefault')));
+
+            $getPaymentMeans[] = $this->sGetPaymentTranslation($fallBackPayment);
         }
 
         $getPaymentMeans = Enlight()->Events()->filter('Shopware_Modules_Admin_GetPaymentMeans_DataFilter', $getPaymentMeans, array('subject'=>$this));
@@ -2094,8 +2097,7 @@ class sAdmin
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderDetailsValue["price"]);
 
-                    /** GET ARTICLE DETAILS START - @date: 05-24-2011 */
-                    $tmpArticle = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, $getOrderDetails[$orderDetailsKey]['articleID']);
+                    $tmpArticle = $this->sSYSTEM->sMODULES['sArticles']->sGetProductByOrdernumber($getOrderDetails[$orderDetailsKey]['articleordernumber']);
 
                     if(!empty($tmpArticle) && is_array($tmpArticle)) {
 
@@ -3224,10 +3226,11 @@ class sAdmin
      * Get dispatch methods
      * @param int $countryID
      * @param int $paymentID
+     * @param null $stateId
      * @access public
      * @return array
      */
-    public function sGetDispatchBasket ($countryID=null, $paymentID = null)
+    public function sGetDispatchBasket ($countryID=null, $paymentID = null, $stateId = null)
     {
         $sql_select = '';
         if(!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT']))
@@ -3333,6 +3336,10 @@ class sAdmin
             $countryID = (int) $user['additional']['countryShipping']['id'];
         else
             $countryID = (int) $countryID;
+
+        if(!empty($user['additional']['stateShipping']['id'])) {
+            $stateId = $user['additional']['stateShipping']['id'];
+        }
         $sql = "
             SELECT main_id FROM s_core_shops WHERE id=".(int) $this->sSYSTEM->sSubShop['id']."
         ";
@@ -3341,6 +3348,7 @@ class sAdmin
         if(is_null($mainId)) {
             $mainId = (int) $this->sSYSTEM->sSubShop['id'];
         }
+        $basket['basketStateId'] = (int) $stateId;
         $basket['countryID'] = $countryID;
         $basket['paymentID'] = $paymentID;
         $basket['customergroupID'] = (int) $this->sSYSTEM->sUSERGROUPDATA['id'];
@@ -3375,14 +3383,15 @@ class sAdmin
      * Get premium dispatch methods
      * @param int $countryID
      * @param int $paymentID
+     * @param null $stateId
      * @access public
      * @return array
      */
-    public function sGetPremiumDispatches ($countryID=null, $paymentID = null)
+    public function sGetPremiumDispatches ($countryID=null, $paymentID = null, $stateId = null)
     {
         $this->sCreateHolidaysTable();
 
-        $basket = $this->sGetDispatchBasket($countryID, $paymentID);
+        $basket = $this->sGetDispatchBasket($countryID, $paymentID, $stateId);
 
         $sql = "SELECT id, bind_sql FROM s_premium_dispatch WHERE active=1 AND type IN (0) AND bind_sql IS NOT NULL AND bind_sql != ''";
         $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);

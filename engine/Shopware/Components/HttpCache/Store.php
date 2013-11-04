@@ -91,46 +91,23 @@ class Store implements StoreInterface
      */
     public function purgeAll()
     {
-        $headerDir = $this->root . DIRECTORY_SEPARATOR . 'md';
-
-        if (!file_exists($headerDir)) {
+        if (!file_exists($this->root)) {
             return false;
         }
 
-        $headerFiles = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($headerDir),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+        $result = false;
 
-        foreach ($headerFiles as $headerFile) {
-            if (!$headerFile->isFile()) {
+        /** @var $file \SplFileInfo */
+        foreach ($this->createRecursiveFileIterator($this->root) as $file) {
+            if (!$file->isFile()) {
                 continue;
             }
 
-            $headerData = file_get_contents($headerFile->getPathname());
-            $headerData = unserialize($headerData);
-            $changed = false;
-            foreach ($headerData as $headerIndex => $header) {
-
-                $cacheKey = $header[1]['x-content-digest'][0];
-                if (file_exists($path = $this->getPath($cacheKey))) {
-                    unlink($path);
-                }
-                $changed = true;
-                unset($headerData[$headerIndex]);
-            }
-
-            if ($changed) {
-                if (empty($headerData)) {
-                    unlink($headerFile->getPathname());
-                } else {
-                    $headerData = serialize($headerData);
-                    file_put_contents($headerFile->getPathname(), $headerData);
-                }
-            }
+            unlink($file->getPathname());
+            $result = true;
         }
 
-        return true;
+        return $result;
     }
 
     /**
@@ -148,24 +125,30 @@ class Store implements StoreInterface
             return false;
         }
 
-        $headerFiles = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($headerDir),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+        if (isset($value)) {
+            $value = ';' . $value . ';';
+        }
 
-        foreach ($headerFiles as $headerFile) {
+        $result = false;
+
+        /** @var $headerFile \SplFileInfo */
+        foreach ($this->createRecursiveFileIterator($headerDir) as $headerFile) {
             if (!$headerFile->isFile()) {
                 continue;
             }
+
             $headerData = file_get_contents($headerFile->getPathname());
             $headerData = unserialize($headerData);
+
             $changed = false;
             foreach ($headerData as $headerIndex => $header) {
                 if (!isset($header[1][$name])) {
                     continue;
                 }
-                $headerValue = implode(', ', $header[1][$name]). ', ';
-                if (isset($value) && strpos($headerValue, $value. ', ') === false) {
+
+                $headerValue = implode(';', $header[1][$name]);
+
+                if (isset($value) && strpos($headerValue, $value) === false) {
                     continue;
                 }
                 $cacheKey = $header[1]['x-content-digest'][0];
@@ -177,6 +160,7 @@ class Store implements StoreInterface
             }
 
             if ($changed) {
+                $result = true;
                 if (empty($headerData)) {
                     unlink($headerFile->getPathname());
                 } else {
@@ -186,7 +170,24 @@ class Store implements StoreInterface
             }
         }
 
-        return true;
+        return $result;
+    }
+
+    /**
+     * @param string $path The path of the directory to be iterated over.
+     * @return \RecursiveIteratorIterator
+     */
+    protected function createRecursiveFileIterator($path)
+    {
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $path,
+            \RecursiveDirectoryIterator::SKIP_DOTS
+        );
+
+        return new \RecursiveIteratorIterator(
+            $directoryIterator,
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
     }
 
     /**

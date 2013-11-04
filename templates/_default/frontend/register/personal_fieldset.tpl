@@ -105,8 +105,8 @@
 	{* Phone *}
 	{block name='frontend_register_personal_fieldset_input_phone'}
 		<div>
-			<label for="phone">{se name='RegisterLabelPhone'}{/se}</label>
-			<input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text required {if $error_flags.phone}instyle_error{/if}" />
+			<label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}</label>
+			<input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
 		</div>
 	{/block}
 		
