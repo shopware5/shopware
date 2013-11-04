@@ -71,6 +71,7 @@ return array_merge($customConfig, array(
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => array('Authorization', 'Cookie'),
+        'purge_allowed_ips' => array('127.0.0.1', '::1'),
         'allow_reload' => false,
         'allow_revalidate' => false,
         'stale_while_revalidate' => 2,
