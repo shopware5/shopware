@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Media\Media;
 
@@ -108,52 +110,42 @@ class Article extends Resource
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array(
             'article',
-            'configuratorSet',
-            'configuratorSetGroups',
             'mainDetail',
             'mainDetailPrices',
-            'PARTIAL categories.{id, name}',
-            'PARTIAL similar.{id, name}',
-            'PARTIAL accessories.{id, name}',
-            'images',
-            'links',
-            'downloads',
             'tax',
-            'customerGroups',
             'propertyValues',
             'supplier',
             'mainDetailAttribute',
             'propertyGroup',
-            'details',
-            'prices',
-            'configuratorOptions',
+            'customerGroups'
         ))
         ->from('Shopware\Models\Article\Article', 'article')
-        ->leftJoin('article.configuratorSet', 'configuratorSet')
-        ->leftJoin('configuratorSet.groups', 'configuratorSetGroups')
         ->leftJoin('article.mainDetail', 'mainDetail')
         ->leftJoin('mainDetail.prices', 'mainDetailPrices')
         ->leftJoin('article.tax', 'tax')
-        ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
-        ->leftJoin('article.links', 'links')
-        ->leftJoin('article.images', 'images')
-        ->leftJoin('article.downloads', 'downloads')
-        ->leftJoin('article.related', 'accessories')
         ->leftJoin('article.propertyValues', 'propertyValues')
-        ->leftJoin('article.similar', 'similar')
-        ->leftJoin('article.customerGroups', 'customerGroups')
         ->leftJoin('article.supplier', 'supplier')
-        ->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
-        ->leftJoin('details.prices', 'prices')
         ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
         ->leftJoin('article.propertyGroup', 'propertyGroup')
-        ->leftJoin('details.configuratorOptions', 'configuratorOptions')
+        ->leftJoin('article.customerGroups', 'customerGroups')
         ->where('article.id = ?1')
-        ->andWhere('images.parentId IS NULL')
         ->setParameter(1, $id);
 
         /** @var $article \Shopware\Models\Article\Article */
         $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
+
+        //if the result mode is set to array, we have to load the associated data directly.
+        //if the result mode is set to object, the doctrine lazy loading can be used.
+        if ($this->resultMode === AbstractQuery::HYDRATE_ARRAY && !empty($article)) {
+            $article['images'] = $this->getArticleImages($id);
+            $article['configuratorSet'] = $this->getArticleConfiguratorSet($id);
+            $article['links'] = $this->getArticleLinks($id);
+            $article['downloads'] = $this->getArticleDownloads($id);
+            $article['categories'] = $this->getArticleCategories($id);
+            $article['similar'] = $this->getArticleSimilar($id);
+            $article['related'] = $this->getArticleRelated($id);
+            $article['details'] = $this->getArticleVariants($id);
+        }
 
         if (!$article) {
             throw new ApiException\NotFoundException("Article by id $id not found");
@@ -174,6 +166,207 @@ class Article extends Resource
         }
 
         return $article;
+    }
+
+    /**
+     * Selects the configured article configurator set and the assigned
+     * configurator groups of the set.
+     * The groups are sorted by the position value.
+     *
+     * @param $articleId
+     * @return mixed
+     */
+    public function getArticleConfiguratorSet($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('configuratorSet', 'groups'))
+            ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
+            ->innerJoin('configuratorSet.articles', 'article')
+            ->leftJoin('configuratorSet.groups', 'groups')
+            ->addOrderBy('groups.position', 'ASC')
+            ->where('article.id = :articleId')
+            ->setParameters(array('articleId' => $articleId));
+
+        return $this->getSingleResult($builder);
+    }
+
+    /**
+     * Selects all images of the main variant of the passed article id.
+     * The images are sorted by their position value.
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleImages($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('images'))
+            ->from('Shopware\Models\Article\Image', 'images')
+            ->innerJoin('images.article', 'article')
+            ->where('article.id = :articleId')
+            ->orderBy('images.position', 'ASC')
+            ->andWhere('images.parentId IS NULL')
+            ->setParameters(array('articleId' => $articleId));
+
+        return $this->getFullResult($builder);
+    }
+
+    /**
+     * Selects all configured download files for the passed article id.
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleDownloads($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('downloads'))
+            ->from('Shopware\Models\Article\Download', 'downloads')
+            ->innerJoin('downloads.article', 'article')
+            ->where('article.id = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $this->getFullResult($builder);
+    }
+
+    /**
+     * Helper function which selects all configured links
+     * for the passed article id.
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleLinks($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('links'))
+            ->from('Shopware\Models\Article\Link', 'links')
+            ->innerJoin('links.article', 'article')
+            ->where('article.id = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $this->getFullResult($builder);
+    }
+
+
+    /**
+     * Helper function which selects all categories of the passed
+     * article id.
+     * This function returns only the directly assigned categories.
+     * To prevent a big data, this function selects only the category name and id.
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleCategories($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('categories.id', 'categories.name'))
+            ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
+            ->innerJoin('categories.articles', 'articles')
+            ->where('articles.id = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $this->getFullResult($builder);
+    }
+
+
+    /**
+     * Helper function which selects all similar articles
+     * of the passed article id.
+     *
+     * @param $articleId
+     * @return mixed
+     */
+    public function getArticleSimilar($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('article', 'PARTIAL similar.{id, name}'))
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->innerJoin('article.similar', 'similar')
+            ->where('article.id = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        $article = $this->getSingleResult($builder);
+        return $article['similar'];
+    }
+
+
+    /**
+     * Helper function which selects all accessory articles
+     * of the passed article id.
+     *
+     * @param $articleId
+     * @return mixed
+     */
+    public function getArticleRelated($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('article', 'PARTIAL related.{id, name}'))
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->innerJoin('article.related', 'related')
+            ->where('article.id = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        $article = $this->getSingleResult($builder);
+        return $article['related'];
+    }
+
+    /**
+     * Helper function which loads all non main variants of
+     * the passed article id.
+     * Additionally the function selects the variant prices
+     * and configurator options for each variant.
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleVariants($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('variants', 'prices', 'options'))
+            ->from('Shopware\Models\Article\Detail', 'variants')
+            ->innerJoin('variants.article', 'article')
+            ->leftJoin('variants.prices', 'prices')
+            ->leftJoin('variants.configuratorOptions', 'options')
+            ->where('article.id = :articleId')
+            ->andWhere('variants.kind = 2')
+            ->setParameter('articleId', $articleId);
+
+        return $this->getFullResult($builder);
+    }
+
+
+    /**
+     * Helper function to prevent duplicate source code
+     * to get a single row of the query builder result for the current resource result mode
+     * using the query paginator.
+     *
+     * @param QueryBuilder $builder
+     * @return array
+     */
+    private function getSingleResult(QueryBuilder $builder)
+    {
+        $query = $builder->getQuery();
+        $query->setHydrationMode($this->getResultMode());
+        $paginator = $this->getManager()->createPaginator($query);
+        return $paginator->getIterator()->current();
+    }
+
+    /**
+     * Helper function to prevent duplicate source code
+     * to get the full query builder result for the current resource result mode
+     * using the query paginator.
+     *
+     * @param QueryBuilder $builder
+     * @return array
+     */
+    private function getFullResult(QueryBuilder $builder)
+    {
+        $query = $builder->getQuery();
+        $query->setHydrationMode($this->getResultMode());
+        $paginator = $this->getManager()->createPaginator($query);
+        return $paginator->getIterator()->getArrayCopy();
     }
 
     /**
