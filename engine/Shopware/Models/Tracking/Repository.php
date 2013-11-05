@@ -56,4 +56,40 @@ class Repository extends ModelRepository
         return $bannerStatistics;
     }
 
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
+     *
+     * @param $articleId
+     * @param $date
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleImpressionQuery($articleId, $date = null)
+    {
+        if ($date == null) {
+            $date = new \DateTime();
+        }
+        $builder = $this->getArticleImpressionQueryBuilder($articleId, $date);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getArticleImpressionQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $articleId
+     * @param \DateTime $date
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleImpressionQueryBuilder($articleId, $date)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select('articleImpression')
+                ->from('Shopware\Models\Tracking\ArticleImpression', 'articleImpression')
+                ->where('articleImpression.articleId = :articleId')
+                ->andWhere('articleImpression.date = :date')
+                ->setParameters(array('articleId' => $articleId, 'date' => $date->format("Y-m-d")));
+
+        return $builder;
+    }
+
 }
