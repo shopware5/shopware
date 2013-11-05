@@ -19,6 +19,7 @@
  * @author     $Author$
  */
 namespace   Shopware\Models\Emotion\Library;
+use Doctrine\Common\Collections\ArrayCollection;
 use         Shopware\Components\Model\ModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 use Shopware\Models\Plugin\Plugin;
@@ -135,6 +136,16 @@ class Component extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;
+
+    /**
+     * Class constructor.
+     * Initials all array collections and date time properties.
+     */
+    public function __construct()
+    {
+        $this->fields = new ArrayCollection();
+    }
+
 
     /**
      * Contains all the assigned \Shopware\Models\Emotion\Library\Field models.
@@ -315,5 +326,358 @@ class Component extends ModelEntity
     public function setPlugin($plugin)
     {
         $this->plugin = $plugin;
+    }
+
+
+    /**
+     * Generally function to create a new custom emotion component field.
+     *
+     * @param array $data
+     *
+     * @return Field
+     */
+    public function createField(array $data)
+    {
+        $data = array_merge(array(
+            'fieldLabel' => '',
+            'valueType' => '',
+            'store' => '',
+            'supportText' => '',
+            'helpTitle' => '',
+            'helpText' => '',
+            'defaultValue' => '',
+            'displayField' => '',
+            'valueField' => '',
+            'allowBlank' => false
+        ), $data);
+
+        $field = new Field();
+        $field->fromArray($data);
+
+        $field->setComponent($this);
+        $this->fields->add($field);
+
+        return $field;
+    }
+
+
+    /**
+     * Creates a checkbox field for the passed emotion component widget.
+     *
+     * Creates a Ext.form.field.Checkbox element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Checkbox
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createCheckboxField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'checkboxfield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.ComboBox element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.ComboBox
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *  - store
+     *  - displayField
+     *  - valueField
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createComboBoxField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'combobox'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.Date element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Date
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createDateField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'datefield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.Display element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Display
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createDisplayField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'displayfield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.Hidden element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Hidden
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createHiddenField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'hiddenfield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.HtmlEditor element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.HtmlEditor
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createHtmlEditorField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'htmleditor'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     *
+     * Creates a Ext.form.field.Number element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Number
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createNumberField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'numberfield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+
+    /**
+     *
+     * Creates a Ext.form.field.Radio element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Radio
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createRadioField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'radiofield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+    /**
+     *
+     * Creates a Ext.form.field.Text element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createTextField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'textfield'
+        ), $options);
+
+        return $this->createField($options);
+
+    }
+
+
+    /**
+     * Creates a Ext.form.field.TextArea element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createTextAreaField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'textareafield'
+        ), $options);
+
+        return $this->createField($options);
+
+    }
+
+
+    /**
+     * Creates a Ext.form.field.Time element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Time
+     *
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createTimeField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'timefield'
+        ), $options);
+
+        return $this->createField($options);
+
+    }
+
+    /**
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createCodeMirrorField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'codemirrorfield'
+        ), $options);
+
+        return $this->createField($options);
+    }
+
+
+    /**
+     * This field type supports the following parameters which can be set
+     * as options array value:
+     *  - name
+     *  - fieldLabel
+     *  - allowBlank
+     *
+     * @param array $options
+     *
+     * @return Field
+     */
+    public function createTinyMceField(array $options)
+    {
+        $options = array_merge(array(
+            'xtype' => 'tinymce'
+        ), $options);
+
+        return $this->createField($options);
     }
 }
