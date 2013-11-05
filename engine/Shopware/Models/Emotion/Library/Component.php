@@ -18,10 +18,11 @@
  * @version    $Id$
  * @author     $Author$
  */
-namespace   Shopware\Models\Emotion\Library;
+namespace Shopware\Models\Emotion\Library;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+    Doctrine\ORM\Mapping AS ORM;
 use Shopware\Models\Plugin\Plugin;
 
 /**
@@ -538,7 +539,6 @@ class Component extends ModelEntity
 
         return $this->createField($options);
     }
-
 
 
     /**

@@ -52,9 +52,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             WHERE namespace=?
         ";
         $plugins = $this->Application()->Db()->fetchAssoc($sql, array($this->name));
-        foreach($plugins as $pluginName => $plugin) {
+        foreach ($plugins as $pluginName => $plugin) {
             $plugins[$pluginName]['class'] = implode('_', array(
-                'Shopware' , 'Plugins', $this->name, $pluginName, 'Bootstrap'
+                'Shopware', 'Plugins', $this->name, $pluginName, 'Bootstrap'
             ));
             $plugins[$pluginName]['path'] = $this->Application()->AppPath(implode('_', array(
                 'Plugins', $plugin['source'], $this->name, $pluginName
@@ -77,8 +77,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     	 	ORDER BY name, position
         ";
         $listeners = $this->Application()->Db()->fetchAll($sql, array($this->name));
-        foreach($listeners as $listenerKey => $listener) {
-            if(($position = strpos($listener['listener'], '::')) !== false) {
+        foreach ($listeners as $listenerKey => $listener) {
+            if (($position = strpos($listener['listener'], '::')) !== false) {
                 $listeners[$listenerKey]['listener'] = substr($listener['listener'], $position + 2);
             }
         }
@@ -103,7 +103,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function getConfig($name)
     {
-        if(!isset($this->configStorage[$name])) {
+        if (!isset($this->configStorage[$name])) {
             $sql = "
                 SELECT
                   ce.name,
@@ -126,7 +126,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 $this->shop !== null && $this->shop->getMain() !== null ? $this->shop->getMain()->getId() : 1,
                 $name
             ));
-            foreach($config as $key => $value) {
+            foreach ($config as $key => $value) {
                 $config[$key] = unserialize($value);
             }
             $this->configStorage[$name] = new Enlight_Config($config, true);
@@ -143,7 +143,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     protected function getInfo($plugin, $name = null)
     {
-        if(!isset($this->storage->plugins->$plugin)) {
+        if (!isset($this->storage->plugins->$plugin)) {
             return null;
         } elseif ($name !== null) {
             return $this->storage->plugins->$plugin->$name;
@@ -311,7 +311,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $result = $plugin->disable();
         $success = is_bool($result) ? $result : !empty($result['success']);
-        if($success) {
+        if ($success) {
             $result = $plugin->uninstall();
             $success = is_bool($result) ? $result : !empty($result['success']);
         }
@@ -332,9 +332,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             /** @var $em Shopware\Components\Model\ModelManager */
             $em = $this->Application()->Models();
 
-            if($plugin->hasForm()) {
+            if ($plugin->hasForm()) {
                 $form = $plugin->Form();
-                if($form->getId()) {
+                if ($form->getId()) {
                     $em->remove($form);
                 } else {
                     $em->detach($form);
@@ -388,7 +388,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $this->write();
 
             $form = $plugin->Form();
-            if($form->hasElements()) {
+            if ($form->hasElements()) {
                 $this->Application()->Models()->persist($form);
             }
             $this->Application()->Models()->flush();
@@ -412,13 +412,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         //$this->storage->write();
 
         $subscribes = $this->Subscriber()->toArray();
-        foreach($subscribes as $subscribe) {
+        foreach ($subscribes as $subscribe) {
             $subscribe['pluginID'] = $this->getInfo($subscribe['plugin'], 'id');
-            if(!isset($subscribe['pluginID'])) {
+            if (!isset($subscribe['pluginID'])) {
                 continue;
             }
             $subscribe['listener'] = $this->getInfo($subscribe['plugin'], 'class')
-                                   . '::' . $subscribe['listener'];
+                . '::' . $subscribe['listener'];
             $sql = '
                 INSERT INTO `s_core_subscribes` (
                     `subscribe`,
