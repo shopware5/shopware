@@ -339,7 +339,7 @@ class Component extends ModelEntity
      */
     public function createField(array $data)
     {
-        $data = array_merge(array(
+        $data += array(
             'fieldLabel' => '',
             'valueType' => '',
             'store' => '',
@@ -350,7 +350,7 @@ class Component extends ModelEntity
             'displayField' => '',
             'valueField' => '',
             'allowBlank' => false
-        ), $data);
+        );
 
         $field = new Field();
         $field->fromArray($data);
@@ -368,21 +368,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Checkbox element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Checkbox
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createCheckboxField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'checkboxfield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -402,15 +400,22 @@ class Component extends ModelEntity
      *  - displayField
      *  - valueField
      *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $store              Required; Store class which used for the combo class
+     *     @type string $displayField       Required; Field name of the model which displays as text
+     *     @type string $valueField         Required; Identifier field of the combo box
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createComboBoxField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'combobox'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -423,9 +428,11 @@ class Component extends ModelEntity
      *
      * This field type supports the following parameters which can be set
      * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @param array $options
      *
@@ -433,9 +440,9 @@ class Component extends ModelEntity
      */
     public function createDateField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'datefield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -448,9 +455,11 @@ class Component extends ModelEntity
      *
      * This field type supports the following parameters which can be set
      * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @param array $options
      *
@@ -458,9 +467,9 @@ class Component extends ModelEntity
      */
     public function createDisplayField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'displayfield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -471,21 +480,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Hidden element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Hidden
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createHiddenField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'hiddenfield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -496,21 +503,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.HtmlEditor element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.HtmlEditor
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createHtmlEditorField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'htmleditor'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -521,21 +526,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Number element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Number
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createNumberField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'numberfield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -546,21 +549,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Radio element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Radio
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createRadioField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'radiofield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
@@ -570,21 +571,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Text element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createTextField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'textfield'
-        ), $options);
+        );
 
         return $this->createField($options);
 
@@ -595,21 +594,19 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.TextArea element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createTextAreaField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'textareafield'
-        ), $options);
+        );
 
         return $this->createField($options);
 
@@ -620,63 +617,60 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Time element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Time
      *
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createTimeField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'timefield'
-        ), $options);
+        );
 
         return $this->createField($options);
 
     }
 
     /**
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
+     * Creates a code mirror component field.
      *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createCodeMirrorField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'codemirrorfield'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
 
 
     /**
-     * This field type supports the following parameters which can be set
-     * as options array value:
-     *  - name
-     *  - fieldLabel
-     *  - allowBlank
-     *
-     * @param array $options
+     * Creates a tiny mce component field.
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
      *
      * @return Field
      */
     public function createTinyMceField(array $options)
     {
-        $options = array_merge(array(
+        $options += array(
             'xtype' => 'tinymce'
-        ), $options);
+        );
 
         return $this->createField($options);
     }
