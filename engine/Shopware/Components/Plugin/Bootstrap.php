@@ -340,7 +340,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
         $item = $this->Menu()->findOneBy(
             array(
-                'label'    => $options['label'],
+                'label' => $options['label'],
                 'parentId' => $parentId
             )
         );
@@ -369,8 +369,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new payment instance
      *
      * @param   array $options
-     * @param   null  $description
-     * @param   null  $action
+     * @param   null $description
+     * @param   null $action
      *
      * @return  \Shopware\Models\Payment\Payment
      */
@@ -465,8 +465,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * {@inheritDoc}
      *
      * @param string|Enlight_Event_Handler $event
-     * @param string                       $listener
-     * @param integer                      $position
+     * @param string $listener
+     * @param integer $position
      *
      * @return Enlight_Plugin_Bootstrap_Config
      */
@@ -488,9 +488,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return array(
             'install' => true,
-            'update'  => true,
-            'enable'  => true,
-            'dummy'   => false
+            'update' => true,
+            'enable' => true,
+            'dummy' => false
         );
     }
 
@@ -556,7 +556,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return array(
             'version' => $this->getVersion(),
-            'label'   => $this->getLabel()
+            'label' => $this->getLabel()
         );
     }
 
@@ -643,7 +643,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $next = null,
         $start = null,
         $end = null
-    ) {
+    )
+    {
         $this->createCronJob($name, $action, $interval, $active);
     }
 
@@ -730,7 +731,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Helper function to enable the http cache for a single shopware controller.
      *
-     * @param int   $cacheTime
+     * @param int $cacheTime
      * @param array $cacheIds
      */
     public function enableControllerCache($cacheTime = 3600, $cacheIds = array())
