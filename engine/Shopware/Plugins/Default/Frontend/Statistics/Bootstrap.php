@@ -153,6 +153,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $this->refreshBasket($request);
             $this->refreshLog($request);
             $this->refreshReferer($request);
+            $this->refreshArticleImpression($request);
             $this->refreshCurrentUsers($request);
             $this->refreshPartner($request, $response);
         }
@@ -287,6 +288,34 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
         $sql = 'INSERT INTO s_statistics_referer (datum, referer) VALUES (NOW(), ?)';
         Shopware()->Db()->query($sql, array($referer));
+    }
+
+    /**
+     * Refresh article impressions
+     *
+     * @param   \Enlight_Controller_Request_RequestHttp $request
+     * @return null|object|\Shopware\Models\Tracking\Banner
+     */
+    public function refreshArticleImpression($request)
+    {
+        $articleId = $request->getParam('articleId');
+        if (empty($articleId)) {
+            return;
+        }
+        /** @var $repository \Shopware\Models\Tracking\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
+        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId);
+        /** @var  $articleImpression \Shopware\Models\Tracking\ArticleImpression */
+        $articleImpression = $articleImpressionQuery->getOneOrNullResult();
+
+        // If no Entry for this day exists - create a new one
+        if ($articleImpression === null) {
+            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId);
+            Shopware()->Models()->persist($articleImpression);
+        } else {
+            $articleImpression->increaseImpressions();
+        }
+        Shopware()->Models()->flush();
     }
 
     /**
