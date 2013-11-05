@@ -756,17 +756,16 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Creates a new component which can be used in the backend emotion
      * module.
-     * The options parameter supports the following options:
-     * <code>
-     *   - [required] $name Logical name of the component
-     *   - [required] $template Template class name which will be loaded in the frontend
-     *   - [required] $xType Ext JS xtype for the backend module component
-     *   - [optional] string $cls Css class which used in the frontend emotion
-     *   - [optional] string $convertFunction Data convert function which allows to convert the saved backend data
-     *   - [optional] string $description Description field for the component, which displayed in the backend module.
-     * </code>
      *
-     * @param array $options
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component
+     *     @type string $template           Required; Template class name which will be loaded in the frontend
+     *     @type string $xType              Required; Ext JS xtype for the backend module component
+     *     @type string $cls                Optional; $cls Css class which used in the frontend emotion
+     *     @type string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
+     *     @type string $description        Optional; Description field for the component, which displayed in the backend module.
+     * }
+     *
      * @return Component
      */
     public function createEmotionComponent(array $options)
@@ -782,8 +781,39 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
         $component->setPluginId($this->getId());
         $component->setPlugin($this->Plugin());
+
+        //saves the component automatically if the plugin is saved
         $this->Plugin()->getEmotionComponents()->add($component);
+
+        //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
+        $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
+        $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
 
         return $component;
     }
+
+    /**
+     * Event listener of the post dispatch event of the backend and widgets emotion controller
+     * to load the plugin emotion template extensions.
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function extendsEmotionTemplates(Enlight_Event_EventArgs $args)
+    {
+        /**@var $view Enlight_View_Default*/
+        $view = $args->getSubject()->View();
+        $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+
+        if ($args->getSubject()->Request()->getModuleName() !== 'backend') {
+            return;
+        }
+
+        $directoryIterator = new \DirectoryIterator($this->Path() . '/Views/emotion_components/backend/');
+        $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
+        foreach($regex as $file) {
+            $path = 'backend/' . $file[0];
+            $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
+        }
+    }
+
 }
