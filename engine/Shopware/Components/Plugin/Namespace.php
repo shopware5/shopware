@@ -349,6 +349,14 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $query = 'DELETE FROM Shopware\Models\Shop\Template t WHERE t.pluginId = ?0';
             $query = $em->createQuery($query);
             $query->execute(array($id));
+
+            $sql = "DELETE s_library_component_field, s_library_component
+                    FROM s_library_component_field
+                    INNER JOIN s_library_component
+                        ON s_library_component.id = s_library_component_field.componentID
+                        AND s_library_component.pluginID = :pluginId";
+
+            $this->Application()->Db()->query($sql, array(':pluginId' => $id));
         }
         return $result;
     }

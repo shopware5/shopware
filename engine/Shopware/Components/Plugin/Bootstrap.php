@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Components\Emotion\Manager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Emotion\Library\Component;
 
 /**
@@ -54,12 +54,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     protected $collection;
 
     /**
-     * Contains a factory to generate emotion elements and fields.
-     * @var Manager
-     */
-    protected $emotion;
-
-    /**
      * Constructor method
      *
      * @param                     $name
@@ -86,35 +80,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
         $this->info->set('capabilities', $this->getCapabilities());
         parent::__construct($name);
-    }
-
-    /**
-     * The \Shopware\Components\Emotion\Manager class
-     * can be used to create simplified emotion elements.
-     *
-     * @return Manager
-     */
-    public final function Emotion()
-    {
-        if ($this->emotion === null) {
-            /**
-             * Can't be used like the $bootstrap->Form() function,
-             * because we have the opportunity to create multiple
-             * components in the same plugin.
-             */
-            $this->emotion = new Manager($this->getId());
-        }
-        return $this->emotion;
-    }
-
-    /**
-     * Saves the passed emotion Component instance.
-     * @param Component $component
-     */
-    public final function saveEmotionComponent(Component $component)
-    {
-        $this->Application()->Models()->persist($component);
-        $this->Application()->Models()->flush($component);
     }
 
     /**
@@ -785,5 +750,39 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if ($httpCache) {
             $httpCache->disableControllerCache();
         }
+    }
+
+    /**
+     * Creates a new component which can be used in the backend emotion
+     * module.
+     * The options parameter supports the following options:
+     * <code>
+     *   - [required] $name Logical name of the component
+     *   - [required] $template Template class name which will be loaded in the frontend
+     *   - [required] $xType Ext JS xtype for the backend module component
+     *   - [optional] string $cls Css class which used in the frontend emotion
+     *   - [optional] string $convertFunction Data convert function which allows to convert the saved backend data
+     *   - [optional] string $description Description field for the component, which displayed in the backend module.
+     * </code>
+     *
+     * @param array $options
+     * @return Component
+     */
+    public function createEmotionComponent(array $options)
+    {
+        $config = array_merge(array(
+            'convertFunction' => null,
+            'description' => '',
+            'cls' => ''
+        ), $options);
+
+        $component = new Component();
+        $component->fromArray($config);
+
+        $component->setPluginId($this->getId());
+        $component->setPlugin($this->Plugin());
+        $this->Plugin()->getEmotionComponents()->add($component);
+
+        return $component;
     }
 }
