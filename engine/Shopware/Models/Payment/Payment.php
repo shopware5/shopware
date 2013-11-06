@@ -246,6 +246,12 @@ class Payment extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
      */
     protected $paymentInstances;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
+     */
+    protected $paymentData;
 
     /**
      * Gets the id of the payment
@@ -765,5 +771,21 @@ class Payment extends ModelEntity
     public function getPaymentInstances()
     {
         return $this->paymentInstances;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     */
+    public function setPaymentData($paymentData)
+    {
+        $this->paymentData = $paymentData;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentData()
+    {
+        return $this->paymentData;
     }
 }

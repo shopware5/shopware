@@ -482,7 +482,7 @@ class sAdmin
         }
 
         $dirs = Enlight()->Events()->filter(
-            'Shopware_Modules_Admin_InitiatePaymentClass_AddDirs',
+            'Shopware_Modules_Admin_InitiatePaymentClass_AddClass',
             $dirs,
             array('subject' => $this)
         );

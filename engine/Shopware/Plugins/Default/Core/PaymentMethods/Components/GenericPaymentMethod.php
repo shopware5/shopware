@@ -22,30 +22,69 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugin\ShopwarePaymentMethods\Components;
+namespace ShopwarePlugin\PaymentMethods\Components;
+
+use Shopware\Models\Payment\PaymentInstance;
 
 /**
  * Class GenericPaymentMethod
  * Used for all payment methods that require no specific logic
  *
- * @package ShopwarePlugin\ShopwarePaymentMethods\Components
+ * @package ShopwarePlugin\PaymentMethods\Components
  */
-class GenericPaymentMethod extends BasePaymentMethod {
-    public function sInit() {
+class GenericPaymentMethod extends BasePaymentMethod
+{
+    /**
+     * @inheritdoc
+     */
+    public function validate()
+    {
         return array();
     }
 
-    public function sUpdate() {
+    /**
+     * @inheritdoc
+     */
+    public function savePaymentData()
+    {
         //nothing to do, no return expected
         return;
     }
 
-    public function sInsert($userId) {
-        //nothing to do, boolean expected
-        return true;
-    }
-    public function getData() {
+    /**
+     * @inheritdoc
+     */
+    public function getCurrentPaymentData()
+    {
         //nothing to do, array expected
         return array();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createPaymentInstance($orderId, $userId, $paymentId)
+    {
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find($orderId);
+        $user = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($userId);
+        $paymentMean = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId);
+        $addressData = $user->getBilling();
+
+        $paymentInstance = new PaymentInstance();
+        $paymentInstance->setOrder($order);
+        $paymentInstance->setCustomer($user);
+        $paymentInstance->setPaymentMean($paymentMean);
+
+        $paymentInstance->setFirstName($addressData->getFirstName());
+        $paymentInstance->setLastName($addressData->getLastName());
+        $paymentInstance->setAddress($addressData->getStreet() . ' ' . $addressData->getStreetNumber());
+        $paymentInstance->setZipCode($addressData->getZipCode());
+        $paymentInstance->setCity($addressData->getCity());
+        $paymentInstance->setAmount($order->getInvoiceAmount());
+
+        Shopware()->Models()->persist($paymentInstance);
+        Shopware()->Models()->flush();
+
+        return $paymentInstance;
     }
 }
