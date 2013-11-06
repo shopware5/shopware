@@ -22,18 +22,80 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugin\ShopwarePaymentMethods\Components;
+namespace ShopwarePlugin\PaymentMethods\Components;
 
 /**
  * Abstract class BasePaymentMethod
  * All PaymentMethod implementations should extend this class.
  * Current methods are legacy, more may be added in the future.
  *
- * @package ShopwarePlugin\ShopwarePaymentMethods\Components
+ * @package ShopwarePlugin\PaymentMethods\Components
  */
-abstract class BasePaymentMethod {
-    public abstract function sInit();
-    public abstract function sUpdate();
-    public abstract function sInsert($userId);
-    public abstract function getData();
+abstract class BasePaymentMethod
+{
+
+    /**
+     * Validates the input received from the client
+     *
+     * @return array List of fields containing errors
+     */
+    public abstract function validate();
+
+    /**
+     * Called when the customer edits his payment data.
+     * Creates/updates the payment information for the current
+     * method.
+     *
+     * @return null
+     */
+    public abstract function savePaymentData();
+
+    /**
+     * Fetches the customer's current payment data for this
+     * payment method
+     *
+     * @return \Shopware\Models\Customer\PaymentData|null
+     */
+    public abstract function getCurrentPaymentData();
+
+    /**
+     * Creates the Payment Instance for the given order
+     * based on the current Payment Method policy.
+     *
+     * @param $orderId The Order Id associated with the current payment
+     * @param $userId The User/Customer Id associated with the current payment
+     * @param $paymentId The Payment Method Id associated with the current payment
+     * @return \Shopware\Models\Payment\PaymentInstace|null
+     */
+    public abstract function createPaymentInstance($orderId, $userId, $paymentId);
+
+    /**
+     * Deprecated call
+     *
+     * Will be removed in the future, please use the other functions
+     */
+    public function sInit()
+    {
+        return $this->validate();
+    }
+
+    /**
+     * Deprecated call
+     *
+     * Will be removed in the future, please use the other functions
+     */
+    public function sUpdate()
+    {
+        return $this->savePaymentData();
+    }
+
+    /**
+     * Deprecated call
+     *
+     * Will be removed in the future, please use the other functions
+     */
+    public function getData()
+    {
+        return $this->getCurrentPaymentData();
+    }
 }

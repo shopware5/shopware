@@ -10,6 +10,7 @@ In this document you will find a changelog of the important changes related to t
  * `calculateCheapestBasePriceData` | This methods returns always the basepricedata of the cheapest variant. This is used in the listing views.
  * `getCheapestVariant` | This method is used by the method `calculateCheapestBasePriceData` to get the purchaseunit and the referenceunit of the cheapest variant.
  * `calculateReferencePrice` | This method does the basic calculation to get the right referenceprice.
+ * 
 
 
 ### Deprecations

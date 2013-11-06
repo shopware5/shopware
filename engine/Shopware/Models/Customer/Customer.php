@@ -360,6 +360,13 @@ class Customer extends ModelEntity
     protected $paymentInstances;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer")
+     */
+    protected $paymentData;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
@@ -369,6 +376,7 @@ class Customer extends ModelEntity
         $this->lastLogin  = new \DateTime();
         $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
         $this->paymentInstances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paymentData = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1063,5 +1071,21 @@ class Customer extends ModelEntity
     public function getPaymentInstances()
     {
         return $this->paymentInstances;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     */
+    public function setPaymentData($paymentData)
+    {
+        $this->paymentData = $paymentData;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentData()
+    {
+        return $this->paymentData;
     }
 }

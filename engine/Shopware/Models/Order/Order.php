@@ -405,6 +405,7 @@ class Order extends ModelEntity
         $this->details = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
     }
+
     /**
      * Get id
      *

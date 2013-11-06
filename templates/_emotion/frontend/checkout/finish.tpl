@@ -2,7 +2,7 @@
 
 {block name='frontend_checkout_finish_teaser'}
 	<div class="teaser">
-		<h2 class="center">{se name="FinishHeaderThankYou"}{/se}{$sShopname}!</h2>
+		<h2 class="center">{se name="FinishHeaderThankYou"}{/se} {$sShopname}!</h2>
 	 	
 	    <p class="center">
 	    	{se name="FinishInfoConfirmationMail"}{/se}<br />{s name="FinishInfoPrintOrder"}{/s}
