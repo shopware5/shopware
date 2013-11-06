@@ -57,23 +57,30 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
+     * Is executed after the collection has been added.
+     */
+    public function afterInit()
+    {
+        $this->get('loader')->registerNamespace(
+            'ShopwarePlugins\\RestApi\\Components',
+            __DIR__ . '/Components/'
+        );
+    }
+
+    /**
      * Listener method for the Enlight_Controller_Front_DispatchLoopStartup event.
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param \Enlight_Controller_EventArgs $args
      */
     public function onDispatchLoopStartup(Enlight_Controller_EventArgs $args)
     {
-        $this->Application()->Loader()->registerNamespace(
-            'ShopwarePlugins\\RestApi\\Components',
-                __DIR__ . '/Components/'
-        );
-
         $this->request  = $args->getSubject()->Request();
         $this->response = $args->getSubject()->Response();
 
         if ($this->request->getModuleName() != 'api') {
             return;
         }
+
         $this->isApiCall = true;
 
         $router = new \ShopwarePlugins\RestApi\Components\Router();
@@ -83,22 +90,20 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
     /**
      * This pre-dispatch event-hook checks permissions
      *
-     * @param Enlight_Event_EventArgs $args
-     * @throws Enlight_Controller_Exception
-     * @return
+     * @param \Enlight_Controller_EventArgs $args
+     * @return void
      */
-    public function onFrontPreDispatch(Enlight_Event_EventArgs $args)
+    public function onFrontPreDispatch(Enlight_Controller_EventArgs $args)
     {
-        $request  = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
+        $request  = $args->getRequest();
+        $response = $args->getResponse();
 
         if ($request->getModuleName() != 'api') {
             return;
         }
 
-
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = $this->get('auth');
         $result = $auth->authenticate();
 
         if (!$result->isValid()) {
@@ -110,14 +115,14 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $identity = $result->getIdentity();
 
-        $db = Shopware()->Db();
+        $db = $this->get('db');
         $select = $db->select()
                      ->from('s_core_auth')
                      ->where('username LIKE ?', $identity['username']);
 
         $user = $db->query($select)->fetchObject();
         if (!empty($user->roleID)) {
-            $user->role = Shopware()->Models()->find(
+            $user->role = $this->get('models')->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
@@ -139,7 +144,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         foreach ((array)$input as $key => $value) {
             if ($value !== null) {
-               $request->setPost($key, $value);
+                $request->setPost($key, $value);
             }
         }
     }
@@ -166,7 +171,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $adapter->setDigestResolver(
             new \ShopwarePlugins\RestApi\Components\StaticResolver(
-                Shopware()->Models()
+                $this->get('models')
             )
         );
 
