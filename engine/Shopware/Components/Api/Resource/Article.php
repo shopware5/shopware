@@ -523,11 +523,11 @@ class Article extends Resource
 
                     /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
                     foreach ($availableGroups as $availableGroup) {
-                        if ($availableGroup->getName() == $group) {
+                        if ($availableGroup->getName() == $group || $availableGroup->getId() === $configuratorOption['groupId']) {
                             $optionExists = false;
                             /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
                             foreach ($availableGroup->getOptions() as $availableOption) {
-                                if ($availableOption->getName() == $option) {
+                                if ($availableOption->getName() == $option || $availableOption->getId() === $configuratorOption['optionId']) {
                                     $assignedOptions->add($availableOption);
                                     $optionExists = true;
                                     break;
@@ -659,10 +659,17 @@ class Article extends Resource
             foreach ($groupData['options'] as $optionData) {
                 $option = null;
                 if ($group->getId() > 0) {
-                    $option = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
-                        'name'    => $optionData['name'],
-                        'groupId' => $group->getId()
-                    ));
+                    if (isset($optionData['id'])) {
+                        $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $optionData['id']);
+                        if (!$option) {
+                            throw new ApiException\CustomValidationException(sprintf("ConfiguratorOption by id %s not found", $optionData['id']));
+                        }
+                    } else {
+                        $option = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
+                            'name'    => $optionData['name'],
+                            'groupId' => $group->getId()
+                        ));
+                    }
                 }
 
                 if (!$option) {
