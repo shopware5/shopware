@@ -56,75 +56,6 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         return true;
     }
 
-    public function assembleRoute($request, $response)
-    {
-        $path = $request->getPathInfo();
-
-        $path = explode('/', trim($path, '/'));
-        $path = array_pad($path, 7, null);
-
-        $type     = $path[1];
-        $id       = !empty($path[2]) ? $path[2] : false;
-        $subType  = !empty($path[3]) ? $path[3] : false;
-        $subId    = is_numeric($path[4]) ? (int) $path[4] : false;
-
-        $method = strtoupper($request->getParam('_method', $request->getMethod()));
-
-        $action = 'invalid';
-
-        if ($method === 'GET' && $id === false) {
-            $action = 'index';
-            $response->setHttpResponseCode(200);
-        } elseif ($method === 'GET') {
-            $action = 'get';
-            $response->setHttpResponseCode(200);
-        } elseif ($method === 'PUT' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
-            $response->setHttpResponseCode(405);
-        } elseif ($method === 'PUT') {
-            $action = 'put';
-        } elseif ($method === 'POST') {
-            $action = 'post';
-            // Set default http status code for successfull request
-            $response->setHttpResponseCode(201);
-        } elseif ($method === 'DELETE' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
-        } elseif ($method === 'DELETE') {
-            $response->setHttpResponseCode(200);
-            $action = 'delete';
-        }
-
-        if ($action == 'invalid') {
-            $request->setParam('id', $id);
-            $request->setParam('subId', $subId);
-
-            $request->setControllerName('index');
-            $request->setActionName($action);
-
-            return;
-        }
-
-        if (!$subType) {
-            $request->setParam('id', $id);
-            $request->setParam('subId', $subId);
-            $request->setActionName($action);
-
-            return;
-        }
-
-        if ($action == 'get' && $subId === false ) {
-            $subAction = $subType . 'Index';
-        } else  {
-            $subAction = $subType;
-        }
-
-        $action = $action . ucfirst($subAction);
-
-        $request->setParam('id', $id);
-        $request->setParam('subId', $subId);
-        $request->setActionName($action);
-    }
-
     /**
      * Listener method for the Enlight_Controller_Front_DispatchLoopStartup event.
      *
@@ -145,7 +76,8 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         }
         $this->isApiCall = true;
 
-        $this->assembleRoute($this->request, $this->response);
+        $router = new \ShopwarePlugins\RestApi\Components\Router();
+        $router->assembleRoute($this->request, $this->response);
     }
 
     /**
