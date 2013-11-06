@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 width: 80,
                 height: 40,
                 renderer: function(storeItem) {
-                    me.setTitle('{s name=chart/category/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
+                    this.setTitle('{s name=chart/category/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
                 }
             }
         }];
