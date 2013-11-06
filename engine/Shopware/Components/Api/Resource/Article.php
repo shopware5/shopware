@@ -134,9 +134,11 @@ class Article extends Resource
         /** @var $article \Shopware\Models\Article\Article */
         $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
-        //if the result mode is set to array, we have to load the associated data directly.
-        //if the result mode is set to object, the doctrine lazy loading can be used.
-        if ($this->resultMode === AbstractQuery::HYDRATE_ARRAY && !empty($article)) {
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article by id $id not found");
+        }
+
+        if ($this->getResultMode() == self::HYDRATE_ARRAY) {
             $article['images'] = $this->getArticleImages($id);
             $article['configuratorSet'] = $this->getArticleConfiguratorSet($id);
             $article['links'] = $this->getArticleLinks($id);
@@ -145,13 +147,7 @@ class Article extends Resource
             $article['similar'] = $this->getArticleSimilar($id);
             $article['related'] = $this->getArticleRelated($id);
             $article['details'] = $this->getArticleVariants($id);
-        }
 
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
-        }
-
-        if ($this->getResultMode() == self::HYDRATE_ARRAY) {
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
             $shops = $query->getArrayResult();
 
@@ -471,16 +467,31 @@ class Article extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array(
+            'article',
+            'mainDetail',
+            'mainDetailPrices',
+            'mainDetailAttribute',
+            'tax',
+            'supplier',
+        ))
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->leftJoin('article.mainDetail', 'mainDetail')
+            ->leftJoin('mainDetail.prices', 'mainDetailPrices')
+            ->leftJoin('article.tax', 'tax')
+            ->leftJoin('article.supplier', 'supplier')
+            ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
+            ->where('article.id = ?1')
+            ->setParameter(1, $id);
+
         /** @var $article \Shopware\Models\Article\Article */
-        $builder = $this->getRepository()->getArticleQueryBuilder($id);
-        $builder->addSelect('supplier', 'mainDetailAttribute')
-                ->leftJoin('article.supplier', 'supplier')
-                ->leftJoin('mainDetail.attribute', 'mainDetailAttribute');
         $article = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
+
 
         if (!$article) {
             throw new ApiException\NotFoundException("Article by id $id not found");
-        }
+        } 
 
         $translations = array();
         if (!empty($params['translations'])) {

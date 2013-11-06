@@ -42,6 +42,216 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return new \Shopware\Components\Api\Resource\Article();
     }
 
+    /**
+     * @group performance
+     */
+    public function testPerformanceGetOneArray()
+    {
+        $ids = Shopware()->Db()->fetchCol("SELECT DISTINCT id FROM s_articles");
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
+        foreach ($ids as $id) {
+            $article = $this->resource->getOne($id);
+            $this->assertInternalType('array', $article);
+        }
+    }
+
+    /**
+     * @group performance
+     */
+    public function testPerformanceGetOneObject()
+    {
+        $ids = Shopware()->Db()->fetchCol("SELECT DISTINCT id FROM s_articles");
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+        foreach ($ids as $id) {
+            $article = $this->resource->getOne($id);
+            $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        }
+    }
+
+    /**
+     * @group performance
+     *
+     * @return int
+     */
+    public function testPerformanceCreateBigOne()
+    {
+        $article = $this->createBigArticle();
+        return $article->getId();
+    }
+
+    /**
+     * @group performance
+     *
+     * @depends testPerformanceCreateBigOne
+     */
+    public function testPerformanceGetBigOneObject($id)
+    {
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+
+        $data = $this->resource->getOne($id);
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $data);
+    }
+
+    /**
+     * @group performance
+     *
+     * @depends testPerformanceCreateBigOne
+     */
+    public function testPerformanceGetBigOneArray($id)
+    {
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
+
+        $data = $this->resource->getOne($id);
+        $this->assertInternalType('array', $data);
+    }
+
+    /**
+     * @group performance
+     *
+     * @depends testPerformanceCreateBigOne
+     */
+    public function testPerformanceBigArticleUpdate($id)
+    {
+        for($i=0; $i < 20; $i++) {
+            $data = array(
+                'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles ORDER BY RAND() LIMIT 10"),
+                'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories ORDER BY RAND() LIMIT 20"),
+                'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 10"),
+            );
+
+            $article = $this->resource->update($id, $data);
+
+            $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        }
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Article
+     */
+    private function createBigArticle()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('groups', 'options'))
+                ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+                ->innerJoin('groups.options', 'options');
+
+        $configurator = array(
+            'name' => 'Performance Test Set',
+            'groups' => $builder->getQuery()->getArrayResult()
+        );
+
+        $builder->select(array(
+            'groups.name as groupName',
+            'options.name as option'
+        ))
+        ->groupBy('groups.id');
+
+        $variantOptions = $builder->getQuery()->getArrayResult();
+        foreach($variantOptions as &$option) {
+            $option['group'] = $option['groupName'];
+            unset($option['groupName']);
+        }
+
+        $variants = array();
+        for($i=0; $i<100; $i++) {
+            $variants[] =  array(
+                'number' => 'swTEST.variant.' . uniqid(),
+                'inStock' => 17,
+                'unit' => array('unit' => 'xyz','name' => 'newUnit'),
+                'attribute' => array('attr3' => 'Freitext3','attr4' => 'Freitext4'),
+                'configuratorOptions' => $variantOptions,
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'prices' => array(
+                    array('customerGroupKey' => 'H','from' => 1, 'to' => 20,'price' => 500),
+                    array('customerGroupKey' => 'H','from' => 21,'to' => '-','price' => 400),
+                )
+            );
+        }
+
+
+        $testData = array(
+            'name' => 'Performance - Artikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
+
+            'filterGroupId' => 1,
+
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'purchaseSteps' => 2,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+            'configuratorSet' => $configurator,
+            'variants' => $variants,
+            'taxId' => 1,
+            'supplierId' => 2,
+            'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
+            'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 100"),
+            'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
+            'links' => array(
+                array('name' => 'foobar', 'link' => 'http://example.org'),
+                array('name' => 'Video', 'link' => 'http://example.org'),
+                array('name' => 'Video2', 'link' => 'http://example.org'),
+                array('name' => 'Video3', 'link' => 'http://example.org'),
+                array('name' => 'Video4', 'link' => 'http://example.org'),
+                array('name' => 'Video5', 'link' => 'http://example.org'),
+                array('name' => 'Video6', 'link' => 'http://example.org'),
+                array('name' => 'Video7', 'link' => 'http://example.org'),
+                array('name' => 'Video8', 'link' => 'http://example.org'),
+                array('name' => 'Video9', 'link' => 'http://example.org'),
+                array('name' => 'Video10', 'link' => 'http://example.org'),
+            ),
+        );
+
+        $article = $this->resource->create($testData);
+        Shopware()->Models()->clear();
+        return $article;
+    }
+
     public function testCreateShouldBeSuccessful()
     {
         $testData = array(
@@ -65,7 +275,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption'.uniqid()
+                        'name' => 'neueOption' . uniqid()
                     )
                 )
             ),
@@ -106,15 +316,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     array(
                         'name' => 'Farbe',
                         'options' => array(
-                            array( 'name' => 'Gelb'),
-                            array( 'name' => 'grün')
+                            array('name' => 'Gelb'),
+                            array('name' => 'grün')
                         )
                     ),
                     array(
                         'name' => 'Gräße',
                         'options' => array(
-                            array( 'name' => 'L'),
-                            array( 'name' => 'XL')
+                            array('name' => 'L'),
+                            array('name' => 'XL')
                         )
                     ),
                 )
@@ -522,7 +732,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-            'taxId'      => 1,
+            'taxId' => 1,
 
 
             'variants' => array(
@@ -592,18 +802,18 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 )
             )
         );
-        /**@var $article \Shopware\Models\Article\Article*/
+        /**@var $article \Shopware\Models\Article\Article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name don't match");
 
-        /**@var $variant \Shopware\Models\Article\Detail*/
-        foreach($updated->getDetails() as $variant) {
+        /**@var $variant \Shopware\Models\Article\Detail */
+        foreach ($updated->getDetails() as $variant) {
             $this->assertTrue(in_array($variant->getNumber(), array('turn', 'turn.1', 'turn.2', 'turn.3'), 'Variant number dont match'));
 
             $this->assertArrayCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
 
-            /**@var $option \Shopware\Models\Article\Configurator\Option*/
-            foreach($variant->getConfiguratorOptions() as $option) {
+            /**@var $option \Shopware\Models\Article\Configurator\Option */
+            foreach ($variant->getConfiguratorOptions() as $option) {
                 $this->assertTrue(in_array($option->getName(), array('M', 'S', 'blau', 'grün')));
             }
         }
