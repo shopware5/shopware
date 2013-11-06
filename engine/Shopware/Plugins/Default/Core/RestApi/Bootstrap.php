@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,87 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins_Backend
- * @subpackage Backend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
-// todo@bc put to seperate file and find better name
-class Shopware_Auth_Adapter_Http_Resolver_Static implements Zend_Auth_Adapter_Http_Resolver_Interface
-{
-    /**
-     * Contains the shopware model manager
-     *
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $modelManager = null;
-
-    public function __construct(\Shopware\Components\Model\ModelManager $modelManager = null)
-    {
-        if ($modelManager !== null) {
-            $this->setModelManager($modelManager);
-        }
-    }
-
-    /**
-     * @param \Shopware\Components\Model\ModelManager $modelManager
-     */
-    public function setModelManager(\Shopware\Components\Model\ModelManager $modelManager)
-    {
-        $this->modelManager = $modelManager;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\ModelManager
-     */
-    public function getModelManager()
-    {
-        return $this->modelManager;
-    }
-
-    /**
-     * Resolve username/realm to password/hash/etc.
-     *
-     * @param  string $username Username
-     * @param  string $realm    Authentication Realm
-     * @return string|false User's shared secret, if the user is found in the
-     *         realm, false otherwise.
-     */
-    public function resolve($username, $realm)
-    {
-        $modelManager = $this->getModelManager();
-
-
-        if ($modelManager === null) {
-            throw new Exception('An instance of model manager has to be set');
-        }
-
-        $repository = $modelManager->getRepository('Shopware\Models\User\User');
-        $user       = $repository->findOneBy(array('username' => $username, 'active' => true));
-
-        if (!$user) {
-            return false;
-        }
-
-        if ($user->getApiKey() === null) {
-            return false;
-        }
-
-        $apiKey = $user->getApiKey();
-
-        return md5($username . ':' . $realm . ':' . $apiKey);
-    }
-}
-
 /**
- * Shopware Auth Plugin
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   ShopwarePlugins\RestApi
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -207,6 +132,11 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
      */
     public function onDispatchLoopStartup(Enlight_Controller_EventArgs $args)
     {
+        $this->Application()->Loader()->registerNamespace(
+            'ShopwarePlugins\\RestApi\\Components',
+                __DIR__ . '/Components/'
+        );
+
         $this->request  = $args->getSubject()->Request();
         $this->response = $args->getSubject()->Response();
 
@@ -303,7 +233,9 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         ));
 
         $adapter->setDigestResolver(
-            new Shopware_Auth_Adapter_Http_Resolver_Static(Shopware()->Models())
+            new \ShopwarePlugins\RestApi\Components\StaticResolver(
+                Shopware()->Models()
+            )
         );
 
         $adapter->setRequest($this->request);
