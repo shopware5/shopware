@@ -618,4 +618,102 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
     }
 
+
+    public function testCreateUseConfiguratorId()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('PARTIAL groups.{id}', 'PARTIAL options.{id}'))
+                ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+                ->innerJoin('groups.options', 'options')
+                ->setFirstResult(0)
+                ->setMaxResults(2);
+
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
+        $paginator = Shopware()->Models()->createPaginator($query);
+
+        $configurator = $paginator->getIterator()->getArrayCopy();
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->setFirstResult(0)
+            ->setMaxResults(5);
+
+        $options = $builder->getQuery()->getArrayResult();
+
+        $variantNumber = 'swVariant' . uniqid();
+
+        $testData = array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 1,
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
+                )
+            ),
+            'variants' => array(
+                array(
+                    'number' => $variantNumber,
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => array(
+                        array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
+                    ),
+                    'configuratorOptions' => $options
+                )
+            ),
+            'configuratorSet' => array(
+                'name' => 'Test-Set',
+                'groups' => $configurator
+            )
+        );
+
+        $article = $this->resource->create($testData);
+
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
+        $data = $this->resource->getOne($article->getId());
+
+        $this->assertArrayCount(5, $data['details'][0]['configuratorOptions']);
+
+        return $variantNumber;
+    }
+
+    /**
+     * @depends testCreateUseConfiguratorId
+     */
+    public function testUpdateUseConfiguratorIds($variantNumber) {
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->setFirstResult(2)
+            ->setMaxResults(2);
+
+        $options = $builder->getQuery()->getArrayResult();
+
+        $id = Shopware()->Db()->fetchOne("SELECT articleID FROM s_articles_details WHERE ordernumber = ?", array($variantNumber));
+
+        $data = array(
+            'variants' => array(
+                array(
+                    'number' => $variantNumber,
+                    'configuratorOptions' => $options
+                )
+            )
+        );
+
+        $this->resource->update($id, $data);
+
+        $data = $this->resource->getOne($id);
+        $this->assertArrayCount(2, $data['details'][0]['configuratorOptions']);
+    }
+
 }
