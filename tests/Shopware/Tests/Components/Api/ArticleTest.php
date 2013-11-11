@@ -953,4 +953,161 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertArrayCount(2, $data['details'][0]['configuratorOptions']);
     }
 
+
+
+    public function testCreateWithMainImages()
+    {
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT
+        );
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+            'media.id as mediaId',
+            '2 as main'
+        ))
+            ->from('Shopware\Models\Media\Media', 'media')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult(10)
+            ->setMaxResults(4);
+
+        /**
+         * Get random images.
+         * Only want to check if the main flag will be used.
+         */
+        $images = $builder->getQuery()->getArrayResult();
+        $images[2]['main'] = 1;
+        $expectedMainId = $images[2]['mediaId'];
+
+        $data = $this->getSimpleTestData();
+        $data['images'] = $images;
+        $article = $this->resource->create($data);
+
+        $this->assertArrayCount(4, $article->getImages());
+
+        $mainFlagExists = false;
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            if ($image->getMain() === 1) {
+                $mainFlagExists = true;
+                $this->assertEquals($expectedMainId, $image->getMedia()->getId());
+            }
+        }
+        $this->assertTrue($mainFlagExists);
+        return $article->getId();
+    }
+
+
+    /**
+     * @depends testCreateWithMainImages
+     */
+    public function testUpdateWithSingleMainImage($articleId)
+    {
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($articleId);
+
+        $updateImages = array();
+        $newId = null;
+        foreach($article['images'] as $image) {
+            if ($image['main'] !== 1) {
+                $updateImages['images'][] = array(
+                    'id' => $image['id'],
+                    'main' => 1
+                );
+                $newId = $image['id'];
+                break;
+            }
+        }
+        $article = $this->resource->update($articleId, $updateImages);
+
+        $this->assertArrayCount(4, $article->getImages());
+
+        $hasMain = false;
+        foreach($article->getImages() as $image) {
+            if ($image->getMain() === 1) {
+                $hasMain = true;
+                $this->assertEquals($image->getId(), $newId);
+            }
+        }
+        $this->assertTrue($hasMain);
+
+        return $article->getId();
+    }
+
+    /**
+     * @depends testUpdateWithSingleMainImage
+     */
+    public function testUpdateWithMainImage($articleId)
+    {
+        $this->resource->getManager()->clear();
+
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($articleId);
+
+        $updateImages = array();
+        $lastMainId = null;
+
+        foreach($article['images'] as $image) {
+            $newImageData = array(
+                'id' => $image['id'],
+                'main' => $image['main']
+            );
+
+            if ($image['main'] == 1) {
+                $lastMainId = $image['id'];
+                $newImageData['main'] = 2;
+            }
+
+            $updateImages['images'][] = $newImageData;
+        }
+
+        $newMainId = null;
+        foreach($updateImages['images'] as &$image) {
+            if ($image['id'] !== $lastMainId) {
+                $image['main'] = 1;
+                $newMainId = $image['id'];
+                break;
+            }
+        }
+        $article = $this->resource->update($articleId, $updateImages);
+        $this->assertArrayCount(4, $article->getImages());
+
+        $hasMain = false;
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            if ($image->getMain() === 1) {
+                $hasMain = true;
+                $this->assertEquals($newMainId, $image->getId());
+            }
+        }
+        $this->assertTrue($hasMain);
+    }
+
+    private function getSimpleTestData() {
+        return array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2
+        );
+    }
 }
