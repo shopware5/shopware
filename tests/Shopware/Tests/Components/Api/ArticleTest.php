@@ -625,6 +625,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $builder->select(array('PARTIAL groups.{id}', 'PARTIAL options.{id}'))
                 ->from('Shopware\Models\Article\Configurator\Group', 'groups')
                 ->innerJoin('groups.options', 'options')
+                ->orderBy('groups.position', 'ASC')
+                ->addOrderBy('options.position', 'ASC')
                 ->setFirstResult(0)
                 ->setMaxResults(2);
 
@@ -637,6 +639,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
             ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->addOrderBy('options.position', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(5);
 
@@ -667,9 +670,32 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'prices' => array(
                         array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
                     ),
+                    /**
+                     * 0 =>
+                     *  array (
+                     *      'optionId' => 11,
+                     *      'groupId' => 5,
+                     *  ),
+                     * 1 =>
+                     *  array (
+                     *      'optionId' => 35,
+                     *      'groupId' => 5,
+                     *  )
+                     */
                     'configuratorOptions' => $options
                 )
             ),
+            /**
+             * array(
+             *    'name' => 'Test-Set'
+             *    'groups' => array(
+             *        'id' => 5,
+             *        'options' = array(
+             *            'id' => 11
+             *        )
+             *    )
+             * )
+             */
             'configuratorSet' => array(
                 'name' => 'Test-Set',
                 'groups' => $configurator
@@ -694,6 +720,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
             ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->addOrderBy('options.position', 'ASC')
             ->setFirstResult(2)
             ->setMaxResults(2);
 
