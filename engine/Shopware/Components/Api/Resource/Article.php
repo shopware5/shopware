@@ -1351,9 +1351,13 @@ class Article extends Resource
 
             // if image is set as main set other images to secondary
             if ($image->getMain() == 1) {
-                /** @var $image \Shopware\Models\Article\Image */
+                /** @var $otherImage \Shopware\Models\Article\Image */
                 foreach ($images as $otherImage) {
-                    $otherImage->setMain(2);
+                    //only update existing images which are not the current processed image.
+                    //otherwise the main flag won't be changed.
+                    if ($otherImage->getId() !== $image->getId()) {
+                        $otherImage->setMain(2);
+                    }
                 }
             }
 
