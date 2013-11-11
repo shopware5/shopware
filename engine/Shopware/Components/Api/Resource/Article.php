@@ -172,7 +172,7 @@ class Article extends Resource
      * @param $articleId
      * @return mixed
      */
-    public function getArticleConfiguratorSet($articleId)
+    protected function getArticleConfiguratorSet($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('configuratorSet', 'groups'))
@@ -193,7 +193,7 @@ class Article extends Resource
      * @param $articleId
      * @return array
      */
-    public function getArticleImages($articleId)
+    protected function getArticleImages($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('images'))
@@ -213,7 +213,7 @@ class Article extends Resource
      * @param $articleId
      * @return array
      */
-    public function getArticleDownloads($articleId)
+    protected function getArticleDownloads($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('downloads'))
@@ -232,7 +232,7 @@ class Article extends Resource
      * @param $articleId
      * @return array
      */
-    public function getArticleLinks($articleId)
+    protected function getArticleLinks($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('links'))
@@ -254,7 +254,7 @@ class Article extends Resource
      * @param $articleId
      * @return array
      */
-    public function getArticleCategories($articleId)
+    protected function getArticleCategories($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('categories.id', 'categories.name'))
@@ -274,7 +274,7 @@ class Article extends Resource
      * @param $articleId
      * @return mixed
      */
-    public function getArticleSimilar($articleId)
+    protected function getArticleSimilar($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('article', 'PARTIAL similar.{id, name}'))
@@ -295,7 +295,7 @@ class Article extends Resource
      * @param $articleId
      * @return mixed
      */
-    public function getArticleRelated($articleId)
+    protected function getArticleRelated($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('article', 'PARTIAL related.{id, name}'))
@@ -317,7 +317,7 @@ class Article extends Resource
      * @param $articleId
      * @return array
      */
-    public function getArticleVariants($articleId)
+    protected function getArticleVariants($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('variants', 'prices', 'options'))
@@ -491,7 +491,7 @@ class Article extends Resource
 
         if (!$article) {
             throw new ApiException\NotFoundException("Article by id $id not found");
-        } 
+        }
 
         $translations = array();
         if (!empty($params['translations'])) {
