@@ -523,11 +523,11 @@ class Article extends Resource
 
                     /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
                     foreach ($availableGroups as $availableGroup) {
-                        if ($availableGroup->getName() == $group || $availableGroup->getId() === $configuratorOption['groupId']) {
+                        if ($availableGroup->getName() == $group || $availableGroup->getId() == $configuratorOption['groupId']) {
                             $optionExists = false;
                             /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
                             foreach ($availableGroup->getOptions() as $availableOption) {
-                                if ($availableOption->getName() == $option || $availableOption->getId() === $configuratorOption['optionId']) {
+                                if ($availableOption->getName() == $option || $availableOption->getId() == $configuratorOption['optionId']) {
                                     $assignedOptions->add($availableOption);
                                     $optionExists = true;
                                     break;
