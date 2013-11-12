@@ -1088,6 +1088,50 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertTrue($hasMain);
     }
 
+
+    /**
+     * This unit test, tests if the attribute fields are translatable.
+     */
+    public function testCreateTranslation()
+    {
+        $data = $this->getSimpleTestData();
+
+        $definedTranslation = array(
+            array(
+                'shopId' => 2,
+                'name' => 'English-Name',
+                'description' => 'English-Description',
+                'descriptionLong' => 'English-DescriptionLong',
+                'keywords' => 'English-Keywords',
+                'packUnit' => 'English-PackUnit'
+            )
+        );
+
+        for($i=1; $i<=20; $i++) {
+            $definedTranslation[0]['attr' . $i] = 'English-Attr' . $i;
+        }
+
+        $data['translations'] = $definedTranslation;
+
+        $article = $this->resource->create($data);
+        $newData = $this->resource->getOne($article->getId());
+
+        $savedTranslation = $newData['translations'][2];
+        $definedTranslation = $definedTranslation[0];
+
+        $this->assertEquals($definedTranslation['name'], $savedTranslation['name']);
+        $this->assertEquals($definedTranslation['description'], $savedTranslation['description']);
+        $this->assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
+        $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
+
+        for($i=1; $i<=20; $i++) {
+            $attr = 'attr' . $i;
+            $this->assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
+        }
+    }
+
+
     private function getSimpleTestData() {
         return array(
             'name' => 'Testartikel',

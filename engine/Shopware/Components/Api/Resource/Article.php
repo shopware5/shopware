@@ -1635,13 +1635,14 @@ class Article extends Resource
      */
     public function writeTranslations($articleId, $translations)
     {
-        $whitelist = array(
+        $whitelist = $this->getAttributeProperties();
+        $whitelist = array_merge($whitelist, array(
             'name',
             'description',
             'descriptionLong',
             'keywords',
             'packUnit'
-        );
+        ));
 
         $translationWriter = new \Shopware_Components_Translation();
         foreach ($translations as $translation) {
@@ -1654,6 +1655,36 @@ class Article extends Resource
             $translationWriter->write($shop->getId(), 'article', $articleId, $data);
         }
     }
+
+    /**
+     * Returns all none association property of the article class.
+     * @return array
+     */
+    private function getAttributeProperties()
+    {
+        $metaData = $this->getManager()->getClassMetadata('\Shopware\Models\Attribute\Article');
+        $properties = array();
+
+        foreach($metaData->getReflectionProperties() as $property) {
+            if ($metaData->hasAssociation($property->getName())) {
+                continue;
+            }
+            $properties[$property->getName()] = $property->getName();
+        }
+
+        foreach($metaData->getAssociationMappings() as $property => $mapping) {
+            $name = $metaData->getSingleAssociationJoinColumnName($property);
+            $field = $metaData->getFieldForColumn($name);
+            unset($properties[$field]);
+        }
+
+        foreach($metaData->getIdentifierFieldNames() as $property) {
+            unset($properties[$property]);
+        }
+
+        return array_values($properties);
+    }
+
 
     /**
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
