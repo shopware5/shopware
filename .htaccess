@@ -12,6 +12,9 @@ RewriteCond %{REQUEST_URI} !(\/media\/(archive|banner|image|music|pdf|unknown|vi
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
+
+# Fix missing authorization-header on fast_cgi installations
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
 # Staging-Rules start
