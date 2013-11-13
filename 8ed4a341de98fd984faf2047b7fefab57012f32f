@@ -1,0 +1,4 @@
+From: bugfix/next/sw-4532-add-filter-unit-tests
+To: next
+Conflict: (content) Merge conflict in tests/Shopware/Tests/Components/Api/ArticleTest.php
+	MODIFY|tests/Shopware/Tests/Components/Api/ArticleTest.php
