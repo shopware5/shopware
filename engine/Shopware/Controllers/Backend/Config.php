@@ -301,8 +301,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getTableListAction()
     {
         $name = $this->Request()->get('name');
+        $limit = intval($this->Request()->get('limit'));
+        $start = intval($this->Request()->get('start'));
         $table = $this->getTable($name);
         $filter = $this->Request()->get('filter');
+        $data = array();
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'name') {
             $search = $filter[0]['value'];
         }
@@ -310,6 +313,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             case 'cronJob':
                 $select = Shopware()->Db()->select();
                 $select->from(array('c' => $table));
+                if (isset($search)) {
+                    $select->where(
+                        'c.name LIKE :search OR ' .
+                        'c.action LIKE :search'
+                    );
+                    $select->bind(
+                        array(
+                            'search' => $search
+                        )
+                    );
+                }
+                $select->limit($limit, $start);
                 $data = Shopware()->Db()->fetchAll($select);
                 foreach ($data as $key => &$row) {
                     $row = array(
@@ -329,6 +344,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     );
                     $row['data'] = !is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
                 }
+                //get the total count
+                $select->reset(Zend_Db_Select::FROM);
+                $select->reset(Zend_Db_Select::LIMIT_COUNT);
+                $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+                $select->from(array('c' => $table), array('count(*) as total'));
+                $totalCount = Shopware()->Db()->fetchOne($select);
+
                 break;
             case 'searchTable':
                 $select = Shopware()->Db()->select();
@@ -346,30 +368,35 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $data = Shopware()->Db()->fetchAll($select);
                 break;
             case 'searchField':
-                $select = Shopware()->Db()->select();
-                $select->from(array('f' => $table));
-                $select->joinLeft(
-                    array('t' => 's_search_tables'),
-                    't.id=f.tableID',
-                    array('tableId' => 'id', 'table')
-                );
-                if(isset($search)) {
-                    $select->where(
-                        'f.name LIKE :search OR '.
-                        'f.field LIKE :search OR '.
-                        't.table LIKE :search'
-                    );
-                    $select->bind(array(
-                        'search' => $search
-                    ));
+                $sqlParams = array();
+                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table
+                        FROM ' . Shopware()->Db()->quoteTableAs($table, 'f') . '
+                        LEFT JOIN s_search_tables t on f.tableID = t.id';
+
+                if (isset($search)) {
+                    $sql .= ' WHERE f.name LIKE :search OR ' .
+                            'f.field LIKE :search OR ' .
+                            't.table LIKE :search';
+                    $sqlParams = array('search' => $search);
                 }
-                $data = Shopware()->Db()->fetchAll($select);
+
+                if (!empty($limit)) {
+                    $sql .= ' Limit ' . Shopware()->Db()->quote($start) . ',' . Shopware()->Db()->quote($limit);
+                }
+
+                $data = Shopware()->Db()->fetchAll($sql, $sqlParams);
+
+                //get the total count
+                $sql = "SELECT FOUND_ROWS()";
+                $totalCount = Shopware()->Db()->fetchOne($sql);
+
                 break;
             default:
                 break;
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $totalCount = empty($totalCount) ? count($data) : $totalCount;
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $totalCount));
     }
 
     /**
