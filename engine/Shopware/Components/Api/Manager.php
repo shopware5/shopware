@@ -45,9 +45,14 @@ class Manager
         /** @var $resource Resource\Resource */
         $resource = new $class();
 
-        $resource->setManager(Shopware()->Models());
-        $resource->setAcl(Shopware()->Acl());
-        $resource->setRole(Shopware()->Auth()->getIdentity()->role);
+        $container = Shopware()->ResourceLoader();
+
+        $resource->setManager($container->get('models'));
+
+        if ($container->initialized('Auth')) {
+            $resource->setAcl($container->get('acl'));
+            $resource->setRole($container->get('auth')->getIdentity()->role);
+        }
 
         return $resource;
     }
