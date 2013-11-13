@@ -1985,6 +1985,9 @@ class sArticles
         ));
 
         foreach ($getSupplier as $supplierKey => $supplierValue) {
+            if(!Shopware()->Shop()->getDefault()) {
+                $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
+            }
             if ($supplierValue["image"]) {
                 $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
             }
