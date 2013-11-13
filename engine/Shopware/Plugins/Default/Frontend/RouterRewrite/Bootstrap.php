@@ -247,6 +247,9 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             case 'cat':
                 $orgQuery ['sCategory'] = $query['sCategory'];
                 break;
+            case 'supplier':
+                $orgQuery ['sSupplier'] = $query['sSupplier'];
+                break;
             case 'campaign':
                 $orgQuery ['sCategory'] = $query['sCategory'];
                 $orgQuery ['emotionId'] = $query['emotionId'];

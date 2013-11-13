@@ -32,10 +32,17 @@
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
+     * Translation handler.
+     * @var Shopware_Components_Translation
+     */
+    private $translator;
+
+    /**
      * Index action method
      */
     public function indexAction()
     {
+        $supplierId = $this->Request()->getParam('sSupplier');
 
         $categoryId = $this->Request()->getParam('sCategory');
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
@@ -62,6 +69,39 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return $this->redirect($location, array('code' => 301));
         }
 
+        if (Shopware()->Config()->get('seoSupplier') === true && $categoryContent['parentId'] == 1 && $this->Request()->getParam('sSupplier', false)) {
+            $supplier = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier')->find($this->Request()->getParam('sSupplier'));
+
+            if(Shopware()->Shop()->getDefault()) {
+                $supplierName = $supplier->getName();
+                $supplierTitle = $supplier->getMetaTitle();
+                $categoryContent['metadescription'] = $supplier->getMetaDescription();
+                $categoryContent['metakeywords'] = $supplier->getMetaKeywords();
+            } else {
+                $translation = $this->getTranslator()->read(Shopware()->Shop()->getId(), 'supplier', $supplier->getId());
+                if (array_key_exists('metaTitle', $translation))
+                    $supplierTitle = $translation['metaTitle'];
+                if (array_key_exists('name', $translation))
+                    $supplierName = $translation['name'];
+                if (array_key_exists('metaDescription', $translation))
+                    $categoryContent['metadescription'] = $translation['metaDescription'];
+                if (array_key_exists('metaKeywords', $translation))
+                    $categoryContent['metakeywords'] = $translation['metaKeywords'];
+            }
+            $path = $this->Front()->Router()->assemble(array(
+                'sViewport' => 'supplier',
+                'sSupplier' => $supplier->getId(),
+            ));
+            if ($path) {
+                $categoryContent['sSelfCanonical'] = $path;
+            }
+            if (!empty($supplierTitle)) {
+                $categoryContent['title'] = $supplierTitle.' | '.Shopware()->Shop()->getName();
+            } elseif(!empty($supplierName)) {
+                $categoryContent['title'] = $supplierName;
+            }
+            $categoryContent['canonicalTitle'] = $supplierName;
+        }
 
         /**@var $repository \Shopware\Models\Emotion\Repository*/
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
@@ -164,7 +204,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         ));
 
         if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, null);
+            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, $supplierId, null);
         }
 
         if(!empty($articleProperties['filterOptions'])) {
@@ -195,5 +235,17 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
         return array_reverse($breadcrumb);
+    }
+
+    /**
+     * @return \Shopware_Components_Translation
+     */
+    private function getTranslator()
+    {
+        if (null === $this->translator) {
+            $this->translator = new Shopware_Components_Translation();
+        }
+
+        return $this->translator;
     }
 }

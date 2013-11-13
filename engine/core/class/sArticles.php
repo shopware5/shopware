@@ -1397,6 +1397,9 @@ class sArticles
             return array();
         }
         $supplier = Shopware()->Models()->toArray($supplier);
+        if(!Shopware()->Shop()->getDefault()) {
+            $supplier = $this->sGetTranslation($supplier, $supplier['id'], 'supplier');
+        }
         $supplier['link'] = $this->sSYSTEM->sCONFIG['sBASEFILE'];
         $supplier['link'] .= '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1&sSupplier=0';
 
@@ -1822,7 +1825,7 @@ class sArticles
         return $sortMode;
     }
 
-    public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
+    public function sGetCategoryProperties($categoryId = null, $supplierId = null, $activeFilters = null)
     {
         if ($categoryId === null
             && !empty($this->sSYSTEM->_GET["sCategory"])
@@ -1836,12 +1839,26 @@ class sArticles
         }
 
         $categoryId = (int)$categoryId;
+        $supplierId = (int)$supplierId;
         $activeFilters = (array)$activeFilters;
 
-        $getProperties = $this->getCategoryFilters($categoryId, $activeFilters);
+        if ($categoryId != Shopware()->Shop()->getCategory()->getId()) {
+            $getProperties = $this->getCategoryFilters($categoryId, $activeFilters, $supplierId);
+        } else {
+            $getProperties = array();
+        }
 
-        $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
-            . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
+
+        if(!empty($this->sSYSTEM->_GET["sViewport"]) && $this->sSYSTEM->_GET["sViewport"] == 'supplier' && $supplierId) {
+            $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
+                . '?sViewport=supplier&sSupplier=' . $supplierId;
+            if ($categoryId !== Shopware()->Shop()->getCategory()->getId()) {
+                $baseLink .= '&sCategory=' . $categoryId;
+            }
+        } else {
+            $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
+                . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
+        }
 
         $propertyArray = array();
 
@@ -1972,7 +1989,10 @@ class sArticles
                 $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
             }
 
-            $query = array('sViewport' => 'cat', 'sCategory' => $id, 'sPage' => 1, 'sSupplier' => $supplierValue["id"]);
+            $query = array('sViewport' => 'supplier','sSupplier' => $supplierValue["id"]);
+            if($id !== Shopware()->Shop()->getCategory()->getId()) {
+                $query['sCategory'] = $id;
+            }
             $getSupplier[$supplierKey]["link"] = Shopware()->Router()->assemble($query);
         }
 
@@ -3014,7 +3034,7 @@ class sArticles
             // This is most likely dead code. I'll update it for now, as part of SW-6977, but its
             // not tested nor should it be in use anywhere
             $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                . "sViewport=cat&sSupplier=" . $getArticle['supplierID']
+                . "sViewport=supplier&sSupplier=" . $getArticle['supplierID']
                 . "&sSearchText=" . urlencode($getArticle['supplierName']);
 
             $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
@@ -4478,7 +4498,7 @@ class sArticles
     }
 
     /**
-     * Get translation for an object (article / variant / link / download)
+     * Get translation for an object (article / variant / link / download / supplier)
      * @param $data
      * @param $id
      * @param $object
@@ -4524,6 +4544,11 @@ class sArticles
                 $map = array(
                     'description' => 'groupdescription',
                     'name' => 'groupname',
+                );
+                break;
+            case 'supplier':
+                $map = array(
+                    'meta_title' => 'title',
                 );
                 break;
         }

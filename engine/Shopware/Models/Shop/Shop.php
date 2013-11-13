@@ -31,6 +31,7 @@
  */
 
 namespace Shopware\Models\Shop;
+
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
     Doctrine\Common\Collections\ArrayCollection;
@@ -57,6 +58,12 @@ class Shop extends ModelEntity
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
     private $mainId;
+
+    /**
+     * @var integer $categoryId
+     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     */
+    private $categoryId;
 
     /**
      * @var Shop $main

@@ -191,12 +191,12 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
             $this->RewriteTable()->sCreateRewriteTableBlog();
+            $this->RewriteTable()->sCreateRewriteTableSuppliers($shop);
             $this->RewriteTable()->sCreateRewriteTableStatic();
         }
 
         return true;
     }
-
 
     /**
      * Event listener function of the search index rebuild cron job.
