@@ -422,10 +422,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data["values"] = $temporaryValues;
 
             foreach ($data["values"] as &$value) {
-                if (empty($category)) {
-                    $category = Shopware()->Shop()->getCategory()->getId();
+                $query = array('sViewport' => 'supplier', 'sSupplier' => $value["id"]);
+                if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
+                    $query['sCategory'] = $category;
                 }
-                $query = array('sViewport' => 'cat', 'sPage' => 1, 'sCategory' => $category, 'sSupplier' => $value["id"]);
+
                 $value["link"] = Shopware()->Router()->assemble($query);
             }
         }
