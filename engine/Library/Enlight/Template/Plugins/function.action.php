@@ -70,7 +70,7 @@ function smarty_function_action($params, Enlight_Template_Default $template)
 
     $params = array_merge($userParams, $params);
 
-    $request = clone $request;
+    $request  = clone $request;
     $response = clone $response;
 
     $request->clearParams();
@@ -78,15 +78,17 @@ function smarty_function_action($params, Enlight_Template_Default $template)
              ->clearRawHeaders()
              ->clearBody();
 
-    if(isset($params['module'])) {
+    if (isset($params['module'])) {
         $request->setModuleName($params['module'])
                 ->setControllerName('index')
                 ->setActionName('index');
     }
-    if(isset($params['controller'])) {
+    if (isset($params['controller'])) {
         $request->setControllerName($params['controller'])
                 ->setActionName('index');
     }
+    $request->setParam('_isSubrequest', true);
+
     $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
     $request->setParams($params)
             ->setDispatched(true);

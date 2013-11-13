@@ -297,4 +297,13 @@ Ext.onReady(function() {
         override: "Ext.form.RadioGroup",
         blankText: "You must select one item in this group"
     });
+    Ext.define('Shopware.apps.Base.view.element.en_GB.BooleanSelect', {
+        override:'Shopware.apps.Base.view.element.BooleanSelect',
+
+        store: [
+            ["", 'Inherited'],
+            [true, 'Yes'],
+            [false, 'No']
+        ]
+    });
 });
