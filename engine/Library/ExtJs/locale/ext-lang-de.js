@@ -325,4 +325,13 @@ Ext.onReady(function() {
         override: "Ext.form.RadioGroup",
         blankText: "Du mußt einen Eintrag aus der Gruppe auswählen"
     });
+    Ext.define('Shopware.apps.Base.view.element.de.BooleanSelect', {
+        override:'Shopware.apps.Base.view.element.BooleanSelect',
+
+        store: [
+            ["", 'Vererbt'],
+            [true, 'Ja'],
+            [false, 'Nein']
+        ]
+    });
 });

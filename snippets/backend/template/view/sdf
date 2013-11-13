@@ -1,19 +1,19 @@
 [default]
-title = "Template Selector"
+title = "Template selector"
 
-button_choose_file = "Choose File"
+button_choose_file = "Choose file"
 empty_text_choose_file = "Please choose a file.."
 message_upload_file = "Uploading your file..."
-button_start_upload = "Start Upload"
+button_start_upload = "Start upload"
 
-panel_more_information = "More Information"
+panel_more_information = "Additional information"
 
-tab_Installed_templates = "Installed Templates"
-tab_install_template = "Install Templates"
-tab_available_templates = "Available Templates"
+tab_Installed_templates = "Installed templates"
+tab_install_template = "Install templates"
+tab_available_templates = "Available templates"
 
 button_preview = "Preview"
-button_end_preview = "End Preview"
+button_end_preview = "End preview"
 
 button_enable = "Enable"
 badge_enabled = "Enabled"
@@ -23,11 +23,11 @@ info_author = "Author"
 info_name = "Name"
 info_description = "Description"
 info_license = "License"
-info_esi_compatible = "ESI Compatible"
-info_style_assist_compatible = "StyleAssist Compatible"
-info_emotions_compatible = "EMOTIONS Compatible"
+info_esi_compatible = "ESI compatible"
+info_style_assist_compatible = "StyleAssist compatible"
+info_emotions_compatible = "Shopping worlds Compatible"
 
-preview_message = "<h1>Template Preview enabled</h1>You can see the selected template in the Storefront.<br>Click to <a href='#' class='end'>end</a> Preview or permanently <a href='#' class='enable'>enable</a> this template."
+preview_message = "<h1>Template preview enabled</h1>You can see the selected template in the frontend.<br>Click to <a href='#' class='end'>end</a> preview or permanently <a href='#' class='enable'>enable</a> this template."
 
 [de_DE : default]
 title = "Template-Auswahl"
