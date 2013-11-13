@@ -36,7 +36,19 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        return $this->forward("defaultSearch");
+        if ($this->Request()->getParam('sSearchMode') == "supplier") {
+            $params = array(
+                'sViewport' => 'supplier'
+            );
+            if ($page = $this->Request()->getParam('sPage')) {
+                $params['p'] = $page;
+            }
+            if ($supplierId = $this->Request()->getParam('sSearch')) {
+                $params['sSupplier'] = $supplierId;
+            }
+
+            return $this->redirect($params, array('code' => 301));
+        }
     }
 
     /**
