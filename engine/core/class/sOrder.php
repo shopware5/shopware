@@ -550,6 +550,16 @@ class sOrder
 			die("Fatal order failure, please try again later, order was not processed");
 		}
 
+        try {
+            $paymentData = Shopware()->Modules()->Admin()->sGetPaymentMeanById($this->sUserData["additional"]["user"]["paymentID"], Shopware()->Modules()->Admin()->sGetUserData());
+            $paymentClass = Shopware()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
+            if ($paymentClass) {
+                $paymentClass->createPaymentInstance($orderID, $this->sUserData["additional"]["user"]["id"], $this->sUserData["additional"]["user"]["paymentID"]);
+            }
+        } catch (\Exception $e) {
+            //Payment method code failure
+        }
+
         //new attribute table with shopware 4
         $attributeSql = "INSERT INTO s_order_attributes (orderID, attribute1, attribute2, attribute3, attribute4, attribute5, attribute6)
                 VALUES (

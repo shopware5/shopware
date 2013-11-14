@@ -111,6 +111,7 @@ Ext.define('Shopware.apps.Order', {
         'Tax',
         'Debit',
         'Payment',
+        'PaymentInstance',
         'Voucher',
         'Configuration',
         'Receipt',

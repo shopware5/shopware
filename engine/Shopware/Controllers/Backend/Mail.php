@@ -408,7 +408,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function sendTestmailAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'mail id found'));
+            $this->View()->assign(array('success' => false, 'message' => 'no mail id found'));
             return;
         }
 

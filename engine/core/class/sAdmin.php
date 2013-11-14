@@ -472,18 +472,36 @@ class sAdmin
      * @access public
      * @return object or false -
      */
-    public function sInitiatePaymentClass($paymentData){
-        include_once("paymentmeans/".$paymentData['class']);
-        $sPaymentObject = new sPaymentMean();
-        $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
+    public function sInitiatePaymentClass($paymentData) {
+        $dirs = array();
+
+        if(substr($paymentData['class'], -strlen('.php')) === '.php') {
+            $index = substr($paymentData['class'], 0, strpos($paymentData['class'], '.php'));
+        } else {
+            $index = $paymentData['class'];
+        }
+
+        $dirs = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_InitiatePaymentClass_AddClass',
+            $dirs,
+            array('subject' => $this)
+        );
+
+        $class = array_key_exists($index, $dirs)?$dirs[$index]:$dirs['default'];
+        if (!$class){
+            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment classes dir not loaded");
+            return false;
+        }
+
+        $sPaymentObject = new $class();
 
         if (!$sPaymentObject){
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment-Class not found");
             return false;
-        }else {
+        } else {
+            $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
             return $sPaymentObject;
         }
-
     }
 
     /**

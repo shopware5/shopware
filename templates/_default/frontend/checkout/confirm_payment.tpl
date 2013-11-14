@@ -38,6 +38,9 @@
 			{/block}
 		</div>
 	{/foreach}
+
+    <div class="doublespace"></div>
+    <input type="submit" value="{s namespace='frontend/checkout/confirm_left' name='ConfirmLinkChangePayment'}Ändern{/s}" class="button-middle small" />
 	<div class="clear">&nbsp;</div>
 </div>
 </form>
