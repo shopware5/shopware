@@ -17,14 +17,14 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
         INSERT IGNORE INTO `s_core_config_elements`
         (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
         VALUES
-        (@parent, 'sepaCompany', 's:0:"";', 'Firmenname', 'Firmenname', 'text', 0, 1, 1, NULL, NULL, NULL),
-        (@parent, 'sepaHeaderText', 's:0:"";', 'Kopftext', 'Kopftext', 'text', 0, 2, 1, NULL, NULL, NULL),
-        (@parent, 'sepaSellerId', 's:0:""', 'Gläubiger-Identifikationsnummer', 'Gläubiger-Identifikationsnummer', 'text', 0, 3, 1, NULL, NULL, NULL),
-        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandant an Kunde senden', 'SEPA Mandant an Kunde senden', 'checkbox', 0, 4, 1, NULL, NULL, NULL),
-        (@parent, 'sepaShowBic', 'i:1;', 'SEPA BIC Feld anzeigen', 'SEPA BIC Feld anzeigen', 'checkbox', 0, 5, 1, NULL, NULL, NULL),
-        (@parent, 'sepaRequireBic', 'i:1;', 'SEPA BIC Feld erforderlich', 'SEPA BIC Feld erforderlich', 'checkbox', 0, 6, 1, NULL, NULL, NULL),
-        (@parent, 'sepaShowBankName', 'i:1;', 'SEPA Kreditinstitut Feld anzeigen', 'SEPA Kreditinstitut Feld anzeigen', 'checkbox', 0, 7, 1, NULL, NULL, NULL),
-        (@parent, 'sepaRequireBankName', 'i:1;', 'SEPA Kreditinstitut Feld erforderlich', 'SEPA Kreditinstitut Feld erforderlich', 'checkbox', 0, 8, 1, NULL, NULL, NULL);
+        (@parent, 'sepaCompany', 's:0:"";', 'Firmenname', NULL, 'text', 0, 1, 1, NULL, NULL, NULL),
+        (@parent, 'sepaHeaderText', 's:0:"";', 'Kopftext', NULL, 'text', 0, 2, 1, NULL, NULL, NULL),
+        (@parent, 'sepaSellerId', 's:0:""', 'Gläubiger-Identifikationsnummer', NULL, 'text', 0, 3, 1, NULL, NULL, NULL),
+        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandat an Kunde senden', NULL, 'checkbox', 0, 4, 1, NULL, NULL, NULL),
+        (@parent, 'sepaShowBic', 'i:1;', 'SEPA BIC Feld anzeigen', NULL, 'checkbox', 0, 5, 1, NULL, NULL, NULL),
+        (@parent, 'sepaRequireBic', 'i:1;', 'SEPA BIC Feld erforderlich', NULL, 'checkbox', 0, 6, 1, NULL, NULL, NULL),
+        (@parent, 'sepaShowBankName', 'i:1;', 'SEPA Kreditinstitut Feld anzeigen', NULL, 'checkbox', 0, 7, 1, NULL, NULL, NULL),
+        (@parent, 'sepaRequireBankName', 'i:1;', 'SEPA Kreditinstitut Feld erforderlich', NULL, 'checkbox', 0, 8, 1, NULL, NULL, NULL);
 
         SET @elementOne = (SELECT id FROM s_core_config_elements WHERE name = 'sepaCompany' LIMIT 1);
         SET @elementTwo = (SELECT id FROM s_core_config_elements WHERE name = 'sepaHeaderText' LIMIT 1);
@@ -37,14 +37,14 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
 
         INSERT IGNORE INTO `s_core_config_element_translations` (`id`, `element_id`, `locale_id`, `label`, `description`)
         VALUES
-        (NULL, @elementOne, '2', 'Creditor name', 'Creditor name'),
-        (NULL, @elementTwo, '2', 'Header text', 'Header text'),
-        (NULL, @elementThree, '2', 'Creditor number', 'Creditor number'),
-        (NULL, @elementFour, '2', 'Send email', 'Send email'),
-        (NULL, @elementFive, '2', 'Show SEPA\'s BIC field', 'Send email'),
-        (NULL, @elementSix, '2', 'Require SEPA\'s BIC field', 'Send email'),
-        (NULL, @elementSeven, '2', 'Show SEPA\'s bank name field', 'Send email'),
-        (NULL, @elementEight, '2', 'Require SEPA\'s bank name field', 'Send email');
+        (NULL, @elementOne, '2', 'Creditor name', 'Name of the creditor to be included in the mandate.'),
+        (NULL, @elementTwo, '2', 'Header text', 'Header text of the mandate.'),
+        (NULL, @elementThree, '2', 'Creditor number', 'Number of the creditor to be included in the mandate.'),
+        (NULL, @elementFour, '2', 'Send email', 'Send email to the customer with the attached SEPA mandate file.'),
+        (NULL, @elementFive, '2', 'Show SEPA\'s BIC field', 'Allow customer to specify its BIC when filling in SEPA payment data.'),
+        (NULL, @elementSix, '2', 'Require SEPA\'s BIC field', 'Require customer to specify its BIC when filling in SEPA payment data. This option is ignored if the field is hidden.'),
+        (NULL, @elementSeven, '2', 'Show SEPA\'s bank name field', 'Allow customer to specify its bank name when filling in SEPA payment data.'),
+        (NULL, @elementEight, '2', 'Require SEPA\'s bank name field', 'Require customer to specify its bank name when filling in SEPA payment data. This option is ignored if the field is hidden.');
 
         CREATE TABLE IF NOT EXISTS `s_core_payment_instance` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
