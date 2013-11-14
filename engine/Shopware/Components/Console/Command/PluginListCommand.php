@@ -47,7 +47,7 @@ class PluginListCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:list')
+            ->setName('sw-plugin:list')
             ->setDescription('List plugins')
             ->addOption(
                 'filter',
@@ -75,6 +75,7 @@ class PluginListCommand extends ShopwareCommand
 
         $repository = $em->getRepository('Shopware\Models\Plugin\Plugin');
         $builder = $repository->createQueryBuilder('plugin');
+        $builder->addOrderBy('plugin.active', 'desc');
         $builder->addOrderBy('plugin.name');
 
         $filter = strtolower($input->getOption('filter'));
@@ -103,12 +104,13 @@ class PluginListCommand extends ShopwareCommand
                 $plugin->getLabel(),
                 $plugin->getVersion(),
                 $plugin->getAuthor(),
-                $plugin->getActive() ? 'Yes' : 'No'
+                $plugin->getActive() ? 'Yes' : 'No',
+                $plugin->getInstalled() ? 'Yes' : 'No'
             );
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Plugin', 'Label', 'Version', 'Author', 'Active'))
+        $table->setHeaders(array('Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'))
               ->setRows($rows);
 
         $table->render($output);
