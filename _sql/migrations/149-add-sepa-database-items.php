@@ -17,14 +17,14 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
         INSERT IGNORE INTO `s_core_config_elements`
         (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
         VALUES
-        (@parent, 'sepaCompany', 's:0:"";', 'Firmenname', 'Firmenname', 'text', 0, 1, 1, NULL, NULL, NULL),
-        (@parent, 'sepaHeaderText', 's:0:"";', 'Kopftext', 'Kopftext', 'text', 0, 2, 1, NULL, NULL, NULL),
-        (@parent, 'sepaSellerId', 's:0:""', 'Gläubiger-Identifikationsnummer', 'Gläubiger-Identifikationsnummer', 'text', 0, 3, 1, NULL, NULL, NULL),
-        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandat an Kunde senden', 'SEPA Mandat an Kunde senden', 'checkbox', 0, 4, 1, NULL, NULL, NULL),
-        (@parent, 'sepaShowBic', 'i:1;', 'SEPA BIC Feld anzeigen', 'SEPA BIC Feld anzeigen', 'checkbox', 0, 5, 1, NULL, NULL, NULL),
-        (@parent, 'sepaRequireBic', 'i:1;', 'SEPA BIC Feld erforderlich', 'SEPA BIC Feld erforderlich', 'checkbox', 0, 6, 1, NULL, NULL, NULL),
-        (@parent, 'sepaShowBankName', 'i:1;', 'SEPA Kreditinstitut Feld anzeigen', 'SEPA Kreditinstitut Feld anzeigen', 'checkbox', 0, 7, 1, NULL, NULL, NULL),
-        (@parent, 'sepaRequireBankName', 'i:1;', 'SEPA Kreditinstitut Feld erforderlich', 'SEPA Kreditinstitut Feld erforderlich', 'checkbox', 0, 8, 1, NULL, NULL, NULL);
+        (@parent, 'sepaCompany', 's:0:"";', 'Firmenname', NULL, 'text', 0, 1, 1, NULL, NULL, NULL),
+        (@parent, 'sepaHeaderText', 's:0:"";', 'Kopftext', NULL, 'text', 0, 2, 1, NULL, NULL, NULL),
+        (@parent, 'sepaSellerId', 's:0:""', 'Gläubiger-Identifikationsnummer', NULL, 'text', 0, 3, 1, NULL, NULL, NULL),
+        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandat an Kunde senden', NULL, 'checkbox', 0, 4, 1, NULL, NULL, NULL),
+        (@parent, 'sepaShowBic', 'i:1;', 'SEPA BIC Feld anzeigen', NULL, 'checkbox', 0, 5, 1, NULL, NULL, NULL),
+        (@parent, 'sepaRequireBic', 'i:1;', 'SEPA BIC Feld erforderlich', NULL, 'checkbox', 0, 6, 1, NULL, NULL, NULL),
+        (@parent, 'sepaShowBankName', 'i:1;', 'SEPA Kreditinstitut Feld anzeigen', NULL, 'checkbox', 0, 7, 1, NULL, NULL, NULL),
+        (@parent, 'sepaRequireBankName', 'i:1;', 'SEPA Kreditinstitut Feld erforderlich', NULL, 'checkbox', 0, 8, 1, NULL, NULL, NULL);
 
         SET @elementOne = (SELECT id FROM s_core_config_elements WHERE name = 'sepaCompany' LIMIT 1);
         SET @elementTwo = (SELECT id FROM s_core_config_elements WHERE name = 'sepaHeaderText' LIMIT 1);
