@@ -129,13 +129,13 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
             xtype: 'toolbar',
             dock: 'bottom',
             items: ['->', {
-                text: 'Abbrechen',
+                text: '{s name=account/login_window/cancel}Cancel{/s}',
                 cls: 'secondary',
                 handler: function() {
                     me.destroy();
                 }
             }, {
-                text: 'Login',
+                text: '{s name=account/login_window/login}Login{/s}',
                 cls: 'primary',
                 handler: function() {
                     me.fireEvent('login', me, me.formPanel, me.targetParams);
