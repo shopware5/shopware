@@ -3,7 +3,7 @@
 
     <p>{s name=SepaEmailCreditorNumber}Gläubiger-Identifikationsnummer{/s} <strong>{$config.sepaSellerId}</strong></p>
 
-    <p>{s name=SepaEmailMandateReference}Mandatsreferenz{/s} <strong>{$data->getId()}</strong></p>
+    <p>{s name=SepaEmailMandateReference}Mandatsreferenz <strong>{$data->getId()}</strong>{/s}</p>
 
     <h1>{s name=SepaEmailDirectDebitMandate}SEPA-Lastschriftmandat{/s}</h1>
 
