@@ -1,0 +1,6 @@
+From: feature/master/sw-7255-sepa-integration
+To: master
+Conflict: (content) Merge conflict in snippets/backend/partner/view/partner.ini
+	MODIFY|snippets/backend/partner/view/partner.ini
+Conflict: (content) Merge conflict in _sql/demo/latest.sql
+	MODIFY|_sql/demo/latest.sql
