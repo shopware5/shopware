@@ -30,6 +30,8 @@
  */
 
 /**
+ * @Deprecated: will be removed in the near future. Please refer to PaymentMethods plugin for more information and future-proof examples.
+ *
  * todo@all: Documentation
  */
 class sPaymentMean

@@ -179,7 +179,7 @@ class Shopware_Components_TemplateMail
             );
         }
 
-        // save currente context to mail model
+        // save current context to mail model
         $mailContext = json_encode($context);
         $mailContext = json_decode($mailContext, true);
         $mailModel->setContext($mailContext);
