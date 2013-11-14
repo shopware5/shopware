@@ -30,7 +30,7 @@
  * @author     $Author$
  */
 
-namespace   Shopware\Models\Payment;
+namespace Shopware\Models\Payment;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping AS ORM;
