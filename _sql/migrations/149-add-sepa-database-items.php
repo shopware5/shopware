@@ -104,8 +104,8 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelBankName', 'Ihre Bank', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelBankName', 'Name of bank', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelUseBillingData', 'Informationen auf Sepa-Mandat übertragen?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelUseBillingData', 'Use billing information for SEPA debit mandate', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
+            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelUseBillingData', 'Rechnungsadresse in Mandat übernehmen?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
+            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelUseBillingData', 'Use billing information for SEPA debit mandate?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaInfoFields', 'Die mit einem * markierten Felder sind Pflichtfelder.', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaInfoFields', 'The fields marked with * are required.', '2013-11-01 00:00:00', '2013-11-01 00:00:00');
 
