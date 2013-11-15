@@ -269,71 +269,82 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @param   Shopware_Components_Plugin_Bootstrap $plugin
+     * @param   Shopware_Components_Plugin_Bootstrap $bootstrap
      * @return  bool
      */
-    public function installPlugin(Shopware_Components_Plugin_Bootstrap $plugin)
+    public function installPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap)
     {
-        $newInfo = $plugin->getInfo();
+        $id = $this->getPluginId($bootstrap->getName());
+
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->Application()->Models();
+        $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
+
+        $newInfo = $bootstrap->getInfo();
         $newInfo = new Enlight_Config($newInfo, true);
         unset($newInfo->source);
-        $plugin->Info()->merge($newInfo);
-        $this->registerPlugin($plugin);
+        $bootstrap->Info()->merge($newInfo);
+        $this->registerPlugin($bootstrap);
 
-        $this->setConfig($plugin->getName(), $plugin->Config());
-        $id = $this->getPluginId($plugin->getName());
+        $this->setConfig($bootstrap->getName(), $bootstrap->Config());
 
-        $result = $plugin->install();
+        $result = $bootstrap->install();
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
-            $data = array(
-                'installation_date' => new Zend_Date(),
-                'update_date' => new Zend_Date(),
-            );
-            $this->Application()->Db()->update('s_core_plugins', $data, array('id=?' => $id));
+            $plugin->setInstalled(new Zend_Date());
+            $plugin->setUpdated(new Zend_Date());
+            $em->flush($plugin);
             $this->write();
 
-            $this->Application()->Models()->flush();
+            $em->flush();
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
         }
+
         return $result;
     }
 
     /**
      * Registers a plugin in the collection.
      *
-     * @param   Shopware_Components_Plugin_Bootstrap $plugin
+     * @param   Shopware_Components_Plugin_Bootstrap $bootstrap
      * @return  bool
      */
-    public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $plugin)
+    public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap)
     {
-        $result = $plugin->disable();
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->Application()->Models();
+
+        /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db */
+        $db = $this->Application()->Db();
+
+        $id = $this->getPluginId($bootstrap->getName());
+        $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
+
+        $result = $bootstrap->disable();
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
-            $result = $plugin->uninstall();
+            $result = $bootstrap->uninstall();
             $success = is_bool($result) ? $result : !empty($result['success']);
         }
+
         if ($success) {
-            $id = $plugin->getId();
-            $data = array(
-                'installation_date' => NULL,
-                'active' => 0
-            );
-            $this->Application()->Db()->update('s_core_plugins', $data, array('id=?' => $id));
+            $plugin->setInstalled(null);
+            $plugin->setActive(false);
+            $em->flush($plugin);
 
+            // Remove event subscribers
             $sql = 'DELETE FROM `s_core_subscribes` WHERE `pluginID`=?';
-            $this->Application()->Db()->query($sql, array($id));
+            $db->query($sql, array($id));
 
+            // Remove crontab-entries
             $sql = 'DELETE FROM `s_crontab` WHERE `pluginID`=?';
-            $this->Application()->Db()->query($sql, array($id));
+            $db->query($sql, array($id));
 
-            /** @var $em Shopware\Components\Model\ModelManager */
-            $em = $this->Application()->Models();
-
-            if ($plugin->hasForm()) {
-                $form = $plugin->Form();
+            // Remove form
+            if ($bootstrap->hasForm()) {
+                $form = $bootstrap->Form();
                 if ($form->getId()) {
                     $em->remove($form);
                 } else {
@@ -342,22 +353,26 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 $em->flush();
             }
 
+            // Remove menu-entry
             $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
             $query = $em->createQuery($query);
             $query->execute(array($id));
 
+            // Remove templates
             $query = 'DELETE FROM Shopware\Models\Shop\Template t WHERE t.pluginId = ?0';
             $query = $em->createQuery($query);
             $query->execute(array($id));
 
+            // Remove emotion-components
             $sql = "DELETE s_library_component_field, s_library_component
                     FROM s_library_component_field
                     INNER JOIN s_library_component
                         ON s_library_component.id = s_library_component_field.componentID
                         AND s_library_component.pluginID = :pluginId";
 
-            $this->Application()->Db()->query($sql, array(':pluginId' => $id));
+            $db->query($sql, array(':pluginId' => $id));
         }
+
         return $result;
     }
 
