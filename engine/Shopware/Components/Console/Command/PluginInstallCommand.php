@@ -24,8 +24,7 @@
 
 namespace Shopware\Components\Console\Command;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Plugin\Plugin;
+use Shopware\Components\Plugin\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,13 +68,13 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get('models');
-
+        /** @var Installer $installer */
+        $installer  = $this->container->get('shopware.plugin_installer');
         $pluginName = $input->getArgument('plugin');
 
-        $plugin = $this->getPluginByName($pluginName);
-        if ($plugin === null) {
+        try {
+            $plugin = $installer->getPluginByName($pluginName);
+        } catch (\Exception $e) {
             $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
             return 1;
         }
@@ -85,39 +84,14 @@ EOF
             return 1;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
-        $namespace = $bootstrap->Collection();
-
-        try {
-            $result = $namespace->installPlugin($bootstrap);
-        } catch (\Exception $e) {
-            $output->writeln(sprintf("Unable to install, got exception:\n%s\n", $e->getMessage()));
-            return 1;
-        }
-
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
-            if (isset($result['message'])) {
-                $output->writeln(sprintf("Unable to install, got message:\n%s\n", $result['message']));
-            } else {
-                $output->writeln(sprintf('Unable to install %s, an unknown error occured.', $pluginName));
-            }
-
-            return 1;
-        }
+        $installer->installPlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
         if (!$input->getOption('activate')) {
             return;
         }
 
-        $isAllowed = $bootstrap->enable();
-        $isAllowed = is_bool($isAllowed) ? $isAllowed : !empty($isAllowed['success']);
-        if ($isAllowed) {
-            $plugin->setActive(true);
-        }
-        $em->flush($plugin);
+        $installer->activatePlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been activated successfully.', $pluginName));
     }
