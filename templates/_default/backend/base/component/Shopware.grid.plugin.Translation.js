@@ -123,6 +123,11 @@ Ext.define('Shopware.grid.plugin.Translation', {
     actionColumnItemGetClassCallback: Ext.emptyFn,
 
     /**
+     * String with the error message for when subapplications are not supported
+     */
+    noSubApplicationSupportErrorText: 'Your ExtJS application does not support sub applications',
+
+    /**
      * Class constructor.
      */
     constructor: function() {
@@ -338,7 +343,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
 
         // Check if sub applications are supported
         if(typeof(Shopware.app.Application.addSubApplication) !== 'function') {
-            Ext.Error.raise('Your ExtJS application does not support sub applications');
+            Ext.Error.raise(me.noSubApplicationSupportErrorText);
         }
 
         //we iterate the translatableFields to set the record values as empty text
