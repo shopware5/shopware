@@ -175,6 +175,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 			$values = $this->Request()->getPost();
 			$values['payment'] = $this->Request()->getPost('register');
 			$values['payment'] = $values['payment']['payment'];
+			$values['isPost'] = true;
 			$this->View()->sFormData = $values;
             if($data instanceof \Shopware\Models\Customer\PaymentData) {
                 $tempFormData = array('paymentData' => $data);
