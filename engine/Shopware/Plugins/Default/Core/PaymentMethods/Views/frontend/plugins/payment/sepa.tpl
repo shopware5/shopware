@@ -26,7 +26,7 @@
         <p class="none clearfix">
             <label for="usebilling">{s name='PaymentSepaLabelUseBillingData'}{/s}:</label>
             <input name="sSepaUseBillingData" type="checkbox" id="usebilling" value="true"
-                {if $form_data.sSepaUseBillingData === 'true' || !($form_data.paymentData || $form_data.isPost) || ($form_data.paymentData && $form_data.paymentData->getUseBillingData())}
+                {if $form_data.sSepaUseBillingData === 'true' || !($form_data.paymentData || $form_data.isPost) || (!$form_data.isPost && $form_data.paymentData && $form_data.paymentData->getUseBillingData())}
                     checked="checked"
                 {/if}
                 class="checkbox {if $error_flags.sSepaBankHolder}instyle_error{/if}"/>
