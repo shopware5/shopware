@@ -205,6 +205,11 @@ Ext.define('Shopware.form.field.TinyMCE',
     autoSize: Ext.emptyFn,
 
     /**
+     * String with the error message for when no source files are included
+     */
+    noSourceErrorText: "The TinyMCE editor source files aren't included in the project",
+
+    /**
      * Initializes the component and sets it up to
      * match the requirements of the TinyMCE editor.
      *
@@ -312,7 +317,7 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Check if the TinyMCE editor files are included
         if(!window.tinyMCE) {
-            Ext.Error.raise("The TinyMCE editor source files aren't included in the project");
+            Ext.Error.raise(me.noSourceErrorText);
         }
 
         // Merge user settings with our default settings

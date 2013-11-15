@@ -84,7 +84,7 @@ Ext.define('Shopware.global.ErrorReporter', {
             path: '{s name=xhr/path}Path{/s}',
             type: '{s name=xhr/type}Type{/s}',
             unknown_type: '{s name=xhr/unknown_type}Unknown type{/s}',
-            reload_module: '{s name=xhr/reload_module}Reload module{/s}',
+            reload_module: '{s name=xhr/reload_module}Reload module{/s}'
         },
 
         /**

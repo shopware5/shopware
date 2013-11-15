@@ -205,6 +205,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      */
     formFieldConfig: {},
 
+    snippets: {
+        emptyText: '{s name=search_default_text}Search...{/s}',
+        assignedArticles: '{s name=assigned_articles}Assigned articles{/s}',
+        articleName: '{s name=article_name}Article name{/s}',
+        orderNumber: '{s name=ordernumber}Order number{/s}'
+    },
+
     /**
      * Initializes the Live Article Search component
      *
@@ -360,7 +367,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var fieldConfig = Ext.apply({
             componentLayout: 'textfield',
             triggerCls: 'reset',
-            emptyText: '{s name=search_default_text}Search...{/s}',
+            emptyText: me.snippets.emptyText,
             fieldLabel: (me.fieldLabel || undefined),
             cls:  Ext.baseCSSPrefix + 'search-article-live-field',
             name: me.searchFieldName,
@@ -492,7 +499,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
 
         var grid = Ext.create('Ext.grid.Panel', {
             store: me.multiSelectStore,
-            title: '{s name=assigned_articles}Assigned articles{/s}',
+            title: me.snippets.assignedArticles,
             selModel: 'rowmodel',
             autoScroll: true,
             columns: me.createMultiSelectGridColumns(),
@@ -525,11 +532,11 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var me = this;
 
         return [{
-            header: '{s name=article_name}Article name{/s}',
+            header: me.snippets.articleName,
             dataIndex: me.returnValue,
             flex: 2
         }, {
-            header: '{s name=ordernumber}Order number{/s}',
+            header: me.snippets.orderNumber,
             dataIndex: me.hiddenReturnValue,
             flex: 1
         }, {

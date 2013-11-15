@@ -112,6 +112,11 @@ Ext.define('Shopware.form.plugin.Translation',
     client: null,
 
     /**
+     * String with the error message for when subapplications are not supported
+     */
+    noSubApplicationSupportErrorText: 'Your ExtJS application does not support sub applications',
+
+    /**
      * The init method is invoked after initComponent method has been run for the client Component.
      *
      * @public
@@ -265,7 +270,7 @@ Ext.define('Shopware.form.plugin.Translation',
 
         // Check if subapplications are supported
         if(typeof(Shopware.app.Application.addSubApplication) !== 'function') {
-            Ext.Error.raise('Your ExtJS application does not support sub applications');
+            Ext.Error.raise(me.noSubApplicationSupportErrorText);
         }
 
         var key = me.translationKey || me.client.getForm().getRecord().getId();
