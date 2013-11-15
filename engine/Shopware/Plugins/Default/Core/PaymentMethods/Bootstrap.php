@@ -73,12 +73,12 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         );
 
         $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch',
+            'Enlight_Controller_Action_PostDispatchSecure',
             'addPaths'
         );
 
         $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch_Backend_Order',
+            'Enlight_Controller_Action_PostDispatchSecure_Backend_Order',
             'onBackendOrderPostDispatch'
         );
     }
@@ -112,15 +112,19 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
+        $request = $arguments->getSubject()->Request();
+
         // Add templates folder
         $this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'payment', Enlight_Template_Manager::POSITION_APPEND
         );
 
-        // Add snippet directory
-        $this->Application()->Snippets()->addConfigDir(
-            $this->Path() . 'Snippets/'
-        );
+        if ($request->getModuleName() === 'backend') {
+            // Add snippet directory
+            $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+            );
+        }
     }
 
     private function addSnippets()
