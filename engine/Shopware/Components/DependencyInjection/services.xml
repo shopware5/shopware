@@ -108,6 +108,11 @@
             <argument>%shopware.plugins%</argument>
         </service>
 
+        <service id="shopware.plugin_installer" class="Shopware\Components\Plugin\Installer">
+            <argument type="service" id="models"/>
+            <argument type="service" id="plugins"/>
+        </service>
+
         <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
         <service id="front"
                  class="Enlight_Controller_Front"

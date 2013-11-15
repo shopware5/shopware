@@ -24,8 +24,7 @@
 
 namespace Shopware\Components\Console\Command;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Plugin\Plugin;
+use Shopware\Components\Plugin\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,16 +62,13 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get('models');
-
+        /** @var Installer $installer */
+        $installer  = $this->container->get('shopware.plugin_installer');
         $pluginName = $input->getArgument('plugin');
-        $repository = $em->getRepository('Shopware\Models\Plugin\Plugin');
 
-        /** @var Plugin $plugin */
-        $plugin = $repository->findOneBy(array('name' => $pluginName));
-
-        if ($plugin === null) {
+        try {
+            $plugin = $installer->getPluginByName($pluginName);
+        } catch (\Exeption $e) {
             $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
             return 1;
         }
@@ -82,27 +78,7 @@ EOF
             return 1;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
-        $namespace = $bootstrap->Collection();
-
-        try {
-            $result = $namespace->uninstallPlugin($bootstrap);
-        } catch (\Exception $e) {
-            $output->writeln(sprintf("Unable to uninstall, got exception:\n%s\n", $e->getMessage()));
-            return 1;
-        }
-
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
-            if (isset($result['message'])) {
-                $output->writeln(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
-            } else {
-                $output->writeln(sprintf('Unable to uninstall %s, an unknown error occured.', $pluginName));
-            }
-
-            return 1;
-        }
+        $installer->uninstallPlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
     }

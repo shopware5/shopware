@@ -26,8 +26,6 @@ namespace Shopware\Components\Console\Command;
 
 use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,37 +50,5 @@ abstract class AbstractPluginCommand extends Command implements ResourceLoaderAw
     public function setResourceLoader(ResourceLoader $resourceLoader = null)
     {
         $this->container = $resourceLoader;
-    }
-
-    /**
-     * @param string $pluginName
-     * @return Plugin
-     */
-    protected function getPluginByName($pluginName)
-    {
-        /** @var ModelManager $em */
-        $em = $this->container->get('models');
-
-        $repository = $em->getRepository('Shopware\Models\Plugin\Plugin');
-
-        /** @var Plugin $plugin */
-        $plugin = $repository->findOneBy(array('name' => $pluginName));
-
-        return $plugin;
-    }
-
-    /**
-     * @param Plugin $plugin
-     * @return \Shopware_Components_Plugin_Bootstrap|null
-     */
-    protected function getPluginBootstrap(Plugin $plugin)
-    {
-        $namespace = $this->container->get('plugins')->get($plugin->getNamespace());
-        if ($namespace === null) {
-            return null;
-        }
-        $plugin = $namespace->get($plugin->getName());
-
-        return $plugin;
     }
 }

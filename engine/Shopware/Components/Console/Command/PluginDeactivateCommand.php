@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Console\Command;
 
-use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,13 +62,13 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get('models');
-
+        /** @var Installer $installer */
+        $installer  = $this->container->get('shopware.plugin_installer');
         $pluginName = $input->getArgument('plugin');
 
-        $plugin = $this->getPluginByName($pluginName);
-        if ($plugin === null) {
+        try {
+            $plugin = $installer->getPluginByName($pluginName);
+        } catch (\Exception $e) {
             $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
             return 1;
         }
@@ -78,14 +78,7 @@ EOF
             return 1;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-
-        $isAllowed = $bootstrap->disable();
-        $isAllowed = is_bool($isAllowed) ? $isAllowed : !empty($isAllowed['success']);
-        if ($isAllowed) {
-            $plugin->setActive(false);
-        }
-        $em->flush($plugin);
+        $installer->deactivatePlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
     }
