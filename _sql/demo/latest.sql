@@ -5689,7 +5689,7 @@ INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `template`, `cla
 (3, 'cash', 'Nachnahme', 'cash.tpl', 'cash.php', '', 0, '(zzgl. 2,00 Euro Nachnahmegebühren)', 0, 0, '', 2, 1, 0, '', 0, NULL, NULL, NULL),
 (4, 'invoice', 'Rechnung', 'invoice.tpl', 'invoice.php', '', 0, 'Sie zahlen einfach und bequem auf Rechnung. Shopware bietet z.B. auch die Möglichkeit, Rechnung automatisiert erst ab der 2. Bestellung für Kunden zur Verfügung zu stellen, um Zahlungsausfälle zu vermeiden.', 0, 5, '', 3, 1, 1, '', 0, '', NULL, NULL),
 (5, 'prepayment', 'Vorkasse', 'prepayment.tpl', 'prepayment.php', '', 0, 'Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.', 0, 0, '', 1, 1, 0, '', 0, NULL, NULL, NULL),
-(6, 'sepa', 'SEPA', 'sepa.tpl', 'sepa', '', 0, 'SEPA Lastschrift', 0, 0, '', 5, 1, 1, '', 0, '', NULL, NULL);
+(6, 'sepa', 'SEPA', 'sepa.tpl', 'sepa', '', 0, 'SEPA Lastschrift', 0, 0, '', 5, 0, 1, '', 0, '', NULL, NULL);
 
 TRUNCATE TABLE `s_core_paymentmeans_attributes`;
 TRUNCATE TABLE `s_core_paymentmeans_countries`;

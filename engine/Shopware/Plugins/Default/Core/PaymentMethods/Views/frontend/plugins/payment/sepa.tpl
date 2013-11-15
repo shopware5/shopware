@@ -26,18 +26,10 @@
         <p class="none clearfix">
             <label for="usebilling">{s name='PaymentSepaLabelUseBillingData'}{/s}:</label>
             <input name="sSepaUseBillingData" type="checkbox" id="usebilling" value="true"
-                    {if $form_data.sSepaUseBillingData}
-                        {if $form_data.sSepaUseBillingData === 'true'}
-                            checked="checked"
-                        {/if}
-                    {elseif $form_data.paymentData }
-                        {if $form_data.paymentData->getUseBillingData() || !$form_data.paymentData->getId()}
-                            checked="checked"
-                        {/if}
-                    {else}
-                        checked="checked"
-                    {/if}
-                    class="checkbox {if $error_flags.sSepaBankHolder}instyle_error{/if}"/>
+                {if $form_data.sSepaUseBillingData === 'true' || !($form_data.paymentData || $form_data.isPost) || ($form_data.paymentData && $form_data.paymentData->getUseBillingData())}
+                    checked="checked"
+                {/if}
+                class="checkbox {if $error_flags.sSepaBankHolder}instyle_error{/if}"/>
         </p>
     {/if}
     <div class="space"></div>
