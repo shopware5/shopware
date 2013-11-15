@@ -30,6 +30,7 @@
  */
 
 namespace Shopware\Models\Shop;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -293,6 +294,20 @@ class Repository extends ModelRepository
         $shop = $builder->getQuery()->getOneOrNullResult();
 
         return $shop;
+    }
+
+    /**
+     * Returns the active shops
+     *
+     * @return mixed
+     */
+    public function getActiveShops($hydrationMode = AbstractQuery::HYDRATE_OBJECT)
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->where('shop.active = 1');
+        $shops = $builder->getQuery()->getResult($hydrationMode);
+
+        return $shops;
     }
 
     /**

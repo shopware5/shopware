@@ -29,7 +29,7 @@ Ext.define('Shopware.apps.Performance.store.Shop', {
 
     proxy: {
         type: 'ajax',
-        url: '{url controller=Performance action=getShops}',
+        url: '{url controller=Performance action=getActiveShops}',
         reader: {
             type: 'json',
             root: 'data'
