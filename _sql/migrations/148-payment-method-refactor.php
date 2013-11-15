@@ -11,8 +11,8 @@ class Migrations_Migration148 Extends Shopware\Components\Migrations\AbstractMig
 
         INSERT IGNORE INTO `s_core_subscribes` (`id`, `subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
             (NULL, 'Shopware_Modules_Admin_InitiatePaymentClass_AddClass', 0, 'Shopware_Plugins_Core_PaymentMethods_Bootstrap::addPaymentClass', @plugin_id, 0),
-            (NULL, 'Enlight_Controller_Action_PostDispatch', 0, 'Shopware_Plugins_Core_PaymentMethods_Bootstrap::addPaths', @plugin_id, 0),
-            (NULL, 'Enlight_Controller_Action_PostDispatch_Backend_Order', 0, 'Shopware_Plugins_Core_PaymentMethods_Bootstrap::onBackendOrderPostDispatch', @plugin_id, 0);
+            (NULL, 'Enlight_Controller_Action_PostDispatchSecure', 0, 'Shopware_Plugins_Core_PaymentMethods_Bootstrap::addPaths', @plugin_id, 0),
+            (NULL, 'Enlight_Controller_Action_PostDispatchSecure_Backend_Order', 0, 'Shopware_Plugins_Core_PaymentMethods_Bootstrap::onBackendOrderPostDispatch', @plugin_id, 0);
 
         INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`)
             SELECT NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/debit', `shopID`, `localeID`, `name`, `value`, '2013-11-01 00:00:00', '2013-11-01 00:00:00'
