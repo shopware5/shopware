@@ -45,7 +45,7 @@ abstract class AbstractPluginCommand extends Command implements ResourceLoaderAw
     protected $container;
 
     /**
-     * @param ResourceLoader $resourceLoader
+     * {@inheritdoc}
      */
     public function setResourceLoader(ResourceLoader $resourceLoader = null)
     {
