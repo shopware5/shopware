@@ -46,13 +46,16 @@ class PluginRefreshCommand extends Command implements ResourceLoaderAwareInterfa
     private $container;
 
     /**
-     * @param ResourceLoader $resourceLoader
+     * {@inheritdoc}
      */
     public function setResourceLoader(ResourceLoader $resourceLoader = null)
     {
         $this->container = $resourceLoader;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
@@ -62,8 +65,7 @@ class PluginRefreshCommand extends Command implements ResourceLoaderAwareInterfa
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

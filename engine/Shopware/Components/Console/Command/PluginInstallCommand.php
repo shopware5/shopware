@@ -38,6 +38,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PluginInstallCommand extends AbstractPluginCommand
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
@@ -62,9 +65,7 @@ EOF
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
