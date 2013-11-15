@@ -365,8 +365,8 @@ Ext.onReady(function() {
     Ext.define('Shopware.form.en_GB.PluginPanel', {
         override:'Shopware.form.PluginPanel',
 
-        noFormIdConfiguredErrorText: 'Keine FormId wird an der Konfiguration der Komponente übergeben',
-        formNotLoadedErrorText: "Der Formular-Speicher konnte nicht erfolgreich geladen werden.",
+        noFormIdConfiguredErrorText: 'No formId is passed to the component configuration',
+        formNotLoadedErrorText: "The form store couldn't be loaded successfully.",
 
         snippets: {
             resetButton: 'Reset',
@@ -423,7 +423,7 @@ Ext.onReady(function() {
 
         noSubApplicationSupportErrorText: "Your ExtJS application does not support sub applications"
     });
-    Ext.define('Shopware.window.plugin.de.Hud', {
+    Ext.define('Shopware.window.plugin.en_GB.Hud', {
         override:'Shopware.window.plugin.Hud',
 
         hudTitle: "Elements library",
