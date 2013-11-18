@@ -340,10 +340,7 @@ Ext.onReady(function() {
         override:'Shopware.form.field.ArticleSearch',
 
         confirmButtonText: 'Save assigned articles',
-        cancelButtonText: 'Reset articles'
-    });
-    Ext.define('Shopware.form.field.en_GB.ArticleSearch', {
-        override:'Shopware.form.field.ArticleSearch',
+        cancelButtonText: 'Reset articles',
 
         snippets: {
             emptyText: 'Search...',

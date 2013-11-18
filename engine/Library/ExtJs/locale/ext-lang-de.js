@@ -349,14 +349,14 @@ Ext.onReady(function() {
     Ext.define('Shopware.MediaManager.de.MediaSelection', {
         override:'Shopware.MediaManager.MediaSelection',
 
-        buttonText: 'Wählen Sie eigene Dateien'
+        buttonText: 'Datei(en) auswählen...'
     });
     Ext.define('Shopware.container.de.Viewport', {
         override:'Shopware.container.Viewport',
 
         snippets: {
             title: 'Desktop erstellen',
-            message: 'Bitte wählen Sie einen Titel für den neuen desktop'
+            message: 'Bitte wählen Sie einen Titel für den neuen Desktop'
         }
     });
     Ext.define('Shopware.DataView.de.GooglePreview', {
@@ -368,10 +368,7 @@ Ext.onReady(function() {
         override:'Shopware.form.field.ArticleSearch',
 
         confirmButtonText: 'Zugeordneten Artikel speichern',
-        cancelButtonText: 'Reset-Artikel'
-    });
-    Ext.define('Shopware.form.field.de.ArticleSearch', {
-        override:'Shopware.form.field.ArticleSearch',
+        cancelButtonText: 'Reset-Artikel',
 
         snippets: {
             emptyText: 'Suche...',
