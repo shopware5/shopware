@@ -15,7 +15,7 @@ class Migrations_Migration150 Extends Shopware\Components\Migrations\AbstractMig
 
         INSERT IGNORE INTO `s_core_config_element_translations` (`id`, `element_id`, `locale_id`, `label`, `description`)
         VALUES
-        (NULL, @elementOne, '2', 'Allow payment details editing on checkout page', 'If set to "No", the customer will not be able to edit the debit payment details directly on the checkout page, and will need to use a dedicated page for that purpose.');
+        (NULL, @elementOne, '2', 'Allow payment details editing on checkout page', NULL);
 EOD;
         $this->addSql($sql);
     }
