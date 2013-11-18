@@ -69,64 +69,11 @@ class PluginRefreshCommand extends Command implements ResourceLoaderAwareInterfa
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em           = $this->container->get('models');
+        /** @var Installer $installer */
+        $installer  = $this->container->get('shopware.plugin_installer');
+        $installer->refreshPluginList();
 
-        /** @var \Enlight_Plugin_PluginManager $plugins */
-        $plugins      = $this->container->get('plugins');
-        $repository   = $em->getRepository('Shopware\Models\Plugin\Plugin');
-        $refreshed    = \Zend_Date::now();
-        $removedCount = 0;
-        $addedCount   = 0;
-
-        /** @var $collection \Shopware_Components_Plugin_Namespace */
-        foreach ($plugins as $namespace => $collection) {
-            if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
-                continue;
-            }
-
-            foreach (array('Local', 'Community', 'Commercial', 'Default') as $source) {
-                $path = Shopware()->AppPath('Plugins_' . $source . '_' . $namespace);
-                if (!is_dir($path)) {
-                    continue;
-                }
-
-                foreach (new \DirectoryIterator($path) as $dir) {
-                    if (!$dir->isDir() || $dir->isDot()) {
-                        continue;
-                    }
-
-                    $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
-                    if (!file_exists($file)) {
-                        continue;
-                    }
-
-                    $name = $dir->getFilename();
-                    $plugin = $collection->get($name);
-
-                    if ($plugin === null) {
-                        $plugin = $collection->initPlugin($name, new \Enlight_Config(array(
-                            'source' => $source,
-                            'path'   => $dir->getPathname() . DIRECTORY_SEPARATOR
-                        )));
-                        $addedCount++;
-                    }
-
-                    $collection->registerPlugin($plugin);
-                }
-            }
-        }
-
-        $sql = 'SELECT id, refresh_date FROM s_core_plugins WHERE refresh_date < ?';
-        $pluginIds = $this->container->get('db')->fetchCol($sql, array($refreshed));
-
-        foreach ($pluginIds as $pluginId) {
-            $plugin = $repository->find($pluginId);
-            $em->remove($plugin);
-            $removedCount++;
-        }
-        $em->flush();
-
-        $output->writeln(sprintf("Successfully refreshed. Removed: %s, New: %s.", $removedCount, $addedCount));
+        //$output->writeln(sprintf("Successfully refreshed. Removed: %s, New: %s.", $removedCount, $addedCount));
+        $output->writeln(sprintf("Successfully refreshed"));
     }
 }

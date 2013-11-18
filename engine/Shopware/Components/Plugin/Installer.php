@@ -41,7 +41,7 @@ class Installer
     private $em;
 
     /**
-     * @var ResourceLoader
+     * @var \Enlight_Plugin_PluginManager
      */
     private $plugins;
 
@@ -49,7 +49,7 @@ class Installer
      * @param ModelManager $em
      * @param $plugins
      */
-    public function __construct(ModelManager $em, $plugins)
+    public function __construct(ModelManager $em, \Enlight_Plugin_PluginManager $plugins)
     {
         $this->plugins = $plugins;
         $this->em = $em;
@@ -197,5 +197,52 @@ class Installer
 
         $plugin->setActive(false);
         $this->em->flush($plugin);
+    }
+
+    public function refreshPluginList()
+    {
+        $refreshed = \Zend_Date::now();
+        $repository   = $this->em->getRepository('Shopware\Models\Plugin\Plugin');
+
+        /** @var $collection \Shopware_Components_Plugin_Namespace */
+        foreach ($this->plugins as $namespace => $collection) {
+            if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
+                continue;
+            }
+            foreach (array('Local', 'Community', 'Commercial', 'Default') as $source) {
+                $path = Shopware()->AppPath('Plugins_' . $source . '_' . $namespace);
+                if (!is_dir($path)) {
+                    continue;
+                }
+                foreach (new \DirectoryIterator($path) as $dir) {
+                    if (!$dir->isDir() || $dir->isDot()) {
+                        continue;
+                    }
+                    $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
+                    if (!file_exists($file)) {
+                        continue;
+                    }
+
+                    $name = $dir->getFilename();
+                    $plugin = $collection->get($name);
+
+                    if ($plugin === null) {
+                        $plugin = $collection->initPlugin($name, new \Enlight_Config(array(
+                            'source' => $source,
+                            'path' => $dir->getPathname() . DIRECTORY_SEPARATOR
+                        )));
+                    }
+                    $collection->registerPlugin($plugin);
+                }
+            }
+        }
+
+        $sql = 'SELECT id, refresh_date FROM s_core_plugins WHERE refresh_date<?';
+        $pluginIds = Shopware()->Db()->fetchCol($sql, array($refreshed));
+        foreach ($pluginIds as $pluginId) {
+            $plugin = $repository->find($pluginId);
+            $this->em->remove($plugin);
+        }
+        $this->em->flush();
     }
 }
