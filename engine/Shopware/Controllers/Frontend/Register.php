@@ -469,31 +469,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 	public function validateBilling()
 	{
 		$rules = array(
-			//'salutation'=>array('required'=>1),
 			'company'=>array('required'=>0),
-			//'firstname'=>array('required'=>1),
-			//'lastname'=>array('required'=>1),
 			'street'=>array('required'=>1),
 			'streetnumber'=>array('required'=>1),
 			'zipcode'=>array('required'=>1),
 			'city'=>array('required'=>1),
-			//'phone'=>array('required'=>1),
 			'country'=>array('required'=>1),
 			'department'=>array('required'=>0),
-			//'fax'=>array('required'=>0),
 			'shippingAddress'=>array('required'=>0),
-			//'ustid'=>array('required'=>0),
-			//'text1'=>array('required'=>0),
-			//'text2'=>array('required'=>0),
-			//'text3'=>array('required'=>0),
-			//'text4'=>array('required'=>0),
-			//'text5'=>array('required'=>0),
-			//'text6'=>array('required'=>0),
-			//'sValidation'=>array('required'=>0),
-			//'birthyear'=>array('required'=>0),
-			//'birthmonth'=>array('required'=>0),
-			//'birthday'=>array('required'=>0),
-			//'dpacheckbox'=>array('required'=>Shopware()->Config()->get('sACTDPRCHECK'))?1:0
 		);
 
         // Check if state selection is required
