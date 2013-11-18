@@ -18,9 +18,9 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
         (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
         VALUES
         (@parent, 'sepaCompany', 's:0:"";', 'Firmenname', NULL, 'text', 0, 1, 1, NULL, NULL, NULL),
-        (@parent, 'sepaHeaderText', 's:0:"";', 'Kopftext', NULL, 'text', 0, 2, 1, NULL, NULL, NULL),
+        (@parent, 'sepaHeaderText', 's:0:"";', 'Überschrift', NULL, 'text', 0, 2, 1, NULL, NULL, NULL),
         (@parent, 'sepaSellerId', 's:0:""', 'Gläubiger-Identifikationsnummer', NULL, 'text', 0, 3, 1, NULL, NULL, NULL),
-        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandat an Kunde senden', NULL, 'checkbox', 0, 4, 1, NULL, NULL, NULL),
+        (@parent, 'sepaSendEmail', 'i:1;', 'SEPA Mandat automatisch versenden', NULL, 'checkbox', 0, 4, 1, NULL, NULL, NULL),
         (@parent, 'sepaShowBic', 'i:1;', 'SEPA BIC Feld anzeigen', NULL, 'checkbox', 0, 5, 1, NULL, NULL, NULL),
         (@parent, 'sepaRequireBic', 'i:1;', 'SEPA BIC Feld erforderlich', NULL, 'checkbox', 0, 6, 1, NULL, NULL, NULL),
         (@parent, 'sepaShowBankName', 'i:1;', 'SEPA Kreditinstitut Feld anzeigen', NULL, 'checkbox', 0, 7, 1, NULL, NULL, NULL),
@@ -104,7 +104,7 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelBankName', 'Ihre Bank', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelBankName', 'Name of bank', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelUseBillingData', 'Rechnungsadresse in Mandat übernehmen?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
+            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaLabelUseBillingData', 'Rechnungs-Adresse in Mandat übernehmen?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaLabelUseBillingData', 'Use billing information for SEPA debit mandate?', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentSepaInfoFields', 'Die mit einem * markierten Felder sind Pflichtfelder.', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
             (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentSepaInfoFields', 'The fields marked with * are required.', '2013-11-01 00:00:00', '2013-11-01 00:00:00');
