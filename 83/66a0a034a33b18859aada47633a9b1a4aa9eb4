@@ -1,0 +1,4 @@
+From: experimental/master/add-static-events
+To: master
+Conflict: (content) Merge conflict in engine/core/class/sArticles.php
+	MODIFY|engine/core/class/sArticles.php
