@@ -103,6 +103,11 @@ class Store implements StoreInterface
                 continue;
             }
 
+            // skip .gitkeep
+            if ($file->getFileName() === '.gitkeep') {
+                continue;
+            }
+
             unlink($file->getPathname());
             $result = true;
         }

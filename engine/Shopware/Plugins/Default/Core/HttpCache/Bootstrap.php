@@ -105,6 +105,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             'onInvalidateCacheId'
         );
 
+        $this->subscribeEvent(
+            'Shopware_Plugins_HttpCache_ClearCache',
+            'onClearCache'
+        );
+
         $this->createCronJob(
             'HTTP Cache löschen',
             'ClearHttpCache',
@@ -286,7 +291,26 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                    . $request->getBaseUrl() . '/';
         }
 
-        return null;
+
+        /** @var ModelManager $em */
+        $em = $this->get('models');
+        $repository = $em->getRepository('Shopware\Models\Shop\Shop');
+
+        /** @var Shopware\Models\Shop\Shop $shop */
+        $shop = $repository->findOneBy(array('default' => true));
+
+        if (!$shop->getHost()) {
+            return null;
+        }
+
+        $url = sprintf(
+            '%s://%s%s/',
+            'http',
+            $shop->getHost(),
+            $shop->getBasePath()
+        );
+
+        return $url;
     }
 
     /**
@@ -377,32 +401,31 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function onClearHttpCache(\Shopware_Components_Cron_CronJob $job)
     {
-        // If local file-based proxy is used delete cache files from filesystem
-        $cacheOptions = $this->Application()->getOption('HttpCache');
-        if (isset($cacheOptions['cache_dir']) && is_dir($cacheOptions['cache_dir'])) {
-            $cacheDir = $cacheOptions['cache_dir'];
-            $counter  = 0;
-
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($cacheDir),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            foreach ($iterator as $path) {
-                if ($path->isDir()) {
-                    rmdir($path->__toString());
-                } else {
-                    $counter++;
-                    unlink($path->__toString());
-                }
-            }
-
-            return "Removed $counter files from $cacheDir\n";
+        if ($this->clearCache()) {
+            return "Cleared HTTP-Cache\n";
         }
 
-        return 'HTTP-Cache Directory not set.';
+
     }
 
+    /**
+     * Callback for Shopware_Plugins_HttpCache_ClearCache-Event
+     *
+     * This events should be used to clear the http-cache without having
+     * to check if the http-cache-plugin is installed and enabled.
+     *
+     * <code>
+     * Shopware()->Events()->notify('Shopware_Plugins_HttpCache_ClearCache');
+     * </code>
+     *
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onClearCache(\Enlight_Event_EventArgs $args)
+    {
+        $result = $this->clearCache();
+
+        $args->setReturn($result);
+    }
 
     /**
      * Callback for Shopware_Plugins_HttpCache_InvalidateCacheId-Event
@@ -858,6 +881,36 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         foreach ($cacheIds as $cacheId) {
             $this->invalidateCacheId($cacheId);
         }
+    }
+
+    /**
+     * Clears the cache
+     *
+     * @return bool
+     */
+    protected function clearCache()
+    {
+        if ($this->request) {
+            $proxyUrl = $this->getProxyUrl($this->request);
+        } else {
+            $proxyUrl = $this->getProxyUrl();
+        }
+
+        if ($proxyUrl === null) {
+            return false;
+        }
+
+        try {
+            $client = new Zend_Http_Client($proxyUrl, array(
+                'useragent' => 'Shopware/' . Shopware()->Config()->get('version'),
+                'timeout'   => 3,
+            ));
+            $client->request('BAN');
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
