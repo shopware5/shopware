@@ -205,17 +205,26 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'paymentInstance' => array(
                 'firstName' => $paymentInstance->getFirstName(),
                 'lastName' => $paymentInstance->getLastName(),
-                'orderNumber' => $paymentInstance->getOrder()->getNumber(),
+                'orderNumber' => $paymentInstance->getOrder()->getNumber()
             )
         ));
 
         $mail->addTo($user->getEmail());
 
-        Shopware()->Template()->assign('data', $paymentInstance);
+        Shopware()->Template()->assign('data', array(
+            'orderNumber' => $paymentInstance->getOrder()->getNumber(),
+            'accountHolder' => $paymentInstance->getAccountHolder(),
+            'address' => $paymentInstance->getAddress(),
+            'city' => $paymentInstance->getCity(),
+            'zipCode' => $paymentInstance->getZipCode(),
+            'bankName' => $paymentInstance->getBankName(),
+            'iban' => $paymentInstance->getIban(),
+            'bic' => $paymentInstance->getBic()
+        ));
         Shopware()->Template()->assign('config', array(
             'sepaCompany' => Shopware()->Config()->get('sepaCompany'),
             'sepaHeaderText' => Shopware()->Config()->get('sepaHeaderText'),
-            'sepaSellerId' => Shopware()->Config()->get('sepaSellerId'),
+            'sepaSellerId' => Shopware()->Config()->get('sepaSellerId')
         ));
 
         $data = Shopware()->Template()->fetch(__DIR__ . '/../Views/frontend/plugins/sepa/email.tpl');
