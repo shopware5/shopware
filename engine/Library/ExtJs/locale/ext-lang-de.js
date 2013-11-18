@@ -382,16 +382,11 @@ Ext.onReady(function() {
 
         noSourceErrorText: "Die Quelldateien der TinyMCE-Editor sind nicht in das Projekt aufgenommen"
     });
-    Ext.define('Shopware.form.plugin.de.Translation', {
-        override:'Shopware.form.plugin.Translation',
-
-        noSubApplicationSupportErrorText: "ExtJS Anwendung unterstützt keine Sub-Anwendungen"
-    });
     Ext.define('Shopware.form.de.PluginPanel', {
         override:'Shopware.form.PluginPanel',
 
-        noFormIdConfiguredErrorText: 'Keine FormId wird an der Konfiguration der Komponente übergeben',
-        formNotLoadedErrorText: "Der Formular-Speicher konnte nicht erfolgreich geladen werden.",
+        noFormIdConfiguredErrorText: 'Es wurde keine FormId an die Komponente übergeben',
+        formNotLoadedErrorText: "Das Formular konnte nicht erfolgreich geladen werden",
 
         snippets: {
             resetButton: 'Zurücksetzen',
@@ -443,23 +438,18 @@ Ext.onReady(function() {
             }
         }
     });
-    Ext.define('Shopware.grid.plugin.de.Translation', {
-        override:'Shopware.grid.plugin.Translation',
-
-        noSubApplicationSupportErrorText: "ExtJS Anwendung unterstützt keine Sub-Anwendungen"
-    });
     Ext.define('Shopware.window.plugin.de.Hud', {
         override:'Shopware.window.plugin.Hud',
 
         hudTitle: "Elemente-Bibliothek",
         hudStoreErrorMessage: function(className) {
-            return className + ' braucht die Eigenschaft "HudStore" steht für den Speicher des Hub-Panels verwendet werden, um die ziehbare Elemente erstellen.';
+            return className + ' benötigt die Eigenschaft "HudStore" zum speichern des Hub-Panels.';
         }
     });
     Ext.apply(Ext.form.VTypes, {
-        passwordText : "Das Feld 'Passwort' is nicht gültig"
+        passwordText : "Das Feld Passwort is nicht gültig"
     });
     Ext.apply(Ext.form.field.VTypes, {
-        missingValidationErrorText: 'Die entfernten vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
+        missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
     });
 });
