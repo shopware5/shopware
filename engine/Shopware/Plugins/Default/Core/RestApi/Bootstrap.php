@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,87 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins_Backend
- * @subpackage Backend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
-// todo@bc put to seperate file and find better name
-class Shopware_Auth_Adapter_Http_Resolver_Static implements Zend_Auth_Adapter_Http_Resolver_Interface
-{
-    /**
-     * Contains the shopware model manager
-     *
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $modelManager = null;
-
-    public function __construct(\Shopware\Components\Model\ModelManager $modelManager = null)
-    {
-        if ($modelManager !== null) {
-            $this->setModelManager($modelManager);
-        }
-    }
-
-    /**
-     * @param \Shopware\Components\Model\ModelManager $modelManager
-     */
-    public function setModelManager(\Shopware\Components\Model\ModelManager $modelManager)
-    {
-        $this->modelManager = $modelManager;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\ModelManager
-     */
-    public function getModelManager()
-    {
-        return $this->modelManager;
-    }
-
-    /**
-     * Resolve username/realm to password/hash/etc.
-     *
-     * @param  string $username Username
-     * @param  string $realm    Authentication Realm
-     * @return string|false User's shared secret, if the user is found in the
-     *         realm, false otherwise.
-     */
-    public function resolve($username, $realm)
-    {
-        $modelManager = $this->getModelManager();
-
-
-        if ($modelManager === null) {
-            throw new Exception('An instance of model manager has to be set');
-        }
-
-        $repository = $modelManager->getRepository('Shopware\Models\User\User');
-        $user       = $repository->findOneBy(array('username' => $username, 'active' => true));
-
-        if (!$user) {
-            return false;
-        }
-
-        if ($user->getApiKey() === null) {
-            return false;
-        }
-
-        $apiKey = $user->getApiKey();
-
-        return md5($username . ':' . $realm . ':' . $apiKey);
-    }
-}
-
 /**
- * Shopware Auth Plugin
- *
- * todo@all: Documentation
+ * @category  Shopware
+ * @package   ShopwarePlugins\RestApi
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -131,79 +56,21 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         return true;
     }
 
-    public function assembleRoute($request, $response)
+    /**
+     * Is executed after the collection has been added.
+     */
+    public function afterInit()
     {
-        $path = $request->getPathInfo();
-
-        $path = explode('/', trim($path, '/'));
-        $path = array_pad($path, 7, null);
-
-        $type     = $path[1];
-        $id       = !empty($path[2]) ? $path[2] : false;
-        $subType  = !empty($path[3]) ? $path[3] : false;
-        $subId    = is_numeric($path[4]) ? (int) $path[4] : false;
-
-        $method = strtoupper($request->getParam('_method', $request->getMethod()));
-
-        $action = 'invalid';
-
-        if ($method === 'GET' && $id === false) {
-            $action = 'index';
-            $response->setHttpResponseCode(200);
-        } elseif ($method === 'GET') {
-            $action = 'get';
-            $response->setHttpResponseCode(200);
-        } elseif ($method === 'PUT' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
-            $response->setHttpResponseCode(405);
-        } elseif ($method === 'PUT') {
-            $action = 'put';
-        } elseif ($method === 'POST') {
-            $action = 'post';
-            // Set default http status code for successfull request
-            $response->setHttpResponseCode(201);
-        } elseif ($method === 'DELETE' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
-        } elseif ($method === 'DELETE') {
-            $response->setHttpResponseCode(200);
-            $action = 'delete';
-        }
-
-        if ($action == 'invalid') {
-            $request->setParam('id', $id);
-            $request->setParam('subId', $subId);
-
-            $request->setControllerName('index');
-            $request->setActionName($action);
-
-            return;
-        }
-
-        if (!$subType) {
-            $request->setParam('id', $id);
-            $request->setParam('subId', $subId);
-            $request->setActionName($action);
-
-            return;
-        }
-
-        if ($action == 'get' && $subId === false ) {
-            $subAction = $subType . 'Index';
-        } else  {
-            $subAction = $subType;
-        }
-
-        $action = $action . ucfirst($subAction);
-
-        $request->setParam('id', $id);
-        $request->setParam('subId', $subId);
-        $request->setActionName($action);
+        $this->get('loader')->registerNamespace(
+            'ShopwarePlugins\\RestApi\\Components',
+            __DIR__ . '/Components/'
+        );
     }
 
     /**
      * Listener method for the Enlight_Controller_Front_DispatchLoopStartup event.
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param \Enlight_Controller_EventArgs $args
      */
     public function onDispatchLoopStartup(Enlight_Controller_EventArgs $args)
     {
@@ -213,30 +80,30 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         if ($this->request->getModuleName() != 'api') {
             return;
         }
+
         $this->isApiCall = true;
 
-        $this->assembleRoute($this->request, $this->response);
+        $router = new \ShopwarePlugins\RestApi\Components\Router();
+        $router->assembleRoute($this->request, $this->response);
     }
 
     /**
      * This pre-dispatch event-hook checks permissions
      *
-     * @param Enlight_Event_EventArgs $args
-     * @throws Enlight_Controller_Exception
-     * @return
+     * @param \Enlight_Controller_EventArgs $args
+     * @return void
      */
-    public function onFrontPreDispatch(Enlight_Event_EventArgs $args)
+    public function onFrontPreDispatch(Enlight_Controller_EventArgs $args)
     {
-        $request  = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
+        $request  = $args->getRequest();
+        $response = $args->getResponse();
 
         if ($request->getModuleName() != 'api') {
             return;
         }
 
-
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = $this->get('auth');
         $result = $auth->authenticate();
 
         if (!$result->isValid()) {
@@ -248,14 +115,14 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $identity = $result->getIdentity();
 
-        $db = Shopware()->Db();
+        $db = $this->get('db');
         $select = $db->select()
                      ->from('s_core_auth')
                      ->where('username LIKE ?', $identity['username']);
 
         $user = $db->query($select)->fetchObject();
         if (!empty($user->roleID)) {
-            $user->role = Shopware()->Models()->find(
+            $user->role = $this->get('models')->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
@@ -277,7 +144,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         foreach ((array)$input as $key => $value) {
             if ($value !== null) {
-               $request->setPost($key, $value);
+                $request->setPost($key, $value);
             }
         }
     }
@@ -303,7 +170,9 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         ));
 
         $adapter->setDigestResolver(
-            new Shopware_Auth_Adapter_Http_Resolver_Static(Shopware()->Models())
+            new \ShopwarePlugins\RestApi\Components\StaticResolver(
+                $this->get('models')
+            )
         );
 
         $adapter->setRequest($this->request);
