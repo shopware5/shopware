@@ -1,4 +1,4 @@
-{if $sRegisterFinished}
+{if !$sRegisterFinished}
 <div class="space"></div>
 <form name="" method="POST" action="{url controller=account action=savePayment sTarget='checkout'}" class="payment">
 <div class="payment_method">
@@ -25,7 +25,7 @@
 			
 			{block name='frontend_checkout_payment_fieldset_template'}
 			<div class="payment_logo_{$payment_mean.name}"></div>
-			{if "frontend/plugins/payment/show_`$payment_mean.template`"|template_exists}
+			{if "frontend/plugins/payment/show_`$payment_mean.template`"|template_exists && !{config name=paymentEditingInCheckoutPage}}
 				<div class="space">&nbsp;</div>
 				<div class="grid_10 bankdata">
 					{if $payment_mean.id eq $sPayment.id}
@@ -44,7 +44,11 @@
 		</div>
 	{/foreach}
 
-	<div class="clear">&nbsp;</div>
+    {if {config name=paymentEditingInCheckoutPage}}
+        <div class="doublespace"></div>
+        <input type="submit" value="{s namespace='frontend/checkout/confirm_left' name='ConfirmLinkChangePayment'}Ändern{/s}" class="button-middle small" />
+    {/if}
+    <div class="clear">&nbsp;</div>
 </div>
 </form>
 {/if}
