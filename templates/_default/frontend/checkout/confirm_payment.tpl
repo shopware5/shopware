@@ -1,4 +1,4 @@
-{if !$sRegisterFinished}
+{if $sRegisterFinished}
 <div class="space"></div>
 <form name="" method="POST" action="{url controller=account action=savePayment sTarget='checkout'}" class="payment">
 <div class="payment_method">
