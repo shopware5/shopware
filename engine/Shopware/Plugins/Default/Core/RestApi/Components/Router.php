@@ -52,9 +52,9 @@ class Router
             $type = $tmp;
         }
 
-        $id       = is_numeric($path[0]) ? (int) $path[0] : false;
+        $id       = !empty($path[0]) ? $path[0] : false;
         $subType  = !empty($path[1]) ? $path[1] : false;
-        $subId    = is_numeric($path[2]) ? (int) $path[2] : false;
+        $subId    = !empty($path[2]) ? $path[2] : false;
 
         $request->setControllerName($type);
         $request->setParam('id', $id);
