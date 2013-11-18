@@ -37,6 +37,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             array('/api/v1/articles/', 1, 'articles', 'index',  false),
             array('/api/v2/articles/', 2, 'articles', 'index', false),
             array('/api/articles/5', 1, 'articles', 'get', 5),
+            array('/api/articles/sw123', 1, 'articles', 'get', 'sw123'),
             array('/api/v1/articles/5', 1, 'articles', 'get', 5),
             array('/api/v2/articles/5', 2, 'articles', 'get', 5),
         );
