@@ -147,7 +147,7 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
             WHERE `s_core_snippets`.`name` IN ('PaymentDebitLabelBankname', 'PaymentDebitLabelName', 'PaymentDebitInfoFields') AND `s_core_snippets`.`namespace` LIKE 'frontend/plugins/payment/debit';
 
         INSERT IGNORE INTO s_core_config_mails (name, frommail, fromname, subject, content, contentHTML, isHTML, attachment) VALUES
-        ('sORDERSEPAAUTHORIZATION', '{config name=mail}', '{config name=shopName}', 'SEPA Lastschriftmandat', 'Hallo {$paymentInstance.firstName} {$paymentInstance.lastName}, im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance->getOrder()->getNumber()}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.', 'Hallo {$paymentInstance->getFirstName()} {$paymentInstance->getLastName()}, im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.', '1', '');
+        ('sORDERSEPAAUTHORIZATION', '{config name=mail}', '{config name=shopName}', 'SEPA Lastschriftmandat', 'Hallo {$paymentInstance.firstName} {$paymentInstance.lastName}, im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.', 'Hallo {$paymentInstance.firstName} {$paymentInstance.lastName}, im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.', '1', '');
 
         SET @template = (SELECT id FROM s_core_config_mails WHERE name = 'sORDERSEPAAUTHORIZATION');
 
