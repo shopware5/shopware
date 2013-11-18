@@ -3,7 +3,7 @@
 
     <p>{s name=SepaEmailCreditorNumber}Gläubiger-Identifikationsnummer{/s} <strong>{$config.sepaSellerId}</strong></p>
 
-    <p>{s name=SepaEmailMandateReference}Mandatsreferenz <strong>{$data->getId()}</strong>{/s}</p>
+    <p>{s name=SepaEmailMandateReference}Mandatsreferenz <strong>{$data.orderNumber}</strong>{/s}</p>
 
     <h1>{s name=SepaEmailDirectDebitMandate}SEPA-Lastschriftmandat{/s}</h1>
 
@@ -17,32 +17,32 @@
         Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.{/s}</p>
 
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data->getAccountHolder()}{$data->getAccountHolder()}{else}&nbsp;{/if}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.accountHolder}{$data.accountHolder}{else}&nbsp;{/if}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailName}Vorname und Name (Kontoinhaber){/s}</p>
     </div>
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data->getAddress()}{$data->getAddress()}{else}&nbsp;{/if}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.address}{$data.address}{else}&nbsp;{/if}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailAddress}Straße und Hausnummer{/s}</p>
     </div>
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data->getZipCode() && $data->getCity()}{$data->getZipCode()} {$data->getCity()}{else}&nbsp;{/if}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.zipCode && $data.city}{$data.zipCode} {$data.city}{else}&nbsp;{/if}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailZip}Postleitzahl und Ort{/s}</p>
     </div>
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBankName} && $data->getBankName()}{$data->getBankName()}{else}&nbsp;{/if}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBankName} && $data.bankName}{$data.bankName}{else}&nbsp;{/if}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailBankName}Kreditinstitut{/s}</p>
     </div>
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBic} && $data->getBic()}{$data->getBic()}{else}&nbsp;{/if}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBic} && $data.bic}{$data.bic}{else}&nbsp;{/if}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailBic}BIC{/s}</p>
     </div>
     <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{$data->getIban()}</p>
+        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{$data.iban}</p>
 
         <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailIban}IBAN{/s}</p>
     </div>

@@ -211,7 +211,17 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $mail->addTo($user->getEmail());
 
-        Shopware()->Template()->assign('data', $paymentInstance);
+        Shopware()->Template()->assign('data', array(
+            'orderNumber' => $paymentInstance->getOrder()->getNumber(),
+            'accountHolder' => $paymentInstance->getAccountHolder(),
+            'address' => $paymentInstance->getAddress(),
+            'city' => $paymentInstance->getCity(),
+            'zipCode' => $paymentInstance->getZipCode(),
+            'bankName' => $paymentInstance->getBankName(),
+            'iban' => $paymentInstance->getIban(),
+            'bic' => $paymentInstance->getBic(),
+
+        ));
         Shopware()->Template()->assign('config', array(
             'sepaCompany' => Shopware()->Config()->get('sepaCompany'),
             'sepaHeaderText' => Shopware()->Config()->get('sepaHeaderText'),
