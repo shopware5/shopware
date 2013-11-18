@@ -354,11 +354,6 @@ Ext.onReady(function() {
 
         noSourceErrorText: "The TinyMCE editor source files aren't included in the project"
     });
-    Ext.define('Shopware.form.plugin.en_GB.Translation', {
-        override:'Shopware.form.plugin.Translation',
-
-        noSubApplicationSupportErrorText: "Your ExtJS application does not support sub applications"
-    });
     Ext.define('Shopware.form.en_GB.PluginPanel', {
         override:'Shopware.form.PluginPanel',
 
@@ -414,11 +409,6 @@ Ext.onReady(function() {
                 plugin_path: 'Plugin path'
             }
         }
-    });
-    Ext.define('Shopware.grid.plugin.en_GB.Translation', {
-        override:'Shopware.grid.plugin.Translation',
-
-        noSubApplicationSupportErrorText: "Your ExtJS application does not support sub applications"
     });
     Ext.define('Shopware.window.plugin.en_GB.Hud', {
         override:'Shopware.window.plugin.Hud',
