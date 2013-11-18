@@ -25,22 +25,25 @@
 			
 			{block name='frontend_checkout_payment_fieldset_template'}
 			<div class="payment_logo_{$payment_mean.name}"></div>
-			{if "frontend/plugins/payment/`$payment_mean.template`"|template_exists}
+			{if "frontend/plugins/payment/show_`$payment_mean.template`"|template_exists}
 				<div class="space">&nbsp;</div>
 				<div class="grid_10 bankdata">
 					{if $payment_mean.id eq $sPayment.id}
-						{include file="frontend/plugins/payment/`$payment_mean.template`" form_data=$sPayment.data}
-					{else}
-						{include file="frontend/plugins/payment/`$payment_mean.template`"}
+						{include file="frontend/plugins/payment/show_`$payment_mean.template`" form_data=$sPayment.data}
 					{/if}
 				</div>
+            {elseif "frontend/plugins/payment/`$payment_mean.template`"|template_exists}
+                <div class="space">&nbsp;</div>
+                <div class="grid_10 bankdata">
+                    {if $payment_mean.id eq $sPayment.id}
+                        {include file="frontend/plugins/payment/`$payment_mean.template`" form_data=$sPayment.data}
+                    {/if}
+                </div>
 			{/if}
 			{/block}
 		</div>
 	{/foreach}
 
-    <div class="doublespace"></div>
-    <input type="submit" value="{s namespace='frontend/checkout/confirm_left' name='ConfirmLinkChangePayment'}Ändern{/s}" class="button-middle small" />
 	<div class="clear">&nbsp;</div>
 </div>
 </form>
