@@ -1,0 +1,4 @@
+From: feature/next/di-plugin-integration
+To: next
+Conflict: (content) Merge conflict in engine/Library/Enlight/Plugin/Bootstrap.php
+	MODIFY|engine/Library/Enlight/Plugin/Bootstrap.php
