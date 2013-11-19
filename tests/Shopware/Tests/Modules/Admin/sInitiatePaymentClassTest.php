@@ -69,7 +69,5 @@ class Shopware_Tests_Modules_Admin_sInitiatePaymentClassTest extends Enlight_Com
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
         }
-
-        Shopware()->Session()->sUserId = 1;
     }
 }
