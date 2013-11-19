@@ -154,48 +154,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected function clearFrontendCache()
     {
-        $request = $this->Request();
-        if ($request->getHeader('Surrogate-Capability') === false) {
-            return true;
-        }
+        $result = Shopware()->Events()->notify('Shopware_Plugins_HttpCache_ClearCache');
 
-        // If local file-based proxy is used delete cache files from filesystem
-        if ($this->resourceLoader->has('HttpCache')) {
-            /** @var $proxy Shopware\Components\HttpCache\AppCache */
-            $proxy = $this->resourceLoader->get('HttpCache');
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($proxy->getCacheDir()),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            foreach ($iterator as $path) {
-                if(strcmp($path->getPathName(), (rtrim($cacheOptions['cache_dir'], '/').'/.gitkeep')) === 0) {
-                    continue;
-                }
-                if ($path->isDir()) {
-                    rmdir($path->__toString());
-                } else {
-                    unlink($path->__toString());
-                }
-            }
-        }
-
-        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
-        $proxyUrl = $httpCache->getProxyUrl($this->Request());
-
-        if ($proxyUrl !== null) {
-            try {
-                $client = new Zend_Http_Client($proxyUrl, array(
-                    'useragent' => 'Shopware/' . Shopware()->Config()->version,
-                    'timeout' => 5,
-                ));
-                $client->request('BAN');
-            } catch (\Exception $e) {
-                return false;
-            }
-        }
-
-        return true;
+        return $result->getReturn();
     }
 
     /**
@@ -478,12 +439,18 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             if (!$entry->isFile()) {
                 continue;
             }
+
+            if ($entry->getFileName() === '.gitkeep') {
+                continue;
+            }
+
             $info['size'] += $entry->getSize();
             $info['files']++;
         }
         $info['size'] = $this->encodeSize($info['size']);
         $info['freeSpace'] = disk_free_space($dir);
         $info['freeSpace'] = $this->encodeSize($info['freeSpace']);
+
         return $info;
     }
 
