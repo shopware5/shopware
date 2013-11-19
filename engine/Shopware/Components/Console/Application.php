@@ -36,6 +36,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -63,7 +64,12 @@ class Application extends BaseApplication
     public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
-        parent::__construct('Shopware CLI', \Shopware::VERSION);
+
+        parent::__construct('Shopware', \Shopware::VERSION);
+
+        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
+        $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
+        $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
     }
 
     /**
@@ -102,6 +108,14 @@ class Application extends BaseApplication
             }
         }
 
+        if (true === $input->hasParameterOption(array('--shell', '-s'))) {
+            $shell = new Shell($this);
+            $shell->setProcessIsolation($input->hasParameterOption(array('--process-isolation')));
+            $shell->run();
+
+            return 0;
+        }
+
         return parent::doRun($input, $output);
     }
 
@@ -109,16 +123,11 @@ class Application extends BaseApplication
     {
         $em = $this->kernel->getResourceLoader()->get('models');
 
-        $helperSet = new  HelperSet(array(
-            'em' => new EntityManagerHelper($em),
-            'db' => new ConnectionHelper($em->getConnection()),
-            'table' => new TableHelper(),
-            'dialog' => new DialogHelper(),
-            'progress' => new ProgressHelper(),
-            'formatter' => new FormatterHelper()
-        ));
+        // setup doctrine commands
+        $helperSet = $this->getHelperSet();
+        $helperSet->set(new EntityManagerHelper($em), 'em');
+        $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
 
-        $this->setHelperSet($helperSet);
         ConsoleRunner::addCommands($this);
 
         if (!is_dir($dir = __DIR__ .'/Command')) {

@@ -290,6 +290,16 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * Gets the environment.
+     *
+     * @return string The current environment
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
      * @return string
      */
     public function getCacheDir()
