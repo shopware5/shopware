@@ -49,6 +49,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
             return $this->redirect($params, array('code' => 301));
         }
+        return $this->forward("defaultSearch");
     }
 
     /**
