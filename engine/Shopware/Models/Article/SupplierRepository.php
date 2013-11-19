@@ -81,27 +81,4 @@ class SupplierRepository extends ModelRepository {
         return $this->createQueryBuilder('supplier')
                 ->select('COUNT(DISTINCT supplier.id)');
     }
-
-    /**
-     * Query to fetch the number of suppliers that have translations and
-     * that can be used to generate friendly routes
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    public function getTranslatedFriendlyUrlSuppliersCountQueryBuilder($shopId)
-    {
-        $builder = $this->getEntityManager()->getDBALQueryBuilder();
-        $builder->select('COUNT(DISTINCT supplier.id) as supplierCount')
-            ->from('s_articles_supplier', 'supplier')
-            ->innerJoin(
-                'supplier',
-                's_core_translations',
-                'translations',
-                "translations.objecttype = 'supplier' AND translations.objectkey = supplier.id"
-            )
-            ->where('translations.objectlanguage = :shop')
-            ->setParameters(array('shop' => $shopId));
-
-        return $builder;
-    }
 }

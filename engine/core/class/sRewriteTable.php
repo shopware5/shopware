@@ -490,7 +490,7 @@ class sRewriteTable
             if(!$shop->getDefault())
             {
                 $translation = $this->getTranslator()->read($shop->getId(), 'supplier', $supplier['id']);
-                $path = array_key_exists('name', $translation)?$translation['name']:null;
+                $path = array_key_exists('name', $translation)?$translation['name']:$path;
             }
             if($path)
             {
