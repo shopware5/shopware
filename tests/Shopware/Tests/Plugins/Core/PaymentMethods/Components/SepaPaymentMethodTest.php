@@ -47,26 +47,30 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         );
 
         //As by default SEPA is disabled, we need to activate it
-        $sepaPaymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')
-            ->findOneByName('Sepa')->setActive(true);
-        Shopware()->Models()->persist($sepaPaymentMean);
-        Shopware()->Models()->flush();
+        $sepaPaymentMean = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Payment\Payment')
+            ->findOneByName('Sepa')
+            ->setActive(true);
+        Shopware()->Models()->flush($sepaPaymentMean);
 
         $this->sepaPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod();
     }
 
     public static function tearDownAfterClass() {
-        $sepaPaymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')
-            ->findOneByName('Sepa')->setActive(false);
-        Shopware()->Models()->persist($sepaPaymentMean);
+        $sepaPaymentMean = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Payment\Payment')
+            ->findOneByName('Sepa')
+            ->setActive(false);
 
-        $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
+        $paymentData = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Customer\PaymentData')
             ->findAll();
         foreach($paymentData as $payment) {
             Shopware()->Models()->remove($payment);
         }
 
-        $paymentInstances = Shopware()->Models()->getRepository('\Shopware\Models\Payment\PaymentInstance')
+        $paymentInstances = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
             ->findAll();
         foreach($paymentInstances as $paymentInstance) {
             Shopware()->Models()->remove($paymentInstance);
