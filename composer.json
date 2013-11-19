@@ -29,7 +29,7 @@
         "monolog/monolog": "1.6.*",
         "ircmaxell/password-compat": "1.0.3",
         "doctrine/common": "2.4.*",
-        "doctrine/dbal": "2.4.*"
+        "doctrine/dbal": "2.4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
