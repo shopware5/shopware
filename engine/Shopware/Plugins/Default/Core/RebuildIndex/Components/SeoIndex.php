@@ -308,16 +308,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
 
-        $shop = $this->registerShop($shopId);
-
-        if ($shop->getDefault()) {
-            $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
-        } else {
-            $builder = $repository->getTranslatedFriendlyUrlSuppliersCountQueryBuilder($shopId);
-            $result = $builder->execute()->fetch(PDO::FETCH_ASSOC);
-
-            $numResults = $result['supplierCount'];
-        }
+        $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
 
         return (int) $numResults;
     }
