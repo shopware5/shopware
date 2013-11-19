@@ -185,8 +185,6 @@ class ArrayHydrator extends AbstractHydrator
                 } else {
                     $oneToOne = true;
 
-                    // @shopware-hack: backport https://github.com/doctrine/doctrine2/commit/9a3298347c5319eed73805d13ca4f75d87736b9c
-
                     if (
                         ( ! isset($nonemptyComponents[$dqlAlias])) &&
                         ( ! isset($baseElement[$relationAlias]))
