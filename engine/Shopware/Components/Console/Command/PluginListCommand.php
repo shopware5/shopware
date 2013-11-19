@@ -39,25 +39,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginListCommand extends Command implements ResourceLoaderAwareInterface
+class PluginListCommand extends ShopwareCommand
 {
     /**
-     * @var ResourceLoader
+     * {@inheritdoc}
      */
-    private $container;
-
-    /**
-     * @param ResourceLoader $resourceLoader
-     */
-    public function setResourceLoader(ResourceLoader $resourceLoader = null)
-    {
-        $this->container = $resourceLoader;
-    }
-
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:list')
+            ->setName('sw-plugin:list')
             ->setDescription('List plugins')
             ->addOption(
                 'filter',
@@ -76,8 +66,7 @@ class PluginListCommand extends Command implements ResourceLoaderAwareInterface
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
