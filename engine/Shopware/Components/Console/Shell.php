@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * Shopware 4.0
@@ -23,24 +22,34 @@
  * our trademarks remain entirely with us.
  */
 
-set_time_limit(0);
+namespace Shopware\Components\Console;
 
-$docPath = realpath(__DIR__ . '/..');
-require $docPath . '/vendor/autoload.php';
+use Symfony\Component\Console\Shell as BaseShell;
 
-set_include_path(
-    $docPath . PATH_SEPARATOR .
-    $docPath . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    $docPath . '/templates/' . PATH_SEPARATOR          // Templates
-);
-
-use Symfony\Component\Console\Input\ArgvInput;
-
-$input = new ArgvInput();
-
-$env = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
-$env = $input->getParameterOption(array('--env', '-e'), $env);
-
-$kernel = new Shopware\Kernel($env, true);
-$application = new Shopware\Components\Console\Application($kernel);
-$application->run($input);
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Console
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ */
+class Shell extends BaseShell
+{
+    /**
+     * Returns the shell header.
+     *
+     * @return string The header string
+     */
+    protected function getHeader()
+    {
+        return <<<EOF
+<info>
+         _                                         _  _
+     ___| |__   ___  _ ____      ____ _ _ __ ___  | || |
+    / __| '_ \ / _ \| '_ \ \ /\ / / _` | '__/ _ \ | || |_
+    \__ \ | | | (_) | |_) \ V  V / (_| | | |  __/ |__   _|
+    |___/_| |_|\___/| .__/ \_/\_/ \__,_|_|  \___|    |_|
+                    |_|
+</info>
+EOF
+        .parent::getHeader();
+    }
+}
