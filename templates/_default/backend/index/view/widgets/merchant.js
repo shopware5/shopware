@@ -159,6 +159,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
         return [{
             dataIndex: 'date',
             header: me.snippets.headers.date,
+            renderer: me.dateColumn,
             flex: 1
         }, {
             dataIndex: 'company_name',
@@ -214,6 +215,21 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
      */
     emailColumn: function(value, cellEl, record) {
         return Ext.String.format('{literal}<a href="mailto:{0}">{1}</a>{/literal}', record.get('email'), value);
+    },
+
+    /**
+     * Formats the date column
+     *
+     * @param [string] - The order time value
+     * @return [string] - The passed value, formatted with Ext.util.Format.date()
+     */
+    dateColumn:function (value, metaData, record) {
+        var timeField = Ext.create('Ext.form.field.Time');
+        if ( value === Ext.undefined ) {
+            return value;
+        }
+
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
     }
 });
 //{/block}

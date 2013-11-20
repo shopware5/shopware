@@ -190,7 +190,9 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 	 * @return [date] value Contains the date
 	 */
 	renderDate: function(value){
-		return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        var timeField = Ext.create('Ext.form.field.Time');
+
+		return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
 	},
 
 	/**
