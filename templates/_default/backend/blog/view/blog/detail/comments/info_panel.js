@@ -124,8 +124,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
                  * @return [string] formatted date string
                  */
                 formatDate: function(value) {
-
-                    return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+                    var timeField = Ext.create('Ext.form.field.Time');
+                    return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
                 },
 
                 /**

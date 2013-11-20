@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         var me = this;
 
         me.validFromField = Ext.create('Ext.form.field.Date', {
-                format      : 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 fieldLabel  : '{s name=form_add/from_label}Active from{/s}',
                 name        : 'validFromDate',
                 supportText : '{s name=form_add/from_support}Format: dd.mm.jjjj{/s}',
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
                 ,me.validFromField,
             {
                 margin      : '0 0 0 10',
-                format      : 'H:i',
+                submitFormat: 'H:i',
                 xtype       : 'timefield',
                 name        : 'validFromTime',
                 supportText : '{s name=form_add/from_time_support}Format: hh:mm{/s}',
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         var me = this;
 
         me.validToField = Ext.create('Ext.form.field.Date', {
-            format      : 'd.m.Y',
+            submitFormat: 'd.m.Y',
             fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
             name        : 'validToDate',
             supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
@@ -265,7 +265,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
                 margin      : '0 0 0 10',
                 xtype       : 'timefield',
                 name        : 'validToTime',
-                format      : 'H:i',
+                submitFormat: 'H:i',
                 supportText : '{s name=form_add/to_time_support}Format: hh:mm{/s}',
                 columnWidth : .40
             }]
