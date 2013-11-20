@@ -161,11 +161,11 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
     },
     
     onDateRenderer : function(value) {
-        //console.log(value);
+        var timeField = Ext.create('Ext.form.field.Time');
         if(!value) {
             return;
         }
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
     },
     /**
      * Creates the items of the action column

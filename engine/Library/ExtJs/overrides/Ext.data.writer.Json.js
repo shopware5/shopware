@@ -5,7 +5,7 @@
 Ext.define('Ext.data.writer.Json-Shopware', {
     override: 'Ext.data.writer.Json',
 
-    getRecordData: function (record) {
+    getRecordData: function (record, operation) {
         var me = this, data, associationData;
 
         data = me.getRecordFieldData(record);
@@ -18,15 +18,73 @@ Ext.define('Ext.data.writer.Json-Shopware', {
 
     /**
      * Internal helper function to draw the data values into a new object.
+     * Exact copy of parent.getRecordData
+     *
      * @param record
      * @return object
      */
-    getRecordFieldData: function(record) {
-        var data = {};
+    getRecordFieldData: function(record, operation) {
+        var isPhantom = record.phantom === true,
+            writeAll = this.writeAllFields || isPhantom,
+            nameProperty = this.nameProperty,
+            fields = record.fields,
+            fieldItems = fields.items,
+            data = {},
+            clientIdProperty = record.clientIdProperty,
+            changes,
+            name,
+            field,
+            key,
+            value,
+            f, fLen;
 
-        Ext.each(record.fields.keys, function(key) {
-            data[key] = record.data[key];
-        });
+        if (writeAll) {
+            fLen = fieldItems.length;
+
+            for (f = 0; f < fLen; f++) {
+                field = fieldItems[f];
+                if (field.persist) {
+                    name = field[nameProperty] || field.name;
+                    value = record.get(field.name);
+                    if (field.serialize) {
+                        data[name] = field.serialize(value, record);
+                    } else if (field.type === Ext.data.Types.DATE && field.dateFormat) {
+                        data[name] = Ext.Date.format(value, field.dateFormat);
+                    } else {
+                        data[name] = value;
+                    }
+                }
+            }
+        } else {
+            // Only write the changes
+            changes = record.getChanges();
+            for (key in changes) {
+                if (changes.hasOwnProperty(key)) {
+                    field = fields.get(key);
+                    if (field.persist) {
+                        name = field[nameProperty] || field.name;
+                        value = record.get(field.name);
+                        if (field.serialize) {
+                            data[name] = field.serialize(value, record);
+                        } else if (field.type === Ext.data.Types.DATE && field.dateFormat) {
+                            data[name] = Ext.Date.format(value, field.dateFormat);
+                        } else {
+                            data[name] = value;
+                        }
+                    }
+                }
+            }
+        }
+        if (isPhantom) {
+            if (clientIdProperty && operation && operation.records.length > 1) {
+                // include clientId for phantom records, if multiple records are being written to the server in one operation.
+                // The server can then return the clientId with each record so the operation can match the server records with the client records
+                data[clientIdProperty] = record.internalId;
+            }
+        } else {
+            // always include the id for non phantoms
+            data[record.idProperty] = record.getId();
+        }
 
         return data;
     },
