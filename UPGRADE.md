@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.3.1
+* Added new event `Shopware_Modules_Articles_sGetArticlesByCategory_FilterCountSql`
+
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:

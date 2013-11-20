@@ -1180,6 +1180,8 @@ class sArticles
             $addFilterWhere
             $supplierSQL
         ";
+
+        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterCountSql', $sql, array('subject' => $this, 'id' => $categoryId));
         $numberArticles = Shopware()->Db()->fetchOne($sql);
 
         // How many pages in this category?
