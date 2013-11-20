@@ -60,7 +60,7 @@ class SupplierRepository extends ModelRepository {
     public function getFriendlyUrlSuppliersBuilder($offset = null, $limit = null)
     {
         $builder = $this->createQueryBuilder('supplier')
-            ->select(array('supplier.id', 'supplier.name'));
+            ->select(array('supplier.id'));
 
         if ($limit != null) {
             $builder->setFirstResult($offset)
