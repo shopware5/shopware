@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Config.view.element.DateTime', {
                 isFormField: false // prevent submission
             }, me.dateCfg), Ext.apply({
                 xtype: 'timefield',
-                format: 'H:i:s',
+                submitFormat: 'H:i:s',
                 disabled: me.disabled,
                 value: me.value,
                 margin: me.timePosition != 'below' ? '0 0 0 3' : 0,

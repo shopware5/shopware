@@ -504,11 +504,12 @@ Ext.define('Shopware.apps.Order.view.list.List', {
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
     dateColumn:function (value, metaData, record) {
+        var timeField = Ext.create('Ext.form.field.Time');
         if ( value === Ext.undefined ) {
             return value;
         }
 
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
     },
 
     /**

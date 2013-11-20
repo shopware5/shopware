@@ -270,7 +270,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $sql = "
-        SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS `date`, status, cleared
+        SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, ordertime AS `date`, status, cleared
         FROM s_order
         LEFT JOIN s_order_billingaddress ON s_order_billingaddress.userID = s_order.userID
         WHERE
@@ -357,7 +357,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function getLastMerchantAction() {
 
         // Fetch all users that needs to get unlocked
-        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,validation,email,s_core_customergroups.description AS customergroup_name, validation AS customergroup_id, s_user.id AS id, lastlogin, company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
+        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,validation,email,s_core_customergroups.description AS customergroup_name, validation AS customergroup_id, s_user.id AS id, lastlogin AS date, company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
         FROM s_user LEFT JOIN s_core_customergroups
         ON groupkey = validation,
         s_user_billingaddress
@@ -371,7 +371,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $user["customergroup_name"] = htmlentities($user["customergroup_name"],null,"UTF-8");
             $user["company_name"] = htmlentities($user["company_name"],null,"UTF-8");
             $user["customer"] = htmlentities($user["customer"],null,"UTF-8");
-            $user["date"] = date('d.m.Y H:i:s', strtotime($user["lastlogin"]));
         }
         
 
