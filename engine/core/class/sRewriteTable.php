@@ -68,12 +68,6 @@ class sRewriteTable
     protected $preparedUpdate = null;
 
     /**
-     * Translation handler.
-     * @var Shopware_Components_Translation
-     */
-    private $translator;
-
-    /**
      * Prepared insert PDOStatement for the s_core_rewrite_urls table.
      * @var PDOStatement
      */
@@ -178,6 +172,13 @@ class sRewriteTable
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
                 array($this, 'sSmartyCategoryPath')
+            );
+        }
+
+        if (!(in_array('createSupplierPath', $keys))) {
+            $this->template->registerPlugin(
+                Smarty::PLUGIN_FUNCTION, 'createSupplierPath',
+                array($this, 'createSupplierPath')
             );
         }
 
@@ -462,21 +463,9 @@ class sRewriteTable
     }
 
     /**
-     * @return \Shopware_Components_Translation
-     */
-    private function getTranslator()
-    {
-        if (null === $this->translator) {
-            $this->translator = new Shopware_Components_Translation();
-        }
-
-        return $this->translator;
-    }
-
-    /**
      * Create rewrite rules for suppliers
      */
-    public function sCreateRewriteTableSuppliers(Shop $shop, $offset = null, $limit = null)
+    public function sCreateRewriteTableSuppliers($offset = null, $limit = null)
     {
         if (empty($this->sSYSTEM->sCONFIG['sSEOSUPPLIER']) || $this->sSYSTEM->sCONFIG['sSEOSUPPLIER'] === false) {
             return;
@@ -485,20 +474,12 @@ class sRewriteTable
         $suppliers = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier')->getFriendlyUrlSuppliersQuery($offset, $limit)->getArrayResult();
 
         foreach ($suppliers as $supplier) {
-            $path = $supplier['name'];
+            $this->data->assign('sSupplier', $supplier);
+            $path = $this->template->fetch('string:' . Shopware()->Config()->seoSupplierRouteTemplate, $this->data);
+            $path = $this->sCleanupPath($path, false);
 
-            if(!$shop->getDefault())
-            {
-                $translation = $this->getTranslator()->read($shop->getId(), 'supplier', $supplier['id']);
-                $path = array_key_exists('name', $translation)?$translation['name']:$path;
-            }
-            if($path)
-            {
-                $path = $this->sCleanupPath($path.'/', false);
-
-                $org_path = 'sViewport=supplier&sSupplier=' . $supplier['id'];
-                $this->sInsertUrl($org_path, $path);
-            }
+            $org_path = 'sViewport=supplier&sSupplier=' . $supplier['id'];
+            $this->sInsertUrl($org_path, $path);
         }
     }
 
@@ -615,6 +596,19 @@ class sRewriteTable
         ));
     }
 
+    public function createSupplierPath($params)
+    {
+        $parts = array();
+        if (!empty($params['supplierID'])) {
+            $parts[] = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier')->find($params['supplierID'])->getName();
+        }
+        if (empty($params['separator']))
+            $params['separator'] = '/';
+        foreach ($parts as &$part) {
+            $part = str_replace($params['separator'], '', $part);
+        }
+        return implode($params['separator'], $parts);
+    }
 
     public function sSmartyCategoryPath($params)
     {
