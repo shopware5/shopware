@@ -36,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginInstallCommand extends AbstractPluginCommand
+class PluginInstallCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class PluginInstallCommand extends AbstractPluginCommand
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:install')
+            ->setName('sw:plugin:install')
             ->setDescription('Installs a plugin.')
             ->addArgument(
                 'plugin',
