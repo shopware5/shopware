@@ -273,7 +273,6 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             {
                 xtype : 'textfield',
                 name : 'name',
-                translatable : true,
                 allowBlank  : false,
                 anchor : '95%',
                 fieldLabel  : '{s name=name}Supplier name{/s}',

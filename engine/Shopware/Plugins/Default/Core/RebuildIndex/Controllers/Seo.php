@@ -297,7 +297,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();
-        $this->RewriteTable()->sCreateRewriteTableSuppliers($shop, $offset, $limit);
+        $this->RewriteTable()->sCreateRewriteTableSuppliers($offset, $limit);
 
         $this->View()->assign(array(
             'success' => true
