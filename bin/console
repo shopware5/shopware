@@ -41,6 +41,6 @@ $input = new ArgvInput();
 $env = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
 $env = $input->getParameterOption(array('--env', '-e'), $env);
 
-$kernel = new Shopware\Kernel($env, true);
+$kernel = new Shopware\Kernel($env, false);
 $application = new Shopware\Components\Console\Application($kernel);
 $application->run($input);

@@ -93,6 +93,10 @@ class Kernel implements HttpKernelInterface
      */
     protected $booted;
 
+    const VERSION      = \Shopware::VERSION;
+    const VERSION_TEXT = \Shopware::VERSION_TEXT;
+    const REVISION     = \Shopware::REVISION;
+
     /**
      * @param string $environment
      * @param boolean $debug
@@ -300,6 +304,18 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * Checks if debug mode is enabled.
+     *
+     * @return Boolean true if debug mode is enabled, false otherwise
+     *
+     * @api
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
      * @return string
      */
     public function getCacheDir()
@@ -318,7 +334,7 @@ class Kernel implements HttpKernelInterface
     /**
      * @return string
      */
-    protected function getDocumentRoot()
+    public function getDocumentRoot()
     {
         return realpath(__DIR__ . '/../../') . '/';
     }
