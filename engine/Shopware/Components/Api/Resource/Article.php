@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Model\QueryBuilder;
@@ -597,10 +598,10 @@ class Article extends Resource
         $data = $this->prepareArticleAssociatedData($data, $article);
         $data = $this->prepareMainDetailAssociatedData($data);
         $data = $this->prepareMainPricesAssociatedData($data, $article);
-        $data = $this->prepareCategoryAssociatedData($data);
+        $data = $this->prepareCategoryAssociatedData($data, $article);
         $data = $this->prepareRelatedAssociatedData($data, $article);
         $data = $this->prepareSimilarAssociatedData($data, $article);
-        $data = $this->prepareAvoidCustomerGroups($data);
+        $data = $this->prepareAvoidCustomerGroups($data, $article);
         $data = $this->prepareAttributeAssociatedData($data, $article);
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareImageAssociatedData($data, $article);
@@ -653,6 +654,9 @@ class Article extends Resource
         // delete old main, if it has no configurator options
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
+
+        $this->checkDataReplacement($article->getDetails(), $data, 'variants');
+
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
@@ -1061,6 +1065,10 @@ class Article extends Resource
             $tax = $article->getTax();
         }
 
+        if ($article->getMainDetail()) {
+            $this->checkDataReplacement($article->getMainDetail()->getPrices(), $data['mainDetail'], 'prices');
+        }
+
         $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainDetail']['prices'], $article, $article->getMainDetail(), $tax);
         return $data;
     }
@@ -1147,16 +1155,19 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareCategoryAssociatedData($data)
+    protected function prepareCategoryAssociatedData($data, ArticleModel $article)
     {
         if (!isset($data['categories'])) {
             return $data;
         }
 
         $categories = array();
+        $this->checkDataReplacement($article->getCategories(), $data, 'categories');
+
         foreach ($data['categories'] as $categoryData) {
             if (!empty($categoryData['id'])) {
                 $model = $this->getManager()->find('Shopware\Models\Category\Category', $categoryData['id']);
@@ -1174,16 +1185,19 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @param $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareAvoidCustomerGroups($data)
+    protected function prepareAvoidCustomerGroups($data, $article)
     {
         if (!isset($data['customerGroups'])) {
             return $data;
         }
 
         $customerGroups = array();
+        $this->checkDataReplacement($article->getCategories(), $data, 'customerGroups');
+
         foreach ($data['customerGroups'] as $customerGroup) {
             if (!empty($customerGroup['id'])) {
                 $customerGroup = $this->getManager()->find('Shopware\Models\Customer\Group', $customerGroup['id']);
@@ -1212,6 +1226,8 @@ class Article extends Resource
         }
 
         $related = array();
+        $this->checkDataReplacement($article->getRelated(), $data, 'related');
+
         foreach ($data['related'] as $relatedData) {
 
             if (empty($relatedData['number']) && empty($relatedData['id'])) {
@@ -1261,6 +1277,7 @@ class Article extends Resource
         }
 
         $similar = array();
+        $this->checkDataReplacement($article->getSimilar(), $data, 'similar');
         foreach ($data['similar'] as $similarData) {
             if (empty($similarData['number']) && empty($similarData['id'])) {
                 continue;
@@ -1328,6 +1345,8 @@ class Article extends Resource
         }
 
         $models = array();
+        $this->checkDataReplacement($article->getPropertyValues(), $data, 'propertyValues');
+
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
             /** @var \Shopware\Models\Property\Option $option  */
@@ -1422,6 +1441,8 @@ class Article extends Resource
         }
 
         $downloads = array();
+        $this->checkDataReplacement($article->getDownloads(), $data, 'downloads');
+
         foreach ($data['downloads'] as &$downloadData) {
             if (isset($downloadData['id'])) {
                 $download = $this->getManager()
@@ -1494,6 +1515,8 @@ class Article extends Resource
 
         $images = $article->getImages();
         $position = 1;
+
+        $this->checkDataReplacement($article->getImages(), $data, 'images');
 
         foreach ($data['images'] as &$imageData) {
             if (isset($imageData['id'])) {
