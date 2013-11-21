@@ -111,13 +111,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
               ce.listener,
               ce.position,
               cp.name as plugin
-    	 	FROM s_core_subscribes ce
-    	 	JOIN s_core_plugins cp
-    	 	ON cp.id=ce.pluginID
-    	 	AND cp.active=1
-    	 	AND cp.namespace=?
-    	 	WHERE ce.type=0
-    	 	ORDER BY name, position
+             FROM s_core_subscribes ce
+             JOIN s_core_plugins cp
+             ON cp.id=ce.pluginID
+             AND cp.active=1
+             AND cp.namespace=?
+             WHERE ce.type=0
+             ORDER BY name, position
         ";
         $listeners = $this->Application()->Db()->fetchAll($sql, array($namespace));
 
@@ -135,11 +135,19 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * plugin has no config, the config is automatically set to an empty array.
      *
      * @param   string $name
+     * @param   Shop   $shop
      * @return  Enlight_Config|array
      */
-    public function getConfig($name)
+    public function getConfig($name, Shop $shop = null)
     {
-        if (!isset($this->configStorage[$name])) {
+        if ($shop) {
+            $cacheKey = $name . $shop->getId();
+        } else {
+            $cacheKey  = $name;
+            $shop = $this->shop;
+        }
+
+        if (!isset($this->configStorage[$cacheKey])) {
             $sql = "
                 SELECT
                   ce.name,
@@ -158,16 +166,18 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 WHERE p.name=?
             ";
             $config = $this->Application()->Db()->fetchPairs($sql, array(
-                $this->shop !== null ? $this->shop->getId() : null,
-                $this->shop !== null && $this->shop->getMain() !== null ? $this->shop->getMain()->getId() : 1,
+                $shop !== null ? $shop->getId() : null,
+                $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
                 $name
             ));
             foreach ($config as $key => $value) {
                 $config[$key] = unserialize($value);
             }
-            $this->configStorage[$name] = new Enlight_Config($config, true);
+
+            $this->configStorage[$cacheKey] = new Enlight_Config($config, true);
         }
-        return $this->configStorage[$name];
+
+        return $this->configStorage[$cacheKey];
     }
 
     /**

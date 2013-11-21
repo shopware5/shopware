@@ -37,7 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginConfigListCommand extends ShopwareCommand
+class PluginConfigSetCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -45,23 +45,29 @@ class PluginConfigListCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:config:list')
-            ->setDescription('Lists plugin configuration.')
+            ->setName('sw:plugin:config:set')
+            ->setDescription('Sets plugin configuration.')
             ->addOption(
                 'shop',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Get configuration for shop'
+                'Set configuration for shop'
             )
             ->addArgument(
                 'plugin',
                 InputArgument::REQUIRED,
-                'The plugin to list config.'
+                'The name of the plugin.'
             )
-            ->setHelp(<<<EOF
-The <info>%command.name%</info> lists a pluginc configuration.
-EOF
-            );
+            ->addArgument(
+                'key',
+                InputArgument::REQUIRED,
+                'Configuration key.'
+            )
+            ->addArgument(
+                'value',
+                InputArgument::REQUIRED,
+                'Configuration value.'
+            )
         ;
     }
 
@@ -90,17 +96,22 @@ EOF
                 $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
                 return 1;
             }
-            $shops = array($shop);
         } else {
-            $shops = $em->getRepository('Shopware\Models\Shop\Shop')->findAll();
+            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
         }
 
-
-        foreach ($shops as $shop) {
-            $config = $installer->getPluginConfig($plugin, $shop);
-
-            $output->writeln(sprintf("Plugin configuration for Plugin %s and shop %s:", $pluginName, $shop->getName()));
-            $output->writeln(print_r($config, true));
+        $value = $input->getArgument('value');
+        if ($value === "null") {
+            $value = null;
         }
+        if ($value === "false") {
+            $value = false;
+        }
+        if ($value === "true") {
+            $value = true;
+        }
+
+        $installer->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
+        $output->writeln(sprintf("Plugin configuration for Plugin %s saved.", $pluginName));
     }
 }
