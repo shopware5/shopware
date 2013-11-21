@@ -47,8 +47,8 @@ class PluginListCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:list')
-            ->setDescription('List plugins')
+            ->setName('sw:plugin:list')
+            ->setDescription('Lists plugins.')
             ->addOption(
                 'filter',
                 null,
@@ -75,21 +75,22 @@ class PluginListCommand extends ShopwareCommand
 
         $repository = $em->getRepository('Shopware\Models\Plugin\Plugin');
         $builder = $repository->createQueryBuilder('plugin');
+        $builder->andWhere('plugin.capabilityEnable = true');
         $builder->addOrderBy('plugin.active', 'desc');
         $builder->addOrderBy('plugin.name');
 
         $filter = strtolower($input->getOption('filter'));
         if ($filter === 'active') {
-            $builder->where('plugin.active = true');
+            $builder->andWhere('plugin.active = true');
         }
 
         if ($filter === 'inactive') {
-            $builder->where('plugin.active = false');
+            $builder->andWhere('plugin.active = false');
         }
 
         $namespace = $input->getOption('namespace');
         if (count($namespace)) {
-            $builder->where('p.namespace IN (:namespace)');
+            $builder->andWhere('p.namespace IN (:namespace)');
             $builder->setParameter('namespace', $namespace);
         }
 

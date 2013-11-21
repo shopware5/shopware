@@ -36,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginActivateCommand extends AbstractPluginCommand
+class PluginActivateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class PluginActivateCommand extends AbstractPluginCommand
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:activate')
+            ->setName('sw:plugin:activate')
             ->setDescription('Activates a plugin.')
             ->addArgument(
                 'plugin',

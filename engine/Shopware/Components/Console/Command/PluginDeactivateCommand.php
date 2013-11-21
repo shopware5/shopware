@@ -36,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginDeactivateCommand extends AbstractPluginCommand
+class PluginDeactivateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class PluginDeactivateCommand extends AbstractPluginCommand
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:deactivate')
+            ->setName('sw:plugin:deactivate')
             ->setDescription('Deactivates a plugin.')
             ->addArgument(
                 'plugin',

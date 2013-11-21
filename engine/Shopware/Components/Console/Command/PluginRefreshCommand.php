@@ -38,28 +38,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginRefreshCommand extends Command implements ResourceLoaderAwareInterface
+class PluginRefreshCommand extends ShopwareCommand
 {
-    /**
-     * @var ResourceLoader
-     */
-    private $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setResourceLoader(ResourceLoader $resourceLoader = null)
-    {
-        $this->container = $resourceLoader;
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:refresh')
+            ->setName('sw:plugin:refresh')
             ->setDescription('Refreshes plugin list.')
         ;
     }
@@ -73,7 +60,6 @@ class PluginRefreshCommand extends Command implements ResourceLoaderAwareInterfa
         $installer  = $this->container->get('shopware.plugin_installer');
         $installer->refreshPluginList();
 
-        //$output->writeln(sprintf("Successfully refreshed. Removed: %s, New: %s.", $removedCount, $addedCount));
         $output->writeln(sprintf("Successfully refreshed"));
     }
 }
