@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Plugin;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 
@@ -149,6 +148,37 @@ class Installer
                 throw new \Exception(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
             } else {
                 throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
+            }
+        }
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @throws \Exception
+     */
+    public function updatePlugin(Plugin $plugin)
+    {
+        if (!$plugin->getUpdateVersion()) {
+            return;
+        }
+
+        $bootstrap = $this->getPluginBootstrap($plugin);
+
+        /** @var $namespace \Shopware_Components_Plugin_Namespace */
+        $namespace = $bootstrap->Collection();
+
+        try {
+            $result = $namespace->updatePlugin($bootstrap);
+        } catch (\Exception $e) {
+            throw new \Exception(sprintf("Unable to update, got exception:\n%s\n", $e->getMessage()), 0, $e);
+        }
+
+        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
+        if (!$success) {
+            if (isset($result['message'])) {
+                throw new \Exception(sprintf("Unable to update, got message:\n%s\n", $result['message']));
+            } else {
+                throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
             }
         }
     }
