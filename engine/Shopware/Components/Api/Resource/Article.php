@@ -24,8 +24,6 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
@@ -631,6 +629,8 @@ class Article extends Resource
             $tax = $article->getTax();
         }
 
+        $this->checkDataReplacement($variant->getPrices(), $variantData, 'prices');
+
         $variantData['prices'] = $this->preparePricesAssociatedData($variantData['prices'], $article, $variant, $tax);
 
         return $variantData;
@@ -1189,14 +1189,14 @@ class Article extends Resource
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareAvoidCustomerGroups($data, $article)
+    protected function prepareAvoidCustomerGroups($data, ArticleModel $article)
     {
         if (!isset($data['customerGroups'])) {
             return $data;
         }
 
         $customerGroups = array();
-        $this->checkDataReplacement($article->getCategories(), $data, 'customerGroups');
+        $this->checkDataReplacement($article->getCustomerGroups(), $data, 'customerGroups');
 
         foreach ($data['customerGroups'] as $customerGroup) {
             if (!empty($customerGroup['id'])) {

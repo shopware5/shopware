@@ -1154,4 +1154,95 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'supplierId' => 2
         );
     }
+
+    public function testImageReplacement()
+    {
+        $data = $this->getSimpleTestData();
+        $data['images'] = $this->getImagesForNewArticle();
+        $article = $this->resource->create($data);
+
+        $createdIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
+            ':articleId' => $article->getId()
+        ));
+
+        $data = array(
+            '__options_images' => array('replace' => true),
+            'images' => $this->getImagesForNewArticle(40)
+        );
+
+        $this->resource->update($article->getId(), $data);
+
+        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
+            ':articleId' => $article->getId()
+        ));
+
+        foreach($updateIds as $id) {
+            $this->assertNotContains($id, $createdIds);
+        }
+        $this->assertCount(5, $updateIds);
+    }
+
+    public function testImageReplacementMerge()
+    {
+        $data = $this->getSimpleTestData();
+        $data['images'] = $this->getImagesForNewArticle();
+        $article = $this->resource->create($data);
+
+        $data = array(
+            '__options_images' => array('replace' => false),
+            'images' => $this->getImagesForNewArticle(40)
+        );
+
+        $this->resource->update($article->getId(), $data);
+
+        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
+            ':articleId' => $article->getId()
+        ));
+
+        $this->assertCount(10, $updateIds);
+    }
+
+
+
+    public function testImageReplacementWithoutOption()
+    {
+        $data = $this->getSimpleTestData();
+        $data['images'] = $this->getImagesForNewArticle();
+        $article = $this->resource->create($data);
+
+        $data = array(
+            'images' => $this->getImagesForNewArticle(40)
+        );
+
+        $this->resource->update($article->getId(), $data);
+
+        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
+            ':articleId' => $article->getId()
+        ));
+
+        $this->assertCount(10, $updateIds);
+    }
+
+    private function getImagesForNewArticle($offset = 10, $limit = 5)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+            'media.id as mediaId',
+            '2 as main'
+        ))
+            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /**
+         * Get random images.
+         * Only want to check if the main flag will be used.
+         */
+        $images = $builder->getQuery()->getArrayResult();
+        $keys = array_keys($images);
+        $images[$keys[0]]['main'] = 1;
+
+        return $images;
+    }
 }
