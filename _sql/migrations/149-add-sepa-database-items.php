@@ -71,11 +71,6 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
             KEY `user_id` (`user_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-        ALTER TABLE `s_core_payment_instance`
-            ADD CONSTRAINT `s_user_payment_instances` FOREIGN KEY (`user_id`) REFERENCES `s_user` (`id`),
-            ADD CONSTRAINT `s_core_paymentmeans_payment_instances` FOREIGN KEY (`payment_mean_id`) REFERENCES `s_core_paymentmeans` (`id`),
-            ADD CONSTRAINT `s_order_payment_instances` FOREIGN KEY (`order_id`) REFERENCES `s_order` (`id`);
-
         CREATE TABLE IF NOT EXISTS `s_core_payment_data` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `payment_mean_id` int(11) NOT NULL,
@@ -89,10 +84,6 @@ class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMig
             KEY `payment_mean_id` (`payment_mean_id`,`user_id`),
             KEY `user_id` (`user_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
-        ALTER TABLE `s_core_payment_data`
-            ADD CONSTRAINT `s_core_payment_data_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `s_user` (`id`),
-            ADD CONSTRAINT `s_core_payment_data_ibfk_1` FOREIGN KEY (`payment_mean_id`) REFERENCES `s_core_paymentmeans` (`id`);
 
         INSERT IGNORE INTO `s_core_paymentmeans` (`name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`, `source`) VALUES
             ('sepa', 'SEPA', 'sepa.tpl', 'sepa', '', 0, 'SEPA debit', 0, 0, '', 5, 0, 0, '', 0, '', NULL, 1);
