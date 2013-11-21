@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
@@ -229,6 +230,98 @@ class Installer
         $this->em->flush($plugin);
     }
 
+    /**
+     * @param Plugin $plugin
+     * @param Shop $shop
+     * @return array
+     */
+    public function getPluginConfig(Plugin $plugin, Shop $shop = null)
+    {
+        $namespace = $this->plugins->get($plugin->getNamespace());
+
+        /** @var \Shopware_Components_Plugin_Namespace $namespace */
+        $config = $namespace->getConfig($plugin->getName(), $shop);
+
+        return $config->toArray();
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param array $elements
+     * @param Shop $shop
+     */
+    public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
+    {
+        if ($shop === null) {
+            $shopRepository  = $this->em->getRepository('Shopware\Models\Shop\Shop');
+            $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+        }
+
+        foreach ($elements as $name => $value) {
+            $this->saveConfigElement($plugin, $name, $value, $shop);
+        }
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param string $name
+     * @param mixed $value
+     * @param Shop $shop
+     * @throws \Exception
+     */
+    public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop = null)
+    {
+        if ($shop === null) {
+            $shopRepository  = $this->em->getRepository('Shopware\Models\Shop\Shop');
+            $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+        }
+
+        $elementRepository = $this->em->getRepository('Shopware\Models\Config\Element');
+        $formRepository    = $this->em->getRepository('Shopware\Models\Config\Form');
+        $valueRepository   = $this->em->getRepository('Shopware\Models\Config\Value');
+
+        /** @var $form \Shopware\Models\Config\Form*/
+        $form = $formRepository->findOneBy(array('pluginId' => $plugin->getId()));
+
+        /** @var $element \Shopware\Models\Config\Element */
+        $element = $elementRepository->findOneBy(array('form' => $form, 'name' => $name));
+        if (!$element) {
+            throw new \Exception(sprintf('Config element "%s" not found.', $name));
+        }
+
+        if ($element->getScope() == 0) {
+            // todo prevent subshop updates
+        }
+
+        $defaultValue = $element->getValue();
+        $valueModel = $valueRepository->findOneBy(array('shop' => $shop, 'element' => $element));
+
+        if (!$valueModel) {
+            if ($value == $defaultValue || $value === null) {
+                return;
+            }
+
+            $valueModel = new \Shopware\Models\Config\Value();
+            $valueModel->setElement($element);
+            $valueModel->setShop($shop);
+            $valueModel->setValue($value);
+            $this->em->persist($valueModel);
+            $this->em->flush($valueModel);
+
+            return;
+        }
+
+        if ($value == $defaultValue || $value === null) {
+            $this->em->remove($valueModel);
+        } else {
+            $valueModel->setValue($value);
+        }
+        $this->em->flush($valueModel);
+    }
+
+    /**
+     *
+     */
     public function refreshPluginList()
     {
         $refreshed = \Zend_Date::now();
