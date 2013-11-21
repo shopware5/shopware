@@ -1,4 +1,6 @@
 <?php
+use Shopware\Models\Shop\Shop;
+
 /**
  * Shopware 4.0
  * Copyright © 2013 shopware AG
@@ -32,9 +34,14 @@
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {
     /**
-     * @var
+     * @var Shop
      */
     protected $shop;
+
+    /**
+     * @var array
+     */
+    protected $configStorage = array();
 
     /**
      * @return Enlight_Config
@@ -52,16 +59,52 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             WHERE namespace=?
         ";
         $plugins = $this->Application()->Db()->fetchAssoc($sql, array($this->name));
+
         foreach ($plugins as $pluginName => $plugin) {
-            $plugins[$pluginName]['class'] = implode('_', array(
-                'Shopware', 'Plugins', $this->name, $pluginName, 'Bootstrap'
-            ));
-            $plugins[$pluginName]['path'] = $this->Application()->AppPath(implode('_', array(
-                'Plugins', $plugin['source'], $this->name, $pluginName
-            )));
+            $plugins[$pluginName]['class'] = $this->buildClassName($this->name, $pluginName);
+            $plugins[$pluginName]['path'] = $this->buildPath($this->name, $pluginName, $plugin['source']);
             $plugins[$pluginName]['config'] = array();
         }
 
+        $listeners = $this->loadListeners($this->name);
+
+        return new Enlight_Config(array(
+            'plugins'   => $plugins,
+            'listeners' => $listeners
+        ), true);
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $pluginName
+     * @return string
+     */
+    protected function buildClassName($namespace, $pluginName)
+    {
+        return implode('_', array(
+            'Shopware', 'Plugins', $namespace, $pluginName, 'Bootstrap'
+        ));
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $pluginName
+     * @param string $pluginSource
+     * @return string
+     */
+    protected function buildPath($namespace, $pluginName, $pluginSource)
+    {
+        return $this->Application()->AppPath(implode('_', array(
+            'Plugins', $pluginSource, $namespace, $pluginName
+        )));
+    }
+
+    /**
+     * @param string $namespace
+     * @return array
+     */
+    protected function loadListeners($namespace)
+    {
         $sql = "
             SELECT
               ce.subscribe as name,
@@ -76,27 +119,20 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     	 	WHERE ce.type=0
     	 	ORDER BY name, position
         ";
-        $listeners = $this->Application()->Db()->fetchAll($sql, array($this->name));
+        $listeners = $this->Application()->Db()->fetchAll($sql, array($namespace));
+
         foreach ($listeners as $listenerKey => $listener) {
             if (($position = strpos($listener['listener'], '::')) !== false) {
                 $listeners[$listenerKey]['listener'] = substr($listener['listener'], $position + 2);
             }
         }
 
-        return new Enlight_Config(array(
-            'plugins' => $plugins,
-            'listeners' => $listeners
-        ), true);
+        return $listeners;
     }
 
     /**
-     * @var
-     */
-    protected $configStorage = array();
-
-    /**
      * Returns the plugin configuration by the plugin name. If the
-     * plugin has no config, the config is automatically set an empty array.
+     * plugin has no config, the config is automatically set to an empty array.
      *
      * @param   string $name
      * @return  Enlight_Config|array
@@ -145,7 +181,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         if (!isset($this->storage->plugins->$plugin)) {
             return null;
-        } elseif ($name !== null) {
+        }
+
+        if ($name !== null) {
             return $this->storage->plugins->$plugin->$name;
         } else {
             return $this->storage->plugins->$plugin;
@@ -177,25 +215,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Set shop instance
      *
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      * @return Shopware_Components_Plugin_Namespace
      */
-    public function setShop(\Shopware\Models\Shop\Shop $shop)
+    public function setShop(Shop $shop)
     {
+        // reset config storage
         $this->configStorage = array();
-        $this->shop = $shop;
-        return $this;
-    }
 
-    /**
-     * Set cache instance
-     *
-     * @param Zend_Cache_Core $cache
-     * @return Shopware_Components_Plugin_Namespace
-     */
-    public function setCache(Zend_Cache_Core $cache)
-    {
-        $this->cache = $cache;
+        $this->shop = $shop;
+
         return $this;
     }
 
@@ -222,10 +251,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         parent::registerPlugin($plugin);
 
-        $info = $plugin->Info();
+        $info         = $plugin->Info();
         $capabilities = $plugin->getCapabilities();
-        $id = $this->getPluginId($plugin->getName());
+        $id           = $this->getPluginId($plugin->getName());
 
+        // normalize autor -> author
         if (isset($info['autor'])) {
             $info['author'] = $info['autor'];
         }
@@ -411,6 +441,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
         }
+
         return $result;
     }
 
@@ -422,11 +453,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function write()
     {
-        //$this->storage->plugins = $this->toArray();
-        //$this->storage->listeners = $this->Subscriber()->toArray();
-        //$this->storage->write();
-
         $subscribes = $this->Subscriber()->toArray();
+
         foreach ($subscribes as $subscribe) {
             $subscribe['pluginID'] = $this->getInfo($subscribe['plugin'], 'id');
             if (!isset($subscribe['pluginID'])) {
@@ -447,6 +475,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                     `position` = VALUES(`position`),
                     `pluginID` = VALUES(`pluginID`)
             ';
+
             $this->Application()->Db()->query($sql, array(
                 $subscribe['name'],
                 0,
