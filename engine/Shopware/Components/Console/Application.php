@@ -24,12 +24,14 @@
 
 namespace Shopware\Components\Console;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -65,7 +67,9 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', \Shopware::VERSION);
+        parent::__construct('Shopware', Kernel::VERSION);
+
+        parent::__construct('Symfony', Kernel::VERSION.' - '.'/'.$kernel->getEnvironment().($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
@@ -128,8 +132,14 @@ class Application extends BaseApplication
         $helperSet->set(new EntityManagerHelper($em), 'em');
         $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
 
-        ConsoleRunner::addCommands($this);
+        DoctrineConsoleRunner::addCommands($this);
 
+        $this->registerFilesystemCommands();
+        $this->registerEventCommands();
+    }
+
+    protected function registerFilesystemCommands()
+    {
         if (!is_dir($dir = __DIR__ .'/Command')) {
             return;
         }
@@ -148,6 +158,24 @@ class Application extends BaseApplication
             $r = new \ReflectionClass($class);
             if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract() && !$r->getConstructor()->getNumberOfRequiredParameters()) {
                 $this->add($r->newInstance());
+            }
+        }
+    }
+
+    protected function registerEventCommands()
+    {
+        $this->kernel->getResourceLoader()->load('plugins');
+
+        /** @var \Enlight_Event_EventManager $eventManager */
+        $eventManager = $this->kernel->getResourceLoader()->get('events');
+
+        $collection = new ArrayCollection();
+        $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, array('subject' => $this));
+
+        /** @var $command Command */
+        foreach ($collection as $command) {
+            if ($command instanceof Command) {
+                $this->add($command);
             }
         }
     }

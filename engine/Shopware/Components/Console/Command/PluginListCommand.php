@@ -47,7 +47,7 @@ class PluginListCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw-plugin:list')
+            ->setName('sw:plugin:list')
             ->setDescription('List plugins')
             ->addOption(
                 'filter',
