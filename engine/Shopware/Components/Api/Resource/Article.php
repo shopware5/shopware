@@ -25,8 +25,10 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Media\Media;
 
 /**
@@ -52,6 +54,14 @@ class Article extends Resource
     public function getDetailRepository()
     {
         return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+    }
+
+    /**
+     * @return Variant
+     */
+    public function getVariantResource()
+    {
+        return Manager::getResource('Variant');
     }
 
     /**
@@ -594,6 +604,8 @@ class Article extends Resource
     protected function prepareAssociatedData($data, ArticleModel $article)
     {
         $data = $this->prepareArticleAssociatedData($data, $article);
+
+
         $data = $this->prepareMainDetailAssociatedData($data);
         $data = $this->prepareMainPricesAssociatedData($data, $article);
         $data = $this->prepareCategoryAssociatedData($data, $article);
@@ -605,6 +617,16 @@ class Article extends Resource
         $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
+
+        //need to set the tax data directly for following price calculations which use the tax object of the article
+        if (!empty($data['tax'])) {
+            $article->setTax($data['tax']);
+        }
+
+        if (!empty($data['configuratorSet'])) {
+            $article->setConfiguratorSet($data['configuratorSet']);
+        }
+
         $data = $this->prepareVariants($data, $article);
 
         return $data;
@@ -671,91 +693,117 @@ class Article extends Resource
             }
         }
 
+        // if the mainDetail was deleted, set the first variant as mainDetail
+        // if another variant has set isMain to true, this variant will become
+        // a usual variant again
+        if ($setFirstVariantMain) {
+            $data['variants']['isMain'] = true;
+        }
+
         $variants = array();
         foreach ($data['variants'] as $variantData) {
 
-            // if the mainDetail was deleted, set the first variant as mainDetail
-            // if another variant has set isMain to true, this variant will become
-            // a usual variant again
-            if ($setFirstVariantMain) {
-                $setFirstVariantMain = false;
-                $data['variants']['isMain'] = true;
-            }
-
             if (isset($variantData['id'])) {
-                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
-                    'id'        => $variantData['id'],
-                    'articleId' => $article->getId()
-                ));
+                $variant = $this->getVariantResource()->update($variantData['id'], $variantData, $article);
+            } else {
+                $variant = null;
 
-                if (!$variant) {
-                    throw new ApiException\CustomValidationException(sprintf("Variant by id %s not found", $variantData['id']));
-                }
-            } elseif (isset($variantData['number'])) {
-                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
-                    'number'    => $variantData['number'],
-                    'articleId' => $article->getId()
-                ));
-            }
-
-            if (!$variant) {
-                $variant = new \Shopware\Models\Article\Detail();
-                $variant->setKind(2);
-            }
-
-            $variantData = $this->prepareVariantAssociatedData($variantData);
-            $variantData = $this->prepareVariantPricesAssociatedData($data, $variantData, $article, $variant);
-            $variantData = $this->prepareVariantAttributeAssociatedData($variantData, $article, $variant);
-
-            $variant->fromArray($variantData);
-
-            if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
-                $configuratorSet = $article->getConfiguratorSet();
-
-                if (!$configuratorSet && !isset($data['configuratorSet'])) {
-                    throw new ApiException\CustomValidationException('A configuratorset has to be defined');
+                //the number property can be set for two reasons.
+                //1. Use the number as identifier to update an existing variant
+                //2. Use this number for the new variant
+                if (isset($variantData['number'])) {
+                    $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
+                        'number'    => $variantData['number'],
+                        'articleId' => $article->getId()
+                    ));
                 }
 
-                /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
-                if ($configuratorSet) {
-                    $availableGroups = $configuratorSet->getGroups();
+                //if the variant was found over the number, update the existing
+                if ($variant) {
+                    $variant = $this->getVariantResource()->_update($variant->getId(), $variantData, $article);
                 } else {
-                    $configuratorSet = $data['configuratorSet'];
-                    $availableGroups = $configuratorSet->getGroups();
+                    //otherwise the number passed to use as order number for the new variant
+                    $variant = $this->getVariantResource()->_create($variantData, $article);
                 }
-
-                $assignedOptions = new \Doctrine\Common\Collections\ArrayCollection();
-                foreach ($variantData['configuratorOptions'] as $configuratorOption) {
-                    $group  = $configuratorOption['group'];
-                    $option = $configuratorOption['option'];
-
-                    /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
-                    foreach ($availableGroups as $availableGroup) {
-                        if ($availableGroup->getName() == $group || $availableGroup->getId() == $configuratorOption['groupId']) {
-                            $optionExists = false;
-                            /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
-                            foreach ($availableGroup->getOptions() as $availableOption) {
-                                if ($availableOption->getName() == $option || $availableOption->getId() == $configuratorOption['optionId']) {
-                                    $assignedOptions->add($availableOption);
-                                    $optionExists = true;
-                                    break;
-                                }
-                            }
-
-                            if (!$optionExists) {
-                                $optionModel = new \Shopware\Models\Article\Configurator\Option();
-                                $optionModel->setPosition(0);
-                                $optionModel->setName($option);
-                                $optionModel->setGroup($availableGroup);
-                                $this->getManager()->persist($optionModel);
-                                $assignedOptions->add($optionModel);
-                            }
-                        }
-                    }
-                }
-
-                $variant->setConfiguratorOptions($assignedOptions);
             }
+
+
+//            if (isset($variantData['id'])) {
+//                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
+//                    'id'        => $variantData['id'],
+//                    'articleId' => $article->getId()
+//                ));
+//
+//                if (!$variant) {
+//                    throw new ApiException\CustomValidationException(sprintf("Variant by id %s not found", $variantData['id']));
+//                }
+//            } elseif (isset($variantData['number'])) {
+//                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
+//                    'number'    => $variantData['number'],
+//                    'articleId' => $article->getId()
+//                ));
+//            }
+//
+//            if (!$variant) {
+//                $variant = new \Shopware\Models\Article\Detail();
+//                $variant->setKind(2);
+//            }
+
+//            $variantData = $this->prepareVariantAssociatedData($variantData);
+//            $variantData = $this->prepareVariantPricesAssociatedData($data, $variantData, $article, $variant);
+//            $variantData = $this->prepareVariantAttributeAssociatedData($variantData, $article, $variant);
+//
+//            $variant->fromArray($variantData);
+//
+//
+//
+//            if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
+//                $configuratorSet = $article->getConfiguratorSet();
+//
+//                if (!$configuratorSet && !isset($data['configuratorSet'])) {
+//                    throw new ApiException\CustomValidationException('A configuratorset has to be defined');
+//                }
+//
+//                /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
+//                if ($configuratorSet) {
+//                    $availableGroups = $configuratorSet->getGroups();
+//                } else {
+//                    $configuratorSet = $data['configuratorSet'];
+//                    $availableGroups = $configuratorSet->getGroups();
+//                }
+//
+//                $assignedOptions = new \Doctrine\Common\Collections\ArrayCollection();
+//                foreach ($variantData['configuratorOptions'] as $configuratorOption) {
+//                    $group  = $configuratorOption['group'];
+//                    $option = $configuratorOption['option'];
+//
+//                    /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
+//                    foreach ($availableGroups as $availableGroup) {
+//                        if ($availableGroup->getName() == $group || $availableGroup->getId() == $configuratorOption['groupId']) {
+//                            $optionExists = false;
+//                            /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
+//                            foreach ($availableGroup->getOptions() as $availableOption) {
+//                                if ($availableOption->getName() == $option || $availableOption->getId() == $configuratorOption['optionId']) {
+//                                    $assignedOptions->add($availableOption);
+//                                    $optionExists = true;
+//                                    break;
+//                                }
+//                            }
+//
+//                            if (!$optionExists) {
+//                                $optionModel = new \Shopware\Models\Article\Configurator\Option();
+//                                $optionModel->setPosition(0);
+//                                $optionModel->setName($option);
+//                                $optionModel->setGroup($availableGroup);
+//                                $this->getManager()->persist($optionModel);
+//                                $assignedOptions->add($optionModel);
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                $variant->setConfiguratorOptions($assignedOptions);
+//            }
 
 //            if (count($variant->getConfiguratorOptions()) === 0) {
 //                throw new \Exception('No Configurator Options assigned');
