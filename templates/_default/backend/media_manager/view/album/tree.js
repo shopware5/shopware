@@ -413,9 +413,12 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 Ext.each(models, function(model) {
                     model.set('newAlbumID', node.get('id'));
                 });
-                store.sync();
-                store.load();
-                view.fireEvent('reload');
+                store.sync({
+                    callback: function(){
+                        store.load();
+                        view.fireEvent('reload');
+                    }
+                });
             }
         });
     }
