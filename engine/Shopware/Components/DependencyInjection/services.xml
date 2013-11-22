@@ -278,5 +278,12 @@
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
             <argument type="service" id="service_container" />
         </service>
+
+        <service id="thumbnail_generator_basic" class="Shopware\Components\Thumbnail\Generator\Basic" />
+
+        <service id="thumbnail_manager" class="Shopware\Components\Thumbnail\Manager">
+            <argument type="service" id="thumbnail_generator_basic" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
     </services>
 </container>

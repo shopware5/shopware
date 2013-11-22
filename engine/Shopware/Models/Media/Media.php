@@ -475,6 +475,16 @@ class Media extends ModelEntity
         return $this->thumbnails;
     }
 
+    /**
+     * Returns the thumbnail paths of already generated thumbnails
+     *
+     * @return array
+     */
+    public function getCreatedThumbnails()
+    {
+        return $this->thumbnails;
+    }
+
     /****************************************************************
      *                  Lifecycle Callbacks                         *
      ****************************************************************/
@@ -490,12 +500,6 @@ class Media extends ModelEntity
     {
         //Upload file
         $this->uploadFile();
-
-        //create default thumbnails for the media manager
-        $this->createDefaultThumbnails();
-
-        //create thumbnails for the configured album thumbnails sizes
-        $this->createAlbumThumbnails($this->album);
     }
 
     /**
@@ -559,6 +563,15 @@ class Media extends ModelEntity
         }
     }
 
+	/**
+	 * Model event function, which called when the model is loaded.
+	 * @ORM\PostLoad
+	 */
+	public function onLoad()
+	{
+		$this->thumbnails = $this->loadThumbnails();
+	}
+
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
      * @return void
@@ -572,15 +585,6 @@ class Media extends ModelEntity
             Shopware()->Models()->persist($article);
         }
         Shopware()->Models()->flush();
-    }
-
-    /**
-     * Model event function, which called when the model is loaded.
-     * @ORM\PostLoad
-     */
-    public function onLoad()
-    {
-        $this->thumbnails = $this->loadThumbnails();
     }
 
     /**
@@ -676,7 +680,6 @@ class Media extends ModelEntity
      *
      * @param       $thumbnailSizes
      * @param       $fileName
-     * @return
      */
     public function removeAlbumThumbnails($thumbnailSizes, $fileName)
     {
@@ -763,9 +766,11 @@ class Media extends ModelEntity
         if ($this->type !== self::TYPE_IMAGE) {
             return;
         }
-        foreach ($this->defaultThumbnails as $size) {
-            $this->createThumbnail($size[0],$size[1]);
-        }
+
+	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
+	    $generator = Shopware()->ResourceLoader()->get('thumbnail_manager');
+
+	    $generator->createMediaThumbnail($this, $this->defaultThumbnails);
     }
 
     /**
@@ -801,49 +806,70 @@ class Media extends ModelEntity
 
     /**
      * Loads the thumbnails paths via the configured thumbnail sizes.
-     * If the thumbnail file of a configured thumbnail size don't exists, it will be created.
      * @return array
      */
     public function loadThumbnails()
     {
-        if ($this->type !== self::TYPE_IMAGE) {
-            return array();
-        }
-        $sizes = array();
+	    $thumbnails = $this->getThumbnailFilePaths();
 
-        //concat default sizes
-        foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
-                $sizes[] = $size . 'x' . $size;
-            } else {
-                $sizes[] = $size[0] . 'x' . $size[1];
-            }
+        if(!file_exists(Shopware()->OldPath() . $this->getPath())){
+            return $thumbnails;
         }
 
-        //Check if the album has loaded correctly.
-        if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
-            $sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
-            $sizes = array_unique($sizes);
-        }
-        $thumbnails = array();
+	    foreach($thumbnails as $size => $thumbnail) {
+		    $size = explode('x', $size);
 
-        //iterate thumbnail sizes
-        foreach ($sizes as $size) {
-            if (strpos($size, 'x') === false) {
-                $size = $size . 'x' . $size;
-            }
-            $path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
-            //create the thumbnail if not exist.
-            if (!file_exists($path)) {
-                $data = explode('x', $size);
-                $this->createThumbnail((int) $data[0], (int) $data[1]);
-            }
-            $path = str_replace(Shopware()->OldPath(), '', $path);
-            if (DIRECTORY_SEPARATOR !== '/') {
-                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-            }
-            $thumbnails[$size] = $path;
-        }
+		    $path = Shopware()->OldPath() . $thumbnail;
+		    if (!file_exists($path)) {
+                $this->createThumbnail($size[0], $size[1]);
+		    }
+	    }
+
+	    return $thumbnails;
+    }
+
+	/**
+	 * Returns an array of all thumbnail paths the media object can have
+	 *
+	 * @return array
+	 */
+	public function getThumbnailFilePaths()
+	{
+		if ($this->type !== self::TYPE_IMAGE) {
+			return array();
+		}
+		$sizes = array();
+
+		//concat default sizes
+		foreach ($this->defaultThumbnails as $size) {
+			if (count($size) === 1) {
+				$sizes[] = $size . 'x' . $size;
+			} else {
+				$sizes[] = $size[0] . 'x' . $size[1];
+			}
+		}
+
+		//Check if the album has loaded correctly.
+		if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
+			$sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
+			$sizes = array_unique($sizes);
+		}
+		$thumbnails = array();
+
+		//iterate thumbnail sizes
+		foreach ($sizes as $size) {
+			if (strpos($size, 'x') === false) {
+				$size = $size . 'x' . $size;
+			}
+			$path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
+            
+			$path = str_replace(Shopware()->OldPath(), '', $path);
+			if (DIRECTORY_SEPARATOR !== '/') {
+				$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+			}
+			$thumbnails[$size] = $path;
+		}
+
 
         return $thumbnails;
     }
@@ -864,7 +890,7 @@ class Media extends ModelEntity
      */
     private function getThumbnailDir()
     {
-        return $this->getUploadDir() . 'thumbnail' . DS;
+        return $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -875,49 +901,20 @@ class Media extends ModelEntity
      */
     private function createThumbnail($width, $height)
     {
+	    //create only thumbnails for image media
+	    if ($this->type !== self::TYPE_IMAGE) {
+		    return;
+	    }
 
+	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
+	    $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
 
-        $image = $this->createFileImage();
-        $originalSize = getimagesize($this->path);
+	    $newSize = array(
+		    'width' => $width,
+		    'height' => $height
+	    );
 
-        //calculate thumbnail size
-        $newSize = $this->calculateThumbnailSize($originalSize, $width, $height);
-
-        //use the thumbnail width as suffix
-        if ($height === 0 || empty($height)) {
-            $suffix = $width . 'x' . $width;
-        } else {
-            $suffix = $width . 'x' . $height;
-        }
-
-        //get new names
-        $newNames = $this->getThumbnailNames($suffix, $this->getFileName());
-
-        //if thumbnail already exist, return
-        if (file_exists($newNames['original'])) {
-            return;
-        }
-
-        //Create Thumbnail in memory.
-        $newImage = imagecreatetruecolor($newSize['width'], $newSize['height']);
-        imagealphablending($newImage, false);
-        imagesavealpha($newImage, true);
-        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newSize['width'], $newSize['height'], $originalSize[0], $originalSize[1]);
-
-        //create file.
-        imagejpeg($newImage, $newNames['jpg'], 90);
-        switch (strtolower($this->extension)) {
-            case 'gif':
-                imagegif($newImage, $newNames['original']);
-                break;
-            case 'png':
-                imagepng($newImage, $newNames['original']);
-                break;
-            default:
-                break;
-        }
-        imagedestroy($newImage);
-        imagedestroy($image);
+        $manager->createMediaThumbnail($this, array($newSize), true);
     }
 
     /**

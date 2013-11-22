@@ -110,10 +110,10 @@ class Album extends ModelEntity
     /**
      * Settings of the album.
      * @var \Shopware\Models\Media\Settings
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Media\Settings", mappedBy="album")
-     * @ORM\JoinColumn(name="id", referencedColumnName="albumID")
+     *
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Media\Settings", mappedBy="album", orphanRemoval=true, cascade={"persist"})
      */
-    private $settings;
+    protected $settings;
 
     /**
      * Initials the children and media collection
@@ -151,35 +151,6 @@ class Album extends ModelEntity
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Sets the parent id of the album. To set no parent pass 0 or null.
-     * If the album has no parent, the parent id "NULL" will be saved.
-     * @param integer|null $parentId
-     * @return Album
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        if ($this->parentId !== 0 && $this->parentId !== null) {
-            $this->parent = Shopware()->Models()->find('Shopware\Models\Media\Album', $parentId);
-        } else {
-            $this->parent = null;
-            $this->parentId = null;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the id of the parent album
-     * @return integer
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
     }
 
     /**
