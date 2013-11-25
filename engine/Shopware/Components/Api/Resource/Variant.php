@@ -260,20 +260,85 @@ class Variant extends Resource
     }
 
 
-    protected function prepareData($data, ArticleModel $article, Detail $variant)
+    protected function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
         $data = $this->prepareUnitAssociation($data);
 
-        $data['prices'] = $this->preparePriceAssociation(
-            $data['prices'],
-            $article,
-            $article->getTax()
-        );
+        if (!empty($data['prices'])) {
+            $data['prices'] = $this->preparePriceAssociation(
+                $data['prices'],
+                $article,
+                $variant,
+                $article->getTax()
+            );
+        }
 
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         return $data;
     }
+
+    /**
+     * @param array $prices
+     * @param \Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function preparePriceAssociation($prices, ArticleModel $article, $articleDetail, Tax $tax)
+    {
+        foreach ($prices as &$priceData) {
+
+            if (empty($priceData['customerGroupKey'])) {
+                $priceData['customerGroupKey'] = 'EK';
+            }
+
+            // load the customer group of the price definition
+            $customerGroup = $this->getManager()
+                ->getRepository('Shopware\Models\Customer\Group')
+                ->findOneBy(array('key' => $priceData['customerGroupKey']));
+
+            /** @var CustomerGroup $customerGroup */
+            if (!$customerGroup instanceof CustomerGroup) {
+                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
+            }
+
+            if (!isset($priceData['from'])) {
+                $priceData['from'] = 1;
+            }
+
+            $priceData['from'] = intval($priceData['from']);
+            $priceData['to']   = intval($priceData['to']);
+
+            if ($priceData['from'] <= 0) {
+                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
+            }
+
+            // if the "to" value isn't numeric, set the place holder "beliebig"
+            if ($priceData['to'] <= 0) {
+                $priceData['to'] = 'beliebig';
+            }
+
+            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
+            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
+            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
+            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
+
+            if ($customerGroup->getTaxInput()) {
+                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+
+            $priceData['customerGroup'] = $customerGroup;
+            $priceData['article']       = $article;
+            $priceData['articleDetail'] = $articleDetail;
+        }
+
+        return $prices;
+    }
+
+
 
 
     /**
@@ -426,60 +491,6 @@ class Variant extends Resource
         $data['attribute']['article'] = $article;
         return $data;
     }
-
-
-
-    protected function preparePriceAssociation(array $prices, ArticleModel $article, Tax $tax)
-    {
-        foreach ($prices as &$priceData) {
-
-            if (empty($priceData['customerGroupKey'])) {
-                $priceData['customerGroupKey'] = 'EK';
-            }
-
-            // load the customer group of the price definition
-            $customerGroup = $this->getManager()
-                ->getRepository('Shopware\Models\Customer\Group')
-                ->findOneBy(array('key' => $priceData['customerGroupKey']));
-
-            /** @var CustomerGroup $customerGroup */
-            if (!$customerGroup instanceof CustomerGroup) {
-                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
-            }
-
-            if (!isset($priceData['from'])) {
-                $priceData['from'] = 1;
-            }
-
-            $priceData['from'] = intval($priceData['from']);
-            $priceData['to']   = intval($priceData['to']);
-
-            if ($priceData['from'] <= 0) {
-                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
-            }
-
-            // if the "to" value isn't numeric, set the place holder "beliebig"
-            if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
-            }
-
-            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
-            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
-            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
-
-            if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
-            $priceData['customerGroup'] = $customerGroup;
-            $priceData['article']       = $article;
-        }
-
-        return $prices;
-    }
-
 
 
     /**

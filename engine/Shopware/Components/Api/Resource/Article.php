@@ -619,11 +619,11 @@ class Article extends Resource
         $data = $this->prepareConfiguratorSet($data, $article);
 
         //need to set the tax data directly for following price calculations which use the tax object of the article
-        if (!empty($data['tax'])) {
+        if (isset($data['tax'])) {
             $article->setTax($data['tax']);
         }
 
-        if (!empty($data['configuratorSet'])) {
+        if (isset($data['configuratorSet'])) {
             $article->setConfiguratorSet($data['configuratorSet']);
         }
 
