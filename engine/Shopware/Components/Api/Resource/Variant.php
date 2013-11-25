@@ -173,7 +173,7 @@ class Variant extends Resource
             throw new ApiException\NotFoundException("Variant by id $id not found");
         }
 
-        $variant = $this->_update($id, $params, $variant->getArticle());
+        $variant = $this->internalUpate($id, $params, $variant->getArticle());
 
         $violations = $this->getManager()->validate($variant);
         if ($violations->count() > 0) {
@@ -202,7 +202,7 @@ class Variant extends Resource
             throw new ApiException\NotFoundException("Article by id $articleId not found");
         }
 
-        $variant = $this->_create($params, $article);
+        $variant = $this->internalCreate($params, $article);
 
         $violations = $this->getManager()->validate($variant);
         if ($violations->count() > 0) {
@@ -218,7 +218,7 @@ class Variant extends Resource
 
 
 
-    public function _update($id, array $data, ArticleModel $article)
+    public function internalUpate($id, array $data, ArticleModel $article)
     {
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
@@ -249,7 +249,7 @@ class Variant extends Resource
      * @return Detail
      * @throws \Shopware\Components\Api\Exception\ValidationException
      */
-    public function _create(array $data, ArticleModel $article)
+    public function internalCreate(array $data, ArticleModel $article)
     {
         $variant = new Detail();
         $variant->setKind(2);
@@ -264,7 +264,21 @@ class Variant extends Resource
     }
 
 
-    public function prepareData(array $data, ArticleModel $article, Detail $variant)
+    /**
+     * Interface which allows to use the data preparation in the article resource for the main variant.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return array|mixed
+     */
+    public function prepareMainVariantData(array $data, ArticleModel $article, Detail $variant)
+    {
+        return $this->prepareData($data, $article, $variant);
+    }
+
+
+    protected function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
         $data = $this->prepareUnitAssociation($data);
 
