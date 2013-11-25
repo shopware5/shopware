@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
@@ -604,19 +605,15 @@ class Article extends Resource
     protected function prepareAssociatedData($data, ArticleModel $article)
     {
         $data = $this->prepareArticleAssociatedData($data, $article);
-
-
-        $data = $this->prepareMainDetailAssociatedData($data);
-        $data = $this->prepareMainPricesAssociatedData($data, $article);
-        $data = $this->prepareCategoryAssociatedData($data, $article);
+        $data = $this->prepareCategoryAssociatedData($data);
         $data = $this->prepareRelatedAssociatedData($data, $article);
         $data = $this->prepareSimilarAssociatedData($data, $article);
-        $data = $this->prepareAvoidCustomerGroups($data, $article);
-        $data = $this->prepareAttributeAssociatedData($data, $article);
+        $data = $this->prepareAvoidCustomerGroups($data);
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
+
 
         //need to set the tax data directly for following price calculations which use the tax object of the article
         if (isset($data['tax'])) {
@@ -627,36 +624,37 @@ class Article extends Resource
             $article->setConfiguratorSet($data['configuratorSet']);
         }
 
+        $data = $this->prepareAttributeAssociatedData($data, $article);
+        $data = $this->prepareMainDetail($data, $article);
+
         $data = $this->prepareVariants($data, $article);
 
         return $data;
     }
 
     /**
+     * Helper function which converts the passed data for the main variant of the article.
      * @param array $data
-     * @param array $variantData
-     * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail $variant
+     * @param ArticleModel $article
      * @return array
      */
-    protected function prepareVariantPricesAssociatedData($data, $variantData, ArticleModel $article, \Shopware\Models\Article\Detail $variant)
+    public function prepareMainDetail(array $data, ArticleModel $article)
     {
-        if (empty($variantData['prices'])) {
-            return $variantData;
+        $detail = $article->getMainDetail();
+        if (!$detail) {
+            $detail = new Detail();
+            $detail->setKind(1);
+            $detail->setArticle($article);
+            $article->setMainDetail($detail);
         }
 
-        if (isset($data['tax'])) {
-            $tax = $data['tax'];
-        } else {
-            $tax = $article->getTax();
-        }
+        $mainData = $data['mainDetail'];
+        $newData = $this->getVariantResource()->prepareData($mainData, $article, $detail);
+        $data['mainDetail'] = $newData;
 
-        $this->checkDataReplacement($variant->getPrices(), $variantData, 'prices');
-
-        $variantData['prices'] = $this->preparePricesAssociatedData($variantData['prices'], $article, $variant, $tax);
-
-        return $variantData;
+        return $data;
     }
+
 
     /**
      * @param array $data
@@ -676,9 +674,6 @@ class Article extends Resource
         // delete old main, if it has no configurator options
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
-
-        $this->checkDataReplacement($article->getDetails(), $data, 'variants');
-
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
@@ -726,88 +721,6 @@ class Article extends Resource
                     $variant = $this->getVariantResource()->_create($variantData, $article);
                 }
             }
-
-
-//            if (isset($variantData['id'])) {
-//                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
-//                    'id'        => $variantData['id'],
-//                    'articleId' => $article->getId()
-//                ));
-//
-//                if (!$variant) {
-//                    throw new ApiException\CustomValidationException(sprintf("Variant by id %s not found", $variantData['id']));
-//                }
-//            } elseif (isset($variantData['number'])) {
-//                $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
-//                    'number'    => $variantData['number'],
-//                    'articleId' => $article->getId()
-//                ));
-//            }
-//
-//            if (!$variant) {
-//                $variant = new \Shopware\Models\Article\Detail();
-//                $variant->setKind(2);
-//            }
-
-//            $variantData = $this->prepareVariantAssociatedData($variantData);
-//            $variantData = $this->prepareVariantPricesAssociatedData($data, $variantData, $article, $variant);
-//            $variantData = $this->prepareVariantAttributeAssociatedData($variantData, $article, $variant);
-//
-//            $variant->fromArray($variantData);
-//
-//
-//
-//            if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
-//                $configuratorSet = $article->getConfiguratorSet();
-//
-//                if (!$configuratorSet && !isset($data['configuratorSet'])) {
-//                    throw new ApiException\CustomValidationException('A configuratorset has to be defined');
-//                }
-//
-//                /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
-//                if ($configuratorSet) {
-//                    $availableGroups = $configuratorSet->getGroups();
-//                } else {
-//                    $configuratorSet = $data['configuratorSet'];
-//                    $availableGroups = $configuratorSet->getGroups();
-//                }
-//
-//                $assignedOptions = new \Doctrine\Common\Collections\ArrayCollection();
-//                foreach ($variantData['configuratorOptions'] as $configuratorOption) {
-//                    $group  = $configuratorOption['group'];
-//                    $option = $configuratorOption['option'];
-//
-//                    /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
-//                    foreach ($availableGroups as $availableGroup) {
-//                        if ($availableGroup->getName() == $group || $availableGroup->getId() == $configuratorOption['groupId']) {
-//                            $optionExists = false;
-//                            /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
-//                            foreach ($availableGroup->getOptions() as $availableOption) {
-//                                if ($availableOption->getName() == $option || $availableOption->getId() == $configuratorOption['optionId']) {
-//                                    $assignedOptions->add($availableOption);
-//                                    $optionExists = true;
-//                                    break;
-//                                }
-//                            }
-//
-//                            if (!$optionExists) {
-//                                $optionModel = new \Shopware\Models\Article\Configurator\Option();
-//                                $optionModel->setPosition(0);
-//                                $optionModel->setName($option);
-//                                $optionModel->setGroup($availableGroup);
-//                                $this->getManager()->persist($optionModel);
-//                                $assignedOptions->add($optionModel);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                $variant->setConfiguratorOptions($assignedOptions);
-//            }
-
-//            if (count($variant->getConfiguratorOptions()) === 0) {
-//                throw new \Exception('No Configurator Options assigned');
-//            }
 
             if ($variantData['isMain'] || $variantData['standard']) {
                 $newMain = $variant;
@@ -1037,152 +950,6 @@ class Article extends Resource
 
     /**
      * @param array $data
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return array
-     */
-    protected function prepareMainDetailAssociatedData($data)
-    {
-        if (!empty($data['mainDetail']['unitId'])) {
-            $data['mainDetail']['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['mainDetail']['unitId']);
-            if (empty($data['mainDetail']['unit'])) {
-                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['mainDetail']['unitId']));
-            }
-        } elseif (!empty($data['mainDetail']['unit'])) {
-            $data['mainDetail']['unit'] = $this->prepareUnitAssociatedData($data['mainDetail']['unit']);
-        }
-
-        return $data;
-    }
-
-    /**
-     * Find a unit by a given ID. If no ID is passed, find it by name or description
-     * @param $unitData
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return \Shopware\Models\Article\Unit|null
-     */
-    protected function prepareUnitAssociatedData($unitData)
-    {
-        if (empty($unitData)) {
-            return null;
-        }
-
-        /** @var $unit \Shopware\Models\Article\Unit */
-        $unit = null;
-        $unitRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Unit');
-
-        if (isset($unitData['id'])) {
-            $unit = $this->getManager()->find('Shopware\Models\Article\Unit', $unitData['id']);
-            if (!$unit) {
-                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
-            }
-        } elseif (isset($unitData['unit'])) {
-            $findBy= array('unit' => $unitData['unit']);
-            $unit = $unitRepository->findOneBy($findBy);
-        } elseif (isset($unitData['name'])) {
-            $findBy= array('name' => $unitData['name']);
-            $unit = $unitRepository->findOneBy($findBy);
-        }
-
-        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
-            $unit = new \Shopware\Models\Article\Unit();
-        } elseif (!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
-            throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
-        }
-        $unit->fromArray($unitData);
-
-        Shopware()->Models()->persist($unit);
-        Shopware()->Models()->flush($unit);
-
-        return $unit;
-    }
-
-    /**
-     * @param array $data
-     * @param \Shopware\Models\Article\Article $article
-     * @return array
-     */
-    protected function prepareMainPricesAssociatedData($data, ArticleModel $article)
-    {
-        if (empty($data['mainDetail']['prices'])) {
-            return $data;
-        }
-
-        if (isset($data['tax'])) {
-            $tax = $data['tax'];
-        } else {
-            $tax = $article->getTax();
-        }
-
-        if ($article->getMainDetail()) {
-            $this->checkDataReplacement($article->getMainDetail()->getPrices(), $data['mainDetail'], 'prices');
-        }
-
-        $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainDetail']['prices'], $article, $article->getMainDetail(), $tax);
-        return $data;
-    }
-
-    /**
-     * @param array $prices
-     * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail $articleDetail
-     * @param \Shopware\Models\Tax\Tax $tax
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return array
-     */
-    protected function preparePricesAssociatedData($prices, ArticleModel $article, $articleDetail, \Shopware\Models\Tax\Tax $tax)
-    {
-        foreach ($prices as &$priceData) {
-
-            if (empty($priceData['customerGroupKey'])) {
-                $priceData['customerGroupKey'] = 'EK';
-            }
-
-            // load the customer group of the price definition
-            $customerGroup = $this->getManager()
-                                  ->getRepository('Shopware\Models\Customer\Group')
-                                  ->findOneBy(array('key' => $priceData['customerGroupKey']));
-
-            /** @var \Shopware\Models\Customer\Group $customerGroup */
-            if (!$customerGroup instanceof \Shopware\Models\Customer\Group) {
-                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
-            }
-
-            if (!isset($priceData['from'])) {
-                $priceData['from'] = 1;
-            }
-
-            $priceData['from'] = intval($priceData['from']);
-            $priceData['to']   = intval($priceData['to']);
-
-            if ($priceData['from'] <= 0) {
-                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
-            }
-
-            // if the "to" value isn't numeric, set the place holder "beliebig"
-            if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
-            }
-
-            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
-            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
-            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
-
-            if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
-            $priceData['customerGroup'] = $customerGroup;
-            $priceData['article']       = $article;
-            $priceData['articleDetail'] = $articleDetail;
-        }
-
-        return $prices;
-    }
-
-    /**
-     * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
@@ -1203,19 +970,16 @@ class Article extends Resource
 
     /**
      * @param array $data
-     * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareCategoryAssociatedData($data, ArticleModel $article)
+    protected function prepareCategoryAssociatedData($data)
     {
         if (!isset($data['categories'])) {
             return $data;
         }
 
         $categories = array();
-        $this->checkDataReplacement($article->getCategories(), $data, 'categories');
-
         foreach ($data['categories'] as $categoryData) {
             if (!empty($categoryData['id'])) {
                 $model = $this->getManager()->find('Shopware\Models\Category\Category', $categoryData['id']);
@@ -1233,19 +997,16 @@ class Article extends Resource
 
     /**
      * @param array $data
-     * @param $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareAvoidCustomerGroups($data, ArticleModel $article)
+    protected function prepareAvoidCustomerGroups($data)
     {
         if (!isset($data['customerGroups'])) {
             return $data;
         }
 
         $customerGroups = array();
-        $this->checkDataReplacement($article->getCustomerGroups(), $data, 'customerGroups');
-
         foreach ($data['customerGroups'] as $customerGroup) {
             if (!empty($customerGroup['id'])) {
                 $customerGroup = $this->getManager()->find('Shopware\Models\Customer\Group', $customerGroup['id']);
@@ -1274,8 +1035,6 @@ class Article extends Resource
         }
 
         $related = array();
-        $this->checkDataReplacement($article->getRelated(), $data, 'related');
-
         foreach ($data['related'] as $relatedData) {
 
             if (empty($relatedData['number']) && empty($relatedData['id'])) {
@@ -1325,7 +1084,6 @@ class Article extends Resource
         }
 
         $similar = array();
-        $this->checkDataReplacement($article->getSimilar(), $data, 'similar');
         foreach ($data['similar'] as $similarData) {
             if (empty($similarData['number']) && empty($similarData['id'])) {
                 continue;
@@ -1393,8 +1151,6 @@ class Article extends Resource
         }
 
         $models = array();
-        $this->checkDataReplacement($article->getPropertyValues(), $data, 'propertyValues');
-
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
             /** @var \Shopware\Models\Property\Option $option  */
@@ -1489,8 +1245,6 @@ class Article extends Resource
         }
 
         $downloads = array();
-        $this->checkDataReplacement($article->getDownloads(), $data, 'downloads');
-
         foreach ($data['downloads'] as &$downloadData) {
             if (isset($downloadData['id'])) {
                 $download = $this->getManager()
@@ -1564,8 +1318,6 @@ class Article extends Resource
         $images = $article->getImages();
         $position = 1;
 
-        $this->checkDataReplacement($article->getImages(), $data, 'images');
-
         foreach ($data['images'] as &$imageData) {
             if (isset($imageData['id'])) {
                 $image = $this->getManager()
@@ -1582,7 +1334,6 @@ class Article extends Resource
             if (isset($imageData['link'])) {
                 $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
                 $path = $this->load($imageData['link'], $name);
-                $name = pathinfo($path, PATHINFO_FILENAME);
 
                 $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
@@ -1592,7 +1343,6 @@ class Article extends Resource
 
                 $media->setFile($file);
                 $media->setName($name);
-
                 $media->setDescription('');
                 $media->setCreated(new \DateTime());
                 $media->setUserId(0);
@@ -1661,45 +1411,6 @@ class Article extends Resource
         return $data;
     }
 
-    /**
-     * @param array $variantData
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     */
-    protected function prepareVariantAssociatedData($variantData)
-    {
-        if (!empty($variantData['unitId'])) {
-            $variantData['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $variantData['unitId']);
-            if (empty($variantData['unit'])) {
-                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $variantData['unitId']));
-            }
-        } elseif (!empty($variantData['unit'])) {
-            $variantData['unit'] = $this->prepareUnitAssociatedData($variantData['unit']);
-        }
-
-        return $variantData;
-    }
-
-    /**
-     * @param array $variantData
-     * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail $variant
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return array
-     */
-    protected function prepareVariantAttributeAssociatedData($variantData, ArticleModel $article, \Shopware\Models\Article\Detail $variant)
-    {
-        if (!$variant->getAttribute()) {
-            $variantData['attribute']['article'] = $article;
-        }
-
-        if (!isset($variantData['attribute'])) {
-            return $variantData;
-        }
-
-        $variantData['attribute']['article'] = $article;
-        return $variantData;
-    }
 
     /**
      * @param integer $articleId
