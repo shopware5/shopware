@@ -1511,6 +1511,7 @@ class Article extends Resource
             if (isset($imageData['link'])) {
                 $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
                 $path = $this->load($imageData['link'], $name);
+                $name = pathinfo($path, PATHINFO_FILENAME);
 
                 $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
@@ -1520,6 +1521,7 @@ class Article extends Resource
 
                 $media->setFile($file);
                 $media->setName($name);
+
                 $media->setDescription('');
                 $media->setCreated(new \DateTime());
                 $media->setUserId(0);
@@ -1712,6 +1714,32 @@ class Article extends Resource
             );
         }
 
+        if (strpos($url, 'data:image') !== false) {
+            if (!$get_handle = fopen($url, "r")) {
+                throw new \Exception("Could not open $url for reading");
+            }
+
+            $meta = stream_get_meta_data($get_handle);
+            if (!strpos($meta['mediatype'], 'image/') === false) {
+                throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
+            }
+
+            $extension = str_replace('image/', '', $meta['mediatype']);
+            $filename = $this->getUniqueFileName($destPath, $baseFilename);
+            $filename .= '.' . $extension;
+
+            if (!$put_handle = fopen("$destPath/$filename", "w+")) {
+                throw new \Exception("Could not open $destPath/$filename for writing");
+            }
+            while (!feof($get_handle)) {
+                fwrite($put_handle, fgets($get_handle, 4096));
+            }
+            fclose($get_handle);
+            fclose($put_handle);
+
+            return "$destPath/$filename";
+        }
+
         $urlArray = parse_url($url);
         $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
@@ -1719,21 +1747,7 @@ class Article extends Resource
             case "http":
             case "https":
             case "file":
-                $counter = 1;
-                if ($baseFilename === null) {
-                    $filename = md5(uniqid(rand(), true));
-                } else {
-                    $filename = $baseFilename;
-                }
-
-                while (file_exists("$destPath/$filename")) {
-                    if ($baseFilename) {
-                        $filename = "$counter-$baseFilename";
-                        $counter++;
-                    } else {
-                        $filename = md5(uniqid(rand(), true));
-                    }
-                }
+                $filename = $this->getUniqueFileName($destPath, $baseFilename);
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
                     throw new \Exception("Could not open $destPath/$filename for writing");
@@ -1753,5 +1767,29 @@ class Article extends Resource
         throw new \InvalidArgumentException(
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
         );
+    }
+
+    private function getUniqueFileName($destPath, $baseFileName = null)
+    {
+        $counter = 1;
+        if ($baseFileName === null) {
+            $filename = md5(uniqid(rand(), true));
+        } else {
+            $filename = $baseFileName;
+        }
+
+        $filename = substr($filename, 0, 90);
+
+        while (file_exists("$destPath/$filename")) {
+            if ($baseFileName) {
+                $filename = "$counter-$baseFileName";
+                $counter++;
+            } else {
+                $filename = md5(uniqid(rand(), true));
+            }
+            $filename = substr($filename,0, 90);
+        }
+
+        return $filename;
     }
 }
