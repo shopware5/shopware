@@ -235,11 +235,10 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      * @param record
      */
     dateRenderer: function(value, metaData, record) {
-        var timeField = Ext.create('Ext.form.field.Time');
         if (record.get('creationDate') === Ext.undefined) {
             return record.get('creationDate');
         }
-        return Ext.util.Format.date(record.get('creationDate')) + ' ' + Ext.util.Format.date(record.get('creationDate'), timeField.format);
+        return Ext.util.Format.date(record.get('creationDate')) + ' ' + Ext.util.Format.date(record.get('creationDate'), timeFormat);
     },
 
     /**
