@@ -304,11 +304,10 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      * @param record
      */
     dateRenderer: function(value, metaData, record) {
-        var timeField = Ext.create('Ext.form.field.Time');
         if (record.get('displayDate') === Ext.undefined) {
             return record.get('displayDate');
         }
-        return Ext.util.Format.date(record.get('displayDate')) + ' ' + Ext.util.Format.date(record.get('displayDate'), timeField.format);
+        return Ext.util.Format.date(record.get('displayDate')) + ' ' + Ext.util.Format.date(record.get('displayDate'), timeFormat);
     },
 
     /**
