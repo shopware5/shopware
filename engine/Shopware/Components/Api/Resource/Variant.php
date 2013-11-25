@@ -159,54 +159,61 @@ class Variant extends Resource
     }
 
 
-//
-//    public function update($id, array $params)
-//    {
-//        if (empty($id)) {
-//            throw new ApiException\ParameterMissingException();
-//        }
-//
-//        /**@var $variant Detail*/
-//        $variant = $this->getRepository()->find($id);
-//
-//        if (!$variant) {
-//            throw new ApiException\NotFoundException("Variant by id $id not found");
-//        }
-//
-//
-//        //..
-//
-//
-//
-//
-//        $violations = $this->getManager()->validate($variant);
-//        if ($violations->count() > 0) {
-//            throw new ApiException\ValidationException($violations);
-//        }
-//
-//        $this->flush();
-//
-//        return $variant;
-//    }
-//
-//
-//
-//    public function create(array $params)
-//    {
-//        $articleId = $params['articleId'];
-//
-//        if (empty($articleId)) {
-//            throw new ApiException\ParameterMissingException("Passed parameter array don't contains an articleId property");
-//        }
-//
-//        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
-//
-//        if (!$article) {
-//            throw new ApiException\NotFoundException("Article by id $articleId not found");
-//        }
-//
-//        return $this->_create($params, $article);
-//    }
+
+    public function update($id, array $params)
+    {
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /**@var $variant Detail*/
+        $variant = $this->getRepository()->find($id);
+
+        if (!$variant) {
+            throw new ApiException\NotFoundException("Variant by id $id not found");
+        }
+
+        $variant = $this->_update($id, $params, $variant->getArticle());
+
+        $violations = $this->getManager()->validate($variant);
+        if ($violations->count() > 0) {
+            throw new ApiException\ValidationException($violations);
+        }
+
+        $this->flush();
+
+        return $variant;
+    }
+
+
+
+    public function create(array $params)
+    {
+        $articleId = $params['articleId'];
+
+        if (empty($articleId)) {
+            throw new ApiException\ParameterMissingException("Passed parameter array don't contains an articleId property");
+        }
+
+        /**@var $article ArticleModel*/
+        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
+
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article by id $articleId not found");
+        }
+
+        $variant = $this->_create($params, $article);
+
+        $violations = $this->getManager()->validate($variant);
+        if ($violations->count() > 0) {
+            throw new ApiException\ValidationException($violations);
+        }
+
+        $this->getManager()->persist($variant);
+        $this->flush();
+
+        return $variant;
+    }
 
 
 
@@ -252,8 +259,6 @@ class Variant extends Resource
         $variant->setArticle($article);
 
         $this->prepareConfigurator($data, $article, $variant);
-
-        //todo@dr Flush? Violation?
 
         return $variant;
     }
@@ -377,13 +382,13 @@ class Variant extends Resource
             ));
 
             if (!$option) {
-                $optionModel = new \Shopware\Models\Article\Configurator\Option();
-                $optionModel->setPosition(0);
-                $optionModel->setName($option);
-                $optionModel->setGroup($availableGroup);
-                $this->getManager()->persist($optionModel);
-                $options->add($optionModel);
+                $option = new \Shopware\Models\Article\Configurator\Option();
+                $option->setPosition(0);
+                $option->setName($option);
+                $option->setGroup($availableGroup);
+                $this->getManager()->persist($option);
             }
+            $options->add($option);
         }
 
         $variant->setConfiguratorOptions($options);
@@ -457,7 +462,7 @@ class Variant extends Resource
      * @return mixed
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
-    public function prepareUnitAssociation($data)
+    protected function prepareUnitAssociation($data)
     {
         //if unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
