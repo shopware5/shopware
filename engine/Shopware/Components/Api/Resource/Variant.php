@@ -159,55 +159,54 @@ class Variant extends Resource
     }
 
 
-
-    public function update($id, array $params)
-    {
-        if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
-        }
-
-        /**@var $variant Detail*/
-        $variant = $this->getRepository()->find($id);
-
-        if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
-        }
-
-
-        //..
-
-
-
-
-        $violations = $this->getManager()->validate($variant);
-        if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
-        }
-
-        $this->flush();
-
-        return $variant;
-    }
-
-
-
-    public function create(array $params)
-    {
-        $articleId = $params['articleId'];
-
-        if (empty($articleId)) {
-            throw new ApiException\ParameterMissingException("Passed parameter array don't contains an articleId property");
-        }
-
-        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
-
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $articleId not found");
-        }
-
-        return $this->createVariant($params, $article);
-
-    }
+//
+//    public function update($id, array $params)
+//    {
+//        if (empty($id)) {
+//            throw new ApiException\ParameterMissingException();
+//        }
+//
+//        /**@var $variant Detail*/
+//        $variant = $this->getRepository()->find($id);
+//
+//        if (!$variant) {
+//            throw new ApiException\NotFoundException("Variant by id $id not found");
+//        }
+//
+//
+//        //..
+//
+//
+//
+//
+//        $violations = $this->getManager()->validate($variant);
+//        if ($violations->count() > 0) {
+//            throw new ApiException\ValidationException($violations);
+//        }
+//
+//        $this->flush();
+//
+//        return $variant;
+//    }
+//
+//
+//
+//    public function create(array $params)
+//    {
+//        $articleId = $params['articleId'];
+//
+//        if (empty($articleId)) {
+//            throw new ApiException\ParameterMissingException("Passed parameter array don't contains an articleId property");
+//        }
+//
+//        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
+//
+//        if (!$article) {
+//            throw new ApiException\NotFoundException("Article by id $articleId not found");
+//        }
+//
+//        return $this->_create($params, $article);
+//    }
 
 
 
@@ -260,7 +259,7 @@ class Variant extends Resource
     }
 
 
-    protected function prepareData(array $data, ArticleModel $article, Detail $variant)
+    public function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
         $data = $this->prepareUnitAssociation($data);
 
@@ -352,85 +351,42 @@ class Variant extends Resource
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
     {
-        if (isset($data['configuratorOptions']) && is_array($data['configuratorOptions'])) {
-
-            if (!$article->getConfiguratorSet()) {
-                throw new ApiException\CustomValidationException('A configuratorset has to be defined');
-            }
-
-            /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
-            $availableGroups = $article->getConfiguratorSet()->getGroups();
-
-            $assignedOptions = new ArrayCollection();
-            foreach ($data['configuratorOptions'] as $configuratorOption) {
-                $group  = $configuratorOption['group'];
-                $option = $configuratorOption['option'];
-
-                /** @var \Shopware\Models\Article\Configurator\Group $availableGroup */
-                foreach ($availableGroups as $availableGroup) {
-                    if ($availableGroup->getName() == $group || $availableGroup->getId() == $configuratorOption['groupId']) {
-                        $optionExists = false;
-                        /** @var \Shopware\Models\Article\Configurator\Option $availableOption */
-                        foreach ($availableGroup->getOptions() as $availableOption) {
-                            if ($availableOption->getName() == $option || $availableOption->getId() == $configuratorOption['optionId']) {
-                                $assignedOptions->add($availableOption);
-                                $optionExists = true;
-                                break;
-                            }
-                        }
-
-                        if (!$optionExists) {
-                            $optionModel = new \Shopware\Models\Article\Configurator\Option();
-                            $optionModel->setPosition(0);
-                            $optionModel->setName($option);
-                            $optionModel->setGroup($availableGroup);
-                            $this->getManager()->persist($optionModel);
-                            $assignedOptions->add($optionModel);
-                        }
-                    }
-                }
-            }
-
-            $variant->setConfiguratorOptions($assignedOptions);
+        if (!$article->getConfiguratorSet()) {
+            throw new ApiException\CustomValidationException('A configurator set has to be defined');
         }
 
-//        if (!$article->getConfiguratorSet()) {
-//            throw new ApiException\CustomValidationException('A configurator set has to be defined');
-//        }
-//
-//        $availableGroups = $article->getConfiguratorSet()->getGroups();
-//
-//        $options = new ArrayCollection();
-//
-//        foreach($data['configuratorOptions'] as $optionData) {
-//
-//            /**@var $availableGroup Group*/
-//            foreach($availableGroups as $availableGroup) {
-//
-//                //passed group not available in the article configurator set?
-//                if (!($availableGroup->getName() == $optionData['group'])
-//                    || !($availableGroup->getId() == $optionData['groupId'])) {
-//
-//                    continue;
-//                }
-//
-//                $option = $this->getAvailableOption($availableGroup->getOptions(), array(
-//                    'id'   => $optionData['optionId'],
-//                    'name' => $optionData['option']
-//                ));
-//
-//                if (!$option) {
-//                    $optionModel = new \Shopware\Models\Article\Configurator\Option();
-//                    $optionModel->setPosition(0);
-//                    $optionModel->setName($option);
-//                    $optionModel->setGroup($availableGroup);
-//                    $this->getManager()->persist($optionModel);
-//                    $options->add($optionModel);
-//                }
-//            }
-//        }
-//
-//        $variant->setConfiguratorOptions($options);
+        $availableGroups = $article->getConfiguratorSet()->getGroups();
+
+        $options = new ArrayCollection();
+
+        foreach($data['configuratorOptions'] as $optionData) {
+            $availableGroup = $this->getAvailableGroup($availableGroups, array(
+                'id' => $optionData['groupId'],
+                'name' => $optionData['group']
+            ));
+
+            //group is in the article configurator set configured?
+            if (!$availableGroup) {
+                continue;
+            }
+
+            //check if the option is available in the configured article configurator set.
+            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+                'id'   => $optionData['optionId'],
+                'name' => $optionData['option']
+            ));
+
+            if (!$option) {
+                $optionModel = new \Shopware\Models\Article\Configurator\Option();
+                $optionModel->setPosition(0);
+                $optionModel->setName($option);
+                $optionModel->setGroup($availableGroup);
+                $this->getManager()->persist($optionModel);
+                $options->add($optionModel);
+            }
+        }
+
+        $variant->setConfiguratorOptions($options);
     }
 
 
@@ -501,7 +457,7 @@ class Variant extends Resource
      * @return mixed
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
-    protected function prepareUnitAssociation($data)
+    public function prepareUnitAssociation($data)
     {
         //if unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
@@ -583,8 +539,5 @@ class Variant extends Resource
 
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
     }
-
-
-
 
 }
