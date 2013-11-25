@@ -261,11 +261,10 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * @param value
      */
     orderDateColumn:function (value) {
-        var timeField = Ext.create('Ext.form.field.Time');
         if ( typeof value === Ext.undefined ) {
             return value;
         }
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeField.format);
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     },
 
     /**

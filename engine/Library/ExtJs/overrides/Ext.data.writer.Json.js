@@ -8,7 +8,7 @@ Ext.define('Ext.data.writer.Json-Shopware', {
     getRecordData: function (record, operation) {
         var me = this, data, associationData;
 
-        data = me.getRecordFieldData(record);
+        data = me.getRecordFieldData(record, operation);
 
         if (record.associations && record.associations.length > 0) {
             me.setRecordAssociationData(record, data);
