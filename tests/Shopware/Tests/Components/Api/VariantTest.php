@@ -299,4 +299,132 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     {
         $this->resource->delete('');
     }
+
+
+    public function testVariantCreate()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $data['configuratorSet'] = $this->getSimpleConfiguratorSet();
+
+        $article = $this->resourceArticle->create($data);
+        $this->assertCount(0, $article->getDetails());
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getSimpleVariantOptions();
+        $variant = $this->resource->create($create);
+        $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getSimpleVariantOptions();
+        $variant = $this->resource->create($create);
+        $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $id = $article->getId();
+        $article = $this->resourceArticle->getOne($id);
+        $this->assertCount(2, $article['details']);
+
+        return $id;
+    }
+
+    /**
+     * @depends testVariantCreate
+     * @param $articleId
+     */
+    public function testVariantUpdate($articleId)
+    {
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $article = $this->resourceArticle->getOne($articleId);
+
+        foreach($article['details'] as $variantData) {
+            $updateData = array(
+                'articleId' => $articleId,
+                'inStock' => 2000,
+                'number' => $variantData['number'] . '-Updated',
+                'unitId' => $this->getRandomId('s_core_units')
+            );
+            $variant = $this->resource->update($variantData['id'], $updateData);
+
+            $this->assertEquals($variant->getUnit()->getId(), $updateData['unitId']);
+            $this->assertEquals($variant->getInStock(), $updateData['inStock']);
+            $this->assertEquals($variant->getNumber(), $updateData['number']);
+        }
+    }
+
+    private function getRandomId($table) {
+        return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " ORDER BY RAND() LIMIT 1");
+    }
+
+
+    private function getSimpleVariantData() {
+        return array(
+            'number' => 'swTEST' . uniqid(),
+            'inStock' => 100,
+            'unitId' => 1,
+            'prices' => array(
+                array(
+                    'customerGroupKey' => 'EK',
+                    'from' => 1,
+                    'to' => '-',
+                    'price' => 400,
+                ),
+            )
+        );
+    }
+
+    private function getSimpleArticleData()
+    {
+        return array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 2
+        );
+    }
+
+    private function getSimpleConfiguratorSet()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('PARTIAL groups.{id}', 'PARTIAL options.{id}'))
+            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+            ->innerJoin('groups.options', 'options')
+            ->orderBy('groups.position', 'ASC')
+            ->addOrderBy('options.position', 'ASC')
+            ->where('groups.id = 5')
+            ->setFirstResult(0)
+            ->setMaxResults(3);
+
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
+        $paginator = Shopware()->Models()->createPaginator($query);
+
+        $configurator = $paginator->getIterator()->getArrayCopy();
+
+        return array(
+            'name' => 'Test-Set',
+            'groups' => $configurator
+        );
+    }
+
+    private function getSimpleVariantOptions()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->addOrderBy('options.position', 'ASC')
+            ->where('options.groupId = 5')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
+        $paginator = Shopware()->Models()->createPaginator($query);
+
+        return $paginator->getIterator()->getArrayCopy();
+    }
+
 }
