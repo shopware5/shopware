@@ -1132,6 +1132,30 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     }
 
 
+    public function testBase64ImageUpload()
+    {
+        $data = $this->getSimpleTestData();
+
+        $data['images'] = array(
+            array(
+                'link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php')
+            )
+        );
+
+        $model = $this->resource->create($data);
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($model->getId());
+
+        $mediaPath = Shopware()->DocPath('media_image');
+
+        $this->assertCount(count($data['images']), $article['images']);
+        foreach($article['images'] as $image) {
+            $this->assertFileExists($mediaPath . $image['path'] . '.' . $image['extension']);
+        }
+    }
+
     private function getSimpleTestData() {
         return array(
             'name' => 'Testartikel',
