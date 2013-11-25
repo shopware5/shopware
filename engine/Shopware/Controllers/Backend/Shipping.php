@@ -153,7 +153,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $params['calculationSql']  = $this->cleanData($params['calculationSql']);
 
         if (!empty($params['bindTimeFrom'])) {
-            $bindTimeFrom = new Zend_Date($params['bindTimeFrom']);
+            $bindTimeFrom = new Zend_Date();
+            $bindTimeFrom->set($params['bindTimeFrom'], Zend_Date::TIME_SHORT);
             $bindTimeFrom = $bindTimeFrom->get(Zend_Date::MINUTE) * 60 + $bindTimeFrom->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeFrom'] = $bindTimeFrom;
         } else {
@@ -161,7 +162,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         if (!empty($params['bindTimeTo'])) {
-            $bindTimeTo = new Zend_Date($params['bindTimeTo']);
+            $bindTimeTo = new Zend_Date();
+            $bindTimeTo->set($params['bindTimeTo'], Zend_Date::TIME_SHORT);
             $bindTimeTo = $bindTimeTo->get(Zend_Date::MINUTE) * 60 + $bindTimeTo->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeTo'] = $bindTimeTo;
         } else {

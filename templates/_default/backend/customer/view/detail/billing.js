@@ -299,7 +299,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             //define birthday date field with a defined format
             xtype:'datefield',
             name:'billing[birthday]',
-            fieldLabel:me.snippets.birthday
+            fieldLabel:me.snippets.birthday,
+            submitFormat: 'd.m.Y'
         }, {
             name:'billing[company]',
             fieldLabel:me.snippets.company

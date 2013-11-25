@@ -16,7 +16,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 {block name="backend/base/header/javascript" append}
 <script type="text/javascript">
     var userName = '{$user->name}',
-        maxParameterLength = '{$maxParameterLength}';
+        maxParameterLength = '{$maxParameterLength}',
+        timeField = Ext.create('Ext.form.field.Time'),
+        timeFormat = timeField.format;
+
 
     Ext.define('Shopware.app.Application', {
     	extend: 'Ext.app.Application',

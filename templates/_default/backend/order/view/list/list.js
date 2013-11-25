@@ -508,7 +508,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             return value;
         }
 
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     },
 
     /**

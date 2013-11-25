@@ -39,6 +39,7 @@
 {include file='ExtJs/overrides/Ext.grid.column.Action.js'}
 {include file='ExtJs/overrides/Ext.view.BoundList.js'}
 {include file='ExtJs/overrides/Ext.form.field.ComboBox.js'}
+{include file='ExtJs/overrides/Ext.form.field.Time.js'}
 {include file='ExtJs/overrides/Ext.tree.Panel.js'}
 {include file='ExtJs/overrides/Ext.panel.Panel.js'}
 {include file='ExtJs/overrides/Ext.ZIndexManager.js'}

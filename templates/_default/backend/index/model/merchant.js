@@ -36,6 +36,15 @@ Ext.define('Shopware.apps.Index.model.Merchant', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/index/model/merchant/fields"}{/block}
-		'id', 'company_name', 'customer', 'email', 'customergroup', 'customergroup_name', 'customergroup_id', 'date', 'validation' ]
+        { name: 'id' },
+        { name: 'company_name' },
+        { name: 'customer' },
+        { name: 'email' },
+        { name: 'customergroup' },
+        { name: 'customergroup_name' },
+        { name: 'customergroup_id' },
+        { name: 'date' },
+        { name: 'validation' }
+    ]
 });
 //{/block}

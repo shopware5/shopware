@@ -128,6 +128,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
         return [{
             header: me.snippets.headers.date,
             dataIndex: 'date',
+            renderer: me.dateColumn,
             flex: 1
         }, {
             header: me.snippets.headers.number,
@@ -173,6 +174,20 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
                 }
             }]
         }];
+    },
+
+    /**
+     * Formats the date column
+     *
+     * @param [string] - The order time value
+     * @return [string] - The passed value, formatted with Ext.util.Format.date()
+     */
+    dateColumn:function (value, metaData, record) {
+        if ( value === Ext.undefined ) {
+            return value;
+        }
+
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     }
 });
 //{/block}
