@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Console\Command;
 
-use Shopware\Components\Plugin\Installer;
+use CommunityStore;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,25 +36,20 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginUpdateCommand extends ShopwareCommand
+class StoreListCommand extends StoreCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::addConfigureShopwareVersion();
+        parent::addConfigureAuth();
+        parent::addConfigureHostname();
+
         $this
-            ->setName('sw:plugin:update')
-            ->setDescription('Updates a plugin.')
-            ->addArgument(
-                'plugin',
-                InputArgument::REQUIRED,
-                'The plugin to be updated.'
-            )
-            ->setHelp(<<<EOF
-The <info>%command.name%</info> updates a plugin.
-EOF
-            );
+            ->setName('sw:store:list')
+            ->setDescription('List licensed plugins.')
         ;
     }
 
@@ -63,35 +58,44 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Disable error reporting for shopware menu legacy hack
-        set_error_handler(function($errno, $errstr) {
-            if ($errno === E_RECOVERABLE_ERROR
-                    && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
+        $this->setupShopwareVersion($input);
 
-                return true;
+        $auth   = $this->setupAuth($input, $output);
+        $domain = $this->setupDomain($input, $output, $auth);
+
+        /** @var \CommunityStore $store */
+        $store = $this->container->get('CommunityStore');
+
+        $resultSet = $store->getAccountService()->getLicencedProducts(
+            $auth,
+            $domain,
+            $store->getNumericShopwareVersion()
+        );
+
+        $products = array();
+
+        /** @var $product \Shopware_StoreApi_Models_Licence */
+        foreach ($resultSet as $product) {
+            $data = $product->getRawData();
+
+            $payed = (int) $data['payed'];
+            if ($payed === 1) {
+                if (empty($data['downloads'])) {
+                    continue;
+                }
+
+                $products[] = array(
+                    'id'          => $data['id'],
+                    'ordernumber' => $data['ordernumber'],
+                    'plugin'      => $data['plugin'],
+                );
             }
-
-            return false;
-        });
-
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
-        $pluginName = $input->getArgument('plugin');
-
-        try {
-            $plugin = $installer->getPluginByName($pluginName);
-        } catch (\Exeption $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
-            return 1;
         }
 
-        if (!$plugin->getUpdateVersion()) {
-            $output->writeln(sprintf('The plugin %s is up to date.', $pluginName));
-            return 1;
-        }
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(array('id', 'OrderNumber', 'Name'))
+              ->setRows($products);
 
-        $installer->updatePlugin($plugin);
-
-        $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
+        $table->render($output);
     }
 }
