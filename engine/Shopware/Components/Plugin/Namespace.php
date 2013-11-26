@@ -314,10 +314,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function installPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap)
     {
-        $id = $this->getPluginId($bootstrap->getName());
+        $this->reloadStorage();
 
         /** @var \Shopware\Components\Model\ModelManager $em */
         $em = $this->Application()->Models();
+        $id = $this->getPluginId($bootstrap->getName());
         $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
 
         $newInfo = $bootstrap->getInfo();
@@ -424,6 +425,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function updatePlugin(Shopware_Components_Plugin_Bootstrap $plugin)
     {
+        $this->reloadStorage();
+
         $name = $plugin->getName();
         $oldVersion = $this->getInfo($name, 'version');
         $newInfo = $plugin->getInfo();

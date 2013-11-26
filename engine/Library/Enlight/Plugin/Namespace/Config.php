@@ -134,6 +134,16 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     /**
      * @return Enlight_Config
      */
+    public function reloadStorage()
+    {
+        $this->storage = $this->initStorage();
+
+        return $this->storage;
+    }
+
+    /**
+     * @return Enlight_Config
+     */
     protected function initStorage()
     {
 
