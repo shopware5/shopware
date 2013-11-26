@@ -42,7 +42,7 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
      * @param string $orderNumber
      * @return bool
      */
-    public function addId(string $orderNumber)
+    public function addId($orderNumber)
     {
         if(!empty($orderNumber)) {
             $this->collection[] = $orderNumber;

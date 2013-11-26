@@ -42,7 +42,7 @@ class Shopware_StoreApi_Models_Query_Criterion_ParentId extends Shopware_StoreAp
      * @param int $id
      * @return bool
      */
-    public function addId(int $id)
+    public function addId($id)
     {
         $id = intval($id);
         if(!empty($id)) {
