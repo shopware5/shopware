@@ -62,6 +62,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
             throw new Shopware_StoreApi_Exception_Exception('there is no store api url configured');
         }
 
+        $this->client->setConfig($this->Config());
         $this->client->startClient($storeApiUrl);
     }
 
@@ -127,7 +128,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function Config()
     {
-        if($this->config === null) {
+        if ($this->config === null) {
             $this->config = new Shopware_Components_StoreConfig();
         }
 
