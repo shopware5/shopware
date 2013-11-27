@@ -71,14 +71,7 @@ if (!file_exists('vendor/autoload.php')) {
     return;
 }
 
-set_include_path(
-    __DIR__ . PATH_SEPARATOR .
-    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    __DIR__ . '/templates/'                           // Templates
-);
-
-// include composer autoloader
-require 'vendor/autoload.php';
+require __DIR__ . '/autoload.php';
 
 use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
