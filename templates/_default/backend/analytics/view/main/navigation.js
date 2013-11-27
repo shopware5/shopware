@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Navigation', {
     alias: 'widget.analytics-navigation',
 
     store: 'Navigation',
-    width: 200,
+    width: 250,
     title: '{s name=navigation_title}Navigation{/s}',
     rootVisible: false,
 

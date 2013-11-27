@@ -79,6 +79,15 @@ class ArticleImpression extends ModelEntity
     private $articleId;
 
     /**
+     * id of the shop which should be tracked
+     *
+     * @var integer $shopId
+     *
+     * @ORM\Column(name="shopId", type="integer", nullable=false)
+     */
+    private $shopId;
+
+    /**
      * Accumulated number of impressions
      *
      * @var integer $impressions
@@ -91,15 +100,17 @@ class ArticleImpression extends ModelEntity
      * Constructor
      *
      * @param $articleId
+     * @param $shopId
      * @param $date
      * @param int $impressions
      */
-    public function __construct($articleId, $date = null, $impressions = 1)
+    public function __construct($articleId, $shopId, $date = null, $impressions = 1)
     {
         if ($date === null) {
             $date = new \DateTime();
         }
         $this->setArticleId($articleId);
+        $this->setShopId($shopId);
         $this->setDate($date);
         $this->setImpressions($impressions);
     }
@@ -152,6 +163,25 @@ class ArticleImpression extends ModelEntity
     public function getArticleId()
     {
         return $this->articleId;
+    }
+
+
+    /**
+     * set the shopId
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+    }
+
+    /**
+     * get the shopId
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
     }
 
     /**

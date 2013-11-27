@@ -302,15 +302,16 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if (empty($articleId)) {
             return;
         }
+        $shopId = Shopware()->Shop()->getId();
         /** @var $repository \Shopware\Models\Tracking\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
-        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId);
+        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId);
         /** @var  $articleImpression \Shopware\Models\Tracking\ArticleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one
         if ($articleImpression === null) {
-            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId);
+            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId, $shopId);
             Shopware()->Models()->persist($articleImpression);
         } else {
             $articleImpression->increaseImpressions();

@@ -44,19 +44,15 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
 
         Ext.applyIf(me, {
             items: [{
-                xtype: 'splitbutton',
-                text: '{s name=toolbar/config}Settings{/s}',
+                xtype: 'combobox',
                 iconCls: 'sprite-gear',
-                menu: [{
-                    xtype: 'menucheckitem',
-                    text: '{s name=toolbar/tax_mode}Tax mode{/s}',
-                    checked: true
-                }, {
-                    xtype: 'menucheckitem',
-                    action: 'refresh',
-                    text: '{s name=toolbar/refresh_mode}Auto refresh{/s}',
-                    checked: true
-                }]
+                name: 'Translate Shop',
+                queryMode: 'remote',
+                fieldLabel: 'shop',
+                store: me.shopStore,
+                multiSelect: true,
+                displayField: 'name',
+                valueField: 'id'
             },
             {
                 xtype: 'datefield',

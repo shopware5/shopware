@@ -70,14 +70,13 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     init:function () {
         var me = this;
 
-        me.sourceStore = me.getStore('Source');
-        me.shopStore = me.getStore('Shop').load({
+        me.sourceStore = me.subApplication.getStore('Source');
+        me.shopStore = me.subApplication.getStore('Shop').load({
             callback:function () {
                 me.dataStore = Ext.widget('analytics-store-data', { shopStore:this });
             }
         });
-        me.navigationStore = me.getStore('Navigation');
-
+        me.navigationStore = me.subApplication.getStore('Navigation');
         me.mainWindow = me.getView('main.Window').create({
             shopStore:me.shopStore,
             sourceStore:me.sourceStore,
@@ -118,43 +117,18 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                     me.renderDataOutput(store, record);
                 }
             },
-            'analytics-table button[action=print]':{
-                click:function (button, event) {
-                    //console.log(button);
-                }
-            },
             'analytics-toolbar button[action=layout]':{
                 change:function (button, item) {
                     me.getPanel().getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
-                    //me.dataStore.load();
                 }
             },
             'analytics-toolbar datefield':{
                 change:me.onChangeDate
+            },
+            'analytics-toolbar combobox':{
+                change:me.onChangeShop,
+                blur:me.onBlurShop
             }
-//            'analytics-toolbar-source':{
-//                /**
-//                 * Shop selection changes
-//                 * Refresh stores
-//                 * @param field
-//                 * @param values
-//                 */
-//                select:function (field, values) {
-//                    var shops = [];
-//                    Ext.each(values, function (value) {
-//                        shops[shops.length] = value.data.id;
-//                    });
-//
-//                    // Support custom stores
-//                    if (me.customStoreEnabled) {
-//                        me.customStore.getProxy().extraParams['shops[]'] = shops;
-//                        me.customStore.load();
-//                    } else {
-//                        me.dataStore.getProxy().extraParams['shops[]'] = shops;
-//                        me.dataStore.load();
-//                    }
-//                }
-//            }
         });
     },
     /**
@@ -259,8 +233,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
         // Special directive for month charts
         if(me.selectedType === 'month') {
-            var me = this,
-                from = me.getFromField().getValue(),
+                var from = me.getFromField().getValue(),
                 to = me.getToField().getValue();
 
             if(to.getFullYear() == from.getFullYear() && (to.getMonth() - from.getMonth()) <= 0) {
@@ -270,6 +243,61 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         }
 
         store.getProxy().extraParams[(field.name == 'from_date' ? 'fromDate' : 'toDate')] = value;
+        store.load();
+    },
+
+    /**
+     * Event listener which is be fired when the user changed the shop combobox
+     *
+     * @param field
+     * @param value
+     */
+    onChangeShop:function (field, value) {
+        var me = this,
+            store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
+
+        store.getProxy().extraParams.selectedShops = value.toString();
+    },
+
+    /**
+     * reloads the store after the shop combobox loses focus
+     */
+    onBlurShop:function () {
+        var me = this,
+            store = (me.customStoreEnabled) ? me.customStore : me.dataStore,
+            gridPanel = me.getPanel().getLayout().getActiveItem(),
+            columns = gridPanel.getColumns(),
+            selectedShopIds = store.getProxy().extraParams.selectedShops;
+
+
+        if(gridPanel.shopColumnName) {
+            //the table uses multiple shop columns so add the selected ones
+            if(!Ext.isEmpty(selectedShopIds)) {
+                selectedShopIds = selectedShopIds.split(",");
+                me.shopStore.each(function (shop) {
+                    if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
+                        columns[columns.length] = {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'amount' + shop.data.id,
+                            text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
+                        };
+                    }
+                });
+            }
+            else {
+                //the user didn't select any shop so add all shop columns
+                me.shopStore.each(function (shop) {
+                    if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
+                        columns[columns.length] = {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'amount' + shop.data.id,
+                            text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
+                        };
+                    }
+                });
+            }
+            gridPanel.reconfigure(null, columns);
+        }
         store.load();
     }
 });

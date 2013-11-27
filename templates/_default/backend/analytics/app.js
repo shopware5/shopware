@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Analytics', {
      * Required stores for controller
      * @array
      */
-    stores:[ 'Navigation', 'Source', 'Shop', 'Data', 'Search', 'Visitors', 'Conversion' ],
+    stores:[ 'Navigation', 'Source', 'Shop', 'Data', 'Search', 'Visitors', 'Conversion', 'ArticleImpression' ],
 
     /**
      * Required models for controller
@@ -87,7 +87,8 @@ Ext.define('Shopware.apps.Analytics', {
         'chart.Dispatch', 'chart.Payment',
         'table.Week', 'table.Weekday', 'table.Month', 'table.Daytime',
         'table.Supplier', 'table.Category', 'table.Country',
-        'table.Dispatch', 'table.Payment', 'table.Search', 'table.Visitors', 'table.Conversion'
+        'table.Dispatch', 'table.Payment', 'table.Search', 'table.Visitors', 'table.Conversion',
+        'table.ArticleImpression'
     ],
     /**
      * Returns the main application window for this is expected

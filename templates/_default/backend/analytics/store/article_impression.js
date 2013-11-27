@@ -33,15 +33,16 @@
  */
 Ext.define('Shopware.apps.Analytics.store.ArticleImpression', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-conversion',
+    alias: 'widget.analytics-store-article_impressions',
     remoteSort: true,
-    fields: ['node', 'name', 'totalVisits','totalOrders','totalConversion', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
+    fields: ['articleId', 'articleName', 'totalAmount', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
     proxy: {
         type: 'ajax',
         url: '{url controller=analytics}',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            totalProperty: 'totalCount'
         }
     },
 
@@ -51,7 +52,7 @@ Ext.define('Shopware.apps.Analytics.store.ArticleImpression', {
 
         if(config.shopStore) {
             config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'conversion' + shop.data.id;
+                config.fields[config.fields.length] = 'amount' + shop.data.id;
             });
         }
 
