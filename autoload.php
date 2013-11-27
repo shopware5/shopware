@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * Shopware 4.0
@@ -21,19 +20,26 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 
-set_time_limit(0);
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Composer\Autoload\ClassLoader;
 
-require __DIR__ . '/../autoload.php';
+set_include_path(
+    __DIR__ . PATH_SEPARATOR .
+    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
+    __DIR__ . '/templates/'                           // Templates
+);
 
-use Symfony\Component\Console\Input\ArgvInput;
+/**
+ * @var ClassLoader $loader
+ */
+$loader = require __DIR__ . '/vendor/autoload.php';
 
-$input = new ArgvInput();
+AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
-$env = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
-$env = $input->getParameterOption(array('--env', '-e'), $env);
-
-$kernel = new Shopware\Kernel($env, false);
-$application = new Shopware\Components\Console\Application($kernel);
-$application->run($input);
+return $loader;
