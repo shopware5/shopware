@@ -65,15 +65,17 @@ class Models
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
     ) {
+        $vendorPath = $kernelRootDir . '/vendor';
+
         // register standard doctrine annotations
         AnnotationRegistry::registerFile(
-            'Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+            $vendorPath . '/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
         );
 
         // register symfony validation annotations
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            realpath($kernelRootDir . '/vendor/symfony/validator')
+            realpath($vendorPath . '/symfony/validator')
         );
 
         $loader->registerNamespace(
