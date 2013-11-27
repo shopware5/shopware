@@ -257,12 +257,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
 		$filterSql = 'WHERE 1 = 1';
 		if (isset($filters['search'])) {
-			$filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR articles.description_long LIKE :descriptionLong)";
+			$filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR details.suppliernumber LIKE :supplierNumber OR articles.description_long LIKE :descriptionLong)";
             $searchFilter =  '%' . $filters['search'] . '%';
 
 			$sqlParams["orderNumber"] = $searchFilter;
 			$sqlParams["articleName"] = $searchFilter;
 			$sqlParams["supplierName"] = $searchFilter;
+			$sqlParams["supplierNumber"] = $searchFilter;
 			$sqlParams["descriptionLong"] = $searchFilter;
 		}
 
