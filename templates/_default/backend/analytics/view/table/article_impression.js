@@ -33,49 +33,73 @@
 Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-article_impression',
-    shopColumnConversion: "{s name=table/article_impression/shop}Impressions: [0]{/s}",
-    initComponent: function() {
-           var me = this;
+    shopColumnName: "{s name=table/article_impression/shop}Impressions: [0]{/s}",
+    initComponent: function () {
+        var me = this;
 
-           me.columns = [{
-                   xtype: 'datecolumn',
-                   dataIndex: 'date',
-                   text: '{s name=table/article_impression/date}Date{/s}',
-                   width: 80,
-                   sortable:false
-               },
-               {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'articleName',
-                   text: '{s name=table/article_impression/articleName}Article Name{/s}',
-                   align: 'right',
-                   flex: 1,
-                   sortable:false
-               },
-               {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'impressions',
-                   text: '{s name=table/article_impression/impressions}Impressions{/s}',
-                   align: 'right',
-                   width: 80,
-                   sortable:false
-               }
-           ];
-           me.subApplication.shopStore.each(function(shop) {
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                align:'right',
+                flex:1
+            }
+        };
+        me.shopStore.each(function (shop) {
+            me.columns.items[me.columns.items.length] = {
+                xtype: 'gridcolumn',
+                dataIndex: 'amount' + shop.data.id,
+                text: Ext.String.format(me.shopColumnName, shop.data.name)
+            };
 
-               me.columns[me.columns.length] = {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'conversion' + shop.data.id,
-                   text: Ext.String.format(me.shopColumnConversion, shop.data.name),
-                   align: 'right',
-                   width: 120,
-                   sortable: false
-               };
+        }, me);
 
-           }, me);
+        me.callParent(arguments);
+    },
+    /**
+     * Creates the grid columns
+     *
+     * @return [array] grid columns
+     */
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/article_impression/date}Date{/s}',
+                width: 100
+            },
+            {
+                xtype: 'actioncolumn',
+                dataIndex: 'articleName',
+                text: '{s name=table/article_impression/articleName}Article Name{/s}',
+                flex: 2,
+                renderer: function(val) {
+                  return val;
+                },
+                items: [{
+                    iconCls:'sprite-pencil',
+                    cls:'editBtn',
+                    tooltip:'{s name=table/article_impression/action_column/edit}Edit this Article{/s}',
+                    handler:function (view, rowIndex, colIndex, item, event, record) {
+                        Shopware.app.Application.addSubApplication({
+                            name: 'Shopware.apps.Article',
+                            action: 'detail',
+                            params: {
+                                articleId: record.get('articleId')
+                            }
+                        });
+                    }
+                }]
+            },
+            {
+                xtype: 'gridcolumn',
+                dataIndex: 'totalAmount',
+                width: 100,
+                text: '{s name=table/article_impression/impressions}Impressions{/s}'
+            }
+        ];
 
-           me.callParent(arguments);
-       }
 
+    }
 });
 //{/block}

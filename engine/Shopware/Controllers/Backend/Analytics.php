@@ -32,16 +32,70 @@
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
 
-    protected function initAcl()
+    /**
+     * Entity Manager
+     * @var null
+     */
+    protected $manager = null;
+
+    /**
+     * @var \Shopware\Models\Shop\Repository
+     */
+    protected $shopRepository;
+
+    /**
+     * @var \Shopware\Models\Tracking\Repository
+     */
+    protected $articleImpressionRepository;
+
+	protected function initAcl()
+	{
+		// read
+		$this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('visits', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
+		$this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
+	}
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     *
+     * @return null
+     */
+    private function getManager()
     {
-        // read
-        $this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('visits', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+        return $this->manager;
+    }
+    /**
+     * Helper Method to get access to the shop repository.
+     *
+     * @return Shopware\Models\Shop\Repository
+     */
+    public function getShopRepository()
+    {
+        if ($this->shopRepository === null) {
+            $this->shopRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
+        }
+        return $this->shopRepository;
+    }
+
+    /**
+     * Helper Method to get access to the tracking repository.
+     *
+     * @return Shopware\Models\Tracking\Repository
+     */
+    public function getArticleImpressionRepository()
+    {
+        if ($this->articleImpressionRepository === null) {
+            $this->articleImpressionRepository = $this->getManager()->getRepository('Shopware\Models\Tracking\ArticleImpression');
+        }
+        return $this->articleImpressionRepository;
     }
 
     /**
@@ -49,8 +103,50 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     public function shopListAction()
     {
-        $shops = $this->getShops();
-        $this->View()->assign(array('data' => $shops, 'success' => true));
+        $sql = '
+            SELECT
+              s.id , s.name,
+              c.currency AS currency,
+              c.name AS currencyName,
+              c.templatechar AS currencyChar
+            FROM s_core_shops s, s_core_currencies c
+            WHERE s.currency_id = c.id
+            ORDER BY s.default DESC, s.name
+        ';
+        $data =  Shopware()->Db()->fetchAll($sql);
+        $this->View()->assign(array('data' => $data, 'success' => true));
+    }
+
+    /**
+     * Returns the analytics data for the article impression statistic
+     */
+    public function articleImpressionAction()
+    {
+        /** @var $builder \Doctrine\DBAL\Query\QueryBuilder */
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+                'SQL_CALC_FOUND_ROWS impression.articleId',
+                'articles.name as articleName',
+                'UNIX_TIMESTAMP(impression.date) as date',
+                'SUM(impression.impressions) as totalAmount'
+        ));
+        $builder->from('s_statistics_article_impression', 'impression');
+        $builder->leftJoin('impression', 's_articles', 'articles', 'impression.articleId = articles.id');
+        $builder->where('`date` >= '. $builder->createNamedParameter($this->getFromDate()).' AND `date` <= '. $builder->createNamedParameter($this->getToDate()));
+        $builder->groupBy('impression.date');
+
+        //add the sub query for all shops to calculate the amount shop specific
+        $this->addShopSelectQuery($builder, 'impression', 'shopId', 'impressions');
+        //add a limit the the query
+        $this->addLimitQuery($builder);
+        //add a order by to the query
+        $this->addOrderQuery($builder, 'totalAmount', 'DESC');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+        $articleImpressionData = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $articleImpressionData, 'totalCount' =>  $this->getFoundRows()));
     }
 
 
@@ -97,7 +193,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     public function orderAnalyticsAction()
     {
-        $shops = $this->getShops();
+        $shopIds = $this->getSelectedShopIds();
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
 
@@ -111,8 +207,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $sqlWhere = '';
         $sqlSelect = '';
         $sqlSelectName = 'name';
-        $sqlDateSub = '14 DAY';
-        $sqlDateTo = "NOW()";
         $sqlSelectField = 'ordertime';
 
         switch ($this->Request()->getParam('type')) {
@@ -127,7 +221,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             case 'month':
                 $sqlSelectField = "DATE_FORMAT(ordertime, '%Y-%m-01')";
                 $sqlSelectName = 'date';
-                $sqlDateFrom = "DATE_SUB(DATE_FORMAT($sqlDateTo, '%Y-%m-01'), INTERVAL 12 MONTH)";
                 break;
             case 'weekday':
                 $sqlSelectField = "Date_Format(ordertime, '%Y-%m-%d')";
@@ -137,7 +230,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             case 'week':
                 $sqlSelectField = 'DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)';
                 $sqlSelectName = 'date';
-                $sqlDateSub = '7 * 10 DAY';
                 break;
             case 'daytime':
                 $sqlSelectField = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
@@ -151,26 +243,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 break;
         }
 
-        if (!isset($sqlDateFrom)) {
-            $sqlDateFrom = "DATE_SUB($sqlDateTo, INTERVAL $sqlDateSub)";
-        }
         if (!isset($sqlGroupBy)) {
             $sqlGroupBy = $sqlSelectField;
         }
-        if (!empty($shops)) {
-            //$sqlWhere .= 'AND o.subshopID IN (' . Shopware()->Db()->quote($shops) .') ';
-
-            foreach ($shops as $shop) {
-                $shop = (int) $shop["id"];
-                $sqlSelect .= "SUM(IF(o.subshopID=$shop, $sqlAmount, 0)) as `amount$shop`, ";
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $sqlSelect .= "SUM(IF(o.subshopID=$shopId, $sqlAmount, 0)) as `amount$shopId`, ";
             }
         }
 
         $sql = "
             SELECT
-                COUNT(*) as `count`,
-                SUM($sqlAmount) as `amount`,
-                Date_Format(ordertime, '%W') as displayDate,
+        		COUNT(*) as `count`,
+        		SUM($sqlAmount) as `amount`,
+        		Date_Format(ordertime, '%W') as displayDate,
                 $sqlSelect
                 $sqlSelectField as `$sqlSelectName`
             FROM `s_order` o
@@ -201,14 +287,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
 
         foreach ($data as &$row) {
-            $row['count'] = (int) $row['count'];
-            $row['amount'] = (float) $row['amount'];
+            $row['count'] = (int)$row['count'];
+            $row['amount'] = (float)$row['amount'];
             $row['date'] = strtotime($row['date']);
 
-            if (!empty($shops)) {
-                foreach ($shops as $shop) {
-                    $shop = (int) $shop["id"];
-                    $row['amount' . $shop] = (float) $row['amount' . $shop];
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $row['amount' . $shopId] = (float)$row['amount' . $shopId];
                 }
             }
         }
@@ -238,16 +323,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $sort = $sort[0];
 
-        // sw-3321: Also take subshops page impressions and unique visits into account in order to have correct
-        // values for the corresponding main-shops.
-        $shops = $this->getShops();
-        if (!empty($shops)) {
-            foreach ($shops as $key => $shop) {
+
+        $shopIds = $this->getSelectedShopIds();
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $key => $shopId) {
                 if ($key == 0) $sqlSelect = ",\n";
-                $shop = (int) $shop["id"];
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.pageimpressions, 0)) as `impressions$shop`, ";
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.uniquevisits, 0)) as `visits$shop` ";
-                if ($key < count($shops) - 1) $sqlSelect .= ",\n";
+                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shopId, s.pageimpressions, 0)) as `impressions$shopId`, ";
+                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shopId, s.uniquevisits, 0)) as `visits$shopId` ";
+                if ($key < count($shopIds) - 1) $sqlSelect .= ",\n";
             }
         }
         $sql = "
@@ -311,7 +394,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 if ($node === 'root') {
                     $node = 1;
                 } else {
-                    $node = (int) $node;
+                    $node = (int)$node;
                 }
                 $sqlSelect .= '(
                     SELECT parent FROM s_categories
@@ -344,7 +427,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $sql = "
             SELECT
-                COUNT(DISTINCT o.id) as `count`,
+        		COUNT(DISTINCT o.id) as `count`,
                 SUM($sqlAmount) as `amount`,
                 $sqlSelect
                 $sqlSelectField as `name`
@@ -370,8 +453,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
 
         foreach ($data as &$row) {
-            $row['count'] = (int) $row['count'];
-            $row['amount'] = (float) $row['amount'];
+            $row['count'] = (int)$row['count'];
+            $row['amount'] = (float)$row['amount'];
         }
 
         $this->View()->success = true;
@@ -419,9 +502,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     public function conversionRateAction()
     {
-
-        // Support subshops
-        $shops = $this->getShops();
         $sqlSelect = "";
         $start = intval($this->Request()->start ? $this->Request()->start : 0);
         $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
@@ -430,11 +510,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $toDate = $this->getToDate();
 
 
-
-        if (!empty($shops)) {
-            foreach ($shops as $shop) {
-                $shop = (int) $shop["id"];
-                $sqlSelect .= "\n 0 AS visits$shop, 0 AS orders$shop, 0 AS conversion$shop,\n";
+        $shopIds = $this->getSelectedShopIds();
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $sqlSelect .= "\n 0 AS visits$shopId, 0 AS orders$shopId, 0 AS conversion$shopId,\n";
             }
         }
         /**
@@ -457,17 +536,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ) )
          */
         $sql = "
-            SELECT
-                datum as `date`,
-                SUM(s.uniquevisits) AS `totalVisits`,
-                $sqlSelect
-                (SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
-            FROM
-                `s_statistics_visitors` AS s
-            WHERE datum <= ?
+        	SELECT
+        		datum as `date`,
+        		SUM(s.uniquevisits) AS `totalVisits`,
+        		$sqlSelect
+        		(SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
+        	FROM
+        		`s_statistics_visitors` AS s
+        	WHERE datum <= ?
             AND datum >= ?
-            GROUP BY `date`
-            ORDER BY `date` DESC
+        	GROUP BY `date`
+        	ORDER BY `date` DESC
        ";
 
         $result = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
@@ -483,20 +562,18 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
          * If shop selection is active, get visitors and orders for each shop
          * Merge results into $basicStats Array
          */
-        if (!empty($shops)) {
-            foreach ($shops as $shop) {
-                $shop = (int) $shop["id"];
-
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
                 $sql = "
                 SELECT datum AS `date`,
                 uniquevisits AS visits
                 FROM s_statistics_visitors WHERE shopID = ?
                 ";
 
-                $result = Shopware()->Db()->fetchAll($sql, array($shop));
+                $result = Shopware()->Db()->fetchAll($sql, array($shopId));
 
                 foreach ($result as $row) {
-                    $basicStats[$row["date"]]["visits" . $shop] = $row["visits"];
+                    $basicStats[$row["date"]]["visits" . $shopId] = $row["visits"];
                 }
 
                 $sql = "
@@ -509,14 +586,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     GROUP BY DATE(ordertime)
                     ORDER BY DATE(ordertime) DESC
                ";
-                $result = Shopware()->Db()->fetchAll($sql, array($shop));
+                $result = Shopware()->Db()->fetchAll($sql, array($shopId));
                 if (!empty($result)) {
                     foreach ($result as $row) {
-                        $basicStats[$row["date"]]["orders" . $shop] = $row["orders"];
-                        if (!empty($basicStats[$row["date"]]["visits" . $shop])) {
-                            $basicStats[$row["date"]]["conversion" . $shop] = round($row["orders"] / $basicStats[$row["date"]]["visits" . $shop] * 100, 2);
+                        $basicStats[$row["date"]]["orders" . $shopId] = $row["orders"];
+                        if (!empty($basicStats[$row["date"]]["visits" . $shopId])) {
+                            $basicStats[$row["date"]]["conversion" . $shopId] = round($row["orders"] / $basicStats[$row["date"]]["visits" . $shopId] * 100, 2);
                         } else {
-                            $basicStats[$row["date"]]["conversion" . $shop] = 0;
+                            $basicStats[$row["date"]]["conversion" . $shopId] = 0;
                         }
                     }
                 }
@@ -534,24 +611,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
 
     /**
-     * helper to get all shops
+     * helper to get the selected shop ids
+     * if no shop is selected the ids of all shops are returned
      *
-     * return shops
+     * return array | shopIds
      */
-    private function getShops()
-    {
+    private function getSelectedShopIds(){
+        $selectedShopIds = $this->Request()->getParam('selectedShops');
+        if(!empty($selectedShopIds)) {
+            $selectedShopIds = explode(",",$selectedShopIds);
+            return $selectedShopIds;
+        }
         $sql = '
-            SELECT
-              s.id , s.name,
-              c.currency AS currency,
-              c.name AS currencyName,
-              c.templatechar AS currencyChar
-            FROM s_core_shops s, s_core_currencies c
-            WHERE s.currency_id = c.id AND s.main_id IS NULL
+            SELECT s.id
+            FROM s_core_shops s
             ORDER BY s.default DESC, s.name
         ';
-        return Shopware()->Db()->fetchAll($sql);
-
+        return Shopware()->Db()->fetchCol($sql);
     }
 
     /**
@@ -559,8 +635,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | fromDate
      */
-    private function getFromDate()
-    {
+    private function getFromDate(){
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
@@ -576,8 +651,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | toDate
      */
-    private function getToDate()
-    {
+    private function getToDate() {
+
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
@@ -589,5 +664,67 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $toDate = $toDate->add(new DateInterval('P1D'));
         $toDate = $toDate->sub(new DateInterval('PT1S'));
         return $toDate->format("Y-m-d H:i:s");
+    }
+
+    /**
+     * helper method to generate the shop sub-queries
+     * which is used to select the shop specific values and amounts
+     *
+     * @param \Doctrine\DBAL\Query\QueryBuilder |$builder
+     * @param $tableAlias
+     * @param $shopFieldName
+     * @param $tableFieldName
+     * @param $fieldAlias
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function addShopSelectQuery($builder, $tableAlias, $shopFieldName, $tableFieldName, $fieldAlias = "amount")
+    {
+        $selectedShopIds = $this->getSelectedShopIds();
+
+        foreach ($selectedShopIds as $shopId) {
+            $builder->addSelect(
+                'SUM(IF(' . $tableAlias . '.' . $shopFieldName . '=' . $shopId . ', ' . $tableAlias . '.' . $tableFieldName . ', 0)) as ' . $fieldAlias . $shopId
+            );
+        }
+    }
+
+
+    /**
+     * helper method to add an limit to the query
+     * @param \Doctrine\DBAL\Query\QueryBuilder | $builder
+     */
+    private function addLimitQuery($builder)
+    {
+        $builder->setFirstResult(intval($this->Request()->getParam('start',0)));
+        $builder->setMaxResults(intval($this->Request()->getParam('limit',25)));
+    }
+
+    /**
+     * helper method to add an order by query to the builder
+     * uses directly the sort param
+     *
+     * @param \Doctrine\DBAL\Query\QueryBuilder | $builder
+     * @param $defaultProperty
+     * @param $defaultDirection
+     */
+    private function addOrderQuery($builder, $defaultProperty, $defaultDirection)
+    {
+        $order = (array)$this->Request()->getParam('sort', array());
+        if(empty($order)) {
+            $builder->orderBy($defaultProperty,$defaultDirection);
+        }
+        else {
+            $builder->orderBy($order[0]["property"], $order[0]["direction"]);
+        }
+    }
+
+    /**
+     * returns the found rows of the last mysql SQL_CALC_FOUND_ROWS function
+     * @return int
+     */
+    private function getFoundRows()
+    {
+        $sql= "SELECT FOUND_ROWS()";
+        return (int)Shopware()->Db()->fetchOne($sql);
     }
 }

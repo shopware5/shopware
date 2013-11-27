@@ -60,15 +60,16 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
      *
      * @param $articleId
-     * @param $date
+     * @param $shopId
+     * @param null $date
      * @return \Doctrine\ORM\Query
      */
-    public function getArticleImpressionQuery($articleId, $date = null)
+    public function getArticleImpressionQuery($articleId, $shopId, $date = null)
     {
         if ($date == null) {
             $date = new \DateTime();
         }
-        $builder = $this->getArticleImpressionQueryBuilder($articleId, $date);
+        $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date);
         return $builder->getQuery();
     }
 
@@ -77,17 +78,19 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param $articleId
-     * @param \DateTime $date
+     * @param $shopId
+     * @param $date
      * @return \Doctrine\ORM\QueryBuilder
+     *
      */
-    public function getArticleImpressionQueryBuilder($articleId, $date)
+    public function getArticleImpressionQueryBuilder($articleId, $shopId, $date)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('articleImpression')
                 ->from('Shopware\Models\Tracking\ArticleImpression', 'articleImpression')
                 ->where('articleImpression.articleId = :articleId')
-                ->andWhere('articleImpression.date = :date')
-                ->setParameters(array('articleId' => $articleId, 'date' => $date->format("Y-m-d")));
+                ->andWhere('articleImpression.date = :fromDate')
+                ->setParameters(array('articleId' => $articleId, 'shopId' => $shopId, 'date' => $date->format("Y-m-d")));
 
         return $builder;
     }
