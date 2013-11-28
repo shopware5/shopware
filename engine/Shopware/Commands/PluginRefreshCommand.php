@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginUninstallCommand extends ShopwareCommand
+class PluginRefreshCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -44,17 +46,8 @@ class PluginUninstallCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:uninstall')
-            ->setDescription('Uninstalls a plugin.')
-            ->addArgument(
-                'plugin',
-                InputArgument::REQUIRED,
-                'The plugin to be uninstalled.'
-            )
-            ->setHelp(<<<EOF
-The <info>%command.name%</info> uninstalls a plugin.
-EOF
-            );
+            ->setName('sw:plugin:refresh')
+            ->setDescription('Refreshes plugin list.')
         ;
     }
 
@@ -63,24 +56,10 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
-        $pluginName = $input->getArgument('plugin');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager->refreshPluginList();
 
-        try {
-            $plugin = $installer->getPluginByName($pluginName);
-        } catch (\Exeption $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
-            return 1;
-        }
-
-        if (!$plugin->getInstalled()) {
-            $output->writeln(sprintf('The plugin %s is already uninstalled.', $pluginName));
-            return 1;
-        }
-
-        $installer->uninstallPlugin($plugin);
-
-        $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
+        $output->writeln(sprintf("Successfully refreshed"));
     }
 }

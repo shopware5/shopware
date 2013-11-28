@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
 use CommunityStore;
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -83,12 +83,12 @@ class StoreDownloadUpdateCommand extends StoreCommand
 
         $product = $this->getLicensedProduct($auth, $domain, $pluginId);
 
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
 
         $result = $this->downloadProduct($product);
 
-        $installer->refreshPluginList();
+        $pluginManager->refreshPluginList();
     }
 
     /**
@@ -116,7 +116,7 @@ class StoreDownloadUpdateCommand extends StoreCommand
             $license = $this->container->get('license');
             $info = $license->readLicenseInfo($licencedProduct->getLicence());
 
-            /** @var \Shopware\Plugin\SwagLicense\Command\LicenseAddCommand $command */
+            /** @var \Shopware\Plugin\SwagLicense\Commands\ImportCommand $command */
             $command = $this->getApplication()->get('swaglicense:license:import');
             $command->saveLicense($info, $this->output);
         }

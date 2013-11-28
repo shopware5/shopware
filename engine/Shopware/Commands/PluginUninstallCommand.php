@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginConfigListCommand extends ShopwareCommand
+class PluginUninstallCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -45,21 +44,15 @@ class PluginConfigListCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:config:list')
-            ->setDescription('Lists plugin configuration.')
-            ->addOption(
-                'shop',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Get configuration for shop'
-            )
+            ->setName('sw:plugin:uninstall')
+            ->setDescription('Uninstalls a plugin.')
             ->addArgument(
                 'plugin',
                 InputArgument::REQUIRED,
-                'The plugin to list config.'
+                'Name of the plugin to be uninstalled.'
             )
             ->setHelp(<<<EOF
-The <info>%command.name%</info> lists a pluginc configuration.
+The <info>%command.name%</info> uninstalls a plugin.
 EOF
             );
         ;
@@ -70,37 +63,24 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
-            $plugin = $installer->getPluginByName($pluginName);
+            $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
             return 1;
         }
 
-        /**@var ModelManager $em */
-        $em = $this->container->get('models');
-
-        if ($input->getOption('shop')) {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($input->getOption('shop'));
-            if (!$shop) {
-                $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
-                return 1;
-            }
-            $shops = array($shop);
-        } else {
-            $shops = $em->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        if (!$plugin->getInstalled()) {
+            $output->writeln(sprintf('The plugin %s is already uninstalled.', $pluginName));
+            return 1;
         }
 
+        $pluginManager->uninstallPlugin($plugin);
 
-        foreach ($shops as $shop) {
-            $config = $installer->getPluginConfig($plugin, $shop);
-
-            $output->writeln(sprintf("Plugin configuration for Plugin %s and shop %s:", $pluginName, $shop->getName()));
-            $output->writeln(print_r($config, true));
-        }
+        $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
     }
 }

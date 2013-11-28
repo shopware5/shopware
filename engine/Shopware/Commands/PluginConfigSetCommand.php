@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,16 +47,10 @@ class PluginConfigSetCommand extends ShopwareCommand
         $this
             ->setName('sw:plugin:config:set')
             ->setDescription('Sets plugin configuration.')
-            ->addOption(
-                'shop',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Set configuration for shop'
-            )
             ->addArgument(
                 'plugin',
                 InputArgument::REQUIRED,
-                'The name of the plugin.'
+                'Name of the plugin.'
             )
             ->addArgument(
                 'key',
@@ -68,6 +62,12 @@ class PluginConfigSetCommand extends ShopwareCommand
                 InputArgument::REQUIRED,
                 'Configuration value.'
             )
+            ->addOption(
+                'shop',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Set configuration for shop id'
+            )
         ;
     }
 
@@ -76,14 +76,14 @@ class PluginConfigSetCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
-            $plugin = $installer->getPluginByName($pluginName);
+            $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
             return 1;
         }
 
@@ -111,7 +111,7 @@ class PluginConfigSetCommand extends ShopwareCommand
             $value = true;
         }
 
-        $installer->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
+        $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
         $output->writeln(sprintf("Plugin configuration for Plugin %s saved.", $pluginName));
     }
 }

@@ -33,7 +33,7 @@ use Shopware\Models\Shop\Shop;
  * @package   Shopware\Components\Plugin
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Installer
+class Manager
 {
     /**
      * @var ModelManager
@@ -65,7 +65,7 @@ class Installer
         $repository = $this->em->getRepository('Shopware\Models\Plugin\Plugin');
 
         /** @var Plugin $plugin */
-        $plugin = $repository->findOneBy(array('name' => $pluginName));
+        $plugin = $repository->findOneBy(array('name' => $pluginName, 'capabilityEnable' => 1));
 
         if ($plugin === null) {
             throw new \Exception(sprintf('Unknown plugin: %s.', $pluginName));

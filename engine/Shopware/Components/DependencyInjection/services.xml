@@ -108,7 +108,7 @@
             <argument>%shopware.plugins%</argument>
         </service>
 
-        <service id="shopware.plugin_installer" class="Shopware\Components\Plugin\Installer">
+        <service id="shopware.plugin_manager" class="Shopware\Components\Plugin\Manager">
             <argument type="service" id="models"/>
             <argument type="service" id="plugins"/>
         </service>

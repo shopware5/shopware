@@ -24,9 +24,20 @@
 
 namespace Shopware\Components\Test\Plugin;
 
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 
 /**
+ * Ensures a given plugin is installed and sets configuration.
+ * After the test is run the initial state is restored
+ *
+ * protected static $ensureLoadedPlugins = array(
+ *     'AdvancedMenu' => array(
+ *         'show'    => 1,
+ *         'levels'  => 3,
+ *         'caching' => 0
+ *     )
+ * );
+ *
  * @runInSeparateProcess
  * @category  Shopware
  * @package   Shopware\Components\Test\Plugin
@@ -35,9 +46,9 @@ use Shopware\Components\Plugin\Installer;
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Installer
+     * @var Manager
      */
-    private static $pluginInstaller;
+    private static $pluginManager;
 
     /**
      * @var array
@@ -51,7 +62,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$pluginInstaller = Shopware()->ResourceLoader()->get('shopware.plugin_installer');
+        self::$pluginManager = Shopware()->ResourceLoader()->get('shopware.plugin_Manager');
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {
@@ -71,33 +82,36 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         self::restorePluginStates();
-        self::$pluginInstaller = null;
+        self::$pluginManager = null;
         Shopware()->Models()->clear();
     }
 
     /**
+     * Ensures given $pluginName is installed and activated.
+     *
      * @param $pluginName
      * @param array $config
      */
     private static function ensurePluginAvailable($pluginName, $config = array())
     {
-        $plugin = self::$pluginInstaller->getPluginByName($pluginName);
+        $plugin = self::$pluginManager->getPluginByName($pluginName);
 
         self::$pluginStates[$pluginName] = array(
             'isInstalled' => (bool) $plugin->getInstalled(),
             'isActive'    => (bool) $plugin->getActive(),
         );
 
-        self::$pluginInstaller->installPlugin($plugin);
-        self::$pluginInstaller->activatePlugin($plugin);
-        self::$pluginInstaller->activatePlugin($plugin);
+        self::$pluginManager->installPlugin($plugin);
+        self::$pluginManager->activatePlugin($plugin);
 
         foreach ($config as $element => $value) {
-            self::$pluginInstaller->saveConfigElement($plugin, $element, $value);
+            self::$pluginManager->saveConfigElement($plugin, $element, $value);
         }
-
     }
 
+    /**
+     * Restores initial plugin state
+     */
     private static function restorePluginStates()
     {
         Shopware()->Models()->clear();
@@ -113,15 +127,15 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     private static function restorePluginState($pluginName, $status)
     {
-        $plugin = self::$pluginInstaller->getPluginByName($pluginName);
+        $plugin = self::$pluginManager->getPluginByName($pluginName);
 
-        if (!$status['isInstalled']) {
-            self::$pluginInstaller->uninstallPlugin($plugin);
+        if ($plugin->getInstalled() && !$status['isInstalled']) {
+            self::$pluginManager->uninstallPlugin($plugin);
             return;
         }
 
-        if (!$status['isActive']) {
-            self::$pluginInstaller->deactivatePlugin($plugin);
+        if ($plugin->getActive() && !$status['isActive']) {
+            self::$pluginManager->deactivatePlugin($plugin);
         }
     }
 }

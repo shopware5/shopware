@@ -56,9 +56,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
     protected function startClient()
     {
         $storeApiUrl = Shopware()->Plugins()->Backend()->StoreApi()->Config()->StoreApiUrl;
-        //@todo: Fix of the plugin configuration
-//        $storeApiUrl = 'http://store.shopware-preview.de/StoreApi';
-        if(empty($storeApiUrl)) {
+        if (empty($storeApiUrl)) {
             throw new Shopware_StoreApi_Exception_Exception('there is no store api url configured');
         }
 
