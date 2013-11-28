@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Installer;
+use CommunityStore;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,25 +36,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginActivateCommand extends ShopwareCommand
+class StoreListDomainsCommand extends StoreCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::addConfigureAuth();
+
         $this
-            ->setName('sw:plugin:activate')
-            ->setDescription('Activates a plugin.')
-            ->addArgument(
-                'plugin',
-                InputArgument::REQUIRED,
-                'The plugin to be activated.'
-            )
-            ->setHelp(<<<EOF
-The <info>%command.name%</info> activates a plugin.
-EOF
-            );
+            ->setName('sw:store:list:domains')
+            ->setDescription('List connected domains.')
         ;
     }
 
@@ -63,29 +56,24 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
-        $pluginName = $input->getArgument('plugin');
+        $auth = $this->setupAuth($input, $output);
 
-        try {
-            $plugin = $installer->getPluginByName($pluginName);
-        } catch (\Exeption $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
-            return 1;
+        /** @var \CommunityStore $store */
+        $store = $this->container->get('CommunityStore');
+
+        $domains = array();
+
+        /** @var \Shopware_StoreApi_Models_Domain $domain */
+        foreach ($store->getAccountService()->getDomains($auth) as $domain) {
+            $domains[] = array(
+               $domain->getDomain(),
+               number_format($domain->getBalance(), 2)
+            );
         }
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(array('Domain', 'Balance'))
+              ->setRows($domains);
 
-        if ($plugin->getActive()) {
-            $output->writeln(sprintf('The plugin %s is already activated.', $pluginName));
-            return 1;
-        }
-
-        if (!$plugin->getInstalled()) {
-            $output->writeln(sprintf('The plugin %s has to be installed first.', $pluginName));
-            return 1;
-        }
-
-        $installer->activatePlugin($plugin);
-
-        $output->writeln(sprintf('Plugin %s has been activated', $pluginName));
+        $table->render($output);
     }
 }

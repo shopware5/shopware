@@ -1,9 +1,20 @@
 <?php
 class Shopware_Components_StoreConfig extends Enlight_Class
 {
+    /**
+     * @var int
+     */
     protected $version;
+
+    /**
+     * @var string
+     */
     protected $language;
 
+    /**
+     * @param $version
+     * @return $this
+     */
     public function setVersion($version)
     {
         $this->version = $version;
@@ -11,6 +22,10 @@ class Shopware_Components_StoreConfig extends Enlight_Class
         return $this;
     }
 
+    /**
+     * @param $language
+     * @return $this
+     */
     public function setLanguage($language)
     {
         $this->language = $language;

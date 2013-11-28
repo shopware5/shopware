@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use CommunityStore;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,18 +36,25 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class StoreListDomainsCommand extends StoreCommand
+class PluginDeactivateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        parent::addConfigureAuth();
-
         $this
-            ->setName('sw:store:list:domains')
-            ->setDescription('List connected domains.')
+            ->setName('sw:plugin:deactivate')
+            ->setDescription('Deactivates a plugin.')
+            ->addArgument(
+                'plugin',
+                InputArgument::REQUIRED,
+                'Name of the plugin to be deactivated.'
+            )
+            ->setHelp(<<<EOF
+The <info>%command.name%</info> deactivates a plugin.
+EOF
+            );
         ;
     }
 
@@ -56,24 +63,24 @@ class StoreListDomainsCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $auth = $this->setupAuth($input, $output);
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginName = $input->getArgument('plugin');
 
-        /** @var \CommunityStore $store */
-        $store = $this->container->get('CommunityStore');
-
-        $domains = array();
-
-        /** @var \Shopware_StoreApi_Models_Domain $domain */
-        foreach ($store->getAccountService()->getDomains($auth) as $domain) {
-            $domains[] = array(
-               $domain->getDomain(),
-               number_format($domain->getBalance(), 2)
-            );
+        try {
+            $plugin = $pluginManager->getPluginByName($pluginName);
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+            return 1;
         }
-        $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Domain', 'Balance'))
-              ->setRows($domains);
 
-        $table->render($output);
+        if (!$plugin->getActive()) {
+            $output->writeln(sprintf('The plugin %s is already deactivated.', $pluginName));
+            return 1;
+        }
+
+        $pluginManager->deactivatePlugin($plugin);
+
+        $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
     }
 }

@@ -22,10 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Command\Command;

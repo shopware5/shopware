@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use CommunityStore;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,20 +36,25 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class StoreListCommand extends StoreCommand
+class PluginUpdateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        parent::addConfigureShopwareVersion();
-        parent::addConfigureAuth();
-        parent::addConfigureHostname();
-
         $this
-            ->setName('sw:store:list')
-            ->setDescription('List licensed plugins.')
+            ->setName('sw:plugin:update')
+            ->setDescription('Updates a plugin.')
+            ->addArgument(
+                'plugin',
+                InputArgument::REQUIRED,
+                'Name of the plugin to be updated.'
+            )
+            ->setHelp(<<<EOF
+The <info>%command.name%</info> updates a plugin.
+EOF
+            );
         ;
     }
 
@@ -58,44 +63,35 @@ class StoreListCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setupShopwareVersion($input);
+        // Disable error reporting for shopware menu legacy hack
+        set_error_handler(function($errno, $errstr) {
+            if ($errno === E_RECOVERABLE_ERROR
+                    && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
 
-        $auth   = $this->setupAuth($input, $output);
-        $domain = $this->setupDomain($input, $output, $auth);
-
-        /** @var \CommunityStore $store */
-        $store = $this->container->get('CommunityStore');
-
-        $resultSet = $store->getAccountService()->getLicencedProducts(
-            $auth,
-            $domain,
-            $store->getNumericShopwareVersion()
-        );
-
-        $products = array();
-
-        /** @var $product \Shopware_StoreApi_Models_Licence */
-        foreach ($resultSet as $product) {
-            $data = $product->getRawData();
-
-            $payed = (int) $data['payed'];
-            if ($payed === 1) {
-                if (empty($data['downloads'])) {
-                    continue;
-                }
-
-                $products[] = array(
-                    'id'          => $data['id'],
-                    'ordernumber' => $data['ordernumber'],
-                    'plugin'      => $data['plugin'],
-                );
+                return true;
             }
+
+            return false;
+        });
+
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginName = $input->getArgument('plugin');
+
+        try {
+            $plugin = $pluginManager->getPluginByName($pluginName);
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+            return 1;
         }
 
-        $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('id', 'OrderNumber', 'Name'))
-              ->setRows($products);
+        if (!$plugin->getUpdateVersion()) {
+            $output->writeln(sprintf('The plugin %s is up to date.', $pluginName));
+            return 1;
+        }
 
-        $table->render($output);
+        $pluginManager->updatePlugin($plugin);
+
+        $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
     }
 }

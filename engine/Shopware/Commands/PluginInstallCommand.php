@@ -22,23 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @category  Shopware
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class PluginDeleteCommand extends ShopwareCommand
+class PluginInstallCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -46,15 +44,21 @@ class PluginDeleteCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:plugin:delete')
-            ->setDescription('Deletes a plugin.')
+            ->setName('sw:plugin:install')
+            ->setDescription('Installs a plugin.')
             ->addArgument(
                 'plugin',
                 InputArgument::REQUIRED,
-                'The plugin to be deleted.'
+                'Name of the plugin to be installed.'
+            )
+            ->addOption(
+                'activate',
+                null,
+                InputOption::VALUE_NONE,
+                'Activate plugin after intallation.'
             )
             ->setHelp(<<<EOF
-The <info>%command.name%</info> deletes a plugin.
+The <info>%command.name%</info> installs a plugin.
 EOF
             );
         ;
@@ -65,58 +69,42 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
+        // Disable error reporting for shopware menu legacy hack
+        set_error_handler(function($errno, $errstr) {
+            if ($errno === E_RECOVERABLE_ERROR
+                && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
+
+                return true;
+            }
+
+            return false;
+        });
+
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
-            $plugin = $installer->getPluginByName($pluginName);
-        } catch (\Exeption $e) {
-            $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
+            $plugin = $pluginManager->getPluginByName($pluginName);
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
             return 1;
         }
 
         if ($plugin->getInstalled()) {
-            $output->writeln("The Plugin has to be uninstalled first.");
+            $output->writeln(sprintf('The plugin %s is already installed.', $pluginName));
             return 1;
         }
 
-        $pluginPath = Shopware()->AppPath(implode('_', array(
-            'Plugins',
-            $plugin->getSource(),
-            $plugin->getNamespace(),
-            $plugin->getName()
-        )));
+        $pluginManager->installPlugin($plugin);
 
-        if ($plugin->getSource() === "Default") {
-            $message = "'Default' Plugins may not be deleted.";
-        } elseif ($plugin->getInstalled() !== null) {
-            $message = 'Please uninstall the plugin first.';
-        } elseif (!$this->deletePath($pluginPath)) {
-            $message = 'Plugin path "' . $pluginPath . '" could not be deleted.';
-        } else {
-            Shopware()->Models()->remove($plugin);
-            Shopware()->Models()->flush();
+        $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
+        if (!$input->getOption('activate')) {
+            return;
         }
 
-        if (isset($message)) {
-            $output->writeln($message);
-            return 1;
-        } else {
-            $output->writeln(sprintf('Plugin %s has been deleted successfully.', $pluginName));
-        }
-    }
+        $pluginManager->activatePlugin($plugin);
 
-    public function deletePath($path)
-    {
-        $fs = new Filesystem();
-
-        try {
-            $fs->remove($path);
-        } catch (IOException $e) {
-            return false;
-        }
-
-        return true;
+        $output->writeln(sprintf('Plugin %s has been activated successfully.', $pluginName));
     }
 }

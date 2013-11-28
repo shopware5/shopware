@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
 use CommunityStore;
-use Shopware\Components\Plugin\Installer;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,15 +107,15 @@ class StoreLicensePluginCommand extends StoreCommand
 
         $output->writeln("License manager downloaded.");
 
-        /** @var Installer $installer */
-        $installer  = $this->container->get('shopware.plugin_installer');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
 
         $output->writeln("Refresh PluginList.");
-        $installer->refreshPluginList();
+        $pluginManager->refreshPluginList();
 
         $pluginName = 'SwagLicense';
         try {
-            $plugin = $installer->getPluginByName($pluginName);
+            $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
             $output->writeln(sprintf('Unknown plugin: %s.', $pluginName));
             return 1;
@@ -128,11 +128,11 @@ class StoreLicensePluginCommand extends StoreCommand
             return 1;
         }
 
-        $installer->installPlugin($plugin);
+        $pluginManager->installPlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
 
-        $installer->activatePlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been activated successfully.', $pluginName));
     }

@@ -22,12 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Plugin\Plugin;
+use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class GenerateAttributesCommand extends ShopwareCommand
+class PluginActivateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -47,8 +44,17 @@ class GenerateAttributesCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:generate:attributes')
-            ->setDescription('Generates attribute models.')
+            ->setName('sw:plugin:activate')
+            ->setDescription('Activates a plugin.')
+            ->addArgument(
+                'plugin',
+                InputArgument::REQUIRED,
+                'Name of the plugin to be activated.'
+            )
+            ->setHelp(<<<EOF
+The <info>%command.name%</info> activates a plugin.
+EOF
+            );
         ;
     }
 
@@ -57,9 +63,29 @@ class GenerateAttributesCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        /** @var Manager $pluginManager */
+        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginName = $input->getArgument('plugin');
 
-        $em->generateAttributeModels();
+        try {
+            $plugin = $pluginManager->getPluginByName($pluginName);
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+            return 1;
+        }
+
+        if ($plugin->getActive()) {
+            $output->writeln(sprintf('The plugin %s is already activated.', $pluginName));
+            return 1;
+        }
+
+        if (!$plugin->getInstalled()) {
+            $output->writeln(sprintf('The plugin %s has to be installed first.', $pluginName));
+            return 1;
+        }
+
+        $pluginManager->activatePlugin($plugin);
+
+        $output->writeln(sprintf('Plugin %s has been activated', $pluginName));
     }
 }
