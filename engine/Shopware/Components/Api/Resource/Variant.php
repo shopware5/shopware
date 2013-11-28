@@ -27,7 +27,6 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
-use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Unit;
@@ -159,7 +158,16 @@ class Variant extends Resource
     }
 
 
-
+    /**
+     * Updates a single variant entity.
+     *
+     * @param $id
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
     public function update($id, array $params)
     {
         if (empty($id)) {
@@ -173,7 +181,7 @@ class Variant extends Resource
             throw new ApiException\NotFoundException("Variant by id $id not found");
         }
 
-        $variant = $this->internalUpate($id, $params, $variant->getArticle());
+        $variant = $this->internalUpdate($id, $params, $variant->getArticle());
 
         $violations = $this->getManager()->validate($variant);
         if ($violations->count() > 0) {
@@ -186,7 +194,16 @@ class Variant extends Resource
     }
 
 
-
+    /**
+     * Creates a new variant for an article.
+     * This function requires an articleId in the params parameter.
+     *
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
     public function create(array $params)
     {
         $articleId = $params['articleId'];
@@ -216,9 +233,21 @@ class Variant extends Resource
     }
 
 
-
-
-    public function internalUpate($id, array $data, ArticleModel $article)
+    /**
+     * Update function for the internal usage of the rest api.
+     * Used from the article resource. This function supports
+     * to pass an updated article entity which isn't updated in the database.
+     * Required for the article resource if the article data is already updated
+     * in the entity but not in the database.
+     *
+     * @param $id
+     * @param array $data
+     * @param ArticleModel $article
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function internalUpdate($id, array $data, ArticleModel $article)
     {
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
@@ -243,6 +272,11 @@ class Variant extends Resource
     }
 
     /**
+     * Create function for the internal usage of the rest api.
+     * Used from the article resource. This function supports
+     * to pass an updated article entity which isn't updated in the database.
+     * Required for the article resource if the article data is already updated
+     * in the entity but not in the database.
      *
      * @param array $data
      * @param ArticleModel $article
@@ -278,6 +312,14 @@ class Variant extends Resource
     }
 
 
+    /**
+     * Resolves the association data for a single variant.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return array|mixed
+     */
     protected function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
         $data = $this->prepareUnitAssociation($data);
@@ -410,6 +452,9 @@ class Variant extends Resource
 
 
     /**
+     * Checks if the passed group data is already existing in the passed array collection.
+     * The group data are checked for "id" and "name".
+     *
      * @param ArrayCollection $availableGroups
      * @param array $groupData
      * @return bool|Option
@@ -429,6 +474,9 @@ class Variant extends Resource
     }
 
     /**
+     * Checks if the passed option data is already existing in the passed array collection.
+     * The option data are checked for "id" and "name".
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection $availableOptions
      * @param array $optionData
      * @return bool

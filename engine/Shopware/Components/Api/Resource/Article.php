@@ -698,7 +698,7 @@ class Article extends Resource
         foreach ($data['variants'] as $variantData) {
 
             if (isset($variantData['id'])) {
-                $variant = $this->getVariantResource()->internalUpate($variantData['id'], $variantData, $article);
+                $variant = $this->getVariantResource()->internalUpdate($variantData['id'], $variantData, $article);
             } else {
                 $variant = null;
 
@@ -714,7 +714,7 @@ class Article extends Resource
 
                 //if the variant was found over the number, update the existing
                 if ($variant) {
-                    $variant = $this->getVariantResource()->internalUpate($variant->getId(), $variantData, $article);
+                    $variant = $this->getVariantResource()->internalUpdate($variant->getId(), $variantData, $article);
                 } else {
                     //otherwise the number passed to use as order number for the new variant
                     $variant = $this->getVariantResource()->internalCreate($variantData, $article);
