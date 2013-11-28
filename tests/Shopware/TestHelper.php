@@ -22,14 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-$docPath = realpath(__DIR__ . '/../../');
-set_include_path(
-    $docPath . PATH_SEPARATOR .
-    $docPath . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    $docPath . '/templates/' . PATH_SEPARATOR          // Templates
-);
+require __DIR__ . '/../../autoload.php';
 
-require $docPath . '/vendor/autoload.php';
 
 /**
  * Shopware Test Helper
