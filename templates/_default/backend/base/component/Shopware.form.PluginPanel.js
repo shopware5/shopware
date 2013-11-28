@@ -72,6 +72,25 @@ Ext.define('Shopware.form.PluginPanel',
     _descriptionAdded: false,
 
     /**
+     * String with the error message for when no formId is configured
+     */
+    noFormIdConfiguredErrorText: 'No formId is passed to the component configuration',
+
+    /**
+     * String with the error message for when the form could not be loaded
+     */
+    formNotLoadedErrorText: "The form store couldn't be loaded successfully.",
+
+    snippets: {
+        resetButton: '{s name=form/reset_text}Reset{/s}',
+        saveButton: '{s name=form/save_text}Save{/s}',
+        description: '{s name=form/description_title}Description{/s}',
+        onSaveFormTitle: '{s name=form/message/save_form_title}Save form{/s}',
+        saveFormSuccess: '{s name=form/message/save_form_success}Form „[name]“ has been saved.{/s}',
+        saveFormError: '{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'
+    },
+
+    /**
      * Initiliazes the component, loads the stores and creates the view.
      *
      * @public
@@ -82,7 +101,7 @@ Ext.define('Shopware.form.PluginPanel',
 
         // Check if we're having a plugin form id
         if(!me.formId) {
-            Ext.Error.raise("No formId is passed to the component configuration");
+            Ext.Error.raise(me.noFormIdConfiguredErrorText);
             return false;
         }
 
@@ -123,7 +142,7 @@ Ext.define('Shopware.form.PluginPanel',
 
         // Check the response
         if (success !== true || !records.length) {
-            Ext.Error.raise("The form store couldn't be loaded successfully.");
+            Ext.Error.raise(me.formNotLoadedErrorText);
             return false;
         }
 
@@ -169,11 +188,11 @@ Ext.define('Shopware.form.PluginPanel',
             dock: 'bottom',
             xtype: 'toolbar',
             items: ['->', {
-                text: '{s name=form/reset_text}Reset{/s}',
+                text: me.snippets.resetButton,
                 cls: 'secondary',
                 action: 'reset'
             }, {
-                text: '{s name=form/save_text}Save{/s}',
+                text: me.snippets.saveButton,
                 cls: 'primary',
                 action: 'save'
             }]
@@ -202,7 +221,7 @@ Ext.define('Shopware.form.PluginPanel',
                 items.push({
                     xtype: 'fieldset',
                     margin: 10,
-                    title: '{s name=form/description_title}Description{/s}',
+                    title: me.snippets.description,
                     html: form.get('description')
                 });
 
@@ -359,12 +378,12 @@ Ext.define('Shopware.form.PluginPanel',
 
         form.setDirty();
 
-        var title = '{s name=form/message/save_form_title}Save form{/s}';
+        var title = me.snippets.onSaveFormTitle;
 
         form.store.add(form);
         form.store.sync({
             success :function (records, operation) {
-                var template = new Ext.Template('{s name=form/message/save_form_success}Form „[name]“ has been saved.{/s}'),
+                var template = new Ext.Template(me.snippets.saveFormSuccess),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
@@ -377,7 +396,7 @@ Ext.define('Shopware.form.PluginPanel',
                 }
             },
             failure:function (records, operation) {
-                var template = new Ext.Template('{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'),
+                var template = new Ext.Template(me.snippets.saveFormError),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
