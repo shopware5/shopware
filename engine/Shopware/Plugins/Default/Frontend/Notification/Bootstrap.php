@@ -105,8 +105,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
-        $view->setNoCache(true);
-
         $view->NotificationVariants = $notificationVariants;
         $view->NotifyEmailError = $view->NotifyEmailError;
         $view->NotifyValid = $view->NotifyValid;
@@ -114,8 +112,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $view->ShowNotification = true;
         $view->NotifyAlreadyRegistered = $view->NotifyAlreadyRegistered;
 	    $view->WaitingForOptInApprovement = Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$view->sArticle['ordernumber']];
-
-        $view->setNoCache(false);
     }
 
     /**
