@@ -109,34 +109,30 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             $view->sLanguages = $this->getLanguages();
             $view->sCurrencies = $this->getCurrencies();
         } else {
-            //$view->setNoCache(true);
             $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
             $view->sBasketAmount = $view->sBasketAmount ?: 0;
             $view->sNotesQuantity = $view->sNotesQuantity ?: 0;
             $view->sUserLoggedIn = $view->sUserLoggedIn ?: false;
-            //$view->setNoCache(false);
         }
 
-		if(!$view->isCached()) {
-			$view->Shop = $shop;
-			$view->Locale = $shop->getLocale()->getLocale();
+        $view->Shop = $shop;
+        $view->Locale = $shop->getLocale()->getLocale();
 
-			$view->sCategoryStart = $shop->getCategory()->getId();
-            $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
-            $view->sCategories = $this->getCategories($view->sCategoryCurrent);
-            $view->sMainCategories = $view->sCategories;
-            $view->sOutputNet = Shopware()->Session()->sOutputNet;
+        $view->sCategoryStart = $shop->getCategory()->getId();
+        $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
+        $view->sCategories = $this->getCategories($view->sCategoryCurrent);
+        $view->sMainCategories = $view->sCategories;
+        $view->sOutputNet = Shopware()->Session()->sOutputNet;
 
-            $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
-			$view->sMenu = $this->getMenu($shop->getId(), $activePage);
+        $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
+        $view->sMenu = $this->getMenu($shop->getId(), $activePage);
 
-            if(!Shopware()->Shop()->get('esi')) {
-			   $view->sCampaigns = $this->getCampaigns($view->sCategoryCurrent);
-            }
-			$view->sShopname = Shopware()->Config()->shopName;
-		}
+        if(!Shopware()->Shop()->get('esi')) {
+           $view->sCampaigns = $this->getCampaigns($view->sCategoryCurrent);
+        }
+        $view->sShopname = Shopware()->Config()->shopName;
 	}
-	
+
 	/**
 	 * Returns basket amount
 	 *
@@ -159,7 +155,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 		if(!empty(Shopware()->System()->_GET['sCategory'])) {
 			return (int) Shopware()->System()->_GET['sCategory'];
 		} elseif(Shopware()->Front()->Request()->getQuery('sCategory')) {
-			return (int) Shopware()->Front()->Request()->getQuery('sCategory');	
+			return (int) Shopware()->Front()->Request()->getQuery('sCategory');
 		} else {
 			return (int) $default;
 		}
@@ -196,7 +192,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             Shopware()->System()->sLanguage
         ));
 	}
-	
+
 	/**
 	 * Return shop currencies
 	 *
@@ -347,7 +343,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         return $blog;
     }
 
-	
+
 	/**
 	 * Returns capabilities
 	 *

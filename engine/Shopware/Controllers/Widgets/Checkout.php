@@ -54,7 +54,6 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        //$this->View()->setCaching(true);
         $this->module = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
     }
@@ -62,11 +61,9 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
     public function infoAction()
     {
         $view = $this->View();
-        //$view->setNocache(true);
         $view->sBasketQuantity = isset($this->session->sBasketQuantity) ? $this->session->sBasketQuantity : 0;
         $view->sBasketAmount = isset($this->session->sBasketAmount) ? $this->session->sBasketAmount : 0;
         $view->sNotesQuantity = isset($this->session->sNotesQuantity) ? $this->session->sNotesQuantity : $this->module->sCountNotes();
         $view->sUserLoggedIn = !empty(Shopware()->Session()->sUserId);
-        //$view->setNocache(false);
     }
 }
