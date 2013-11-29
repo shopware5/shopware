@@ -41,7 +41,14 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
         'select_manufacturer': '{s name=select_manufacturer}Select manufacturer(s){/s}',
         'manufacturer_administration': '{s name=manufacturer_administration}Manufacturer administration{/s}',
         'name': '{s name=name}Name{/s}',
-        'actions': '{s name=actions}Action(s){/s}'
+        'actions': '{s name=actions}Action(s){/s}',
+
+        manufacturer_slider_title: '{s name=manufacturer_slider_title}Title{/s}',
+        manufacturer_slider_arrows: '{s name=manufacturer_slider_arrows}Display arrows{/s}',
+        manufacturer_slider_numbers: '{s name=manufacturer_slider_numbers}Display numbers{/s}',
+        manufacturer_slider_scrollspeed: '{s name=manufacturer_slider_scrollspeed}Scroll speed{/s}',
+        manufacturer_slider_rotation: '{s name=manufacturer_slider_rotation}Rotate automatic{/s}',
+        manufacturer_slider_rotatespeed: '{s name=manufacturer_slider_rotatespeed}Rotation speed{/s}'
     },
 
     /**
