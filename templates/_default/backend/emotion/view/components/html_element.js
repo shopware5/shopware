@@ -27,45 +27,16 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{block name="backend/emotion/view/components/category_teaser"}
-//{namespace name=backend/emotion/view/components/category_teaser}
-Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
+
+//{block name="backend/emotion/view/components/html_element"}
+//{namespace name=backend/emotion/view/components/html_element}
+Ext.define('Shopware.apps.Emotion.view.components.HtmlElement', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
-    alias: 'widget.emotion-components-category-teaser',
+    alias: 'widget.emotion-components-html-element',
 
     snippets: {
-        blog_category: '{s name=blog_category}Blog category{/s}'
-    },
-
-    /**
-     * Base path which will be used from the component.
-     * @string
-     */
-    basePath: '{link file=""}',
-
-    /**
-     * Initiliaze the component.
-     *
-     * @public
-     * @return void
-     */
-    initComponent: function() {
-        var me = this;
-        me.callParent(arguments);
-
-        me.mediaSelection = me.down('mediaselectionfield');
-
-        var value = '';
-        Ext.each(me.getSettings('record').get('data'), function(item) {
-            if(item.key == 'image_type') {
-                value = item.value;
-                return false;
-            }
-        });
-
-        if(!value || value !== 'selected_image') {
-            me.mediaSelection.hide();
-        }
+        text: '{s name=text}Text{/s}',
+        cms_title: '{s name=cms_title}Title{/s}'
     }
 });
 //{/block}

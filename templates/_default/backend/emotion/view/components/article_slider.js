@@ -42,7 +42,13 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         'article_administration': '{s name=article_administration}Article administration{/s}',
         'name': '{s name=name}Article name{/s}',
         'ordernumber': '{s name=ordernumber}Ordernumber{/s}',
-        'actions': '{s name=actions}Action(s){/s}'
+        'actions': '{s name=actions}Action(s){/s}',
+
+        article_slider_max_number: '{s name=article_slider_max_number}Maximum number of articles{/s}',
+        article_slider_title: '{s name=article_slider_title}Title{/s}',
+        article_slider_arrows: '{s name=article_slider_arrows}Display arrows{/s}',
+        article_slider_numbers: '{s name=article_slider_numbers}Display numbers{/s}',
+        article_slider_scrollspeed: '{s name=article_slider_scrollspeed}Scroll speed{/s}'
     },
 
     /**
