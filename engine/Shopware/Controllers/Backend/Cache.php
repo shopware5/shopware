@@ -161,7 +161,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected function clearTemplateCache()
     {
-        Shopware()->Template()->clearAllCache();
         Shopware()->Template()->clearCompiledTemplate();
         Shopware()->Template()->clearAllCache();
     }

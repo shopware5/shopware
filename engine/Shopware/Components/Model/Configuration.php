@@ -279,9 +279,7 @@ class Configuration extends BaseConfiguration
             throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
         }
 
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
-
-        $dir = $dir . '/' . \Shopware::REVISION;
+        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR . \Shopware::REVISION;
         if (!is_dir($dir)) {
             mkdir($dir, 0775);
         }
