@@ -299,13 +299,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                   . Shopware::REVISION;
         $baseHash = substr(sha1($baseHash), 0 , 5);
         $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
-        if (isset($user->role)) {
-            $template->setCacheId($user->role->getName());
-        }
 
         if($this->action !== null && $this->action->View()->hasTemplate()) {
             $this->action->View()->Template()->setCompileId($template->getCompileId());
-            $this->action->View()->Template()->setCacheId($template->getCacheId());
         }
     }
 
