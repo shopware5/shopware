@@ -38,8 +38,8 @@ ini_set("max_execution_time", 120);
 define("installer", true);
 define('SW_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
-$directory_not_empty = file_exists(SW_PATH . 'cache/templates/compile/');
-if ($directory_not_empty) {
+$directories = glob(SW_PATH . 'cache/templates/*', GLOB_ONLYDIR);
+if (!empty($directories)) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo "<h4>Der Installer wurde bereits ausgeführt</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie alle Dateien und Ordner unterhalb des Ordners cache/templates!";
     echo "<h4>The installation process has already been finished.</h4> <br/> If you want to run the installation process again, delete all the files and directories under the folder cache/templates!";
