@@ -1778,7 +1778,7 @@ class Article extends Resource
             $filename = $baseFileName;
         }
 
-        $filename = substr($filename, 0, 90);
+        $filename = substr($filename, 0, 50);
 
         while (file_exists("$destPath/$filename")) {
             if ($baseFileName) {
@@ -1787,7 +1787,7 @@ class Article extends Resource
             } else {
                 $filename = md5(uniqid(rand(), true));
             }
-            $filename = substr($filename,0, 90);
+            $filename = substr($filename,0, 50);
         }
 
         return $filename;

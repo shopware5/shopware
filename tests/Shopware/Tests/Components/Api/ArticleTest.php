@@ -1153,6 +1153,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(count($data['images']), $article['images']);
         foreach($article['images'] as $image) {
             $this->assertFileExists($mediaPath . $image['path'] . '.' . $image['extension']);
+            $this->assertEquals('image/png', mime_content_type($mediaPath . $image['path'] . '.' . $image['extension']));
         }
     }
 
