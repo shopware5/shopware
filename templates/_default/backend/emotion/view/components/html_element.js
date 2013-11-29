@@ -28,32 +28,15 @@
  * @author shopware AG
  */
 
-//{block name="backend/emotion/view/components/blog"}
-//{namespace name=backend/emotion/view/components/blog}
-Ext.define('Shopware.apps.Emotion.view.components.Blog', {
+//{block name="backend/emotion/view/components/html_element"}
+//{namespace name=backend/emotion/view/components/html_element}
+Ext.define('Shopware.apps.Emotion.view.components.HtmlElement', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
-    alias: 'widget.emotion-components-blog',
+    alias: 'widget.emotion-components-html-element',
 
     snippets: {
-        entry_amount: '{s name=entry_amount}Count{/s}',
-        thumbnail_size: '{s name=thumbnail_size}Thumbnail size{/s}'
-    },
-
-    /**
-     * Initiliaze the component.
-     *
-     * @public
-     * @return void
-     */
-    initComponent: function() {
-        var me = this;
-        me.callParent(arguments);
-
-        me.numberField = me.down('numberfield');
-
-        if(!me.numberField.getValue()) {
-            me.numberField.setValue(1);
-        }
+        text: '{s name=text}Text{/s}',
+        cms_title: '{s name=cms_title}Title{/s}'
     }
 });
 //{/block}

@@ -29,7 +29,6 @@
  */
 
 //{namespace name=backend/emotion/view/detail}
-
 Ext.define('Shopware.apps.Emotion.view.components.Base', {
     extend: 'Ext.form.Panel',
     bodyBorder: 0,
@@ -90,13 +89,20 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [];
+        var me = this, items = [], name, fieldLabel;
 
         Ext.each(me.getSettings('fields', true), function(item) {
+            name = item.get('name');
+            fieldLabel = '"'+ name + '" => ' + item.get('fieldLabel');
+            if (me.snippets && me.snippets[name]) {
+                fieldLabel = '"'+ name + '" => ' + me.snippets[name];
+            }
+
             items.push({
                 xtype: item.get('xType'),
                 helpText: item.get('helpText') || '',
-                fieldLabel: item.get('fieldLabel') || '',
+                fieldLabel: fieldLabel || '',
+                labelWidth: 300,
                 fieldId: item.get('id'),
                 valueType: item.get('valueType'),
                 name: item.get('name') || '',
@@ -114,6 +120,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         items.push(me.createSizingFields());
         return items;
     },
+
 
     /**
      * @private

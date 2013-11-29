@@ -33,6 +33,10 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-category-teaser',
 
+    snippets: {
+        blog_category: '{s name=blog_category}Blog category{/s}'
+    },
+
     /**
      * Base path which will be used from the component.
      * @string
