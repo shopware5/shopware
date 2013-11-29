@@ -272,7 +272,7 @@ class Order extends Resource
      *
      * @param $params
      * @return mixed
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException| ApiException\CustomValidationException(
      */
     public function prepareOrderDetailsData($params)
     {
@@ -292,6 +292,12 @@ class Order extends Resource
         foreach ($details as &$detail) {
             // Apply whiteList
             $detail = array_intersect_key($detail, array_flip($detailWhiteList));
+
+            // Technically "articleID" and "articleordernumber" are not unique per orderId,
+            // so we cannot use those to identify order positions.
+            if (!isset($detail['id']) || empty($detail['id'])) {
+                throw new ApiException\CustomValidationException('You need to specify the id of the order positions you want to modify');
+            }
 
             // Check order detail model
             /** @var \Shopware\Models\Order\Detail $detailModel */
