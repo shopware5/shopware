@@ -61,10 +61,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             return;
         }
 
-        if ($this->Request()->getParam('no-cache') === null) {
-            $this->View()->setCaching(true);
-        }
-
         if (strpos($this->Request()->getPathInfo(), '/backend/') !== 0) {
             $this->redirect('backend/', array('code' => 301));
         }
@@ -97,9 +93,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         }
 
         $identity = $auth->getIdentity();
-        if (isset($identity->disabled_cache) && $identity->disabled_cache) {
-            $this->View()->setCaching(false);
-        }
 
         $this->View()->assign('user', $identity, true);
         $app = $this->Request()->getParam('app', 'Index');
