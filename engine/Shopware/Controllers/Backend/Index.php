@@ -152,13 +152,12 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         if ($this->auth->checkAuth() === null) {
             throw new Enlight_Controller_Exception('Unauthorized', 401);
         }
-        if (!$this->View()->isCached()) {
-            /** @var $menu \Shopware\Models\Menu\Repository */
-            $menu = Shopware()->Models()->getRepository(
-                'Shopware\Models\Menu\Menu'
-            );
-            $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
-            $this->View()->menu = $menuItems;
-        }
+
+        /** @var $menu \Shopware\Models\Menu\Repository */
+        $menu = Shopware()->Models()->getRepository(
+            'Shopware\Models\Menu\Menu'
+        );
+        $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
+        $this->View()->menu = $menuItems;
     }
 }

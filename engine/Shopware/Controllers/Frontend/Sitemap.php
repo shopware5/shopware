@@ -34,8 +34,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if (!$this->view->isCached()) {
-            $this->View()->sCategoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
-        }
+        $this->View()->sCategoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
     }
 }

@@ -39,15 +39,6 @@
 class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 {
     /**
-     * Pre dispatch method
-     */
-    public function preDispatch()
-    {
-        //$this->View()->setCaching(true);
-        //$this->View()->setCacheID(array($this->Request()->sCustom));
-    }
-
-    /**
      * Index action method
      */
     public function indexAction()
