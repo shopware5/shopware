@@ -191,41 +191,7 @@ class Order extends Resource
             throw new ApiException\NotFoundException("Order by id $id not found");
         }
 
-        $whitelist = array(
-            'paymentStatusId',
-            'orderStatusId',
-            'trackingCode',
-            'comment',
-            'customerComment',
-            'internalComment',
-            'transactionId',
-            'clearedDate',
-            'attribute',
-        );
-
-        $params = array_intersect_key($params, array_flip($whitelist));
-
-        if (isset($params['orderStatusId'])) {
-            $params['orderStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(array(
-                'id'    => $params['orderStatusId'],
-                'group' => 'state',
-            ));
-
-            if (empty($params['orderStatus'])) {
-                throw new ApiException\NotFoundException(sprintf("OrderStatus by id %s not found", $params['orderStatusId']));
-            }
-        }
-
-        if (isset($params['paymentStatusId'])) {
-            $params['paymentStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(array(
-                'id'    => $params['paymentStatusId'],
-                'group' => 'payment',
-            ));
-
-            if (empty($params['paymentStatus'])) {
-                throw new ApiException\NotFoundException(sprintf("PaymentStatus by id %s not found", $params['paymentStatusId']));
-            }
-        }
+        $params = $this->prepareOrderData($params);
 
         $order->fromArray($params);
 
@@ -237,5 +203,128 @@ class Order extends Resource
         $this->flush();
 
         return $order;
+    }
+
+    /**
+     * Helper method to prepare the order data
+     *
+     * @param array $params
+     * @return array
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function prepareOrderData(array $params)
+    {
+        $params = $this->prepareOrderDetailsData($params);
+
+        $orderWhiteList = array(
+            'paymentStatusId',
+            'orderStatusId',
+            'trackingCode',
+            'comment',
+            'customerComment',
+            'internalComment',
+            'transactionId',
+            'clearedDate',
+            'attribute',
+            'details'
+        );
+
+        $params = array_intersect_key($params, array_flip($orderWhiteList));
+
+        if (isset($params['orderStatusId'])) {
+            $params['orderStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+                array(
+                    'id' => $params['orderStatusId'],
+                    'group' => 'state',
+                )
+            );
+
+            if (empty($params['orderStatus'])) {
+                throw new ApiException\NotFoundException(sprintf(
+                    "OrderStatus by id %s not found",
+                    $params['orderStatusId']
+                ));
+            }
+        }
+
+        if (isset($params['paymentStatusId'])) {
+            $params['paymentStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+                array(
+                    'id' => $params['paymentStatusId'],
+                    'group' => 'payment',
+                )
+            );
+
+            if (empty($params['paymentStatus'])) {
+                throw new ApiException\NotFoundException(sprintf(
+                    "PaymentStatus by id %s not found",
+                    $params['paymentStatusId']
+                ));
+            }
+            return $params;
+        }
+
+        return $params;
+    }
+
+    /**
+     * Helper method to prepare the order detail data
+     *
+     * @param $params
+     * @return mixed
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function prepareOrderDetailsData($params)
+    {
+        $detailWhiteList = array(
+            'status',
+            'shipped',
+            'id'
+        );
+
+        $details = $params['details'];
+
+        if (empty($details)) {
+            unset ($params['details']);
+            return $params;
+        }
+
+        foreach ($details as &$detail) {
+            // Apply whiteList
+            $detail = array_intersect_key($detail, array_flip($detailWhiteList));
+
+            // Check order detail model
+            /** @var \Shopware\Models\Order\Detail $detailModel */
+            $detailModel = Shopware()->Models()->find('Shopware\Models\Order\Detail', $detail['id']);
+            if (!$detailModel) {
+                throw new ApiException\NotFoundException(sprintf(
+                    "Detail by id %s not found",
+                    $detail['id']
+                ));
+            }
+
+            if (isset($detail['status'])) {
+                $status = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $detail['status']);
+
+                if (!$status) {
+                    throw new ApiException\NotFoundException(sprintf(
+                        "DetailStatus by id %s not found",
+                        $detail['status']
+                    ));
+                }
+
+                $detailModel->setStatus($status);
+            }
+
+            // Set shipped flag
+            if (isset($detail['shipped'])) {
+                $detailModel->setShipped($detail['shipped']);
+            }
+
+            $detail = $detailModel;
+        }
+
+        $params['details'] = $details;
+        return $params;
     }
 }
