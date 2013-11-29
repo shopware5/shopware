@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
 
 /**
@@ -209,4 +210,22 @@ abstract class Resource
             }
         }
     }
+
+    /**
+     * Helper function which checks the option configuration for the passed collection.
+     * If the data property contains the "__options_$optionName" value and this value contains
+     * the "replace" parameter the collection will be cleared.
+     *
+     * @param ArrayCollection $collection
+     * @param $data
+     * @param $optionName
+     */
+    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName)
+    {
+        $key = '__options_' . $optionName;
+        if (isset($data[$key]) && $data[$key]['replace']) {
+            $collection->clear();
+        }
+    }
+
 }
