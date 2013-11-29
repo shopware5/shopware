@@ -93,16 +93,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
 
         Ext.each(me.getSettings('fields', true), function(item) {
             name = item.get('name');
-            fieldLabel = '"'+ name + '" => ' + item.get('fieldLabel');
+            fieldLabel = item.get('fieldLabel');
             if (me.snippets && me.snippets[name]) {
-                fieldLabel = '"'+ name + '" => ' + me.snippets[name];
+                fieldLabel = me.snippets[name];
             }
 
             items.push({
                 xtype: item.get('xType'),
                 helpText: item.get('helpText') || '',
                 fieldLabel: fieldLabel || '',
-                labelWidth: 300,
                 fieldId: item.get('id'),
                 valueType: item.get('valueType'),
                 name: item.get('name') || '',

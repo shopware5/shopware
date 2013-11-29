@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Blog', {
     alias: 'widget.emotion-components-blog',
 
     snippets: {
-        entry_amount: '{s name=entry_amount}Count{/s}',
+        entry_amount: '{s name=entry_amount}Number of entries{/s}',
         thumbnail_size: '{s name=thumbnail_size}Thumbnail size{/s}'
     },
 
