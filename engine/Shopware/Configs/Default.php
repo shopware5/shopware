@@ -63,8 +63,8 @@ return array_merge($customConfig, array(
         'useIncludePath' => true,
         'charset' => 'utf-8',
         'forceCache' => false,
-        'cacheDir' => $this->DocPath('cache_templates_cache'),
-        'compileDir' => $this->DocPath('cache_templates_compile')
+        'cacheDir' => $this->DocPath('cache_templates'),
+        'compileDir' => $this->DocPath('cache_templates')
     ), $customConfig['template']),
     'mail' => array_merge(array(
         'charset' => 'utf-8'
