@@ -374,7 +374,8 @@ Ext.onReady(function() {
             emptyText: 'Suche...',
             assignedArticles: 'Zugeordneten Artikel',
             articleName: 'Artikelname',
-            orderNumber: 'Bestell-Nr.'
+            orderNumber: 'Bestell-Nr.',
+            dropDownTitle: 'Artikel'
         }
     });
     Ext.define('Shopware.form.field.de.TinyMCE', {
@@ -421,7 +422,7 @@ Ext.onReady(function() {
                 reload_module: 'Reload-Modul'
             },
             eval: {
-                reload_admin: 'Reload-Verwaltung',
+                reload_admin: 'Modul erneut laden',
                 error_type: 'Art des Fehlers',
                 error_msg: 'Fehlermeldung'
             },
