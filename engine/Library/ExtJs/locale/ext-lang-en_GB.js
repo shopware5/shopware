@@ -346,7 +346,8 @@ Ext.onReady(function() {
             emptyText: 'Search...',
             assignedArticles: 'Assigned articles',
             articleName: 'Article name',
-            orderNumber: 'Order number'
+            orderNumber: 'Order number',
+            dropDownTitle: 'Articles'
         }
     });
     Ext.define('Shopware.form.field.en_GB.TinyMCE', {
