@@ -34,7 +34,11 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
     alias: 'widget.emotion-components-category-teaser',
 
     snippets: {
-        blog_category: '{s name=blog_category}Blog category{/s}'
+        blog_category: {
+            fieldLabel: '{s name=blog_category}Blog category{/s}',
+            supportText: '{s name=blog_category_support}The selected category is a blog Category{/s}'
+        },
+        image: '{s name=image}Image{/s}'
     },
 
     /**

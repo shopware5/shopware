@@ -89,13 +89,22 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [], name, fieldLabel;
+        var me = this, items = [], name, fieldLabel, snippet, supportText;
 
         Ext.each(me.getSettings('fields', true), function(item) {
             name = item.get('name');
             fieldLabel = item.get('fieldLabel');
+            supportText = item.get('supportText');
+
             if (me.snippets && me.snippets[name]) {
-                fieldLabel = me.snippets[name];
+                snippet = me.snippets[name];
+
+                if (Ext.isObject(snippet)) {
+                    if (snippet.hasOwnProperty('supportText')) supportText = snippet.supportText;
+                    if (snippet.hasOwnProperty('fieldLabel')) fieldLabel = snippet.fieldLabel;
+                } else {
+                    fieldLabel = snippet;
+                }
             }
 
             items.push({
@@ -110,7 +119,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 valueField: item.get('valueField'),
                 checkedValue: true,
                 uncheckedValue: false,
-                supportText: item.get('supportText') || '',
+                supportText: supportText || '',
                 allowBlank: (!item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || ''
             });
