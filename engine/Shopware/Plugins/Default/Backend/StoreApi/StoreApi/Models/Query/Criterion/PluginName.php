@@ -42,7 +42,7 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
      * @param string $pluginName
      * @return bool
      */
-    public function addPluginName(string $pluginName)
+    public function addPluginName($pluginName)
     {
         if(!empty($pluginName)) {
             $this->collection[] = $pluginName;

@@ -22,10 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Command;
+namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Command\Command;
@@ -48,7 +46,7 @@ class PluginListCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:plugin:list')
-            ->setDescription('List plugins')
+            ->setDescription('Lists plugins.')
             ->addOption(
                 'filter',
                 null,
@@ -75,20 +73,22 @@ class PluginListCommand extends ShopwareCommand
 
         $repository = $em->getRepository('Shopware\Models\Plugin\Plugin');
         $builder = $repository->createQueryBuilder('plugin');
+        $builder->andWhere('plugin.capabilityEnable = true');
+        $builder->addOrderBy('plugin.active', 'desc');
         $builder->addOrderBy('plugin.name');
 
         $filter = strtolower($input->getOption('filter'));
         if ($filter === 'active') {
-            $builder->where('plugin.active = true');
+            $builder->andWhere('plugin.active = true');
         }
 
         if ($filter === 'inactive') {
-            $builder->where('plugin.active = false');
+            $builder->andWhere('plugin.active = false');
         }
 
         $namespace = $input->getOption('namespace');
         if (count($namespace)) {
-            $builder->where('p.namespace IN (:namespace)');
+            $builder->andWhere('p.namespace IN (:namespace)');
             $builder->setParameter('namespace', $namespace);
         }
 
@@ -103,12 +103,13 @@ class PluginListCommand extends ShopwareCommand
                 $plugin->getLabel(),
                 $plugin->getVersion(),
                 $plugin->getAuthor(),
-                $plugin->getActive() ? 'Yes' : 'No'
+                $plugin->getActive() ? 'Yes' : 'No',
+                $plugin->getInstalled() ? 'Yes' : 'No'
             );
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Plugin', 'Label', 'Version', 'Author', 'Active'))
+        $table->setHeaders(array('Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'))
               ->setRows($rows);
 
         $table->render($output);

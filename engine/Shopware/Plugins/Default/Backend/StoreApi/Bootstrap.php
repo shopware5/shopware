@@ -70,12 +70,12 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
             'onPreDispatch'
         );
         $this->subscribeEvent($event);
-        
+
         //creates the standard plugin form
         $form = $this->Form();
         $form->setElement('text', 'StoreApiUrl', array('label' => 'Store API Url', 'value' => 'http://store.shopware-preview.de/storeApi', 'scope'=>Shopware_Components_Form::SCOPE_SHOP));
         $form->save();
-        
+
 
         return true;
     }
@@ -90,6 +90,10 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
      */
     public static function onInitResourceStoreApi(Enlight_Event_EventArgs $args)
     {
+        //Setup the alternative path for the namespace Shopware_Components
+        Shopware()->Loader()->registerNamespace('Shopware_Components', dirname(__FILE__).'/Components/');
+        Shopware()->Loader()->registerNamespace('Shopware_StoreApi', dirname(__FILE__).'/StoreApi/');
+
         return new Shopware_Components_StoreApi();
     }
 

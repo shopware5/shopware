@@ -67,9 +67,7 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', Kernel::VERSION);
-
-        parent::__construct('Symfony', Kernel::VERSION.' - '.'/'.$kernel->getEnvironment().($kernel->isDebug() ? '/debug' : ''));
+        parent::__construct('Shopware', Kernel::VERSION.' - '.'/'.$kernel->getEnvironment().($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
@@ -140,14 +138,14 @@ class Application extends BaseApplication
 
     protected function registerFilesystemCommands()
     {
-        if (!is_dir($dir = __DIR__ .'/Command')) {
+        if (!is_dir($dir = $this->getKernel()->getDocumentRoot() . '/engine/Shopware/Commands')) {
             return;
         }
 
         $finder = new Finder();
         $finder->files()->name('*Command.php')->in($dir);
 
-        $prefix = 'Shopware\\Components\\Console\\Command';
+        $prefix = 'Shopware\\Commands';
         foreach ($finder as $file) {
             $ns = $prefix;
             if ($relativePath = $file->getRelativePath()) {

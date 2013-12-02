@@ -104,7 +104,7 @@ class Kernel implements HttpKernelInterface
     public function __construct($environment, $debug)
     {
         $this->environment = $environment;
-        $this->debug = $debug;
+        $this->debug = (boolean) $debug;
         $this->booted = false;
         $this->name = 'Shopware';
 
