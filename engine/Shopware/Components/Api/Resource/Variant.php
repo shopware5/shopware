@@ -26,9 +26,11 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Manager;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Tax\Tax;
@@ -50,6 +52,13 @@ class Variant extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
     }
 
+    /**
+     * @return Article
+     */
+    public function getArticleResource()
+    {
+        return Manager::getResource('Article');
+    }
 
     /**
      * @param string $number
@@ -260,13 +269,11 @@ class Variant extends Resource
             throw new ApiException\NotFoundException("Variant by id $id not found");
         }
 
+        $variant->setArticle($article);
+
         $data = $this->prepareData($data, $article, $variant);
 
         $variant->fromArray($data);
-
-        $variant->setArticle($article);
-
-        $this->prepareConfigurator($data, $article, $variant);
 
         return $variant;
     }
@@ -287,12 +294,11 @@ class Variant extends Resource
     {
         $variant = new Detail();
         $variant->setKind(2);
-
-        $data = $this->prepareData($data, $article, $variant);
-        $variant->fromArray($data);
         $variant->setArticle($article);
 
-        $this->prepareConfigurator($data, $article, $variant);
+        $data = $this->prepareData($data, $article, $variant);
+
+        $variant->fromArray($data);
 
         return $variant;
     }
@@ -325,6 +331,8 @@ class Variant extends Resource
         $data = $this->prepareUnitAssociation($data);
 
         if (!empty($data['prices'])) {
+            $this->checkDataReplacement($variant->getPrices(), $data, 'prices');
+
             $data['prices'] = $this->preparePriceAssociation(
                 $data['prices'],
                 $article,
@@ -335,8 +343,13 @@ class Variant extends Resource
 
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
+        if (isset($data['configuratorOptions'])) {
+            $data = $this->prepareConfigurator($data, $article, $variant);
+        }
+
         return $data;
     }
+
 
     /**
      * @param array $prices
@@ -399,8 +412,6 @@ class Variant extends Resource
     }
 
 
-
-
     /**
      * Resolves the passed configuratorOptions parameter for a single variant.
      * Each passed configurator option, has to be configured in the article configurator set.
@@ -408,6 +419,7 @@ class Variant extends Resource
      * @param array $data
      * @param ArticleModel $article
      * @param Detail $variant
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
@@ -438,7 +450,7 @@ class Variant extends Resource
             ));
 
             if (!$option) {
-                $option = new \Shopware\Models\Article\Configurator\Option();
+                $option = new Option();
                 $option->setPosition(0);
                 $option->setName($option);
                 $option->setGroup($availableGroup);
@@ -447,7 +459,11 @@ class Variant extends Resource
             $options->add($option);
         }
 
+        $data['configuratorOptions'] = $options;
+
         $variant->setConfiguratorOptions($options);
+
+        return $data;
     }
 
 
@@ -457,7 +473,7 @@ class Variant extends Resource
      *
      * @param ArrayCollection $availableGroups
      * @param array $groupData
-     * @return bool|Option
+     * @return bool|Group
      */
     private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
     {
