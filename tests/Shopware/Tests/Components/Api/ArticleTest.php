@@ -359,7 +359,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'purchaseSteps' => 2,
 
                     'prices' => array(
                         array(
