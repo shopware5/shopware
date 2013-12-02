@@ -321,13 +321,13 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 
     /**
      * Checks if the template is already cached.
-     * @return  bool
+     *
+     * @deprecated 4.2
+     * @return false
      */
     public function isCached()
     {
         return false;
-        //todo@hl Fix is cached function
-        //return $this->template !== null ? $this->template->isCached() : false;
     }
 
     /**

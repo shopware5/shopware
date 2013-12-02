@@ -77,58 +77,56 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             );
         }
 
-        if (!$this->View()->isCached()) {
-            $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
+        $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
 
-            if (empty($article) || empty($article["articleName"])) {
-                return $this->forward('error');
-            }
-
-            if (!empty($article['template'])) {
-                $this->View()->loadTemplate('frontend/detail/' . $article['template']);
-            } elseif (!empty($article['mode'])) {
-                $this->View()->loadTemplate('frontend/blog/detail.tpl');
-            } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
-                $this->View()->loadTemplate('frontend/detail/ajax.tpl');
-            }
-
-            $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-            $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
-
-            if (!empty(Shopware()->Config()->InquiryValue)) {
-                $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
-                    'sViewport' => 'support',
-                    'sFid' => Shopware()->Config()->InquiryID,
-                    'sInquiry' => 'detail',
-                    'sOrdernumber' => $article['ordernumber']
-                ));
-            }
-
-            if (!empty($article["categoryID"])) {
-                $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article["categoryID"]));
-                $categoryInfo = end($breadcrumb);
-            } else {
-                $breadcrumb = array();
-                $categoryInfo = null;
-            }
-
-            $breadcrumb[] = array(
-                'link' => $article['linkDetails'],
-                'name' => $article['articleName']
-            );
-
-            // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
-            $article['sReleaseDate'] = $article['sReleasedate'];
-
-            // Push ThumbnailSize to template
-            $lastArticles['ThumbnailSize'] = Shopware()->Config()->thumb;
-
-            $this->View()->sLastArticles = $lastArticles;
-            $this->View()->sBreadcrumb = $breadcrumb;
-            $this->View()->sCategoryInfo = $categoryInfo;
-            $this->View()->sArticle = $article;
-            $this->View()->rand = md5(uniqid(rand()));
+        if (empty($article) || empty($article["articleName"])) {
+            return $this->forward('error');
         }
+
+        if (!empty($article['template'])) {
+            $this->View()->loadTemplate('frontend/detail/' . $article['template']);
+        } elseif (!empty($article['mode'])) {
+            $this->View()->loadTemplate('frontend/blog/detail.tpl');
+        } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
+            $this->View()->loadTemplate('frontend/detail/ajax.tpl');
+        }
+
+        $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
+        $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+
+        if (!empty(Shopware()->Config()->InquiryValue)) {
+            $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
+                'sViewport' => 'support',
+                'sFid' => Shopware()->Config()->InquiryID,
+                'sInquiry' => 'detail',
+                'sOrdernumber' => $article['ordernumber']
+            ));
+        }
+
+        if (!empty($article["categoryID"])) {
+            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article["categoryID"]));
+            $categoryInfo = end($breadcrumb);
+        } else {
+            $breadcrumb = array();
+            $categoryInfo = null;
+        }
+
+        $breadcrumb[] = array(
+            'link' => $article['linkDetails'],
+            'name' => $article['articleName']
+        );
+
+        // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
+        $article['sReleaseDate'] = $article['sReleasedate'];
+
+        // Push ThumbnailSize to template
+        $lastArticles['ThumbnailSize'] = Shopware()->Config()->thumb;
+
+        $this->View()->sLastArticles = $lastArticles;
+        $this->View()->sBreadcrumb = $breadcrumb;
+        $this->View()->sCategoryInfo = $categoryInfo;
+        $this->View()->sArticle = $article;
+        $this->View()->rand = md5(uniqid(rand()));
     }
 
     /**

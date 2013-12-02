@@ -48,7 +48,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $data = array(
             $this->getConfigCacheInfo(),
             $this->getHttpCacheInfo(),
-            $this->getBackendCacheInfo(),
             $this->getTemplateCacheInfo(),
             $this->getShopwareProxyCacheInfo(),
             $this->getDoctrineFileCacheInfo(),
@@ -104,7 +103,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         if ($cache['config'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
-            $this->clearCompilerCache();
+            $this->clearTemplateCache();
         }
         if ($cache['search'] == 'on') {
             $this->clearSearchCache();
@@ -114,7 +113,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
         if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearTemplateCache();
-            $this->clearCompilerCache();
         }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->clearFrontendCache();
@@ -137,9 +135,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         switch ($cache) {
             case 'Config':
                 $this->clearFrontendCache();
-                $this->clearBackendCache();
+                $this->clearTemplateCache();
                 $this->clearConfigCache();
-                $this->clearCompilerCache();
                 $this->clearSearchCache();
                 $this->clearProxyCache();
                 break;
@@ -162,26 +159,31 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     /**
      * Clear template cache
      */
-    protected function clearBackendCache()
-    {
-        $this->clearTemplateCache();
-        $this->clearCompilerCache();
-    }
-
-    /**
-     * Clear compiler cache
-     */
     protected function clearTemplateCache()
     {
+        Shopware()->Template()->clearCompiledTemplate();
         Shopware()->Template()->clearAllCache();
     }
 
     /**
+     * Alias for clearTemplateCache().
+     * Clear template cache
+     * @deprecated 4.2
+     */
+    protected function clearBackendCache()
+    {
+        $this->clearTemplateCache();
+    }
+
+    /**
+     * Alias for clearTemplateCache().
      * Clear compiler cache
+     *
+     * @deprecated 4.2
      */
     protected function clearCompilerCache()
     {
-        Shopware()->Template()->clearCompiledTemplate();
+        $this->clearTemplateCache();
     }
 
     /**
@@ -347,20 +349,21 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $dir = $this->View()->Engine()->getCompileDir();
 
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Smarty compiled templates';
+        $info['name'] = 'Smarty templates';
         return $info;
     }
 
     /**
+     * Alias to getTemplateCacheInfo().
      * Returns cache information
      *
+     * @deprecated 4.2
      * @return array
      */
     public function getBackendCacheInfo()
     {
-        $dir = $this->View()->Engine()->getCacheDir();
-        $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Smarty cached templates';
+        return $this->getTemplateCacheInfo();
+
         return $info;
     }
 
