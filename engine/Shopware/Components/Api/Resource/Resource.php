@@ -76,6 +76,29 @@ abstract class Resource
     protected $role = null;
 
     /**
+     * Returns a new api resource which contains the
+     * same configuration for the model manager and acl
+     * as the current resource.
+     *
+     * @param $name
+     * @return Resource
+     */
+    protected function getResource($name)
+    {
+        $name = ucfirst($name);
+        $class = __NAMESPACE__ . '\\' . $name;
+
+        /** @var $resource Resource\Resource */
+        $resource = new $class();
+
+        $resource->setManager($this->getManager());
+        $resource->setAcl($this->getAcl());
+        $resource->setRole($this->getRole());
+
+        return $resource;
+    }
+
+    /**
      * @param string $privilege
      * @throws \Shopware\Components\Api\Exception\PrivilegeException
      */
@@ -165,7 +188,7 @@ abstract class Resource
      */
     public function setAutoFlush($autoFlush)
     {
-        $this->autoFlush = (bool) $autoFlush;
+        $this->autoFlush = (bool)$autoFlush;
     }
 
     /**
