@@ -24,7 +24,16 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Manager;
+use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Configurator\Option;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Image;
+use Shopware\Models\Article\Unit;
+use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Tax\Tax;
 
 /**
  * Variant API Resource
@@ -43,6 +52,13 @@ class Variant extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
     }
 
+    /**
+     * @return Article
+     */
+    public function getArticleResource()
+    {
+        return $this->getResource('Article');
+    }
 
     /**
      * @param string $number
@@ -149,4 +165,462 @@ class Variant extends Resource
 
         return $articleDetail;
     }
+
+
+    /**
+     * Updates a single variant entity.
+     *
+     * @param $id
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function update($id, array $params)
+    {
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /**@var $variant Detail*/
+        $variant = $this->getRepository()->find($id);
+
+        if (!$variant) {
+            throw new ApiException\NotFoundException("Variant by id $id not found");
+        }
+
+        $variant = $this->internalUpdate($id, $params, $variant->getArticle());
+
+        $violations = $this->getManager()->validate($variant);
+        if ($violations->count() > 0) {
+            throw new ApiException\ValidationException($violations);
+        }
+
+        $this->flush();
+
+        return $variant;
+    }
+
+
+    /**
+     * Creates a new variant for an article.
+     * This function requires an articleId in the params parameter.
+     *
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function create(array $params)
+    {
+        $articleId = $params['articleId'];
+
+        if (empty($articleId)) {
+            throw new ApiException\ParameterMissingException("Passed parameter array does not contain an articleId property");
+        }
+
+        /**@var $article ArticleModel*/
+        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
+
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article by id $articleId not found");
+        }
+
+        $variant = $this->internalCreate($params, $article);
+
+        $violations = $this->getManager()->validate($variant);
+        if ($violations->count() > 0) {
+            throw new ApiException\ValidationException($violations);
+        }
+
+        $this->getManager()->persist($variant);
+        $this->flush();
+
+        return $variant;
+    }
+
+
+    /**
+     * Update function for the internal usage of the rest api.
+     * Used from the article resource. This function supports
+     * to pass an updated article entity which isn't updated in the database.
+     * Required for the article resource if the article data is already updated
+     * in the entity but not in the database.
+     *
+     * @param $id
+     * @param array $data
+     * @param ArticleModel $article
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function internalUpdate($id, array $data, ArticleModel $article)
+    {
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /**@var $variant Detail*/
+        $variant = $this->getRepository()->find($id);
+
+        if (!$variant) {
+            throw new ApiException\NotFoundException("Variant by id $id not found");
+        }
+
+        $variant->setArticle($article);
+
+        $data = $this->prepareData($data, $article, $variant);
+
+        $variant->fromArray($data);
+
+        return $variant;
+    }
+
+    /**
+     * Create function for the internal usage of the rest api.
+     * Used from the article resource. This function supports
+     * to pass an updated article entity which isn't updated in the database.
+     * Required for the article resource if the article data is already updated
+     * in the entity but not in the database.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     */
+    public function internalCreate(array $data, ArticleModel $article)
+    {
+        $variant = new Detail();
+        $variant->setKind(2);
+        $variant->setArticle($article);
+
+        $data = $this->prepareData($data, $article, $variant);
+
+        $variant->fromArray($data);
+
+        return $variant;
+    }
+
+
+    /**
+     * Interface which allows to use the data preparation in the article resource for the main variant.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return array|mixed
+     */
+    public function prepareMainVariantData(array $data, ArticleModel $article, Detail $variant)
+    {
+        return $this->prepareData($data, $article, $variant);
+    }
+
+
+    /**
+     * Resolves the association data for a single variant.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return array|mixed
+     */
+    protected function prepareData(array $data, ArticleModel $article, Detail $variant)
+    {
+        $data = $this->prepareUnitAssociation($data);
+
+        if (!empty($data['prices'])) {
+            $this->checkDataReplacement($variant->getPrices(), $data, 'prices');
+
+            $data['prices'] = $this->preparePriceAssociation(
+                $data['prices'],
+                $article,
+                $variant,
+                $article->getTax()
+            );
+        }
+
+        $data = $this->prepareAttributeAssociation($data, $article, $variant);
+
+        if (isset($data['configuratorOptions'])) {
+            $data = $this->prepareConfigurator($data, $article, $variant);
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @param array $prices
+     * @param \Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function preparePriceAssociation($prices, ArticleModel $article, $articleDetail, Tax $tax)
+    {
+        foreach ($prices as &$priceData) {
+
+            if (empty($priceData['customerGroupKey'])) {
+                $priceData['customerGroupKey'] = 'EK';
+            }
+
+            // load the customer group of the price definition
+            $customerGroup = $this->getManager()
+                ->getRepository('Shopware\Models\Customer\Group')
+                ->findOneBy(array('key' => $priceData['customerGroupKey']));
+
+            /** @var CustomerGroup $customerGroup */
+            if (!$customerGroup instanceof CustomerGroup) {
+                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
+            }
+
+            if (!isset($priceData['from'])) {
+                $priceData['from'] = 1;
+            }
+
+            $priceData['from'] = intval($priceData['from']);
+            $priceData['to']   = intval($priceData['to']);
+
+            if ($priceData['from'] <= 0) {
+                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
+            }
+
+            // if the "to" value isn't numeric, set the place holder "beliebig"
+            if ($priceData['to'] <= 0) {
+                $priceData['to'] = 'beliebig';
+            }
+
+            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
+            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
+            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
+            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
+
+            if ($customerGroup->getTaxInput()) {
+                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+
+            $priceData['customerGroup'] = $customerGroup;
+            $priceData['article']       = $article;
+            $priceData['articleDetail'] = $articleDetail;
+        }
+
+        return $prices;
+    }
+
+
+    /**
+     * Resolves the passed configuratorOptions parameter for a single variant.
+     * Each passed configurator option, has to be configured in the article configurator set.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
+    {
+        if (!$article->getConfiguratorSet()) {
+            throw new ApiException\CustomValidationException('A configurator set has to be defined');
+        }
+
+        $availableGroups = $article->getConfiguratorSet()->getGroups();
+
+        $options = new ArrayCollection();
+
+        foreach($data['configuratorOptions'] as $optionData) {
+            $availableGroup = $this->getAvailableGroup($availableGroups, array(
+                'id' => $optionData['groupId'],
+                'name' => $optionData['group']
+            ));
+
+            //group is in the article configurator set configured?
+            if (!$availableGroup) {
+                continue;
+            }
+
+            //check if the option is available in the configured article configurator set.
+            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+                'id'   => $optionData['optionId'],
+                'name' => $optionData['option']
+            ));
+
+            if (!$option) {
+                $option = new Option();
+                $option->setPosition(0);
+                $option->setName($option);
+                $option->setGroup($availableGroup);
+                $this->getManager()->persist($option);
+            }
+            $options->add($option);
+        }
+
+        $data['configuratorOptions'] = $options;
+
+        $variant->setConfiguratorOptions($options);
+
+        return $data;
+    }
+
+
+    /**
+     * Checks if the passed group data is already existing in the passed array collection.
+     * The group data are checked for "id" and "name".
+     *
+     * @param ArrayCollection $availableGroups
+     * @param array $groupData
+     * @return bool|Group
+     */
+    private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
+    {
+        /**@var $availableGroup Option */
+        foreach($availableGroups as $availableGroup) {
+            if ($availableGroup->getName() == $groupData['name']
+                || $availableGroup->getId() == $groupData['id']) {
+
+                return $availableGroup;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the passed option data is already existing in the passed array collection.
+     * The option data are checked for "id" and "name".
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $availableOptions
+     * @param array $optionData
+     * @return bool
+     */
+    private function getAvailableOption(ArrayCollection $availableOptions, array $optionData)
+    {
+        /**@var $availableOption Option */
+        foreach($availableOptions as $availableOption) {
+            if ($availableOption->getName() == $optionData['name']
+                || $availableOption->getId() == $optionData['id']) {
+
+                return $availableOption;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return mixed
+     */
+    protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
+    {
+        if (!$variant->getAttribute()) {
+            $data['attribute']['article'] = $article;
+        }
+
+        if (!isset($data['attribute'])) {
+            return $data;
+        }
+
+        $data['attribute']['article'] = $article;
+        return $data;
+    }
+
+
+    /**
+     * Prepares the base variant data to save over doctrine.
+     * Resolves the foreign keys for the passed unit data.
+     *
+     * @param $data
+     * @return mixed
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function prepareUnitAssociation($data)
+    {
+        //if unit id passed, assign existing unit.
+        if (!empty($data['unitId'])) {
+
+            $data['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['unitId']);
+
+            if (empty($data['unit'])) {
+                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
+            }
+
+        //new unit data send? create new unit for this variant
+        } elseif (!empty($data['unit'])) {
+
+            $data['unit'] = $this->updateUnitReference($data['unit']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Try to find an existing unit by the passed parameters.
+     * If no unit reference found, the function creates a new Unit entity.
+     * The passed unit data will be assigned to the created or found Unit entity.
+     *
+     * @param $unitData
+     * @return Unit
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function updateUnitReference($unitData)
+    {
+        $unitRepository = $this->getManager()->getRepository('\Shopware\Models\Article\Unit');
+
+        //try to find an existing unit by the passed conditions "id", "name" or "unit"
+        $unit = $unitRepository->findOneBy(
+            $this->getUnitFindCondition($unitData)
+        );
+
+        //unit identifier send and unit not found? throw exception => Not allowed to create a new unit in this case
+        if (!$unit && isset($unitData['id'])) {
+            throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
+        }
+
+        //to create a new unit, the unit name and unit is required. Otherwise we throw an exception
+        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
+            $unit = new Unit();
+            $this->getManager()->persist($unit);
+        } else if (!$unit) {
+            throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+        }
+
+        $unit->fromArray($unitData);
+        $this->getManager()->flush($unit);
+
+        return $unit;
+    }
+
+
+    /**
+     * Helper function returns the findOneBy condition
+     * for the passed unit data.
+     *
+     * @param $data
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    private function getUnitFindCondition($data)
+    {
+        if (isset($data['id'])) {
+            return array('id' => $data['id']);
+        }
+
+        if (isset($data['unit'])) {
+            return array('unit' => $data['unit']);
+        }
+
+        if (isset($data['name'])) {
+            return array('name' => $data['name']);
+        }
+
+        throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+    }
+
 }
