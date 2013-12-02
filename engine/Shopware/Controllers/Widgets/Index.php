@@ -43,8 +43,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        //$this->View()->setCaching(false);
-        if($this->Request()->getActionName() == 'refreshStatistic') {
+        if ($this->Request()->getActionName() == 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
     }
@@ -83,11 +82,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function menuAction()
     {
-        if(!$this->View()->isCached()) {
-            $this->View()->sGroup = $this->Request()->getParam('group');
-            $plugin = Shopware()->Plugins()->Core()->ControllerBase();
-            $this->View()->sMenu = $plugin->getMenu();
-        }
+        $this->View()->sGroup = $this->Request()->getParam('group');
+        $plugin = Shopware()->Plugins()->Core()->ControllerBase();
+        $this->View()->sMenu = $plugin->getMenu();
     }
 
     /**
@@ -95,20 +92,18 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function shopMenuAction()
     {
-        if(!$this->View()->isCached()) {
-            $shop = Shopware()->Shop();
-            $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
+        $shop = Shopware()->Shop();
+        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
-            $this->View()->shop = $shop;
-            $this->View()->currencies = $shop->getCurrencies();
-            $languages = $shop->getChildren()->toArray();
-            foreach($languages as $languageKey => $language) {
-                if(!$language->getActive()) {
-                    unset($languages[$languageKey]);
-                }
+        $this->View()->shop = $shop;
+        $this->View()->currencies = $shop->getCurrencies();
+        $languages = $shop->getChildren()->toArray();
+        foreach($languages as $languageKey => $language) {
+            if(!$language->getActive()) {
+                unset($languages[$languageKey]);
             }
-            array_unshift($languages, $main);
-            $this->View()->languages = $languages;
         }
+        array_unshift($languages, $main);
+        $this->View()->languages = $languages;
     }
 }

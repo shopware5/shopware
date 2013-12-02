@@ -61,10 +61,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             return;
         }
 
-        if ($this->Request()->getParam('no-cache') === null) {
-            $this->View()->setCaching(true);
-        }
-
         if (strpos($this->Request()->getPathInfo(), '/backend/') !== 0) {
             $this->redirect('backend/', array('code' => 301));
         }
@@ -97,9 +93,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         }
 
         $identity = $auth->getIdentity();
-        if (isset($identity->disabled_cache) && $identity->disabled_cache) {
-            $this->View()->setCaching(false);
-        }
 
         $this->View()->assign('user', $identity, true);
         $app = $this->Request()->getParam('app', 'Index');
@@ -152,13 +145,12 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         if ($this->auth->checkAuth() === null) {
             throw new Enlight_Controller_Exception('Unauthorized', 401);
         }
-        if (!$this->View()->isCached()) {
-            /** @var $menu \Shopware\Models\Menu\Repository */
-            $menu = Shopware()->Models()->getRepository(
-                'Shopware\Models\Menu\Menu'
-            );
-            $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
-            $this->View()->menu = $menuItems;
-        }
+
+        /** @var $menu \Shopware\Models\Menu\Repository */
+        $menu = Shopware()->Models()->getRepository(
+            'Shopware\Models\Menu\Menu'
+        );
+        $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
+        $this->View()->menu = $menuItems;
     }
 }

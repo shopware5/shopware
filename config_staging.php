@@ -21,8 +21,8 @@ $stagingConfig = array(
         'cache_dir' =>  $this->DocPath('staging_cache_templates_html')
     ),
     'template' => array(
-        'cacheDir' => $this->DocPath('staging_cache_templates_cache'),
-        'compileDir' => $this->DocPath('staging_cache_templates_compile')
+        'cacheDir' => $this->DocPath('staging_cache_templates'),
+        'compileDir' => $this->DocPath('staging_cache_templates')
     ),
     'hook' => array(
         'proxyDir' => $this->DocPath('staging_cache_proxies'),
