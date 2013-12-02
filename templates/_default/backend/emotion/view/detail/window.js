@@ -109,6 +109,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
         me.tabPanel = me.createTabPanel();
         me.items = [ me.tabPanel ];
+
         me.hubPlugin = Ext.create('Shopware.window.plugin.Hud', {
             hudStore: store,
             originalStore: me.libraryStore,
@@ -226,7 +227,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                         '<ul>',
                             '<tpl for="children">',
                                 '<li class="x-library-element" data-componentId="{data.id}">',
-                                    '{data.name}',
+                                    '{data.fieldLabel}',
                                 '</li>',
                             '</tpl>',
                         '</ul>',
