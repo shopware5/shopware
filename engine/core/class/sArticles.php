@@ -1992,10 +1992,21 @@ class sArticles
                 $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
             }
 
-            $query = array('sViewport' => 'supplier','sSupplier' => $supplierValue["id"]);
+
             if($id !== Shopware()->Shop()->getCategory()->getId()) {
-                $query['sCategory'] = $id;
+                $query = array(
+                    'sViewport' => 'cat',
+                    'sCategory' => $id,
+                    'sPage' => 1,
+                    'sSupplier' => $supplierValue["id"]
+                );
+            } else {
+                $query = array(
+                    'sViewport' => 'supplier',
+                    'sSupplier' => $supplierValue["id"]
+                );
             }
+
             $getSupplier[$supplierKey]["link"] = Shopware()->Router()->assemble($query);
         }
 
