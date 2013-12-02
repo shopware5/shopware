@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
@@ -67,7 +66,7 @@ class Article extends Resource
      */
     public function getVariantResource()
     {
-        return Manager::getResource('Variant');
+        return $this->getResource('Variant');
     }
 
     /**

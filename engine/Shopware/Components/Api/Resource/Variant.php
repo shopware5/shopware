@@ -57,7 +57,7 @@ class Variant extends Resource
      */
     public function getArticleResource()
     {
-        return Manager::getResource('Article');
+        return $this->getResource('Article');
     }
 
     /**
@@ -218,7 +218,7 @@ class Variant extends Resource
         $articleId = $params['articleId'];
 
         if (empty($articleId)) {
-            throw new ApiException\ParameterMissingException("Passed parameter array don't contains an articleId property");
+            throw new ApiException\ParameterMissingException("Passed parameter array does not contain an articleId property");
         }
 
         /**@var $article ArticleModel*/
