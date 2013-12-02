@@ -30,7 +30,12 @@ use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Download;
+use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media;
+use Symfony\Component\HttpFoundation\File\File;
+use Shopware\Models\Article\Configurator;
+
 
 /**
  * Article API Resource
@@ -605,10 +610,10 @@ class Article extends Resource
     protected function prepareAssociatedData($data, ArticleModel $article)
     {
         $data = $this->prepareArticleAssociatedData($data, $article);
-        $data = $this->prepareCategoryAssociatedData($data);
+        $data = $this->prepareCategoryAssociatedData($data, $article);
         $data = $this->prepareRelatedAssociatedData($data, $article);
         $data = $this->prepareSimilarAssociatedData($data, $article);
-        $data = $this->prepareAvoidCustomerGroups($data);
+        $data = $this->prepareAvoidCustomerGroups($data, $article);
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
@@ -695,6 +700,8 @@ class Article extends Resource
         }
 
         $variants = array();
+        $this->checkDataReplacement($article->getDetails(), $data, 'variants');
+
         foreach ($data['variants'] as $variantData) {
 
             if (isset($variantData['id'])) {
@@ -732,7 +739,7 @@ class Article extends Resource
                     $oldMain = $data['mainDetail'];
 
 
-                    if ($oldMain instanceof \Shopware\Models\Article\Detail) {
+                    if ($oldMain instanceof Detail) {
                         $oldMain->setKind(2);
                         if ($oldMain->getNumber() && $oldMain->getConfiguratorOptions()) {
                             $variant = $oldMain;
@@ -780,7 +787,7 @@ class Article extends Resource
 
         $configuratorSet = $article->getConfiguratorSet();
         if (!$configuratorSet) {
-            $configuratorSet = new \Shopware\Models\Article\Configurator\Set();
+            $configuratorSet = new Configurator\Set();
             if (isset($data['mainDetail']['number'])) {
                 $number = $data['mainDetail']['number'];
             } else {
@@ -815,7 +822,7 @@ class Article extends Resource
                 $group = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->findOneBy(array('name' => $groupData['name']));
 
                 if (!$group) {
-                    $group = new \Shopware\Models\Article\Configurator\Group();
+                    $group = new Configurator\Group();
                     $group->setPosition($groupPosition);
                 }
             } else {
@@ -841,7 +848,7 @@ class Article extends Resource
                 }
 
                 if (!$option) {
-                    $option = new \Shopware\Models\Article\Configurator\Option();
+                    $option = new Configurator\Option();
                 }
 
                 $option->fromArray($optionData);
@@ -969,16 +976,19 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareCategoryAssociatedData($data)
+    protected function prepareCategoryAssociatedData($data, ArticleModel $article)
     {
         if (!isset($data['categories'])) {
             return $data;
         }
 
         $categories = array();
+        $this->checkDataReplacement($article->getCategories(), $data, 'categories');
+
         foreach ($data['categories'] as $categoryData) {
             if (!empty($categoryData['id'])) {
                 $model = $this->getManager()->find('Shopware\Models\Category\Category', $categoryData['id']);
@@ -996,16 +1006,19 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function prepareAvoidCustomerGroups($data)
+    protected function prepareAvoidCustomerGroups($data, ArticleModel $article)
     {
         if (!isset($data['customerGroups'])) {
             return $data;
         }
 
         $customerGroups = array();
+        $this->checkDataReplacement($article->getCustomerGroups(), $data, 'customerGroups');
+
         foreach ($data['customerGroups'] as $customerGroup) {
             if (!empty($customerGroup['id'])) {
                 $customerGroup = $this->getManager()->find('Shopware\Models\Customer\Group', $customerGroup['id']);
@@ -1034,6 +1047,7 @@ class Article extends Resource
         }
 
         $related = array();
+        $this->checkDataReplacement($article->getRelated(), $data, 'related');
         foreach ($data['related'] as $relatedData) {
 
             if (empty($relatedData['number']) && empty($relatedData['id'])) {
@@ -1083,6 +1097,7 @@ class Article extends Resource
         }
 
         $similar = array();
+        $this->checkDataReplacement($article->getSimilar(), $data, 'similar');
         foreach ($data['similar'] as $similarData) {
             if (empty($similarData['number']) && empty($similarData['id'])) {
                 continue;
@@ -1150,6 +1165,8 @@ class Article extends Resource
         }
 
         $models = array();
+        $this->checkDataReplacement($article->getPropertyValues(), $data, 'propertyValues');
+
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
             /** @var \Shopware\Models\Property\Option $option  */
@@ -1244,24 +1261,25 @@ class Article extends Resource
         }
 
         $downloads = array();
+        $this->checkDataReplacement($article->getDownloads(), $data, 'downloads');
         foreach ($data['downloads'] as &$downloadData) {
             if (isset($downloadData['id'])) {
                 $download = $this->getManager()
                                  ->getRepository('Shopware\Models\Article\Download')
                                  ->find($downloadData['id']);
 
-                if (!$download instanceof \Shopware\Models\Article\Download) {
+                if (!$download instanceof Download) {
                     throw new ApiException\CustomValidationException(sprintf("Download by id %s not found", $downloadData['id']));
                 }
             } else {
-                $download = new \Shopware\Models\Article\Download();
+                $download = new Download();
             }
 
             if (isset($downloadData['link'])) {
                 $path = $this->load($downloadData['link']);
-                $file = new \Symfony\Component\HttpFoundation\File\File($path);
+                $file = new File($path);
 
-                $media = new \Shopware\Models\Media\Media();
+                $media = new Media();
                 $media->setAlbumId(-6);
                 $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -6));
 
@@ -1314,6 +1332,7 @@ class Article extends Resource
             return $data;
         }
 
+        $this->checkDataReplacement($article->getImages(), $data, 'images');
         $images = $article->getImages();
         $position = 1;
 
@@ -1323,20 +1342,21 @@ class Article extends Resource
                         ->getRepository('Shopware\Models\Article\Image')
                         ->find($imageData['id']);
 
-                if (!$image instanceof \Shopware\Models\Article\Image) {
+                if (!$image instanceof Image) {
                     throw new ApiException\CustomValidationException(sprintf("Image by id %s not found", $imageData['id']));
                 }
             } else {
-                $image = new \Shopware\Models\Article\Image();
+                $image = new Image();
             }
 
             if (isset($imageData['link'])) {
                 $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
                 $path = $this->load($imageData['link'], $name);
+                $name = pathinfo($path, PATHINFO_FILENAME);
 
-                $file = new \Symfony\Component\HttpFoundation\File\File($path);
+                $file = new File($path);
 
-                $media = new \Shopware\Models\Media\Media();
+                $media = new Media();
                 $media->setAlbumId(-1);
                 $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
 
@@ -1377,7 +1397,7 @@ class Article extends Resource
 
             // if image is set as main set other images to secondary
             if ($image->getMain() == 1) {
-                /** @var $otherImage \Shopware\Models\Article\Image */
+                /** @var $otherImage Image */
                 foreach ($images as $otherImage) {
                     //only update existing images which are not the current processed image.
                     //otherwise the main flag won't be changed.
@@ -1392,7 +1412,7 @@ class Article extends Resource
 
         $hasMain = false;
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var $image Image */
         foreach ($images as $image) {
             if ($image->getMain() == 1) {
                 $hasMain = true;
