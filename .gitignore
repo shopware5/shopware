@@ -27,7 +27,6 @@ Thumbs.db
 /engine/Shopware/Plugins/Local/
 
 # Userconfigurations
-/config_http.php
 /config.php
 /engine/Shopware/Configs/Custom.php
 

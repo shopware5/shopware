@@ -294,6 +294,16 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isHttpCacheEnabled()
+    {
+        $config = $this->getHttpCacheConfig();
+
+        return (isset($config['enabled']) && $config['enabled']);
+    }
+
+    /**
      * Gets the environment.
      *
      * @return string The current environment
@@ -484,8 +494,16 @@ class Kernel implements HttpKernelInterface
     /**
      * @return array
      */
-    protected function getConfig()
+    public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHttpCacheConfig()
+    {
+        return is_array($this->config['httpCache']) ? $this->config['httpCache'] : array();
     }
 }
