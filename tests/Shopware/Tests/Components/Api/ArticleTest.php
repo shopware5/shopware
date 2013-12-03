@@ -125,132 +125,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
-    /**
-     * @return \Shopware\Models\Article\Article
-     */
-    private function createBigArticle()
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('groups', 'options'))
-                ->from('Shopware\Models\Article\Configurator\Group', 'groups')
-                ->innerJoin('groups.options', 'options');
-
-        $configurator = array(
-            'name' => 'Performance Test Set',
-            'groups' => $builder->getQuery()->getArrayResult()
-        );
-
-        $builder->select(array(
-            'groups.name as groupName',
-            'options.name as option'
-        ))
-        ->groupBy('groups.id');
-
-        $variantOptions = $builder->getQuery()->getArrayResult();
-        foreach($variantOptions as &$option) {
-            $option['group'] = $option['groupName'];
-            unset($option['groupName']);
-        }
-
-        $variants = array();
-        for($i=0; $i<100; $i++) {
-            $variants[] =  array(
-                'number' => 'swTEST.variant.' . uniqid(),
-                'inStock' => 17,
-                'unit' => array('unit' => 'xyz','name' => 'newUnit'),
-                'attribute' => array('attr3' => 'Freitext3','attr4' => 'Freitext4'),
-                'configuratorOptions' => $variantOptions,
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-                'prices' => array(
-                    array('customerGroupKey' => 'H','from' => 1, 'to' => 20,'price' => 500),
-                    array('customerGroupKey' => 'H','from' => 21,'to' => '-','price' => 400),
-                )
-            );
-        }
-
-
-        $testData = array(
-            'name' => 'Performance - Artikel',
-            'description' => 'Test description',
-            'descriptionLong' => 'Test descriptionLong',
-            'active' => true,
-            'pseudoSales' => 999,
-            'highlight' => true,
-            'keywords' => 'test, testarticle',
-
-            'filterGroupId' => 1,
-
-            'propertyValues' => array(
-                array(
-                    'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
-                    'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid()
-                    )
-                )
-            ),
-
-            'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
-                'inStock' => 15,
-                'unitId' => 1,
-
-                'attribute' => array(
-                    'attr1' => 'Freitext1',
-                    'attr2' => 'Freitext2',
-                ),
-
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-                'purchaseSteps' => 2,
-
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => 20,
-                        'price' => 500,
-                    ),
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 21,
-                        'to' => '-',
-                        'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => $configurator,
-            'variants' => $variants,
-            'taxId' => 1,
-            'supplierId' => 2,
-            'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
-            'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 100"),
-            'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
-            'links' => array(
-                array('name' => 'foobar', 'link' => 'http://example.org'),
-                array('name' => 'Video', 'link' => 'http://example.org'),
-                array('name' => 'Video2', 'link' => 'http://example.org'),
-                array('name' => 'Video3', 'link' => 'http://example.org'),
-                array('name' => 'Video4', 'link' => 'http://example.org'),
-                array('name' => 'Video5', 'link' => 'http://example.org'),
-                array('name' => 'Video6', 'link' => 'http://example.org'),
-                array('name' => 'Video7', 'link' => 'http://example.org'),
-                array('name' => 'Video8', 'link' => 'http://example.org'),
-                array('name' => 'Video9', 'link' => 'http://example.org'),
-                array('name' => 'Video10', 'link' => 'http://example.org'),
-            ),
-        );
-
-        $article = $this->resource->create($testData);
-        Shopware()->Models()->clear();
-        return $article;
-    }
 
     public function testCreateShouldBeSuccessful()
     {
@@ -1155,28 +1029,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
-    private function getSimpleTestData() {
-        return array(
-            'name' => 'Testartikel',
-            'description' => 'Test description',
-            'active' => true,
-            'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
-                'inStock' => 15,
-                'unitId' => 1,
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => '-',
-                        'price' => 400,
-                    )
-                )
-            ),
-            'taxId' => 1,
-            'supplierId' => 2
-        );
-    }
 
     public function testImageReplacement()
     {
@@ -1371,6 +1223,317 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(3, $article->getMainDetail()->getPrices());
     }
 
+
+    public function testPriceReplacement()
+    {
+        $data = $this->getSimpleTestData();
+        $article = $this->resource->create($data);
+
+        $update = array(
+            'mainDetail' => array(
+                'number' => $article->getMainDetail()->getNumber(),
+                '__options_prices' => array('replace' => false),
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'H',
+                        'from' => 1,
+                        'to' => '10',
+                        'price' => 200,
+                    ),
+                    array(
+                        'customerGroupKey' => 'H',
+                        'from' => 11,
+                        'to' => '-',
+                        'price' => 100,
+                    )
+                )
+            )
+        );
+
+        $article = $this->resource->update($article->getId(), $update);
+        $this->assertCount(3, $article->getMainDetail()->getPrices());
+    }
+
+
+    public function testCategoryReplacement()
+    {
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Category\Category',
+            'categories',
+            true
+        );
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Category\Category',
+            'categories',
+            false
+        );
+    }
+
+    public function testSimilarReplacement()
+    {
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Article\Article',
+            'similar',
+            true
+        );
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Article\Article',
+            'similar',
+            false
+        );
+    }
+
+    public function testRelatedReplacement()
+    {
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Article\Article',
+            'related',
+            true
+        );
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Article\Article',
+            'related',
+            false
+        );
+    }
+
+    public function testCustomerGroupReplacement()
+    {
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Customer\Group',
+            'customerGroups',
+            true
+        );
+        $this->internalTestReplaceMode(
+            'Shopware\Models\Customer\Group',
+            'customerGroups',
+            false
+        );
+    }
+
+
+
+    protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
+    {
+        //create keys for getter function and the __options parameter in the update and create
+        //example => "__options_categories"  /  "getCategories"
+        $replaceKey = '__options_' . $arrayKey;
+        $getter = 'get' . ucfirst($arrayKey);
+
+        //returns a simple article data set to create an article with a simple main detail
+        $data = $this->getSimpleTestData();
+
+        //get an offset of 10 entities for the current entity type, like 10x categories
+        $createdEntities = $this->getEntityOffset($entity);
+        $data[$arrayKey] = $createdEntities;
+
+        $article = $this->resource->create($data);
+        $this->assertCount(count($createdEntities), $article->$getter());
+
+        $updatedEntity = $this->getEntityOffset($entity, true, 20, 5);
+
+        $update = array(
+            $replaceKey => array('replace' => $replace),
+            $arrayKey => $updatedEntity
+        );
+        $article = $this->resource->update($article->getId(), $update);
+
+        if ($replace == true) {
+            $this->assertCount(count($updatedEntity), $article->$getter());
+        } else {
+            $this->assertCount(count($createdEntities) + count($updatedEntity), $article->$getter());
+        }
+    }
+
+
+    /**
+     * @return \Shopware\Models\Article\Article
+     */
+    private function createBigArticle()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('groups', 'options'))
+            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+            ->innerJoin('groups.options', 'options');
+
+        $configurator = array(
+            'name' => 'Performance Test Set',
+            'groups' => $builder->getQuery()->getArrayResult()
+        );
+
+        $builder->select(array(
+            'groups.name as groupName',
+            'options.name as option'
+        ))
+            ->groupBy('groups.id');
+
+        $variantOptions = $builder->getQuery()->getArrayResult();
+        foreach ($variantOptions as &$option) {
+            $option['group'] = $option['groupName'];
+            unset($option['groupName']);
+        }
+
+        $variants = array();
+        for ($i = 0; $i < 100; $i++) {
+            $variants[] = array(
+                'number' => 'swTEST.variant.' . uniqid(),
+                'inStock' => 17,
+                'unit' => array('unit' => 'xyz', 'name' => 'newUnit'),
+                'attribute' => array('attr3' => 'Freitext3', 'attr4' => 'Freitext4'),
+                'configuratorOptions' => $variantOptions,
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'prices' => array(
+                    array('customerGroupKey' => 'H', 'from' => 1, 'to' => 20, 'price' => 500),
+                    array('customerGroupKey' => 'H', 'from' => 21, 'to' => '-', 'price' => 400),
+                )
+            );
+        }
+
+
+        $testData = array(
+            'name' => 'Performance - Artikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
+
+            'filterGroupId' => 1,
+
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+            'configuratorSet' => $configurator,
+            'variants' => $variants,
+            'taxId' => 1,
+            'supplierId' => 2,
+            'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
+            'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 100"),
+            'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
+            'links' => array(
+                array('name' => 'foobar', 'link' => 'http://example.org'),
+                array('name' => 'Video', 'link' => 'http://example.org'),
+                array('name' => 'Video2', 'link' => 'http://example.org'),
+                array('name' => 'Video3', 'link' => 'http://example.org'),
+                array('name' => 'Video4', 'link' => 'http://example.org'),
+                array('name' => 'Video5', 'link' => 'http://example.org'),
+                array('name' => 'Video6', 'link' => 'http://example.org'),
+                array('name' => 'Video7', 'link' => 'http://example.org'),
+                array('name' => 'Video8', 'link' => 'http://example.org'),
+                array('name' => 'Video9', 'link' => 'http://example.org'),
+                array('name' => 'Video10', 'link' => 'http://example.org'),
+            ),
+        );
+
+        $article = $this->resource->create($testData);
+        Shopware()->Models()->clear();
+        return $article;
+    }
+
+    private function getSimpleTestData()
+    {
+        return array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 400,
+                    )
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2
+        );
+    }
+
+    private function getImagesForNewArticle($offset = 10, $limit = 5)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+            'media.id as mediaId',
+            '2 as main'
+        ))
+            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /**
+         * Get random images.
+         * Only want to check if the main flag will be used.
+         */
+        $images = $builder->getQuery()->getArrayResult();
+        $keys = array_keys($images);
+        $images[$keys[0]]['main'] = 1;
+
+        return $images;
+    }
+
+    private function getEntityOffset($entity, $onlyId = true, $offset = 0, $limit = 10)
+    {
+        $fields = array('alias');
+        if ($onlyId) {
+            $fields = array('alias.id');
+        }
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select($fields)
+                ->from($entity, 'alias')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        return $builder->getQuery()->getArrayResult();
+    }
 }
 
 
