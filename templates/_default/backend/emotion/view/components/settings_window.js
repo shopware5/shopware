@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
         var me = this;
 
         // Set the window title
-        me.title = me.settings.component.get('name');
+        me.title = me.settings.component.get('fieldLabel');
 
         // Build up the items
         me.items = [{

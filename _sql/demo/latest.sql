@@ -7055,13 +7055,13 @@ INSERT INTO `s_filter_values` (`id`, `optionID`, `value`, `position`) VALUES
 
 TRUNCATE TABLE `s_library_component`;
 INSERT INTO `s_library_component` (`id`, `name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`) VALUES
-(2, 'HTML-Element', '', NULL, '', 'component_html', 'html-text-element', NULL),
+(2, 'HTML-Element', 'emotion-components-html-element', NULL, '', 'component_html', 'html-text-element', NULL),
 (3, 'Banner', 'emotion-components-banner', 'getBannerMappingLinks', '', 'component_banner', 'banner-element', NULL),
 (4, 'Artikel', 'emotion-components-article', 'getArticle', '', 'component_article', 'article-element', NULL),
 (5, 'Kategorie-Teaser', 'emotion-components-category-teaser', 'getCategoryTeaser', '', 'component_category_teaser', 'category-teaser-element', NULL),
 (6, 'Blog-Artikel', 'emotion-components-blog', 'getBlogEntry', '', 'component_blog', 'blog-element', NULL),
 (7, 'Banner-Slider', 'emotion-components-banner-slider', 'getBannerSlider', '', 'component_banner_slider', 'banner-slider-element', NULL),
-(8, 'Youtube-Video', '', NULL, '', 'component_youtube', 'youtube-element', NULL),
+(8, 'Youtube-Video', 'emotion-components-youtube', NULL, '', 'component_youtube', 'youtube-element', NULL),
 (9, 'iFrame-Element', '', NULL, '', 'component_iframe', 'iframe-element', NULL),
 (10, 'Hersteller-Slider', 'emotion-components-manufacturer-slider', 'getManufacturerSlider', '', 'component_manufacturer_slider', 'manufacturer-slider-element', NULL),
 (11, 'Artikel-Slider', 'emotion-components-article-slider', 'getArticleSlider', '', 'component_article_slider', 'article-slider-element', NULL);

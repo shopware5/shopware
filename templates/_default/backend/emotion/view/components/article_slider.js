@@ -48,7 +48,10 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         article_slider_title: '{s name=article_slider_title}Title{/s}',
         article_slider_arrows: '{s name=article_slider_arrows}Display arrows{/s}',
         article_slider_numbers: '{s name=article_slider_numbers}Display numbers{/s}',
-        article_slider_scrollspeed: '{s name=article_slider_scrollspeed}Scroll speed{/s}'
+        article_slider_scrollspeed: '{s name=article_slider_scrollspeed}Scroll speed{/s}',
+
+        article_slider_rotation: '{s name=article_slider_rotation}Rotate automatically{/s}',
+        article_slider_rotatespeed: '{s name=article_slider_rotatespeed}Rotation speed{/s}'
     },
 
     /**
