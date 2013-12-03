@@ -280,6 +280,25 @@ abstract class Resource
         return null;
     }
 
+    /**
+     * Helper function to resolve one to many associations for an entity.
+     * The function do the following thinks:
+     * It iterates all conditions which passed. The conditions contains the property names
+     * which can be used as identifier like array("id", "name", "number", ...).
+     * If the property isn't set in the passed data array the function continue with the next condition.
+     * If the property is set, the function looks into the passed collection element if
+     * the item is already exist in the entity collection.
+     * In case that the collection don't contains the entity, the function throws an exception.
+     * If no property is set, the function creates a new entity and adds the instance into the
+     * passed collection and persist the entity.
+     *
+     * @param ArrayCollection $collection
+     * @param $data
+     * @param $entityType
+     * @param array $conditions
+     * @return null|object
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
     protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
     {
         foreach ($conditions as $property) {
@@ -303,6 +322,26 @@ abstract class Resource
         return $item;
     }
 
+    /**
+     * Helper function to resolve many to many associations for an entity.
+     * The function do the following thinks:
+     * It iterates all conditions which passed. The conditions contains the property names
+     * which can be used as identifier like array("id", "name", "number", ...).
+     * If the property isn't set in the passed data array the function continue with the next condition.
+     * If the property is set, the function looks into the passed collection element if
+     * the item is already exist in the entity collection.
+     * In case that the collection don't contains the entity, the function creates a findOneBy
+     * statement for the passed entity type.
+     * In case that the findOneBy statement finds no entity, the function throws an exception.
+     * Otherwise the item will be
+     *
+     * @param ArrayCollection $collection
+     * @param $data
+     * @param $entityType
+     * @param array $conditions
+     * @return null|object
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
     protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
     {
         $repo = $this->getManager()->getRepository($entityType);

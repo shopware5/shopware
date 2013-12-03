@@ -646,9 +646,7 @@ class Article extends Resource
             $article->setMainDetail($detail);
         }
 
-        $mainData = $data['mainDetail'];
-        $newData = $this->getVariantResource()->prepareMainVariantData($mainData, $article, $detail);
-        $data['mainDetail'] = $newData;
+        $data['mainDetail'] = $this->getVariantResource()->prepareMainVariantData($data['mainDetail'], $article, $detail);
 
         return $data;
     }
@@ -766,10 +764,6 @@ class Article extends Resource
 
             $variants[] = $variant;
         }
-        
-//        echo '<pre>';
-//        \Doctrine\Common\Util\Debug::dump($variants, 2);
-//        exit();
 
         $data['details'] = $variants;
         unset($data['variants']);

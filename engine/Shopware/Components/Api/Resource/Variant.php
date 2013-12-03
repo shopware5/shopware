@@ -418,11 +418,6 @@ class Variant extends Resource
             $price->fromArray($priceData);
         }
 
-//        echo '<pre>';
-//        \Doctrine\Common\Util\Debug::dump($data['prices'], 2);
-//        \Doctrine\Common\Util\Debug::dump($prices, 2);
-
-//        return $data['prices'];
         return $prices;
     }
 
@@ -568,7 +563,6 @@ class Variant extends Resource
 
         //new unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
-
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }
 
@@ -607,8 +601,6 @@ class Variant extends Resource
         }
 
         $unit->fromArray($unitData);
-//        $this->getManager()->flush($unit);
-
         return $unit;
     }
 
