@@ -711,7 +711,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             )
         );
 
-
         $updateArticle = array(
             'configuratorSet' => array(
                 'groups' => array(
@@ -1171,7 +1170,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'from' => 1,
                         'to' => '-',
                         'price' => 400,
-                    ),
+                    )
                 )
             ),
             'taxId' => 1,
@@ -1191,7 +1190,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $data = array(
             '__options_images' => array('replace' => true),
-            'images' => $this->getImagesForNewArticle(40)
+            'images' => $this->getImagesForNewArticle(100)
         );
 
         $this->resource->update($article->getId(), $data);
@@ -1270,6 +1269,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return $images;
     }
 
+
     public function testCreateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -1341,4 +1341,36 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $this->assertTrue(in_array($value->getOption()->getId(), $optionIds));
         }
     }
+
+    public function testPriceReplacement() {
+        $data = $this->getSimpleTestData();
+        $article = $this->resource->create($data);
+
+        $update = array(
+            'mainDetail' => array(
+                'number' => $article->getMainDetail()->getNumber(),
+                '__options_prices' => array('replace' => false),
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'H',
+                        'from' => 1,
+                        'to' => '10',
+                        'price' => 200,
+                    ),
+                    array(
+                        'customerGroupKey' => 'H',
+                        'from' => 11,
+                        'to' => '-',
+                        'price' => 100,
+                    )
+                )
+            )
+        );
+
+        $article = $this->resource->update($article->getId(), $update);
+        $this->assertCount(3, $article->getMainDetail()->getPrices());
+    }
+
 }
+
+
