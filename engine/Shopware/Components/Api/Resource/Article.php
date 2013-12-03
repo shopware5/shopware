@@ -686,7 +686,7 @@ class Article extends Resource
             }
 
             if (!$mainDetailGetsConfigurator && count($oldMainDetail->getConfiguratorOptions()) === 0) {
-                Shopware()->Models()->remove($oldMainDetail);
+                $this->getManager()->remove($oldMainDetail);
                 $setFirstVariantMain = true;
             }
         }
@@ -745,7 +745,7 @@ class Article extends Resource
                         if ($oldMain->getNumber() && $oldMain->getConfiguratorOptions()) {
                             $variant = $oldMain;
                         } else {
-                            Shopware()->Models()->remove($oldMain);
+                            $this->getManager()->remove($oldMain);
                         }
                     } else {
                         $oldMain['kind'] = 2;
@@ -754,7 +754,7 @@ class Article extends Resource
                         } elseif (!empty($oldMain['number'])) {
                             $oldMain = $this->getDetailRepository()->findOneBy(array('number' => $oldMain['number']));
                             if ($oldMain) {
-                                Shopware()->Models()->remove($oldMain);
+                                $this->getManager()->remove($oldMain);
                             }
                         }
                     }
@@ -766,6 +766,10 @@ class Article extends Resource
 
             $variants[] = $variant;
         }
+        
+//        echo '<pre>';
+//        \Doctrine\Common\Util\Debug::dump($variants, 2);
+//        exit();
 
         $data['details'] = $variants;
         unset($data['variants']);
@@ -873,7 +877,7 @@ class Article extends Resource
         $configuratorSet->getGroups()->clear();
         $configuratorSet->setGroups($allGroups);
 
-        Shopware()->Models()->persist($configuratorSet);
+        $this->getManager()->persist($configuratorSet);
 
         $data['configuratorSet'] = $configuratorSet;
 
@@ -1251,7 +1255,7 @@ class Article extends Resource
                 if (isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
                 }
-                Shopware()->Models()->persist($value);
+                $this->getManager()->persist($value);
             } else {
                 throw new ApiException\CustomValidationException("Name or id for property value required");
             }
@@ -1304,7 +1308,7 @@ class Article extends Resource
 
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
-                    $this->getManager()->flush($media);
+//                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occured while loading your image"));
                 }
@@ -1371,7 +1375,7 @@ class Article extends Resource
                 try {
                     //persist the model into the model manager this uploads and resizes the image
                     $this->getManager()->persist($media);
-                    $this->getManager()->flush($media);
+//                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
                 }

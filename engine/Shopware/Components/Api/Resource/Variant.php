@@ -31,6 +31,7 @@ use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Tax\Tax;
@@ -300,6 +301,7 @@ class Variant extends Resource
 
         $variant->fromArray($data);
 
+        $this->getManager()->persist($variant);
         return $variant;
     }
 
@@ -331,10 +333,8 @@ class Variant extends Resource
         $data = $this->prepareUnitAssociation($data);
 
         if (!empty($data['prices'])) {
-//            $this->checkDataReplacement($variant->getPrices(), $data, 'prices');
-
             $data['prices'] = $this->preparePriceAssociation(
-                $data['prices'],
+                $data,
                 $article,
                 $variant,
                 $article->getTax()
@@ -352,16 +352,24 @@ class Variant extends Resource
 
 
     /**
-     * @param array $prices
+     * @param $data
      * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param \Shopware\Models\Article\Detail $variant
      * @param \Shopware\Models\Tax\Tax $tax
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
      */
-    protected function preparePriceAssociation($prices, ArticleModel $article, $articleDetail, Tax $tax)
+    protected function preparePriceAssociation($data, ArticleModel $article, Detail $variant, Tax $tax)
     {
-        foreach ($prices as &$priceData) {
+        $prices = $this->checkDataReplacement($variant->getPrices(), $data, 'prices', true);
+
+        foreach ($data['prices'] as &$priceData) {
+            /**@var $price Price*/
+            $price = $this->getOneToManySubElement(
+                $prices,
+                $priceData,
+                '\Shopware\Models\Article\Price'
+            );
 
             if (empty($priceData['customerGroupKey'])) {
                 $priceData['customerGroupKey'] = 'EK';
@@ -405,9 +413,16 @@ class Variant extends Resource
 
             $priceData['customerGroup'] = $customerGroup;
             $priceData['article'] = $article;
-            $priceData['detail'] = $articleDetail;
+            $priceData['detail'] = $variant;
+
+            $price->fromArray($priceData);
         }
 
+//        echo '<pre>';
+//        \Doctrine\Common\Util\Debug::dump($data['prices'], 2);
+//        \Doctrine\Common\Util\Debug::dump($prices, 2);
+
+//        return $data['prices'];
         return $prices;
     }
 
@@ -592,7 +607,7 @@ class Variant extends Resource
         }
 
         $unit->fromArray($unitData);
-        $this->getManager()->flush($unit);
+//        $this->getManager()->flush($unit);
 
         return $unit;
     }
