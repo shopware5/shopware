@@ -26,11 +26,9 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Download;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\File;
@@ -91,8 +89,8 @@ class Article extends Resource
         }
 
         return $articleDetail
-                ->getArticle()
-                ->getId();
+            ->getArticle()
+            ->getId();
     }
 
     /**
@@ -134,17 +132,17 @@ class Article extends Resource
             'propertyGroup',
             'customerGroups'
         ))
-        ->from('Shopware\Models\Article\Article', 'article')
-        ->leftJoin('article.mainDetail', 'mainDetail')
-        ->leftJoin('mainDetail.prices', 'mainDetailPrices')
-        ->leftJoin('article.tax', 'tax')
-        ->leftJoin('article.propertyValues', 'propertyValues')
-        ->leftJoin('article.supplier', 'supplier')
-        ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
-        ->leftJoin('article.propertyGroup', 'propertyGroup')
-        ->leftJoin('article.customerGroups', 'customerGroups')
-        ->where('article.id = ?1')
-        ->setParameter(1, $id);
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->leftJoin('article.mainDetail', 'mainDetail')
+            ->leftJoin('mainDetail.prices', 'mainDetailPrices')
+            ->leftJoin('article.tax', 'tax')
+            ->leftJoin('article.propertyValues', 'propertyValues')
+            ->leftJoin('article.supplier', 'supplier')
+            ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
+            ->leftJoin('article.propertyGroup', 'propertyGroup')
+            ->leftJoin('article.customerGroups', 'customerGroups')
+            ->where('article.id = ?1')
+            ->setParameter(1, $id);
 
         /** @var $article \Shopware\Models\Article\Article */
         $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
@@ -391,9 +389,9 @@ class Article extends Resource
             ->leftJoin('article.mainDetail', 'mainDetail');
 
         $builder->addFilter($criteria)
-                ->addOrderBy($orderBy)
-                ->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->addOrderBy($orderBy)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
 
         $query = $builder->getQuery();
 
@@ -583,14 +581,14 @@ class Article extends Resource
      */
     protected function removeArticleDetails($article)
     {
-        $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
+        $sql = "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
         foreach ($details as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
-            $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
+            $sql = "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
             $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
@@ -701,7 +699,9 @@ class Article extends Resource
         }
 
         $variants = array();
-        $this->checkDataReplacement($article->getDetails(), $data, 'variants');
+        if (isset($data['__options_variants']) && $data['__options_variants']['replace']) {
+            $this->removeArticleDetails($article);
+        }
 
         foreach ($data['variants'] as $variantData) {
 
@@ -715,7 +715,7 @@ class Article extends Resource
                 //2. Use this number for the new variant
                 if (isset($variantData['number'])) {
                     $variant = $this->getManager()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array(
-                        'number'    => $variantData['number'],
+                        'number' => $variantData['number'],
                         'articleId' => $article->getId()
                     ));
                 }
@@ -842,7 +842,7 @@ class Article extends Resource
                         }
                     } else {
                         $option = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
-                            'name'    => $optionData['name'],
+                            'name' => $optionData['name'],
                             'groupId' => $group->getId()
                         ));
                     }
@@ -855,7 +855,7 @@ class Article extends Resource
                 $option->fromArray($optionData);
                 $option->setGroup($group);
                 $option->setPosition($optionPosition++);
-                $allOptions[]   = $option;
+                $allOptions[] = $option;
                 $groupOptions[] = $option;
             }
 
@@ -957,152 +957,6 @@ class Article extends Resource
 
     /**
      * @param array $data
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return array
-     */
-    protected function prepareMainDetailAssociatedData($data)
-    {
-        if (!empty($data['mainDetail']['unitId'])) {
-            $data['mainDetail']['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['mainDetail']['unitId']);
-            if (empty($data['mainDetail']['unit'])) {
-                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['mainDetail']['unitId']));
-            }
-        } elseif (!empty($data['mainDetail']['unit'])) {
-            $data['mainDetail']['unit'] = $this->prepareUnitAssociatedData($data['mainDetail']['unit']);
-        }
-
-        return $data;
-    }
-
-    /**
-     * Find a unit by a given ID. If no ID is passed, find it by name or description
-     * @param $unitData
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return \Shopware\Models\Article\Unit|null
-     */
-    protected function prepareUnitAssociatedData($unitData)
-    {
-        if (empty($unitData)) {
-            return null;
-        }
-
-        /** @var $unit \Shopware\Models\Article\Unit */
-        $unit = null;
-        $unitRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Unit');
-
-        if (isset($unitData['id'])) {
-            $unit = $this->getManager()->find('Shopware\Models\Article\Unit', $unitData['id']);
-            if (!$unit) {
-                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
-            }
-        } elseif (isset($unitData['unit'])) {
-            $findBy= array('unit' => $unitData['unit']);
-            $unit = $unitRepository->findOneBy($findBy);
-        } elseif (isset($unitData['name'])) {
-            $findBy= array('name' => $unitData['name']);
-            $unit = $unitRepository->findOneBy($findBy);
-        }
-
-        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
-            $unit = new \Shopware\Models\Article\Unit();
-        } elseif (!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
-            throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
-        }
-        $unit->fromArray($unitData);
-
-        Shopware()->Models()->persist($unit);
-        Shopware()->Models()->flush($unit);
-
-        return $unit;
-    }
-
-    /**
-     * @param array $data
-     * @param \Shopware\Models\Article\Article $article
-     * @return array
-     */
-    protected function prepareMainPricesAssociatedData($data, ArticleModel $article)
-    {
-        if (empty($data['mainDetail']['prices'])) {
-            return $data;
-        }
-
-        if (isset($data['tax'])) {
-            $tax = $data['tax'];
-        } else {
-            $tax = $article->getTax();
-        }
-
-        if ($article->getMainDetail()) {
-            $this->checkDataReplacement($article->getMainDetail()->getPrices(), $data['mainDetail'], 'prices');
-        }
-
-        $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainDetail']['prices'], $article, $article->getMainDetail(), $tax);
-        return $data;
-    }
-
-    /**
-     * @param array $prices
-     * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail $articleDetail
-     * @param \Shopware\Models\Tax\Tax $tax
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @return array
-     */
-    protected function preparePricesAssociatedData($prices, ArticleModel $article, $articleDetail, \Shopware\Models\Tax\Tax $tax)
-    {
-        foreach ($prices as &$priceData) {
-
-            if (empty($priceData['customerGroupKey'])) {
-                $priceData['customerGroupKey'] = 'EK';
-            }
-
-            // load the customer group of the price definition
-            $customerGroup = $this->getManager()
-                                  ->getRepository('Shopware\Models\Customer\Group')
-                                  ->findOneBy(array('key' => $priceData['customerGroupKey']));
-
-            /** @var \Shopware\Models\Customer\Group $customerGroup */
-            if (!$customerGroup instanceof \Shopware\Models\Customer\Group) {
-                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
-            }
-
-            if (!isset($priceData['from'])) {
-                $priceData['from'] = 1;
-            }
-
-            $priceData['from'] = intval($priceData['from']);
-            $priceData['to']   = intval($priceData['to']);
-
-            if ($priceData['from'] <= 0) {
-                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
-            }
-
-            // if the "to" value isn't numeric, set the place holder "beliebig"
-            if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
-            }
-
-            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
-            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
-            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
-
-            if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
-            $priceData['customerGroup'] = $customerGroup;
-            $priceData['article']       = $article;
-            $priceData['articleDetail'] = $articleDetail;
-        }
-
-        return $prices;
-    }
-
-    /**
-     * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
@@ -1113,9 +967,9 @@ class Article extends Resource
             $data['mainDetail']['attribute'] = $data['attribute'];
         }
         unset($data['attribute']);
-	    if(isset($data['mainDetail']['attribute']['articleDetailId'])) {
-		    unset($data['mainDetail']['attribute']['articleDetailId']);
-	    }
+        if (isset($data['mainDetail']['attribute']['articleDetailId'])) {
+            unset($data['mainDetail']['attribute']['articleDetailId']);
+        }
         $data['mainDetail']['attribute']['article'] = $article;
 
         return $data;
@@ -1152,80 +1006,6 @@ class Article extends Resource
         $data['categories'] = $categories;
 
         return $data;
-    }
-
-    /**
-     * @param ArrayCollection $collection
-     * @param $property
-     * @param $value
-     * @return null
-     */
-    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
-    {
-        foreach($collection->getIterator() as $entity) {
-            $method = 'get' . ucfirst($property);
-
-            if (!$entity && !method_exists($entity, $method)) {
-                continue;
-            }
-            if ($entity->$method() == $value) {
-                return $entity;
-            }
-        }
-        return null;
-    }
-
-
-    protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
-    {
-        foreach($conditions as $property) {
-            if (!isset($data[$property])) {
-                continue;
-            }
-            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
-
-            if (!$item) {
-                throw new ApiException\CustomValidationException(
-                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
-                );
-            }
-            return $item;
-        }
-
-        $item = new $entityType();
-        $this->getManager()->persist($item);
-        $collection->add($item);
-
-        return $item;
-    }
-
-
-    protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
-    {
-        $repo = $this->getManager()->getRepository($entityType);
-        foreach($conditions as $property) {
-            if (!isset($data[$property])) {
-                continue;
-            }
-
-            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
-            if ($item) {
-                return $item;
-            }
-
-            $item = $repo->findOneBy(array($property => $data[$property]));
-
-            if (!$item) {
-                throw new ApiException\CustomValidationException(
-                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
-                );
-            }
-
-            $collection->add($item);
-            return $item;
-        }
-
-        return null;
     }
 
     /**
@@ -1267,15 +1047,14 @@ class Article extends Resource
             return $data;
         }
 
-        $related = array();
-        $this->checkDataReplacement($article->getRelated(), $data, 'related');
+        $related = $this->checkDataReplacement($article->getRelated(), $data, 'related', true);
 
         foreach ($data['related'] as $relatedData) {
             if (empty($relatedData['number']) && empty($relatedData['id'])) {
                 continue;
             }
 
-            /**@var $relatedArticle Detail*/
+            /**@var $relatedArticle Detail */
             $relatedArticle = $this->getManyToManySubElement(
                 $related,
                 $relatedData,
@@ -1339,7 +1118,7 @@ class Article extends Resource
             );
 
             if ($similarArticle) {
-                /**@var $similarArticle Detail*/
+                /**@var $similarArticle Detail */
                 $similarArticle = $similarArticle->getArticle();
             } else {
                 $similarArticle = $this->getManyToManySubElement(
@@ -1404,7 +1183,7 @@ class Article extends Resource
 
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
-            /** @var \Shopware\Models\Property\Option $option  */
+            /** @var \Shopware\Models\Property\Option $option */
             $option = null;
 
             // Get value by id
@@ -1424,11 +1203,11 @@ class Article extends Resource
                             throw new ApiException\CustomValidationException(sprintf("Property option by id %s not found", $valueData['option']['id']));
                         }
                         $filters = array(
-                            array('property' => "options.id",'expression' => '=','value' => $option->getId()),
-                            array('property' => "groups.id",'expression' => '=','value' => $propertyGroup->getId()),
+                            array('property' => "options.id", 'expression' => '=', 'value' => $option->getId()),
+                            array('property' => "groups.id", 'expression' => '=', 'value' => $propertyGroup->getId()),
                         );
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
-                        /** @var \Shopware\Models\Property\Relation $relation  */
+                        /** @var \Shopware\Models\Property\Relation $relation */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation) {
                             $propertyGroup->addOption($option);
@@ -1438,11 +1217,11 @@ class Article extends Resource
                         // if a name is passed and there is a matching option/group relation, get this option
                         // if only a name is passed, create a new option
                         $filters = array(
-                            array('property' => "options.name",'expression' => '=','value' => $valueData['option']['name']),
-                            array('property' => "groups.name",'expression' => '=','value' => $propertyGroup->getName()),
+                            array('property' => "options.name", 'expression' => '=', 'value' => $valueData['option']['name']),
+                            array('property' => "groups.name", 'expression' => '=', 'value' => $propertyGroup->getName()),
                         );
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
-                        /** @var \Shopware\Models\Property\Relation $relation  */
+                        /** @var \Shopware\Models\Property\Relation $relation */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation) {
                             $option = new \Shopware\Models\Property\Option();
@@ -1561,6 +1340,7 @@ class Article extends Resource
             unset($data['images']);
             return $data;
         }
+
         $position = 1;
         $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
 
@@ -1604,7 +1384,7 @@ class Article extends Resource
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
             } else if (!empty($imageData['mediaId'])) {
-                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int) $imageData['mediaId']);
+                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int)$imageData['mediaId']);
                 if (!($media instanceof Media)) {
                     throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
                 }
@@ -1652,7 +1432,6 @@ class Article extends Resource
         return $data;
     }
 
-
     /**
      * @param integer $articleId
      * @param array $translations
@@ -1690,26 +1469,25 @@ class Article extends Resource
         $metaData = $this->getManager()->getClassMetadata('\Shopware\Models\Attribute\Article');
         $properties = array();
 
-        foreach($metaData->getReflectionProperties() as $property) {
+        foreach ($metaData->getReflectionProperties() as $property) {
             if ($metaData->hasAssociation($property->getName())) {
                 continue;
             }
             $properties[$property->getName()] = $property->getName();
         }
 
-        foreach($metaData->getAssociationMappings() as $property => $mapping) {
+        foreach ($metaData->getAssociationMappings() as $property => $mapping) {
             $name = $metaData->getSingleAssociationJoinColumnName($property);
             $field = $metaData->getFieldForColumn($name);
             unset($properties[$field]);
         }
 
-        foreach($metaData->getIdentifierFieldNames() as $property) {
+        foreach ($metaData->getIdentifierFieldNames() as $property) {
             unset($properties[$property]);
         }
 
         return array_values($properties);
     }
-
 
     /**
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
@@ -1738,29 +1516,11 @@ class Article extends Resource
         }
 
         if (strpos($url, 'data:image') !== false) {
-            if (!$get_handle = fopen($url, "r")) {
-                throw new \Exception("Could not open $url for reading");
-            }
-
-            $meta = stream_get_meta_data($get_handle);
-            if (!strpos($meta['mediatype'], 'image/') === false) {
-                throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
-            }
-
-            $extension = str_replace('image/', '', $meta['mediatype']);
-            $filename = $this->getUniqueFileName($destPath, $baseFilename);
-            $filename .= '.' . $extension;
-
-            if (!$put_handle = fopen("$destPath/$filename", "w+")) {
-                throw new \Exception("Could not open $destPath/$filename for writing");
-            }
-            while (!feof($get_handle)) {
-                fwrite($put_handle, fgets($get_handle, 4096));
-            }
-            fclose($get_handle);
-            fclose($put_handle);
-
-            return "$destPath/$filename";
+            return $this->uploadBase64File(
+                $url,
+                $destPath,
+                $baseFilename
+            );
         }
 
         $urlArray = parse_url($url);
@@ -1792,6 +1552,52 @@ class Article extends Resource
         );
     }
 
+    /**
+     * Helper function which downloads the passed image url
+     * and save the image with a unique file name in the destination path.
+     * If the passed baseFilename already exists in the destination path,
+     * the function creates a unique file name.
+     *
+     * @param $url
+     * @param $destinationPath
+     * @param $baseFilename
+     * @return string
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Exception
+     */
+    protected function uploadBase64File($url, $destinationPath, $baseFilename)
+    {
+        if (!$get_handle = fopen($url, "r")) {
+            throw new \Exception("Could not open $url for reading");
+        }
+
+        $meta = stream_get_meta_data($get_handle);
+        if (!strpos($meta['mediatype'], 'image/') === false) {
+            throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
+        }
+
+        $extension = str_replace('image/', '', $meta['mediatype']);
+        $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
+        $filename .= '.' . $extension;
+
+        if (!$put_handle = fopen("$destinationPath/$filename", "w+")) {
+            throw new \Exception("Could not open $destinationPath/$filename for writing");
+        }
+        while (!feof($get_handle)) {
+            fwrite($put_handle, fgets($get_handle, 4096));
+        }
+        fclose($get_handle);
+        fclose($put_handle);
+
+        return "$destinationPath/$filename";
+    }
+
+    /**
+     * Helper function to get a unique file name for the passed destination path.
+     * @param $destPath
+     * @param null $baseFileName
+     * @return null|string
+     */
     private function getUniqueFileName($destPath, $baseFileName = null)
     {
         $counter = 1;
@@ -1810,7 +1616,7 @@ class Article extends Resource
             } else {
                 $filename = md5(uniqid(rand(), true));
             }
-            $filename = substr($filename,0, 50);
+            $filename = substr($filename, 0, 50);
         }
 
         return $filename;
