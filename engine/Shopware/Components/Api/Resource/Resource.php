@@ -242,13 +242,21 @@ abstract class Resource
      * @param ArrayCollection $collection
      * @param $data
      * @param $optionName
+     * @param $defaultReplace
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName)
+    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName, $defaultReplace)
     {
         $key = '__options_' . $optionName;
-        if (isset($data[$key]) && $data[$key]['replace']) {
+        if (isset($data[$key])) {
+            if ($data[$key]['replace']) {
+                $collection->clear();
+            }
+        } else if ($defaultReplace) {
             $collection->clear();
         }
+
+        return $collection;
     }
 
 }
