@@ -1269,4 +1269,76 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         return $images;
     }
+
+    public function testCreateWithDuplicateProperties()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('values', 'option'))
+            ->from('Shopware\Models\Property\Value', 'values')
+            ->innerJoin('values.option', 'option')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+        $databaseValues = $builder->getQuery()->getArrayResult();
+        $properties = array();
+        foreach ($databaseValues as $value) {
+            $valueIds[] = $value['id'];
+            $optionIds[] = $value['option']['id'];
+            $properties[] = array(
+                'value' => $value['value'],
+                'option' => array(
+                    'name' => $value['option']['name']
+                )
+            );
+        }
+        $data = $this->getSimpleTestData();
+        $data['propertyValues'] = $properties;
+        $data['filterGroupId'] = 1;
+        $article = $this->resource->create($data);
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($article->getId());
+        foreach ($article['propertyValues'] as $value) {
+            $this->assertTrue(in_array($value['id'], $valueIds));
+            $this->assertTrue(in_array($value['optionId'], $optionIds));
+        }
+    }
+
+    public function testUpdateWithDuplicateProperties()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('values', 'option'))
+            ->from('Shopware\Models\Property\Value', 'values')
+            ->innerJoin('values.option', 'option')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+        $databaseValues = $builder->getQuery()->getArrayResult();
+        $properties = array();
+        foreach ($databaseValues as $value) {
+            $valueIds[] = $value['id'];
+            $optionIds[] = $value['option']['id'];
+            $properties[] = array(
+                'value' => $value['value'],
+                'option' => array(
+                    'name' => $value['option']['name']
+                )
+            );
+        }
+        $update = array(
+            'propertyValues' => $properties,
+            'filterGroupId' => 1
+        );
+        $data = $this->getSimpleTestData();
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT
+        );
+        $article = $this->resource->create($data);
+        /**@var $article Shopware\Models\Article\Article */
+        $article = $this->resource->update($article->getId(), $update);
+        /**@var $value \Shopware\Models\Property\Value*/
+        foreach ($article->getPropertyValues() as $value) {
+            $this->assertTrue(in_array($value->getId(), $valueIds));
+            $this->assertTrue(in_array($value->getOption()->getId(), $optionIds));
+        }
+    }
 }
