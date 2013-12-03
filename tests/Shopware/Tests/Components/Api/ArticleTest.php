@@ -1224,35 +1224,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     }
 
 
-    public function testPriceReplacement()
-    {
-        $data = $this->getSimpleTestData();
-        $article = $this->resource->create($data);
 
-        $update = array(
-            'mainDetail' => array(
-                'number' => $article->getMainDetail()->getNumber(),
-                '__options_prices' => array('replace' => false),
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'H',
-                        'from' => 1,
-                        'to' => '10',
-                        'price' => 200,
-                    ),
-                    array(
-                        'customerGroupKey' => 'H',
-                        'from' => 11,
-                        'to' => '-',
-                        'price' => 100,
-                    )
-                )
-            )
-        );
-
-        $article = $this->resource->update($article->getId(), $update);
-        $this->assertCount(3, $article->getMainDetail()->getPrices());
-    }
 
 
     public function testCategoryReplacement()
@@ -1494,29 +1466,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'taxId' => 1,
             'supplierId' => 2
         );
-    }
-
-    private function getImagesForNewArticle($offset = 10, $limit = 5)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array(
-            'media.id as mediaId',
-            '2 as main'
-        ))
-            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
-            ->addOrderBy('media.id', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        /**
-         * Get random images.
-         * Only want to check if the main flag will be used.
-         */
-        $images = $builder->getQuery()->getArrayResult();
-        $keys = array_keys($images);
-        $images[$keys[0]]['main'] = 1;
-
-        return $images;
     }
 
     private function getEntityOffset($entity, $onlyId = true, $offset = 0, $limit = 10)
