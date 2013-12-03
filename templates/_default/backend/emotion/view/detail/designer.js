@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                             { tag: 'div', cls: 'x-emotion-banner-preview-inner' }
                         ] },
                         { tag: 'div', cls: 'x-emotion-element-handle' },
-                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
+                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('fieldLabel') },
                         { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
                         { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
                     ];
@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                     return (rowHeight < 2) ? me.getDefaultMarkup(element, component) : [
                         { tag: 'div', cls: 'x-emotion-element-handle' },
-                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
+                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('fieldLabel') },
                         { tag: 'div', cls: 'x-emotion-element-info', html: snippet },
                         { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
                         { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
@@ -332,7 +332,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                 getDefaultMarkup: function(element, component) {
                     return [
                         { tag: 'div', cls: 'x-emotion-element-handle' },
-                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('name') },
+                        { tag: 'div', cls: 'x-emotion-element-inner', html: component.get('fieldLabel') },
                         { tag: 'div', cls: 'x-emotion-element-pencil', 'data-emotionid': element.internalId },
                         { tag: 'div', cls: 'x-emotion-element-delete', 'data-emotionid': element.internalId }
                     ];
@@ -592,6 +592,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         id: '',
                         data: {},
                         name: record.get('name'),
+                        fieldLabel: record.get('fieldLabel'),
                         startRow: startRow,
                         endRow: elEndRow,
                         startCol: startCol,
