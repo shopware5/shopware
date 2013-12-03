@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Manager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
@@ -258,7 +259,6 @@ class Article extends Resource
         return $this->getFullResult($builder);
     }
 
-
     /**
      * Helper function which selects all categories of the passed
      * article id.
@@ -280,7 +280,6 @@ class Article extends Resource
         return $this->getFullResult($builder);
     }
 
-
     /**
      * Helper function which selects all similar articles
      * of the passed article id.
@@ -300,7 +299,6 @@ class Article extends Resource
         $article = $this->getSingleResult($builder);
         return $article['similar'];
     }
-
 
     /**
      * Helper function which selects all accessory articles
@@ -345,7 +343,6 @@ class Article extends Resource
 
         return $this->getFullResult($builder);
     }
-
 
     /**
      * Helper function to prevent duplicate source code
@@ -658,7 +655,6 @@ class Article extends Resource
         return $data;
     }
 
-
     /**
      * @param array $data
      * @param \Shopware\Models\Article\Article $article
@@ -677,6 +673,12 @@ class Article extends Resource
         // delete old main, if it has no configurator options
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
+
+        if (isset($data['__options_variants']) && $data['__options_variants']['replace']) {
+            $this->removeArticleDetails($article);
+        }
+
+
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
@@ -955,6 +957,152 @@ class Article extends Resource
 
     /**
      * @param array $data
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function prepareMainDetailAssociatedData($data)
+    {
+        if (!empty($data['mainDetail']['unitId'])) {
+            $data['mainDetail']['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['mainDetail']['unitId']);
+            if (empty($data['mainDetail']['unit'])) {
+                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['mainDetail']['unitId']));
+            }
+        } elseif (!empty($data['mainDetail']['unit'])) {
+            $data['mainDetail']['unit'] = $this->prepareUnitAssociatedData($data['mainDetail']['unit']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Find a unit by a given ID. If no ID is passed, find it by name or description
+     * @param $unitData
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return \Shopware\Models\Article\Unit|null
+     */
+    protected function prepareUnitAssociatedData($unitData)
+    {
+        if (empty($unitData)) {
+            return null;
+        }
+
+        /** @var $unit \Shopware\Models\Article\Unit */
+        $unit = null;
+        $unitRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Unit');
+
+        if (isset($unitData['id'])) {
+            $unit = $this->getManager()->find('Shopware\Models\Article\Unit', $unitData['id']);
+            if (!$unit) {
+                throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
+            }
+        } elseif (isset($unitData['unit'])) {
+            $findBy= array('unit' => $unitData['unit']);
+            $unit = $unitRepository->findOneBy($findBy);
+        } elseif (isset($unitData['name'])) {
+            $findBy= array('name' => $unitData['name']);
+            $unit = $unitRepository->findOneBy($findBy);
+        }
+
+        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
+            $unit = new \Shopware\Models\Article\Unit();
+        } elseif (!$unit && (!isset($unitData['name']) || !isset($unitData['unit']))) {
+            throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+        }
+        $unit->fromArray($unitData);
+
+        Shopware()->Models()->persist($unit);
+        Shopware()->Models()->flush($unit);
+
+        return $unit;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Article\Article $article
+     * @return array
+     */
+    protected function prepareMainPricesAssociatedData($data, ArticleModel $article)
+    {
+        if (empty($data['mainDetail']['prices'])) {
+            return $data;
+        }
+
+        if (isset($data['tax'])) {
+            $tax = $data['tax'];
+        } else {
+            $tax = $article->getTax();
+        }
+
+        if ($article->getMainDetail()) {
+            $this->checkDataReplacement($article->getMainDetail()->getPrices(), $data['mainDetail'], 'prices');
+        }
+
+        $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainDetail']['prices'], $article, $article->getMainDetail(), $tax);
+        return $data;
+    }
+
+    /**
+     * @param array $prices
+     * @param \Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function preparePricesAssociatedData($prices, ArticleModel $article, $articleDetail, \Shopware\Models\Tax\Tax $tax)
+    {
+        foreach ($prices as &$priceData) {
+
+            if (empty($priceData['customerGroupKey'])) {
+                $priceData['customerGroupKey'] = 'EK';
+            }
+
+            // load the customer group of the price definition
+            $customerGroup = $this->getManager()
+                                  ->getRepository('Shopware\Models\Customer\Group')
+                                  ->findOneBy(array('key' => $priceData['customerGroupKey']));
+
+            /** @var \Shopware\Models\Customer\Group $customerGroup */
+            if (!$customerGroup instanceof \Shopware\Models\Customer\Group) {
+                throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
+            }
+
+            if (!isset($priceData['from'])) {
+                $priceData['from'] = 1;
+            }
+
+            $priceData['from'] = intval($priceData['from']);
+            $priceData['to']   = intval($priceData['to']);
+
+            if ($priceData['from'] <= 0) {
+                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
+            }
+
+            // if the "to" value isn't numeric, set the place holder "beliebig"
+            if ($priceData['to'] <= 0) {
+                $priceData['to'] = 'beliebig';
+            }
+
+            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
+            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
+            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
+            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
+
+            if ($customerGroup->getTaxInput()) {
+                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+
+            $priceData['customerGroup'] = $customerGroup;
+            $priceData['article']       = $article;
+            $priceData['articleDetail'] = $articleDetail;
+        }
+
+        return $prices;
+    }
+
+    /**
+     * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @return array
@@ -985,22 +1133,99 @@ class Article extends Resource
             return $data;
         }
 
-        $categories = array();
-        $this->checkDataReplacement($article->getCategories(), $data, 'categories');
+        $categories = $this->checkDataReplacement(
+            $article->getCategories(),
+            $data,
+            'categories',
+            true
+        );
 
         foreach ($data['categories'] as $categoryData) {
-            if (!empty($categoryData['id'])) {
-                $model = $this->getManager()->find('Shopware\Models\Category\Category', $categoryData['id']);
-                if (!$model) {
-                    throw new ApiException\CustomValidationException(sprintf("Category by id %s not found", $categoryData['id']));
-                }
-                $categories[] = $model;
-            }
+
+            $this->getManyToManySubElement(
+                $categories,
+                $categoryData,
+                '\Shopware\Models\Category\Category'
+            );
         }
 
         $data['categories'] = $categories;
 
         return $data;
+    }
+
+    /**
+     * @param ArrayCollection $collection
+     * @param $property
+     * @param $value
+     * @return null
+     */
+    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
+    {
+        foreach($collection->getIterator() as $entity) {
+            $method = 'get' . ucfirst($property);
+
+            if (!$entity && !method_exists($entity, $method)) {
+                continue;
+            }
+            if ($entity->$method() == $value) {
+                return $entity;
+            }
+        }
+        return null;
+    }
+
+
+    protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        foreach($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+            return $item;
+        }
+
+        $item = new $entityType();
+        $this->getManager()->persist($item);
+        $collection->add($item);
+
+        return $item;
+    }
+
+
+    protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        $repo = $this->getManager()->getRepository($entityType);
+        foreach($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+            if ($item) {
+                return $item;
+            }
+
+            $item = $repo->findOneBy(array($property => $data[$property]));
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+
+            $collection->add($item);
+            return $item;
+        }
+
+        return null;
     }
 
     /**
@@ -1015,19 +1240,16 @@ class Article extends Resource
             return $data;
         }
 
-        $customerGroups = array();
-        $this->checkDataReplacement($article->getCustomerGroups(), $data, 'customerGroups');
+        $customerGroups = $this->checkDataReplacement($article->getCustomerGroups(), $data, 'customerGroups', true);
 
-        foreach ($data['customerGroups'] as $customerGroup) {
-            if (!empty($customerGroup['id'])) {
-                $customerGroup = $this->getManager()->find('Shopware\Models\Customer\Group', $customerGroup['id']);
-                if (!$customerGroup) {
-                    throw new ApiException\CustomValidationException(sprintf("CustomerGroup by id %s not found", $customerGroup['id']));
-                }
-
-                $customerGroups[] = $customerGroup;
-            }
+        foreach ($data['customerGroups'] as $customerGroupData) {
+            $this->getManyToManySubElement(
+                $customerGroups,
+                $customerGroupData,
+                '\Shopware\Models\Customer\Group'
+            );
         }
+
         $data['customerGroups'] = $customerGroups;
 
         return $data;
@@ -1047,35 +1269,42 @@ class Article extends Resource
 
         $related = array();
         $this->checkDataReplacement($article->getRelated(), $data, 'related');
-        foreach ($data['related'] as $relatedData) {
 
+        foreach ($data['related'] as $relatedData) {
             if (empty($relatedData['number']) && empty($relatedData['id'])) {
                 continue;
             }
 
-            if (!empty($relatedData['number'])) {
-                /** @var $relatedArticle \Shopware\Models\Article\Detail */
-                $relatedArticle = $this->getDetailRepository()->findOneBy(array('number' => $relatedData['number']));
-                if (!$relatedArticle) {
-                    throw new ApiException\CustomValidationException(sprintf("Related Article by number %s not found", $relatedData['number']));
-                }
+            /**@var $relatedArticle Detail*/
+            $relatedArticle = $this->getManyToManySubElement(
+                $related,
+                $relatedData,
+                '\Shopware\Models\Article\Detail',
+                array('number')
+            );
 
-                /** @var $relatedArticle \Shopware\Models\Article\Article */
+            if ($relatedArticle) {
                 $relatedArticle = $relatedArticle->getArticle();
-
-            } elseif (!empty($relatedData['id'])) {
-                /** @var $relatedArticle \Shopware\Models\Article\Article*/
-                $relatedArticle = $this->getRepository()->find($relatedData['id']);
-                if (!$relatedArticle) {
-                    throw new ApiException\CustomValidationException(sprintf("Related Article by id %s not found", $relatedData['id']));
-                }
+            } else {
+                $relatedArticle = $this->getManyToManySubElement(
+                    $related,
+                    $relatedData,
+                    '\Shopware\Models\Article\Article'
+                );
             }
 
-            // if the user select the cross
+            //no valid entity found, throw exception!
+            if (!$relatedArticle) {
+                $property = $relatedData['number'] ? $relatedData['number'] : $relatedData['id'];
+                throw new ApiException\CustomValidationException(
+                    sprintf("Related Article by number/id %s not found", $property)
+                );
+            }
+
+            /**@var $relatedArticle ArticleModel */
             if ($relatedData['cross']) {
                 $relatedArticle->getRelated()->add($article);
             }
-            $related[] = $relatedArticle;
         }
 
         $data['related'] = $related;
@@ -1095,35 +1324,43 @@ class Article extends Resource
             return $data;
         }
 
-        $similar = array();
-        $this->checkDataReplacement($article->getSimilar(), $data, 'similar');
+        $similar = $this->checkDataReplacement($article->getSimilar(), $data, 'similar', true);
+
         foreach ($data['similar'] as $similarData) {
             if (empty($similarData['number']) && empty($similarData['id'])) {
                 continue;
             }
 
-            if (!empty($similarData['number'])) {
-                /** @var $relatedArticle \Shopware\Models\Article\Detail */
-                $similarArticle = $this->getDetailRepository()->findOneBy(array('number' => $similarData['number']));
-                if (!$similarArticle) {
-                    throw new ApiException\CustomValidationException(sprintf("Similar Article by number %s not found", $similarData['number']));
-                }
+            $similarArticle = $this->getManyToManySubElement(
+                $similar,
+                $similarData,
+                '\Shopware\Models\Article\Detail',
+                array('number')
+            );
 
-                /** @var $similarArticle \Shopware\Models\Article\Article */
+            if ($similarArticle) {
+                /**@var $similarArticle Detail*/
                 $similarArticle = $similarArticle->getArticle();
-            } elseif (!empty($similarData['id'])) {
-                /**@var $similarArticle \Shopware\Models\Article\Article*/
-                $similarArticle = $this->getRepository()->find($similarData['id']);
-                if (!$similarArticle) {
-                    throw new ApiException\CustomValidationException(sprintf("Similar Article by id %s not found", $similarData['id']));
-                }
+            } else {
+                $similarArticle = $this->getManyToManySubElement(
+                    $similar,
+                    $similarData,
+                    '\Shopware\Models\Article\Article'
+                );
             }
 
-            //if the user select the cross
+            //no valid entity found, throw exception!
+            if (!$similarArticle) {
+                $property = $similarData['number'] ? $similarData['number'] : $similarData['id'];
+                throw new ApiException\CustomValidationException(
+                    sprintf("Similar Article by number/id %s not found", $property)
+                );
+            }
+
+            /**@var $similarArticle ArticleModel */
             if ($similarData['cross']) {
                 $similarArticle->getSimilar()->add($article);
             }
-            $similar[] = $similarArticle;
         }
 
         $data['similar'] = $similar;
@@ -1164,7 +1401,6 @@ class Article extends Resource
         }
 
         $models = array();
-        $this->checkDataReplacement($article->getPropertyValues(), $data, 'propertyValues');
 
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
@@ -1259,20 +1495,16 @@ class Article extends Resource
             return $data;
         }
 
-        $downloads = array();
-        $this->checkDataReplacement($article->getDownloads(), $data, 'downloads');
-        foreach ($data['downloads'] as &$downloadData) {
-            if (isset($downloadData['id'])) {
-                $download = $this->getManager()
-                                 ->getRepository('Shopware\Models\Article\Download')
-                                 ->find($downloadData['id']);
+        $downloads = $this->checkDataReplacement($article->getDownloads(), $data, 'downloads', true);
 
-                if (!$download instanceof Download) {
-                    throw new ApiException\CustomValidationException(sprintf("Download by id %s not found", $downloadData['id']));
-                }
-            } else {
-                $download = new Download();
-            }
+        foreach ($data['downloads'] as &$downloadData) {
+
+            $download = $this->getOneToManySubElement(
+                $downloads,
+                $downloadData,
+                '\Shopware\Models\Article\Download'
+            );
+
 
             if (isset($downloadData['link'])) {
                 $path = $this->load($downloadData['link']);
@@ -1293,7 +1525,7 @@ class Article extends Resource
 
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
-                    $this->getManager()->flush();
+                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occured while loading your image"));
                 }
@@ -1304,7 +1536,6 @@ class Article extends Resource
             }
 
             $download->fromArray($downloadData);
-            $downloads[] = $download;
         }
         $data['downloads'] = $downloads;
 
@@ -1330,23 +1561,15 @@ class Article extends Resource
             unset($data['images']);
             return $data;
         }
-
-        $this->checkDataReplacement($article->getImages(), $data, 'images');
-        $images = $article->getImages();
         $position = 1;
+        $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
 
         foreach ($data['images'] as &$imageData) {
-            if (isset($imageData['id'])) {
-                $image = $this->getManager()
-                        ->getRepository('Shopware\Models\Article\Image')
-                        ->find($imageData['id']);
-
-                if (!$image instanceof Image) {
-                    throw new ApiException\CustomValidationException(sprintf("Image by id %s not found", $imageData['id']));
-                }
-            } else {
-                $image = new Image();
-            }
+            $image = $this->getOneToManySubElement(
+                $images,
+                $imageData,
+                '\Shopware\Models\Article\Image'
+            );
 
             if (isset($imageData['link'])) {
                 $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
