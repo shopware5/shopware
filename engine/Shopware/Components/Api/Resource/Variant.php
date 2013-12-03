@@ -331,7 +331,7 @@ class Variant extends Resource
         $data = $this->prepareUnitAssociation($data);
 
         if (!empty($data['prices'])) {
-            $this->checkDataReplacement($variant->getPrices(), $data, 'prices');
+//            $this->checkDataReplacement($variant->getPrices(), $data, 'prices');
 
             $data['prices'] = $this->preparePriceAssociation(
                 $data['prices'],
@@ -404,8 +404,8 @@ class Variant extends Resource
             }
 
             $priceData['customerGroup'] = $customerGroup;
-            $priceData['article']       = $article;
-            $priceData['articleDetail'] = $articleDetail;
+            $priceData['article'] = $article;
+            $priceData['detail'] = $articleDetail;
         }
 
         return $prices;

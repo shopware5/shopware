@@ -259,4 +259,77 @@ abstract class Resource
         return $collection;
     }
 
+    /**
+     * @param ArrayCollection $collection
+     * @param $property
+     * @param $value
+     * @return null
+     */
+    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
+    {
+        foreach ($collection->getIterator() as $entity) {
+            $method = 'get' . ucfirst($property);
+
+            if (!$entity && !method_exists($entity, $method)) {
+                continue;
+            }
+            if ($entity->$method() == $value) {
+                return $entity;
+            }
+        }
+        return null;
+    }
+
+    protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        foreach ($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+            return $item;
+        }
+
+        $item = new $entityType();
+        $this->getManager()->persist($item);
+        $collection->add($item);
+
+        return $item;
+    }
+
+    protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        $repo = $this->getManager()->getRepository($entityType);
+        foreach ($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+            if ($item) {
+                return $item;
+            }
+
+            $item = $repo->findOneBy(array($property => $data[$property]));
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+
+            $collection->add($item);
+            return $item;
+        }
+
+        return null;
+    }
+
+
 }
