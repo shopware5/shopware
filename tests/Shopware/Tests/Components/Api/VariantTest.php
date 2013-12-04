@@ -30,6 +30,11 @@
 class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
+     * @var \Shopware\Components\Api\Resource\Variant
+     */
+    protected $resource;
+
+    /**
      * @var \Shopware\Components\Api\Resource\Article
      */
     private $resourceArticle;
@@ -305,20 +310,22 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     {
         $data = $this->getSimpleArticleData();
         $data['mainDetail'] = $this->getSimpleVariantData();
-        $data['configuratorSet'] = $this->getSimpleConfiguratorSet();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
 
         $article = $this->resourceArticle->create($data);
         $this->assertCount(0, $article->getDetails());
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
-        $create['configuratorOptions'] = $this->getSimpleVariantOptions();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
         $variant = $this->resource->create($create);
         $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
-        $create['configuratorOptions'] = $this->getSimpleVariantOptions();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $variant = $this->resource->create($create);
         $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
@@ -328,6 +335,20 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $this->assertCount(2, $article['details']);
 
         return $id;
+    }
+
+    private function getVariantOptionsOfSet($configuratorSet)
+    {
+        $options = array();
+        foreach($configuratorSet['groups'] as $group) {
+            $id = rand(0, count($group['options']) - 1);
+            $option = $group['options'][$id];
+            $options[] = array(
+                'optionId' => $option['id'],
+                'groupId'  => $group['id']
+            );
+        }
+        return $options;
     }
 
     /**
@@ -354,6 +375,65 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         }
     }
 
+    public function testVariantImageAssignByMediaId()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+        $data['images'] = $this->getSimpleMedia(2);
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+        $create['images'] = $this->getSimpleMedia(1);
+
+        /**@var $variant \Shopware\Models\Article\Detail */
+        $variant = $this->resource->create($create);
+
+        $this->assertCount(1, $variant->getImages());
+        return $variant->getId();
+
+    }
+
+    /**
+     * @depends testVariantImageAssignByMediaId
+     * @param $variantId
+     * @internal param $articleId
+     */
+    public function testVariantImageReset($variantId)
+    {
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $variant = $this->resource->getOne($variantId);
+        $this->assertTrue($variant->getImages()->count() > 0);
+
+        $update = array(
+            'articleId' => $variant->getArticle()->getId(),
+            'images' => array()
+        );
+
+        $variant = $this->resource->update($variantId, $update);
+
+        $this->assertCount(0, $variant->getImages());
+    }
+
+
+
+    private function getSimpleMedia($limit = 5)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select('media.id  as mediaId')
+            ->from('Shopware\Models\Media\Media', 'media')
+            ->where('media.albumId = -1')
+            ->setFirstResult(0)
+            ->setMaxResults($limit);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+
     private function getRandomId($table) {
         return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " ORDER BY RAND() LIMIT 1");
     }
@@ -378,7 +458,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     private function getSimpleArticleData()
     {
         return array(
-            'name' => 'Testartikel',
+            'name' => 'Images - Test Artikel',
             'description' => 'Test description',
             'active' => true,
             'taxId' => 1,
@@ -386,45 +466,34 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         );
     }
 
-    private function getSimpleConfiguratorSet()
+    private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
+
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('PARTIAL groups.{id}', 'PARTIAL options.{id}'))
+        $builder->select(array('groups.id'))
             ->from('Shopware\Models\Article\Configurator\Group', 'groups')
-            ->innerJoin('groups.options', 'options')
-            ->orderBy('groups.position', 'ASC')
-            ->addOrderBy('options.position', 'ASC')
-            ->where('groups.id = 5')
             ->setFirstResult(0)
-            ->setMaxResults(3);
+            ->setMaxResults($groupLimit)
+            ->orderBy('groups.position', 'ASC');
 
-        $query = $builder->getQuery();
-        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
-        $paginator = Shopware()->Models()->createPaginator($query);
+        $groups = $builder->getQuery()->getArrayResult();
 
-        $configurator = $paginator->getIterator()->getArrayCopy();
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->where('options.groupId = :groupId')
+            ->setFirstResult(0)
+            ->setMaxResults($optionLimit)
+            ->orderBy('options.position', 'ASC');
+
+        foreach($groups as &$group) {
+            $builder->setParameter('groupId', $group['id']);
+            $group['options'] = $builder->getQuery()->getArrayResult();
+        }
 
         return array(
             'name' => 'Test-Set',
-            'groups' => $configurator
+            'groups' => $groups
         );
     }
-
-    private function getSimpleVariantOptions()
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
-            ->from('Shopware\Models\Article\Configurator\Option', 'options')
-            ->addOrderBy('options.position', 'ASC')
-            ->where('options.groupId = 5')
-            ->setFirstResult(0)
-            ->setMaxResults(20);
-
-        $query = $builder->getQuery();
-        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
-        $paginator = Shopware()->Models()->createPaginator($query);
-
-        return $paginator->getIterator()->getArrayCopy();
-    }
-
 }
