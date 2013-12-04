@@ -420,6 +420,48 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     }
 
 
+    public function testVariantImageCreateByLink()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+        $create['images'] = array(
+            array('link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php')),
+            array('link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'),
+        );
+
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+
+        /**@var $variant \Shopware\Models\Article\Detail*/
+        $variant = $this->resource->create($create);
+        $article = $this->resourceArticle->getOne($article->getId());
+
+        $this->assertCount(2, $article->getImages());
+        $this->assertCount(2, $variant->getImages());
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertCount(1, $image->getMappings(), "No image mapping created!");
+
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
+            $mapping = $image->getMappings()->current();
+            $this->assertCount(
+                $variant->getConfiguratorOptions()->count(),
+                $mapping->getRules(),
+                "Image mapping contains not enough rules. "
+            );
+        }
+        return $variant->getId();
+    }
+
+
 
     private function getSimpleMedia($limit = 5)
     {
