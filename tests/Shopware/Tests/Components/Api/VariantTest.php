@@ -401,6 +401,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     /**
      * @depends testVariantImageAssignByMediaId
      * @param $variantId
+     * @return int
      * @internal param $articleId
      */
     public function testVariantImageReset($variantId)
@@ -417,9 +418,59 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $variant = $this->resource->update($variantId, $update);
 
         $this->assertCount(0, $variant->getImages());
+        
+        $article = $variant->getArticle();
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertCount(0, $image->getMappings());
+        }
+
+        return $variant->getId();
     }
 
+    /**
+     * @depends testVariantImageReset
+     * @param $variantId
+     */
+    public function testVariantAddImage($variantId)
+    {
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $variant = $this->resource->getOne($variantId);
+        $this->assertTrue($variant->getImages()->count() === 0);
 
+        $update = array(
+            'articleId' => $variant->getArticle()->getId(),
+            'images' => $this->getSimpleMedia(3)
+        );
+        $variant = $this->resource->update($variantId, $update);
+        $this->assertCount(3, $variant->getImages());
+
+
+        $add = array(
+            'articleId' => $variant->getArticle()->getId(),
+            '__options_images' => array('replace' => false),
+            'images' => $this->getSimpleMedia(5, 20)
+        );
+        $variant = $this->resource->update($variantId, $add);
+        $this->assertCount(8, $variant->getImages());
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($variant->getArticle()->getImages() as $image) {
+            $this->assertCount(1, $image->getMappings(), "No image mapping created!");
+
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
+            $mapping = $image->getMappings()->current();
+            $this->assertCount(
+                $variant->getConfiguratorOptions()->count(),
+                $mapping->getRules(),
+                "Image mapping contains not enough rules. "
+            );
+        }
+    }
+
+    /**
+     * @return int
+     */
     public function testVariantImageCreateByLink()
     {
         $data = $this->getSimpleArticleData();
@@ -463,13 +514,13 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
 
 
-    private function getSimpleMedia($limit = 5)
+    private function getSimpleMedia($limit = 5, $offset = 0)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select('media.id  as mediaId')
             ->from('Shopware\Models\Media\Media', 'media')
             ->where('media.albumId = -1')
-            ->setFirstResult(0)
+            ->setFirstResult($offset)
             ->setMaxResults($limit);
 
         return $builder->getQuery()->getArrayResult();
