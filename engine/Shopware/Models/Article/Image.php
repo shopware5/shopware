@@ -34,6 +34,8 @@ use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM,
     Symfony\Component\Validator\Constraints as Assert,
     Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Models\Media\Media;
+
 /**
  * todo@all: Documentation
  *
@@ -392,7 +394,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Category
+     * @return Image
      */
     public function getParent()
     {
@@ -400,7 +402,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Category $parent
+     * @param Image $parent
      */
     public function setParent($parent)
     {
@@ -424,7 +426,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return
+     * @return Media
      */
     public function getMedia()
     {
@@ -432,7 +434,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param  $media
+     * @param Media $media
      */
     public function setMedia($media)
     {
