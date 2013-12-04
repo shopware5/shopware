@@ -242,13 +242,133 @@ abstract class Resource
      * @param ArrayCollection $collection
      * @param $data
      * @param $optionName
+     * @param $defaultReplace
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName)
+    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName, $defaultReplace)
     {
         $key = '__options_' . $optionName;
-        if (isset($data[$key]) && $data[$key]['replace']) {
+        if (isset($data[$key])) {
+            if ($data[$key]['replace']) {
+                $collection->clear();
+            }
+        } else if ($defaultReplace) {
             $collection->clear();
         }
+
+        return $collection;
     }
+
+    /**
+     * @param ArrayCollection $collection
+     * @param $property
+     * @param $value
+     * @return null
+     */
+    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
+    {
+        foreach ($collection->getIterator() as $entity) {
+            $method = 'get' . ucfirst($property);
+
+            if (!$entity && !method_exists($entity, $method)) {
+                continue;
+            }
+            if ($entity->$method() == $value) {
+                return $entity;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Helper function to resolve one to many associations for an entity.
+     * The function do the following thinks:
+     * It iterates all conditions which passed. The conditions contains the property names
+     * which can be used as identifier like array("id", "name", "number", ...).
+     * If the property isn't set in the passed data array the function continue with the next condition.
+     * If the property is set, the function looks into the passed collection element if
+     * the item is already exist in the entity collection.
+     * In case that the collection don't contains the entity, the function throws an exception.
+     * If no property is set, the function creates a new entity and adds the instance into the
+     * passed collection and persist the entity.
+     *
+     * @param ArrayCollection $collection
+     * @param $data
+     * @param $entityType
+     * @param array $conditions
+     * @return null|object
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        foreach ($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+            return $item;
+        }
+
+        $item = new $entityType();
+        $this->getManager()->persist($item);
+        $collection->add($item);
+
+        return $item;
+    }
+
+    /**
+     * Helper function to resolve many to many associations for an entity.
+     * The function do the following thinks:
+     * It iterates all conditions which passed. The conditions contains the property names
+     * which can be used as identifier like array("id", "name", "number", ...).
+     * If the property isn't set in the passed data array the function continue with the next condition.
+     * If the property is set, the function looks into the passed collection element if
+     * the item is already exist in the entity collection.
+     * In case that the collection don't contains the entity, the function creates a findOneBy
+     * statement for the passed entity type.
+     * In case that the findOneBy statement finds no entity, the function throws an exception.
+     * Otherwise the item will be
+     *
+     * @param ArrayCollection $collection
+     * @param $data
+     * @param $entityType
+     * @param array $conditions
+     * @return null|object
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    {
+        $repo = $this->getManager()->getRepository($entityType);
+        foreach ($conditions as $property) {
+            if (!isset($data[$property])) {
+                continue;
+            }
+
+            $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
+            if ($item) {
+                return $item;
+            }
+
+            $item = $repo->findOneBy(array($property => $data[$property]));
+
+            if (!$item) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("%s by %s %s not found", $entityType, $property, $data[$property])
+                );
+            }
+
+            $collection->add($item);
+            return $item;
+        }
+
+        return null;
+    }
+
 
 }
