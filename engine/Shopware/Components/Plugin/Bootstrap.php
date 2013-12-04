@@ -918,7 +918,12 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return;
         }
 
-        $directoryIterator = new \DirectoryIterator($this->Path() . '/Views/emotion_components/backend/');
+        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
+        if (!file_exists($backendPath)) {
+            return;
+        }
+
+        $directoryIterator = new \DirectoryIterator($backendPath);
         $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
         foreach($regex as $file) {
             $path = 'backend/' . $file[0];
