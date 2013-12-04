@@ -16,10 +16,7 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 {block name="backend/base/header/javascript" append}
 <script type="text/javascript">
     var userName = '{$user->name}',
-        maxParameterLength = '{$maxParameterLength}',
-        timeField = Ext.create('Ext.form.field.Time'),
-        timeFormat = timeField.format;
-
+        maxParameterLength = '{$maxParameterLength}';
 
     Ext.define('Shopware.app.Application', {
     	extend: 'Ext.app.Application',
@@ -110,5 +107,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 		disableCachingValue: '{time()}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
 	});
     Ext.Loader.setPath('Shopware.apps', '{url module=backend action=index}', '?file=app');
+
+    Ext.onReady(function() {
+        var timeField = Ext.create('Ext.form.field.Time');
+        this.timeFormat = timeField.format;
+    });
 </script>
 {/block}

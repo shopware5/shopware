@@ -162,13 +162,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         /**@var $validFrom \DateTime*/
         if ($validFrom instanceof \DateTime) {
             $emotion['validFrom'] = $validFrom->format('d.m.Y');
-            $emotion['validFromTime'] = $validFrom->format('H:i:s');
+            $emotion['validFromTime'] = $validFrom->format('H:i');
         }
 
         /**@var $validTo \DateTime*/
         if ($validTo instanceof \DateTime) {
             $emotion['validTo'] = $validTo->format('d.m.Y');
-            $emotion['validToTime'] = $validTo->format('H:i:s');
+            $emotion['validToTime'] = $validTo->format('H:i');
         }
 
         foreach($emotion['elements'] as &$element) {
