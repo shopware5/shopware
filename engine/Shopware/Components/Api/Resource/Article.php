@@ -1284,25 +1284,16 @@ class Article extends Resource
 
 
             if (isset($downloadData['link'])) {
-                $path = $this->load($downloadData['link']);
-                $file = new File($path);
-
-                $media = new Media();
-                $media->setAlbumId(-6);
-                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -6));
-
-                $media->setFile($file);
+                $media = $this->internalCreateMediaByFileLink(
+                    $downloadData['link'],
+                    -6
+                );
                 if (isset($downloadData['name']) && !empty($downloadData['name'])) {
                     $media->setDescription($downloadData['name']);
-                } else {
-                    $media->setDescription('');
                 }
-                $media->setCreated(new \DateTime());
-                $media->setUserId(0);
 
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
-//                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occured while loading your image"));
                 }
@@ -1350,29 +1341,9 @@ class Article extends Resource
             );
 
             if (isset($imageData['link'])) {
-                $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
-                $path = $this->load($imageData['link'], $name);
-                $name = pathinfo($path, PATHINFO_FILENAME);
-
-                $file = new File($path);
-
-                $media = new Media();
-                $media->setAlbumId(-1);
-                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
-
-                $media->setFile($file);
-                $media->setName($name);
-                $media->setDescription('');
-                $media->setCreated(new \DateTime());
-                $media->setUserId(0);
-
-                try {
-                    //persist the model into the model manager this uploads and resizes the image
-                    $this->getManager()->persist($media);
-//                    $this->getManager()->flush($media);
-                } catch (\Doctrine\ORM\ORMException $e) {
-                    throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
-                }
+                $media = $this->internalCreateMediaByFileLink(
+                    $imageData['link']
+                );
 
                 $image->setMain(2);
                 $image->setMedia($media);
@@ -1381,8 +1352,13 @@ class Article extends Resource
                 $position++;
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
+
             } else if (!empty($imageData['mediaId'])) {
-                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int)$imageData['mediaId']);
+                $media = $this->getManager()->find(
+                    'Shopware\Models\Media\Media',
+                    (int)$imageData['mediaId']
+                );
+
                 if (!($media instanceof Media)) {
                     throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
                 }
@@ -1429,6 +1405,45 @@ class Article extends Resource
 
         return $data;
     }
+
+
+    /**
+     * Internal helper function which is used to upload the passed image link
+     * to the server and create a media object for the image.
+     *
+     * @param $link
+     * @param $albumId
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return Media
+     */
+    public function internalCreateMediaByFileLink($link, $albumId = -1)
+    {
+        $name = pathinfo($link, PATHINFO_FILENAME);
+        $path = $this->load($link, $name);
+        $name = pathinfo($path, PATHINFO_FILENAME);
+        $file = new File($path);
+
+        $media = new Media();
+
+        $media->setAlbumId($albumId);
+        $media->setAlbum(
+            $this->getManager()->find('Shopware\Models\Media\Album', $albumId)
+        );
+        $media->setFile($file);
+        $media->setName($name);
+        $media->setDescription('');
+        $media->setCreated(new \DateTime());
+        $media->setUserId(0);
+
+        try {
+            //persist the model into the model manager this uploads and resizes the image
+            $this->getManager()->persist($media);
+        } catch (\Doctrine\ORM\ORMException $e) {
+            throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
+        }
+        return $media;
+    }
+
 
     /**
      * @param integer $articleId
