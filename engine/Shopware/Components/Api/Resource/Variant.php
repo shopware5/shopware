@@ -415,6 +415,13 @@ class Variant extends Resource
                     $image = $this->createNewArticleImage($media, $article);
                 }
 
+            } else if (isset($imageData['link'])) {
+
+                //check if an url passed and upload the passed image url and create a new article image.
+                $media = $this->getArticleResource()->internalCreateMediaByFileLink(
+                    $imageData['link']
+                );
+                $image = $this->createNewArticleImage($media, $article);
 
             } else {
                 throw new ApiException\CustomValidationException("One of the passed variant images don't contains a mediaId or link property!");
