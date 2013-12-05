@@ -87,7 +87,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
         if (substr($name, 0, 1) == 's') {
             $name = substr($name, 1);
         }
-        if (!in_array($name, array('RewriteTable', 'TicketSystem'))) {
+        if (!in_array($name, array('RewriteTable'))) {
             $name = "s" . ucfirst(strtolower($name));
         } else {
             $name = "s" . $name;
