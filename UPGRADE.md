@@ -3,6 +3,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 4.2.0
 
+* Deprecated class `sTicketSystem` has been removed.
 * Doctrine has been updated to version 2.4. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
 * Break: `Doctrine\ORM\Query::setParamters()` has changed. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
 * `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
