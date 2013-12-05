@@ -405,6 +405,14 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $query->execute(array($id));
 
             // Remove emotion-components
+            $sql = "DELETE s_emotion_element
+                    FROM s_emotion_element
+                    INNER JOIN s_library_component
+                        ON s_library_component.id = s_emotion_element.componentID
+                        AND s_library_component.pluginID = :pluginId";
+
+            $db->query($sql, array(':pluginId' => $id));
+
             $sql = "DELETE s_library_component_field, s_library_component
                     FROM s_library_component_field
                     INNER JOIN s_library_component
