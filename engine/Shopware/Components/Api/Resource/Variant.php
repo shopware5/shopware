@@ -56,9 +56,17 @@ class Variant extends Resource
     /**
      * @return Article
      */
-    public function getArticleResource()
+    protected function getArticleResource()
     {
         return $this->getResource('Article');
+    }
+
+    /**
+     * @return Media
+     */
+    protected function getMediaResource()
+    {
+        return $this->getResource('Media');
     }
 
     /**
@@ -412,33 +420,36 @@ class Variant extends Resource
                         );
                     }
 
-                    $image = $this->createNewArticleImage($media, $article);
+                    $image = $this->getArticleResource()->createNewArticleImage(
+                        $article, $media
+                    );
                 }
 
             } else if (isset($imageData['link'])) {
 
                 //check if an url passed and upload the passed image url and create a new article image.
-                $media = $this->getArticleResource()->internalCreateMediaByFileLink(
+                $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
-                $image = $this->createNewArticleImage($media, $article);
+                $image = $this->getArticleResource()->createNewArticleImage(
+                    $article, $media
+                );
 
             } else {
                 throw new ApiException\CustomValidationException("One of the passed variant images don't contains a mediaId or link property!");
             }
 
-            $newImage = new Image();
-            $newImage->setParent($image);
-            $newImage->setArticleDetail($variant);
-            $newImage->setPosition($image->getPosition());
-            $newImage->setMain($image->getMain());
+            $variantImage = $this->createVariantImage(
+                $image,
+                $variant
+            );
 
             $this->createImageMappingForOptions(
                 $variant->getConfiguratorOptions(),
                 $image
             );
 
-            $images->add($newImage);
+            $images->add($variantImage);
         }
 
         $data['images'] = $images;
@@ -446,28 +457,22 @@ class Variant extends Resource
         return $data;
     }
 
-
     /**
-     * Helper function to create a new article image by a media object.
-     * @param MediaModel $media
-     * @param ArticleModel $article
+     * Helper function which creates a variant image for the passed article image.
+     * @param Image $articleImage
+     * @param Detail $variant
      * @return Image
      */
-    protected function createNewArticleImage(MediaModel $media, ArticleModel $article)
+    public function createVariantImage(Image $articleImage, Detail $variant)
     {
-        $image = new Image();
-        $image->setMain(2);
-        $image->setMedia($media);
-        $image->setArticle($article);
-        $image->setPath($media->getName());
-        $image->setExtension($media->getExtension());
-        $this->getManager()->persist($image);
+        $variantImage = new Image();
+        $variantImage->setParent($articleImage);
+        $variantImage->setArticleDetail($variant);
+        $variantImage->setPosition($articleImage->getPosition());
+        $variantImage->setMain($articleImage->getMain());
 
-        $article->getImages()->add($image);
-
-        return $image;
+        return $variantImage;
     }
-
 
     /**
      * Helper function which returns a single image mapping
