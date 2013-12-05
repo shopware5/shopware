@@ -3,6 +3,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 4.2.0
 
+* The subquery in `$priceForBasePrice` used in `sArticles::sGetArticlesByCategory` has been removed.
 * A userland implementaion of [`array_column()`](http://php.net/array_column) has been included.
 * Deprecated class `sTicketSystem` has been removed.
 * Doctrine has been updated to version 2.4. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
