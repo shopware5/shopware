@@ -90,23 +90,28 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [];
+        var me = this, items = [], store;
 
         Ext.each(me.getSettings('fields', true), function(item) {
+            store = null;
+            if (item.get('store')) {
+                store = Ext.create(item.get('store'));
+            }
             items.push({
                 xtype: item.get('xType'),
                 helpText: item.get('helpText') || '',
                 fieldLabel: item.get('fieldLabel') || '',
                 fieldId: item.get('id'),
                 valueType: item.get('valueType'),
+                queryMode: 'remote',
                 name: item.get('name') || '',
-                store: item.get('store'),
+                store: store,
                 displayField: item.get('displayField'),
                 valueField: item.get('valueField'),
                 checkedValue: true,
                 uncheckedValue: false,
                 supportText: item.get('supportText') || '',
-                allowBlank: (!item.get('allowBlank') ? true : false),
+                allowBlank: (item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || ''
             });
         });
