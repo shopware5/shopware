@@ -122,6 +122,10 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
                     $this->_identity, array()
                 );
             }
+
+            Enlight_Components_Session::regenerateId();
+            $this->setSessionId(Enlight_Components_Session::getId());
+
             $this->updateExpiry();
             $this->updateSessionId();
 
