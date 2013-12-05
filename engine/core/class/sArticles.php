@@ -1007,16 +1007,6 @@ class sArticles
         $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         $now = Shopware()->Db()->quote(date('Y-m-d'));
 
-        //deprecated the priceForBasePrice is no longer used
-        $priceForBasePrice = "
-        (
-            SELECT price
-            FROM s_articles_prices
-            WHERE articledetailsID = aDetails.id
-            AND pricegroup= IF(p.id IS NULL, 'EK', p.pricegroup)
-            AND `from` = 1 LIMIT 1
-        ) as priceForBasePrice";
-
         $sql = "
             SELECT
                 STRAIGHT_JOIN
@@ -1078,8 +1068,6 @@ class sArticles
                 aAttributes.attr18,
                 aAttributes.attr19,
                 aAttributes.attr20,
-
-                $priceForBasePrice,
 
                 $select_price as price,
 
@@ -1888,7 +1876,7 @@ class sArticles
                 $removeLink = $baseLink . '&sFilterProperties=0';
             }
             $lastOptionId = $property['optionID'];
-            
+
             if (!empty($activeFilters)
                 && in_array($property['valueID'], $activeFilters)
             ) {
