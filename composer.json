@@ -28,6 +28,7 @@
         "symfony/console": "2.4.*",
         "monolog/monolog": "1.6.*",
         "ircmaxell/password-compat": "1.0.3",
+        "rhumsaa/array_column": "~1.1",
         "doctrine/common": "2.4.*",
         "doctrine/dbal": "2.4.1",
         "doctrine/orm": "2.4.1"
