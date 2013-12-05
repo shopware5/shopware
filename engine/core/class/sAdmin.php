@@ -1209,7 +1209,11 @@ class sAdmin
 	        $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
         }
 
+
+
         if ($isValidLogin) {
+            $this->regenerateSessionId();
+
             $this->sSYSTEM->sDB_CONNECTION->Execute(
                 "UPDATE s_user SET lastlogin=NOW(),failedlogins = 0, lockeduntil = NULL, sessionID=? WHERE id=?",
                 array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
@@ -1308,6 +1312,41 @@ class sAdmin
         );
 
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
+    }
+
+    /**
+     * Regenerates session id and updates references in the db
+     */
+    public function regenerateSessionId()
+    {
+        $oldSessionId = session_id();
+        session_regenerate_id(true);
+        $newSessionId = session_id();
+
+        // close and restart session to make sure the db-session handler writes updates.
+        session_write_close();
+        session_start();
+
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_Regenerate_Session_Id',
+            array(
+                'subject' => $this,
+                'oldSessionId' => $oldSessionId,
+                'newSessionId' => $newSessionId,
+            )
+        );
+
+        $sessions = array(
+            's_order_basket'            => 'sessionID',
+            's_user'                    => 'sessionID',
+            's_emarketing_lastarticles' => 'sessionID',
+            's_order_comparisons'       => 'sessionID',
+        );
+
+        $conn = Shopware()->Models()->getConnection();
+        foreach ($sessions as $tablename => $column) {
+            $conn->update($tablename, array($column => $newSessionId), array($column => $oldSessionId));
+        }
     }
 
 
