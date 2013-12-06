@@ -619,7 +619,7 @@ class Article extends Resource
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
-        $data = $this->prepareImageAssociatedData($data, $article);
+
 
         //need to set the tax data directly for following price calculations which use the tax object of the article
         if (isset($data['tax'])) {
@@ -630,10 +630,12 @@ class Article extends Resource
             $article->setConfiguratorSet($data['configuratorSet']);
         }
 
+        $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareAttributeAssociatedData($data, $article);
         $data = $this->prepareMainDetail($data, $article);
         $data = $this->prepareVariants($data, $article);
 
+        unset($data['images']);
         return $data;
     }
 
@@ -1324,6 +1326,9 @@ class Article extends Resource
     }
 
     /**
+     * Resolves the passed images data to valid Shopware\Models\Article\Image
+     * entities.
+     *
      * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -1399,6 +1404,10 @@ class Article extends Resource
                     }
                 }
             }
+
+            if (isset($imageData['options'])) {
+                $this->createImageMappings($image, $article, $imageData['options']);
+            }
         }
 
         $hasMain = $this->getCollectionElementByProperty(
@@ -1411,12 +1420,75 @@ class Article extends Resource
             $image = $images->get(0);
             $image->setMain(1);
         }
-
         unset($data['images']);
 
         return $data;
     }
 
+
+
+    /**
+     * Creates the article image mappings for the passed article and image entity.
+     * The mappings parameter contains a multi dimensional array with configurator options.
+     * The first level of the mappings defines the OR conditions of the image mappings.
+     * The second level of the mappings defines a single rule.
+     * Example:
+     * $mappings = array(
+     *    array(
+     *       array('name' => 'red')
+     *       AND
+     *       array('name' => 'small')
+     *    )
+     *    //OR
+     *    array('name' => 'blue')
+     * )
+     *
+     * @param Image $image
+     * @param ArticleModel $article
+     * @param array $mappings
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function createImageMappings(Image $image, ArticleModel $article, array $mappings)
+    {
+        if (!$article->getConfiguratorSet()) {
+            throw new ApiException\CustomValidationException(
+                "Article is no configurator article. Image mapping can only be created on configurator articles"
+            );
+        }
+        
+        $configuratorOptions = $article->getConfiguratorSet()->getOptions();
+
+        foreach($mappings as $mappingData) {
+
+            $options = new ArrayCollection();
+
+            foreach($mappingData as $option) {
+
+                $available = $this->getCollectionElementByProperties($configuratorOptions, array(
+                    'id'   => $option['id'],
+                    'name' => $option['name'],
+                ));
+
+                if (!$available) {
+                    $property = $option['id'] ? $option['id'] : $option['name'];
+                    throw new ApiException\CustomValidationException(
+                        sprintf("Passed option %s do not exist in the configurator set of the article", $property)
+                    );
+                }
+
+                $options->add($available);
+            }
+
+            if (empty($options)) {
+                throw new ApiException\CustomValidationException("No available option exists");
+            }
+
+            $this->getVariantResource()->createImageMappingForOptions(
+                $options,
+                $image
+            );
+        }
+    }
 
     /**
      * Helper function which creates a new article image with the passed media object.
