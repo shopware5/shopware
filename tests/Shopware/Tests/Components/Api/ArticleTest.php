@@ -1225,6 +1225,177 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
 
 
+    public function testImageConfiguration()
+    {
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT
+        );
+
+        $create = $this->getSimpleTestData();
+
+        $images = $this->getEntityOffset(
+            'Shopware\Models\Media\Media',
+            0,
+            1,
+            array('id as mediaId')
+        );
+
+        $configurator = $this->getSimpleConfiguratorSet(1, 2);
+        $variants = $this->createConfiguratorVariants($configurator['groups']);
+
+        $usedOption = $this->getOptionsForImage($configurator, 1, 'name');
+        foreach($images as &$image) {
+            $image['options'] = array($usedOption);
+        }
+
+        $create['images'] = $images;
+        $create['configuratorSet'] = $configurator;
+        $create['variants'] = $variants;
+
+        $article = $this->resource->create($create);
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertCount(1, $image->getMappings());
+
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
+            foreach($image->getMappings() as $mapping) {
+                $this->assertCount(1, $mapping->getRules());
+            }
+        }
+
+        $this->resource->generateVariantImages($article->getId());
+
+        $article = $this->resource->getOne($article->getId());
+
+        /**@var $variant \Shopware\Models\Article\Detail*/
+        foreach($article->getDetails() as $variant) {
+            foreach($variant->getConfiguratorOptions() as $option) {
+                if ($option->getName() == $usedOption[0]['name']) {
+                    $this->assertCount(1, $variant->getImages());
+                }
+            }
+        }
+    }
+
+
+
+    private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
+    {
+        if (!is_int($optionCount)) {
+            $optionCount = rand(1, count($configuratorSet['groups']) - 1);
+        }
+
+        $options = array();
+        foreach($configuratorSet['groups'] as $group) {
+            $id = rand(0, count($group['options']) - 1);
+            $option = $group['options'][$id];
+            $options[] = array(
+                $property => $option[$property]
+            );
+            if (count($options) == $optionCount) {
+                return $options;
+            }
+        }
+        return $options;
+    }
+
+    /**
+     * Helper function which creates all variants for
+     * the passed groups with options.
+     * @param $groups
+     * @param array $groupMapping
+     * @param array $optionMapping
+     * @return array
+     */
+    private function createConfiguratorVariants(
+        $groups,
+        $groupMapping = array('key' => 'groupId', 'value' => 'id'),
+        $optionMapping = array('key' => 'option', 'value' => 'name')
+    )
+    {
+        $options = array();
+
+        $groupArrayKey = $groupMapping['key'];
+        $groupValuesKey = $groupMapping['value'];
+        $optionArrayKey = $optionMapping['key'];
+        $optionValuesKey = $optionMapping['value'];
+
+        foreach($groups as $group) {
+            $groupOptions = array();
+            foreach($group['options'] as $option) {
+                $groupOptions[] = array(
+                    $groupArrayKey => $group[$groupValuesKey],
+                    $optionArrayKey => $option[$optionValuesKey]
+                );
+            }
+            $options[] = $groupOptions;
+        }
+
+        $combinations = $this->combinations($options);
+        $combinations = $this->cleanUpCombinations($combinations);
+
+        $variants = array();
+        foreach($combinations as $combination) {
+            $variant = $this->getSimpleVariantData();
+            $variant['configuratorOptions'] = $combination;
+            $variants[] = $variant;
+        }
+        return $variants;
+    }
+
+    /**
+     * Combinations merge the result of dimensional arrays not perfectly
+     * so we have to clean up the first array level.
+     * @param $combinations
+     * @return mixed
+     */
+    protected function cleanUpCombinations($combinations) {
+
+        foreach($combinations as &$combination) {
+            $combination[] = array(
+                'option' => $combination['option'],
+                'groupId' => $combination['groupId']
+            );
+            unset($combination['groupId']);
+            unset($combination['option']);
+        }
+
+        return $combinations;
+    }
+
+    /**
+     * Helper function which combines all array elements
+     * of the passed arrays.
+     *
+     * @param $arrays
+     * @param int $i
+     * @return array
+     */
+    protected function combinations($arrays, $i = 0) {
+        if (!isset($arrays[$i])) {
+            return array();
+        }
+        if ($i == count($arrays) - 1) {
+            return $arrays[$i];
+        }
+
+        // get combinations from subsequent arrays
+        $tmp = $this->combinations($arrays, $i + 1);
+
+        $result = array();
+
+        // concat each array from tmp with each element from $arrays[$i]
+        foreach ($arrays[$i] as $v) {
+            foreach ($tmp as $t) {
+                $result[] = is_array($t) ?
+                    array_merge(array($v), $t) :
+                    array($v, $t);
+            }
+        }
+
+        return $result;
+    }
 
 
     public function testCategoryReplacement()
@@ -1302,7 +1473,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $article = $this->resource->create($data);
         $this->assertCount(count($createdEntities), $article->$getter());
 
-        $updatedEntity = $this->getEntityOffset($entity, true, 20, 5);
+        $updatedEntity = $this->getEntityOffset($entity, 20, 5, array('id'));
 
         $update = array(
             $replaceKey => array('replace' => $replace),
@@ -1316,7 +1487,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $this->assertCount(count($createdEntities) + count($updatedEntity), $article->$getter());
         }
     }
-
 
     /**
      * @return \Shopware\Models\Article\Article
@@ -1468,21 +1638,75 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
-    private function getEntityOffset($entity, $onlyId = true, $offset = 0, $limit = 10)
+    private function getEntityOffset($entity, $offset = 0, $limit = 10, $fields = array('id'))
     {
-        $fields = array('alias');
-        if ($onlyId) {
-            $fields = array('alias.id');
+        if (!empty($fields)) {
+            $selectFields = array();
+            foreach($fields as $field) {
+                $selectFields[] = 'alias.' . $field;
+            }
+        } else {
+            $selectFields = array('alias');
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select($fields)
+        $builder->select($selectFields)
                 ->from($entity, 'alias')
                 ->setFirstResult($offset)
                 ->setMaxResults($limit);
 
         return $builder->getQuery()->getArrayResult();
     }
+
+
+    private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
+    {
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('groups.id', 'groups.name'))
+            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+            ->setFirstResult(0)
+            ->setMaxResults($groupLimit)
+            ->orderBy('groups.position', 'ASC');
+
+        $groups = $builder->getQuery()->getArrayResult();
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id', 'options.name'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->where('options.groupId = :groupId')
+            ->setFirstResult(0)
+            ->setMaxResults($optionLimit)
+            ->orderBy('options.position', 'ASC');
+
+        foreach($groups as &$group) {
+            $builder->setParameter('groupId', $group['id']);
+            $group['options'] = $builder->getQuery()->getArrayResult();
+        }
+
+        return array(
+            'name' => 'Test-Set',
+            'groups' => $groups
+        );
+    }
+
+
+    private function getSimpleVariantData() {
+        return array(
+            'number' => 'swTEST' . uniqid(),
+            'inStock' => 100,
+            'unitId' => 1,
+            'prices' => array(
+                array(
+                    'customerGroupKey' => 'EK',
+                    'from' => 1,
+                    'to' => '-',
+                    'price' => 400,
+                ),
+            )
+        );
+    }
+
 }
 
 
