@@ -1327,6 +1327,10 @@ class sAdmin
         session_write_close();
         session_start();
 
+        $this->sSYSTEM->sSESSION_ID = $newSessionId;
+        Shopware()->Bootstrap()->resetResource('SessionId');
+        Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
+
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',
             array(
