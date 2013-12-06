@@ -1425,6 +1425,125 @@ class Article extends Resource
         return $data;
     }
 
+    /**
+     * This function generates all variant image entities
+     * for the passed article id.
+     * The function expects that the variants and the mapping of the article images
+     * already exists.
+     *
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function generateVariantImages($id)
+    {
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /** @var $article \Shopware\Models\Article\Article */
+        $article = $this->getRepository()->find($id);
+
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article by id $id not found");
+        }
+
+        $builder = $this->getArticleImageMappingsQuery($id);
+
+        $mappings = $builder->getQuery()->getResult();
+
+        /**@var $mapping Image\Mapping*/
+        foreach($mappings as $mapping) {
+
+            $builder = $this->getArticleVariantQuery($id);
+
+            /**@var $rule Image\Rule*/
+            foreach($mapping->getRules() as $rule) {
+                $option = $rule->getOption();
+                $alias = 'option' . $option->getId();
+                $builder->innerJoin('variants.configuratorOptions', $alias, 'WITH', $alias . '.id = :' . $alias)
+                    ->setParameter($alias, $option->getId());
+            }
+
+            $variants = $builder->getQuery()->getResult();
+
+            /**@var $variant Detail*/
+            foreach($variants as $variant) {
+                $exist = $this->getCollectionElementByProperty(
+                    $variant->getImages(),
+                    'parent',
+                    $mapping->getImage()
+                );
+                if ($exist) continue;
+
+                $image = $this->getVariantResource()->createVariantImage(
+                    $mapping->getImage(),
+                    $variant
+                );
+
+                $variant->getImages()->add($image);
+            }
+        }
+        $this->getManager()->flush();
+
+    }
+
+    /**
+     * Returns a query builder to select all article images with mappings and rules.
+     * Used to generate the variant images.
+     *
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     */
+    protected function getArticleImageMappingsQuery($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('mappings', 'image', 'rules'))
+            ->from('Shopware\Models\Article\Image\Mapping', 'mappings')
+            ->innerJoin('mappings.image', 'image')
+            ->innerJoin('mappings.rules', 'rules')
+            ->where('image.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Checks if the passed article image is already created
+     * as variant image.
+     *
+     * @param Detail $variant
+     * @param Image $image
+     * @return bool
+     */
+    protected function isVariantImageExist(Detail $variant, Image $image)
+    {
+        /**@var $variantImage Image*/
+        foreach($variant->getImages() as $variantImage) {
+            if ($variantImage->getParent()->getId() == $image->getId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Small helper function which creates a query builder to select
+     * all article variants.
+     *
+     * @param $id
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     */
+    protected function getArticleVariantQuery($id)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select('variants');
+        $builder->from('Shopware\Models\Article\Detail', 'variants')
+            ->where('variants.articleId = :articleId')
+            ->setParameter('articleId', $id);
+        return $builder;
+    }
 
 
     /**
