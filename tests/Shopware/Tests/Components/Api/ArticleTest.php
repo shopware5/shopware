@@ -125,7 +125,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
-
     public function testCreateShouldBeSuccessful()
     {
         $testData = array(
@@ -527,7 +526,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->resource->delete('');
     }
 
-
     /**
      * Test case to add a new article image over a media id.
      */
@@ -551,7 +549,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $image = array_pop($article['images']);
         $this->assertEquals($image['mediaId'], 25);
     }
-
 
     public function testUpdateToVariantArticle()
     {
@@ -700,7 +697,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
     }
 
-
     public function testCreateUseConfiguratorId()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -825,8 +821,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertArrayCount(2, $data['details'][0]['configuratorOptions']);
     }
 
-
-
     public function testCreateWithMainImages()
     {
         $this->resource->setResultMode(
@@ -869,7 +863,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertTrue($mainFlagExists);
         return $article->getId();
     }
-
 
     /**
      * @depends testCreateWithMainImages
@@ -960,7 +953,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertTrue($hasMain);
     }
 
-
     /**
      * This unit test, tests if the attribute fields are translatable.
      */
@@ -1003,7 +995,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
-
     public function testBase64ImageUpload()
     {
         $data = $this->getSimpleTestData();
@@ -1028,7 +1019,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $this->assertEquals('image/png', mime_content_type($mediaPath . $image['path'] . '.' . $image['extension']));
         }
     }
-
 
     public function testImageReplacement()
     {
@@ -1077,8 +1067,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(10, $updateIds);
     }
 
-
-
     public function testImageReplacementWithoutOption()
     {
         $data = $this->getSimpleTestData();
@@ -1098,29 +1086,27 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(10, $updateIds);
     }
 
-    private function getImagesForNewArticle($offset = 10, $limit = 5)
+
+    public function testImageAttributes()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array(
-            'media.id as mediaId',
-            '2 as main'
-        ))
-            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
-            ->addOrderBy('media.id', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
+        $data = $this->getSimpleTestData();
+        $images = $this->getImagesForNewArticle();
+        foreach($images as &$image) {
+            $image['attribute'] = array(
+                'attribute1' => 'attr1'
+            );
+        }
+        $data['images'] = $images;
+        $article = $this->resource->create($data);
 
-        /**
-         * Get random images.
-         * Only want to check if the main flag will be used.
-         */
-        $images = $builder->getQuery()->getArrayResult();
-        $keys = array_keys($images);
-        $images[$keys[0]]['main'] = 1;
-
-        return $images;
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertInstanceOf('\Shopware\Models\Attribute\ArticleImage', $image->getAttribute());
+            $this->assertEquals('attr1', $image->getAttribute()->getAttribute1());
+            $this->assertEquals(null, $image->getAttribute()->getAttribute2());
+            $this->assertEquals(null, $image->getAttribute()->getAttribute3());
+        }
     }
-
 
     public function testCreateWithDuplicateProperties()
     {
@@ -1223,10 +1209,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(3, $article->getMainDetail()->getPrices());
     }
 
-
-
-
-
     public function testCategoryReplacement()
     {
         $this->internalTestReplaceMode(
@@ -1283,6 +1265,28 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
+    private function getImagesForNewArticle($offset = 10, $limit = 5)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array(
+            'media.id as mediaId',
+            '2 as main'
+        ))
+            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /**
+         * Get random images.
+         * Only want to check if the main flag will be used.
+         */
+        $images = $builder->getQuery()->getArrayResult();
+        $keys = array_keys($images);
+        $images[$keys[0]]['main'] = 1;
+
+        return $images;
+    }
 
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
@@ -1316,7 +1320,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $this->assertCount(count($createdEntities) + count($updatedEntity), $article->$getter());
         }
     }
-
 
     /**
      * @return \Shopware\Models\Article\Article
