@@ -329,9 +329,25 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         $this->setConfig($bootstrap->getName(), $bootstrap->Config());
 
+        $this->Application()->Events()->notify(
+            'Shopware_Plugin_PreInstall',
+            array(
+                'subject'  => $this,
+                'plugin'   => $bootstrap,
+            )
+        );
+
         $result = $bootstrap->install();
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
+            $this->Application()->Events()->notify(
+                'Shopware_Plugin_PostInstall',
+                array(
+                    'subject'  => $this,
+                    'plugin'   => $bootstrap,
+                )
+            );
+
             $plugin->setInstalled(new Zend_Date());
             $plugin->setUpdated(new Zend_Date());
             $em->flush($plugin);
@@ -363,10 +379,27 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $id = $this->getPluginId($bootstrap->getName());
         $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
 
+        $this->Application()->Events()->notify(
+            'Shopware_Plugin_PreUninstall',
+            array(
+                'subject'  => $this,
+                'plugin'   => $bootstrap,
+            )
+        );
+
         $result = $bootstrap->disable();
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
             $result = $bootstrap->uninstall();
+
+            $this->Application()->Events()->notify(
+                'Shopware_Plugin_PostUninstall',
+                array(
+                    'subject'     => $this,
+                    'plugin'      => $bootstrap,
+                )
+            );
+
             $success = is_bool($result) ? $result : !empty($result['success']);
         }
 
@@ -433,9 +466,25 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $newInfo = new Enlight_Config($newInfo, true);
         unset($newInfo->source);
 
+        $this->Application()->Events()->notify(
+            'Shopware_Plugin_PreUpdate',
+            array(
+                'subject'  => $this,
+                'plugin'   => $plugin,
+            )
+        );
+
         $result = $plugin->update($oldVersion);
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
+            $this->Application()->Events()->notify(
+                'Shopware_Plugin_PostUpdate',
+                array(
+                    'subject'  => $this,
+                    'plugin'   => $plugin,
+                )
+            );
+
             $newInfo->set('updateVersion', null);
             $newInfo->set('updateSource', null);
             $newInfo->set('updateDate', Zend_Date::now());
