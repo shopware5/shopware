@@ -470,6 +470,7 @@ class Variant extends Resource
         $variantImage->setArticleDetail($variant);
         $variantImage->setPosition($articleImage->getPosition());
         $variantImage->setMain($articleImage->getMain());
+        $variantImage->setExtension($articleImage->getExtension());
 
         return $variantImage;
     }
@@ -515,7 +516,7 @@ class Variant extends Resource
      * @param Image $image
      * @return Image\Mapping
      */
-    protected function createImageMappingForOptions(ArrayCollection $options, Image $image)
+    public function createImageMappingForOptions(ArrayCollection $options, Image $image)
     {
         $mapping = new Image\Mapping();
         $mapping->setImage($image);
