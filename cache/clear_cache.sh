@@ -1,12 +1,17 @@
 #!/bin/bash
-echo "Clearing all caches"
+DIR="$(cd "$(dirname "$0")" && pwd)"
 
-rm -rf html/*
-rm -rf general/*
-rm -rf templates/*
+echo $DIR
 
-find proxies/ -name '*.php' -print0 | xargs -0 rm -f
-find proxies/ -name '*.meta' -print0 | xargs -0 rm -f
-find doctrine/filecache/ -name '*.php' -print0 | xargs -0 rm -f
-find doctrine/proxies/ -name '*.php' -print0 | xargs -0 rm -f
-find doctrine/attributes/ -name '*.php' -print0 | xargs -0 rm -f
+echo "Clearing regular caches"
+rm -rf $DIR/html/*
+rm -rf $DIR/general/*
+rm -rf $DIR/templates/*
+rm -rf $DIR/proxies/*
+rm -rf $DIR/doctrine/filecache/*
+rm -rf $DIR/doctrine/proxies/*
+
+if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
+    echo "Clearing attributes"
+    rm -rf $DIR/doctrine/attributes/*
+fi
