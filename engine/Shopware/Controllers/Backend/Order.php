@@ -378,7 +378,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $order['billingAttribute'] = $order['billing']['attribute'];
                 $order['shippingAttribute'] = $order['shipping']['attribute'];
                 $order['locale']= $order['languageSubShop']['locale'];
+
+                //Deprecated: use payment instance
                 $order['debit'] = $order['customer']['debit'];
+
                 unset($order['billing']['attribute']);
                 unset($order['shipping']['attribute']);
 
@@ -1383,6 +1386,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //the documents will be created over the "createDocumentAction" so we have to unset the array element, otherwise the
         //created documents models would be overwritten.
         unset($data['documents']);
+
+        //For now the paymentInstances information is not editable, so it's just discarded at this point
+        unset($data['paymentInstances']);
 
         $data['billing'] = $this->prepareAddressData($data['billing'][0]);
         $data['shipping'] = $this->prepareAddressData($data['shipping'][0]);

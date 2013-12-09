@@ -297,4 +297,132 @@ Ext.onReady(function() {
         override: "Ext.form.RadioGroup",
         blankText: "You must select one item in this group"
     });
+
+    /**
+     * Shopware 4.0
+     *
+     * Code beyond this point is no longer part of ExtJs core
+     * and must be ported manually when ExtJs is updated
+     */
+    Ext.define('Ext.app.en_GB.Application', {
+        override:'Ext.app.Application',
+
+        loadingMessage: 'Loading [0] ...'
+    });
+    Ext.define('Shopware.apps.Base.view.element.en_GB.BooleanSelect', {
+        override:'Shopware.apps.Base.view.element.BooleanSelect',
+
+        store: [
+            ["", 'Inherited'],
+            [true, 'Yes'],
+            [false, 'No']
+        ]
+    });
+    Ext.define('Shopware.MediaManager.en_GB.MediaSelection', {
+        override:'Shopware.MediaManager.MediaSelection',
+
+        buttonText: 'Select own files'
+    });
+    Ext.define('Shopware.container.en_GB.Viewport', {
+        override:'Shopware.container.Viewport',
+
+        snippets: {
+            title: 'Create desktop',
+            message: 'Please choose a title for the new desktop'
+        }
+    });
+    Ext.define('Shopware.DataView.en_GB.GooglePreview', {
+        override:'Shopware.DataView.GooglePreview',
+
+        refreshButtonText: 'Refresh'
+    });
+    Ext.define('Shopware.form.field.en_GB.ArticleSearch', {
+        override:'Shopware.form.field.ArticleSearch',
+
+        confirmButtonText: 'Save assigned articles',
+        cancelButtonText: 'Reset articles',
+
+        snippets: {
+            emptyText: 'Search...',
+            assignedArticles: 'Assigned articles',
+            articleName: 'Article name',
+            orderNumber: 'Order number',
+            dropDownTitle: 'Articles'
+        }
+    });
+    Ext.define('Shopware.form.field.en_GB.TinyMCE', {
+        override:'Shopware.form.field.TinyMCE',
+
+        noSourceErrorText: "The TinyMCE editor source files aren't included in the project"
+    });
+    Ext.define('Shopware.form.en_GB.PluginPanel', {
+        override:'Shopware.form.PluginPanel',
+
+        noFormIdConfiguredErrorText: 'No formId is passed to the component configuration',
+        formNotLoadedErrorText: "The form store couldn't be loaded successfully.",
+
+        snippets: {
+            resetButton: 'Reset',
+            saveButton: 'Save',
+            description: 'Description',
+            onSaveFormTitle: 'Save form',
+            saveFormSuccess: 'Form "[name]" has been saved.',
+            saveFormError: 'Form "[name]" could not be saved.'
+        }
+    });
+    Ext.define('Shopware.global.en_GB.ErrorReporter', {
+        override:'Shopware.global.ErrorReporter',
+
+        snippets: {
+            general: {
+                title: 'Shopware Error Reporter',
+                error_title: 'Error information',
+                browser_title: 'Browser information',
+                cancel: 'Cancel'
+            },
+            xhr: {
+                module: 'Module',
+                request_path: 'Request path',
+                http_error: 'HTTP error message',
+                http_status: 'HTTP status code',
+                error_desc: 'Error description',
+                module_files: 'Module files',
+                class_name: 'Class name',
+                path: 'Path',
+                type: 'Type',
+                unknown_type: 'Unknown type',
+                reload_module: 'Reload module'
+            },
+            eval: {
+                reload_admin: 'Reload administration',
+                error_type: 'Error type',
+                error_msg: 'Error message'
+            },
+            browser: {
+                os: 'Operating system',
+                browser_engine: 'Browser engine',
+                window_size: 'Window size',
+                java_enabled: 'Java enabled',
+                cookies_enabled: 'Cookies enabled',
+                lang: 'Language',
+                plugins: 'Browser plugins',
+                plugin_name: 'Plugin name',
+                plugin_path: 'Plugin path'
+            }
+        }
+    });
+    Ext.define('Shopware.window.plugin.en_GB.Hud', {
+        override:'Shopware.window.plugin.Hud',
+
+        hudTitle: "Elements library",
+        hudStoreErrorMessage: function(className) {
+            return className + ' needs the property "hudStore" which represents the store used by the hub panel to create the draggable items.';
+        }
+    });
+    Ext.apply(Ext.form.VTypes, {
+        passwordText : 'The inserted passwords are not equal'
+    });
+    Ext.apply(Ext.form.field.VTypes, {
+        missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property'
+    });
 });

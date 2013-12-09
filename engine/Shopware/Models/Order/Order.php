@@ -392,10 +392,20 @@ class Order extends ModelEntity
      */
     protected $esd;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
+     */
+    protected $paymentInstances;
+
+
     public function __construct()
     {
         $this->details = new ArrayCollection();
+        $this->paymentInstances = new ArrayCollection();
     }
+
     /**
      * Get id
      *
@@ -1141,5 +1151,21 @@ class Order extends ModelEntity
     public function getLanguageSubShop()
     {
         return $this->languageSubShop;
+    }
+
+    /**
+     * @param mixed $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
     }
 }

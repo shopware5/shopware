@@ -313,6 +313,7 @@ class Repository extends ModelRepository
                 'documentType',
                 'documentAttribute',
                 'customer',
+                'paymentInstances',
                 'debit',
                 'shipping',
                 'shippingAttribute',
@@ -328,6 +329,7 @@ class Repository extends ModelRepository
                 ->leftJoin('details.attribute', 'detailAttribute')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('customer.debit', 'debit')
+                ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('shipping.country', 'shippingCountry')

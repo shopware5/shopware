@@ -44,7 +44,14 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         'actions': '{s name=actions}Action(s){/s}',
         'link': '{s name=link}Link{/s}',
         'altText': '{s name=altText}Alternative text{/s}',
-        'title': '{s name=title}Title{/s}'
+        'title': '{s name=title}Title{/s}',
+
+        banner_slider_title: '{s name=banner_slider_title}Title{/s}',
+        banner_slider_arrows: '{s name=banner_slider_arrows}Display arrows{/s}',
+        banner_slider_numbers: '{s name=banner_slider_numbers}Display numbers{/s}',
+        banner_slider_scrollspeed: '{s name=banner_slider_scrollspeed}Scroll speed{/s}',
+        banner_slider_rotation: '{s name=banner_slider_rotation}Rotate automatically{/s}',
+        banner_slider_rotatespeed: '{s name=banner_slider_rotatespeed}Rotation speed{/s}'
     },
 
     /**

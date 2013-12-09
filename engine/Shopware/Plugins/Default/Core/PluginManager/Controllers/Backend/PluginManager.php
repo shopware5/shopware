@@ -1003,6 +1003,41 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
+     * Deletes a complete plugin directory structure.
+     */
+    public function deletePluginAction()
+    {
+        $id = $this->Request()->getParam('id');
+        $repository = $this->getRepository();
+
+        /** @var $plugin Shopware\Models\Plugin\Plugin */
+        $plugin = $repository->find($id);
+
+        if ($plugin === null) {
+            return;
+        }
+
+        $pluginPath = Shopware()->AppPath(implode('_', array(
+            'Plugins', $plugin->getSource(), $plugin->getNamespace(), $plugin->getName()
+        )));
+
+        if ($plugin->getSource() === "Default") {
+            $message = "'Default' Plugins may not be deleted.";
+        } elseif ($plugin->getInstalled() !== null) {
+            $message = 'Please uninstall the plugin first.';
+        } else {
+            $this->removeDirectory($pluginPath);
+            Shopware()->Models()->remove($plugin);
+            Shopware()->Models()->flush();
+        }
+
+        $this->View()->assign(array(
+            'success' => empty($message),
+            'message' => isset($message) ? $message : ''
+        ));
+    }
+
+    /**
      * Internal helper function to get the plugin namespace of an uploaded zip file.
      * @param $path
      * @return string

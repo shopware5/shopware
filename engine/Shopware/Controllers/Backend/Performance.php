@@ -29,6 +29,8 @@
  * @author     $Author$
  */
 
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Performance Controller
  */
@@ -44,12 +46,29 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
     }
 
+    /**
+     * Gets a list of id-name of all existing shops
+     */
     public function getShopsAction()
     {
         $shops = Shopware()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
         $this->View()->assign(array(
             'success' => true,
             'data' => $shops
+        ));
+    }
+
+    /**
+     * Gets a list of id-name of all active shops
+     */
+    public function getActiveShopsAction()
+    {
+        $shops = Shopware()->Models()->getRepository(
+            'Shopware\Models\Shop\Shop'
+        )->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => array_map(function($item) {return array('id' => $item['id'], 'name' => $item['name']);}, $shops)
         ));
     }
 
