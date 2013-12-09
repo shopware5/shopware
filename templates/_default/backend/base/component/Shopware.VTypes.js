@@ -44,6 +44,8 @@ Ext.apply(Ext.form.VTypes, {
 
 Ext.apply(Ext.form.field.VTypes, {
 
+    missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property',
+
     /**
      * Remote validation method which sets an event listener on the blur event of
      * the field and validates the value with the server-side.
@@ -74,7 +76,7 @@ Ext.apply(Ext.form.field.VTypes, {
         }
 
         if (!field.validationErrorMsg) {
-            Ext.Error.raise('The remote vType validation needs a validationErrorMsg property');
+            Ext.Error.raise(this.missingValidationErrorText);
             return false;
         }
 

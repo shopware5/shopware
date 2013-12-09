@@ -173,12 +173,17 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
 	 * @return void
 	 */
     initComponent:function () {
-        var me = this;
+        var me = this, mainWindow;
         me.items = me.createItems();
         me.dockedItems = [ me.createToolbar() ];
         me.title = me.snippets.title;
         me.registerEvents();
         me.callParent(arguments);
+
+        mainWindow = me.subApplication.articleWindow;
+        if(mainWindow.hasOwnProperty('unitStore')) {
+            me.unitComboBox.bindStore(mainWindow.unitStore);
+        }
 
         if (me.record) {
             me.formPanel.loadRecord(me.record);
@@ -367,6 +372,18 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
     createBasePriceFieldSet: function() {
         var me = this;
 
+        me.unitComboBox = Ext.create('Ext.form.field.ComboBox', {
+            labelWidth: 155,
+            anchor: '100%',
+            name: 'unitId',
+            queryMode: 'local',
+            fieldLabel: me.snippets.basePrice.unit,
+            emptyText: me.snippets.basePrice.empty,
+            store: me.unitStore,
+            displayField: 'name',
+            valueField: 'id'
+        });
+
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             cls: Ext.baseCSSPrefix + 'article-base-price-field-set',
@@ -377,16 +394,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             },
             title: me.snippets.basePrice.title,
             items: [
+                me.unitComboBox,
                 {
-                    xtype: 'combobox',
-                    name: 'unitId',
-                    queryMode: 'local',
-                    fieldLabel: me.snippets.basePrice.unit,
-                    emptyText: me.snippets.basePrice.empty,
-                    store: me.unitStore,
-                    displayField: 'name',
-                    valueField: 'id'
-                }, {
                     xtype: 'numberfield',
                     name: 'purchaseUnit',
                     submitLocaleSeparator: false,

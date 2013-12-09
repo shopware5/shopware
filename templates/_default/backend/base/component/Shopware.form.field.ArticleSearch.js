@@ -205,6 +205,14 @@ Ext.define('Shopware.form.field.ArticleSearch',
      */
     formFieldConfig: {},
 
+    snippets: {
+        emptyText: '{s name=search_default_text}Search...{/s}',
+        assignedArticles: '{s name=assigned_articles}Assigned articles{/s}',
+        articleName: '{s name=article_name}Article name{/s}',
+        orderNumber: '{s name=ordernumber}Order number{/s}',
+        dropDownTitle: '{s name=search_result/article}Article{/s}'
+    },
+
     /**
      * Initializes the Live Article Search component
      *
@@ -360,7 +368,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var fieldConfig = Ext.apply({
             componentLayout: 'textfield',
             triggerCls: 'reset',
-            emptyText: '{s name=search_default_text}Search...{/s}',
+            emptyText: me.snippets.emptyText,
             fieldLabel: (me.fieldLabel || undefined),
             cls:  Ext.baseCSSPrefix + 'search-article-live-field',
             name: me.searchFieldName,
@@ -461,11 +469,15 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * @return [object] created Ext.XTemplate
      */
     createDropDownMenuTpl: function() {
+        var me = this;
+
         return new Ext.XTemplate(
             '<div class="header">',
                 '<div class="header-inner">',
                     '<div class="arrow">&nbsp;</div>',
-                    '<span class="title">{s name=search_result/article}Article{/s}</span>',
+                    '<span class="title">',
+                    me.snippets.dropDownTitle,
+                    '</span>',
                 '</div>',
             '</div>',
             '<div class="content">',
@@ -492,7 +504,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
 
         var grid = Ext.create('Ext.grid.Panel', {
             store: me.multiSelectStore,
-            title: '{s name=assigned_articles}Assigned articles{/s}',
+            title: me.snippets.assignedArticles,
             selModel: 'rowmodel',
             autoScroll: true,
             columns: me.createMultiSelectGridColumns(),
@@ -525,11 +537,11 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var me = this;
 
         return [{
-            header: '{s name=article_name}Article name{/s}',
+            header: me.snippets.articleName,
             dataIndex: me.returnValue,
             flex: 2
         }, {
-            header: '{s name=ordernumber}Order number{/s}',
+            header: me.snippets.orderNumber,
             dataIndex: me.hiddenReturnValue,
             flex: 1
         }, {

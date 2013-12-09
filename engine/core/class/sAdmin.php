@@ -472,18 +472,36 @@ class sAdmin
      * @access public
      * @return object or false -
      */
-    public function sInitiatePaymentClass($paymentData){
-        include_once("paymentmeans/".$paymentData['class']);
-        $sPaymentObject = new sPaymentMean();
-        $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
+    public function sInitiatePaymentClass($paymentData) {
+        $dirs = array();
+
+        if(substr($paymentData['class'], -strlen('.php')) === '.php') {
+            $index = substr($paymentData['class'], 0, strpos($paymentData['class'], '.php'));
+        } else {
+            $index = $paymentData['class'];
+        }
+
+        $dirs = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_InitiatePaymentClass_AddClass',
+            $dirs,
+            array('subject' => $this)
+        );
+
+        $class = array_key_exists($index, $dirs)?$dirs[$index]:$dirs['default'];
+        if (!$class){
+            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment classes dir not loaded");
+            return false;
+        }
+
+        $sPaymentObject = new $class();
 
         if (!$sPaymentObject){
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment-Class not found");
             return false;
-        }else {
+        } else {
+            $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
             return $sPaymentObject;
         }
-
     }
 
     /**
@@ -1191,7 +1209,11 @@ class sAdmin
 	        $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
         }
 
+
+
         if ($isValidLogin) {
+            $this->regenerateSessionId();
+
             $this->sSYSTEM->sDB_CONNECTION->Execute(
                 "UPDATE s_user SET lastlogin=NOW(),failedlogins = 0, lockeduntil = NULL, sessionID=? WHERE id=?",
                 array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
@@ -1290,6 +1312,45 @@ class sAdmin
         );
 
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
+    }
+
+    /**
+     * Regenerates session id and updates references in the db
+     */
+    public function regenerateSessionId()
+    {
+        $oldSessionId = session_id();
+        session_regenerate_id(true);
+        $newSessionId = session_id();
+
+        // close and restart session to make sure the db-session handler writes updates.
+        session_write_close();
+        session_start();
+
+        $this->sSYSTEM->sSESSION_ID = $newSessionId;
+        Shopware()->Bootstrap()->resetResource('SessionId');
+        Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
+
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_Regenerate_Session_Id',
+            array(
+                'subject' => $this,
+                'oldSessionId' => $oldSessionId,
+                'newSessionId' => $newSessionId,
+            )
+        );
+
+        $sessions = array(
+            's_order_basket'            => 'sessionID',
+            's_user'                    => 'sessionID',
+            's_emarketing_lastarticles' => 'sessionID',
+            's_order_comparisons'       => 'sessionID',
+        );
+
+        $conn = Shopware()->Models()->getConnection();
+        foreach ($sessions as $tablename => $column) {
+            $conn->update($tablename, array($column => $newSessionId), array($column => $oldSessionId));
+        }
     }
 
 

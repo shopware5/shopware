@@ -82,6 +82,18 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
 
         me.title = me.snippets.title;
 
+        me.items = me.createItems();
+
+        me.callParent(arguments);
+
+        if ( me.record.get('paymentId') !== 2 ) {
+            me.fieldContainer.hide();
+        }
+    },
+
+    createItems: function() {
+        var me = this;
+
         me.topContainer = Ext.create('Ext.container.Container', {
             layout: 'anchor',
             items:me.createTopElements()
@@ -92,14 +104,9 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             defaults: { columnWidth: .5 },
             items:me.createDebitForm()
         });
+        me.debitContainer = me.fieldContainer;
 
-        me.items = [ me.topContainer, me.fieldContainer ];
-
-        me.callParent(arguments);
-
-        if ( me.record.get('paymentId') !== 2 ) {
-            me.fieldContainer.hide();
-        }
+        return [ me.topContainer, me.fieldContainer ];
     },
 
     /**
@@ -129,8 +136,13 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
      * @return [Array] Container which contains the payment combo box
      */
     createTopElements:function () {
+        return [ this.createPaymentCombo() ];
+    },
+
+    createPaymentCombo: function() {
         var me = this;
-        return [{
+
+        me.paymentCombo = Ext.create('Ext.form.field.ComboBox', {
             name:'paymentId',
             triggerAction:'all',
             fieldLabel:me.snippets.payment,
@@ -139,19 +151,20 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             displayField:'description',
             allowBlank:false,
             required:true,
-            anchor:'100%',
+            anchor:'97.5%',
             labelWidth: 120,
             minWidth:250,
             labelStyle: 'font-weight: 700;',
             editable:false,
-            xtype:'combobox',
             queryMode: 'local',
-            listeners:{
+            listeners: {
                 change:function (field, newValue) {
                     me.fireEvent('changePayment', newValue, me.fieldContainer);
                 }
             }
-        }];
+        });
+
+        return me.paymentCombo;
     },
 
     /**

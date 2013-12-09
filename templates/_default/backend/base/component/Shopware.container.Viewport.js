@@ -158,6 +158,11 @@ Ext.define('Shopware.container.Viewport',
 	 */
 	desktopSwitcher: null,
 
+    snippets: {
+        title: '{s name=create_desktop_title}Create desktop{/s}',
+        message: '{s name=create_desktop_message}Please choose a title for the new desktop{/s}'
+    },
+
 	/**
 	 * Property which holds a store. The store
 	 * represents the different desktops.
@@ -445,8 +450,8 @@ Ext.define('Shopware.container.Viewport',
 
 
         desktopSwitcher.getEl().on('click', function() {
-            var title = '{s name=create_desktop_title}Create desktop{/s}';
-            var message = '{s name=create_desktop_message}Please choose a title for the new desktop{/s}';
+            var title = me.snippets.title;
+            var message = me.snippets.message;
             Ext.MessageBox.prompt(title, message, function(response, title) {
                 if(response === 'ok') {
                     me.createDesktop(title, true);

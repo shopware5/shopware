@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Shipping.store.Payment', {
      * Amount of data loaded at once
      * @integer
      */
-    pageSize : 30,
+    pageSize : 250,
     /**
      * enables the remote filter system
      * @boolean

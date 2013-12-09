@@ -27,9 +27,15 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/emotion/view/components/banner}
 Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-banner',
+
+    snippets: {
+        file: '{s name=file}Image{/s}',
+        link: '{s name=link}Link{/s}'
+    },
 
     basePath: '{link file=""}',
 
@@ -82,7 +88,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         });
 
         return Ext.create('Ext.form.FieldSet', {
-            title: 'Vorschaubild',
+            title: '{s name=preview}Preview image{/s}',
             items: [ me.createMappingButton(), me.previewImage ]
         });
     },
@@ -90,7 +96,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     createMappingButton: function() {
        var me = this;
        var button = Ext.create('Ext.button.Button', {
-           text: 'Bild-Mapping anlegen',
+           text: '{s name=mapping}Create image mapping{/s}',
            iconCls: 'sprite-layer-select',
            cls: 'small secondary',
            handler: function() {

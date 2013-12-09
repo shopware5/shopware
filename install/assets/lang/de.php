@@ -49,8 +49,8 @@ return array(
     'step5_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten', // Choose your license
     'step5_ce' => 'Shopware Community Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
     'step5_pe' => 'Shopware Professional (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', // Shopware Professional Edition (License: Commercial / License key required)
-    'step5_ee' => 'Shopware Enterprise Business (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', // Shopware Enterprise Business Edition (License: Commercial / License key required)
-    'step5_ec' => 'Shopware Enterprise Cluster (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', //  Shopware Enterprise Cluster Edition (License: Commercial / License key required)
+    'step5_ee' => 'Shopware Enterprise Basic (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', // Shopware Enterprise Basic Edition (License: Commercial / License key required)
+    'step5_ec' => 'Shopware Enterprise Premium (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)', //  Shopware Enterprise Premium Edition (License: Commercial / License key required)
     'step5_license' => 'Lizenz', // License-Key:
     'step5_info' => 'Wenn Sie eine kommerzielle Shopware Lizenz erworben haben ,bitte wählen Sie die zutreffene Edition aus der Liste und geben Sie Ihren Lizenzschlüssel ein!', //  If you have purchased a commercial shopware version, select the appropriate edition in the list. Then, enter the license key that you received after the purchase.
     // Step 6

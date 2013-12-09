@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
          */
         api: {
             update: '{url action="savePlugin"}',
-            destroy: '{url controller=Plugin action="deletePlugin"}'
+            destroy: '{url action="deletePlugin"}'
         },
 
         /**
