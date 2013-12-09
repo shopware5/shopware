@@ -87,9 +87,15 @@ class Variant extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $builder = $this->getRepository()->getDetailsByIdsQuery(array($id));
+        $builder = $this->getRepository()->getVariantDetailQuery();
+        $builder->andWhere('variants.id = :variantId')
+                ->addOrderBy('variants.id', 'ASC')
+                ->addOrderBy('customerGroup.id', 'ASC')
+                ->addOrderBy('prices.from', 'ASC')
+                ->setParameter('variantId', $id);
+
         /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $builder->getOneOrNullResult($this->getResultMode());
+        $articleDetail = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$articleDetail) {
             throw new ApiException\NotFoundException("Variant by id $id not found");

@@ -31,6 +31,8 @@
 
 namespace Shopware\Models\Article;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
+
 /**
  * todo@all: Documentation
  */
@@ -2345,6 +2347,34 @@ class Repository extends ModelRepository
         return $builder;
     }
 
+    /**
+     * Returns the detail query builder for variants.
+     * This query builder should be used to read the whole variant data.
+     *
+     * @return QueryBuilder
+     */
+    public function getVariantDetailQuery()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+            'variants',
+            'attribute',
+            'prices',
+            'customerGroup',
+            'options',
+            'images'
+        ));
+
+        $builder->from('Shopware\Models\Article\Detail', 'variants')
+            ->innerJoin('variants.article', 'article')
+            ->leftJoin('variants.attribute', 'attribute')
+            ->leftJoin('variants.images', 'images')
+            ->leftJoin('variants.prices', 'prices')
+            ->innerJoin('prices.customerGroup', 'customerGroup')
+            ->leftJoin('variants.configuratorOptions', 'options');
+
+        return $builder;
+    }
 }
 
 
