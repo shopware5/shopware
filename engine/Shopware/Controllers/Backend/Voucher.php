@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,22 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Voucher
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 use Shopware\Models\Voucher\Voucher as Voucher,
     Doctrine\ORM\AbstractQuery;
 /**
  * Shopware Backend Controller for the Voucher Module
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs
 {

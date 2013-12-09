@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage CronRating
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Shopware Cron for article ratings
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -178,9 +168,9 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
 				b.city AS billing_city,
 				b.phone AS phone,
 				b.phone AS billing_phone,
-				b.fax AS fax, 
-				b.fax AS billing_fax, 
-				b.countryID AS billing_countryID, 
+				b.fax AS fax,
+				b.fax AS billing_fax,
+				b.countryID AS billing_countryID,
 				bc.countryname AS billing_country,
 				bc.countryiso AS billing_countryiso,
 				bca.name AS billing_countryarea,

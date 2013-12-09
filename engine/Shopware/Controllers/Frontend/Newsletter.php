@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Newsletter controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
@@ -205,7 +195,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 		";
         $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
         $result = Shopware()->Db()->query($sql, array(Shopware()->System()->sLanguage));
-        
+
         $content = array();
         while ($row = $result->fetch()) {
             $row['link'] = $this->Front()->Router()->assemble(array('action' => 'detail', 'sID' => $row['id']));

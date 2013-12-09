@@ -1,5 +1,28 @@
 <?php
 /**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+/**
  * Shopware API
  * Mapping von Shopware Datenfeldern
  *
@@ -10,7 +33,7 @@
 class sMappingConvert {
 	private $sFunctions;
 	public $sAPI;
-	
+
 	function __construct()
 	{
 		//$value,$vars,$config,&$array
@@ -22,8 +45,8 @@ class sMappingConvert {
 			"load_values" => create_function('$value,$vars,$config,&$array','if(empty($array)||!is_array($array)) return false; $array = array_merge($value,$array); return true;'),
 			"put_value" => create_function('$value,$key','if(empty($value)) return false; return array($key=>$value);'),
 			"put_key" => create_function('$array,$name','if(empty($array)||!is_array($array)||empty($name)||!is_string($name)) return false; foreach($array as $key=>$value) $array[$key][$name]=$key; return $array;'),
-			"change_key" => create_function ('$array,$key','if(empty($array)||!is_array($array)) return false; $tmp = array(); foreach($array as $value) $tmp[$value[$key]] = $value; return $tmp;'), 
-			"key_as_atr" => create_function ('$array,$name','if(empty($array)||!is_array($array)||empty($name)||!is_string($name)) return false; $tmp = array(); foreach($array as $key=>$value) $tmp[] = array("_attributes"=>array($name=>$key),"_value"=>$value);  return $tmp;'), 
+			"change_key" => create_function ('$array,$key','if(empty($array)||!is_array($array)) return false; $tmp = array(); foreach($array as $value) $tmp[$value[$key]] = $value; return $tmp;'),
+			"key_as_atr" => create_function ('$array,$name','if(empty($array)||!is_array($array)||empty($name)||!is_string($name)) return false; $tmp = array(); foreach($array as $key=>$value) $tmp[] = array("_attributes"=>array($name=>$key),"_value"=>$value);  return $tmp;'),
 			//"move_value" => create_function('$value,$key','if(empty($key)) return false; return array($key=>$value);'),
 			"implode" => create_function('$value,$config','return implode($config["separator"], $value);'),
 			//"rename_array" => create_function('$array,$config','if(is_array($array)&&count($array)) foreach($array as $key=>$value) $ret[$key] = $value; return $ret;'),
@@ -49,13 +72,13 @@ class sMappingConvert {
 			if(empty($config))
 				continue;
 			if(is_string($config))
-				$config = array('field'=>$config);				
+				$config = array('field'=>$config);
 			if (!isset($config['field']))
 				$config['field'] = $name;
 			elseif(is_int($name))
 				$name = $config['field'];
 			if(!is_array($config))
-				continue;		
+				continue;
 			if(!empty($config['convert'])&&is_string($config['convert']))
 				$config['convert'] = array($config['convert']=>"");
 			foreach ($config as $key=>$con)
@@ -121,7 +144,7 @@ class sMappingConvert {
 		}
 		return $data;
 	}
-	
+
 	function convert_line ($mask, $line, $prepare=false)
 	{
 		if(empty($line)||!is_array($line))
@@ -156,7 +179,7 @@ class sMappingConvert {
 		}
 		return $values;
 	}
-	
+
 	function convert_row ($config, $array)
 	{
 		if(empty($config))
@@ -189,7 +212,7 @@ class sMappingConvert {
 		}
 		return $data;
 	}
-	
+
 	function register_function ($name, $func = "")
 	{
 		if(empty($name))
@@ -201,14 +224,14 @@ class sMappingConvert {
 		$name = rtrim($name,"_");
 		$this->sFunctions[$name] = $func;
 	}
-	
+
 	function unregister_function ($func)
 	{
 		if(isset($this->sFunctions[$func]))
 			unset($this->sFunctions[$func]);
 		return true;
 	}
-	
+
 	function _func_mapping ($value,$vars)
 	{
 		if (empty($vars)||!is_array($vars)||!count($vars))

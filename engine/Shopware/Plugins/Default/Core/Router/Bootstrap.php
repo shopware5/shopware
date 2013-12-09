@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,30 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Router
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Router Plugin
  *
- * todo@all: Documentation
- */
-
-/**
- *
- * Shopware Application
- *
  * @category   Shopware
  * @package    Shopware_Plugins
  * @subpackage Core
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @license    http://shopware.de/license
  */
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap
