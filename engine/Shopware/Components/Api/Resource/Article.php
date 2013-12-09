@@ -32,6 +32,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Article\Configurator;
+use Shopware\Components\Api\BatchInterface;
 
 
 /**
@@ -41,7 +42,7 @@ use Shopware\Models\Article\Configurator;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Article extends Resource
+class Article extends Resource implements BatchInterface
 {
     /**
      * @return \Shopware\Models\Article\Repository
@@ -1714,5 +1715,35 @@ class Article extends Resource
         return array_values($properties);
     }
 
+    /**
+     * Returns the primary ID of any data set.
+     *
+     * {@inheritDoc}
+     */
+    public function getIdByData($data)
+    {
+        $id = null;
 
+        if (isset($data['id'])) {
+            $id = $data['id'];
+        } else if(isset($data['mainDetail']['number'])) {
+            try {
+                $id = $this->getIdFromNumber($data['mainDetail']['number']);
+            }catch (ApiException\NotFoundException $e) {
+                return false;
+            }
+        }
+
+        if (!$id) {
+            return false;
+        }
+
+        $model = $this->getManager()->find('Shopware\Models\Article\Article', $id);
+
+        if ($model) {
+            return $id;
+        }
+
+        return false;
+    }
 }
