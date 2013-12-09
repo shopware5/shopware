@@ -834,7 +834,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         ))
             ->from('Shopware\Models\Media\Media', 'media')
             ->addOrderBy('media.id', 'ASC')
-            ->setFirstResult(10)
+            ->setFirstResult(5)
             ->setMaxResults(4);
 
         /**
