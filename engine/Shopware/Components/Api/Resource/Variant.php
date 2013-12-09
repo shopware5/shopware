@@ -35,6 +35,7 @@ use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
+use Shopware\Components\Api\BatchInterface;
 
 /**
  * Variant API Resource
@@ -43,7 +44,7 @@ use Shopware\Models\Tax\Tax;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Variant extends Resource
+class Variant extends Resource implements BatchInterface
 {
     /**
      * @return \Shopware\Models\Article\Repository
@@ -832,4 +833,35 @@ class Variant extends Resource
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
     }
 
+    /**
+     * Returns the primary ID of any data set.
+     *
+     * {@inheritDoc}
+     */
+    public function getIdByData($data)
+    {
+        $id = null;
+
+        if (isset($data['id'])) {
+            $id = $data['id'];
+        } else if(isset($data['number'])) {
+            try {
+                $id = $this->getIdFromNumber($data['number']);
+            }catch (ApiException\NotFoundException $e) {
+                return false;
+            }
+        }
+
+        if (!$id) {
+            return false;
+        }
+
+        $model = $this->getManager()->find('Shopware\Models\Article\Detail', $id);
+
+        if ($model) {
+            return $id;
+        }
+
+        return false;
+    }
 }

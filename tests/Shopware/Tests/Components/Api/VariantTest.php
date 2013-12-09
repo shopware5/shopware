@@ -418,7 +418,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $variant = $this->resource->update($variantId, $update);
 
         $this->assertCount(0, $variant->getImages());
-        
+
         $article = $variant->getArticle();
         /**@var $image \Shopware\Models\Article\Image*/
         foreach($article->getImages() as $image) {
@@ -588,5 +588,48 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
             'name' => 'Test-Set',
             'groups' => $groups
         );
+    }
+
+    public function testBatchModeShouldBeSuccessful()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+        $this->assertCount(0, $article->getDetails());
+
+        // Create 5 new variants
+        $batchData = array();
+        for ($i = 0; $i < 5; $i++) {
+            $create = $this->getSimpleVariantData();
+            $create['articleId'] = $article->getId();
+            $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+            $batchData[] = $create;
+        }
+
+        // Update the price of the existing variant
+        $existingVariant = $data['mainDetail'];
+        $existingVariant['prices'] = array(
+            array(
+                'customerGroupKey' => 'EK',
+                'from' => 1,
+                'to' => '-',
+                'price' => 473.99,
+            )
+        );
+        $batchData[] =  $existingVariant;
+
+        // Run batch operations
+        $this->resource->batch($batchData);
+
+        // Check results
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $id = $article->getId();
+        $article = $this->resourceArticle->getOne($id);
+
+        $this->assertCount(5, $article['details']);
+        $this->assertEquals(398, round($article['mainDetail']['prices'][0]['price']));
     }
 }
