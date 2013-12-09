@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,29 +20,19 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Check System
- *
- * todo@all: Documentation
  * <code>
  * $list = new Shopware_Components_Check_System();
  * $data = $list->toArray();
  * </code>
  */
 class Shopware_Components_Check_System implements IteratorAggregate, Countable
-{	
+{
 	protected $list;
-	
+
 	/**
 	 * Checks all requirements
 	 */
@@ -57,7 +47,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			);
 		}
 	}
-	
+
 	/**
 	 * Returns the check list
 	 *
@@ -76,7 +66,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 		return $this->list;
 	}
-	
+
 	/**
 	 * Checks a requirement
 	 *
@@ -146,7 +136,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return $required==$version;
 		}
 	}
-	
+
 	/**
 	 * Returns the check list
 	 *
@@ -156,7 +146,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     {
         return $this->getList();
     }
-	
+
     /**
      * Checks the zend optimizer
      *
@@ -176,7 +166,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 		return false;
 	}
-	
+
 	/**
      * Checks the ion cube loader
      *
@@ -196,7 +186,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 		return false;
 	}
-	
+
 	/**
      * Checks the php version
      *
@@ -243,7 +233,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 		return false;
 	}
-	
+
 	/**
      * Checks the curl version
      *
@@ -260,7 +250,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
      * Checks the lib xml version
      *
@@ -274,7 +264,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
      * Checks the gd version
      *
@@ -295,7 +285,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
      * Checks the gd jpg support
      *
@@ -310,7 +300,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks the freetype support
 	 *
@@ -325,7 +315,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks the session save path config
 	 *
@@ -341,7 +331,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks the magic quotes config
 	 *
@@ -370,7 +360,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks the include path config
 	 *
@@ -385,7 +375,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Compare max execution time config
 	 *
@@ -400,7 +390,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 		}
 		return version_compare($required, $version, '<=');
 	}
-	
+
 	/**
 	 * Decode php size format
 	 *
@@ -422,7 +412,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 	    }
 	    return $val;
 	}
-	
+
 	/**
 	 * Decode byte size format
 	 *
@@ -448,7 +438,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 	    }
 	    return $val;
 	}
-	
+
 	/**
 	 * Encode byte size format
 	 *
@@ -461,7 +451,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
 	    for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
 	    return( round( $bytes, 2 ) . ' ' . $types[$i] );
 	}
-	
+
 	/**
 	 *  Returns the check list
 	 *
@@ -471,7 +461,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     {
     	return $this->getList()->toArray();
     }
-    
+
     /**
      * Counts the check list
      *

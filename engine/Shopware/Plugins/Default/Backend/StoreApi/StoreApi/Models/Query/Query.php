@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -66,7 +66,7 @@ abstract class Shopware_StoreApi_Models_Query_Query extends Enlight_Class
         if(empty($this->criterion)) {
             return $criterion_collection;
         }
-        
+
         foreach($this->criterion as $criterion) {
             if(in_array(get_class($criterion), $this->validCriterion)) {
                 $statement = $criterion->getCriterionStatement();

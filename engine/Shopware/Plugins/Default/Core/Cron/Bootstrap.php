@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,25 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Cron
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
  */
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
 	protected $results = array();
 
 	public function install()
-	{		
+	{
 		$this->subscribeEvent(
 	 		'Enlight_Controller_Dispatcher_ControllerPath_Backend_Cron',
 	 		'onGetControllerPath'
@@ -53,17 +44,17 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 	 	);
 		return true;
 	}
-	
+
 	public function onGetControllerPath(Enlight_Event_EventArgs $args)
     {
 		return $this->Path() . 'Cron.php';
     }
-    
+
     public function onAfterSendResponse(Enlight_Event_EventArgs $args)
     {
 		//Shopware()->Cron()->runCronJobs();
     }
-    
+
     public function onInitResourceCron(Enlight_Event_EventArgs $args)
     {
         $eventManager = $this->Application()->Events();

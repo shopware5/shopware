@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Test
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware test listener
- *
- * todo@all: Documentation
  */
 class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketListener
 {
@@ -41,10 +31,10 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
 	protected $serverAddress;
 	protected $printTicketStateChanges;
 	protected $notifyTicketStateChanges;
-	
+
 	/**
 	 * Constructor method
-	 * 
+	 *
 	 * @param string|array $options
 	 */
 	public function __construct($serverAddress, $printTicketStateChanges=false , $notifyTicketStateChanges=false)
@@ -53,7 +43,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
     	$this->printTicketStateChanges = $printTicketStateChanges;
     	$this->notifyTicketStateChanges = $notifyTicketStateChanges;
     }
-        
+
     /**
      * Get the status of a ticket message
      *
@@ -94,7 +84,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
     protected function updateTicket($ticketId, $statusToBe, $message, $resolution)
     {
     	$statusText = $statusToBe=='closed' ? 'Test erfolgreich' : 'Test fehlgeschlagen';
-    	
+
         $this->getClient()->call('ticket.update', array(
         	(int) $ticketId,
         	$message,
@@ -135,7 +125,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
     	}
         return $this->client;
     }
-    
+
     /**
      * Adds an error to the list of errors.
      *
@@ -151,27 +141,27 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
         $resolution = '';
         $cumulative = FALSE;
         $adjustTicket = TRUE;
-        
+
         $message .= "\n".$e->getMessage();
-        
+
         if ($e instanceof PHPUnit_Framework_ExpectationFailedException) {
         //	$message .= "\n".$e->getCustomMessage();
         }
-        
+
         $message = str_replace("\n", "\n[[BR]]", $message);
-        
+
         $name = $test->getName(false);
         $tickets = PHPUnit_Util_Test::getTickets(get_class($test), $name);
-        
+
         foreach ($tickets as $ticket) {
            $ticketInfo = $this->getTicketInfo($ticket);
-            
+
             if ($adjustTicket && in_array($ticketInfo['status'], $ifStatus)) {
                 $this->updateTicket($ticket, $newStatus, $message, $resolution);
             }
         }
     }
-    
+
     /**
      * Adds a failure to the list of failures.
      * The passed in exception caused the failure.
@@ -198,7 +188,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
         } elseif ($test->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {
         	return;
         }
-        
+
         $ifStatus   = array('assigned', 'new', 'reopened');
         $newStatus  = 'closed';
         $message    = 'Automatically closed by PHPUnit (test passed).';
@@ -207,7 +197,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
 
         $name = $test->getName(false);
         $tickets = PHPUnit_Util_Test::getTickets(get_class($test), $name);
-        
+
         foreach ($tickets as $ticket) {
             // Remove this test from the totals (if it passed).
             if ($test->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {
@@ -225,7 +215,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
             }
 
             $ticketInfo = $this->getTicketInfo($ticket);
-            
+
             if ($adjustTicket && in_array($ticketInfo['status'], $ifStatus)) {
                 $this->updateTicket($ticket, $newStatus, $message, $resolution);
             }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -292,8 +292,8 @@ class sRewriteTable
         }
         $static = array();
         $urls = $this->template->fetch('string:' . $this->sSYSTEM->sCONFIG['sSEOSTATICURLS'], $this->data);
-        
-        
+
+
         if (!empty($urls))
         foreach (explode("\n", $urls) as $url) {
             list($key, $value) = explode(',', trim($url));

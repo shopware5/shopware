@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Customer
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 use Shopware\Models\Customer\Customer as Customer,
@@ -36,25 +28,12 @@ use Shopware\Models\Customer\Customer as Customer,
     Shopware\Models\Customer\Debit as Debit,
     Shopware\Models\Attribute\CustomerBilling as BillingAttributes,
     Shopware\Models\Attribute\CustomerShipping as ShippingAttributes;
-/**
- * Backend Controller for the customer backend module.
- *
- * Displays all customers in an Ext.grid.Panel and allows to delete,
- * add and edit customers. On the detail page the customer data displayed
- * and a list of all done orders shown.
- */
+
 /**
  * Backend Controller for the customer backend module.
  * Displays all customers in an Ext.grid.Panel and allows to delete,
  * add and edit customers. On the detail page the customer data displayed
  * and a list of all done orders shown.
- *
- * @link http://www.shopware.de
- * @copyright Copyright (c) 2011, shopware AG
- * @author Oliver Denter
- * @author $Author$
- * @package Shopware_Controllers
- * @subpackage Backend
  */
 class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs
 {
@@ -312,7 +291,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data = $this->getCustomer($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-            
+
         }
         catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
@@ -600,7 +579,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         } else {
             unset($params['group']);
         }
- 
+
         if (!empty($params['shopId'])) {
             $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
         } else {
@@ -619,24 +598,24 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         } else {
             $params['priceGroup'] = null;
         }
- 
+
         //If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
         if ($customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
- 
+
         if(empty($id) && empty($params['shipping'][0]["firstName"]) && empty($params['shipping'][0]["lastName"])){
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
- 
+
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];
         $params['debit'] = $params['debit'][0];
         $params['attribute'] = $params['attribute'][0];
         $params['billing']['attribute'] = $params['billingAttribute'][0];
         $params['shipping']['attribute'] = $params['shippingAttribute'][0];
- 
+
         return $params;
     }
 
