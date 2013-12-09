@@ -30,10 +30,43 @@
 class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
+     * @var \Shopware\Components\Api\Resource\Media
+     */
+    protected $resource;
+
+    /**
      * @return \Shopware\Components\Api\Resource\Media
      */
     public function createResource()
     {
         return new Shopware\Components\Api\Resource\Media();
     }
+
+    public function testUploadName()
+    {
+        $data = $this->getSimpleTestData();
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-used.jpg';
+
+        //copy image to execute test case multiple times.
+        unlink($dest);
+        copy($source, $dest);
+
+        $data['file'] = $dest;
+        $path = Shopware()->DocPath('media_image') . '/test-bild-used.jpg';
+        unlink($path);
+
+        $media = $this->resource->create($data);
+        $this->assertFileExists($path);
+    }
+
+
+    protected function getSimpleTestData()
+    {
+        return array(
+            'album' => -1,
+            'description' => 'Test description'
+        );
+    }
+
 }
