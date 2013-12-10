@@ -185,12 +185,13 @@
     </target>
 
     <target name="build-config">
-        <copy file="${app.dir}/Configs/Custom.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
+        <copy file="${basedir}/config.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
             <filterset begintoken="%" endtoken="%">
-                <filter token="db.name" value="${db.name}"/>
-                <filter token="db.host" value="${db.host}"/>
-                <filter token="db.user" value="${db.user}"/>
+                <filter token="db.database" value="${db.name}"/>
+                <filter token="db.host"     value="${db.host}"/>
+                <filter token="db.user"     value="${db.user}"/>
                 <filter token="db.password" value="${db.password}"/>
+                <filter token="db.port"     value=""/>
             </filterset>
         </copy>
     </target>
