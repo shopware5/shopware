@@ -91,6 +91,7 @@
             <arg value="composer.phar" />
             <arg value="install" />
             <arg value="--no-interaction" />
+            <arg value="--optimize-autoloader" />
         </exec>
     </target>
 
