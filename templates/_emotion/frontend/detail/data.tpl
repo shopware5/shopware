@@ -1,5 +1,108 @@
 {block name="frontend_detail_data"}
 
+	{* Rich snippet data couldn't be in the "head"-element due to the fact that the "#detail" element needs the schema of the data *}
+	{block name="frontend_detail_rich_snippets"}
+
+		{* Supplier name *}
+		{block name="frontend_detail_rich_snippets_brand"}
+			<meta itemprop="brand" content="{$sArticle.supplierName}" />
+		{/block}
+
+		{* Product name *}
+		{block name="frontend_detail_rich_snippets_name"}
+			<meta itemprop="name" content="{$sArticle.articleName}" />
+		{/block}
+
+		{* Product image *}
+		{block name="frontend_detail_rich_snippets_image"}
+			<meta itemprop="image" content="{if $sArticle.image.src.3}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" />
+		{/block}
+
+		{* Product description *}
+		{block name="frontend_detail_rich_snippets_description"}
+			<meta itemprop="description" content="{$sArticle.description_long|strip_tags}" />
+		{/block}
+
+		{* Category path. Google recommend the following format: "Parent category > Child category" *}
+		{block name="frontend_detail_rich_snippets_category"}
+			<meta itemprop="category" content="{strip}
+				{foreach $sBreadcrumb as $crumb}
+					{if !$crumb@last}
+						{if !$crumb@first} > {/if}{$crumb.name}
+					{/if}
+				{/foreach}
+				{/strip}" />
+		{/block}
+
+		{* Product identifier e.g the order number *}
+		{block name="frontend_detail_rich_snippets_identifier"}
+			<meta itemprop="identifier" content="sku:{$sArticle.ordernumber}" />
+		{/block}
+
+		{* Currency of the price, needs to follow the ISO-4217 standard *}
+		{block name="frontend_detail_rich_snippets_currency"}
+			<meta itemprop="currency" content="{$Shop->getCurrency()->getCurrency()}" />
+		{/block}
+
+		{* Product price *}
+		{block name="frontend_detail_rich_snippets_price"}
+			<meta itemprop="price" content="{$sArticle.price}" />
+		{/block}
+
+		{* Seller of the product e.g. our shop *}
+		{block name="frontend_detail_rich_snippets_seller"}
+			<meta itemprop="seller" content="{$sShopname}" />
+		{/block}
+
+		{* Availability of the product *}
+		{block name="frontend_detail_rich_snippets_availability"}
+			<meta itemprop="availability" content="{if $sArticle.instock > 0}in_stock{else}out_of_stock{/if}" />
+		{/block}
+
+		{* Available quantity of the product *}
+		{block name="frontend_detail_rich_snippets_quantity"}
+			<meta itemprop="quantity" content="{$sArticle.instock}" />
+		{/block}
+
+		{* Offer url for the product similar to the canonical tag in the "head"-element *}
+		{block name="frontend_detail_rich_snippets_offerUrl"}
+			<meta itemprop="offerUrl" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
+		{/block}
+
+		{* Aggregated review if we're dealing with more than one vote *}
+		{block name="frontend_detail_rich_snippets_review_aggregate"}
+			{if $sArticle.sVoteAverange.count > 1}
+				<span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+
+					{* Name of the reviewed product *}
+					{block name="frontend_detail_rich_snippets_review_aggregate_name"}
+						<meta itemprop="v:itemreviewed" content="{$sArticle.articleName}" />
+					{/block}
+
+					{* Minimum points *}
+					{block name="frontend_detail_rich_snippets_review_aggregate_worst"}
+						<meta itemprop="worst" content="0" />
+					{/block}
+
+					{* Maximum points *}
+					{block name="frontend_detail_rich_snippets_review_aggregate_best"}
+						<meta itemprop="best" content="10" />
+					{/block}
+
+					{* Average rating *}
+					{block name="frontend_detail_rich_snippets_review_aggregate_rating"}
+						<meta itemprop="rating" content="{$sArticle.sVoteAverange.averange}" />
+					{/block}
+
+					{* Vote count *}
+					{block name="frontend_detail_rich_snippets_review_aggregate_count"}
+						<meta itemprop="count" content="{$sArticle.sVoteAverange.count}" />
+					{/block}
+				</span>
+			{/if}
+		{/block}
+	{/block}
+
 	{* Caching instock status *}
 	{if !$sView}
 		<input id='instock_{$sArticle.ordernumber}'type='hidden' value='{$sArticle.instock}' />

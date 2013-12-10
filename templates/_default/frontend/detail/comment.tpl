@@ -64,13 +64,59 @@
 	{* Display comments *}
 	{if $sArticle.sVoteComments}
 		{foreach name=comment from=$sArticle.sVoteComments item=vote}
-			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}">
+			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}"{if $sArticle.sVoteAverange.count == 1} itemscope itemtype="http://data-vocabulary.org/Review{/if}">
+
+				{* If we just have one comment, we need to use the "review" type, otherwise we need to use "review-aggregate" *}
+				{block name="frontend_detail_comment_rich_snippets"}
+					{if $sArticle.sVoteAverange.count == 1}
+
+						{* Name of the reviewed product *}
+						{block name="frontend_detail_comment_rich_snippets_name"}
+							<meta itemprop="itemreviewed" content="{$sArticle.articleName}" />
+						{/block}
+
+						{* Review date, needs to follow the iso date format *}
+						{block name="frontend_detail_comment_rich_snippets_date"}
+							<meta itemprop="dtreviewed" content="{$vote.datum|substr:0:-9}" />
+						{/block}
+
+						{* Vote rating *}
+						{block name="frontend_detail_comment_rich_snippets_rating"}
+							<meta itemprop="rating" content="{$vote.points*2|replace:'.':','}" />
+						{/block}
+
+						{* Minimum points *}
+						{block name="frontend_detail_comment_rich_snippets_worst"}
+							<meta itemprop="worst" content="0" />
+						{/block}
+
+						{* Maximum points *}
+						{block name="frontend_detail_comment_rich_snippets_best"}
+							<meta itemprop="best" content="10" />
+						{/block}
+
+						{* Review summary *}
+						{block name="frontend_detail_comment_rich_snippets_summary"}
+							<meta itemprop="summary" content="{$vote.headline}" />
+						{/block}
+
+						{* Name of the reviewer *}
+						{block name="frontend_detail_comment_rich_snippets_reviewer"}
+							<meta itemprop="reviewer" content="{$vote.name}" />
+						{/block}
+
+						{* Review text *}
+						{block name="frontend_detail_comment_rich_snippets_description"}
+							<meta itemprop="description" content="{$vote.comment}" />
+						{/block}
+					{/if}
+				{/block}
 
 				<div class="left_container">
 				{* Author *}
 				{block name='frontend_detail_comment_author'}
 					<strong class="author">
-						{se name="DetailCommentInfoFrom"}{/se} {$vote.name}
+						{se name="DetailCommentInfoFrom"}{/se} <span>{$vote.name}</span>
 					</strong>
 				{/block}
 
