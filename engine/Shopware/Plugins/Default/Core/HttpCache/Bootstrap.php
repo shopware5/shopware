@@ -1,4 +1,6 @@
 <?php
+use Shopware\Components\Model\ModelManager;
+
 /**
  * Shopware 4.0
  * Copyright © 2013 shopware AG
@@ -404,8 +406,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if ($this->clearCache()) {
             return "Cleared HTTP-Cache\n";
         }
-
-
     }
 
     /**
@@ -849,11 +849,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        $proxyUrl = $this->getProxyUrl($this->request);
-        if ($proxyUrl === null || $this->request->getHeader('Surrogate-Capability') === false) {
-            return;
-        }
-
         $entity = $eventArgs->get('entity');
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             $entityName = get_parent_class($entity);
@@ -929,7 +924,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         $proxyUrl = $this->getProxyUrl($this->request);
-        if ($proxyUrl === null || $this->request->getHeader('Surrogate-Capability') === false) {
+        if ($proxyUrl === null) {
+            return false;
+        }
+
+        if (!$this->request || $this->request->getHeader('Surrogate-Capability') === false) {
             return false;
         }
 

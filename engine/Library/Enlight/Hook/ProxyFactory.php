@@ -315,7 +315,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             FilesystemIterator::CURRENT_AS_PATHNAME
         );
 
-        foreach($proxies as $proxyPath) {
+        foreach ($proxies as $proxyPath) {
             @unlink($proxyPath);
         }
     }

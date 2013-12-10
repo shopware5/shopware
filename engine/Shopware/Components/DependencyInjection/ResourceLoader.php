@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\DependencyInjection;
 
+use InvalidArgumentException;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection
@@ -53,7 +55,6 @@ class ResourceLoader
      */
     protected $bootstrap;
 
-
     /**
      * @param Container $container
      */
@@ -84,6 +85,20 @@ class ResourceLoader
         $this->container->set('application', $application);
 
         return $this;
+    }
+
+    /**
+     * Gets a parameter.
+     *
+     * @param string $name The parameter name
+     *
+     * @return mixed  The parameter value
+     *
+     * @throws InvalidArgumentException if the parameter is not defined
+     */
+    public function getParameter($name)
+    {
+        return $this->container->getParameter($name);
     }
 
     /**
