@@ -1716,6 +1716,52 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
+    public function testAssignCategoriesByPathShouldBeSuccessful()
+    {
+        // Delete previous data
+        try {
+            $id = $this->resource->getIdFromNumber('hollo-1');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (Exception $e) {
+        }
+        // Associate three kinds of categories with the article:
+        // category by id, category by path, new category by path
+        $article = $this->resource->create(
+            array(
+                'name' => 'Hähnchenschnitzel Hollo',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Onkel Tom',
+                'categories' => array(
+                    array('path' => 'Deutsch|Genusswelten|Tees und Zubehör|Tees'),
+                    array('path' => 'Deutsch|Genusswelten|Tees und Zubehör|Süßstoff'),
+                    array('id' => 16)
+                ),
+                'mainDetail' => array(
+                    'number' => 'hollo-1',
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 4.99,
+                        ),
+                    )
+                ),
+            )
+        );
+        $ids = array_map(
+            function($category) {
+                return $category->getId();
+            },
+            $article->getCategories()->toArray()
+        );
+        $ids = array_flip($ids);
+        $this->assertArrayHasKey(12, $ids);
+        $this->assertArrayHasKey(16, $ids);
+        $this->assertArrayCount(3, $ids);
+    }
+
 }
 
 

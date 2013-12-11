@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Models\Category\Category as CategoryModel;
 
 /**
  * Category API Resource
@@ -225,5 +226,64 @@ class Category extends Resource
         }
 
         return $params;
+    }
+
+
+    /**
+     * Find a category by a given human readable path.
+     * This will step through all categories from top to bottom and return the matching category.
+     *
+     * @param string $path              Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
+     * @param boolean $create           Should categories be created?
+     * @return null|Category
+     * @throws \RuntimeException
+     */
+    public function findCategoryByPath($path, $create = false)
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        $categoryModel = null;
+        $categoryNames = explode('|', $path);
+
+        $parentId = 1; // The root node
+        $parent = null;
+
+        foreach ($categoryNames as $categoryName) {
+            if (empty($categoryName)) {
+                break;
+            }
+
+            $categoryModel = $this->getRepository()->findOneBy(array('name' => $categoryName, 'parentId' => $parentId));
+            if (!$categoryModel) {
+                if (!$create) {
+                    return null;
+                }
+
+                if (null === $parent) {
+                    /** @var Category $parent */
+                    $parent = $this->getRepository()->find($parentId);
+                    if (!$parent) {
+                        throw new \RuntimeException(sprintf('Could not find parent %s', $parentId));
+                    }
+                }
+
+                $categoryModel = new CategoryModel();
+                $this->getManager()->persist($categoryModel);
+                $categoryModel->setParent($parent);
+                $categoryModel->setName($categoryName);
+            }
+
+            $parentId = $categoryModel->getId();
+            $parent = $categoryModel;
+
+        }
+
+        if (empty($categoryModel)) {
+            return null;
+        }
+
+        return $categoryModel;
     }
 }
