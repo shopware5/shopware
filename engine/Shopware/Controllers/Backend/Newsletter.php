@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,26 +20,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Newsletter controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
-{	
+{
 	/**
 	 * Init controller method
-	 * 
+	 *
 	 * Disables the authorization-checking and template renderer.
 	 */
 	public function init()
@@ -47,14 +37,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
 		Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
 	}
-	
+
 	/**
 	 * Index action method
-	 * 
+	 *
 	 * Forwards the request to the proper action.
 	 */
 	public function indexAction()
-	{		
+	{
 		if ($this->Request()->getParam('id')) {
 			if ($this->Request()->getParam('testmail')) {
 				return $this->forward('mail');
@@ -67,10 +57,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			return $this->forward('cron');
 		}
 	}
-	
+
 	/**
 	 * View action method
-	 * 
+	 *
 	 * Shows a complete preview of the newsletter.
 	 */
 	public function viewAction()
@@ -91,10 +81,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 				return;
 			}
 		}
-		
+
 		$mailing = $this->initMailing($mailingID);
 		$template = $this->initTemplate($mailing);
-		
+
 		if(!empty($mailaddressID)) {
 			$sql = 'SELECT email FROM s_campaigns_mailaddresses WHERE id=?';
 			$email = Shopware()->Db()->fetchOne($sql, array($mailaddressID));
@@ -117,7 +107,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             $body = $template->fetch('newsletter/alt/'.$mailing['template'], $template);
         }
 
-		
+
 		if(empty($mailing['plaintext'])) {
 			if(!$this->Request()->getParam('id')) {
 				$body = $this->trackFilter($body, $mailing['id']);
@@ -126,7 +116,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$this->Response()->setHeader('Content-Type', 'text/plain');
 			$body = $this->altFilter($body);
 		}
-		
+
 		echo $body;
 	}
 
@@ -282,10 +272,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             );
         }
    	}
-	
+
 	/**
 	 * Cron action method
-	 * 
+	 *
 	 * Sends the newsletter emails as a cronjob.
 	 */
 	public function cronAction()
@@ -293,30 +283,30 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$this->Response()->setHeader('Content-Type', 'text/plain');
 		$this->mailAction();
 	}
-	
+
 	/**
 	 * Log action method
-	 * 
+	 *
 	 * Logs read the email newsletter.
 	 */
 	public function logAction()
 	{
 		$mailing = (int) $this->Request()->getParam('mailing');
 		$mail = (int) $this->Request()->getParam('mailaddress');
-						
+
 		if(empty($mailing)||empty($mail)) {
 			return;
 		}
-		
+
 		$sql = 'SELECT email FROM s_campaigns_mailaddresses WHERE id=?';
 		$email = Shopware()->Db()->fetchOne($sql, array($mail));
-		
+
 		if(empty($email)) {
 			return;
 		}
 
 		$sql = '
-			UPDATE s_campaigns_mailaddresses 
+			UPDATE s_campaigns_mailaddresses
 			SET lastread=lastmailing
 			WHERE lastmailing=?
 			AND email=?
@@ -327,18 +317,18 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$sql = 'UPDATE s_campaigns_mailings SET `read`=`read`+1 WHERE id=?';
 			Shopware()->Db()->query($sql, array($mailing));
 		}
-		
+
 		$this->Response()->setHeader('Content-Type', 'image/gif');
 		$bild = imagecreate (1, 1);
 		$white = imagecolorallocate($bild, 255, 255, 255);
-		imagefill($bild, 1, 1, $white);		
+		imagefill($bild, 1, 1, $white);
 		imagegif ($bild);
 		imagedestroy($bild);
 	}
-	
+
 	/**
 	 * Init mailing method
-	 * 
+	 *
 	 * Initializes the mailing using the mailing id.
 	 */
 	public function initMailing($mailingID=null)
@@ -350,24 +340,24 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($mailing['languageID']);
         $shop->registerResources(Shopware()->Bootstrap());
-        
+
 		$this->Request()
 			->setHttpHost($shop->getHost())
 			->setBaseUrl($shop->getBasePath());
-						
+
 		Shopware()->Session()->sUserGroup = $mailing['customergroup'];
 		$sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
 		Shopware()->Session()->sUserGroupData =  Shopware()->Db()->fetchRow($sql, array($mailing['customergroup']));
-        
+
 		Shopware()->Router()->setGlobalParam('module', 'frontend');
 		Shopware()->Config()->DontAttachSession = true;
-		
+
 		return $mailing;
 	}
-	
+
 	/**
 	 * Init template method
-	 * 
+	 *
 	 * Initializes the template using the mailing data.
 	 */
 	public function initTemplate($mailing)
@@ -391,10 +381,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
 			$template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());
 		}
-		
+
 		return $template;
 	}
-	
+
 	/**
 	 * Returns mailing data using the mailing id.
 	 *
@@ -413,7 +403,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$mailing = Shopware()->Db()->fetchRow($sql);
 		return $mailing;
 	}
-	
+
 	/**
 	 * Returns mailing details by mailing id.
 	 *
@@ -423,7 +413,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 	public function getMailingDetails($id)
 	{
 		$details = Shopware()->Modules()->Marketing()->sMailCampaignsGetDetail((int) $id);
-	
+
 		foreach ($details['containers'] as $key => $container) {
 			if($container['type']=='ctVoucher') {
 				if(!empty($container['value'])) {
@@ -435,10 +425,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 				$details['suggest'] = true;
 			}
 		}
-		
+
 		return $details;
 	}
-	
+
 	/**
 	 * Returns the article suggests based on the customer.
 	 *
@@ -450,7 +440,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Returns mailing voucher using the voucher id.
 	 *
@@ -474,7 +464,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$voucher = Shopware()->Db()->fetchRow($sql, array($voucherID));
 		return $voucher;
 	}
-	
+
 	/**
 	 * Returns the mailing email addresses based on the mailing id.
 	 *
@@ -487,7 +477,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$mailing = Shopware()->Db()->fetchRow($sql, array($id));
 
 		if(empty($mailing)) return false;
-		
+
 		$mailing['groups'] = unserialize($mailing['groups']);
 
         // The first element holds the selected customer groups for the current newsletter
@@ -510,7 +500,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		if (empty($customerGroups)) {
 			$customerGroups = '1=2';
 		}
-		
+
 		$limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;
         $limit = max(1, $limit);
 
@@ -544,7 +534,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 
 		return Shopware()->Db()->fetchCol($sql, array($id, $mailing['languageID']));
 	}
-	
+
 	/**
 	 * Returns a new voucher code using the voucher id.
 	 *
@@ -568,7 +558,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		Shopware()->Db()->query($sql, array($code['id']));
 		return $code['code'];
 	}
-	
+
 	/**
 	 * Returns mailing user data by email.
 	 *
@@ -610,7 +600,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			WHERE cm.email=?
 		';
 		$user = Shopware()->Db()->fetchRow($sql, array($email));
-		
+
 		if(empty($user)) {
 			$sql = '
 				SELECT '.$select.'
@@ -629,10 +619,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 			$user = Shopware()->Db()->fetchRow($sql);
 			$user['email'] = $user['newsletter'] = $email;
 		}
-		
+
 		return $user;
 	}
-	
+
 	/**
 	 * Pre filter the old template source.
 	 *
@@ -648,7 +638,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$source = preg_replace('#{eval var=($sCampaignContainer.data.link)}#Umsi', '{include file="string:`$1`"}', $source);
 		return $source;
 	}
-	
+
 	/**
 	 * Replaces the relative pictures links with absolute links.
 	 *
@@ -662,7 +652,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$source = preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
 		return $source;
 	}
-	
+
 	/**
 	 * Removes the unneeded metadata in the alternative view.
 	 *
@@ -677,7 +667,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$source = html_entity_decode($source);
 		return $source;
 	}
-	
+
 	/**
 	 * Adds a parameter to the internal tracking urls.
 	 *
@@ -695,7 +685,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 		$source = preg_replace($pattern, 'href="$1?'.$track.'"', $source);
 		return $source;
 	}
-	
+
 	/**
 	 * Creates a hash based on the passed data.
 	 *

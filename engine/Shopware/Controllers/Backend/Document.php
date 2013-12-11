@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Document
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Shopware document / pdf controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 {
@@ -67,9 +57,9 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 			$this->path = "http://";
 		}
 		$this->path .= Shopware()->Config()->BasePath."/";
-		
+
 	}
-	
+
 	/**
 	 * Generate pdf invoice
 	 * @param $this->Request()->id - Order-ID
@@ -121,7 +111,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 	 * @return void
 	 */
 	public function settingsAction(){
-		
+
 	}
 
 	/**
@@ -157,9 +147,9 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		'1000','doc_".$id."','Neuer Beleg'
 		)
 		";
-		
+
 		$insert = Shopware()->Db()->query($sql);
-		
+
 	}
 
 	/**
@@ -210,7 +200,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		}
 		return $this->forward('detail');
 	}
-	
+
 	/**
 	 * Update properties of element box
 	 * @access public
@@ -224,7 +214,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		}
 		return $this->forward('detail');
 	}
-	
+
 	/**
 	 * Load properties of element box / document
 	 * @access public
@@ -234,7 +224,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		$this->View()->assign('Config',Shopware()->Config());
 		$this->View()->assign('Path',$this->path);
 		$id = $this->Request()->id;
-		
+
 		if (empty($id)){
 			$this->View()->setTemplate();
 		}else {
@@ -263,7 +253,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 			}
 		}
 	}
-	
+
 	/**
 	 * Load available documents
 	 * @access public
@@ -273,19 +263,19 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		$getDocuments = Shopware()->Db()->fetchAll("
 		SELECT id, name AS text, template, numbers, 1 AS leaf FROM s_core_documents ORDER BY id ASC
 		");
-		
+
 		echo json_encode($getDocuments);
-		
+
 	}
 
 	/**
-	 * Duplicate document properties 
+	 * Duplicate document properties
 	 * @return void
 	 */
 	public function duplicatePropertiesAction(){
 		$this->View()->setTemplate();
 		$id = $this->Request()->id;
-		
+
 		// Update statement
 		$getDocumentTypes = Shopware()->Db()->fetchAll("
 		SELECT DISTINCT id FROM s_core_documents WHERE id != ?
@@ -306,21 +296,21 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 			";
 			Shopware()->Db()->query($sqlDuplicate,array($targetID["id"],$id));
 		}
-		
+
 //		return $this->forward("detail");
 	}
-	
+
 	/**
 	 * Deprecated method to load translations, will be replaced in Shopware 4.
 	 * @access public
 	 */
 	protected function sInitTranslations($key,$object,$addAdditionalKey=""){
-		
+
 		$queryLanguages = Shopware()->Db()->fetchAll("
-		SELECT * FROM s_core_multilanguage 
-		WHERE 
+		SELECT * FROM s_core_multilanguage
+		WHERE
 		skipbackend != 1
-		ORDER BY id ASC		
+		ORDER BY id ASC
 		");
 		$array = array();
 		$this->sLanguages = $queryLanguages;
@@ -334,17 +324,17 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 			AND
 				objectlanguage = ?
 			",array($object,$key,$language["isocode"]));
-			
+
 			if ($addAdditionalKey){
 				$this->sTranslations[$object][$language["isocode"]] = unserialize($queryTranslation["objectdata"]);
 			}else {
 				$this->sTranslations[$language["isocode"]] = unserialize($queryTranslation["objectdata"]);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Deprecated method to load translations, will be replaced in Shopware 4.
 	 * @access public
@@ -353,7 +343,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 		if (!$this->sLanguages || !@count($this->sLanguages)) return;
 		foreach ($this->sLanguages as $language){
 			if ($secondkey){
-				
+
 				if ($this->sTranslations[$object][$language["isocode"]][$secondkey][$key]){
 					$opacity = "opacity:1";
 				}else {
@@ -366,11 +356,11 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
 					$opacity = "opacity:0.5";
 				}
 			}
-			
+
 			$style = "style=\"margin-left:10px;$opacity;cursor:pointer\"";
 			$onclick = "onclick=\"sTranslations('$field','$key','$id','$object','{$language["isocode"]}','$secondkey')\"";
-			$element .= "<img src=\"".$this->path."engine/backend/img/default/icons/flags/{$language["flagbackend"]}\" $style $onclick>";	
+			$element .= "<img src=\"".$this->path."engine/backend/img/default/icons/flags/{$language["flagbackend"]}\" $style $onclick>";
 		}
-		return $element;	
+		return $element;
 	}
 }

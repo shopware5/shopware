@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
+
 /**
  * Deprecated Shopware Class that provide crm features to shopware
- *
- * todo@all: Documentation
  */
 class sTicketSystem
 {
@@ -40,14 +31,14 @@ class sTicketSystem
 	* Pointer to Shopware-Core-Functions
 	*/
 	var $sSYSTEM;
-	
-	
+
+
 	/**
 	 * Sets the default DB connector (mysql|adodb)
 	 */
 	public $sDbType;
-	
-	
+
+
 	/**
 	 * Class-constructor
 	 */
@@ -56,15 +47,15 @@ class sTicketSystem
 		//Set the Database default typ
 		$this->sDbType = "mysql";
 	}
-	
-	
+
+
 	/**
 	 * Returns all support tickets as an associative array
 	 *
 	 * @access public
 	 * @author Dennis Scharfenberg
 	 * @version 1.0
-	 * 
+	 *
 	 * @param string $sort the first part of the SQL-LIMIT
 	 * @param string $dir
 	 * @param int $start the start value of SQL-LIMIT
@@ -75,22 +66,22 @@ class sTicketSystem
 	 */
 	public function getTicketSupportStore($sort="receipt", $dir="DESC", $start=0, $limit=25, $search="", $where="", $aFilter="")
 	{
-		
-		/* 
-         * ESCAPE 
-         */ 
-        $start = intval($start); 
-        $limit = intval($limit); 
-        $search = mysql_real_escape_string(stripcslashes($search)); 
-        foreach ($aFilter as $filterKey => $filterVal) 
-        { 
-                $aFilter[$filterKey] = mysql_real_escape_string(stripcslashes($aFilter[$filterKey])); 
-        } 
-        
+
+		/*
+         * ESCAPE
+         */
+        $start = intval($start);
+        $limit = intval($limit);
+        $search = mysql_real_escape_string(stripcslashes($search));
+        foreach ($aFilter as $filterKey => $filterVal)
+        {
+                $aFilter[$filterKey] = mysql_real_escape_string(stripcslashes($aFilter[$filterKey]));
+        }
+
 		/*
 		 * SORTFILED MAPPING
 		 */
-		
+
 		switch ($sort)
 		{
 			case "receipt":
@@ -115,7 +106,7 @@ class sTicketSystem
 				$sort = "tst.name";
 			break;
 		}
-		
+
 		/*
 		 * FILTER OPTIONS
 		 */
@@ -128,12 +119,12 @@ class sTicketSystem
 		{
 			$filter_add .= "AND ts.employeeID = '{$aFilter['filter_employee']}'";
 		}
-		
+
 		//create where statement for hide all closed status
 		$hide_closed_status = "";
-			
+
 		if($aFilter['filter_status'] != -1)
-		{			
+		{
 			if($aFilter['filter_status'] == 4)
 			{
 				$sql_clo = "SELECT `id` , `description`
@@ -144,7 +135,7 @@ class sTicketSystem
 							FROM `s_ticket_support_status`
 							WHERE `closed` = 1";
 			}
-			
+
 			$q_clo = mysql_query($sql_clo);
 			if(mysql_num_rows($q_clo) != 0)
 			{
@@ -158,15 +149,15 @@ class sTicketSystem
 				$hide_closed_status = sprintf("AND ts.statusID NOT IN (%s)", implode(",", $st_ids));
 			}
 		}
-			
-		
+
+
 		/*
 		 * SEARCH SETTINGS
 		 */
 		$search = trim($search);
 		if(!empty($search))
-		{			
-			$search_qr = "AND (ub.lastname LIKE '%{$search}%' 
+		{
+			$search_qr = "AND (ub.lastname LIKE '%{$search}%'
 							OR ub.firstname LIKE '%{$search}%'
 							OR CONCAT_WS(', ',ub.lastname, ub.firstname) LIKE '%{$search}%'
 							OR CONCAT_WS(' ',ub.firstname, ub.lastname) LIKE '%{$search}%'
@@ -176,22 +167,22 @@ class sTicketSystem
 							OR ub.company LIKE '%{$search}%'
 							)";
 		}
-		
+
 		/*
 		 * FETCH TICKET ARRAY
 		 */
-		
+
 		//seconds sort param
 		if($sort == "statusID")
 		{
 			$secSort = ", `receipt` DESC";
 		}
-		
+
 		$sql = "
-		SELECT 		
+		SELECT
 			ts.*,
 			DATE_FORMAT(ts.receipt, '%d.%m.%Y - %H:%i') AS receipt_f,
-			DATE_FORMAT(ts.last_contact, '%d.%m.%Y - %H:%i') AS last_contact_f,		
+			DATE_FORMAT(ts.last_contact, '%d.%m.%Y - %H:%i') AS last_contact_f,
 			CONCAT_WS(', ',ub.lastname, ub.firstname) AS contact,
 			ub.company ,
 			st.description as status,
@@ -209,7 +200,7 @@ class sTicketSystem
 		{$filter_add}
 		ORDER BY {$sort} {$dir} {$secSort}
 		LIMIT {$start},{$limit}";
-		
+
 		if($this->sDbType == "mysql")
 		{
 			$result = mysql_query($sql);
@@ -222,15 +213,15 @@ class sTicketSystem
 		{
 			$fetchTickets = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 		}
-		
-		$aResults = array();	
+
+		$aResults = array();
 		$aResults['data'] = array();
-					
+
 		foreach ($fetchTickets as $fetch)
 		{
 			$data = array();
 			$data['ticketID'] = $fetch['id'];
-			
+
 			/*
 			 * Highlighht Search
 			 */
@@ -239,10 +230,10 @@ class sTicketSystem
 				$search_highlight = sprintf("<span style='background-color:yellow'>%s</span>", $search);
 				$fetch['message'] = str_replace($search, $search_highlight, $fetch['message']);
 				$fetch['contact'] = str_replace($search, $search_highlight, $fetch['contact']);
-				
+
 				$data['ticketID'] = str_replace($search, $search_highlight, $data['ticketID']);
 			}
-			
+
 			$data['id'] = $fetch['id'];
 			$data['userID'] = $fetch['userID'];
 			$data['employeeID'] = $fetch['employeeID'];
@@ -259,24 +250,24 @@ class sTicketSystem
 			$data['receipt'] = $fetch['receipt_f'];
 			$data['last_contact'] = $fetch['last_contact_f'];
 			$data['isocode'] = strtoupper($fetch['isocode']);
-			
+
 			if(!empty($data['contact']))
 			{
 				$data['display_name'] = $data['contact'];
 			}else{
 				$data['display_name'] = $data['email'];
 			}
-			
-			
+
+
 			$aResults['data'][] = $data;
 		}
-						
+
 		/*
 		 * FETCH TOTAL COUNT
 		 */
-		
+
 		$sql_total = "
-		SELECT 		
+		SELECT
 			COUNT(*) AS total
 		FROM `s_ticket_support` AS ts
 		LEFT JOIN `s_user_billingaddress` AS ub ON(ub.userID = ts.userID)
@@ -286,56 +277,56 @@ class sTicketSystem
 		{$hide_closed_status}
 		{$search_qr}
 		{$filter_add}";
-		
-		
+
+
 		$result_total = mysql_query($sql_total);
 		$aResults['total'] = mysql_result($result_total, 0, "total");
-		
-		return $aResults;		
+
+		return $aResults;
 	}
-	
+
 	public function getTicketCountries()
-	{		
-		$sqlQ = mysql_query("SELECT DISTINCT tsm.`isocode`, m.name 
+	{
+		$sqlQ = mysql_query("SELECT DISTINCT tsm.`isocode`, m.name
 							FROM `s_ticket_support_mails` AS tsm
 							LEFT JOIN `s_core_multilanguage` AS m
 							ON tsm.isocode = m.isocode
 							ORDER BY tsm.`isocode`");
-		$aResults = array();	
+		$aResults = array();
 		$aResults['data'] = array();
-		
+
 		while ($fetch = mysql_fetch_assoc($sqlQ)) {
-			$data = array();		
+			$data = array();
 			$data['iso'] = strtoupper($fetch["isocode"]);
 			$data['name'] = $fetch["name"];
 			$aResults['data'][] = $data;
-		}		
-		return $aResults;		
+		}
+		return $aResults;
 	}
-	
+
 	public function getTicketMissingCountries()
-	{		
+	{
 		$sqlQ = mysql_query("SELECT `isocode`, name
 							FROM `s_core_multilanguage`
 							WHERE `isocode` NOT
 							IN (
-							
+
 							SELECT DISTINCT `isocode`
 							FROM `s_ticket_support_mails`
 							)
 							ORDER BY `isocode`");
-		$aResults = array();	
+		$aResults = array();
 		$aResults['data'] = array();
-		
+
 		while ($fetch = mysql_fetch_assoc($sqlQ)) {
-			$data = array();		
+			$data = array();
 			$data['iso'] = strtoupper($fetch["isocode"]);
 			$data['name'] = utf8_decode($fetch["name"]);
 			$aResults['data'][] = $data;
-		}		
-		return $aResults;		
+		}
+		return $aResults;
 	}
-	
+
 	/**
 	 * Deletes a ticket and its historys entries by ID
 	 *
@@ -345,23 +336,23 @@ class sTicketSystem
 	{
 		//Escape
 		$ticketID = intval($ticketID);
-		
+
 		$sql1 = "DELETE FROM `s_ticket_support` WHERE `id` = '{$ticketID}' LIMIT 1";
 		mysql_query($sql1);
-		
+
 		$sql2 = "DELETE FROM `s_ticket_support_history` WHERE `ticketID` = '{$ticketID}'";
 		mysql_query($sql2);
 	}
-	
+
 	public function deleteTicketTypeByID($typeID)
 	{
 		//Escape
         $typeID = intval($typeID);
-		
+
 		$sql1 = "DELETE FROM `s_ticket_support_types` WHERE `id` = '{$typeID}' LIMIT 1";
 		return mysql_query($sql1);
 	}
-	
+
 	/**
 	 * Returns all TicketMails in an ExtJS store format
 	 *
@@ -371,48 +362,48 @@ class sTicketSystem
 	{
 		//Escape
 		$ticketID = intval($ticketID);
-		
+
 		$data = array();
 		$standard = array();
-		
+
 		$sql = "
-			SELECT * FROM `s_ticket_support_mails` 
-			WHERE `isocode` = 
+			SELECT * FROM `s_ticket_support_mails`
+			WHERE `isocode` =
 			(
 				SELECT isocode FROM `s_ticket_support` WHERE id = '{$ticketID}'
 			)
 			ORDER BY `description`";
-		
+
 		$query = mysql_query($sql);
 		while ($fetch = mysql_fetch_array($query)) {
-			
+
 			$fetch['subject'] = $this->replaceTicketMailBB($ticketID, $fetch['subject']);
 			$fetch['content'] = $this->replaceTicketMailBB($ticketID, $fetch['content']);
 			$fetch['contentHTML'] = $this->replaceTicketMailBB($ticketID, $fetch['contentHTML']);
-			
+
 			$fetch['subject'] = utf8_encode($fetch['subject']);
 			$fetch['content'] = nl2br($fetch['content']);
 			$fetch['contentHTML'] = $fetch['contentHTML'];
-			
+
 			if($fetch['name'] == "sSTANDARD"){
 				$standard = $fetch;
 				$fetch['standard'] = 1;
 			}
-			
+
 			$data[$fetch['id']] = $fetch;
 		}
-		
+
 		return array("data"=>$data, "standard"=>$standard);
 	}
-	
+
 	public function getTicketMailItem($id, $ticketID)
-	{	
+	{
 		//Escape
 		$id = intval($id);
 		$ticketID = intval($ticketID);
-			
+
 		$sql = "SELECT * FROM `s_ticket_support_mails` WHERE `id` = '{$id}'";
-		
+
 		if($this->sDbType == "adodb")
 		{
 			$fetch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
@@ -421,24 +412,24 @@ class sTicketSystem
 			$query = mysql_query($sql);
 			$fetch = mysql_fetch_array($query);
 		}
-		
-		
+
+
 		$fetch['subject'] = $this->replaceTicketMailBB($ticketID, $fetch['subject']);
 		$fetch['content'] = $this->replaceTicketMailBB($ticketID, $fetch['content']);
 		$fetch['contentHTML'] = $this->replaceTicketMailBB($ticketID, $fetch['contentHTML']);
-			
+
 		$fetch['subject'] = utf8_encode($fetch['subject']);
 		$fetch['content'] = utf8_encode($fetch['content']);
 		$fetch['contentHTML'] = utf8_encode($fetch['contentHTML']);
-		
+
 		$fetch['content'] = nl2br($fetch['content']);
-		
+
 		return $fetch;
 	}
-	
+
 	public function replaceTicketMailBB($ticketID, $string)
 	{
-		
+
 		//Escape
 		$ticketID = intval($ticketID);
 
@@ -451,22 +442,22 @@ class sTicketSystem
 				$sCONFIG[$confData['name']] = $confData['value'];
 			}
 		}
-		else 
+		else
 		{
 			$sCONFIG = $this->sSYSTEM->sCONFIG;
 		}
-		
+
 		//SSL CHECK
 		$sCONFIG['sUSESSL'] == 1 ? $http = "https://" : $http = "http://";
-		
+
 		$ticketData = $this->getTicketSupportById($ticketID);
 		$string = str_replace("{sTicketID}", "#".$ticketID, $string);
-		
+
 		//Get Shopshop URL
 		$sql = "SELECT *
 				FROM `s_core_multilanguage`
 				WHERE `isocode` LIKE '{$ticketData['isocode']}'";
-		
+
 		if($this->sDbType == "adodb")
 		{
 			$result = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
@@ -476,7 +467,7 @@ class sTicketSystem
 			$result = mysql_query($sql);
 			$url = mysql_fetch_assoc($result);
 		}
-		
+
 		//iso missing
 		if(empty($url['domainaliase']))
 		{
@@ -495,46 +486,46 @@ class sTicketSystem
 		}
 		//Split
 		$url_conf = explode("\n", $url['domainaliase']);
-		
-		
+
+
 		//sCONFIG nicht verf�gbar!!!
 		$temp = str_replace($sCONFIG["sHOST"],$url_conf[0],$sCONFIG["sBASEPATH"]);
-		
+
 		$temp = str_replace("\n","",$temp);
 		$temp = str_replace("\r","",$temp);
-		
+
 		$string = str_replace("{sTicketDirectUrl}", "http://".$temp."/shopware.php?sViewport=ticketdirect&sAID=".$ticketData['uniqueID'], $string);
-		
+
 		return $string;
 	}
-	
+
 	/**
 	 * Returns one support tickets as an associative array
 	 *
 	 * @access public
 	 * @author Dennis Scharfenberg
 	 * @version 1.0
-	 * 
-	 * @param int $ticketID s_ticket_support.id 
+	 *
+	 * @param int $ticketID s_ticket_support.id
 	 * @param int $userID BenutzerID (sollte aus Sicherheitsgr�nden �bergeben werden)
 	 * @return array
 	 */
 	public function getTicketSupportById($ticketID, $userID=0)
-	{	
-		//Escape 
- 		$ticketID = intval($ticketID); 
+	{
+		//Escape
+ 		$ticketID = intval($ticketID);
  		$userID = intval($userID);
-		
-		if(!empty($userID)) 
-		{ 
-			$whereAdd = "AND ts.`userID` = ".$userID; 
+
+		if(!empty($userID))
+		{
+			$whereAdd = "AND ts.`userID` = ".$userID;
 		}
- 			
+
 		/*
 		 * FETCH TICKET ARRAY
 		 */
-		
-		$sql = "SELECT 		
+
+		$sql = "SELECT
 		ts.*,
 		u.email AS user_email,
 		ts.email AS ticket_email,
@@ -543,33 +534,33 @@ class sTicketSystem
 		DATE_FORMAT(ts.last_contact, '%d.%m.%Y - %H:%i') AS last_contact_f,
 		CONCAT_WS(', ',ub.lastname, ub.firstname) AS contact,
 		ub.company,
-		st.responsible, 
-		st.closed 
-		
+		st.responsible,
+		st.closed
+
 		FROM `s_ticket_support` AS ts
 		LEFT JOIN `s_user_billingaddress` AS ub ON(ub.userID = ts.userID)
 		LEFT JOIN `s_user` AS u ON(u.id = ts.userID)
 		LEFT JOIN `s_ticket_support_status` AS st ON(st.id = ts.statusID)
-		
+
 		WHERE ts.id = '{$ticketID}'
 		{$whereAdd}";
-		
+
 		if($this->sDbType == "mysql")
 		{
-			
+
 			$result = mysql_query($sql);
 			$fetch = mysql_fetch_assoc($result);
 		}elseif ($this->sDbType == "adodb")
 		{
-			
+
 			$fetch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
-			
+
 		}
-		
-		
-		
-		$aResults = array();	
-				
+
+
+
+		$aResults = array();
+
 		$aResults['id'] = $fetch['id'];
 		$aResults['userID'] = $fetch['userID'];
 		$aResults['ticket_type'] = $fetch['ticket_type'];
@@ -589,10 +580,10 @@ class sTicketSystem
 		$aResults['closed'] = $fetch['closed'];
 		$aResults['uniqueID'] = $fetch['uniqueID'];
 		$aResults['isocode'] = $fetch['isocode'];
-		
-		return $aResults;		
+
+		return $aResults;
 	}
-	
+
 	/**
 	 * Returns the last message of this ticket of the tickethistory
 	 *
@@ -603,7 +594,7 @@ class sTicketSystem
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Returns all support stat�s as an associative array
 	 *
@@ -615,12 +606,12 @@ class sTicketSystem
 	 */
 	public function getTicketStatusStore($filterStore=false)
 	{
-		
-		$sql = "SELECT * FROM `s_ticket_support_status`";		
+
+		$sql = "SELECT * FROM `s_ticket_support_status`";
 		$result = mysql_query($sql);
-		
-		$aResults = array();	
-			
+
+		$aResults = array();
+
 		//Add to filter store
 		if($filterStore)
 		{
@@ -631,7 +622,7 @@ class sTicketSystem
 			$data['description'] = "Alle anzeigen";
 			$aResults['data'][] = $data;
 		}
-			
+
 		while ($fetch = mysql_fetch_assoc($result))
 		{
 			$data = array();
@@ -639,10 +630,10 @@ class sTicketSystem
 			$data['description'] = $fetch['description'];
 			$aResults['data'][] = $data;
 		}
-				
-		return $aResults;		
+
+		return $aResults;
 	}
-	
+
 	/**
 	 * Update the ticket with the values of an array
 	 *
@@ -651,27 +642,27 @@ class sTicketSystem
 	 */
 	public function updateTicketDataById($ticketID, $aUpdates)
 	{
-		
+
 		//Escape
 		$ticketID = intval($ticketID);
-		
+
 		$sep = false;
 		if($this->sDbType == "mysql")
 		{
-			$sql = "UPDATE `s_ticket_support` SET ";		
-			
+			$sql = "UPDATE `s_ticket_support` SET ";
+
 			foreach ($aUpdates as $field => $value)
 			{
 				//Escape
 				$field = mysql_real_escape_string(stripcslashes($field));
 				$value = mysql_real_escape_string(stripcslashes($value));
-				
+
 				if($sep) $sql .= ", ";
 				$sql .= sprintf("`%s` = '%s'", $field, $value);
 				$sep=true;
 			}
 			$sql .= sprintf(" WHERE `id` = '%s'", $ticketID);
-			
+
 			return mysql_query($sql);
 		}else {
 			foreach ($aUpdates as $field => $value)
@@ -679,10 +670,10 @@ class sTicketSystem
 				$updateSQL[] = "$field = ".$this->sSYSTEM->sDB_CONNECTION->qstr($value);
 			}
 			$sql = "UPDATE `s_ticket_support` SET ".implode(",",$updateSQL)." WHERE `id` = ?";
-			return $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($ticketID));	
+			return $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($ticketID));
 		}
 	}
-	
+
 	/**
 	 * Saves a new entry in s_ticket_support_history
 	 *
@@ -699,30 +690,30 @@ class sTicketSystem
 		}else{
 			$aInsert['user'] = "";
 		}
-		
+
 		if($this->sDbType == "mysql")
 		{
-			//Escape 
-			$aInsert['ticketID'] = intval($aInsert['ticketID']); 
-			$aInsert['message'] = mysql_real_escape_string(stripcslashes($aInsert['message'])); 
-			$aInsert['support_type'] = mysql_real_escape_string(stripcslashes($aInsert['support_type'])); 
-			$aInsert['subject'] = mysql_real_escape_string(stripcslashes($aInsert['subject'])); 
+			//Escape
+			$aInsert['ticketID'] = intval($aInsert['ticketID']);
+			$aInsert['message'] = mysql_real_escape_string(stripcslashes($aInsert['message']));
+			$aInsert['support_type'] = mysql_real_escape_string(stripcslashes($aInsert['support_type']));
+			$aInsert['subject'] = mysql_real_escape_string(stripcslashes($aInsert['subject']));
 			$aInsert['direction'] = mysql_real_escape_string(stripcslashes($aInsert['direction']));
 			$aInsert['user'] = mysql_real_escape_string(stripcslashes($aInsert['user']));
 			// todo@all $sw_user is undefined ?
-			$sql = "INSERT INTO `s_ticket_support_history` 
+			$sql = "INSERT INTO `s_ticket_support_history`
 				(`ticketID`, `swUser`, `message`,  `support_type`,  `subject`, `receipt`, `direction`) VALUES
 				('{$aInsert['ticketID']}', '{$sw_user}', '{$aInsert['message']}', '{$aInsert['support_type']}', '{$aInsert['subject']}', NOW() , '{$aInsert['direction']}')";
-		
+
 			//Letzter Kontakt aktualisieren
 			$sqlUp = "UPDATE `s_ticket_support` SET `last_contact` = NOW( ) WHERE `id` = '{$aInsert['ticketID']}' LIMIT 1";
-		
+
 			mysql_query($sql);
 			mysql_query($sqlUp);
 		}
 		else
 		{
-			$sql = "INSERT INTO `s_ticket_support_history` 
+			$sql = "INSERT INTO `s_ticket_support_history`
 					(`ticketID`, `swUser`, `message`,  `support_type`,  `subject`, `receipt`, `direction`) VALUES
 					(?, ?, ?, ?, ?, NOW(), ?)";
 			$this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($aInsert['ticketID'], $aInsert['user'], $aInsert['message'], $aInsert['support_type'], $aInsert['subject'], $aInsert['direction']));
@@ -731,9 +722,9 @@ class sTicketSystem
 			$this->sSYSTEM->sDB_CONNECTION->Execute($sqlUp, array($aInsert['ticketID']));
 		}
 	}
-	
+
 	/**
-	 * returns all tickets and answers for one user 
+	 * returns all tickets and answers for one user
 	 *
 	 * @param int $ticketID The ticket ID
 	 * @param int $userID The id of the user
@@ -742,37 +733,37 @@ class sTicketSystem
 	public function getTicketHistoryStore($ticketID, $userID)
 	{
         $pre = ""; $post = "";
-		//Escape 
-		$ticketID = intval($ticketID); 
+		//Escape
+		$ticketID = intval($ticketID);
 		$userID = intval($userID);
-		
+
 		if(!empty($userID))
 		{
 			$whereAdd = "OR `userID` = '{$userID}'";
 		}
 		$tasks = mysql_query("
-			SELECT 
+			SELECT
 				ts.*,
-				DATE_FORMAT(ts.receipt, '%d.%m.%Y') AS date,  
-				DATE_FORMAT(ts.receipt, '%H:%i') AS time  
-			FROM `s_ticket_support` AS ts 
-			WHERE 				
+				DATE_FORMAT(ts.receipt, '%d.%m.%Y') AS date,
+				DATE_FORMAT(ts.receipt, '%H:%i') AS time
+			FROM `s_ticket_support` AS ts
+			WHERE
 				`id` = '{$ticketID}'
 				{$whereAdd}
 			ORDER BY `id` DESC, ts.receipt DESC
 		");
-	
+
 		if(mysql_num_rows($tasks) != 0)
-		{			
+		{
 			while ($fetch = mysql_fetch_array($tasks)) {
 				if($fetch['id'] == $ticketID){
 					$current = 1;
 				}else{
 					$current = 0;
 				}
-				
-				
-				$data_f = array();			
+
+
+				$data_f = array();
 				$data_f['id'] = $fetch['id'];
 				$data_f['ticketID'] = $fetch['id'];
 				$data_f['send_to'] = 'Support';
@@ -783,25 +774,25 @@ class sTicketSystem
 				$data_f['date'] = $fetch['date'];
 				$data_f['time'] = $fetch['time'];
 				$data_f['current'] = $current;
-				
+
 				$tasks_history = mysql_query("
-					SELECT 
+					SELECT
 						th.*,
-						DATE_FORMAT(th.receipt, '%d.%m.%Y') AS date,  
-						DATE_FORMAT(th.receipt, '%H:%i') AS time  
+						DATE_FORMAT(th.receipt, '%d.%m.%Y') AS date,
+						DATE_FORMAT(th.receipt, '%H:%i') AS time
 					FROM `s_ticket_support_history` AS th
-					WHERE 
+					WHERE
 						`ticketID` = '{$data_f['id']}'
 					ORDER BY `receipt` DESC
-				");	
+				");
 				while ($fetch2 = mysql_fetch_array($tasks_history)) {
-					
+
 					if($fetch2['direction'] == "IN"){
 						$username = $fetch['email'];
 					}else{
 						$username = $fetch2['swUser'];
 					}
-					
+
 					$data = array();
 					$data['id'] = $fetch2['id'];
 					$data['direction'] = $fetch2['direction'];
@@ -811,11 +802,11 @@ class sTicketSystem
 					$data['message'] = nl2br($data['message']);
 					$data['sUser'] = $pre.utf8_encode($username).$post;
 					$data['date'] = $fetch2['date'];
-					$data['time'] = $fetch2['time'];					
+					$data['time'] = $fetch2['time'];
 					$data['current'] = $current;
 					$ret[] = $data;
 				}
-				
+
 				//add ticket enquiry
 				$ret[] = $data_f;
 			}
@@ -823,12 +814,12 @@ class sTicketSystem
 			$data['id'] = 0;
 			$ret[] = $data;
 		}
-		
+
 		return array("data"=>$ret);
 	}
-	
+
 	/**
-	 * returns the history of one ticket 
+	 * returns the history of one ticket
 	 *
 	 * @param int $ticketID The ticket ID
 	 * @return associative array
@@ -840,18 +831,18 @@ class sTicketSystem
         $post = "";
 		$ret = array();
 		$ticketID = intval($ticketID);
-				
+
 		$sql = "
-			SELECT 
+			SELECT
 				th.*,
-				DATE_FORMAT(th.receipt, '%d.%m.%Y') AS date,  
-				DATE_FORMAT(th.receipt, '%H:%i') AS time  
+				DATE_FORMAT(th.receipt, '%d.%m.%Y') AS date,
+				DATE_FORMAT(th.receipt, '%H:%i') AS time
 			FROM `s_ticket_support_history` AS th
-			WHERE 
+			WHERE
 				`ticketID` = '{$ticketID}'
 			ORDER BY `receipt` ASC
 		";
-		
+
 		if($this->sDbType == "mysql")
 		{
 			$fetchHistory = array();
@@ -865,8 +856,8 @@ class sTicketSystem
 		{
 			$fetchHistory = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 		}
-		foreach ($fetchHistory as $fetch2)		
-		{	
+		foreach ($fetchHistory as $fetch2)
+		{
 			$data['id'] = $fetch2['id'];
 			$data['ticketID'] = $fetch2['ticketID'];
 			$data['subject'] = $fetch2['subject'];
@@ -874,30 +865,30 @@ class sTicketSystem
 			$data['message'] = nl2br($fetch2['message']);
 			$data['sUser'] = $pre."Kundenanfrage".$post;
 			$data['date'] = $fetch2['date'];
-			$data['time'] = $fetch2['time'];					
-			$data['direction'] = $fetch2['direction'];					
+			$data['time'] = $fetch2['time'];
+			$data['direction'] = $fetch2['direction'];
 			$data['current'] = 0;
 			$ret[] = $data;
 		}
-		
+
 		return array("data"=>$ret);
 	}
-	
+
 	public function getTicketIdByUniqueID($uniqueID)
-	{		
-		$sql = "SELECT 
-					id 
-				FROM `s_ticket_support` 
-				WHERE 
+	{
+		$sql = "SELECT
+					id
+				FROM `s_ticket_support`
+				WHERE
 					`uniqueID` = ?
 				ORDER BY `id` DESC
 				LIMIT 1";
-		
+
 		$fetch_tmp = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($uniqueID));
-		
+
 		return $fetch_tmp['id'];
 	}
-	
+
 	/**
 	 * send notification by new or answered tickets
 	 *
@@ -909,48 +900,48 @@ class sTicketSystem
 		$this->sDbType = "adodb";
 		//Escape
 		$ticketID = intval($ticketID);
-		
+
 		$isocode = $this->getTicketIsoCodeByTicketID($ticketID);
-		
+
 		if($newticket)
 		{
 			$sTICKETNOTIFYMAIL_ID = $this->getTicketMailItemIdByName("sTICKETNOTIFYMAILNEW", $isocode);
 		}else{
 			$sTICKETNOTIFYMAIL_ID = $this->getTicketMailItemIdByName("sTICKETNOTIFYMAILANS", $isocode);
 		}
-					
+
 		if(!empty($this->sSYSTEM->sCONFIG["sTICKETNOTIFYEMAIL"]) && !empty($sTICKETNOTIFYMAIL_ID))
 		{
 			$notifyTpl = $this->getTicketMailItem($sTICKETNOTIFYMAIL_ID, $ticketID);
-			
+
 			$mail = $this->sSYSTEM->sMailer;
 
 			if (!$mail) die("PHPMAILER failure");
 			$mail->IsHTML(1);
-			
-						
+
+
 			$mail->From     = $notifyTpl["frommail"] ? $notifyTpl["frommail"] : $this->sSYSTEM->sCONFIG["sMAIL"];
 			$mail->FromName = $notifyTpl["fromname"] ? $notifyTpl["fromname"] : $this->sSYSTEM->sCONFIG["sSHOPNAME"];
-			
-			
+
+
 			$mail->Subject  = $notifyTpl["subject"];
-			
+
 			if(empty($notifyTpl["ishtml"]))
 			{
 				$mail->Body = utf8_decode(nl2br($notifyTpl["content"]));
 			}else{
 				$mail->Body = $notifyTpl["contentHTML"];
 			}
-			
-			
+
+
 			$mail->ClearAddresses();
-			
+
 			$explMails = explode(";",  $this->sSYSTEM->sCONFIG["sTICKETNOTIFYEMAIL"]);
 			foreach ($explMails as $explMail)
 			{
 				$mail->AddAddress($explMail, "");
 			}
-			
+
 			$mail->Send();
 		}
 
@@ -959,51 +950,51 @@ class sTicketSystem
 		{
 			//Fetch Ticket Details
 			$ticketData = $this->getTicketSupportById($ticketID);
-			
+
 			//Fetch mail template
 			$sTICKETNOTIFYMAIL_ID = $this->getTicketMailItemIdByName("sTICKETNOTIFYMAILCOSTUMER", $isocode);
-			
+
 			$notifyTpl = $this->getTicketMailItem($sTICKETNOTIFYMAIL_ID, $ticketID);
-			
+
 			$mail = $this->sSYSTEM->sMailer;
 
 			if (!$mail) die("PHPMAILER failure");
 			$mail->IsHTML(1);
-			
-							
+
+
 			$mail->From     = $notifyTpl["frommail"] ? $notifyTpl["frommail"] : $this->sSYSTEM->sCONFIG["sMAIL"];
 			$mail->FromName = $notifyTpl["fromname"] ? $notifyTpl["fromname"] : $this->sSYSTEM->sCONFIG["sSHOPNAME"];
-			
-			
+
+
 			$mail->Subject  = $notifyTpl["subject"];
-			
+
 			if(empty($notifyTpl["ishtml"]))
 			{
 				$mail->Body = utf8_decode(nl2br($notifyTpl["content"]));
 			}else{
 				$mail->Body = $notifyTpl["contentHTML"];
 			}
-			
+
 			$ticketData['ticket_email'] = $ticketData['ticket_email'] ? $ticketData['ticket_email'] : $this->sSYSTEM->sCONFIG["sMAIL"];
-			$mail->ClearAddresses();			
+			$mail->ClearAddresses();
 			$mail->AddAddress($ticketData['ticket_email'], "");
-			
+
 			$mail->Send();
-		}	
+		}
 	}
-		
+
 	function getTicketMailItemIdByName($name, $isocode="de")
 	{
-		//Escape		
+		//Escape
 		$fetch = $this->sSYSTEM->sDB_CONNECTION->GetAll("SELECT id FROM `s_ticket_support_mails` WHERE `name` =  ? AND `isocode` = ? LIMIT 1", array($name, $isocode));
 		return $fetch[0]["id"];
 	}
-	
+
 	function getTicketIsoCodeByTicketID($ticketID)
 	{
 		//Escape
 		$ticketID = intval($ticketID);
-		
+
 		$fetch = $this->sSYSTEM->sDB_CONNECTION->GetAll("SELECT `isocode` FROM `s_ticket_support` WHERE `id` = '{$ticketID}' LIMIT 1");
 		return $fetch[0]["isocode"];
 	}

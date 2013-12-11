@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 /**
  * Deprecated Shopware Class that handle static shop pages and dynamic content
- *
- * todo@all: Documentation
  */
 class sCms
 {
@@ -51,7 +41,7 @@ class sCms
      * @return array
      */
 	public function sGetStaticPage($staticId = null)
-	{	
+	{
 		if(empty($staticId) && !empty($this->sSYSTEM->_GET['sCustom'])) {
 			$staticId = (int) $this->sSYSTEM->_GET['sCustom'];
 		} else {
@@ -107,7 +97,7 @@ class sCms
         }
 		return $staticPage;
 	}
-	
+
 	 /**
 	 * Dynamische Inhalte einer Gruppe auslesen
 	 * @param int $group Gruppen-ID
@@ -116,26 +106,26 @@ class sCms
 	 * @return array
 	 */
 	public function sGetDynamicContentByGroup($group,$sPage=1){
-		
+
 		// Get count of topics
 		$sql = "
 		SELECT COUNT(id) as countTopics FROM s_cms_content WHERE groupID=? GROUP BY groupID
 		";
-		
-		
+
+
 		$getCountTopics = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
-		
+
 		if ($sPage > $getCountTopics["countTopics"] || $sPage <= 0 ) $sPage = 1;
-		
+
 		$limitStart = $sPage * $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] - $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"];
 		$limitEnd = intval($this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
-		
+
 		// Calculate number of pages
 		$numberPages = intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]) != $getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] ? intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"])+1 : intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
-			
+
 		// Make Array with page-structure to render in template
 		$pages = array();
-		
+
 		for ($i=1;$i<=$numberPages;$i++){
 			if ($i==$sPage){
 				$pages["numbers"][$i]["markup"] = true;
@@ -144,25 +134,25 @@ class sCms
 			}
 			$pages["numbers"][$i]["value"] = $i;
 			$pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sPage"=>$i),false);
-		} 
-		
-		
+		}
+
+
 		// Query - Topic
 		$sql = "
 			SELECT id, description,text,img,link,attachment, datum as `date`, DATE_FORMAT(datum,'%d.%m.%Y') AS datumFormated
-			FROM s_cms_content WHERE groupID=? 
+			FROM s_cms_content WHERE groupID=?
 			ORDER BY datum DESC
 		";
 		$sql = Shopware()->Db()->limit($sql, $limitEnd, $limitStart);
-		
+
 		$queryDynamic = Shopware()->Db()->fetchAll($sql, array($group));
-				
+
 		foreach ($queryDynamic as $dynamicKey => $dynamicValue){
 			$tempDatum = explode(".",$queryDynamic[$dynamicKey]["datum"]);
-			
+
 			// Building Link for more information page (optional)
 			$queryDynamic[$dynamicKey]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$dynamicValue["id"]),false);
-			
+
 			// Get Image
 			if ($queryDynamic[$dynamicKey]["img"]){
 				$queryDynamic[$dynamicKey]["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic[$dynamicKey]["img"].".jpg";
@@ -172,12 +162,12 @@ class sCms
 			if ($queryDynamic[$dynamicKey]["attachment"]){
 				$queryDynamic[$dynamicKey]["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic[$dynamicKey]["attachment"];
 			}
-			
+
 			$queryDynamic[$dynamicKey]["dateExploded"] = $tempDatum;
 		}
 		return array("sContent"=>$queryDynamic,"sPages"=>$pages);
 	}
-	
+
 	 /**
 	 * Detailinformationen eines Gruppen-Eintrags
 	 * @param int $group Gruppen-ID
@@ -189,18 +179,18 @@ class sCms
 
 		// Query - Topic
 		$sql = "
-		SELECT id, description,text,img,link,attachment,DATE_FORMAT(datum,'%d.%m.%Y') AS datum FROM s_cms_content WHERE groupID=? 
+		SELECT id, description,text,img,link,attachment,DATE_FORMAT(datum,'%d.%m.%Y') AS datum FROM s_cms_content WHERE groupID=?
 		AND id=?
 		";
-	
+
 		$queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group,$id));
-		
+
 		if ($queryDynamic["id"]){
 			$tempDatum = explode(".",$queryDynamic["datum"]);
-			
+
 			// Building Link for more information page (optional)
 			$queryDynamic["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$queryDynamic["id"]),false);
-			
+
 			// Get Image
 			if ($queryDynamic["img"]){
 				$queryDynamic["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic["img"].".jpg";
@@ -210,17 +200,17 @@ class sCms
 			if ($queryDynamic["attachment"]){
 				$queryDynamic["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic["attachment"];
 			}
-			
+
 			$queryDynamic["dateExploded"] = $tempDatum;
 		}else {
 			// Error-Handler
 			$this->sSYSTEM->E_CORE_WARNING ("sCMS##sGetContentById","Content with id $id not found");
 			return false;
 		}
-		
+
 		return array("sContent"=>$queryDynamic);
 	}
-	
+
 	 /**
 	 * Name einer Gruppe anhand der ID
 	 * @param int $group Gruppen-ID
@@ -231,9 +221,9 @@ class sCms
 		$sql = "
 		SELECT description FROM s_cms_groups WHERE id=?
 		";
-	
+
 		$queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
-		
+
 		return $queryDynamic["description"];
 	}
 }

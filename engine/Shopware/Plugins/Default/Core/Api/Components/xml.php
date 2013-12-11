@@ -1,5 +1,28 @@
 <?php
 /**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+/**
  * Shopware API
  * Zugriff auf XML-Dateien
  *
@@ -17,7 +40,7 @@ class sXmlConvert
 		"padding"=> "\t",
 		"newline" => "\r\n",
 	);
-	
+
 	function encode ($array)
 	{
 		$standalone = $this->sSettings['standalone'] ? "yes" : "no";
@@ -30,7 +53,7 @@ class sXmlConvert
 		$ret = "";
 		if($this->sSettings['padding']!==false)
 			$pad = str_repeat($this->sSettings['padding'],$pos);
-		else 
+		else
 			$pad = "";
 		foreach ($array as $key=>$item)
 		{
@@ -39,7 +62,7 @@ class sXmlConvert
 			$attributes = "";
 			if (is_array($item)&&isset($item['_attributes']))
 			{
-				foreach ($item['_attributes'] as $k=>$v) 
+				foreach ($item['_attributes'] as $k=>$v)
 					$attributes .= " $k=\"".htmlspecialchars($v)."\"";
 				if (isset($item['_value']))
 					$item = $item['_value'];
@@ -152,14 +175,14 @@ class sXmlConvert
 		}
 		return($xml_array);
 	}
-	
+
 	function fix_array (&$array, $name="")
 	{
 		if(!empty($name)&&(empty($array[$name])||!is_array($array[$name])))
 			return false;
 		if(!empty($name))
 			$array = $array[$name];
-		if (empty($array)||!is_array($array)) 
+		if (empty($array)||!is_array($array))
 			return false;
 		if(key($array)!==0)
 			$array = array(0=>$array);
@@ -183,13 +206,13 @@ class sXmlConvert
 		{
 			if(!isset($value['_attributes'][$atr]))
 			{
-			}				
+			}
 			elseif(isset($value['_value'])) {
 				$data[$value['_attributes'][$atr]] = $value['_value'];
 			} elseif(!empty($valuename)) {
 				if(isset($value[$valuename]))
 					$data[$value['_attributes'][$atr]] = $value[$valuename];
-				else 
+				else
 					$data[$value['_attributes'][$atr]] = null;
 			} else {
 				$data[$value['_attributes'][$atr]] = $value;
@@ -199,7 +222,7 @@ class sXmlConvert
 				if(empty($data[$value['_attributes'][$atr]]))
 					$data[$value['_attributes'][$atr]] = null;
 			}
-			
+
 		}
 		$array = $data;
 	}
@@ -214,12 +237,12 @@ class sXmlConvert
 			} elseif(!empty($valuename)) {
 				if(isset($value[$valuename]))
 					$data[$value[$name]] = $value[$valuename];
-				else 
+				else
 					$data[$value[$name]] = null;
 			} else {
 				$data[$value[$name]] = $value;
 			}
-				
+
 		}
 		$array = $data;
 	}
