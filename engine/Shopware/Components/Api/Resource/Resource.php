@@ -213,7 +213,7 @@ abstract class Resource
      */
     public function setAutoFlush($autoFlush)
     {
-        $this->autoFlush = (bool)$autoFlush;
+        $this->autoFlush = (bool) $autoFlush;
     }
 
     /**
@@ -312,7 +312,7 @@ abstract class Resource
      */
     protected function getCollectionElementByProperties(ArrayCollection $collection, array $conditions)
     {
-        foreach($conditions as $property => $value) {
+        foreach ($conditions as $property => $value) {
             $entity = $this->getCollectionElementByProperty(
                 $collection,
                 $property,
@@ -438,7 +438,7 @@ abstract class Resource
                         $results[$key]['data']
                     );
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -496,7 +496,7 @@ abstract class Resource
                         $results[$key]['data']
                     );
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
