@@ -26,7 +26,6 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Components\Api\Manager;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
@@ -34,6 +33,7 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
 
 /**
@@ -56,9 +56,17 @@ class Variant extends Resource
     /**
      * @return Article
      */
-    public function getArticleResource()
+    protected function getArticleResource()
     {
         return $this->getResource('Article');
+    }
+
+    /**
+     * @return Media
+     */
+    protected function getMediaResource()
+    {
+        return $this->getResource('Media');
     }
 
     /**
@@ -352,10 +360,198 @@ class Variant extends Resource
         if (isset($data['configuratorOptions'])) {
             $data = $this->prepareConfigurator($data, $article, $variant);
         }
+        if (isset($data['images'])) {
+            $data = $this->prepareImageAssociation($data, $article, $variant);
+        }
 
         return $data;
     }
 
+    /**
+     * Resolves the passed images array for the current variant.
+     * An image can be assigned to a variant over a media id of an existing article image
+     * or over the link property which can contain a image link.
+     * This image will be added automatically to the article.
+     *
+     * @param $data
+     * @param ArticleModel $article
+     * @param Detail $variant
+     * @return mixed
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function prepareImageAssociation($data, ArticleModel $article, Detail $variant)
+    {
+        if (empty($data['images'])) {
+            if ($variant->getImages()->count() > 0) {
+                /**@var $image Image*/
+                foreach($variant->getImages() as $image) {
+                    $mapping = $this->getVariantMappingOfImage($image, $variant);
+
+                    if ($mapping) $this->getManager()->remove($mapping);
+                }
+            }
+            return $data;
+        }
+
+        $images = $this->checkDataReplacement(
+            $variant->getImages(),
+            $data,
+            'images',
+            true
+        );
+        foreach($data['images'] as $imageData) {
+
+            //check if a media id was passed.
+            if (isset($imageData['mediaId'])) {
+
+                //first check if the media object is already assigned to the article
+                $image = $this->getAvailableMediaImage(
+                    $article->getImages(),
+                    $imageData['mediaId']
+                );
+
+                //media image isn't assigned to the article?
+                if (!$image) {
+
+                    //find the media object and convert it to an article image.
+                    /**@var $media MediaModel*/
+                    $media = $this->getManager()->find(
+                        'Shopware\Models\Media\Media',
+                        (int)$imageData['mediaId']
+                    );
+
+                    if (!$media) {
+                        throw new ApiException\CustomValidationException(
+                            sprintf('Media by id %s not found', (int)$imageData['mediaId'])
+                        );
+                    }
+
+                    $image = $this->getArticleResource()->createNewArticleImage(
+                        $article, $media
+                    );
+                }
+
+            } else if (isset($imageData['link'])) {
+
+                //check if an url passed and upload the passed image url and create a new article image.
+                $media = $this->getMediaResource()->internalCreateMediaByFileLink(
+                    $imageData['link']
+                );
+                $image = $this->getArticleResource()->createNewArticleImage(
+                    $article, $media
+                );
+
+            } else {
+                throw new ApiException\CustomValidationException("One of the passed variant images don't contains a mediaId or link property!");
+            }
+
+            $variantImage = $this->createVariantImage(
+                $image,
+                $variant
+            );
+
+            $this->createImageMappingForOptions(
+                $variant->getConfiguratorOptions(),
+                $image
+            );
+
+            $images->add($variantImage);
+        }
+
+        $data['images'] = $images;
+        $variant->setImages($images);
+        return $data;
+    }
+
+    /**
+     * Helper function which creates a variant image for the passed article image.
+     * @param Image $articleImage
+     * @param Detail $variant
+     * @return Image
+     */
+    public function createVariantImage(Image $articleImage, Detail $variant)
+    {
+        $variantImage = new Image();
+        $variantImage->setParent($articleImage);
+        $variantImage->setArticleDetail($variant);
+        $variantImage->setPosition($articleImage->getPosition());
+        $variantImage->setMain($articleImage->getMain());
+        $variantImage->setExtension($articleImage->getExtension());
+
+        return $variantImage;
+    }
+
+    /**
+     * Helper function which returns a single image mapping
+     * for the passed variant image and variant model.
+     *
+     * @param Image $image
+     * @param Detail $variant
+     * @return null|Image\Mapping
+     */
+    protected function getVariantMappingOfImage(Image $image, Detail $variant)
+    {
+        $parent = $image->getParent();
+
+        /**@var $mapping Image\Mapping*/
+        foreach($parent->getMappings() as $mapping) {
+            $match = true;
+
+            /**@var $rule Image\Rule*/
+            foreach($mapping->getRules() as $rule) {
+                $option = $this->getCollectionElementByProperty(
+                    $variant->getConfiguratorOptions(),
+                    'id',
+                    $rule->getOption()->getId()
+                );
+                if (!$option) {
+                    $match = false;
+                    break;
+                }
+            }
+            if ($match) {
+                return $mapping;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param ArrayCollection $options
+     * @param Image $image
+     * @return Image\Mapping
+     */
+    public function createImageMappingForOptions(ArrayCollection $options, Image $image)
+    {
+        $mapping = new Image\Mapping();
+        $mapping->setImage($image);
+        foreach($options as $option) {
+            $rule = new Image\Rule();
+            $rule->setMapping($mapping);
+            $rule->setOption($option);
+            $mapping->getRules()->add($rule);
+        }
+        $image->getMappings()->add($mapping);
+
+        return $mapping;
+    }
+
+    /**
+     * @param ArrayCollection $availableImages
+     * @param $mediaId
+     * @return bool|Image
+     */
+    private function getAvailableMediaImage(ArrayCollection $availableImages, $mediaId)
+    {
+        /**@var $image Image*/
+        foreach($availableImages as $image) {
+            if ($image->getMedia()->getId() == $mediaId) {
+                return $image;
+            }
+        }
+        return false;
+    }
 
     /**
      * @param $data
