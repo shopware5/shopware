@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Config.view.element.DateTime', {
         if(!me.value) {
             me.value = null;
         } else if (typeof(me.value) == 'string') {
-            me.value = me.value.replace(' ', 'T');
+            me.value = me.value.replace('T', ' ');
             me.value = new Date(me.value);
         }
 
