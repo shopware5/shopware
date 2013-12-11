@@ -1005,11 +1005,25 @@ class Article extends Resource
 
         foreach ($data['categories'] as $categoryData) {
 
-            $this->getManyToManySubElement(
+            $category = $this->getManyToManySubElement(
                 $categories,
                 $categoryData,
                 '\Shopware\Models\Category\Category'
             );
+
+            if (!$category && !empty($categoryData['path'])) {
+                $category = $this->getResource('Category')->findCategoryByPath(
+                    $categoryData['path'],
+                    true
+                );
+
+                if (!$category) {
+                    throw new ApiException\CustomValidationException(sprintf("Could not find or create category by path: %s.", $categoryData['path']));
+                }
+
+                $categories->add($category);
+            }
+
         }
 
         $data['categories'] = $categories;
@@ -1569,7 +1583,7 @@ class Article extends Resource
                 "Article is no configurator article. Image mapping can only be created on configurator articles"
             );
         }
-        
+
         $configuratorOptions = $article->getConfiguratorSet()->getOptions();
 
         foreach($mappings as $mappingData) {
