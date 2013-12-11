@@ -71,8 +71,8 @@ class Router
             $action = 'get';
             $response->setHttpResponseCode(200);
         } elseif ($method === 'PUT' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
-            $response->setHttpResponseCode(405);
+            $action = 'batch';
+            $response->setHttpResponseCode(200);
         } elseif ($method === 'PUT') {
             $action = 'put';
         } elseif ($method === 'POST') {
@@ -80,7 +80,8 @@ class Router
             // Set default http status code for successfull request
             $response->setHttpResponseCode(201);
         } elseif ($method === 'DELETE' && $id === false) {
-            $action = 'invalid'; // 405 Method Not Allowed
+            $action = 'batchDelete';
+            $response->setHttpResponseCode(200);
         } elseif ($method === 'DELETE') {
             $response->setHttpResponseCode(200);
             $action = 'delete';

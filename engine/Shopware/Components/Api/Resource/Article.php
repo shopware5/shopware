@@ -32,6 +32,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Article\Configurator;
+use Shopware\Components\Api\BatchInterface;
 
 
 /**
@@ -41,7 +42,7 @@ use Shopware\Models\Article\Configurator;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Article extends Resource
+class Article extends Resource implements BatchInterface
 {
     /**
      * @return \Shopware\Models\Article\Repository
@@ -1386,7 +1387,7 @@ class Article extends Resource
             } else if (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
                     'Shopware\Models\Media\Media',
-                    (int)$imageData['mediaId']
+                    (int) $imageData['mediaId']
                 );
 
                 if (!($media instanceof MediaModel)) {
@@ -1462,12 +1463,12 @@ class Article extends Resource
         $mappings = $builder->getQuery()->getResult();
 
         /**@var $mapping Image\Mapping*/
-        foreach($mappings as $mapping) {
+        foreach ($mappings as $mapping) {
 
             $builder = $this->getArticleVariantQuery($id);
 
             /**@var $rule Image\Rule*/
-            foreach($mapping->getRules() as $rule) {
+            foreach ($mapping->getRules() as $rule) {
                 $option = $rule->getOption();
                 $alias = 'option' . $option->getId();
                 $builder->innerJoin('variants.configuratorOptions', $alias, 'WITH', $alias . '.id = :' . $alias)
@@ -1477,7 +1478,7 @@ class Article extends Resource
             $variants = $builder->getQuery()->getResult();
 
             /**@var $variant Detail*/
-            foreach($variants as $variant) {
+            foreach ($variants as $variant) {
                 $exist = $this->getCollectionElementByProperty(
                     $variant->getImages(),
                     'parent',
@@ -1528,8 +1529,8 @@ class Article extends Resource
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
         /**@var $variantImage Image*/
-        foreach($variant->getImages() as $variantImage) {
-            if ($variantImage->getParent()->getId() == $image->getId()){
+        foreach ($variant->getImages() as $variantImage) {
+            if ($variantImage->getParent()->getId() == $image->getId()) {
                 return true;
             }
         }
@@ -1586,11 +1587,11 @@ class Article extends Resource
 
         $configuratorOptions = $article->getConfiguratorSet()->getOptions();
 
-        foreach($mappings as $mappingData) {
+        foreach ($mappings as $mappingData) {
 
             $options = new ArrayCollection();
 
-            foreach($mappingData as $option) {
+            foreach ($mappingData as $option) {
 
                 $available = $this->getCollectionElementByProperties($configuratorOptions, array(
                     'id'   => $option['id'],
@@ -1714,5 +1715,35 @@ class Article extends Resource
         return array_values($properties);
     }
 
+    /**
+     * Returns the primary ID of any data set.
+     *
+     * {@inheritDoc}
+     */
+    public function getIdByData($data)
+    {
+        $id = null;
 
+        if (isset($data['id'])) {
+            $id = $data['id'];
+        } else if (isset($data['mainDetail']['number'])) {
+            try {
+                $id = $this->getIdFromNumber($data['mainDetail']['number']);
+            } catch (ApiException\NotFoundException $e) {
+                return false;
+            }
+        }
+
+        if (!$id) {
+            return false;
+        }
+
+        $model = $this->getManager()->find('Shopware\Models\Article\Article', $id);
+
+        if ($model) {
+            return $id;
+        }
+
+        return false;
+    }
 }

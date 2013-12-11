@@ -514,4 +514,122 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('total', $result);
         $this->assertInternalType('int', $result['total']);
     }
+
+    public function getSimpleArticleData()
+    {
+        return array(
+              'name' => 'Simple test article',
+              'description' => 'Test description',
+              'descriptionLong' => 'Test descriptionLong',
+              'active' => true,
+              'pseudoSales' => 999,
+              'highlight' => true,
+              'keywords' => 'test, testarticle',
+
+              'filterGroupId' => 1,
+
+              'propertyValues' => array(
+                  array(
+                      'value' => 'grün',
+                      'option' => array(
+                          'name' => 'Farbe'
+                      )
+                  ),
+                  array(
+                      'value' => 'testWert',
+                      'option' => array(
+                          'name' => 'neueOption'.uniqid()
+                      )
+                  )
+              ),
+
+              'mainDetail' => array(
+                  'number' => 'swTEST' . uniqid(),
+                  'inStock' => 15,
+                  'unitId' => 1,
+
+                  'attribute' => array(
+                      'attr1' => 'Freitext1',
+                      'attr2' => 'Freitext2',
+                  ),
+
+                  'minPurchase' => 5,
+                  'purchaseSteps' => 2,
+
+                  'prices' => array(
+                      array(
+                          'customerGroupKey' => 'EK',
+                          'from' => 1,
+                          'to' => 20,
+                          'price' => 500,
+                      ),
+                      array(
+                          'customerGroupKey' => 'EK',
+                          'from' => 21,
+                          'to' => '-',
+                          'price' => 400,
+                      ),
+                  )
+              ),
+
+              'taxId'        => 1,
+              'supplierId'   => 2,
+
+              'similar' => array(
+                  array('id' => 5),
+                  array('id' => 6),
+              ),
+
+              'categories' => array(
+                  array('id' => 15),
+                  array('id' => 10),
+              ),
+
+              'related' => array(
+                  array('id' => 3, 'cross' => true),
+                  array('id' => 4),
+              ),
+
+              'links' => array(
+                  array('name' => 'foobar', 'link' => 'http://example.org'),
+                  array('name' => 'Video', 'link' => 'http://example.org'),
+              ),
+          );
+    }
+
+    public function testBatchModeShouldBeSuccessful()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
+
+
+        $data = array(
+            $this->getSimpleArticleData(),
+            $this->getSimpleArticleData(),
+            $this->getSimpleArticleData(),
+            array(
+                'id' => 2,
+                'keywords' => 'batch test'
+            )
+        );
+
+        $requestData = Zend_Json::encode($data);
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+
+        $response = $client->request('PUT');
+
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+        $this->assertEquals(200, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+        
+        $this->assertEquals('create', $result['data'][0]['operation']);
+        $this->assertEquals('create', $result['data'][1]['operation']);
+        $this->assertEquals('create', $result['data'][2]['operation']);
+        $this->assertEquals('update', $result['data'][3]['operation']);
+    }
 }

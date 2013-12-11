@@ -35,6 +35,7 @@ use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
+use Shopware\Components\Api\BatchInterface;
 
 /**
  * Variant API Resource
@@ -43,7 +44,7 @@ use Shopware\Models\Tax\Tax;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Variant extends Resource
+class Variant extends Resource implements BatchInterface
 {
     /**
      * @return \Shopware\Models\Article\Repository
@@ -384,7 +385,7 @@ class Variant extends Resource
         if (empty($data['images'])) {
             if ($variant->getImages()->count() > 0) {
                 /**@var $image Image*/
-                foreach($variant->getImages() as $image) {
+                foreach ($variant->getImages() as $image) {
                     $mapping = $this->getVariantMappingOfImage($image, $variant);
 
                     if ($mapping) $this->getManager()->remove($mapping);
@@ -399,7 +400,7 @@ class Variant extends Resource
             'images',
             true
         );
-        foreach($data['images'] as $imageData) {
+        foreach ($data['images'] as $imageData) {
 
             //check if a media id was passed.
             if (isset($imageData['mediaId'])) {
@@ -417,12 +418,12 @@ class Variant extends Resource
                     /**@var $media MediaModel*/
                     $media = $this->getManager()->find(
                         'Shopware\Models\Media\Media',
-                        (int)$imageData['mediaId']
+                        (int) $imageData['mediaId']
                     );
 
                     if (!$media) {
                         throw new ApiException\CustomValidationException(
-                            sprintf('Media by id %s not found', (int)$imageData['mediaId'])
+                            sprintf('Media by id %s not found', (int) $imageData['mediaId'])
                         );
                     }
 
@@ -494,11 +495,11 @@ class Variant extends Resource
         $parent = $image->getParent();
 
         /**@var $mapping Image\Mapping*/
-        foreach($parent->getMappings() as $mapping) {
+        foreach ($parent->getMappings() as $mapping) {
             $match = true;
 
             /**@var $rule Image\Rule*/
-            foreach($mapping->getRules() as $rule) {
+            foreach ($mapping->getRules() as $rule) {
                 $option = $this->getCollectionElementByProperty(
                     $variant->getConfiguratorOptions(),
                     'id',
@@ -526,7 +527,7 @@ class Variant extends Resource
     {
         $mapping = new Image\Mapping();
         $mapping->setImage($image);
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $rule = new Image\Rule();
             $rule->setMapping($mapping);
             $rule->setOption($option);
@@ -545,7 +546,7 @@ class Variant extends Resource
     private function getAvailableMediaImage(ArrayCollection $availableImages, $mediaId)
     {
         /**@var $image Image*/
-        foreach($availableImages as $image) {
+        foreach ($availableImages as $image) {
             if ($image->getMedia()->getId() == $mediaId) {
                 return $image;
             }
@@ -644,7 +645,7 @@ class Variant extends Resource
 
         $options = new ArrayCollection();
 
-        foreach($data['configuratorOptions'] as $optionData) {
+        foreach ($data['configuratorOptions'] as $optionData) {
             $availableGroup = $this->getAvailableGroup($availableGroups, array(
                 'id' => $optionData['groupId'],
                 'name' => $optionData['group']
@@ -690,7 +691,7 @@ class Variant extends Resource
     private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
     {
         /**@var $availableGroup Option */
-        foreach($availableGroups as $availableGroup) {
+        foreach ($availableGroups as $availableGroup) {
             if ($availableGroup->getName() == $groupData['name']
                 || $availableGroup->getId() == $groupData['id']) {
 
@@ -712,7 +713,7 @@ class Variant extends Resource
     private function getAvailableOption(ArrayCollection $availableOptions, array $optionData)
     {
         /**@var $availableOption Option */
-        foreach($availableOptions as $availableOption) {
+        foreach ($availableOptions as $availableOption) {
             if ($availableOption->getName() == $optionData['name']
                 || $availableOption->getId() == $optionData['id']) {
 
@@ -832,4 +833,35 @@ class Variant extends Resource
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
     }
 
+    /**
+     * Returns the primary ID of any data set.
+     *
+     * {@inheritDoc}
+     */
+    public function getIdByData($data)
+    {
+        $id = null;
+
+        if (isset($data['id'])) {
+            $id = $data['id'];
+        } else if (isset($data['number'])) {
+            try {
+                $id = $this->getIdFromNumber($data['number']);
+            } catch (ApiException\NotFoundException $e) {
+                return false;
+            }
+        }
+
+        if (!$id) {
+            return false;
+        }
+
+        $model = $this->getManager()->find('Shopware\Models\Article\Detail', $id);
+
+        if ($model) {
+            return $id;
+        }
+
+        return false;
+    }
 }

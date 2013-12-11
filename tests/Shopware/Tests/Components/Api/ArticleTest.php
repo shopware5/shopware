@@ -1762,6 +1762,52 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertArrayCount(3, $ids);
     }
 
+    public function testBatchModeShouldBeSuccessful()
+    {
+        $createNew = $this->getSimpleTestData();
+        $updateExistingByNumber = array(
+            'mainDetail' => array(
+                'number' => 'SW10003'
+            ),
+            'keywords' => 'newKeyword1'
+        );
+        $updateExistingById = array(
+            'id' => 3,
+            'keywords' => 'newKeyword2'
+        );
+
+        $result = $this->resource->batch(array(
+           'new' => $createNew,
+           'existingByNumber' => $updateExistingByNumber,
+           'existingById' => $updateExistingById,
+        ));
+
+
+        $this->assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
+        $this->assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
+        $this->assertEquals('Testartikel', $result['new']['data']['name']);
+    }
+
+    public function testBatchDeleteShouldBeSuccessful()
+    {
+
+        $result = $this->resource->batch(
+            array(
+                $this->getSimpleTestData(),
+                $this->getSimpleTestData(),
+                $this->getSimpleTestData()
+            )
+        );
+
+        $delete = array();
+        foreach ($result as $item) {
+            $delete[] = $item['data'];
+        }
+
+        $result = $this->resource->batchDelete($delete);
+
+        $this->assertEquals(3, count($result));
+    }
 }
 
 
