@@ -19,7 +19,7 @@ Thumbs.db
 /vendor/
 
 # Internal Repositories
-/internal/
+/internal
 /engine/Shopware/Plugins/Commercial/
 
 # User installed plugins
@@ -45,3 +45,6 @@ Thumbs.db
 
 /files/documents/
 /files/downloads/
+
+# Snippet exports
+/snippetsExport/

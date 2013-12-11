@@ -442,9 +442,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     public function createCronJob($name, $action, $interval = 86400, $active = 1)
     {
         $sql = '
-			INSERT INTO s_crontab (`name`, `action`, `next`, `start`, `interval`, `active`, `end`, `pluginID`)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-		';
+            INSERT INTO s_crontab (`name`, `action`, `next`, `start`, `interval`, `active`, `end`, `pluginID`)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ';
         Shopware()->Db()->query(
             $sql,
             array(
@@ -926,10 +926,24 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
         $directoryIterator = new \DirectoryIterator($backendPath);
         $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
-        foreach($regex as $file) {
+        foreach ($regex as $file) {
             $path = 'backend/' . $file[0];
             $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
         }
+    }
+
+    /**
+     * Removes the snippets present in the plugin's ini files
+     * from the database
+     *
+     * @param bool $removeDirty if true, the snippets changed by the
+     * shop owner will also be removed
+     */
+    public function removeSnippets($removeDirty = false)
+    {
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
     }
 
 }

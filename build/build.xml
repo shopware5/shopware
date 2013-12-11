@@ -23,7 +23,7 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-composer-install, build-database, build-config, build-cache-dir" />
+    <target name="build-unit" depends="build-composer-install, build-config, build-database, build-snippets-deploy, build-cache-dir" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
@@ -164,6 +164,16 @@
             <arg value="--host=${db.host}"/>
             <arg value="--username=${db.user}"/>
             <arg value="--dbname=${db.name}"/>
+        </exec>
+    </target>
+
+    <target name="build-snippets-deploy">
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:generate:attributes"/>
+        </exec>
+
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:snippets:to:sql --include-plugins"/>
         </exec>
     </target>
 

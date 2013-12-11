@@ -338,6 +338,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         );
 
         $result = $bootstrap->install();
+
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
             $this->Application()->Events()->notify(
@@ -354,6 +355,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $this->write();
 
             $em->flush();
+
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Snippets/');
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'snippets/');
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
@@ -507,6 +512,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 $this->Application()->Models()->persist($form);
             }
             $this->Application()->Models()->flush();
+
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Snippets/');
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'snippets/');
+            Shopware()->ResourceLoader()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Resources/snippet/');
+
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();

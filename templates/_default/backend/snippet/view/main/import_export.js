@@ -183,6 +183,7 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
             fields: ['id', 'label'],
             data: [
                 ['sql', 'SQL (Backup)'],
+                ['csvexcel', 'CSV (Microsoft Excel)'],
                 ['csv', 'CSV']
             ]
         });
