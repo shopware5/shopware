@@ -329,15 +329,10 @@ class Article extends Resource
      */
     protected function getArticleVariants($articleId)
     {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('variants', 'prices', 'options'))
-            ->from('Shopware\Models\Article\Detail', 'variants')
-            ->innerJoin('variants.article', 'article')
-            ->leftJoin('variants.prices', 'prices')
-            ->leftJoin('variants.configuratorOptions', 'options')
-            ->where('article.id = :articleId')
-            ->andWhere('variants.kind = 2')
-            ->setParameter('articleId', $articleId);
+        $builder = $this->getRepository()->getVariantDetailQuery();
+        $builder->andWhere('article.id = :articleId')
+                ->andWhere('variants.kind = 2')
+                ->setParameter('articleId', $articleId);
 
         return $this->getFullResult($builder);
     }
