@@ -281,6 +281,27 @@ abstract class Resource
     }
 
     /**
+     * @param ArrayCollection $collection
+     * @param array $conditions
+     * @return null
+     */
+    protected function getCollectionElementByProperties(ArrayCollection $collection, array $conditions)
+    {
+        foreach($conditions as $property => $value) {
+            $entity = $this->getCollectionElementByProperty(
+                $collection,
+                $property,
+                $value
+            );
+            if ($entity) {
+                return $entity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Helper function to resolve one to many associations for an entity.
      * The function do the following thinks:
      * It iterates all conditions which passed. The conditions contains the property names

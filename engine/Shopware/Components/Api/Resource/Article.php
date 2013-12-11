@@ -30,8 +30,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
-use Shopware\Models\Media\Media;
-use Symfony\Component\HttpFoundation\File\File;
+use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Article\Configurator;
 
 
@@ -63,9 +62,18 @@ class Article extends Resource
     /**
      * @return Variant
      */
-    public function getVariantResource()
+    protected function getVariantResource()
     {
         return $this->getResource('Variant');
+    }
+
+
+    /**
+     * @return Media
+     */
+    protected function getMediaResource()
+    {
+        return $this->getResource('Media');
     }
 
     /**
@@ -604,7 +612,6 @@ class Article extends Resource
         $data = $this->prepareSimilarAssociatedData($data, $article);
         $data = $this->prepareAvoidCustomerGroups($data, $article);
         $data = $this->preparePropertyValuesData($data, $article);
-        $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
 
@@ -618,10 +625,12 @@ class Article extends Resource
             $article->setConfiguratorSet($data['configuratorSet']);
         }
 
+        $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareAttributeAssociatedData($data, $article);
         $data = $this->prepareMainDetail($data, $article);
         $data = $this->prepareVariants($data, $article);
 
+        unset($data['images']);
         return $data;
     }
 
@@ -699,7 +708,11 @@ class Article extends Resource
         foreach ($data['variants'] as $variantData) {
 
             if (isset($variantData['id'])) {
-                $variant = $this->getVariantResource()->internalUpdate($variantData['id'], $variantData, $article);
+                $variant = $this->getVariantResource()->internalUpdate(
+                    $variantData['id'],
+                    $variantData,
+                    $article
+                );
             } else {
                 $variant = null;
 
@@ -715,7 +728,11 @@ class Article extends Resource
 
                 //if the variant was found over the number, update the existing
                 if ($variant) {
-                    $variant = $this->getVariantResource()->internalUpdate($variant->getId(), $variantData, $article);
+                    $variant = $this->getVariantResource()->internalUpdate(
+                        $variant->getId(),
+                        $variantData,
+                        $article
+                    );
                 } else {
                     //otherwise the number passed to use as order number for the new variant
                     $variant = $this->getVariantResource()->internalCreate($variantData, $article);
@@ -731,7 +748,6 @@ class Article extends Resource
                 // if the old main article does not have any configurator options, delete it
                 if (isset($data['mainDetail'])) {
                     $oldMain = $data['mainDetail'];
-
 
                     if ($oldMain instanceof Detail) {
                         $oldMain->setKind(2);
@@ -1277,27 +1293,17 @@ class Article extends Resource
                 '\Shopware\Models\Article\Download'
             );
 
-
             if (isset($downloadData['link'])) {
-                $path = $this->load($downloadData['link']);
-                $file = new File($path);
-
-                $media = new Media();
-                $media->setAlbumId(-6);
-                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -6));
-
-                $media->setFile($file);
+                $media = $this->getMediaResource()->internalCreateMediaByFileLink(
+                    $downloadData['link'],
+                    -6
+                );
                 if (isset($downloadData['name']) && !empty($downloadData['name'])) {
                     $media->setDescription($downloadData['name']);
-                } else {
-                    $media->setDescription('');
                 }
-                $media->setCreated(new \DateTime());
-                $media->setUserId(0);
 
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
-//                    $this->getManager()->flush($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
                     throw new ApiException\CustomValidationException(sprintf("Some error occured while loading your image"));
                 }
@@ -1315,6 +1321,9 @@ class Article extends Resource
     }
 
     /**
+     * Resolves the passed images data to valid Shopware\Models\Article\Image
+     * entities.
+     *
      * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -1338,6 +1347,7 @@ class Article extends Resource
         $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
 
         foreach ($data['images'] as &$imageData) {
+            /**@var $image Image*/
             $image = $this->getOneToManySubElement(
                 $images,
                 $imageData,
@@ -1345,47 +1355,35 @@ class Article extends Resource
             );
 
             if (isset($imageData['link'])) {
-                $name = pathinfo($imageData['link'], PATHINFO_FILENAME);
-                $path = $this->load($imageData['link'], $name);
-                $name = pathinfo($path, PATHINFO_FILENAME);
+                /**@var $media MediaModel*/
+                $media = $this->getMediaResource()->internalCreateMediaByFileLink(
+                    $imageData['link']
+                );
 
-                $file = new File($path);
+                $image = $this->updateArticleImageWithMedia(
+                    $article,
+                    $image,
+                    $media
+                );
 
-                $media = new Media();
-                $media->setAlbumId(-1);
-                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
-
-                $media->setFile($file);
-                $media->setName($name);
-                $media->setDescription('');
-                $media->setCreated(new \DateTime());
-                $media->setUserId(0);
-
-                try {
-                    //persist the model into the model manager this uploads and resizes the image
-                    $this->getManager()->persist($media);
-//                    $this->getManager()->flush($media);
-                } catch (\Doctrine\ORM\ORMException $e) {
-                    throw new ApiException\CustomValidationException(sprintf("Some error occurred while loading your image"));
-                }
-
-                $image->setMain(2);
-                $image->setMedia($media);
                 $image->setPosition($position);
-                $image->setArticle($article);
                 $position++;
-                $image->setPath($media->getName());
-                $image->setExtension($media->getExtension());
+
             } else if (!empty($imageData['mediaId'])) {
-                $media = $this->getManager()->find('Shopware\Models\Media\Media', (int)$imageData['mediaId']);
-                if (!($media instanceof Media)) {
+                $media = $this->getManager()->find(
+                    'Shopware\Models\Media\Media',
+                    (int)$imageData['mediaId']
+                );
+
+                if (!($media instanceof MediaModel)) {
                     throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
                 }
-                $image->setPath($media->getName());
-                $image->setExtension($media->getExtension());
-                $image->setDescription($media->getDescription());
-                $image->setArticle($article);
-                $image->setMedia($media);
+
+                $image = $this->updateArticleImageWithMedia(
+                    $article,
+                    $image,
+                    $media
+                );
             }
 
             $image->fromArray($imageData);
@@ -1402,27 +1400,247 @@ class Article extends Resource
                 }
             }
 
-            $images->add($image);
-        }
-
-        $hasMain = false;
-
-        /** @var $image Image */
-        foreach ($images as $image) {
-            if ($image->getMain() == 1) {
-                $hasMain = true;
-                break;
+            if (isset($imageData['options'])) {
+                $this->createImageMappings($image, $article, $imageData['options']);
             }
         }
+
+        $hasMain = $this->getCollectionElementByProperty(
+            $images,
+            'main',
+            1
+        );
 
         if (!$hasMain) {
             $image = $images->get(0);
             $image->setMain(1);
         }
-
         unset($data['images']);
 
         return $data;
+    }
+
+    /**
+     * This function generates all variant image entities
+     * for the passed article id.
+     * The function expects that the variants and the mapping of the article images
+     * already exists.
+     *
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function generateVariantImages($id)
+    {
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /** @var $article \Shopware\Models\Article\Article */
+        $article = $this->getRepository()->find($id);
+
+        if (!$article) {
+            throw new ApiException\NotFoundException("Article by id $id not found");
+        }
+
+        $builder = $this->getArticleImageMappingsQuery($id);
+
+        $mappings = $builder->getQuery()->getResult();
+
+        /**@var $mapping Image\Mapping*/
+        foreach($mappings as $mapping) {
+
+            $builder = $this->getArticleVariantQuery($id);
+
+            /**@var $rule Image\Rule*/
+            foreach($mapping->getRules() as $rule) {
+                $option = $rule->getOption();
+                $alias = 'option' . $option->getId();
+                $builder->innerJoin('variants.configuratorOptions', $alias, 'WITH', $alias . '.id = :' . $alias)
+                    ->setParameter($alias, $option->getId());
+            }
+
+            $variants = $builder->getQuery()->getResult();
+
+            /**@var $variant Detail*/
+            foreach($variants as $variant) {
+                $exist = $this->getCollectionElementByProperty(
+                    $variant->getImages(),
+                    'parent',
+                    $mapping->getImage()
+                );
+                if ($exist) continue;
+
+                $image = $this->getVariantResource()->createVariantImage(
+                    $mapping->getImage(),
+                    $variant
+                );
+
+                $variant->getImages()->add($image);
+            }
+        }
+        $this->getManager()->flush();
+
+    }
+
+    /**
+     * Returns a query builder to select all article images with mappings and rules.
+     * Used to generate the variant images.
+     *
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     */
+    protected function getArticleImageMappingsQuery($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('mappings', 'image', 'rules'))
+            ->from('Shopware\Models\Article\Image\Mapping', 'mappings')
+            ->innerJoin('mappings.image', 'image')
+            ->innerJoin('mappings.rules', 'rules')
+            ->where('image.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Checks if the passed article image is already created
+     * as variant image.
+     *
+     * @param Detail $variant
+     * @param Image $image
+     * @return bool
+     */
+    protected function isVariantImageExist(Detail $variant, Image $image)
+    {
+        /**@var $variantImage Image*/
+        foreach($variant->getImages() as $variantImage) {
+            if ($variantImage->getParent()->getId() == $image->getId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Small helper function which creates a query builder to select
+     * all article variants.
+     *
+     * @param $id
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     */
+    protected function getArticleVariantQuery($id)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select('variants');
+        $builder->from('Shopware\Models\Article\Detail', 'variants')
+            ->where('variants.articleId = :articleId')
+            ->setParameter('articleId', $id);
+        return $builder;
+    }
+
+
+    /**
+     * Creates the article image mappings for the passed article and image entity.
+     * The mappings parameter contains a multi dimensional array with configurator options.
+     * The first level of the mappings defines the OR conditions of the image mappings.
+     * The second level of the mappings defines a single rule.
+     * Example:
+     * $mappings = array(
+     *    array(
+     *       array('name' => 'red')
+     *       AND
+     *       array('name' => 'small')
+     *    )
+     *    //OR
+     *    array('name' => 'blue')
+     * )
+     *
+     * @param Image $image
+     * @param ArticleModel $article
+     * @param array $mappings
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    protected function createImageMappings(Image $image, ArticleModel $article, array $mappings)
+    {
+        if (!$article->getConfiguratorSet()) {
+            throw new ApiException\CustomValidationException(
+                "Article is no configurator article. Image mapping can only be created on configurator articles"
+            );
+        }
+        
+        $configuratorOptions = $article->getConfiguratorSet()->getOptions();
+
+        foreach($mappings as $mappingData) {
+
+            $options = new ArrayCollection();
+
+            foreach($mappingData as $option) {
+
+                $available = $this->getCollectionElementByProperties($configuratorOptions, array(
+                    'id'   => $option['id'],
+                    'name' => $option['name'],
+                ));
+
+                if (!$available) {
+                    $property = $option['id'] ? $option['id'] : $option['name'];
+                    throw new ApiException\CustomValidationException(
+                        sprintf("Passed option %s do not exist in the configurator set of the article", $property)
+                    );
+                }
+
+                $options->add($available);
+            }
+
+            if (empty($options)) {
+                throw new ApiException\CustomValidationException("No available option exists");
+            }
+
+            $this->getVariantResource()->createImageMappingForOptions(
+                $options,
+                $image
+            );
+        }
+    }
+
+    /**
+     * Helper function which creates a new article image with the passed media object.
+     * @param ArticleModel $article
+     * @param MediaModel $media
+     * @return Image
+     */
+    public function createNewArticleImage(ArticleModel $article, MediaModel $media)
+    {
+        $image = new Image();
+        $image = $this->updateArticleImageWithMedia(
+            $article,
+            $image,
+            $media
+        );
+        $this->getManager()->persist($image);
+        $article->getImages()->add($image);
+        return $image;
+    }
+
+    /**
+     * Helper function to map the media data into an article image
+     *
+     * @param ArticleModel $article
+     * @param Image $image
+     * @param MediaModel $media
+     * @return Image
+     */
+    public function updateArticleImageWithMedia(ArticleModel $article, Image $image, MediaModel $media)
+    {
+        $image->setMain(2);
+        $image->setMedia($media);
+        $image->setArticle($article);
+        $image->setPath($media->getName());
+        $image->setExtension($media->getExtension());
+        $image->setDescription($media->getDescription());
+
+        return $image;
     }
 
     /**
@@ -1482,136 +1700,5 @@ class Article extends Resource
         return array_values($properties);
     }
 
-    /**
-     * @param string $url URL of the resource that should be loaded (ftp, http, file)
-     * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
-     * @return bool|string returns the absolute path of the downloaded file
-     * @throws \InvalidArgumentException
-     * @throws \Exception
-     */
-    protected function load($url, $baseFilename = null)
-    {
-        $destPath = Shopware()->DocPath('media_' . 'temp');
-        if (!is_dir($destPath)) {
-            mkdir($destPath, 0777, true);
-        }
 
-        $destPath = realpath($destPath);
-
-        if (!file_exists($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not exist.", $destPath)
-            );
-        } elseif (!is_writable($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not have write permissions.", $destPath)
-            );
-        }
-
-        if (strpos($url, 'data:image') !== false) {
-            return $this->uploadBase64File(
-                $url,
-                $destPath,
-                $baseFilename
-            );
-        }
-
-        $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/", $urlArray['path']);
-        switch ($urlArray['scheme']) {
-            case "ftp":
-            case "http":
-            case "https":
-            case "file":
-                $filename = $this->getUniqueFileName($destPath, $baseFilename);
-
-                if (!$put_handle = fopen("$destPath/$filename", "w+")) {
-                    throw new \Exception("Could not open $destPath/$filename for writing");
-                }
-
-                if (!$get_handle = fopen($url, "r")) {
-                    throw new \Exception("Could not open $url for reading");
-                }
-                while (!feof($get_handle)) {
-                    fwrite($put_handle, fgets($get_handle, 4096));
-                }
-                fclose($get_handle);
-                fclose($put_handle);
-
-                return "$destPath/$filename";
-        }
-        throw new \InvalidArgumentException(
-            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
-        );
-    }
-
-    /**
-     * Helper function which downloads the passed image url
-     * and save the image with a unique file name in the destination path.
-     * If the passed baseFilename already exists in the destination path,
-     * the function creates a unique file name.
-     *
-     * @param $url
-     * @param $destinationPath
-     * @param $baseFilename
-     * @return string
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Exception
-     */
-    protected function uploadBase64File($url, $destinationPath, $baseFilename)
-    {
-        if (!$get_handle = fopen($url, "r")) {
-            throw new \Exception("Could not open $url for reading");
-        }
-
-        $meta = stream_get_meta_data($get_handle);
-        if (!strpos($meta['mediatype'], 'image/') === false) {
-            throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
-        }
-
-        $extension = str_replace('image/', '', $meta['mediatype']);
-        $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
-        $filename .= '.' . $extension;
-
-        if (!$put_handle = fopen("$destinationPath/$filename", "w+")) {
-            throw new \Exception("Could not open $destinationPath/$filename for writing");
-        }
-        while (!feof($get_handle)) {
-            fwrite($put_handle, fgets($get_handle, 4096));
-        }
-        fclose($get_handle);
-        fclose($put_handle);
-
-        return "$destinationPath/$filename";
-    }
-
-    /**
-     * Helper function to get a unique file name for the passed destination path.
-     * @param $destPath
-     * @param null $baseFileName
-     * @return null|string
-     */
-    private function getUniqueFileName($destPath, $baseFileName = null)
-    {
-        $counter = 1;
-        if ($baseFileName === null) {
-            $filename = md5(uniqid(rand(), true));
-        } else {
-            $filename = $baseFileName;
-        }
-
-        $filename = substr($filename, 0, 50);
-
-        while (file_exists("$destPath/$filename")) {
-            if ($baseFileName) {
-                $filename = "$counter-$baseFileName";
-                $counter++;
-            } else {
-                $filename = md5(uniqid(rand(), true));
-            }
-            $filename = substr($filename, 0, 50);
-        }
-
-        return $filename;
-    }
 }
