@@ -26,6 +26,8 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\BatchInterface;
+use Shopware\Components\DependencyInjection\ResourceLoader;
 
 /**
  * Abstract API Resource Class
@@ -74,6 +76,29 @@ abstract class Resource
      * @var string|\Zend_Acl_Role_Interface
      */
     protected $role = null;
+
+    /** @var ResourceLoader */
+    protected $resourceLoader = null;
+
+    /**
+     * @return ResourceLoader
+     */
+    public function getResourceLoader()
+    {
+        if (!$this->resourceLoader) {
+            $this->resourceLoader = Shopware()->ResourceLoader();
+        }
+        return $this->resourceLoader;
+
+    }
+
+    /**
+     * @param $resourceLoader
+     */
+    public function setResourceLoader($resourceLoader)
+    {
+        $this->resourceLoader = $resourceLoader;
+    }
 
     /**
      * Returns a new api resource which contains the
@@ -188,7 +213,7 @@ abstract class Resource
      */
     public function setAutoFlush($autoFlush)
     {
-        $this->autoFlush = (bool)$autoFlush;
+        $this->autoFlush = (bool) $autoFlush;
     }
 
     /**
@@ -287,7 +312,7 @@ abstract class Resource
      */
     protected function getCollectionElementByProperties(ArrayCollection $collection, array $conditions)
     {
-        foreach($conditions as $property => $value) {
+        foreach ($conditions as $property => $value) {
             $entity = $this->getCollectionElementByProperty(
                 $collection,
                 $property,
@@ -391,5 +416,119 @@ abstract class Resource
         return null;
     }
 
+    public function batchDelete($data)
+    {
+        if (!$this instanceof BatchInterface) {
+            throw new \RuntimeException('BatchInterface is not implemented by this resource');
+        }
 
+        $results = array();
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                $results[$key] = array(
+                    'success' => true,
+                    'operation' => 'delete',
+                    'data' => $this->delete($id)
+                );
+                error_log($this->getResultMode());
+                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                        $results[$key]['data']
+                    );
+                }
+            } catch (\Exception $e) {
+                if (!$this->getManager()->isOpen()) {
+                    $this->resetEntityManager();
+                }
+                $message = $e->getMessage();
+                if ($e instanceof ApiException\ValidationException) {
+                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                }
+
+                $results[$key] = array(
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString()
+                );
+            }
+        }
+
+        return $results;
+
+    }
+
+    /**
+     * This method will update/create a whole list of entities.
+     * The resource needs to implement BatchInterface for that.
+     *
+     * @param $data
+     * @return array
+     * @throws \RuntimeException
+     */
+    public function batch($data)
+    {
+        if (!$this instanceof BatchInterface) {
+            throw new \RuntimeException('BatchInterface is not implemented by this resource');
+        }
+
+        $results = array();
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                if ($id) {
+                    $results[$key] = array(
+                        'success' => true,
+                        'operation' => 'update',
+                        'data' => $this->update($id, $datum)
+                    );
+                } else {
+                    $results[$key] = array(
+                        'success' => true,
+                        'operation' => 'create',
+                        'data' => $this->create($datum)
+                    );
+                }
+                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                        $results[$key]['data']
+                    );
+                }
+            } catch (\Exception $e) {
+                if (!$this->getManager()->isOpen()) {
+                    $this->resetEntityManager();
+                }
+                $message = $e->getMessage();
+                if ($e instanceof ApiException\ValidationException) {
+                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                }
+
+                $results[$key] = array(
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString()
+                );
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * This helper method will reload the EntityManager.
+     * This is useful if the EntityManager was closed due to an error on the
+     * PDO connection.
+     */
+    protected function resetEntityManager()
+    {
+        $this->getResourceLoader()->reset('models')
+                                  ->reset('db_connection')
+                                  ->load('models');
+
+        $this->getResourceLoader()->load('db_connection');
+
+        $this->setManager($this->resourceLoader->get('models'));
+    }
 }

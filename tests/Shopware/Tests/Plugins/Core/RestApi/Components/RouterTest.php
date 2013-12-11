@@ -100,9 +100,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function routePutProvider()
     {
         return array(
-            array('/api/articles/',     1, 'index',    'invalid',  false, 405),
-            array('/api/v1/articles/',  1, 'index',    'invalid',  false, 405),
-            array('/api/v2/articles/',  2, 'index',    'invalid',  false, 405),
+            array('/api/articles/',     1, 'articles', 'batch',  false, 200),
+            array('/api/v1/articles/',  1, 'articles', 'batch',  false, 200),
+            array('/api/v2/articles/',  2, 'articles', 'batch',  false, 200),
             array('/api/articles/5',    1, 'articles', 'put',      5,     200),
             array('/api/v1/articles/5', 1, 'articles', 'put',      5,     200),
             array('/api/v2/articles/5', 2, 'articles', 'put',      5,     200),
@@ -133,9 +133,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function routeDeleteProvider()
     {
         return array(
-            array('/api/articles/',    1, 'index', 'invalid', false, 200),
-            array('/api/v1/articles/', 1, 'index', 'invalid', false, 200),
-            array('/api/v2/articles/', 2, 'index', 'invalid', false, 200),
+            array('/api/articles/',    1, 'articles', 'batchDelete', false, 200),
+            array('/api/v1/articles/', 1, 'articles', 'batchDelete', false, 200),
+            array('/api/v2/articles/', 2, 'articles', 'batchDelete', false, 200),
 
             array('/api/articles/5',    1, 'articles', 'delete', 5, 200),
             array('/api/v1/articles/5', 1, 'articles', 'delete', 5, 200),

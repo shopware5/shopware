@@ -58,4 +58,51 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         $this->response()->setHeader('Content-type', 'application/json', true);
         $this->response()->setBody($data);
     }
+
+    /**
+     * Controller Action for the batchAction
+     *
+     * @throws RuntimeException
+     */
+    public function batchAction()
+    {
+        // To support the batch mode, the controller just needs to reference the api resource
+        // with the "resource" property
+        if (!property_exists($this, 'resource')) {
+            throw new RuntimeException('Property "resource" not found.');
+        }
+
+        $params = $this->Request()->getPost();
+
+        $this->resource->setResultMode(
+            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $result = $this->resource->batch($params);
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
+    }
+
+    /**
+     * Controller Action for the batchDelete
+     *
+     * @throws RuntimeException
+     */
+    public function batchDeleteAction()
+    {
+        // To support the batch mode, the controller just needs to reference the api resource
+        // with the "resource" property
+        if (!property_exists($this, 'resource')) {
+            throw new RuntimeException('Property "resource" not found.');
+        }
+
+        $params = $this->Request()->getPost();
+
+        $this->resource->setResultMode(
+            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $result = $this->resource->batchDelete($params);
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
+    }
+
 }
