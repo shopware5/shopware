@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Menu
- * @subpackage SaveHandler
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
  * <code>
  * $menuSave = Shopware_Components_Menu_SaveHandler_DbTable;
  * $menuSave->load($menu);
@@ -40,9 +31,9 @@
 class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstract
 {
 	protected $_name = 's_core_menu';
-	
+
 	protected $_primary = 'id';
-	
+
 	protected $_colums = array(
 		'id' => 'id',
 		'parent' => 'parent',
@@ -58,11 +49,11 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
         'action' => 'action',
         'shortcut' => 'shortcut'
 	);
-	
+
 	protected $_order = array(
 		'parent', 'position', 'id'
 	);
-	
+
 	public function __construct($config=array())
     {
         if ($config instanceof Zend_Config) {
@@ -78,7 +69,7 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
 
         parent::__construct($config);
     }
-    
+
     public function load(Shopware_Components_Menu $menu)
     {
     	$rows = $this->fetchAll(null, $this->_order);
@@ -94,7 +85,7 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
 		}
 		$menu->addItems($pages);
     }
-    
+
     public function save(Shopware_Components_Menu $menu)
     {
     	$iterator = new RecursiveIteratorIterator($menu, RecursiveIteratorIterator::CHILD_FIRST);
@@ -117,7 +108,7 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
 					$data[$colum] = $value;
 				}
 			}
-			
+
 			if(!empty($data_id)) {
 				$this->update($data, array($this->_colums['id'].' = ?' => $data_id));
 			} else {

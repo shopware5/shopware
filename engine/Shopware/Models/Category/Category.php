@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -34,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @category  Shopware
  * @package   Shopware\Models
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")

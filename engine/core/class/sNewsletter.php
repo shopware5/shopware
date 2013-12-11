@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,52 +20,42 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Deprecated Shopware Class that handle newsletters
- *
- * todo@all: Documentation
  */
 class sNewsletter
 {
 	var $sSYSTEM;
-	
+
 		public function sCampaignsGetSuggestions($id,$userid=0){
 
 			$id = intval($id);
-			
+
 			$sql = "
 			SELECT value, description FROM s_campaigns_containers WHERE type='ctSuggest'
 			AND promotionID=$id
 			";
 			unset($this->sSYSTEM->sMODULES['sArticles']->sCachePromotions);
 			unset($this->sSYSTEM->sMODULES['sMarketing']->sBlacklist);
-			
+
 			$getSuggestInfo = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($sql);
 			if ($getSuggestInfo["value"] && $getSuggestInfo["description"]){
 				// Main-Information
 				$sSuggestion["description"] = $getSuggestInfo["description"];
 				$sSuggestion["value"] = $getSuggestInfo["value"];
 				// Get personalized articles
-				
+
 				$limit = intval($sSuggestion["value"] / 2);
 				if ($userid){
-					
+
 					// 1.) Get last viewed articles
 					$sql = "
 					SELECT DISTINCT articleID FROM s_emarketing_lastarticles WHERE userID=$userid
 					ORDER BY time DESC LIMIT $limit
 					";
-					
+
 					$selectLast = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 					$countLimit = $limit - count($selectLast);
 					$this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR'] = 1;
@@ -79,12 +69,12 @@ class sNewsletter
 					if (count($selectLastAlsoView)) $selectLast = array_merge($selectLast,$selectLastAlsoView);
 					// 2.) Get last bought articles
 					$sql = "
-					SELECT DISTINCT articleID FROM s_order_details, s_order WHERE 
+					SELECT DISTINCT articleID FROM s_order_details, s_order WHERE
 					s_order.userID=$userid
 					AND s_order_details.orderID = s_order.id
 					ORDER BY ordertime DESC LIMIT $limit
 					";
-					
+
 					$selectLastOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 					foreach ($selectLastOrders as $lastArticle) $this->sSYSTEM->sMODULES['sMarketing']->sBlacklist[] = $lastArticle["articleID"];
 					foreach ($selectLastOrders as $lastArticle){
@@ -94,9 +84,9 @@ class sNewsletter
 						}
 					}
 					if (count($selectLastAlsoBought)) $selectLast = array_merge($selectLast,$selectLastAlsoBought);
-					
+
 					$blacklist = array();
-					
+
 					$countRecommendations = count($selectLast);
 					if ($countRecommendations){
 						foreach ($selectLast as $lastArticle){
@@ -110,12 +100,12 @@ class sNewsletter
 						}
 					}
 				}
-				
+
 				$leftRecommendations = $sSuggestion["value"] - count($finalRecommendations);
-				
+
 				$randomize = array('new', 'top');
 				$category = $this->sSYSTEM->_GET['sCategory'] ? $this->sSYSTEM->_GET['sCategory'] : 0;
-				
+
 				while ($leftRecommendations>0) {
 					$article = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($randomize[array_rand($randomize)], $category, '');
 					if(!empty($article)) {
@@ -124,9 +114,9 @@ class sNewsletter
 						$finalRecommendations[] = $article;
 					}
 				}
-				
+
 				$sSuggestion["data"] = $finalRecommendations;
-				
+
 				return $sSuggestion;
 
 		}

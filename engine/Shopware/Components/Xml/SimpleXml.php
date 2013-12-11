@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,12 +39,12 @@ class Shopware_Components_Xml_SimpleXml
 	protected $filename;
 
 	/**
-	 * @var 
+	 * @var
 	 */
 	protected $namespace;
 
 	/**
-	 * @var 
+	 * @var
 	 */
 	public $SimpleXML;
 
@@ -58,7 +58,7 @@ class Shopware_Components_Xml_SimpleXml
 	/**
 	 * @param  $node
 	 * @param array $filter
-	 * @return 
+	 * @return
 	 */
 	public function getXmlAtNode($node,$filter= array()){
 		if ($this->SimpleXML->getName()==$node){
@@ -114,7 +114,7 @@ class Shopware_Components_Xml_SimpleXml
 	}
 
 	/**
-	 * Create new xml 
+	 * Create new xml
 	 * @return Shopware_Components_Xml_SimpleXml
 	 */
 	public function create(){
@@ -176,7 +176,7 @@ class Shopware_Components_Xml_SimpleXml
 	}
 
 	/**
-	 * Save xml and make it beautiful 
+	 * Save xml and make it beautiful
 	 * @return Shopware_Components_Xml_SimpleXml
 	 */
 	public function save(){
@@ -184,7 +184,7 @@ class Shopware_Components_Xml_SimpleXml
 		$dom->preserveWhiteSpace = false;
 		$dom->formatOutput = true;
 		$dom->loadXML($this->SimpleXML->asXML());
-		
+
 		file_put_contents($this->filename,$dom->saveXML());
 		return $this;
 	}

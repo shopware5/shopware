@@ -1,5 +1,28 @@
 <?php
 /**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+/**
  * Shopware API
  * Zugriff auf CSV-Dateien
  *
@@ -7,7 +30,6 @@
  * @package     Shopware 2.08.01
  * @subpackage  API-Converter
  */
-
 class sCsvConvert
 {
 	var $sSettings = array(
@@ -20,10 +42,10 @@ class sCsvConvert
 		"escaped_newline" => "",
 	);
 	function encode ($array,$keys = array())
-	{	
+	{
 		if(!is_array($keys)||!count($keys))
 			$keys = array_keys(current($array));
-		$lastkey = end($keys);	
+		$lastkey = end($keys);
 		$csv = $this->_encode_line(array_combine($keys,$keys),$keys).$this->sSettings['newline'];
 		foreach ($array as $line)
 		{
@@ -32,18 +54,18 @@ class sCsvConvert
 		return $csv;
 	}
 	function encode_stream ($array,$keys = array(), &$stream = null)
-	{	
+	{
 		if(empty($stream))
 			$stream = fopen("php://output","w");
 		if(!is_array($keys)||!count($keys))
 			$keys = array_keys(current($array));
-		$lastkey = end($keys);	
+		$lastkey = end($keys);
 		$csv = $this->_encode_line(array_combine($keys,$keys),$keys).$this->sSettings['newline'];
 		foreach ($array as $line)
 		{
 			fwrite($stream,$this->_encode_line($line, $keys).$this->sSettings['newline']);
 		}
-		return true; 
+		return true;
 	}
 	function get_all_keys ($array)
 	{
@@ -71,11 +93,11 @@ class sCsvConvert
 						$line[$key] = utf8_decode($line[$key]);
 					if(!empty($fieldmark))
 						$csv .= str_replace($fieldmark,$this->sSettings['escaped_fieldmark'],$line[$key]);
-					else 
+					else
 						$csv .= str_replace($this->sSettings['separator'],$this->sSettings['escaped_separator'],$line[$key]);
 					$csv .= $fieldmark;
 				}
-				else 
+				else
 					$csv .= $line[$key];
 			}
 			if($lastkey!=$key)
@@ -107,23 +129,23 @@ class sCsvConvert
 	    }
 	    return $lines;
 	}*/
-	
+
 	function decode ($csv,$keys = array())
 	{
 		$csv = file_get_contents($csv);
 
 		if(isset($this->sSettings['fieldmark']))
 			$fieldmark = $this->sSettings['fieldmark'];
-		else 
+		else
 			$fieldmark = "";
 		if($this->sSettings['encoding']=="UTF-8")
 			$csv = utf8_decode($csv);
-					
+
 		if(isset($this->sSettings['escaped_newline'])&&$this->sSettings['escaped_newline']!==false&&isset($this->sSettings['fieldmark'])&&$this->sSettings['fieldmark']!==false)
 			$lines = $this->_split_line($csv);
-		else 
+		else
 			$lines = preg_split("/\n|\r/", $csv, -1, PREG_SPLIT_NO_EMPTY);
-			
+
 		if(empty($keys)||!is_array($keys))
 		{
 			if(empty($this->sSettings['fieldmark']))
@@ -134,7 +156,7 @@ class sCsvConvert
 				$keys[$i] = trim($key,"? \n\t\r");
 			unset($lines[0]);
 		}
-		
+
 		foreach ($lines as $line)
 		{
 			$tmp = array();
@@ -156,7 +178,7 @@ class sCsvConvert
 		preg_match("#[^$fm]*#A",$line,$match);
 		if(!empty($match[0]))
 			$values = explode($this->sSettings['separator'],substr($match[0],0,-1));
-		else 
+		else
 			$values = array();
 		$reg = "#([$fm][^$fm]*)[$fm]([^$fm]*)#";
 		preg_match_all($reg,$line,$matchs);
@@ -170,7 +192,7 @@ class sCsvConvert
 					$values[] = substr($tmp.$matchs[1][$key],1);
 					$tmp = "";
 				}
-				else 
+				else
 				{
 					$tmp .= $matchs[1][$key];
 				}
@@ -223,7 +245,7 @@ class sCsvConvert
 	        else {
 				$lines[] = $elements[$i];
 	        }
-	        
+
 	    }
 		return $lines;
 	}

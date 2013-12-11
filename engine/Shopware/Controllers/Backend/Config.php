@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Config Controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
@@ -137,7 +127,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ->select(array('form', 'element', 'value', 'elementTranslation', 'formTranslation'))
             ->setParameter("localeId",$locale->getId());
 
-        
+
 
         $builder->addOrderBy((array)$this->Request()->getParam('sort', array()))
             ->addFilter((array)$this->Request()->getParam('filter', array()));

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,15 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Blog
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     M.Schmaeing
- * @author     $Author$
  */
 
 namespace Shopware\Models\Blog;
@@ -40,8 +31,6 @@ use Shopware\Components\Model\ModelEntity,
 
 /**
  * Shopware Blog Model
- *
- * todo@all: Documentation
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_blog")

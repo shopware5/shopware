@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage RouterOld
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Router old plugin
- * 
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -43,17 +33,17 @@ class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_
 	 * @return bool
 	 */
 	public function install()
-	{		
+	{
 		$event = $this->createEvent(
 	 		'Enlight_Controller_Router_Route',
 	 		'onRoute',
 	 		10
 	 	);
 		$this->subscribeEvent($event);
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Event listener method
 	 *
@@ -69,7 +59,7 @@ class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_
         if(empty($url)) {
             return;
         }
-		
+
 		$query = array();
 		if(preg_match('#.*?_(detail)_([0-9]+)(?:_([0-9]+))?_?(?:SESS\-(.*?))?.html#', $url, $match)) {
 			$query['sViewport'] = $match[1];
@@ -118,7 +108,7 @@ class Shopware_Plugins_Frontend_RouterOld_Bootstrap extends Shopware_Components_
 			return;
 		}
 	}
-	
+
 	/**
 	 * Cleanup path method
 	 *
