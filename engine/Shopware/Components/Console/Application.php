@@ -123,17 +123,24 @@ class Application extends BaseApplication
 
     protected function registerCommands()
     {
-        $em = $this->kernel->getResourceLoader()->get('models');
+        //Wrap database related logic in a try-catch
+        //so that non-db commands can still execute
+        try {
+            $em = $this->kernel->getResourceLoader()->get('models');
 
-        // setup doctrine commands
-        $helperSet = $this->getHelperSet();
-        $helperSet->set(new EntityManagerHelper($em), 'em');
-        $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
+            // setup doctrine commands
+            $helperSet = $this->getHelperSet();
+            $helperSet->set(new EntityManagerHelper($em), 'em');
+            $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
 
-        DoctrineConsoleRunner::addCommands($this);
+            DoctrineConsoleRunner::addCommands($this);
+
+            $this->registerEventCommands();
+        } catch (\Exception $e) {
+        }
 
         $this->registerFilesystemCommands();
-        $this->registerEventCommands();
+
     }
 
     protected function registerFilesystemCommands()

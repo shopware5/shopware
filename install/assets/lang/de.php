@@ -2,9 +2,11 @@
 
 /** Installer locale - de_DE */
 return array(
+    'meta_text'     => '<strong>Shopware-Version:</strong> ___VERSION___',
     "start_install" => "Installation starten",
     "system_requirements" => "Systemvoraussetzungen",
     "configure_db" => "Datenbank konfigurieren",
+    "import_db" => "DB-Import",
     "licence" => "Lizenz",
     "configuration" => "Konfiguration",
     "done" => "Fertig",
@@ -12,7 +14,7 @@ return array(
     "select_language" => "Sprache wählen",
     "select_language_choose" => "Bitte wählen",
     "select_language_de" => "Deutsch",
-    "select_language_en" => "Englisch",
+    "select_language_en" => "English",
     "your_name" => "Ihr Name",
     "back" => "Zurück",
     "forward" => "Weiter",
