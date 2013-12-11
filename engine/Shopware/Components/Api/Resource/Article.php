@@ -1387,7 +1387,7 @@ class Article extends Resource implements BatchInterface
             } else if (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
                     'Shopware\Models\Media\Media',
-                    (int)$imageData['mediaId']
+                    (int) $imageData['mediaId']
                 );
 
                 if (!($media instanceof MediaModel)) {
@@ -1463,12 +1463,12 @@ class Article extends Resource implements BatchInterface
         $mappings = $builder->getQuery()->getResult();
 
         /**@var $mapping Image\Mapping*/
-        foreach($mappings as $mapping) {
+        foreach ($mappings as $mapping) {
 
             $builder = $this->getArticleVariantQuery($id);
 
             /**@var $rule Image\Rule*/
-            foreach($mapping->getRules() as $rule) {
+            foreach ($mapping->getRules() as $rule) {
                 $option = $rule->getOption();
                 $alias = 'option' . $option->getId();
                 $builder->innerJoin('variants.configuratorOptions', $alias, 'WITH', $alias . '.id = :' . $alias)
@@ -1478,7 +1478,7 @@ class Article extends Resource implements BatchInterface
             $variants = $builder->getQuery()->getResult();
 
             /**@var $variant Detail*/
-            foreach($variants as $variant) {
+            foreach ($variants as $variant) {
                 $exist = $this->getCollectionElementByProperty(
                     $variant->getImages(),
                     'parent',
@@ -1529,8 +1529,8 @@ class Article extends Resource implements BatchInterface
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
         /**@var $variantImage Image*/
-        foreach($variant->getImages() as $variantImage) {
-            if ($variantImage->getParent()->getId() == $image->getId()){
+        foreach ($variant->getImages() as $variantImage) {
+            if ($variantImage->getParent()->getId() == $image->getId()) {
                 return true;
             }
         }
@@ -1587,11 +1587,11 @@ class Article extends Resource implements BatchInterface
 
         $configuratorOptions = $article->getConfiguratorSet()->getOptions();
 
-        foreach($mappings as $mappingData) {
+        foreach ($mappings as $mappingData) {
 
             $options = new ArrayCollection();
 
-            foreach($mappingData as $option) {
+            foreach ($mappingData as $option) {
 
                 $available = $this->getCollectionElementByProperties($configuratorOptions, array(
                     'id'   => $option['id'],
@@ -1726,10 +1726,10 @@ class Article extends Resource implements BatchInterface
 
         if (isset($data['id'])) {
             $id = $data['id'];
-        } else if(isset($data['mainDetail']['number'])) {
+        } else if (isset($data['mainDetail']['number'])) {
             try {
                 $id = $this->getIdFromNumber($data['mainDetail']['number']);
-            }catch (ApiException\NotFoundException $e) {
+            } catch (ApiException\NotFoundException $e) {
                 return false;
             }
         }
