@@ -159,7 +159,7 @@ class Shipping extends ModelEntity
      * The association is joined over the shipping userID and the customer id
      *
      * @var \Shopware\Models\Customer\Customer $customer
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Customer", inversedBy="shipping")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
     protected $customer;
