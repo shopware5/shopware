@@ -35,6 +35,20 @@ use Shopware\Components\Api\Exception as ApiException;
  */
 class Translation extends Resource
 {
+    const TYPE_PRODUCT = 'article';
+    const TYPE_VARIANT = 'variant';
+    const TYPE_PRODUCT_LINK = 'link';
+    const TYPE_PRODUCT_DOWNLOAD = 'download';
+    const TYPE_PRODUCT_MANUFACTURER = 'supplier';
+    const TYPE_COUNTRY = 'config_countries';
+    const TYPE_COUNTRY_STATE = 'config_country_states';
+    const TYPE_DISPATCH = 'config_dispatch';
+    const TYPE_PAYMENT = 'config_payment';
+    const TYPE_FILTER_SET = 'propertygroup';
+    const TYPE_FILTER_GROUP = 'propertyoption';
+    const TYPE_FILTER_OPTION = 'propertyvalue';
+    const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
+    const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
 
     /** @var \Shopware_Components_Translation $translationWriter */
     protected $translationWriter = null;
@@ -59,219 +73,65 @@ class Translation extends Resource
     }
 
     /**
-     * Helper function that will for example unserialize the serialized objectdata and resolve language
-     * @param array $translation
-     * @return array
-     */
-    private function prepareTranslationForOutput($translation)
-    {
-        $translation['objectdata'] = unserialize($translation['objectdata']);
-        return $translation;
-    }
-
-    /**
-     * @param int $id
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function getOne($id)
-    {
-
-        $this->checkPrivilege('read');
-
-        if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
-        }
-
-        /** @var $translation \Shopware_Components_Translation */
-        $translation = Shopware()->Db()->fetchRow(
-            "SELECT t.*, l.locale, l.language, l.territory FROM s_core_translations t
-                LEFT JOIN s_core_locales l ON l.id = t.objectlanguage
-                WHERE t.id = ?",
-            array($id)
-        );
-
-        if (!$translation) {
-            throw new ApiException\NotFoundException("Translation by id $id not found");
-        }
-
-        return $this->prepareTranslationForOutput($translation);
-    }
-
-    /**
+     * Returns a list of translation objects.
+     *
      * @param int $offset
      * @param int $limit
      * @param array $criteria
      * @param array $orderBy
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList(
+        $offset = 0,
+        $limit = 25,
+        array $criteria = array(),
+        array $orderBy = array())
     {
         $this->checkPrivilege('read');
 
-        $offset = (int) $offset;
-        $limit = (int) $limit;
+        $query = $this->getListQuery($offset, $limit, $criteria, $orderBy)->getQuery();
+        $query->setHydrationMode($this->getResultMode());
+        $paginator = $this->getManager()->createPaginator($query);
 
-        $translation = Shopware()->Db()->fetchAll(
-            "SELECT t.*, l.locale, l.language, l.territory FROM s_core_translations t
-                LEFT JOIN s_core_locales l ON l.id = t.objectlanguage
-                LIMIT {$offset},{$limit}"
+        $translations = $paginator->getIterator()->getArrayCopy();
+
+        foreach ($translations as &$translation) {
+            unset($translation['id']);
+            $translation['data'] = unserialize($translation['data']);
+        }
+
+        return array(
+            'total' => $paginator->count(),
+            'data' => $translations
         );
-
-        return array('data' => $translation, 'total' => count($translation));
     }
 
     /**
-     * @param array $params
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * Helper function which creates the query builder for the getList function.
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function create(array $params)
+    protected function getListQuery($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
     {
-        $this->checkPrivilege('create');
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('translation', 'locale'))
+            ->from('Shopware\Models\Translation\Translation', 'translation')
+            ->leftJoin('translation.locale', 'locale');
 
-        $params = $this->prepareTranslationData($params);
+        $builder->setFirstResult($offset)
+            ->setMaxResults($limit);
 
-        $translationWriter = $this->getTranslationComponent();
-        $translationWriter->write(
-            $params['objectlanguage'],
-            $params['objecttype'],
-            $params['objectkey'],
-            $params['objectdata']
-        );
-
-        $sql  = '
-            SELECT `id`
-            FROM `s_core_translations`
-            WHERE `objecttype` = ?
-            AND `objectkey` = ?
-            AND `objectlanguage` = ?
-        ';
-        $id = Shopware()->Db()->fetchOne($sql, array(
-            $params['objecttype'],
-            $params['objectkey'],
-            $params['objectlanguage']
-        ));
-
-        if ($id) {
-            $translation = $this->getOne($id);
-        } else {
-            throw new \Exception("Translation wasn't inserted properly");
+        if (!empty($criteria)) {
+            $builder->addFilter($criteria);
+        }
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
         }
 
-
-        return $translation;
-    }
-
-    /**
-     * @param int $id
-     * @param array $params
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Exception
-     */
-    public function update($id, array $params)
-    {
-        $this->checkPrivilege('update');
-
-        if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
-        }
-        // will throw a not found exception, if id is not found
-        $translation = $this->getOne($id);
-
-        $params = $this->prepareTranslationData($params, $translation);
-
-        $this->delete($id);
-
-        $translationWriter = $this->getTranslationComponent();
-        $translationWriter->write(
-            $params['objectlanguage'],
-            $params['objecttype'],
-            $params['objectkey'],
-            $params['objectdata']
-        );
-
-        $sql  = '
-            SELECT `id`
-            FROM `s_core_translations`
-            WHERE `objecttype` = ?
-            AND `objectkey` = ?
-            AND `objectlanguage` = ?
-        ';
-        $id = Shopware()->Db()->fetchOne($sql, array(
-            $params['objecttype'],
-            $params['objectkey'],
-            $params['objectlanguage']
-        ));
-
-        if ($id) {
-            $translation = $this->getOne($id);
-        } else {
-            throw new \Exception("Translation wasn't inserted properly");
-        }
-
-        return $translation;
-    }
-
-    /**
-     * @param int $id
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Exception
-     */
-    public function delete($id)
-    {
-        $this->checkPrivilege('delete');
-
-        if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
-        }
-
-        // will throw a not found exception, if id is not found
-        $this->getOne($id);
-
-        Shopware()->Db()->delete('s_core_translations',
-        array(
-            'id = ?' => $id
-        ));
-
-        return true;
-    }
-
-    /**
-     * @param array $params
-     * @param null $translation
-     * @return array
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Exception
-     */
-    private function prepareTranslationData($params, $translation = null)
-    {
-        $requiredParams = array('objecttype', 'objectdata', 'objectkey', 'objectlanguage');
-        foreach ($requiredParams as $param) {
-            if (!$translation) {
-                if (!isset($params[$param]) || empty($params[$param])) {
-                    throw new ApiException\ParameterMissingException($param);
-                }
-            } else {
-                if (isset($params[$param]) && empty($params[$param])) {
-                    throw new \Exception('param $param may not be empty');
-                }
-            }
-        }
-
-        if (!is_array($params['objectdata'])) {
-            throw new \Exception("objectdata needs to be an array");
-        }
-
-        if ($translation) {
-            $params = array_merge($translation, $params);
-        }
-
-        return $params;
+        return $builder;
     }
 }
