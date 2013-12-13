@@ -49,8 +49,8 @@ class Manager
 
         $container = Shopware()->ResourceLoader();
 
-        if ($class instanceof ResourceLoaderAwareInterface) {
-            $class->setResourceLoader($container);
+        if ($resource instanceof ResourceLoaderAwareInterface) {
+            $resource->setResourceLoader($container);
         }
 
         $resource->setManager($container->get('models'));
