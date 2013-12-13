@@ -432,7 +432,6 @@ abstract class Resource
                     'operation' => 'delete',
                     'data' => $this->delete($id)
                 );
-                error_log($this->getResultMode());
                 if ($this->getResultMode() == self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
