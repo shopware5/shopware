@@ -191,7 +191,7 @@ class Enlight_Config_Writer_Query extends Enlight_Config_Writer_Writer
             $columnsData[] = $this->_valueColumn;
             $valuesData[] = '\''.addslashes($config->get($field)).'\'';
             $updateData[] = $this->_valueColumn.'=IF('.$this->_dirtyColumn.' = 1, '.$this->_valueColumn.', \''.addslashes($config->get($field)).'\')';
-            $updateData[] = $this->_dirtyColumn.'=IF('.$this->_valueColumn.' = '.addslashes($config->get($field)).', 0, 1)';
+            $updateData[] = $this->_dirtyColumn.'=IF('.$this->_valueColumn.' = \''.addslashes($config->get($field)).'\', 0, 1)';
 
             if ($update) {
                 $query = sprintf($sqlSkeleton, $this->_table, implode(', ', $columnsData), implode(', ', $valuesData), implode(', ', $updateData));

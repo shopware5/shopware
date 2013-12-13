@@ -5,11 +5,11 @@ class Migrations_Migration208 Extends Shopware\Components\Migrations\AbstractMig
     {
         $sql = <<<'EOD'
         ALTER TABLE  `s_core_snippets`
-        ADD  `dirty` int(1) NULL DEFAULT  '1' ;
+        ADD  `dirty` int(1) NULL DEFAULT  '0' ;
 
         UPDATE `s_core_snippets`
-        SET dirty = 0
-        WHERE created = updated OR updated in (
+        SET dirty = 1
+        WHERE created <> updated AND updated NOT IN (
             "2010-09-28 11:54:19",
             "2010-10-06 12:28:47",
             "2010-10-07 23:31:10",
@@ -72,8 +72,8 @@ class Migrations_Migration208 Extends Shopware\Components\Migrations\AbstractMig
             "2011-05-24 13:52:14",
             "2011-05-24 14:22:59",
             "2011-05-24 17:13:52",
-            "2012-06-25 16:54:02",
-        )
+            "2012-06-25 16:54:02"
+        );
 EOD;
         $this->addSql($sql);
     }
