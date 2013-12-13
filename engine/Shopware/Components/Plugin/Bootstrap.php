@@ -655,7 +655,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function getSource()
     {
-        return $this->info->source;
+        return $this->info ? $this->info->source : null;
     }
 
     /**
