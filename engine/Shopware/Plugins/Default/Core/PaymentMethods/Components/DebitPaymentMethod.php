@@ -40,7 +40,8 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
     public function __construct()
     {
-        include_once(Shopware()->OldPath() . 'engine/core/class/paymentmeans/debit.php');
+        include_once __DIR__ . '/Legacy/debit.php';
+
         $this->legacyImplementation = new \sPaymentMean();
 
         if (!$this->legacyImplementation) {
