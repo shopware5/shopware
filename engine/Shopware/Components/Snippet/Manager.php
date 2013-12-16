@@ -51,35 +51,35 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $shop;
 
     /**
-     * @var array
+     * @var Enlight_Config_Adapter_File
      */
-    protected $extends = array();
-
-    protected $cache;
     protected $fileAdapter;
 
     /**
      * @var array
      */
-    protected $configDir = array();
+    protected $extends = array();
 
     public function __construct(ModelManager $modelManager, $snippetConfig = array())
     {
         $this->snippetConfig = $snippetConfig;
-        $this->modelManager = $modelManager;
+        $this->modelManager  = $modelManager;
 
-        $this->configDir[] = Shopware()->DocPath('snippets');
+        $configDir = array();
         if (file_exists(Shopware()->DocPath('snippets'))) {
-            $this->fileAdapter = new Enlight_Config_Adapter_File(array(
-                'configDir' => $this->configDir,
-                'allowWrites' => $snippetConfig['writeToIni']
-            ));
+            $configDir[] = Shopware()->DocPath('snippets');
         }
+
+        $this->fileAdapter = new Enlight_Config_Adapter_File(array(
+            'configDir'   => $configDir,
+            'allowWrites' => $snippetConfig['writeToIni']
+        ));
+
         $this->adapter = new Enlight_Config_Adapter_DbTable(array(
-            'table' => 's_core_snippets',
+            'table'           => 's_core_snippets',
             'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('shopID', 'localeID'),
-            'allowWrites' => $snippetConfig['writeToDb']
+            'sectionColumn'   => array('shopID', 'localeID'),
+            'allowWrites'     => $snippetConfig['writeToDb']
         ));
     }
 
@@ -176,18 +176,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected function getDefaultLocale()
     {
         return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->getDefault()->getLocale();
-    }
-
-    /**
-     * Set cache instance
-     *
-     * @param   Zend_Cache_Core $cache
-     * @return  Shopware_Components_Snippet_Manager
-     */
-    public function setCache(Zend_Cache_Core $cache)
-    {
-        $this->cache = $cache;
-        return $this;
     }
 
     /**
