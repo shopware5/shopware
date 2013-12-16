@@ -30,11 +30,12 @@
 if (version_compare(PHP_VERSION, '5.3.2', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
+    echo '<h2>Error</h2>';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
+
     echo '<h2>Fehler</h2>';
     echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3.2';
 
-    echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
     return;
 }
 
@@ -42,11 +43,12 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
 if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.database%') !== false) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
-    echo '<h2>Fehler</h2>';
-    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den Installer unter /install/ aus!';
-
     echo '<h2>Error</h2>';
-    echo 'Shopware 4 must be configured first. Please run the installer under /install/!';
+    echo 'Shopware 4 must be configured installed before use. Please run the <a href="install/">installer</a>.';
+
+    echo '<h2>Fehler</h2>';
+    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="install/">Installer</a>.';
+
     return;
 }
 
@@ -63,11 +65,12 @@ if (is_dir('update')) {
 if (!file_exists('vendor/autoload.php')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
+    echo '<h2>Error</h2>';
+    echo 'Please execute "composer install" from the command line to install the required dependencies for Shopware 4';
+
     echo '<h2>Fehler</h2>';
     echo 'Bitte führen Sie zuerst "composer install" aus.';
 
-    echo '<h2>Error</h2>';
-    echo 'Please execute "composer install" install';
     return;
 }
 

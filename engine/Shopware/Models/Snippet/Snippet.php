@@ -35,7 +35,7 @@ use         Shopware\Components\Model\ModelEntity,
  *   - UNIQUE KEY `namespace` (`namespace`,`shopID`,`name`,`localeID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SnippetRepository")
  * @ORM\Table(name="s_core_snippets")
  * @ORM\HasLifecycleCallbacks
  */
@@ -98,6 +98,13 @@ class Snippet extends ModelEntity
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     private $updated;
+
+    /**
+     * @var integer $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean", nullable=false)
+     */
+    protected $dirty = false;
 
     /**
      * Get id
@@ -293,4 +300,22 @@ class Snippet extends ModelEntity
     {
         $this->updated = new \DateTime('now');
     }
+
+    /**
+     * @param int $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDirty()
+    {
+        return $this->dirty;
+    }
+
+
 }

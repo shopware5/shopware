@@ -170,6 +170,7 @@ $app->map('/step4/', function () {
             } else {
                 // Trying to import database
                 $dbObj->importDump();
+                $dbObj->importDumpSnippets();
                 // If en-user import en.sql
                 if ($app->config("install.language")!="de") {
 

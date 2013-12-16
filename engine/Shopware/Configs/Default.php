@@ -18,6 +18,7 @@ if(!is_array($customConfig)) {
 // Allow partial override
 $customConfig = array_merge(array(
     'db' => array(),
+    'snippet' => array(),
     'front' => array(),
     'template' => array(),
     'mail' => array(),
@@ -38,6 +39,12 @@ $customConfig = array_merge(array(
 
 return array_merge($customConfig, array(
     'custom' => $customConfig['custom'],
+    'snippet' => array_merge(array(
+        'readFromDb' => true,
+        'writeToDb' => true,
+        'readFromIni' => false,
+        'writeToIni' => false,
+    ), $customConfig['snippet']),
     'db' => array_merge(array(
         'username' => 'root',
         'password' => '',

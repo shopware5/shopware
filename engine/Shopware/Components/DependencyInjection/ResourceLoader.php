@@ -102,6 +102,20 @@ class ResourceLoader
     }
 
     /**
+     * Checks if a parameter exists.
+     *
+     * @param string $name The parameter name
+     *
+     * @return Boolean The presence of parameter in container
+     *
+     * @api
+     */
+    public function hasParameter($name)
+    {
+        return $this->container->hasParameter($name);
+    }
+
+    /**
      * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
      * The given name will be used as identifier.
      *

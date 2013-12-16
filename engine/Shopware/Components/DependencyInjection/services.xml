@@ -137,7 +137,10 @@
 
         <service id="shopware.loader" alias="Loader" />
         <service id="Loader"     class="Enlight_Loader" />
-        <service id="snippets"   class="%shopware.snippet_manager.class%"/>
+        <service id="snippets"   class="%shopware.snippet_manager.class%">
+            <argument type="service" id="shopware.model_manager"/>
+            <argument>%shopware.snippet%</argument>
+        </service>
         <service id="subscriber" class="Shopware_Components_Subscriber">
 
         </service>
@@ -264,6 +267,15 @@
             <argument type="service" id="db_connection" />
         </service>
 
+        <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">
+            <argument type="service" id="shopware.model_manager" />
+            <argument type="service" id="db" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
+
+        <service id="shopware.snippet_query_handler" class="Shopware\Components\Snippet\QueryHandler">
+            <argument>%kernel.root_dir%snippets/</argument>
+        </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
             <argument type="service" id="resource_loader" />
         </service>

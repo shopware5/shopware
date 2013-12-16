@@ -80,10 +80,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     protected function getLocaleId($locale)
     {
         $sql = '
-			SELECT `id`
-			FROM `s_core_locales`
-			WHERE `locale` = ?
-		';
+            SELECT `id`
+            FROM `s_core_locales`
+            WHERE `locale` = ?
+        ';
         return Shopware()->Db()->fetchOne($sql, array($locale));
     }
 
@@ -238,6 +238,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
         $snippet = new Snippet();
         $snippet->fromArray($params);
+        $snippet->setDirty(true);
 
         try {
             Shopware()->Models()->persist($snippet);
@@ -263,6 +264,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             foreach ($snippets as $snippet) {
                 /* @var $snippetModel Snippet */
                 $snippetModel = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($snippet['id']);
+                $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
+                $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
             }
             Shopware()->Models()->flush();
@@ -284,6 +287,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         $params = $this->Request()->getPost();
+        $dirty = ($result->getDirty() || strcmp($result->getValue(), $params['value']) != 0);
+        $result->setDirty($dirty);
         $result->fromArray($params);
 
         Shopware()->Models()->flush();
@@ -448,18 +453,24 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $value = trim(ltrim($snippet['value-' . $translation['both']], "'"));
                 $value = $this->getFormatSnippetForSave($value);
 
+                $dirty = 0;
+                if (array_key_exists('dirty-' . $translation['both'], $snippet)) {
+                    $dirty = trim(ltrim($snippet['dirty-' . $translation['both']], "'"));
+                }
+
                 $sql = '
-					INSERT INTO `s_core_snippets` (`namespace`, `name`, `localeID`, `shopID`, `value`, `updated`, `created`)
-					VALUES (?, ?, ?, ?, ?, NOW(), NOW())
-					ON DUPLICATE KEY UPDATE `value`=VALUES(`value`), `updated`=NOW()
-				';
+                    INSERT INTO `s_core_snippets` (`namespace`, `name`, `localeID`, `shopID`, `value`, `updated`, `created`, `dirty`)
+                    VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?)
+                    ON DUPLICATE KEY UPDATE `value`=VALUES(`value`), `updated`=NOW()
+                ';
 
                 Shopware()->Db()->query($sql, array(
-                      $namespace,
-                      $name,
-                      $translation['localeID'],
-                      $translation['shopID'],
-                      $value
+                    $namespace,
+                    $name,
+                    $translation['localeID'],
+                    $translation['shopID'],
+                    $value,
+                    $dirty
                  ));
 
                 $counter++;
@@ -481,7 +492,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
         $format = strtolower($this->Request()->getParam('format', 'sql'));
 
-        if ($format=="csv") {
+        if ($format=="csv" || $format=="csvexcel") {
             $sql = "
             SELECT DISTINCT s.shopID as shopId, l.id as localeId, l.locale
             FROM s_core_snippets s, s_core_locales l, s_core_multilanguage o
@@ -495,7 +506,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             $stmt = Shopware()->Db()
                 ->select()
-                ->from(array('s1' => 's_core_snippets'), array('namespace', 'name', "value as $alias"))
+                ->from(array('s1' => 's_core_snippets'), array('namespace', 'name', "value as $alias", "dirty as $alias-dirty"))
                 ->where('s1.localeId = ?', 1)
                 ->where('s1.shopId = ?', 1)
                 ->order('s1.namespace');
@@ -514,7 +525,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $stmt->joinLeft(
                     array($prefix => 's_core_snippets'),
                     "s1.namespace = $prefix.namespace AND s1.name = $prefix.name AND $prefix.localeId = $localeId AND $prefix.shopId = $shopId",
-                    array("value as $alias")
+                    array("value as $alias", "dirty as $alias-dirty")
                 );
             }
 
@@ -524,17 +535,25 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $header[] = "namespace";
             $header[] = "name";
             foreach ($locales as $locale) {
-                $header[] = "value-" . $locale['locale'] . '-' .  $locale['shopId'];
+                $header[] = "value-" . $locale['locale'] . '-' . $locale['shopId'];
+                $header[] = "dirty-" . $locale['locale'] . '-' . $locale['shopId'];
             }
 
             echo implode($header, ";");
             echo "\r\n";
 
-            $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
+            if ($format == 'csv') {
+                $encoding = 'utf-8';
+            } elseif ($format == 'csvexcel') {
+                $encoding = 'iso-8859-15';
+            }
+            $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset='.$encoding);
             $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.csv"');
 
             foreach ($result as $row) {
-                $row = array_map(array($this, 'getFormatSnippetForExport'), $row);
+                foreach ($row as $key => $elem) {
+                    $row[$key] = $this->getFormatSnippetForExport($elem, $encoding);
+                }
                 echo $this->encodeLine($row, array_keys($row));
             }
 
@@ -548,18 +567,19 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
             $result = Shopware()->Db()->query($sql);
 
-            echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`) VALUES \r\n";
+            echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
                 $value = Shopware()->DB()->quote($row['value']);
                 $value = str_replace("\n", "\\n", $value);
 
-                $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW())",
+                $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
                       Shopware()->DB()->quote($row['namespace']),
                       Shopware()->DB()->quote($row['name']),
                       $value,
                       (int) $row['localeID'],
                       (int) $row['shopID'],
-                      $row['created']
+                      $row['created'],
+                      $row['dirty']
                 );
 
             }
@@ -765,7 +785,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $csv = '';
         $lastKey = end($keys);
         foreach ($keys as $key) {
-            if (!empty($line[$key])) {
+            if (!is_null($line[$key])) {
                 if (strpos($line[$key], "\r") !== false || strpos($line[$key], "\n") !== false || strpos(
                     $line[$key], $settings['fieldmark']
                 ) !== false || strpos($line[$key], $settings['separator']) !== false
@@ -790,14 +810,13 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      * Format snippet for export
      *
      * @param string $string
+     * @param string $encoding
      * @return string
      */
-    protected function getFormatSnippetForExport($string)
+    protected function getFormatSnippetForExport($string, $encoding = 'utf-8')
     {
-        if (function_exists('mb_convert_encoding')) {
-            $string = mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
-        } else {
-            $string = htmlentities($string, ENT_NOQUOTES);
+        if (function_exists('mb_convert_encoding') && $encoding != 'utf-8') {
+            $string = mb_convert_encoding($string, $encoding, 'UTF-8');
         }
         return $string;
     }
@@ -815,7 +834,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         foreach ($xml as $cell) {
             $data[] = (string) $cell->Data;
         }
-        if($keys!==null) {
+        if ($keys!==null) {
             $key_data = array();
             foreach ($keys as $key=>$name) {
                 $key_data[$name] = isset($data[$key]) ? $data[$key] : '';
@@ -834,21 +853,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     protected function getFormatSnippetForSave($string)
     {
         if (function_exists('mb_convert_encoding')) {
-            $string = mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
+            $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
         }
 
-        $string = str_replace(
-            array('&nbsp;', '&amp;', '&lt;', '&gt;'),
-            array('%%%SHOPWARE_NBSP%%%', '%%%SHOPWARE_AMP%%%', '%%%SHOPWARE_LT%%%', '%%%SHOPWARE_GT%%%'),
-            $string
-        );
-
         $string = html_entity_decode($string, ENT_NOQUOTES);
-        $string = str_replace(
-            array('%%%SHOPWARE_NBSP%%%', '%%%SHOPWARE_AMP%%%', '%%%SHOPWARE_LT%%%', '%%%SHOPWARE_GT%%%'),
-            array('&nbsp;', '&amp;', '&lt;', '&gt;'),
-            $string
-        );
+
         return $string;
     }
 

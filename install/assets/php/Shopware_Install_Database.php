@@ -205,6 +205,24 @@ class Shopware_Install_Database
         return true;
     }
 
+    public function importDumpSnippets()
+    {
+        if (!file_exists(dirname(__FILE__)."/../../assets/sql/snippets.sql")) {
+            return;
+        }
+        $dump = file_get_contents(dirname(__FILE__)."/../../assets/sql/snippets.sql");
+
+        try {
+
+            $this->getDatabase()->query($dump);
+        } catch (PDOException $e) {
+            $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Is given MySQL storage engine available?
      *
