@@ -389,7 +389,6 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         }
     }
 
-
     protected function getDummyArticle()
     {
         return array(
