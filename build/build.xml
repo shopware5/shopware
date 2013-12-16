@@ -173,7 +173,7 @@
         </exec>
 
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
-            <arg line="console sw:snippets:to:sql --include-plugins"/>
+            <arg line="console sw:snippets:to:db --include-plugins"/>
         </exec>
     </target>
 

@@ -24,18 +24,16 @@
 
 namespace Shopware\Commands;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
  * @package   Shopware\Command
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class SnippetsToIniCommand extends ShopwareCommand
+class SnippetsToDbCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -43,19 +41,13 @@ class SnippetsToIniCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:snippets:to:ini')
-            ->setDescription('Dump snippets from the database into .ini files')
-            ->addArgument(
-                'locale',
-                InputArgument::REQUIRED,
-                'Locale to be exported.'
-            )
+            ->setName('sw:snippets:to:db')
+            ->setDescription('Load snippets from .ini files into database')
             ->addOption(
-                'target',
+                'include-plugins',
                 null,
-                InputOption::VALUE_REQUIRED,
-                'The folder where the exported files should be placed. Defaults to snippetsExport',
-                'snippetsExport'
+                InputOption::VALUE_NONE,
+                'If given, the active plugin snippets will also be loaded'
             )
         ;
     }
@@ -65,21 +57,30 @@ class SnippetsToIniCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = $this->container->get('application')->DocPath($input->getOption('target'));
-        if (!file_exists($dir) || !is_writeable($dir)) {
-            $old = umask(0);
-            mkdir($dir, 0777, true);
-            chmod($dir, 0777);
-            umask($old);
-        }
-        if (!is_writeable($dir)) {
-            $output->writeln('<error>Output dir '.$input->getOption('file').' is not writable, aborting</error>');
-            return 1;
-        }
-
-        /** @var $databaseLoader \Shopware\Components\Snippet\DatabaseHandler */
+        //Import core snippets
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $databaseLoader->setOutput($output);
-        $databaseLoader->dumpFromDatabase($input->getOption('target'), $input->getArgument('locale'));
+        $databaseLoader->loadToDatabase();
+
+        //Import plugin snippets
+        if ($input->getOption('include-plugins')) {
+            $pluginRepository = $this->container->get('shopware.model_manager')->getRepository('Shopware\Models\Plugin\Plugin');
+            $plugins = $pluginRepository->findByActive(true);
+            $pluginBasePath = $this->container->get('application')->AppPath('Plugins');
+
+            foreach ($plugins as $plugin) {
+                $pluginPath = implode('/', array(
+                    rtrim($pluginBasePath, '/'),
+                    $plugin->getSource(),
+                    $plugin->getNamespace(),
+                    $plugin->getName()
+                ));
+
+                $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
+                $databaseLoader->loadToDatabase($pluginPath.'/Snippets/');
+                $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/');
+            }
+            $output->writeln('<info>Plugin snippets processed correctly</info>');
+        }
     }
 }
