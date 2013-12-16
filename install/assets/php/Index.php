@@ -1,7 +1,7 @@
 <?php
 use Slim\Slim;
 
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 
@@ -22,7 +22,7 @@ $app = new \Slim\Slim();
 if (!isset($_SESSION)) {
     session_start();
 }
-if (!isset($_SESSION["parameters"])){
+if (!isset($_SESSION["parameters"])) {
     $_SESSION["parameters"] = array();
 }
 
@@ -55,8 +55,8 @@ $app->contentType('text/html; charset=utf-8');
 // Save post - parameters
 $params = $app->request()->params();
 
-foreach ($params as $key => $value){
-    if (strpos($key,"c_")!==false){
+foreach ($params as $key => $value) {
+    if (strpos($key,"c_")!==false) {
         $_SESSION["parameters"][$key] = $value;
     }
 }
@@ -100,16 +100,16 @@ $app->map('/step2/', function () {
     // Check system requirements
     $shopwareSystemCheck = $app->config('install.requirements');
     $systemCheckResults = $shopwareSystemCheck->toArray();
-    if ($shopwareSystemCheck->getFatalError() == true){
+    if ($shopwareSystemCheck->getFatalError() == true) {
         $app->view()->setData("error", true);
     }
     // Check file & directory permissions
     $shopwareSystemCheckPath = $app->config("install.requirementsPath");
     $systemCheckPathResults = $shopwareSystemCheckPath->toArray();
-    if ($shopwareSystemCheckPath->getFatalError() == true){
+    if ($shopwareSystemCheckPath->getFatalError() == true) {
         $app->view()->setData("error",true);
     }
-    if ($app->view()->getData("error") == false && $app->request()->post("action")){
+    if ($app->view()->getData("error") == false && $app->request()->post("action")) {
         // No errors and submitted form - proceed with next-step
         $app->redirect($app->urlFor("step3"));
     }
@@ -122,24 +122,24 @@ $app->map('/step2/', function () {
 // Step 3: Enter database
 $app->map('/step3/', function () {
     $app = Slim::getInstance();
-    if ($app->request()->post("action")){
+    if ($app->request()->post("action")) {
         // Check form
         $getParams = $app->config("install.database.parameters");
 
-        if (empty($getParams["user"]) || empty($getParams["host"]) || empty($getParams["port"]) || empty($getParams["database"])){
+        if (empty($getParams["user"]) || empty($getParams["host"]) || empty($getParams["port"]) || empty($getParams["database"])) {
             $app->view()->setData("error","Please fill in all fields");
-        }else {
+        } else {
             // Check if database account is reachable
             $dbObj = $app->config("install.database");
             $dbObj->setDatabase();
 
-            if ($dbObj->getError()){
+            if ($dbObj->getError()) {
                 $app->view()->setData("error",$dbObj->getError());
-            }else {
+            } else {
                 $dbObj->writeConfig();
-                if ($dbObj->getError()){
+                if ($dbObj->getError()) {
                     $app->view()->setData("error",$dbObj->getError());
-                }else {
+                } else {
                     // Redirect to step 4 - (everything seems to be okay)
                     $app->redirect($app->urlFor("step4"));
                 }
@@ -155,34 +155,34 @@ $app->map('/step3/', function () {
 // Step 4: Import database
 $app->map('/step4/', function () {
     $app = Slim::getInstance();
-    if ($app->request()->post("action") && !$app->request()->post("c_skip")){
+    if ($app->request()->post("action") && !$app->request()->post("c_skip")) {
         // Check if required fields are suited
         $getParams = $app->config("install.database.parameters");
 
-        if (empty($getParams["user"]) || empty($getParams["password"]) || empty($getParams["host"]) || empty($getParams["port"]) || empty($getParams["database"])){
+        if (empty($getParams["user"]) || empty($getParams["password"]) || empty($getParams["host"]) || empty($getParams["port"]) || empty($getParams["database"])) {
             $app->view()->setData("error","Database connection parameters missing. Cookies enabled?");
-        }else {
+        } else {
             // Check if database account is reachable
             $dbObj = $app->config("install.database");
             $dbObj->setDatabase();
-            if ($dbObj->getError()){
+            if ($dbObj->getError()) {
                 $app->view()->setData("error",$dbObj->getError());
-            }else {
+            } else {
                 // Trying to import database
                 $dbObj->importDump();
                 // If en-user import en.sql
-                if ($app->config("install.language")!="de"){
+                if ($app->config("install.language")!="de") {
 
                     $dbObj->importDumpEn();
                 }
-                if ($dbObj->getError()){
+                if ($dbObj->getError()) {
                     $app->view()->setData("error",$dbObj->getError());
-                }else {
+                } else {
                     $app->redirect($app->urlFor("step5"));
                 }
             }
         }
-    }elseif ($app->request()->post("c_skip")){
+    } elseif ($app->request()->post("c_skip")) {
         $app->redirect($app->urlFor("step5"));
     }
 
@@ -195,39 +195,39 @@ $app->map('/step4/', function () {
 $app->map('/step5/', function () {
     $app = Slim::getInstance();
     $app->render("/header.php",array("tab"=>"licence"));
-    if ($app->request()->post("action")){
-        if ($app->request()->post("c_edition")!="ce"){
+    if ($app->request()->post("action")) {
+        if ($app->request()->post("c_edition")!="ce") {
             // If PE/EE/EEC check license
-            if (!$app->request()->post("c_license")){
+            if (!$app->request()->post("c_license")) {
                 $app->view()->setData("error","It is required that you enter a proper license key to install shopware pe/ee/ec");
-            }else {
+            } else {
                 $licenseObj = $app->config("install.license");
                 $dbObj = $app->config("install.database");
                 $dbObj->setDatabase();
-                if ($dbObj->getError()){
+                if ($dbObj->getError()) {
                     $app->view()->setData("error",$dbObj->getError());
-                }else {
+                } else {
                     // Assign database connection to license object
                     $licenseObj->setDatabase($dbObj->getDatabase());
                     // Do license check
                     $licenseObj->evaluateLicense($app->request()->post("c_license"),$_SERVER["HTTP_HOST"],strtoupper($app->request()->post("c_edition")));
-                    if ($licenseObj->getError()){
+                    if ($licenseObj->getError()) {
                         $app->view()->setData("error",$licenseObj->getError());
-                    }else {
+                    } else {
                         // Proceed with next step
                         $app->redirect($app->urlFor("step6"));
                     }
                 }
             }
-        }else {
+        } else {
             // If ce-edition continue with installation
             $app->redirect($app->urlFor("step6"));
         }
     }
-    if (empty($_SESSION["parameters"]["c_edition"])){
+    if (empty($_SESSION["parameters"]["c_edition"])) {
         $_SESSION["parameters"]["c_edition"] = "ce";
     }
-    if (empty($_SESSION["parameters"]["c_license"])){
+    if (empty($_SESSION["parameters"]["c_license"])) {
         $_SESSION["parameters"]["c_license"] = "";
     }
     $app->view()->setData("parameters",$_SESSION["parameters"]);
@@ -241,23 +241,23 @@ $app->map('/step6/', function () {
     $configObj = $app->config("install.configuration");
     $dbObj = $app->config("install.database");
     $dbObj->setDatabase();
-    if ($dbObj->getError()){
+    if ($dbObj->getError()) {
         $app->view()->setData("error",$dbObj->getError());
-    }else {
+    } else {
         $configObj->setDatabase($dbObj->getDatabase());
     }
-    if (!$dbObj->getError()){
-        if ($app->request()->post("action")){
+    if (!$dbObj->getError()) {
+        if ($app->request()->post("action")) {
             // First create or update admin-user
-            if (!$configObj->createAdmin($_SESSION["parameters"])){
+            if (!$configObj->createAdmin($_SESSION["parameters"])) {
                 $app->view()->setData("error",$configObj->getError());
-            }else {
-                if (!$configObj->updateConfig($_SESSION["parameters"])){
+            } else {
+                if (!$configObj->updateConfig($_SESSION["parameters"])) {
                     $app->view()->setData("error",$configObj->getError());
-                }else {
-                    if (!$configObj->updateShop($_SESSION["parameters"])){
+                } else {
+                    if (!$configObj->updateShop($_SESSION["parameters"])) {
                         $app->view()->setData("error",$configObj->getError());
-                    }else {
+                    } else {
                         $app->redirect($app->urlFor("step7"));
                     }
                 }
@@ -265,22 +265,22 @@ $app->map('/step6/', function () {
         }
         // Load default currencies
         $currencies = $configObj->getCurrencies();
-        if (!$currencies){
+        if (!$currencies) {
             $app->view()->setData("error",$configObj->getError());
-        }else {
+        } else {
             $app->view()->setData("currencies",$currencies);
         }
 
         // Load shop-url
         $app->view()->setData("shop",$configObj->getShopDomain());
     }
-    if (empty($_SESSION["parameters"]["c_config_shop_language"])){
+    if (empty($_SESSION["parameters"]["c_config_shop_language"])) {
         $_SESSION["parameters"]["c_config_shop_language"] = "de_DE";
     }
-    if (empty($_SESSION["parameters"]["c_config_shop_currency"])){
+    if (empty($_SESSION["parameters"]["c_config_shop_currency"])) {
         $_SESSION["parameters"]["c_config_shop_currency"] = "de_DE";
     }
-    if (empty($_SESSION["parameters"]["c_config_admin_language"])){
+    if (empty($_SESSION["parameters"]["c_config_admin_language"])) {
         $_SESSION["parameters"]["c_config_admin_language"] = "de_DE";
     }
     $app->view()->setData("parameters",$_SESSION["parameters"]);

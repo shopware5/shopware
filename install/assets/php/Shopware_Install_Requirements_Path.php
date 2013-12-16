@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Check Path
- * todo@all: Documentation
  * <code>
  * $list = new Shopware_Components_Check_Path();
  * $data = $list->toArray();
@@ -40,7 +31,7 @@
  */
 class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
 {
-	protected $list;
+    protected $list;
     protected $fatalError;
 
     public function setFatalError($fatalError)
@@ -52,77 +43,78 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
     {
         return $this->fatalError;
     }
-	/**
-	 * Checks all requirements
-	 */
-	protected function checkAll()
-	{
-		foreach ($this->list->file as $requirement) {
-			$requirement->existsAndWriteable = $this->checkExits($requirement->name);
-		}
-	}
+    /**
+     * Checks all requirements
+     */
+    protected function checkAll()
+    {
+        foreach ($this->list->file as $requirement) {
+            $requirement->existsAndWriteable = $this->checkExits($requirement->name);
+        }
+    }
 
-	/**
-	 * Checks a requirement
-	 *
-	 * @param string $name
-	 * @return bool
-	 */
-	protected function checkExits($name)
-	{
-        $name = dirname(__FILE__)."/../../../".$name;
+    /**
+     * Checks a requirement
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function checkExits($name)
+    {
+        $name = dirname(__FILE__) . "/../../../" . $name;
 
-		if(file_exists($name) && is_readable($name) && is_writeable($name)){
+        if (file_exists($name) && is_readable($name) && is_writeable($name)) {
             return true;
         }
+
         return false;
-	}
+    }
 
-	/**
-	 * Compares the requirement with the version
-	 *
-	 * @param string $name
-	 * @param string $version
-	 * @param string $required
-	 * @return bool
-	 */
-	protected function compare($name, $version, $required)
-	{
-		return $version;
-	}
+    /**
+     * Compares the requirement with the version
+     *
+     * @param string $name
+     * @param string $version
+     * @param string $required
+     * @return bool
+     */
+    protected function compare($name, $version, $required)
+    {
+        return $version;
+    }
 
-	/**
-	 * Returns the check list
-	 *
-	 * @return Iterator
-	 */
-	public function getList()
-	{
-		if($this->list === null) {
-			$this->list = simplexml_load_file(dirname(__FILE__).'/Path.xml');
+    /**
+     * Returns the check list
+     *
+     * @return Iterator
+     */
+    public function getList()
+    {
+        if ($this->list === null) {
+            $this->list = simplexml_load_file(dirname(__FILE__).'/Path.xml');
 
-			$this->list = $this->list->files;
+            $this->list = $this->list->files;
 
-			$this->checkAll();
-		}
-		return $this->list;
-	}
+            $this->checkAll();
+        }
+        return $this->list;
+    }
 
-	/**
-	 * Returns the check list
-	 *
-	 * @return Iterator
-	 */
-	public function getIterator()
+    /**
+     * Returns the check list
+     *
+     * @return Iterator
+     */
+    public function getIterator()
     {
         return $this->getList();
     }
 
     /**
-	 *  Returns the check list
-	 *
-	 * @return array
-	 */
+     *  Returns the check list
+     *
+     * @return array
+     */
     public function toArray()
     {
         $list = array();
@@ -130,9 +122,9 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
         foreach ($getList->file as $requirement) {
             $listResult = array();
 
-            $listResult["name"] = (string)$requirement->name;
-            $listResult["existsAndWriteable"] = (string)$requirement->existsAndWriteable;
-            if (empty($listResult["existsAndWriteable"])){
+            $listResult["name"] = (string) $requirement->name;
+            $listResult["existsAndWriteable"] = (string) $requirement->existsAndWriteable;
+            if (empty($listResult["existsAndWriteable"])) {
                 $this->setFatalError(true);
             }
             $list[] = $listResult;
@@ -147,6 +139,6 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
      */
     public function count()
     {
-    	return $this->getList()->count();
+        return $this->getList()->count();
     }
 }

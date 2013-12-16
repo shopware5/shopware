@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>

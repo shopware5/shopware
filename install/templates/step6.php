@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>
@@ -10,7 +10,7 @@ if (!defined("installer")){
     </div>
 
     <?php
-     if ($error == true){
+     if ($error == true) {
      ?>
      <div class="alert alert-error">
          <?php echo $error ?>
@@ -52,7 +52,7 @@ if (!defined("installer")){
                 <label><?php echo $language["step6_sconfig_currency"];?></label>
                     <select name="c_config_shop_currency">
                         <?php
-                        foreach ($currencies as $currency){
+                        foreach ($currencies as $currency) {
                         ?>
                             <option value="<?php echo $currency["id"] ?>" <?php echo $parameters["c_config_shop_currency"] == $currency["id"] ? "selected" : ""?>><?php echo $currency["currency"] ?></option>
                         <?php
