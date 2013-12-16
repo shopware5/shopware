@@ -50,6 +50,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
         $name = $options['name'] !== null ? $options['name'] : '';
         unset($options['name']);
         parent::__construct($name, $options);
+        $this->read();
     }
 
     /**
@@ -68,7 +69,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
-        if($save) {
+        if ($save) {
             $this->set($name, $default);
             $this->write();
         }
