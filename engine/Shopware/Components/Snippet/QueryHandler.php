@@ -39,12 +39,12 @@ class QueryHandler
     protected $snippetsDir;
 
     /**
-     * @var Enlight_Config_Adapter_File the file adapter
+     * @var \Enlight_Config_Adapter_File the file adapter
      */
     protected $inputAdapter;
 
     /**
-     * @var Enlight_Config_Writer_Query the query writer
+     * @var \Enlight_Config_Writer_Query the query writer
      */
     protected $outputWriter;
 
@@ -56,12 +56,14 @@ class QueryHandler
     /**
      * Parses current .ini snippet files and generates the matching MySQL queries
      *
+     * @param string  $snippetsDir
      * @param bool $update if false, UPDATE IGNORE statements are generated. Default true, generates UPDATE .. ON DUPLICATE KEY statements
      * @return array The array containing the generated queries.
      */
     public function loadToQuery($snippetsDir = null, $update = true)
     {
         $snippetsDir = $snippetsDir?:$this->snippetsDir;
+
         if (!file_exists($snippetsDir)) {
             return array();
         }
