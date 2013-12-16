@@ -36,11 +36,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected $cacheManager;
 
-    public function init()
+    public function preDispatch()
     {
-        $this->cacheManager = $this->get('shopware.cache_manager');
+        parent::preDispatch();
 
-        parent::init();
+        $this->cacheManager = $this->get('shopware.cache_manager');
     }
 
     protected function initAcl()
