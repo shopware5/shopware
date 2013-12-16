@@ -235,7 +235,7 @@ class Kernel implements HttpKernelInterface
     protected function initializeConfig()
     {
         $configLoader = new ConfigLoader(
-            $this->getDocumentRoot(),
+            $this->getRootDir() . '/',
             $this->environment,
             $this->name
         );
@@ -344,9 +344,9 @@ class Kernel implements HttpKernelInterface
     /**
      * @return string
      */
-    public function getDocumentRoot()
+    public function getRootDir()
     {
-        return realpath(__DIR__ . '/../../') . '/';
+        return realpath(__DIR__ . '/../../');
     }
 
     /**
@@ -444,7 +444,7 @@ class Kernel implements HttpKernelInterface
     protected function getKernelParameters()
     {
         return array(
-            'kernel.root_dir' => $this->getDocumentRoot(),
+            'kernel.root_dir' => $this->getRootDir(),
             'kernel.environment' => $this->environment,
             'kernel.debug' => $this->debug,
             'kernel.name' => $this->name,
