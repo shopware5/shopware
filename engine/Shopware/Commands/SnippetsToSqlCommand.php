@@ -88,6 +88,8 @@ class SnippetsToSqlCommand extends ShopwareCommand
             $databaseLoader->setOutput($output);
             $databaseLoader->loadToDatabase();
         } elseif ($input->getOption('target') == 'file') {
+
+            /** @var $queryLoader \Shopware\Components\Snippet\QueryHandler */
             $queryLoader = $this->container->get('shopware.snippet_query_handler');
 
             $output->writeln('<info>Writing to file</info>');

@@ -48,7 +48,7 @@ class DatabaseHandler
     protected $em;
 
     /**
-     * @var DB
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -58,12 +58,12 @@ class DatabaseHandler
     protected $output;
 
     /**
-     * @var Enlight_Config_Adapter_File Snippet input adapter
+     * @var \Enlight_Config_Adapter_File Snippet input adapter
      */
     protected $inputAdapter;
 
     /**
-     * @var Enlight_Config_Adapter_DbTable Snippet output adapter
+     * @var \Enlight_Config_Adapter_DbTable Snippet output adapter
      */
     protected $outputAdapter;
 
@@ -72,7 +72,7 @@ class DatabaseHandler
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param $kernelRoot
      */
-    public function __construct(ModelManager $em, Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
+    public function __construct(ModelManager $em, \Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
     {
         $this->em = $em;
         $this->kernelRoot = $kernelRoot;
@@ -92,7 +92,7 @@ class DatabaseHandler
      */
     public function loadToDatabase($snippetsDir = null)
     {
-        $snippetsDir = $snippetsDir ? : $this->kernelRoot . 'snippets/';
+        $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
             return;
         }
@@ -159,7 +159,7 @@ class DatabaseHandler
      */
     public function dumpFromDatabase($snippetsDir, $localeName)
     {
-        $snippetsDir = $this->kernelRoot . $snippetsDir . '/';
+        $snippetsDir = $this->kernelRoot . '/' . $snippetsDir . '/';
         if (!file_exists($snippetsDir)) {
             return;
         }
@@ -220,7 +220,7 @@ class DatabaseHandler
      */
     public function removeFromDatabase($snippetsDir = null, $removeDirty = false)
     {
-        $snippetsDir = $snippetsDir ? : $this->kernelRoot . 'snippets/';
+        $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
             return;
         }

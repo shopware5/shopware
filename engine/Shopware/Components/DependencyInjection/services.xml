@@ -274,7 +274,7 @@
         </service>
 
         <service id="shopware.snippet_query_handler" class="Shopware\Components\Snippet\QueryHandler">
-            <argument>%kernel.root_dir%snippets/</argument>
+            <argument>%kernel.root_dir%/snippets/</argument>
         </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
             <argument type="service" id="resource_loader" />
