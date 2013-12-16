@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Shop;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM;
 
@@ -63,6 +64,17 @@ class Locale extends ModelEntity
      * @ORM\Column(name="territory", type="string", length=255, nullable=false)
      */
     private $territory;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Translation\Translation", mappedBy="locale")
+     */
+    protected $translations;
+
+    function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -146,5 +158,21 @@ class Locale extends ModelEntity
     public function toString()
     {
         return $this->getLocale();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param mixed $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
     }
 }
