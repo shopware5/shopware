@@ -70,8 +70,8 @@
 		{/block}
 
 		{* Aggregated review if we're dealing with more than one vote *}
-		{block name="frontend_detail_rich_snippets_review_aggregate"}
-			{if $sArticle.sVoteAverange.count > 1}
+		{if $sArticle.sVoteAverange.count > 1}
+			{block name="frontend_detail_rich_snippets_review_aggregate"}
 				<span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
 
 					{* Name of the reviewed product *}
@@ -99,8 +99,52 @@
 						<meta itemprop="count" content="{$sArticle.sVoteAverange.count}" />
 					{/block}
 				</span>
-			{/if}
-		{/block}
+			{/block}
+		{elseif $sArticle.sVoteAverage.count == 1}
+			{block name="frontend_detail_rich_snippets_review_single"}
+				{$vote=$sArticle.sVoteComments}
+
+				{* Name of the reviewed product *}
+				{block name="frontend_detail_comment_rich_snippets_name"}
+					<meta itemprop="itemreviewed" content="{$sArticle.articleName}" />
+				{/block}
+
+				{* Review date, needs to follow the iso date format *}
+				{block name="frontend_detail_comment_rich_snippets_date"}
+					<meta itemprop="dtreviewed" content="{$vote.datum|substr:0:-9}" />
+				{/block}
+
+				{* Vote rating *}
+				{block name="frontend_detail_comment_rich_snippets_rating"}
+					<meta itemprop="rating" content="{$vote.points*2|replace:'.':','}" />
+				{/block}
+
+				{* Minimum points *}
+				{block name="frontend_detail_comment_rich_snippets_worst"}
+					<meta itemprop="worst" content="0" />
+				{/block}
+
+				{* Maximum points *}
+				{block name="frontend_detail_comment_rich_snippets_best"}
+					<meta itemprop="best" content="10" />
+				{/block}
+
+				{* Review summary *}
+				{block name="frontend_detail_comment_rich_snippets_summary"}
+					<meta itemprop="summary" content="{$vote.headline}" />
+				{/block}
+
+				{* Name of the reviewer *}
+				{block name="frontend_detail_comment_rich_snippets_reviewer"}
+					<meta itemprop="reviewer" content="{$vote.name}" />
+				{/block}
+
+				{* Review text *}
+				{block name="frontend_detail_comment_rich_snippets_description"}
+					<meta itemprop="description" content="{$vote.comment}" />
+				{/block}
+			{/block}
+		{/if}
 	{/block}
 
 	{* Caching instock status *}
