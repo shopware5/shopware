@@ -116,8 +116,9 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
+        $data = $this->Request()->getParams();
 
-        $this->resource->delete($id);
+        $this->resource->delete($id, $data);
 
         $this->View()->assign(array('success' => true));
     }
