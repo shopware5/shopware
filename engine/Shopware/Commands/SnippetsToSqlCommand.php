@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,23 +43,15 @@ class SnippetsToSqlCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:snippets:to:sql')
-            ->setDescription('Load snippets from .ini files into sql')
-            ->addOption(
-                'target',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Where to dump the snippet information',
-                'database'
-            )
-            ->addOption(
+            ->setDescription('Load snippets from .ini files into sql file')
+            ->addArgument(
                 'file',
-                null,
-                InputOption::VALUE_REQUIRED,
+                InputArgument::REQUIRED,
                 'Target file'
             )
             ->addOption(
                 'force',
-                null,
+                'f',
                 InputOption::VALUE_NONE,
                 'If given, the file will be overwritten if it already exists'
             )
@@ -72,7 +65,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
                 'update',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Only applicable to file export. If false, updates on existing snippets will not be performed'
+                'If false, updates on existing snippets will not be performed'
             )
         ;
     }
@@ -82,29 +75,20 @@ class SnippetsToSqlCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //Import core snippets
-        if ($input->getOption('target') == 'database') {
-            $databaseLoader = $this->container->get('shopware.snippet_database_handler');
-            $databaseLoader->setOutput($output);
-            $databaseLoader->loadToDatabase();
-        } elseif ($input->getOption('target') == 'file') {
-
-            /** @var $queryLoader \Shopware\Components\Snippet\QueryHandler */
-            $queryLoader = $this->container->get('shopware.snippet_query_handler');
-
-            $output->writeln('<info>Writing to file</info>');
-            if (!$input->getOption('file')) {
-                $output->writeln('<error>Target type file requires that you specify the "file" option</error>');
-                return;
-            }
-            $queries = $queryLoader->loadToQuery(null, $input->getOption('update') !== 'false');
-            if (file_exists($input->getOption('file')) && !$input->getOption('force')) {
-                $output->writeln('<error>Output file '.$input->getOption('file').' already exists, aborting</error>');
-                return;
-            }
-            file_put_contents($input->getOption('file'), implode(PHP_EOL, $queries));
-            $output->writeln('<info>Core snippets processed correctly</info>');
+        if (file_exists($input->getArgument('file')) && !$input->getOption('force')) {
+            $output->writeln('<error>Output file '.$input->getArgument('file').' already exists, aborting</error>');
+            return 1;
         }
+
+        $output->writeln(sprintf('<info>Writing to file "%s".</info>', $input->getArgument('file')));
+
+        /** @var $queryLoader \Shopware\Components\Snippet\QueryHandler */
+        $queryLoader = $this->container->get('shopware.snippet_query_handler');
+
+        //Import core snippets
+        $queries = $queryLoader->loadToQuery(null, $input->getOption('update') !== 'false');
+        file_put_contents($input->getArgument('file'), implode(PHP_EOL, $queries));
+        $output->writeln('<info>Core snippets processed correctly</info>');
 
         //Import plugin snippets
         if ($input->getOption('include-plugins')) {
@@ -121,16 +105,11 @@ class SnippetsToSqlCommand extends ShopwareCommand
                 ));
 
                 $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
-                if ($input->getOption('target') == 'database') {
-                    $databaseLoader->loadToDatabase($pluginPath.'/Snippets/');
-                    $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/');
-                } elseif ($input->getOption('target') == 'file') {
-                    $queries = array_merge(
-                        $queryLoader->loadToQuery($pluginPath.'/Snippets/'),
-                        $queryLoader->loadToQuery($pluginPath.'/Resources/snippet/')
-                    );
-                    file_put_contents($input->getOption('file'), implode(PHP_EOL, $queries), FILE_APPEND);
-                }
+                $queries = array_merge(
+                    $queryLoader->loadToQuery($pluginPath.'/Snippets/'),
+                    $queryLoader->loadToQuery($pluginPath.'/Resources/snippet/')
+                );
+                file_put_contents($input->getArgument('file'), implode(PHP_EOL, $queries), FILE_APPEND);
             }
             $output->writeln('<info>Plugin snippets processed correctly</info>');
         }

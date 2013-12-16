@@ -167,6 +167,9 @@ class DatabaseHandler
         $snippetRepository = $this->em->getRepository('Shopware\Models\Snippet\Snippet');
 
         $locale = $this->em->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($localeName);
+        if (!$locale) {
+            throw new \Exception(\sprintf('Locale "%s" not found.', $localeName));
+        }
 
         $this->outputAdapter = new \Enlight_Config_Adapter_File(array(
             'configDir' => $snippetsDir . '/',
