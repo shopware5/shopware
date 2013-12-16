@@ -34,6 +34,9 @@ Thumbs.db
 /tests/Shopware/TempFiles/
 /cache/
 
+# Log files
+/logs/
+
 # User provided content
 /media/archive/
 /media/image/
