@@ -227,28 +227,25 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param string $number - Alphanumeric identifier of the translatable entity.
-     *                         This can be a article number, configurator group name or some thing else.
-     *                         For more information which number fields are supported, look into the #getIdByNumber
-     *
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     *
      * @return null|object
      */
-    public function createByNumber($number, array $data)
+    public function createByNumber(array $data)
     {
         $this->checkPrivilege('create');
 
-        if (empty($number)) {
+        if (empty($data['key'])) {
             throw new ApiException\ParameterMissingException(
-                "Create by number expects a passed entity number"
+                "Create by number expects a passed entity number in the key property"
             );
         }
 
         $this->checkRequirements($data);
 
         $data['key'] = $this->getIdByNumber(
-            $number,
+            $data['key'],
             $data['type']
         );
 

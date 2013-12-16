@@ -169,7 +169,7 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         $data['key'] = $article['ordernumber'];
 
         /**@var $translation \Shopware\Models\Translation\Translation */
-        $translation = $this->resource->createByNumber($data['key'], $data);
+        $translation = $this->resource->createByNumber($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
