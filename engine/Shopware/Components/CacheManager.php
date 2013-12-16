@@ -311,7 +311,7 @@ class CacheManager
      */
     public function getDirectoryInfo($dir)
     {
-        $docRoot = $this->container->getParameter('kernel.root_dir');
+        $docRoot = $this->container->getParameter('kernel.root_dir') . '/';
 
         $info = array();
         $info['dir'] = str_replace($docRoot, '', $dir);

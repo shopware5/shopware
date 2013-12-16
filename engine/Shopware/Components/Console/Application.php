@@ -138,7 +138,7 @@ class Application extends BaseApplication
 
     protected function registerFilesystemCommands()
     {
-        if (!is_dir($dir = $this->getKernel()->getDocumentRoot() . '/engine/Shopware/Commands')) {
+        if (!is_dir($dir = $this->getKernel()->getRootDir() . '/engine/Shopware/Commands')) {
             return;
         }
 
