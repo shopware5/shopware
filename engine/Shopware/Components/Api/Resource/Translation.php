@@ -142,7 +142,10 @@ class Translation extends Resource implements BatchInterface
 
         foreach ($translations as &$translation) {
             unset($translation['id']);
-            $translation['data'] = unserialize($translation['data']);
+            $translation['data'] = $this->getTranslationComponent()->unFilterData(
+                'article',
+                $translation['data']
+            );
         }
 
         return array(

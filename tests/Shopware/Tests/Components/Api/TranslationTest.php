@@ -129,8 +129,8 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
 
         $this->assertEquals(2, $shop['locale']['id']);
 
-        $this->assertArrayHasKey('txtArtikel', $data['data']);
-        $this->assertArrayHasKey('txtlangbeschreibung', $data['data']);
+        $this->assertArrayHasKey('name', $data['data']);
+        $this->assertArrayHasKey('descriptionLong', $data['data']);
     }
 
     public function testCreateArticle()
@@ -153,7 +153,9 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         );
         $this->assertEquals(
             $data['data'],
-            unserialize($translation->getData()),
+            $this->resource->getTranslationComponent()->unFilterData(
+                'article', $translation->getData()
+            ),
             'Translation data do not match'
         );
 
@@ -184,7 +186,9 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         );
         $this->assertEquals(
             $data['data'],
-            unserialize($translation->getData()),
+            $this->resource->getTranslationComponent()->unFilterData(
+                'article', $translation->getData()
+            ),
             'Translation data do not match'
         );
 
@@ -224,7 +228,9 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
 
         $this->assertEquals(
             $translation['data'],
-            unserialize($updated->getData()),
+            $this->resource->getTranslationComponent()->unFilterData(
+                'article', $updated->getData()
+            ),
             'Translation data do not match'
         );
 
@@ -407,12 +413,12 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         switch (strtolower($type)) {
             case 'article':
                 return array(
-                    'txtArtikel' => 'Dummy Translation',
-                    'txtshortdescription' => 'Dummy Translation',
-                    'txtlangbeschreibung' => 'Dummy Translation',
-                    'txtzusatztxt' => 'Dummy Translation',
-                    'txtkeywords' => 'Dummy Translation',
-                    'txtpackunit' => 'Dummy Translation',
+                    'name' => 'Dummy Translation',
+                    'description' => 'Dummy Translation',
+                    'descriptionLong' => 'Dummy Translation',
+                    'additionalText' => 'Dummy Translation',
+                    'keywords' => 'Dummy Translation',
+                    'packUnit' => 'Dummy Translation',
                 );
             case 'variant':
                 return array(
