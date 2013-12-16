@@ -207,14 +207,34 @@ class Shopware_Install_Database
 
     public function importDumpSnippets()
     {
-        if (!file_exists(dirname(__FILE__)."/../../assets/sql/snippets.sql")) {
+        $snippetsSql = dirname(__FILE__)."/../../assets/sql/snippets.sql";
+
+        if (!file_exists($snippetsSql)) {
             return;
         }
-        $dump = file_get_contents(dirname(__FILE__)."/../../assets/sql/snippets.sql");
+
+        $query = file_get_contents($snippetsSql);
+        $rows = explode(";\n", trim($query));
+
+        $locales = array();
+        foreach ($rows as $key => $row) {
+            if (strpos($row, ' s_core_locales ') !== false) {
+                $locales[] = $row;
+                unset($rows[$key]);
+            } else {
+                break;
+            }
+        }
+        $batches = array_map(function($chunk) use ($locales) {
+                return array_merge($locales, $chunk);
+            },
+            array_chunk($rows, 500)
+        );
 
         try {
-
-            $this->getDatabase()->query($dump);
+            foreach ($batches as $batch) {
+                $this->getDatabase()->exec(implode(";\n", $batch));
+            }
         } catch (PDOException $e) {
             $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
             return false;
