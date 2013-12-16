@@ -57,7 +57,7 @@ class Translation extends ModelEntity
      * @Assert\NotBlank()
      * @ORM\Column(name="objectlanguage", type="string", nullable=false)
      */
-    private $shopId;
+    private $localeId;
 
     /**
      * @var Locale
@@ -65,19 +65,6 @@ class Translation extends ModelEntity
      * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
      */
     protected $locale;
-
-    /**
-     * Class constructor which allows to create a new instance with a data array.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
-    {
-        if (!empty($data)) {
-            $this->fromArray($data);
-        }
-        return $this;
-    }
 
     /**
      * @param string $data
