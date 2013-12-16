@@ -63,6 +63,9 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
             0, 5,
             array(
                 array('property' => 'translation.localeId', 'value' => 2)
+            ),
+            array(
+                array('property' => 'translation.type', 'direction' => 'ASC')
             )
         );
         $shop = $this->getShopWithLocale(2);
@@ -184,6 +187,8 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
             unserialize($translation->getData()),
             'Translation data do not match'
         );
+
+        return $article['articleID'];
     }
 
     /**
@@ -193,14 +198,14 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
     {
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, array(
-            array('property' => 'translation.type',     'value' => 'article'),
-            array('property' => 'translation.key',      'value' => $key),
+            array('property' => 'translation.type', 'value' => 'article'),
+            array('property' => 'translation.key', 'value' => $key),
             array('property' => 'translation.localeId', 'value' => 2)
         ));
 
         $translation = $translation['data'][0];
 
-        foreach($translation['data'] as &$fieldTranslation) {
+        foreach ($translation['data'] as &$fieldTranslation) {
             $fieldTranslation = 'UPDATE - ' . $fieldTranslation;
         }
 
@@ -233,8 +238,8 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
     {
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, array(
-            array('property' => 'translation.type',     'value' => 'article'),
-            array('property' => 'translation.key',      'value' => $key),
+            array('property' => 'translation.type', 'value' => 'article'),
+            array('property' => 'translation.key', 'value' => $key),
             array('property' => 'translation.localeId', 'value' => 2)
         ));
 
@@ -330,6 +335,63 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         );
     }
 
+    public function testBatch()
+    {
+        $translations = array();
+        for($i=0; $i<4; $i++) {
+            $translations[] = $this->getDummyData('article');
+        }
+
+        $article = Shopware()->Db()->fetchRow(
+            "SELECT ordernumber, articleID
+            FROM s_articles_details
+            LIMIT 1"
+        );
+        $translations[0]['key'] = $article['ordernumber'];
+        $translations[0]['useNumberAsId'] = true;
+
+        $results = $this->resource->batch($translations);
+
+        foreach($results as $result) {
+            $this->assertTrue($result['success']);
+            $this->assertEquals('update', $result['operation']);
+            $this->assertNotEmpty($result['data']);
+            $this->assertEquals(2, $result['data']['localeId']);
+        }
+    }
+
+    /**
+     * @depends testCreateArticleByNumber
+     */
+    public function testUpdateByNumber($articleId)
+    {
+        $translation = $this->getDummyData('article');
+        $article = Shopware()->Db()->fetchRow(
+            "SELECT ordernumber, articleID
+            FROM s_articles_details
+            WHERE articleID = :articleId
+            LIMIT 1",
+            array(':articleId' => $articleId)
+        );
+        $translation['key'] = $article['ordernumber'];
+
+        foreach($translation['data'] as &$data) {
+            $data .= "-UpdateByNumber";
+        }
+
+        /**@var $result Shopware\Models\Translation\Translation*/
+        $result = $this->resource->updateByNumber($article['ordernumber'], $translation);
+
+        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $result);
+        $this->assertEquals($result->getKey(), $article['articleID']);
+        $data = unserialize($result->getData());
+
+        foreach($data as $item) {
+            $isInString = (strpos($item, '-UpdateByNumber') !== false);
+            $this->assertTrue($isInString);
+        }
+    }
+
     protected function getDummyData($type, $localeId = 2)
     {
         return array(
@@ -387,19 +449,6 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
                     'link' => 'Dummy Translation',
                 );
         }
-    }
-
-    protected function getDummyArticle()
-    {
-        return array(
-            'type' => 'article',
-            'key' => rand(2000, 10000),
-            'data' => array(
-                'txtArtikel' => 'Dummy translation',
-                'txtlangbeschreibung' => 'Dummy translation'
-            ),
-            'localeId' => 2
-        );
     }
 
     protected function getShopWithLocale($id)

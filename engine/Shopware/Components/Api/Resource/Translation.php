@@ -194,11 +194,20 @@ class Translation extends Resource implements BatchInterface
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
      * @param array $data
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function create(array $data)
     {
         $this->checkPrivilege('create');
+
+        $this->checkRequirements($data);
+
+        if (!isset($data['key']) || empty($data['key'])) {
+            throw new ApiException\ParameterMissingException(
+                "The parameter key is required for a object translation."
+            );
+        }
 
         return $this->saveTranslation($data);
     }
@@ -215,21 +224,31 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param array $data
      * @param string $number - Alphanumeric identifier of the translatable entity.
      *                         This can be a article number, configurator group name or some thing else.
      *                         For more information which number fields are supported, look into the #getIdByNumber
      *
+     * @param array $data
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function createByNumber($number, array $data)
     {
         $this->checkPrivilege('create');
 
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException(
+                "Create by number expects a passed entity number"
+            );
+        }
+
+        $this->checkRequirements($data);
+
         $data['key'] = $this->getIdByNumber(
             $number,
             $data['type']
         );
+
         return $this->saveTranslation($data);
     }
 
@@ -248,13 +267,23 @@ class Translation extends Resource implements BatchInterface
      * @param $id int - Identifier of the translated object, like the s_articles.id.
      *
      * @param array $data
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function update($id, array $data)
     {
         $this->checkPrivilege('update');
 
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException(
+                "Update expects a passed id"
+            );
+        }
+
+        $this->checkRequirements($data);
+
         $data['key'] = $id;
+
         return $this->saveTranslation($data);
     }
 
@@ -277,16 +306,25 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      *
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function updateByNumber($number, array $data)
     {
         $this->checkPrivilege('update');
 
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException(
+                "Create by number expects a passed entity number"
+            );
+        }
+        $this->checkRequirements($data);
+
         $data['key'] = $this->getIdByNumber(
             $number,
             $data['type']
         );
+
         return $this->saveTranslation($data);
     }
 
@@ -303,11 +341,19 @@ class Translation extends Resource implements BatchInterface
      *
      * @param $id
      * @param array $data
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function delete($id, $data)
     {
         $this->checkPrivilege('delete');
+
+        if (empty($id)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        $this->checkRequirements($data);
 
         $translation = $this->getObjectTranslation(
             $data['type'],
@@ -315,6 +361,17 @@ class Translation extends Resource implements BatchInterface
             $data['localeId'],
             AbstractQuery::HYDRATE_OBJECT
         );
+
+        if (!$translation) {
+            throw new ApiException\NotFoundException(
+                sprintf(
+                    "No translation found for type %s, locale id %s and foreign key %s",
+                    $data['type'],
+                    $data['localeId'],
+                    $id
+                )
+            );
+        }
 
         $this->getManager()->remove($translation);
 
@@ -338,13 +395,19 @@ class Translation extends Resource implements BatchInterface
      *                         For more information which number fields are supported, look into the #getIdByNumber
      *
      * @param array $data
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return null|object
      */
     public function deleteByNumber($number, $data)
     {
-        if (!isset($number) || empty($number)) {
-
+        if (empty($number)) {
+            throw new ApiException\ParameterMissingException(
+                "Delete by number expects a passed entity number"
+            );
         }
+
+        $this->checkRequirements($data);
+
         $id = $this->getIdByNumber($number, $data['type']);
 
         return $this->delete($id, $data);
@@ -361,32 +424,6 @@ class Translation extends Resource implements BatchInterface
      */
     protected function saveTranslation(array $data)
     {
-        if (!isset($data['type']) || empty($data['type'])) {
-            throw new ApiException\ParameterMissingException(
-                "The parameter type is required for a object translation"
-            );
-        }
-        if (!isset($data['key']) || empty($data['key'])) {
-            throw new ApiException\ParameterMissingException(
-                "The parameter key is required for a object translation"
-            );
-        }
-        if (!isset($data['localeId']) || empty($data['localeId'])) {
-            throw new ApiException\ParameterMissingException(
-                "The parameter localeId is required for a object translation"
-            );
-        }
-        if (!isset($data['data']) || empty($data['data'])) {
-            throw new ApiException\ParameterMissingException(
-                "The parameter localeId is required for a object translation"
-            );
-        }
-        if (!is_array($data['data'])) {
-            throw new ApiException\CustomValidationException(
-                "The parameter data has to be an array."
-            );
-        }
-
         $existing = $this->getObjectTranslation(
             $data['type'], //translation object type
             $data['key'], //identifier of the translatable entity (s_articles.id)
@@ -508,10 +545,14 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception();
+            throw new ApiException\NotFoundException(
+                sprintf("Variant by order number %s not found", $number)
+            );
         }
         if (!$entity->getArticle()) {
-            throw new \Exception();
+            throw new ApiException\NotFoundException(
+                sprintf("Variant %s has no assigned article", $number)
+            );
         }
         return $entity->getArticle()->getId();
     }
@@ -527,7 +568,9 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getLinkIdByNumber($number)
     {
-        throw new \Exception("Not supported");
+        throw new ApiException\CustomValidationException(
+            "Article links can not be founded over an alphanumeric key"
+        );
     }
 
     /**
@@ -540,7 +583,9 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getDownloadIdByNumber($number)
     {
-        throw new \Exception("Not supported");
+        throw new ApiException\CustomValidationException(
+            "Article downloads can not be founded over an alphanumeric key"
+        );
     }
 
 
@@ -558,8 +603,11 @@ class Translation extends Resource implements BatchInterface
             'Shopware\Models\Article\Supplier',
             array(array('name' => $number))
         );
+
         if (!$entity) {
-            throw new \Exception(sprintf("Manufacturer by name %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Manufacturer by name %s not found", $number)
+            );
         }
         return $entity->getId();
     }
@@ -584,7 +632,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Country by iso/name %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Country by iso/name %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -610,7 +660,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Country state by name/short code %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Country state by name/short code %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -635,7 +687,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Dispatch by name code %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Dispatch by name code %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -660,7 +714,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Payment by name/description code %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Payment by name/description code %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -684,7 +740,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Filter set by name code %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter set by name code %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -707,7 +765,7 @@ class Translation extends Resource implements BatchInterface
         $numbers = explode('|', $number);
 
         if (count($numbers) < 2) {
-            throw new \Exception(
+            throw new ApiException\CustomValidationException(
                 sprintf("Passed filter group number %s contains not the full path: set|group", $number)
             );
         }
@@ -722,7 +780,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$set) {
-            throw new \Exception(sprintf("Filter set by name code %s not found", $numbers[0]));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter set by name code %s not found", $numbers[0])
+            );
         }
 
         /**@var $group Option */
@@ -734,7 +794,9 @@ class Translation extends Resource implements BatchInterface
 
 
         if (!$group) {
-            throw new \Exception(sprintf("Filter group by name code %s not found", $numbers[1]));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter group by name code %s not found", $numbers[1])
+            );
         }
 
         return $group->getId();
@@ -757,7 +819,7 @@ class Translation extends Resource implements BatchInterface
         $numbers = explode('|', $number);
 
         if (count($numbers) < 3) {
-            throw new \Exception(
+            throw new ApiException\CustomValidationException(
                 sprintf("Passed filter option number %s contains not the full path: set|group|option", $number)
             );
         }
@@ -771,7 +833,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$set) {
-            throw new \Exception(sprintf("Filter set by name %s not found", $numbers[0]));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter set by name %s not found", $numbers[0])
+            );
         }
 
         /**@var $group Option */
@@ -783,7 +847,9 @@ class Translation extends Resource implements BatchInterface
 
 
         if (!$group) {
-            throw new \Exception(sprintf("Filter group by name %s not found", $numbers[1]));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter group by name %s not found", $numbers[1])
+            );
         }
 
         /**@var $option Value */
@@ -794,7 +860,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$option) {
-            throw new \Exception(sprintf("Filter option by name %s not found", $numbers[2]));
+            throw new ApiException\NotFoundException(
+                sprintf("Filter option by name %s not found", $numbers[2])
+            );
         }
 
         return $option->getId();
@@ -816,7 +884,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$entity) {
-            throw new \Exception(sprintf("Configurator group by name %s not found", $number));
+            throw new ApiException\NotFoundException(
+                sprintf("Configurator group by name %s not found", $number)
+            );
         }
 
         return $entity->getId();
@@ -829,17 +899,17 @@ class Translation extends Resource implements BatchInterface
      * Example:
      *     GROUP-A|OPTION-A
      *
-     *
      * @param $number
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @return int
-     * @throws \Exception
      */
     protected function getConfiguratorOptionIdByNumber($number)
     {
         $numbers = explode('|', $number);
 
         if (count($numbers) < 2) {
-            throw new \Exception(
+            throw new ApiException\CustomValidationException(
                 sprintf("Passed configurator option name %s contains not the full path: group|option", $number)
             );
         }
@@ -851,7 +921,9 @@ class Translation extends Resource implements BatchInterface
         );
 
         if (!$group) {
-            throw new \Exception(sprintf("Configurator group by name %s not found", $numbers[0]));
+            throw new ApiException\NotFoundException(
+                sprintf("Configurator group by name %s not found", $numbers[0])
+            );
         }
 
         /**@var $option ConfiguratorOption */
@@ -861,9 +933,42 @@ class Translation extends Resource implements BatchInterface
             $numbers[1]
         );
         if (!$option) {
-            throw new \Exception(sprintf("Configurator option by name %s not found", $numbers[1]));
+            throw new ApiException\NotFoundException(
+                sprintf("Configurator option by name %s not found", $numbers[1])
+            );
         }
 
         return $option->getId();
     }
+
+
+    protected function checkRequirements($data)
+    {
+        if (!isset($data['type']) || empty($data['type'])) {
+            throw new ApiException\ParameterMissingException(
+                "Passed translation contains no object type"
+            );
+        }
+
+        if (!isset($data['localeId']) || empty($data['localeId'])) {
+            throw new ApiException\ParameterMissingException(
+                "Passed translation contains no locale id"
+            );
+        }
+
+        if (!isset($data['data']) || empty($data['data'])) {
+            throw new ApiException\ParameterMissingException(
+                "The parameter data is required for a object translation"
+            );
+        }
+
+        if (!is_array($data['data'])) {
+            throw new ApiException\CustomValidationException(
+                "The parameter data has to be an array."
+            );
+        }
+    }
+
+
+
 }
