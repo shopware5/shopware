@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,25 +20,8 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
-/**
- * Shopware Check System
- *
- * todo@all: Documentation
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
- */
 require_once(dirname(__FILE__)."/Shopware_Components_Dump.php");
 
 class Shopware_Install_Database
@@ -58,7 +41,10 @@ class Shopware_Install_Database
      */
     protected $configFile;
 
-    public function __construct(array $databaseParameters){
+    protected $error;
+
+    public function __construct(array $databaseParameters)
+    {
         $this->configFile = dirname(__FILE__)."/../../../config.php";
         $this->database_parameters = $databaseParameters;
     }
@@ -72,8 +58,6 @@ class Shopware_Install_Database
     {
         return $this->error;
     }
-
-    protected $error;
 
     public function setDatabase()
     {
@@ -111,11 +95,11 @@ class Shopware_Install_Database
         try {
             $sql = "SELECT VERSION()";
             $result = $this->database->query($sql)->fetchColumn(0);
-            if(version_compare($result, '5.1.0', '<')) {
+            if (version_compare($result, '5.1.0', '<')) {
                 $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 4 requires at least MySQL 5.1.0.<br/>");
                 return false;
             }
-        } catch(PDOException $e) { }
+        } catch (PDOException $e) { }
 
         try {
             $hasEngineSupport = $this->hasStorageEngine('InnoDB');
@@ -123,28 +107,30 @@ class Shopware_Install_Database
                 $this->setError("Database-Error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
             }
-        } catch(PDOException $e) { }
+        } catch (PDOException $e) { }
 
         try {
             $sql = "SELECT @@SESSION.sql_mode;";
             $result = $this->database->query($sql)->fetchColumn(0);
-            if(strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
                 $this->setError("Database-Error!: The MySQL strict mode is active. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
             }
-        } catch(PDOException $e) { }
+        } catch (PDOException $e) { }
 
         return true;
     }
 
-    public function getDatabase(){
+    public function getDatabase()
+    {
         return $this->database;
     }
 
-    public function writeConfig(){
+    public function writeConfig()
+    {
         $databaseConfigFile = $this->configFile;
 
-        if (!file_exists($databaseConfigFile) || !is_writable($databaseConfigFile)){
+        if (!file_exists($databaseConfigFile) || !is_writable($databaseConfigFile)) {
             $this->setError("Shopware config file $databaseConfigFile not found or not writeable");
             return false;
         }
@@ -159,7 +145,7 @@ class Shopware_Install_Database
             'socket'   => 'unix_socket',
         );
 
-        foreach ($this->database_parameters as $key => $parameter){
+        foreach ($this->database_parameters as $key => $parameter) {
             if ($key == "port" && empty($parameter)) continue;
             if ($key == "socket" && empty($parameter)) continue;
 
@@ -171,11 +157,11 @@ class Shopware_Install_Database
         }
         try {
             $template = '<?php return ' . var_export($config, true) . ';';
-            if (!file_put_contents($databaseConfigFile, $template)){
+            if (!file_put_contents($databaseConfigFile, $template)) {
                 $this->setError("Could not write config");
                 return false;
             }
-        } catch (Exception $e){
+        } catch (Exception $e) {
             $this->setError($e->getMessage());
             return false;
         }
@@ -183,11 +169,11 @@ class Shopware_Install_Database
         return true;
     }
 
-    public function importDump(){
+    public function importDump()
+    {
         $dump = new Shopware_Components_Dump(dirname(__FILE__)."/../../assets/sql/sw4_clean.sql");
 
         foreach ($dump as $line) {
-
             try {
                 $this->getDatabase()->query($line);
             } catch (PDOException $e) {
@@ -199,7 +185,8 @@ class Shopware_Install_Database
         return true;
     }
 
-    public function importDumpEn(){
+    public function importDumpEn()
+    {
         $dump = file_get_contents(dirname(__FILE__)."/../../assets/sql/en.sql");
         $dump = explode("\r\n",$dump);
 
@@ -216,10 +203,6 @@ class Shopware_Install_Database
         }
 
         return true;
-    }
-
-    public function writeDatabaseConfig(){
-
     }
 
     /**

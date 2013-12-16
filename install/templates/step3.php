@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>
@@ -10,7 +10,7 @@ if (!defined("installer")){
     </div>
 
     <?php
-     if ($error == true){
+     if ($error == true) {
      ?>
      <div class="alert alert-error">
          <?php echo $error ?>

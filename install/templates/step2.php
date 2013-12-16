@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>
@@ -7,7 +7,7 @@ if (!defined("installer")){
 <div id="start">
 
     <?php
-    if ($error == true){
+    if ($error == true) {
     ?>
     <div class="alert alert-error">
         <?php echo $language["step2_error"];?>
@@ -25,20 +25,20 @@ if (!defined("installer")){
             <?php echo $language["step2_files_info"];?>
         </span>
         <table class="table table-striped">
-               	<thead>
-               		<tr>
-               			<th><?php echo $language["step2_tablefiles_colcheck"];?></th>
+                   <thead>
+                       <tr>
+                           <th><?php echo $language["step2_tablefiles_colcheck"];?></th>
                         <th><?php echo $language["step2_tablefiles_colstatus"];?></th>
-               		</tr>
-               	</thead>
+                       </tr>
+                   </thead>
             <tbody>
                 <?php
-                   foreach ($systemCheckResultsWritePermissions as $systemCheckResult){
+                   foreach ($systemCheckResultsWritePermissions as $systemCheckResult) {
                 ?>
                     <?php
-                    if ($systemCheckResult["existsAndWriteable"] == true){
+                    if ($systemCheckResult["existsAndWriteable"] == true) {
                         $class = "success";
-                    }else {
+                    } else {
                         $class = "error";
                     }
                     ?>
@@ -59,26 +59,26 @@ if (!defined("installer")){
             <?php echo $language["step2_php_info"];?>
         </span>
         <table class="table table-striped">
-        	<thead>
-        		<tr>
-        			<th><?php echo $language["step2_system_colcheck"];?></th>
+            <thead>
+                <tr>
+                    <th><?php echo $language["step2_system_colcheck"];?></th>
                     <th><?php echo $language["step2_system_colrequired"];?></th>
                     <th><?php echo $language["step2_system_colfound"];?></th>
                     <th><?php echo $language["step2_system_colstatus"];?></th>
-        		</tr>
-        	</thead>
+                </tr>
+            </thead>
 
-        	<tbody>
+            <tbody>
             <?php
-               foreach ($systemCheckResults as $systemCheckResult){
+               foreach ($systemCheckResults as $systemCheckResult) {
             ?>
                 <?php
-                if ($systemCheckResult["result"] == true){
+                if ($systemCheckResult["result"] == true) {
                     $class = "success";
-                }else {
-                    if ($systemCheckResult["error"] == true){
+                } else {
+                    if ($systemCheckResult["error"] == true) {
                         $class = "error";
-                    }else {
+                    } else {
                         $class = "warning";
                     }
                 }
@@ -90,7 +90,7 @@ if (!defined("installer")){
                     <td><?php echo $systemCheckResult["result"] == true ? '<i class="icon-ok-sign"></i>' : '<i class="icon-minus-sign"></i>' ?></td>
                 </tr>
                 <?php
-                 if(!empty($systemCheckResult["notice"])){
+                 if (!empty($systemCheckResult["notice"])) {
                 ?>
                <tr class="notice-text">
                    <td colspan="4">
@@ -103,7 +103,7 @@ if (!defined("installer")){
             <?php
                }
             ?>
-        	</tbody>
+            </tbody>
         </table>
         <div class="actions clearfix">
             <a href="<?php echo $app->urlFor('step1', array()); ?>" class="secondary"><?php echo $language["back"];?></a>
