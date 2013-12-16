@@ -47,7 +47,7 @@ use Shopware\Models\Property\Value;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Translation extends Resource
+class Translation extends Resource implements BatchInterface
 {
     const TYPE_PRODUCT = 'article';
     const TYPE_VARIANT = 'variant';
@@ -68,6 +68,27 @@ class Translation extends Resource
     protected $translationWriter = null;
 
     protected $repository = null;
+
+    /**
+     * This methods needs to return an ID for the current resource.
+     * The ID needs to be the primary ID of the resource (in most cases `id`).
+     * If your resource supports other kinds of IDs, too, you should identify
+     * your entity by these IDs and return the primary ID of that entity.
+     *
+     * @param $data
+     * @return int|boolean      Return the primary ID of the entity, if it exists
+     *                          Return false, if no existing entity matches $data
+     */
+    public function getIdByData($data)
+    {
+        if ($data['useNumberAsId']) {
+            return $this->getIdByNumber(
+                $data['key'],
+                $data['type']
+            );
+        }
+        return $data['key'];
+    }
 
     protected function getRepository()
     {
