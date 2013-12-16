@@ -46,7 +46,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $sort   = $this->Request()->getParam('sort', array());
         $filter = $this->Request()->getParam('filter', array());
 
-        $result = $this->resource->getList($offset, $limit, $filter, $sort);
+        $result = $this->resource->getList($offset, $limit, $filter, $sort, array(
+            'language' => $this->Request()->getParam('language')
+        ));
 
         $this->View()->assign($result);
         $this->View()->assign('success', true);
@@ -63,9 +65,13 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->getOneByNumber($id);
+            $article = $this->resource->getOneByNumber($id, array(
+                'language' => $this->Request()->getParam('language')
+            ));
         } else {
-            $article = $this->resource->getOne($id);
+            $article = $this->resource->getOne($id, array(
+                'language' => $this->Request()->getParam('language')
+            ));
         }
 
         $this->View()->assign('data', $article);

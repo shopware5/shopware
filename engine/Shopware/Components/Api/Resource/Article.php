@@ -33,6 +33,7 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Article\Configurator;
 use Shopware\Components\Api\BatchInterface;
+use Shopware\Models\Shop\Locale;
 
 
 /**
@@ -68,6 +69,13 @@ class Article extends Resource implements BatchInterface
         return $this->getResource('Variant');
     }
 
+    /**
+     * @return Translation
+     */
+    protected function getTranslationResource()
+    {
+        return $this->getResource('Translation');
+    }
 
     /**
      * @return Media
@@ -105,23 +113,23 @@ class Article extends Resource implements BatchInterface
     /**
      * Convenience method to get a article by number
      * @param string $number
+     * @param array $options
      * @return array|\Shopware\Models\Article\Article
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function getOneByNumber($number)
+    public function getOneByNumber($number, array $options = array())
     {
         $id = $this->getIdFromNumber($number);
-        return $this->getOne($id);
+        return $this->getOne($id, $options);
     }
 
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Article\Article
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @param array $options
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @return array|\Shopware\Models\Article\Article
      */
-    public function getOne($id)
+    public function getOne($id, array $options = array())
     {
         $this->checkPrivilege('read');
 
@@ -136,6 +144,7 @@ class Article extends Resource implements BatchInterface
             'mainDetailPrices',
             'tax',
             'propertyValues',
+            'configuratorOptions',
             'supplier',
             'mainDetailAttribute',
             'propertyGroup',
@@ -148,6 +157,7 @@ class Article extends Resource implements BatchInterface
             ->leftJoin('article.propertyValues', 'propertyValues')
             ->leftJoin('article.supplier', 'supplier')
             ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
+            ->leftJoin('mainDetail.configuratorOptions', 'configuratorOptions')
             ->leftJoin('article.propertyGroup', 'propertyGroup')
             ->leftJoin('article.customerGroups', 'customerGroups')
             ->where('article.id = ?1')
@@ -180,6 +190,19 @@ class Article extends Resource implements BatchInterface
                     $translation['shopId'] = $shop['id'];
                     $article['translations'][$shop['id']] = $translation;
                 }
+            }
+
+            if (isset($options['language']) && !empty($options['language'])) {
+                /**@var $locale Locale */
+                $locale = $this->findEntityByConditions('Shopware\Models\Shop\Locale', array(
+                    array('id' => $options['language']),
+                    array('locale' => $options['language'])
+                ));
+
+                $article = $this->translateArticle(
+                    $article,
+                    $locale
+                );
             }
         }
 
@@ -340,8 +363,8 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getRepository()->getVariantDetailQuery();
         $builder->andWhere('article.id = :articleId')
-                ->andWhere('variants.kind = 2')
-                ->setParameter('articleId', $articleId);
+            ->andWhere('variants.kind = 2')
+            ->setParameter('articleId', $articleId);
 
         return $this->getFullResult($builder);
     }
@@ -383,9 +406,10 @@ class Article extends Resource implements BatchInterface
      * @param int $limit
      * @param array $criteria
      * @param array $orderBy
+     * @param array $options
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array(), array $options = array())
     {
         $this->checkPrivilege('read');
 
@@ -408,6 +432,24 @@ class Article extends Resource implements BatchInterface
 
         //returns the article data
         $articles = $paginator->getIterator()->getArrayCopy();
+
+        if ($this->getResultMode() === self::HYDRATE_ARRAY
+            && isset($options['language'])
+            && !empty($options['language'])) {
+
+            /**@var $locale Locale */
+            $locale = $this->findEntityByConditions('Shopware\Models\Shop\Locale', array(
+                array('id' => $options['language']),
+                array('locale' => $options['language'])
+            ));
+
+            foreach($articles as &$article) {
+                $article = $this->translateArticle(
+                    $article,
+                    $locale
+                );
+            }
+        }
 
         return array('data' => $articles, 'total' => $totalResult);
     }
@@ -1362,7 +1404,7 @@ class Article extends Resource implements BatchInterface
         $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
 
         foreach ($data['images'] as &$imageData) {
-            /**@var $image Image*/
+            /**@var $image Image */
             $image = $this->getOneToManySubElement(
                 $images,
                 $imageData,
@@ -1370,7 +1412,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($imageData['link'])) {
-                /**@var $media MediaModel*/
+                /**@var $media MediaModel */
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
@@ -1387,7 +1429,7 @@ class Article extends Resource implements BatchInterface
             } else if (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
                     'Shopware\Models\Media\Media',
-                    (int) $imageData['mediaId']
+                    (int)$imageData['mediaId']
                 );
 
                 if (!($media instanceof MediaModel)) {
@@ -1462,12 +1504,12 @@ class Article extends Resource implements BatchInterface
 
         $mappings = $builder->getQuery()->getResult();
 
-        /**@var $mapping Image\Mapping*/
+        /**@var $mapping Image\Mapping */
         foreach ($mappings as $mapping) {
 
             $builder = $this->getArticleVariantQuery($id);
 
-            /**@var $rule Image\Rule*/
+            /**@var $rule Image\Rule */
             foreach ($mapping->getRules() as $rule) {
                 $option = $rule->getOption();
                 $alias = 'option' . $option->getId();
@@ -1477,7 +1519,7 @@ class Article extends Resource implements BatchInterface
 
             $variants = $builder->getQuery()->getResult();
 
-            /**@var $variant Detail*/
+            /**@var $variant Detail */
             foreach ($variants as $variant) {
                 $exist = $this->getCollectionElementByProperty(
                     $variant->getImages(),
@@ -1528,7 +1570,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
-        /**@var $variantImage Image*/
+        /**@var $variantImage Image */
         foreach ($variant->getImages() as $variantImage) {
             if ($variantImage->getParent()->getId() == $image->getId()) {
                 return true;
@@ -1536,7 +1578,6 @@ class Article extends Resource implements BatchInterface
         }
         return false;
     }
-
 
     /**
      * Small helper function which creates a query builder to select
@@ -1554,7 +1595,6 @@ class Article extends Resource implements BatchInterface
             ->setParameter('articleId', $id);
         return $builder;
     }
-
 
     /**
      * Creates the article image mappings for the passed article and image entity.
@@ -1594,7 +1634,7 @@ class Article extends Resource implements BatchInterface
             foreach ($mappingData as $option) {
 
                 $available = $this->getCollectionElementByProperties($configuratorOptions, array(
-                    'id'   => $option['id'],
+                    'id' => $option['id'],
                     'name' => $option['name'],
                 ));
 
@@ -1716,6 +1756,310 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
+     * Translate the whole article array.
+     *
+     * @param array $data
+     * @param Locale $locale
+     * @return array
+     */
+    protected function translateArticle(array $data, Locale $locale)
+    {
+        $this->getTranslationResource()->setResultMode(
+            self::HYDRATE_ARRAY
+        );
+        $translation = $this->getSingleTranslation(
+            'article',
+            $locale->getId(),
+            $data['id']
+        );
+
+        if (!empty($translation)) {
+            $data = $this->mergeTranslation($data, $translation['data']);
+
+            if ($data['mainDetail']) {
+                $data['mainDetail'] = $this->mergeTranslation($data['mainDetail'], $translation['data']);
+
+                if ($data['mainDetail']['attribute']) {
+                    $data['mainDetail']['attribute'] = $this->mergeTranslation(
+                        $data['mainDetail']['attribute'],
+                        $translation['data']
+                    );
+                }
+
+                if ($data['mainDetail']['configuratorOptions']) {
+                    $data['mainDetail']['configuratorOptions'] = $this->translateAssociation(
+                        $data['mainDetail']['configuratorOptions'],
+                        $locale,
+                        'configuratoroption'
+                    );
+                }
+            }
+        }
+
+        $data['details'] = $this->translateVariants(
+            $data['details'],
+            $locale
+        );
+
+        $data['links'] = $this->translateAssociation(
+            $data['links'],
+            $locale,
+            'link'
+        );
+
+        $data['downloads'] = $this->translateAssociation(
+            $data['downloads'],
+            $locale,
+            'download'
+        );
+
+        $data['supplier'] = $this->translateSupplier($data['supplier'], $locale);
+
+        $data['propertyValues'] = $this->translatePropertyValues($data['propertyValues'], $locale);
+
+        $data['propertyGroup'] = $this->translatePropertyGroup($data['propertyGroup'], $locale);
+
+        if (!empty($data['configuratorSet']) && !empty($data['configuratorSet']['groups'])) {
+            $data['configuratorSet']['groups'] = $this->translateAssociation(
+                $data['configuratorSet']['groups'],
+                $locale,
+                'configuratorgroup'
+            );
+        }
+
+        $data['related'] = $this->translateAssociation(
+            $data['related'],
+            $locale,
+            'article'
+        );
+
+        $data['similar'] = $this->translateAssociation(
+            $data['similar'],
+            $locale,
+            'article'
+        );
+
+        $data['images'] = $this->translateAssociation(
+            $data['images'],
+            $locale,
+            'articleimage'
+        );
+
+        return $data;
+    }
+
+    /**
+     * Translates the passed values array with the passed locale entity.
+     *
+     * @param $values
+     * @param Locale $locale
+     * @return mixed
+     */
+    protected function translatePropertyValues($values, Locale $locale)
+    {
+        if (empty($values)) {
+            return $values;
+        }
+
+        foreach ($values as &$value) {
+            $translation = $this->getSingleTranslation(
+                'propertyvalue',
+                $locale->getId(),
+                $value['id']
+            );
+            if (empty($translation)) {
+                continue;
+            }
+
+            $translation['data']['value'] = $translation['data']['optionValue'];
+
+            $value = $this->mergeTranslation(
+                $value,
+                $translation['data']
+            );
+        }
+
+        return $values;
+    }
+
+    /**
+     * Translates the passed supplier data.
+     *
+     * @param $supplier
+     * @param Locale $locale
+     * @return array
+     */
+    protected function translateSupplier($supplier, Locale $locale)
+    {
+        if (empty($supplier)) {
+            return $supplier;
+        }
+        $translation = $this->getSingleTranslation(
+            'supplier',
+            $locale->getId(),
+            $supplier['id']
+        );
+
+        if (empty($translation)) {
+            return $supplier;
+        }
+
+        return $this->mergeTranslation(
+            $supplier,
+            $translation['data']
+        );
+    }
+
+    /**
+     * Translates the passed property group data.
+     * @param $groupData
+     * @param Locale $locale
+     * @return array
+     */
+    protected function translatePropertyGroup($groupData, Locale $locale)
+    {
+        if (empty($groupData)) {
+            return $groupData;
+        }
+
+        $translation = $this->getSingleTranslation(
+            'propertygroup',
+            $locale->getId(),
+            $groupData['id']
+        );
+
+        if (empty($translation)) {
+            return $groupData;
+        }
+
+        $translation['data']['name'] = $translation['data']['groupName'];
+
+        return $this->mergeTranslation(
+            $groupData,
+            $translation['data']
+        );
+    }
+
+    /**
+     * Translates the passed variants array and all associated data.
+     * @param $details
+     * @param Locale $locale
+     * @return mixed
+     */
+    protected function translateVariants($details, Locale $locale)
+    {
+        if (empty($details)) {
+            return $details;
+        }
+
+        foreach ($details as &$variant) {
+            $translation = $this->getSingleTranslation(
+                'variant',
+                $locale->getId(),
+                $variant['id']
+            );
+            if (empty($translation)) {
+                continue;
+            }
+            $variant = $this->mergeTranslation(
+                $variant,
+                $translation['data']
+            );
+            $variant['attribute'] = $this->mergeTranslation(
+                $variant['attribute'],
+                $translation['data']
+            );
+
+            if ($variant['configuratorOptions']) {
+                $variant['configuratorOptions'] = $this->translateAssociation(
+                    $variant['configuratorOptions'],
+                    $locale,
+                    'configuratoroption'
+                );
+            }
+
+            if ($variant['images']) {
+                foreach ($variant['images'] as &$image) {
+                    $translation = $this->getSingleTranslation(
+                        'articleimage',
+                        $locale->getId(),
+                        $image['parentId']
+                    );
+                    if (empty($translation)) {
+                        continue;
+                    }
+                    $image = $this->mergeTranslation($image, $translation['data']);
+                }
+            }
+
+        }
+
+        return $details;
+    }
+
+    /**
+     * Helper function which merges the translated data into the already
+     * existing data object. This function merges only values, which already
+     * exist in the original data array.
+     *
+     * @param $data
+     * @param $translation
+     * @return array
+     */
+    protected function mergeTranslation($data, $translation)
+    {
+        $data = array_merge(
+            $data,
+            array_intersect_key($translation, $data)
+        );
+
+        return $data;
+    }
+
+    /**
+     * Helper function which translates associated array data.
+     *
+     * @param array $association
+     * @param Locale $locale
+     * @param $type
+     * @return array
+     */
+    protected function translateAssociation(array $association, Locale $locale, $type)
+    {
+        foreach ($association as &$item) {
+            $translation = $this->getSingleTranslation(
+                $type,
+                $locale->getId(),
+                $item['id']
+            );
+            if (empty($translation)) {
+                continue;
+            }
+            $item = $this->mergeTranslation($item, $translation['data']);
+        }
+        return $association;
+    }
+
+    /**
+     * Helper function to get a single translation.
+     * @param $type
+     * @param $localeId
+     * @param $key
+     * @return array
+     */
+    protected function getSingleTranslation($type, $localeId, $key)
+    {
+        $translation = $this->getTranslationResource()->getList(0, 1, array(
+            array('property' => 'translation.type', 'value' => $type),
+            array('property' => 'translation.key', 'value' => $key),
+            array('property' => 'translation.localeId', 'value' => $localeId),
+        ));
+
+        return $translation['data'][0];
+    }
+
+
+    /**
      * Returns the primary ID of any data set.
      *
      * {@inheritDoc}
@@ -1746,4 +2090,6 @@ class Article extends Resource implements BatchInterface
 
         return false;
     }
+
+
 }
