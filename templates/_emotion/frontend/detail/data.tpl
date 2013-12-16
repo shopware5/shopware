@@ -102,7 +102,7 @@
 			{/block}
 		{elseif $sArticle.sVoteAverage.count == 1}
 			{block name="frontend_detail_rich_snippets_review_single"}
-				{$vote=$sArticle.sVoteComments}
+				{$vote=$sArticle.sVoteComments.0}
 
 				{* Name of the reviewed product *}
 				{block name="frontend_detail_comment_rich_snippets_name"}
