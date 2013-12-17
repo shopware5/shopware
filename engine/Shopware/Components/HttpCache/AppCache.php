@@ -56,6 +56,11 @@ class AppCache extends HttpCache
     protected $cacheDir;
 
     /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * Constructor.
      *
      * @param HttpKernelInterface $kernel  An HttpKernelInterface instance
@@ -69,15 +74,16 @@ class AppCache extends HttpCache
             $this->cacheDir = $options['cache_dir'];
         }
 
-        $options += array(
+        $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
-        );
+            'debug'             => false,
+        ), $options);
 
         parent::__construct(
             $kernel,
             $this->createStore(),
             $this->createEsi(),
-            $options
+            $this->options
         );
     }
 
