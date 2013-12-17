@@ -884,7 +884,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $config = array_merge(array(
             'convertFunction' => null,
             'description' => '',
-            'cls' => ''
+            'cls' => '',
+            'xtype' => 'emotion-components-base'
         ), $options);
 
         $component = new Component();
