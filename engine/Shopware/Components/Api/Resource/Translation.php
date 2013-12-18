@@ -353,7 +353,7 @@ class Translation extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        $this->checkRequirements($data);
+        $this->checkRequirements($data, false);
 
         $translation = $this->getObjectTranslation(
             $data['type'],
@@ -406,7 +406,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        $this->checkRequirements($data);
+        $this->checkRequirements($data, false);
 
         $id = $this->getIdByNumber($number, $data['type']);
 
@@ -942,7 +942,7 @@ class Translation extends Resource implements BatchInterface
     }
 
 
-    protected function checkRequirements($data)
+    protected function checkRequirements($data, $checkData = true)
     {
         if (!isset($data['type']) || empty($data['type'])) {
             throw new ApiException\ParameterMissingException(
@@ -956,16 +956,18 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        if (!isset($data['data']) || empty($data['data'])) {
-            throw new ApiException\ParameterMissingException(
-                "The parameter data is required for a object translation"
-            );
-        }
+        if ($checkData) {
+            if (!isset($data['data']) || empty($data['data'])) {
+                throw new ApiException\ParameterMissingException(
+                    "The parameter data is required for a object translation"
+                );
+            }
 
-        if (!is_array($data['data'])) {
-            throw new ApiException\CustomValidationException(
-                "The parameter data has to be an array."
-            );
+            if (!is_array($data['data'])) {
+                throw new ApiException\CustomValidationException(
+                    "The parameter data has to be an array."
+                );
+            }
         }
     }
 
