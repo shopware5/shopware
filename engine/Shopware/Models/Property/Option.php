@@ -150,4 +150,29 @@ class Option extends ModelEntity
     {
         return $this->filterable;
     }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
+     * @return \Shopware\Models\Property\Group[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
 }

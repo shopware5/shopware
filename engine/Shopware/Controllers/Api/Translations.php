@@ -53,28 +53,20 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     }
 
     /**
-     * Get one translation
-     *
-     * GET /api/translations/{id}
-     */
-    public function getAction()
-    {
-        $id = $this->Request()->getParam('id');
-
-        $translation = $this->resource->getOne($id);
-
-        $this->View()->assign('data', $translation);
-        $this->View()->assign('success', true);
-    }
-
-    /**
      * Create new translation
      *
      * POST /api/translations
      */
     public function postAction()
     {
-        $translation = $this->resource->create($this->Request()->getPost());
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $params = $this->Request()->getPost();
+
+        if ($useNumberAsId) {
+            $translation = $this->resource->createByNumber($params);
+        } else {
+            $translation = $this->resource->create($params);
+        }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
         $data = array(
@@ -93,10 +85,16 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function putAction()
     {
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
 
-        $translation = $this->resource->update($id, $params);
+        if ($useNumberAsId) {
+            $translation = $this->resource->updateByNumber($id, $params);
+        } else {
+            $translation = $this->resource->update($id, $params);
+        }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
         $data = array(
@@ -116,8 +114,14 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
+        $data = $this->Request()->getParams();
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        $this->resource->delete($id);
+        if ($useNumberAsId) {
+            $this->resource->deleteByNumber($id, $data);
+        } else {
+            $this->resource->delete($id, $data);
+        }
 
         $this->View()->assign(array('success' => true));
     }

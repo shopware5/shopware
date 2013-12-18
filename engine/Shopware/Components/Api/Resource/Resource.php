@@ -28,6 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Abstract API Resource Class
@@ -288,14 +290,18 @@ abstract class Resource
      * @param ArrayCollection $collection
      * @param $property
      * @param $value
+     * @throws \Exception
      * @return null
      */
     protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
     {
-        foreach ($collection->getIterator() as $entity) {
+        foreach ($collection as $entity) {
             $method = 'get' . ucfirst($property);
 
-            if (!$entity && !method_exists($entity, $method)) {
+            if (!method_exists($entity, $method)) {
+                throw new \Exception(
+                    sprintf("Method %s not found on entity %s", $method, get_class($entity))
+                );
                 continue;
             }
             if ($entity->$method() == $value) {
@@ -325,6 +331,34 @@ abstract class Resource
 
         return null;
     }
+
+
+    /**
+     * Helper function to execute different findOneBy statements which different conditions
+     * until a passed entity instance found.
+     *
+     * @param $entity
+     * @param array $conditions
+     * @return null|ModelEntity
+     * @throws \Exception
+     */
+    protected function findEntityByConditions($entity, array $conditions)
+    {
+        $repo = $this->getManager()->getRepository($entity);
+        if (!$repo instanceof ModelRepository) {
+            throw new \Exception(sprintf("Passed entity has no configured repository: %s", $entity));
+        }
+
+        foreach($conditions as $condition)
+        {
+            $instance = $repo->findOneBy($condition);
+            if ($instance) {
+                return $instance;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Helper function to resolve one to many associations for an entity.
