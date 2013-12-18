@@ -54,56 +54,45 @@ class Shopware_Components_Translation
     {
         switch ($type) {
             case 'article':
+                return array(
+                    'txtArtikel'          => 'name',
+                    'txtshortdescription' => 'description',
+                    'txtlangbeschreibung' => 'descriptionLong',
+                    'txtzusatztxt'        => 'additionalText',
+                    'txtkeywords'         => 'keywords',
+                    'txtpackunit'         => 'packUnit'
+                );
             case 'variant':
-                if ($type == 'article') {
-                    $map = array(
-                        'txtArtikel'          => 'name',
-                        'txtshortdescription' => 'description',
-                        'txtlangbeschreibung' => 'descriptionLong',
-                        'txtzusatztxt'        => 'additionalText',
-                        'txtkeywords'         => 'keywords',
-                        'txtpackunit'         => 'packUnit'
-                    );
-                } else {
-                    $map = array(
-                        'txtzusatztxt' => 'additionalText',
-                        'txtpackunit'  => 'packUnit'
-                    );
-                }
-                break;
+                return array(
+                    'txtzusatztxt' => 'additionalText',
+                    'txtpackunit'  => 'packUnit'
+                );
             case 'link':
-                $map = array(
+                return array(
                     'linkname' => 'description'
                 );
-                break;
             case 'download':
-                $map = array(
+                return array(
                     'downloadname' => 'description'
                 );
-                break;
             case 'config_countries':
-                $map = array(
+                return array(
                     'countryname' => 'name',
                     'notice' => 'description'
                 );
-                break;
             case 'config_units':
-                $map = array(
+                return array(
                     'description' => 'name'
                 );
-                break;
             case 'config_dispatch':
-                $map = array(
+                return array(
                     'dispatch_name' => 'name',
                     'dispatch_description' => 'description',
                     'dispatch_status_link' => 'statusLink'
                 );
-                break;
             default:
-                $map = false;
-                break;
+                return false;
         }
-        return $map;
     }
 
     /**
@@ -127,6 +116,9 @@ class Shopware_Components_Translation
             }
         }
         foreach($tmp as $tmpKey => $value) {
+            if (!is_string($value)) {
+                continue;
+            }
             if (strlen(trim($value)) == 0) {
                 unset($tmp[$tmpKey]);
             }
@@ -148,7 +140,7 @@ class Shopware_Components_Translation
      * @param   null $key
      * @return  array
      */
-    protected function unFilterData($type, $data, $key = null)
+    public function unFilterData($type, $data, $key = null)
     {
         $tmp = unserialize($data);
         if ($tmp === false) {
