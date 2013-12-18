@@ -237,7 +237,7 @@ $app->map('/step5/', function () {
 })->name("step5")->via('GET','POST');
 
 // Step 6: Configure
-$app->map('/step6/', function () {
+$app->map('/step6/', function () use ($language) {
     $app = Slim::getInstance();
     $configObj = $app->config("install.configuration");
     $dbObj = $app->config("install.database");
@@ -276,13 +276,13 @@ $app->map('/step6/', function () {
         $app->view()->setData("shop",$configObj->getShopDomain());
     }
     if (empty($_SESSION["parameters"]["c_config_shop_language"])) {
-        $_SESSION["parameters"]["c_config_shop_language"] = "de_DE";
+        $_SESSION["parameters"]["c_config_shop_language"] = $language['locale'];
     }
     if (empty($_SESSION["parameters"]["c_config_shop_currency"])) {
-        $_SESSION["parameters"]["c_config_shop_currency"] = "de_DE";
+        $_SESSION["parameters"]["c_config_shop_currency"] = $language['locale'];
     }
     if (empty($_SESSION["parameters"]["c_config_admin_language"])) {
-        $_SESSION["parameters"]["c_config_admin_language"] = "de_DE";
+        $_SESSION["parameters"]["c_config_admin_language"] = $language['locale'];
     }
     $app->view()->setData("parameters",$_SESSION["parameters"]);
     $app->render("/header.php",array("tab"=>"configuration"));
