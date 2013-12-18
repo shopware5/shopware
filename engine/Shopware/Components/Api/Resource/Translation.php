@@ -198,7 +198,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @return null|object
+     * @return TranslationModel
      */
     public function create(array $data)
     {
@@ -230,7 +230,7 @@ class Translation extends Resource implements BatchInterface
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
-     * @return null|object
+     * @return TranslationModel
      */
     public function createByNumber(array $data)
     {
@@ -268,7 +268,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @return null|object
+     * @return TranslationModel
      */
     public function update($id, array $data)
     {
@@ -307,7 +307,7 @@ class Translation extends Resource implements BatchInterface
      * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @return null|object
+     * @return TranslationModel
      */
     public function updateByNumber($number, array $data)
     {
@@ -343,7 +343,7 @@ class Translation extends Resource implements BatchInterface
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @return null|object
+     * @return boolean
      */
     public function delete($id, $data)
     {
@@ -396,7 +396,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @return null|object
+     * @return boolean
      */
     public function deleteByNumber($number, $data)
     {
@@ -523,7 +523,9 @@ class Translation extends Resource implements BatchInterface
             case self::TYPE_CONFIGURATOR_OPTION:
                 return $this->getConfiguratorOptionIdByNumber($number);
             default:
-                throw new \Exception(sprintf("Unknown translation type %s", $type));
+                throw new ApiException\CustomValidationException(
+                    sprintf("Unknown translation type %s", $type)
+                );
         }
 
     }
@@ -549,11 +551,7 @@ class Translation extends Resource implements BatchInterface
                 sprintf("Variant by order number %s not found", $number)
             );
         }
-        if (!$entity->getArticle()) {
-            throw new ApiException\NotFoundException(
-                sprintf("Variant %s has no assigned article", $number)
-            );
-        }
+
         return $entity->getArticle()->getId();
     }
 
@@ -564,7 +562,7 @@ class Translation extends Resource implements BatchInterface
      * throws only an exception.
      *
      * @param $number
-     * @throws \Exception
+     * @throws ApiException\CustomValidationException
      */
     protected function getLinkIdByNumber($number)
     {
@@ -579,7 +577,7 @@ class Translation extends Resource implements BatchInterface
      * throws only an exception.
      *
      * @param $number
-     * @throws \Exception
+     * @throws ApiException\CustomValidationException
      */
     protected function getDownloadIdByNumber($number)
     {
