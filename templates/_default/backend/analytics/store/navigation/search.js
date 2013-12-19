@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Conversion
+ * @subpackage Search
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,32 +31,21 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.ArticleImpression', {
+Ext.define('Shopware.apps.Analytics.store.navigation.Search', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-article_impressions',
+    alias: 'widget.analytics-store-navigation-search',
+    fields: [
+        'searchterm',
+        'countRequests',
+        'countResults'
+    ],
     remoteSort: true,
-    fields: ['articleId', 'articleName', 'totalAmount', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics}',
+        url: '{url controller=analytics action=getSearchTerms}',
         reader: {
             type: 'json',
-            root: 'data',
-            totalProperty: 'totalCount'
+            root: 'data'
         }
-    },
-
-    constructor: function(config) {
-
-        config.fields = this.fields;
-
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'amount' + shop.data.id;
-            });
-        }
-
-
-        this.callParent([config]);
     }
 });

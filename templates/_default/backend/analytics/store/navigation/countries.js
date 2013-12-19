@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Conversion
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,31 +31,21 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.Conversion', {
+Ext.define('Shopware.apps.Analytics.store.navigation.Countries', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-conversion',
+    alias: 'widget.analytics-store-navigation-countries',
     remoteSort: true,
-    fields: ['node', 'name', 'totalVisits','totalOrders','totalConversion', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
+    fields: [
+        'amount',
+        'name'
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics}',
+        url: '{url controller=analytics action=getCountries}',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            totalProperty: 'total'
         }
-    },
-
-    constructor: function(config) {
-
-        config.fields = this.fields;
-
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'conversion' + shop.data.id;
-            });
-        }
-
-
-        this.callParent([config]);
     }
 });

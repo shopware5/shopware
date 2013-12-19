@@ -45,15 +45,6 @@ Ext.define('Shopware.apps.Analytics.store.Data', {
     },
 
     constructor: function(config) {
-
-        config.fields = this.fields;
-
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'amount' + shop.data.id;
-            });
-        }
-
-        this.callParent([config]);
+        this.callParent(arguments);
     }
 });

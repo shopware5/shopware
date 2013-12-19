@@ -64,7 +64,27 @@ Ext.define('Shopware.apps.Analytics', {
      * Required stores for controller
      * @array
      */
-    stores:[ 'Navigation', 'Source', 'Shop', 'Data', 'Search', 'Visitors', 'Conversion', 'ArticleImpression' ],
+    stores:[
+        'Navigation',
+
+        'Shop',
+        'Data',
+
+        'navigation.ArticleImpressions',
+        'navigation.CalendarWeeks',
+        'navigation.Categories',
+        'navigation.Conversion',
+        'navigation.Countries',
+        'navigation.Month',
+        'navigation.Overview',
+        'navigation.Payment',
+        'navigation.Search',
+        'navigation.ShippingMethods',
+        'navigation.Time',
+        'navigation.Vendors',
+        'navigation.Visitors',
+        'navigation.Weekdays'
+    ],
 
     /**
      * Required models for controller
@@ -78,17 +98,39 @@ Ext.define('Shopware.apps.Analytics', {
      * @array
      */
     views:[
-        'main.Window', 'main.Navigation',
-        'main.Panel', 'main.Toolbar',
-        'main.Table', 'main.Chart',
+        'main.Window',
+        'main.Navigation',
+        'main.Panel',
+        'main.Toolbar',
+        'main.Table',
+        'main.Chart',
+
         'toolbar.Source',
-        'chart.Week', 'chart.Weekday', 'chart.Month', 'chart.Daytime',
-        'chart.Supplier', 'chart.Category', 'chart.Country',
-        'chart.Dispatch', 'chart.Payment',
-        'table.Week', 'table.Weekday', 'table.Month', 'table.Daytime',
-        'table.Supplier', 'table.Category', 'table.Country',
-        'table.Dispatch', 'table.Payment', 'table.Search', 'table.Visitors', 'table.Conversion',
-        'table.ArticleImpression'
+
+        'chart.Week',
+        'chart.Weekday',
+        'chart.Month',
+        'chart.Daytime',
+        'chart.Supplier',
+        'chart.Category',
+        'chart.Country',
+        'chart.Dispatch',
+        'chart.Payment',
+
+        'table.Week',
+        'table.Weekday',
+        'table.Month',
+        'table.Daytime',
+        'table.Supplier',
+        'table.Category',
+        'table.Country',
+        'table.Dispatch',
+        'table.Payment',
+        'table.Search',
+        'table.Visitors',
+        'table.Conversion',
+        'table.ArticleImpression',
+        'table.Overview'
     ],
     /**
      * Returns the main application window for this is expected

@@ -38,27 +38,106 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
     model: 'Shopware.apps.Analytics.model.Navigation',
     root: {
         expanded: true,
-        children: [
-            { "text": "{s name=nav/salesBy/month}Month{/s}", "leaf": true, "iconCls": "sprite-calendar-month", "action": "order_analytics", "id": "month", "comparable": true},
-            { "text": "{s name=nav/salesBy/calendarWeeks}Calendar weeks{/s}", "leaf": true, "iconCls": "sprite-calendar-select-week", "action": "order_analytics", "id": "week", "comparable": true},
-            { "text": "{s name=nav/salesBy/weekdays}Weekdays{/s}", "leaf": true, "iconCls": "sprite-calendar-select-days", "action": "order_analytics", "id": "weekday", "comparable": true},
-            { "text": "{s name=nav/salesBy/time}Time{/s}", "leaf": true, "iconCls": "sprite-clock", "action": "order_analytics", "id": "daytime", "comparable": true},
-            { "text": "{s name=nav/salesBy/categories}Categories{/s}", "leaf": true, "iconCls": "sprite-category", "action": "order_detail_analytics", "id": "category"},
-            { "text": "{s name=nav/salesBy/countries}Countries{/s}", "leaf": true, "iconCls": "sprite-locale", "action": "order_analytics", "id": "country"},
-            { "text": "{s name=nav/salesBy/payment}Payment{/s}", "leaf": true, "iconCls": "sprite-moneys", "action": "order_analytics", "id": "payment"},
-            { "text": "{s name=nav/salesBy/shippingMethods}Shipping methods{/s}", "leaf": true, "iconCls": "sprite-truck-box-label", "action": "order_analytics", "id": "dispatch"},
-            { "text": "{s name=nav/salesBy/vendors}Vendors{/s}", "leaf": true, "iconCls": "sprite-toolbox", "action": "order_detail_analytics", "id": "supplier"},
-            { "text": "{s name=nav/rating/orderConversion}Order conversion rate{/s}", "leaf": true, "iconCls": "sprite-newspapers", "store": "analytics-store-conversion", id: "conversion", "comparable": true, "action": "conversion_rate"},
-            { "text": "{s name=nav/search}Popular search terms{/s}", "leaf": true, "iconCls": "sprite-magnifier", "action": "search_analytics", "id": "search", "store": 'analytics-store-search'},
-            { "text": "{s name=nav/visitors}Visitors{/s}", "leaf": true, "iconCls": "sprite-chart-up-color", "action": "visits", "id": "visitors", "store": 'analytics-store-visitors', "comparable": true},
-            { "text": "Artikel nach Aufrufen(Impressionen)", "leaf": true, "iconCls": "sprite-chart-up-color", "action": "ArticleImpression", "id": "article_impression", "store": 'analytics-store-article_impressions', "comparable": true}
-        ]
+        children: [{
+            id: 'overview',
+            text: 'Overview',
+            store: 'analytics-store-navigation-overview',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'month',
+            text: '{s name=nav/salesBy/month}Month{/s}',
+            store: 'analytics-store-navigation-month',
+            iconCls: 'sprite-calendar-month',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'week',
+            text: '{s name=nav/salesBy/calendarWeeks}Calendar weeks{/s}',
+            store: 'analytics-store-navigation-calendar_weeks',
+            iconCls: 'sprite-calendar-select-week',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'weekday',
+            text: '{s name=nav/salesBy/weekdays}Weekdays{/s}',
+            store: 'analytics-store-navigation-weekdays',
+            iconCls: 'sprite-calendar-select-days',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'daytime',
+            text: '{s name=nav/salesBy/time}Time{/s}',
+            store: 'analytics-store-navigation-time',
+            iconCls: 'sprite-clock',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'category',
+            text: '{s name=nav/salesBy/categories}Categories{/s}',
+            store: 'analytics-store-navigation-categories',
+            iconCls: 'sprite-category',
+            leaf: true
+        }, {
+            id: 'country',
+            text: '{s name=nav/salesBy/countries}Countries{/s}',
+            store: 'analytics-store-navigation-countries',
+            iconCls: 'sprite-locale',
+            leaf: true
+        }, {
+            id: 'payment',
+            text: '{s name=nav/salesBy/payment}Payment{/s}',
+            store: 'analytics-store-navigation-payment',
+            iconCls: 'sprite-moneys',
+            leaf: true
+        }, {
+            id: 'dispatch',
+            text: '{s name=nav/salesBy/shippingMethods}Shipping methods{/s}',
+            store: 'analytics-store-navigation-shipping_methods',
+            iconCls: 'sprite-truck-box-label',
+            leaf: true
+        }, {
+            id: 'supplier',
+            text: '{s name=nav/salesBy/vendors}Vendors{/s}',
+            store: 'analytics-store-navigation-vendors',
+            iconCls: 'sprite-toolbox',
+            leaf: true
+        }, {
+            id: 'conversion',
+            text: '{s name=nav/rating/orderConversion}Order conversion rate{/s}',
+            store: 'analytics-store-navigation-conversion',
+            iconCls: 'sprite-newspapers',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'search',
+            text: '{s name=nav/search}Popular search terms{/s}',
+            store: 'analytics-store-navigation-search',
+            iconCls: 'sprite-magnifier',
+            leaf: true
+        }, {
+            id: 'visitors',
+            text: '{s name=nav/visitors}Visitors{/s}',
+            store: 'analytics-store-navigation-visitors',
+            iconCls: 'sprite-chart-up-color',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'article_impression',
+            text: 'Artikel nach Aufrufen(Impressionen)',
+            store: 'analytics-store-navigation-article_impressions',
+            iconCls: 'sprite-chart-up-color',
+            comparable: true,
+            leaf: true
+        }]
     },
     constructor: function(config) {
+        var me = this;
 
-        config.root = Ext.clone(this.root);
+        config.root = Ext.clone(me.root);
 
-        this.callParent([config]);
+        me.callParent(arguments);
     }
 });
 //{/block}

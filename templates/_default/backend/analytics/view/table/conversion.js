@@ -38,55 +38,46 @@ Ext.define('Shopware.apps.Analytics.view.table.Conversion', {
     alias: 'widget.analytics-table-conversion',
     shopColumnConversion: "{s name=table/conversion/shop}Conversion: [0]{/s}",
     initComponent: function() {
-           var me = this;
+        var me = this;
 
-           me.columns = [{
-                   xtype: 'datecolumn',
-                   dataIndex: 'date',
-                   text: '{s name=table/conversion/date}Date{/s}',
-                   width: 80,
-                   sortable:false
-               },
-               {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'totalVisits',
-                   text: '{s name=table/conversion/totalVisits}Total visits{/s}',
-                   align: 'right',
-                   flex: 1,
-                   sortable:false
-               },
-               {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'totalOrders',
-                   text: '{s name=table/conversion/totalOrders}Total orders{/s}',
-                   align: 'right',
-                   flex: 1,
-                   sortable:false
-               },
-               {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'totalConversion',
-                   text: '{s name=table/conversion/conversion}Conversion{/s}',
-                   align: 'right',
-                   width: 80,
-                   sortable:false
-               }
-           ];
-           me.shopStore.each(function(shop) {
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                align: 'right',
+                flex: 1,
+                sortable: false
+            }
+        };
 
-               me.columns[me.columns.length] = {
-                   xtype: 'gridcolumn',
-                   dataIndex: 'conversion' + shop.data.id,
-                   text: Ext.String.format(me.shopColumnConversion, shop.data.name),
-                   align: 'right',
-                   width: 120,
-                   sortable: false
-               };
+        me.callParent(arguments);
+    },
 
-           }, me);
+    getColumns: function() {
+        var me = this,
+            columns = [{
+            xtype: 'datecolumn',
+            dataIndex: 'date',
+            text: '{s name=table/conversion/date}Date{/s}'
+        }, {
+            dataIndex: 'totalVisits',
+            text: '{s name=table/conversion/totalVisits}Total visits{/s}'
+        }, {
+            dataIndex: 'totalOrders',
+            text: '{s name=table/conversion/totalOrders}Total orders{/s}'
+        }, {
+            dataIndex: 'totalConversion',
+            text: '{s name=table/conversion/conversion}Conversion{/s}'
+        }];
 
-           me.callParent(arguments);
-       }
+        me.shopStore.each(function(shop) {
+            columns.push({
+                dataIndex: 'conversion' + shop.data.id,
+                text: Ext.String.format(me.shopColumnConversion, shop.data.name)
+            });
+        }, me);
+
+        return columns;
+    }
 
 });
 //{/block}

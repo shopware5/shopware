@@ -70,7 +70,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     init:function () {
         var me = this;
 
-        me.sourceStore = me.subApplication.getStore('Source');
         me.shopStore = me.subApplication.getStore('Shop').load({
             callback:function () {
                 me.dataStore = Ext.widget('analytics-store-data', { shopStore:this });
@@ -79,7 +78,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         me.navigationStore = me.subApplication.getStore('Navigation');
         me.mainWindow = me.getView('main.Window').create({
             shopStore:me.shopStore,
-            sourceStore:me.sourceStore,
             navigationStore:me.navigationStore
         }).show();
 
@@ -92,10 +90,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                  * @param record
                  */
                 select:function (tree, record) {
-                    if (!record.data.action) {
-                        return;
-                    }
-
                     // Cache the selected data type
                     if(record.data.id) {
                         me.selectedType = record.data.id;
@@ -130,6 +124,16 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 blur:me.onBlurShop
             }
         });
+
+
+        var overview = me.navigationStore.getNodeById('overview'),
+            store = Ext.widget(overview.data.store, { shopStore: me.shopStore });
+
+        me.selectedType = overview.data.id;
+        me.customStore = store;
+        me.customStoreEnabled = true;
+
+        me.renderDataOutput(store, overview);
     },
     /**
      * Load chart and table for a certain statistic
@@ -143,7 +147,9 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             chartId = 'widget.analytics-chart-' + record.data.id,
             tableId = 'widget.analytics-table-' + record.data.id,
             panel = me.getPanel(),
-            layout = true;
+            layout = true,
+            fromValue = me.getFromField().value,
+            toValue = me.getToField().value;
 
         // Remove all previous inserted charts / tables
         Ext.suspendLayouts();
@@ -151,18 +157,11 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         panel.setLoading(true);
 
         Ext.apply(store.getProxy().extraParams, {
-            controller:'analytics',
-            action:record.data.action,
-            type:record.data.id,
-            node:'root'
+            node: 'root'
         });
-
-
-        var fromValue = me.getFromField().value;
         if (Ext.typeOf(fromValue) == 'date') {
             store.getProxy().extraParams.fromDate = fromValue;
         }
-        var toValue = me.getToField().value;
         if (Ext.typeOf(toValue) == 'date') {
             store.getProxy().extraParams.toDate = toValue;
         }
@@ -265,12 +264,16 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     onBlurShop:function () {
         var me = this,
             store = (me.customStoreEnabled) ? me.customStore : me.dataStore,
-            gridPanel = me.getPanel().getLayout().getActiveItem(),
-            columns = gridPanel.getColumns(),
+            gridPanel = me.getPanel().getLayout().getActiveItem();
+
+        if(!gridPanel){
+            return;
+        }
+
+        var columns = gridPanel.getColumns(),
             selectedShopIds = store.getProxy().extraParams.selectedShops;
 
-
-        if(gridPanel.shopColumnName) {
+        if(me.getPanel().shopColumnName) {
             //the table uses multiple shop columns so add the selected ones
             if(!Ext.isEmpty(selectedShopIds)) {
                 selectedShopIds = selectedShopIds.split(",");
@@ -283,8 +286,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                         };
                     }
                 });
-            }
-            else {
+            } else {
                 //the user didn't select any shop so add all shop columns
                 me.shopStore.each(function (shop) {
                     if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {

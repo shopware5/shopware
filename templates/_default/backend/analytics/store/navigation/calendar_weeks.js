@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Panel
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,25 +31,35 @@
 /**
  * todo@all: Documentation
  */
-//{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/main/panel"}
-Ext.define('Shopware.apps.Analytics.view.main.Panel', {
-    extend: 'Ext.panel.Panel',
-    layout: 'card',
-    alias: 'widget.analytics-panel',
+Ext.define('Shopware.apps.Analytics.store.navigation.CalendarWeeks', {
+    extend: 'Ext.data.Store',
+    alias: 'widget.analytics-store-navigation-calendar_weeks',
+    remoteSort: true,
+    fields: [
+        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        'amount',
+        'displayDate'
+    ],
+    proxy: {
+        type: 'ajax',
+        url: '{url controller=analytics action=getCalendarWeeks}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
+    },
 
-    initComponent: function() {
+    constructor: function(config) {
         var me = this;
+        config.fields = me.fields;
 
-        Ext.applyIf(me, {
-            dockedItems: [{
-                xtype: 'analytics-toolbar',
-                dock: 'top',
-                shopStore: me.shopStore
-            }]
-        });
+        if(config.shopStore) {
+            config.shopStore.each(function(shop) {
+                config.fields.push('amount' + shop.data.id);
+            });
+        }
 
         me.callParent(arguments);
     }
 });
-//{/block}

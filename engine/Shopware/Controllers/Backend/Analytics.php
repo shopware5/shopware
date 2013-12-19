@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return null
+     * @return null|\Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {
@@ -99,197 +99,210 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * Get a list of installed shops
+     * Returns the query builder to fetch all available stores
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    public function shopListAction()
+    private function getShopsQueryBuilder()
     {
-        $sql = '
-            SELECT
-              s.id , s.name,
-              c.currency AS currency,
-              c.name AS currencyName,
-              c.templatechar AS currencyChar
-            FROM s_core_shops s, s_core_currencies c
-            WHERE s.currency_id = c.id
-            ORDER BY s.default DESC, s.name
-        ';
-        $data =  Shopware()->Db()->fetchAll($sql);
-        $this->View()->assign(array('data' => $data, 'success' => true));
-    }
-
-    /**
-     * Returns the analytics data for the article impression statistic
-     */
-    public function articleImpressionAction()
-    {
-        /** @var $builder \Doctrine\DBAL\Query\QueryBuilder */
-        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder = $this->getManager()->getDBALQueryBuilder();
         $builder->select(array(
-                'SQL_CALC_FOUND_ROWS impression.articleId',
-                'articles.name as articleName',
-                'UNIX_TIMESTAMP(impression.date) as date',
-                'SUM(impression.impressions) as totalAmount'
-        ));
-        $builder->from('s_statistics_article_impression', 'impression');
-        $builder->leftJoin('impression', 's_articles', 'articles', 'impression.articleId = articles.id');
-        $builder->where('`date` >= '. $builder->createNamedParameter($this->getFromDate()).' AND `date` <= '. $builder->createNamedParameter($this->getToDate()));
-        $builder->groupBy('impression.date');
+            's.id',
+            's.name',
+            'c.currency',
+            'c.name AS currencyName',
+            'c.templateChar AS currencyChar'
+        ))
+        ->from('s_core_shops', 's')
+        ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
+        ->orderBy('s.default', 'desc')
+        ->orderBy('s.name');
 
-        //add the sub query for all shops to calculate the amount shop specific
-        $this->addShopSelectQuery($builder, 'impression', 'shopId', 'impressions');
-        //add a limit the the query
-        $this->addLimitQuery($builder);
-        //add a order by to the query
-        $this->addOrderQuery($builder, 'totalAmount', 'DESC');
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $builder->execute();
-        $articleImpressionData = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $this->View()->assign(array('success' => true, 'data' => $articleImpressionData, 'totalCount' =>  $this->getFoundRows()));
+        return $builder;
     }
 
-
     /**
-     * Get a tree-column-model compatible list
-     * of installed shops
+     * Returns the query builder to fetch all visitors
+     *
+     * @param $property
+     * @param $direction
+     * @param $start
+     * @param $limit
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    public function sourceListAction()
-    {
-        $sql = '
-           SELECT
-              s.id , s.name as text,
-              c.currency AS currency,
-              c.name AS currencyName,
-              c.templatechar AS currencyChar
-            FROM s_core_shops s, s_core_currencies c
-            WHERE s.currency_id = c.id
-            AND s.main_id IS NULL
-            ORDER BY s.default DESC, s.name
-        ';
-        $shops = Shopware()->Db()->fetchAll($sql);
-        foreach ($shops as $index => $shop) {
-            $shops[$index]['leaf'] = true;
-            $shops[$index]['checked'] = false;
-        }
-
-        $this->View()->assign(array(
-            'text' => '.',
-            'children' => array(
-                array('text' => 'Shops', 'expanded' => true, 'children' => $shops),
-            ),
-            'success' => true
-        ));
-    }
-
-
-    /**
-     * Get sales data for statistics
-     * Kind of statistic is defined via
-     * $this->Request()->getParam('type')
-     *  Possible values:
-     *  dispatch,payment,month,weekday,week,daytime,country
-     * Returns json formatted result
-     */
-    public function orderAnalyticsAction()
+    private function getVisitorsQueryBuilder($property, $direction, $start, $limit)
     {
         $shopIds = $this->getSelectedShopIds();
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
 
-        if (!$this->Request()->getParam('tax')) {
-            $sqlAmount = 'invoice_amount-invoice_shipping';
-        } else {
-            $sqlAmount = 'invoice_amount_net-invoice_shipping_net';
-        }
-        $sqlAmount = '(' . $sqlAmount . ')/currencyFactor';
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            'datum',
+            'SUM(pageimpressions) AS totalImpressions',
+            'SUM(uniquevisits) AS totalVisits'
+        ));
 
-        $sqlWhere = '';
-        $sqlSelect = '';
-        $sqlSelectName = 'name';
-        $sqlSelectField = 'ordertime';
-
-        switch ($this->Request()->getParam('type')) {
-            case 'dispatch':
-                $sqlSelectField = 'd.name';
-                $sqlGroupBy = 'o.dispatchID';
-                break;
-            case 'payment':
-                $sqlSelectField = 'p.description';
-                $sqlGroupBy = 'o.paymentID';
-                break;
-            case 'month':
-                $sqlSelectField = "DATE_FORMAT(ordertime, '%Y-%m-01')";
-                $sqlSelectName = 'date';
-                break;
-            case 'weekday':
-                $sqlSelectField = "Date_Format(ordertime, '%Y-%m-%d')";
-                $sqlGroupBy = 'WEEKDAY(ordertime)';
-                $sqlSelectName = 'date';
-                break;
-            case 'week':
-                $sqlSelectField = 'DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)';
-                $sqlSelectName = 'date';
-                break;
-            case 'daytime':
-                $sqlSelectField = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
-                $sqlSelectName = 'date';
-                break;
-            case 'country':
-                $sqlSelectField = 'c.countryname';
-                $sqlGroupBy = 'ob.countryID';
-                break;
-            default:
-                break;
-        }
-
-        if (!isset($sqlGroupBy)) {
-            $sqlGroupBy = $sqlSelectField;
-        }
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $sqlSelect .= "SUM(IF(o.subshopID=$shopId, $sqlAmount, 0)) as `amount$shopId`, ";
+                $builder->addSelect("SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)={$shopId}, s.pageimpressions, 0)) as `impressions{$shopId}`");
+                $builder->addSelect("SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)={$shopId}, s.uniquevisits, 0)) as `visits{$shopId}` ");
             }
         }
 
-        $sql = "
-            SELECT
-        		COUNT(*) as `count`,
-        		SUM($sqlAmount) as `amount`,
-        		Date_Format(ordertime, '%W') as displayDate,
-                $sqlSelect
-                $sqlSelectField as `$sqlSelectName`
-            FROM `s_order` o
+        $builder->from('s_statistics_visitors', 's')
+        ->leftJoin('s', 's_core_shops', 'cs', 's.shopID = cs.id')
+        ->where('datum >= :fromDate')
+        ->andWhere('datum <= :toDate')
+        ->groupBy('datum')
+        ->orderBy(':parameter', ':direction')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter('parameter', $property)
+        ->setParameter('direction', $direction)
+        ->setParameter('fromDate', $this->getFromDate())
+        ->setParameter('toDate', $this->getToDate());
 
-            LEFT JOIN s_premium_dispatch d
-            ON o.dispatchID = d.id
+        return $builder;
+    }
 
-            LEFT JOIN s_core_paymentmeans p
-            ON o.paymentID = p.id
+    /**
+     * Returns the query builder to fetch all search terms which are filtered by the parameters
+     *
+     * @param $property
+     * @param $direction
+     * @param $start
+     * @param $limit
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getSearchTermsQueryBuilder($property, $direction, $start, $limit)
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            'COUNT(s.searchterm) AS countRequests',
+            's.searchterm',
+            'MAX(s.results) as countResults'
+        ))
+        ->from('s_statistics_search', 's')
+        ->groupBy('s.searchterm')
+        ->orderBy(':parameter', ':direction')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter('parameter', $property)
+        ->setParameter('direction', $direction);
 
-            JOIN s_order_billingaddress ob
-            ON o.id = ob.orderID
+        return $builder;
+    }
 
-            JOIN s_core_countries c
-            ON ob.countryID = c.id
+    /**
+     * Returns the query builder to fetch all search terms which are filtered by the parameters
+     *
+     * @param $start
+     * @param $limit
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getConversionRateQueryBuilder($start, $limit)
+    {
+        $shopIds = $this->getSelectedShopIds();
+        $builder = $this->getManager()->getDBALQueryBuilder();
 
-            WHERE o.status NOT IN (4, -1)
+        $builder->select(array(
+            'sv.datum as date',
+            'SUM(sv.uniquevisits) as totalVisits',
+            'COUNT(DISTINCT o.id) AS totalOrders',
+        ))
+        ->from('s_statistics_visitors', 'sv')
+        ->leftJoin('sv', 's_order', 'o', 'DATE(o.ordertime) = sv.datum AND o.status NOT IN (4,-1)')
+        ->where('datum >= :fromDate')
+        ->andWhere('datum <= :toDate')
+        ->groupBy('sv.datum')
+        ->orderBy('sv.datum', 'DESC')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter('fromDate', $this->getFromDate())
+        ->setParameter('toDate', $this->getToDate());
 
-            AND o.ordertime <= ?
-            AND o.ordertime >= ?
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $builder->addSelect("(
+                    SELECT uniquevisits
+                    FROM   s_statistics_visitors
+                    WHERE  shopID = {$shopId}
+                    AND    datum = sv.datum
+                ) as visits{$shopId}");
 
-            $sqlWhere
+                $builder->addSelect("(
+                    SELECT COUNT(DISTINCT o2.id)
+                    FROM   s_order as o2
+                    WHERE  o2.subshopID = {$shopId}
+                    AND    DATE(o2.ordertime) = sv.datum
+                    AND    o2.status NOT IN (4,-1)
+                ) as orders{$shopId}");
+            }
+        }
 
-            GROUP BY $sqlGroupBy
-            ORDER BY $sqlSelectName
-        ";
+        return $builder;
+    }
 
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
+    private function getOrderDetailQueryBuilder()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            'COUNT(DISTINCT o.id) AS count',
+            'SUM((od.price * od.quantity)/currencyFactor) AS amount'
+        ))
+        ->from('s_order', 'o')
+        ->innerJoin('o', 's_order_details', 'od', 'o.id = od.orderID AND od.modus=0')
+        ->innerJoin('od', 's_articles', 'a', 'od.articleID = a.id')
+        ->where('o.status NOT IN (4, -1)')
+        ->andWhere('o.ordertime >= :fromTime')
+        ->andWhere('o.ordertime <= :toTime')
+        ->setParameter('fromTime', $this->getFromDate())
+        ->setParameter('toTime', $this->getToDate())
+        ->orderBy('name');
+
+        return $builder;
+    }
+
+    private function getOrderAnalyticsQueryBuilder()
+    {
+        $shopIds = $this->getSelectedShopIds();
+
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            'COUNT(*) AS count',
+            'SUM((invoice_amount - invoice_shipping)/currencyFactor) AS amount',
+            'Date_Format(ordertime, \'%W\') as displayDate'
+        ))
+        ->from('s_order', 'o')
+        ->leftJoin('o', 's_premium_dispatch', 'd', 'o.dispatchID = d.id')
+        ->leftJoin('o', 's_core_paymentmeans', 'p', 'o.paymentID = p.id')
+        ->innerJoin('o', 's_order_billingaddress', 'ob', 'o.id = ob.orderID')
+        ->innerJoin('ob', 's_core_countries', 'c', 'ob.countryID = c.id')
+        ->where('o.status NOT IN (4, -1)')
+        ->andWhere('o.ordertime >= :fromTime')
+        ->andWhere('o.ordertime <= :toTime')
+        ->setParameter('fromTime', $this->getFromDate())
+        ->setParameter('toTime', $this->getToDate());
+
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $builder->addSelect("SUM(IF(o.subshopID={$shopId}, invoice_amount - invoice_shipping, 0)) as amount{$shopId}");
+            }
+        }
+
+        return $builder;
+    }
+
+    private function formatOrderAnalyticsData($data)
+    {
+        $shopIds = $this->getSelectedShopIds();
 
         foreach ($data as &$row) {
             $row['count'] = (int)$row['count'];
             $row['amount'] = (float)$row['amount'];
-            $row['date'] = strtotime($row['date']);
+
+            if(!empty($row['date'])){
+                $row['date'] = strtotime($row['date']);
+            }
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
@@ -298,317 +311,290 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $this->View()->success = true;
-        $this->View()->data = $data;
+        return $data;
     }
 
     /**
-     * Get statistics for shop visitors
+     * Get a list of installed shops
      */
-    public function visitsAction()
+    public function shopListAction()
     {
-        $data = array();
-        $sqlSelect = null;
+        $builder = $this->getShopsQueryBuilder();
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
-
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
-        $sort = $this->Request()->sort;
-
-        if (empty($sort[0])) {
-            $sort[0] = array("property" => "datum", "direction" => "DESC");
-        }
-
-        $sort = $sort[0];
-
-
-        $shopIds = $this->getSelectedShopIds();
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $key => $shopId) {
-                if ($key == 0) $sqlSelect = ",\n";
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shopId, s.pageimpressions, 0)) as `impressions$shopId`, ";
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shopId, s.uniquevisits, 0)) as `visits$shopId` ";
-                if ($key < count($shopIds) - 1) $sqlSelect .= ",\n";
-            }
-        }
-        $sql = "
-        SELECT datum,SUM(pageimpressions) AS totalImpressions, SUM(uniquevisits) AS totalVisits
-        $sqlSelect
-        FROM s_statistics_visitors s
-        LEFT JOIN s_core_shops cs ON s.shopID = cs.id
-        WHERE datum <= ?
-        AND datum >= ?
-        GROUP BY datum
-        ORDER BY {$sort["property"]} {$sort["direction"]}
-        ";
-
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
-
-        $this->View()->total = count($data);
-
-        $data = array_splice($data, $start, $limit);
-        foreach ($data as &$row) {
-            $row['datum'] = strtotime($row['datum']);
-        }
-        $this->View()->success = true;
-        $this->View()->data = $data;
-
+        $this->View()->assign(array('data' => $data, 'success' => true));
     }
 
-    /**
-     * Get sales data for statistics
-     * Kind of statistic is defined via
-     * $this->Request()->getParam('type')
-     *  Possible values:
-     *  supplier,category,article,voucher
-     * Returns json formatted result
-     */
-    public function orderDetailAnalyticsAction()
+    // todo - refactor
+    public function getOverviewAction()
     {
-        if (!$this->Request()->getParam('tax')) {
-            $sqlAmount = 'od.price * od.quantity';
-        } else {
-            $sqlAmount = 'od.price / (100+tax) * 100) * od.quantity';
-        }
-        $sqlAmount = '(' . $sqlAmount . ')/currencyFactor';
-        $sqlSelect = '';
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'sv.datum AS date',
+            'sv.pageimpressions AS clicks',
+            'COUNT(o.id) AS orders',
+            'o.invoice_amount AS revenue',
+            'sv.uniquevisits AS visitors',
+            '(
+                SELECT COUNT(o2.invoice_amount)
+                FROM s_order o2
+                WHERE o2.status=-1
+                AND DATE(o2.ordertime) = sv.datum
+            ) AS cancelledOrders',
+            'COUNT(DISTINCT u.id) AS newCustomers'
+        ))
+        ->from('s_statistics_visitors', 'sv')
+        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)')
+        ->leftJoin('sv', 's_user', 'u', 'u.firstlogin = sv.datum')
+        ->where('sv.datum >= :fromDate AND sv.datum <= :toDate')
+        ->groupBy('sv.datum')
+        ->setParameter(':fromDate', $this->getFromDate())
+        ->setParameter(':toDate', $this->getToDate());
 
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
+        $this->addLimitQuery($builder);
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        switch ($this->Request()->getParam('type')) {
-            case 'supplier':
-                $sqlSelectField = 's.name';
-                $sqlGroupBy = 'a.supplierID';
-                $sqlJoin = '
-                    JOIN s_articles_supplier s
-                    ON s.id = a.supplierID
-                ';
-                break;
-            case 'category':
-                $sqlSelectField = 'c.description';
-                $sqlGroupBy = 'c.id';
-                $node = $this->Request()->getParam('node', 'root');
-                if ($node === 'root') {
-                    $node = 1;
-                } else {
-                    $node = (int)$node;
-                }
-                $sqlSelect .= '(
-                    SELECT parent FROM s_categories
-                    WHERE c.id=parent LIMIT 1
-                ) as `node`, ';
-
-                $sqlJoin = "
-                    INNER JOIN s_articles_categories_ro ac
-                        ON  ac.articleID  = a.id
-
-                    INNER JOIN s_categories c
-                        ON  c.id = ac.categoryID
-                        AND c.active = 1
-                        AND c.parent=$node
-                ";
-                break;
-            case 'article':
-                $sqlSelectField = 'a.name';
-                $sqlGroupBy = 'od.articleID';
-                break;
-            case 'voucher':
-                break;
-            default:
-                break;
+        foreach($data as &$row){
+            $row['date'] = strtotime($row['date']);
+            $row['revenue'] = (float)($row['revenue']);
+            $row['orders'] = (int)($row['orders']);
+            $row['clicks'] = (int)($row['clicks']);
+            $row['visitors'] = (int)($row['visitors']);
+            $row['cancelledOrders'] = (int)($row['cancelledOrders']);
+            $row['newCustomers'] = (int)($row['newCustomers']);
         }
 
-        if (!isset($sqlGroupBy)) {
-            $sqlGroupBy = $sqlSelectField;
-        }
+        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  $statement->rowCount()));
+    }
 
-        $sql = "
-            SELECT
-        		COUNT(DISTINCT o.id) as `count`,
-                SUM($sqlAmount) as `amount`,
-                $sqlSelect
-                $sqlSelectField as `name`
-            FROM `s_order` o
+    public function getMonthAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-01\') AS date');
+        $builder->groupBy('date');
+        $builder->orderBy('date');
 
-            JOIN s_order_details od
-            ON od.orderID = o.id AND od.modus=0
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            JOIN s_articles a
-            ON a.id = od.articleID
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
 
-            $sqlJoin
+    public function getCalendarWeeksAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY) AS date');
+        $builder->groupBy('DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)');
+        $builder->orderBy('date');
 
-            WHERE o.status NOT IN (4, -1)
-            AND o.ordertime <= ?
-            AND o.ordertime >= ?
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
 
-            GROUP BY $sqlGroupBy
+    public function getWeekdaysAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date');
+        $builder->groupBy('WEEKDAY(ordertime)');
+        $builder->orderBy('date');
 
-            ORDER BY `name`
-        ";
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
+
+    public function getTimeAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\') AS date');
+        $builder->orderBy('date');
+        $builder->groupBy('date');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
+
+    public function getCategoriesAction()
+    {
+        $node = $this->Request()->getParam('node', 'root');
+        $node = $node === 'root' ? 1 : (int) $node;
+
+        $builder = $this->getOrderDetailQueryBuilder();
+        $builder->addSelect('c.description as name')
+                ->addSelect('( SELECT parent FROM s_categories WHERE c.id=parent LIMIT 1 ) as node')
+                ->innerJoin('a', 's_articles_categories_ro', 'ac', 'a.id = ac.articleID')
+                ->innerJoin('ac', 's_categories', 'c', 'ac.categoryID = c.id AND c.active = 1 AND c.parent = :parent')
+                ->groupBy('c.id')
+                ->setParameter('parent', $node);
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($data as &$row) {
             $row['count'] = (int)$row['count'];
             $row['amount'] = (float)$row['amount'];
         }
 
-        $this->View()->success = true;
-        $this->View()->data = $data;
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $statement->rowCount()));
     }
 
-    /**
-     * Get statistics for popular search terms
-     * Possible sorting values: countRequests, searchterm, countResults
-     * Sort is defined in array $this->Request()->sort (property=>...,direction=>ASC/DESC)
-     * @return json formatted output
-     */
-    public function searchAnalyticsAction()
+    public function getCountriesAction()
     {
-        $data = array();
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
-        $sort = $this->Request()->sort;
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('c.countryname AS name');
+        $builder->groupBy('ob.countryID');
+        $builder->orderBy('name');
 
-        if (empty($sort[0])) {
-            $sort[0] = array("property" => "countRequests", "direction" => "DESC");
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
+
+    public function getPaymentAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('p.description AS name');
+        $builder->groupBy('o.paymentID');
+        $builder->orderBy('name');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
+
+    public function getShippingMethodsAction()
+    {
+        $builder = $this->getOrderAnalyticsQueryBuilder();
+        $builder->addSelect('d.name AS name');
+        $builder->groupBy('o.dispatchID');
+        $builder->orderBy('name');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
+    }
+
+    public function getConversionRateAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
+        $shopIds= $this->getSelectedShopIds();
+
+        $builder = $this->getConversionRateQueryBuilder($start, $limit);
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($data as &$row){
+            $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    $row['conversion' . $shopId] =  round($row['orders' . $shopId] / $row['visits' . $shopId] * 100, 2);
+                }
+            }
         }
 
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $statement->rowCount()));
+    }
+
+    public function getVendorsAction()
+    {
+        $builder = $this->getOrderDetailQueryBuilder()
+                        ->addSelect('s.name')
+                        ->leftJoin('a', 's_articles_supplier', 's', 'a.supplierID = s.id')
+                        ->groupBy('a.supplierID')
+                        ->orderBy('s.name');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($data as &$row) {
+            $row['count'] = (int)$row['count'];
+            $row['amount'] = (float)$row['amount'];
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $statement->rowCount()));
+    }
+
+    public function getSearchTermsAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+        $sort = (array) $this->Request()->getParam('sort', array());
+
+        if (empty($sort) || empty($sort[0])) {
+            $sort[0] = array('property' => 'countRequests', 'direction' => 'DESC');
+        }
         $sort = $sort[0];
 
-        $sql = "
-        SELECT COUNT(searchterm) AS countRequests, searchterm,
-        MAX(results) AS countResults FROM s_statistics_search GROUP BY searchterm
-        ORDER BY {$sort["property"]} {$sort["direction"]}
-        ";
+        $builder = $this->getSearchTermsQueryBuilder($sort['property'], $sort['direction'], $start, $limit);
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $data = Shopware()->Db()->fetchAll($sql);
-
-        $this->View()->total = count($data);
-
-        $data = array_splice($data, $start, $limit);
-
-        $this->View()->success = true;
-        $this->View()->data = $data;
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $data));
     }
 
-    /**
-     * Get conversion rates
-     * Basically number of orders for a day / number of visitors
-     */
-    public function conversionRateAction()
+    public function getVisitorsAction()
     {
-        $sqlSelect = "";
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+        $sort = (array) $this->Request()->getParam('sort', array());
 
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
-
-
-        $shopIds = $this->getSelectedShopIds();
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $sqlSelect .= "\n 0 AS visits$shopId, 0 AS orders$shopId, 0 AS conversion$shopId,\n";
-            }
+        if (empty($sort) || empty($sort[0])) {
+            $sort[0] = array('property' => 'datum', 'direction' => 'DESC');
         }
-        /**
-         * Fetch total visitors and total orders for each day that may be occurs in statistics
-         * Result - Sample:
-         * Array ( [0] => Array
-        (
-        [date] => 2012-05-26
-        [visitsTotal] => 2
-        [visits1] => 2
-        [orders1] => 0
-        [conversion1] => 0
-        [visits6] => 0
-        [orders6] => 0
-        [conversion6] => 0
-        [visits9] => 0
-        [orders9] => 0
-        [conversion9] => 0
-        [ordersTotal] => 0
-        ) )
-         */
-        $sql = "
-        	SELECT
-        		datum as `date`,
-        		SUM(s.uniquevisits) AS `totalVisits`,
-        		$sqlSelect
-        		(SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
-        	FROM
-        		`s_statistics_visitors` AS s
-        	WHERE datum <= ?
-            AND datum >= ?
-        	GROUP BY `date`
-        	ORDER BY `date` DESC
-       ";
+        $sort = $sort[0];
 
-        $result = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
+        $builder = $this->getVisitorsQueryBuilder($sort['property'], $sort['direction'], $start, $limit);
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        // Reformat result to use date as key
-        $basicStats = array();
-        foreach ($result as $row) {
-            $row["totalConversion"] = round($row["totalOrders"] / $row["totalVisits"] * 100, 2);
-            $basicStats[$row["date"]] = $row;
-        }
-
-        /**
-         * If shop selection is active, get visitors and orders for each shop
-         * Merge results into $basicStats Array
-         */
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $sql = "
-                SELECT datum AS `date`,
-                uniquevisits AS visits
-                FROM s_statistics_visitors WHERE shopID = ?
-                ";
-
-                $result = Shopware()->Db()->fetchAll($sql, array($shopId));
-
-                foreach ($result as $row) {
-                    $basicStats[$row["date"]]["visits" . $shopId] = $row["visits"];
-                }
-
-                $sql = "
-                    SELECT
-                        DATE(ordertime) as `date`,
-                        COUNT(o.id) AS `orders`
-                    FROM
-                        `s_order` AS o
-                    WHERE subshopID = ? AND status NOT IN (4,-1)
-                    GROUP BY DATE(ordertime)
-                    ORDER BY DATE(ordertime) DESC
-               ";
-                $result = Shopware()->Db()->fetchAll($sql, array($shopId));
-                if (!empty($result)) {
-                    foreach ($result as $row) {
-                        $basicStats[$row["date"]]["orders" . $shopId] = $row["orders"];
-                        if (!empty($basicStats[$row["date"]]["visits" . $shopId])) {
-                            $basicStats[$row["date"]]["conversion" . $shopId] = round($row["orders"] / $basicStats[$row["date"]]["visits" . $shopId] * 100, 2);
-                        } else {
-                            $basicStats[$row["date"]]["conversion" . $shopId] = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach ($basicStats as &$row) $row["date"] = strtotime($row["date"]);
-        $this->View()->total = count($basicStats);
-        $basicStats = array_splice($basicStats, $start, $limit);
-        $this->View()->data = array_values($basicStats);
-        $this->View()->success = true;
-
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
     }
 
+    // todo refactor
+    public function getArticleImpressionsAction()
+    {
+        /** @var $builder \Doctrine\DBAL\Query\QueryBuilder */
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            'SQL_CALC_FOUND_ROWS i.articleId',
+            'a.name as articleName',
+            'UNIX_TIMESTAMP(i.date) as date',
+            'SUM(i.impressions) as totalAmount'
+        ))
+        ->from('s_statistics_article_impression', 'i')
+        ->leftJoin('i', 's_articles', 'a', 'i.articleId = a.id')
+        ->where('i.date >= :fromDate')
+        ->andWhere('i.date <= :toDate')
+        ->groupBy('i.date')
+        ->setParameter(':fromDate', $this->getFromDate())
+        ->setParameter(':toDate', $this->getToDate());
 
+        //add the sub query for all shops to calculate the amount shop specific
+        $this->addShopSelectQuery($builder, 'i', 'shopId', 'impressions');
+        //add a limit the the query
+        $this->addLimitQuery($builder);
+        //add a order by to the query
+        $this->addOrderQuery($builder, 'totalAmount', 'DESC');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $statement->rowCount()));
+    }
 
     /**
      * helper to get the selected shop ids
@@ -617,17 +603,22 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      * return array | shopIds
      */
     private function getSelectedShopIds(){
-        $selectedShopIds = $this->Request()->getParam('selectedShops');
+        $selectedShopIds = (string) $this->Request()->getParam('selectedShops');
+
         if(!empty($selectedShopIds)) {
-            $selectedShopIds = explode(",",$selectedShopIds);
+            $selectedShopIds = explode(',', $selectedShopIds);
             return $selectedShopIds;
         }
-        $sql = '
-            SELECT s.id
-            FROM s_core_shops s
-            ORDER BY s.default DESC, s.name
-        ';
-        return Shopware()->Db()->fetchCol($sql);
+
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select('s.id')
+                ->from('s_core_shops', 's')
+                ->orderBy('s.default', 'DESC')
+                ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
