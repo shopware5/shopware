@@ -50,6 +50,10 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         });
 
         me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return this.columns;
     }
 });
 //{/block}

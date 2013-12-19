@@ -31,14 +31,19 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.Visitors', {
+Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-visitors',
+    alias: 'widget.analytics-store-navigation-visitors',
     remoteSort: true,
-    fields: ['node', 'name', 'totalImpressions','totalVisits', { name : 'datum', type: 'date', dateFormat: 'timestamp' }],
+    fields: [
+        'name',
+        'totalImpressions',
+        'totalVisits',
+        { name : 'datum', type: 'date' }
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics}',
+        url: '{url controller=analytics action=getVisitors}',
         reader: {
             type: 'json',
             root: 'data'
@@ -46,17 +51,16 @@ Ext.define('Shopware.apps.Analytics.store.Visitors', {
     },
 
     constructor: function(config) {
-
-        config.fields = this.fields;
+        var me = this;
+        config.fields = me.fields;
 
         if(config.shopStore) {
             config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'visits' + shop.data.id;
-                config.fields[config.fields.length] = 'impressions' + shop.data.id;
+                config.fields.push('visits' + shop.data.id);
+                config.fields.push('impressions' + shop.data.id);
             });
         }
 
-
-        this.callParent([config]);
+        me.callParent(arguments);
     }
 });

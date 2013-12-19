@@ -41,22 +41,19 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
         xtype: 'gridcolumn',
         dataIndex: 'searchterm',
         text: '{s name=table/search/term}Search term{/s}',
-        width: 300
-    },
-    {
+        flex: 2
+    }, {
         xtype: 'gridcolumn',
         dataIndex: 'countRequests',
         text: '{s name=table/search/requests}Requests{/s}',
         align: 'right',
         flex: 1
-    },
-    {
+    }, {
         xtype: 'gridcolumn',
         dataIndex: 'countResults',
         text: '{s name=table/search/results}Results{/s}',
         align: 'right',
         flex: 1
-    }
-    ]
+    }]
 });
 //{/block}

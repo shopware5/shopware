@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Panel
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,25 +31,21 @@
 /**
  * todo@all: Documentation
  */
-//{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/main/panel"}
-Ext.define('Shopware.apps.Analytics.view.main.Panel', {
-    extend: 'Ext.panel.Panel',
-    layout: 'card',
-    alias: 'widget.analytics-panel',
-
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            dockedItems: [{
-                xtype: 'analytics-toolbar',
-                dock: 'top',
-                shopStore: me.shopStore
-            }]
-        });
-
-        me.callParent(arguments);
+Ext.define('Shopware.apps.Analytics.store.navigation.ShippingMethods', {
+    extend: 'Ext.data.Store',
+    alias: 'widget.analytics-store-navigation-shipping_methods',
+    remoteSort: true,
+    fields: [
+        'name',
+        'amount'
+    ],
+    proxy: {
+        type: 'ajax',
+        url: '{url controller=analytics action=getShippingMethods}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
 });
-//{/block}

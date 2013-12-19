@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Search
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,17 +31,35 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.Search', {
+Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-search',
-    fields: ['searchterm','countRequests','countResults'],
+    alias: 'widget.analytics-store-navigation-month',
     remoteSort: true,
+    fields: [
+        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        'amount',
+        'displayDate'
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics action=searchAnalytics}',
+        url: '{url controller=analytics action=getMonth}',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            totalProperty: 'total'
         }
+    },
+
+    constructor: function(config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if(config.shopStore) {
+            config.shopStore.each(function(shop) {
+                config.fields.push('amount' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });

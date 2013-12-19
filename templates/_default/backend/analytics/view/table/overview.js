@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,66 +20,66 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
+ * // todo@all add snippets
+ *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Visitors
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/visitors"}
-Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
+//{block name="backend/analytics/view/table/overview"}
+Ext.define('Shopware.apps.Analytics.view.table.Overview', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-visitors',
-    shopColumnVisits: "{s name=table/visits/visits}V: [0]{/s}",
-    shopColumnImpressions: "{s name=table/visits/impressions}I: [0]{/s}",
-    initComponent: function() {
+    alias: 'widget.analytics-table-overview',
+    shopColumnName: 'Overview',
+
+    initComponent: function () {
         var me = this;
 
         me.columns = {
             items: me.getColumns(),
             defaults: {
-               align: 'right',
-               flex: 1
+                align:'right',
+                flex:1
             }
         };
 
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        var me = this,
-            columns = [{
+    /**
+     * Creates the grid columns
+     *
+     * @return [array] grid columns
+     */
+    getColumns: function () {
+        return [{
             xtype: 'datecolumn',
-            dataIndex: 'datum',
-            text: '{s name=table/visitors/date}Date{/s}'
+            dataIndex: 'date',
+            text: 'Datum'
         }, {
-            dataIndex: 'totalVisits',
-            text: '{s name=table/visitors/totalVisits}Total visits{/s}'
+            dataIndex: 'orders',
+            text: 'Bestellungen'
         }, {
-            dataIndex: 'totalImpressions',
-            text: '{s name=table/visitors/totalImpressions}Total impressions{/s}'
+            dataIndex: 'revenue',
+            text: 'Umsatz'
+        }, {
+            dataIndex: 'cancelledOrders',
+            text: 'Abgebr. Warenkörbe'
+        }, {
+            dataIndex: 'newCustomers',
+            text: 'Neukunden'
+        }, {
+            dataIndex: 'visitors',
+            text: 'Besucher'
+        }, {
+            dataIndex: 'clicks',
+            text: 'Seitenaufrufe'
         }];
-        
-        me.shopStore.each(function(shop) {
-            columns.push({
-                dataIndex: 'visits' + shop.data.id,
-                text: Ext.String.format(me.shopColumnVisits, shop.data.name),
-                sortable: false
-            });
-            columns.push({
-                dataIndex: 'impressions' + shop.data.id,
-                text: Ext.String.format(me.shopColumnImpressions, shop.data.name),
-                sortable: false
-            });
-        }, me);
-
-        return columns;
     }
 });
 //{/block}

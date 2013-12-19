@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Window', {
     cls: Ext.baseCSSPrefix + 'analytics',
     layout: 'border',
     title: '{s name=title}Statistics{/s}',
-    width:1024,
+    width: '90%',
     height:'90%',
     stateId:'shopware-statistics-main-window',
 
@@ -48,8 +48,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Window', {
         me.items = [{
             xtype: 'analytics-panel',
             region: 'center',
-            shopStore: me.shopStore,
-            sourceStore: me.sourceStore
+            shopStore: me.shopStore
         }, {
             xtype: 'analytics-navigation',
             region: 'west',

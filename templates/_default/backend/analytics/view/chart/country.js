@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
             }
         }];
 
-
         me.callParent(arguments);
     }
 });

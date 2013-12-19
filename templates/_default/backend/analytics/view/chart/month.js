@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
     initComponent: function() {
         var me = this;
         // Initiate stores for handling multiple shop values
-        this.initMultipleShopTipsStores();
+        me.initMultipleShopTipsStores();
 
         me.series = [{
             type: 'line',
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
         }];
 
         me.shopStore.each(function(shop) {
-            me.series[me.series.length] = {
+            me.series.push({
                 type: 'line',
                 title: shop.data.name,
                 axis : ['left', 'bottom'],
@@ -101,8 +101,8 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                    trackMouse: true,
                    width: 120,
                    highlight: {
-                        size: 7,
-                        radius: 7
+                       size: 7,
+                       radius: 7
                    },
                    height: 60,
                    renderer: function(storeItem, item) {
@@ -111,10 +111,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                        this.update(sales);
                    }
                 }
-            };
+            });
         }, me);
-        me.callParent(arguments);
 
+        me.callParent(arguments);
     }
 });
 //{/block}

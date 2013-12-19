@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Source
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,13 +31,35 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.Source', {
-    extend: 'Ext.data.TreeStore',
-    root: {
-        expanded: true
-    },
+Ext.define('Shopware.apps.Analytics.store.navigation.Time', {
+    extend: 'Ext.data.Store',
+    alias: 'widget.analytics-store-navigation-time',
+    remoteSort: true,
+    fields: [
+        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        'amount',
+        'displayDate'
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url action=sourceList}'
+        url: '{url controller=analytics action=getTime}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
+    },
+
+    constructor: function(config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if(config.shopStore) {
+            config.shopStore.each(function(shop) {
+                config.fields.push('amount' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });
