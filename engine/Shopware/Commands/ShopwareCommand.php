@@ -24,8 +24,8 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,23 +37,23 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class ShopwareCommand extends Command implements ResourceLoaderAwareInterface
+abstract class ShopwareCommand extends Command implements ContainerAwareInterface
 {
     /**
-     * @var ResourceLoader
+     * @var Container
      */
     protected $container;
 
     /**
      * {@inheritdoc}
      */
-    public function setResourceLoader(ResourceLoader $resourceLoader = null)
+    public function setContainer(Container $container = null)
     {
-        $this->container = $resourceLoader;
+        $this->container = $container;
     }
 
     /**
-     * @return ResourceLoader
+     * @return Container
      */
     public function getContainer()
     {

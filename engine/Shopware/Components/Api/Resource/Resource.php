@@ -27,7 +27,7 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\BatchInterface;
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelRepository;
 
@@ -79,27 +79,27 @@ abstract class Resource
      */
     protected $role = null;
 
-    /** @var ResourceLoader */
-    protected $resourceLoader = null;
+    /** @var Container */
+    protected $container = null;
 
     /**
-     * @return ResourceLoader
+     * @return Container
      */
-    public function getResourceLoader()
+    public function getContainer()
     {
-        if (!$this->resourceLoader) {
-            $this->resourceLoader = Shopware()->ResourceLoader();
+        if (!$this->container) {
+            $this->container = Shopware()->Container();
         }
-        return $this->resourceLoader;
+        return $this->container;
 
     }
 
     /**
-     * @param $resourceLoader
+     * @param $container
      */
-    public function setResourceLoader($resourceLoader)
+    public function setContainer($container)
     {
-        $this->resourceLoader = $resourceLoader;
+        $this->container = $container;
     }
 
     /**
@@ -556,12 +556,12 @@ abstract class Resource
      */
     protected function resetEntityManager()
     {
-        $this->getResourceLoader()->reset('models')
+        $this->getContainer()->reset('models')
                                   ->reset('db_connection')
                                   ->load('models');
 
-        $this->getResourceLoader()->load('db_connection');
+        $this->getContainer()->load('db_connection');
 
-        $this->setManager($this->resourceLoader->get('models'));
+        $this->setManager($this->container->get('models'));
     }
 }

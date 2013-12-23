@@ -13,7 +13,6 @@
     </parameters>
 
     <services>
-        <service id="resource_loader" synthetic="true" />
         <service id="bootstrap"       synthetic="true" />
         <service id="application"     synthetic="true" />
 
@@ -23,7 +22,7 @@
                  class="Zend_Locale"
                  factory-service="locale_factory"
                  factory-method="factory">
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="currency_factory" class="Shopware\Components\DependencyInjection\Bridge\Currency"/>
@@ -32,7 +31,7 @@
                  factory-service="currency_factory"
                  factory-method="factory">
 
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
             <argument type="service" id="shopware.locale"/>
         </service>
 
@@ -51,7 +50,7 @@
                  class="Enlight_Components_Session_Namespace"
                  factory-service="session_factory"
                  factory-method="factory">
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
@@ -70,7 +69,7 @@
                  class="Zend_Mail_Transport_Abstract"
                  factory-service="mail_factory"
                  factory-method="factory">
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
             <argument type="service" id="config"/>
             <argument>%shopware.mail%</argument>
         </service>
@@ -81,7 +80,7 @@
                  factory-service="templatemail_factory"
                  factory-method="factory">
 
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="table_factory" class="Shopware\Components\DependencyInjection\Bridge\Table" />
@@ -101,7 +100,7 @@
                  factory-service="plugins_factory"
                  factory-method="factory">
 
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
             <argument type="service" id="Loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
@@ -119,7 +118,7 @@
                  factory-service="front_factory"
                  factory-method="factory">
 
-            <argument type="service" id="resource_loader"/>
+            <argument type="service" id="service_container"/>
             <argument type="service" id="bootstrap"/>
             <argument type="service" id="events"/>
             <argument>%shopware.front%</argument>
@@ -277,7 +276,7 @@
             <argument>%kernel.root_dir%/snippets/</argument>
         </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
-            <argument type="service" id="resource_loader" />
+            <argument type="service" id="service_container" />
         </service>
     </services>
 </container>

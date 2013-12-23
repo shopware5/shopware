@@ -24,8 +24,8 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

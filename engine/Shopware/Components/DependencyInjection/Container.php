@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Container as BaseContainer;
  * @package   Shopware\Components\DependencyInjection
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ResourceLoader extends BaseContainer
+class Container extends BaseContainer
 {
     /**
      * Constant for the bootstrap status, set before the resource is initialed
@@ -57,7 +57,7 @@ class ResourceLoader extends BaseContainer
 
     /**
      * @param \Shopware_Bootstrap $bootstrap
-     * @return ResourceLoader
+     * @return Container
      */
     public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
@@ -69,7 +69,7 @@ class ResourceLoader extends BaseContainer
 
     /**
      * @param \Shopware $application
-     * @return ResourceLoader
+     * @return Container
      */
     public function setApplication(\Shopware $application)
     {
@@ -84,7 +84,7 @@ class ResourceLoader extends BaseContainer
      *
      * @param string $name
      * @param mixed $resource
-     * @return ResourceLoader
+     * @return Container
      */
     public function set($name, $resource, $scope = 'container')
     {
@@ -248,7 +248,7 @@ class ResourceLoader extends BaseContainer
      * list properties.
      *
      * @param string $name
-     * @return ResourceLoader
+     * @return Container
      */
     public function reset($name)
     {

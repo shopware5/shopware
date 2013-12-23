@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,7 +34,7 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class CacheManager
 {
     /**
-     * @var ResourceLoader
+     * @var Container
      */
     private $container;
 
@@ -64,9 +64,9 @@ class CacheManager
     private $events;
 
     /**
-     * @param ResourceLoader $container
+     * @param Container $container
      */
-    public function __construct(ResourceLoader $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
 

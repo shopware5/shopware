@@ -28,9 +28,9 @@ use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberComp
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
+use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -126,7 +126,7 @@ class Kernel implements HttpKernelInterface
         $front = $this->container->get('front');
 
         $front->returnResponse(true);
-        $front->throwExceptions(!$catch);
+        $front->throwExceptions($catch);
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
@@ -245,7 +245,7 @@ class Kernel implements HttpKernelInterface
     {
         $this->shopware = new \Shopware(
             $this->environment,
-            $this->getConfig(),
+            $this->config,
             $this->container
         );
     }
@@ -268,14 +268,13 @@ class Kernel implements HttpKernelInterface
         if (!$cache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
-            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\ResourceLoader');
+            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
         }
 
         require_once $cache;
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
-        $this->container->set('resource_loader', $this->container);
     }
 
     /**
@@ -396,7 +395,7 @@ class Kernel implements HttpKernelInterface
      * @param string $alias
      * @param array|string $options
      */
-    protected function addShopwareConfig(Container $container, $alias, $options)
+    protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {
         foreach ($options as $key => $option) {
             $container->setParameter($alias . '.' . $key, $option);

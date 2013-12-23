@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -102,11 +102,11 @@ class Application extends BaseApplication
             $this->commandsRegistered = true;
         }
 
-        $container = $this->kernel->getConta();
+        $container = $this->kernel->getContainer();
 
         foreach ($this->all() as $command) {
-            if ($command instanceof ResourceLoaderAwareInterface) {
-                $command->setResourceLoader($container);
+            if ($command instanceof ContainerAwareInterface) {
+                $command->setContainer($container);
             }
         }
 
