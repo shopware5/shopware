@@ -250,7 +250,7 @@ class AppCache extends HttpCache
         $this->getKernel()->boot();
 
         /** @var $bootstrap \Shopware\Components\DependencyInjection\ResourceLoader */
-        $resourceLoader = $this->getKernel()->getResourceLoader();
+        $resourceLoader = $this->getKernel()->getContainer();
         $resourceLoader->set('HttpCache', $this);
 
         return parent::forward($request, $raw, $entry);

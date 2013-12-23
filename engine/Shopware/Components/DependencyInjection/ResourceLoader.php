@@ -2,14 +2,14 @@
 
 namespace Shopware\Components\DependencyInjection;
 
-use InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Container as BaseContainer;
 
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ResourceLoader
+class ResourceLoader extends BaseContainer
 {
     /**
      * Constant for the bootstrap status, set before the resource is initialed
@@ -56,22 +56,13 @@ class ResourceLoader
     protected $bootstrap;
 
     /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-        $this->container->setResourceLoader($this);
-    }
-
-    /**
      * @param \Shopware_Bootstrap $bootstrap
      * @return ResourceLoader
      */
     public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
         $this->bootstrap = $bootstrap;
-        $this->container->set('bootstrap', $bootstrap);
+        parent::set('bootstrap', $bootstrap);
 
         return $this;
     }
@@ -82,37 +73,9 @@ class ResourceLoader
      */
     public function setApplication(\Shopware $application)
     {
-        $this->container->set('application', $application);
+        parent::set('application', $application);
 
         return $this;
-    }
-
-    /**
-     * Gets a parameter.
-     *
-     * @param string $name The parameter name
-     *
-     * @return mixed  The parameter value
-     *
-     * @throws InvalidArgumentException if the parameter is not defined
-     */
-    public function getParameter($name)
-    {
-        return $this->container->getParameter($name);
-    }
-
-    /**
-     * Checks if a parameter exists.
-     *
-     * @param string $name The parameter name
-     *
-     * @return Boolean The presence of parameter in container
-     *
-     * @api
-     */
-    public function hasParameter($name)
-    {
-        return $this->container->hasParameter($name);
     }
 
     /**
@@ -123,17 +86,17 @@ class ResourceLoader
      * @param mixed $resource
      * @return ResourceLoader
      */
-    public function set($name, $resource)
+    public function set($name, $resource, $scope = 'container')
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
 
-        $this->container->set($name, $resource);
+        parent::set($name, $resource);
 
-        $this->resourceList[$name] = $resource;
+        $this->resourceList[$name]   = $resource;
         $this->resourceStatus[$name] = self::STATUS_ASSIGNED;
 
-        if ($this->container->has('events')) {
-            $this->container->getService('events')->notify(
+        if (parent::has('events')) {
+            parent::get('events')->notify(
                 'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
                     'subject'  => $this,
                     'resource' => $resource
@@ -152,7 +115,7 @@ class ResourceLoader
      */
     public function has($name)
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
 
         return isset($this->resourceList[$name]) || $this->load($name);
     }
@@ -166,9 +129,24 @@ class ResourceLoader
      */
     public function initialized($name)
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
 
         return isset($this->resourceList[$name]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    public function getNormalizedId($id)
+    {
+        $id = strtolower($id);
+
+        if (isset($this->aliases[$id])) {
+            $id = $this->aliases[$id];
+        }
+
+        return $id;
     }
 
     /**
@@ -180,9 +158,9 @@ class ResourceLoader
      * @throws \Exception
      * @return mixed
      */
-    public function get($name)
+    public function get($name, $invalidBehavior = 1)
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
 
         if (!isset($this->resourceStatus[$name])) {
             $this->load($name);
@@ -213,7 +191,7 @@ class ResourceLoader
      */
     public function load($name)
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
 
         if (isset($this->resourceStatus[$name])) {
             switch ($this->resourceStatus[$name]) {
@@ -233,8 +211,8 @@ class ResourceLoader
             $this->resourceStatus[$name] = self::STATUS_BOOTSTRAP;
             $event = false;
 
-            if ($this->container->has('events')) {
-                $event = $this->container->getService('events')->notifyUntil(
+            if (parent::has('events')) {
+                $event = parent::get('events')->notifyUntil(
                     'Enlight_Bootstrap_InitResource_' . $name,
                     array('subject' => $this)
                 );
@@ -242,12 +220,12 @@ class ResourceLoader
 
             if ($event) {
                 $this->resourceList[$name] = $event->getReturn();
-            } elseif ($this->container->has($name)) {
-                $this->resourceList[$name] = $this->container->getService($name);
+            } elseif (parent::has($name)) {
+                $this->resourceList[$name] = parent::get($name);
             }
 
-            if ($this->container->has('events')) {
-                $this->container->getService('events')->notify(
+            if (parent::has('events')) {
+                parent::get('events')->notify(
                     'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this)
                 );
             }
@@ -274,12 +252,12 @@ class ResourceLoader
      */
     public function reset($name)
     {
-        $name = $this->container->getNormalizedId($name);
+        $name = $this->getNormalizedId($name);
         if (isset($this->resourceList[$name])) {
             unset($this->resourceList[$name]);
             unset($this->resourceStatus[$name]);
         }
-        $this->container->set($name, null);
+        parent::set($name, null);
 
         return $this;
     }

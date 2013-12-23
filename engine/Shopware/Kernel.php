@@ -26,7 +26,6 @@ namespace Shopware;
 
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
-use Shopware\Components\DependencyInjection\ResourceLoader;
 use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
 use Symfony\Component\Config\ConfigCache;
@@ -69,11 +68,6 @@ class Kernel implements HttpKernelInterface
      * @var Container
      */
     protected $container;
-
-    /**
-     * @var ResourceLoader
-     */
-    protected $resourceLoader;
 
     /**
      * Enables the debug mode
@@ -129,7 +123,7 @@ class Kernel implements HttpKernelInterface
         }
 
         /** @var $front \Enlight_Controller_Front **/
-        $front = $this->resourceLoader->get('front');
+        $front = $this->container->get('front');
 
         $front->returnResponse(true);
         $front->throwExceptions(!$catch);
@@ -220,7 +214,6 @@ class Kernel implements HttpKernelInterface
         }
 
         $this->initializeContainer();
-        $this->initializeResourceLoader();
         $this->initializeShopware();
 
         $this->booted = true;
@@ -253,17 +246,8 @@ class Kernel implements HttpKernelInterface
         $this->shopware = new \Shopware(
             $this->environment,
             $this->getConfig(),
-            $this->resourceLoader
+            $this->container
         );
-    }
-
-    /**
-     * Creates a new instance of the ResourceLoader
-     */
-    protected function initializeResourceLoader()
-    {
-        $this->resourceLoader = new ResourceLoader($this->getContainer());
-        $this->getContainer()->set('resource_loader', $this->resourceLoader);
     }
 
     /**
@@ -284,13 +268,14 @@ class Kernel implements HttpKernelInterface
         if (!$cache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
-            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
+            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\ResourceLoader');
         }
 
         require_once $cache;
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
+        $this->container->set('resource_loader', $this->container);
     }
 
     /**
@@ -455,14 +440,6 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
-     * @return ResourceLoader
-     */
-    public function getResourceLoader()
-    {
-        return $this->resourceLoader;
-    }
-
-    /**
      * @return \Shopware
      */
     public function getShopware()
@@ -474,7 +451,7 @@ class Kernel implements HttpKernelInterface
      * Returns the di container
      * @return Container
      */
-    protected function getContainer()
+    public function getContainer()
     {
         return $this->container;
     }
@@ -487,7 +464,6 @@ class Kernel implements HttpKernelInterface
      */
     protected function getContainerClass($nameSuffix = null)
     {
-
         return $this->name . \Shopware::REVISION . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
