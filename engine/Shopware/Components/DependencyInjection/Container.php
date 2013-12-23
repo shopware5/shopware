@@ -51,17 +51,11 @@ class Container extends BaseContainer
     protected $container;
 
     /**
-     * @var \Shopware_Bootstrap
-     */
-    protected $bootstrap;
-
-    /**
      * @param \Shopware_Bootstrap $bootstrap
      * @return Container
      */
     public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
-        $this->bootstrap = $bootstrap;
         parent::set('bootstrap', $bootstrap);
 
         return $this;
