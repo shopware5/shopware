@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Api;
 
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
  * API Manger
@@ -47,10 +47,10 @@ class Manager
         /** @var $resource Resource\Resource */
         $resource = new $class();
 
-        $container = Shopware()->ResourceLoader();
+        $container = Shopware()->Container();
 
-        if ($resource instanceof ResourceLoaderAwareInterface) {
-            $resource->setResourceLoader($container);
+        if ($resource instanceof ContainerAwareInterface) {
+            $resource->setContainer($container);
         }
 
         $resource->setManager($container->get('models'));

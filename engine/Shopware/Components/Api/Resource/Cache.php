@@ -26,8 +26,8 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\CacheManager;
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Cache API Resource
@@ -39,7 +39,7 @@ use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Cache extends Resource implements ResourceLoaderAwareInterface
+class Cache extends Resource implements ContainerAwareInterface
 {
     /**
      * @var \Enlight_Controller_Request_RequestHttp
@@ -60,11 +60,11 @@ class Cache extends Resource implements ResourceLoaderAwareInterface
     }
 
     /**
-     * Sets the ResourceLoader.
+     * Sets the Container.
      *
-     * @param ResourceLoader $container
+     * @param Container $container
      */
-    public function setResourceLoader(ResourceLoader $container = null)
+    public function setContainer(Container $container = null)
     {
         if ($container) {
             $this->request      = $container->get('front')->Request();
