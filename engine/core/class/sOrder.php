@@ -152,10 +152,12 @@ class sOrder
 	 */
 	public function sGetOrderNumber()
 	{
+        $name = "invoice";
+        $name = Enlight()->Events()->filter('Shopware_Modules_Order_GetOrdernumber_FilterName', $name, array('subject'=>$this));
 
-		$sql = "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE";
+		$sql = "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='" . $name . "' FOR UPDATE";
 		$ordernumber = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql);
-		$sql = "UPDATE s_order_number SET number=number+1 WHERE name='invoice'";
+		$sql = "UPDATE s_order_number SET number=number+1 WHERE name='" . $name . "'";
 		$this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 		$ordernumber += 1;
 
