@@ -52,6 +52,9 @@
 </script>
 {/block}
 
+{* Meta title *}
+{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle}{else}{$smarty.block.parent}{/if}{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sArticle.keywords}{$sArticle.keywords}{elseif $sArticle.sDescriptionKeywords}{$sArticle.sDescriptionKeywords}{/if}{/block}
 
