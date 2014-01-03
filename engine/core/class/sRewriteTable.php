@@ -401,7 +401,7 @@ class sRewriteTable
     {
         return "
 			SELECT a.*, IF(atr.name IS NULL OR atr.name='', a.name, atr.name) as name,
-			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed,
+			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed, metaTitle,
 				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
 				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
 			FROM s_articles a
