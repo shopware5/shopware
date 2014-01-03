@@ -2999,6 +2999,13 @@ class sArticles
         // Translate main - data
         $getArticle = $this->sGetTranslation($getArticle, $id, "article", $this->sSYSTEM->sLanguage);
 
+        //mock a supplier array so we can use sGetTranslation
+        $supplier = array(
+            'description' => $getArticle['supplierDescription']
+        );
+        $supplier = $this->sGetTranslation($supplier, $getArticle['supplierID'], 'supplier', $this->sSYSTEM->sLanguage);
+        $getArticle['supplierDescription'] = $supplier['description'];
+
         /*
           Calculating matching price SW 2.1
           */
@@ -4551,6 +4558,7 @@ class sArticles
             case 'supplier':
                 $map = array(
                     'meta_title' => 'title',
+                    'description' => 'description',
                 );
                 break;
         }
