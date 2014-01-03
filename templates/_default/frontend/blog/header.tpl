@@ -1,5 +1,8 @@
 {extends file='frontend/index/header.tpl'}
 
+{* Title *}
+{block name='frontend_index_header_title'}{if $sArticle.metaTitle}{$sArticle.metaTitle}{else}{$smarty.block.parent}{/if}{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sArticle.metaKeyWords}{$sArticle.metaKeyWords}{else}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/if}{/block}
 

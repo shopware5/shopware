@@ -131,6 +131,13 @@ class Blog extends ModelEntity
     private $metaDescription;
 
     /**
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="string", nullable=true)
+     */
+    private $metaTitle;
+
+    /**
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
@@ -519,14 +526,43 @@ class Blog extends ModelEntity
         return $this->setOneToMany($comments, '\Shopware\Models\Blog\Comment', 'comments', 'blog');
     }
 
-
+    /**
+     * returns the author
+     *
+     * @return mixed
+     */
     public function getAuthor()
     {
         return $this->author;
     }
 
+    /**
+     * sets the author
+     *
+     * @param $author
+     */
     public function setAuthor($author)
     {
         $this->author = $author;
+    }
+
+    /**
+     * set the metaTitle
+     *
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * returns the metaTitle
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
     }
 }
