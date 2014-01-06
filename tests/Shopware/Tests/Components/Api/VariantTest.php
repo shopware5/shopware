@@ -590,6 +590,54 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         );
     }
 
+    public function testVariantDefaultPriceBehavior()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
+        $variant = $this->resource->create($create);
+
+        $this->resource->setResultMode(2);
+        $data = $this->resource->getOne($variant->getId());
+
+        $this->assertEquals(400 / 1.19, $data['prices'][0]['price']);
+    }
+
+    public function testVariantGrossPrices()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
+        $variant = $this->resource->create($create);
+
+        $this->resource->setResultMode(2);
+        $data = $this->resource->getOne($variant->getId(), array(
+            'considerTaxInput' => true
+        ));
+
+        $this->assertEquals(400, $data['prices'][0]['price']);
+    }
+
+
+
     public function testBatchModeShouldBeSuccessful()
     {
         $data = $this->getSimpleArticleData();

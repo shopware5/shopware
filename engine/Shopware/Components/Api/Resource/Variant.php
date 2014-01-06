@@ -72,23 +72,24 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * @param string $number
+     * @param array $options
      * @return array|\Shopware\Models\Article\Detail
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
-    public function getOneByNumber($number)
+    public function getOneByNumber($number, array $options = array())
     {
         $id = $this->getIdFromNumber($number);
-        return $this->getOne($id);
+        return $this->getOne($id, $options);
     }
 
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Article\Detail
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @param array $options
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @return array|\Shopware\Models\Article\Detail
      */
-    public function getOne($id)
+    public function getOne($id, array $options = array())
     {
         $this->checkPrivilege('read');
 
@@ -104,14 +105,38 @@ class Variant extends Resource implements BatchInterface
                 ->setParameter('variantId', $id);
 
         /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
+        $variant = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
-        if (!$articleDetail) {
+        if (!$variant) {
             throw new ApiException\NotFoundException("Variant by id $id not found");
         }
 
+        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
 
-        return $articleDetail;
+            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
+                $tax = Shopware()->Db()->fetchOne(
+                    "SELECT tax
+                     FROM s_core_tax
+                         INNER JOIN s_articles
+                             ON s_articles.taxID = s_core_tax.id
+                             AND s_articles.id = :articleId",
+                    array(':articleId' => $variant['articleId'])
+                );
+
+                if (empty($tax)) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("No article tax configured for variant: %s", $id)
+                    );
+                }
+
+                $variant['prices'] = $this->getArticleResource()->getTaxPrices(
+                    $variant['prices'],
+                    $tax
+                );
+            }
+        }
+
+        return $variant;
     }
 
 
