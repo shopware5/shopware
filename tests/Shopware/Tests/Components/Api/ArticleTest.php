@@ -135,6 +135,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'pseudoSales' => 999,
             'highlight' => true,
             'keywords' => 'test, testarticle',
+            'metaTitle' => 'this is a test title with umlauts äöüß',
 
             'filterGroupId' => 1,
 
@@ -277,6 +278,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertEquals($article->getName(), $testData['name']);
         $this->assertEquals($article->getDescription(), $testData['description']);
+        $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
 
         $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
         $this->assertEquals(
