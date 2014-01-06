@@ -1,13 +1,13 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    MediaManager
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
@@ -33,6 +26,10 @@
  *
  * This file contains the thumbnail generation window and its elements.
  * The main generation logic is contained in the thumbnail controller.
+ *
+ * @category    Shopware
+ * @package     MediaManager
+ * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/media_manager/view/main}
 
@@ -129,17 +126,26 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         }
     },
 
+    /**
+     * The title shown in the window header
+     */
     title: '{s name=thumbnail/batch/title}Create thumbnails{/s}',
 
+    /**
+     * The default generation batch size
+     */
     batchSize: 30,
 
+    /**
+     * Constructor for the generation window
+     * Registers events and adds all needed content items to the window
+     */
     initComponent: function () {
         var me = this;
         me.registerEvents();
         me.items = me.createItems();
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to create the window items.
@@ -156,13 +162,21 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         ];
     },
 
+    /**
+     * Registers events in the event bus for firing events when needed
+     */
     registerEvents: function () {
         this.addEvents(
-                'startProcess',
-                'cancelProcess'
+            'startProcess',
+            'cancelProcess'
         );
     },
 
+    /**
+     * Creates and returns a new combobox with all available batch sizes for the generation process
+     *
+     * @returns {*}
+     */
     createBatchSizeCombo: function () {
         var me = this;
 
@@ -200,6 +214,13 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         return me.batchSizeCombo;
     },
 
+    /**
+     * Returns a new progress bar for a detailed view of the generation progress status
+     *
+     * @param name
+     * @param text
+     * @returns {*}
+     */
     createProgressBar: function (name, text) {
         return Ext.create('Ext.ProgressBar', {
             animate: true,
@@ -211,6 +232,11 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         });
     },
 
+    /**
+     * Returns a new start button for the generation process
+     *
+     * @returns {*}
+     */
     createStartButton: function () {
         var me = this;
 
@@ -224,6 +250,11 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         });
     },
 
+    /**
+     * Returns a new cancel button for the generation process
+     *
+     * @returns {*}
+     */
     createCancelButton: function () {
         var me = this;
 
@@ -239,6 +270,11 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         });
     },
 
+    /**
+     * Returns a new close button for the generation process window
+     *
+     * @returns {*}
+     */
     createCloseButton: function () {
         var me = this;
 
@@ -254,6 +290,12 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
         });
     },
 
+    /**
+     * Returns a container with all generation buttons
+     * The cancel button is hidden by default
+     *
+     * @returns {*}
+     */
     createButtons: function () {
         var me = this;
 

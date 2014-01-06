@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers, Shopware_Models
- * @subpackage Backend, Frontend, Article, Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $id$
- * @author     Shopware
  */
 
 namespace Shopware\Components\Thumbnail\Generator;
@@ -39,18 +32,20 @@ namespace Shopware\Components\Thumbnail\Generator;
  * for further manipulation.
  *
  * Class Basic
- * @package Shopware\Component\Thumbnail\Generator
+ * @category    Shopware
+ * @package     Shopware\Component\Thumbnail\Generator
+ * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Basic implements GeneratorInterface
 {
     /**
      * This method creates a new thumbnail based on the given parameters
      *
-     * @param $imagePath
-     * @param $destination
-     * @param $width
-     * @param $height
-     * @param bool $keepProportions
+     * @param String $imagePath - full path of the original image
+     * @param String $destination - full path of the thumbnail where it should be created
+     * @param Int $width - width of the thumbnail
+     * @param Int $height - height of the thumbnail
+     * @param bool $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
      * @throws \Exception
      * @return void
      */
@@ -76,7 +71,7 @@ class Basic implements GeneratorInterface
 
         $newSize = array('width' => $width, 'height' => $height);
 
-        if($keepProportions !== false){
+        if($keepProportions === true){
             $newSize = $this->calculateProportionalThumbnailSize($originalSize, $width, $height);
         }
 
