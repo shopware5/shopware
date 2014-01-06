@@ -3,7 +3,6 @@ class Migrations_Migration207 Extends Shopware\Components\Migrations\AbstractMig
 {
     public function up()
     {
-        return;
         $sql = <<<'EOD'
         UPDATE s_export
             SET header = '{#BOM#}{strip}\nid{#S#}\ntitel{#S#}\nbeschreibung{#S#}\nlink{#S#}\nbild_url{#S#}\nean{#S#}\ngewicht{#S#}\nmarke{#S#}\nmpn{#S#}\nzustand{#S#}\nproduktart{#S#}\npreis{#S#}\nversand{#S#}\nstandort{#S#}\ncurrency{#S#}\navailability\n{/strip}{#L#}',
@@ -56,6 +55,7 @@ class Migrations_Migration207 Extends Shopware\Components\Migrations\AbstractMig
             AND body = '<item> \n	<title>{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape}</title>\n	<guid>{$sArticle.articleID|link:$sArticle.name|escape}</guid>\n	<link>{$sArticle.articleID|link:$sArticle.name|escape}</link>\n	<description>{$sArticle.description_long|strip_tags|regex_replace:"/[^wöäüÖÄÜß .?!,&:%;-\\"'']/i":""|trim|truncate:900:"..."|escape}</description>\n	<category>{$sArticle.articleID|category:" > "|escape}</category>\n	{if $sArticle.changed}<pubDate>{$sArticle.changed|date_format:"%a, %d %b %Y %T %Z"}</pubDate>{/if}\n	<g:bild_url>{$sArticle.image|image:4}</g:bild_url>\n{*<g:verfallsdatum>2006-12-20</g:verfallsdatum>*}\n	<g:preis>{$sArticle.price|format:"number"}</g:preis>\n{*<g:preisart>ab</g:preisart>*}\n{*	<g:währung>{$sCurrency.currency}</g:währung>*}\n{*	<g:zahlungsmethode>Barzahlung;Scheck;Visa;MasterCard;AmericanExpress;Lastschrift</g:zahlungsmethode>*}\n{*<g:menge>20</g:menge>*}\n	<g:marke>{$sArticle.supplier|escape}</g:marke>\n	<g:ean>{$sArticle.ean|escape}</g:ean>\n{*<g:hersteller>{$sArticle.supplier|escape}</g:hersteller>*}\n{*<g:hersteller_kennung>834</g:hersteller_kennung>*}\n{*<g:speicher>512</g:speicher>*}\n{*<g:prozessorgeschwindigkeit>2</g:prozessorgeschwindigkeit>*}\n	<g:modellnummer>{$sArticle.suppliernumber|escape}</g:modellnummer>\n{*<g:größe>14x14x3</g:größe>*}\n	<g:gewicht>2</g:gewicht>\n	<g:zustand>neu</g:zustand>\n{*<g:farbe>schwarz</g:farbe>*}\n	<g:produktart>{$sArticle.articleID|category:"/"|escape}</g:produktart>\n</item>'
         ;
 EOD;
+
         $this->addSql($sql);
     }
 }
