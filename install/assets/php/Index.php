@@ -19,7 +19,11 @@ $app = new \Slim\Slim();
 
 //$app->add(new Slim_Middleware_SessionCookie());
 
+$configObj = new Shopware_Install_Configuration();
+$basepath = $configObj->getShopDomain();
+
 if (!isset($_SESSION)) {
+    session_set_cookie_params(600, $basepath['basepath']);
     session_start();
 }
 if (!isset($_SESSION["parameters"])) {
@@ -37,6 +41,9 @@ if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages))
 }
 if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)) {
     $selectedLanguage = $_POST["language"];
+    unset($_SESSION["parameters"]["c_config_shop_language"]);
+    unset($_SESSION["parameters"]["c_config_shop_currency"]);
+    unset($_SESSION["parameters"]["c_config_admin_language"]);
     $_SESSION["language"] = $selectedLanguage;
 } elseif (isset($_SESSION["language"]) && in_array($_SESSION["language"], $allowedLanguages)) {
     $selectedLanguage = $_SESSION["language"];
@@ -73,7 +80,6 @@ $databaseParameters = array(
 $app->config("install.database.parameters",$databaseParameters);
 $app->config('install.database',new Shopware_Install_Database($databaseParameters));
 $app->config('install.license',new Shopware_Install_License());
-$configObj = new Shopware_Install_Configuration();
 $app->config('install.configuration',$configObj);
 
 // Set global variables
@@ -83,7 +89,6 @@ $app->view()->setData("baseURL", str_replace('index.php', '', $_SERVER["PHP_SELF
 $app->view()->setData("app",$app);
 $app->view()->setData("error",false);
 $app->view()->setData("parameters", $_SESSION["parameters"]);
-$basepath = $configObj->getShopDomain();
 $app->view()->setData("basepath","http://".$basepath["domain"].$basepath["basepath"]);
 
 // Step 1: Select language
