@@ -52,11 +52,11 @@ abstract class BasePaymentMethod
 
     /**
      * Fetches the customer's current payment data for this
-     * payment method
+     * payment method as array
      *
-     * @return \Shopware\Models\Customer\PaymentData|null
+     * @return array|null
      */
-    abstract public function getCurrentPaymentData();
+    abstract public function getCurrentPaymentDataAsArray();
 
     /**
      * Creates the Payment Instance for the given order
@@ -65,7 +65,7 @@ abstract class BasePaymentMethod
      * @param $orderId The Order Id associated with the current payment
      * @param $userId The User/Customer Id associated with the current payment
      * @param $paymentId The Payment Method Id associated with the current payment
-     * @return \Shopware\Models\Payment\PaymentInstace|null
+     * @return true|null
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);
 
@@ -96,6 +96,6 @@ abstract class BasePaymentMethod
      */
     public function getData()
     {
-        return $this->getCurrentPaymentData();
+        return $this->getCurrentPaymentDataAsArray();
     }
 }

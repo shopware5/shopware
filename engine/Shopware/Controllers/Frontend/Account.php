@@ -137,34 +137,23 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
-        /**
-         * small refactoring, keeps old behavior and adds future compatibility for getCurrentPaymentData() call
-         * $getPaymentDetails['table'] validation is deprecated and will be removed
-         *
-         * getData() is deprecated and will be replaced by getCurrentPaymentData()
-         */
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
-        if ($getPaymentDetails['table'] || ($getPaymentDetails && method_exists($paymentClass, 'getCurrentPaymentData'))) {
-            $data = $paymentClass->getData();
-            if (!empty($data) && is_array($data)) {
+        if (getPaymentDetails && method_exists($paymentClass, 'getCurrentPaymentDataAsArray'))
+		{
+            $data = $paymentClass->getCurrentPaymentDataAsArray();
+            if(!empty($data)) {
                 $this->View()->sFormData += $data;
-            } elseif ($data instanceof \Shopware\Models\Customer\PaymentData) {
-                $tempFormData = array('paymentData' => $data);
-                $this->View()->sFormData += $tempFormData;
             }
-        }
+		}
 
-        if ($this->Request()->isPost()) {
-            $values = $this->Request()->getPost();
-            $values['payment'] = $this->Request()->getPost('register');
-            $values['payment'] = $values['payment']['payment'];
-            $values['isPost'] = true;
-            $this->View()->sFormData = $values;
-            if ($data instanceof \Shopware\Models\Customer\PaymentData) {
-                $tempFormData = array('paymentData' => $data);
-                $this->View()->sFormData += $tempFormData;
-            }
-        }
+		if($this->Request()->isPost())
+		{
+			$values = $this->Request()->getPost();
+			$values['payment'] = $this->Request()->getPost('register');
+			$values['payment'] = $values['payment']['payment'];
+			$values['isPost'] = true;
+			$this->View()->sFormData = $values;
+		}
     }
 
 

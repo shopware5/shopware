@@ -111,7 +111,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         if(count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
-            $this->assertContains(Shopware()->Snippets()->getNamespace('engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa')
+            $this->assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN'), $validationResult['sErrorMessages']);
             $this->assertFalse(array_key_exists("sSepaBic", $validationResult['sErrorFlag']));
             $this->assertFalse(array_key_exists("sSepaBankName", $validationResult['sErrorFlag']));

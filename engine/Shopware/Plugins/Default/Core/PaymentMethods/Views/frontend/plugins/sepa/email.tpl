@@ -1,54 +1,101 @@
-<div style="padding: 50px; width: 490px; margin-left: 40px;">
-    <p><strong>{$config.sepaHeaderText}</strong></p>
+<style type="text/css">
+    div, strong, p, b, i, em { margin: 0; padding: 0 }
+    p, .topbar {
+        margin: 0 0 20px;
+    }
+    .headline {
+        margin: 20px 0 0;
+    }
+    .container {
+        width: 590px;
+        margin: 50px 40px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #333;
+    }
+    .row {
+        margin: 20px 30px 0;
+    }
+    .field {
+        border-bottom: 1px solid #c7c7c7;
+        font-weight: bold;
+        margin: 0;
+        width: 425px;
+        font-size: 21px;
+    }
+    .label {
+        width: 400px;
+        margin: 0 0 0 25px;
+        color: #999;
+    }
+    .space {
+        height: 35px;
+    }
+</style>
 
-    <p>{s name=SepaEmailCreditorNumber}Gläubiger-Identifikationsnummer{/s} <strong>{$config.sepaSellerId}</strong></p>
+<div class="container">
 
-    <p>{s name=SepaEmailMandateReference}Mandatsreferenz <strong>{$data.orderNumber}</strong>{/s}</p>
+    <div class="row">
+        <div class="topbar">
+            {$config.sepaHeaderText}
+        </div>
 
-    <h1>{s name=SepaEmailDirectDebitMandate}SEPA-Lastschriftmandat{/s}</h1>
+        <p>{s namespace='frontend/plugins/sepa/email' name=SepaEmailCreditorNumber}Gläubiger-Identifikationsnummer{/s} <strong>{$config.sepaSellerId}</strong></p>
 
-    <p>{s name=SepaEmailBody}Ich ermächtige den {$config.sepaCompany}, Zahlungen von meinem Konto
-        mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an,
-        die von dem {$config.sepaCompany} auf mein Konto gezogenen Lastschriften einzulösen.</p>
-
-    <p>
-        Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten
-        Betrages verlangen.
-        Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.{/s}</p>
-
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.accountHolder}{$data.accountHolder}{else}&nbsp;{/if}</p>
-
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailName}Vorname und Name (Kontoinhaber){/s}</p>
+        <p>{s namespace='frontend/plugins/sepa/email' name=SepaEmailMandateReference}Mandatsreferenz <strong>{$data.orderNumber}</strong>{/s}</p>
     </div>
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.address}{$data.address}{else}&nbsp;{/if}</p>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailAddress}Straße und Hausnummer{/s}</p>
+    <div class="row">
+        {* Headline *}
+        <h1 class="headline">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailDirectDebitMandate}SEPA-Lastschriftmandat{/s}</h1>
     </div>
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if $data.zipCode && $data.city}{$data.zipCode} {$data.city}{else}&nbsp;{/if}</p>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailZip}Postleitzahl und Ort{/s}</p>
+    {* Description *}
+    <div class="row">
+        <p>{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailBody}
+                Ich ermächtige den {$config.sepaCompany}, Zahlungen von meinem Konto
+                mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an,
+                die von dem {$config.sepaCompany} auf mein Konto gezogenen Lastschriften einzulösen.</p><p>
+                Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten
+                Betrages verlangen.
+                Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.
+        {/s}</p>
     </div>
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBankName} && $data.bankName}{$data.bankName}{else}&nbsp;{/if}</p>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailBankName}Kreditinstitut{/s}</p>
+    <div class="row">
+        <div class="field">{if $data.accountHolder}{$data.accountHolder}{else}&nbsp;{/if}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailName}Vorname und Name (Kontoinhaber){/s}</div>
     </div>
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{if {config name=sepaShowBic} && $data.bic}{$data.bic}{else}&nbsp;{/if}</p>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailBic}BIC{/s}</p>
+    <div class="row">
+        <div class="field">{if $data.address}{$data.address}{else}&nbsp;{/if}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailAddress}Straße und Hausnummer{/s}</div>
     </div>
-    <div style="margin-top: 20px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0; font-weight: 700; font-size: 20px;">{$data.iban}</p>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailIban}IBAN{/s}</p>
+    <div class="row">
+        <div class="field">{if $data.zipCode && $data.city}{$data.zipCode} {$data.city}{else}&nbsp;{/if}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailZip}Postleitzahl und Ort{/s}</div>
     </div>
-    <div style="margin-top: 30px; margin-left: 30px;">
-        <p style="width: 300px; border-bottom: solid 1px #000000; margin: 0;"></p>
+    
+    <div class="row">
+        <div class="field">{if {config name=sepaShowBankName} && $data.bankName}{$data.bankName}{else}&nbsp;{/if}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailBankName}Kreditinstitut{/s}</div>
+    </div>
+        
+    <div class="row">
+        <div class="field">{if {config name=sepaShowBic} && $data.bic}{$data.bic}{else}&nbsp;{/if}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailBic}BIC{/s}</div>
+    </div>
+        
+    <div class="row">
+        <div class="field">{$data.iban}</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailIban}IBAN{/s}</div>
+    </div>
 
-        <p style="width: 300px; margin: 0 0 0 30px;">{s name=SepaEmailSignature}Datum, Ort und Unterschrift{/s}</p>
+    <div class="space">&nbsp;</div>
+
+    <div class="row">
+        <div class="field">&nbsp;</div>
+        <div class="label">{s namespace='frontend/plugins/payment/sepaemail' name=SepaEmailSignature}Datum, Ort und Unterschrift{/s}</div>
     </div>
 </div>
+
