@@ -618,6 +618,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 IF(d.releasedate='0000-00-00','',d.releasedate) as releasedate,
                 d.shippingfree,
                 a.topseller,
+                a.metaTitle,
                 a.keywords,
                 d.minpurchase,
                 d.purchasesteps,

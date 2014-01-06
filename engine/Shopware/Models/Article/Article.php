@@ -152,7 +152,14 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
      */
-    private $keywords = true;
+    private $keywords = null;
+
+    /**
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
+     */
+    private $metaTitle = null;
 
     /**
      * @var \DateTime $changed
@@ -669,6 +676,28 @@ class Article extends ModelEntity
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set metaTitle
+     *
+     * @param string $metaTitle
+     * @return Article
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+        return $this;
+    }
+
+    /**
+     * Get metaTitle
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
     }
 
     /**
