@@ -64,7 +64,7 @@
 	{* Display comments *}
 	{if $sArticle.sVoteComments}
 		{foreach name=comment from=$sArticle.sVoteComments item=vote}
-			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}">
+			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}"{if $sArticle.sVoteAverange.count == 1} itemscope itemtype="http://data-vocabulary.org/Review{/if}">
 
 				<div class="left_container">
 				{* Author *}
