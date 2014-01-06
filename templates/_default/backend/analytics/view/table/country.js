@@ -37,17 +37,28 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
 
-    columns: [{
-        xtype: 'gridcolumn',
-        dataIndex: 'name',
-        text: '{s name=table/country/country}Country{/s}',
-        width: 300
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/country/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            dataIndex: 'name',
+            text: '{s name=table/country/country}Country{/s}'
+        }, {
+            xtype: 'numbercolumn',
+            dataIndex: 'amount',
+            text: '{s name=table/country/sales}Sales{/s}'
+        }];
+    }
 });
 //{/block}

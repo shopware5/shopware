@@ -22,7 +22,7 @@
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Dispatch
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -31,34 +31,24 @@
 /**
  * todo@all: Documentation
  */
-//{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/dispatch"}
-Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
-    extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-dispatch',
-
-    initComponent: function() {
-        var me = this;
-
-        me.columns = {
-            items: me.getColumns(),
-            defaults: {
-                flex: 1
-            }
-        };
-
-        me.callParent(arguments);
-    },
-
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/dispatch/shippingmethod}Shipping method{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/dispatch/sales}Sales{/s}'
-        }];
+Ext.define('Shopware.apps.Analytics.store.navigation.Rating', {
+    extend: 'Ext.data.Store',
+    alias: 'widget.analytics-store-navigation-rating',
+    remoteSort: true,
+    fields: [
+        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        'cancelledOrderRate',
+        'basketConversion',
+        'orderConversion',
+        'basketVisitConversion'
+    ],
+    proxy: {
+        type: 'ajax',
+        url: '{url controller=analytics action=getRating}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
 });
-//{/block}

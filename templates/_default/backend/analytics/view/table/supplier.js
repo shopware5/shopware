@@ -37,17 +37,28 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-supplier',
 
-    columns: [{
-        xtype: 'gridcolumn',
-        dataIndex: 'name',
-        text: '{s name=table/supplier/supplier}Supplier{/s}',
-        width: 300
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/supplier/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            dataIndex: 'name',
+            text: '{s name=table/supplier/supplier}Supplier{/s}'
+        }, {
+            xtype: 'numbercolumn',
+            dataIndex: 'amount',
+            text: '{s name=table/supplier/sales}Sales{/s}'
+        }];
+    }
 });
 //{/block}

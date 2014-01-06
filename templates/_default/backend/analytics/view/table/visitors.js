@@ -49,12 +49,14 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
             }
         };
 
+        me.initStoreIndices('visits', me.shopColumnVisits, { sortable: false });
+        me.initStoreIndices('impressions', me.shopColumnImpressions, { sortable: false });
+
         me.callParent(arguments);
     },
 
     getColumns: function(){
-        var me = this,
-            columns = [{
+        return [{
             xtype: 'datecolumn',
             dataIndex: 'datum',
             text: '{s name=table/visitors/date}Date{/s}'
@@ -65,21 +67,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
             dataIndex: 'totalImpressions',
             text: '{s name=table/visitors/totalImpressions}Total impressions{/s}'
         }];
-        
-        me.shopStore.each(function(shop) {
-            columns.push({
-                dataIndex: 'visits' + shop.data.id,
-                text: Ext.String.format(me.shopColumnVisits, shop.data.name),
-                sortable: false
-            });
-            columns.push({
-                dataIndex: 'impressions' + shop.data.id,
-                text: Ext.String.format(me.shopColumnImpressions, shop.data.name),
-                sortable: false
-            });
-        }, me);
-
-        return columns;
     }
 });
 //{/block}

@@ -37,17 +37,28 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-category',
 
-    columns: [{
-        xtype: 'gridcolumn',
-        dataIndex: 'name',
-        text: '{s name=table/category/category}Category{/s}',
-        width: 300
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/category/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            dataIndex: 'name',
+            text: '{s name=table/category/category}Category{/s}'
+        }, {
+            xtype: 'numbercolumn',
+            dataIndex: 'amount',
+            text: '{s name=table/category/sales}Sales{/s}'
+        }];
+    }
 });
 //{/block}

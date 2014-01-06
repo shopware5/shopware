@@ -37,17 +37,30 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-daytime',
 
-    columns: [{
-        xtype: 'datecolumn',
-        dataIndex: 'date',
-        text: '{s name=table/daytime/time}Date{/s}',
-        format: 'H:00'
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/daytime/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            xtype: 'datecolumn',
+            dataIndex: 'date',
+            text: '{s name=table/daytime/time}Date{/s}',
+            format: 'H:00'
+        }, {
+            xtype: 'numbercolumn',
+            dataIndex: 'amount',
+            text: '{s name=table/daytime/sales}Sales{/s}'
+        }];
+    }
 });
 //{/block}

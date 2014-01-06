@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,44 +20,59 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
+ * // todo@all add snippets
+ *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Dispatch
+ * @subpackage Overview
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/dispatch"}
-Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
+//{block name="backend/analytics/view/table/overview"}
+Ext.define('Shopware.apps.Analytics.view.table.Rating', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-dispatch',
+    alias: 'widget.analytics-table-rating',
+    shopColumnName: 'Rating',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex: 1
+                align:'right',
+                flex:1
             }
         };
 
         me.callParent(arguments);
     },
 
-    getColumns: function(){
+    /**
+     * Creates the grid columns
+     *
+     * @return [array] grid columns
+     */
+    getColumns: function () {
         return [{
-            dataIndex: 'name',
-            text: '{s name=table/dispatch/shippingmethod}Shipping method{/s}'
+            xtype: 'datecolumn',
+            dataIndex: 'date',
+            text: 'Datum'
         }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/dispatch/sales}Sales{/s}'
+            dataIndex: 'cancelledOrderRate',
+            text: 'Order Cancel Rate'
+        }, {
+            dataIndex: 'basketConversion',
+            text: 'Basket Conversion Rate'
+        }, {
+            dataIndex: 'orderConversion',
+            text: 'Order Conversion Rate'
+        }, {
+            dataIndex: 'basketVisitConversion',
+            text: 'Basket/Visit Conversion Rate'
         }];
     }
 });
