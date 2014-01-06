@@ -37,23 +37,30 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-search',
 
-    columns: [{
-        xtype: 'gridcolumn',
-        dataIndex: 'searchterm',
-        text: '{s name=table/search/term}Search term{/s}',
-        flex: 2
-    }, {
-        xtype: 'gridcolumn',
-        dataIndex: 'countRequests',
-        text: '{s name=table/search/requests}Requests{/s}',
-        align: 'right',
-        flex: 1
-    }, {
-        xtype: 'gridcolumn',
-        dataIndex: 'countResults',
-        text: '{s name=table/search/results}Results{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            dataIndex: 'searchterm',
+            text: '{s name=table/search/term}Search term{/s}'
+        }, {
+            dataIndex: 'countRequests',
+            text: '{s name=table/search/requests}Requests{/s}'
+        }, {
+            dataIndex: 'countResults',
+            text: '{s name=table/search/results}Results{/s}'
+        }];
+    }
 });
 //{/block}

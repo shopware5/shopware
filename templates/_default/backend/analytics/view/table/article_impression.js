@@ -40,18 +40,12 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
+                align: 'right',
                 flex:1
             }
         };
-        me.shopStore.each(function (shop) {
-            me.columns.items[me.columns.items.length] = {
-                xtype: 'gridcolumn',
-                dataIndex: 'amount' + shop.data.id,
-                text: Ext.String.format(me.shopColumnName, shop.data.name)
-            };
 
-        }, me);
+        me.initStoreIndices('amount', me.shopColumnName);
 
         me.callParent(arguments);
     },
@@ -61,45 +55,34 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [
-            {
-                xtype: 'datecolumn',
-                dataIndex: 'date',
-                text: '{s name=table/article_impression/date}Date{/s}',
-                width: 100
+        return [{
+            xtype: 'datecolumn',
+            dataIndex: 'date',
+            text: '{s name=table/article_impression/date}Date{/s}'
+        }, {
+            xtype: 'actioncolumn',
+            dataIndex: 'articleName',
+            text: '{s name=table/article_impression/articleName}Article Name{/s}',
+            renderer: function(val) {
+                return val;
             },
-            {
-                xtype: 'actioncolumn',
-                dataIndex: 'articleName',
-                text: '{s name=table/article_impression/articleName}Article Name{/s}',
-                flex: 2,
-                renderer: function(val) {
-                  return val;
-                },
-                items: [{
-                    iconCls:'sprite-pencil',
-                    cls:'editBtn',
-                    tooltip:'{s name=table/article_impression/action_column/edit}Edit this Article{/s}',
-                    handler:function (view, rowIndex, colIndex, item, event, record) {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: record.get('articleId')
-                            }
-                        });
-                    }
-                }]
-            },
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'totalAmount',
-                width: 100,
-                text: '{s name=table/article_impression/impressions}Impressions{/s}'
-            }
-        ];
-
-
+            items: [{
+                iconCls:'sprite-pencil',
+                cls:'editBtn',
+                tooltip:'{s name=table/article_impression/action_column/edit}Edit this Article{/s}',
+                handler:function (view, rowIndex, colIndex, item, event, record) {
+                    openNewModule('Shopware.apps.Article', {
+                        action: 'detail',
+                        params: {
+                            articleId: record.get('articleId')
+                        }
+                    });
+                }
+            }]
+        }, {
+            dataIndex: 'totalAmount',
+            text: '{s name=table/article_impression/impressions}Impressions{/s}'
+        }];
     }
 });
 //{/block}

@@ -49,12 +49,13 @@ Ext.define('Shopware.apps.Analytics.view.table.Conversion', {
             }
         };
 
+        me.initStoreIndices('conversion', me.shopColumnConversion);
+
         me.callParent(arguments);
     },
 
     getColumns: function() {
-        var me = this,
-            columns = [{
+        return [{
             xtype: 'datecolumn',
             dataIndex: 'date',
             text: '{s name=table/conversion/date}Date{/s}'
@@ -68,15 +69,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Conversion', {
             dataIndex: 'totalConversion',
             text: '{s name=table/conversion/conversion}Conversion{/s}'
         }];
-
-        me.shopStore.each(function(shop) {
-            columns.push({
-                dataIndex: 'conversion' + shop.data.id,
-                text: Ext.String.format(me.shopColumnConversion, shop.data.name)
-            });
-        }, me);
-
-        return columns;
     }
 
 });

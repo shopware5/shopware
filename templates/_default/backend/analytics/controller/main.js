@@ -95,15 +95,15 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                         me.selectedType = record.data.id;
                     }
 
+                    var store = me.dataStore;
                     // If a custom store is defined ...
                     if (record.data.store) {
                         // Create a custom store, defined in navigation store
-                        var store = Ext.widget(record.data.store, { shopStore:me.shopStore });
+                        store = Ext.widget(record.data.store, { shopStore:me.shopStore });
                         me.customStore = store;
                         me.customStoreEnabled = true; // Enable flag to refresh correct store in shop-select event listeners
                     } else {
                         // Use default store
-                        var store = me.dataStore;
                         me.customStoreEnabled = false;
                         store.removeAll(true);
                     }
@@ -279,22 +279,22 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 selectedShopIds = selectedShopIds.split(",");
                 me.shopStore.each(function (shop) {
                     if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
-                        columns[columns.length] = {
+                        columns.push({
                             xtype: 'gridcolumn',
                             dataIndex: 'amount' + shop.data.id,
                             text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
-                        };
+                        });
                     }
                 });
             } else {
                 //the user didn't select any shop so add all shop columns
                 me.shopStore.each(function (shop) {
                     if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
-                        columns[columns.length] = {
+                        columns.push({
                             xtype: 'gridcolumn',
                             dataIndex: 'amount' + shop.data.id,
                             text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
-                        };
+                        });
                     }
                 });
             }

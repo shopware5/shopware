@@ -326,7 +326,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->View()->assign(array('data' => $data, 'success' => true));
     }
 
-    // todo - refactor
     public function getOverviewAction()
     {
         $builder = Shopware()->Models()->getDBALQueryBuilder();
@@ -367,6 +366,27 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  $statement->rowCount()));
+    }
+
+    public function getRating()
+    {
+//        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+//        'cancelledOrderRate',
+//        'basketConversion',
+//        'orderConversion',
+//        'basketVisitConversion'
+
+        $data = array(
+            array(
+                'date' => time(),
+                'cancelledOrderRate' => 1,
+                'basketConversion' => 1,
+                'orderConversion' => 1,
+                'basketVisitConversion' => 1
+            )
+        );
+
+        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));
     }
 
     public function getMonthAction()
@@ -707,15 +727,5 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         else {
             $builder->orderBy($order[0]["property"], $order[0]["direction"]);
         }
-    }
-
-    /**
-     * returns the found rows of the last mysql SQL_CALC_FOUND_ROWS function
-     * @return int
-     */
-    private function getFoundRows()
-    {
-        $sql= "SELECT FOUND_ROWS()";
-        return (int)Shopware()->Db()->fetchOne($sql);
     }
 }

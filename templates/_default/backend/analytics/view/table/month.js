@@ -41,31 +41,29 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
     initComponent: function() {
         var me = this;
 
-        me.columns = [{
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
             xtype: 'datecolumn',
             dataIndex: 'date',
             text: '{s name=table/month/month}Month{/s}',
-            format: 'F, Y',
-            width: 300
+            format: 'F, Y'
         }, {
             xtype: 'numbercolumn',
             dataIndex: 'amount',
-            text: '{s name=table/month/sales}Total sales{/s}',
-            align: 'right',
-            flex: 1
+            text: '{s name=table/month/sales}Total sales{/s}'
         }];
-
-        me.shopStore.each(function(shop) {
-
-            me.columns[me.columns.length] = {
-                xtype: 'numbercolumn',
-                dataIndex: 'amount' + shop.data.id,
-                text: Ext.String.format(me.shopColumnText, shop.data.name),
-                align: 'right'
-            };
-        }, me);
-
-        me.callParent(arguments);
     }
 });
 //{/block}

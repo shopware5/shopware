@@ -37,18 +37,30 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-weekday',
 
-    columns: [{
-        xtype: 'datecolumn',
-        dataIndex: 'date',
-        text: '{s name=table/weekday/weekday}Weekday{/s}',
-        format: 'l',
-        width: 300
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/weekday/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function() {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1
+            }
+        };
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function(){
+        return [{
+            xtype: 'datecolumn',
+            dataIndex: 'date',
+            text: '{s name=table/weekday/weekday}Weekday{/s}',
+            format: 'l'
+        }, {
+            xtype: 'numbercolumn',
+            dataIndex: 'amount',
+            text: '{s name=table/weekday/sales}Sales{/s}'
+        }];
+    }
 });
 //{/block}
