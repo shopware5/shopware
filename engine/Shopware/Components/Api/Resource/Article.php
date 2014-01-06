@@ -233,7 +233,7 @@ class Article extends Resource implements BatchInterface
      * @param float $taxRate Float value of the article tax (example: 19.00)
      * @return array
      */
-    protected function getTaxPrices(array $prices, $taxRate)
+    public function getTaxPrices(array $prices, $taxRate)
     {
         foreach($prices as &$price) {
             $price['net'] = $price['price'];

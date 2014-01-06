@@ -66,11 +66,13 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
 
         if ($useNumberAsId) {
             $article = $this->resource->getOneByNumber($id, array(
-                'language' => $this->Request()->getParam('language')
+                'language' => $this->Request()->getParam('language'),
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
             ));
         } else {
             $article = $this->resource->getOne($id, array(
-                'language' => $this->Request()->getParam('language')
+                'language' => $this->Request()->getParam('language'),
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
             ));
         }
 
