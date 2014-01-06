@@ -2933,6 +2933,7 @@ class sArticles
                 a.mode,
                 a.taxID,
                 a.description AS description,
+                a.metaTitle,
                 a.keywords,
                 a.description_long,
                 aSupplier.name AS supplierName,
