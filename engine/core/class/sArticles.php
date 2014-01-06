@@ -4175,34 +4175,14 @@ class sArticles
      * @param int $id id of the article
      * @access public
      * @return bool
+     * @deprecated Please use the Shopware_Plugins_Frontend_LastArticles_Bootstrap::setLastArticleById function.
      */
     public function sSetLastArticle($image, $name, $id)
     {
-        if (empty($this->sSYSTEM->sSESSION_ID) || empty($name) || empty($id)) {
-            return;
-        }
+        /**@var $plugin Shopware_Plugins_Frontend_LastArticles_Bootstrap*/
+        $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
 
-        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
-            'subject'   => $this,
-            'article'   => $id
-        ));
-
-        $insertArticle = $this->sSYSTEM->sDB_CONNECTION->Execute('
-			INSERT INTO s_emarketing_lastarticles
-				(img, name, articleID, sessionID, time, userID, shopID)
-			VALUES
-				(?, ?, ?, ?, NOW(), ?, ?)
-			ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
-		', array(
-            (string)$image,
-            (string)$name,
-            $id,
-            $this->sSYSTEM->sSESSION_ID,
-            (int)$this->sSYSTEM->_SESSION['sUserId'],
-            (int)$this->sSYSTEM->sLanguage
-        ));
-
-        return $insertArticle;
+        return $plugin->setLastArticleById($id);
     }
 
     /**
