@@ -2,6 +2,7 @@
 
 /** Installer locale - de_DE */
 return array(
+    'locale' => 'de_DE',
     'meta_text'     => '<strong>Shopware-Version:</strong> ___VERSION___',
     "start_install" => "Installation starten",
     "system_requirements" => "Systemvoraussetzungen",

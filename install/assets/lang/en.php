@@ -1,7 +1,8 @@
 <?php
 
-/** Installer locale - en_US */
+/** Installer locale - en_GB */
 return array(
+    'locale' => 'en_GB',
     'meta_text'     => '<strong>Shopware version:</strong> ___VERSION___',
     "start_install" => "Start install",
     "system_requirements" => "System requirements",
