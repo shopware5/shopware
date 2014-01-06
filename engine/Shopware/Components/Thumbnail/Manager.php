@@ -77,8 +77,8 @@ class Manager
      * then resizes it and saves it to the default thumbnail directory
      *
      * @param Media $media
-     * @param array $thumbnailSizes
-     * @param bool $keepProportions
+     * @param array $thumbnailSizes - array of all sizes which needs to be generated
+     * @param bool $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
      * @throws \Exception
      * @return bool
      */
