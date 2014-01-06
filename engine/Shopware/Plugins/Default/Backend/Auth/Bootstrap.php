@@ -331,39 +331,40 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     {
         $backendLocales = $this->getLocales();
         $browserLocales = array_keys(Zend_Locale::getBrowser());
-        $quotedBackendLocale = Shopware()->Db()->quote($backendLocales);
 
         if (!empty($browserLocales)) {
-            foreach($browserLocales as $key => $locale) {
-                $quotedLocale = Shopware()->Db()->quote('%' . $locale . '%');
+            $quotedBackendLocale = Shopware()->Db()->quote($backendLocales);
+            $orderIndex = 1;
+            $orderCriteria = '';
+            foreach ($browserLocales as $browserLocale) {
+                $orderCriteria .= 'WHEN ' . Shopware()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
+                $orderIndex++;
+            }
+            $orderCriteria .= 'ELSE ' . $orderIndex . ' END ';
 
-                $orderIndex = 1;
-                $orderCriteria = '';
-                foreach ($browserLocales as $browserLocale) {
-                    $orderCriteria .= 'WHEN ' . Shopware()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
-                    $orderIndex++;
-                }
-                $orderCriteria .= 'ELSE ' . $orderIndex . ' END ';
-
-                // For each browser locale, get exact or similar
-                // filtered by allowed backend locales
-                // ordered by exact match from browser
-                $sql = 'SELECT locale, id FROM s_core_locales
-                WHERE locale LIKE ' . $quotedLocale . ' AND id IN (' . $quotedBackendLocale . ')
+            // For each browser locale, get exact or similar
+            // filtered by allowed backend locales
+            // ordered by exact match from browser
+            $sql = 'SELECT id FROM s_core_locales
+                WHERE locale LIKE :browserLocale AND id IN (' . $quotedBackendLocale . ')
                 ORDER BY CASE locale ' . $orderCriteria . ' LIMIT 1';
 
-                $fetchResult = Shopware()->Db()->fetchPairs($sql);
+            foreach ($browserLocales as $key => $locale) {
+                $fetchResult = Shopware()->Db()->fetchOne($sql, array(
+                    'browserLocale' => $locale . '%'
+                ));
 
-                if (count($fetchResult) >= 1) {
-                    return array_shift($fetchResult);
+                if ($fetchResult) {
+                    return $fetchResult;
                 }
             }
         }
 
         // No match from the browser locales, fallback to default shop locale
         $defaultShop = Shopware()->Models()->getRepository(
-                'Shopware\Models\Shop\Shop'
-            )->getDefault();
+            'Shopware\Models\Shop\Shop'
+        )->getDefault();
+
         if ($defaultShop) {
             $defaultShopLocale = $defaultShop->getLocale()->getId();
         }
