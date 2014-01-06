@@ -24,6 +24,7 @@
 
 namespace ShopwarePlugin\PaymentMethods\Components;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Payment\PaymentInstance;
 
 /**
@@ -54,7 +55,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentData()
+    public function getCurrentPaymentDataAsArray()
     {
         //nothing to do, array expected
         return array();
@@ -65,26 +66,47 @@ class GenericPaymentMethod extends BasePaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find($orderId);
-        $user = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($userId);
-        $paymentMean = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId);
-        $addressData = $user->getBilling();
+        $orderAmount = Shopware()->Models()->createQueryBuilder()
+            ->select('orders.invoiceAmount')
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->where('orders.id = ?1')
+            ->setParameter(1, $orderId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $paymentInstance = new PaymentInstance();
-        $paymentInstance->setOrder($order);
-        $paymentInstance->setCustomer($user);
-        $paymentInstance->setPaymentMean($paymentMean);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')
+            ->getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $paymentInstance->setFirstName($addressData->getFirstName());
-        $paymentInstance->setLastName($addressData->getLastName());
-        $paymentInstance->setAddress($addressData->getStreet() . ' ' . $addressData->getStreetNumber());
-        $paymentInstance->setZipCode($addressData->getZipCode());
-        $paymentInstance->setCity($addressData->getCity());
-        $paymentInstance->setAmount($order->getInvoiceAmount());
+        $query = "INSERT INTO  s_core_payment_instance (
+            payment_mean_id ,
+            order_id ,
+            user_id ,
+            firstname ,
+            lastname ,
+            address ,
+            zipcode ,
+            city ,
+            amount ,
+            created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Shopware()->Models()->persist($paymentInstance);
-        Shopware()->Models()->flush();
+        $date = new \DateTime();
+        $data = array(
+            $paymentId,
+            $orderId,
+            $userId,
+            $addressData['firstName'],
+            $addressData['lastName'],
+            $addressData['street'] . ' ' . $addressData['streetNumber'],
+            $addressData['zipCode'],
+            $addressData['city'],
+            $orderAmount,
+            $date->format('Y-m-d')
+        );
 
-        return $paymentInstance;
+        Shopware()->Db()->query($query, $data);
+
+        return true;
     }
 }
