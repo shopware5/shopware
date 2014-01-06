@@ -13,6 +13,7 @@ In this document you will find a changelog of the important changes related to t
 * `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
 * Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
 * Update Zend Framework to version 1.12.3 (latest stable)
+* Break: Custom article attributes of type `Time` are now always saved using the german format. Only affects values inserted in non-german backends
 
 ## 4.1.4
 
