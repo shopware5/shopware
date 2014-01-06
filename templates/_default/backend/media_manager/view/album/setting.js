@@ -413,13 +413,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             store = me.thumbnailStore,
             counter = 0;
 
-        store.remove(record);
+        if(store && store.getCount() > 0){
+            store.remove(record);
 
-        // Iterate through each entry to change the index
-        Ext.each(store.data.items, function(item) {
-            item.set('index', counter);
-            counter++;
-        })
+            // Iterate through each entry to change the index
+            Ext.each(store.data.items, function(item) {
+                item.set('index', counter);
+                counter++;
+            });
+        }
 
         if(counter === 0){
             me.thumbnailGenerate.hide();

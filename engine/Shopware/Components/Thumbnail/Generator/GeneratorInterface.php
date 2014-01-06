@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers, Shopware_Models
- * @subpackage Backend, Frontend, Article, Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $id$
- * @author     Shopware
  */
 
 namespace Shopware\Components\Thumbnail\Generator;
@@ -42,7 +35,9 @@ namespace Shopware\Components\Thumbnail\Generator;
  * the image path, destination and size of the thumbnail
  *
  * Class GeneratorInterface
- * @package Shopware\Components\Thumbnail\Generator
+ * @category    Shopware
+ * @package     Shopware\Components\Thumbnail\Generator
+ * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GeneratorInterface
 {

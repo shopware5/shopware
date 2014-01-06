@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers, Shopware_Models
- * @subpackage Backend, Frontend, Article, Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $id$
- * @author     Shopware
  */
 
 namespace Shopware\Components\Thumbnail;
@@ -44,11 +37,15 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * It expects a passed media object for further information handling.
  *
  * Class Manager
- * @package Shopware\Components\Thumbnail
+ * @category    Shopware
+ * @package     Shopware\Components\Thumbnail
+ * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
     /**
+     * This generator will be used for the thumbnail creation itself
+     *
      * @var GeneratorInterface
      */
     protected $generator;
@@ -63,7 +60,7 @@ class Manager
      * Expects a passed generator and the media/destination directory
      *
      * @param GeneratorInterface $generator
-     * @param $rootDir
+     * @param String $rootDir - the full path to the shopware directory e.g. /var/www/shopware/
      */
     function __construct(GeneratorInterface $generator, $rootDir)
     {
@@ -149,6 +146,13 @@ class Manager
         return $thumbnailDir . $fileName;
     }
 
+    /**
+     * Returns the full path of a thumbnail dir according to the media type
+     * The default path for images after the root dir would be media/image/thumbnail/
+     *
+     * @param $media
+     * @return string
+     */
     protected function getThumbnailDir($media)
     {
         return $this->rootDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . strtolower($media->getType()) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
