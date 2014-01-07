@@ -173,9 +173,9 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
     },
 
     /**
-     * Creates and returns a new combobox with all available batch sizes for the generation process
+     * Creates and returns a new combo box with all available batch sizes for the generation process
      *
-     * @returns {*}
+     * @returns [object]
      */
     createBatchSizeCombo: function () {
         var me = this;
@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
      *
      * @param name
      * @param text
-     * @returns {*}
+     * @returns [object]
      */
     createProgressBar: function (name, text) {
         return Ext.create('Ext.ProgressBar', {
@@ -235,7 +235,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
     /**
      * Returns a new start button for the generation process
      *
-     * @returns {*}
+     * @returns [object]
      */
     createStartButton: function () {
         var me = this;
@@ -253,7 +253,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
     /**
      * Returns a new cancel button for the generation process
      *
-     * @returns {*}
+     * @returns [object]
      */
     createCancelButton: function () {
         var me = this;
@@ -273,7 +273,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
     /**
      * Returns a new close button for the generation process window
      *
-     * @returns {*}
+     * @returns [object]
      */
     createCloseButton: function () {
         var me = this;
@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
      * Returns a container with all generation buttons
      * The cancel button is hidden by default
      *
-     * @returns {*}
+     * @returns [object]
      */
     createButtons: function () {
         var me = this;
