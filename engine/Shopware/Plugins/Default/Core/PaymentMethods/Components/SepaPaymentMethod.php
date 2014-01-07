@@ -25,11 +25,6 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\PaymentData;
-use Shopware\Models\Order\Order;
-use Shopware\Models\Payment\PaymentInstance;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class SepaPaymentMethod
@@ -125,26 +120,25 @@ class SepaPaymentMethod extends GenericPaymentMethod
             getPaymentsQuery(array('name' => 'Sepa'))->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = array(
-            (Shopware()->Front()->Request()->getParam("sSepaUseBillingData")==='true'?1:0),
-            Shopware()->Front()->Request()->getParam("sSepaBankName"),
-            preg_replace('/\s+|\./', '', Shopware()->Front()->Request()->getParam("sSepaIban")),
-            Shopware()->Front()->Request()->getParam("sSepaBic"),
-            $paymentMean['id'],
-            $userId
+            'use_billing_data' => (Shopware()->Front()->Request()->getParam("sSepaUseBillingData")==='true'?1:0),
+            'bankname' => Shopware()->Front()->Request()->getParam("sSepaBankName"),
+            'iban' => preg_replace('/\s+|\./', '', Shopware()->Front()->Request()->getParam("sSepaIban")),
+            'bic' => Shopware()->Front()->Request()->getParam("sSepaBic")
         );
 
         if (!$lastPayment) {
             $date = new \DateTime();
-            $data[] = $date->format('Y-m-d');
-            Shopware()->Db()->query("
-            INSERT INTO s_core_payment_data (use_billing_data, bankname, iban, bic, payment_mean_id, user_id, created_at)
-            VALUES (?,?,?,?,?,?,?)",
-                $data);
+            $data['created_at'] = $date->format('Y-m-d');
+            $data['payment_mean_id'] = $paymentMean['id'];
+            $data['user_id'] = $userId;
+            Shopware()->Db()->insert("s_core_payment_data", $data);
         } else {
-            Shopware()->Db()->query("
-            UPDATE s_core_payment_data SET use_billing_data = ?, bankname = ?, iban = ?, bic = ?
-            WHERE payment_mean_id = ? AND user_id = ?",
-                $data);
+            $where = array(
+                'payment_mean_id = ?' => $paymentMean['id'],
+                'user_id = ?'  => $userId
+            );
+
+            Shopware()->Db()->update("s_core_payment_data", $data, $where);
         }
     }
 
@@ -161,7 +155,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
         $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
             ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        if(isset($paymentData)) {
+        if (isset($paymentData)) {
             $arrayData = array(
                 "sSepaUseBillingData" => $paymentData['useBillingData'],
                 "sSepaBankName" => $paymentData['bankName'],
@@ -192,27 +186,6 @@ class SepaPaymentMethod extends GenericPaymentMethod
             getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         $paymentData = $this->getCurrentPaymentDataAsArray();
 
-        $query = "INSERT INTO  s_core_payment_instance (
-            payment_mean_id ,
-            order_id ,
-            user_id ,
-
-            firstname ,
-            lastname ,
-            address ,
-            zipcode ,
-            city ,
-
-            bank_name ,
-            account_holder ,
-            bic ,
-            iban ,
-
-            amount ,
-            created_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         $date = new \DateTime();
         $data = array(
             'payment_mean_id' => $paymentId,
@@ -234,50 +207,13 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'created_at' => $date->format('Y-m-d')
         );
 
-        Shopware()->Db()->query($query, array_values($data));
+        Shopware()->Db()->insert('s_core_payment_instance', $data);
 
         if (Shopware()->Config()->get('sepaSendEmail')) {
             $this->sendSepaEmail($order['number'], $userId, $data);
         }
 
         return true;
-
-
-//        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find($orderId);
-//        $user = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($userId);
-//        $paymentMean = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId);
-//        $paymentData = Shopware()->Models()->getRepository('Shopware\Models\Customer\PaymentData')
-//            ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult();
-//        $addressData = $user->getBilling();
-//
-//        $paymentInstance = new PaymentInstance();
-//        $paymentInstance->setOrder($order);
-//        $paymentInstance->setCustomer($user);
-//        $paymentInstance->setPaymentMean($paymentMean);
-//
-//        $paymentInstance->setBankName($paymentData->getBankName());
-//        $paymentInstance->setBic($paymentData->getBic());
-//        $paymentInstance->setIban($paymentData->getIban());
-//
-//        if ($paymentData->getUseBillingData()) {
-//            $paymentInstance->setFirstName($addressData->getFirstName());
-//            $paymentInstance->setLastName($addressData->getLastName());
-//            $paymentInstance->setAccountHolder($addressData->getFirstName() . ' ' . $addressData->getLastName());
-//            $paymentInstance->setAddress($addressData->getStreet() . ' ' . $addressData->getStreetNumber());
-//            $paymentInstance->setZipCode($addressData->getZipCode());
-//            $paymentInstance->setCity($addressData->getCity());
-//        }
-//
-//        $paymentInstance->setAmount($order->getInvoiceAmount());
-//
-//        Shopware()->Models()->persist($paymentInstance);
-//        Shopware()->Models()->flush();
-//
-//        if (Shopware()->Config()->get('sepaSendEmail')) {
-//            $this->sendSepaEmail($order, $user, $paymentInstance);
-//        }
-//
-//        return $paymentInstance;
     }
 
     private function sendSepaEmail($orderNumber, $userId, $data)

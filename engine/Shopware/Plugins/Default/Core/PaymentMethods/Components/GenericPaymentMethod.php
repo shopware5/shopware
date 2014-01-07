@@ -77,35 +77,21 @@ class GenericPaymentMethod extends BasePaymentMethod
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')
             ->getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $query = "INSERT INTO  s_core_payment_instance (
-            payment_mean_id ,
-            order_id ,
-            user_id ,
-            firstname ,
-            lastname ,
-            address ,
-            zipcode ,
-            city ,
-            amount ,
-            created_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         $date = new \DateTime();
         $data = array(
-            $paymentId,
-            $orderId,
-            $userId,
-            $addressData['firstName'],
-            $addressData['lastName'],
-            $addressData['street'] . ' ' . $addressData['streetNumber'],
-            $addressData['zipCode'],
-            $addressData['city'],
-            $orderAmount,
-            $date->format('Y-m-d')
+            'payment_mean_id' => $paymentId,
+            'order_id' => $orderId,
+            'user_id' => $userId,
+            'firstname' => $addressData['firstName'],
+            'lastname' => $addressData['lastName'],
+            'address' => $addressData['street'] . ' ' . $addressData['streetNumber'],
+            'zipcode' => $addressData['zipCode'],
+            'city' => $addressData['city'],
+            'amount' => $orderAmount,
+            'created_at' => $date->format('Y-m-d')
         );
 
-        Shopware()->Db()->query($query, $data);
+        Shopware()->Db()->insert("s_core_payment_instance", $data);
 
         return true;
     }
