@@ -138,22 +138,20 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
-        if (getPaymentDetails && method_exists($paymentClass, 'getCurrentPaymentDataAsArray'))
-		{
+        if (getPaymentDetails instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
             $data = $paymentClass->getCurrentPaymentDataAsArray();
-            if(!empty($data)) {
+            if (!empty($data)) {
                 $this->View()->sFormData += $data;
             }
-		}
+        }
 
-		if($this->Request()->isPost())
-		{
-			$values = $this->Request()->getPost();
-			$values['payment'] = $this->Request()->getPost('register');
-			$values['payment'] = $values['payment']['payment'];
-			$values['isPost'] = true;
-			$this->View()->sFormData = $values;
-		}
+        if ($this->Request()->isPost()) {
+            $values = $this->Request()->getPost();
+            $values['payment'] = $this->Request()->getPost('register');
+            $values['payment'] = $values['payment']['payment'];
+            $values['isPost'] = true;
+            $this->View()->sFormData = $values;
+        }
     }
 
 
@@ -481,7 +479,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $sourceIsCheckoutConfirm = $this->Request()->getParam('sourceCheckoutConfirm');
             $values = $this->Request()->getPost('register');
             $this->admin->sSYSTEM->_POST['sPayment'] = $values['payment'];
-
             $checkData = $this->admin->sValidateStep3();
 
             if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
@@ -502,8 +499,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
                 $this->admin->sUpdatePayment();
 
-                if (method_exists($checkData['sPaymentObject'],'sUpdate')) {
-                    $checkData['sPaymentObject']->sUpdate();
+                if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+                    $checkData['sPaymentObject']->savePaymentData();
                 }
             }
         }

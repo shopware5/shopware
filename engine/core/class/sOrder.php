@@ -531,7 +531,7 @@ class sOrder
         try {
             $paymentData = Shopware()->Modules()->Admin()->sGetPaymentMeanById($this->sUserData["additional"]["user"]["paymentID"], Shopware()->Modules()->Admin()->sGetUserData());
             $paymentClass = Shopware()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
-            if ($paymentClass) {
+            if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
                 $paymentClass->createPaymentInstance($orderID, $this->sUserData["additional"]["user"]["id"], $this->sUserData["additional"]["user"]["paymentID"]);
             }
         } catch (\Exception $e) {

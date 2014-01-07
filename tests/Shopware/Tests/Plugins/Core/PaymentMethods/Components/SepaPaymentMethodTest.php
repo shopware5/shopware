@@ -140,14 +140,11 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
         $this->sepaPaymentMethod->savePaymentData();
 
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentData();
-        $this->assertInstanceOf('Shopware\Models\Customer\PaymentData', $lastPayment);
-        $this->assertEquals('sepa', $lastPayment->getPaymentMean()->getName());
-        $this->assertEquals(1, $lastPayment->getCustomer()->getId());
-        $this->assertEquals(null, $lastPayment->getBankName());
-        $this->assertEquals(null, $lastPayment->getBic());
-        $this->assertEquals(null, $lastPayment->getIban());
-        $this->assertEquals(false, $lastPayment->getUseBillingData());
+        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray();
+        $this->assertEquals(null, $lastPayment['sSepaBankName']);
+        $this->assertEquals(null, $lastPayment['sSepaBic']);
+        $this->assertEquals(null, $lastPayment['sSepaIban']);
+        $this->assertEquals(false, $lastPayment['sSepaUseBillingData']);
     }
 
     public function testSavePaymentDataUpdatePrevious() {
@@ -163,14 +160,11 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
         $this->sepaPaymentMethod->savePaymentData();
 
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentData();
-        $this->assertInstanceOf('Shopware\Models\Customer\PaymentData', $lastPayment);
-        $this->assertEquals('sepa', $lastPayment->getPaymentMean()->getName());
-        $this->assertEquals(1, $lastPayment->getCustomer()->getId());
-        $this->assertEquals("Some Valid Bank Name", $lastPayment->getBankName());
-        $this->assertEquals("Some Valid Bic", $lastPayment->getBic());
-        $this->assertEquals("AL47212110090000000235698741", $lastPayment->getIban());
-        $this->assertEquals(true, $lastPayment->getUseBillingData());
+        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray();
+        $this->assertEquals("Some Valid Bank Name", $lastPayment['sSepaBankName']);
+        $this->assertEquals("Some Valid Bic", $lastPayment['sSepaBic']);
+        $this->assertEquals("AL47212110090000000235698741", $lastPayment['sSepaIban']);
+        $this->assertEquals(true, $lastPayment['sSepaUseBillingData']);
     }
 
     public function testCreatePaymentInstance() {
@@ -182,7 +176,11 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         //for now, don't test email
         Shopware()->Config()->set('sepaSendEmail', false);
 
-        $paymentInstance = $this->sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
+        $this->sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
+
+        $paymentInstance = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
+            ->findOneBy(array('order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId));
 
         $this->assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
         $this->assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());

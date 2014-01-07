@@ -486,6 +486,7 @@ class sAdmin
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment-Class not found");
             return false;
         } else {
+            // This exists for legacy purposes but should be considered deprecated, and not used
             $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
             return $sPaymentObject;
         }
