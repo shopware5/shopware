@@ -275,10 +275,10 @@ class Currency extends ModelEntity
             'currency' => $this->getCurrency(),
             'factor' => $this->getFactor()
         );
-        if($this->getSymbol()) {
+        if ($this->getSymbol()) {
             $options['symbol'] = $this->getSymbol();
         }
-        if($this->getSymbolPosition() > 0) {
+        if ($this->getSymbolPosition() > 0) {
             $options['position'] = $this->getSymbolPosition();
         }
         return $options;

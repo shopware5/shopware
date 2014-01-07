@@ -62,26 +62,26 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $config = array();
         $config["term"] = $config["sSearch"] = $term;
         $config['restrictSearchResultsToCategory'] = Shopware()->Shop()->get('parentID');
-        $config['filter']['supplier'] = $config['sFilter']['supplier'] = (int)$this->Request()->sFilter_supplier;
-        $config['filter']['category'] = $config['sFilter']['category'] = (int)$this->Request()->sFilter_category;
-        $config['filter']['price'] = $config['sFilter']['price'] = (int)$this->Request()->sFilter_price;
+        $config['filter']['supplier'] = $config['sFilter']['supplier'] = (int) $this->Request()->sFilter_supplier;
+        $config['filter']['category'] = $config['sFilter']['category'] = (int) $this->Request()->sFilter_category;
+        $config['filter']['price'] = $config['sFilter']['price'] = (int) $this->Request()->sFilter_price;
         $config['filter']['propertyGroup'] = $this->Request()->sFilter_propertygroup;
         $config['filter']['propertygroup'] = $config['filter']['propertyGroup'];
         $config['sFilter']['propertygroup']= $config['filter']['propertyGroup'];
 
-        $config['sortSearchResultsBy'] = $config["sSort"] = (int)$this->Request()->sSort;
-        $config['sortSearchResultsByDirection'] = (int)$this->Request()->sOrder;
+        $config['sortSearchResultsBy'] = $config["sSort"] = (int) $this->Request()->sSort;
+        $config['sortSearchResultsByDirection'] = (int) $this->Request()->sOrder;
 
         if (!empty($this->Request()->sPage)) {
-            $config['currentPage'] = (int)$this->Request()->sPage;
+            $config['currentPage'] = (int) $this->Request()->sPage;
         } else {
             $config['currentPage'] = 1;
         }
 
         if (!empty($this->Request()->sPerPage)) {
-            $config['resultsPerPage'] = (int)$this->Request()->sPerPage;
+            $config['resultsPerPage'] = (int) $this->Request()->sPerPage;
         } elseif (!empty(Shopware()->Config()->sFUZZYSEARCHRESULTSPERPAGE)) {
-            $config['resultsPerPage'] = (int)Shopware()->Config()->sFUZZYSEARCHRESULTSPERPAGE;
+            $config['resultsPerPage'] = (int) Shopware()->Config()->sFUZZYSEARCHRESULTSPERPAGE;
         } else {
             $config['resultsPerPage'] = 8;
         }
@@ -131,10 +131,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $minLengthSearchTerm = Shopware()->Config()->sMINSEARCHLENGHT;
 
         // Check if search term met minimum length
-        if (strlen($term) >= (int)$minLengthSearchTerm) {
+        if (strlen($term) >= (int) $minLengthSearchTerm) {
             // Configure search adapter
             $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
-            if (empty($adapter)){
+            if (empty($adapter)) {
                 $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
             }
 
@@ -164,7 +164,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             // Get additional information for each search result
             $articles = array();
             foreach ($resultArticles as $article) {
-                $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int)$article["articleID"]);
+                $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $article["articleID"]);
                 if (!empty($article['articleID'])) {
                     $articles[] = $article;
                 }
@@ -237,13 +237,13 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     protected function getCategoryTree($id, $mainId)
     {
         $sql = '
-			SELECT
-				`id` ,
-				`description`,
-				`parent`
-			FROM `s_categories`
-			WHERE `id`=?
-		';
+            SELECT
+                `id` ,
+                `description`,
+                `parent`
+            FROM `s_categories`
+            WHERE `id`=?
+        ';
         $cat = Shopware()->Db()->fetchRow($sql, array($id));
         if (empty($cat['id']) || $id == $cat['parent'] || $id == $mainId) {
             return array();
@@ -324,7 +324,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     protected function searchFuzzyCheck($search)
     {
-        $minSearch = empty(Shopware()->Config()->sMINSEARCHLENGHT) ? 2 : (int)Shopware()->Config()->sMINSEARCHLENGHT;
+        $minSearch = empty(Shopware()->Config()->sMINSEARCHLENGHT) ? 2 : (int) Shopware()->Config()->sMINSEARCHLENGHT;
         if (!empty($search) && strlen($search) >= $minSearch) {
             $sql = '
                 SELECT DISTINCT articleID
@@ -332,7 +332,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 WHERE ordernumber = ?
                 GROUP BY articleID
                 LIMIT 2
-			';
+            ';
             $articles = Shopware()->Db()->fetchCol($sql, array($search));
 
             if (empty($articles)) {
@@ -343,7 +343,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                     OR ? LIKE CONCAT(ordernumber, '%')
                     GROUP BY articleID
                     LIMIT 2
-				";
+                ";
                 $articles = Shopware()->Db()->fetchCol($sql, array($search, $search));
             }
         }

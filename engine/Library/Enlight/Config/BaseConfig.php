@@ -408,7 +408,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     {
         if ($extendedSection === null && isset($this->_extends[$extendingSection])) {
             unset($this->_extends[$extendingSection]);
-        } else if ($extendedSection !== null) {
+        } elseif ($extendedSection !== null) {
             $this->_extends[$extendingSection] = $extendedSection;
         }
     }

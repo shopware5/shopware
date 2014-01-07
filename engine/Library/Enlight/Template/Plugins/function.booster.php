@@ -51,7 +51,7 @@
  */
 
 // Terminate the path to the document root
-if(method_exists(Enlight_Application::Instance(), 'DocPath')) {
+if (method_exists(Enlight_Application::Instance(), 'DocPath')) {
     $docPath = Enlight_Application::Instance()->DocPath();
 } else {
     $docPath = getcwd() . DIRECTORY_SEPARATOR;

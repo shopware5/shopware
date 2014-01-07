@@ -74,10 +74,10 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
      */
     public function readTranslationAction()
     {
-        $type = (string)$this->Request()->getParam('type');
-        $merge = (bool)$this->Request()->getParam('merge');
-        $key = (string)$this->Request()->getParam('key', 1);
-        $language = (string)$this->Request()->getParam('language');
+        $type = (string) $this->Request()->getParam('type');
+        $merge = (bool) $this->Request()->getParam('merge');
+        $key = (string) $this->Request()->getParam('key', 1);
+        $language = (string) $this->Request()->getParam('language');
 
         $data = $this->translation->read($language, $type, $key, $merge);
 
@@ -91,11 +91,11 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
      */
     public function saveTranslationAction()
     {
-        $type = (string)$this->Request()->getParam('type');
-        $merge = (bool)$this->Request()->getParam('merge');
-        $key = (string)$this->Request()->getParam('key', 1);
-        $language = (string)$this->Request()->getParam('language');
-        $data = (array)$this->Request()->getParam('data', array());
+        $type = (string) $this->Request()->getParam('type');
+        $merge = (bool) $this->Request()->getParam('merge');
+        $key = (string) $this->Request()->getParam('key', 1);
+        $language = (string) $this->Request()->getParam('language');
+        $data = (array) $this->Request()->getParam('data', array());
 
         $this->View()->assign(array(
             'success' => $this->translation->write(

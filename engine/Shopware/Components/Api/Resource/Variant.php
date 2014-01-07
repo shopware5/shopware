@@ -457,7 +457,7 @@ class Variant extends Resource implements BatchInterface
                     );
                 }
 
-            } else if (isset($imageData['link'])) {
+            } elseif (isset($imageData['link'])) {
 
                 //check if an url passed and upload the passed image url and create a new article image.
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
@@ -824,7 +824,7 @@ class Variant extends Resource implements BatchInterface
         if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
             $unit = new Unit();
             $this->getManager()->persist($unit);
-        } else if (!$unit) {
+        } elseif (!$unit) {
             throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
         }
 
@@ -869,7 +869,7 @@ class Variant extends Resource implements BatchInterface
 
         if (isset($data['id'])) {
             $id = $data['id'];
-        } else if (isset($data['number'])) {
+        } elseif (isset($data['number'])) {
             try {
                 $id = $this->getIdFromNumber($data['number']);
             } catch (ApiException\NotFoundException $e) {

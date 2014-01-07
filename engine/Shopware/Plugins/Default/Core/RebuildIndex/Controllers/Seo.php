@@ -196,7 +196,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * @param $limit int
      * @param $shop Shopware\Models\Shop\Shop
      */
-    protected  function seoArticle($offset, $limit, $shop)
+    protected function seoArticle($offset, $limit, $shop)
     {
         $this->RewriteTable()->baseSetup();
 
@@ -215,7 +215,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             '1900-01-01'
         ));
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $data->assign('sArticle', $article);
             $path = $template->fetch(
                 'string:' . Shopware()->Config()->get('sRouterArticleTemplate'),
@@ -290,7 +290,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', 50);
-        $shopId = (int)$this->Request()->getParam('shopId', 1);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
         $shop = $this->SeoIndex()->registerShop($shopId);
@@ -304,4 +304,3 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         ));
     }
 }
-

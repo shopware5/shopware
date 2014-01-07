@@ -42,7 +42,8 @@ class Repository extends ModelRepository
      * @param null $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getPaymentStatusQuery($filter = null, $order = null, $offset = null, $limit = null) {
+    public function getPaymentStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
         $builder = $this->getPaymentStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
@@ -59,8 +60,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getPaymentStatusQueryBuilder($filter = null, $order = null) {
-
+    public function getPaymentStatusQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
@@ -70,10 +71,10 @@ class Repository extends ModelRepository
                 ->where('status.group = ?1')
                 ->setParameter(1, 'payment');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -89,7 +90,8 @@ class Repository extends ModelRepository
      * @param null $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null){
+    public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
         $builder = $this->getOrderStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
@@ -106,7 +108,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getOrderStatusQueryBuilder($filter = null, $order = null) {
+    public function getOrderStatusQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
@@ -120,7 +123,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 

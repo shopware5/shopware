@@ -72,7 +72,8 @@ class Mapping extends ModelEntity
     /**
      * Class constructor which initials the array collections.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->rules = new ArrayCollection();
     }
 

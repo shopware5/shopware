@@ -207,8 +207,8 @@ class RuleSet extends ModelEntity
     }
 
     /**
-	 * Gets the corresponding payment-model.
-	 *
+     * Gets the corresponding payment-model.
+     *
      * @return
      */
     public function getPayment()
@@ -217,8 +217,8 @@ class RuleSet extends ModelEntity
     }
 
     /**
-	 * Sets the payment-model.
-	 *
+     * Sets the payment-model.
+     *
      * @param  $payment
      * @return \Shopware\Models\Payment\RuleSet
      */

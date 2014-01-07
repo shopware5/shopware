@@ -69,7 +69,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -125,7 +125,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -249,7 +249,7 @@ class Repository extends ModelRepository
         $builder->setParameter('shopId', $id);
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if($shop !== null) {
+        if ($shop !== null) {
             $this->fixActive($shop);
         }
 
@@ -267,7 +267,7 @@ class Repository extends ModelRepository
         $builder->where('shop.default = 1');
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if($shop !== null) {
+        if ($shop !== null) {
             $this->fixActive($shop);
         }
 
@@ -311,14 +311,14 @@ class Repository extends ModelRepository
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = null;
         $host = $request->getHttpHost();
-        if(empty($host)) {
+        if (empty($host)) {
             return $shop;
         }
         $requestPath = $request->getRequestUri();
 
         $builder = $this->getActiveQueryBuilder();
         $builder->andWhere("shop.host=:host OR (shop.host IS NULL AND main.host=:host)");
-        if($request->isSecure()) {
+        if ($request->isSecure()) {
             $builder->orWhere("shop.secureHost=:host OR (shop.secureHost IS NULL AND main.secureHost=:host)");
         }
         $builder->setParameter('host', $host);
@@ -377,10 +377,10 @@ class Repository extends ModelRepository
             $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
             $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());
             $baseUrl = $shop->getSecureBasePath();
-            if($shop->getBaseUrl() != $shop->getBasePath()) {
-                if(!$shop->getBasePath()) {
+            if ($shop->getBaseUrl() != $shop->getBasePath()) {
+                if (!$shop->getBasePath()) {
                     $baseUrl .= $shop->getBaseUrl();
-                } elseif(strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
+                } elseif (strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
                     $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
                 }
             }

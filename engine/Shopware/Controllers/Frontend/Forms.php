@@ -307,7 +307,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $req = "";
         }
 
-        switch($element['typ']) {
+        switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -336,7 +336,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         $output = '';
-        switch($element['typ']) {
+        switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -422,7 +422,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             }
 
             if (!empty($value)) {
-                switch($element['typ']) {
+                switch ($element['typ']) {
                     case "date":
                         $values = preg_split("#[^0-9]#", $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
                         if (count($values) != 3) {

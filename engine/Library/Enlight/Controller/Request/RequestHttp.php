@@ -111,7 +111,7 @@ class Enlight_Controller_Request_RequestHttp
             return $_SERVER['HTTP_' . $temp];
         }
 
-        if(strpos($temp, 'CONTENT_') === 0 && isset($_SERVER[$temp])) {
+        if (strpos($temp, 'CONTENT_') === 0 && isset($_SERVER[$temp])) {
             return $_SERVER[$temp];
         }
 

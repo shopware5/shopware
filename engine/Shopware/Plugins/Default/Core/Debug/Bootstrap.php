@@ -36,25 +36,25 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     protected $log;
 
-	/**
-	 * Plugin install method
+    /**
+     * Plugin install method
      * @return bool
      */
-	public function install()
-	{
+    public function install()
+    {
         //todo@hl Change to Enlight_Controller_Front_RouteStartup event. Add block ip support
-		$this->subscribeEvent(
-			'Enlight_Controller_Front_StartDispatch',
-			'onStartDispatch'
-		);
+        $this->subscribeEvent(
+            'Enlight_Controller_Front_StartDispatch',
+            'onStartDispatch'
+        );
 
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
         $form->setParent($parent);
         $form->setElement('text', 'AllowIP', array('label' => 'Auf IP beschränken', 'value' => ''));
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * Setter method for the log property. If no log are given the log resource of the
@@ -91,14 +91,14 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
-	    // Check for ip-address
+        // Check for ip-address
         if (!empty($_SERVER["REMOTE_ADDR"])
           && !empty($this->Config()->AllowIP)
           && strpos($this->Config()->AllowIP, $_SERVER["REMOTE_ADDR"])===false){
             return;
         }
 
-        if($this->Log() === null){
+        if ($this->Log() === null) {
             return;
         }
 
@@ -213,7 +213,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             $table = array('Template Vars > ' . $template_name . ' (' . (count($template_vars)) . ')', $rows);
             try {
                 $this->Log()->table($table);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 die((string) $e);
             }
         }
@@ -288,7 +288,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             $data = $this->encode($data->toArray());
         } elseif (method_exists($data, '__toArray') || $data instanceof stdClass) {
             $data = $this->encode((array) $data);
-        } elseif(is_object($data)) {
+        } elseif (is_object($data)) {
             $data = $data instanceof Enlight_Hook_Proxy ? get_parent_class($data) : get_class($data);
         } else {
             $data = (string) $data;

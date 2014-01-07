@@ -87,7 +87,7 @@ class Shopware_Plugins_Core_Log_Bootstrap extends Shopware_Components_Plugin_Boo
             $log->setEventItem('date', Zend_Date::now());
             $log->addWriter(new Zend_Log_Writer_Null());
             $config = $this->Config();
-            if(!empty($config->logDb)) {
+            if (!empty($config->logDb)) {
                 $writer = Zend_Log_Writer_Db::factory(array(
                     'db' => Shopware()->Db(),
                     'table' => 's_core_log',
@@ -103,7 +103,7 @@ class Shopware_Plugins_Core_Log_Bootstrap extends Shopware_Components_Plugin_Boo
                 $writer->addFilter(Enlight_Components_Log::WARN);
                 $log->addWriter($writer);
             }
-            if(!empty($config->logMail)) {
+            if (!empty($config->logMail)) {
                 $mail = new Enlight_Components_Mail();
                 $mail->addTo(Shopware()->Config()->Mail);
                 $writer = new Zend_Log_Writer_Mail($mail);

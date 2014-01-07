@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         foreach ($data as $key => $category) {
             $data[$key]['text'] = $category['name'];
             $data[$key]['cls'] = 'folder';
-            $data[$key]['childrenCount'] = (int)$category['childrenCount'];
+            $data[$key]['childrenCount'] = (int) $category['childrenCount'];
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
             if ($preselectedNodes !== null) {
@@ -273,8 +273,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // Collecting form data
         if (!empty($tmpId)) {
-            $id             = (int)$tmpId;
-            $liveShoppingId = (int)$this->Request()->get('liveshoppingId');
+            $id             = (int) $tmpId;
+            $liveShoppingId = (int) $this->Request()->get('liveshoppingId');
         } else {
             $createMode     = true;
             $liveShoppingId = 0;
@@ -331,8 +331,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             Shopware()->Models()->flush();
             $params['id'] = $bannerModel->getId();
             $this->View()->assign(array('success' => 'true', 'data' => $params));
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $errorMsg = $e->getMessage();
             $this->View()->assign(array('success' => 'false', 'errorMsg' => $errorMsg));
         }
@@ -356,8 +355,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             }
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true));
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }

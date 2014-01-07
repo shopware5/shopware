@@ -73,7 +73,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     public function doSearch($term)
     {
         $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
-        if (empty($adapter)){
+        if (empty($adapter)) {
             $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
         }
         $search = new Shopware_Components_Search($adapter);
@@ -120,7 +120,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             "suggestSearch" => true,
             "currentPage" => 1,
             "restrictSearchResultsToCategory" => Shopware()->Shop()->get('parentID'),
-            "resultsPerPage" => empty(Shopware()->Config()->MaxLiveSearchResults) ? 6 : (int)Shopware()->Config()->MaxLiveSearchResults
+            "resultsPerPage" => empty(Shopware()->Config()->MaxLiveSearchResults) ? 6 : (int) Shopware()->Config()->MaxLiveSearchResults
         );
 
         $config["sPerPage"] = $config["resultsPerPage"];

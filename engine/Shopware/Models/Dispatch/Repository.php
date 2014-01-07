@@ -41,13 +41,14 @@ class Repository extends ModelRepository
      * @param $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getDispatchesQuery($filter = null, $order = null, $offset = null, $limit = null) {
-    	$builder = $this->getDispatchesQueryBuilder($filter, $order);
+    public function getDispatchesQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getDispatchesQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -57,7 +58,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getDispatchesQueryBuilder($filter = null, $order = null) {
+    public function getDispatchesQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'id' => 'dispatches.id',
@@ -75,7 +77,7 @@ class Repository extends ModelRepository
         if (!empty($order)) {
             $builder->addOrderBy($order);
         }
-    	return $builder;
+        return $builder;
     }
 
     /**

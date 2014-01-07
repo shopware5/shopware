@@ -185,8 +185,8 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
         $generator->setPath($path);
         $generator->setModelPath(Shopware()->AppPath('Models'));
         $generator->setSchemaManager(
-			$this->Application()->Models()->getConnection()->getSchemaManager()
-		);
+            $this->Application()->Models()->getConnection()->getSchemaManager()
+        );
 
         return $generator->generateAttributeModels(array());
     }

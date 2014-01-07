@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
      */
     public function __construct($pluginNames)
     {
-        if(is_array($pluginNames)) {
-            foreach($pluginNames as $pluginName) {
+        if (is_array($pluginNames)) {
+            foreach ($pluginNames as $pluginName) {
                 $this->addPluginName($pluginName);
             }
         } else {
@@ -44,7 +44,7 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
      */
     public function addPluginName($pluginName)
     {
-        if(!empty($pluginName)) {
+        if (!empty($pluginName)) {
             $this->collection[] = $pluginName;
             return true;
         } else {
@@ -54,7 +54,7 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

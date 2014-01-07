@@ -388,7 +388,7 @@ class Enlight_Components_Adodb extends Enlight_Class
             $sql = $timeout;
         }
 
-        $bind = (array)$bind;
+        $bind = (array) $bind;
 
         $result = $this->$name($sql, $bind);
 

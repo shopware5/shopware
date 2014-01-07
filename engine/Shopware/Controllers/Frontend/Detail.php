@@ -58,7 +58,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $id = (int)$this->Request()->sArticle;
+        $id = (int) $this->Request()->sArticle;
         $tpl = (string) $this->Request()->template;
         if (empty($id)) {
             return $this->forward('error');
@@ -132,7 +132,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function ratingAction()
     {
-        $id = (int)$this->Request()->sArticle;
+        $id = (int) $this->Request()->sArticle;
         if (empty($id)) {
             return $this->forward('error');
         }
@@ -146,8 +146,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         if ($hash = $this->Request()->sConfirmation) {
             $getVote = Shopware()->Db()->fetchRow('
-				SELECT * FROM s_core_optin WHERE hash = ?
-			', array($hash));
+                SELECT * FROM s_core_optin WHERE hash = ?
+            ', array($hash));
             if (!empty($getVote['data'])) {
                 Shopware()->System()->_POST = unserialize($getVote['data']);
                 $voteConfirmed = true;
@@ -185,9 +185,9 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $hash = md5(uniqid(rand()));
 
                 $sql = '
-				    INSERT INTO s_core_optin (datum, hash, data)
-				    VALUES (NOW(), ?, ?)
-			    ';
+                    INSERT INTO s_core_optin (datum, hash, data)
+                    VALUES (NOW(), ?, ?)
+                ';
                 Shopware()->Db()->query($sql, array(
                     $hash, serialize(Shopware()->System()->_POST)
                 ));

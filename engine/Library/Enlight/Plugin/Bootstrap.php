@@ -52,7 +52,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      */
     public function __construct($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
         parent::__construct();
     }
 

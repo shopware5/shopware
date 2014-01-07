@@ -58,119 +58,122 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
 
     /**
      * Function to get all active payment-means and the ruleSets
-	 *
+     *
      * @return void
      */
     public function getPaymentsAction()
     {
-		try{
-			$builder = Shopware()->Models()->createQueryBuilder();
-			$builder->select(array('payment', 'ruleSets'))
-					->from('Shopware\Models\Payment\Payment','payment');
-			$builder->leftJoin('payment.ruleSets', 'ruleSets');
-			$builder->where('payment.active=1');
+        try {
+            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder->select(array('payment', 'ruleSets'))
+                    ->from('Shopware\Models\Payment\Payment','payment');
+            $builder->leftJoin('payment.ruleSets', 'ruleSets');
+            $builder->where('payment.active=1');
 
-			$result = $builder->getQuery()->getArrayResult();
-			$total = Shopware()->Models()->getQueryCount($builder->getQuery());
+            $result = $builder->getQuery()->getArrayResult();
+            $total = Shopware()->Models()->getQueryCount($builder->getQuery());
 
-			$this->View()->assign(array('success'=>true, 'data'=>$result, 'total'=>$total));
-		}catch(Exception $e){
-			$this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
-		}
+            $this->View()->assign(array('success'=>true, 'data'=>$result, 'total'=>$total));
+        } catch (Exception $e) {
+            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+        }
     }
 
-	/**
-	 * Function to delete a single rule.
-	 * It is called, when the user clicks on the delete button of a rule.
-	 *
-	 * @return void
-	 */
-	public function deleteRuleAction(){
-		try{
-			$params = $this->Request()->getParams();
+    /**
+     * Function to delete a single rule.
+     * It is called, when the user clicks on the delete button of a rule.
+     *
+     * @return void
+     */
+    public function deleteRuleAction()
+    {
+        try {
+            $params = $this->Request()->getParams();
 
-			$ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+            $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
 
-			Shopware()->Models()->remove($ruleModel);
-			Shopware()->Models()->flush();
+            Shopware()->Models()->remove($ruleModel);
+            Shopware()->Models()->flush();
 
-			$this->View()->assign(array('success'=>true, 'data'=>$params));
-		} catch(Exception $e){
-			$this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
-		}
-	}
+            $this->View()->assign(array('success'=>true, 'data'=>$params));
+        } catch (Exception $e) {
+            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+        }
+    }
 
-	/**
-	 * Function to edit existing ruleSets.
-	 * It is called, when the user presses the save-button and he edited at least one ruleSet.
-	 *
-	 * It works with both simple arrays and 2-dimensional arrays.
-	 *
-	 * @return void
-	 */
-	public function editRuleAction(){
-		try{
-			$params = $this->Request()->getParams();
-			unset($params['module']);
-			unset($params['controller']);
-			unset($params['action']);
-			unset($params['_dc']);
+    /**
+     * Function to edit existing ruleSets.
+     * It is called, when the user presses the save-button and he edited at least one ruleSet.
+     *
+     * It works with both simple arrays and 2-dimensional arrays.
+     *
+     * @return void
+     */
+    public function editRuleAction()
+    {
+        try {
+            $params = $this->Request()->getParams();
+            unset($params['module']);
+            unset($params['controller']);
+            unset($params['action']);
+            unset($params['_dc']);
 
-			//2-dimensional array
-			if($params[0]){
-				$data = array();
-				foreach($params as $values){
-					/**
-					 * @var $ruleModel Shopware\Models\Payment\RuleSet
-					 */
-					$ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $values['id']);
+            //2-dimensional array
+            if ($params[0]) {
+                $data = array();
+                foreach ($params as $values) {
+                    /**
+                     * @var $ruleModel Shopware\Models\Payment\RuleSet
+                     */
+                    $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $values['id']);
 
-					$ruleModel->fromArray($values);
+                    $ruleModel->fromArray($values);
 
-					Shopware()->Models()->persist($ruleModel);
-					Shopware()->Models()->flush();
-					$data[] = Shopware()->Models()->toArray($ruleModel);
-				}
-				$this->View()->assign(array('success'=>true, 'data'=>$data));
-			}else{
-				/**
-				 * @var $ruleModel Shopware\Models\Payment\RuleSet
-				 */
-				$ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+                    Shopware()->Models()->persist($ruleModel);
+                    Shopware()->Models()->flush();
+                    $data[] = Shopware()->Models()->toArray($ruleModel);
+                }
+                $this->View()->assign(array('success'=>true, 'data'=>$data));
+            } else {
+                /**
+                 * @var $ruleModel Shopware\Models\Payment\RuleSet
+                 */
+                $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
 
-				$ruleModel->fromArray($params);
+                $ruleModel->fromArray($params);
 
-				Shopware()->Models()->persist($ruleModel);
-				Shopware()->Models()->flush();
+                Shopware()->Models()->persist($ruleModel);
+                Shopware()->Models()->flush();
 
-				$data = Shopware()->Models()->toArray($ruleModel);
+                $data = Shopware()->Models()->toArray($ruleModel);
 
-				$this->View()->assign(array('success'=>true, 'data'=>$data));
-			}
-		} catch(Exception $e){
-			$this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
-		}
-	}
+                $this->View()->assign(array('success'=>true, 'data'=>$data));
+            }
+        } catch (Exception $e) {
+            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+        }
+    }
 
-	/**
-	 * Function to create a new ruleSet.
-	 * It is called when the user presses the save-button and at least one rule is new.
-	 *
-	 * @return void
-	 */
-	public function createRuleAction(){
-		try{
-			$params = $this->Request()->getParams();
+    /**
+     * Function to create a new ruleSet.
+     * It is called when the user presses the save-button and at least one rule is new.
+     *
+     * @return void
+     */
+    public function createRuleAction()
+    {
+        try {
+            $params = $this->Request()->getParams();
 
-			$ruleModel = new Shopware\Models\Payment\RuleSet();
-			$ruleModel->fromArray($params);
+            $ruleModel = new Shopware\Models\Payment\RuleSet();
+            $ruleModel->fromArray($params);
 
-			Shopware()->Models()->persist($ruleModel);
-			Shopware()->Models()->flush();
+            Shopware()->Models()->persist($ruleModel);
+            Shopware()->Models()->flush();
 
-			$this->View()->assign(array('success'=>true, 'data'=>Shopware()->Models()->toArray($ruleModel)));
-		} catch(Exception $e){
-			$this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
-		}
-	}
+            $this->View()->assign(array('success'=>true, 'data'=>Shopware()->Models()->toArray($ruleModel)));
+        } catch (Exception $e) {
+            $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
+        }
+    }
 }

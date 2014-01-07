@@ -70,7 +70,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    function getCurrentPaymentData()
+    public function getCurrentPaymentData()
     {
         return $this->legacyImplementation->getData();
     }

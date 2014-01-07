@@ -245,7 +245,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $uri = $this->Request()->getScheme() . '://' . $this->Request()->getHttpHost();
             $url = $uri . $url;
         }
-        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int)$options['code']);
+        $this->Response()->setRedirect($url, empty($options['code']) ? 302 : (int) $options['code']);
     }
 
     /**

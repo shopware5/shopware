@@ -191,4 +191,3 @@ class Article extends ModelEntity
         return $this->articleDetail;
     }
 }
-

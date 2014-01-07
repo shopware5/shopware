@@ -66,7 +66,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -89,8 +90,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Returns available forms
      */
-	public function getFormsAction()
-	{
+    public function getFormsAction()
+    {
         // if id is provided return a single form instead of a collection
         if ($id = $this->Request()->getParam('id')) {
             return $this->getSingleForm($id);
@@ -109,7 +110,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $forms = $query->getArrayResult();
 
         $this->View()->assign(array('success' => true, 'data' => $forms, 'total' => $totalResult));
-	}
+    }
 
     /**
      * Gets a single form incl. it's fields

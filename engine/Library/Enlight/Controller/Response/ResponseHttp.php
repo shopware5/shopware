@@ -90,7 +90,7 @@ class Enlight_Controller_Response_ResponseHttp
      */
     public function sendCookies()
     {
-        if(!empty($this->_cookies)) {
+        if (!empty($this->_cookies)) {
             $this->canSendHeaders(true);
             foreach ($this->_cookies as $name => $cookie) {
                 setcookie(

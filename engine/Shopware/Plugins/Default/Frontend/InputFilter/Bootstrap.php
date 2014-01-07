@@ -96,10 +96,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $intVars = array('sCategory', 'sContent', 'sCustom');
         foreach ($intVars as $parameter) {
             if (!empty($_GET[$parameter])) {
-                $_GET[$parameter] = (int)$_GET[$parameter];
+                $_GET[$parameter] = (int) $_GET[$parameter];
             }
             if (!empty($_POST[$parameter])) {
-                $_POST[$parameter] = (int)$_POST[$parameter];
+                $_POST[$parameter] = (int) $_POST[$parameter];
             }
         }
 

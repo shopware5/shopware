@@ -31,7 +31,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 {
 
 
-    public function initAcl(){
+    public function initAcl()
+    {
         $this->setAclResourceName("systeminfo");
         $this->addAclPermission("getConfigList", "read", "You're not allowed to open the module.");
         $this->addAclPermission("getPathList", "read", "You're not allowed to open the module.");
@@ -58,12 +59,13 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      * The encoder-configs are excluded, because they are needed in another store
      * getEncoderAction loads those two encoder-configs
      */
-    public function getConfigListAction(){
+    public function getConfigListAction()
+    {
         $list = new Shopware_Components_Check_System();
         $data = $list->toArray();
-        foreach($data as $key=>&$config){
+        foreach ($data as $key=>&$config) {
             //Those configs mustn't be displayed in the grid
-            if($config['name'] == 'ionCube Loader' || $config['name'] == 'Zend Optimizer'){
+            if ($config['name'] == 'ionCube Loader' || $config['name'] == 'Zend Optimizer') {
                 unset($data[$key]);
             }
         }
@@ -73,7 +75,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     /**
      * Function to get all necessary paths and a status, whether the paths are available
      */
-    public function getPathListAction(){
+    public function getPathListAction()
+    {
         $list = new Shopware_Components_Check_Path();
         $this->View()->assign(array('success'=>true, 'data'=>$list->toArray()));
     }
@@ -98,7 +101,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     /**
      * Function to get all plugins and its version.
      */
-    public function getVersionListAction(){
+    public function getVersionListAction()
+    {
         $select = Shopware()->Db()->select()->from(
             's_core_plugins',
             array('version','name', 'namespace', 'source')
@@ -118,15 +122,16 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     /**
      * Function to get the active encoders
      */
-    public function getEncoderAction(){
+    public function getEncoderAction()
+    {
         $list = new Shopware_Components_Check_System();
         $data = $list->toArray();
-        foreach($data as $key=>&$config){
-            if($config['name'] != 'ionCube Loader' && $config['name'] != 'Zend Optimizer'){
+        foreach ($data as $key=>&$config) {
+            if ($config['name'] != 'ionCube Loader' && $config['name'] != 'Zend Optimizer') {
                 unset($data[$key]);
                 continue;
             }
-            if($config['result']===true){
+            if ($config['result']===true) {
                 $encoder = $config;
             }
         }
@@ -138,12 +143,13 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     /**
      * Function to display the phpinfo
      */
-    public function infoAction(){
+    public function infoAction()
+    {
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $_COOKIE = array();
         $_REQUEST = array();
         $_SERVER['HTTP_COOKIE'] = null;
-        if(function_exists('apache_setenv')) {
+        if (function_exists('apache_setenv')) {
             apache_setenv('HTTP_COOKIE', null);
         }
         phpinfo();

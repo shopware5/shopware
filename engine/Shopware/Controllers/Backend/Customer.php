@@ -68,22 +68,24 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Helper function to get access to the shop repository.
      * @return \Shopware\Models\Shop\Repository
      */
-    private function getShopRepository() {
-    	if ($this->shopRepository === null) {
-    		$this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-    	}
-    	return $this->shopRepository;
+    private function getShopRepository()
+    {
+        if ($this->shopRepository === null) {
+            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        }
+        return $this->shopRepository;
     }
 
     /**
      * Helper function to get access to the group repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getGroupRepository() {
-    	if ($this->groupRepository === null) {
-    		$this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
-    	}
-    	return $this->groupRepository;
+    private function getGroupRepository()
+    {
+        if ($this->groupRepository === null) {
+            $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+        }
+        return $this->groupRepository;
     }
 
     /**
@@ -93,7 +95,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     protected function getManager()
     {
-        if(self::$manager === null) {
+        if (self::$manager === null) {
             self::$manager = Shopware()->Models();
         }
         return self::$manager;
@@ -107,7 +109,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     protected function getRepository()
     {
-        if(self::$repository === null) {
+        if (self::$repository === null) {
             self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
         }
         return self::$repository;
@@ -120,7 +122,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      *
      * @return void
      */
-    protected  function initAcl()
+    protected function initAcl()
     {
         $this->addAclPermission('getList','read', 'no_list_rights', 'You do not have sufficient rights to view the list of customers.');
         $this->addAclPermission('getDetail', 'detail', 'no_detail_rights', 'You do not have sufficient rights to view the customer detail page.');
@@ -168,43 +170,47 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Helper function to get access to the country repository.
      * @return \Shopware\Models\Country\Repository
      */
-    private function getCountryRepository() {
-    	if ($this->countryRepository === null) {
-    		$this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
-    	}
-    	return $this->countryRepository;
+    private function getCountryRepository()
+    {
+        if ($this->countryRepository === null) {
+            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+        }
+        return $this->countryRepository;
     }
     /**
      * Helper function to get access to the order repository.
      * @return \Shopware\Models\Order\Repository
      */
-    private function getOrderRepository() {
-    	if ($this->orderRepository === null) {
-    		$this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
-    	}
-    	return $this->orderRepository;
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        }
+        return $this->orderRepository;
     }
 
     /**
      * Helper function to get access to the payment repository.
      * @return \Shopware\Models\Payment\Repository
      */
-    private function getPaymentRepository() {
-    	if ($this->paymentRepository === null) {
-    		$this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
-    	}
-    	return $this->paymentRepository;
+    private function getPaymentRepository()
+    {
+        if ($this->paymentRepository === null) {
+            $this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+        }
+        return $this->paymentRepository;
     }
 
     /**
      * Helper function to get access to the dispatch repository.
      * @return \Shopware\Models\Dispatch\Repository
      */
-    private function getDispatchRepository() {
-    	if ($this->dispatchRepository === null) {
-    		$this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
-    	}
-    	return $this->dispatchRepository;
+    private function getDispatchRepository()
+    {
+        if ($this->dispatchRepository === null) {
+            $this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        }
+        return $this->dispatchRepository;
     }
 
 
@@ -265,8 +271,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -292,8 +297,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
 
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -346,8 +350,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $query->getArrayResult();
 
             $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -381,8 +384,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $this->getChartData($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $orders));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => true, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -604,7 +606,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['paymentPreset'] = $params['paymentId'];
         }
 
-        if(empty($id) && empty($params['shipping'][0]["firstName"]) && empty($params['shipping'][0]["lastName"])){
+        if (empty($id) && empty($params['shipping'][0]["firstName"]) && empty($params['shipping'][0]["lastName"])) {
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
@@ -631,7 +633,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
 
             //iterate the customers and add the remove action
-            foreach($customers as $customer) {
+            foreach ($customers as $customer) {
                 $entity = $this->getRepository()->find($customer['id']);
                 $this->getManager()->remove($entity);
             }
@@ -642,8 +644,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 'success' => true,
                 'data' => $this->Request()->getParams())
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -703,5 +704,3 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $this->redirect($url);
     }
 }
-
-

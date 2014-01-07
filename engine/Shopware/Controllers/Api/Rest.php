@@ -51,7 +51,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         });
 
         $data = Zend_Json::encode($data);
-        if($pretty) {
+        if ($pretty) {
             $data = Zend_Json::prettyPrint($data);
         }
 

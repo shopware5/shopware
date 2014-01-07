@@ -37,17 +37,17 @@ class Shopware_StoreApi_Core_Service_Account extends Enlight_Class
 
     public function getDomain(Shopware_StoreApi_Models_Auth $authModel, $domain)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             return new Shopware_StoreApi_Core_Response_SearchResult(array());
         }
 
         $searchResult = $this->gateway->getDomains($authModel->getShopwareId(), $authModel->getToken());
-        if($searchResult instanceof Shopware_StoreApi_Exception_Response) {
+        if ($searchResult instanceof Shopware_StoreApi_Exception_Response) {
             return $searchResult;
         }
 
-        foreach($searchResult as $domainModel) {
-            if($domainModel->getDomain() == $domain) {
+        foreach ($searchResult as $domainModel) {
+            if ($domainModel->getDomain() == $domain) {
                 return $domainModel;
             }
         }
@@ -57,7 +57,7 @@ class Shopware_StoreApi_Core_Service_Account extends Enlight_Class
 
     public function getDomains(Shopware_StoreApi_Models_Auth $authModel)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             throw new Enlight_Exception('The parameter authModel is not an instance of the class Shopware_StoreApi_Models_Auth');
         }
 
@@ -66,11 +66,11 @@ class Shopware_StoreApi_Core_Service_Account extends Enlight_Class
 
     public function getLicencedProducts(Shopware_StoreApi_Models_Auth $authModel, $domainModel, $version)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             throw new Enlight_Exception('The parameter authModel is not an instance of the class Shopware_StoreApi_Models_Auth');
-        }elseif(!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
+        } elseif (!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
             throw new Enlight_Exception('The parameter domainModel is not an instance of the class Shopware_StoreApi_Models_Domain');
-        }elseif(!is_integer($version)) {
+        } elseif (!is_integer($version)) {
             return new Shopware_StoreApi_Exception_Response('The parameter version is not instance of Integer', 10);
         }
 
@@ -79,11 +79,11 @@ class Shopware_StoreApi_Core_Service_Account extends Enlight_Class
 
     public function getLicencedProductById(Shopware_StoreApi_Models_Auth $authModel, $domainModel, $articleID, $version)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             throw new Enlight_Exception('The parameter authModel is not an instance of the class Shopware_StoreApi_Models_Auth');
-        }elseif(!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
+        } elseif (!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
             throw new Enlight_Exception('The parameter domainModel is not an instance of the class Shopware_StoreApi_Models_Domain');
-        }elseif(!is_integer($version)) {
+        } elseif (!is_integer($version)) {
             return new Shopware_StoreApi_Exception_Response('The parameter version is not instance of Integer', 10);
         }
 
@@ -92,7 +92,7 @@ class Shopware_StoreApi_Core_Service_Account extends Enlight_Class
 
     public function getTax(Shopware_StoreApi_Models_Auth $authModel)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             throw new Enlight_Exception('The parameter authModel is not an instance of the class Shopware_StoreApi_Models_Auth');
         }
 

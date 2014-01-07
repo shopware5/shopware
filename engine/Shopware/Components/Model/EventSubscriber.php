@@ -159,7 +159,8 @@ class EventSubscriber implements BaseEventSubscriber
      * @param $entity \Shopware\Components\Model\ModelEntity
      * @return string
      */
-    protected function getEntityName($entity) {
+    protected function getEntityName($entity)
+    {
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             $entityName = get_parent_class($entity);
         } else {
@@ -174,7 +175,8 @@ class EventSubscriber implements BaseEventSubscriber
      * @param $eventArgs LifecycleEventArgs
      * @return \Enlight_Event_EventArgs|null
      */
-    protected function notifyEvent($eventName, $eventArgs) {
+    protected function notifyEvent($eventName, $eventArgs)
+    {
         return $this->eventManager->notify($eventName, array(
             'entityManager' => $eventArgs->getEntityManager(),
             'entity' => $eventArgs->getEntity()

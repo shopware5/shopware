@@ -7,11 +7,11 @@ if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
 } elseif (file_exists(__DIR__ . '/Custom.php')) {
     $customConfig = $this->loadConfig(__DIR__ . '/Custom.php');
-}  else {
+} else {
     $customConfig = array();
 }
 
-if(!is_array($customConfig)) {
+if (!is_array($customConfig)) {
     throw new Enlight_Exception('The custom configuration file must return an array.');
 }
 
@@ -142,33 +142,33 @@ return array_merge($customConfig, array(
     /*
     'cache' => array(
         'backend' => 'Two Levels',
-    	'backendOptions' => array(
-			'slow_backend' => 'File',
-			'slow_backend_options' =>  array(
-				'hashed_directory_umask' => 0771,
-				'cache_file_umask' => 0644,
-				'hashed_directory_level' => 2,
-				'cache_dir' => $this->DocPath('cache_general'),
-				'file_name_prefix' => 'shopware'
-	    	),
-			'fast_backend'  => 'Memcached',
-			'fast_backend_options' => array(
-				'servers' => array(
-					array(
-						'host' => 'localhost',
-						'port' => 11211,
-						'persistent' => true,
-						'weight' => 1,
-						'timeout' => 5,
-						'retry_interval' => 15,
-						'status' => true,
-						'failure_callback' => null
-					)
-				),
-				'compression' => false,
-				'compatibility' => false
-			)
-    	),
+        'backendOptions' => array(
+            'slow_backend' => 'File',
+            'slow_backend_options' =>  array(
+                'hashed_directory_umask' => 0771,
+                'cache_file_umask' => 0644,
+                'hashed_directory_level' => 2,
+                'cache_dir' => $this->DocPath('cache_general'),
+                'file_name_prefix' => 'shopware'
+            ),
+            'fast_backend'  => 'Memcached',
+            'fast_backend_options' => array(
+                'servers' => array(
+                    array(
+                        'host' => 'localhost',
+                        'port' => 11211,
+                        'persistent' => true,
+                        'weight' => 1,
+                        'timeout' => 5,
+                        'retry_interval' => 15,
+                        'status' => true,
+                        'failure_callback' => null
+                    )
+                ),
+                'compression' => false,
+                'compatibility' => false
+            )
+        ),
     ),
     */
     /*

@@ -62,7 +62,7 @@ class Enlight_Components_Locale extends Zend_Locale
     public function setLocale($locale = null)
     {
         if (is_array($locale)) {
-            $this->id = isset($locale['id']) ? (int)$locale['id'] : null;
+            $this->id = isset($locale['id']) ? (int) $locale['id'] : null;
             $locale = isset($locale['locale']) ? $locale['locale'] : null;
         }
         parent::setLocale($locale);

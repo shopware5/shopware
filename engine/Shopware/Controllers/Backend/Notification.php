@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $filter = $this->Request()->getParam('filter', array());
 
             //order data
-            $order = (array)$this->Request()->getParam('sort', array());
+            $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $repository \Shopware\Models\Article\Repository */
             $repository = Shopware()->Models()->Article();
@@ -88,8 +88,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
                     'totalNotNotified' => $summaryData["notNotified"]
                 )
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -110,7 +109,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $filter = $this->Request()->getParam('filter', array());
 
             //order data
-            $order = (array)$this->Request()->getParam('sort', array());
+            $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $repository \Shopware\Models\Article\Repository */
             $repository = Shopware()->Models()->Article();
@@ -120,8 +119,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
 
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' => $totalCount));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }

@@ -497,22 +497,22 @@ class Country extends ModelEntity
 
 
 /**
-	* @return \Doctrine\Common\Collections\ArrayCollection
-	*/
-	public function getPayments()
-	{
-		return $this->payments;
-	}
+    * @return \Doctrine\Common\Collections\ArrayCollection
+    */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
 
    /**
-	* @param \Doctrine\Common\Collections\ArrayCollection $payments
-	* @return Country
-	*/
-	public function setPayments($payments)
-	{
-		$this->payments = $payments;
-		return $this;
-	}
+    * @param \Doctrine\Common\Collections\ArrayCollection $payments
+    * @return Country
+    */
+    public function setPayments($payments)
+    {
+        $this->payments = $payments;
+        return $this;
+    }
 
     /**
      * @param int $displayStateInRegistration

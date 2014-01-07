@@ -63,20 +63,21 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
 /**
-	* Add the table alias to the passed filter and sort parameters.
-	* @param $properties
-	* @param $fields
-	* @return array|mixed
-	*/
-	private function prepareParam($properties, $fields) {
-		foreach ($properties as $key => $property) {
-		if (array_key_exists($property['property'], $fields)) {
-			$property['property'] = $fields[$property['property']];
-		}
-			$properties[$key] = $property;
-		}
-		return $properties;
-	}
+    * Add the table alias to the passed filter and sort parameters.
+    * @param $properties
+    * @param $fields
+    * @return array|mixed
+    */
+    private function prepareParam($properties, $fields)
+    {
+        foreach ($properties as $key => $property) {
+        if (array_key_exists($property['property'], $fields)) {
+            $property['property'] = $fields[$property['property']];
+        }
+            $properties[$key] = $property;
+        }
+        return $properties;
+    }
 
     /**
      * Returns all supported detail status as an array. The status are used on the detail
@@ -476,7 +477,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         $filters = $this->Request()->getParam('filter', array());
-        foreach($filters as $filter) {
+        foreach ($filters as $filter) {
             if ($filter['property'] === 'free') {
                 $builder->andWhere(
                     $builder->expr()->orX(
@@ -490,7 +491,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             }
         }
 
-  		$repository->addOrderBy($builder, $this->prepareParam($this->Request()->getParam('sort', array()), $fields));
+        $repository->addOrderBy($builder, $this->prepareParam($this->Request()->getParam('sort', array()), $fields));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
@@ -706,7 +707,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'state.id as id',
             'state.name as name'
         ));
-        if($countryId !== null) {
+        if ($countryId !== null) {
             $builder ->where('state.countryId = :cId');
             $builder->setParameter(':cId', $countryId);
         }
@@ -724,9 +725,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
 
-	public function getAvailableHashesAction()
-	{
-		$hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
+    public function getAvailableHashesAction()
+    {
+        $hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
 
         $result = array();
 
@@ -745,12 +746,12 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             );
         }
 
-		$totalResult = count($hashes);
+        $totalResult = count($hashes);
 
-		$this->View()->assign(array(
+        $this->View()->assign(array(
             'success' => true,
             'data' => $result,
             'total' => $totalResult,
         ));
-	}
+    }
 }

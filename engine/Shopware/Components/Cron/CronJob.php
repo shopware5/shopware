@@ -43,7 +43,7 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
      */
     public function set($key, $value)
     {
-        if($key === 'data') {
+        if ($key === 'data') {
             $this->setReturn($value);
         } else {
             $this->_elements[$key] = $value;
@@ -59,7 +59,7 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
      */
     public function get($key)
     {
-        if($key === 'data') {
+        if ($key === 'data') {
             return $this->getReturn();
         }
         return parent::get($key);

@@ -77,7 +77,8 @@ class sRewriteTable
      * Getter function of the prepared insert PDOStatement
      * @return null|PDOStatement
      */
-    protected function getPreparedInsert() {
+    protected function getPreparedInsert()
+    {
         if ($this->preparedInsert === null) {
             $this->preparedInsert = Shopware()->Db()->prepare('
                 INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
@@ -93,7 +94,8 @@ class sRewriteTable
      * Getter function of the prepared update PDOStatement
      * @return null|PDOStatement
      */
-    protected function getPreparedUpdate() {
+    protected function getPreparedUpdate()
+    {
         if ($this->preparedUpdate === null) {
             $this->preparedUpdate = Shopware()->Db()->prepare('UPDATE s_core_rewrite_urls SET main=0 WHERE org_path=? AND path!=? AND subshopID=?');
         }
@@ -218,67 +220,67 @@ class sRewriteTable
     {
         // Delete CMS / campaigns
         $sql = "
-			DELETE ru FROM s_core_rewrite_urls ru
-			LEFT JOIN s_cms_static cs
-			ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
-			LEFT JOIN s_cms_support ct
-			ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
-			LEFT JOIN s_emarketing_promotion_main ep
-			ON ru.org_path LIKE CONCAT('sViewport=campaign&sCampaign=', ep.id)
-			LEFT JOIN s_cms_groups cg
-			ON ru.org_path LIKE CONCAT('sViewport=content&sContent=', cg.id)
-			WHERE (ru.org_path LIKE 'sViewport=custom&sCustom=%'
-			OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
-			OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
-			OR ru.org_path LIKE 'sViewport=content&sContent=%')
-			AND cs.id IS NULL
-			AND ct.id IS NULL
-			AND ep.id IS NULL
-			AND cg.id IS NULL
-		";
+            DELETE ru FROM s_core_rewrite_urls ru
+            LEFT JOIN s_cms_static cs
+            ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
+            LEFT JOIN s_cms_support ct
+            ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
+            LEFT JOIN s_emarketing_promotion_main ep
+            ON ru.org_path LIKE CONCAT('sViewport=campaign&sCampaign=', ep.id)
+            LEFT JOIN s_cms_groups cg
+            ON ru.org_path LIKE CONCAT('sViewport=content&sContent=', cg.id)
+            WHERE (ru.org_path LIKE 'sViewport=custom&sCustom=%'
+            OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
+            OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
+            OR ru.org_path LIKE 'sViewport=content&sContent=%')
+            AND cs.id IS NULL
+            AND ct.id IS NULL
+            AND ep.id IS NULL
+            AND cg.id IS NULL
+        ";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 
         // delete non-existing blog categories from rewrite table
         $sql = "
-			DELETE ru FROM s_core_rewrite_urls ru
-			LEFT JOIN s_categories c
-			ON c.id = REPLACE(ru.org_path, 'sViewport=blog&sCategory=', '')
-			AND c.blog = 1
-			WHERE ru.org_path LIKE 'sViewport=blog&sCategory=%'
-			AND c.id IS NULL
-		";
+            DELETE ru FROM s_core_rewrite_urls ru
+            LEFT JOIN s_categories c
+            ON c.id = REPLACE(ru.org_path, 'sViewport=blog&sCategory=', '')
+            AND c.blog = 1
+            WHERE ru.org_path LIKE 'sViewport=blog&sCategory=%'
+            AND c.id IS NULL
+        ";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 
         // delete non-existing categories
         $sql = "
-			DELETE ru FROM s_core_rewrite_urls ru
-			LEFT JOIN s_categories c
-			ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
-			AND (c.external = '' OR c.external IS NULL)
-			AND c.blog = 0
-			WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
-			AND c.id IS NULL
-		";
+            DELETE ru FROM s_core_rewrite_urls ru
+            LEFT JOIN s_categories c
+            ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
+            AND (c.external = '' OR c.external IS NULL)
+            AND c.blog = 0
+            WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
+            AND c.id IS NULL
+        ";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 
         // delete non-existing articles
         $sql = "
-			DELETE ru FROM s_core_rewrite_urls ru
-			LEFT JOIN s_articles a
-			ON a.id = REPLACE(ru.org_path, 'sViewport=detail&sArticle=', '')
-			WHERE ru.org_path LIKE 'sViewport=detail&sArticle=%'
-			AND a.id IS NULL
-		";
+            DELETE ru FROM s_core_rewrite_urls ru
+            LEFT JOIN s_articles a
+            ON a.id = REPLACE(ru.org_path, 'sViewport=detail&sArticle=', '')
+            WHERE ru.org_path LIKE 'sViewport=detail&sArticle=%'
+            AND a.id IS NULL
+        ";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
 
         // delete all non-existing suppliers
         $sql = "
             DELETE ru FROM s_core_rewrite_urls ru
             LEFT JOIN s_articles a
-			ON a.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
+            ON a.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
             WHERE ru.org_path LIKE 'sViewport=supplier&sSupplier=%'
             AND a.id IS NULL
-		";
+        ";
         $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
     }
 
@@ -337,7 +339,7 @@ class sRewriteTable
             $path = $template->fetch();
             $path = $this->sCleanupPath($path, false);
 
-            if($category['blog']) {
+            if ($category['blog']) {
                 $orgPath = 'sViewport=blog&sCategory=' . $category['id'];
             } else {
                 $orgPath = 'sViewport=cat&sCategory=' . $category['id'];
@@ -400,11 +402,11 @@ class sRewriteTable
     public function getSeoArticleQuery()
     {
         return "
-			SELECT a.*, IF(atr.name IS NULL OR atr.name='', a.name, atr.name) as name,
-			    d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed, metaTitle,
-				at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
-				at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
-			FROM s_articles a
+            SELECT a.*, IF(atr.name IS NULL OR atr.name='', a.name, atr.name) as name,
+                d.ordernumber, d.suppliernumber, s.name as supplier, datum as date, d.releasedate, changetime as changed, metaTitle,
+                at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
+                at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
+            FROM s_articles a
 
             INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
@@ -413,23 +415,23 @@ class sRewriteTable
                 ON  c.id = ac.categoryID
                 AND c.active = 1
 
-			JOIN s_articles_details d
-			    ON d.id = a.main_detail_id
+            JOIN s_articles_details d
+                ON d.id = a.main_detail_id
 
-			LEFT JOIN s_articles_attributes at
-			    ON at.articledetailsID=d.id
+            LEFT JOIN s_articles_attributes at
+                ON at.articledetailsID=d.id
 
-			LEFT JOIN s_articles_translations atr
-			    ON atr.articleID=a.id
-			    AND atr.languageID=?
+            LEFT JOIN s_articles_translations atr
+                ON atr.articleID=a.id
+                AND atr.languageID=?
 
-			LEFT JOIN s_articles_supplier s
-			    ON s.id=a.supplierID
+            LEFT JOIN s_articles_supplier s
+                ON s.id=a.supplierID
 
-			WHERE a.active=1
-			AND a.changetime > ?
-			GROUP BY a.id
-			ORDER BY a.changetime, a.id
+            WHERE a.active=1
+            AND a.changetime > ?
+            GROUP BY a.id
+            ORDER BY a.changetime, a.id
           ";
     }
 

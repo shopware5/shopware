@@ -22,9 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Backend_ConfigIframe extends Shopware_Controllers_Backend_ExtJs {
-
-    public function openModuleAction() {
+class Shopware_Controllers_Backend_ConfigIframe extends Shopware_Controllers_Backend_ExtJs
+{
+    public function openModuleAction()
+    {
         $this->View()->loadTemplate('backend/index/iframe.tpl');
         die();
     }

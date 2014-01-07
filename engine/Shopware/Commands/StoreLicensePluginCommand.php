@@ -344,7 +344,7 @@ class StoreLicensePluginCommand extends StoreCommand
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
 
-        switch($code) {
+        switch ($code) {
             case \Shopware_StoreApi_Exception_Response::ACCESS_FORBIDDEN:
                 $message = $namespace->get('access_forbidden', 'Access prohibited – Token expired or insufficient rights.', true);
                 break;
