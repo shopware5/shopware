@@ -43,7 +43,7 @@ class Shopware_StoreApi_Core_Service_Vendor extends Enlight_Class
         );
         $searchResult = $this->getVendors($vendorQuery);
 
-        if($searchResult instanceof Shopware_StoreApi_Exception_Response) {
+        if ($searchResult instanceof Shopware_StoreApi_Exception_Response) {
             return $searchResult;
         }
 

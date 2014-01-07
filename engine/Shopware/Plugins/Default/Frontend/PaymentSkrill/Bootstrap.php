@@ -37,7 +37,7 @@ class Shopware_Plugins_Frontend_PaymentSkrill_Bootstrap extends Shopware_Compone
             'label' => $this->getName(),
             'source' => $this->getSource(),
             'description' => 'Skrill (Moneybookers) ist die sichere Art, weltweit zu bezahlen, ohne ihre Bezahldaten jedesmal neu einzugeben.
-				    Sie können in 200 Ländern über 100 verschiedene Zahlungsoptionen nutzen, einschließlich aller wichtigen Kredit- und EC- Karten.',
+                    Sie können in 200 Ländern über 100 verschiedene Zahlungsoptionen nutzen, einschließlich aller wichtigen Kredit- und EC- Karten.',
             'license' => '',
             'support' => 'http://wiki.shopware.de',
             'link' => 'http://www.skrill.com/',

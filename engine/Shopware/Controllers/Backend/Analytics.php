@@ -32,17 +32,17 @@
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
 
-	protected function initAcl()
-	{
-		// read
-		$this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('visits', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
-	}
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('visits', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
+    }
 
     /**
      * Get a list of installed shops
@@ -161,16 +161,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             //$sqlWhere .= 'AND o.subshopID IN (' . Shopware()->Db()->quote($shops) .') ';
 
             foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
+                $shop = (int) $shop["id"];
                 $sqlSelect .= "SUM(IF(o.subshopID=$shop, $sqlAmount, 0)) as `amount$shop`, ";
             }
         }
 
         $sql = "
             SELECT
-        		COUNT(*) as `count`,
-        		SUM($sqlAmount) as `amount`,
-        		Date_Format(ordertime, '%W') as displayDate,
+                COUNT(*) as `count`,
+                SUM($sqlAmount) as `amount`,
+                Date_Format(ordertime, '%W') as displayDate,
                 $sqlSelect
                 $sqlSelectField as `$sqlSelectName`
             FROM `s_order` o
@@ -201,14 +201,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
 
         foreach ($data as &$row) {
-            $row['count'] = (int)$row['count'];
-            $row['amount'] = (float)$row['amount'];
+            $row['count'] = (int) $row['count'];
+            $row['amount'] = (float) $row['amount'];
             $row['date'] = strtotime($row['date']);
 
             if (!empty($shops)) {
                 foreach ($shops as $shop) {
-                    $shop = (int)$shop["id"];
-                    $row['amount' . $shop] = (float)$row['amount' . $shop];
+                    $shop = (int) $shop["id"];
+                    $row['amount' . $shop] = (float) $row['amount' . $shop];
                 }
             }
         }
@@ -244,7 +244,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if (!empty($shops)) {
             foreach ($shops as $key => $shop) {
                 if ($key == 0) $sqlSelect = ",\n";
-                $shop = (int)$shop["id"];
+                $shop = (int) $shop["id"];
                 $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.pageimpressions, 0)) as `impressions$shop`, ";
                 $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.uniquevisits, 0)) as `visits$shop` ";
                 if ($key < count($shops) - 1) $sqlSelect .= ",\n";
@@ -311,7 +311,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 if ($node === 'root') {
                     $node = 1;
                 } else {
-                    $node = (int)$node;
+                    $node = (int) $node;
                 }
                 $sqlSelect .= '(
                     SELECT parent FROM s_categories
@@ -344,7 +344,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $sql = "
             SELECT
-        		COUNT(DISTINCT o.id) as `count`,
+                COUNT(DISTINCT o.id) as `count`,
                 SUM($sqlAmount) as `amount`,
                 $sqlSelect
                 $sqlSelectField as `name`
@@ -370,8 +370,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
 
         foreach ($data as &$row) {
-            $row['count'] = (int)$row['count'];
-            $row['amount'] = (float)$row['amount'];
+            $row['count'] = (int) $row['count'];
+            $row['amount'] = (float) $row['amount'];
         }
 
         $this->View()->success = true;
@@ -433,7 +433,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         if (!empty($shops)) {
             foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
+                $shop = (int) $shop["id"];
                 $sqlSelect .= "\n 0 AS visits$shop, 0 AS orders$shop, 0 AS conversion$shop,\n";
             }
         }
@@ -457,17 +457,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ) )
          */
         $sql = "
-        	SELECT
-        		datum as `date`,
-        		SUM(s.uniquevisits) AS `totalVisits`,
-        		$sqlSelect
-        		(SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
-        	FROM
-        		`s_statistics_visitors` AS s
-        	WHERE datum <= ?
+            SELECT
+                datum as `date`,
+                SUM(s.uniquevisits) AS `totalVisits`,
+                $sqlSelect
+                (SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
+            FROM
+                `s_statistics_visitors` AS s
+            WHERE datum <= ?
             AND datum >= ?
-        	GROUP BY `date`
-        	ORDER BY `date` DESC
+            GROUP BY `date`
+            ORDER BY `date` DESC
        ";
 
         $result = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
@@ -485,7 +485,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
          */
         if (!empty($shops)) {
             foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
+                $shop = (int) $shop["id"];
 
                 $sql = "
                 SELECT datum AS `date`,
@@ -538,7 +538,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return shops
      */
-    private function getShops(){
+    private function getShops()
+    {
         $sql = '
             SELECT
               s.id , s.name,
@@ -558,7 +559,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | fromDate
      */
-    private function getFromDate(){
+    private function getFromDate()
+    {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
@@ -574,8 +576,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | toDate
      */
-    private function getToDate() {
-
+    private function getToDate()
+    {
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {

@@ -178,4 +178,3 @@ class Link extends ModelEntity
         return $this->container;
     }
 }
-

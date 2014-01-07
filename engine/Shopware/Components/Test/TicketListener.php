@@ -27,21 +27,21 @@
  */
 class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketListener
 {
-	protected $client;
-	protected $serverAddress;
-	protected $printTicketStateChanges;
-	protected $notifyTicketStateChanges;
+    protected $client;
+    protected $serverAddress;
+    protected $printTicketStateChanges;
+    protected $notifyTicketStateChanges;
 
-	/**
-	 * Constructor method
-	 *
-	 * @param string|array $options
-	 */
-	public function __construct($serverAddress, $printTicketStateChanges=false , $notifyTicketStateChanges=false)
+    /**
+     * Constructor method
+     *
+     * @param string|array $options
+     */
+    public function __construct($serverAddress, $printTicketStateChanges=false , $notifyTicketStateChanges=false)
     {
-    	$this->serverAddress = $serverAddress;
-    	$this->printTicketStateChanges = $printTicketStateChanges;
-    	$this->notifyTicketStateChanges = $notifyTicketStateChanges;
+        $this->serverAddress = $serverAddress;
+        $this->printTicketStateChanges = $printTicketStateChanges;
+        $this->notifyTicketStateChanges = $notifyTicketStateChanges;
     }
 
     /**
@@ -52,25 +52,24 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      */
     public function getTicketInfo($ticketId = null)
     {
-    	if (!is_numeric($ticketId)) {
-    		return array('status' => 'invalid_ticket_id');
-    	}
-    	try {
-    		$info = $this->getClient()->call('ticket.get', (int) $ticketId);
-    		switch ($info[3]['jenkins']) {
-    			case '':
-    			case 'Test erfolgreich':
-    				return array('status' => 'closed');
-    			case 'Kein Test':
-    			case 'Test fehlgeschlagen':
-    				return array('status' => 'new');
-    			default:
-    				return array('status' => 'unknown_ticket');
-    		}
-    	}
-    	catch (Exception $e) {
-    		return array('status' => 'unknown_ticket');
-    	}
+        if (!is_numeric($ticketId)) {
+            return array('status' => 'invalid_ticket_id');
+        }
+        try {
+            $info = $this->getClient()->call('ticket.get', (int) $ticketId);
+            switch ($info[3]['jenkins']) {
+                case '':
+                case 'Test erfolgreich':
+                    return array('status' => 'closed');
+                case 'Kein Test':
+                case 'Test fehlgeschlagen':
+                    return array('status' => 'new');
+                default:
+                    return array('status' => 'unknown_ticket');
+            }
+        } catch (Exception $e) {
+            return array('status' => 'unknown_ticket');
+        }
     }
 
     /**
@@ -83,28 +82,28 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      */
     protected function updateTicket($ticketId, $statusToBe, $message, $resolution)
     {
-    	$statusText = $statusToBe=='closed' ? 'Test erfolgreich' : 'Test fehlgeschlagen';
+        $statusText = $statusToBe=='closed' ? 'Test erfolgreich' : 'Test fehlgeschlagen';
 
         $this->getClient()->call('ticket.update', array(
-        	(int) $ticketId,
-        	$message,
-        	null,
-        	null,
-        	array(
-        		'jenkins_date' => Zend_Date::now()->toString('YYYY-MM-dd HH:mm:ss'),
-        		'jenkins' => $statusText,
-        		'resolution' => $resolution
-        	),
-        	$this->notifyTicketStateChanges
-    	));
+            (int) $ticketId,
+            $message,
+            null,
+            null,
+            array(
+                'jenkins_date' => Zend_Date::now()->toString('YYYY-MM-dd HH:mm:ss'),
+                'jenkins' => $statusText,
+                'resolution' => $resolution
+            ),
+            $this->notifyTicketStateChanges
+        ));
 
-    	if ($this->printTicketStateChanges) {
-    		printf(
-	    		"\nUpdating Trac issue #%d, status: %s\n",
-	    		$ticketId,
-	    		$statusText
-    		);
-    	}
+        if ($this->printTicketStateChanges) {
+            printf(
+                "\nUpdating Trac issue #%d, status: %s\n",
+                $ticketId,
+                $statusText
+            );
+        }
     }
 
     /**
@@ -114,15 +113,15 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      */
     protected function getClient()
     {
-    	if($this->client === null) {
-    		$this->client = new Zend_XmlRpc_Client($this->serverAddress);
-    		if (extension_loaded('curl')) {
-				$adapter = new Zend_Http_Client_Adapter_Curl();
-				$adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER, false);
-				$adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST, false);
-				$this->client->getHttpClient()->setAdapter($adapter);
-			}
-    	}
+        if ($this->client === null) {
+            $this->client = new Zend_XmlRpc_Client($this->serverAddress);
+            if (extension_loaded('curl')) {
+                $adapter = new Zend_Http_Client_Adapter_Curl();
+                $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER, false);
+                $adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST, false);
+                $this->client->getHttpClient()->setAdapter($adapter);
+            }
+        }
         return $this->client;
     }
 
@@ -135,7 +134,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-    	$ifStatus   = array('closed');
+        $ifStatus   = array('closed');
         $newStatus  = 'reopened';
         $message    = 'Automatically reopened by PHPUnit (test failed).';
         $resolution = '';
@@ -172,7 +171,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-    	$this->addError($test, $e, $time);
+        $this->addError($test, $e, $time);
     }
 
     /**
@@ -184,9 +183,9 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         if ($test instanceof PHPUnit_Framework_Warning) {
-        	return;
+            return;
         } elseif ($test->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {
-        	return;
+            return;
         }
 
         $ifStatus   = array('assigned', 'new', 'reopened');
@@ -207,11 +206,11 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
             // Only close tickets if ALL referenced cases pass
             // but reopen tickets if a single test fails.
             if (count($this->ticketCounts[$ticket]) > 0) {
-            	// There exist remaining test cases with this reference.
-            	$adjustTicket = FALSE;
+                // There exist remaining test cases with this reference.
+                $adjustTicket = FALSE;
             } else {
-            	// No remaining tickets, go ahead and adjust.
-            	$adjustTicket = TRUE;
+                // No remaining tickets, go ahead and adjust.
+                $adjustTicket = TRUE;
             }
 
             $ticketInfo = $this->getTicketInfo($ticket);

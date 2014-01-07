@@ -203,7 +203,7 @@ class Enlight_Components_Cron_Job
      */
     public function setId($id)
     {
-        $this->id = (int)$id;
+        $this->id = (int) $id;
         return $this;
     }
 
@@ -225,7 +225,7 @@ class Enlight_Components_Cron_Job
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
         return $this;
     }
 
@@ -247,7 +247,7 @@ class Enlight_Components_Cron_Job
      */
     public function setAction($action)
     {
-        $this->action = (string)$action;
+        $this->action = (string) $action;
         return $this;
     }
 
@@ -343,7 +343,7 @@ class Enlight_Components_Cron_Job
      */
     public function setInterval($interval)
     {
-        $this->interval = (int)$interval;
+        $this->interval = (int) $interval;
         return $this;
     }
 
@@ -375,7 +375,7 @@ class Enlight_Components_Cron_Job
      */
     public function setActive($active)
     {
-        $this->active = (boolean)$active;
+        $this->active = (boolean) $active;
         return $this;
     }
 
@@ -388,9 +388,9 @@ class Enlight_Components_Cron_Job
      */
     public function get($name, $default = null)
     {
-        if(isset($this->$name)) {
+        if (isset($this->$name)) {
             return $this->$name;
-        } elseif(isset($this->options[$name])) {
+        } elseif (isset($this->options[$name])) {
             return $this->options[$name];
         }
         return $default;

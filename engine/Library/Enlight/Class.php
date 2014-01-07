@@ -38,8 +38,8 @@ abstract class Enlight_Class
      * Contains all initialed enlight instances.
      * @var array
      */
-    static protected $instances = array();
-    
+    protected static $instances = array();
+
     /**
      * Constructor method.
      *
@@ -48,7 +48,7 @@ abstract class Enlight_Class
      * If an hook proxy exist for the class, the constructor will prevent the initialization and throw an exception
      * that the instance method should be used.
      */
-    public function __construct ()
+    public function __construct()
     {
         $class = get_class($this);
         if ($this instanceof Enlight_Singleton) {
@@ -75,7 +75,7 @@ abstract class Enlight_Class
             }
         }
     }
-    
+
     /**
      * Returns the class name of the given class. If no class is given, the class will drawn by
      * get_called_class(). If the given class has an hook proxy the function will return the proxy class.
@@ -111,13 +111,13 @@ abstract class Enlight_Class
      * @param   array $args
      * @return  Enlight_Class
      */
-    static public function Instance($class=null, $args=null)
+    public static function Instance($class=null, $args=null)
     {
         $class = self::getClassName($class);
         if (isset(self::$instances[$class])) {
             return self::$instances[$class];
-        }        
-        
+        }
+
         $rc = new ReflectionClass($class);
 
         if (isset($args)) {
@@ -127,18 +127,18 @@ abstract class Enlight_Class
         }
         return $instance;
     }
-    
+
     /**
      * Reset the instance of the given class.
      *
      * @param   mixed $class
      */
-    static public function resetInstance($class=null)
+    public static function resetInstance($class=null)
     {
         $class = self::getClassName($class);
         unset(self::$instances[$class]);
     }
-    
+
     /**
      * Magic caller
      *
@@ -152,21 +152,21 @@ abstract class Enlight_Class
             Enlight_Exception::METHOD_NOT_FOUND
         );
     }
-    
+
     /**
      * Magic static caller
      *
      * @param   string $name
      * @param   array $args
      */
-    static public function __callStatic($name, $args=null)
+    public static function __callStatic($name, $args=null)
     {
         throw new Enlight_Exception(
             'Method "'.get_called_class().'::'.$name.'" not found failure',
             Enlight_Exception::METHOD_NOT_FOUND
         );
     }
-    
+
     /**
      * Magic getter
      *
@@ -176,7 +176,7 @@ abstract class Enlight_Class
     {
         throw new Enlight_Exception('Property "'.$name.'" not found failure', Enlight_Exception::PROPERTY_NOT_FOUND);
     }
-    
+
     /**
      * Magic setter
      *

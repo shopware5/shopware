@@ -117,7 +117,7 @@ class CacheManager
      */
     public function clearRewriteCache()
     {
-        $cache = (int)$this->config->routerCache;
+        $cache = (int) $this->config->routerCache;
         $cache = $cache < 360 ? 86400 : $cache;
 
         $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
@@ -332,7 +332,7 @@ class CacheManager
             $info['message'] = 'Cache dir is not writable';
         }
 
-        $info['size'] = (float)0;
+        $info['size'] = (float) 0;
         $info['files'] = 0;
 
         $dirIterator = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);

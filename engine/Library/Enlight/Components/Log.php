@@ -52,7 +52,7 @@ class Enlight_Components_Log extends Zend_Log
      * @param   Enlight_Config|array $config
      * @return  Enlight_Components_Log
      */
-    static public function factory($config = array())
+    public static function factory($config = array())
     {
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();

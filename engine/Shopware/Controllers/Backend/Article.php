@@ -1087,7 +1087,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $imageData['parent'] = $parent;
 
         $join = '';
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $alias = 'alias'. $option->getId();
             $join = $join . ' INNER JOIN s_article_configurator_option_relations alias'. $option->getId() .
                     ' ON ' . $alias . '.option_id = ' . $option->getId() .
@@ -3090,7 +3090,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $sql = "SELECT `name`, `default` FROM s_core_engine_elements";
         $data = Shopware()->Db()->fetchAll($sql);
         $prepared = array();
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $prepared[$item['name']] = $item['default'];
         }
 
@@ -4079,7 +4079,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ";
         $attributes = Shopware()->Db()->fetchAssoc($sql);
         $prepared = array();
-        foreach($attributes as $name => $attr) {
+        foreach ($attributes as $name => $attr) {
             $prepared[$name] = $attr['default'];
         }
 
@@ -4162,8 +4162,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-        $shopId = (int)$this->Request()->getParam('shopId');
-        $articleId = (int)$this->Request()->getParam('articleId');
+        $shopId = (int) $this->Request()->getParam('shopId');
+        $articleId = (int) $this->Request()->getParam('articleId');
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);

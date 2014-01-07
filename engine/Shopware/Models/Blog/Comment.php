@@ -281,4 +281,3 @@ class Comment extends ModelEntity
         $this->points = $points;
     }
 }
-

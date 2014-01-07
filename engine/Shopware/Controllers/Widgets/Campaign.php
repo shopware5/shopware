@@ -35,7 +35,7 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
     public function getEmotion($repository)
     {
         /**@var $repository \Shopware\Models\Emotion\Repository */
-        $emotionId = (int)$this->Request()->getParam('emotionId');
+        $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
         $emotion = $query->getQuery()->getArrayResult();
         $emotion['rows'] = $emotion['grid']['rows'];
@@ -46,7 +46,8 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
         return $emotion;
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         $this->View()->loadTemplate("widgets/emotion/index.tpl");
         parent::indexAction();
     }

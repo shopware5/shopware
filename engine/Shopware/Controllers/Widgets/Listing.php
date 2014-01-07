@@ -27,14 +27,14 @@
  */
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
-	public function topSellerAction()
-	{
+    public function topSellerAction()
+    {
         $perPage = (int) $this->Request()->getParam('perPage', 4);
         $this->View()->sCharts = Shopware()->Modules()->Articles()->sGetArticleCharts(
             $this->Request()->getParam('sCategory')
         );
         $this->View()->perPage = $perPage;
-	}
+    }
 
     public function tagCloudAction()
     {

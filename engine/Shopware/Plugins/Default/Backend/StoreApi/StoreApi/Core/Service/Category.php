@@ -39,7 +39,7 @@ class Shopware_StoreApi_Core_Service_Category extends Enlight_Class
         );
         $searchResult = $this->getCategories($categoryQuery);
 
-        if($searchResult instanceof Shopware_StoreApi_Exception_Response) {
+        if ($searchResult instanceof Shopware_StoreApi_Exception_Response) {
             return $searchResult;
         }
 
@@ -48,7 +48,7 @@ class Shopware_StoreApi_Core_Service_Category extends Enlight_Class
 
     public function getCategories(Shopware_StoreApi_Models_Query_Category $categoryQuery)
     {
-        if(!$categoryQuery instanceof Shopware_StoreApi_Models_Query_Category) {
+        if (!$categoryQuery instanceof Shopware_StoreApi_Models_Query_Category) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Query_Category', 10);
         }
 

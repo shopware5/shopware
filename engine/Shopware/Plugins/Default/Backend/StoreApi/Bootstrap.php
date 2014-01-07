@@ -45,8 +45,8 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
      *
      * @return bool
      */
-    public function install() {
-
+    public function install()
+    {
         //Create the new resource StoreApi
         $event = $this->createEvent(
             'Enlight_Bootstrap_InitResource_StoreApi',
@@ -102,7 +102,7 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
         $request = $me->Request();
 
         //Aborts if the current is not a backend controller
-        if(strtolower($request->getModuleName()) != 'backend') {
+        if (strtolower($request->getModuleName()) != 'backend') {
             return;
         }
 

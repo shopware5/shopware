@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_ParentId extends Shopware_StoreAp
      */
     public function __construct($ids)
     {
-        if(is_array($ids)) {
-            foreach($ids as $id) {
+        if (is_array($ids)) {
+            foreach ($ids as $id) {
                 $this->addId($id);
             }
         } else {
@@ -45,7 +45,7 @@ class Shopware_StoreApi_Models_Query_Criterion_ParentId extends Shopware_StoreAp
     public function addId($id)
     {
         $id = intval($id);
-        if(!empty($id)) {
+        if (!empty($id)) {
             $this->collection[] = $id;
             return true;
         } else {
@@ -55,7 +55,7 @@ class Shopware_StoreApi_Models_Query_Criterion_ParentId extends Shopware_StoreAp
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

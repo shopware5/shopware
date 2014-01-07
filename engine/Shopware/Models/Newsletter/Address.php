@@ -226,4 +226,3 @@ class Address extends ModelEntity
         return $this->groupId;
     }
 }
-

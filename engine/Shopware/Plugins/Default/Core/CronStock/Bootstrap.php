@@ -38,7 +38,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
     public function onRun(Enlight_Components_Cron_EventArgs $args)
     {
         $sql = '
-			SELECT
+            SELECT
             d.ordernumber,
             d.id,
             a.id as `articleID`,
@@ -82,7 +82,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         WHERE d.articleID = a.id
         AND d.id = at.articledetailsID
         AND stockmin > instock
-		';
+        ';
         $articles = Shopware()->Db()->fetchAssoc($sql);
         $data = array(
             'count' => count($articles),

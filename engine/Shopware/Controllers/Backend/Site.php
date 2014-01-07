@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         $name = empty($data['groupName']) ? null : $data['groupName'];
         $key = empty($data['templateVar']) ? null : $data['templateVar'];
 
-        if($key === null) {
+        if ($key === null) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => 'Template Variable may not be empty'
@@ -239,7 +239,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        if($name === null) {
+        if ($name === null) {
             $this->View()->assign(array(
                'success' => false,
                'message' => 'Name may not be empty'
@@ -249,7 +249,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         // Check if name exists
         $model = $repository->findOneBy(array('name' => $name));
-        if($model !== null) {
+        if ($model !== null) {
             $this->View()->assign(array(
                    'success' => false,
                    'message' => 'nameExists'
@@ -259,10 +259,10 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         // Check if key exists
         $model = $repository->findOneBy(array('key' => $key));
-        if($model === null) {
+        if ($model === null) {
             $model = new \Shopware\Models\Site\Group();
             $model->setKey($key);
-        }else{
+        } else {
             $this->View()->assign(array(
                'success' => false,
                'message' => 'variableExists'
@@ -295,7 +295,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         /** @var \Shopware\Models\Site\Group $model  */
         $model = $repository->findOneBy(array('key' => $key));
-        if($model !== null) {
+        if ($model !== null) {
             $manager->remove($model);
             $manager->flush();
         }
@@ -467,7 +467,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $query = $this->getSiteRepository()->getGroupListQuery();
             $groups = $query->getArrayResult();
 
-            foreach($groups as $groupKey => $group) {
+            foreach ($groups as $groupKey => $group) {
                 if (in_array($group['key'], $grouping)) {
                     unset($groups[$groupKey]);
                 }
@@ -489,7 +489,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $query = $this->getSiteRepository()->getGroupListQuery();
             $groups = $query->getArrayResult();
 
-            foreach($groups as $groupKey => $group) {
+            foreach ($groups as $groupKey => $group) {
                 if (!in_array($group['key'], $grouping)) {
                     unset($groups[$groupKey]);
                 }

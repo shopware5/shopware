@@ -188,7 +188,7 @@ class Article extends Resource implements BatchInterface
                     $article['tax']['tax']
                 );
 
-                foreach($article['details'] as &$detail) {
+                foreach ($article['details'] as &$detail) {
                     $detail['prices'] = $this->getTaxPrices(
                         $detail['prices'],
                         $article['tax']['tax']
@@ -235,7 +235,7 @@ class Article extends Resource implements BatchInterface
      */
     public function getTaxPrices(array $prices, $taxRate)
     {
-        foreach($prices as &$price) {
+        foreach ($prices as &$price) {
             $price['net'] = $price['price'];
             if ($price['customerGroup'] && $price['customerGroup']['taxInput']) {
                 $price['price'] = $price['price'] * (($taxRate + 100) / 100);
@@ -478,7 +478,7 @@ class Article extends Resource implements BatchInterface
                 array('locale' => $options['language'])
             ));
 
-            foreach($articles as &$article) {
+            foreach ($articles as &$article) {
                 $article = $this->translateArticle(
                     $article,
                     $locale
@@ -1461,10 +1461,10 @@ class Article extends Resource implements BatchInterface
                 $image->setPosition($position);
                 $position++;
 
-            } else if (!empty($imageData['mediaId'])) {
+            } elseif (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
                     'Shopware\Models\Media\Media',
-                    (int)$imageData['mediaId']
+                    (int) $imageData['mediaId']
                 );
 
                 if (!($media instanceof MediaModel)) {
@@ -2105,7 +2105,7 @@ class Article extends Resource implements BatchInterface
 
         if (isset($data['id'])) {
             $id = $data['id'];
-        } else if (isset($data['mainDetail']['number'])) {
+        } elseif (isset($data['mainDetail']['number'])) {
             try {
                 $id = $this->getIdFromNumber($data['mainDetail']['number']);
             } catch (ApiException\NotFoundException $e) {

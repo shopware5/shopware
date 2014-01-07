@@ -68,7 +68,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         Shopware()->Db()->query(
             'DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId',
             array(
-                'articleId' => (int)$articleId
+                'articleId' => (int) $articleId
             )
         );
 
@@ -93,7 +93,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         Shopware()->Db()->query($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
-            'articleId' => (int)$articleId
+            'articleId' => (int) $articleId
         ));
     }
 

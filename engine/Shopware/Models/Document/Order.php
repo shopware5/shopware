@@ -140,36 +140,36 @@ class
     {
         // Test-data for preview mode
         if ($config["_preview"] == true && $config["_previewSample"]==true) {
-			$php53 = 'a:17:{s:7:"_amount";i:142;s:12:"_amountNetto";d:119.32773109243697717829491011798381805419921875;s:8:"_billing";s:1011:"C:11:"ArrayObject":986:{x:i:2;a:24:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:11:"shopware AG";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:14:"customernumber";s:0:"";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:12:"streetnumber";s:1:"2";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:5:"phone";s:14:"02555 / 997500";s:3:"fax";s:0:"";s:9:"countryID";s:1:"2";s:5:"ustid";s:0:"";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:9:"_currency";s:138:"C:11:"ArrayObject":113:{x:i:2;a:4:{s:8:"currency";s:3:"EUR";s:4:"name";s:4:"Euro";s:6:"factor";s:1:"1";s:4:"char";s:6:"&euro;";};m:a:0:{}}";s:9:"_dispatch";s:45:"C:11:"ArrayObject":21:{x:i:2;a:0:{};m:a:0:{}}";s:3:"_id";i:0;s:4:"_net";b:0;s:6:"_order";s:1014:"C:11:"ArrayObject":989:{x:i:2;a:36:{s:2:"id";s:1:"7";s:11:"ordernumber";s:5:"10001";s:6:"userID";s:1:"2";s:14:"invoice_amount";s:3:"142";s:18:"invoice_amount_net";s:6:"119.32";s:16:"invoice_shipping";s:2:"13";s:20:"invoice_shipping_net";s:5:"10.92";s:9:"ordertime";s:19:"2010-09-09 00:00:00";s:6:"status";s:1:"7";s:7:"cleared";s:2:"17";s:9:"paymentID";s:1:"3";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:7:"taxfree";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"0000-00-00 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:2:"de";s:10:"dispatchID";s:1:"9";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"o_attr1";s:0:"";s:7:"o_attr2";s:0:"";s:7:"o_attr3";s:0:"";s:7:"o_attr4";s:0:"";s:7:"o_attr5";s:0:"";s:7:"o_attr6";s:0:"";s:11:"remote_addr";s:14:"192.168.178.53";s:6:"factor";s:1:"1";s:12:"templatechar";s:6:"&euro;";s:12:"currencyName";s:4:"Euro";};m:a:0:{}}";s:8:"_payment";s:493:"C:11:"ArrayObject":468:{x:i:2;a:16:{s:2:"id";s:1:"3";s:4:"name";s:4:"cash";s:11:"description";s:9:"Nachnahme";s:8:"template";s:8:"cash.tpl";s:5:"class";s:8:"cash.php";s:5:"table";s:0:"";s:4:"hide";s:1:"0";s:21:"additionaldescription";s:35:"(zzgl. 2,00 Euro Nachnahmegebühren)";s:13:"debit_percent";s:1:"0";s:9:"surcharge";s:1:"0";s:15:"surchargestring";s:0:"";s:8:"position";s:1:"2";s:6:"active";s:1:"1";s:9:"esdactive";s:1:"0";s:11:"embediframe";s:0:"";s:12:"hideprospect";s:1:"0";};m:a:0:{}}";s:10:"_positions";s:1354:"C:11:"ArrayObject":1328:{x:i:2;a:2:{i:0;a:46:{s:2:"id";s:1:"7";s:7:"orderID";s:1:"7";s:11:"ordernumber";s:5:"10001";s:9:"articleID";s:1:"8";s:18:"articleordernumber";s:6:"SW2003";s:5:"price";d:129;s:8:"quantity";s:1:"1";s:4:"name";s:18:"Lunaracer Größe 42";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:3:"tax";s:2:"19";s:5:"netto";d:108.40336134453781369302305392920970916748046875;s:12:"amount_netto";d:108.40336134453781369302305392920970916748046875;s:6:"amount";i:129;}i:1;a:8:{s:8:"quantity";i:1;s:5:"netto";d:10.924369747899159932558177388273179531097412109375;s:3:"tax";s:2:"19";s:5:"price";s:2:"13";s:6:"amount";s:2:"13";s:12:"amount_netto";d:10.924369747899159932558177388273179531097412109375;s:18:"articleordernumber";s:0:"";s:4:"name";s:13:"Versandkosten";}};m:a:0:{}}";s:9:"_shipping";s:900:"C:11:"ArrayObject":875:{x:i:2;a:20:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:12:"streetnumber";s:1:"2";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:9:"countryID";s:1:"2";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:14:"_shippingCosts";s:2:"13";s:24:"_shippingCostsAsPosition";b:1;s:11:"_summaryNet";b:0;s:4:"_tax";s:61:"a:1:{i:19;d:22.67226890756302282170508988201618194580078125;}";s:5:"_user";s:615:"C:11:"ArrayObject":590:{x:i:2;a:19:{s:2:"id";s:1:"2";s:8:"password";s:32:"c899f4ef7be7ddaab75bcd8b6c9a85a8";s:5:"email";s:14:"hl@shopware.ag";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2010-06-18";s:9:"lastlogin";s:19:"2010-08-09 15:04:12";s:9:"sessionID";s:32:"b33a7d0a8ee56fe430b70e36c6de7eec";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:2:"de";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;};m:a:0:{}}";s:7:"_userID";i:0;}';
+            $php53 = 'a:17:{s:7:"_amount";i:142;s:12:"_amountNetto";d:119.32773109243697717829491011798381805419921875;s:8:"_billing";s:1011:"C:11:"ArrayObject":986:{x:i:2;a:24:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:11:"shopware AG";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:14:"customernumber";s:0:"";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:12:"streetnumber";s:1:"2";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:5:"phone";s:14:"02555 / 997500";s:3:"fax";s:0:"";s:9:"countryID";s:1:"2";s:5:"ustid";s:0:"";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:9:"_currency";s:138:"C:11:"ArrayObject":113:{x:i:2;a:4:{s:8:"currency";s:3:"EUR";s:4:"name";s:4:"Euro";s:6:"factor";s:1:"1";s:4:"char";s:6:"&euro;";};m:a:0:{}}";s:9:"_dispatch";s:45:"C:11:"ArrayObject":21:{x:i:2;a:0:{};m:a:0:{}}";s:3:"_id";i:0;s:4:"_net";b:0;s:6:"_order";s:1014:"C:11:"ArrayObject":989:{x:i:2;a:36:{s:2:"id";s:1:"7";s:11:"ordernumber";s:5:"10001";s:6:"userID";s:1:"2";s:14:"invoice_amount";s:3:"142";s:18:"invoice_amount_net";s:6:"119.32";s:16:"invoice_shipping";s:2:"13";s:20:"invoice_shipping_net";s:5:"10.92";s:9:"ordertime";s:19:"2010-09-09 00:00:00";s:6:"status";s:1:"7";s:7:"cleared";s:2:"17";s:9:"paymentID";s:1:"3";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:7:"taxfree";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"0000-00-00 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:2:"de";s:10:"dispatchID";s:1:"9";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"o_attr1";s:0:"";s:7:"o_attr2";s:0:"";s:7:"o_attr3";s:0:"";s:7:"o_attr4";s:0:"";s:7:"o_attr5";s:0:"";s:7:"o_attr6";s:0:"";s:11:"remote_addr";s:14:"192.168.178.53";s:6:"factor";s:1:"1";s:12:"templatechar";s:6:"&euro;";s:12:"currencyName";s:4:"Euro";};m:a:0:{}}";s:8:"_payment";s:493:"C:11:"ArrayObject":468:{x:i:2;a:16:{s:2:"id";s:1:"3";s:4:"name";s:4:"cash";s:11:"description";s:9:"Nachnahme";s:8:"template";s:8:"cash.tpl";s:5:"class";s:8:"cash.php";s:5:"table";s:0:"";s:4:"hide";s:1:"0";s:21:"additionaldescription";s:35:"(zzgl. 2,00 Euro Nachnahmegebühren)";s:13:"debit_percent";s:1:"0";s:9:"surcharge";s:1:"0";s:15:"surchargestring";s:0:"";s:8:"position";s:1:"2";s:6:"active";s:1:"1";s:9:"esdactive";s:1:"0";s:11:"embediframe";s:0:"";s:12:"hideprospect";s:1:"0";};m:a:0:{}}";s:10:"_positions";s:1354:"C:11:"ArrayObject":1328:{x:i:2;a:2:{i:0;a:46:{s:2:"id";s:1:"7";s:7:"orderID";s:1:"7";s:11:"ordernumber";s:5:"10001";s:9:"articleID";s:1:"8";s:18:"articleordernumber";s:6:"SW2003";s:5:"price";d:129;s:8:"quantity";s:1:"1";s:4:"name";s:18:"Lunaracer Größe 42";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:3:"tax";s:2:"19";s:5:"netto";d:108.40336134453781369302305392920970916748046875;s:12:"amount_netto";d:108.40336134453781369302305392920970916748046875;s:6:"amount";i:129;}i:1;a:8:{s:8:"quantity";i:1;s:5:"netto";d:10.924369747899159932558177388273179531097412109375;s:3:"tax";s:2:"19";s:5:"price";s:2:"13";s:6:"amount";s:2:"13";s:12:"amount_netto";d:10.924369747899159932558177388273179531097412109375;s:18:"articleordernumber";s:0:"";s:4:"name";s:13:"Versandkosten";}};m:a:0:{}}";s:9:"_shipping";s:900:"C:11:"ArrayObject":875:{x:i:2;a:20:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:12:"streetnumber";s:1:"2";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:9:"countryID";s:1:"2";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:14:"_shippingCosts";s:2:"13";s:24:"_shippingCostsAsPosition";b:1;s:11:"_summaryNet";b:0;s:4:"_tax";s:61:"a:1:{i:19;d:22.67226890756302282170508988201618194580078125;}";s:5:"_user";s:615:"C:11:"ArrayObject":590:{x:i:2;a:19:{s:2:"id";s:1:"2";s:8:"password";s:32:"c899f4ef7be7ddaab75bcd8b6c9a85a8";s:5:"email";s:14:"hl@shopware.ag";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2010-06-18";s:9:"lastlogin";s:19:"2010-08-09 15:04:12";s:9:"sessionID";s:32:"b33a7d0a8ee56fe430b70e36c6de7eec";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:2:"de";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;};m:a:0:{}}";s:7:"_userID";i:0;}';
 
-			$php52 = 'a:18:{s:3:"_id";s:2:"13";s:6:"_order";s:1021:"O:11:"ArrayObject":37:{s:2:"id";s:2:"13";s:11:"ordernumber";s:5:"10080";s:6:"userID";s:1:"5";s:14:"invoice_amount";s:6:"119.89";s:18:"invoice_amount_net";s:6:"100.75";s:16:"invoice_shipping";s:2:"17";s:20:"invoice_shipping_net";s:5:"14.29";s:9:"ordertime";s:19:"2010-09-27 17:25:15";s:6:"status";s:1:"0";s:7:"cleared";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:7:"taxfree";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"0000-00-00 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:2:"de";s:10:"dispatchID";s:1:"6";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"o_attr1";s:0:"";s:7:"o_attr2";s:0:"";s:7:"o_attr3";s:0:"";s:7:"o_attr4";s:0:"";s:7:"o_attr5";s:0:"";s:7:"o_attr6";s:0:"";s:11:"remote_addr";s:14:"192.168.178.18";s:6:"factor";s:1:"1";s:10:"currencyID";s:1:"1";s:12:"templatechar";s:6:"&euro;";s:12:"currencyName";s:4:"Euro";}";s:10:"_positions";s:3789:"O:11:"ArrayObject":4:{i:0;a:47:{s:2:"id";s:2:"37";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:2:"47";s:18:"articleordernumber";s:14:"SW2024_5983.12";s:5:"price";d:99.9899999999999948840923025272786617279052734375;s:8:"quantity";s:1:"1";s:4:"name";s:43:"Konfigurator Standard Größe: XL
-			Farbe: gelb";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";s:0:"";s:5:"attr2";s:0:"";s:5:"attr3";s:0:"";s:5:"attr4";s:0:"";s:5:"attr5";s:0:"";s:5:"attr6";s:0:"";s:5:"attr7";s:0:"";s:5:"attr8";s:0:"";s:5:"attr9";s:0:"";s:6:"attr10";s:0:"";s:6:"attr11";s:0:"";s:6:"attr12";s:0:"";s:6:"attr13";s:0:"";s:6:"attr14";s:0:"";s:6:"attr15";s:0:"";s:6:"attr16";s:0:"";s:6:"attr17";s:10:"0000-00-00";s:6:"attr18";s:0:"";s:6:"attr19";s:0:"";s:6:"attr20";s:0:"";s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:84.025210084033602697672904469072818756103515625;s:12:"amount_netto";d:84.025210084033602697672904469072818756103515625;s:6:"amount";d:99.9899999999999948840923025272786617279052734375;}i:1;a:47:{s:2:"id";s:2:"39";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:11:"sw-discount";s:5:"price";d:-2.100000000000000088817841970012523233890533447265625;s:8:"quantity";s:1:"1";s:4:"name";s:21:"- 2 % Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"3";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:-1.76470588235294112422479884116910398006439208984375;s:12:"amount_netto";d:-1.76470588235294112422479884116910398006439208984375;s:6:"amount";d:-2.100000000000000088817841970012523233890533447265625;}i:2;a:47:{s:2:"id";s:2:"38";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:12:"sw-surcharge";s:5:"price";d:5;s:8:"quantity";s:1:"1";s:4:"name";s:20:"Mindermengenzuschlag";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:4.20168067226890773468994666473008692264556884765625;s:12:"amount_netto";d:4.20168067226890773468994666473008692264556884765625;s:6:"amount";i:5;}i:3;a:9:{s:8:"quantity";i:1;s:5:"netto";d:14.28571428571428469922466319985687732696533203125;s:3:"tax";s:2:"19";s:5:"price";s:2:"17";s:6:"amount";s:2:"17";s:5:"modus";i:1;s:12:"amount_netto";d:14.28571428571428469922466319985687732696533203125;s:18:"articleordernumber";s:0:"";s:4:"name";s:13:"Versandkosten";}}";s:7:"_userID";s:1:"5";s:5:"_user";s:586:"O:11:"ArrayObject":19:{s:2:"id";s:1:"5";s:8:"password";s:32:"a15370144783d9da799fcfacb99a881d";s:5:"email";s:14:"sk@shopware.de";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2010-09-27";s:9:"lastlogin";s:19:"2010-09-27 18:01:47";s:9:"sessionID";s:26:"10pfde4j8usf5u5i9sr647aoi6";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:2:"de";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;}";s:8:"_billing";s:966:"O:11:"ArrayObject":24:{s:2:"id";s:2:"13";s:6:"userID";s:1:"5";s:7:"orderID";s:2:"13";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:14:"customernumber";s:5:"20033";s:9:"firstname";s:9:"Sebastian";s:8:"lastname";s:7:"Klöpper";s:6:"street";s:11:"Hauptstraße";s:12:"streetnumber";s:2:"36";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:5:"phone";s:12:"02555-997500";s:3:"fax";s:0:"";s:9:"countryID";s:1:"2";s:5:"ustid";s:0:"";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";O:11:"ArrayObject":13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";}}";s:9:"_shipping";s:864:"O:11:"ArrayObject":20:{s:2:"id";s:2:"13";s:6:"userID";s:1:"5";s:7:"orderID";s:2:"13";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:9:"Sebastian";s:8:"lastname";s:7:"Klöpper";s:6:"street";s:11:"Hauptstraße";s:12:"streetnumber";s:2:"36";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:9:"countryID";s:1:"2";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";O:11:"ArrayObject":13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";}}";s:8:"_payment";s:563:"O:11:"ArrayObject":16:{s:2:"id";s:1:"5";s:4:"name";s:10:"prepayment";s:11:"description";s:8:"Vorkasse";s:8:"template";s:14:"prepayment.tpl";s:5:"class";s:14:"prepayment.php";s:5:"table";s:0:"";s:4:"hide";s:1:"0";s:21:"additionaldescription";s:107:"Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.";s:13:"debit_percent";s:1:"0";s:9:"surcharge";s:1:"0";s:15:"surchargestring";s:0:"";s:8:"position";s:1:"1";s:6:"active";s:1:"1";s:9:"esdactive";s:1:"0";s:11:"embediframe";s:0:"";s:12:"hideprospect";s:1:"0";}";s:9:"_dispatch";s:83:"O:11:"ArrayObject":2:{s:4:"name";s:15:"Express Versand";s:11:"description";s:0:"";}";s:4:"_net";b:0;s:11:"_summaryNet";b:0;s:12:"_amountNetto";d:100.74789915966385933643323369324207305908203125;s:7:"_amount";d:119.8900000000000005684341886080801486968994140625;s:4:"_tax";a:1:{i:19;d:19.14210084033613412657359731383621692657470703125;}s:9:"_currency";s:115:"O:11:"ArrayObject":4:{s:8:"currency";s:3:"EUR";s:4:"name";s:4:"Euro";s:6:"factor";s:1:"1";s:4:"char";s:6:"&euro;";}";s:14:"_shippingCosts";s:2:"17";s:24:"_shippingCostsAsPosition";b:1;s:9:"_discount";d:-2.100000000000000088817841970012523233890533447265625;}';
+            $php52 = 'a:18:{s:3:"_id";s:2:"13";s:6:"_order";s:1021:"O:11:"ArrayObject":37:{s:2:"id";s:2:"13";s:11:"ordernumber";s:5:"10080";s:6:"userID";s:1:"5";s:14:"invoice_amount";s:6:"119.89";s:18:"invoice_amount_net";s:6:"100.75";s:16:"invoice_shipping";s:2:"17";s:20:"invoice_shipping_net";s:5:"14.29";s:9:"ordertime";s:19:"2010-09-27 17:25:15";s:6:"status";s:1:"0";s:7:"cleared";s:2:"17";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:7:"taxfree";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"0000-00-00 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:2:"de";s:10:"dispatchID";s:1:"6";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"o_attr1";s:0:"";s:7:"o_attr2";s:0:"";s:7:"o_attr3";s:0:"";s:7:"o_attr4";s:0:"";s:7:"o_attr5";s:0:"";s:7:"o_attr6";s:0:"";s:11:"remote_addr";s:14:"192.168.178.18";s:6:"factor";s:1:"1";s:10:"currencyID";s:1:"1";s:12:"templatechar";s:6:"&euro;";s:12:"currencyName";s:4:"Euro";}";s:10:"_positions";s:3789:"O:11:"ArrayObject":4:{i:0;a:47:{s:2:"id";s:2:"37";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:2:"47";s:18:"articleordernumber";s:14:"SW2024_5983.12";s:5:"price";d:99.9899999999999948840923025272786617279052734375;s:8:"quantity";s:1:"1";s:4:"name";s:43:"Konfigurator Standard Größe: XL
+            Farbe: gelb";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";s:0:"";s:5:"attr2";s:0:"";s:5:"attr3";s:0:"";s:5:"attr4";s:0:"";s:5:"attr5";s:0:"";s:5:"attr6";s:0:"";s:5:"attr7";s:0:"";s:5:"attr8";s:0:"";s:5:"attr9";s:0:"";s:6:"attr10";s:0:"";s:6:"attr11";s:0:"";s:6:"attr12";s:0:"";s:6:"attr13";s:0:"";s:6:"attr14";s:0:"";s:6:"attr15";s:0:"";s:6:"attr16";s:0:"";s:6:"attr17";s:10:"0000-00-00";s:6:"attr18";s:0:"";s:6:"attr19";s:0:"";s:6:"attr20";s:0:"";s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:84.025210084033602697672904469072818756103515625;s:12:"amount_netto";d:84.025210084033602697672904469072818756103515625;s:6:"amount";d:99.9899999999999948840923025272786617279052734375;}i:1;a:47:{s:2:"id";s:2:"39";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:11:"sw-discount";s:5:"price";d:-2.100000000000000088817841970012523233890533447265625;s:8:"quantity";s:1:"1";s:4:"name";s:21:"- 2 % Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"3";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:-1.76470588235294112422479884116910398006439208984375;s:12:"amount_netto";d:-1.76470588235294112422479884116910398006439208984375;s:6:"amount";d:-2.100000000000000088817841970012523233890533447265625;}i:2;a:47:{s:2:"id";s:2:"38";s:7:"orderID";s:2:"13";s:11:"ordernumber";s:5:"10080";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:12:"sw-surcharge";s:5:"price";d:5;s:8:"quantity";s:1:"1";s:4:"name";s:20:"Mindermengenzuschlag";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:4:"meta";b:0;s:3:"tax";s:2:"19";s:5:"netto";d:4.20168067226890773468994666473008692264556884765625;s:12:"amount_netto";d:4.20168067226890773468994666473008692264556884765625;s:6:"amount";i:5;}i:3;a:9:{s:8:"quantity";i:1;s:5:"netto";d:14.28571428571428469922466319985687732696533203125;s:3:"tax";s:2:"19";s:5:"price";s:2:"17";s:6:"amount";s:2:"17";s:5:"modus";i:1;s:12:"amount_netto";d:14.28571428571428469922466319985687732696533203125;s:18:"articleordernumber";s:0:"";s:4:"name";s:13:"Versandkosten";}}";s:7:"_userID";s:1:"5";s:5:"_user";s:586:"O:11:"ArrayObject":19:{s:2:"id";s:1:"5";s:8:"password";s:32:"a15370144783d9da799fcfacb99a881d";s:5:"email";s:14:"sk@shopware.de";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2010-09-27";s:9:"lastlogin";s:19:"2010-09-27 18:01:47";s:9:"sessionID";s:26:"10pfde4j8usf5u5i9sr647aoi6";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:2:"de";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;}";s:8:"_billing";s:966:"O:11:"ArrayObject":24:{s:2:"id";s:2:"13";s:6:"userID";s:1:"5";s:7:"orderID";s:2:"13";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:14:"customernumber";s:5:"20033";s:9:"firstname";s:9:"Sebastian";s:8:"lastname";s:7:"Klöpper";s:6:"street";s:11:"Hauptstraße";s:12:"streetnumber";s:2:"36";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:5:"phone";s:12:"02555-997500";s:3:"fax";s:0:"";s:9:"countryID";s:1:"2";s:5:"ustid";s:0:"";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";O:11:"ArrayObject":13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";}}";s:9:"_shipping";s:864:"O:11:"ArrayObject":20:{s:2:"id";s:2:"13";s:6:"userID";s:1:"5";s:7:"orderID";s:2:"13";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:9:"Sebastian";s:8:"lastname";s:7:"Klöpper";s:6:"street";s:11:"Hauptstraße";s:12:"streetnumber";s:2:"36";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:9:"countryID";s:1:"2";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";O:11:"ArrayObject":13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";}}";s:8:"_payment";s:563:"O:11:"ArrayObject":16:{s:2:"id";s:1:"5";s:4:"name";s:10:"prepayment";s:11:"description";s:8:"Vorkasse";s:8:"template";s:14:"prepayment.tpl";s:5:"class";s:14:"prepayment.php";s:5:"table";s:0:"";s:4:"hide";s:1:"0";s:21:"additionaldescription";s:107:"Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.";s:13:"debit_percent";s:1:"0";s:9:"surcharge";s:1:"0";s:15:"surchargestring";s:0:"";s:8:"position";s:1:"1";s:6:"active";s:1:"1";s:9:"esdactive";s:1:"0";s:11:"embediframe";s:0:"";s:12:"hideprospect";s:1:"0";}";s:9:"_dispatch";s:83:"O:11:"ArrayObject":2:{s:4:"name";s:15:"Express Versand";s:11:"description";s:0:"";}";s:4:"_net";b:0;s:11:"_summaryNet";b:0;s:12:"_amountNetto";d:100.74789915966385933643323369324207305908203125;s:7:"_amount";d:119.8900000000000005684341886080801486968994140625;s:4:"_tax";a:1:{i:19;d:19.14210084033613412657359731383621692657470703125;}s:9:"_currency";s:115:"O:11:"ArrayObject":4:{s:8:"currency";s:3:"EUR";s:4:"name";s:4:"Euro";s:6:"factor";s:1:"1";s:4:"char";s:6:"&euro;";}";s:14:"_shippingCosts";s:2:"17";s:24:"_shippingCostsAsPosition";b:1;s:9:"_discount";d:-2.100000000000000088817841970012523233890533447265625;}';
 
             if (floatval(phpversion()) >= 5.3) {
-				//This one doesn't have a currencyID
+                //This one doesn't have a currencyID
                 $test = utf8_decode($php53);
             } else {
                 $test = utf8_decode($php52);
             }
 
-			$test = unserialize($test);
+            $test = unserialize($test);
 
-			$array = $this->convertToUtf8($test);
+            $array = $this->convertToUtf8($test);
             $array['_order']->language = 1;
 
-			foreach($array as &$element){
-				if(is_object($element)){
-					$element = serialize($element);
-				}
-			}
+            foreach ($array as &$element) {
+                if (is_object($element)) {
+                    $element = serialize($element);
+                }
+            }
 
-			foreach ($array as $key => $v) {
-				if (preg_match("/\{/",$v)){
-					$this->$key = unserialize($v);
-				} else {
-					$this->$key = $v;
-				}
-			}
+            foreach ($array as $key => $v) {
+                if (preg_match("/\{/",$v)) {
+                    $this->$key = unserialize($v);
+                } else {
+                    $this->$key = $v;
+                }
+            }
             return;
         }
 
@@ -191,32 +191,32 @@ class
         $this->processOrder();
     }
 
-	/**
-	 * Converts the serialized array to utf8 by unserializing it, iterating through each element and setting the encoding to utf8.
-	 * It also reverts the arrays to objects
-	 * @param $array
-	 * @return array
-	 */
-    private function convertToUtf8($array){
-		$testArray = array();
-		foreach($array as $key=>&$arrayElement){
-			if(preg_match("/\{/",$arrayElement)){
-				$arrayElement = unserialize($arrayElement);
-			}
-			if(!is_object($arrayElement))
-			{
-				if(is_array($arrayElement)){
-					$testArray[$key] = $this->convertToUtf8($arrayElement);
-				}else{
-					$testArray[$key] = utf8_encode($arrayElement);
-				}
-			}else{
-				$arrayElement = $arrayElement->getArrayCopy();
-				$testArray[$key] = new ArrayObject($this->convertToUtf8($arrayElement), ArrayObject::ARRAY_AS_PROPS);
-			}
-		}
-		return $testArray;
-	}
+    /**
+     * Converts the serialized array to utf8 by unserializing it, iterating through each element and setting the encoding to utf8.
+     * It also reverts the arrays to objects
+     * @param $array
+     * @return array
+     */
+    private function convertToUtf8($array)
+    {
+        $testArray = array();
+        foreach ($array as $key=>&$arrayElement) {
+            if (preg_match("/\{/",$arrayElement)) {
+                $arrayElement = unserialize($arrayElement);
+            }
+            if (!is_object($arrayElement)) {
+                if (is_array($arrayElement)) {
+                    $testArray[$key] = $this->convertToUtf8($arrayElement);
+                } else {
+                    $testArray[$key] = utf8_encode($arrayElement);
+                }
+            } else {
+                $arrayElement = $arrayElement->getArrayCopy();
+                $testArray[$key] = new ArrayObject($this->convertToUtf8($arrayElement), ArrayObject::ARRAY_AS_PROPS);
+            }
+        }
+        return $testArray;
+    }
     /**
      * Get order database entries
      * @throws Enlight_Exception
@@ -291,10 +291,10 @@ class
             $this->_order["invoice_shipping"],
             $this->_order["invoice_shipping_net"]
         ));
-        if (empty($taxShipping)){
+        if (empty($taxShipping)) {
             $taxShipping = Shopware()->Config()->sTAXSHIPPING;
         }
-        $taxShipping = (float)$taxShipping;
+        $taxShipping = (float) $taxShipping;
         if ($this->_order["taxfree"]) {
             $this->_amountNetto =  $this->_amountNetto + $this->_order["invoice_shipping"];
 
@@ -370,7 +370,7 @@ class
         foreach ($this->_positions as $position) {
             if ($position["mode"] == 0) {
                 $getTax = $position["tax_rate"];
-                if (empty($getTax)){
+                if (empty($getTax)) {
                     $getTax = Shopware()->Db()->fetchOne("
                     SELECT tax FROM s_core_tax WHERE id = ?
                     ",array($position["taxID"]));
@@ -407,7 +407,7 @@ class
                 Read tax for each order position
                 */
                 if ($position["modus"]==4 || $position["modus"] == 3) {
-                        if (empty($position["tax_rate"])){
+                        if (empty($position["tax_rate"])) {
                         // Discounts get tax from configuration
                         if (!empty(Shopware()->Config()->sTAXAUTOMODE)) {
                             $tax = $this->getMaxTaxRate();
@@ -415,22 +415,21 @@ class
                             $tax = Shopware()->Config()->sDISCOUNTTAX;
                         }
                         $position["tax"] = $tax;
-                    }else {
+                    } else {
                         $position["tax"] = $position["tax_rate"];
                     }
-                } elseif(empty($position["taxID"]))
-                {
+                } elseif (empty($position["taxID"])) {
                     // Articles get tax per item configuration
-                    if (empty($position["tax_rate"])){
+                    if (empty($position["tax_rate"])) {
                         $position["tax"] = Shopware()->Db()->fetchOne("SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND s_core_tax.id=s_articles.taxID",array($position["articleID"]));
-                    }else {
+                    } else {
                         $position["tax"] = $position["tax_rate"];
                     }
                 } else {
                     // Bundles tax
-                    if (empty($position["tax_rate"])){
+                    if (empty($position["tax_rate"])) {
                         $position["tax"] = Shopware()->Db()->fetchOne("SELECT tax FROM s_core_tax WHERE s_core_tax.id=?",array($position["taxID"]));
-                    }else {
+                    } else {
                         $position["tax"] = $position["tax_rate"];
                     }
                 }
@@ -441,13 +440,12 @@ class
                 } else {
                     $position["netto"] = $position["price"] / (100 + $position["tax"]) * 100;
                 }
-            } elseif ($position["modus"]==2)
-            {
+            } elseif ($position["modus"]==2) {
                 $ticketResult = Shopware()->Db()->fetchRow("
                 SELECT * FROM s_emarketing_vouchers WHERE ordercode=?
                 ",array($position["articleordernumber"]));
 
-                if (empty($position["tax_rate"])){
+                if (empty($position["tax_rate"])) {
                     if ($ticketResult["taxconfig"] == "default" || empty($ticketResult["taxconfig"])) {
                         $position["tax"] =  Shopware()->Config()->sVOUCHERTAX;
                         // Pre 3.5.4 behaviour
@@ -464,7 +462,7 @@ class
                     } else {
                         $position["tax"]  = 0;
                     }
-                }else {
+                } else {
                     $position["tax"] = $position["tax_rate"];
                 }
                 if ($this->_net == true) {
@@ -474,8 +472,7 @@ class
                     $position["netto"] =  $position["price"]/(100+$position["tax"])*100;
                 }
 
-            } elseif ($position["modus"]==1)
-            {
+            } elseif ($position["modus"]==1) {
                 $position["tax"] = 0;
                 $position["netto"] = 0;
             }
@@ -490,7 +487,7 @@ class
             if (!empty($position["tax"])) {
                 $this->_tax[number_format(floatval($position["tax"]),2)] += round($position["amount"] / ($position["tax"]+100) *$position["tax"], 2);
             }
-            if ($position["amount"] <= 0){
+            if ($position["amount"] <= 0) {
                 $this->_discount += $position["amount"];
             }
             $position["price"] = $position["price"];
@@ -529,12 +526,12 @@ class
         WHERE id=?
         ",array($this->_billing["countryID"])), ArrayObject::ARRAY_AS_PROPS);
 
-        if (!empty($this->_billing["stateID"])){
+        if (!empty($this->_billing["stateID"])) {
             $this->_billing["state"] = new ArrayObject(Shopware()->Db()->fetchRow("
             SELECT * FROM s_core_countries_states
             WHERE id=?
             ",array($this->_billing["stateID"])), ArrayObject::ARRAY_AS_PROPS);
-        }else {
+        } else {
             $this->_billing["state"] = array();
         }
 
@@ -581,12 +578,12 @@ class
             WHERE id=?
             ",array($this->_shipping["countryID"])), ArrayObject::ARRAY_AS_PROPS);
 
-            if (!empty($this->_shipping["stateID"])){
+            if (!empty($this->_shipping["stateID"])) {
                 $this->_shipping["state"] = new ArrayObject(Shopware()->Db()->fetchRow("
                 SELECT * FROM s_core_countries_states
                 WHERE id=?
                 ",array($this->_shipping["stateID"])), ArrayObject::ARRAY_AS_PROPS);
-            }else {
+            } else {
                 $this->_shipping["state"] = array();
             }
         }

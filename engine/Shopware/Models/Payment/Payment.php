@@ -377,7 +377,7 @@ class Payment extends ModelEntity
      */
     public function setHide($hide)
     {
-        $this->hide = (bool)$hide;
+        $this->hide = (bool) $hide;
         return $this;
     }
 
@@ -488,7 +488,7 @@ class Payment extends ModelEntity
      */
     public function setPosition($position)
     {
-        $this->position = (int)$position;
+        $this->position = (int) $position;
         return $this;
     }
 
@@ -510,7 +510,7 @@ class Payment extends ModelEntity
      */
     public function setActive($active)
     {
-        $this->active = (bool)$active;
+        $this->active = (bool) $active;
         return $this;
     }
 
@@ -532,7 +532,7 @@ class Payment extends ModelEntity
      */
     public function setEsdActive($esdActive)
     {
-        $this->esdActive = (bool)$esdActive;
+        $this->esdActive = (bool) $esdActive;
         return $this;
     }
 

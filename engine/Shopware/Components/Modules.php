@@ -114,7 +114,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return (bool)$this->getModule($offset);
+        return (bool) $this->getModule($offset);
     }
 
     /**

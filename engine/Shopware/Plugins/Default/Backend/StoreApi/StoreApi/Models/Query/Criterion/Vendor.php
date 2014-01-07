@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_Vendor extends Shopware_StoreApi_
      */
     public function __construct($vendorModels)
     {
-        if(is_array($vendorModels) || $vendorModels instanceof Shopware_StoreApi_Core_Response_SearchResult) {
-            foreach($vendorModels as $vendorModel) {
+        if (is_array($vendorModels) || $vendorModels instanceof Shopware_StoreApi_Core_Response_SearchResult) {
+            foreach ($vendorModels as $vendorModel) {
                 $this->addVendor($vendorModel);
             }
         } else {
@@ -44,7 +44,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Vendor extends Shopware_StoreApi_
      */
     public function addVendor(Shopware_StoreApi_Models_Vendor $vendorModel)
     {
-        if($vendorModel instanceof Shopware_StoreApi_Models_Vendor) {
+        if ($vendorModel instanceof Shopware_StoreApi_Models_Vendor) {
             $this->collection[] = $vendorModel;
             return true;
         } else {
@@ -54,11 +54,11 @@ class Shopware_StoreApi_Models_Query_Criterion_Vendor extends Shopware_StoreApi_
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             $vendorIds = array();
-            foreach($this->collection as $collection) {
+            foreach ($this->collection as $collection) {
                 $vendorIds[] = $collection->getId();
             }
 

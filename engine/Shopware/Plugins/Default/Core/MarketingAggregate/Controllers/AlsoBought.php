@@ -72,4 +72,3 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
         $this->View()->assign(array('success' => true));
     }
 }
-

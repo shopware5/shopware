@@ -134,7 +134,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             $this->View()->assign(array(
                 'success' => false
             ));
-        }else {
+        } else {
             if ($articleDetail->getKind() == 1) {
                 $article = $articleDetail->getArticle();
                 $this->removePrices($article->getId());
@@ -204,7 +204,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
-        foreach($details as $detail) {
+        foreach ($details as $detail) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->delete('Shopware\Models\Article\Image', 'image')
                     ->where('image.articleDetailId = :id')
@@ -226,45 +226,45 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     public function listAction()
     {
-		if (!$this->_isAllowed('read', 'article')) {
-			/** @var $namespace Enlight_Components_Snippet_Namespace */
-			$this->View()->assign(array(
-				'success' => false,
-				'data' => $this->Request()->getParams(),
-				'message' => 'Insufficient permissions' )
-			);
-			return;
-		}
+        if (!$this->_isAllowed('read', 'article')) {
+            /** @var $namespace Enlight_Components_Snippet_Namespace */
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => 'Insufficient permissions' )
+            );
+            return;
+        }
 
-		$categoryId   = $this->Request()->getParam('categoryId');
-		$filterParams = $this->Request()->getParam('filter', array());
+        $categoryId   = $this->Request()->getParam('categoryId');
+        $filterParams = $this->Request()->getParam('filter', array());
         $filterBy     = $this->Request()->getParam('filterBy');
-		$showVariants = (bool) $this->Request()->getParam('showVariants', false);
+        $showVariants = (bool) $this->Request()->getParam('showVariants', false);
         $order        = $this->Request()->getParam('sort', null);
         $start        = $this->Request()->getParam('start', 0);
         $limit        = $this->Request()->getParam('limit', 20);
 
-		$filters = array();
+        $filters = array();
         foreach ($filterParams as $singleFilter) {
-			$filters[$singleFilter['property']] = $singleFilter['value'];
-		}
+            $filters[$singleFilter['property']] = $singleFilter['value'];
+        }
 
 
-		$categorySql = '';
+        $categorySql = '';
         $imageSQL = '';
-		$sqlParams = array();
+        $sqlParams = array();
 
 
-		$filterSql = 'WHERE 1 = 1';
-		if (isset($filters['search'])) {
-			$filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR articles.description_long LIKE :descriptionLong)";
+        $filterSql = 'WHERE 1 = 1';
+        if (isset($filters['search'])) {
+            $filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR articles.description_long LIKE :descriptionLong)";
             $searchFilter =  '%' . $filters['search'] . '%';
 
-			$sqlParams["orderNumber"] = $searchFilter;
-			$sqlParams["articleName"] = $searchFilter;
-			$sqlParams["supplierName"] = $searchFilter;
-			$sqlParams["descriptionLong"] = $searchFilter;
-		}
+            $sqlParams["orderNumber"] = $searchFilter;
+            $sqlParams["articleName"] = $searchFilter;
+            $sqlParams["supplierName"] = $searchFilter;
+            $sqlParams["descriptionLong"] = $searchFilter;
+        }
 
         if ($filterBy == 'notInStock') {
             $filterSql .= " AND details.instock <= 0 ";
@@ -273,19 +273,19 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         if ($filterBy == 'noCategory') {
             $categorySql = "
                     LEFT JOIN s_articles_categories_ro ac
-					ON ac.articleID = articles.id
+                    ON ac.articleID = articles.id
             ";
 
             $filterSql .= " AND ac.id IS NULL ";
         } elseif (!empty($categoryId) && $categoryId !== 'NaN') {
-			$categorySql =  "
+            $categorySql =  "
                 LEFT JOIN s_categories c
                     ON  c.id = :categoryId
 
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = articles.id
                     AND ac.categoryID = c.id
-			";
+            ";
             $sqlParams["categoryId"] = $categoryId;
         }
 
@@ -300,15 +300,15 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
 
         // Make sure that whe don't get a cold here
-		$columns = array('number', 'name', 'supplier', 'active', 'inStock', 'price', 'tax' );
-		$directions = array('ASC', 'DESC');
+        $columns = array('number', 'name', 'supplier', 'active', 'inStock', 'price', 'tax' );
+        $directions = array('ASC', 'DESC');
 
-		if (null === $order || !in_array($order[0]['property'] , $columns) || !in_array($order[0]['direction'], $directions)) {
-			$order = 'id DESC';
-		} else {
-			$order = array_shift($order);
-			$order = $order['property'] . ' ' . $order['direction'];
-		}
+        if (null === $order || !in_array($order[0]['property'] , $columns) || !in_array($order[0]['direction'], $directions)) {
+            $order = 'id DESC';
+        } else {
+            $order = array_shift($order);
+            $order = $order['property'] . ' ' . $order['direction'];
+        }
 
         list($sqlParams, $filterSql, $categorySql, $imageSQL, $order) = Enlight()->Events()->filter(
             'Shopware_Controllers_Backend_ArticleList_SQLParts',
@@ -316,118 +316,118 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             array('subject' => $this)
         );
 
-		if ($showVariants) {
+        if ($showVariants) {
             $sql = "
-				SELECT DISTINCT SQL_CALC_FOUND_ROWS
-				   details.id as id,
-				   articles.id as articleId,
-				   articles.name as name,
-				   articles.configurator_set_id,
-				   suppliers.name as supplier,
-				   articles.active as active,
-				   details.id as detailId,
-				   details.additionaltext as additionalText,
-				   details.instock as inStock,
-				   details.ordernumber as number,
+                SELECT DISTINCT SQL_CALC_FOUND_ROWS
+                   details.id as id,
+                   articles.id as articleId,
+                   articles.name as name,
+                   articles.configurator_set_id,
+                   suppliers.name as supplier,
+                   articles.active as active,
+                   details.id as detailId,
+                   details.additionaltext as additionalText,
+                   details.instock as inStock,
+                   details.ordernumber as number,
                    ROUND(prices.price*(100+tax.tax)/100,2) as `price`,
                    tax.tax as tax
-				FROM
-					s_articles_details as details
-				INNER JOIN s_articles as articles
-					ON details.articleID = articles.id
-				LEFT JOIN s_articles_supplier as suppliers
-					ON articles.supplierID = suppliers.id
+                FROM
+                    s_articles_details as details
+                INNER JOIN s_articles as articles
+                    ON details.articleID = articles.id
+                LEFT JOIN s_articles_supplier as suppliers
+                    ON articles.supplierID = suppliers.id
 
                 LEFT JOIN s_articles_prices prices
                     ON prices.articledetailsID = details.id
                     AND prices.`to`= 'beliebig'
                     AND prices.pricegroup='EK'
 
-				LEFT JOIN s_core_tax AS tax
-			        ON tax.id = articles.taxID
+                LEFT JOIN s_core_tax AS tax
+                    ON tax.id = articles.taxID
 
-				$categorySql
-				$imageSQL
+                $categorySql
+                $imageSQL
 
-				$filterSql
-				AND details.kind <> 3
-				ORDER BY $order, details.ordernumber ASC
-				LIMIT  $start, $limit
-			";
+                $filterSql
+                AND details.kind <> 3
+                ORDER BY $order, details.ordernumber ASC
+                LIMIT  $start, $limit
+            ";
         } else {
-			$sql = "
-				SELECT DISTINCT SQL_CALC_FOUND_ROWS
-				       details.id as id,
-					   articles.id as articleId,
-					   articles.name as name,
-					   articles.configurator_set_id,
-					   suppliers.name as supplier,
-					   articles.active as active,
-					   details.id as detailId,
-					   details.additionaltext as additionalText,
-					   details.instock as inStock,
-					   details.ordernumber as number,
-					   ROUND(prices.price*(100+tax.tax)/100,2) as `price`,
-					   tax.tax as tax
+            $sql = "
+                SELECT DISTINCT SQL_CALC_FOUND_ROWS
+                       details.id as id,
+                       articles.id as articleId,
+                       articles.name as name,
+                       articles.configurator_set_id,
+                       suppliers.name as supplier,
+                       articles.active as active,
+                       details.id as detailId,
+                       details.additionaltext as additionalText,
+                       details.instock as inStock,
+                       details.ordernumber as number,
+                       ROUND(prices.price*(100+tax.tax)/100,2) as `price`,
+                       tax.tax as tax
 
-				FROM s_articles as articles
+                FROM s_articles as articles
 
-				INNER JOIN s_articles_details as details
-					ON articles.main_detail_id = details.id
+                INNER JOIN s_articles_details as details
+                    ON articles.main_detail_id = details.id
 
-				LEFT JOIN s_articles_supplier as suppliers
-					ON articles.supplierID = suppliers.id
+                LEFT JOIN s_articles_supplier as suppliers
+                    ON articles.supplierID = suppliers.id
 
                 LEFT JOIN s_articles_prices prices
                     ON prices.articledetailsID = details.id
                     AND prices.`to`= 'beliebig'
                     AND prices.pricegroup='EK'
 
-				LEFT JOIN s_core_tax AS tax
-			        ON tax.id = articles.taxID
+                LEFT JOIN s_core_tax AS tax
+                    ON tax.id = articles.taxID
 
-				$categorySql
-				$imageSQL
-				$filterSql
+                $categorySql
+                $imageSQL
+                $filterSql
 
-				ORDER BY $order, details.ordernumber ASC
-				LIMIT  $start, $limit
-			";
-		}
+                ORDER BY $order, details.ordernumber ASC
+                LIMIT  $start, $limit
+            ";
+        }
 
         $sql = Enlight()->Events()->filter('Shopware_Controllers_Backend_ArticleList_ListSQL', $sql, array('subject' => $this, 'sqlParams' => $sqlParams));
-		$articles = Shopware()->Db()->fetchAll($sql, $sqlParams);
+        $articles = Shopware()->Db()->fetchAll($sql, $sqlParams);
 
-		$sql= "SELECT FOUND_ROWS() as count";
-		$count = Shopware()->Db()->fetchOne($sql);
+        $sql= "SELECT FOUND_ROWS() as count";
+        $count = Shopware()->Db()->fetchOne($sql);
 
-		foreach ($articles as $key => $article) {
-			// Check for configurator
-			$isConfigurator = !empty($article['configurator_set_id']);
-			$articles[$key]['hasConfigurator'] = ($isConfigurator !== false);
+        foreach ($articles as $key => $article) {
+            // Check for configurator
+            $isConfigurator = !empty($article['configurator_set_id']);
+            $articles[$key]['hasConfigurator'] = ($isConfigurator !== false);
 
-			// Check for Image
-			$image = Shopware()->Db()->fetchOne(
-				'SELECT img FROM s_articles_img WHERE articleID = ? AND main = 1 AND article_detail_id IS NULL',
-				$article['articleId']
-			);
+            // Check for Image
+            $image = Shopware()->Db()->fetchOne(
+                'SELECT img FROM s_articles_img WHERE articleID = ? AND main = 1 AND article_detail_id IS NULL',
+                $article['articleId']
+            );
 
-			if ($image) {
-				$articles[$key]['imageSrc']= $image . '_140x140.jpg';
-			}
+            if ($image) {
+                $articles[$key]['imageSrc']= $image . '_140x140.jpg';
+            }
 
-			// Check for Categories
-			$hasCategories = Shopware()->Db()->fetchOne(
-				'SELECT id FROM s_articles_categories_ro WHERE articleID = ?',
-				$article['articleId']
-			);
-			$articles[$key]['hasCategories'] = ($hasCategories !== false);
-		}
+            // Check for Categories
+            $hasCategories = Shopware()->Db()->fetchOne(
+                'SELECT id FROM s_articles_categories_ro WHERE articleID = ?',
+                $article['articleId']
+            );
+            $articles[$key]['hasCategories'] = ($hasCategories !== false);
+        }
 
-		$this->View()->assign(array(
-			'success' => true,
-			'data'    => $articles,
-			'total'   => $count
-		));
+        $this->View()->assign(array(
+            'success' => true,
+            'data'    => $articles,
+            'total'   => $count
+        ));
     }
 }

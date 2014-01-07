@@ -193,7 +193,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Enlight_Config
      */
-    public final function Info()
+    final public function Info()
     {
         return $this->info;
     }
@@ -201,7 +201,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return string
      */
-    public final function Path()
+    final public function Path()
     {
         return $this->info->path;
     }
@@ -219,7 +219,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Shopware\Models\Plugin\Plugin
      */
-    public final function Plugin()
+    final public function Plugin()
     {
         if ($this->plugin === null) {
             $repo = Shopware()->Models()->getRepository(
@@ -238,7 +238,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Shopware\Components\Model\ModelRepository
      */
-    public final function Forms()
+    final public function Forms()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Config\Form'
@@ -250,7 +250,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return Shopware\Models\Config\Form
      */
-    public final function Form()
+    final public function Form()
     {
         if (!$this->hasForm()) {
             $this->form = $this->initForm();
@@ -262,7 +262,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return bool
      */
-    public final function hasForm()
+    final public function hasForm()
     {
         if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
@@ -312,7 +312,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return Shopware\Models\Menu\Repository
      */
-    public final function Menu()
+    final public function Menu()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Menu\Menu'
@@ -359,7 +359,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Shopware\Components\Model\ModelRepository
      */
-    public final function Payments()
+    final public function Payments()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Payment\Payment'

@@ -228,7 +228,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
                 $orgQuery['sArticle'] = $query['sArticle'];
                 break;
             case 'blog':
-                if(!empty($query['sAction'])) {
+                if (!empty($query['sAction'])) {
                     $orgQuery['sAction'] = $query['sAction'];
                     $orgQuery ['sCategory'] = $query['sCategory'];
                     $orgQuery['blogArticle'] = $query['blogArticle'];

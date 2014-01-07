@@ -51,4 +51,3 @@ class Shopware_Plugins_Frontend_SwagTrustedShopsExcellence_Bootstrap extends Sho
         return 'Trusted Shops Excellence';
     }
 }
-

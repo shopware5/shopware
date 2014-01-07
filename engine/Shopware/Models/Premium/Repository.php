@@ -62,9 +62,9 @@ class Repository extends ModelRepository
             $builder->where('article.name LIKE ?1')
             ->setParameter(1, '%'.$filterValue.'%');
         }
-		if (!empty($order)) {
-			$builder->addOrderBy($order);
-		}
+        if (!empty($order)) {
+            $builder->addOrderBy($order);
+        }
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
 

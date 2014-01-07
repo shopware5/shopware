@@ -110,9 +110,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $params = $this->Request()->getPost();
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $article = $this->resource->updateByNumber($id, $params);
-        }else{
+        } else {
             $article = $this->resource->update($id, $params);
         }
 
@@ -136,9 +136,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
-        }else{
+        } else {
             $this->resource->delete($id);
         }
 

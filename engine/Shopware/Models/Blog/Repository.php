@@ -89,11 +89,11 @@ class Repository extends ModelRepository
         ->orderBy("blog.displayDate","DESC");
 
 
-        if(!empty($blogCategoryIds)) {
+        if (!empty($blogCategoryIds)) {
             $builder->andWhere($builder->expr()->in('blog.categoryId', $blogCategoryIds));
         }
 
-        if(!empty($filter)) {
+        if (!empty($filter)) {
             $builder->addFilter($filter);
         }
 
@@ -273,11 +273,11 @@ class Repository extends ModelRepository
                 ->andWhere('blog.displayDate < :now')
                 ->setParameter("now", new \DateTime())
                 ->orderBy('blog.displayDate', 'DESC');
-        if(!empty($categoryIds)) {
+        if (!empty($categoryIds)) {
             $builder->andWhere($builder->expr()->in('blog.categoryId', $categoryIds));
         }
 
-        if(!empty($filter)){
+        if (!empty($filter)) {
             $builder->addFilter($filter);
         }
 
@@ -329,7 +329,7 @@ class Repository extends ModelRepository
             ->leftJoin('blog.comments', 'comments' , \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active != 1')
             ->groupBy("blog.id");
 
-        if(!empty($blogCategoryIds)) {
+        if (!empty($blogCategoryIds)) {
             $builder->where($builder->expr()->in('blog.categoryId', $blogCategoryIds));
         }
 

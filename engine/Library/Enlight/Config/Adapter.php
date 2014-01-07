@@ -78,7 +78,7 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
             switch ($key) {
                 case 'nameSuffix':
                 case 'namePrefix':
-                    $this->{'_' . $key} = (string)$option;
+                    $this->{'_' . $key} = (string) $option;
                     break;
                 case 'allowWrites':
                     $this->_allowWrites = (boolean) $option;

@@ -99,9 +99,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $shop = $repository->getActiveById($shop);
             } elseif (($shop = $request->getCookie('shop')) !== null) {
                 $shop = $repository->getActiveById($shop);
-            } if($shop === null) {
+            } if ($shop === null) {
                 $shop = $repository->getActiveByRequest($request);
-            } if($shop === null) {
+            } if ($shop === null) {
                 $shop = $repository->getActiveDefault();
             }
         } catch (Exception $e) {
@@ -127,7 +127,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        if(!$main->getDefault()) {
+        if (!$main->getDefault()) {
             $main = $repository->getActiveDefault();
             $shop->setTemplate($main->getTemplate());
             $shop->setHost($main->getHost());
@@ -185,7 +185,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $newPath = str_replace($removePath, $request->getBasePath(), $request->getRequestUri());
             }
 
-            if(isset($newPath)) {
+            if (isset($newPath)) {
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -276,7 +276,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey !== null && $cookieKey != 'template') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->setCookie($cookieKey, $cookieValue, 0, $path);
-            if($request->isPost() && $request->getQuery('__shop') === null) {
+            if ($request->isPost() && $request->getQuery('__shop') === null) {
                 $url = sprintf('%s://%s%s',
                     $request->getScheme(),
                     $request->getHttpHost(),
@@ -288,9 +288,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Upgrade currency
-        if($request->getCookie('currency') !== null) {
+        if ($request->getCookie('currency') !== null) {
             $currencyValue = $request->getCookie('currency');
-            foreach($shop->getCurrencies() as $currency) {
+            foreach ($shop->getCurrencies() as $currency) {
                 if($currencyValue == $currency->getId()
                     || $currencyValue == $currency->getCurrency()) {
                     $shop->setCurrency($currency);
@@ -307,17 +307,17 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Refresh basket on currency change
-        if(isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency) {
+        if (isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency) {
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 
         // Upgrade template
-        if(isset($session->template) && !empty($session->Admin)) {
+        if (isset($session->template) && !empty($session->Admin)) {
             $repository = 'Shopware\Models\Shop\Template';
             $repository = Shopware()->Models()->getRepository($repository);
             $template = $session->template;
             $template = $repository->findOneBy(array('template' => $template));
-            if($template !== null) {
+            if ($template !== null) {
                 $shop->setTemplate($template);
             } else {
                 unset($session->template);
@@ -329,7 +329,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         // Save upgrades
         $shop->registerResources($bootstrap);
 
-        if($request->isSecure()) {
+        if ($request->isSecure()) {
             $template = $bootstrap->getResource('Template');
             $template->setCompileId($template->getCompileId() . '_secure');
         }
@@ -351,7 +351,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     {
         $bootstrap = $this->Application()->Bootstrap();
 
-        if(!$bootstrap->hasResource('Shop')) {
+        if (!$bootstrap->hasResource('Shop')) {
             return;
         }
 
@@ -465,7 +465,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return $args->getReturn();
         }
 
-        if($this->shop === null && $params['module'] == 'frontend') {
+        if ($this->shop === null && $params['module'] == 'frontend') {
             $this->initShopConfig();
         }
 

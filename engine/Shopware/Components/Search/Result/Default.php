@@ -24,6 +24,6 @@
 
 /**
  */
-class Shopware_Components_Search_Result_Default extends Shopware_Components_Search_Result_Abstract {
-
+class Shopware_Components_Search_Result_Default extends Shopware_Components_Search_Result_Abstract
+{
 }

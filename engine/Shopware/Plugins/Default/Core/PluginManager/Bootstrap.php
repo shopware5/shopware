@@ -47,7 +47,7 @@ class Shopware_Plugins_Core_PluginManager_Bootstrap extends Shopware_Components_
      * @return bool
      */
     public function install()
-	{
+    {
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_PluginManager',
             'onGetPluginController'

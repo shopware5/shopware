@@ -41,7 +41,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
     public function indexAction()
     {
-		$view = $this->View();
+        $view = $this->View();
         $view->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
         $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
     }

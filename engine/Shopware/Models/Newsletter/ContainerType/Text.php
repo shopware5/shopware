@@ -199,4 +199,3 @@ class Text extends ModelEntity
         return $this->link;
     }
 }
-

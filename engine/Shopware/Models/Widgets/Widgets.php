@@ -54,7 +54,7 @@ class Shopware_Models_Widgets_Widgets extends Enlight_Class implements Enlight_H
      * @param  $panel
      * @return void
      */
-    public function setWidget ($widget)
+    public function setWidget($widget)
     {
         $this->widget = $widget;
         $this->widgetXML = Shopware()->DocPath()."/files/config/Widgets.xml";
@@ -65,7 +65,7 @@ class Shopware_Models_Widgets_Widgets extends Enlight_Class implements Enlight_H
      * @param  $panel
      * @return void
      */
-    public function setPanel ($panel)
+    public function setPanel($panel)
     {
         $this->panel = $panel;
         $this->panelXML = Shopware()->DocPath()."/files/config/Panels.xml";

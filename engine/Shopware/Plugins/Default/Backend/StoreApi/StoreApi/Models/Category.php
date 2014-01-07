@@ -51,7 +51,7 @@ class Shopware_StoreApi_Models_Category extends Shopware_StoreApi_Models_Model
 
     public function getProducts()
     {
-        if(!empty($this->rawData['_products'])) {
+        if (!empty($this->rawData['_products'])) {
             return new Shopware_StoreApi_Core_Response_Response(array( '_products' => $this->rawData['_products'] ), false);
         }
     }

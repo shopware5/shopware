@@ -63,8 +63,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $response = $args->getSubject()->Action()->Response();
 
         $headers = $response->getHeaders();
-        foreach($headers as $header) {
-            if($header['name'] == 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
+        foreach ($headers as $header) {
+            if ($header['name'] == 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
                 $source = $args->getReturn();
 
                 $source = str_replace(array("\r\n", "\r"), "\n", $source);
@@ -245,7 +245,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public static function rewriteLink($link = null, $title = null)
     {
-        if(!isset(self::$shopConfig)) {
+        if (!isset(self::$shopConfig)) {
             self::$shopConfig = Shopware()->Config();
             self::$baseFile = self::$shopConfig->baseFile;
         }

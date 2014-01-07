@@ -87,13 +87,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         ");
 
         //iterate all selected articles which has to be initialed
-        foreach($articles as $articleId) {
+        foreach ($articles as $articleId) {
             //now we select all similar articles of the s_emarketing_lastarticles table
             $preparedSelect->execute(array('articleId' => $articleId));
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
-            foreach($combinations as $combination) {
+            foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
         }

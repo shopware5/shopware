@@ -38,4 +38,3 @@ class Enlight_Controller_Exception extends Enlight_Exception
     const Controller_Dispatcher_Controller_No_Route = 4400;
     const NO_ROUTE = 404;
 }
-
