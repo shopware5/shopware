@@ -37,8 +37,6 @@ In case you wish to contribute to Shopware, fork the master tree rather than clo
     chmod 755 -R cache
     chmod 755 -R files
     chmod 755 -R media
-    chmod 755 -R engine/Library/Mpdf/tmp
-    chmod 755 -R engine/Library/Mpdf/ttfontdata
     chmod 755 -R engine/Shopware/Plugins/Community
 
 
