@@ -4168,42 +4168,6 @@ class sArticles
         return $images;
     }
 
-    /**
-     * Insert a article in the list of the recently visit articles
-     * @param string $image absolut image url
-     * @param string $name name of the article
-     * @param int $id id of the article
-     * @access public
-     * @return bool
-     */
-    public function sSetLastArticle($image, $name, $id)
-    {
-        if (empty($this->sSYSTEM->sSESSION_ID) || empty($name) || empty($id)) {
-            return;
-        }
-
-        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
-            'subject'   => $this,
-            'article'   => $id
-        ));
-
-        $insertArticle = $this->sSYSTEM->sDB_CONNECTION->Execute('
-			INSERT INTO s_emarketing_lastarticles
-				(img, name, articleID, sessionID, time, userID, shopID)
-			VALUES
-				(?, ?, ?, ?, NOW(), ?, ?)
-			ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
-		', array(
-            (string)$image,
-            (string)$name,
-            $id,
-            $this->sSYSTEM->sSESSION_ID,
-            (int)$this->sSYSTEM->_SESSION['sUserId'],
-            (int)$this->sSYSTEM->sLanguage
-        ));
-
-        return $insertArticle;
-    }
 
     /**
      * Get article id by ordernumber
