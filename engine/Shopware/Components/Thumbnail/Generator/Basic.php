@@ -96,7 +96,7 @@ class Basic implements GeneratorInterface
             $originalSize['height']
         );
 
-        // saves the image information into a jpg file with a quality rate of 90%
+        // saves the image information into a specific file extension
         switch(strtolower($this->getImageExtension($destination))){
             case 'png':
                 imagepng($newImage, $destination);
