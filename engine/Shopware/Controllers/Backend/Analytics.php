@@ -414,36 +414,75 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
-            'ROUND(o.invoice_amount / o.currencyFactor) AS revenue',
+            'ROUND(o.invoice_amount / o.currencyFactor, 2) AS revenue',
+            'u.id as userID',
             'o.referer AS referrer',
-            'sv.uniquevisits AS visitors',
+            'DATE(u.firstlogin) as firstLogin',
+            'DATE(o.ordertime) as orderTime',
             '(
-                SELECT COUNT(o2.invoice_amount)
+                SELECT o2.ordertime
                 FROM s_order o2
-                WHERE o2.status=-1
-                AND DATE(o2.ordertime) = sv.datum
-            ) AS cancelledOrders'
+                WHERE o2.userID = u.id
+                ORDER BY o2.ordertime DESC
+                LIMIT 1
+            ) as firstOrder',
+            '(
+                SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
+                FROM s_order o3
+                WHERE userID = u.id
+                AND o3.status != 4
+                AND o3.status != -1
+            ) as customerRevenue'
         ))
-        ->from('s_statistics_visitors', 'sv')
-        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)')
-        ->where('sv.datum >= :fromDate AND sv.datum <= :toDate')
-        ->groupBy('sv.datum')
+        ->from('s_order', 'o')
+        ->add('from', array(
+            'table' => 's_user',
+            'alias' => 'u',
+        ), true)
+        ->where('o.status != 4 AND o.status != -1')
+        ->andWhere('o.userID = u.id')
+        ->andWhere('o.ordertime >= :fromDate AND o.ordertime <= :toDate')
+        ->andWhere("o.referer LIKE 'http%//%'")
+        ->orderBy('revenue')
         ->setParameter(':fromDate', $this->getFromDate())
         ->setParameter(':toDate', $this->getToDate());
 
-        $data = array(
-            'host' => 'google.de',
-            'entireRevenue' => 10000,
-            'lead' => 200,
-            'customerValue' => 300,
-            'entireNewRevenue' => 7500,
-            'entireOldRevenue' => 2500,
-            'orders' => 100,
-            'newCustomers' => 75,
-            'oldCustomers' => 25,
-            'perNewRevenue' => 100,
-            'perOldRevenue' => 100
-        );
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        print_r(\Doctrine\Common\Util\Debug::export($results, 3));
+        echo "</pre>";
+        exit();
+
+
+
+//        $data = array(
+//            'host' => 'google.de',
+//            'entireRevenue' => 10000,
+//            'lead' => 200,
+//            'customerValue' => 300,
+//            'entireNewRevenue' => 7500,
+//            'entireOldRevenue' => 2500,
+//            'orders' => 100,
+//            'newCustomers' => 75,
+//            'oldCustomers' => 25,
+//            'perNewRevenue' => 100,
+//            'perOldRevenue' => 100
+//        );
+
+//        $data = array(
+//            'Host' => 'google.de',
+//            'Umsatz' => 10000,
+//            'Umsatz/Bestellungen' => 200,
+//            'Kundenwert' => 300,
+//            'Umsatz Neukunden' => 7500,
+//            'Umsatz Altkunden' => 2500,
+//            'Bestellungen' => 100,
+//            'Neukunden' => 75,
+//            'Altkunden' => 25,
+//            'perNewRevenue' => 100,
+//            'perOldRevenue' => 100
+//        );
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));
     }
