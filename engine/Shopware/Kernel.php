@@ -402,7 +402,7 @@ class Kernel implements HttpKernelInterface
             '/engine/Shopware/Configs/Custom.php',
         );
         foreach ($files as $file) {
-            if (!is_file($filePath = $this->getDocumentRoot() . $file)) {
+            if (!is_file($filePath = $this->getRootDir() . $file)) {
                 continue;
             }
             $resource = new FileResource($filePath);
