@@ -15,6 +15,7 @@ In this document you will find a changelog of the important changes related to t
 * Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
 * Update Zend Framework to version 1.12.3 (latest stable)
 * Break: Custom article attributes of type `Time` are now always saved using the german format. Only affects values inserted in non-german backends
+* Implement new options in the article resource. "considerTaxInput" allows to get the variant prices considering the article tax. "language" allows to get a whole translated article array. The "language" parameter can contain a sub shop id or a language iso like en_GB.
 
 ## 4.1.4
 

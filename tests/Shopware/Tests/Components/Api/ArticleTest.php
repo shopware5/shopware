@@ -1466,6 +1466,65 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return $images;
     }
 
+    public function testArticleDefaultPriceBehavior()
+    {
+        $data = $this->getSimpleTestData();
+
+        $article = $this->resource->create($data);
+
+        $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
+
+        /**@var $price \Shopware\Models\Article\Price*/
+        $price = $article->getMainDetail()->getPrices()->first();
+
+        $this->assertEquals(
+            400 / (($article->getTax()->getTax() + 100) / 100),
+            $price->getPrice(),
+            'Customer group price not calculated'
+        );
+
+        $data = $this->resource->getOne($article->getId());
+
+        $this->assertEquals(
+            400 / (($article->getTax()->getTax() + 100) / 100),
+            $data['mainDetail']['prices'][0]['price']
+        );
+    }
+
+    public function testArticleGrossPrices()
+    {
+        $data = $this->getSimpleTestData();
+
+        $article = $this->resource->create($data);
+
+        $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
+
+        /**@var $price \Shopware\Models\Article\Price*/
+        $price = $article->getMainDetail()->getPrices()->first();
+
+        $net = 400 / (($article->getTax()->getTax() + 100) / 100);
+
+        $this->assertEquals(
+            $net,
+            $price->getPrice(),
+            'Customer group price not calculated'
+        );
+
+        $this->resource->setResultMode(2);
+
+        $data = $this->resource->getOne(
+            $article->getId(),
+            array(
+                'considerTaxInput' => true
+            )
+        );
+
+        $price = $data['mainDetail']['prices'][0];
+
+        $this->assertEquals(400, $price['price']);
+        $this->assertEquals($net, $price['net']);
+    }
+
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
     {
@@ -1669,7 +1728,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return $builder->getQuery()->getArrayResult();
     }
 
-
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
 
@@ -1700,7 +1758,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'groups' => $groups
         );
     }
-
 
     private function getSimpleVariantData() {
         return array(
