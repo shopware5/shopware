@@ -567,7 +567,7 @@ class Media extends ModelEntity
     private function updateAssociations()
     {
         /** @var $article \Shopware\Models\Article\Image*/
-        foreach($this->articles as $article) {
+        foreach ($this->articles as $article) {
             $article->setPath($this->getName());
             Shopware()->Models()->persist($article);
         }
@@ -832,7 +832,7 @@ class Media extends ModelEntity
             if (strpos($size, 'x') === false) {
                 $size = $size . 'x' . $size;
             }
-			$path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
+            $path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
             //create the thumbnail if not exist.
             if (!file_exists($path)) {
                 $data = explode('x', $size);
@@ -950,9 +950,9 @@ class Media extends ModelEntity
         $srcHeight = $originalSize[1];
 
         // Calculate the scale factor
-        if($width === 0) {
+        if ($width === 0) {
             $factor = $height / $srcHeight;
-        } else if($height === 0) {
+        } elseif ($height === 0) {
             $factor = $width / $srcWidth;
         } else {
             $factor = min($width / $srcWidth, $height / $srcHeight);

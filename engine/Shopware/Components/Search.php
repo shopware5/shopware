@@ -25,8 +25,8 @@
 /**
  * Shopware Search Adapter Proxy
  */
-class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook {
-
+class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook
+{
     /**
      * @var Shopware_Components_Search_Adapter_Abstract
      */
@@ -35,14 +35,16 @@ class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook {
     /**
      * @param Shopware_Components_Search_Adapter_Abstract $adapter
      */
-    public function __construct(Shopware_Components_Search_Adapter_Abstract $adapter){
+    public function __construct(Shopware_Components_Search_Adapter_Abstract $adapter)
+    {
         $this->setAdapter($adapter);
     }
 
     /**
      * @param Shopware_Components_Search_Adapter_Abstract $adapter
      */
-    public function setAdapter(Shopware_Components_Search_Adapter_Abstract $adapter){
+    public function setAdapter(Shopware_Components_Search_Adapter_Abstract $adapter)
+    {
         $this->adapter = $adapter;
     }
 
@@ -50,7 +52,8 @@ class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook {
     /**
     * @return \Shopware_Components_Search_Adapter_Abstract
     */
-    public function getAdapter(){
+    public function getAdapter()
+    {
         return $this->adapter;
     }
 
@@ -58,7 +61,8 @@ class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook {
     * @param $term string
     * @return Shopware_Components_Search_Result_Abstract
     */
-    public function search($term, array $config){
+    public function search($term, array $config)
+    {
         return $this->getAdapter()->search($term,$config);
     }
 }

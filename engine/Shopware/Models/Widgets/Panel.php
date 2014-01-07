@@ -48,7 +48,7 @@ class Shopware_Models_Widgets_Panel extends Enlight_Class implements Enlight_Hoo
      * @param  $panel
      * @return void
      */
-    public function setPanel ($panel)
+    public function setPanel($panel)
     {
         $this->panel = $panel;
         $this->panelXML = Shopware()->DocPath()."/files/config/Panels.xml";

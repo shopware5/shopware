@@ -306,7 +306,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'articleId' => $articleId
         ));
 
-        foreach($articles as $id) {
+        foreach ($articles as $id) {
             $this->SimilarShown()->refreshSimilarShown($articleId, $id);
             $this->SimilarShown()->refreshSimilarShown($id, $articleId);
         }
@@ -399,7 +399,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'sessionId' => Shopware()->SessionID()
         ));
 
-        foreach($combinations as $combination) {
+        foreach ($combinations as $combination) {
             $this->AlsoBought()->refreshBoughtArticles(
                 $combination['article_id'],
                 $combination['related_article_id']
@@ -455,7 +455,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
 
         $details = $arguments->getDetails();
-        foreach($details as $article) {
+        foreach ($details as $article) {
             if ($article['mode'] != 0 || empty($article['articleID'])) {
                 continue;
             }

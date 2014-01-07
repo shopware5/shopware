@@ -28,6 +28,6 @@
  */
 class Shopware_Components_Form extends Zend_Form
 {
-	const SCOPE_SHOP = 1;
-	const SCOPE_LOCALE = 2;
+    const SCOPE_SHOP = 1;
+    const SCOPE_LOCALE = 2;
 }

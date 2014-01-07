@@ -133,7 +133,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         if (is_string($directory)) {
             $this->addControllerDirectory($directory, $module);
         } else {
-            foreach ((array)$directory as $module => $path) {
+            foreach ((array) $directory as $module => $path) {
                 $this->addControllerDirectory($path, $module);
             }
         }
@@ -168,7 +168,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function removeControllerDirectory($module)
     {
-        $module = (string)$module;
+        $module = (string) $module;
         if (isset($this->controllerDirectory[$module])) {
             unset($this->controllerDirectory[$module]);
             return true;
@@ -252,7 +252,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         if (!$isAction) {
             $segments = explode($this->pathDelimiter, $unFormatted);
         } else {
-            $segments = (array)$unFormatted;
+            $segments = (array) $unFormatted;
         }
 
         foreach ($segments as $key => $segment) {
@@ -272,7 +272,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function setDefaultControllerName($controller)
     {
-        $this->defaultController = (string)$controller;
+        $this->defaultController = (string) $controller;
         return $this;
     }
 
@@ -292,7 +292,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function setDefaultAction($action)
     {
-        $this->defaultAction = (string)$action;
+        $this->defaultAction = (string) $action;
         return $this;
     }
 
@@ -312,7 +312,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function setDefaultModule($module)
     {
-        $this->defaultModule = (string)$module;
+        $this->defaultModule = (string) $module;
         return $this;
     }
 

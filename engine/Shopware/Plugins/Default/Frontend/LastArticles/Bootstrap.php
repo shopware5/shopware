@@ -108,7 +108,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         }
 
         if (rand(0, 100) === 0) {
-            $time = $config->time > 0 ? (int)$config->time : 15;
+            $time = $config->time > 0 ? (int) $config->time : 15;
             $sql = '
                 DELETE FROM s_emarketing_lastarticles
                 WHERE time < DATE_SUB(CONCAT(CURDATE(), ?), INTERVAL ? DAY)
@@ -155,18 +155,18 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         ));
 
         return Shopware()->Db()->query('
-			INSERT INTO s_emarketing_lastarticles
-				(img, name, articleID, sessionID, time, userID, shopID)
-			VALUES
-				(?, ?, ?, ?, NOW(), ?, ?)
-			ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
-		', array(
-            (string)$article['image'],
-            (string)$article['name'],
+            INSERT INTO s_emarketing_lastarticles
+                (img, name, articleID, sessionID, time, userID, shopID)
+            VALUES
+                (?, ?, ?, ?, NOW(), ?, ?)
+            ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
+        ', array(
+            (string) $article['image'],
+            (string) $article['name'],
             $articleId,
             $sessionId,
-            (int)Shopware()->Session()->sUserId,
-            (int)Shopware()->Shop()->getId()
+            (int) Shopware()->Session()->sUserId,
+            (int) Shopware()->Shop()->getId()
         ));
     }
 

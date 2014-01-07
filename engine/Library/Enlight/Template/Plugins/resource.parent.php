@@ -51,7 +51,7 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
                 if ($hit) {
                     return $_filePath;
                 }
-                if($_template->parent->source->filepath == $_filePath) {
+                if ($_template->parent->source->filepath == $_filePath) {
                     $hit = true;
                 }
             }

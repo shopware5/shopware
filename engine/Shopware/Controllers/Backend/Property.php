@@ -46,18 +46,20 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      * Helper function to get access to the property repository.
      * @return \Shopware\Models\Property\Repository
      */
-    private function getPropertyRepository() {
-    	if ($this->propertyRepository === null) {
-    		$this->propertyRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
-    	}
-    	return $this->propertyRepository;
+    private function getPropertyRepository()
+    {
+        if ($this->propertyRepository === null) {
+            $this->propertyRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
+        }
+        return $this->propertyRepository;
     }
 
     /**
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -138,24 +140,24 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      */
     private function saveGroupAttributes($group, $attributeData)
     {
-    	if (empty($attributeData)) {
-    		return;
-    	}
-    	if ($group->getId() > 0) {
+        if (empty($attributeData)) {
+            return;
+        }
+        if ($group->getId() > 0) {
             $result = $this->getPropertyRepository()
                            ->getAttributesQuery($group->getId())
                            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-    		if (empty($result)) {
-    			$attributes = new \Shopware\Models\Attribute\PropertyGroup();
-    		} else {
-    			$attributes = $result;
-    		}
-    	} else {
-    		$attributes = new \Shopware\Models\Attribute\PropertyGroup();
-    	}
-    	$attributes->fromArray($attributeData);
-    	$attributes->setPropertyGroup($group);
-    	$this->getManager()->persist($attributes);
+            if (empty($result)) {
+                $attributes = new \Shopware\Models\Attribute\PropertyGroup();
+            } else {
+                $attributes = $result;
+            }
+        } else {
+            $attributes = new \Shopware\Models\Attribute\PropertyGroup();
+        }
+        $attributes->fromArray($attributeData);
+        $attributes->setPropertyGroup($group);
+        $this->getManager()->persist($attributes);
     }
 
     /**

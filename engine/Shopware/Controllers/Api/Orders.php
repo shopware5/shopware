@@ -62,9 +62,9 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $order = $this->resource->getOneByNumber($id);
-        }else{
+        } else {
             $order = $this->resource->getOne($id);
         }
 
@@ -83,9 +83,9 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $order = $this->resource->updateByNumber($id, $params);
-        }else{
+        } else {
             $order = $this->resource->update($id, $params);
         }
 

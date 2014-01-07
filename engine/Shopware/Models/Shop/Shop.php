@@ -635,7 +635,7 @@ class Shop extends ModelEntity
      */
     public function get($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'isocode':
                 return $this->getId();
             case 'skipbackend':
@@ -650,7 +650,7 @@ class Shop extends ModelEntity
                 return $this->getCustomerGroup()->getKey();
             case 'defaultcurrency':
                 return $this->getCurrency()->getId();
-	        case 'fallback':
+            case 'fallback':
                 return $this->getFallback() !== null ? $this->getFallback()->getId() : null;
         }
         return null;

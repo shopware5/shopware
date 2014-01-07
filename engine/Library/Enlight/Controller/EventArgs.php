@@ -57,4 +57,3 @@ class Enlight_Controller_EventArgs extends Enlight_Event_EventArgs
         return $this->get('response');
     }
 }
-

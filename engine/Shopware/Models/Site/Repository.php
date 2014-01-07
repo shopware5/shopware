@@ -70,10 +70,10 @@ class Repository extends ModelRepository
             'g.active as active',
             'm.id as mappingId'
         ));
-        if($filterBy !== null) {
+        if ($filterBy !== null) {
             $builder->addFilter($filterBy);
         }
-        if($orderBy !== null) {
+        if ($orderBy !== null) {
             $builder->addOrderBy($orderBy);
         }
 

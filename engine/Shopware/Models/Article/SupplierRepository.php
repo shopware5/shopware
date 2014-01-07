@@ -31,8 +31,8 @@ use Doctrine\ORM\Query\ResultSetMapping;
 /**
  * Repository class for Supplier entity
  */
-class SupplierRepository extends ModelRepository {
-
+class SupplierRepository extends ModelRepository
+{
     /**
      * Query to fetch all suppliers that can be used
      * to generate friendly routes

@@ -106,7 +106,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $view->assign('sAdvancedMenu', $this->getAdvancedMenu(
             $parent,
             $category,
-            (int)$config->levels
+            (int) $config->levels
         ));
         $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
     }
@@ -141,8 +141,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         $ref =& $tree;
         foreach ($path as $categoryId) {
-            foreach($ref as $categoryKey => $category) {
-                if($category['id'] == $categoryId) {
+            foreach ($ref as $categoryKey => $category) {
+                if ($category['id'] == $categoryId) {
                     $ref[$categoryKey]['flag'] = true;
                     $ref =& $ref[$categoryKey]['sub'];
                     continue 2;

@@ -91,7 +91,7 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
 
         if ($this->_renderWithoutSections == true) {
             $iniString .= $this->_addBranch($this->_config);
-        } else if (is_string($sectionName)) {
+        } elseif (is_string($sectionName)) {
             $iniString .= '[' . $sectionName . ']' . "\n"
                        .  $this->_addBranch($this->_config)
                        .  "\n";

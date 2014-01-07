@@ -71,7 +71,7 @@ class Locale extends ModelEntity
      */
     protected $translations;
 
-    function __construct()
+    public function __construct()
     {
         $this->translations = new ArrayCollection();
     }

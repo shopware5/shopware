@@ -433,7 +433,7 @@ class Repository extends ModelRepository
             $builder->andWhere('customer.accountMode = 0');
         }
 
-        if(!empty($shopId)){
+        if (!empty($shopId)) {
             $builder->andWhere('customer.shopId  = ?3')
                ->setParameter(3, $shopId);
         }

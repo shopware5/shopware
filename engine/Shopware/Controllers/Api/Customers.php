@@ -62,9 +62,9 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $customer = $this->resource->getOneByNumber($id);
-        }else{
+        } else {
             $customer = $this->resource->getOne($id);
         }
 
@@ -102,9 +102,9 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $customer = $this->resource->updateByNumber($id, $params);
-        }else{
+        } else {
             $customer = $this->resource->update($id, $params);
         }
 
@@ -129,9 +129,9 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
-        }else{
+        } else {
             $this->resource->delete($id);
         }
 

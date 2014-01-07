@@ -160,7 +160,8 @@ class PaymentInstance extends ModelEntity
      */
     protected $createdAt;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->createdAt = new \DateTime();
     }
 

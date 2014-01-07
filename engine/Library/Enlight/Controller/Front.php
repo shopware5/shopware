@@ -470,7 +470,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     public function throwExceptions($flag = null)
     {
         if ($flag !== null) {
-            $this->throwExceptions = (bool)$flag;
+            $this->throwExceptions = (bool) $flag;
             return $this;
         }
         return $this->throwExceptions;
@@ -485,7 +485,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      */
     public function setParam($name, $value)
     {
-        $name = (string)$name;
+        $name = (string) $name;
         $this->invokeParams[$name] = $value;
         return $this;
     }

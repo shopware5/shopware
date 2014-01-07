@@ -120,7 +120,7 @@ class sPaymentMean
     public function sInsert($userId)
     {
         if (!$userId) return false;
-        
+
         // Insert data
         $data = array(
                 $userId,

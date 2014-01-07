@@ -93,7 +93,7 @@ class Manager
      */
     public function getCompatibleEncoders()
     {
-        return array_filter($this->encoder, function($encoder) {
+        return array_filter($this->encoder, function ($encoder) {
             return !method_exists($encoder, 'isCompatible') || $encoder->isCompatible();
         });
     }

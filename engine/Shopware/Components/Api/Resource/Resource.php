@@ -279,7 +279,7 @@ abstract class Resource
             if ($data[$key]['replace']) {
                 $collection->clear();
             }
-        } else if ($defaultReplace) {
+        } elseif ($defaultReplace) {
             $collection->clear();
         }
 
@@ -349,8 +349,7 @@ abstract class Resource
             throw new \Exception(sprintf("Passed entity has no configured repository: %s", $entity));
         }
 
-        foreach($conditions as $condition)
-        {
+        foreach ($conditions as $condition) {
             $instance = $repo->findOneBy($condition);
             if ($instance) {
                 return $instance;

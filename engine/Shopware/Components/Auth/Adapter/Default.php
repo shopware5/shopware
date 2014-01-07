@@ -132,7 +132,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             }
             // Increase number of failed logins
             $this->setFailedLogins($user->failedlogins + 1);
-            if(isset($lockedUntil)) {
+            if (isset($lockedUntil)) {
                 return new Zend_Auth_Result(
                     -4,
                     $this->_identity,
@@ -206,7 +206,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         if ($this->_credentialColumn == $this->expiryColumn) {
             if ($this->_credential->toString('YYYY-MM-dd HH:mm:ss') >= $resultIdentity[$this->_credentialColumn]) {
                 $passwordValid = false;
-            } else  {
+            } else {
                 $passwordValid = true;
             }
         } else {

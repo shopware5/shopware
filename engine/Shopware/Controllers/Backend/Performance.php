@@ -61,7 +61,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         )->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array(
             'success' => true,
-            'data' => array_map(function($item) {return array('id' => $item['id'], 'name' => $item['name']);}, $shops)
+            'data' => array_map(function ($item) {return array('id' => $item['id'], 'name' => $item['name']);}, $shops)
         ));
     }
 
@@ -128,11 +128,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareForSavingDefault($data)
-   	{
+    {
         unset($data['id']);
 
         return $data;
-   	}
+    }
 
     /**
      * Prepare seo array for saving
@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareSeoConfigForSaving($data)
-	{
+    {
         unset($data['id']);
 
         $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');

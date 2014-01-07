@@ -76,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $supplierTitle = $supplier->getMetaTitle();
             $categoryContent['metadescription'] = $supplier->getMetaDescription();
             $categoryContent['metakeywords'] = $supplier->getMetaKeywords();
-            if(!Shopware()->Shop()->getDefault()) {
+            if (!Shopware()->Shop()->getDefault()) {
                 $translation = $this->getTranslator()->read(Shopware()->Shop()->getId(), 'supplier', $supplier->getId());
                 if (array_key_exists('metaTitle', $translation))
                     $supplierTitle = $translation['metaTitle'];
@@ -94,7 +94,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             }
             if (!empty($supplierTitle)) {
                 $categoryContent['title'] = $supplierTitle.' | '.Shopware()->Shop()->getName();
-            } elseif(!empty($supplierName)) {
+            } elseif (!empty($supplierName)) {
                 $categoryContent['title'] = $supplierName;
             }
             $categoryContent['canonicalTitle'] = $supplierName;
@@ -142,10 +142,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**
              * @deprecated
              */
-            if(empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
+            if (empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
                 $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
                 $viewAssignments['sOffers'] = $offers;
-                if (!empty($offers)){
+                if (!empty($offers)) {
                     $showListing = false;
                 }
             }
@@ -165,7 +165,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             && !empty($categoryArticles['sTemplate'])
             && !empty($categoryContent['layout'])) {
             if ($categoryArticles['sTemplate'] == 'table') {
-                if($categoryContent['layout'] == '1col') {
+                if ($categoryContent['layout'] == '1col') {
                     $categoryContent['layout'] = '3col';
                     $categoryContent['template'] = 'article_listing_3col.tpl';
                 }
@@ -188,7 +188,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $newTemplateLoaded = true;
         }
 
-        if($newTemplateLoaded) {
+        if ($newTemplateLoaded) {
             //assign it again because load template was called
             $this->View()->assign($viewAssignments);
         }
@@ -204,7 +204,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, $supplierId, null);
         }
 
-        if(!empty($articleProperties['filterOptions'])) {
+        if (!empty($articleProperties['filterOptions'])) {
             $this->View()->assign(array(
                 'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
                 'sPropertiesOptionsOnly' => $articleProperties['filterOptions']['optionsOnly'] ?: array(),

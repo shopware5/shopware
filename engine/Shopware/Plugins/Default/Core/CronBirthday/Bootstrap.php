@@ -40,45 +40,45 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
         $birthdayVoucher = Shopware()->Config()->get('birthdayVoucher', 'birthday');
 
         $sql = '
-			SELECT
-				userID,
-				company,
-				department,
-				salutation,
-				customernumber,
-				firstname,
-				lastname,
-				street,
-				streetnumber,
-				zipcode,
-				city,
-				phone,
-				fax,
-				countryID,
-				ustid,
-				at.text1,
-				at.text2,
-				at.text3,
-				at.text4,
-				at.text5,
-				at.text6,
-				email,
-				paymentID,
-				firstlogin,
-				lastlogin,
-				newsletter,
-				affiliate,
-				customergroup,
-				language,
+            SELECT
+                userID,
+                company,
+                department,
+                salutation,
+                customernumber,
+                firstname,
+                lastname,
+                street,
+                streetnumber,
+                zipcode,
+                city,
+                phone,
+                fax,
+                countryID,
+                ustid,
+                at.text1,
+                at.text2,
+                at.text3,
+                at.text4,
+                at.text5,
+                at.text6,
+                email,
+                paymentID,
+                firstlogin,
+                lastlogin,
+                newsletter,
+                affiliate,
+                customergroup,
+                language,
                 subshopID
-			FROM s_user u, s_user_billingaddress ub
+            FROM s_user u, s_user_billingaddress ub
             LEFT JOIN s_user_billingaddress_attributes at
             ON at.billingID = ub.id
-			WHERE accountmode = 0
-			AND active = 1
-			AND userID = u.id
-			AND birthday LIKE ?
-		';
+            WHERE accountmode = 0
+            AND active = 1
+            AND userID = u.id
+            AND birthday LIKE ?
+        ';
         $users = Shopware()->Db()->fetchAll($sql, array(
             '%-' . date('m-d')
         ));
@@ -86,14 +86,14 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             return 'No birthday users found.';
         }
         $sql = '
-			SELECT evc.voucherID
-			FROM s_emarketing_vouchers ev, s_emarketing_voucher_codes evc
-			WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
-			AND evc.voucherID = ev.id
-			AND evc.userID IS NULL
-			AND evc.cashed = 0
-			AND ev.ordercode= ?
-		';
+            SELECT evc.voucherID
+            FROM s_emarketing_vouchers ev, s_emarketing_voucher_codes evc
+            WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
+            AND evc.voucherID = ev.id
+            AND evc.userID IS NULL
+            AND evc.cashed = 0
+            AND ev.ordercode= ?
+        ';
         $voucherId = Shopware()->Db()->fetchOne($sql, array($birthdayVoucher));
         if (empty($voucherId)) {
             return 'No birthday voucher found.';
@@ -106,17 +106,17 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 WHERE evc.voucherID = ?
                 AND evc.userID IS NULL
                 AND evc.cashed = 0
-			';
+            ';
             $voucher = Shopware()->Db()->fetchRow($sql, array($voucherId));
             if (empty($voucher)) {
                 return 'No new voucher code found.';
             }
             $sql = '
-				UPDATE s_emarketing_voucher_codes evc
-				SET userID=?
-				WHERE id=?
-				AND userID IS NULL
-			';
+                UPDATE s_emarketing_voucher_codes evc
+                SET userID=?
+                WHERE id=?
+                AND userID IS NULL
+            ';
             $result = Shopware()->Db()->query($sql, array(
                 $user['userID'], $voucher['vouchercodeID']
             ));

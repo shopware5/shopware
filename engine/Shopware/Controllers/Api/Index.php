@@ -85,13 +85,13 @@ class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
         if ($exception instanceof ApiException\ParameterMissingException) {
             $this->Response()->setHttpResponseCode(400);
 
-            if($exception->getMissingParam() === null) {
+            if ($exception->getMissingParam() === null) {
                 $this->View()->assign(array(
                    'success' => false,
                    'code'    => 400,
                    'message' => 'A required parameter is missing'
                 ));
-            }else{
+            } else {
                 $this->View()->assign(array(
                    'success' => false,
                    'code'    => 400,

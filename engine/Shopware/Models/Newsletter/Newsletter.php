@@ -471,4 +471,3 @@ class Newsletter extends ModelEntity
         return $this->alreadySendTo;
     }
 }
-

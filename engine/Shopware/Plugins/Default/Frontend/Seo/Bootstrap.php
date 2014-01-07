@@ -107,15 +107,15 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if ($request->getQuery('sViewport') === 'supplier' || $request->getQuery('controller') === 'supplier') {
             $alias = $this->sGetQueryAliasList();
 
-            if(array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
+            if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
                 unset($queryBlacklist[$index]);
             }
-            if($index = array_search('sSupplier', $queryBlacklist, true)) {
+            if ($index = array_search('sSupplier', $queryBlacklist, true)) {
                 unset($queryBlacklist[$index]);
             }
 
             $queryBlacklist[] = 'sCategory';
-            if(array_key_exists('sCategory', $alias)) {
+            if (array_key_exists('sCategory', $alias)) {
                 $queryBlacklist[] = $alias['sCategory'];
             }
         }
