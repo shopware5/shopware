@@ -31,11 +31,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/overview"}
-Ext.define('Shopware.apps.Analytics.view.table.Rating', {
+//{block name="backend/analytics/view/table/referrer_revenue"}
+Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-rating',
-    shopColumnName: 'Rating',
+    alias: 'widget.analytics-table-referrer_revenue',
+    shopColumnName: 'Umsatz nach Referrer',
 
     initComponent: function () {
         var me = this;
@@ -58,18 +58,38 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
      */
     getColumns: function () {
         return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: 'Datum'
+            dataIndex: 'host',
+            text: 'Host'
         }, {
-            dataIndex: 'basketConversion',
-            text: 'Basket Conversion Rate'
+            dataIndex: 'entireRevenue',
+            text: 'Ges. Umsatz'
         }, {
-            dataIndex: 'orderConversion',
-            text: 'Order Conversion Rate'
+            dataIndex: 'lead',
+            text: 'Lead-Wert'
         }, {
-            dataIndex: 'basketVisitConversion',
-            text: 'Basket/Visit Conversion Rate'
+            dataIndex: 'customerValue',
+            text: 'Kundenwert'
+        }, {
+            dataIndex: 'entireNewRevenue',
+            text: 'Umsatz Neukunden'
+        }, {
+            dataIndex: 'entireOldRevenue',
+            text: 'Umsatz Altkunden'
+        }, {
+            dataIndex: 'orders',
+            text: 'Bestellungen'
+        }, {
+            dataIndex: 'newCustomers',
+            text: 'Neukunden'
+        }, {
+            dataIndex: 'oldCustomers',
+            text: 'Altkunden'
+        }, {
+            dataIndex: 'perNewRevenue',
+            text: 'Umsatz/Neukunden'
+        }, {
+            dataIndex: 'perOldRevenue',
+            text: 'Umsatz/Altkunden'
         }];
     }
 });
