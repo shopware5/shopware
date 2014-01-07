@@ -4168,22 +4168,6 @@ class sArticles
         return $images;
     }
 
-    /**
-     * Insert a article in the list of the recently visit articles
-     * @param string $image absolut image url
-     * @param string $name name of the article
-     * @param int $id id of the article
-     * @access public
-     * @return bool
-     * @deprecated Please use the Shopware_Plugins_Frontend_LastArticles_Bootstrap::setLastArticleById function.
-     */
-    public function sSetLastArticle($image, $name, $id)
-    {
-        /**@var $plugin Shopware_Plugins_Frontend_LastArticles_Bootstrap*/
-        $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
-
-        return $plugin->setLastArticleById($id);
-    }
 
     /**
      * Get article id by ordernumber
