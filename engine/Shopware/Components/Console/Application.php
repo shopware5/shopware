@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -102,11 +102,11 @@ class Application extends BaseApplication
             $this->commandsRegistered = true;
         }
 
-        $container = $this->kernel->getResourceLoader();
+        $container = $this->kernel->getContainer();
 
         foreach ($this->all() as $command) {
-            if ($command instanceof ResourceLoaderAwareInterface) {
-                $command->setResourceLoader($container);
+            if ($command instanceof ContainerAwareInterface) {
+                $command->setContainer($container);
             }
         }
 
@@ -126,7 +126,7 @@ class Application extends BaseApplication
         //Wrap database related logic in a try-catch
         //so that non-db commands can still execute
         try {
-            $em = $this->kernel->getResourceLoader()->get('models');
+            $em = $this->kernel->getContainer()->get('models');
 
             // setup doctrine commands
             $helperSet = $this->getHelperSet();
@@ -169,10 +169,10 @@ class Application extends BaseApplication
 
     protected function registerEventCommands()
     {
-        $this->kernel->getResourceLoader()->load('plugins');
+        $this->kernel->getContainer()->load('plugins');
 
         /** @var \Enlight_Event_EventManager $eventManager */
-        $eventManager = $this->kernel->getResourceLoader()->get('events');
+        $eventManager = $this->kernel->getContainer()->get('events');
 
         $collection = new ArrayCollection();
         $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, array('subject' => $this));

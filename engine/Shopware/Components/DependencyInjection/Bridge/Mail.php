@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,14 +34,14 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class Mail
 {
     /**
-     * @param ResourceLoader                $resourceLoader
+     * @param Container                $container
      * @param \Shopware_Components_Config   $config
      * @param array                         $options
      * @return \Enlight_Components_Mail|null
      */
-    public function factory(ResourceLoader $resourceLoader, \Shopware_Components_Config $config, array $options)
+    public function factory(Container $container, \Shopware_Components_Config $config, array $options)
     {
-        if (!$resourceLoader->load('MailTransport')) {
+        if (!$container->load('MailTransport')) {
             return null;
         }
 

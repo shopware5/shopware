@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,14 +34,14 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class Locale
 {
     /**
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      * @return \Zend_Locale
      */
-    public function factory(ResourceLoader $resourceLoader)
+    public function factory(Container $container)
     {
         $locale = 'de_DE';
-        if ($resourceLoader->has('Shop')) {
-            $locale = $resourceLoader->get('Shop')->getLocale()->getLocale();
+        if ($container->has('Shop')) {
+            $locale = $container->get('Shop')->getLocale()->getLocale();
         }
 
         return new \Zend_Locale($locale);

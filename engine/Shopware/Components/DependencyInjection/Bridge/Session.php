@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,10 +34,10 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class Session
 {
     /**
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      * @return \Enlight_Components_Session_Namespace
      */
-    public function factory(ResourceLoader $resourceLoader)
+    public function factory(Container $container)
     {
         $sessionOptions = Shopware()->getOption('session', array());
 
@@ -51,14 +51,14 @@ class Session
         }
 
         /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $resourceLoader->get('Shop');
+        $shop = $container->get('Shop');
 
         $name = 'session-' . $shop->getId();
         $sessionOptions['name'] = $name;
 
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
-                'db'             => $resourceLoader->get('Db'),
+                'db'             => $container->get('Db'),
                 'name'           => 's_core_sessions',
                 'primary'        => 'id',
                 'modifiedColumn' => 'modified',
@@ -73,7 +73,7 @@ class Session
 
         \Enlight_Components_Session::start($sessionOptions);
 
-        $resourceLoader->set('SessionID', \Enlight_Components_Session::getId());
+        $container->set('SessionID', \Enlight_Components_Session::getId());
 
         $namespace = new \Enlight_Components_Session_Namespace('Shopware');
 

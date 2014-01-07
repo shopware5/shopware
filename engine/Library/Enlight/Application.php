@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * The Enlight_Application component forms the basis for the enlight project.
@@ -133,16 +133,16 @@ class Enlight_Application
      *
      * @param string $environment
      * @param array $options
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      */
-    public function __construct($environment, array $options, ResourceLoader $resourceLoader)
+    public function __construct($environment, array $options, Container $container)
     {
         self::$instance = $this;
         $this->environment = $environment;
         $this->path = dirname(dirname(__FILE__)) . $this->DS();
         $this->core_path = $this->path . 'Enlight' . $this->DS();
 
-        $this->_loader = $resourceLoader->get('Loader');
+        $this->_loader = $container->get('Loader');
 
         if (!empty($options['app'])) {
             $this->app = $options['app'];
@@ -166,8 +166,8 @@ class Enlight_Application
 
         $this->setOptions($options);
 
-        $this->_hooks    = $resourceLoader->get('hooks');
-        $this->_events   = $resourceLoader->get('events');
+        $this->_hooks    = $container->get('hooks');
+        $this->_events   = $container->get('events');
     }
 
     /**
@@ -330,8 +330,8 @@ class Enlight_Application
         if (!$this->_bootstrap) {
             $class = $this->App() . '_Bootstrap';
             $this->_bootstrap = Enlight_Class::Instance($class, array($this));
-
         }
+
         return $this->_bootstrap;
     }
 

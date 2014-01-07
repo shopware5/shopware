@@ -32,9 +32,9 @@
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\ResourceLoader
+     * @var \Shopware\Components\DependencyInjection\Container
      */
-    protected $resourceLoader;
+    protected $container;
 
     /**
      * Instance of the enlight application.
@@ -52,8 +52,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     public function __construct(Shopware $application)
     {
         $this->setApplication($application);
-
-        $this->resourceLoader = $application->ResourceLoader();
+        $this->container = $application->Container();
 
         parent::__construct();
     }
@@ -109,7 +108,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
-        $this->resourceLoader->set($name, $resource);
+        $this->container->set($name, $resource);
 
         return $this;
     }
@@ -122,7 +121,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function hasResource($name)
     {
-        return $this->resourceLoader->has($name);
+        return $this->container->has($name);
     }
 
     /**
@@ -134,7 +133,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function issetResource($name)
     {
-        return $this->resourceLoader->initialized($name);
+        return $this->container->initialized($name);
     }
 
     /**
@@ -147,7 +146,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function getResource($name)
     {
-        return $this->resourceLoader->get($name);
+        return $this->container->get($name);
     }
 
     /**
@@ -166,7 +165,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function loadResource($name)
     {
-        return $this->resourceLoader->load($name);
+        return $this->container->load($name);
     }
 
     /**
@@ -178,7 +177,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function resetResource($name)
     {
-        $this->resourceLoader->reset($name);
+        $this->container->reset($name);
 
         return $this;
     }
@@ -193,6 +192,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function __call($name, $arguments = null)
     {
-        return $this->resourceLoader->get($name);
+        return $this->container->get($name);
     }
 }

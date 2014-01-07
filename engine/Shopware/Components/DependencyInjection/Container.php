@@ -34,41 +34,120 @@ use Symfony\Component\DependencyInjection\Container as BaseContainer;
 class Container extends BaseContainer
 {
     /**
-     * @var ResourceLoader
+     * Constant for the bootstrap status, set before the resource is initialed
      */
-    protected $resourceLoader;
+    const STATUS_BOOTSTRAP = 0;
 
     /**
-     * @param ResourceLoader $resourceLoader
+     * Constant for the bootstrap status, set after the resource is successfully initialed
      */
-    public function setResourceLoader(ResourceLoader $resourceLoader)
+    const STATUS_LOADED = 1;
+
+    /**
+     * Constant for the bootstrap status, set if an exception is thrown by the initialisation
+     */
+    const STATUS_NOT_FOUND = 2;
+
+    /**
+     * Constant for the bootstrap status, set when the resource is registered.
+     */
+    const STATUS_ASSIGNED = 3;
+
+    /**
+     * Property which contains all registered resources
+     *
+     * @var array
+     */
+    protected $resourceList = array();
+
+    /**
+     * Property which contains all states for the registered resources.
+     *
+     * @var array
+     */
+    protected $resourceStatus = array();
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * @param \Shopware_Bootstrap $bootstrap
+     * @return Container
+     */
+    public function setBootstrap(\Shopware_Bootstrap $bootstrap)
     {
-        $this->resourceLoader = $resourceLoader;
+        parent::set('bootstrap', $bootstrap);
+
+        return $this;
     }
 
     /**
-     * Wraps container get call to resource loader.
-     * So the resource loader is able to trigger events
-     * for internal loaded service dependencies
-     *
-     * {@inheritdoc}
+     * @param \Shopware $application
+     * @return Container
      */
-    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function setApplication(\Shopware $application)
     {
-        if (null === $this->resourceLoader) {
-            return parent::get($id, $invalidBehavior);
+        parent::set('application', $application);
+
+        return $this;
+    }
+
+    /**
+     * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
+     * The given name will be used as identifier.
+     *
+     * @param string $name
+     * @param mixed $resource
+     * @return Container
+     */
+    public function set($name, $resource, $scope = 'container')
+    {
+        $name = $this->getNormalizedId($name);
+
+        parent::set($name, $resource);
+
+        $this->resourceList[$name]   = $resource;
+        $this->resourceStatus[$name] = self::STATUS_ASSIGNED;
+
+        if (parent::has('events')) {
+            parent::get('events')->notify(
+                'Enlight_Bootstrap_AfterRegisterResource_' . $name, array(
+                    'subject'  => $this,
+                    'resource' => $resource
+                )
+            );
         }
 
-        return $this->resourceLoader->get($id);
+        return $this;
     }
 
     /**
-     * Returns service directly from container
-     * {@inheritdoc}
+     * Checks if the given resource name is already registered. If not the resource is loaded.
+     *
+     * @param string $name
+     * @return bool
      */
-    public function getService($id)
+    public function has($name)
     {
-        return parent::get($id);
+        $name = $this->getNormalizedId($name);
+
+        return isset($this->resourceList[$name]) || $this->load($name);
+    }
+
+    /**
+     * Checks if the given resource name is already registered.
+     * Unlike as the hasResource method is, if the resource does not exist the resource will not even loaded.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function initialized($name)
+    {
+        $name = $this->getNormalizedId($name);
+
+        return isset($this->resourceList[$name]);
     }
 
     /**
@@ -84,5 +163,118 @@ class Container extends BaseContainer
         }
 
         return $id;
+    }
+
+    /**
+     * Getter method for a single resource. If the source is not already registered, this function will
+     * load the resource automatically. In case the resource is not found the status STATUS_NOT_FOUND is
+     * set and an \Exception is thrown.
+     *
+     * @param string $name
+     * @throws \Exception
+     * @return mixed
+     */
+    public function get($name, $invalidBehavior = 1)
+    {
+        $name = $this->getNormalizedId($name);
+
+        if (!isset($this->resourceStatus[$name])) {
+            $this->load($name);
+        }
+
+        if ($this->resourceStatus[$name] === self::STATUS_NOT_FOUND) {
+            throw new \Exception('Resource "' . $name . '" not found failure');
+        }
+
+        return $this->resourceList[$name];
+    }
+
+    /**
+     * Loads the given resource. If the resource is already registered and the status
+     * is STATUS_BOOTSTRAP an Enlight_Exception is thrown.
+     * The resource is initial by the Enlight_Bootstrap_InitResource event.
+     * If this event doesn't exist for the given resource, the resource is initialed
+     * by call_user_func.
+     * After the resource is initialed the event Enlight_Bootstrap_AfterInitResource is
+     * fired. In case an exception is thrown by initializing the resource,
+     * Enlight sets the status STATUS_NOT_FOUND for the resource in the resource status list.
+     * In case the resource successfully initialed the resource has the status STATUS_LOADED
+     *
+     * @param string $name
+     * @throws \Exception
+     * @throws \Enlight_Exception
+     * @return bool
+     */
+    public function load($name)
+    {
+        $name = $this->getNormalizedId($name);
+
+        if (isset($this->resourceStatus[$name])) {
+            switch ($this->resourceStatus[$name]) {
+                case self::STATUS_BOOTSTRAP:
+                    throw new \Enlight_Exception('Resource "' . $name . '" can\'t resolve all dependencies');
+                case self::STATUS_NOT_FOUND:
+                    return false;
+                case self::STATUS_ASSIGNED:
+                case self::STATUS_LOADED:
+                    return true;
+                default:
+                    break;
+            }
+        }
+
+        try {
+            $this->resourceStatus[$name] = self::STATUS_BOOTSTRAP;
+            $event = false;
+
+            if (parent::has('events')) {
+                $event = parent::get('events')->notifyUntil(
+                    'Enlight_Bootstrap_InitResource_' . $name,
+                    array('subject' => $this)
+                );
+            }
+
+            if ($event) {
+                $this->resourceList[$name] = $event->getReturn();
+            } elseif (parent::has($name)) {
+                $this->resourceList[$name] = parent::get($name);
+            }
+
+            if (parent::has('events')) {
+                parent::get('events')->notify(
+                    'Enlight_Bootstrap_AfterInitResource_' . $name, array('subject' => $this)
+                );
+            }
+        } catch (\Exception $e) {
+            $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
+            throw $e;
+        }
+
+        if (isset($this->resourceList[$name]) && $this->resourceList[$name] !== null) {
+            $this->resourceStatus[$name] = self::STATUS_LOADED;
+            return true;
+        } else {
+            $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
+            return false;
+        }
+    }
+
+    /**
+     * If the given resource is set, the resource and the resource status are removed from the
+     * list properties.
+     *
+     * @param string $name
+     * @return Container
+     */
+    public function reset($name)
+    {
+        $name = $this->getNormalizedId($name);
+        if (isset($this->resourceList[$name])) {
+            unset($this->resourceList[$name]);
+            unset($this->resourceStatus[$name]);
+        }
+        parent::set($name, null);
+
+        return $this;
     }
 }

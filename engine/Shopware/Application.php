@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Shopware Application
@@ -42,20 +42,20 @@ class Shopware extends Enlight_Application
     protected $oldPath = null;
 
     /**
-     * @var Shopware\Components\ResourceLoader
+     * @var Container
      */
-    protected $resourceLoader;
+    protected $container;
 
     /**
      * Constructor method
      *
      * @param string $environment
      * @param array $options
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      */
-    public function __construct($environment, array $options, ResourceLoader $resourceLoader)
+    public function __construct($environment, array $options, Container $container)
     {
-        $this->resourceLoader = $resourceLoader;
+        $this->container = $container;
 
         Shopware($this);
 
@@ -63,10 +63,10 @@ class Shopware extends Enlight_Application
             $this->oldPath = realpath(__DIR__ . '/../../') . '/';
         }
 
-        parent::__construct($environment, $options, $resourceLoader);
+        parent::__construct($environment, $options, $container);
 
-        $resourceLoader->setBootstrap($this->Bootstrap());
-        $resourceLoader->setApplication($this);
+        $container->setBootstrap($this->Bootstrap());
+        $container->setApplication($this);
     }
 
     /**
@@ -98,11 +98,11 @@ class Shopware extends Enlight_Application
     /**
      * Returns injection container
      *
-     * @return ResourceLoader
+     * @return Container
      */
-    public function ResourceLoader()
+    public function Container()
     {
-        return $this->resourceLoader;
+        return $this->container;
     }
 
     /**
