@@ -291,7 +291,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
 
             $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
-            $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.jpg';
+            $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
             $path = str_replace(Shopware()->OldPath(), '', $path);
             if (DIRECTORY_SEPARATOR !== '/') {

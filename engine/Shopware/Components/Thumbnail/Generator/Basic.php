@@ -97,7 +97,17 @@ class Basic implements GeneratorInterface
         );
 
         // saves the image information into a jpg file with a quality rate of 90%
-        imagejpeg($newImage, $destination, 90);
+        switch(strtolower($this->getImageExtension($destination))){
+            case 'png':
+                imagepng($newImage, $destination);
+                break;
+            case 'gif':
+                imagegif($newImage, $destination);
+                break;
+            default:
+                imagejpeg($newImage, $destination, 90);
+                break;
+        }
 
         // Removes both the original and the new created image from memory
         imagedestroy($newImage);

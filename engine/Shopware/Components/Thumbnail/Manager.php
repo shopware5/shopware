@@ -117,33 +117,41 @@ class Manager
         foreach ($thumbnailSizes as $size) {
             $suffix = $size['width'] . 'x' . $size['height'];
 
-            $destination = $this->getDestination($media, $suffix);
+            $destinations = $this->getDestination($media, $suffix);
 
-            $this->generator->createThumbnail(
-                $imagePath,
-                $destination,
-                $size['width'],
-                $size['height'],
-                $keepProportions
-            );
+            foreach($destinations as $destination){
+                $this->generator->createThumbnail(
+                    $imagePath,
+                    $destination,
+                    $size['width'],
+                    $size['height'],
+                    $keepProportions
+                );
+            }
         }
     }
 
     /**
-     * Returns the new image path for saving
+     * Returns an array with a jpg and original extension path if its not a jpg
      *
      * @param Media $media
      * @param $suffix
-     * @return string
+     * @return array
      * @throws \Exception
      */
     protected function getDestination(Media $media, $suffix)
     {
         $thumbnailDir = $this->getThumbnailDir($media);
 
-        $fileName = $media->getName() . '_' . $suffix . '.jpg';
+        $fileNames = array(
+            'jpg' => $thumbnailDir . $media->getName() . '_' . $suffix . '.jpg'
+        );
 
-        return $thumbnailDir . $fileName;
+        if($media->getExtension() !== 'jpg'){
+            $fileNames[$media->getExtension()] =  $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+        }
+
+        return $fileNames;
     }
 
     /**
