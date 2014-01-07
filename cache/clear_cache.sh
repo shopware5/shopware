@@ -10,6 +10,8 @@ rm -rf $DIR/templates/*
 rm -rf $DIR/proxies/*
 rm -rf $DIR/doctrine/filecache/*
 rm -rf $DIR/doctrine/proxies/*
+rm -rf $DIR/mpdf/tmp/*
+rm -rf $DIR/mpdf/ttfontdata/*
 
 if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
     echo "Clearing attributes"
