@@ -32,7 +32,7 @@
  */
 class Shopware_Components_Convert_Xml
 {
-    var $sSettings = array(
+    public $sSettings = array(
         "encoding"=> "UTF-8",
         "standalone"=> true,
         "attributes"=> true,
@@ -41,7 +41,7 @@ class Shopware_Components_Convert_Xml
         "newline" => "\r\n",
     );
 
-    function encode($array)
+    public function encode($array)
     {
         $standalone = $this->sSettings['standalone'] ? "yes" : "no";
         $ret        =
@@ -50,7 +50,7 @@ class Shopware_Components_Convert_Xml
         return $ret;
     }
 
-    function _encode($array, $pos = 0, $ekey = "")
+    public function _encode($array, $pos = 0, $ekey = "")
     {
         $ret = "";
         if ($this->sSettings['padding'] !== false) {
@@ -96,7 +96,7 @@ class Shopware_Components_Convert_Xml
         return $ret;
     }
 
-    function decode($contents)
+    public function decode($contents)
     {
         if (!$contents) {
             return array();
@@ -188,7 +188,7 @@ class Shopware_Components_Convert_Xml
         return ($xml_array);
     }
 
-    function fix_array(&$array, $name = "")
+    public function fix_array(&$array, $name = "")
     {
         if (!empty($name) && (empty($array[$name]) || !is_array($array[$name]))) {
             return false;
@@ -205,7 +205,7 @@ class Shopware_Components_Convert_Xml
         return true;
     }
 
-    function fix_string(&$string)
+    public function fix_string(&$string)
     {
         if (empty($string)) {
             return false;
@@ -219,7 +219,7 @@ class Shopware_Components_Convert_Xml
         return true;
     }
 
-    function attr_as_key(&$array, $atr, $valuename = "")
+    public function attr_as_key(&$array, $atr, $valuename = "")
     {
         $data = array();
         if (!empty($array) && is_array($array)) {
@@ -248,7 +248,7 @@ class Shopware_Components_Convert_Xml
         $array = $data;
     }
 
-    function value_as_key(&$array, $name, $valuename = "")
+    public function value_as_key(&$array, $name, $valuename = "")
     {
         $data = array();
         if (!empty($array) && is_array($array)) {
@@ -269,7 +269,7 @@ class Shopware_Components_Convert_Xml
         $array = $data;
     }
 
-    function atr_as_values(&$array, $valuename = "")
+    public function atr_as_values(&$array, $valuename = "")
     {
         if (!empty($valuename) && is_string($array)) {
             $array[$valuename] = $array;

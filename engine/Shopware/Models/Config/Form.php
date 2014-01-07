@@ -256,7 +256,7 @@ class Form extends ModelEntity
         if (!$element instanceof Element) {
             $element = $this->getElement($element);
         }
-        if($element !== null) {
+        if ($element !== null) {
             $this->elements->removeElement($element);
         }
         return $this;

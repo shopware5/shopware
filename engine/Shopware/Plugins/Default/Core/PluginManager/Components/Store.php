@@ -344,7 +344,7 @@ class CommunityStore
         /**@var $feedback Shopware_StoreApi_Core_Response_SearchResult*/
         $iterator = $feedback->getIterator();
         $votes = array();
-        foreach($iterator as $data) {
+        foreach ($iterator as $data) {
             $votes[] = $data->getRawData();
         }
         return array('success' => true, 'data' => $votes);
@@ -383,7 +383,7 @@ class CommunityStore
             $products = array();
 
             /**@var $product Shopware_StoreApi_Models_Licence */
-            foreach($resultSet->getIterator() as $product) {
+            foreach ($resultSet->getIterator() as $product) {
                 $data = $product->getRawData();
 
                 $payed = (int) $data['payed'];
@@ -442,7 +442,7 @@ class CommunityStore
         $categories = array();
 
         /**@var $categoryModel Shopware_StoreApi_Models_Category */
-        foreach($iterator as $categoryModel) {
+        foreach ($iterator as $categoryModel) {
             $categories[] = $categoryModel->getRawData();
         }
         return $categories;
@@ -471,7 +471,7 @@ class CommunityStore
         $products = array();
 
         /**@var $product Shopware_StoreApi_Models_Product */
-        foreach($iterator as $product) {
+        foreach ($iterator as $product) {
             $data  = $product->getRawData();
             $data['details'] = $product->getDetails();
             $products[] = $data;
@@ -527,7 +527,7 @@ class CommunityStore
         $categories = array();
 
         /**@var $model Shopware_StoreApi_Models_Category */
-        foreach($iterator as $model) {
+        foreach ($iterator as $model) {
             $category = $model->getRawData();
             $productResult = $model->getProducts();
             if ($productResult instanceof Shopware_StoreApi_Exception_Response) {
@@ -535,7 +535,7 @@ class CommunityStore
             } else {
                 $products = array();
                 /**@var $productModel Shopware_StoreApi_Models_Product*/
-                foreach($productResult as $productModel) {
+                foreach ($productResult as $productModel) {
                     $product = $productModel->getRawData();
                     $product['details'] = $productModel->getDetails();
                     $products[] = $product;
@@ -569,7 +569,7 @@ class CommunityStore
         $productQuery->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_PLUGIN_NAME);
         $productQuery->setOrderDirection(Shopware_StoreApi_Models_Query_Product::ORDER_DIRECTION_ASC);
         if (!empty($orderBy)) {
-            switch(strtolower($orderBy['property'])) {
+            switch (strtolower($orderBy['property'])) {
                 case "datum":
                     $productQuery->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_CREATION_DATE);
                     $productQuery->setOrderDirection($orderBy['direction']);
@@ -586,7 +586,7 @@ class CommunityStore
 
         if (!empty($filters)) {
             $values = array();
-            foreach($filters as $filter) {
+            foreach ($filters as $filter) {
                 $values[] = $filter['value'];
             }
             $productQuery->addCriterion(
@@ -596,7 +596,8 @@ class CommunityStore
         return $productQuery;
     }
 
-    public function getDomainMessage() {
+    public function getDomainMessage()
+    {
         $url = 'store.shopware.de';
         if ($this->getIdentity()) {
             $url = $this->getIdentity()->getAccountUrl();
@@ -639,7 +640,7 @@ class CommunityStore
         $query->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_PLUGIN_NAME);
         $query->setOrderDirection(Shopware_StoreApi_Models_Query_Product::ORDER_DIRECTION_ASC);
         if (!empty($orderBy)) {
-            switch(strtolower($orderBy['property'])) {
+            switch (strtolower($orderBy['property'])) {
                 case "datum":
                     $query->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_CREATION_DATE);
                     $query->setOrderDirection($orderBy['direction']);
@@ -656,7 +657,7 @@ class CommunityStore
 
         if (!empty($filters)) {
             $values = array();
-            foreach($filters as $filter) {
+            foreach ($filters as $filter) {
                 $values[] = $filter['value'];
             }
             $query->addCriterion(
@@ -672,7 +673,7 @@ class CommunityStore
         $products = array();
 
         /**@var $product Shopware_StoreApi_Models_Product */
-        foreach($iterator as $product) {
+        foreach ($iterator as $product) {
             $data  = $product->getRawData();
             $data['details'] = $product->getDetails();
             $products[] = $data;
@@ -759,7 +760,7 @@ class CommunityStore
                 );
             }
         } else {
-            foreach($resultSet as $key => &$plugin) {
+            foreach ($resultSet as $key => &$plugin) {
                 if (array_key_exists($key, $plugins)) {
                     $plugin['pluginId'] = $plugins[$key]['pluginId'];
                 }
@@ -820,7 +821,7 @@ class CommunityStore
             }
         } else {
             // mark returned plugins as compatible
-            foreach($resultSet as  $productModel) {
+            foreach ($resultSet as  $productModel) {
                 $names  = $productModel->getPluginNames();
                 foreach ($names as $name) {
                     $results[$name] = true;

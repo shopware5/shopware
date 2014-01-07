@@ -72,16 +72,16 @@ class Repository extends ModelRepository
             'area.id as areaId'
         ));
         $builder->from('Shopware\Models\Country\Country', 'countries')
-		->leftJoin('countries.area', 'area');
+        ->leftJoin('countries.area', 'area');
 
-		if($filter[0]['property'] == "areaId"){
-			$builder->where('area.id = :areaId');
-			$builder->setParameter('areaId', $filter[0]['value']);
-		}else if($filter !== null){
-			$builder->addFilter($filter);
-		}
+        if ($filter[0]['property'] == "areaId") {
+            $builder->where('area.id = :areaId');
+            $builder->setParameter('areaId', $filter[0]['value']);
+        } elseif ($filter !== null) {
+            $builder->addFilter($filter);
+        }
 
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 

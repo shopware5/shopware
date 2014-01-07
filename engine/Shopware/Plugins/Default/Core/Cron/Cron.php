@@ -26,14 +26,14 @@
  */
 class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
 {
-	public function init()
-	{
-		Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-		Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-	}
+    public function init()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+    }
 
-	public function indexAction()
-	{
+    public function indexAction()
+    {
         /** @var $cronManager Enlight_Components_Cron_Manager */
         $cronManager = Shopware()->Cron();
 
@@ -43,7 +43,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
 
             // Fix cron action name
             $action = $job->getAction();
-            if(strpos($action, 'Shopware_') !== 0) {
+            if (strpos($action, 'Shopware_') !== 0) {
                 $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $job->getAction())));
                 $job->setAction('Shopware_CronJob_' . $action);
             }

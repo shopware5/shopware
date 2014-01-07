@@ -41,13 +41,14 @@ class Repository extends ModelRepository
      * @param $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getMediaListQuery($filter = null, $orderBy = null, $limit= null, $offset = null) {
-    	$builder = $this->getMediaListQueryBuilder($filter, $orderBy);
+    public function getMediaListQuery($filter = null, $orderBy = null, $limit= null, $offset = null)
+    {
+        $builder = $this->getMediaListQueryBuilder($filter, $orderBy);
         if ($limit !== null && $offset !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -57,17 +58,18 @@ class Repository extends ModelRepository
      * @param $orderBy
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getMediaListQueryBuilder($filter, $orderBy) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+    public function getMediaListQueryBuilder($filter, $orderBy)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('media')
                 ->from('Shopware\Models\Media\Media', 'media');
-        if($filter) {
+        if ($filter) {
             $builder->addFilter($filter);
         }
-        if($orderBy) {
+        if ($orderBy) {
             $builder->addOrderBy($orderBy);
         }
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -108,10 +110,9 @@ class Repository extends ModelRepository
 
         $builder->select('media')
                 ->from('Shopware\Models\Media\Media', 'media');
-		if($albumId != null || $albumId != 0)
-		{
-			$builder->where($expr->eq('media.albumId', $albumId));
-		}
+        if ($albumId != null || $albumId != 0) {
+            $builder->where($expr->eq('media.albumId', $albumId));
+        }
 
         if ($filter!== null) {
             $builder->andWhere(
@@ -139,9 +140,10 @@ class Repository extends ModelRepository
      * @param $albumId
      * @return \Doctrine\ORM\Query
      */
-    public function getAlbumWithSettingsQuery($albumId) {
-    	$builder = $this->getAlbumWithSettingsQueryBuilder($albumId);
-    	return $builder->getQuery();
+    public function getAlbumWithSettingsQuery($albumId)
+    {
+        $builder = $this->getAlbumWithSettingsQueryBuilder($albumId);
+        return $builder->getQuery();
     }
 
     /**
@@ -150,15 +152,16 @@ class Repository extends ModelRepository
      * @param $albumId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getAlbumWithSettingsQueryBuilder($albumId) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+    public function getAlbumWithSettingsQueryBuilder($albumId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('album', 'settings'))
                 ->from('Shopware\Models\Media\Album', 'album')
                 ->leftJoin('album.settings', 'settings')
                 ->where('album.id = ?1')
                 ->setParameter(1, $albumId);
 
-    	return $builder;
+        return $builder;
     }
 
     /**

@@ -136,7 +136,7 @@ class Enlight_Extensions_RouterSymfony_Bootstrap extends Enlight_Plugin_Bootstra
 
         try {
             return $matcher->match($request->getPathInfo());
-        } catch(ResourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             return null;
         }
     }
@@ -164,7 +164,7 @@ class Enlight_Extensions_RouterSymfony_Bootstrap extends Enlight_Plugin_Bootstra
                 if (($url = $matcher->generate($name, $params)) !== null) {
                     return ltrim($url, '/');
                 }
-            } catch(Exception $e) { }
+            } catch (Exception $e) { }
         }
         return null;
     }

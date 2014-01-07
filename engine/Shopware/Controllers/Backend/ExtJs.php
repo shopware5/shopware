@@ -159,8 +159,8 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-	    $identity = Shopware()->Auth()->getIdentity();
-		$this->View()->assign('user', $identity, true);
+        $identity = Shopware()->Auth()->getIdentity();
+        $this->View()->assign('user', $identity, true);
     }
 
     /**
@@ -222,10 +222,10 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
                 'controller' => $this->Request()->getControllerName(),
                 'file' => $fileName)
             );
-            if($this->View()->templateExists($templateBase)) {
+            if ($this->View()->templateExists($templateBase)) {
                 $template .= '{include file="' . $templateBase. '"}' . "\n";
             }
-            if($this->View()->templateExists($templateExtend)) {
+            if ($this->View()->templateExists($templateExtend)) {
                 $template .= '{include file="' . $templateExtend. '"}' . "\n";
             }
         }

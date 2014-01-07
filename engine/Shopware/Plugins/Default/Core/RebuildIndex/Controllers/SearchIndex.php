@@ -56,4 +56,3 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
         $this->View()->assign(array('success' => true));
     }
 }
-

@@ -26,20 +26,20 @@
  */
 class Shopware_Controllers_Frontend_Content extends Enlight_Controller_Action
 {
-	public function indexAction()
-	{
-		if (empty($this->Request()->sContent)){
-			return $this->forward('index','index');
-		}
+    public function indexAction()
+    {
+        if (empty($this->Request()->sContent)) {
+            return $this->forward('index','index');
+        }
 
-		$groupID = $this->Request()->sContent;
-		$detailID = $this->Request()->sCid;
+        $groupID = $this->Request()->sContent;
+        $detailID = $this->Request()->sCid;
 
-		if (!empty($detailID)){
-			$this->view->loadTemplate('frontend/content/detail.tpl');
-		}
+        if (!empty($detailID)) {
+            $this->view->loadTemplate('frontend/content/detail.tpl');
+        }
 
-        if (!empty($detailID)){
+        if (!empty($detailID)) {
             $sContent = Shopware()->Modules()->Cms()->sGetDynamicContentById($groupID, $detailID);
             $this->view->sContentItem = $sContent['sContent'];
             $this->view->sPages = $sContent['sPages'];
@@ -50,5 +50,5 @@ class Shopware_Controllers_Frontend_Content extends Enlight_Controller_Action
         }
         $this->view->sContentName = Shopware()->Modules()->Cms()->sGetDynamicGroupName($groupID);
         $this->view->sBreadcrumb = array(0=>array('name'=>$this->view->sContentName));
-	}
+    }
 }

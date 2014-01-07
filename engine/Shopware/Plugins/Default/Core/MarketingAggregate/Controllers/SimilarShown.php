@@ -73,4 +73,3 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
         $this->View()->assign(array('success' => true));
     }
 }
-

@@ -226,7 +226,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
         if ($this->scope !== null && $scope === null) {
             $scope = $this->scope;
         }
-        if($this->template !== null) {
+        if ($this->template !== null) {
             $this->template->assign($spec, $value, $nocache, $scope);
         } else {
             $this->engine->assign($spec, $value, $nocache);
@@ -292,7 +292,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function setNocache($value = true)
     {
-        $this->nocache = (bool)$value;
+        $this->nocache = (bool) $value;
         return $this;
     }
 
@@ -315,7 +315,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      */
     public function setCaching($value = true)
     {
-        $this->Template()->caching = (bool)$value;
+        $this->Template()->caching = (bool) $value;
         return $this;
     }
 

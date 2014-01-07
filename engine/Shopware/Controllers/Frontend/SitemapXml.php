@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
         $this->readArticleUrls($parentId);
 
-	    $this->readBlogUrls($parentId);
+        $this->readBlogUrls($parentId);
 
         echo "</urlset>\r\n";
     }
@@ -85,7 +85,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $categories = $this->repository->getActiveChildrenList($parentId);
 
         foreach ($categories as $category) {
-            if(!empty($category['external'])) {
+            if (!empty($category['external'])) {
                 continue;
             }
 
@@ -137,19 +137,19 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     public function readArticleUrls($parentId)
     {
         $sql = "
-			SELECT
-				a.id,
-				DATE(a.changetime) as changed
-			FROM s_articles a
+            SELECT
+                a.id,
+                DATE(a.changetime) as changed
+            FROM s_articles a
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID  = a.id
                     AND ac.categoryID = ?
                 INNER JOIN s_categories c
                     ON  c.id = ac.categoryID
                     AND c.active = 1
-			WHERE a.active = 1
-			GROUP BY a.id
-		";
+            WHERE a.active = 1
+            GROUP BY a.id
+        ";
         $result = Shopware()->Db()->query($sql, array($parentId));
         if (!$result->rowCount()) {
             return;
@@ -163,44 +163,44 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         }
     }
 
-	/**
-	 * Reads the blog item urls
-	 *
-	 * @param $parentId
-	 */
-	public function readBlogUrls($parentId)
-	{
-		$query = $this->repository->getBlogCategoriesByParentQuery($parentId);
-		$blogCategories = $query->getArrayResult();
+    /**
+     * Reads the blog item urls
+     *
+     * @param $parentId
+     */
+    public function readBlogUrls($parentId)
+    {
+        $query = $this->repository->getBlogCategoriesByParentQuery($parentId);
+        $blogCategories = $query->getArrayResult();
 
-		$blogIds = array();
-		foreach($blogCategories as $blogCategory) {
-			$blogIds[] = $blogCategory["id"];
-		}
+        $blogIds = array();
+        foreach ($blogCategories as $blogCategory) {
+            $blogIds[] = $blogCategory["id"];
+        }
         if (empty($blogIds)) {
             return;
         }
-		$blogIds = Shopware()->Db()->quote($blogIds);
+        $blogIds = Shopware()->Db()->quote($blogIds);
 
-		$sql = "
-			SELECT id, category_id, DATE(display_date) as changed
-			FROM s_blog
-			WHERE active = 1 AND category_id IN($blogIds)
-			";
-		$result = Shopware()->Db()->query($sql);
-		if (!$result->rowCount()) {
-			return;
-		}
-		while ($blogUrlData = $result->fetch()) {
-			$blogUrlData['link'] = $this->Front()->Router()->assemble(array(
-				'sViewport' => 'blog',
-				'sAction' => 'detail',
-				'sCategory' => $blogUrlData['category_id'],
-				'blogArticle' => $blogUrlData['id']
-			));
-			$this->printArticleUrls($blogUrlData);
-		}
-	}
+        $sql = "
+            SELECT id, category_id, DATE(display_date) as changed
+            FROM s_blog
+            WHERE active = 1 AND category_id IN($blogIds)
+            ";
+        $result = Shopware()->Db()->query($sql);
+        if (!$result->rowCount()) {
+            return;
+        }
+        while ($blogUrlData = $result->fetch()) {
+            $blogUrlData['link'] = $this->Front()->Router()->assemble(array(
+                'sViewport' => 'blog',
+                'sAction' => 'detail',
+                'sCategory' => $blogUrlData['category_id'],
+                'blogArticle' => $blogUrlData['id']
+            ));
+            $this->printArticleUrls($blogUrlData);
+        }
+    }
 
     /**
      * Print article url

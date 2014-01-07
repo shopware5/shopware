@@ -176,7 +176,8 @@ class Image extends ModelEntity
     /**
      * Class constructor which initials the array collections.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->mappings = new ArrayCollection();
         $this->children = new ArrayCollection();
     }

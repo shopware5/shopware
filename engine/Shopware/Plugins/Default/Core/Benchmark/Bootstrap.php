@@ -88,7 +88,7 @@ class Shopware_Plugins_Core_Benchmark_Bootstrap extends Shopware_Components_Plug
     public function Config()
     {
         $config = parent::Config();
-        if(count($config) === 0) {
+        if (count($config) === 0) {
             $config->merge(new Enlight_Config(array(
                 'logDb' => true,
                 'logTemplate' => true,

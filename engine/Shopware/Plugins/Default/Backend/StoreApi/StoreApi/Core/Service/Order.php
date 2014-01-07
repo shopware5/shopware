@@ -37,11 +37,11 @@ class Shopware_StoreApi_Core_Service_Order extends Enlight_Class
 
     public function orderProduct($authModel, $domainModel, $productModel, $rentVersion=false)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             throw new Enlight_Exception('The parameter authModel is not an instance of the class Shopware_StoreApi_Models_Auth');
-        }elseif(!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
+        } elseif (!$domainModel instanceof Shopware_StoreApi_Models_Domain) {
             throw new Enlight_Exception('The parameter domainModel is not an instance of the class Shopware_StoreApi_Models_Domain');
-        }elseif(!$productModel instanceof Shopware_StoreApi_Models_Product) {
+        } elseif (!$productModel instanceof Shopware_StoreApi_Models_Product) {
             throw new Enlight_Exception('The parameter productModel is not an instance of the class Shopware_StoreApi_Models_Product');
         }
 

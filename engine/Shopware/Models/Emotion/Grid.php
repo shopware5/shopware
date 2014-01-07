@@ -198,7 +198,8 @@ class Grid extends ModelEntity
     /**
      * Clone function for this model.
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->id = null;
         $this->emotions = new ArrayCollection();
     }

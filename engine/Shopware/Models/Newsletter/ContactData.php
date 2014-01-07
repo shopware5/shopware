@@ -334,4 +334,3 @@ class ContactData extends ModelEntity
 
 
 }
-

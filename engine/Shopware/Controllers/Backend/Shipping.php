@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $params = $this->Request()->getParams();
         $dispatchModel = null;
-        $id = (int)$this->Request()->get('id');
+        $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $dispatchModel = $this->getRepository()->find($id);
         } else {
@@ -119,9 +119,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $categories                = $params['categories'];
 
 
-        if(!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
+        if (!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
             $params['shippingFree'] = null;
-        }else{
+        } else {
             $params['shippingFree'] = floatval(str_replace(',' , '.', $params['shippingFree']));
         }
 
@@ -277,9 +277,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      * @param $calculationType
      * @return array
      */
-    private function getCalculationConfig($calculationType) {
-        switch ($calculationType)
-        {
+    private function getCalculationConfig($calculationType)
+    {
+        switch ($calculationType) {
             case 1:
                 return array(
                     'decimalPrecision' => 2,
@@ -328,9 +328,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $result = $query->getArrayResult();
 
         // if minChange was not passed, get it in order to show a proper cost matrix
-        if($minChange === null) {
+        if ($minChange === null) {
             $dispatch = $this->getRepository()->getShippingCostsQuery($dispatchId)->getArrayResult();
-            if($dispatch) {
+            if ($dispatch) {
                 $config = $this->getCalculationConfig(isset($dispatch[0]['calculation']) ? $dispatch[0]['calculation'] : 0);
                 $minChange = $config['minChange'];
             }
@@ -376,7 +376,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->getManager()->remove($costsModel);
             $this->getManager()->flush();
             $this->View()->assign(array('success' => true));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $dispatches = $this->Request()->getParam('dispatches', array(array('id' => $this->Request()->getParam('id'))));
 
             //iterate the customers and add the remove action
-            foreach($dispatches as $dispatch) {
+            foreach ($dispatches as $dispatch) {
                 $entity = $this->getRepository()->find($dispatch['id']);
                 $this->getManager()->remove($entity);
                 $this->deleteCostsMatrix($entity->getId());
@@ -418,8 +418,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 'success' => true,
                 'data' => $this->Request()->getParams())
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -453,7 +452,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(array('success' => false, 'errorMsg' => 'Empty Post Request'));
             return;
         }
-        $dispatchId = (int)$this->Request()->getParam('dispatchId');
+        $dispatchId = (int) $this->Request()->getParam('dispatchId');
         $costsMatrix = $this->Request()->getParam('costMatrix');
         $params = $this->Request()->getParams();
 
@@ -461,17 +460,17 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $costsMatrix = array($params);
         }
 
-        if (!is_array($costsMatrix)){
+        if (!is_array($costsMatrix)) {
             $this->View()->assign(array('success' => false, 'errorMsg' => 'Empty data set.'));
             return;
         }
-        if ($dispatchId <= 0){
+        if ($dispatchId <= 0) {
             $this->View()->assign(array('success' => false, 'errorMsg' => 'No dispatch id given.'));
             return;
         }
 
         $dispatch = Shopware()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
-        if(!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)){
+        if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
             $this->View()->assign(array('success' => false, 'errorMsg' => 'No valid dispatch ID.'));
             return;
         }
@@ -491,7 +490,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             try {
                 $manager->persist($shippingCostModel);
                 $data[] = $this->getManager()->toArray($shippingCostModel);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $errorMsg = $e->getMessage();
                 $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));
                 return;

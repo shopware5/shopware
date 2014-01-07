@@ -78,4 +78,3 @@ class Group extends ModelEntity
         return $this->name;
     }
 }
-

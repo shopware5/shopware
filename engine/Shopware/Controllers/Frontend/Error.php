@@ -41,7 +41,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        if($this->Request()->getActionName() !== 'service') {
+        if ($this->Request()->getActionName() !== 'service') {
             if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
                 $this->Front()->Plugins()->Json()->setRenderer();
                 $this->View()->assign('success', false);
@@ -99,7 +99,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                     break;
             }
 
-            if($this->View()->getAssign('success') !== null) {
+            if ($this->View()->getAssign('success') !== null) {
                 $this->Response()->setHttpResponseCode(200);
                 $this->View()->clearAssign('exception');
                 $this->View()->assign('message', $error->exception->getMessage());

@@ -168,7 +168,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         $this->SeoIndex()->registerShop($shops[0]);
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
-        foreach($shops as $shopId) {
+        foreach ($shops as $shopId) {
             /** @var $repository \Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);

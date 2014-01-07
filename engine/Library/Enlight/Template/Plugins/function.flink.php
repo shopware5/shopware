@@ -45,11 +45,11 @@ function smarty_function_flink($params, $template)
                 $file = realpath($dir) . DS . str_replace('/', DS, $file);
                 break;
             }
-            if($useIncludePath) {
-                if($dir === '.' . DS) {
+            if ($useIncludePath) {
+                if ($dir === '.' . DS) {
                     $dir = '';
                 }
-                if(($result = Enlight_Loader::isReadable($dir . $file)) !== false) {
+                if (($result = Enlight_Loader::isReadable($dir . $file)) !== false) {
                     $file = $result;
                     break;
                 }
@@ -79,13 +79,13 @@ function smarty_function_flink($params, $template)
             if (!file_exists($docPath . $file)) {
                 //return false;
             }
-            if($request !== null) {
+            if ($request !== null) {
                 $file = $request->getBasePath() . '/' . $file;
             }
         }
     }
 
-    if(empty($file) && $request !== null) {
+    if (empty($file) && $request !== null) {
         $file = $request->getBasePath() . '/';
     }
 

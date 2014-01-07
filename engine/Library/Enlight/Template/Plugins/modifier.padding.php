@@ -44,7 +44,7 @@ function smarty_modifier_padding($str, $width = 10, $break = '...', $fill = ' ')
     if (empty($width) || !is_numeric($width)) {
         $width = 10;
     } else {
-        $width = (int)$width;
+        $width = (int) $width;
     }
     // if no string is given, just build one string containing the fill pattern
     if (!is_scalar($str)) {

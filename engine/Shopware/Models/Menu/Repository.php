@@ -34,7 +34,7 @@ class Repository extends ModelRepository
     public function save()
     {
 
-	}
+    }
 
     /**
      * @deprecated Will be executed automatically.
@@ -51,7 +51,7 @@ class Repository extends ModelRepository
      */
     public function findOneBy(array $criteria)
     {
-        if(func_num_args() === 2) {
+        if (func_num_args() === 2) {
             return parent::findOneBy(array(func_get_arg(0) => func_get_arg(1)));
         } else {
             return parent::findOneBy($criteria);

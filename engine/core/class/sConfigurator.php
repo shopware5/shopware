@@ -56,7 +56,8 @@ class sConfigurator
      *
      * @return mixed
      */
-    protected function getSingleArticle($articleId) {
+    protected function getSingleArticle($articleId)
+    {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('article'))
                 ->from('Shopware\Models\Article\Article', 'article')
@@ -72,7 +73,8 @@ class sConfigurator
      *
      * @return array
      */
-    protected function getConfiguratorOptionsForVariantId($variantId) {
+    protected function getConfiguratorOptionsForVariantId($variantId)
+    {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('options'))
                 ->from('Shopware\Models\Article\Configurator\Option', 'options')
@@ -126,7 +128,7 @@ class sConfigurator
 
         $mainDetailOptions = $this->getConfiguratorOptionsForVariantId($article['mainDetailId']);
         //now we iterate all activated options and assign them to the corresponding group.
-        foreach($data['options'] as $option) {
+        foreach ($data['options'] as $option) {
             //the convert functions changes the property names, so we save the ids in internal helper properties.
             $groupId = $option['groupId'];
             $optionId = $option['id'];
@@ -140,7 +142,7 @@ class sConfigurator
                 if (empty($selectedItems)) {
 
                     /**@var $mainDetailOption \Shopware\Models\Article\Configurator\Option*/
-                    foreach($mainDetailOptions as $mainDetailOption) {
+                    foreach ($mainDetailOptions as $mainDetailOption) {
                         if ($mainDetailOption['id'] === $optionId) {
                             $selected = 1;
                         }
@@ -162,7 +164,7 @@ class sConfigurator
 
         //now we iterate all groups to convert them from the old property structure to new one.
         $sConfigurator = array();
-        foreach($data['groups'] as $group) {
+        foreach ($data['groups'] as $group) {
             $data = $this->getConvertGroupData($group);
             $isSelected = (int) array_key_exists($group['id'], $selectedItems) && !empty($selectedItems[$group['id']]);
             //if the current group id exists in the post data, the group was selected already.
@@ -192,8 +194,8 @@ class sConfigurator
 
         //now we check if the sQuantity property is set in the post.
         $quantity = 1;
-        if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
-            $quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
+        if (!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
+            $quantity = (int) $this->sSYSTEM->_POST["sQuantity"];
         }
         $articleData["quantity"] = $quantity;
 
@@ -230,7 +232,7 @@ class sConfigurator
                 $selected = $this->getConvertedDetail($detailData);
                 $attributeIndex = 1;
                 //at least we creates the old "attr1-X" attributes with the option id as value.
-                foreach($detailData['configuratorOptions'] as $option) {
+                foreach ($detailData['configuratorOptions'] as $option) {
                     $attribute = 'attr' . $attributeIndex;
                     $selected[$attribute] = $option['id'];
                     $attributeIndex++;
@@ -260,7 +262,7 @@ class sConfigurator
             }
             $preSelectedOptions = $detail['configuratorOptions'];
 
-            foreach($sConfigurator as &$group) {
+            foreach ($sConfigurator as &$group) {
                 $preSelectedOption = $preSelectedOptions[$group['groupID']];
                 $id = $preSelectedOption['id'];
                 if (array_key_exists($id, $group['values'])) {
@@ -281,7 +283,7 @@ class sConfigurator
         //if one variant are selected we have to calculate the prices and get the price
         if (!empty($selected)) {
             $selectedPrice = $selected['price'][0];
-            foreach($selected['price'] as $price) {
+            foreach ($selected['price'] as $price) {
                 if (!is_numeric($price['to'])) {
                     $selectedPrice = $price;
                     break;
@@ -338,7 +340,8 @@ class sConfigurator
      * @param array $selectedItems
      * @return Shopware\Components\Model\QueryBuilder
      */
-    public function getSelectionQueryBuilder($selectedItems = array()) {
+    public function getSelectionQueryBuilder($selectedItems = array())
+    {
         //first we create a small query builder with the article details and the prices
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('detail', 'prices'))
@@ -352,7 +355,7 @@ class sConfigurator
                 ->addOrderBy('prices.from', 'ASC');
 
         //now we iterate all selected groups with their options to filter the available variant
-        foreach($selectedItems as $optionId) {
+        foreach ($selectedItems as $optionId) {
             if (empty($optionId)) {
                 continue;
             }
@@ -396,8 +399,8 @@ class sConfigurator
 
         // Calculating price for reference-unit
         if ($selected["purchaseunit"] > 0 && $selected["referenceunit"]) {
-            $selected["purchaseunit"] = (float)$selected["purchaseunit"];
-            $selected["referenceunit"] = (float)$selected["referenceunit"];
+            $selected["purchaseunit"] = (float) $selected["purchaseunit"];
+            $selected["referenceunit"] = (float) $selected["referenceunit"];
             $articleData['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
                 $selected["price"][0]["price"],
                 $selected["purchaseunit"],
@@ -410,8 +413,7 @@ class sConfigurator
 
         if ($selected["unitID"]) {
             $articleData["sUnit"] = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($selected["unitID"]);
-        }
-        else {
+        } else {
             $articleData["sUnit"] = null;
         }
 
@@ -439,7 +441,7 @@ class sConfigurator
         $articleData["sReleasedate"] = $articleData["releasedate"];
 
         if (!empty($selected['attributes'])) {
-            foreach($selected['attributes'] as $key => $value) {
+            foreach ($selected['attributes'] as $key => $value) {
                 $articleData[$key] = $value;
             }
         }
@@ -457,7 +459,7 @@ class sConfigurator
     {
         $prices = array();
         //iterate price to calculate the gross price.
-        foreach($data as $price) {
+        foreach ($data as $price) {
             $price['priceNet'] = $price["price"];
             $price['price'] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPrice($price["price"],$tax,$taxId);
             $price['pricenumeric'] =  $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum($price["price"],$tax,false,false,$taxId,false);
@@ -504,17 +506,17 @@ class sConfigurator
 
         //now we check if the sQuantity property is set in the post.
         $quantity = 1;
-        if(!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
-            $quantity = (int)$this->sSYSTEM->_POST["sQuantity"];
+        if (!empty($this->sSYSTEM->_POST["sQuantity"])&&is_numeric($this->sSYSTEM->_POST["sQuantity"])) {
+            $quantity = (int) $this->sSYSTEM->_POST["sQuantity"];
         }
 
         $firstGroup = $groups[0];
 
         $secondGroup = $groups[1];
         $resultGroups = array();
-        foreach($firstGroup['options'] as $firstKey => $firstGroupOption) {
+        foreach ($firstGroup['options'] as $firstKey => $firstGroupOption) {
             $mergedGroups = array();
-            foreach($secondGroup['options'] as $secondKey => $secondGroupOption) {
+            foreach ($secondGroup['options'] as $secondKey => $secondGroupOption) {
                 $detail = $repository->getArticleDetailForTableConfiguratorOptionCombinationQuery($id, $firstKey, $secondKey, $article, $customerGroupKey)
                                      ->getArrayResult();
                 $detail = $detail[0];
@@ -524,7 +526,7 @@ class sConfigurator
                 }
                 $selectedPrice = null;
                 //iterate price to calculate the gross price.
-                foreach($detail['prices'] as $key => $price) {
+                foreach ($detail['prices'] as $key => $price) {
                     $price['price'] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPrice($price["price"],$articleData["tax"],$articleData["taxID"]);
                     if (!is_numeric($price['to'])) {
                         $selectedPrice = $price;
@@ -713,10 +715,10 @@ class sConfigurator
         if (empty($settings['template'])) {
 
             //switch the template for the different configurator types.
-            if($settings["type"]== self::TYPE_SELECTION) {
+            if ($settings["type"]== self::TYPE_SELECTION) {
                 //Selection configurator
                 $settings["template"] = "article_config_step.tpl";
-            } elseif($settings["type"]== self::TYPE_TABLE) {
+            } elseif ($settings["type"]== self::TYPE_TABLE) {
                 //Table configurator
                 $settings["template"] = "article_config_table.tpl";
             } else {
@@ -734,7 +736,7 @@ class sConfigurator
      * @param array $article
      * @return array
      */
-    public function sGetArticleConfig ($id, $article)
+    public function sGetArticleConfig($id, $article)
     {
         return $this->getArticleConfigurator($id, $article);
     }

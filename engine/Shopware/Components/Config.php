@@ -89,7 +89,7 @@ class Shopware_Components_Config implements ArrayAccess
         $this->load();
         $this->offsetSet('host', $shop->getHost());
         $this->offsetSet('basePath', $shop->getHost() . $shop->getBasePath());
-        if($shop->getTitle() !== null) {
+        if ($shop->getTitle() !== null) {
             $this->offsetSet('shopName', $shop->getTitle());
         }
         return $this;
@@ -149,7 +149,7 @@ class Shopware_Components_Config implements ArrayAccess
         $result = array();
         foreach ($data as $row) {
             $result[$row['name']] = unserialize($row['value']);
-			// Take namespaces (form names) into account
+            // Take namespaces (form names) into account
             $result[$row['form'] . '::' . $row['name']] = unserialize($row['value']);
         }
 
@@ -175,11 +175,11 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-	 * Get config by namespace (form). Each config name is unique by namespace + name
-	 */
+     * Get config by namespace (form). Each config name is unique by namespace + name
+     */
     public function getByNamespace($namespace, $name, $default = null)
     {
-    	return $this->get($namespace . '::' . $name, $default);
+        return $this->get($namespace . '::' . $name, $default);
     }
 
     /**

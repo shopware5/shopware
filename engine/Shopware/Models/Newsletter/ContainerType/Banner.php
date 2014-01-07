@@ -179,4 +179,3 @@ class Banner extends ModelEntity
         return $this->container;
     }
 }
-

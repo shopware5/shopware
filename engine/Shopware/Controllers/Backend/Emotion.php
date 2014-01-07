@@ -38,25 +38,26 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     protected $manager = null;
 
-	protected function initAcl()
-	{
-		$this->addAclPermission('list', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('detail', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('library', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('fill', 'read', 'Insufficient Permissions');
+    protected function initAcl()
+    {
+        $this->addAclPermission('list', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('detail', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('library', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('fill', 'read', 'Insufficient Permissions');
 
-		$this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
 
-		$this->addAclPermission('save', 'save', 'Insufficient Permissions');
+        $this->addAclPermission('save', 'save', 'Insufficient Permissions');
 
-		$this->addAclPermission('duplicate', 'create', 'Insufficient Permissions');
-	}
+        $this->addAclPermission('duplicate', 'create', 'Insufficient Permissions');
+    }
 
     /**
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -70,7 +71,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     protected function getRepository()
     {
-        if(self::$repository === null) {
+        if (self::$repository === null) {
             self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         }
         return self::$repository;
@@ -94,9 +95,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getListQuery($filter, $sort, $offset, $limit);
         $count = Shopware()->Models()->getQueryCount($query);
         $emotions = $query->getArrayResult();
-        foreach ($emotions as &$emotion){
+        foreach ($emotions as &$emotion) {
             $categories = array();
-            foreach ($emotion["categories"] as $category){
+            foreach ($emotion["categories"] as $category) {
                 $categories[] = $category["name"];
             }
             $emotion["categoriesNames"] = implode(",",$categories);
@@ -125,7 +126,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         if (!empty($emotion["isLandingPage"])) {
             $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        }else {
+        } else {
             $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
 
@@ -144,13 +145,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $emotion['validToTime'] = $validTo->format('H:i');
         }
 
-        foreach($emotion['elements'] as &$element) {
+        foreach ($emotion['elements'] as &$element) {
             $elementQuery = $this->getRepository()->getElementDataQuery($element['id'], $element['componentId']);
             $componentData = $elementQuery->getArrayResult();
             $data = array();
-            foreach($componentData as $entry) {
+            foreach ($componentData as $entry) {
                 $value = '';
-                switch(strtolower($entry['valueType'])) {
+                switch (strtolower($entry['valueType'])) {
                     case "json":
                         $value = Zend_Json::decode($entry['value']);
                         break;
@@ -282,8 +283,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 'data' => $data,
                 'success' => true
             ));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array(
                 'data' => $this->Request()->getParams(),
                 'success' => false,
@@ -296,7 +296,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Internal helper function which deletes all data for the passed emotion.
      * @param $emotion
      */
-    private function clearEmotionData($emotion) {
+    private function clearEmotionData($emotion)
+    {
         $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Data u WHERE u.emotionId = ?1');
         $query->setParameter(1,$emotion->getId());
         $query->execute();
@@ -314,14 +315,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @param $data
      * @return array
      */
-    private function fillElements($emotion, $data) {
+    private function fillElements($emotion, $data)
+    {
         $elements= array();
 
-        foreach($data['elements'] as $elementData) {
+        foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
             $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $elementData['componentId']);
 
-            foreach($elementData['data'] as $item) {
+            foreach ($elementData['data'] as $item) {
                 $model = new \Shopware\Models\Emotion\Data();
                 $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['id']);
                 $model->setComponent($component);
@@ -332,7 +334,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 /**@var $field \Shopware\Models\Emotion\Library\Field*/
                 $model->setField($field);
                 $value = '';
-                switch(strtolower($field->getValueType())) {
+                switch (strtolower($field->getValueType())) {
                     case "json":
                         $value = Zend_Json::encode($item['value']);
                         break;
@@ -368,7 +370,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $emotions = $this->Request()->getParam('emotions', array(array('id' => $this->Request()->getParam('id'))));
 
             //iterate the customers and add the remove action
-            foreach($emotions as $emotion) {
+            foreach ($emotions as $emotion) {
                 if (empty($emotion['id'])) {
                     continue;
                 }
@@ -382,8 +384,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 'data' => $this->Request()->getParams(),
                 'success' => true
             ));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array(
                 'data' => $this->Request()->getParams(),
                 'success' => false,
@@ -392,7 +393,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
     }
 
-    public function duplicateAction() {
+    public function duplicateAction()
+    {
         $emotionId = (int) $this->Request()->getParam('emotionId');
 
         $this->View()->assign(array('success' => true, 'data' => array()));
@@ -483,12 +485,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @param $records
      * @return array
      */
-    protected function deleteManyGrids($records) {
+    protected function deleteManyGrids($records)
+    {
         if (empty($records)) {
             return array('success' => false, 'error' => 'No grids passed');
         }
         $errors = array();
-        foreach($records as $record) {
+        foreach ($records as $record) {
             if (empty($record['id'])) {
                 continue;
             }
@@ -573,7 +576,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
      */
-    protected function getGridsQuery($offset = null, $limit = null) {
+    protected function getGridsQuery($offset = null, $limit = null)
+    {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('grids'))
                 ->from('Shopware\Models\Emotion\Grid', 'grids');
@@ -831,12 +835,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @param $records
      * @return array
      */
-    protected function deleteManyTemplates($records) {
+    protected function deleteManyTemplates($records)
+    {
         if (empty($records)) {
             return array('success' => false, 'error' => 'No templates passed');
         }
         $errors = array();
-        foreach($records as $record) {
+        foreach ($records as $record) {
             if (empty($record['id'])) {
                 continue;
             }
@@ -921,7 +926,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
      */
-    protected function getTemplatesQuery($offset = null, $limit = null) {
+    protected function getTemplatesQuery($offset = null, $limit = null)
+    {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('templates'))
                 ->from('Shopware\Models\Emotion\Template', 'templates');

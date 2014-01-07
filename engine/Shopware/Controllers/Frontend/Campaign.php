@@ -36,7 +36,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
                 AND (valid_to IS NULL || valid_to >= now())
             ', array($this->Request()->getParam('emotionId')));
 
-            if(empty($emotionData)) {
+            if (empty($emotionData)) {
                 $this->Response()->setHttpResponseCode(404);
                 return $this->forward('index', 'index');
             }
@@ -48,7 +48,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
             $this->View()->assign('isEmotionLandingPage', true);
         } else {
             // @deprecated - support for shopware 3.x campaigns
-            $campaignId = (int)$this->Request()->sCampaign;
+            $campaignId = (int) $this->Request()->sCampaign;
             if (empty($campaignId)) {
                 return $this->forward('index', 'index');
             }

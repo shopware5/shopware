@@ -48,7 +48,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      */
     public function __construct($elements = array())
     {
-        $this->_elements = (array)$elements;
+        $this->_elements = (array) $elements;
     }
 
     /**
@@ -213,7 +213,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * @param array $args
      * @return mixed
      */
-    function __call($name, $args = null)
+    public function __call($name, $args = null)
     {
         switch (substr($name, 0, 3)) {
             case 'get':

@@ -406,7 +406,7 @@ class %className% extends ModelEntity
             $className = $this->getClassNameOfTableName($parentClass);
 
             //if the passed table is not an attribute table, we have to check if the table is already declared
-        } else if (array_key_exists($table->getName(), $this->getTableMapping())) {
+        } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
 
             //if this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
@@ -457,7 +457,7 @@ class %className% extends ModelEntity
     {
         $columns = array();
         /**@var $column \Doctrine\DBAL\Schema\Column*/
-        foreach($table->getColumns() as $column) {
+        foreach ($table->getColumns() as $column) {
             $columns[] = $this->getColumnProperty($table,$column);
         }
         return $columns;
@@ -550,8 +550,8 @@ class %className% extends ModelEntity
     protected function getColumnForeignKey($table, $column)
     {
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
-            foreach($foreignKey->getLocalColumns() as $foreignKeyColumn) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
+            foreach ($foreignKey->getLocalColumns() as $foreignKeyColumn) {
                 if ($foreignKeyColumn === $column->getName()) {
                     return $foreignKey;
                 }
@@ -608,7 +608,7 @@ class %className% extends ModelEntity
         if ($table->getPrimaryKey() === null) {
             return false;
         }
-        foreach($table->getPrimaryKey()->getColumns() as $primaryColumn) {
+        foreach ($table->getPrimaryKey()->getColumns() as $primaryColumn) {
             if ($column->getName() === $primaryColumn) {
                 return true;
             }
@@ -628,7 +628,7 @@ class %className% extends ModelEntity
     {
         $associations = array();
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
             $associations[] = $this->getAssociationProperty($table, $foreignKey);
         }
         return $associations;
@@ -676,7 +676,7 @@ class %className% extends ModelEntity
     protected function getColumnsFunctions($table)
     {
         $functions = array();
-        foreach($table->getColumns() as $column) {
+        foreach ($table->getColumns() as $column) {
             $functions[] = $this->getColumnFunctions($table, $column);
         }
         return $functions;
@@ -714,7 +714,7 @@ class %className% extends ModelEntity
     {
         $columns = array();
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
             $columns[] = $this->getAssociationFunctions($foreignKey);
         }
         return $columns;

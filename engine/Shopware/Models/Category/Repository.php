@@ -498,7 +498,7 @@ class Repository extends ModelRepository
             $category['articleCount'] = $child['articleCount'];
 
             //check if no depth passed or the current depth is lower than the passed depth
-            if ($depth === null || $depth > 0 ) {
+            if ($depth === null || $depth > 0) {
                 $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth);
             }
             $categories[] = $category;
@@ -530,7 +530,7 @@ class Repository extends ModelRepository
         $categories = array();
         $depth--;
 
-        foreach($children as &$child) {
+        foreach ($children as &$child) {
             $category = $child['category'];
             $category['childrenCount'] = $child['childrenCount'];
             $category['articleCount'] = $child['articleCount'];

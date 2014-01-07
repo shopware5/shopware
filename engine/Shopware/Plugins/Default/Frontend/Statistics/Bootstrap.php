@@ -226,7 +226,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         Shopware()->Db()->query($sql, array(
             $request->getClientIp(false),
             $request->getParam('requestPage', $request->getRequestUri()),
-            empty(Shopware()->Session()->sUserId) ? 0 : (int)Shopware()->Session()->sUserId
+            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId
         ));
     }
 
@@ -304,10 +304,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                 if (!empty($campaignID)) {
                     Shopware()->Session()->sPartner = 'sCampaign' . $campaignID;
                     $sql = '
-						UPDATE s_campaigns_mailings
-						SET clicked = clicked + 1
-						WHERE id = ?
-					';
+                        UPDATE s_campaigns_mailings
+                        SET clicked = clicked + 1
+                        WHERE id = ?
+                    ';
                     Shopware()->Db()->query($sql, array($campaignID));
                 }
             } else {

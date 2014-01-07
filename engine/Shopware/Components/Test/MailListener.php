@@ -27,33 +27,33 @@
  */
 class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestListener
 {
-	protected $mailTransport;
-	protected $mailRecipients;
+    protected $mailTransport;
+    protected $mailRecipients;
 
-	/**
-	 * Constructor method
-	 *
-	 * @param unknown_type $mailRecipients
-	 * @param unknown_type $mailTransport
-	 */
-	public function __construct($mailRecipients, $mailTransport = array())
+    /**
+     * Constructor method
+     *
+     * @param unknown_type $mailRecipients
+     * @param unknown_type $mailTransport
+     */
+    public function __construct($mailRecipients, $mailTransport = array())
     {
-    	if(!$mailTransport instanceof Zend_Mail_Transport_Abstract) {
-	    	if(empty($mailTransport['type'])) {
-	    		$mailTransport['type'] = 'sendmail';
-	    	}
-	    	if(!Shopware()->Loader()->loadClass($mailTransport['type'])) {
-				$transportName = ucfirst(strtolower($mailTransport['type']));
-				$transportName = 'Zend_Mail_Transport_'.$transportName;
-			}
-			if($transportName=='Zend_Mail_Transport_Smtp') {
-				$mailTransport = Enlight_Class::Instance($transportName, array($mailTransport['host'], $mailTransport));
-			} else {
-				$mailTransport = Enlight_Class::Instance($transportName, array($mailTransport));
-			}
-    	}
-    	$this->mailTransport = $mailTransport;
-    	$this->mailRecipients = explode(',', $mailRecipients);
+        if (!$mailTransport instanceof Zend_Mail_Transport_Abstract) {
+            if (empty($mailTransport['type'])) {
+                $mailTransport['type'] = 'sendmail';
+            }
+            if (!Shopware()->Loader()->loadClass($mailTransport['type'])) {
+                $transportName = ucfirst(strtolower($mailTransport['type']));
+                $transportName = 'Zend_Mail_Transport_'.$transportName;
+            }
+            if ($transportName=='Zend_Mail_Transport_Smtp') {
+                $mailTransport = Enlight_Class::Instance($transportName, array($mailTransport['host'], $mailTransport));
+            } else {
+                $mailTransport = Enlight_Class::Instance($transportName, array($mailTransport));
+            }
+        }
+        $this->mailTransport = $mailTransport;
+        $this->mailRecipients = explode(',', $mailRecipients);
     }
 
     /**
@@ -69,7 +69,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
 
         if ($e instanceof PHPUnit_Framework_ExpectationFailedException) {
             /** @var $e PHPUnit_Framework_ExpectationFailedException */
-        	//$message .= "\n" . $e->getComparisonFailure()->toString();
+            //$message .= "\n" . $e->getComparisonFailure()->toString();
         }
 
         $name = $test->getName(false);
@@ -107,7 +107,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-    	$this->addError($test, $e, $time);
+        $this->addError($test, $e, $time);
     }
 
     /**

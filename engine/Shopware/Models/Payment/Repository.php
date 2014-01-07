@@ -42,7 +42,8 @@ class Repository extends ModelRepository
       * @param null $limit
       * @return \Doctrine\ORM\Query
       */
-     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null) {
+     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
+     {
          $builder = $this->getPaymentsQueryBuilder($filter, $order);
          if ($limit !== null) {
              $builder->setFirstResult($offset)
@@ -59,8 +60,8 @@ class Repository extends ModelRepository
       * @param null $order
       * @return \Doctrine\ORM\QueryBuilder
       */
-     public function getPaymentsQueryBuilder($filter = null, $order = null) {
-
+     public function getPaymentsQueryBuilder($filter = null, $order = null)
+     {
          $builder = $this->createQueryBuilder('p');
          $builder->select(array(
              'p.id as id',
@@ -71,10 +72,10 @@ class Repository extends ModelRepository
          ));
          $builder->where('p.active = 1');
 
-         if($filter !== null) {
+         if ($filter !== null) {
              $builder->addFilter($filter);
          }
-         if($order !== null) {
+         if ($order !== null) {
              $builder->addOrderBy($order);
          }
 

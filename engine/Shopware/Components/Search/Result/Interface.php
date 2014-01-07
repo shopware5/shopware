@@ -25,7 +25,8 @@
 /**
  * Interface that define the minimum of methods a shopware search result object must contain
  */
-interface Shopware_Components_Search_Result_Interface {
+interface Shopware_Components_Search_Result_Interface
+{
     public function getResult();
     public function getCurrentCategoryFilter();
     public function getAffectedPriceRanges();

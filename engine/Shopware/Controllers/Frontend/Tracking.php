@@ -57,13 +57,13 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
     public function countBannerClickAction()
     {
         $bannerId = $this->Request()->getParam('bannerId', null);
-        if(is_null($bannerId)) {
+        if (is_null($bannerId)) {
             return false;
         }
         /** @var $bannerMgn \Shopware\Models\Banner\Repository */
         $bannerMgn = Shopware()->Models()->Banner();
         $banner = $bannerMgn->findOneBy(array('id'=>$bannerId));
-        if(is_null($banner)) {
+        if (is_null($banner)) {
             return false;
         }
         /** @var $statRepository \Shopware\Models\Tracking\Repository */
@@ -74,8 +74,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         Shopware()->Models()->flush($bannerStatistics);
         // speichern
         $jumpTarget = $banner->getLink();
-        if(!empty($jumpTarget))
-        {
+        if (!empty($jumpTarget)) {
             $this->redirect($jumpTarget);
         }
         return true;
@@ -89,7 +88,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
     public function countBannerViewAction()
     {
         $bannerId =$this->Request()->getParam('bannerId', null);
-        if(is_null($bannerId)) {
+        if (is_null($bannerId)) {
             return false;
         }
         try {
@@ -98,8 +97,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
             $bannerStatistics->increaseViews();
             Shopware()->Models()->flush($bannerStatistics);
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
         return true;

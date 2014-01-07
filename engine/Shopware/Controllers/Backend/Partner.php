@@ -92,7 +92,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $offset = intval($this->Request()->start);
 
             //order data
-            $order = (array)$this->Request()->getParam('sort', array());
+            $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $repository \Shopware\Models\Partner\Repository */
             $repository = Shopware()->Models()->Partner();
@@ -103,8 +103,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $data = $dataQuery->getArrayResult();
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' => $totalCount));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -122,7 +121,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $partnerId = intval($this->Request()->partnerId);
 
             //order data
-            $order = (array)$this->Request()->getParam('sort', array());
+            $order = (array) $this->Request()->getParam('sort', array());
 
             $fromDate = $this->getFromDate();
             $toDate = $this->getToDate();
@@ -148,8 +147,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
                     'totalProvision' => $summaryData["provision"]
                 )
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -206,11 +204,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         $id = $this->Request()->id;
 
-        if(!empty($id)){
+        if (!empty($id)) {
             //edit Data
             $partnerModel = Shopware()->Models()->Partner()->find($id);
-        }
-        else {
+        } else {
             //new Data
             $partnerModel = new Partner();
             $partnerModel->setDate('now');
@@ -231,8 +228,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(array('success' => true, 'data' => $data));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -252,7 +248,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $customerData = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $userId = $customerData["id"];
         unset($customerData["id"]);
-        if(!empty($customerData)){
+        if (!empty($customerData)) {
             echo implode(", ",array_filter($customerData))."|".$userId;
         }
     }
@@ -270,8 +266,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true, 'data' => $this->Request()->getParams()));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -279,7 +274,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     /**
      * Validate the Tracking code to prevent that it already exists
      */
-    public function validateTrackingCodeAction() {
+    public function validateTrackingCodeAction()
+    {
         $trackingCode = $this->Request()->value;
         $partnerId = intval($this->Request()->param);
 
@@ -310,7 +306,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
-        if(is_array($resultArray[0])) {
+        if (is_array($resultArray[0])) {
             fputcsv($fp, array_keys($resultArray[0]), ";");
         }
 
@@ -345,7 +341,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      *
      * return DateTime | fromDate
      */
-    private function getFromDate(){
+    private function getFromDate()
+    {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
@@ -361,8 +358,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      *
      * return DateTime | toDate
      */
-    private function getToDate() {
-
+    private function getToDate()
+    {
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {

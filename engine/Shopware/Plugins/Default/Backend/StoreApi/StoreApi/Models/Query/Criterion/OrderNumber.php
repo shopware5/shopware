@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
      */
     public function __construct($orderNumbers)
     {
-        if(is_array($orderNumbers)) {
-            foreach($orderNumbers as $orderNumber) {
+        if (is_array($orderNumbers)) {
+            foreach ($orderNumbers as $orderNumber) {
                 $this->addId($orderNumber);
             }
         } else {
@@ -44,7 +44,7 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
      */
     public function addId($orderNumber)
     {
-        if(!empty($orderNumber)) {
+        if (!empty($orderNumber)) {
             $this->collection[] = $orderNumber;
             return true;
         } else {
@@ -54,7 +54,7 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

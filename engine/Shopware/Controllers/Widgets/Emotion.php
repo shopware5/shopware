@@ -39,7 +39,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function getEmotion($repository)
     {
-        $categoryId = (int)$this->Request()->getParam('categoryId');
+        $categoryId = (int) $this->Request()->getParam('categoryId');
         $query = $repository->getCategoryEmotionsQuery($categoryId);
         $emotions = $query->getArrayResult();
 
@@ -60,9 +60,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function emotionTopSellerAction()
     {
-        $category = (int)$this->Request()->getParam("category");
-        $start = (int)$this->Request()->getParam("start");
-        $limit = (int)$this->Request()->getParam("limit");
+        $category = (int) $this->Request()->getParam("category");
+        $start = (int) $this->Request()->getParam("start");
+        $limit = (int) $this->Request()->getParam("limit");
 
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
@@ -90,9 +90,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function emotionNewcomerAction()
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
-        $category = (int)$this->Request()->getParam("category");
-        $start = (int)$this->Request()->getParam("start");
-        $limit = (int)$this->Request()->getParam("limit");
+        $category = (int) $this->Request()->getParam("category");
+        $start = (int) $this->Request()->getParam("start");
+        $limit = (int) $this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
@@ -162,9 +162,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
         }
 
-        $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
+        $this->View()->assign('categoryId', (int) $this->Request()->getParam('categoryId'));
         $this->View()->assign('sEmotions', $emotions, true);
-        $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));
+        $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
     }
 
     private function getArticle($data, $categoryId, $element)
@@ -192,19 +192,19 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
-	/**
-	 * Gets a random blog entry from the database
-	 *
-	 * @param $category
-	 * @return array {Array} $result
-	 */
-	private function getRandomBlogEntry($category)
-	{
-		$data = array('entry_amount' => 50);
-		$result = $this->getBlogEntry($data, $category);
+    /**
+     * Gets a random blog entry from the database
+     *
+     * @param $category
+     * @return array {Array} $result
+     */
+    private function getRandomBlogEntry($category)
+    {
+        $data = array('entry_amount' => 50);
+        $result = $this->getBlogEntry($data, $category);
 
-		return $result['entries'][array_rand($result['entries'])];
-	}
+        return $result['entries'][array_rand($result['entries'])];
+    }
 
     /**
      * Gets the specific blog entry from the database.
@@ -216,14 +216,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getBlogEntry($data, $category)
     {
-        $entryAmount = (int)$data['entry_amount'];
+        $entryAmount = (int) $data['entry_amount'];
 
-	    // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
-	    if(!isset($data['thumbnail_size'])) {
-		    $data['thumbnail_size'] = 3;
-	    }
+        // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
+        if (!isset($data['thumbnail_size'])) {
+            $data['thumbnail_size'] = 3;
+        }
 
-        if($category === null) {
+        if ($category === null) {
             return $data;
         }
 
@@ -310,20 +310,20 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
 
-	        if($data['blog_category']) {
-				$result = $this->getRandomBlogEntry($data["category_selection"]);
-		        if(!empty( $result['media']['thumbnails'])) {
-			        $data['image'] = $result['media']['thumbnails'][2];
-		        } else {
-			        $data['image'] = $result['media']['path'];
-		        }
+            if ($data['blog_category']) {
+                $result = $this->getRandomBlogEntry($data["category_selection"]);
+                if (!empty( $result['media']['thumbnails'])) {
+                    $data['image'] = $result['media']['thumbnails'][2];
+                } else {
+                    $data['image'] = $result['media']['path'];
+                }
 
-	        } else {
-		        // Get random article from selected $category
+            } else {
+                // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
 
                 $data["image"] = $temp["image"]["src"][2];
-	        }
+            }
         }
         return $data;
     }
@@ -350,10 +350,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getBannerMappingLinks($data, $category, $element)
     {
 
-        if(!empty($data['link'])) {
+        if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
-            if(empty($matches) && substr($data['link'], 0, 1) === '/') {
+            if (empty($matches) && substr($data['link'], 0, 1) === '/') {
                 $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
             }
         }
@@ -363,11 +363,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             foreach ($mappings as $key => $mapping) {
                 $number = $mapping['link'];
 
-                if(!empty($number)) {
+                if (!empty($number)) {
                     preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $number, $matches);
 
-                    if(empty($matches)) {
-                        if(substr($number, 0, 1) === '/') {
+                    if (empty($matches)) {
+                        if (substr($number, 0, 1) === '/') {
                             $mapping['link'] = $this->Request()->getBaseUrl() . $number;
                         } else {
                             $mapping['link'] = $this->articleByNumber($number);
@@ -411,9 +411,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data["values"] = $builder->getQuery()->getArrayResult();
 
             $temporaryValues = array();
-            foreach ($manufacturers as $manufacturer){
-                foreach ($data["values"] as $value){
-                    if ($value["id"] == $manufacturer){
+            foreach ($manufacturers as $manufacturer) {
+                foreach ($data["values"] as $value) {
+                    if ($value["id"] == $manufacturer) {
                         $temporaryValues[] = $value;
                     }
                 }
@@ -438,11 +438,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $data["values"] = $data["banner_slider"];
 
-        foreach($data["values"] as &$value) {
-            if(!empty($value['link'])) {
+        foreach ($data["values"] as &$value) {
+            if (!empty($value['link'])) {
                 preg_match('/^(http|https):\/\//', $value['link'], $matches);
 
-                if(empty($matches)) {
+                if (empty($matches)) {
                     $value['link'] = $this->Request()->getBaseUrl() . $value['link'];
                 }
             }
@@ -474,7 +474,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 foreach ($data["selected_articles"] as &$article) {
                     $articleId = $article["articleId"];
                     $entry = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
-	                if (!empty($entry["articleID"])) $values[] = $entry;
+                    if (!empty($entry["articleID"])) $values[] = $entry;
                 }
                 break;
             case "topseller":

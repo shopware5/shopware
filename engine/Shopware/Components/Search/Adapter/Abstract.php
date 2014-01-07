@@ -24,7 +24,8 @@
 
 /**
  */
-abstract class Shopware_Components_Search_Adapter_Abstract {
+abstract class Shopware_Components_Search_Adapter_Abstract
+{
     abstract public function search ($term,array $config);
     abstract public function getResult();
 }

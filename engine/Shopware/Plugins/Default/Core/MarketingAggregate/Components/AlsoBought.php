@@ -71,13 +71,13 @@ class Shopware_Components_AlsoBought extends Enlight_Class
         ");
 
         //iterate all selected articles which has to be initialed
-        foreach($articles as $articleId) {
+        foreach ($articles as $articleId) {
             //now we select all bought articles for the current article id
             $preparedSelect->execute(array('articleId' => $articleId));
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
-            foreach($combinations as $combination) {
+            foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
         }
@@ -111,7 +111,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * @param int $interval
      * @return DateTime
      */
-    public function getOrderTime($interval = 365) {
+    public function getOrderTime($interval = 365)
+    {
         $orderTime = new DateTime();
         $orderTime->sub(new DateInterval('P'. (int) $interval .'D'));
         return $orderTime;

@@ -102,7 +102,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @throws Exception
      */
-    public function __construct ($filename, $delimiter = self::DEFAULT_DELIMITER, $header = null)
+    public function __construct($filename, $delimiter = self::DEFAULT_DELIMITER, $header = null)
     {
         if (($this->_handler = fopen($filename, 'r')) === false) {
             throw new Exception("The file '$filename' cannot be opened");
@@ -111,14 +111,11 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         $this->_newline = $this->getNewLineType();
 
         $this->_delimiter = $delimiter;
-        if(empty($header))
-        {
-        	$this->_read();
-        	$this->_header = $this->_current;
-        }
-        else
-        {
-        	$this->_header = $header;
+        if (empty($header)) {
+            $this->_read();
+            $this->_header = $this->_current;
+        } else {
+            $this->_header = $header;
         }
     }
 
@@ -134,18 +131,18 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
         $pos = false;
         $content = '';
-        while($pos === false && !feof($this->_handler)) {
+        while ($pos === false && !feof($this->_handler)) {
             $content .= fread($this->_handler, 1024);
             // Get first appearance of \n
             $pos = strpos($content, "\n");
         }
 
-        if($pos !== false && $pos > 1) {
+        if ($pos !== false && $pos > 1) {
             rewind($this->_handler);
             // Check if the previous char is a \r. If it is we have a windows EOL
-            if(substr($content, $pos-1, 1) === "\r") {
+            if (substr($content, $pos-1, 1) === "\r") {
                 return $newLineWin;
-            }else{
+            } else {
                 return $newLineNix;
             }
         }
@@ -156,12 +153,12 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
     public function SetFieldmark($fieldmark)
     {
-    	$this->_fieldmark = $fieldmark;
+        $this->_fieldmark = $fieldmark;
     }
 
     public function GetHeader()
     {
-    	return $this->_header;
+        return $this->_header;
     }
 
     /**
@@ -169,7 +166,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @access public
      */
-    public function __destruct ()
+    public function __destruct()
     {
         fclose($this->_handler);
     }
@@ -179,7 +176,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @access public
      */
-    public function next ()
+    public function next()
     {
         $this->_read();
         $this->_key += 1;
@@ -190,7 +187,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @access public
      */
-    public function rewind ()
+    public function rewind()
     {
         rewind($this->_handler);
         $this->_read();
@@ -203,7 +200,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @access public
      */
-    public function key ()
+    public function key()
     {
         return $this->_key;
     }
@@ -214,13 +211,12 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * @access public
      * @return array The row as an one-dimensional array
      */
-    public function current ()
+    public function current()
     {
-    	$data = array();
-    	foreach ($this->_header as $key=>$name)
-    	{
-    		$data[$name] = isset($this->_current[$key]) ? $this->_current[$key] : '';
-    	}
+        $data = array();
+        foreach ($this->_header as $key=>$name) {
+            $data[$name] = isset($this->_current[$key]) ? $this->_current[$key] : '';
+        }
         return $data;
     }
 
@@ -230,7 +226,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * @access public
      * @return boolean If the current row is readable.
      */
-    public function valid ()
+    public function valid()
     {
         return $this->_current !== false;
     }
@@ -240,53 +236,47 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @access private
      */
-    private function _read ()
+    private function _read()
     {
         //$this->_current = fgetcsv($this->_handler, $this->_length, $this->_delimiter);
-        if(!$this->_handler||feof($this->_handler))
-        {
-        	$this->_current = false;
-        	return;
+        if (!$this->_handler||feof($this->_handler)) {
+            $this->_current = false;
+            return;
         }
         $count = 0;
-		$line = stream_get_line($this->_handler, $this->_length, $this->_newline);
+        $line = stream_get_line($this->_handler, $this->_length, $this->_newline);
 
         // remove possible utf8-bom
         if (substr($line, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
             $line = substr($line, 3);
         }
 
-        while((empty($this->_fieldmark)||($count = substr_count($line, $this->_fieldmark)) % 2 != 0)&&!feof($this->_handler))
-		{
-			$line .= $this->_newline.stream_get_line($this->_handler, $this->_length, $this->_newline);
-		}
-		if(empty($line))
-		{
-			$this->_current = false;
-			return;
-		}
-		$line = explode($this->_delimiter,$line);
-		if(empty($count))
-		{
-			$this->_current = $line;
-			return;
-		}
-		$this->_current = array();
-		$row = "";
-		do
-		{
-			$row .= current($line);
-			$count = substr_count($row, $this->_fieldmark);
-			if ($count % 2 != 0) {
-				$row .= ";";
-				continue;
-			} elseif ($count) {
-				$this->_current[] = str_replace($this->_fieldmark.$this->_fieldmark,$this->_fieldmark,substr($row,1,-1));
-			} else {
-				$this->_current[] = $row;
-			}
-			$row = "";
-		}
-		while (next($line)!==false);
+        while ((empty($this->_fieldmark)||($count = substr_count($line, $this->_fieldmark)) % 2 != 0)&&!feof($this->_handler)) {
+            $line .= $this->_newline.stream_get_line($this->_handler, $this->_length, $this->_newline);
+        }
+        if (empty($line)) {
+            $this->_current = false;
+            return;
+        }
+        $line = explode($this->_delimiter,$line);
+        if (empty($count)) {
+            $this->_current = $line;
+            return;
+        }
+        $this->_current = array();
+        $row = "";
+        do {
+            $row .= current($line);
+            $count = substr_count($row, $this->_fieldmark);
+            if ($count % 2 != 0) {
+                $row .= ";";
+                continue;
+            } elseif ($count) {
+                $this->_current[] = str_replace($this->_fieldmark.$this->_fieldmark,$this->_fieldmark,substr($row,1,-1));
+            } else {
+                $this->_current[] = $row;
+            }
+            $row = "";
+        } while (next($line)!==false);
     }
 }

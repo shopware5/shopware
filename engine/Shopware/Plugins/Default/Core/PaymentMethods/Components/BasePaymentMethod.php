@@ -39,7 +39,7 @@ abstract class BasePaymentMethod
      *
      * @return array List of fields containing errors
      */
-    public abstract function validate();
+    abstract public function validate();
 
     /**
      * Called when the customer edits his payment data.
@@ -48,7 +48,7 @@ abstract class BasePaymentMethod
      *
      * @return null
      */
-    public abstract function savePaymentData();
+    abstract public function savePaymentData();
 
     /**
      * Fetches the customer's current payment data for this
@@ -56,7 +56,7 @@ abstract class BasePaymentMethod
      *
      * @return \Shopware\Models\Customer\PaymentData|null
      */
-    public abstract function getCurrentPaymentData();
+    abstract public function getCurrentPaymentData();
 
     /**
      * Creates the Payment Instance for the given order
@@ -67,7 +67,7 @@ abstract class BasePaymentMethod
      * @param $paymentId The Payment Method Id associated with the current payment
      * @return \Shopware\Models\Payment\PaymentInstace|null
      */
-    public abstract function createPaymentInstance($orderId, $userId, $paymentId);
+    abstract public function createPaymentInstance($orderId, $userId, $paymentId);
 
     /**
      * Deprecated call

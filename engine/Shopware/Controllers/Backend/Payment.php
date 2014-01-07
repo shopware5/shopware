@@ -50,7 +50,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -61,7 +62,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      * Internal helper function to get access to the country repository.
      * @return null|Shopware\Models\Country\Repository
      */
-    private function getCountryRepository() {
+    private function getCountryRepository()
+    {
         if ($this->countryRepository === null) {
             $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
         }
@@ -81,7 +83,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         }
     }
 
-    public function initAcl(){
+    public function initAcl()
+    {
         $this->addAclPermission("getPayments", "read", "You're not allowed to see the payments.");
         $this->addAclPermission("createPayments", "create", "You're not allowed to create a payment.");
         $this->addAclPermission("updatePayments", "update", "You're not allowed to update the payment.");
@@ -114,33 +117,32 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     private function formatResult($results)
     {
         $surchargeCollection = array();
-        foreach($results as &$result){
-            if($result['active']==1){
+        foreach ($results as &$result) {
+            if ($result['active']==1) {
                 $result['iconCls'] = 'sprite-tick-small';
-            }else{
+            } else {
                 $result['iconCls'] = 'sprite-cross-small';
             }
             $result['text'] = $result['description'].' ('.$result['id'].')';
             $result['leaf'] = true;
 
             //Matches the surcharges with the countries
-            if(!empty($result['surchargeString'])){
+            if (!empty($result['surchargeString'])) {
                 $surchargeString = $result['surchargeString'];
                 $surcharges = explode(";",$surchargeString);
                 $specificSurcharges = array();
-                foreach($surcharges as $surcharge){
+                foreach ($surcharges as $surcharge) {
                     $specificSurcharges[] = explode(":",$surcharge);
                 }
                 $surchargeCollection[$result['name']] = $specificSurcharges;
             }
-            if(empty($surchargeCollection[$result['name']])){
+            if (empty($surchargeCollection[$result['name']])) {
                 $surchargeCollection[$result['name']] = array();
             }
-            foreach($result['countries'] as &$country){
-                foreach($surchargeCollection[$result['name']] as $singleSurcharge){
+            foreach ($result['countries'] as &$country) {
+                foreach ($surchargeCollection[$result['name']] as $singleSurcharge) {
 
-                    if($country['iso']==$singleSurcharge[0])
-                    {
+                    if ($country['iso']==$singleSurcharge[0]) {
                         $country['surcharge'] = $singleSurcharge[1];
                     }
                 }
@@ -153,7 +155,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     /**
      * Function to get all inactive and active countries
      */
-    public function getCountriesAction(){
+    public function getCountriesAction()
+    {
         $result = $this->getCountryRepository()
                        ->getCountriesQuery()
                        ->getArrayResult();
@@ -163,18 +166,19 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     /**
      * Function to create a new payment
      */
-    public function createPaymentsAction() {
-        try{
+    public function createPaymentsAction()
+    {
+        try {
 
             $params = $this->Request()->getParams();
             unset($params["action"]);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
             $existingModel = $repository->findByName($params['name']);
 
-            if($existingModel){
+            if ($existingModel) {
                 throw new \Doctrine\ORM\ORMException('The name is already in use.');
             }
-            if($params['source'] == 0){
+            if ($params['source'] == 0) {
                 $params['source'] = null;
             }
 
@@ -182,7 +186,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $params['attribute'] = $params['attribute'][0];
             $countries = $params['countries'];
             $countryArray = array();
-            foreach($countries as $country){
+            foreach ($countries as $country) {
                 $countryArray[] = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
             }
             $params['countries'] = $countryArray;
@@ -203,21 +207,22 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      * Function to update a payment with its countries, shops and surcharges
      * The mapping for the mapping-tables is automatically created
      */
-    public function updatePaymentsAction() {
-        try{
+    public function updatePaymentsAction()
+    {
+        try {
             $id = $this->Request()->getParam('id', null);
             /**@var $payment \Shopware\Models\Payment\Payment  */
             $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
-			$action = $payment->getAction();
+            $action = $payment->getAction();
             $data = $this->Request()->getParams();
-			$data['surcharge'] = str_replace(',','.',$data['surcharge']);
-			$data['debitPercent'] = str_replace(',','.',$data['debitPercent']);
+            $data['surcharge'] = str_replace(',','.',$data['surcharge']);
+            $data['debitPercent'] = str_replace(',','.',$data['debitPercent']);
 
             $countries = new \Doctrine\Common\Collections\ArrayCollection();
             if (!empty($data['countries'])) {
                 //clear all countries, to save the old and new ones then
                 $payment->getCountries()->clear();
-                foreach($data['countries'] as $country ) {
+                foreach ($data['countries'] as $country) {
                     $model = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
                     $countries->add($model);
                 }
@@ -226,10 +231,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
 
             $shops = new \Doctrine\Common\Collections\ArrayCollection();
-            if (!empty($data['shops'])){
+            if (!empty($data['shops'])) {
                 //clear all shops, to save the old and new ones then
                 $payment->getShops()->clear();
-                foreach($data['shops'] as $shop ) {
+                foreach ($data['shops'] as $shop) {
                     $model = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
                     $shops->add($model);
                 }
@@ -237,30 +242,30 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
 
             $data['attribute'] = $data['attribute'][0];
-			$payment->fromArray($data);
+            $payment->fromArray($data);
 
-			//A default parameter "action" is sent
-			//To prevent "updatePayment" written into the database
-			if(empty($action)){
-				$payment->setAction('');
-			}else{
-				$payment->setAction($action);
-			}
+            //A default parameter "action" is sent
+            //To prevent "updatePayment" written into the database
+            if (empty($action)) {
+                $payment->setAction('');
+            } else {
+                $payment->setAction($action);
+            }
 
-			//ExtJS transforms null to 0
-			if($payment->getSource() == 0){
-				$payment->setSource(null);
-			}
-			if($payment->getPluginId() == 0){
-				$payment->setPluginId(null);
-			}
+            //ExtJS transforms null to 0
+            if ($payment->getSource() == 0) {
+                $payment->setSource(null);
+            }
+            if ($payment->getPluginId() == 0) {
+                $payment->setPluginId(null);
+            }
 
             Shopware()->Models()->persist($payment);
             Shopware()->Models()->flush();
 
-            if($data['active']){
+            if ($data['active']) {
                 $data['iconCls'] = 'sprite-tick';
-            }else{
+            } else {
                 $data['iconCls'] = 'sprite-cross';
             }
 
@@ -271,7 +276,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         }
     }
 
-    public function deletePaymentAction(){
+    public function deletePaymentAction()
+    {
         if (!$this->Request()->isPost()) {
             $this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
             return;
@@ -280,17 +286,15 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         $id = $this->Request()->get('id');
         /**@var $model \Shopware\Models\Payment\Payment  */
         $model = $repository->find($id);
-        if($model->getSource() == 1){
+        if ($model->getSource() == 1) {
             try {
                 Shopware()->Models()->remove($model);
                 Shopware()->Models()->flush();
                 $this->View()->assign(array("success" => true));
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
             }
-        }
-        else{
+        } else {
             $this->View()->assign(array("success" => false, 'errorMsg' => "Default payments can not be deleted"));
         }
     }

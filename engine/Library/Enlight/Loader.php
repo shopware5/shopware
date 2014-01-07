@@ -195,7 +195,7 @@ class Enlight_Loader
         }
 
         if (PATH_SEPARATOR == ':') {
-            // On *nix systems, include_paths which include paths with a stream 
+            // On *nix systems, include_paths which include paths with a stream
             // schema cannot be safely explode'd, so we have to be a bit more
             // intelligent in the approach.
             $paths = preg_split('#:(?!//)#', $path);
@@ -217,7 +217,7 @@ class Enlight_Loader
      */
     public function getClassPath($class)
     {
-        if($this->classMap !== null && isset($this->classMap[$class]) && is_readable($this->classMap[$class])) {
+        if ($this->classMap !== null && isset($this->classMap[$class]) && is_readable($this->classMap[$class])) {
             return $this->classMap[$class];
         }
         foreach ($this->namespaces as $namespace) {
@@ -229,7 +229,7 @@ class Enlight_Loader
             $path = $namespace['path'] . $path . $namespace['extension'];
             $path = self::isReadable($path);
             if ($path !== false) {
-                if($this->classMap !== null) {
+                if ($this->classMap !== null) {
                     $this->classMapChanged = true;
                     $this->classMap[$class] = $path;
                 }
@@ -299,7 +299,7 @@ class Enlight_Loader
     public static function addIncludePath($path, $position = self::POSITION_APPEND)
     {
         if (is_array($path)) {
-            return (bool)array_map(__METHOD__, $path);
+            return (bool) array_map(__METHOD__, $path);
         }
         if (!is_string($path) || !file_exists($path) || !is_dir($path)) {
             throw new Enlight_Exception('Path "' . $path . '" is not a dir failure');
@@ -366,8 +366,7 @@ class Enlight_Loader
     {
         try {
             $this->loadClass($class);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -427,23 +426,23 @@ class Enlight_Loader
      */
     public function saveClassBootstrap($file)
     {
-        if(file_exists($file)) {
+        if (file_exists($file)) {
             return true;
         }
         $fp = fopen($file, 'w+');
-        if(!$file || !flock($fp, LOCK_EX)) {
+        if (!$file || !flock($fp, LOCK_EX)) {
             return false;
         }
         fwrite($fp, '<?php' . "\n");
-        foreach(get_included_files() as $i => $file) {
+        foreach (get_included_files() as $i => $file) {
             if($i === 0) continue;
             $content = file_get_contents($file);
-            if(strpos($content, '<?php') !== 0) {
+            if (strpos($content, '<?php') !== 0) {
                 continue;
             }
             $content = substr($content, 5);
             $content = trim($content);
-            if(strpos($content, 'return') === 0) {
+            if (strpos($content, 'return') === 0) {
                 continue;
             }
             $content = str_replace(

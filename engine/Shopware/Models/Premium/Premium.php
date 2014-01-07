@@ -204,23 +204,23 @@ class Premium extends ModelEntity
         return $this->articleDetail;
     }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @param $shopId int Contains the shopId
-	 * @return \Shopware\Models\Premium\Premium
-	 */
-	public function setShopId($shopId)
-	{
-		$this->shopId = $shopId;
-		return $this;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @param $shopId int Contains the shopId
+     * @return \Shopware\Models\Premium\Premium
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+        return $this;
+    }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @return int
-	 */
-	public function getShopId()
-	{
-		return $this->shopId;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
 }

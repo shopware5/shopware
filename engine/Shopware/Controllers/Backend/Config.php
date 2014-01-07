@@ -32,32 +32,32 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public static $repositories = null;
 
-	protected function initAcl()
-	{
-		$this->addAclPermission('getNavigation', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getForm', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
+    protected function initAcl()
+    {
+        $this->addAclPermission('getNavigation', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getForm', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
 
-		$this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
 
-		$this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
-		$this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
-	}
+        $this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
+        $this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
+    }
 
     /**
      * Return the config form navigation
      */
     public function getNavigationAction()
     {
-        $node = (int)$this->Request()->getParam('node');
+        $node = (int) $this->Request()->getParam('node');
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
@@ -129,14 +129,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
 
 
-        $builder->addOrderBy((array)$this->Request()->getParam('sort', array()))
-            ->addFilter((array)$this->Request()->getParam('filter', array()));
+        $builder->addOrderBy((array) $this->Request()->getParam('sort', array()))
+            ->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach($data['elements'] as $elementsKey => $values) {
-            foreach($values['translations'] as $translationsKey => $array) {
-                if($array['label'] !== null) {
+        foreach ($data['elements'] as $elementsKey => $values) {
+            foreach ($values['translations'] as $translationsKey => $array) {
+                if ($array['label'] !== null) {
                     $data['elements'][$elementsKey]['label'] = $array['label'];
                 }
             }
@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         /* @var $defaultShop \Shopware\Models\Shop\Shop */
         $defaultShop = $shopRepository->getDefault();
-        if($defaultShop === null) {
+        if ($defaultShop === null) {
             $this->View()->assign(array('success' => false, 'message' => 'No default shop found. Check your shop configuration'));
             return;
         }
@@ -287,8 +287,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         if ($builder !== null) {
-            $builder->addFilter((array)$this->Request()->getParam('filter', array()))
-                ->addOrderBy((array)$this->Request()->getParam('sort', array()));
+            $builder->addFilter((array) $this->Request()->getParam('filter', array()))
+                ->addOrderBy((array) $this->Request()->getParam('sort', array()));
             $builder->setFirstResult($this->Request()->getParam('start'))
                 ->setMaxResults($this->Request()->getParam('limit'));
 
@@ -333,7 +333,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $data = Shopware()->Db()->fetchAll($select);
                 foreach ($data as $key => &$row) {
                     $row = array(
-                        'id' => (int)$row['id'],
+                        'id' => (int) $row['id'],
                         'name' => $row['name'],
                         'action' => $row['action'],
                         'active' => !empty($row['active']) && !empty($row['end']),
@@ -341,11 +341,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'data' => !empty($row['data']) ? unserialize($row['data']) : $row['data'],
                         'next' => isset($row['next']) ? new DateTime($row['next']) : $row['next'],
                         'start' => isset($row['start']) ? new DateTime($row['start']) : $row['start'],
-                        'interval' => (int)$row['interval'],
+                        'interval' => (int) $row['interval'],
                         'end' => isset($row['end']) ? new DateTime($row['end']) : $row['end'],
                         'informTemplate' => $row['inform_template'],
                         'informMail' => $row['inform_mail'],
-                        'pluginId' => isset($row['pluginID']) ? (int)$row['pluginID'] : null
+                        'pluginId' => isset($row['pluginID']) ? (int) $row['pluginID'] : null
                     );
                     $row['data'] = !is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
                 }
@@ -362,7 +362,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $select->from(array('t' => $table), array(
                     '*', 'name' => 'table'
                 ));
-                if(isset($search)) {
+                if (isset($search)) {
                     $select->where(
                         't.table LIKE :search'
                     );
@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
-        $builder->addFilter((array)$this->Request()->getParam('filter', array()));
+        $builder->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $query = $builder->getQuery();
         $data = $query->getArrayResult();
@@ -525,7 +525,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                     $data['discounts'] = $discounts;
                 }
-                if(empty($data["mode"])) {
+                if (empty($data["mode"])) {
                     $data["discount"] = 0;
                 }
                 break;
@@ -914,8 +914,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('template');
 
-        $builder->addFilter((array)$this->Request()->getParam('filter', array()))
-            ->addOrderBy((array)$this->Request()->getParam('sort', array()));
+        $builder->addFilter((array) $this->Request()->getParam('filter', array()))
+            ->addOrderBy((array) $this->Request()->getParam('sort', array()));
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
@@ -978,9 +978,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $templateData = array();
             $templateFile = $dirInfo->getPathname() . '/info.json';
             if (file_exists($templateFile)) {
-                $templateData = (array)Zend_Json::decode(file_get_contents($templateFile));
+                $templateData = (array) Zend_Json::decode(file_get_contents($templateFile));
             }
-            if(!isset($templateData['version'])) {
+            if (!isset($templateData['version'])) {
                 $templateData['version'] = strpos($dirName, 'emotion_') !== 0 ? 1 : 2;
             }
             if (isset($templateList[$dirName])) {
@@ -1148,27 +1148,27 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementModel->setName('Footer');
         $elementModel->setValue(
             '<table style="height: 90px;" border="0" width="100%">
-			<tbody>
-			<tr valign="top">
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Demo GmbH</span></p>
-			<p><span style="font-size: xx-small;">Steuer-Nr <br />UST-ID: <br />Finanzamt </span><span style="font-size: xx-small;">Musterstadt</span></p>
-			</td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Bankverbindung</span></p>
-			<p><span style="font-size: xx-small;">Sparkasse Musterstadt<br />BLZ: <br />Konto: </span></p>
-			<span style="font-size: xx-small;">aaaa<br /></span></td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">AGB<br /></span></p>
-			<p><span style="font-size: xx-small;">Gerichtsstand ist Musterstadt<br />Erf&uuml;llungsort Musterstadt<br />Gelieferte Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</span></p>
-			</td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Gesch&auml;ftsf&uuml;hrer</span></p>
-			<p><span style="font-size: xx-small;">Max Mustermann</span></p>
-			</td>
-			</tr>
-			</tbody>
-			</table>'
+            <tbody>
+            <tr valign="top">
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Demo GmbH</span></p>
+            <p><span style="font-size: xx-small;">Steuer-Nr <br />UST-ID: <br />Finanzamt </span><span style="font-size: xx-small;">Musterstadt</span></p>
+            </td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Bankverbindung</span></p>
+            <p><span style="font-size: xx-small;">Sparkasse Musterstadt<br />BLZ: <br />Konto: </span></p>
+            <span style="font-size: xx-small;">aaaa<br /></span></td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">AGB<br /></span></p>
+            <p><span style="font-size: xx-small;">Gerichtsstand ist Musterstadt<br />Erf&uuml;llungsort Musterstadt<br />Gelieferte Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</span></p>
+            </td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Gesch&auml;ftsf&uuml;hrer</span></p>
+            <p><span style="font-size: xx-small;">Max Mustermann</span></p>
+            </td>
+            </tr>
+            </tbody>
+            </table>'
         );
         $elementModel->setStyle('width: 170mm; position:fixed; bottom:-20mm; height: 15mm;');
         $elementModel->setDocument($model);

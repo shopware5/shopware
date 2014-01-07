@@ -45,7 +45,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -56,7 +57,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the mail repository.
      * @return null|Shopware\Models\Mail\Repository
      */
-    private function getRepository() {
+    private function getRepository()
+    {
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
         }
@@ -178,7 +180,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $data = $data['data'];
 
         /**@var $mail \Shopware\Models\Mail\Mail*/
-        if (!$mail instanceof \Shopware\Models\Mail\Mail ) {
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
             $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
             return;
         }
@@ -212,7 +214,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $query = $this->getRepository()->getMailQuery($id);
         $mail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-        if (!$mail instanceof \Shopware\Models\Mail\Mail ) {
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
             $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
             return false;
         }
