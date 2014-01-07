@@ -26,12 +26,12 @@ namespace Shopware;
 
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
-use Shopware\Components\DependencyInjection\ServiceDefinition;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -262,7 +262,7 @@ class Kernel implements HttpKernelInterface
 
         $cache = new ConfigCache(
             $this->getCacheDir() . '/' . $class . '.php',
-            $this->debug
+            true //always check for file modified time
         );
 
         if (!$cache->isFresh()) {
@@ -380,6 +380,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('services.xml');
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
+        $this->addResources($container);
 
         $container->addCompilerPass(new EventListenerCompilerPass());
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
@@ -388,10 +389,28 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @param ContainerBuilder $container
+     */
+    public function addResources(ContainerBuilder $container)
+    {
+        $files = array(
+            '/config.php',
+            '/engine/Shopware/Configs/Custom.php',
+        );
+        foreach ($files as $file) {
+            if (!is_file($filePath = $this->getDocumentRoot() . $file)) {
+                continue;
+            }
+            $resource = new FileResource($filePath);
+            $container->addResource($resource);
+        }
+    }
+
+    /**
      * Adds all shopware configuration as di container parameter.
      * Each shopware configuration has the alias "shopware."
      *
-     * @param Container $container
+     * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $alias
      * @param array|string $options
      */
