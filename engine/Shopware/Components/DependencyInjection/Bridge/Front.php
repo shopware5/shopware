@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -39,14 +39,14 @@ class Front
      * front dispatcher. After the controller path is set to the dispatcher,
      * the plugin namespace of the front resource is set.
      *
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      * @param \Shopware_Bootstrap $bootstrap
      * @param array $options
      * @throws \Exception
      * @return \Enlight_Controller_Front
      */
     public function factory(
-        ResourceLoader $resourceLoader,
+        Container $container,
         \Shopware_Bootstrap $bootstrap,
         \Enlight_Event_EventManager $eventManager,
         array $options
@@ -61,7 +61,7 @@ class Front
         $front->setParams($options);
 
         /** @var $plugins  \Enlight_Plugin_PluginManager */
-        $plugins = $resourceLoader->get('Plugins');
+        $plugins = $container->get('Plugins');
 
         $plugins->registerNamespace($front->Plugins());
 
@@ -75,9 +75,9 @@ class Front
         }
 
         try {
-            $resourceLoader->load('Cache');
-            $resourceLoader->load('Db');
-            $resourceLoader->load('Plugins');
+            $container->load('Cache');
+            $container->load('Db');
+            $container->load('Plugins');
         } catch (\Exception $e) {
             if ($front->throwExceptions()) {
                 throw $e;

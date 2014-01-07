@@ -43,7 +43,7 @@ class Shopware_Tests_Components_Api_CacheTest extends Shopware_Tests_Components_
     public function createResource()
     {
         $resource = new \Shopware\Components\Api\Resource\Cache();
-        $resource->setResourceLoader(Shopware()->ResourceLoader());
+        $resource->setContainer(Shopware()->Container());
 
         return $resource;
     }

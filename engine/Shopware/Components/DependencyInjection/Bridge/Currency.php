@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,16 +34,16 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class Currency
 {
     /**
-     * @param ResourceLoader    $resourceLoader
+     * @param Container    $container
      * @param \Zend_Locale      $locale
      *
      * @return \Zend_Currency
      */
-    public function factory(ResourceLoader $resourceLoader, \Zend_Locale $locale)
+    public function factory(Container $container, \Zend_Locale $locale)
     {
         $currency = 'EUR';
-        if ($resourceLoader->has('Shop')) {
-            $currency = $resourceLoader->get('Shop')->getCurrency()->getCurrency();
+        if ($container->has('Shop')) {
+            $currency = $container->get('Shop')->getCurrency()->getCurrency();
         }
 
         return new \Zend_Currency($currency, $locale);

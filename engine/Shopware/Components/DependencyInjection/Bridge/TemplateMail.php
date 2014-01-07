@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,21 +34,21 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class TemplateMail
 {
     /**
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      * @return \Shopware_Components_TemplateMail
      */
-    public function factory(ResourceLoader $resourceLoader)
+    public function factory(Container $container)
     {
-        $resourceLoader->load('MailTransport');
+        $container->load('MailTransport');
 
         $stringCompiler = new \Shopware_Components_StringCompiler(
-            $resourceLoader->get('Template')
+            $container->get('Template')
         );
         $mailer = new \Shopware_Components_TemplateMail();
-        if ($resourceLoader->initialized('Shop')) {
-            $mailer->setShop($resourceLoader->get('Shop'));
+        if ($container->initialized('Shop')) {
+            $mailer->setShop($container->get('Shop'));
         }
-        $mailer->setModelManager($resourceLoader->get('Models'));
+        $mailer->setModelManager($container->get('Models'));
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;

@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -34,7 +34,7 @@ use Shopware\Components\DependencyInjection\ResourceLoader;
 class Plugins
 {
     /**
-     * @param ResourceLoader $resourceLoader
+     * @param Container $container
      * @param \Enlight_Loader $loader
      * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
@@ -43,14 +43,14 @@ class Plugins
      * @return \Enlight_Plugin_PluginManager
      */
     public function factory(
-        ResourceLoader $resourceLoader,
+        Container $container,
         \Enlight_Loader $loader,
         \Enlight_Event_EventManager $eventManager,
         \Shopware $application,
         array $config
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
-        $resourceLoader->load('Table');
+        $container->load('Table');
 
         if (!isset($config['namespaces'])) {
             $config['namespaces'] = array('Core', 'Frontend', 'Backend');

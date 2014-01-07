@@ -20,8 +20,8 @@
  * @author     $Author$
  */
 
-use Shopware\Components\DependencyInjection\ResourceLoader;
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Basic class for each Enlight controller action.
@@ -35,7 +35,7 @@ use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Controller_Action extends Enlight_Class implements Enlight_Hook, ResourceLoaderAwareInterface
+abstract class Enlight_Controller_Action extends Enlight_Class implements Enlight_Hook, ContainerAwareInterface
 {
     /**
      * @var Enlight_Controller_Front
@@ -64,9 +64,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $response;
 
     /**
-     * @var Shopware\Components\DependencyInjection\ResourceLoader
+     * @var Shopware\Components\DependencyInjection\Container
      */
-    protected $resourceLoader;
+    protected $container;
 
     /**
      * @var string Contains the name of the controller.
@@ -262,11 +262,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     }
 
     /**
-     * @param ResourceLoader $loader
+     * @param Container $loader
      */
-    public function setResourceLoader(ResourceLoader $loader = null)
+    public function setContainer(Container $loader = null)
     {
-        $this->resourceLoader = $loader;
+        $this->container = $loader;
     }
 
     /**
@@ -363,7 +363,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function get($name)
     {
-        return $this->resourceLoader->get($name);
+        return $this->container->get($name);
     }
 
     /**
@@ -371,7 +371,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function getModelManager()
     {
-        return $this->resourceLoader->get('Models');
+        return $this->container->get('Models');
     }
 
     /**

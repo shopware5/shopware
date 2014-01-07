@@ -25,18 +25,18 @@
 namespace Shopware\Components\DependencyInjection;
 
 /**
- * ResourceLoaderAwareInterface should be implemented by classes that depends on a ResourceLoader.
+ * ContainerAwareInterface should be implemented by classes that depends on a Container.
  *
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface ResourceLoaderAwareInterface
+interface ContainerAwareInterface
 {
     /**
-     * Sets the ResourceLoader.
+     * Sets the Container.
      *
-     * @param ResourceLoader|null $ResourceLoader A ResourceLoaderInterface instance or null
+     * @param Container|null $Container A ContainerInterface instance or null
      */
-    public function setResourceLoader(ResourceLoader $ResourceLoader = null);
+    public function setContainer(Container $Container = null);
 }

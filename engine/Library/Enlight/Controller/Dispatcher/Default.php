@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-use Shopware\Components\DependencyInjection\ResourceLoaderAwareInterface;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Implements all methods to register single or multiple controllers and load them automatically.
@@ -509,9 +509,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
-        if ($controller instanceof ResourceLoaderAwareInterface) {
-            $resourceLoader = Enlight_Application::Instance()->ResourceLoader();
-            $controller->setResourceLoader($resourceLoader);
+        if ($controller instanceof ContainerAwareInterface) {
+            $container = Enlight_Application::Instance()->Container();
+            $controller->setContainer($container);
         }
 
         $action = $this->getActionMethod($request);

@@ -113,7 +113,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      */
     public function get($name)
     {
-        // todo@all inject resourceloader during plugin construction
-        return $this->collection->Application()->ResourceLoader()->get($name);
+        // todo@all inject container during plugin construction
+        return $this->collection->Application()->Container()->get($name);
     }
 }

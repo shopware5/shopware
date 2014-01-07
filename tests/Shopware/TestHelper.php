@@ -77,7 +77,7 @@ class TestKernel extends \Shopware\Kernel
         $this->shopware = new \TestHelper(
             $this->environment,
             $this->getConfig(),
-            $this->resourceLoader
+            $this->container
         );
     }
 
