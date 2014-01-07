@@ -146,6 +146,7 @@ class Article extends Resource implements BatchInterface
             'propertyValues',
             'configuratorOptions',
             'supplier',
+            'priceCustomGroup',
             'mainDetailAttribute',
             'propertyGroup',
             'customerGroups'
@@ -153,6 +154,7 @@ class Article extends Resource implements BatchInterface
             ->from('Shopware\Models\Article\Article', 'article')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.prices', 'mainDetailPrices')
+            ->leftJoin('mainDetailPrices.customerGroup', 'priceCustomGroup')
             ->leftJoin('article.tax', 'tax')
             ->leftJoin('article.propertyValues', 'propertyValues')
             ->leftJoin('article.supplier', 'supplier')
@@ -179,6 +181,20 @@ class Article extends Resource implements BatchInterface
             $article['similar'] = $this->getArticleSimilar($id);
             $article['related'] = $this->getArticleRelated($id);
             $article['details'] = $this->getArticleVariants($id);
+
+            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
+                $article['mainDetail']['prices'] = $this->getTaxPrices(
+                    $article['mainDetail']['prices'],
+                    $article['tax']['tax']
+                );
+
+                foreach($article['details'] as &$detail) {
+                    $detail['prices'] = $this->getTaxPrices(
+                        $detail['prices'],
+                        $article['tax']['tax']
+                    );
+                }
+            }
 
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
             $shops = $query->getArrayResult();
@@ -207,6 +223,25 @@ class Article extends Resource implements BatchInterface
         }
 
         return $article;
+    }
+
+    /**
+     * Helper function which calculates formats the variant prices for each customer group.
+     * If the customer group configured "taxInput" as true, the price will be formatted as gross.
+     *
+     * @param array $prices Array of the variant prices
+     * @param float $taxRate Float value of the article tax (example: 19.00)
+     * @return array
+     */
+    public function getTaxPrices(array $prices, $taxRate)
+    {
+        foreach($prices as &$price) {
+            $price['net'] = $price['price'];
+            if ($price['customerGroup'] && $price['customerGroup']['taxInput']) {
+                $price['price'] = $price['price'] * (($taxRate + 100) / 100);
+            }
+        }
+        return $prices;
     }
 
     /**

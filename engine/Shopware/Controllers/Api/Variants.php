@@ -45,9 +45,13 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
         if($useNumberAsId){
-            $articleDetail = $this->resource->getOneByNumber($id);
+            $articleDetail = $this->resource->getOneByNumber($id, array(
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
         }else{
-            $articleDetail = $this->resource->getOne($id);
+            $articleDetail = $this->resource->getOne($id, array(
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
         }
 
         $this->View()->assign('data', $articleDetail);
