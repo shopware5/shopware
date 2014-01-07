@@ -368,22 +368,81 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  $statement->rowCount()));
     }
 
-    public function getRating()
+    public function getRatingAction()
     {
-//        { name : 'date', type: 'date', dateFormat: 'timestamp' },
-//        'cancelledOrderRate',
-//        'basketConversion',
-//        'orderConversion',
-//        'basketVisitConversion'
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'sv.datum AS date',
+            'COUNT(o.id) AS orders',
+            'sv.uniquevisits AS visitors',
+            '(
+                SELECT COUNT(o2.invoice_amount)
+                FROM s_order o2
+                WHERE o2.status=-1
+                AND DATE(o2.ordertime) = sv.datum
+            ) AS cancelledOrders'
+        ))
+        ->from('s_statistics_visitors', 'sv')
+        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)')
+        ->where('sv.datum >= :fromDate AND sv.datum <= :toDate')
+        ->groupBy('sv.datum')
+        ->setParameter(':fromDate', $this->getFromDate())
+        ->setParameter(':toDate', $this->getToDate());
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $data = array();
+
+        foreach($results as $result){
+            $orders = $result['orders'];
+            $visitors = $result['visitors'];
+            $cancelledOrders = $result['cancelledOrders'];
+
+            $data[] = array(
+                'date' => strtotime($result['date']),
+                'basketConversion' => round($orders / ($cancelledOrders + $orders) * 100, 2),
+                'orderConversion' => round($orders / $visitors * 100, 2),
+                'basketVisitConversion' => round($cancelledOrders / $visitors * 100, 2)
+            );
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));
+    }
+
+    public function getReferrerRevenueAction()
+    {
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'ROUND(o.invoice_amount / o.currencyFactor) AS revenue',
+            'o.referer AS referrer',
+            'sv.uniquevisits AS visitors',
+            '(
+                SELECT COUNT(o2.invoice_amount)
+                FROM s_order o2
+                WHERE o2.status=-1
+                AND DATE(o2.ordertime) = sv.datum
+            ) AS cancelledOrders'
+        ))
+        ->from('s_statistics_visitors', 'sv')
+        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)')
+        ->where('sv.datum >= :fromDate AND sv.datum <= :toDate')
+        ->groupBy('sv.datum')
+        ->setParameter(':fromDate', $this->getFromDate())
+        ->setParameter(':toDate', $this->getToDate());
 
         $data = array(
-            array(
-                'date' => time(),
-                'cancelledOrderRate' => 1,
-                'basketConversion' => 1,
-                'orderConversion' => 1,
-                'basketVisitConversion' => 1
-            )
+            'host' => 'google.de',
+            'entireRevenue' => 10000,
+            'lead' => 200,
+            'customerValue' => 300,
+            'entireNewRevenue' => 7500,
+            'entireOldRevenue' => 2500,
+            'orders' => 100,
+            'newCustomers' => 75,
+            'oldCustomers' => 25,
+            'perNewRevenue' => 100,
+            'perOldRevenue' => 100
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));

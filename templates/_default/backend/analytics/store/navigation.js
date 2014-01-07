@@ -45,10 +45,17 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
-        }, {
+        },{
             id: 'rating',
             text: 'Rating',
             store: 'analytics-store-navigation-rating',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
+            id: 'referrer_revenue',
+            text: 'Umsatz nach Referrer',
+            store: 'analytics-store-navigation-referrer_revenue',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
