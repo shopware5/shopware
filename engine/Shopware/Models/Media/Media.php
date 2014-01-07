@@ -862,7 +862,6 @@ class Media extends ModelEntity
 				$size = $size . 'x' . $size;
 			}
 			$path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
-            
 			$path = str_replace(Shopware()->OldPath(), '', $path);
 			if (DIRECTORY_SEPARATOR !== '/') {
 				$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
