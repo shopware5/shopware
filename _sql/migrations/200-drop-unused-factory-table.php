@@ -4,7 +4,7 @@ class Migrations_Migration200 Extends Shopware\Components\Migrations\AbstractMig
     public function up()
     {
         $sql = <<<'EOD'
-DROP TABLE IF EXISTS s_core_factory;
+DROP TABLE s_core_factory;
 EOD;
 
         $this->addSql($sql);
