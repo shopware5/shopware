@@ -1302,6 +1302,7 @@ class sAdmin
         session_start();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
+        Shopware()->Session()->offsetSet('sessionId', $newSessionId);
         Shopware()->Bootstrap()->resetResource('SessionId');
         Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
 
