@@ -192,7 +192,7 @@ class sOrder
         $sql = "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE";
         $ordernumber = $this->db->fetchOne($sql);
         $sql = "UPDATE s_order_number SET number=number+1 WHERE name='invoice'";
-        $this->db->query($sql);
+        $this->db->executeUpdate($sql);
         $ordernumber += 1;
 
         $ordernumber = $this->eventManager->filter('Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber', $ordernumber, array('subject'=>$this));
@@ -301,11 +301,11 @@ class sOrder
         ",array($this->session->offsetGet('sessionId')));
 
         foreach ($deleteWholeOrder as $orderDelete) {
-            $this->db->query("
+            $this->db->executeUpdate("
             DELETE FROM s_order WHERE id = ?
             ",array($orderDelete["id"]));
 
-            $this->db->query("
+            $this->db->executeUpdate("
             DELETE FROM s_order_details
             WHERE orderID=?
             ",array($orderDelete["id"]));
@@ -379,10 +379,13 @@ class sOrder
         );
 
         try {
-            $this->db->insert('s_order', $data);
+            $affectedRows = $this->db->insert('s_order', $data);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
-            throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01:" . $e->getMessage().$sql, 0, $e);
+            throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01:" . $e->getMessage(), 0, $e);
+        }
+        if (!$affectedRows || ! $orderID) {
+            throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01: No rows affected or no order id saved", 0);
         }
 
         $position = 0;
@@ -535,10 +538,13 @@ class sOrder
         $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterSQL', $sql, array('subject'=>$this));
 
         try {
-            $this->db->query($sql);
+            $affectedRows = $this->db->executeUpdate($sql);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
             throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} :" . $e->getMessage(), 0, $e);
+        }
+        if (!$affectedRows || !$orderID) {
+            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} : No rows affected or no order id created.", 0);
         }
 
         try {
@@ -563,7 +569,7 @@ class sOrder
                     ".$this->db->quote((string) $this->o_attr_6)."
                 )";
         $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterSQL', $attributeSql, array('subject'=>$this));
-        $this->db->query($attributeSql);
+        $this->db->executeUpdate($attributeSql);
 
         // add attributes to order
         $sql = 'SELECT * FROM s_order_attributes WHERE orderID = :orderId;';
@@ -637,7 +643,7 @@ class sOrder
 
                 if ($getVoucher["modus"]==1) {
                     // Update Voucher - Code
-                    $this->db->query("
+                    $this->db->executeUpdate("
                     UPDATE s_emarketing_voucher_codes
                     SET cashed = 1, userID= ?
                     WHERE id = ?
@@ -650,7 +656,7 @@ class sOrder
 
 
             try {
-                $this->db->query($sql);
+                $this->db->executeUpdate($sql);
                 $orderdetailsID = $this->db->lastInsertId();
             } catch (Exception $e) {
                 throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} :" . $e->getMessage(), 0, $e);
@@ -670,7 +676,7 @@ class sOrder
                              $this->db->quote((string) $basketRow["ob_attr6"]).
             ")";
             $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
-            $this->db->query($attributeSql);
+            $this->db->executeUpdate($attributeSql);
 
             // add attributes
             $sql = 'SELECT * FROM s_order_details_attributes WHERE detailID = :detailID;';
@@ -682,7 +688,7 @@ class sOrder
 
             // Update sales and stock
             if ($basketRow["priceNumeric"] >= 0) {
-                $this->db->query("
+                $this->db->executeUpdate("
                 UPDATE s_articles_details SET sales=sales+{$basketRow["quantity"]},instock=instock-{$basketRow["quantity"]}  WHERE ordernumber='{$basketRow["ordernumber"]}'
                 ");
             }
@@ -694,9 +700,9 @@ class sOrder
                 $max_instock = (int) $max_instock;
                 if ($max_instock<=0) {
                     $sql = 'UPDATE s_articles SET active=0 WHERE id=?';
-                    $this->db->query($sql,array($basketRow['articleID']));
+                    $this->db->executeUpdate($sql,array($basketRow['articleID']));
                     // Ticket #5517
-                    $this->db->query("
+                    $this->db->executeUpdate("
                     UPDATE s_articles_details SET active = 0 WHERE ordernumber = ?
                     ",array($basketRow['ordernumber']));
                 }
@@ -783,7 +789,7 @@ class sOrder
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
 
-        $this->db->query("DELETE FROM s_order_basket WHERE sessionID=?",array($this->session->offsetGet('sessionId')));
+        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?",array($this->session->offsetGet('sessionId')));
 
         $this->sendMail($variables);
 
@@ -979,7 +985,7 @@ class sOrder
             $address["ustid"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $result = $this->db->query($sql,$array);
+        $result = $this->db->executeUpdate($sql,$array);
 
 
         //new attribute tables
@@ -996,7 +1002,7 @@ class sOrder
             $address["text6"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $this->db->query($sql,$array);
+        $this->db->executeUpdate($sql,$array);
 
         return $result;
     }
@@ -1057,7 +1063,7 @@ class sOrder
             $address["stateID"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $result = $this->db->query($sql,$array);
+        $result = $this->db->executeUpdate($sql,$array);
 
         //new attribute table
         $shippingId = $this->db->lastInsertId();
@@ -1073,7 +1079,7 @@ class sOrder
             $address["text6"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $this->db->query($sql,$array);
+        $this->db->executeUpdate($sql,$array);
 
         return $result;
     }
@@ -1138,7 +1144,7 @@ class sOrder
         $checkIfUserFound = $this->db->fetchRow($tmpSQL, array($checkMail));
         if (count($checkIfUserFound)) {
             // User-Datensatz aktualisieren
-            $this->db->query("
+            $this->db->executeUpdate("
             UPDATE s_emarketing_tellafriend SET confirmed=1 WHERE recipient=?
             ",array($checkMail));
             // --
@@ -1325,14 +1331,14 @@ class sOrder
         $previousStatusId = $this->db->fetchOne($sql, array($orderId));
         if ($paymentStatusId != $previousStatusId) {
             $sql = 'UPDATE `s_order` SET `cleared`=? WHERE `id`=?;';
-            $this->db->query($sql, array($paymentStatusId, $orderId));
+            $this->db->executeUpdate($sql, array($paymentStatusId, $orderId));
             $sql = '
                INSERT INTO s_order_history (
                   orderID, userID, previous_order_status_id, order_status_id,
                   previous_payment_status_id, payment_status_id, comment, change_date )
                 SELECT id, NULL, status, status, ?, ?, ?, NOW() FROM s_order WHERE id=?
             ';
-            $this->db->query($sql, array($previousStatusId, $paymentStatusId, $comment, $orderId));
+            $this->db->executeUpdate($sql, array($previousStatusId, $paymentStatusId, $comment, $orderId));
             if ($sendStatusMail) {
                 $mail = $this->createStatusMail($paymentStatusId, $comment, $orderId);
                 if ($mail) {
@@ -1356,14 +1362,14 @@ class sOrder
         $previousStatusId = $this->db->fetchOne($sql, array($orderId));
         if ($orderStatusId != $previousStatusId) {
             $sql = 'UPDATE `s_order` SET `status`=? WHERE `id`=?;';
-            $this->db->query($sql, array($orderStatusId, $orderId));
+            $this->db->executeUpdate($sql, array($orderStatusId, $orderId));
             $sql = '
                INSERT INTO s_order_history (
                   orderID, userID, previous_order_status_id, order_status_id,
                   previous_payment_status_id, payment_status_id, comment, change_date )
                 SELECT id, NULL, ?, ?, cleared, cleared, ?, NOW() FROM s_order WHERE id=?
             ';
-            $this->db->query($sql, array($previousStatusId, $orderStatusId, $comment, $orderId));
+            $this->db->executeUpdate($sql, array($previousStatusId, $orderStatusId, $comment, $orderId));
             if ($sendStatusMail) {
                 $mail = $this->createStatusMail($orderStatusId, $comment, $orderId);
                 if ($mail) {

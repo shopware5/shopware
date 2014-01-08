@@ -104,4 +104,33 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         // finally, we delete the authorization data
         unset($this->_config['username'], $this->_config['password']);
     }
+
+    /**
+     * Executes an SQL INSERT/UPDATE/DELETE query with the given parameters
+     * and returns the number of affected rows.
+     *
+     * @param string $query  The SQL query.
+     * @param array  $params The query parameters.
+     * @param array  $types  The parameter types, ignored for now.
+     *
+     * @return integer The number of affected rows.
+     */
+    public function executeUpdate($query, array $params = array(), array $types = array())
+    {
+        $stmt = $this->query($query, $params);
+
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Alias for query.
+     * @param $query
+     * @param array $params
+     * @param array $types
+     * @return Zend_Db_Statement_Pdo
+     */
+    public function executeQuery($query, array $params = array(), array $types = array())
+    {
+        return $this->query($query, $params);
+    }
 }
