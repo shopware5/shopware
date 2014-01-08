@@ -224,11 +224,14 @@ class sOrder
 
         if (!$esdArticle["serials"]) {
             // No serialnumber is needed
-            $this->db->query("
-                INSERT INTO s_order_esd
-                (serialID, esdID, userID, orderID, orderdetailsID, datum)
-                VALUES (0,{$esdArticle["id"]},".$this->sUserData["additional"]["user"]["id"].",$orderID,$orderdetailsID,now())");
-
+            $this->db->insert('s_order_esd', array(
+                'serialID' => 0,
+                'esdID' => $esdArticle["id"],
+                'userID' => $this->sUserData["additional"]["user"]["id"],
+                'orderID' => $orderID,
+                'orderdetailsID' => $orderdetailsID,
+                'datum' => 'now()'
+            ));
             return;
         }
 
@@ -271,13 +274,14 @@ class sOrder
                 // Update basketrow
                 $basketRow['assignedSerials'][] = $availableSerials[$i-1]["serialnumber"];
 
-                $sql = "
-                    INSERT INTO s_order_esd
-                    (serialID, esdID, userID, orderID, orderdetailsID, datum)
-                    VALUES ($serialId,{$esdArticle["id"]},".$this->sUserData["additional"]["user"]["id"].",$orderID,$orderdetailsID,now())
-                    ";
-
-                $this->db->query($sql);
+                $this->db->insert('s_order_esd', array(
+                    'serialID' => $serialId,
+                    'esdID' => $esdArticle["id"],
+                    'userID' => $this->sUserData["additional"]["user"]["id"],
+                    'orderID' => $orderID,
+                    'orderdetailsID' => $orderdetailsID,
+                    'datum' => 'now()'
+                ));
             }
         }
     }
@@ -351,57 +355,31 @@ class sOrder
         if (empty($this->sBasketData["AmountWithTaxNumeric"])) $this->sBasketData["AmountWithTaxNumeric"] = '0';
         if (empty($this->sBasketData["AmountNetNumeric"])) $this->sBasketData["AmountNetNumeric"] = '0';
 
-
-        $sql = "
-            INSERT INTO s_order (
-              ordernumber, userID, invoice_amount,invoice_amount_net, invoice_shipping,
-              invoice_shipping_net, ordertime, status, paymentID, customercomment,
-              net, taxfree, partnerID,temporaryID,referer,language,
-              dispatchID,currency,currencyFactor,subshopID
-            ) VALUES ('0',
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                now(),
-                -1,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?
-            )
-        ";
         $data = array(
-            $this->sUserData["additional"]["user"]["id"],
-            $this->sBasketData["AmountWithTaxNumeric"],
-            $this->sBasketData["AmountNetNumeric"],
-            $this->sShippingcostsNumeric,
-            $this->sShippingcostsNumericNet,
-            $this->sUserData["additional"]["user"]["paymentID"],
-            $this->sComment,
-            $net,
-            $taxfree,
-            (string) $this->session->offsetGet("sPartner"),
-            $this->session->offsetGet('sessionId'),
-            (string) $this->session->offsetGet('sReferer'),
-            $shop->getId(),
-            $dispatchId,
-            $this->sSYSTEM->sCurrency["currency"],
-            $this->sSYSTEM->sCurrency["factor"],
-            $mainShop->getId()
+            'ordernumber' => '0',
+            'userID' => $this->sUserData["additional"]["user"]["id"],
+            'invoice_amount' => $this->sBasketData["AmountWithTaxNumeric"],
+            'invoice_amount_net' => $this->sBasketData["AmountNetNumeric"],
+            'invoice_shipping' => $this->sShippingcostsNumeric,
+            'invoice_shipping_net' => $this->sShippingcostsNumericNet,
+            'ordertime' => 'now()',
+            'status' => -1,
+            'paymentID' => $this->sUserData["additional"]["user"]["paymentID"],
+            'customercomment' => $this->sComment,
+            'net' => $net,
+            'taxfree' => $taxfree,
+            'partnerID' => (string) $this->session->offsetGet("sPartner"),
+            'temporaryID' => $this->session->offsetGet('sessionId'),
+            'referer' => (string) $this->session->offsetGet('sReferer'),
+            'language' => $shop->getId(),
+            'dispatchID' => $dispatchId,
+            'currency' => $this->sSYSTEM->sCurrency["currency"],
+            'currencyFactor' => $this->sSYSTEM->sCurrency["factor"],
+            'subshopID' => $mainShop->getId()
         );
 
         try {
-            $this->db->query($sql, $data);
+            $this->db->insert('s_order', $data);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
             throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01:" . $e->getMessage().$sql, 0, $e);
@@ -422,43 +400,24 @@ class sOrder
             if (!$basketRow["modus"]) $basketRow["modus"] = "0";
             if (!$basketRow["taxID"]) $basketRow["taxID"] = "0";
 
-            $sql = "
-                INSERT INTO s_order_details (
-                    orderID,
-                    ordernumber,
-                    articleID,
-                    articleordernumber,
-                    price,
-                    quantity,
-                    name,
-                    status,
-                    releasedate,
-                    modus,
-                    esdarticle,
-                    taxID,
-                    tax_rate
-                ) VALUES (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?
-                );
-            ";
             $data = array(
-                $orderID,
-                0,
-                $basketRow["articleID"],
-                $basketRow["ordernumber"],
-                $basketRow["priceNumeric"],
-                $basketRow["quantity"],
-                $basketRow["articlename"],
-                0,
-                '0000-00-00',
-                $basketRow["modus"],
-                $basketRow["esdarticle"],
-                $basketRow["taxID"],
-                $basketRow["tax_rate"]
+                'orderID' => $orderID,
+                'ordernumber' => 0,
+                'articleID' => $basketRow["articleID"],
+                'articleordernumber' => $basketRow["ordernumber"],
+                'price' => $basketRow["priceNumeric"],
+                'quantity' => $basketRow["quantity"],
+                'name' => $basketRow["articlename"],
+                'status' => 0,
+                'releasedate' => '0000-00-00',
+                'modus' => $basketRow["modus"],
+                'esdarticle' => $basketRow["esdarticle"],
+                'taxID' => $basketRow["taxID"],
+                'tax_rate' => $basketRow["tax_rate"]
             );
 
             try {
-                $this->db->query($sql, $data);
+                $this->db->insert('s_order_details', $data);
             } catch (Exception $e) {
                 throw new Enlight_Exception("##sOrder-sTemporaryOrder-Position-#02:" . $e->getMessage(), 0, $e);
             }
