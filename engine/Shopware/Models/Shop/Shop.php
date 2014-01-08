@@ -111,6 +111,12 @@ class Shop extends ModelEntity
     private $secure = false;
 
     /**
+     * @var boolean $secure
+     * @ORM\Column(name="always_secure", type="boolean", nullable=false)
+     */
+    private $alwaysSecure = false;
+
+    /**
      * @var string $name
      * @ORM\Column(name="secure_host", type="string", length=255, nullable=true)
      */
@@ -727,5 +733,21 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAlwaysSecure()
+    {
+        return $this->alwaysSecure;
+    }
+
+    /**
+     * @param boolean $alwaysSecure
+     */
+    public function setAlwaysSecure($alwaysSecure)
+    {
+        $this->alwaysSecure = $alwaysSecure;
     }
 }
