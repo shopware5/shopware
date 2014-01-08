@@ -404,8 +404,7 @@ class sOrder
             $this->db->query($sql, $data);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
-            $this->sSYSTEM->E_CORE_ERROR("##sOrder-sTemporaryOrder-#01",$e->getMessage().$sql);
-            die ("Could not create temporary order");
+            throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01:" . $e->getMessage().$sql, 0, $e);
         }
 
         $position = 0;
@@ -471,8 +470,7 @@ class sOrder
             try {
                 $this->db->query($sql, $data);
             } catch (Exception $e) {
-                $this->sSYSTEM->E_CORE_ERROR("##sOrder-sTemporaryOrder-Position-#02",$e->getMessage());
-                die ("Could not create temporary order - row");
+                throw new Enlight_Exception("##sOrder-sTemporaryOrder-Position-#02:" . $e->getMessage(), 0, $e);
             }
 
         } // For every artice in basket
@@ -591,8 +589,7 @@ class sOrder
             $this->db->query($sql);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
-            mail($this->config->get('sMAIL'),"Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]}", $e->getMessage() . $sql);
-            die("Fatal order failure, please try again later, order was not processed");
+            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} :" . $e->getMessage(), 0, $e);
         }
 
         try {
@@ -716,8 +713,7 @@ class sOrder
                 $this->db->query($sql);
                 $orderdetailsID = $this->db->lastInsertId();
             } catch (Exception $e) {
-                mail($this->config->get('sMAIL'),"Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]}",$e->getMessage().$sql);
-                die("Fatal order failure, please try again later, order was not processed");
+                throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} :" . $e->getMessage(), 0, $e);
             }
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
