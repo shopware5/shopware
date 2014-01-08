@@ -3020,6 +3020,44 @@ INSERT INTO `s_core_engine_queries` (`id`, `query`, `option`, `value`, `domeleme
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `s_core_factory`
+--
+
+DROP TABLE IF EXISTS `s_core_factory`;
+CREATE TABLE IF NOT EXISTS `s_core_factory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `basename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `basefile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `inheritname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `inheritfile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `basename` (`basename`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+
+--
+-- Daten für Tabelle `s_core_factory`
+--
+
+INSERT INTO `s_core_factory` (`id`, `description`, `basename`, `basefile`, `inheritname`, `inheritfile`) VALUES
+(1, 'Artikelhandling', 'sArticles', 'sArticles.php', 'myArticles', 'myArticles.php'),
+(2, 'Kundenbereich', 'sAdmin', 'sAdmin.php', '', ''),
+(3, 'Warenkorb', 'sBasket', 'sBasket.php', '', ''),
+(4, 'Kategoriesystem', 'sCategories', 'sCategories.php', '', ''),
+(5, 'Kernfunktionalitäten', 'sCore', 'sCore.php', 'myCore', 'myCore.php'),
+(7, 'Cross-Selling', 'sCrossselling', 'sCrossselling.php', '', ''),
+(8, 'Bestellhandling', 'sOrder', 'sOrder.php', '', ''),
+(13, 'Marketing-Funktionen', 'sMarketing', 'sMarketing.php', '', ''),
+(14, 'Content-Management', 'sCms', 'sCms.php', '', ''),
+(15, 'Intelligente Suche', 'sSearch', 'sSearch.php', '', ''),
+(17, 'Support-Funktionen', 'sCmsSupport', 'sCmsSupport.php', '', ''),
+(18, 'Cache-Funktionen', 'sCache', 'sCache.php', '', ''),
+(19, 'Ticket Support', 'sTicketSystem', 'sTicketSystem.php', '', ''),
+(20, 'Router', 'sRouter', 'sRouter.php', '', '');
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `s_core_licences`
 --
 
