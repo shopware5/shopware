@@ -224,7 +224,7 @@ class sOrder
 
         if (!$esdArticle["serials"]) {
             // No serialnumber is needed
-            $updateSerial = $this->db->query("
+            $this->db->query("
                 INSERT INTO s_order_esd
                 (serialID, esdID, userID, orderID, orderdetailsID, datum)
                 VALUES (0,{$esdArticle["id"]},".$this->sUserData["additional"]["user"]["id"].",$orderID,$orderdetailsID,now())");
@@ -277,7 +277,7 @@ class sOrder
                     VALUES ($serialId,{$esdArticle["id"]},".$this->sUserData["additional"]["user"]["id"].",$orderID,$orderdetailsID,now())
                     ";
 
-                $updateSerial = $this->db->query($sql);
+                $this->db->query($sql);
             }
         }
     }
@@ -297,11 +297,11 @@ class sOrder
         ",array($this->session->offsetGet('sessionId')));
 
         foreach ($deleteWholeOrder as $orderDelete) {
-            $deleteOrder = $this->db->query("
+            $this->db->query("
             DELETE FROM s_order WHERE id = ?
             ",array($orderDelete["id"]));
 
-            $deleteSubOrder = $this->db->query("
+            $this->db->query("
             DELETE FROM s_order_details
             WHERE orderID=?
             ",array($orderDelete["id"]));
@@ -411,20 +411,10 @@ class sOrder
         foreach ($this->sBasketData["content"] as $basketRow) {
             $position++;
 
-            $amountRow = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($basketRow["priceNumeric"] * $basketRow["quantity"]);
-
             if (!$basketRow["price"]) $basketRow["price"] = "0,00";
-            if (!$amountRow) $amountRow = "0,00";
-
 
             $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
             $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
-
-            if (!$basketRow["itemInfo"]) {
-                $priceRow = $basketRow["price"];
-            } else {
-                $priceRow = $basketRow["itemInfo"];
-            }
 
             $basketRow["articlename"] = $this->sSYSTEM->sMODULES['sArticles']->sOptimizeText($basketRow["articlename"]);
 
@@ -630,20 +620,11 @@ class sOrder
         foreach ($this->sBasketData["content"] as $key => $basketRow) {
             $position++;
 
-            $amountRow = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($basketRow["priceNumeric"] * $basketRow["quantity"]);
-
             if (!$basketRow["price"]) $basketRow["price"] = "0,00";
-            if (!$amountRow) $amountRow = "0,00";
 
             $basketRow["articlename"] = str_replace("<br />","\n",$basketRow["articlename"]);
             $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
             $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
-
-            if (!$basketRow["itemInfo"]) {
-                $priceRow = $basketRow["price"];
-            } else {
-                $priceRow = $basketRow["itemInfo"];
-            }
 
             $basketRow["articlename"] = $this->sSYSTEM->sMODULES['sArticles']->sOptimizeText($basketRow["articlename"]);
 
@@ -697,7 +678,7 @@ class sOrder
 
                 if ($getVoucher["modus"]==1) {
                     // Update Voucher - Code
-                    $updateVoucher = $this->db->query("
+                    $this->db->query("
                     UPDATE s_emarketing_voucher_codes
                     SET cashed = 1, userID= ?
                     WHERE id = ?
@@ -1198,7 +1179,7 @@ class sOrder
         $checkIfUserFound = $this->db->fetchRow($tmpSQL, array($checkMail));
         if (count($checkIfUserFound)) {
             // User-Datensatz aktualisieren
-            $updateUserFound = $this->db->query("
+            $this->db->query("
             UPDATE s_emarketing_tellafriend SET confirmed=1 WHERE recipient=?
             ",array($checkMail));
             // --
