@@ -481,6 +481,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $secure = false;
         }
 
+        if ($this->shop && $this->shop->getAlwaysSecure()) {
+            $secure = true;
+        }
+
         $url = '';
 
         if (!isset($userParams['fullPath']) || !empty($userParams['fullPath'])) {
