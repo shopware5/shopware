@@ -216,7 +216,7 @@ class sOrder
         AND s_articles_details.ordernumber='{$basketRow["ordernumber"]}'
         ";
 
-        $esdArticle = $this->db->fetchRow($this->config->get('sCACHEARTICLE'), $sqlGetEsd);
+        $esdArticle = $this->db->fetchRow($sqlGetEsd);
         if (!$esdArticle["id"]) {
             // ESD not found
             return;
