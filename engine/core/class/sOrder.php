@@ -322,8 +322,9 @@ class sOrder
         if (!$this->sShippingcostsNumeric) $this->sShippingcostsNumeric = "0";
         if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
 
-        // Check if tax-free
-        if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+        $taxId = $this->sSYSTEM->sUSERGROUPDATA["tax"];
+        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
+        if ($this->isTaxFree($taxId, $customerGroupId)) {
             $net = "1";
         } else {
             $net = "0";
@@ -452,8 +453,9 @@ class sOrder
 
         if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
 
-        // Check if tax-free
-        if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+        $taxId = $this->sSYSTEM->sUSERGROUPDATA["tax"];
+        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
+        if ($this->isTaxFree($taxId, $customerGroupId)) {
             $net = "1";
         } else {
             $net = "0";
@@ -820,6 +822,18 @@ class sOrder
         );
 
         return !empty($insertOrder["id"]);
+    }
+
+    /**
+     * Checks if the current customer should see net prices.
+     * @param $taxId
+     * @param $customerGroupId
+     * @return bool
+     */
+    private function isTaxFree($taxId, $customerGroupId)
+    {
+        return (($this->config->get('sARTICLESOUTPUTNETTO') && !$taxId)
+            || (!$taxId && $customerGroupId));
     }
 
     /**
