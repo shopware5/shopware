@@ -484,21 +484,9 @@ class sOrder
             $taxfree = "1";
         }
 
-        //unset($this->sSYSTEM->_SESSION["sPartner"]);
-        $isPartner = $this->session->offsetGet("sPartner");
-        if (empty($isPartner)) {
-            //"additional"]["user"]
-            $pid = $this->sUserData["additional"]["user"]["affiliate"];
-
-            if (!empty($pid) && $pid != "0") {
-                // Get Partner code
-                $partner = $this->db->fetchOne("
-                SELECT idcode FROM s_emarketing_partner WHERE id = ?
-                ",array($pid));
-            }
-        } else {
-            $partner = $this->session->offsetGet("sPartner");
-        }
+        $partner = $this->getPartnerId(
+            $this->sUserData["additional"]["user"]["affiliate"]
+        );
 
         $sql = "
         INSERT INTO s_order (
@@ -521,7 +509,7 @@ class sOrder
             ".$this->db->quote($this->sComment).",
             $net,
             $taxfree,
-            ".$this->db->quote((string) $partner).",
+            " . $this->db->quote((string) $partner) . ",
             ".$this->db->quote((string) $this->uniqueID).",
             ".$this->db->quote((string) $this->session->offsetGet('sReferer')).",
             '".$shop->getId()."',
@@ -834,6 +822,31 @@ class sOrder
     {
         return (($this->config->get('sARTICLESOUTPUTNETTO') && !$taxId)
             || (!$taxId && $customerGroupId));
+    }
+
+    /**
+     * Checks if the current order was send from a partner and returns
+     * the partner code.
+     *
+     * @param int $userAffiliate affiliate flag of the user data.
+     * @return null|string
+     */
+    private function getPartnerId($userAffiliate)
+    {
+        $isPartner = $this->session->offsetGet("sPartner");
+        if (!empty($isPartner)) {
+            return $this->session->offsetGet("sPartner");
+        }
+
+        if (empty($userAffiliate)) {
+            return null;
+        }
+
+        // Get Partner code
+        return $this->db->fetchOne(
+            "SELECT idcode FROM s_emarketing_partner WHERE id = ?",
+            array($userAffiliate)
+        );
     }
 
     /**
