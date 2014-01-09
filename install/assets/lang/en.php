@@ -71,8 +71,8 @@ return array(
     'step6_admin_language' => 'Admin backend language:', // Admin backend language
     'step6_admin_language_de' => 'German', // German
     'step6_admin_language_en' => 'English', // English
-    'step6_admin_password' => 'Admin password:', // Admin password
-    'step6_admin_password_repeat' => 'Repeat admin password:', // Admin password repeat
+    'step6_admin_password' => 'Admin password (default: demo):', // Admin password
+    'step6_admin_password_repeat' => 'Repeat admin password (default: demo):', // Admin password repeat
     // Step 7
     'step7_title' => 'Finished', // Finished
     'step7_info' => 'The installation has been completed successfully<br/><br /> For security reasons, you should now delete the installer (/install directory) from your server via FTP.', // The installation was finished successful

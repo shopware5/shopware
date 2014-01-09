@@ -73,8 +73,8 @@ return array(
     'step6_admin_language' => 'Admin Backend-Sprache:', // Admin backend language
     'step6_admin_language_de' => 'Deutsch', // German
     'step6_admin_language_en' => 'Englisch', // English
-    'step6_admin_password' => 'Admin Passwort:', // Admin password
-    'step6_admin_password_repeat' => 'Admin Passwort Wdh.:', // Admin password repeat
+    'step6_admin_password' => 'Admin Passwort (Standard: demo):', // Admin password
+    'step6_admin_password_repeat' => 'Admin Passwort Wdh. (Standard: demo):', // Admin password repeat
     // Step 7
     'step7_title' => 'Basis-Einrichtung abgeschlossen', // Finished
     'step7_info' => 'Die Installation wurde erfolgreich abgeschlossen.<br /><br />Aus Sicherheitsgründen sollten Sie den Installer (/install) nun via FTP vom Server löschen.', // The installation was finished successful
