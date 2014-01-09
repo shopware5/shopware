@@ -620,22 +620,13 @@ class sOrder
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
 
             // Check for individual voucher - code
-            if ($basketRow["modus"]==2) {
-
-                $getVoucher = $this->db->fetchRow("
-                SELECT modus,id FROM s_emarketing_vouchers
-                WHERE ordercode=?
-                ",array($basketRow["ordernumber"]));
-
-                if ($getVoucher["modus"]==1) {
-                    // Update Voucher - Code
-                    $this->db->executeUpdate("
-                    UPDATE s_emarketing_voucher_codes
-                    SET cashed = 1, userID= ?
-                    WHERE id = ?
-                    ",array($this->sUserData["additional"]["user"]["id"],$basketRow["articleID"]));
-
-                }
+            if ($basketRow["modus"] == 2) {
+                //reserve the basket voucher for the current user.
+                $this->reserveVoucher(
+                    $basketRow["ordernumber"],
+                    $this->sUserData["additional"]["user"]["id"],
+                    $basketRow["articleID"]
+                );
             }
 
             if ($basketRow["esdarticle"]) $esdOrder = true;
@@ -847,6 +838,29 @@ class sOrder
             "SELECT idcode FROM s_emarketing_partner WHERE id = ?",
             array($userAffiliate)
         );
+    }
+
+    /**
+     * Helper function which reserves individual voucher codes for the
+     * passed user.
+     *
+     * @param $orderCode
+     * @param $customerId
+     * @param $voucherCodeId
+     */
+    private function reserveVoucher($orderCode, $customerId, $voucherCodeId)
+    {
+        $getVoucher = $this->db->fetchRow(
+            "SELECT modus,id FROM s_emarketing_vouchers WHERE ordercode = ?",
+            array($orderCode)
+        );
+
+        if ($getVoucher["modus"] == 1) {
+            $this->db->executeUpdate(
+                "UPDATE s_emarketing_voucher_codes SET cashed = 1, userID= ? WHERE id = ?",
+                array($customerId, $voucherCodeId)
+            );
+        }
     }
 
     /**
