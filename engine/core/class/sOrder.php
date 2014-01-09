@@ -702,24 +702,12 @@ class sOrder
 
         $this->sUserData["additional"]["payment"]["description"] = html_entity_decode($this->sUserData["additional"]["payment"]["description"]);
 
-        $sOrderDetails = array();
-        foreach ($this->sBasketData["content"] as $content) {
-            $content["articlename"] = trim(html_entity_decode($content["articlename"]));
-            $content["articlename"] = str_replace(array("<br />","<br>"),"\n",$content["articlename"]);
-            $content["articlename"] = str_replace("&euro;","€",$content["articlename"]);
-            $content["articlename"] = trim($content["articlename"]);
-
-            while (strpos($content["articlename"],"\n\n")!==false) {
-                $content["articlename"] = str_replace("\n\n","\n",$content["articlename"]);
-            }
-
-            $content["ordernumber"] = trim(html_entity_decode($content["ordernumber"]));
-
-            $sOrderDetails[] = $content;
-        }
+        $details = $this->getOrderDetailsForMail(
+            $this->sBasketData["content"]
+        );
 
         $variables = array(
-            "sOrderDetails"=>$sOrderDetails,
+            "sOrderDetails"=>$details,
             "billingaddress"=>$this->sUserData["billingaddress"],
             "shippingaddress"=>$this->sUserData["shippingaddress"],
             "additional"=>$this->sUserData["additional"],
@@ -949,6 +937,34 @@ class sOrder
             array('orderId' => $orderId)
         );
         return $attributes;
+    }
+
+    /**
+     * Small helper function which iterates all basket rows
+     * and formats the article name and order number.
+     * This function is used for the order status mail.
+     *
+     * @param $basketRows
+     * @return array
+     */
+    private function getOrderDetailsForMail($basketRows)
+    {
+        $details = array();
+        foreach ($basketRows as $content) {
+            $content["articlename"] = trim(html_entity_decode($content["articlename"]));
+            $content["articlename"] = str_replace(array("<br />","<br>"),"\n",$content["articlename"]);
+            $content["articlename"] = str_replace("&euro;","€",$content["articlename"]);
+            $content["articlename"] = trim($content["articlename"]);
+
+            while (strpos($content["articlename"],"\n\n")!==false) {
+                $content["articlename"] = str_replace("\n\n","\n",$content["articlename"]);
+            }
+
+            $content["ordernumber"] = trim(html_entity_decode($content["ordernumber"]));
+
+            $details[] = $content;
+        }
+        return $details;
     }
 
     /**
