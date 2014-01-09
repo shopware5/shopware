@@ -675,18 +675,7 @@ class sOrder
             'details' => $this->sBasketData['content'],
         ));
 
-        // Assign variables
-        foreach ($this->sUserData["billingaddress"] as $key => $value) {
-            $this->sUserData["billingaddress"][$key] = html_entity_decode($value);
-        }
-        foreach ($this->sUserData["shippingaddress"] as $key => $value) {
-            $this->sUserData["shippingaddress"][$key] = html_entity_decode($value);
-        }
-        foreach ($this->sUserData["additional"]["country"] as $key => $value) {
-            $this->sUserData["additional"]["country"][$key] = html_entity_decode($value);
-        }
-
-        $this->sUserData["additional"]["payment"]["description"] = html_entity_decode($this->sUserData["additional"]["payment"]["description"]);
+        $this->sUserData = $this->getUserDataForMail($this->sUserData);
 
         $details = $this->getOrderDetailsForMail(
             $this->sBasketData["content"]
@@ -965,6 +954,32 @@ class sOrder
             $details[] = $content;
         }
         return $details;
+    }
+
+    /**
+     * Helper function which converts all HTML entities, in the passed user data array,
+     * to their applicable characters.
+     *
+     * @param $userData
+     * @return array
+     */
+    private function getUserDataForMail($userData)
+    {
+        // Assign variables
+        foreach ($userData["billingaddress"] as $key => $value) {
+            $userData["billingaddress"][$key] = html_entity_decode($value);
+        }
+        foreach ($userData["shippingaddress"] as $key => $value) {
+            $userData["shippingaddress"][$key] = html_entity_decode($value);
+        }
+        foreach ($userData["additional"]["country"] as $key => $value) {
+            $userData["additional"]["country"][$key] = html_entity_decode($value);
+        }
+
+        $userData["additional"]["payment"]["description"] = html_entity_decode(
+            $userData["additional"]["payment"]["description"]
+        );
+        return $userData;
     }
 
     /**
