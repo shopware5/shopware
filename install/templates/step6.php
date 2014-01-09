@@ -96,13 +96,13 @@ if (!defined("installer")) {
         <div class="row">
             <div class="span6">
                 <label><?php echo $language["step6_admin_password"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_config_admin_password"]) ? $parameters["c_config_admin_password"] : 'demo' ?>" name="c_config_admin_password" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_config_admin_password"]) ? $parameters["c_config_admin_password"] : 'demo' ?>" name="c_config_admin_password" required="required" />
             </div>
 
             <div class="span6">
 
                 <label><?php echo $language["step6_admin_password_repeat"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_config_admin_password2"]) ? $parameters["c_config_admin_password2"] : 'demo' ?>" name="c_config_admin_password2" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_config_admin_password2"]) ? $parameters["c_config_admin_password2"] : 'demo' ?>" name="c_config_admin_password2" required="required" />
             </div>
         </div>
 

@@ -29,14 +29,14 @@ if (!defined("installer")) {
                 <label><?php echo $language["step3_field_port"];?></label>
                 <input type="text" value="<?php echo isset($parameters["c_database_port"]) ? $parameters["c_database_port"] : '3306' ?>" name="c_database_port" required="required" />
 
-                <label><?php echo $language["step3_field_socket"];?></label>
+                <label class="allowBlank"><?php echo $language["step3_field_socket"];?></label>
                 <input type="text" value="<?php echo isset($parameters["c_database_socket"]) ? $parameters["c_database_socket"] : '' ?>" name="c_database_socket" class="allowBlank" />
 
                 <label><?php echo $language["step3_field_user"];?></label>
                 <input type="text" value="<?php echo isset($parameters["c_database_user"]) ? $parameters["c_database_user"] : '' ?>" name="c_database_user" required="required" />
 
                 <label><?php echo $language["step3_field_password"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" required="required" />
 
                 <label><?php echo $language["step3_field_database"];?></label>
                 <input type="text" value="<?php echo isset($parameters["c_database_schema"]) ? $parameters["c_database_schema"] : '' ?>" name="c_database_schema" required="required" />
