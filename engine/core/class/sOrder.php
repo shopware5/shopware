@@ -440,14 +440,10 @@ class sOrder
 
         $this->sShippingData["AmountNumeric"] = $this->sShippingData["AmountNumeric"] ? $this->sShippingData["AmountNumeric"] : "0";
 
-        if (strlen($this->bookingId)>3) {
-            $insertOrder = $this->db->fetchRow("
-            SELECT id FROM s_order WHERE transactionID=? AND status != -1
-            ",array($this->bookingId));
-            if ($insertOrder["id"]) {
-                return false;
-            }
+        if ($this->isTransactionExist($this->bookingId)) {
+            return false;
         }
+
         // Insert basic-data of the order
         $orderNumber = $this->sGetOrderNumber();
         $this->sOrderNumber = $orderNumber;
@@ -805,6 +801,26 @@ class sOrder
         return $orderNumber;
     } // End public function Order
 
+
+    /**
+     * Checks if the passed transaction id is already set as transaction id of an
+     * existing order.
+     * @param $transactionId
+     * @return bool
+     */
+    private function isTransactionExist($transactionId)
+    {
+        if (strlen($transactionId) <= 3) {
+            return false;
+        }
+
+        $insertOrder = $this->db->fetchRow(
+            "SELECT id FROM s_order WHERE transactionID = ? AND status != -1",
+            array($transactionId)
+        );
+
+        return !empty($insertOrder["id"]);
+    }
 
     /**
      * send order confirmation mail
