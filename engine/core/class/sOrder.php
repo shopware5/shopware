@@ -649,12 +649,9 @@ class sOrder
             $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
             $this->db->executeUpdate($attributeSql);
 
-            // add attributes
-            $sql = 'SELECT * FROM s_order_details_attributes WHERE detailID = :detailID;';
-            $attributes = $this->db->fetchRow($sql, array('detailID' => $orderdetailsID));
+            $attributes = $this->getOrderDetailAttributes($orderdetailsID);
             unset($attributes['id']);
             unset($attributes['detailID']);
-            $orderDetail['attributes'] = $attributes;
             $this->sBasketData['content'][$key]['attributes'] = $attributes;
 
             // Update sales and stock
@@ -752,6 +749,20 @@ class sOrder
         return $orderNumber;
     } // End public function Order
 
+    /**
+     * Helper function which returns the attribute data of the passed order position.
+     *
+     * @param $detailId
+     * @return mixed
+     */
+    private function getOrderDetailAttributes($detailId)
+    {
+        $attributes = $this->db->fetchRow(
+            'SELECT * FROM s_order_details_attributes WHERE detailID = :detailID;',
+            array('detailID' => $detailId)
+        );
+        return $attributes;
+    }
 
     /**
      * Checks if the passed transaction id is already set as transaction id of an
