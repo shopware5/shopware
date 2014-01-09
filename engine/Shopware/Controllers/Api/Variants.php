@@ -58,6 +58,51 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $this->View()->assign('success', true);
     }
 
+    /**
+     * Create new variant
+     *
+     * POST /api/variants
+     */
+    public function postAction()
+    {
+        $article = $this->resource->create($this->Request()->getPost());
+
+        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $data = array(
+            'id'       => $article->getId(),
+            'location' => $location
+        );
+
+        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->Response()->setHeader('Location', $location);
+    }
+
+    /**
+     * Update variant
+     *
+     * PUT /api/variants/{id}
+     */
+    public function putAction()
+    {
+        $id = $this->Request()->getParam('id');
+        $params = $this->Request()->getPost();
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+
+        if ($useNumberAsId) {
+            $article = $this->resource->updateByNumber($id, $params);
+        } else {
+            $article = $this->resource->update($id, $params);
+        }
+
+        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $data = array(
+            'id'       => $article->getId(),
+            'location' => $location
+        );
+
+        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->Response()->setHeader('Location', $location);
+    }
 
     /**
      * Delete a given variant
