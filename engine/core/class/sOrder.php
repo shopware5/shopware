@@ -322,9 +322,10 @@ class sOrder
         if (!$this->sShippingcostsNumeric) $this->sShippingcostsNumeric = "0";
         if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
 
-        $taxId = $this->sSYSTEM->sUSERGROUPDATA["tax"];
-        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
-        if ($this->isTaxFree($taxId, $customerGroupId)) {
+        if ($this->isTaxFree(
+            $this->sSYSTEM->sUSERGROUPDATA["tax"],
+            $this->sSYSTEM->sUSERGROUPDATA["id"])
+        ) {
             $net = "1";
         } else {
             $net = "0";
@@ -453,9 +454,10 @@ class sOrder
 
         if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
 
-        $taxId = $this->sSYSTEM->sUSERGROUPDATA["tax"];
-        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
-        if ($this->isTaxFree($taxId, $customerGroupId)) {
+        if ($this->isTaxFree(
+                $this->sSYSTEM->sUSERGROUPDATA["tax"],
+                $this->sSYSTEM->sUSERGROUPDATA["id"])
+        ) {
             $net = "1";
         } else {
             $net = "0";
@@ -565,20 +567,7 @@ class sOrder
         foreach ($this->sBasketData["content"] as $key => $basketRow) {
             $position++;
 
-            if (!$basketRow["price"]) $basketRow["price"] = "0,00";
-
-            $basketRow["articlename"] = str_replace("<br />","\n",$basketRow["articlename"]);
-            $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
-            $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
-
-            $basketRow["articlename"] = $this->sSYSTEM->sMODULES['sArticles']->sOptimizeText($basketRow["articlename"]);
-
-            if (!$basketRow["esdarticle"]) $basketRow["esdarticle"] = "0";
-            if (!$basketRow["modus"]) $basketRow["modus"] = "0";
-            if (!$basketRow["taxID"]) $basketRow["taxID"] = "0";
-            if ($this->sNet == true) {
-                $basketRow["taxID"] = "0";
-            }
+            $basketRow = $this->formatBasketRow($basketRow);
 
             $sql = "
             INSERT INTO s_order_details
@@ -977,6 +966,34 @@ class sOrder
         }
         return $details;
     }
+
+    /**
+     * Helper function for the sSaveOrder which formats a single
+     * basket row.
+     * This function sets the default for different properties, which
+     * might not be set or invalid.
+     *
+     * @param $basketRow
+     * @return mixed
+     */
+    private function formatBasketRow($basketRow)
+    {
+        $basketRow["articlename"] = str_replace("<br />","\n",$basketRow["articlename"]);
+        $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
+        $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
+        $basketRow["articlename"] = Shopware()->Modules()->Articles()->sOptimizeText(
+            $basketRow["articlename"]
+        );
+
+        if (!$basketRow["price"]) $basketRow["price"] = "0,00";
+        if (!$basketRow["esdarticle"]) $basketRow["esdarticle"] = "0";
+        if (!$basketRow["modus"]) $basketRow["modus"] = "0";
+        if (!$basketRow["taxID"]) $basketRow["taxID"] = "0";
+        if ($this->sNet == true) $basketRow["taxID"] = "0";
+
+        return $basketRow;
+    }
+
 
     /**
      * send order confirmation mail
