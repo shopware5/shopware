@@ -30,6 +30,7 @@ use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 
 /**
  * Abstract API Resource Class
@@ -452,7 +453,7 @@ abstract class Resource
     public function batchDelete($data)
     {
         if (!$this instanceof BatchInterface) {
-            throw new \RuntimeException('BatchInterface is not implemented by this resource');
+            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
         }
 
         $results = array();
@@ -502,7 +503,7 @@ abstract class Resource
     public function batch($data)
     {
         if (!$this instanceof BatchInterface) {
-            throw new \RuntimeException('BatchInterface is not implemented by this resource');
+            throw new BatchInterfaceNotImplementedException('BatchInterface is not implemented by this resource');
         }
 
         $results = array();

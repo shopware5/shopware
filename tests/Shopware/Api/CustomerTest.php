@@ -211,7 +211,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test@foobar.com', $data['email']);
     }
 
-    public function testPutCustomersWithoutIdShouldFail()
+    public function testPutBatchCustomersShouldFail()
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
 
@@ -233,6 +233,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('success', $result);
         $this->assertFalse($result['success']);
+        $this->assertEquals('This resource has no support for batch operations.', $result['message']);
     }
 
     /**
