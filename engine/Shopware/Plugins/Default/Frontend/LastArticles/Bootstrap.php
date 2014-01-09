@@ -145,12 +145,12 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         Shopware()->Session()->sLastArticle = $articleId;
         $sessionId = Shopware()->SessionID();
 
-        if (empty($sessionId) || empty($article['name']) || empty($articleId)) {
+        if (empty($sessionId) || empty($article['articleName']) || empty($articleId)) {
             return;
         }
 
         Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
-            'subject'   => $this,
+            'subject'   => Shopware()->Modules()->Articles(),
             'article'   => $articleId
         ));
 
@@ -162,7 +162,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
         ', array(
             (string) $article['image'],
-            (string) $article['name'],
+            (string) $article['articleName'],
             $articleId,
             $sessionId,
             (int) Shopware()->Session()->sUserId,
