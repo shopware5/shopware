@@ -665,9 +665,10 @@ class sOrder
 
             // Update sales and stock
             if ($basketRow["priceNumeric"] >= 0) {
-                $this->db->executeUpdate("
-                UPDATE s_articles_details SET sales=sales+{$basketRow["quantity"]},instock=instock-{$basketRow["quantity"]}  WHERE ordernumber='{$basketRow["ordernumber"]}'
-                ");
+                $this->refreshOrderedVariant(
+                    $basketRow["ordernumber"],
+                    $basketRow["quantity"]
+                );
             }
 
             $deactivateNoInStock = $this->config->get('sDEACTIVATENOINSTOCK');
@@ -861,6 +862,25 @@ class sOrder
                 array($customerId, $voucherCodeId)
             );
         }
+    }
+
+    /**
+     * This function updates the data for an ordered variant.
+     * The variant sales value will be increased with the passed quantity
+     * and the variant stock value decreased with the passed quantity.
+     *
+     * @param string $orderNumber
+     * @param int $quantity
+     */
+    private function refreshOrderedVariant($orderNumber, $quantity)
+    {
+        $this->db->executeUpdate("
+            UPDATE s_articles_details
+            SET sales = sales + :quantity,
+                instock = instock - :quantity
+            WHERE ordernumber = :number",
+            array(':quantity' => $quantity, ':number' => $orderNumber)
+        );
     }
 
     /**
