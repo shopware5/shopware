@@ -36,7 +36,7 @@ if (!defined("installer")) {
                 <input type="text" value="<?php echo isset($parameters["c_database_user"]) ? $parameters["c_database_user"] : '' ?>" name="c_database_user" required="required" />
 
                 <label><?php echo $language["step3_field_password"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" required="required" />
 
                 <label><?php echo $language["step3_field_database"];?></label>
                 <input type="text" value="<?php echo isset($parameters["c_database_schema"]) ? $parameters["c_database_schema"] : '' ?>" name="c_database_schema" required="required" />
