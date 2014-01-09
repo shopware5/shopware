@@ -192,56 +192,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $builder;
     }
 
-    /**
-     * Returns the query builder to fetch all search terms which are filtered by the parameters
-     *
-     * @param $start
-     * @param $limit
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getConversionRateQueryBuilder($start, $limit)
-    {
-        $shopIds = $this->getSelectedShopIds();
-        $builder = $this->getManager()->getDBALQueryBuilder();
-
-        $builder->select(array(
-            'sv.datum as date',
-            'SUM(sv.uniquevisits) as totalVisits',
-            'COUNT(DISTINCT o.id) AS totalOrders',
-        ))
-        ->from('s_statistics_visitors', 'sv')
-        ->leftJoin('sv', 's_order', 'o', 'DATE(o.ordertime) = sv.datum AND o.status NOT IN (4,-1)')
-        ->where('datum >= :fromDate')
-        ->andWhere('datum <= :toDate')
-        ->groupBy('sv.datum')
-        ->orderBy('sv.datum', 'DESC')
-        ->setFirstResult($start)
-        ->setMaxResults($limit)
-        ->setParameter('fromDate', $this->getFromDate())
-        ->setParameter('toDate', $this->getToDate());
-
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $builder->addSelect("(
-                    SELECT uniquevisits
-                    FROM   s_statistics_visitors
-                    WHERE  shopID = {$shopId}
-                    AND    datum = sv.datum
-                ) as visits{$shopId}");
-
-                $builder->addSelect("(
-                    SELECT COUNT(DISTINCT o2.id)
-                    FROM   s_order as o2
-                    WHERE  o2.subshopID = {$shopId}
-                    AND    DATE(o2.ordertime) = sv.datum
-                    AND    o2.status NOT IN (4,-1)
-                ) as orders{$shopId}");
-            }
-        }
-
-        return $builder;
-    }
-
     private function getOrderDetailQueryBuilder()
     {
         $builder = $this->getManager()->getDBALQueryBuilder();
@@ -328,6 +278,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getOverviewAction()
     {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
             'sv.datum AS date',
@@ -335,6 +288,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'COUNT(o.id) AS orders',
             'o.invoice_amount AS revenue',
             'sv.uniquevisits AS visitors',
+            'SUM(sv.uniquevisits) as totalVisits',
+            'COUNT(DISTINCT o.id) AS totalOrders',
             '(
                 SELECT COUNT(o2.invoice_amount)
                 FROM s_order o2
@@ -344,10 +299,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'COUNT(DISTINCT u.id) AS newCustomers'
         ))
         ->from('s_statistics_visitors', 'sv')
-        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)')
+        ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime)AND o.status NOT IN (4, -1)')
         ->leftJoin('sv', 's_user', 'u', 'u.firstlogin = sv.datum')
         ->where('sv.datum >= :fromDate AND sv.datum <= :toDate')
         ->groupBy('sv.datum')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
         ->setParameter(':fromDate', $this->getFromDate())
         ->setParameter(':toDate', $this->getToDate());
 
@@ -355,6 +312,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $statement = $builder->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+        $shopIds = $this->getSelectedShopIds();
         foreach($data as &$row){
             $row['date'] = strtotime($row['date']);
             $row['revenue'] = (float)($row['revenue']);
@@ -363,6 +321,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $row['visitors'] = (int)($row['visitors']);
             $row['cancelledOrders'] = (int)($row['cancelledOrders']);
             $row['newCustomers'] = (int)($row['newCustomers']);
+            $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    $row['conversion' . $shopId] =  round($row['orders' . $shopId] / $row['visits' . $shopId] * 100, 2);
+                }
+            }
         }
 
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  $statement->rowCount()));
@@ -407,11 +372,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             );
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));
+        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  $statement->rowCount()));
     }
 
     public function getReferrerRevenueAction()
     {
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop->registerResources(Shopware()->Bootstrap());
+
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
             'ROUND(o.invoice_amount / o.currencyFactor, 2) AS revenue',
@@ -429,7 +397,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             '(
                 SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
                 FROM s_order o3
-                WHERE userID = u.id
+                WHERE o3.userID = u.id
                 AND o3.status != 4
                 AND o3.status != -1
             ) as customerRevenue'
@@ -443,48 +411,63 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ->andWhere('o.userID = u.id')
         ->andWhere('o.ordertime >= :fromDate AND o.ordertime <= :toDate')
         ->andWhere("o.referer LIKE 'http%//%'")
+        ->andWhere("o.referer NOT LIKE :hostname")
         ->orderBy('revenue')
         ->setParameter(':fromDate', $this->getFromDate())
-        ->setParameter(':toDate', $this->getToDate());
+        ->setParameter(':toDate', $this->getToDate())
+        ->setParameter(':hostname', '%' . $shop->getHost() . '%');
 
         $statement = $builder->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        echo "<pre>";
-        print_r(\Doctrine\Common\Util\Debug::export($results, 3));
-        echo "</pre>";
-        exit();
 
+        $referrer = array();
+        $customers = array();
+        foreach($results as $result){
+            $url = parse_url($result['referrer']);
+            $host = $url['host'];
 
+            if(!array_key_exists($host, $referrer)){
+                $referrer[$host] = array(
+                    'host' => $host,
+                    'entireRevenue' => 0,
+                    'lead' => 0,
+                    'customerValue' => 0,
+                    'entireNewRevenue' => 0,
+                    'entireOldRevenue' => 0,
+                    'orders' => 0,
+                    'newCustomers' => 0,
+                    'oldCustomers' => 0,
+                    'perNewRevenue' => 0,
+                    'perOldRevenue' => 0
+                );
+            }
 
-//        $data = array(
-//            'host' => 'google.de',
-//            'entireRevenue' => 10000,
-//            'lead' => 200,
-//            'customerValue' => 300,
-//            'entireNewRevenue' => 7500,
-//            'entireOldRevenue' => 2500,
-//            'orders' => 100,
-//            'newCustomers' => 75,
-//            'oldCustomers' => 25,
-//            'perNewRevenue' => 100,
-//            'perOldRevenue' => 100
-//        );
+            if(!in_array($result['userID'], $customers)){
+                if(strtotime($result['orderTime']) - strtotime($result['firstLogin']) < 60 * 60 * 24){
+                    $referrer[$host]['entireNewRevenue'] += $result['revenue'];
+                    $referrer[$host]['newCustomers']++;
+                } else {
+                    $referrer[$host]['entireOldRevenue'] += $result['revenue'];
+                    $referrer[$host]['oldCustomers']++;
+                }
 
-//        $data = array(
-//            'Host' => 'google.de',
-//            'Umsatz' => 10000,
-//            'Umsatz/Bestellungen' => 200,
-//            'Kundenwert' => 300,
-//            'Umsatz Neukunden' => 7500,
-//            'Umsatz Altkunden' => 2500,
-//            'Bestellungen' => 100,
-//            'Neukunden' => 75,
-//            'Altkunden' => 25,
-//            'perNewRevenue' => 100,
-//            'perOldRevenue' => 100
-//        );
+                $referrer[$host]['customerRevenue'] += $result['revenue'];
+            }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' =>  1));
+            $referrer[$host]['entireRevenue'] += $result['revenue'];
+            $referrer[$host]['orders']++;
+        }
+
+        foreach($referrer as &$ref){
+            $ref['lead'] = round($ref['entireRevenue'] / $ref['orders'], 2);
+            $ref['perNewRevenue'] = round($ref['entireNewRevenue'] / $ref['newCustomers'], 2);
+            $ref['perOldRevenue'] = round($ref['entireOldRevenue'] / $ref['oldCustomers'], 2);
+            $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
+        }
+
+        $referrer = array_values($referrer);
+
+        $this->View()->assign(array('success' => true, 'data' => $referrer, 'totalCount' =>  count($referrer)));
     }
 
     public function getMonthAction()
@@ -600,30 +583,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(array('success' => true, 'data' => $this->formatOrderAnalyticsData($data), 'total' => $statement->rowCount()));
-    }
-
-    public function getConversionRateAction()
-    {
-        $start = (int) $this->Request()->getParam('start', 0);
-        $limit = (int) $this->Request()->getParam('limit', 25);
-
-        $shopIds= $this->getSelectedShopIds();
-
-        $builder = $this->getConversionRateQueryBuilder($start, $limit);
-        $statement = $builder->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($data as &$row){
-            $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
-
-            if(!empty($shopIds)){
-                foreach($shopIds as $shopId){
-                    $row['conversion' . $shopId] =  round($row['orders' . $shopId] / $row['visits' . $shopId] * 100, 2);
-                }
-            }
-        }
-
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $statement->rowCount()));
     }
 
     public function getVendorsAction()

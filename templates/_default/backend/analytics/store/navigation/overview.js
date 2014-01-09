@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
         'orders',
         'revenue',
         'cancelledOrders',
+        'totalConversion',
         'newCustomers',
         'visitors',
         'clicks'
