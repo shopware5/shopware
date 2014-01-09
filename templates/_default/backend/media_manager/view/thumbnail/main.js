@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
             cancel: '{s name=thumbnail/batch/cancel}Cancel process{/s}',
             start: '{s name=thumbnail/batch/start}Start process{/s}',
             close: '{s name=thumbnail/batch/close}Close window{/s}',
-            process: '{s name=thumbnail/batch/thumbnails}[0] of [1] thumbnails{/s}'
+            process: '{s name=thumbnail/batch/thumbnails}Creating thumbnails for [0]/[1] images{/s}'
         }
     },
 

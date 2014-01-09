@@ -424,7 +424,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         model.save({
             callback: function () {
                 if (thumbChanged) {
-                    Ext.Msg.confirm('Title', 'Es wurden neue Thumbnailgrößen erstellt. Wollen Sie diese nun generieren?', function (btn) {
+                    Ext.Msg.confirm('Title', '{s name=settings/generateNewSizes}Es wurden neue Thumbnailgrößen definiert. Wollen Sie diese nun generieren?{/s}', function (btn) {
                         if (btn !== 'yes') {
                             return false;
                         }
@@ -486,7 +486,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             thumbChanged = me.handleAlbumModelData(model, window);
 
         if (thumbChanged) {
-            Ext.Msg.confirm('Title', 'The Album has to be saved first. Save Album?', function (btn) {
+            Ext.Msg.confirm('Title', '{s name=settings/saveBeforeGeneration}The album must first be saved. Save album now?{/s}', function (btn) {
                 if (btn !== 'yes') {
                     return false;
                 }
