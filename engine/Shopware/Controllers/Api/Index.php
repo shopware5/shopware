@@ -136,6 +136,17 @@ class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
             return;
         }
 
+        if ($exception instanceof ApiException\BatchInterfaceNotImplementedException) {
+            $this->Response()->setHttpResponseCode(405);
+            $this->View()->assign(array(
+                'success' => false,
+                'code'    => 405,
+                'message' => 'This resource has no support for batch operations.'
+            ));
+
+            return;
+        }
+
         $this->Response()->setHttpResponseCode(500);
         $debug = true;
         if ($debug) {
