@@ -118,13 +118,6 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             iconCls: 'sprite-toolbox',
             leaf: true
         }, {
-            id: 'conversion',
-            text: '{s name=nav/rating/orderConversion}Order conversion rate{/s}',
-            store: 'analytics-store-navigation-conversion',
-            iconCls: 'sprite-newspapers',
-            comparable: true,
-            leaf: true
-        }, {
             id: 'search',
             text: '{s name=nav/search}Popular search terms{/s}',
             store: 'analytics-store-navigation-search',
