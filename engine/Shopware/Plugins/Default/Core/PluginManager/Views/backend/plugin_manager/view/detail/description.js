@@ -182,7 +182,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Description', {
             attributes = me.article.getAttributeStore.first().data,
             categoryNames = me.getCategoryNames(me.article.getCategoryStore),
             date = me.article.data.datum,
-            formatted = Ext.Date.format(date, 'd.m.Y');
+            formatted = Ext.util.Format.date(date);
 
         var metaData = '<p><strong>'+me.snippets.category+':</strong>' + categoryNames +'</p>' +
            '<p><strong>'+me.snippets.supplier+':</strong>' + me.article.get('supplierName') + '</p>' +
