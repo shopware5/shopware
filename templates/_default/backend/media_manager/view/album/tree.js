@@ -392,7 +392,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
      * @return void
      */
     initializeTreeDropZone: function(view) {
-        var treeView = this.view;
+        var treeView = this.view,
+            win = view.up('window'),
+            mediaView = win.down('mediamanager-media-view');
 
         view.dropZone = Ext.create('Ext.dd.DropZone', view.getEl(), {
             ddGroup: 'media-tree-dd',
@@ -402,7 +404,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
             onNodeDrop : function(target, dd, e, data) {
                 var node = treeView.getRecord(target),
-                    models = data.mediaModels, store;
+                    models = data.mediaModels,
+                    store,
+                    loadMask = new Ext.LoadMask(mediaView).show();
 
                 // The event was fired from the list view
                 if(!models) {
@@ -415,6 +419,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 });
                 store.sync({
                     callback: function(){
+                        loadMask.hide();
                         store.load();
                         view.fireEvent('reload');
                     }

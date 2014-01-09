@@ -38,7 +38,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
 
     snippets: {
         errorTitle: '{s name=error/title}Error{/s}',
-        errorMessage: '{s name=thumbnail/batch/error_message}An error has occurred while generating the item variants:{/s}'
+        errorMessage: '{s name=thumbnail/batch/error_message}An error has occurred while generating the item thumbnails:{/s}',
+        finished: '{s name=thumbnail/batch/finished}Finished{/s}'
     },
 
     refs: [
@@ -256,6 +257,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
 
             me.errors = [];
         }
+
+        me.batchConfig.progress.updateText(me.snippets.finished);
 
         win.cancelButton.hide();
         win.closeButton.enable();

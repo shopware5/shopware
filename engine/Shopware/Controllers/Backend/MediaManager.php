@@ -120,6 +120,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $builder->select(array('album'))
                 ->from('Shopware\Models\Media\Album', 'album')
                 ->where('album.parentId IS NULL')
+                ->orWhere('album.parentId = 0')
                 ->orderBy('album.position', 'ASC');
 
         if (!empty($albumId)) {
@@ -576,6 +577,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->persist($media);
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
+
+            if($media->getType() === Media::TYPE_IMAGE){
+                $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+                $defaultSizes = $media->getDefaultThumbnails();
+                $defaultSize = $defaultSizes[0][0] . 'x' . $defaultSizes[0][1];
+
+                $manager->createMediaThumbnail($media, array($defaultSize), true);
+            }
+
             $this->Response()->setHeader('Content-Type', 'text/plain');
 
             die(json_encode(array('success' => true, 'data' => $data[0])));

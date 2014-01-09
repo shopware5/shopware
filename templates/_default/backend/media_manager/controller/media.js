@@ -286,7 +286,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             store = me.getStore('Media'),
             view = me.getMediaView(),
             cardContainer = view.cardContainer,
-            selModel, selected;
+            selModel, selected,
+            loadingMask = new Ext.LoadMask(view).show();
 
         if(view.selectedLayout === 'grid') {
             view = view.dataView;
@@ -302,6 +303,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         store.getProxy().batchActions = false;
         store.sync({
             callback : function() {
+                loadingMask.hide();
                 store.load({
                     callback: function() {
                         rootNode.removeAll(false);
