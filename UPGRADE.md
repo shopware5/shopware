@@ -1,5 +1,5 @@
 # Shopware Upgrade Information
-In this document you will find a changelog of the important changes related to the code base of shopware.
+In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.2.0
 
@@ -14,6 +14,7 @@ In this document you will find a changelog of the important changes related to t
 * `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
 * Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
 * Update Zend Framework to version 1.12.3 (latest stable)
+* Deprecation: Several unused Zend Framework components and classes are now deprecated. Refer to the full upgrade guide for details
 * Break: Custom article attributes of type `Time` are now always saved using the german format. Only affects values inserted in non-german backends
 * Removed the sSetLastArticle in sArticles.php. Was deprecated through setLastArticleById in the Shopware_Plugins_Frontend_LastArticles_Bootstrap plugin.
 * Implement new options in the article resource. "considerTaxInput" allows to get the variant prices considering the article tax. "language" allows to get a whole translated article array. The "language" parameter can contain a sub shop id or a language iso like en_GB.
