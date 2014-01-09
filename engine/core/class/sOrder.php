@@ -557,15 +557,9 @@ class sOrder
         $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterSQL', $attributeSql, array('subject'=>$this));
         $this->db->executeUpdate($attributeSql);
 
-        // add attributes to order
-        $sql = 'SELECT * FROM s_order_attributes WHERE orderID = :orderId;';
-        $attributes = $this->db->fetchRow($sql, array('orderId' => $orderID));
+        $attributes = $this->getOrderAttributes($orderID);
         unset($attributes['id']);
         unset($attributes['orderID']);
-        $orderAttributes = $attributes;
-
-        $orderDay = date("d.m.Y");
-        $orderTime = date("H:i");
 
         $position = 0;
         foreach ($this->sBasketData["content"] as $key => $basketRow) {
@@ -708,9 +702,6 @@ class sOrder
 
         $this->sUserData["additional"]["payment"]["description"] = html_entity_decode($this->sUserData["additional"]["payment"]["description"]);
 
-
-
-
         $sOrderDetails = array();
         foreach ($this->sBasketData["content"] as $content) {
             $content["articlename"] = trim(html_entity_decode($content["articlename"]));
@@ -736,10 +727,10 @@ class sOrder
             "sAmount"=>$this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax)." ".$this->sSYSTEM->sCurrency["currency"] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount)." ".$this->sSYSTEM->sCurrency["currency"],
             "sAmountNet"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData["AmountNetNumeric"])." ".$this->sSYSTEM->sCurrency["currency"],
             "ordernumber"=>$orderNumber,
-            "sOrderDay"=>$orderDay,
-            "sOrderTime"=>$orderTime,
+            "sOrderDay" => date("d.m.Y"),
+            "sOrderTime" => date("H:i"),
             "sComment"=>$this->sComment,
-            'attributes' => $orderAttributes,
+            'attributes' => $attributes,
             "sEsd"=>$esdOrder
         );
 
@@ -753,7 +744,6 @@ class sOrder
         // Save Billing and Shipping-Address to retrace in future
         $this->sSaveBillingAddress($this->sUserData["billingaddress"],$orderID);
         $this->sSaveShippingAddress($this->sUserData["shippingaddress"],$orderID);
-
 
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
@@ -874,7 +864,6 @@ class sOrder
         );
     }
 
-
     /**
      * Helper function which checks if the passed article is out of stock and
      * deactivates it if the config flag sDeactivateNoInStock is set to true
@@ -900,7 +889,6 @@ class sOrder
             $this->deactivateVariant($orderNumber);
         }
     }
-
 
     /**
      * Helper function which deactivates the variant for the passed
@@ -947,6 +935,21 @@ class sOrder
         return ($stock <= 0);
     }
 
+    /**
+     * Helper function which returns the attributes
+     * of the passed order id.
+     *
+     * @param $orderId
+     * @return array|null
+     */
+    private function getOrderAttributes($orderId)
+    {
+        $attributes = $this->db->fetchRow(
+            'SELECT * FROM s_order_attributes WHERE orderID = :orderId;',
+            array('orderId' => $orderId)
+        );
+        return $attributes;
+    }
 
     /**
      * send order confirmation mail
