@@ -240,10 +240,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $images = array();
-
         /** @var $media \Shopware\Models\Media\Media */
-        foreach($mediaList as $media){
+        foreach($mediaList as &$media){
             if($media['type'] !== Media::TYPE_IMAGE){
                 continue;
             }
@@ -256,11 +254,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $media['width'] = $size[0];
                 $media['height'] = $size[1];
             }
-
-            $images[] = $media;
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $images, 'total' => $totalResult));
+        $this->View()->assign(array('success' => true, 'data' => $mediaList, 'total' => $totalResult));
     }
 
     /**
