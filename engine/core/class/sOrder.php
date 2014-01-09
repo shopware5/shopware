@@ -26,7 +26,8 @@
  * Deprecated Shopware Class that handle frontend orders
  */
 class sOrder
-{	/**
+{
+    /**
      * Array with userdata
      *
      * @var array
@@ -364,7 +365,7 @@ class sOrder
             'invoice_amount_net' => $this->sBasketData["AmountNetNumeric"],
             'invoice_shipping' => $this->sShippingcostsNumeric,
             'invoice_shipping_net' => $this->sShippingcostsNumericNet,
-            'ordertime' => 'now()',
+            'ordertime' => new Zend_Db_Expr('NOW()'),
             'status' => -1,
             'paymentID' => $this->sUserData["additional"]["user"]["paymentID"],
             'customercomment' => $this->sComment,
@@ -486,7 +487,7 @@ class sOrder
             $taxfree = "1";
         }
 
-        $partner = $this->getPartnerId(
+        $partner = $this->getPartnerCode(
             $this->sUserData["additional"]["user"]["affiliate"]
         );
 
@@ -781,7 +782,7 @@ class sOrder
      * @param int $userAffiliate affiliate flag of the user data.
      * @return null|string
      */
-    private function getPartnerId($userAffiliate)
+    private function getPartnerCode($userAffiliate)
     {
         $isPartner = $this->session->offsetGet("sPartner");
         if (!empty($isPartner)) {
@@ -824,8 +825,8 @@ class sOrder
 
     /**
      * This function updates the data for an ordered variant.
-     * The variant sales value will be increased with the passed quantity
-     * and the variant stock value decreased with the passed quantity.
+     * The variant sales value will be increased by the passed quantity
+     * and the variant stock value decreased by the passed quantity.
      *
      * @param string $orderNumber
      * @param int $quantity
@@ -849,7 +850,6 @@ class sOrder
      * @param $orderNumber
      * @param $articleId
      * @param $lastStock
-     * @return bool
      */
     private function refreshLastStockArticle($orderNumber, $articleId, $lastStock)
     {
@@ -965,7 +965,6 @@ class sOrder
      */
     private function getUserDataForMail($userData)
     {
-        // Assign variables
         foreach ($userData["billingaddress"] as $key => $value) {
             $userData["billingaddress"][$key] = html_entity_decode($value);
         }
