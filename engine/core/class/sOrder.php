@@ -75,20 +75,21 @@ class sOrder
      * @var double
      */
     public $sAmountWithTax;
+
     /**
-     * Shipppingcosts
+     * Shipping costs
      *
      * @var double
      */
     public $sShippingcosts;
     /**
-     * Shippingcosts unformated
+     * Shipping costs unformated
      *
      * @var double
      */
     public $sShippingcostsNumeric;
     /**
-     * Shippingcosts net unformated
+     * Shipping costs net unformated
      *
      * @var double
      */
@@ -184,24 +185,24 @@ class sOrder
     }
 
     /**
-     * Get a unique ordernumber
+     * Get a unique order number
      * @access public
-     * @return string ordernumber
+     * @return string The reserved order number
      */
     public function sGetOrderNumber()
     {
         $sql = "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE";
-        $ordernumber = $this->db->fetchOne($sql);
+        $number = $this->db->fetchOne($sql);
         $sql = "UPDATE s_order_number SET number=number+1 WHERE name='invoice'";
         $this->db->executeUpdate($sql);
-        $ordernumber += 1;
+        $number += 1;
 
-        $ordernumber = $this->eventManager->filter('Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber', $ordernumber, array('subject'=>$this));
-        return $ordernumber;
+        $number = $this->eventManager->filter('Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber', $number, array('subject'=>$this));
+        return $number;
     }
 
     /**
-     * Check each basketrow for instant downloads
+     * Check each basket row for instant downloads
      * @access public
      */
     public function sManageEsdOrder(&$basketRow, $orderID, $orderdetailsID)
@@ -224,14 +225,14 @@ class sOrder
         }
 
         if (!$esdArticle["serials"]) {
-            // No serialnumber is needed
+            // No serial number is needed
             $this->db->insert('s_order_esd', array(
                 'serialID' => 0,
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
                 'orderdetailsID' => $orderdetailsID,
-                'datum' => 'now()'
+                'datum' => new Zend_Db_Expr('NOW()'),
             ));
             return;
         }
@@ -269,7 +270,7 @@ class sOrder
         // Check if enough serials are available, if not, an email has been sent
         if (count($availableSerials) >= $quantity) {
             for ($i = 1; $i <= $quantity; $i++) {
-                // Assign serialnumber
+                // Assign serial number
                 $serialId = $availableSerials[$i-1]["id"];
 
                 // Update basketrow
@@ -281,7 +282,7 @@ class sOrder
                     'userID' => $this->sUserData["additional"]["user"]["id"],
                     'orderID' => $orderID,
                     'orderdetailsID' => $orderdetailsID,
-                    'datum' => 'now()'
+                    'datum' => new Zend_Db_Expr('NOW()'),
                 ));
             }
         }
@@ -428,7 +429,7 @@ class sOrder
                 throw new Enlight_Exception("##sOrder-sTemporaryOrder-Position-#02:" . $e->getMessage(), 0, $e);
             }
 
-        } // For every artice in basket
+        } // For every article in basket
         return;
     }
 
@@ -658,7 +659,7 @@ class sOrder
                 $basketRow["laststock"]
             );
 
-            // For esd-articles, assign serialnumber if needed
+            // For esd-articles, assign serial number if needed
             // Check if this article is esd-only (check in variants, too -> later)
             if ($basketRow["esdarticle"]) {
                 $this->sManageEsdOrder($basketRow, $orderID, $orderdetailsID);
@@ -669,7 +670,7 @@ class sOrder
                 }
             }
 
-        } // For every artice in basket
+        } // For every article in basket
 
         $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', array(
             'subject' => $this,
@@ -726,7 +727,7 @@ class sOrder
         }
 
         return $orderNumber;
-    } // End public function Order
+    }
 
     /**
      * Helper function which returns the attribute data of the passed order position.
@@ -1045,7 +1046,7 @@ class sOrder
 
         );
 
-        // Support for individual paymentmeans with custom-tables
+        // Support for individual payment means with custom-tables
         if ($variables["additional"]["payment"]["table"]) {
             $paymentTable = $this->db->fetchRow("
             SELECT * FROM {$variables["additional"]["payment"]["table"]}
@@ -1287,51 +1288,6 @@ class sOrder
         return $result;
     }
 
-    /**
-     * smarty modifier fill
-     */
-    public function smarty_modifier_fill($str, $width=10, $break="...", $fill=" ")
-    {
-        if(!is_scalar($break))
-        $break = "...";
-        if(empty($fill)||!is_scalar($fill))
-        $fill = " ";
-        if(empty($width)||!is_numeric($width))
-        $width = 10;
-        else
-        $width = (int) $width;
-        if(!is_scalar($str))
-        return str_repeat($fill,$width);
-        if(strlen($str)>$width)
-        $str = substr($str,0,$width-strlen($break)).$break;
-        if($width>strlen($str))
-        return $str.str_repeat($fill,$width-strlen($str));
-        else
-        return $str;
-    }
-
-    /**
-     * smarty modifier padding
-     */
-    public function smarty_modifier_padding($str, $width=10, $break="...", $fill=" ")
-    {
-        if(!is_scalar($break))
-        $break = "...";
-        if(empty($fill)||!is_scalar($fill))
-        $fill = " ";
-        if(empty($width)||!is_numeric($width))
-        $width = 10;
-        else
-        $width = (int) $width;
-        if(!is_scalar($str))
-        return str_repeat($fill,$width);
-        if(strlen($str)>$width)
-        $str = substr($str,0,$width-strlen($break)).$break;
-        if($width>strlen($str))
-        return str_repeat($fill,$width-strlen($str)).$str;
-        else
-        return $str;
-    }
 
     /**
      * Check if this order could be refered to a previous recommendation
@@ -1346,32 +1302,28 @@ class sOrder
         ";
         $checkIfUserFound = $this->db->fetchRow($tmpSQL, array($checkMail));
         if (count($checkIfUserFound)) {
-            // User-Datensatz aktualisieren
             $this->db->executeUpdate("
             UPDATE s_emarketing_tellafriend SET confirmed=1 WHERE recipient=?
             ",array($checkMail));
-            // --
 
-            // Daten �ber Werber fetchen
-            $getWerberInfo = $this->db->fetchRow("
+            $advertiser = $this->db->fetchRow("
             SELECT email, firstname, lastname FROM s_user, s_user_billingaddress
             WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
             ",array($checkIfUserFound["sender"]));
 
-            if (empty($getWerberInfo)) {
-                // Benutzer nicht mehr vorhanden
+            if (empty($advertiser)) {
                 return;
             }
 
             $context = array(
-                'customer'     => $getWerberInfo["firstname"] . " " . $getWerberInfo["lastname"],
+                'customer'     => $advertiser["firstname"] . " " . $advertiser["lastname"],
                 'user'         => $this->sUserData["billingaddress"]["firstname"] . " " . $this->sUserData["billingaddress"]["lastname"],
                 'voucherValue' => $this->config->get('sVOUCHERTELLFRIENDVALUE'),
                 'voucherCode'  => $this->config->get('sVOUCHERTELLFRIENDCODE')
             );
 
             $mail = Shopware()->TemplateMail()->createMail('sVOUCHER', $context);
-            $mail->addTo($getWerberInfo["email"]);
+            $mail->addTo($advertiser["email"]);
             $mail->send();
         } // - if user found
     } // Tell-a-friend
@@ -1418,7 +1370,6 @@ class sOrder
             return;
         }
 
-        //todo@all replace this with the new sw api
         $order = Shopware()->Api()->Export()->sGetOrders(array('orderID' => $orderId));
         $order = current($order);
 
