@@ -41,6 +41,7 @@ class Front
      *
      * @param Container $container
      * @param \Shopware_Bootstrap $bootstrap
+     * @param \Enlight_Event_EventManager $eventManager
      * @param array $options
      * @throws \Exception
      * @return \Enlight_Controller_Front
@@ -67,11 +68,8 @@ class Front
 
         $front->setParam('bootstrap', $bootstrap);
 
-        if (!empty($config['throwExceptions'])) {
-            $front->throwExceptions(true);
-        }
-        if (!empty($config['returnResponse'])) {
-            $front->returnResponse(true);
+        if (!empty($options['throwExceptions'])) {
+            $front->throwExceptions((bool) $options['throwExceptions']);
         }
 
         try {

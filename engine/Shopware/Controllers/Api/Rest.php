@@ -31,7 +31,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        $this->Front()->throwExceptions(false);
 
         // todo@bc set url in shopware specific way
         $serverUrlHelper = new Zend_View_Helper_ServerUrl();
