@@ -3,6 +3,10 @@ RewriteEngine on
 
 #RewriteBase /shopware/
 
+# Https config for the backend
+#RewriteCond %{HTTPS} !=on
+#RewriteRule backend/(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule shopware.dll shopware.php
 RewriteRule files/documents/.* engine [NC,L]
 RewriteRule backend/media/(.*) media/$1 [NC,L]
