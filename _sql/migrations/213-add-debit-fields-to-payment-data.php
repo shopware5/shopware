@@ -1,5 +1,5 @@
 <?php
-class Migrations_Migration211 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration213 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up()
     {
@@ -20,6 +20,14 @@ class Migrations_Migration211 Extends Shopware\Components\Migrations\AbstractMig
         UPDATE s_core_snippets
         SET namespace = 'frontend/plugins/payment/sepaemail'
         WHERE namespace = 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/sepa/email';
+
+        INSERT IGNORE INTO `s_core_payment_instance` (order_id, amount, account_number, bank_code, bank_name, account_holder, payment_mean_id)
+        SELECT s_order.id as order_id, s_order.invoice_amount_net as amount ,
+        s_user_debit.account as account_number, s_user_debit.bankcode as bank_code,
+        s_user_debit.bankname as bank_name, s_user_debit.bankholder as account_holder,
+        s_order.paymentID as payment_mean_id
+        FROM s_order LEFT JOIN s_user_debit ON s_order.userID = s_user_debit.userID
+        WHERE paymentID = (SELECT id FROM s_core_paymentmeans WHERE name LIKE 'debit') AND s_order.id NOT IN (SELECT DISTINCT(order_id) FROM s_core_payment_instance)
 EOD;
         $this->addSql($sql);
     }

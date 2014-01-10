@@ -39,18 +39,18 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate()
+    public function validate(\Enlight_Controller_Request_Request $request)
     {
-        if (!Shopware()->Front()->Request()->getParam("sDebitAccount")) {
+        if (!$request->getParam("sDebitAccount")) {
             $sErrorFlag["sDebitAccount"] = true;
         }
-        if (!Shopware()->Front()->Request()->getParam("sDebitBankcode")) {
+        if (!$request->getParam("sDebitBankcode")) {
             $sErrorFlag["sDebitBankcode"] = true;
         }
-        if (!Shopware()->Front()->Request()->getParam("sDebitBankName")) {
+        if (!$request->getParam("sDebitBankName")) {
             $sErrorFlag["sDebitBankName"] = true;
         }
-        $bankHolder = Shopware()->Front()->Request()->getParam("sDebitBankHolder");
+        $bankHolder = $request->getParam("sDebitBankHolder");
         if (empty($bankHolder) && isset($bankHolder)) {
             $sErrorFlag["sDebitBankHolder"] = true;
         }
@@ -71,23 +71,18 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function savePaymentData()
+    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
-
-        $lastPayment = $this->getCurrentPaymentDataAsArray();
+        $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
         $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
             getPaymentsQuery(array('name' => 'debit'))->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = array(
-            'account_number' => Shopware()->Front()->Request()->getParam("sDebitAccount"),
-            'bank_code' => Shopware()->Front()->Request()->getParam("sDebitBankcode"),
-            'bankname' => Shopware()->Front()->Request()->getParam("sDebitBankName"),
-            'account_holder' => Shopware()->Front()->Request()->getParam("sDebitBankHolder")
+            'account_number' => $request->getParam("sDebitAccount"),
+            'bank_code' => $request->getParam("sDebitBankcode"),
+            'bankname' => $request->getParam("sDebitBankName"),
+            'account_holder' => $request->getParam("sDebitBankHolder")
         );
 
         if (!$lastPayment) {
@@ -113,14 +108,14 @@ class DebitPaymentMethod extends GenericPaymentMethod
          * It updates the s_user_debit (deprecated) table with the submited data
          */
         $data = array(
-            Shopware()->Front()->Request()->getParam("sDebitAccount"),
-            Shopware()->Front()->Request()->getParam("sDebitBankcode"),
-            Shopware()->Front()->Request()->getParam("sDebitBankName"),
-            Shopware()->Front()->Request()->getParam("sDebitBankHolder"),
+            $request->getParam("sDebitAccount"),
+            $request->getParam("sDebitBankcode"),
+            $request->getParam("sDebitBankName"),
+            $request->getParam("sDebitBankHolder"),
             $userId
         );
 
-        if ($this->getData()) {
+        if ($this->getData($userId)) {
             $sql = "UPDATE s_user_debit SET account=?, bankcode=?, bankname=?, bankholder=?
                 WHERE userID = ?";
         } else {
@@ -134,13 +129,8 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentDataAsArray()
+    public function getCurrentPaymentDataAsArray($userId)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
-
         $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
             ->getCurrentPaymentDataQueryBuilder($userId, 'debit')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
@@ -159,7 +149,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
          * This code is provided as a temporary "bridge" between old and new tables
          * It can be safely removed after s_user_debit is removed
          */
-        $rawData = $this->getData();
+        $rawData = $this->getData($userId);
         if (!$rawData) {
             return array();
         }
@@ -184,15 +174,10 @@ class DebitPaymentMethod extends GenericPaymentMethod
     }
 
     /**
-     * @inheritdoc
+     * @Deprecated
      */
-    public function getData()
+    public function getData($userId)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
-
         $getData = Shopware()->Db()->fetchRow(
             "SELECT account AS sDebitAccount, bankcode AS sDebitBankcode, bankname AS sDebitBankName, bankholder AS sDebitBankHolder
               FROM s_user_debit
@@ -218,7 +203,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
             getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-        $debitData = $this->getCurrentPaymentDataAsArray();
+        $debitData = $this->getCurrentPaymentDataAsArray($userId);
 
         $date = new \DateTime();
         $data = array(
