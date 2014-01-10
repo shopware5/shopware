@@ -38,7 +38,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate()
+    public function validate(\Enlight_Controller_Request_Request $request)
     {
         return array();
     }
@@ -46,7 +46,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function savePaymentData()
+    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
         //nothing to do, no return expected
         return;
@@ -55,7 +55,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentDataAsArray()
+    public function getCurrentPaymentDataAsArray($userId)
     {
         //nothing to do, array expected
         return array();

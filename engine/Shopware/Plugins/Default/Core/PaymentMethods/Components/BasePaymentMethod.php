@@ -37,26 +37,30 @@ abstract class BasePaymentMethod
     /**
      * Validates the input received from the client
      *
+     * @param \Enlight_Controller_Request_Request $request The Request object
      * @return array List of fields containing errors
      */
-    abstract public function validate();
+    abstract public function validate(\Enlight_Controller_Request_Request $request);
 
     /**
      * Called when the customer edits his payment data.
      * Creates/updates the payment information for the current
      * method.
      *
+     * @param $userId The user id
+     * @param \Enlight_Controller_Request_Request $request The Request object
      * @return null
      */
-    abstract public function savePaymentData();
+    abstract public function savePaymentData($userId, \Enlight_Controller_Request_Request $request);
 
     /**
      * Fetches the customer's current payment data for this
      * payment method as array
      *
+     * @param $userId The user id
      * @return array|null
      */
-    abstract public function getCurrentPaymentDataAsArray();
+    abstract public function getCurrentPaymentDataAsArray($userId);
 
     /**
      * Creates the Payment Instance for the given order
@@ -68,34 +72,4 @@ abstract class BasePaymentMethod
      * @return true|null
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function sInit()
-    {
-        return $this->validate();
-    }
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function sUpdate()
-    {
-        return $this->savePaymentData();
-    }
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function getData()
-    {
-        return $this->getCurrentPaymentDataAsArray();
-    }
 }

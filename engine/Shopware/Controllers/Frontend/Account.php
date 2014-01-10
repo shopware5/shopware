@@ -138,8 +138,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
-        if (getPaymentDetails instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $data = $paymentClass->getCurrentPaymentDataAsArray();
+        if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
             if (!empty($data)) {
                 $this->View()->sFormData += $data;
             }
@@ -500,7 +500,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $this->admin->sUpdatePayment();
 
                 if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-                    $checkData['sPaymentObject']->savePaymentData();
+                    $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
                 }
             }
         }

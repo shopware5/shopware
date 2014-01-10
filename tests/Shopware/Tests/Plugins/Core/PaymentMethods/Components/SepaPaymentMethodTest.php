@@ -56,7 +56,8 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $this->sepaPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod();
     }
 
-    public static function tearDownAfterClass() {
+    public static function tearDownAfterClass()
+    {
         $sepaPaymentMean = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')
             ->findOneByName('Sepa')
@@ -65,14 +66,14 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $paymentData = Shopware()->Models()
             ->getRepository('\Shopware\Models\Customer\PaymentData')
             ->findAll();
-        foreach($paymentData as $payment) {
+        foreach ($paymentData as $payment) {
             Shopware()->Models()->remove($payment);
         }
 
         $paymentInstances = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
             ->findAll();
-        foreach($paymentInstances as $paymentInstance) {
+        foreach ($paymentInstances as $paymentInstance) {
             Shopware()->Models()->remove($paymentInstance);
         }
 
@@ -80,14 +81,13 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         parent::tearDownAfterClass();
     }
 
-    public function testValidateEmptyGet() {
+    public function testValidateEmptyGet()
+    {
         $this->Request()->setMethod('GET');
 
-        Shopware()->Front()->setRequest($this->Request());
-
-        $validationResult = $this->sepaPaymentMethod->validate();
+        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
-        if(count($validationResult)) {
+        if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
             $this->assertArrayHasKey("sSepaIban", $validationResult['sErrorFlag']);
@@ -96,7 +96,8 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         }
     }
 
-    public function testValidateFaultyIban() {
+    public function testValidateFaultyIban()
+    {
         $this->Request()->setMethod('POST');
         $this->Request()->setQuery(array(
             "sSepaIban" => "Some Invalid Iban",
@@ -104,11 +105,9 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             "sSepaBankName" => "Some Valid Bank Name"
         ));
 
-        Shopware()->Front()->setRequest($this->Request());
-
-        $validationResult = $this->sepaPaymentMethod->validate();
+        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
-        if(count($validationResult)) {
+        if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
             $this->assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
@@ -118,7 +117,8 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         }
     }
 
-    public function testValidateCorrectData() {
+    public function testValidateCorrectData()
+    {
         $this->Request()->setMethod('POST');
         $this->Request()->setQuery(array(
             "sSepaIban" => "AL47 2121 1009 0000 0002 3569 8741",
@@ -126,30 +126,24 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             "sSepaBankName" => "Some Valid Bank Name"
         ));
 
-        Shopware()->Front()->setRequest($this->Request());
-
-        $validationResult = $this->sepaPaymentMethod->validate();
+        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
         $this->assertCount(0, $validationResult);
     }
 
-    public function testSavePaymentDataInitialEmptyData() {
-        Shopware()->Session()->sUserId = 1;
+    public function testSavePaymentDataInitialEmptyData()
+    {
+        $this->sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        Shopware()->Front()->setRequest($this->Request());
-
-        $this->sepaPaymentMethod->savePaymentData();
-
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray();
+        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
         $this->assertEquals(null, $lastPayment['sSepaBankName']);
         $this->assertEquals(null, $lastPayment['sSepaBic']);
         $this->assertEquals(null, $lastPayment['sSepaIban']);
         $this->assertEquals(false, $lastPayment['sSepaUseBillingData']);
     }
 
-    public function testSavePaymentDataUpdatePrevious() {
-        Shopware()->Session()->sUserId = 1;
-
+    public function testSavePaymentDataUpdatePrevious()
+    {
         $this->Request()->setQuery(array(
             "sSepaIban" => "AL47 2121 1009 0000 0002 3569 8741",
             "sSepaBic" => "Some Valid Bic",
@@ -158,16 +152,17 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         ));
         Shopware()->Front()->setRequest($this->Request());
 
-        $this->sepaPaymentMethod->savePaymentData();
+        $this->sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray();
+        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
         $this->assertEquals("Some Valid Bank Name", $lastPayment['sSepaBankName']);
         $this->assertEquals("Some Valid Bic", $lastPayment['sSepaBic']);
         $this->assertEquals("AL47212110090000000235698741", $lastPayment['sSepaIban']);
         $this->assertEquals(true, $lastPayment['sSepaUseBillingData']);
     }
 
-    public function testCreatePaymentInstance() {
+    public function testCreatePaymentInstance()
+    {
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;

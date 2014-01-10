@@ -978,7 +978,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
         if ($payment && $paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $data = $paymentClass->getCurrentPaymentDataAsArray();
+            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
             if (!empty($data)) {
                 $payment['data'] = $data;
             }

@@ -37,20 +37,20 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate()
+    public function validate(\Enlight_Controller_Request_Request $request)
     {
         $sErrorFlag = array();
 
-        if (!Shopware()->Front()->Request()->getParam("sSepaIban") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaIban"))) === 0 ) {
+        if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0 ) {
             $sErrorFlag["sSepaIban"] = true;
         }
-        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!Shopware()->Front()->Request()->getParam("sSepaBic") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaBic"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$request->getParam("sSepaBic") || strlen(trim($request->getParam("sSepaBic"))) === 0 )) {
             $sErrorFlag["sSepaBic"] = true;
         }
-        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!Shopware()->Front()->Request()->getParam("sSepaBankName") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaBankName"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0 )) {
             $sErrorFlag["sSepaBankName"] = true;
         }
-        if (Shopware()->Front()->Request()->getParam("sSepaIban") && !$this->validateIBAN(Shopware()->Front()->Request()->getParam("sSepaIban"))) {
+        if ($request->getParam("sSepaIban") && !$this->validateIBAN($request->getParam("sSepaIban"))) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN');
         }
@@ -107,23 +107,18 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function savePaymentData()
+    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
-
-        $lastPayment = $this->getCurrentPaymentDataAsArray();
+        $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
         $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
             getPaymentsQuery(array('name' => 'Sepa'))->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = array(
-            'use_billing_data' => (Shopware()->Front()->Request()->getParam("sSepaUseBillingData")==='true'?1:0),
-            'bankname' => Shopware()->Front()->Request()->getParam("sSepaBankName"),
-            'iban' => preg_replace('/\s+|\./', '', Shopware()->Front()->Request()->getParam("sSepaIban")),
-            'bic' => Shopware()->Front()->Request()->getParam("sSepaBic")
+            'use_billing_data' => ($request->getParam("sSepaUseBillingData")==='true'?1:0),
+            'bankname' => $request->getParam("sSepaBankName"),
+            'iban' => preg_replace('/\s+|\./', '', $request->getParam("sSepaIban")),
+            'bic' => $request->getParam("sSepaBic")
         );
 
         if (!$lastPayment) {
@@ -145,13 +140,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentDataAsArray()
+    public function getCurrentPaymentDataAsArray($userId)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
-
         $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
             ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
@@ -184,7 +174,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
             getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-        $paymentData = $this->getCurrentPaymentDataAsArray();
+        $paymentData = $this->getCurrentPaymentDataAsArray($userId);
 
         $date = new \DateTime();
         $data = array(

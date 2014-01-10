@@ -63,185 +63,165 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->session['sRegister'] = array();
         }
 
-		if(in_array($this->Request()->getActionName(), array('ajax_validate_password', 'ajax_validate_billing', 'ajax_validate_email'))) {
-			Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-		}
-	}
+        if (in_array($this->Request()->getActionName(), array('ajax_validate_password', 'ajax_validate_billing', 'ajax_validate_email'))) {
+            Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        }
+    }
 
 
-	/**
-	 * Will be called when no action is supplied
-	 *
-	 * @return void
-	 */
-	public function indexAction()
-	{
-		if(!empty($this->session['sUserId']))
-		{
-			if ($this->request->getParam('sValidation')||!Shopware()->Modules()->Basket()->sCountBasket()) {
-				return $this->forward('index', 'account');
-			} else {
-				return $this->forward('confirm', 'checkout');
-			}
-		}
-		$skipLogin = $this->request->getParam('skipLogin');
-		if ($skipLogin=="1"){
-			$this->View()->skipLogin = $skipLogin;
-		}
-		$this->personalAction();
-		$this->billingAction();
-		$this->shippingAction();
-		$this->paymentAction();
-	}
+    /**
+     * Will be called when no action is supplied
+     *
+     * @return void
+     */
+    public function indexAction()
+    {
+        if (!empty($this->session['sUserId'])) {
+            if ($this->request->getParam('sValidation')||!Shopware()->Modules()->Basket()->sCountBasket()) {
+                return $this->forward('index', 'account');
+            } else {
+                return $this->forward('confirm', 'checkout');
+            }
+        }
+        $skipLogin = $this->request->getParam('skipLogin');
+        if ($skipLogin=="1") {
+            $this->View()->skipLogin = $skipLogin;
+        }
+        $this->personalAction();
+        $this->billingAction();
+        $this->shippingAction();
+        $this->paymentAction();
+    }
 
-	/**
-	 * Checks the registration
-	 *
-	 * @return void
-	 */
-	public function saveRegisterAction()
-	{
-		if($this->request->isPost())
-		{
-			$this->savePersonalAction();
-			$this->saveBillingAction();
-			if(!empty($this->post['billing']['shippingAddress']))
-			{
-				$this->saveShippingAction();
-			}
-			if(isset($this->post['payment']))
-			{
-				$this->savePaymentAction();
-			}
-			if(empty($this->error))
-			{
-				$this->saveRegister();
-			}
-		}
-		$this->forward('index');
-	}
+    /**
+     * Checks the registration
+     *
+     * @return void
+     */
+    public function saveRegisterAction()
+    {
+        if ($this->request->isPost()) {
+            $this->savePersonalAction();
+            $this->saveBillingAction();
+            if (!empty($this->post['billing']['shippingAddress'])) {
+                $this->saveShippingAction();
+            }
+            if (isset($this->post['payment'])) {
+                $this->savePaymentAction();
+            }
+            if (empty($this->error)) {
+                $this->saveRegister();
+            }
+        }
+        $this->forward('index');
+    }
 
-	/**
-	 * Saves the registration
-	 *
-	 * @return void
-	 */
-	public function saveRegister()
-	{
-		$paymentData = isset($this->session['sRegister']['payment']['object']) ? $this->session['sRegister']['payment']['object'] : false;
+    /**
+     * Saves the registration
+     *
+     * @return void
+     */
+    public function saveRegister()
+    {
+        $paymentData = isset($this->session['sRegister']['payment']['object']) ? $this->session['sRegister']['payment']['object'] : false;
 
-		$this->admin->sSaveRegister();
+        $this->admin->sSaveRegister();
 
-		if(!empty($paymentData))
-		{
-			$paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
-			$this->admin->sSYSTEM->_POST = $this->request->getPost();
-			if ($paymentObject instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod)
-			{
-				$checkPayment = $paymentObject->validate();
-                if (empty($checkPayment))
-                {
+        if (!empty($paymentData)) {
+            $paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
+            $this->admin->sSYSTEM->_POST = $this->request->getPost();
+            if ($paymentObject instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+                $checkPayment = $paymentObject->validate($this->request);
+                if (empty($checkPayment)) {
                     $paymentObject->savePaymentData();
                 }
-			}
+            }
 
-		}
-	}
+        }
+    }
 
-	/**
-	 * Returns the personal information and validates it
-	 *
-	 * @return void
-	 */
-	public function personalAction()
-	{
-		if(!isset($this->View()->register->personal))
-		{
-			$this->View()->register->personal = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
-		if(!isset($this->View()->register->personal->form_data))
-		{
-			$this->View()->register->personal->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
+    /**
+     * Returns the personal information and validates it
+     *
+     * @return void
+     */
+    public function personalAction()
+    {
+        if (!isset($this->View()->register->personal)) {
+            $this->View()->register->personal = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        if (!isset($this->View()->register->personal->form_data)) {
+            $this->View()->register->personal->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
 
-		if (!empty($this->session['sRegister']['auth']))
-		foreach ($this->session['sRegister']['auth'] as $key => $value)
-		{
-			if(!isset($this->View()->register->personal->form_data->$key))
-			{
-				$this->View()->register->personal->form_data->$key = $value;
-			}
-		}
+        if (!empty($this->session['sRegister']['auth']))
+        foreach ($this->session['sRegister']['auth'] as $key => $value) {
+            if (!isset($this->View()->register->personal->form_data->$key)) {
+                $this->View()->register->personal->form_data->$key = $value;
+            }
+        }
 
-		if (!empty($this->session['sRegister']['billing']))
-		foreach ($this->session['sRegister']['billing'] as $key => $value)
-		{
-			if(!isset($this->View()->register->personal->form_data->$key))
-			{
-				$this->View()->register->personal->form_data->$key = $value;
-			}
-		}
+        if (!empty($this->session['sRegister']['billing']))
+        foreach ($this->session['sRegister']['billing'] as $key => $value) {
+            if (!isset($this->View()->register->personal->form_data->$key)) {
+                $this->View()->register->personal->form_data->$key = $value;
+            }
+        }
 
-		if($this->request->getParam('sValidation'))
-		{
-			// For new b2bessentials plugin (replacement for customergroup module), do validation of this parameter
-			$sValidation = $this->request->getParam('sValidation');
-			// Simply check if this customergroup is valid
-			if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ",array($sValidation))){
-				// New event to do further validations in b2b customergroup plugin
-				if(!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this,'sValidation'=>$sValidation))){
-					$this->View()->register->personal->form_data->sValidation = $sValidation;
-				}
-			}else {
-				throw new Enlight_Exception("Invalid customergroup");
-			}
-		}
-	}
+        if ($this->request->getParam('sValidation')) {
+            // For new b2bessentials plugin (replacement for customergroup module), do validation of this parameter
+            $sValidation = $this->request->getParam('sValidation');
+            // Simply check if this customergroup is valid
+            if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ",array($sValidation))) {
+                // New event to do further validations in b2b customergroup plugin
+                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this,'sValidation'=>$sValidation))) {
+                    $this->View()->register->personal->form_data->sValidation = $sValidation;
+                }
+            } else {
+                throw new Enlight_Exception("Invalid customergroup");
+            }
+        }
+    }
 
-	/**
-	 * Saves and validates the personal information
-	 *
-	 * @return void
-	 */
-	public function savePersonalAction()
-	{
-		if(!isset($this->View()->register->personal))
-		{
-			$this->View()->register->personal = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
+    /**
+     * Saves and validates the personal information
+     *
+     * @return void
+     */
+    public function savePersonalAction()
+    {
+        if (!isset($this->View()->register->personal)) {
+            $this->View()->register->personal = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
 
-		if(!empty($this->post['personal']))
-		{
-			$this->View()->register->personal->form_data = new ArrayObject($this->post['personal'], ArrayObject::ARRAY_AS_PROPS);
-		}
+        if (!empty($this->post['personal'])) {
+            $this->View()->register->personal->form_data = new ArrayObject($this->post['personal'], ArrayObject::ARRAY_AS_PROPS);
+        }
 
-		$checkData = $this->validatePersonal();
-		if (!empty($checkData['sErrorMessages']))
-		{
-			foreach ($checkData['sErrorMessages'] as $key=>$error_message) {
-				$checkData['sErrorMessages'][$key] = $this->View()->fetch('string:'.$error_message);
-			}
-			$this->error = true;
-			$this->View()->register->personal->error_flags = new ArrayObject($checkData['sErrorFlag'], ArrayObject::ARRAY_AS_PROPS);
-			$this->View()->register->personal->error_messages = new ArrayObject($checkData['sErrorMessages'], ArrayObject::ARRAY_AS_PROPS);
-		}
-	}
+        $checkData = $this->validatePersonal();
+        if (!empty($checkData['sErrorMessages'])) {
+            foreach ($checkData['sErrorMessages'] as $key=>$error_message) {
+                $checkData['sErrorMessages'][$key] = $this->View()->fetch('string:'.$error_message);
+            }
+            $this->error = true;
+            $this->View()->register->personal->error_flags = new ArrayObject($checkData['sErrorFlag'], ArrayObject::ARRAY_AS_PROPS);
+            $this->View()->register->personal->error_messages = new ArrayObject($checkData['sErrorMessages'], ArrayObject::ARRAY_AS_PROPS);
+        }
+    }
 
-	/**
-	 * Returns the billing information and validates it
-	 *
-	 * @return void
-	 */
-	public function billingAction()
-	{
-		if(!isset($this->View()->register->billing))
-		{
-			$this->View()->register->billing = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
-		if(!isset($this->View()->register->billing->form_data))
-		{
-			$this->View()->register->billing->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-		}
+    /**
+     * Returns the billing information and validates it
+     *
+     * @return void
+     */
+    public function billingAction()
+    {
+        if (!isset($this->View()->register->billing)) {
+            $this->View()->register->billing = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        if (!isset($this->View()->register->billing->form_data)) {
+            $this->View()->register->billing->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
 
         $getCountryList =  $this->admin->sGetCountryList();
 
