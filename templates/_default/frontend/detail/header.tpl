@@ -37,6 +37,7 @@
 			$('.write_comment').click(function(e) {
 				e.preventDefault();
 				$.tabNavi.tabs('select', commentTabIndex);
+				$('html, body').scrollTop( $("#write_comment").offset().top );
 			});
 		});
 	} catch(err) { if(debug) console.log(err) };
