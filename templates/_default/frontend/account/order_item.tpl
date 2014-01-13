@@ -52,6 +52,7 @@
 	{/block}
 </div>
 <div id="order{$offerPosition.ordernumber}" class="displaynone">
+	{block name='frontend_account_order_item_detail_top'}{/block}
 	<div class="table">
 		{block name='frontend_account_order_item_detail_table_head'}
 		<div class="table_head">
@@ -312,4 +313,5 @@
 			
 		</div>
 	</div>
+	{block name='frontend_account_order_item_detail_bottom'}{/block}
 </div>

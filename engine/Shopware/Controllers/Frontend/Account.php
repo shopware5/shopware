@@ -523,8 +523,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 	 * Save shipping action
 	 *
 	 * Save shipping address data
+	 * 
+	 * @param boolean $redirect
 	 */
-	public function savePaymentAction()
+	public function savePaymentAction($redirect = true)
 	{
 		if($this->Request()->isPost())
 		{
@@ -540,7 +542,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 				    $this->View()->sErrorFlag = $checkData['checkPayment']['sErrorFlag'];
 				    $this->View()->sErrorMessages = $checkData['checkPayment']['sErrorMessages'];
                 }
-				return $this->forward('payment');
+				
+		        if ($redirect == false ){
+			        return;
+		        }
+				else{
+					return $this->forward('payment');
+				}
 			}
 			else
 			{
@@ -560,11 +568,20 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 				}
 			}
 		}
+		
+		if ($redirect == false ){
+			return;
+		}
 
+		if (Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Account_SavePayment_Redirect', array('subject'=>$this))){
+			return;
+		}
+        
 		if(!$target = $this->Request()->getParam('sTarget'))
 		{
 			$target = 'account';
 		}
+		
 		$this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'payment'));
 	}
 

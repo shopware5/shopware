@@ -19,6 +19,7 @@
 		</fieldset>
 	{/block}
 	{else}
+	{block name="frontend_account_orders_before_orders"}{/block}
 	<h1>{se name="OrdersHeader"}{/se}</h1>
 	<div class="orderoverview_active">
 	
@@ -58,6 +59,7 @@
 			{/foreach}
 		</div>
 	</div>
+	{block name="frontend_account_orders_after_orders"}{/block}
 	<div class="space">&nbsp;</div>
 	{/if}
 </div>
