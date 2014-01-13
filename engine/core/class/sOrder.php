@@ -982,6 +982,53 @@ class sOrder
     }
 
     /**
+     * Helper function which returns order details for the
+     * order status mail.
+     * Additionally to the order details rows, this function returns
+     * the order detail attributes for each position.
+     *
+     * @param $orderId
+     * @return array
+     */
+    private function getOrderDetailsForStatusMail($orderId)
+    {
+        $orderDetails = Shopware()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
+        $orderDetails = array_values($orderDetails);
+
+        // add attributes to orderDetails
+        foreach ($orderDetails as &$orderDetail) {
+            $attributes = $this->getOrderDetailAttributes($orderDetail['orderdetailsID']);
+            unset($attributes['id']);
+            unset($attributes['detailID']);
+            $orderDetail['attributes'] = $attributes;
+        }
+        return $orderDetails;
+    }
+
+    /**
+     * Helper function which get formated order data for the passed order id.
+     * This function is used if the order status changed and the status mail will be
+     * send.
+     *
+     * @param $orderId
+     * @return mixed
+     */
+    private function getOrderForStatusMail($orderId)
+    {
+        $order = Shopware()->Api()->Export()->sGetOrders(
+            array('orderID' => $orderId)
+        );
+        $order = current($order);
+
+        $attributes = $this->getOrderAttributes($orderId);
+        unset($attributes['id']);
+        unset($attributes['orderID']);
+        $order['attributes'] = $attributes;
+
+        return $order;
+    }
+
+    /**
      * Helper function which converts all HTML entities, in the passed user data array,
      * to their applicable characters.
      *
@@ -1360,11 +1407,9 @@ class sOrder
      */
     public function sendStatusMail(Enlight_Components_Mail $mail)
     {
-
         $this->eventManager->notify('Shopware_Controllers_Backend_OrderState_Send_BeforeSend', array(
             'subject' => Shopware()->Front(), 'mail' => $mail,
         ));
-
 
         if (!empty($this->config->OrderStateMailAck)) {
             $mail->addBcc($this->config->OrderStateMailAck);
@@ -1394,34 +1439,14 @@ class sOrder
             return;
         }
 
-        $order = Shopware()->Api()->Export()->sGetOrders(array('orderID' => $orderId));
-        $order = current($order);
-
-        // add attributes to order
-        $sql = 'SELECT * FROM s_order_attributes WHERE orderID = :orderId;';
-        $attributes = $this->db->fetchRow($sql, array('orderId' => $orderId));
-        unset($attributes['id']);
-        unset($attributes['orderID']);
-        $order['attributes'] = $attributes;
+        $order = $this->getOrderForStatusMail($orderId);
+        $orderDetails = $this->getOrderDetailsForStatusMail($orderId);
 
         if (!empty($order['dispatchID'])) {
             $dispatch = $this->db->fetchRow('
                 SELECT name, description FROM s_premium_dispatch
                 WHERE id=?
             ', array($order['dispatchID']));
-        }
-
-
-        $orderDetails = Shopware()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
-        $orderDetails = array_values($orderDetails);
-
-        // add attributes to orderDetails
-        foreach ($orderDetails as &$orderDetail) {
-            $sql = 'SELECT * FROM s_order_details_attributes WHERE detailID = :detailID;';
-            $attributes = $this->db->fetchRow($sql, array('detailID' => $orderDetail['orderdetailsID']));
-            unset($attributes['id']);
-            unset($attributes['detailID']);
-            $orderDetail['attributes'] = $attributes;
         }
 
         $user = Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
@@ -1437,7 +1462,10 @@ class sOrder
         $shop->registerResources(Shopware()->Bootstrap());
 
         /* @var $mailModel \Shopware\Models\Mail\Mail */
-        $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(array('name' => $templateName));
+        $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+            array('name' => $templateName)
+        );
+
         if (!$mailModel) {
             return;
         }
