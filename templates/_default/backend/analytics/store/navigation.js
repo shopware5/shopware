@@ -67,6 +67,13 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             comparable: true,
             leaf: true
         }, {
+            id: 'referrer_visitors',
+            text: 'Besucher Zugriffsquellen',
+            store: 'analytics-store-navigation-referrer_visitors',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
             id: 'month',
             text: '{s name=nav/salesBy/month}Month{/s}',
             store: 'analytics-store-navigation-month',

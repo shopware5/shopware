@@ -510,6 +510,53 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->View()->assign(array('success' => true, 'data' => $results, 'totalCount' => $statement->rowCount()));
     }
 
+    public function getReferrerVisitorsAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop->registerResources(Shopware()->Bootstrap());
+
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'COUNT(r.referer) as count',
+            'r.referer as referrer'
+        ))
+        ->from('s_statistics_referer', 'r')
+        ->where('r.datum >= :fromTime')
+        ->andWhere('r.datum <= :toTime')
+        ->groupBy('referer')
+        ->orderBy('count', 'DESC')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter(':fromTime', $this->getFromDate())
+        ->setParameter(':toTime', $this->getToDate())
+        ->setParameter(':hostname', '%' . $shop->getHost() . '%');
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $referrer = array();
+        foreach($results as &$result){
+            $host = parse_url($result['referrer']);
+            $host = str_replace('www.', '', $host['host']);
+
+            if(!array_key_exists($host, $referrer)){
+                $referrer[$host] = array(
+                    'count' => 0,
+                    'referrer' => $host
+                );
+            }
+
+            $referrer[$host]['count']++;
+        }
+
+        $referrer = array_values($referrer);
+
+        $this->View()->assign(array('success' => true, 'data' => $referrer, 'totalCount' => $statement->rowCount()));
+    }
+
     public function getMonthAction()
     {
         $builder = $this->getOrderAnalyticsQueryBuilder();
