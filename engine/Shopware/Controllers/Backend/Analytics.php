@@ -470,6 +470,46 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->View()->assign(array('success' => true, 'data' => $referrer, 'totalCount' =>  count($referrer)));
     }
 
+    public function getPartnerRevenueAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'ROUND(SUM((o.invoice_amount - o.invoice_shipping) / o.currencyFactor), 2) AS revenue',
+            'p.company AS partner',
+            'o.partnerID as trackingCode',
+            'p.id as partnerId'
+        ))
+        ->from('s_order', 'o')
+        ->leftJoin('o', 's_emarketing_partner', 'p', 'p.idcode = o.partnerID')
+        ->where('o.status NOT IN (-1, 4)')
+        ->andWhere('o.ordertime >= :fromTime')
+        ->andWhere('o.ordertime <= :toTime')
+        ->andWhere("o.partnerID != ''")
+        ->groupBy('o.partnerID')
+        ->orderBy('revenue', 'DESC')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter(':fromTime', $this->getFromDate())
+        ->setParameter(':toTime', $this->getToDate());
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($results as &$result){
+            if(empty($result['partner'])){
+                $result['partner'] = $result['trackingCode'];
+            }
+            if(empty($result['PartnerID'])){
+                $result['PartnerID'] = 0;
+            }
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $results, 'totalCount' => $statement->rowCount()));
+    }
+
     public function getMonthAction()
     {
         $builder = $this->getOrderAnalyticsQueryBuilder();
