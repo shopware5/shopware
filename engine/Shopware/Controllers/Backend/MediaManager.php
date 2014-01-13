@@ -120,7 +120,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $builder->select(array('album'))
                 ->from('Shopware\Models\Media\Album', 'album')
                 ->where('album.parentId IS NULL')
-                ->orWhere('album.parentId = 0')
                 ->orderBy('album.position', 'ASC');
 
         if (!empty($albumId)) {
@@ -666,14 +665,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
         $data['name'] = $data['text'];
 
+        $data['parent'] = null;
         if (!empty($data['parentId']) && $data['parentId'] != 'root') {
             $parent = $this->getManager()->find('Shopware\Models\Media\Album', $data['parentId']);
             if (!$parent) {
                 throw new Exception('No valid parent album passed!');
             }
             $data['parent'] = $parent;
-        } else {
-            $data['parent'] = null;
         }
 
         if (isset($data['createThumbnails']) && !empty($data['createThumbnails'])) {
