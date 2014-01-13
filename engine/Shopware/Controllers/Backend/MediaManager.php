@@ -574,7 +574,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
             if($media->getType() === Media::TYPE_IMAGE){
-                $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+                $manager = Shopware()->Container()->get('thumbnail_manager');
                 $defaultSizes = $media->getDefaultThumbnails();
                 $defaultSize = $defaultSizes[0][0] . 'x' . $defaultSizes[0][1];
 
@@ -1000,7 +1000,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 		}
 
 		/** @var $generator Shopware\Components\Thumbnail\Manager **/
-		$manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+		$manager = Shopware()->Container()->get('thumbnail_manager');
 
 		try {
 			foreach($medias as $media){

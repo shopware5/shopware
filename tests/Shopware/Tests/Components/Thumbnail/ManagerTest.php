@@ -114,22 +114,22 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
 
     public function testThumbnailCleanUp()
     {
-        $manager = Shopware()->Container()->get('thumbnail_manager');
-
         $media = $this->getMediaModel();
 
-        $manager->createMediaThumbnail($media);
+        $defaultSizes = $media->getDefaultThumbnails();
+        $defaultSize = $defaultSizes[0];
+        $defaultSize = $defaultSize[0] . 'x' . $defaultSize[1];
+        
+        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager->createMediaThumbnail($media, array($defaultSize));
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
         $path = $thumbnailDir . $media->getName();
 
-        $defaultSize = $media->getDefaultThumbnails();
-        $defaultSize = $defaultSize[0];
-
-        $this->assertFileExists($path . '_' . $defaultSize[0] . 'x' . $defaultSize[1] . '.jpg');
+        $this->assertFileExists($path . '_' . $defaultSize . '.' . $media->getExtension());
 
         $manager->removeMediaThumbnails($media);
-
-        $this->assertFileNotExists($path . '_' . $defaultSize[0] . 'x' . $defaultSize[1] . '.jpg');
+        
+        $this->assertFileNotExists($path . '_' . $defaultSize . '.' . $media->getExtension());
     }
 }
