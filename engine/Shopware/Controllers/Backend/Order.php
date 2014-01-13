@@ -955,8 +955,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 continue;
             }
 
-            $this->createOrderDocuments($documentType, $documentMode, $order);
-
             //we have to flush the status changes directly, because the "createStatusMail" function in the
             //sOrder.php core class, use the order data from the database. So we have to save the new status before we
             //create the status mail
@@ -972,11 +970,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
 
             try {
-                Shopware()->Models()->persist($order);
-                Shopware()->Models()->flush();
+                Shopware()->Models()->flush($order);
             } catch (Exception $e) {
                 continue;
             }
+
+            // the setOrder function of the Shopware_Components_Document change the currency of the shop.
+            // this would create a new Shop if we execute an flush();
+            $this->createOrderDocuments($documentType, $documentMode, $order);
+
 
             //convert to array data to return the data to the view
 
