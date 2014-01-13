@@ -452,8 +452,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * On any change on country, payment or dispatch recalculate shipping costs
      * and forward to cart / confirm view
+     *
+     * @param boolean $forward
      */
-    public function calculateShippingCostsAction()
+    public function calculateShippingCostsAction($forward = true)
     {
         if ($this->Request()->getPost('sCountry')) {
             $this->session['sCountry'] = (int) $this->Request()->getPost('sCountry');
@@ -474,7 +476,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if ($this->Request()->getPost('sState')) {
             $this->session['sState'] = (int) $this->Request()->getPost('sState');
         }
+        
+        if ($forward == false){
+            return;
+        }
 
+		if (Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Checkout_CalculateShippingCosts_Forward', array('subject'=>$this))){
+			return;
+		}
+        
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
