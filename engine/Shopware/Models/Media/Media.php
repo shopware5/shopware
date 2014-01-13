@@ -768,7 +768,7 @@ class Media extends ModelEntity
         }
 
 	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
-	    $generator = Shopware()->ResourceLoader()->get('thumbnail_manager');
+	    $generator = Shopware()->Container()->get('thumbnail_manager');
 
 	    $generator->createMediaThumbnail($this, $this->defaultThumbnails);
     }
@@ -906,7 +906,7 @@ class Media extends ModelEntity
 	    }
 
 	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
-	    $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+	    $manager = Shopware()->Container()->get('thumbnail_manager');
 
 	    $newSize = array(
 		    'width' => $width,
