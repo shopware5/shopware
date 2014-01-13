@@ -1539,25 +1539,54 @@ class sOrder
      */
     public function setPaymentStatus($orderId, $paymentStatusId, $sendStatusMail = false, $comment = null)
     {
-        $sql = 'SELECT `cleared` FROM `s_order` WHERE `id`=?;';
-        $previousStatusId = $this->db->fetchOne($sql, array($orderId));
-        if ($paymentStatusId != $previousStatusId) {
-            $sql = 'UPDATE `s_order` SET `cleared`=? WHERE `id`=?;';
-            $this->db->executeUpdate($sql, array($paymentStatusId, $orderId));
-            $sql = '
-               INSERT INTO s_order_history (
-                  orderID, userID, previous_order_status_id, order_status_id,
-                  previous_payment_status_id, payment_status_id, comment, change_date )
-                SELECT id, NULL, status, status, ?, ?, ?, NOW() FROM s_order WHERE id=?
-            ';
-            $this->db->executeUpdate($sql, array($previousStatusId, $paymentStatusId, $comment, $orderId));
-            if ($sendStatusMail) {
-                $mail = $this->createStatusMail($paymentStatusId, $comment, $orderId);
-                if ($mail) {
-                    $this->sendStatusMail($mail);
-                }
+        $previousStatusId = $this->getOrderPaymentStatus($orderId);
+        if ($paymentStatusId == $previousStatusId) {
+            return;
+        }
+
+        $this->db->executeUpdate(
+            'UPDATE s_order SET cleared = :paymentStatus WHERE id = :orderId;',
+            array(
+                'paymentStatus' => $paymentStatusId,
+                'orderId' => $orderId
+            )
+        );
+
+        $sql = '
+           INSERT INTO s_order_history (
+              orderID, userID, previous_order_status_id, order_status_id,
+              previous_payment_status_id, payment_status_id, comment, change_date )
+            SELECT id, NULL, status, status, :previousStatus, :currentStatus, :comment, NOW() FROM s_order WHERE id = :orderId
+        ';
+
+        $this->db->executeUpdate($sql, array(
+            ':previousStatus' => $previousStatusId,
+            ':currentStatus' => $paymentStatusId,
+            ':comment' => $comment,
+            ':orderId' => $orderId
+        ));
+
+        if ($sendStatusMail) {
+            $mail = $this->createStatusMail($paymentStatusId, $comment, $orderId);
+            if ($mail) {
+                $this->sendStatusMail($mail);
             }
         }
+    }
+
+
+    /**
+     * Helper function which returns the current payment status
+     * of the passed order.
+     * @param $orderId
+     * @return string
+     */
+    private function getOrderPaymentStatus($orderId)
+    {
+        return $this->db->fetchOne(
+            'SELECT cleared FROM s_order WHERE id= :orderId;',
+            array(':orderId' => $orderId)
+        );
     }
 
     /**
@@ -1570,24 +1599,51 @@ class sOrder
      */
     public function setOrderStatus($orderId, $orderStatusId, $sendStatusMail = false, $comment = null)
     {
-        $sql = 'SELECT `status` FROM `s_order` WHERE `id`=?;';
-        $previousStatusId = $this->db->fetchOne($sql, array($orderId));
-        if ($orderStatusId != $previousStatusId) {
-            $sql = 'UPDATE `s_order` SET `status`=? WHERE `id`=?;';
-            $this->db->executeUpdate($sql, array($orderStatusId, $orderId));
-            $sql = '
-               INSERT INTO s_order_history (
-                  orderID, userID, previous_order_status_id, order_status_id,
-                  previous_payment_status_id, payment_status_id, comment, change_date )
-                SELECT id, NULL, ?, ?, cleared, cleared, ?, NOW() FROM s_order WHERE id=?
-            ';
-            $this->db->executeUpdate($sql, array($previousStatusId, $orderStatusId, $comment, $orderId));
-            if ($sendStatusMail) {
-                $mail = $this->createStatusMail($orderStatusId, $comment, $orderId);
-                if ($mail) {
-                    $this->sendStatusMail($mail);
-                }
+        $previousStatusId = $this->getOrderStatus($orderId);
+
+        if ($orderStatusId == $previousStatusId) {
+            return;
+        }
+
+        $this->db->executeUpdate(
+            'UPDATE s_order SET status = :status WHERE id = :orderId;',
+            array(':status' => $orderStatusId, ':orderId' => $orderId)
+        );
+
+        $sql = '
+           INSERT INTO s_order_history (
+              orderID, userID, previous_order_status_id, order_status_id,
+              previous_payment_status_id, payment_status_id, comment, change_date )
+            SELECT id, NULL, :previousStatus, :currentStatus, cleared, cleared, :comment, NOW() FROM s_order WHERE id = :orderId
+        ';
+
+        $this->db->executeUpdate($sql, array(
+            ':previousStatus' => $previousStatusId,
+            ':currentStatus' => $orderStatusId,
+            ':comment' => $comment,
+            ':orderId' => $orderId
+        ));
+
+        if ($sendStatusMail) {
+            $mail = $this->createStatusMail($orderStatusId, $comment, $orderId);
+            if ($mail) {
+                $this->sendStatusMail($mail);
             }
         }
+    }
+
+    /**
+     * Helper function which returns the current order status of the passed order
+     * id.
+     *
+     * @param $orderId
+     * @return string
+     */
+    private function getOrderStatus($orderId)
+    {
+        return $this->db->fetchOne(
+            'SELECT status FROM s_order WHERE id= :orderId;',
+            array(':orderId' => $orderId)
+        );
     }
 }
