@@ -76,6 +76,7 @@ class Session
         $container->set('SessionID', \Enlight_Components_Session::getId());
 
         $namespace = new \Enlight_Components_Session_Namespace('Shopware');
+        $namespace->offsetSet('sessionId', \Enlight_Components_Session::getId());
 
         return $namespace;
     }
