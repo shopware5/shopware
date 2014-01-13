@@ -57,8 +57,16 @@ class sBasket
 	 * @return array
 	 */
 	public function sGetAmount(){
-		return  $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-		AS totalAmount FROM s_order_basket WHERE sessionID=? GROUP BY sessionID",array($this->sSYSTEM->sSESSION_ID));
+		
+		$sql = "
+		    SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+			FROM s_order_basket
+			WHERE sessionID=? GROUP BY sessionID
+		";
+		
+		$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_GetAmount_FilterSql', $sql, array('subject'=>$this));
+		
+		return  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->sSESSION_ID));
 	}
 
 	/**
@@ -68,8 +76,16 @@ class sBasket
 	 * @return array
 	 */
 	public function sGetAmountArticles(){
-		return  $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-		AS totalAmount FROM s_order_basket WHERE sessionID=? AND modus=0 GROUP BY sessionID",array($this->sSYSTEM->sSESSION_ID));
+		
+		$sql = "
+		    SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+			FROM s_order_basket
+			WHERE sessionID=? AND modus=0 GROUP BY sessionID
+		";
+		
+		$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_GetAmountArticles_FilterSql', $sql, array('subject'=>$this));
+		
+		return  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->sSESSION_ID));
 	}
 
 	/**
@@ -130,14 +146,21 @@ class sBasket
 			}
 			$supplierSQL = "OR s_articles.supplierID = $supplier ";
 		}
-		return  $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-		AS totalAmount FROM s_order_basket, s_articles WHERE sessionID=? AND modus=0 AND s_order_basket.articleID=s_articles.id
-		AND
-		(
-		$articleSQL
-		$supplierSQL
-		)
-		GROUP BY sessionID",array($this->sSYSTEM->sSESSION_ID));
+		
+		$sql = "
+		    SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+			FROM s_order_basket, s_articles
+			WHERE sessionID=? AND modus=0 AND s_order_basket.articleID=s_articles.id
+			    AND (
+			        $articleSQL
+					$supplierSQL
+			    )
+			GROUP BY sessionID
+		";
+		
+		$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_GetAmountRestrictedArticles_FilterSql', $sql, array('subject'=>$this));
+		
+		return  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->sSESSION_ID));
 	}
 
 	/**
@@ -682,6 +705,7 @@ class sBasket
         );
 		$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_AddVoucher_FilterSql',$sql, array('subject'=>$this,"params"=>$params,"voucher"=>$ticketResult,"name"=>$vouchername,"shippingfree"=>$shippingfree,"tax"=>$tax));
 
+		$sql = Enlight()->Events()->filter('Shopware_Modules_Basket_AddVoucher_FilterSqlParams',$params, array('subject'=>$this,"sql"=>$sql,"voucher"=>$ticketResult,"name"=>$vouchername,"shippingfree"=>$shippingfree,"tax"=>$tax));
 
 		if (!$this->sSYSTEM->sDB_CONNECTION->Execute($sql,$params)){
 			return false;
