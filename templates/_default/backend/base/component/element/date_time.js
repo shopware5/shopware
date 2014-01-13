@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
             defaults: d,
             items: [Ext.apply({
                 xtype: 'datefield',
-                //format: 'Y-m-d',
                 disabled: me.disabled,
                 value: me.value,
                 readOnly: !!me.readOnly,
@@ -89,7 +88,6 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
                 isFormField: false // prevent submission
             }, me.dateCfg), Ext.apply({
                 xtype: 'timefield',
-                format: 'H:i:s',
                 disabled: me.disabled,
                 value: me.value,
                 readOnly: !!me.readOnly,
