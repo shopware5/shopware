@@ -84,7 +84,8 @@ Ext.define('Shopware.apps.Analytics', {
         'navigation.Visitors',
         'navigation.Weekdays',
         'navigation.Rating',
-        'navigation.ReferrerRevenue'
+        'navigation.ReferrerRevenue',
+        'navigation.PartnerRevenue'
     ],
 
     /**
@@ -132,7 +133,8 @@ Ext.define('Shopware.apps.Analytics', {
         'table.ArticleImpression',
         'table.Overview',
         'table.Rating',
-        'table.ReferrerRevenue'
+        'table.ReferrerRevenue',
+        'table.PartnerRevenue'
     ],
     /**
      * Returns the main application window for this is expected
