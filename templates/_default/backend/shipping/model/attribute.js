@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Shipping.model.Attribute', {
      * @array
      */
     fields : [
+        //{block name="backend/shipping/model/attribute/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'dispatchId', type : 'int', useNull: true }
     ]
