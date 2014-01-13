@@ -405,8 +405,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             onNodeDrop : function(target, dd, e, data) {
                 var node = treeView.getRecord(target),
                     models = data.mediaModels,
-                    store,
-                    loadMask = new Ext.LoadMask(mediaView).show();
+                    store;
+
+                mediaView.setLoading(true);
 
                 // The event was fired from the list view
                 if(!models) {
@@ -419,7 +420,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 });
                 store.sync({
                     callback: function(){
-                        loadMask.hide();
+                        mediaView.setLoading(false);
                         store.load();
                         view.fireEvent('reload');
                     }
