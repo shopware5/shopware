@@ -557,6 +557,39 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->View()->assign(array('success' => true, 'data' => $referrer, 'totalCount' => $statement->rowCount()));
     }
 
+    public function getArticleSellsAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop->registerResources(Shopware()->Bootstrap());
+
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'SUM(od.quantity) AS sellCount',
+            'a.name',
+            'od.articleordernumber as ordernumber'
+        ))
+        ->from('s_order_details', 'od')
+        ->innerJoin('od', 's_articles', 'a', 'a.id = od.articleID')
+        ->innerJoin('od', 's_order', 'o', 'o.id = od.orderID')
+        ->where('o.ordertime >= :fromTime')
+        ->andWhere('o.ordertime <= :toTime')
+        ->andWhere('o.status NOT IN (-1, 4)')
+        ->groupBy('a.id')
+        ->orderBy('sellCount', 'DESC')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter(':fromTime', $this->getFromDate())
+        ->setParameter(':toTime', $this->getToDate());
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(array('success' => true, 'data' => $results, 'totalCount' => $statement->rowCount()));
+    }
+
     public function getMonthAction()
     {
         $builder = $this->getOrderAnalyticsQueryBuilder();

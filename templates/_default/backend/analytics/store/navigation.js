@@ -74,6 +74,13 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             comparable: true,
             leaf: true
         }, {
+            id: 'article_sells',
+            text: 'Artikel nach Verkäufen',
+            store: 'analytics-store-navigation-article_sells',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
             id: 'month',
             text: '{s name=nav/salesBy/month}Month{/s}',
             store: 'analytics-store-navigation-month',
