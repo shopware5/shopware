@@ -3,13 +3,13 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
 {
     public function testManagerInstance()
     {
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
         $this->assertInstanceOf('\Shopware\Components\Thumbnail\Manager', $manager);
     }
 
     public function testThumbnailGeneration()
     {
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
 
         $media = $this->getMediaModel();
 
@@ -54,7 +54,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
 
     public function testGenerationWithoutPassedSizes()
     {
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
 
         $media = $this->getMediaModel();
 
@@ -92,7 +92,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $media->setFile($file);
         $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
 
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
         $manager->createMediaThumbnail($media);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
@@ -108,13 +108,13 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
     {
         $media = new \Shopware\Models\Media\Media();
 
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
         $manager->createMediaThumbnail($media);
     }
 
     public function testThumbnailCleanUp()
     {
-        $manager = Shopware()->ResourceLoader()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get('thumbnail_manager');
 
         $media = $this->getMediaModel();
 
