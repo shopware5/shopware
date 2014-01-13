@@ -210,17 +210,10 @@ class sOrder
         $quantity = $basketRow["quantity"];
         $basketRow['assignedSerials'] = array();
 
-        $sqlGetEsd = "
-        SELECT s_articles_esd.id AS id, serials
-        FROM s_articles_esd, s_articles_details
-        WHERE s_articles_esd.articleID={$basketRow["articleID"]}
-        AND articledetailsID=s_articles_details.id
-        AND s_articles_details.ordernumber='{$basketRow["ordernumber"]}'
-        ";
+        //check if current order number is an esd variant.
+        $esdArticle = $this->getVariantEsd($basketRow["ordernumber"]);
 
-        $esdArticle = $this->db->fetchRow($sqlGetEsd);
         if (!$esdArticle["id"]) {
-            // ESD not found
             return;
         }
 
@@ -237,17 +230,7 @@ class sOrder
             return;
         }
 
-        $sqlCheckSerials = "
-        SELECT s_articles_esd_serials.id AS id, s_articles_esd_serials.serialnumber as serialnumber
-        FROM s_articles_esd_serials
-        LEFT JOIN s_order_esd
-        ON (s_articles_esd_serials.id = s_order_esd.serialID)
-        WHERE
-        s_order_esd.serialID IS NULL
-        AND s_articles_esd_serials.esdID={$esdArticle["id"]}
-        ";
-
-        $availableSerials = $this->db->fetchAll($sqlCheckSerials);
+        $availableSerials = $this->getAvailableSerialsOfEsd($esdArticle["id"]);
 
         if ((count($availableSerials) <= $this->config->get('esdMinSerials')) || count($availableSerials) <= $quantity) {
             // No serialnumber anymore, inform merchant
@@ -268,23 +251,25 @@ class sOrder
         }
 
         // Check if enough serials are available, if not, an email has been sent
-        if (count($availableSerials) >= $quantity) {
-            for ($i = 1; $i <= $quantity; $i++) {
-                // Assign serial number
-                $serialId = $availableSerials[$i-1]["id"];
+        if (count($availableSerials) < $quantity) {
+            return;
+        }
 
-                // Update basketrow
-                $basketRow['assignedSerials'][] = $availableSerials[$i-1]["serialnumber"];
+        for ($i = 1; $i <= $quantity; $i++) {
+            // Assign serial number
+            $serialId = $availableSerials[$i-1]["id"];
 
-                $this->db->insert('s_order_esd', array(
-                    'serialID' => $serialId,
-                    'esdID' => $esdArticle["id"],
-                    'userID' => $this->sUserData["additional"]["user"]["id"],
-                    'orderID' => $orderID,
-                    'orderdetailsID' => $orderdetailsID,
-                    'datum' => new Zend_Db_Expr('NOW()'),
-                ));
-            }
+            // Update basket row
+            $basketRow['assignedSerials'][] = $availableSerials[$i-1]["serialnumber"];
+
+            $this->db->insert('s_order_esd', array(
+                'serialID' => $serialId,
+                'esdID' => $esdArticle["id"],
+                'userID' => $this->sUserData["additional"]["user"]["id"],
+                'orderID' => $orderID,
+                'orderdetailsID' => $orderdetailsID,
+                'datum' => new Zend_Db_Expr('NOW()'),
+            ));
         }
     }
 
@@ -727,6 +712,45 @@ class sOrder
         }
 
         return $orderNumber;
+    }
+
+    /**
+     * Helper function which returns the esd defition of the passed variant
+     * order number.
+     * Used for the sManageEsd function to check if the current order article variant
+     * is an esd variant.
+     * @param $orderNumber
+     * @return array
+     */
+    private function getVariantEsd($orderNumber)
+    {
+        return $this->db->fetchRow(
+            "SELECT s_articles_esd.id AS id, serials
+            FROM  s_articles_esd, s_articles_details
+            WHERE s_articles_esd.articleID = s_articles_details.articleID
+            AND   articledetailsID = s_articles_details.id
+            AND   s_articles_details.ordernumber= :orderNumber",
+            array(':orderNumber' => $orderNumber)
+        );
+    }
+
+    /**
+     * Helper function which returns all available esd serials for the passed esd id.
+     *
+     * @param $esdId
+     * @return array
+     */
+    private function getAvailableSerialsOfEsd($esdId)
+    {
+        return $this->db->fetchAll(
+            "SELECT s_articles_esd_serials.id AS id, s_articles_esd_serials.serialnumber as serialnumber
+            FROM s_articles_esd_serials
+            LEFT JOIN s_order_esd
+              ON (s_articles_esd_serials.id = s_order_esd.serialID)
+            WHERE s_order_esd.serialID IS NULL
+            AND s_articles_esd_serials.esdID= :esdId",
+            array('esdId' => $esdId)
+        );
     }
 
     /**
