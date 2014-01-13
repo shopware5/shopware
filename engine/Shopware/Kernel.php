@@ -125,8 +125,10 @@ class Kernel implements HttpKernelInterface
         /** @var $front \Enlight_Controller_Front **/
         $front = $this->container->get('front');
 
+        // alays return response from front controller
+        // the response will be transformed to a symfony response
+        // this is required for the http-cache to work
         $front->returnResponse(true);
-        $front->throwExceptions($catch);
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
