@@ -38,13 +38,31 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     }
 
     /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Payment Methods';
+    }
+
+    public function getInfo()
+    {
+        return array(
+            'version' => $this->getVersion(),
+            'label' => $this->getLabel(),
+            'name' => $this->getLabel(),
+            'description' => 'Shopware Payment Methods handling. This plugin is required to handle payment methods, and should not be deactivated.'
+        );
+    }
+
+    /**
      * @return array
      */
     public function getCapabilities()
     {
         return array(
             'install' => false,
-            'enable' => false,
+            'enable' => true,
             'update' => true
         );
     }
@@ -59,6 +77,16 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         $this->subscribeEvents();
         $this->addSnippets();
 
+        return true;
+    }
+
+    /**
+     * Standard plugin update method to register all required components.
+     *
+     * @return bool success
+     */
+    public function update()
+    {
         return true;
     }
 
