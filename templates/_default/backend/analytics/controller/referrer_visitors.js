@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Copyright © 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,49 +20,54 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Overview
+ * @subpackage Main
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
+/**
+ * todo@all: Documentation
+ */
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/referrer_revenue"}
-Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
-    extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-customer_age',
-    shopColumnName: 'Kundenalter',
-
-    initComponent: function () {
-        var me = this;
-
-        me.columns = {
-            items: me.getColumns(),
-            defaults: {
-                flex:1
-            }
-        };
-
-        me.callParent(arguments);
-    },
+//{block name="backend/analytics/controller/referrer_visitors"}
+Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
 
     /**
-     * Creates the grid columns
-     *
-     * @return [array] grid columns
+     * Extend from the standard ExtJS 4 controller
+     * @string
      */
-    getColumns: function () {
-        return [{
-            dataIndex: 'age',
-            text: 'Alter'
-        }, {
-            dataIndex: 'percent',
-            text: 'Prozentanteil'
-        }];
+    extend:'Enlight.app.Controller',
+
+    /**
+     * References to specific elements in the module
+     * @array
+     */
+    refs:[
+        { ref:'panel', selector:'analytics-panel' }
+    ],
+
+    /**
+     * Creates the necessary event listener for this specific controller
+     * to control the switch from the referrer listing and the search term table
+     *
+     * @return void
+     */
+    init:function () {
+        var me = this;
+
+        me.control({
+            'analytics-table-referrer_visitors':{
+                viewSearchTerms: function(){
+
+                },
+                viewSearchUrl: function(){
+
+                }
+            }
+        });
     }
 });
 //{/block}
