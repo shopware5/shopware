@@ -166,6 +166,7 @@ class Repository extends ModelRepository
             'documents',
             'payment',
             'customer',
+            'paymentInstances',
             'shipping',
             'billing',
             'billingCountry',
@@ -193,6 +194,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')
