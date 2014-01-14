@@ -315,12 +315,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $shopIds = $this->getSelectedShopIds();
         foreach($data as &$row){
             $row['date'] = strtotime($row['date']);
-            $row['revenue'] = (float)($row['revenue']);
-            $row['orders'] = (int)($row['orders']);
-            $row['clicks'] = (int)($row['clicks']);
-            $row['visitors'] = (int)($row['visitors']);
-            $row['cancelledOrders'] = (int)($row['cancelledOrders']);
-            $row['newCustomers'] = (int)($row['newCustomers']);
             $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
 
             if(!empty($shopIds)){
@@ -562,9 +556,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $start = (int) $this->Request()->getParam('start', 0);
         $limit = (int) $this->Request()->getParam('limit', 25);
 
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
-
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
             'SUM(od.quantity) AS sellCount',
@@ -588,6 +579,75 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(array('success' => true, 'data' => $results, 'totalCount' => $statement->rowCount()));
+    }
+
+    public function getCustomersAction()
+    {
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 25);
+
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'u.firstlogin AS firstLogin',
+            'o.ordertime AS orderTime',
+            'COUNT(o.id) AS count',
+            'ub.salutation'
+        ))
+        ->from('s_user', 'u')
+        ->innerJoin('u', 's_order', 'o', 'o.userID = u.id')
+        ->innerJoin('u', 's_user_billingaddress', 'ub', 'ub.userID = u.id')
+        ->where('o.ordertime >= :fromTime')
+        ->andWhere('o.ordertime <= :toTime')
+        ->andWhere('o.status NOT IN (-1, 4)')
+        ->groupBy('u.id')
+        ->orderBy('orderTime', 'DESC')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->setParameter(':fromTime', $this->getFromDate())
+        ->setParameter(':toTime', $this->getToDate());
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $data = array();
+        foreach($results as $result){
+            $week = date('Y - W', strtotime($result['orderTime']));
+
+            if(!array_key_exists($week, $data)){
+                $data[$week] = array(
+                    'week' => $week,
+                    'newCustomersOrders' => 0,
+                    'oldCustomersOrders' => 0,
+                    'orders' => 0,
+                    'male' => 0,
+                    'female' => 0
+                );
+            }
+            
+            if(strtotime($result['orderTime']) - strtotime($result['firstLogin']) < 60 * 60 * 24){
+                $data[$week]['newCustomersOrders'] += $result['count'];
+            } else {
+                $data[$week]['oldCustomersOrders'] += $result['count'];
+            }
+
+            $data[$week]['orders'] += $result['count'];
+
+            if($result['salutation'] == 'mr'){
+                $data[$week]['male']++;
+            } else if($result['salutation' == 'ms']){
+                $data[$week]['female']++;
+            }
+        }
+
+        foreach($data as &$entry){
+            $entry['amountNewCustomers'] = round($entry['newCustomersOrders'] / $entry['orders'] * 100, 2);
+            $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orders'] * 100, 2);
+            $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
+            $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
+        }
+
+        $data = array_values($data);
+        $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' => count($data)));
     }
 
     public function getMonthAction()
