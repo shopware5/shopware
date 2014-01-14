@@ -81,6 +81,13 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             comparable: true,
             leaf: true
         }, {
+            id: 'customers',
+            text: 'Anteil Neu-/Stammkunden',
+            store: 'analytics-store-navigation-customers',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
             id: 'month',
             text: '{s name=nav/salesBy/month}Month{/s}',
             store: 'analytics-store-navigation-month',
