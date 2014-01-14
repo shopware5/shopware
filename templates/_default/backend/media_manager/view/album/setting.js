@@ -250,7 +250,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         });
 
         me.thumbnailGenerate = Ext.create('Ext.button.Button', {
-            text: 'Thumbnails generieren',
+            text: '{s name=settings/generateThumbBtn}Generate thumbnails{/s}',
             margin: '0 0 0 6',
             scale: 'small',
             action: 'mediamanager-album-setting-generate-thumbnail',

@@ -227,6 +227,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
                 }
 
                 if (newOffset === config.totalCount) {
+                    me.batchConfig.progress.updateText(me.snippets.finished);
                     me.onProcessFinish(win);
                     return;
                 }
@@ -234,7 +235,12 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
                 me.runRequest(newOffset, win);
             },
             failure: function (response) {
-                me.runRequest((offset + config.batchSize), win);
+                Ext.Msg.alert(
+                        '{s name=thumbnail/batch/timeOutTitle}An error occured{/s}',
+                        "{s name=thumbnail/batch/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
+                );
+
+                me.onProcessFinish(win);
             }
         });
     },
@@ -257,8 +263,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
 
             me.errors = [];
         }
-
-        me.batchConfig.progress.updateText(me.snippets.finished);
 
         win.cancelButton.hide();
         win.closeButton.enable();
